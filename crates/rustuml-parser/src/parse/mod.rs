@@ -336,6 +336,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_non_interface_class_decl = false;
     let mut has_class_factory_decl = false;
     let mut has_entity_class_factory_decl = false;
+    let mut has_class_factory_incompatible_component_leaf = false;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
@@ -552,8 +553,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // beats multiple `interface` lines that would otherwise score for class.
         if trimmed.starts_with("component ") {
             scores[5] += 15;
-            if top_level && !trimmed.contains('{') {
-                has_top_level_component_leaf = true;
+            if !trimmed.contains('{') {
+                has_class_factory_incompatible_component_leaf = true;
+                if top_level {
+                    has_top_level_component_leaf = true;
+                }
             }
         }
         // Standalone `[Bracket]` syntax marks a component (leaf on its own line).
@@ -774,18 +778,26 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
     }
 
+    // Java keeps trying a factory only while every source command is
+    // consumable. `CommandCreateElementFull2` rejects ordinary component
+    // leaves in CLASS unless `allowmixing` has enabled mixed element kinds.
+    let class_factory_viable = has_class_factory_decl
+        && (!has_class_factory_incompatible_component_leaf || has_allowmixing);
+
     // CommandPackageWithUSymbol makes a quoted shared container valid for both
-    // CLASS and DESCRIPTION, but not SEQUENCE. If CommandCreateClass or
-    // CommandCreateClassMultilines can consume an entity in the same source,
-    // Java's earlier ClassDiagramFactory wins the factory-order tie.
-    if quoted_shared_deployment_containers > 0 && has_entity_class_factory_decl {
+    // CLASS and DESCRIPTION, but not SEQUENCE. If the complete source remains
+    // consumable by ClassDiagramFactory, Java's earlier class factory wins.
+    if quoted_shared_deployment_containers > 0
+        && has_entity_class_factory_decl
+        && class_factory_viable
+    {
         scores[1] = scores[1].max(scores[7]);
     }
 
     // Java tries ClassDiagramFactory before the later shared-container
     // factories. Quoted node/frame/cloud/database containers only need their
     // deployment bonus when no declaration makes the class grammar viable.
-    if !has_class_factory_decl {
+    if !class_factory_viable {
         scores[7] += 20 * quoted_shared_deployment_containers;
     }
 
@@ -822,7 +834,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
-        && !has_class_factory_decl
+        && !class_factory_viable
         && !has_component_package_container
         && !has_top_level_component_leaf
     {
@@ -839,7 +851,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
-        && !has_class_factory_decl
+        && !class_factory_viable
         && (has_component_package_container || has_top_level_component_leaf)
     {
         let other_max = scores
@@ -1421,6 +1433,40 @@ mod tests {
         let input =
             "@startuml\nnode \"Fresh Runtime Host\" as Host {\nartifact FreshBinary\n}\n@enduml";
         assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn component_leaf_makes_quoted_entity_source_fall_through_to_description() {
+        for input in [
+            "@startuml\n\
+             top to bottom direction\n\
+             entity Ledger\n\
+             node \"Runtime Edge\" as Runtime {\n\
+               component API\n\
+             }\n\
+             @enduml",
+            "@startuml\n\
+             left to right direction\n\
+             cloud \"Runtime Edge\" {\n\
+               component API\n\
+             }\n\
+             entity Ledger\n\
+             @enduml",
+        ] {
+            assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
+        }
+    }
+
+    #[test]
+    fn allowmixing_keeps_quoted_entity_and_component_source_in_class_factory() {
+        let input = "@startuml\n\
+                     allowmixing\n\
+                     node \"Runtime Edge\" as Runtime {\n\
+                       entity Ledger {}\n\
+                       component API\n\
+                     }\n\
+                     @enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Class(_)));
     }
 
     #[test]
