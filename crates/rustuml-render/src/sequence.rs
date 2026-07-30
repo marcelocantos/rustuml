@@ -6,7 +6,7 @@
 //! Produces SVG output that matches PlantUML's Java implementation exactly —
 //! same element structure, attributes, coordinates, and font metrics.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fmt::Write;
 
 use rustuml_parser::diagram::sequence::*;
@@ -6700,7 +6700,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let mut group_left_shift_depth = 0usize;
     let mut group_left_external_shift_depth = 0usize;
-    let mut group_has_external_left = false;
     {
         // Scan for groups and collect the participant index range for each group
         let mut group_stack: Vec<(usize, usize, bool)> = Vec::new(); // (min_idx, max_idx, has_external_left)
@@ -6742,7 +6741,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         if msg.from == "[" || msg.to == "[" {
                             top.2 = true;
-                            group_has_external_left = true;
                         }
                     }
                 }
@@ -7026,8 +7024,27 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         ActivationChange::Activate => {
                             spacing_return_stack.push((msg.to.clone(), msg.from.clone()));
                         }
-                        ActivationChange::Deactivate => {}
-                        ActivationChange::Destroy => {}
+                        ActivationChange::Deactivate => {
+                            // Autoactivation turns an outgoing dotted exo
+                            // message into a close on its source. CommandReturn
+                            // then selects the next surviving activation owner,
+                            // so spacing must retire the same owner that the
+                            // lifecycle and paint projections retire.
+                            if let Some(position) = spacing_return_stack
+                                .iter()
+                                .rposition(|(ret_from, _)| ret_from == &msg.from)
+                            {
+                                spacing_return_stack.remove(position);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if let Some(position) = spacing_return_stack
+                                .iter()
+                                .rposition(|(ret_from, _)| ret_from == &msg.to)
+                            {
+                                spacing_return_stack.remove(position);
+                            }
+                        }
                     }
                 }
 
@@ -7215,7 +7232,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // "note left of" on the first participant: positioned entirely to the left
     // of the lifeline, so the lifeline must be far enough right to fit the note.
     //
-    let mut min_first_center_x: f64 = 0.0;
+    // Minimum absolute centre imposed by left-border messages. PlantUML's
+    // ConstraintSet includes the synthetic first border as a normal endpoint,
+    // so a boundary arrow can constrain any participant, not only index zero.
+    let mut min_participant_center_x = vec![0.0_f64; n];
     let mut min_scan_auto = AutoState::default();
     for event in &diagram.events {
         match event {
@@ -7262,7 +7282,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
                         box_left + bw / 2.0
                     };
-                    min_first_center_x = min_first_center_x.max(min_cx);
+                    min_participant_center_x[0] = min_participant_center_x[0].max(min_cx);
                 }
                 NotePosition::Left if first_part == Some(0) => {
                     // `NoteBox#getStartingX` truncates the complete side-note
@@ -7286,7 +7306,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     );
                     let bw = participants[0].box_width;
                     let min_cx = HEAD_BOX_Y + note_content_w + gap + bw / 2.0 - (bw / 2.0).floor();
-                    min_first_center_x = min_first_center_x.max(min_cx);
+                    min_participant_center_x[0] = min_participant_center_x[0].max(min_cx);
                 }
                 _ => {}
             }
@@ -7295,8 +7315,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // participant against the same border using the numbered arrow
         // component's preferred width.
         if let Event::Message(msg) = event
-            && ((msg.from == "[" && id_to_idx.get(msg.to.as_str()) == Some(&0))
-                || (msg.to == "[" && id_to_idx.get(msg.from.as_str()) == Some(&0)))
+            && let Some(participant_idx) = if msg.from == "[" {
+                id_to_idx.get(msg.to.as_str()).copied()
+            } else if msg.to == "[" {
+                id_to_idx.get(msg.from.as_str()).copied()
+            } else {
+                None
+            }
         {
             let label_w = message_label_width(&process_label(&msg.label));
             let autonumber_extra = min_scan_auto
@@ -7307,8 +7332,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // exo-specific +3 only when the later group envelope is queried;
             // GroupingGraphicalElement and prepareMissingSpace then turn that
             // envelope into the shared 7px translation.
-            min_first_center_x =
-                min_first_center_x.max(autonumber_extra + label_w + 24.0);
+            min_participant_center_x[participant_idx] =
+                min_participant_center_x[participant_idx].max(autonumber_extra + label_w + 24.0);
         }
         if matches!(event, Event::Message(_) | Event::Return(_)) {
             min_scan_auto.advance();
@@ -7391,7 +7416,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // variants (m=1). See the C3 width-feedback note.
     let mut meta_shift: f64 = 0.0;
     if !participants.is_empty() {
-        // First participant center must be at least min_first_center_x (for notes)
+        // Each participant center must satisfy any synthetic-left-border
+        // constraint collected above.
         // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
         // When groups encompass the leftmost participant, PlantUML reserves one
         // frame margin per enclosing frame so each nested frame can still land at
@@ -7412,15 +7438,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
-        // A long exo-left arrow has minX=0. `InGroupableList#getMinX`
-        // applies its exo +3 margin, then `GroupingGraphicalElement` starts
-        // one MARGIN10 earlier. `prepareMissingSpace` shifts the full
-        // constraint set by that negative-start deficit.
-        let group_shift = group_shift.max(if group_has_external_left {
-            group_frame_margin - GROUP_EXTERNAL_ARROW_MARGIN
-        } else {
-            0.0
-        });
         let teoz_box_shift = if diagram.teoz && has_boxes {
             TEOZ_BOX_BOUNDARY_GAP
         } else {
@@ -7431,7 +7448,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + group_shift
             + teoz_box_shift
             + participant_layout_halves[0];
-        participants[0].center_x = default_center.max(min_first_center_x);
+        participants[0].center_x = default_center.max(min_participant_center_x[0]);
         participants[0].box_x = participants[0].center_x - participant_layout_halves[0];
         // PlantUML computes lifeline line x as box_x + (int)(preferredWidth / 2)
         participants[0].lifeline_line_x =
@@ -7445,7 +7462,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let gap_from_labels = pair_max_label_width[i - 1];
 
             let gap = min_gap_boxes.max(gap_from_labels);
-            participants[i].center_x = participants[i - 1].center_x + gap;
+            participants[i].center_x =
+                (participants[i - 1].center_x + gap).max(min_participant_center_x[i]);
             participants[i].box_x = participants[i].center_x - participant_layout_halves[i];
             participants[i].lifeline_line_x =
                 participants[i].box_x + participant_layout_halves[i].floor();
@@ -8497,7 +8515,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             (anchor_x + gap).floor()
                         };
-                        let mut note_right = note_left + note_content_w;
+                        // NoteBox#getMaxX keeps the component's full-precision
+                        // preferred width even though ComponentRoseNote snaps
+                        // the visible polygon width. The layout envelope and
+                        // the drawing therefore intentionally have different
+                        // right edges.
+                        let mut note_right = if note.on_message || diagram.teoz {
+                            note_left + note_content_w
+                        } else {
+                            note_left + raw_note_content_w
+                        };
                         // A message-attached note sits inside a message tile, which
                         // reserves the arrow's endpoint plus the note component's
                         // raw preferred width and `NoteBox.getRightShift`. Java
@@ -9033,7 +9060,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         left_owner: GroupLeftOwner,
     }
 
-    let compute_group_frames = |participants: &[ParticipantLayout], after_missing_space: bool| {
+    let compute_group_frames = |participants: &[ParticipantLayout]| {
         let center_of = |id: &str| -> f64 {
             id_to_idx
                 .get(id)
@@ -9082,10 +9109,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 .copied()
                                 .unwrap_or(0.0)
                         };
-                        if live_shift == 0.0 {
+                        if note.shape != NoteShape::Note && live_shift == 0.0 {
+                            // Hexagonal/rectangular note components retain the
+                            // integer lifeline anchor used by their legacy
+                            // position projection.
                             participants[i].lifeline_line_x
                         } else {
-                            participants[i].box_x + participants[i].box_width / 2.0 + live_shift
+                            // Folded ComponentRoseNote consumes the fractional
+                            // ParticipantBox centre through NoteBox.
+                            participants[i].center_x + live_shift
                         }
                     }
                 })
@@ -9143,9 +9175,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let right = ll_x.floor() - gap;
                         Some((right - note_content_w, right))
                     } else {
-                        let position_width =
-                            note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
-                        let left = (ll_x - gap - position_width).floor();
+                        let left = if note.shape == NoteShape::Note {
+                            // NoteBox#getStartingX truncates the logical component
+                            // origin toward zero, then ComponentRoseNote paints its
+                            // polygon after paddingX. Keeping those operations
+                            // separate matters both near x=0 and at fractional
+                            // positive activation-segment coordinates.
+                            let align_extra = if note_text_align == MessageAlign::Center {
+                                NOTE_FOLD_SIZE - 1.0
+                            } else {
+                                0.0
+                            };
+                            let component_pref_width = max_text_w
+                                + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                                + align_extra
+                                + 2.0 * note_global_padding;
+                            (ll_x - component_pref_width).trunc() + ROSE_NOTE_PADDING_X
+                        } else {
+                            let position_width = note_content_width_raw_padded(
+                                max_text_w,
+                                note.shape,
+                                note_text_align,
+                            );
+                            (ll_x - gap - position_width).floor()
+                        };
                         Some((left, left + raw_note_content_w + 1.0))
                     }
                 }
@@ -9524,7 +9577,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 f64::NEG_INFINITY
                             };
                             let mut frame_right = part_right.max(header_right);
-                            if has_child {
+                            // InGroupableList#getMax first selects the member by
+                            // its raw getMaxX, then applies the winning member's
+                            // type-specific margin. A nested list reports
+                            // `child_right`, while a right exo arrow reports
+                            // `external_right + 3`; when the latter wins, the
+                            // parent must apply the exo -3 rule instead of the
+                            // nested-list +10 rule.
+                            let external_right_outranks_child = has_external_right
+                                && group.external_right + GROUP_EXTERNAL_ARROW_MARGIN > child_right;
+                            if has_child && !external_right_outranks_child {
                                 // Parent encloses child via `child.getMaxX() + MARGINX`, and
                                 // child.getMaxX() = child.max + EXTERNAL_MARGINX2, so the
                                 // parent rect sits MARGINX + EXTERNAL_MARGINX2 right of the
@@ -9719,19 +9781,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         top.on_msg_note_frame_right.max(candidate);
                                 }
                             }
-                        } else if let Some((mut nl, nr)) = note_group_extent(ev_idx, note) {
+                        } else if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
                             let left_owner =
                                 match (note.position, note.shape, note.participants.len()) {
                                     (NotePosition::Left, NoteShape::Note, _) => {
-                                        if after_missing_space {
-                                            // Java NoteBox re-evaluates `(int)(segment.pos1 -
-                                            // preferredWidth)` after ConstraintSet.pushToLeft.
-                                            // The folded-note component's full preferred width
-                                            // crosses the integer boundary one pixel before the
-                                            // visible-width approximation used by the initial
-                                            // constraint projection.
-                                            nl -= 1.0;
-                                        }
                                         GroupLeftOwner::StandardLeftNote
                                     }
                                     (NotePosition::Over, _, 1) => GroupLeftOwner::SingleOverNote,
@@ -9763,7 +9816,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         group_frames
     };
 
-    let mut group_frames = compute_group_frames(&participants, false);
+    let mut group_frames = compute_group_frames(&participants);
 
     // Frames are popped inner-first (a nested group's GroupEnd precedes its
     // enclosing group's GroupEnd), but PlantUML emits the first-instance frame
@@ -9803,7 +9856,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             participant.box_x += group_left_missing_space;
             participant.lifeline_line_x += group_left_missing_space;
         }
-        group_frames = compute_group_frames(&participants, true);
+        group_frames = compute_group_frames(&participants);
         group_frames.sort_by_key(|frame| frame.event_idx);
         for note_left in self_msg_right_note_left_by_event.values_mut() {
             *note_left += group_left_missing_space;
@@ -9811,35 +9864,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         svg_width_exact += group_left_missing_space;
     }
     let effective_right = effective_right + group_left_missing_space;
-    let grouped_standard_left_note_events: HashSet<usize> = {
-        let mut depth = 0usize;
-        diagram
-            .events
-            .iter()
-            .enumerate()
-            .filter_map(|(event_idx, event)| {
-                match event {
-                    Event::GroupStart(_) => depth += 1,
-                    Event::GroupEnd => depth = depth.saturating_sub(1),
-                    _ => {}
-                }
-                if depth > 0
-                    && matches!(
-                        event,
-                        Event::Note(Note {
-                            position: NotePosition::Left,
-                            shape: NoteShape::Note,
-                            ..
-                        })
-                    )
-                {
-                    Some(event_idx)
-                } else {
-                    None
-                }
-            })
-            .collect()
-    };
     let center_of = |id: &str| -> f64 {
         id_to_idx
             .get(id)
@@ -10572,9 +10596,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut last_return_pair: Option<(String, String, bool)> = None;
 
     let events = &diagram.events;
-    let has_right_boundary_found_message = events
-        .iter()
-        .any(|event| matches!(event, Event::Message(message) if message.from == "]"));
     let lost_external_min_to_x = participants
         .last()
         .map(|p| p.box_x + p.box_width + 5.0)
@@ -10588,14 +10609,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         })
-        .max(if has_right_boundary_found_message {
-            // Both forms are constrained against the same right border. Once a
-            // FROM_RIGHT message widens that border, TO_RIGHT messages use the
-            // shared area edge rather than their local preferred width.
-            svg_width_exact - 5.0
-        } else {
-            0.0
-        });
+        // MessageExoArrow#getRightEndInternal always receives the solved
+        // constraint-set maxX. A TO_RIGHT arrow therefore reaches the shared
+        // right border even when no FROM_RIGHT message is present.
+        .max(svg_width_exact - 5.0);
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
     // A group whose `end` was consumed (e.g. a `break` inside an `alt` swallows
@@ -11054,7 +11071,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // the union segment's right edge; the right participant
                     // contributes its left edge.
                     let to_existing_depth = to_depth;
-                    let activates_target = to_live_depth > to_existing_depth;
+                    let activates_target = to_live_depth > to_existing_depth
+                        || matches!(msg.activation, Some(ActivationChange::Activate));
                     let target_deactivates_at_start = to_live_depth < to_existing_depth;
                     let target_shift = if msg.from == "[" {
                         if to_live_depth > 0 {
@@ -11064,7 +11082,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     } else if msg.from == "]" {
                         to_live_depth as f64 * ACTIVATION_HALF_W
-                    } else if to_active && !is_create_msg && !target_deactivates_at_start {
+                    } else if (to_active || activates_target)
+                        && !is_create_msg
+                        && !target_deactivates_at_start
+                    {
                         if is_right {
                             let lands_on_depth = if activates_target {
                                 to_existing_depth
@@ -11073,7 +11094,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             ACTIVATION_HALF_W * (1.0 - lands_on_depth as f64)
                         } else if activates_target {
-                            ACTIVATION_HALF_W * (to_existing_depth + 1) as f64
+                            // All variations at the message ordinate contribute
+                            // to LivingParticipantBox.getLiveThicknessAt. This
+                            // matters when `B ++` is immediately followed by an
+                            // explicit `activate B`: both live segments start on
+                            // the same row, so the reverse arrow lands on the
+                            // outer edge of their union.
+                            ACTIVATION_HALF_W * to_live_depth as f64
                         } else {
                             ACTIVATION_HALF_W * to_existing_depth as f64
                         }
@@ -12016,10 +12043,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     .copied()
                                     .unwrap_or(0.0)
                             };
-                            if live_shift == 0.0 {
+                            if note.shape != NoteShape::Note && live_shift == 0.0 {
                                 participants[i].lifeline_line_x
                             } else {
-                                participants[i].box_x + participants[i].box_width / 2.0 + live_shift
+                                participants[i].center_x + live_shift
                             }
                         }
                     })
@@ -12079,17 +12106,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let right = ll_x.floor() - gap;
                             (right - note_content_w, right)
                         } else {
-                            let position_width = note_content_width_raw_padded(
-                                max_text_w,
-                                note.shape,
-                                note_text_align,
-                            );
-                            let mut left = (ll_x - gap - position_width).floor();
-                            if group_left_missing_space > 0.0
-                                && grouped_standard_left_note_events.contains(&ev_idx)
-                            {
-                                left -= 1.0;
-                            }
+                            let left = if note.shape == NoteShape::Note {
+                                let align_extra = if note_text_align == MessageAlign::Center {
+                                    NOTE_FOLD_SIZE - 1.0
+                                } else {
+                                    0.0
+                                };
+                                let component_pref_width = max_text_w
+                                    + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                                    + align_extra
+                                    + 2.0 * note_global_padding;
+                                (ll_x - component_pref_width).trunc() + ROSE_NOTE_PADDING_X
+                            } else {
+                                let position_width = note_content_width_raw_padded(
+                                    max_text_w,
+                                    note.shape,
+                                    note_text_align,
+                                );
+                                (ll_x - gap - position_width).floor()
+                            };
                             (left, left + note_content_w)
                         }
                     }
