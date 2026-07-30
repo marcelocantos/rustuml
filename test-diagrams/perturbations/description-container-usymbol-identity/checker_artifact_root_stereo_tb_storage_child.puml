@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+artifact "Signed Payload 9441" as Payload9441 <<signed_9441>> #PaleGreen {
+  storage "Payload Locker 9442" as Locker9442
+  queue "Dispatch Row 9443" as Dispatch9443
+}
+Locker9442 --> Dispatch9443 : schedules
+@enduml

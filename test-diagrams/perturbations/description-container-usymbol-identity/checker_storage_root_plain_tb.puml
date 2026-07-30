@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+storage "Ledger Vault 9401" as Vault9401 {
+  queue "Inbound Batch 9402" as Batch9402
+}
+Vault9401 --> Batch9402 : persists
+@enduml

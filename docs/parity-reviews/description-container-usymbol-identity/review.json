@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-container-usymbol-identity",
+  "reviewer": {
+    "role": "independent adversarial checker",
+    "tool": "Codex desktop",
+    "date": "2026-07-31"
+  },
+  "verdict": "reject",
+  "reason": "A fresh Java-valid held-out storage container with stereotype, explicit color, left-to-right layout, multiple children, and a root link fails the no-oracle comparison. Any valid counterexample rejects this mechanism.",
+  "revisions": {
+    "requested_implementation_revision": "54b10a247831a0b8a4742398210f3e55103b6e69",
+    "resolved_implementation_revision": "54b10a24918e1b3b01b9c232b63fb5cce90e8f09",
+    "implementation_revision_note": "The prompt's full implementation SHA is not present locally. The unambiguous requested prefix 54b10a24 resolves in this repository to 54b10a24918e1b3b01b9c232b63fb5cce90e8f09, which is the detached revision reviewed.",
+    "account_revision": "e532129e",
+    "account_file": "docs/parity-reviews/description-container-usymbol-identity/account-followup.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "provenance": {
+    "isolated_checkout": "/tmp/rustuml-check-description-container-usymbol-identity-1uOh7pY8",
+    "cargo_target_dir": "/tmp/rustuml-check-description-container-usymbol-identity-target",
+    "helper": "/tmp/rustuml-check-description-container-usymbol-identity-target/release/examples/diff_one",
+    "cargo_command": "CARGO_TARGET_DIR=/tmp/rustuml-check-description-container-usymbol-identity-target cargo build --release -p rustuml-oracle --example diff_one",
+    "cargo_build_count": 1,
+    "cargo_build_elapsed": "47.38s",
+    "helper_sha256": "122f902ed72b569cc07821cbf3957117668346d907b44ffafd982888909c9244",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "git checkout --detach 54b10a24918e1b3b01b9c232b63fb5cce90e8f09",
+    "sed -n '1,240p' docs/parity-reviews/description-container-usymbol-identity/account-followup.json",
+    "git show --format=fuller --find-renames --find-copies 54b10a24918e1b3b01b9c232b63fb5cce90e8f09 -- crates/rustuml-render/src/deployment.rs",
+    "sed -n '1,170p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStorage.java",
+    "sed -n '1,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java",
+    "sed -n '68,250p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "sed -n '130,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sed -n '112,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.puml test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.puml test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.puml test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.puml test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.puml test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.puml",
+    "xmllint --noout test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.svg test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.svg test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.svg test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.svg test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.svg test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Welcome to PlantUML' test-diagrams/perturbations/description-container-usymbol-identity -g '*.svg'",
+    "CARGO_TARGET_DIR=/tmp/rustuml-check-description-container-usymbol-identity-target cargo build --release -p rustuml-oracle --example diff_one",
+    "shasum -a 256 /tmp/rustuml-check-description-container-usymbol-identity-target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "/tmp/rustuml-check-description-container-usymbol-identity-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/checker_*.puml",
+    "rg -n '9401|9411|9421|9431|9441|9451|Amber Archive 9411|durable_9411' crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math docs/parity-reviews -g '*.rs' -g '*.json' -g '*.md'"
+  ],
+  "java_model_findings": [
+    "CommandPackageWithUSymbol at the pinned Java revision accepts storage and artifact brace-delimited DESCRIPTION containers and passes the selected USymbol to diagram.gotoGroup.",
+    "USymbolStorage.asBig draws URectangle.build(width,height).rounded(70), places stereotype at y=5, and title at y=7+stereotype height.",
+    "USymbolArtifact.asBig draws a rounded rectangle plus a folded-page UPolygon translated to width-17,y=5, places stereotype at y=2, and title at y=2+stereotype height.",
+    "LimitFinder expands URectangle top-left by -1,-1 and expands UPolygon X bounds by 10; SvekResult moves the measured minimum to 6 and returns dimension delta 15,15."
+  ],
+  "implementation_findings": [
+    "The implementation diff is narrowly scoped to crates/rustuml-render/src/deployment.rs and adds Storage cluster dispatch, storage/artifact title offsets, and Storage/Artifact root-cluster painted bounds.",
+    "No production occurrence of the fresh held-out labels or ids was found. The new parity constants in the implementation are adjacent to Java-source comments and are not themselves the reject basis.",
+    "The successful perturbations show the implementation handles several storage/artifact root and nested cases, including plain storage, nested storage, plain artifact, stereotyped artifact, and nested artifact under storage.",
+    "The failing perturbation disproves the broader shape dispatch/canvas claim: Java paints the root Archive9411 storage cluster as a rounded rect at x=7,y=7,width=443.4,height=148 with rx=ry=35 and canvas 464x239. The reviewed Rust helper paints the same root cluster as a two-path cylinder-like shape beginning at x=6,y=6, moves the stereotype/title to y=41.5352/58.0234 instead of y=25.5352/44.0234, shifts descendants, and expands the canvas to 474x253."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_plain_tb.svg",
+      "axes": ["storage", "no stereotype", "root", "top-to-bottom", "single child", "renamed labels"],
+      "java_valid": true,
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.svg",
+      "axes": ["storage", "stereotype", "explicit color", "root", "left-to-right", "multiple children", "root link", "renamed labels"],
+      "java_valid": true,
+      "comparison": "fail",
+      "stdout_excerpt": "SVG structural differences: element count expected 31, got 32; root svg expected width=464px height=239px, actual width=474px height=253px; cluster expected <rect>, actual <path>.",
+      "counterexample": true
+    },
+    {
+      "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_nested_stereo_tb.svg",
+      "axes": ["storage", "stereotype", "nested", "top-to-bottom", "multiple children", "internal link", "renamed labels"],
+      "java_valid": true,
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_plain_lr.svg",
+      "axes": ["artifact", "no stereotype", "root", "left-to-right", "multiple children", "internal link", "renamed labels"],
+      "java_valid": true,
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_root_stereo_tb_storage_child.svg",
+      "axes": ["artifact", "stereotype", "explicit color", "root", "top-to-bottom", "storage child", "internal link", "renamed labels"],
+      "java_valid": true,
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/checker_artifact_nested_under_storage_lr.svg",
+      "axes": ["artifact", "no artifact stereotype", "nested under stereotyped storage", "left-to-right", "multiple children", "cross links", "renamed labels"],
+      "java_valid": true,
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    }
+  ],
+  "syntax_validation": {
+    "xmllint": "pass",
+    "error_marker_scan": "pass: no syntax/error markers found"
+  },
+  "conclusion": "Reject. The corrected account is well grounded in the cited Java model and most implementation constants have provenance, but the implementation does not fully preserve storage cluster shape dispatch and canvas/text placement across the held-out matrix. The preserved failing input is valid Java PlantUML and should remain executable until the underlying dispatch/frame model is fixed."
+}

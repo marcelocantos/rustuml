@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+artifact "Release Bundle 9431" as Bundle9431 {
+  component "Verifier 9432" as Verifier9432
+  database "Manifest Index 9433" as Index9433
+}
+Verifier9432 --> Index9433 : reads
+@enduml

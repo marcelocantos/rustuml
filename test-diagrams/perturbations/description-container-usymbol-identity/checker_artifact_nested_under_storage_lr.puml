@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+storage "Outer Depot 9451" as Depot9451 <<outer_9451>> {
+  artifact "Inner Capsule 9452" as Capsule9452 {
+    component "Reader 9453" as Reader9453
+  }
+  database "Catalog 9454" as Catalog9454
+}
+Capsule9452 --> Catalog9454 : indexes
+Reader9453 --> Catalog9454 : confirms
+@enduml

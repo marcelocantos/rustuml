@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+frame "Operations Frame 9421" as Frame9421 {
+  storage "Nested Cache 9422" as Cache9422 <<warm_9422>> {
+    queue "Retry Lane 9423" as Retry9423
+    component "Cleaner 9424" as Cleaner9424
+  }
+}
+Retry9423 --> Cleaner9424 : drains
+@enduml

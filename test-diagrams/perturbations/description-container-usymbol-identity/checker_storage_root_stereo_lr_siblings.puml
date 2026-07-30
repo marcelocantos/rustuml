@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+storage "Amber Archive 9411" as Archive9411 <<durable_9411>> #LightBlue {
+  database "Shard One 9412" as Shard9412
+  artifact "Receipt Jar 9413" as Receipt9413
+}
+component "Audit Worker 9414" as Worker9414
+Shard9412 --> Receipt9413 : exports
+Archive9411 --> Worker9414 : grants
+@enduml
