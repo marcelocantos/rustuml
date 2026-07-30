@@ -6154,12 +6154,7 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         SYMBOL_CLUSTER_STROKE_WIDTH,
     )
     .unwrap();
-    emit_layout_symbol_cluster_title(
-        svg,
-        cluster,
-        x + 3.0,
-        y + PACKAGE_TITLE_BASELINE - 1.0,
-    );
+    emit_layout_symbol_cluster_title(svg, cluster, x + 3.0, y + PACKAGE_TITLE_BASELINE - 1.0);
 }
 
 fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
@@ -14421,6 +14416,8 @@ mod tests {
     fn explicit_empty_symbols_use_symbol_leaf_geometry() {
         let input = "@startuml\n\
                      frame FreshFrame7101 {\n\
+                       package FreshEmptyPackage7102 {\n\
+                       }\n\
                        folder FreshEmptyFolder7103 {\n\
                        }\n\
                        frame FreshEmptyFrame7105 {\n\
@@ -14445,6 +14442,12 @@ mod tests {
             .collect::<Vec<_>>();
         let diagram = rustuml_parser::parse::class::parse_class(&lines).unwrap();
         let model = package_render_model(&diagram);
+        let ordinary_idx = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "FreshFrame7101.FreshEmptyPackage7102")
+            .unwrap();
+        assert_eq!(model.roles[ordinary_idx], PackageRenderRole::EmptyLeaf);
         for (name, extra_width, extra_height) in [
             ("FreshEmptyFolder7103", 30.0, 38.0),
             ("FreshEmptyFrame7105", 40.0, 30.0),
@@ -14476,6 +14479,16 @@ mod tests {
                 "{name}"
             );
         }
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(
+            !svg.contains("<!--entity FreshFrame7101.FreshEmptyPackage7102-->"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains("<!--entity FreshFrame7101.FreshEmptyFolder7103-->"),
+            "{svg}"
+        );
     }
 
     #[test]
