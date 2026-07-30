@@ -3910,6 +3910,11 @@ fn relationship_endpoint_name<'a>(
     if let Some(name) = association_point_name(diagram, id) {
         return std::borrow::Cow::Owned(name);
     }
+    if let Some(note_idx) = note_endpoint_index(diagram, id)
+        && let Some(alias) = diagram.notes[note_idx].alias.as_deref()
+    {
+        return std::borrow::Cow::Borrowed(alias);
+    }
     if let Some((idx, package)) = diagram
         .packages
         .iter()
@@ -11671,10 +11676,7 @@ fn no_oracle_entity_id_from(
             })
         })
         .or_else(|| {
-            diagram
-                .notes
-                .iter()
-                .position(|note| note.alias.as_deref() == Some(id))
+            note_endpoint_index(diagram, id)
                 .and_then(|index| note_ids.and_then(|ids| ids.get(index)).cloned().flatten())
         })
         .or_else(|| {
@@ -12686,10 +12688,7 @@ fn relationship_layout_id<'a>(
     diagram: &ClassDiagram,
     endpoint: &'a str,
 ) -> std::borrow::Cow<'a, str> {
-    diagram
-        .notes
-        .iter()
-        .position(|note| note.alias.as_deref() == Some(endpoint))
+    note_endpoint_index(diagram, endpoint)
         .map(|note_idx| std::borrow::Cow::Owned(floating_note_layout_id(note_idx)))
         .or_else(|| {
             package_endpoint_index(diagram, endpoint).and_then(|package_idx| {
@@ -12706,6 +12705,19 @@ fn relationship_layout_id<'a>(
             })
         })
         .unwrap_or(std::borrow::Cow::Borrowed(endpoint))
+}
+
+fn note_endpoint_index(diagram: &ClassDiagram, endpoint: &str) -> Option<usize> {
+    diagram
+        .notes
+        .iter()
+        .position(|note| note.id.as_deref() == Some(endpoint))
+        .or_else(|| {
+            diagram
+                .notes
+                .iter()
+                .position(|note| note.alias.as_deref() == Some(endpoint))
+        })
 }
 
 fn package_endpoint_index(diagram: &ClassDiagram, endpoint: &str) -> Option<usize> {
@@ -12833,26 +12845,24 @@ fn floating_note_opale_relationship(diagram: &ClassDiagram, note_idx: usize) -> 
     if note.target.is_some() {
         return None;
     }
-    let alias = note.alias.as_deref()?;
+    let endpoint = note.id.as_deref().or(note.alias.as_deref())?;
     let mut links = diagram
         .relationships
         .iter()
         .enumerate()
-        .filter(|(_, relationship)| relationship.from == alias || relationship.to == alias);
+        .filter(|(_, relationship)| relationship.from == endpoint || relationship.to == endpoint);
     let (relationship_idx, relationship) = links.next()?;
     if links.next().is_some() {
         return None;
     }
-    let other = if relationship.from == alias {
+    let other = if relationship.from == endpoint {
         relationship.to.as_str()
     } else {
         relationship.from.as_str()
     };
-    (!diagram
-        .notes
-        .iter()
-        .any(|candidate| candidate.alias.as_deref() == Some(other)))
-    .then_some(relationship_idx)
+    note_endpoint_index(diagram, other)
+        .is_none()
+        .then_some(relationship_idx)
 }
 
 fn association_point_layout_id(association_idx: usize) -> String {

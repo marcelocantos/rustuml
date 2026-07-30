@@ -20,6 +20,9 @@ pub enum NotePosition {
 pub struct Note {
     /// Note content lines (may contain Creole/HTML markup).
     pub lines: Vec<String>,
+    /// Canonical quark identity for a named floating note.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     /// Entity this note is attached to, if any.
     pub target: Option<String>,
     /// Position relative to target entity.

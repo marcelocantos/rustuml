@@ -75,6 +75,8 @@ struct ClassParser {
     package_by_path: HashMap<Vec<String>, usize>,
     /// Entity lookup by canonical quark path.
     entity_by_path: HashMap<Vec<String>, usize>,
+    /// Named note lookup in the same canonical quark namespace.
+    note_by_path: HashMap<Vec<String>, usize>,
     /// Canonical quark paths in the order PlantUML's Plasma tree creates them.
     quark_creation_order: Vec<Vec<String>>,
     /// Note currently being accumulated (multi-line `note ... end note`).
@@ -123,6 +125,7 @@ impl ClassParser {
             package_paths: Vec::new(),
             package_by_path: HashMap::new(),
             entity_by_path: HashMap::new(),
+            note_by_path: HashMap::new(),
             quark_creation_order: Vec::new(),
             current_note: None,
             last_entity_id: None,
@@ -140,31 +143,11 @@ impl ClassParser {
     }
 
     fn finish(self) -> ClassDiagram {
-        // Filter out phantom entities created by `ensure_entity` on
-        // relationship endpoints when the endpoint is a note alias
-        // (e.g. `A .. N1` after `note "..." as N1`). These should not be
-        // rendered as classes — they are notes. Keep their relationships:
-        // Java `CommandFactoryNote` creates real note entities, and
-        // `GraphvizImageBuilder` sends every `Link` involving them through
-        // SVEK (where a singly linked class note may become an Opale).
-        let note_aliases: std::collections::HashSet<&str> = self
-            .notes
-            .iter()
-            .filter_map(|n| n.alias.as_deref())
-            .collect();
-        let entities = if note_aliases.is_empty() {
-            self.entities
-        } else {
-            self.entities
-                .into_iter()
-                .filter(|e| !note_aliases.contains(e.id.as_str()))
-                .collect()
-        };
         ClassDiagram {
             meta: self.meta,
             direction: self.direction,
             uid_events: self.uid_events,
-            entities,
+            entities: self.entities,
             relationships: self.relationships,
             association_classes: self.association_classes,
             together: self.together,
@@ -203,7 +186,17 @@ impl ClassParser {
         relationship
     }
 
-    fn push_note(&mut self, note: Note) {
+    fn push_note(&mut self, mut note: Note) {
+        if let Some(alias) = note.alias.as_deref() {
+            // `CommandFactoryNote` uses `quarkInContext(false, alias)`: the
+            // note is real data on a current-package quark, not a side table
+            // entry repaired after relationship parsing.
+            let path = self.resolve_quark_path(alias, QuarkLookup::CurrentContext);
+            let id = self.path_id(&path);
+            self.register_quark_path(&path);
+            self.note_by_path.insert(path, self.notes.len());
+            note.id = Some(id);
+        }
         self.uid_events.push(ClassUidEvent::Note {
             index: self.notes.len(),
             owner_package: self
@@ -493,6 +486,12 @@ impl ClassParser {
     fn materialize_relationship_endpoint(&mut self, path: Vec<String>) -> String {
         if let Some(&idx) = self.entity_by_path.get(&path) {
             return self.entities[idx].id.clone();
+        }
+        if let Some(&idx) = self.note_by_path.get(&path) {
+            return self.notes[idx]
+                .id
+                .clone()
+                .unwrap_or_else(|| self.path_id(&path));
         }
         if let Some(&idx) = self.package_by_path.get(&path) {
             return self.packages[idx].name.clone();
@@ -1472,6 +1471,7 @@ impl ClassParser {
                 .collect();
             self.push_note(Note {
                 lines,
+                id: None,
                 target: Some(target),
                 position: Some(position),
                 alias: None,
@@ -1486,6 +1486,7 @@ impl ClassParser {
             let target = self.resolve_note_target(&caps[2]);
             self.current_note = Some(Note {
                 lines: Vec::new(),
+                id: None,
                 target: Some(target),
                 position: Some(position),
                 alias: None,
@@ -1506,6 +1507,7 @@ impl ClassParser {
             let target = self.last_entity_id.clone();
             self.push_note(Note {
                 lines,
+                id: None,
                 target,
                 position: Some(position),
                 alias: None,
@@ -1521,6 +1523,7 @@ impl ClassParser {
             let target = self.last_entity_id.clone();
             self.current_note = Some(Note {
                 lines: Vec::new(),
+                id: None,
                 target,
                 position: Some(position),
                 alias: None,
@@ -1539,6 +1542,7 @@ impl ClassParser {
                 .collect();
             self.push_note(Note {
                 lines,
+                id: None,
                 target: None,
                 position: None,
                 alias: Some(alias),
@@ -1552,6 +1556,7 @@ impl ClassParser {
             let alias = caps[1].to_string();
             self.current_note = Some(Note {
                 lines: Vec::new(),
+                id: None,
                 target: None,
                 position: None,
                 alias: Some(alias),
@@ -1576,6 +1581,7 @@ impl ClassParser {
             };
             self.push_note(Note {
                 lines,
+                id: None,
                 target: None,
                 position: None,
                 alias: None,
@@ -1588,6 +1594,7 @@ impl ClassParser {
         if line == "note on link" {
             self.current_note = Some(Note {
                 lines: Vec::new(),
+                id: None,
                 target: None,
                 position: None,
                 alias: None,
@@ -4080,6 +4087,59 @@ mod tests {
         assert_eq!(d.relationships[0].to, "FreshMemo4217");
         assert_eq!(d.relationships[1].from, "FreshMemo4217");
         assert_eq!(d.relationships[1].to, "FreshPeer4219");
+    }
+
+    #[test]
+    fn package_named_note_relationship_reuses_the_note_quark() {
+        let d = parse(
+            "class FreshRoot5411\n\
+             package FreshArchive5413 {\n\
+               class FreshLeaf5417\n\
+             }\n\
+             package FreshArchive5413 {\n\
+               note \"renamed package memo\" as FreshMemo5419\n\
+               FreshMemo5419 .. FreshArchive5413.FreshLeaf5417\n\
+             }",
+        );
+
+        assert_eq!(d.entities.len(), 2);
+        assert_eq!(
+            d.notes[0].id.as_deref(),
+            Some("FreshArchive5413.FreshMemo5419")
+        );
+        assert_eq!(d.relationships[0].from, "FreshArchive5413.FreshMemo5419");
+        assert_eq!(d.relationships[0].to, "FreshArchive5413.FreshLeaf5417");
+        assert!(d.uid_events.iter().all(|event| !matches!(
+            event,
+            ClassUidEvent::Entity(id) if id == "FreshArchive5413.FreshMemo5419"
+        )));
+    }
+
+    #[test]
+    fn duplicate_local_note_aliases_resolve_in_their_current_packages() {
+        let d = parse(
+            "package FreshWest5511 {\n\
+               class FreshWestLeaf5513\n\
+               note \"west memo\" as FreshMemo5517\n\
+               FreshMemo5517 .. FreshWestLeaf5513\n\
+             }\n\
+             package FreshEast5521 {\n\
+               class FreshEastLeaf5523\n\
+               note \"east memo\" as FreshMemo5517\n\
+               FreshMemo5517 .. FreshEastLeaf5523\n\
+             }",
+        );
+
+        assert_eq!(
+            d.notes
+                .iter()
+                .filter_map(|note| note.id.as_deref())
+                .collect::<Vec<_>>(),
+            ["FreshWest5511.FreshMemo5517", "FreshEast5521.FreshMemo5517"]
+        );
+        assert_eq!(d.relationships[0].from, "FreshWest5511.FreshMemo5517");
+        assert_eq!(d.relationships[1].from, "FreshEast5521.FreshMemo5517");
+        assert_eq!(d.entities.len(), 2);
     }
 
     #[test]
