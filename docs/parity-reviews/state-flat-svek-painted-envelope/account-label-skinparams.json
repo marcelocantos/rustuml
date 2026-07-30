@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-flat-svek-painted-envelope-label-skinparams",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "446dc5383741fd91f4613ee19e0d9e53a77764db",
+  "parent_account": "docs/parity-reviews/state-flat-svek-painted-envelope/account.json",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:285-297 resolves the transition Display with the live message alignment and font before wrapping it as labelOnly",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:356-366 wraps every ordinary label in one pixel of margin on all sides, or six pixels for a self-link",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:369-373 resolves stateMessageAlignment without changing the edge painter",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:944-947 paints the same resolved label block at the solved Graphviz label origin",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockMarged.java:73-86 paints a UEmpty for the complete margin box before translating and painting its child text",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:150-152 includes the complete UEmpty rectangle",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:203-210 includes every UText from baseline-height+1.5 through baseline+1.5"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs StateArrowFont resolves transition font family, size, style, color, padding, and alignment from legacy skinparams",
+    "crates/rustuml-render/src/state.rs StateTransitionLabelBlock measures and emits the same resolved rows",
+    "crates/rustuml-render/src/state.rs flat_painted_bounds already includes the complete solved edge label box supplied to Graphviz",
+    "crates/rustuml-render/src/state.rs has_complete_flat_painter_model rejects the collector whenever diagram.meta.skinparams is nonempty"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-transition-display-lines/checker_tab_backslash_unknown_escape_lr.puml",
+    "test-diagrams/perturbations/state-transition-display-lines/checker_link_raw_escape_outside_newline_lr.puml"
+  ],
+  "invariant": "A legacy skinparam that is consumed entirely by the modeled transition-label font or alignment changes the dimensions or placement inside SvekEdge's existing label block, but it does not replace the painter or remove that block from SvekResult. The complete margin UEmpty, visible text rows, nodes, paths, and decorations therefore remain one LimitFinder union. Flat-envelope eligibility follows modeled painter capabilities, not whether the skinparam list happens to be empty.",
+  "causal_divergence": "Rust already resolves the two preserved fixtures' StateArrowFontName, StateArrowFontSize, and message alignment into the Graphviz label size and final text. Nevertheless, has_complete_flat_painter_model rejects every nonempty skinparam list. The legacy fallback derives the vertical origin from state rectangles and routed paths without including a transition label whose solved box extends above both nodes. It therefore places the rectangle frontier at y=6 and the visible rectangle at y=7. Java includes the label wrapper and text, finds a smaller painted minimum, and translates the complete diagram down by 4.1035 pixels for the Courier fixture and 4.0313 pixels for the sans-serif fixture. Those differing offsets are consequences of each selected font's measured row height, not constants to encode.",
+  "planned_change": "Replace the empty-skinparam predicate with a narrow capability predicate admitting only legacy keys whose effects are already owned by StateArrowFont and StateTransitionLabelBlock: state/ordinary arrow font family, size, style, and color; default font family and size fallbacks; stateMessageAlignment; and defaultTextAlignment. Keep all node-style, shadow, spacing, note, title, composite, and unknown skinparams excluded. Reuse the existing complete edge-label box in flat_painted_bounds; do not add a translation constant or fixture branch. Add capability tests with renamed labels and multiple font/alignment settings, then verify both preserved failures and the complete parser/renderer suites.",
+  "perturbation_axes": [
+    "Courier New versus sans-serif transition metrics",
+    "font sizes above and below the default",
+    "stateMessageAlignment versus defaultTextAlignment and natural row markers",
+    "left-to-right versus top-to-bottom rank direction",
+    "labels above, between, and below their endpoint states",
+    "ordinary links versus self-links with different wrapper margins",
+    "renamed labels and changed row counts"
+  ],
+  "scope_boundary": "This account only broadens flat painted-envelope activation for fully modeled transition-label skinparams. It does not admit node paint, shadow, spacing, notes, titles, composites, arbitrary style programs, or unknown legacy keys, and it does not address raw hyperlink title newline normalization."
+}
