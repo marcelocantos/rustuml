@@ -2,43 +2,76 @@
   "schema_version": 1,
   "mechanism": "description-bracket-shorthand-factory-selection",
   "created": "2026-07-31",
+  "amended": "2026-07-31",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "64bc51e4aba504fae256372c6b242d02ffbd8ed6",
   "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "supersedes": {
+    "account_revision": "ee0a7a712078b8484454c97e1d25cc80493f2269",
+    "rejected_implementation": "e33b38a0bfe33d40b3d954eff16ff30c90399c1f",
+    "adversarial_review_revision": "d1dc14ea5ff5079a7ae662d9079e6dfcb1d7f705",
+    "review_path": "docs/parity-reviews/description-bracket-shorthand-factory-selection/review.json",
+    "reason": "The rejected account reduced Java factory viability to a bracket-line predicate plus a special exclusion for class bodies. The 19-input checker matrix showed that bracket-shaped text inside other multiline commands can still alter dispatch, and that valid reverse aliases, abbreviated directions, and styled Description links are not covered by the duplicated Rust recognizers."
+  },
   "regression_origin": {
     "commit": "4275bab624c02c820e28ab866b58f5db5b470b7c",
     "subject": "fix: port complete package symbol model",
-    "evidence": "The commit introduced has_class_symbol_container and promoted CLASS above every competing score while its viability model omitted DESCRIPTION-only bracket shorthand."
+    "evidence": "The commit introduced has_class_symbol_container and promoted CLASS above competing scores while the viability model did not execute the candidate factories' ordered command grammars. The later e33b38a0 repair added selected Description bracket regexes but retained that raw-line scoring architecture."
   },
   "java_locations": [
-    "src/main/java/net/sourceforge/plantuml/core/DiagramType.java:195-199",
     "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:128-136,226-241",
-    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:74-109,135-197",
+    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:74-109,135-197,218-236",
+    "src/main/java/net/sourceforge/plantuml/command/CommonCommands.java:53-58,103-118",
     "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:100-171",
-    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java:82-145",
     "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138",
-    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-178",
-    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:81-138,213-233",
-    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java:87-119,180-242"
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-128,135-177",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:81-137,141-155,213-235",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java:75-119,126-178,180-241,250-291"
   ],
   "rust_locations": [
-    "crates/rustuml-parser/src/parse/mod.rs:323-430,643-688,863-892,1292-1363",
+    "crates/rustuml-parser/src/parse/mod.rs:314-436,447-483,835-881,889-920",
+    "crates/rustuml-parser/src/parse/component.rs:34-80,330-405,503-544,694-750,840-940",
     "crates/rustuml-parser/src/parse/class.rs:650-764,1076-1103,1283-1440",
-    "crates/rustuml-parser/src/parse/component.rs:483-509,659-717,824-947",
     "crates/rustuml-render/src/class.rs:3686-3740"
   ],
-  "claimed_invariant": "A shared package-symbol opener does not establish CLASS ownership. For generic @startuml, ClassDiagramFactory wins only if every later line is accepted by its command grammar. Bare bracket component declarations and bracket-endpoint links are DESCRIPTION commands and reject the earlier Class candidate.",
-  "causal_divergence": "Rust scores bracket syntax as Component evidence but does not feed it into Class-factory viability. The symbol-container override consequently revives a Java candidate that failed at the first bracket shorthand line, dispatching to a Class model that discards the leaves and links.",
-  "planned_model_change": "Recognize exact DESCRIPTION-only bracket declaration and bracket-endpoint link grammar, excluding class qualifiers, guards, URLs, arrow styles, and bracket text consumed inside a multiline class body. Invalidate Class-factory viability before score promotion and dispatch the source through Diagram::Component. Extend that parser's bracket declaration command to preserve Java's display/code split for both `[Display] as Code` and `Code as [Display]` forms.",
+  "java_model": {
+    "factory_selection": "PSystemBuilder tries eligible factories in a fixed order and returns the first successful complete parse. For generic UML, ClassDiagramFactory precedes DescriptionDiagramFactory; a shared package, node, frame, component, or other USymbol container therefore does not by itself choose either model.",
+    "command_consumption": "PSystemCommandFactory advances a cursor through the complete preprocessed source. At each cursor position it asks the candidate factory's ordered command list for a match. An OK single-line command consumes one line. An OK_PARTIAL command is extended line by line until that same command reports OK; the entire block is then consumed atomically, so bracket-shaped class members, title text, header/footer text, legends, notes, sprites, skinparam blocks, style blocks, and other multiline bodies are never reconsidered as top-level declarations or links. A candidate fails only when no registered command consumes the next source span or command execution reports an error.",
+    "shared_commands": "Both ClassDiagramFactory and DescriptionDiagramFactory register CommonCommands title, legend, header, footer, skinparam, sprite, and style commands in addition to their diagram-specific commands. Their viability difference is the set and order of actual commands that consume source spans, not the number of lexical hints in raw lines.",
+    "declaration_and_alias_grammar": "Description CommandCreateElementFull recognizes the same typed declaration alternatives used for execution: a code alone, DISPLAY as CODE, CODE as DISPLAY, and unquoted display as CODE. Bracket forms participate as either code or display, and execution keeps code identity separate from display text before resolving the quark in the current group. Shared USymbol containers likewise resolve code/display aliases and push the resulting group context.",
+    "link_grammar": "Description CommandLinkElement parses both endpoints, optional endpoint quantifiers, endpoint decorations, two arrow-body segments over `-=.~`, optional style clauses on either side of the direction, an optional middle-circle form, optional direction, optional stereotype/color, and the link label as one command. Direction accepts full and abbreviated spellings (`left`, `le`, `l`, `right`, `ri`, `r`, `up`, `u`, `down`, `do`, `d`) with a lookahead into the remaining arrow. Style clauses accept color and line-style tokens, including multiple semicolon-separated style groups. Endpoints include bare/quoted identifiers, interfaces, actors, use cases, and bracket components; implicit bracket endpoints are created as DESCRIPTION leaves with the component USymbol. Left/up direction inverts the constructed link after endpoint identity has been resolved."
+  },
+  "claimed_invariant": "Factory ownership is the result of complete ordered command consumption. A shared symbol container remains a viable CLASS command, but any later source span that only Description's command set can consume rejects the earlier Class candidate. Conversely, bracket-shaped text already owned by a multiline Class/common command cannot affect factory viability. The Description candidate that wins must construct declarations, scoped aliases, implicit endpoints, and links from the same typed command parses that established its viability.",
+  "causal_divergence": "Rust performs subtype selection by independently scanning and scoring every raw source line. Its Class viability flag is changed by a second, reduced pair of Description bracket regexes, with only a hand-maintained class-leaf-body exclusion. Because this scan has no general command cursor, body lines belonging to title, header, footer, legend, note, style, skinparam, sprite, or other multiline commands can be misclassified as top-level Description evidence. The component-backed Description parser then reparses the chosen source with separate reduced regexes: declaration routing and construction are not one command object; link direction recognizes only full words; arrow recognition omits Java's style-clause placement and abbreviated directions; and group membership is maintained by an ad hoc global/package representation rather than Java's current-group quark identity. Dispatch can therefore disagree with construction, and valid aliases or implicit endpoints can lose display, scope, source order, or links even after DESCRIPTION was selected.",
+  "planned_model_change": {
+    "dispatch": "Replace bracket-specific Class rejection and score promotion for this family with a lightweight ordered command-consumption machine. Each candidate factory owns an ordered registry of command recognizers. A recognizer returns no match, one consumed line, or a complete consumed multiline span. Advance a source cursor only by the selected command span, reject the candidate at the first unconsumed or execution-invalid span, and choose the first complete candidate in Java factory order.",
+    "shared_multiline_ownership": "Represent common multiline commands once and register the same recognizers with Class and Description candidates. The recognizer owns its opener, body, and terminator as one span, including nested/embedded blocks where applicable. Detection never scans interior lines for subtype evidence.",
+    "typed_description_commands": "Implement Description declaration and link recognizers as typed parsers used by both candidate viability and semantic construction. A declaration result carries symbol, code, display, stereotype, URL, colors, tags, and alias orientation. A link result carries typed endpoints, quantifiers, decorations, body segments, style clauses, optional middle marker, normalized direction, stereotype/color, and label. Do not maintain a detector regex and a different construction regex.",
+    "scope_and_identity": "Resolve declaration aliases and link endpoints through one current-group symbol table that preserves qualified identity, display text, declaration order, and implicit endpoint kind. Entering a shared USymbol container pushes that group; leaving it restores the parent. A later link references the same scoped entity instead of recreating a top-level label.",
+    "acceptance_boundary": "Remove looks_like_description_bracket_command and the class-leaf-body exception after the command-consumption path covers this family. Do not add fixture labels, per-container exceptions, direction enumerations outside the grammar, or fallback score bonuses to recover individual outputs."
+  },
   "perturbation_axes": [
-    "package/component/node/frame containers, aliases, and nested scopes",
-    "bare bracket, bracket-with-alias, and links-only endpoint forms",
-    "leaf count, chain/fanout/cross-container topology, and declaration order",
-    "top-to-bottom versus left-to-right with renamed labels",
-    "explicit class and explicit description-keyword negative controls"
+    "common multiline owner (class body, title, caption, header, footer, legend, note, skinparam, style, sprite) crossed with bracket declaration-shaped, reverse-alias-shaped, and link-shaped body text, varying body length and command order",
+    "declaration alias orientation (DISPLAY as CODE, CODE as DISPLAY, no alias) crossed with nested package/component/node/frame scopes, repeated leaf names, declaration-before-link versus implicit endpoint creation, and renamed labels",
+    "link direction (implicit, full word, every accepted abbreviation, horizontal and vertical inversion) crossed with arrow body kind/length and endpoint order",
+    "link style placement (before direction, after direction, both sides, color plus dashed/dotted/bold, semicolon-separated styles) crossed with bracket, bare, quoted, interface, actor, and use-case endpoints",
+    "factory-order controls where identical shared containers are followed by a Class-only command, a Description-only command, or only common commands, under top-to-bottom and left-to-right layout"
   ],
+  "held_out_evidence": {
+    "directory": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection",
+    "inputs": 19,
+    "java_valid_inputs": 19,
+    "strict_matches": 5,
+    "mechanism_relevant_failures": 8,
+    "disproved_claims": [
+      "a class-body-only exclusion is sufficient to model multiline ownership",
+      "the reduced full-word direction recognizer covers Description factory viability",
+      "styled bracket links are consistently recognized by dispatch and construction",
+      "both bracket alias orientations retain the same scoped identity and display"
+    ]
+  },
   "likely_combo_impact": {
-    "explained": "combo/combo_component_201 through combo_component_250",
-    "not_explained": "combo/combo_sequence_everything and the nine baseline combo failures"
+    "explained": "The original bare bracket family and related bracket declaration/link combinations are instances of this command-consumption mechanism.",
+    "not_explained": "Sequence-family combination failures and unrelated layout, text-metric, or rendering residues."
   }
 }
