@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+namespace app.core {
+  object "Second Declaration" as second
+}
+namespace app.core {
+  map "First In Use" as first {
+    active => true
+  }
+}
+first --> second : precedes
+@enduml

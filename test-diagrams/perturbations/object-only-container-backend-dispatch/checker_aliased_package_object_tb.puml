@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+package "Alias Domain" as AliasBox {
+  object "Aliased Member" as member {
+    code = A17
+  }
+}
+@enduml

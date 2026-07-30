@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+package Accounting {
+  map "Posting Rules" as rules {
+    currency => AUD
+  }
+  object "Customer Account" as account {
+    balance = 120
+  }
+}
+rules --> account : selects
+@enduml

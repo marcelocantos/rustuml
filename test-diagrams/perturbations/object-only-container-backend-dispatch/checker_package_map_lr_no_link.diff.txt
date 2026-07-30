@@ -1,0 +1,34 @@
+SVG structural differences:
+  [4] <path> attr mismatch:
+    expected: [("d", "M8.5,6 L127.7891,6 A3.75,3.75 0 0 1 130.2891,8.5 L137.2891,28.4883 L160.5,28.4883 A2.5,2.5 0 0 1 163,30.9883 L163,124.5 A2.5,2.5 0 0 1 160.5,127 L8.5,127 A2.5,2.5 0 0 1 6,124.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,6 L127.7891,6 A3.75,3.75 0 0 1 130.2891,8.5 L137.2891,28.4883 L161.5,28.4883 A2.5,2.5 0 0 1 164,30.9883 L164,123.5 A2.5,2.5 0 0 1 161.5,126 L8.5,126 A2.5,2.5 0 0 1 6,123.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [8] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "61.4648"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "109.9629"), ("x", "30"), ("y", "45.5")]
+    actual:   [("fill", "#F1F1F1"), ("height", "61.4648"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "109.9629"), ("x", "22.5"), ("y", "41")]
+  [9] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "95.9629"), ("x", "37"), ("y", "61.0352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "95.9629"), ("x", "29.5"), ("y", "56.5352")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "30"), ("x2", "139.9629"), ("y1", "65.9883"), ("y2", "65.9883")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "22.5"), ("x2", "132.4629"), ("y1", "61.4883"), ("y2", "61.4883")]
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "38.2813"), ("x", "35"), ("y", "81.5234")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "38.2813"), ("x", "27.5"), ("y", "77.0234")]
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.5557"), ("x", "83.2813"), ("y", "81.5234")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "34.5557"), ("x", "75.7813"), ("y", "77.0234")]
+  [13] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "78.2813"), ("x2", "78.2813"), ("y1", "65.9883"), ("y2", "86.4766")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "70.7812"), ("x2", "70.7812"), ("y1", "61.4883"), ("y2", "81.9766")]
+  [14] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "30"), ("x2", "139.9629"), ("y1", "86.4766"), ("y2", "86.4766")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "22.5"), ("x2", "132.4629"), ("y1", "81.9766"), ("y2", "81.9766")]
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "37.6387"), ("x", "35.3213"), ("y", "102.0117")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "37.6387"), ("x", "27.8213"), ("y", "97.5117")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "8.8525"), ("x", "83.2813"), ("y", "102.0117")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "8.8525"), ("x", "75.7813"), ("y", "97.5117")]
+  [17] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "78.2813"), ("x2", "78.2813"), ("y1", "86.4766"), ("y2", "106.9648")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "70.7812"), ("x2", "70.7812"), ("y1", "81.9766"), ("y2", "102.4648")]

@@ -1,0 +1,19 @@
+SVG structural differences:
+  [8] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "40.9766"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "108.1357"), ("x", "38"), ("y", "45")]
+    actual:   [("fill", "#F1F1F1"), ("height", "40.9766"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "108.1357"), ("x", "30"), ("y", "41")]
+  [9] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "91.1299"), ("x", "46.5029"), ("y", "60.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "91.1299"), ("x", "38.5029"), ("y", "56.5352")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "38"), ("x2", "146.1357"), ("y1", "65.4883"), ("y2", "65.4883")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "30"), ("x2", "138.1357"), ("y1", "61.4883"), ("y2", "61.4883")]
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "58.29"), ("x", "43"), ("y", "81.0234")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "58.29"), ("x", "35"), ("y", "77.0234")]
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "29.8457"), ("x", "111.29"), ("y", "81.0234")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "29.8457"), ("x", "103.29"), ("y", "77.0234")]
+  [13] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "106.29"), ("x2", "106.29"), ("y1", "65.4883"), ("y2", "85.9766")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "98.29"), ("x2", "98.29"), ("y1", "61.4883"), ("y2", "81.9766")]

@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+object "Left Node" as left
+object "Right Node" as right
+left --> right : forwards
+@enduml

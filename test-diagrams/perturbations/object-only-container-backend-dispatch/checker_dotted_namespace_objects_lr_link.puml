@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+namespace org.example.billing {
+  object "Invoice Header" as header
+  object "Invoice Line" as line
+}
+header *--> line : contains
+@enduml

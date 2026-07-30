@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+package "Ledger Domain" {
+  object "Primary Ledger" as ledger {
+    account = 41
+  }
+  object "Audit Entry" as audit {
+    status = open
+  }
+}
+@enduml

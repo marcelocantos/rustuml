@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package "East Domain" {
+  object "East Node" as east
+}
+package "West Domain" {
+  object "West Node" as west
+}
+west --> east : synchronizes
+@enduml

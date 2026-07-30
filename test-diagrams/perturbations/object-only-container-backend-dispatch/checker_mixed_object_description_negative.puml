@@ -1,0 +1,9 @@
+@startuml
+allowmixing
+top to bottom direction
+package "Mixed Description Domain" {
+  object "Runtime Gateway" as runtime
+  rectangle "External Gateway" as gateway
+}
+runtime --> gateway : delegates
+@enduml

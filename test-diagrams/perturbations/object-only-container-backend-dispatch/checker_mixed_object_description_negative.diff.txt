@@ -1,0 +1,25 @@
+SVG structural differences:
+  element count: expected 18, got 22
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "221px"), ("preserveAspectRatio", "none"), ("style", "width:228px;height:221px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 228 221"), ("width", "228px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "231px"), ("preserveAspectRatio", "none"), ("style", "width:228px;height:231px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 228 231"), ("width", "228px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M8.5,6 L200.5645,6 A3.75,3.75 0 0 1 203.0645,8.5 L210.0645,28.4883 L210.5,28.4883 A2.5,2.5 0 0 1 213,30.9883 L213,204.48 A2.5,2.5 0 0 1 210.5,206.98 L8.5,206.98 A2.5,2.5 0 0 1 6,204.48 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,6 L200.5645,6 A3.75,3.75 0 0 1 203.0645,8.5 L210.0645,28.4883 L210.5,28.4883 A2.5,2.5 0 0 1 213,30.9883 L213,213.99 A2.5,2.5 0 0 1 210.5,216.49 L8.5,216.49 A2.5,2.5 0 0 1 6,213.99 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [8] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "36.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "131.5303"), ("x", "43.23"), ("y", "41")]
+    actual:   [("fill", "#F1F1F1"), ("height", "34.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "126.5303"), ("x", "45.7349"), ("y", "41")]
+  [9] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "117.5303"), ("x", "50.23"), ("y", "56.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "117.5303"), ("x", "74.7349"), ("y", "59.5352")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "44.23"), ("x2", "173.7603"), ("y1", "61.4883"), ("y2", "61.4883")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "46.7349"), ("x2", "171.2651"), ("y1", "67.4883"), ("y2", "67.4883")]
+  [12] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "36.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "136.5527"), ("x", "40.72"), ("y", "154.49")]
+    actual:   [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "148.5527"), ("x", "34.7236"), ("y", "152.4883")]
+  [13] tag mismatch: expected <text>, got <ellipse>
+  [14] tag mismatch: expected <g>, got <path>
+  [15] tag mismatch: expected <path>, got <text>
+  [16] tag mismatch: expected <polygon>, got <line>
+  [17] tag mismatch: expected <text>, got <line>

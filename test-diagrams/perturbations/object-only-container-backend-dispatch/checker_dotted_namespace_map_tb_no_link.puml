@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+namespace io.sample.settings {
+  map "Service Limits" as limits {
+    retries => 5
+    timeout => 30
+  }
+}
+@enduml

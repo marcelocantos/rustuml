@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "mechanism": "object-only-container-backend-dispatch",
+  "review_date": "2026-07-31",
+  "reviewer": {
+    "task_id": "codex-independent-object-only-container-backend-dispatch-20260731",
+    "identity": "independent adversarial checker; did not author account or implementation",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, and supplied prebuilt diff_one helper",
+    "workspace": "/private/tmp/rustuml-review-object-only-container-dispatch",
+    "shipping_rust_edited": false,
+    "account_or_baseline_edited": false,
+    "cargo_or_rustc_invoked": false
+  },
+  "account_commit": "41f52949485715bf18c6c85c87805e8ecbef5107",
+  "implementation_commit": "da7a338517a368483e00290e5738ac96cbfb5e6a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "rust_helper": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "requested_sha256": "7cbd07cb8f6663b607378980e4a9b9a9e451c7f24d9cd96cc11aaf3dd6aa4bd5",
+    "observed_sha256_before": "7cbd07cb8f6663b607378980e4a9b9a9e451c7f24d9cd96cc11aaf3dd6aa4bd5",
+    "observed_sha256_after_artifact_generation": "a2d03fe52e1a06a0734d84662572f2d4e0d9d1785a7ad45039365615a44a5c73",
+    "observed_sha256_final": "3cde7d6d9f25dee6ccaf4c84e0b58d309af448894108db4fc40a6bc2a99e7a21",
+    "artifact_mtime_range": "2026-07-31 05:55:32 AEST through 2026-07-31 05:57:08 AEST",
+    "replacement_mtime": "2026-07-31 05:59:31 AEST",
+    "provenance_note": "The shared helper path matched the requested hash immediately before the matrix. Every preserved Rust SVG and diff predates the helper file's later replacement mtime. Another build then replaced the path at least twice during final validation; the drift happened after the recorded artifacts but means the path is not a stable binary store.",
+    "mode": "--no-oracle"
+  },
+  "commands": [
+    "git show 41f52949485715bf18c6c85c87805e8ecbef5107:docs/parity-reviews/object-only-container-backend-dispatch/account.json",
+    "git show da7a338517a368483e00290e5738ac96cbfb5e6a -- crates/rustuml-parser/src/parse/mod.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/CommandPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/CommandNamespace.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/object-only-container-backend-dispatch/*.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <input.puml>",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <input.puml>",
+    "xmllint --noout test-diagrams/perturbations/object-only-container-backend-dispatch/*.svg test-diagrams/perturbations/object-only-container-backend-dispatch/*.rust.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/object-only-container-backend-dispatch -g '*.svg' -g '*.rust.svg'",
+    "stat -f '%N | mtime=%Sm | ctime=%Sc | size=%z' -t '%Y-%m-%d %H:%M:%S %Z' /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one test-diagrams/perturbations/object-only-container-backend-dispatch/*.rust.svg test-diagrams/perturbations/object-only-container-backend-dispatch/*.diff.txt",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "source_audit": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:101-140",
+        "finding": "One factory registers object, map, class, package, symbol-container, and namespace commands. Grammar ownership therefore does not choose one leaf image model."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java:180-184",
+        "finding": "LeafType.OBJECT and LeafType.MAP are dispatched independently to EntityImageObject and EntityImageMap after shared parsing."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java:71-141",
+        "finding": "An ordinary package command accepts an optional alias, stereotype, URL, and color; an alias becomes the group quark while the quoted name remains its display."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/command/CommandNamespace.java:67-110",
+        "finding": "Namespace commands resolve a quark in the current context and enter it with gotoGroup, so explicit nesting preserves the parent scope and qualified identity."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:412-423,870-881",
+        "finding": "The implementation calls every syntactic package or namespace opener ordinary without checking whether the eventual object parser accepts that exact command form or can represent its scope."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/object.rs:29-44,123-168",
+        "finding": "ObjectParser stores one current_package Option rather than a scope stack. A nested opener replaces its parent, and one closing brace clears the only active package."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/object.rs:353-391",
+        "finding": "The object package regex accepts only a bare quoted or unquoted name. It does not accept the alias, stereotype, URL, or color forms accepted by Java CommandPackage; unknown lines are silently ignored."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:503-524,715-718",
+        "finding": "Subtype scoring scans raw lines without object-body context. A valid object field such as `state = ready` is counted as a state declaration (+50), overwhelming the object declaration (+10)."
+      },
+      {
+        "location": "git diff 41f52949485715bf18c6c85c87805e8ecbef5107 da7a338517a368483e00290e5738ac96cbfb5e6a -- crates/rustuml-parser/src/parse/mod.rs",
+        "finding": "The implementation contains no fixture labels, golden reads, SVG surgery, coordinate keys, or new high-precision constants. It is mechanism-shaped, but its compatibility predicate is incomplete."
+      }
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_objects_tb_no_link.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_objects_tb_no_link.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_objects_tb_no_link.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_objects_tb_no_link.diff.txt",
+      "axes": ["ordinary package", "object-only", "top-to-bottom", "renamed labels", "no links"],
+      "result": "pass",
+      "finding": "Structurally equivalent. Cluster and object qualified names, source lines, ids, dimensions, and paint match."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_map_lr_no_link.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_map_lr_no_link.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_map_lr_no_link.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_map_lr_no_link.diff.txt",
+      "axes": ["ordinary package", "map-only", "left-to-right", "no links"],
+      "result": "fail",
+      "finding": "Identity and map dimensions match, but Rust shifts the map by 7.5x4.5 pixels and changes the package envelope. The standalone map control passes, making this container-specific residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_object_map_tb_link_order.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_object_map_tb_link_order.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_object_map_tb_link_order.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_package_object_map_tb_link_order.diff.txt",
+      "axes": ["ordinary package", "object plus map", "top-to-bottom", "link", "map declared first"],
+      "result": "fail",
+      "finding": "Dispatch preserves object/map leaf kinds and ids, but the map is shifted by 8x4 pixels inside the package; this repeats the container-specific map residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_objects_lr_link.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_objects_lr_link.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_objects_lr_link.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_objects_lr_link.diff.txt",
+      "axes": ["dotted namespace", "object-only", "left-to-right", "composition link", "renamed labels"],
+      "result": "fail",
+      "finding": "Rust preserves the synthesized namespace ancestry and qualified identities, but lays out the linked objects vertically. The top-level LR control fails the same way, so the direction failure is broader object-layout residue rather than a dispatch counterexample."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_map_tb_no_link.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_map_tb_no_link.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_map_tb_no_link.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_dotted_namespace_map_tb_no_link.diff.txt",
+      "axes": ["dotted namespace", "map-only", "top-to-bottom", "no links"],
+      "result": "fail",
+      "finding": "Namespace ancestry and map identity match, but Rust shifts the map by 8x4 pixels inside the leaf namespace. The same map passes outside a container."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_objects_tb.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_objects_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_objects_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_objects_tb.diff.txt",
+      "axes": ["explicit nested namespace", "object-only", "top-to-bottom", "valid field named state"],
+      "result": "fail",
+      "finding": "In-scope counterexample: Rust emits an empty STATE diagram because raw subtype scoring treats the object field `state = ready` as a state declaration. Java emits nested com/com.example clusters and the object leaf."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_object_map_lr_link.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_object_map_lr_link.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_object_map_lr_link.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_explicit_nested_namespace_object_map_lr_link.diff.txt",
+      "axes": ["explicit nested namespace", "object plus map", "left-to-right", "link"],
+      "result": "fail",
+      "finding": "In-scope counterexample: Java qualifies the inner group and leaves as net.demo.*, while Rust replaces the parent scope and emits demo.* with an empty displaced net cluster."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_aliased_package_object_tb.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_aliased_package_object_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_aliased_package_object_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_aliased_package_object_tb.diff.txt",
+      "axes": ["aliased ordinary package", "object-only", "top-to-bottom", "renamed label"],
+      "result": "fail",
+      "finding": "In-scope counterexample: the dispatch predicate calls the package ordinary, but ObjectParser rejects its valid alias syntax and silently drops the group. Java emits AliasBox/member; Rust emits only top-level member."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_class_negative.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_class_negative.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_class_negative.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_class_negative.diff.txt",
+      "axes": ["ordinary package", "object plus class negative control", "left-to-right", "link"],
+      "result": "fail",
+      "finding": "The negative control retains class parsing and the expected cluster/entity/link identities. Its strict mismatch is the broader class renderer's object header geometry, not over-broad object routing."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_description_negative.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_description_negative.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_description_negative.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_mixed_object_description_negative.diff.txt",
+      "axes": ["ordinary package", "object plus description negative control", "allowmixing", "top-to-bottom", "link"],
+      "result": "fail",
+      "finding": "The negative control retains class parsing and all expected identities. The mismatch is existing class/description leaf paint and object header geometry, not object-only dispatch."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_rectangle_symbol_object_negative.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_rectangle_symbol_object_negative.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_rectangle_symbol_object_negative.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_rectangle_symbol_object_negative.diff.txt",
+      "axes": ["nonordinary rectangle symbol container", "object-only negative control", "left-to-right", "link"],
+      "result": "fail",
+      "finding": "The symbol container retains class parsing and the complete cluster/entity/link structure. Existing class object dimensions differ; no object-backend theft was found."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_cloud_symbol_map_negative.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_cloud_symbol_map_negative.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_cloud_symbol_map_negative.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_cloud_symbol_map_negative.diff.txt",
+      "axes": ["nonordinary cloud symbol container", "map-only negative control", "top-to-bottom", "no links"],
+      "result": "fail",
+      "finding": "Rust retains class-family routing, but its class path renders the cloud as a leaf and drops the nested map instead of preserving Java's cloud group. This is a pre-existing package-symbol/class-model gap, not an object-routing regression."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_sibling_packages_cross_link_lr.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_sibling_packages_cross_link_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_sibling_packages_cross_link_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_sibling_packages_cross_link_lr.diff.txt",
+      "axes": ["two ordinary packages", "object-only", "cross-container link", "left-to-right", "declaration order"],
+      "result": "fail",
+      "finding": "Cluster membership and ids match, but Rust lays the graph vertically. The top-level LR control reproduces that broader direction failure."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_reopened_namespace_declaration_order_tb.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_reopened_namespace_declaration_order_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_reopened_namespace_declaration_order_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_reopened_namespace_declaration_order_tb.diff.txt",
+      "axes": ["reopened dotted namespace", "object plus map", "top-to-bottom", "declaration order", "link"],
+      "result": "fail",
+      "finding": "In-scope counterexample: Rust overwrites the namespace source line from 2 to 5 and allocates the namespace/object ids in a different order, changing link endpoint metadata. Java preserves the first group's identity."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_map_geometry_control.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_map_geometry_control.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_map_geometry_control.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_map_geometry_control.diff.txt",
+      "axes": ["top-level control", "map-only", "top-to-bottom", "no container"],
+      "result": "pass",
+      "finding": "Structurally equivalent. This isolates the map failures above to container integration rather than generic map dimensions or row paint."
+    },
+    {
+      "source": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_objects_lr_link_control.puml",
+      "golden": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_objects_lr_link_control.svg",
+      "rust_svg": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_objects_lr_link_control.rust.svg",
+      "diff": "test-diagrams/perturbations/object-only-container-backend-dispatch/checker_top_level_objects_lr_link_control.diff.txt",
+      "axes": ["top-level control", "object-only", "left-to-right", "link", "no container"],
+      "result": "fail",
+      "finding": "Rust lays the objects vertically despite the LR directive. This reproduces the direction mismatch without containers and separates it from the dispatch mechanism."
+    }
+  ],
+  "findings": [
+    "Rejected: the claimed compatibility predicate is broader than the backend it selects. Java-valid aliased packages are called ordinary but are not parsed by ObjectParser, so the container disappears.",
+    "Rejected: explicit nested namespaces are not representable by ObjectParser's single current_package slot. Rust loses parent qualification and emits an empty displaced outer cluster.",
+    "Rejected: detect_uml_subtype scans object body contents as global syntax. A valid field named `state` can override explicit object syntax and select an empty STATE diagram.",
+    "Rejected: reopened namespace identity is not stable. Rust overwrites the first source location and changes entity/link id allocation, violating the declaration-order axis named by the account.",
+    "Fresh map cases reveal a second object-container residue: top-level map paint passes exactly, but the same map inside a package or namespace is shifted and changes the envelope.",
+    "The mixed object+class, mixed object+description, and rectangle-symbol controls did not show over-broad object routing. Their remaining diffs are broader class-renderer residues. The cloud+map symbol control retains class-family routing but exposes an existing class symbol-group gap.",
+    "The implementation itself is not fixture-shaped and introduces no suspicious constants. The failure is a semantic completeness problem: the dispatch predicate does not share a grammar/capability model with the backend it selects.",
+    "The shared helper path matched the requested SHA-256 before the matrix and was replaced after all preserved artifacts were written. Artifact mtimes precede the replacement mtime, but the path drift is recorded because it is unsuitable as a durable binary provenance anchor."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "The change fixes the four narrow bare package/namespace object regressions, but does not establish the account's general invariant for Java-valid ordinary object-compatible containers. Aliases, explicit nesting, body-context scoring, and reopened namespace identity are counterexamples."
+}

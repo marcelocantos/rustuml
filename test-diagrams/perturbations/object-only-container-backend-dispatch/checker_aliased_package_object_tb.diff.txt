@@ -1,0 +1,12 @@
+SVG structural differences:
+  element count: expected 12, got 8
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "116px"), ("preserveAspectRatio", "none"), ("style", "width:175px;height:116px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 175 116"), ("width", "175px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "64px"), ("preserveAspectRatio", "none"), ("style", "width:142px;height:64px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 142 64"), ("width", "142px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "AliasBox"), ("data-source-line", "2"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "member"), ("data-source-line", "3"), ("id", "ent0002")]
+  [4] tag mismatch: expected <path>, got <rect>
+  [5] tag mismatch: expected <line>, got <text>
+  [6] tag mismatch: expected <text>, got <line>
+  [7] tag mismatch: expected <g>, got <text>

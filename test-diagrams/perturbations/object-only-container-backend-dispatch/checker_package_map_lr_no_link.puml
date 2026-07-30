@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+package "Feature Registry" {
+  map "Runtime Flags" as flags {
+    mode => strict
+    batch => 4
+  }
+}
+@enduml

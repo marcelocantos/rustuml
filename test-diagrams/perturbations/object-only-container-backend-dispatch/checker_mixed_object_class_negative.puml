@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package "Policy Domain" {
+  object "Runtime Policy" as runtime
+  class PolicyDefinition
+}
+runtime --> PolicyDefinition : realizes
+@enduml

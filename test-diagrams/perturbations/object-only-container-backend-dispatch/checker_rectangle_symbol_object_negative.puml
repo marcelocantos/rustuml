@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+rectangle "Presentation Shell" {
+  object "View Model" as view_model
+  object "Render State" as render_state
+}
+view_model --> render_state
+@enduml

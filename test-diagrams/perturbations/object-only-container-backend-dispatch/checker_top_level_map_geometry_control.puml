@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+map "Standalone Flags" as flags {
+  mode => strict
+  batch => 4
+}
+@enduml

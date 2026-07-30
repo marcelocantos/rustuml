@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+namespace com {
+  namespace example {
+    object "Nested Worker" as worker {
+      state = ready
+    }
+  }
+}
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+namespace net {
+  namespace demo {
+    map "Lookup Table" as lookup {
+      key => value
+    }
+    object "Lookup Client" as client
+  }
+}
+client --> lookup : reads
+@enduml
