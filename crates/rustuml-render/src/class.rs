@@ -2186,66 +2186,34 @@ fn render_with_oracle_uid_origin(
         .collect();
     let mut entity_layout_slots = vec![0; diagram.entities.len()];
     let mut floating_layout_slots = vec![None; diagram.notes.len()];
+    let mut attached_layout_slots_by_note = vec![None; diagram.notes.len()];
     let mut empty_package_layout_slots = vec![None; diagram.packages.len()];
     let mut next_layout_slot = 0;
     let svek_nodes = svek_node_emission_order(diagram);
-    let root_start = svek_nodes
-        .iter()
-        .position(|node| {
-            matches!(
-                node,
-                SvekNodeEmission::Entity(idx)
-                    if package_render.innermost_pkg[*idx].is_none()
-            )
-        })
-        .unwrap_or(svek_nodes.len());
-    let mut layout_nodes = svek_nodes[..root_start]
-        .iter()
-        .copied()
-        .map(ClassLayoutNodeEmission::Svek)
-        .collect::<Vec<_>>();
-    let mut root_nodes = svek_nodes[root_start..]
-        .iter()
-        .filter_map(|node| match node {
-            SvekNodeEmission::Entity(idx) => Some((
-                diagram.entities[*idx].source_line,
-                false,
-                *idx,
-                ClassLayoutNodeEmission::Svek(*node),
-            )),
-            SvekNodeEmission::EmptyPackage(_) => None,
-        })
-        .chain(floating_note_indices.iter().map(|&idx| {
-            (
-                diagram.notes[idx].source_line,
-                true,
-                idx,
-                ClassLayoutNodeEmission::FloatingNote(idx),
-            )
-        }))
-        .collect::<Vec<_>>();
-    root_nodes.sort_by_key(|&(source_line, is_note, idx, _)| (source_line, is_note, idx));
-    layout_nodes.extend(root_nodes.into_iter().map(|(_, _, _, node)| node));
-
-    for node in layout_nodes {
+    for node in svek_nodes {
         match node {
-            ClassLayoutNodeEmission::Svek(SvekNodeEmission::Entity(idx)) => {
+            SvekNodeEmission::Entity(idx) => {
                 let entity = &diagram.entities[idx];
                 let dim = &dims[idx];
                 layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
                 entity_layout_slots[idx] = next_layout_slot;
             }
-            ClassLayoutNodeEmission::Svek(SvekNodeEmission::EmptyPackage(idx)) => {
+            SvekNodeEmission::Note(idx) => {
+                let note = &diagram.notes[idx];
+                let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
+                if note.target.is_some() && note.position.is_some() {
+                    layout.add_node(&attached_note_layout_id(idx), "", width, height);
+                    attached_layout_slots_by_note[idx] = Some(next_layout_slot);
+                } else {
+                    layout.add_node(&floating_note_layout_id(idx), "", width, height);
+                    floating_layout_slots[idx] = Some(next_layout_slot);
+                }
+            }
+            SvekNodeEmission::EmptyPackage(idx) => {
                 let package = &diagram.packages[idx];
                 let (width, height) = empty_package_intrinsic_dims(package);
                 layout.add_node(&empty_package_layout_id(idx), "", width, height);
                 empty_package_layout_slots[idx] = Some(next_layout_slot);
-            }
-            ClassLayoutNodeEmission::FloatingNote(idx) => {
-                let note = &diagram.notes[idx];
-                let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
-                layout.add_node(&floating_note_layout_id(idx), "", width, height);
-                floating_layout_slots[idx] = Some(next_layout_slot);
             }
         }
         next_layout_slot += 1;
@@ -2287,16 +2255,11 @@ fn render_with_oracle_uid_origin(
             );
         }
     }
-    let mut attached_layout_slots = Vec::new();
     for (idx, note) in diagram.notes.iter().enumerate() {
         let (Some(target), Some(position)) = (note.target.as_deref(), note.position) else {
             continue;
         };
         let note_id = attached_note_layout_id(idx);
-        let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
-        layout.add_node(&note_id, "", width, height);
-        attached_layout_slots.push(next_layout_slot);
-        next_layout_slot += 1;
         match position {
             NotePosition::Left => {
                 layout.add_same_rank(&note_id, target);
@@ -2310,6 +2273,10 @@ fn render_with_oracle_uid_origin(
             NotePosition::Bottom => layout.add_edge(target, &note_id, None),
         }
     }
+    let attached_layout_slots = attached_layout_slots_by_note
+        .into_iter()
+        .flatten()
+        .collect::<Vec<_>>();
     for (idx, pkg) in diagram.packages.iter().enumerate() {
         if package_render.roles[idx] != PackageRenderRole::Cluster {
             continue;
@@ -4152,6 +4119,7 @@ struct SvekEmissionOrder<'a> {
     diagram: &'a ClassDiagram,
     parent_pkg: &'a [Option<usize>],
     innermost_pkg: &'a [Option<usize>],
+    note_owner_pkg: &'a [Option<usize>],
     package_roles: &'a [PackageRenderRole],
     node_order: Vec<SvekNodeEmission>,
 }
@@ -4159,6 +4127,7 @@ struct SvekEmissionOrder<'a> {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum SvekNodeEmission {
     Entity(usize),
+    Note(usize),
     EmptyPackage(usize),
 }
 
@@ -4176,19 +4145,66 @@ enum LayoutNoteEmission {
     },
 }
 
-#[derive(Clone, Copy)]
-enum ClassLayoutNodeEmission {
-    Svek(SvekNodeEmission),
-    FloatingNote(usize),
-}
-
 impl SvekEmissionOrder<'_> {
-    fn collect_package(&mut self, pkg_idx: usize) {
-        for (entity_idx, _) in self.diagram.entities.iter().enumerate() {
-            if self.innermost_pkg[entity_idx] == Some(pkg_idx) {
-                self.node_order.push(SvekNodeEmission::Entity(entity_idx));
+    fn collect_direct_leaves(&mut self, owner: Option<usize>) {
+        if self.diagram.uid_events.is_empty() {
+            let mut leaves = self
+                .diagram
+                .entities
+                .iter()
+                .enumerate()
+                .filter(|(idx, _)| self.innermost_pkg[*idx] == owner)
+                .map(|(idx, entity)| (entity.source_line, 0_u8, idx, SvekNodeEmission::Entity(idx)))
+                .chain(
+                    self.diagram
+                        .notes
+                        .iter()
+                        .enumerate()
+                        .filter(|(idx, note)| {
+                            self.note_owner_pkg[*idx] == owner && note_is_svek_leaf(note)
+                        })
+                        .map(|(idx, note)| {
+                            (note.source_line, 1_u8, idx, SvekNodeEmission::Note(idx))
+                        }),
+                )
+                .collect::<Vec<_>>();
+            leaves.sort_by_key(|&(source_line, kind, idx, _)| (source_line, kind, idx));
+            self.node_order
+                .extend(leaves.into_iter().map(|(_, _, _, node)| node));
+            return;
+        }
+
+        for event in &self.diagram.uid_events {
+            match event {
+                ClassUidEvent::Entity(id) => {
+                    if let Some(idx) = self
+                        .diagram
+                        .entities
+                        .iter()
+                        .position(|entity| entity.id == *id)
+                        && self.innermost_pkg[idx] == owner
+                    {
+                        self.node_order.push(SvekNodeEmission::Entity(idx));
+                    }
+                }
+                ClassUidEvent::Note { index, .. } => {
+                    if self.note_owner_pkg.get(*index).copied().flatten() == owner
+                        && self
+                            .diagram
+                            .notes
+                            .get(*index)
+                            .is_some_and(note_is_svek_leaf)
+                    {
+                        self.node_order.push(SvekNodeEmission::Note(*index));
+                    }
+                }
+                _ => {}
             }
         }
+    }
+
+    fn collect_package(&mut self, pkg_idx: usize) {
+        self.collect_direct_leaves(Some(pkg_idx));
         for child_idx in 0..self.diagram.packages.len() {
             if self.parent_pkg[child_idx] != Some(pkg_idx) {
                 continue;
@@ -4204,14 +4220,57 @@ impl SvekEmissionOrder<'_> {
     }
 }
 
+fn note_is_svek_leaf(note: &Note) -> bool {
+    (note.target.is_some() && note.position.is_some())
+        || (note.target.is_none() && note.alias.is_some())
+}
+
+fn note_owner_packages(
+    diagram: &ClassDiagram,
+    innermost_pkg: &[Option<usize>],
+) -> Vec<Option<usize>> {
+    let mut owners = vec![None; diagram.notes.len()];
+    for event in &diagram.uid_events {
+        let ClassUidEvent::Note {
+            index,
+            owner_package,
+        } = event
+        else {
+            continue;
+        };
+        if let Some(owner_name) = owner_package {
+            owners[*index] = diagram
+                .packages
+                .iter()
+                .position(|package| package.name == *owner_name);
+        }
+    }
+    if diagram.uid_events.is_empty() {
+        for (note_idx, note) in diagram.notes.iter().enumerate() {
+            owners[note_idx] = note.target.as_deref().and_then(|target| {
+                diagram
+                    .entities
+                    .iter()
+                    .position(|entity| entity.id == target)
+                    .and_then(|entity_idx| innermost_pkg[entity_idx])
+            });
+        }
+    }
+    owners
+}
+
 fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
     let package_render = package_render_model(diagram);
+    let note_owner_pkg = note_owner_packages(diagram, &package_render.innermost_pkg);
     let mut emission = SvekEmissionOrder {
         diagram,
         parent_pkg: &package_render.parent_pkg,
         innermost_pkg: &package_render.innermost_pkg,
+        note_owner_pkg: &note_owner_pkg,
         package_roles: &package_render.roles,
-        node_order: Vec::with_capacity(diagram.entities.len() + diagram.packages.len()),
+        node_order: Vec::with_capacity(
+            diagram.entities.len() + diagram.notes.len() + diagram.packages.len(),
+        ),
     };
 
     for (pkg_idx, parent) in package_render.parent_pkg.iter().copied().enumerate() {
@@ -4229,19 +4288,7 @@ fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
         }
     }
 
-    let mut root_entities = diagram
-        .entities
-        .iter()
-        .enumerate()
-        .filter(|(idx, _)| package_render.innermost_pkg[*idx].is_none())
-        .map(|(idx, entity)| (entity.source_line, idx))
-        .collect::<Vec<_>>();
-    root_entities.sort_by_key(|&(source_line, idx)| (source_line, idx));
-    emission.node_order.extend(
-        root_entities
-            .into_iter()
-            .map(|(_, idx)| SvekNodeEmission::Entity(idx)),
-    );
+    emission.collect_direct_leaves(None);
 
     emission.node_order
 }
@@ -4293,7 +4340,7 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         .into_iter()
         .filter_map(|node| match node {
             SvekNodeEmission::Entity(idx) => Some(idx),
-            SvekNodeEmission::EmptyPackage(_) => None,
+            SvekNodeEmission::Note(_) | SvekNodeEmission::EmptyPackage(_) => None,
         })
         .collect();
 
@@ -4356,11 +4403,11 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
                     .iter()
                     .position(|entity| entity.id == *id)
                     .map(CucaUidEvent::Entity),
-                ClassUidEvent::Note(idx) => diagram.notes.get(*idx).and_then(|note| {
+                ClassUidEvent::Note { index, .. } => diagram.notes.get(*index).and_then(|note| {
                     if note.target.is_some() && note.position.is_some() {
-                        Some(CucaUidEvent::AttachedNote(*idx))
+                        Some(CucaUidEvent::AttachedNote(*index))
                     } else if note.target.is_none() && note.alias.is_some() {
-                        Some(CucaUidEvent::FloatingNote(*idx))
+                        Some(CucaUidEvent::FloatingNote(*index))
                     } else {
                         None
                     }
@@ -5161,47 +5208,36 @@ fn render_plantuml_svg(
         .iter()
         .filter_map(|node| match node {
             SvekNodeEmission::Entity(idx) => Some(*idx),
-            SvekNodeEmission::EmptyPackage(_) => None,
+            SvekNodeEmission::Note(_) | SvekNodeEmission::EmptyPackage(_) => None,
         })
         .collect::<Vec<_>>();
     let mut node_emission_cursor = 0;
-    let layout_floating_notes = floating_notes
-        .iter()
-        .filter_map(|&(note_idx, node_idx)| {
-            svek_ids.note_ids[note_idx].as_deref().map(|entity_id| {
-                (
-                    ent_id_seq(Some(entity_id)),
-                    LayoutNoteEmission::Floating {
-                        note_idx,
-                        node_idx,
-                        entity_id: entity_id.to_string(),
-                    },
-                )
-            })
-        })
-        .collect::<Vec<_>>();
-    let layout_attached_notes =
-        attached_notes
-            .iter()
-            .filter_map(|&(note_idx, node_idx, position)| {
-                svek_ids.attached_note_starts[note_idx].map(|note_start| {
-                    (
-                        ent_id_seq(Some(&format!("ent{:04}", note_start + 1))),
-                        LayoutNoteEmission::Attached {
-                            note_idx,
-                            node_idx,
-                            position,
-                            note_start,
-                        },
-                    )
-                })
-            });
-    let mut layout_note_emissions = layout_floating_notes
-        .into_iter()
-        .chain(layout_attached_notes)
-        .collect::<Vec<_>>();
-    layout_note_emissions.sort_by_key(|(sequence, _)| *sequence);
-    let mut layout_note_cursor = 0;
+    let mut layout_note_emissions = HashMap::new();
+    for &(note_idx, node_idx) in &floating_notes {
+        if let Some(entity_id) = svek_ids.note_ids[note_idx].as_deref() {
+            layout_note_emissions.insert(
+                note_idx,
+                LayoutNoteEmission::Floating {
+                    note_idx,
+                    node_idx,
+                    entity_id: entity_id.to_string(),
+                },
+            );
+        }
+    }
+    for &(note_idx, node_idx, position) in &attached_notes {
+        if let Some(note_start) = svek_ids.attached_note_starts[note_idx] {
+            layout_note_emissions.insert(
+                note_idx,
+                LayoutNoteEmission::Attached {
+                    note_idx,
+                    node_idx,
+                    position,
+                    note_start,
+                },
+            );
+        }
+    }
 
     // Cursor over `oracle_note_entities` (already sorted by emission counter).
     // `emit_note` writes one note's `<g class="entity">…</g>` wrapper; the loop
@@ -5215,17 +5251,41 @@ fn render_plantuml_svg(
 
     // Render each entity.
     for &i in &emission_order {
-        while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
-            node_emission_order.get(node_emission_cursor).copied()
-        {
-            if let Some(empty) = layout_empty_packages
-                .iter()
-                .find(|empty| empty.package_idx == package_idx)
-            {
-                let entity_id = svek_ids.package_ids[package_idx]
-                    .as_deref()
-                    .unwrap_or("ent0002");
-                emit_layout_empty_package(&mut svg, empty, entity_id);
+        while let Some(node) = node_emission_order.get(node_emission_cursor).copied() {
+            match node {
+                SvekNodeEmission::Entity(idx) => {
+                    debug_assert_eq!(idx, i);
+                    break;
+                }
+                SvekNodeEmission::Note(note_idx) => {
+                    if oracle.is_none()
+                        && let Some(emission) = layout_note_emissions.get(&note_idx)
+                    {
+                        render_svek_note_emission(
+                            &mut svg,
+                            diagram,
+                            emission,
+                            positions,
+                            edge_paths,
+                            &resolved_relationship_edges,
+                            &floating_note_opale_relationships,
+                            layout_x_bias,
+                            body_dx,
+                            body_dy,
+                        );
+                    }
+                }
+                SvekNodeEmission::EmptyPackage(package_idx) => {
+                    if let Some(empty) = layout_empty_packages
+                        .iter()
+                        .find(|empty| empty.package_idx == package_idx)
+                    {
+                        let entity_id = svek_ids.package_ids[package_idx]
+                            .as_deref()
+                            .unwrap_or("ent0002");
+                        emit_layout_empty_package(&mut svg, empty, entity_id);
+                    }
+                }
             }
             node_emission_cursor += 1;
         }
@@ -5295,27 +5355,7 @@ fn render_plantuml_svg(
                 .unwrap_or(seq_ent_id)
         };
 
-        // Flush any note entities whose emission counter precedes this entity's
-        // (e.g. a `note … as N` declared before the first `entity`).
         let cur_seq = ent_id_seq(Some(&current_ent_id));
-        while oracle.is_none()
-            && layout_note_cursor < layout_note_emissions.len()
-            && layout_note_emissions[layout_note_cursor].0 < cur_seq
-        {
-            render_svek_note_emission(
-                &mut svg,
-                diagram,
-                &layout_note_emissions[layout_note_cursor].1,
-                positions,
-                edge_paths,
-                &resolved_relationship_edges,
-                &floating_note_opale_relationships,
-                layout_x_bias,
-                body_dx,
-                body_dy,
-            );
-            layout_note_cursor += 1;
-        }
         while note_cursor < oracle_note_entities.len()
             && ent_id_seq(oracle_note_entities[note_cursor].entity_id.as_deref()) < cur_seq
         {
@@ -5449,33 +5489,40 @@ fn render_plantuml_svg(
         }
     }
 
-    while oracle.is_none() && layout_note_cursor < layout_note_emissions.len() {
-        render_svek_note_emission(
-            &mut svg,
-            diagram,
-            &layout_note_emissions[layout_note_cursor].1,
-            positions,
-            edge_paths,
-            &resolved_relationship_edges,
-            &floating_note_opale_relationships,
-            layout_x_bias,
-            body_dx,
-            body_dy,
-        );
-        layout_note_cursor += 1;
-    }
-
-    while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
-        node_emission_order.get(node_emission_cursor).copied()
-    {
-        if let Some(empty) = layout_empty_packages
-            .iter()
-            .find(|empty| empty.package_idx == package_idx)
-        {
-            let entity_id = svek_ids.package_ids[package_idx]
-                .as_deref()
-                .unwrap_or("ent0002");
-            emit_layout_empty_package(&mut svg, empty, entity_id);
+    while let Some(node) = node_emission_order.get(node_emission_cursor).copied() {
+        match node {
+            SvekNodeEmission::Entity(_) => {
+                debug_assert!(false, "unconsumed entity in SVEK traversal");
+            }
+            SvekNodeEmission::Note(note_idx) => {
+                if oracle.is_none()
+                    && let Some(emission) = layout_note_emissions.get(&note_idx)
+                {
+                    render_svek_note_emission(
+                        &mut svg,
+                        diagram,
+                        emission,
+                        positions,
+                        edge_paths,
+                        &resolved_relationship_edges,
+                        &floating_note_opale_relationships,
+                        layout_x_bias,
+                        body_dx,
+                        body_dy,
+                    );
+                }
+            }
+            SvekNodeEmission::EmptyPackage(package_idx) => {
+                if let Some(empty) = layout_empty_packages
+                    .iter()
+                    .find(|empty| empty.package_idx == package_idx)
+                {
+                    let entity_id = svek_ids.package_ids[package_idx]
+                        .as_deref()
+                        .unwrap_or("ent0002");
+                    emit_layout_empty_package(&mut svg, empty, entity_id);
+                }
+            }
         }
         node_emission_cursor += 1;
     }
@@ -16178,6 +16225,7 @@ mod tests {
             .into_iter()
             .map(|node| match node {
                 SvekNodeEmission::Entity(idx) => diagram.entities[idx].label.as_str(),
+                SvekNodeEmission::Note(idx) => diagram.notes[idx].alias.as_deref().unwrap_or("GMN"),
                 SvekNodeEmission::EmptyPackage(idx) => {
                     package_display_label(&diagram.packages[idx])
                 }
@@ -16421,6 +16469,47 @@ mod tests {
             r#"data-qualified-name="PaintTail1039""#,
         ];
 
+        assert!(markers.windows(2).all(|pair| {
+            svg.find(pair[0]).expect("missing earlier SVEK node")
+                < svg.find(pair[1]).expect("missing later SVEK node")
+        }));
+    }
+
+    #[test]
+    fn package_traversal_precedes_root_notes_regardless_of_constructor_ids() {
+        let input = "@startuml\n\
+            class FreshRoot4141\n\
+            note right of FreshRoot4141 : root note before package\n\
+            package FreshScope4153 {\n\
+              class FreshNested4157\n\
+              note left of FreshNested4157 : nested note\n\
+            }\n\
+            class FreshTail4163\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(
+            svek_node_emission_order(&diagram),
+            [
+                SvekNodeEmission::Entity(1),
+                SvekNodeEmission::Note(1),
+                SvekNodeEmission::Entity(0),
+                SvekNodeEmission::Note(0),
+                SvekNodeEmission::Entity(2),
+            ]
+        );
+
+        let svg = render(&diagram, &Theme::default());
+        let markers = [
+            r#"data-qualified-name="FreshScope4153.FreshNested4157""#,
+            r#"data-qualified-name="GMN8""#,
+            r#"data-qualified-name="FreshRoot4141""#,
+            r#"data-qualified-name="GMN3""#,
+            r#"data-qualified-name="FreshTail4163""#,
+        ];
         assert!(markers.windows(2).all(|pair| {
             svg.find(pair[0]).expect("missing earlier SVEK node")
                 < svg.find(pair[1]).expect("missing later SVEK node")

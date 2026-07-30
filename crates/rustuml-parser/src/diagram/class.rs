@@ -78,9 +78,14 @@ pub struct ClassDiagram {
 pub enum ClassUidEvent {
     Package(String),
     Entity(String),
-    Note(usize),
+    Note {
+        index: usize,
+        owner_package: Option<String>,
+    },
     Relationship(usize),
-    DiscardedRelationship { inverted: bool },
+    DiscardedRelationship {
+        inverted: bool,
+    },
     Association(usize),
 }
 

@@ -204,7 +204,13 @@ impl ClassParser {
     }
 
     fn push_note(&mut self, note: Note) {
-        self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
+        self.uid_events.push(ClassUidEvent::Note {
+            index: self.notes.len(),
+            owner_package: self
+                .package_stack
+                .last()
+                .map(|&index| self.packages[index].name.clone()),
+        });
         self.notes.push(note);
     }
 
@@ -478,6 +484,17 @@ impl ClassParser {
             return self.packages[idx].name.clone();
         }
         self.resolve_relationship_endpoint(&strip_creole_for_id(raw))
+    }
+
+    fn resolve_note_target(&self, raw: &str) -> String {
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+        if let Some(&idx) = self.entity_by_path.get(&path) {
+            return self.entities[idx].id.clone();
+        }
+        if let Some(&idx) = self.package_by_path.get(&path) {
+            return self.packages[idx].name.clone();
+        }
+        raw.to_string()
     }
 
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
@@ -1401,7 +1418,7 @@ impl ClassParser {
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
-            let target = caps[2].to_string();
+            let target = self.resolve_note_target(&caps[2]);
             let text = caps[3].trim().to_string();
             // Expand `\n` escape sequences into actual newlines.  Preserve
             // leading whitespace on each segment so that indented `* items`
@@ -1425,7 +1442,7 @@ impl ClassParser {
 
         if let Some(caps) = ATTACHED_ML_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
-            let target = caps[2].to_string();
+            let target = self.resolve_note_target(&caps[2]);
             self.current_note = Some(Note {
                 lines: Vec::new(),
                 target: Some(target),
@@ -3732,6 +3749,28 @@ mod tests {
             d.notes[0].lines,
             ["First content line", "Second content line"]
         );
+    }
+
+    #[test]
+    fn nested_attached_note_keeps_resolved_target_and_constructor_owner() {
+        let d = parse(
+            "package FreshScope4121 {\n\
+               class FreshNested4127\n\
+               note left of FreshNested4127 : scoped note\n\
+             }",
+        );
+
+        assert_eq!(
+            d.notes[0].target.as_deref(),
+            Some("FreshScope4121.FreshNested4127")
+        );
+        assert!(d.uid_events.iter().any(|event| matches!(
+            event,
+            ClassUidEvent::Note {
+                index: 0,
+                owner_package: Some(owner),
+            } if owner == "FreshScope4121"
+        )));
     }
 
     #[test]
