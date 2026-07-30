@@ -2403,12 +2403,13 @@ impl AutonomousTextStyle {
 
 fn state_skinparam_preferred_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
     keys.iter().find_map(|key| {
+        let key = rustuml_parser::parse::canonical_skinparam_key(key);
         diagram
             .meta
             .skinparams
             .iter()
             .rev()
-            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
+            .find(|skinparam| rustuml_parser::parse::canonical_skinparam_key(&skinparam.key) == key)
             .map(|skinparam| skinparam.value.trim().to_string())
     })
 }
@@ -2486,14 +2487,18 @@ fn is_state_monospace_family(family: &str) -> bool {
 }
 
 fn state_skinparam_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
+    let keys = keys
+        .iter()
+        .map(|key| rustuml_parser::parse::canonical_skinparam_key(key))
+        .collect::<Vec<_>>();
     diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|skinparam| {
-            keys.iter()
-                .any(|key| skinparam.key.eq_ignore_ascii_case(key))
+            let skinparam_key = rustuml_parser::parse::canonical_skinparam_key(&skinparam.key);
+            keys.iter().any(|key| skinparam_key == key.as_str())
         })
         .map(|skinparam| skinparam.value.trim().to_string())
 }
@@ -2745,12 +2750,14 @@ struct StateArrowFont {
 impl StateArrowFont {
     fn from_skinparams(diagram: &StateDiagram) -> Self {
         let find = |keys: &[&str]| {
-            diagram
-                .meta
-                .skinparams
+            let keys = keys
                 .iter()
-                .rev()
-                .find(|sp| keys.iter().any(|key| sp.key.eq_ignore_ascii_case(key)))
+                .map(|key| rustuml_parser::parse::canonical_skinparam_key(key))
+                .collect::<Vec<_>>();
+            diagram.meta.skinparams.iter().rev().find(|sp| {
+                let key = rustuml_parser::parse::canonical_skinparam_key(&sp.key);
+                keys.iter().any(|expected| key == expected.as_str())
+            })
         };
         let color = find(&["stateArrowFontColor", "arrowFontColor"])
             .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
@@ -3447,12 +3454,13 @@ fn layout_autonomous_scope(
 /// `skinparam nodesep` or `skinparam ranksep` value.
 fn autonomous_outer_spacing(diagram: &StateDiagram) -> GraphSpacing {
     let explicit_nonzero = |key: &str| {
+        let key = rustuml_parser::parse::canonical_skinparam_key(key);
         diagram
             .meta
             .skinparams
             .iter()
             .rev()
-            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
+            .find(|skinparam| rustuml_parser::parse::canonical_skinparam_key(&skinparam.key) == key)
             .and_then(|skinparam| {
                 let value = skinparam.value.trim();
                 (!value.is_empty() && value.bytes().all(|byte| byte.is_ascii_digit()))
@@ -3481,8 +3489,9 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
             rest = &rest[start + 2 + end + 2..];
         }
         canonical.push_str(rest);
+        let canonical = rustuml_parser::parse::canonical_skinparam_key(&canonical);
         matches!(
-            canonical.to_ascii_lowercase().as_str(),
+            canonical.as_str(),
             "nodesep"
                 | "ranksep"
                 | "statebackgroundcolor"
@@ -3521,17 +3530,14 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
 
 fn has_only_flat_label_skinparams(diagram: &StateDiagram) -> bool {
     diagram.meta.skinparams.iter().all(|skinparam| {
+        let key = rustuml_parser::parse::canonical_skinparam_key(&skinparam.key);
         matches!(
-            skinparam.key.to_ascii_lowercase().as_str(),
-            "statearrowfontcolor"
-                | "arrowfontcolor"
-                | "statearrowfontsize"
+            key.as_str(),
+            "arrowfontcolor"
                 | "arrowfontsize"
                 | "defaultfontsize"
-                | "statearrowfontname"
                 | "arrowfontname"
                 | "defaultfontname"
-                | "statearrowfontstyle"
                 | "arrowfontstyle"
                 | "statemessagealignment"
                 | "defaulttextalignment"
@@ -11640,6 +11646,29 @@ CobaltDecision --> [*]
         assert_eq!(font.alignment, StateLabelAlignment::Right);
         assert_eq!(block.alignment, StateLabelAlignment::Left);
         assert_eq!(block.row_x(31.0, 0), 31.0);
+    }
+
+    #[test]
+    fn dotted_alignment_alias_keeps_flat_label_painted_frontier() {
+        let input = concat!(
+            "@startuml\n",
+            "left to right direction\n",
+            "skinparam State.Arrow_Font.Name Courier New\n",
+            "skinparam State.Arrow_Font.Size 11\n",
+            "skinparam State.Message_Alignment left\n",
+            "skinparam default.text.align right\n",
+            "state \"First Relay\" as First\n",
+            "state \"Second Relay\" as Second\n",
+            "First --> Second : prefix row\\rnatural right row\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"width="89.8291" x="7" y="7.8032""#), "{svg}");
+        assert!(svg.contains(
+            r#"font-family="Courier New" font-size="11" lengthAdjust="spacing" textLength="66.0107" x="174.0375" y="16.9609""#
+        ));
     }
 
     #[test]

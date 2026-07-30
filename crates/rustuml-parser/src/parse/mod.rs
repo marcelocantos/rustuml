@@ -39,7 +39,12 @@ fn normalized_skinparam_spelling(key: &str) -> String {
     key.trim().to_ascii_lowercase().replace(['_', '.'], "")
 }
 
-fn canonical_skinparam_key(key: &str) -> String {
+/// Return the ordinary-key identity used by Java
+/// `SkinParam.cleanForKeySlow`.
+///
+/// Renderers use this when consuming retained source spellings from
+/// [`crate::diagram::DiagramMeta::skinparams`].
+pub fn canonical_skinparam_key(key: &str) -> String {
     let mut canonical = normalized_skinparam_spelling(key);
     canonical = canonical
         .replace("sequenceparticipant", "participant")
@@ -1817,6 +1822,22 @@ mod tests {
         assert_eq!(matching.len(), 1);
         assert_eq!(matching[0].key, "defaulttextalignment");
         assert_eq!(matching[0].value, "right");
+    }
+
+    #[test]
+    fn canonical_skinparam_key_matches_java_cleanup_rules() {
+        assert_eq!(
+            canonical_skinparam_key(" State.Arrow_Font.Name "),
+            "arrowfontname"
+        );
+        assert_eq!(
+            canonical_skinparam_key("default.text_align"),
+            "defaulttextalignment"
+        );
+        assert_eq!(
+            canonical_skinparam_key("Sequence.Participant_Padding"),
+            "participantpadding"
+        );
     }
 
     #[test]
