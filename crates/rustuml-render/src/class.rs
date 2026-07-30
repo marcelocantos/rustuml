@@ -4351,6 +4351,15 @@ fn note_owner_packages(
 }
 
 fn note_qualified_name(diagram: &ClassDiagram, note_idx: usize, leaf: &str) -> String {
+    if let Some(id) = diagram
+        .notes
+        .get(note_idx)
+        .and_then(|note| note.id.as_deref())
+    {
+        // EntityImageNote writes Entity.getQuark().getQualifiedName(); the SVG
+        // writer then translates each namespace-separator character.
+        return translate_qualified_name(id);
+    }
     let package_render = package_render_model(diagram);
     let owners = note_owner_packages(diagram, &package_render.innermost_pkg);
     let translated_leaf = translate_qualified_name(leaf);
@@ -17084,6 +17093,27 @@ mod tests {
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains(&format!(r#"data-qualified-name="{attached_name}""#)));
         assert!(svg.contains(r#"data-qualified-name="FreshOwner4211.FreshMemo4231""#));
+    }
+
+    #[test]
+    fn named_notes_translate_their_canonical_namespace_separator_identity() {
+        let input = "@startuml\n\
+            set namespaceSeparator ::\n\
+            package FreshArchive4241 {\n\
+              class FreshDirect4243\n\
+            }\n\
+            package FreshArchive4241 {\n\
+              note \"separator memo\" as FreshMemo4253\n\
+              FreshMemo4253 .. FreshArchive4241::FreshDirect4243\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"data-qualified-name="FreshArchive4241..FreshMemo4253""#));
     }
 
     #[test]
