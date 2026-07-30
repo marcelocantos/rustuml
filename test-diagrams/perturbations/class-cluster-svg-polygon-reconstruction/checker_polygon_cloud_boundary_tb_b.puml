@@ -1,0 +1,10 @@
+@startuml
+skinparam packageStyle cloud
+package "Boundary Cloud Delta 8707" as BoundaryCloud8707 {
+  class BoundaryLeaf8709
+  class BoundaryPeer8711
+  BoundaryLeaf8709 --> BoundaryPeer8711
+}
+class Outside8713
+BoundaryPeer8711 --> Outside8713
+@enduml

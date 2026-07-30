@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-header-separation",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 09014421, did not edit production source, and did not edit account.json."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-adversarial-09014421",
+    "rust_revision": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "rust_tree": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "e564a723cf16ec3a4fcc7ce2fce934befbd3712374fa6654988ade263a794488",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git show 09014421 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/class.rs",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+    "rg -n -i 'class-package-style-header-separation|checker_' crates",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.puml > test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.puml > test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.puml"
+  ],
+  "source_inspection": {
+    "supported": [
+      "Java ClusterHeader reads reserves only from group.getUSymbol() before ClusterDecoration performs packageStyle fallback.",
+      "Java ClusterDecoration passes both title and stereo blocks to symbol.asBig().",
+      "No fixture-shaped branches, held-out filenames, or mechanism-name strings were found in shipping crates."
+    ],
+    "disproven": [
+      "Rust emit_layout_symbol_cluster_title at crates/rustuml-render/src/class.rs:6742-6759 emits only the bold label text for symbol clusters and never emits stereotype lines.",
+      "Node and database cluster emitters call that label-only helper from crates/rustuml-render/src/class.rs:6441-6446 and 6767-6769, so fallback node/database headers with visible stereotypes do not match Java's title-plus-stereo block."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.svg",
+      "axes": [
+        "packageStyle node versus explicit node",
+        "title plus visible stereotype",
+        "top-to-bottom",
+        "top-level clusters"
+      ],
+      "outcome": "fail: Rust drops the fallback package stereotype block and centers the title as though it were the first header line."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.svg",
+      "axes": [
+        "packageStyle database versus explicit database",
+        "title plus visible stereotype",
+        "left-to-right",
+        "nested fallback cluster"
+      ],
+      "outcome": "fail: Rust again omits the fallback package stereotype block and mis-shapes the database header region."
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 2,
+    "valid_inputs": 2,
+    "valid_passed": 0,
+    "valid_failed": 2
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The implementation still conflates symbol-cluster headers with plain label-only titles.",
+      "evidence": "Both fresh held-outs fail because Java passes the stereotype block into symbol.asBig(), while Rust's emit_layout_symbol_cluster_title only writes the bold label. The missing stereotype shifts header ordering and cluster geometry."
+    },
+    {
+      "severity": "informational",
+      "summary": "The reviewed diff shows no fixture-shaped logic or post-hoc SVG surgery.",
+      "evidence": "Searches over shipping crates found no mechanism-name strings, held-out filenames, or coordinate-keyed SVG rewrites for this mechanism."
+    }
+  ],
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-package-style-header-separation/",
+    "review": "docs/parity-reviews/class-package-style-header-separation/review.json",
+    "production_files_modified": false,
+    "account_modified": false
+  },
+  "verdict": "REJECT"
+}

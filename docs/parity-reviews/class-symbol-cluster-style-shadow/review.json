@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-cluster-style-shadow",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 09014421, did not edit production source, and did not edit account.json."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-adversarial-09014421",
+    "rust_revision": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "rust_tree": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "e564a723cf16ec3a4fcc7ce2fce934befbd3712374fa6654988ade263a794488",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git show 09014421 -- crates/rustuml-render/src/class.rs",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.puml > test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.puml > test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.puml > test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.puml"
+  ],
+  "source_inspection": {
+    "supported": [
+      "package_skinparam now allows generic Package background and border values to feed explicit symbol clusters.",
+      "The shadow filter is attached to package cluster shapes, and no fixture-shaped logic or post-hoc SVG surgery was found in shipping crates."
+    ],
+    "disproven": [
+      "package_cluster_envelope_extra at crates/rustuml-render/src/class.rs:3753-3775 adds shadow-related envelope growth only for database, node, and cloud clusters.",
+      "Java LimitFinder extends rectangle-backed cluster maxima under shadowing, so frame-backed clusters still lose the right-side shadow extent in Rust."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_node_generic_vs_fallback_tb.svg",
+      "axes": [
+        "explicit node versus fallback node",
+        "generic package colors",
+        "packageBorderThickness",
+        "shadow on"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_shadow_frame_cloud_lr.svg",
+      "axes": [
+        "fallback frame versus explicit cloud",
+        "generic versus symbol-specific style channels",
+        "left-to-right",
+        "shadow on"
+      ],
+      "outcome": "fail: Rust's canvas is 494px wide versus Java's 499px, consistent with missing rectangle/frame shadow envelope extension."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/checker_no_shadow_rectangle_lr.svg",
+      "axes": [
+        "explicit rectangle versus fallback rectangle",
+        "left-to-right",
+        "shadow off"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 3,
+    "valid_inputs": 3,
+    "valid_passed": 2,
+    "valid_failed": 1
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Shadow-envelope handling is still incomplete for rectangle-backed package clusters.",
+      "evidence": "A fresh shadowed frame/cloud LR case remains 5px too narrow. The reviewed source never adds the Java rectangle shadow max extension for frame-backed clusters, so the canvas owner can still be wrong."
+    },
+    {
+      "severity": "informational",
+      "summary": "The generic package color and no-shadow paths look healthy on fresh held-outs.",
+      "evidence": "The explicit/fallback node style case and the no-shadow rectangle case both pass structurally."
+    }
+  ],
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-symbol-cluster-style-shadow/",
+    "review": "docs/parity-reviews/class-symbol-cluster-style-shadow/review.json",
+    "production_files_modified": false,
+    "account_modified": false
+  },
+  "verdict": "REJECT"
+}

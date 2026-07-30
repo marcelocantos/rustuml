@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-empty-leaf-fallback",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 09014421, did not edit production source, and did not edit account.json."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-adversarial-09014421",
+    "rust_revision": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "rust_tree": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "e564a723cf16ec3a4fcc7ce2fce934befbd3712374fa6654988ade263a794488",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git show 09014421 -- crates/rustuml-render/src/class.rs",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.puml > test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.puml > test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.puml > test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.puml"
+  ],
+  "source_inspection": {
+    "supported": [
+      "Java EntityImageEmptyPackage uses ClusterDecoration(packageStyle, null, ...) for ordinary empty leaves, so configured packageStyle legitimately affects paint geometry.",
+      "No fixture-shaped branches, held-out filenames, or mechanism-name strings were found in shipping crates."
+    ],
+    "disproven": [
+      "Rust's generic non-wrapped empty-symbol text path at crates/rustuml-render/src/class.rs:5974-5983 centers stereotype and title with one fallback formula for every symbol leaf.",
+      "Node fallback leaves rendered through crates/rustuml-render/src/class.rs:6057-6102 still use that generic placement and miss Java's node-specific title/stereotype positioning."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_cloud_fallback_vs_explicit_tb.svg",
+      "axes": [
+        "cloud fallback versus explicit cloud",
+        "ordinary empty leaf versus explicit symbol empty leaf",
+        "top-to-bottom"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_nested_lr.svg",
+      "axes": [
+        "node fallback versus explicit node",
+        "nested empty leaves",
+        "left-to-right",
+        "visible stereotype"
+      ],
+      "outcome": "fail: Rust shifts the fallback node stereotype/title block about four pixels to the right and slightly downward."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/checker_empty_node_fallback_only_lr.svg",
+      "axes": [
+        "node fallback only",
+        "left-to-right",
+        "visible stereotype",
+        "nested ordinary empty leaf"
+      ],
+      "outcome": "fail: the same fallback-node title/stereotype mis-centering reproduces without any explicit-symbol control present."
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 3,
+    "valid_inputs": 3,
+    "valid_passed": 1,
+    "valid_failed": 2
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The empty-leaf fallback is still not correct for node-style ordinary empty packages.",
+      "evidence": "Two fresh LR node fallback cases fail even after removing the explicit-symbol control. The source uses a single generic placement formula for every non-wrapped symbol leaf instead of reproducing node-specific title/stereotype placement."
+    },
+    {
+      "severity": "informational",
+      "summary": "Cloud fallback now behaves correctly on the fresh direct-empty top-level case.",
+      "evidence": "checker_empty_cloud_fallback_vs_explicit_tb passes structurally and confirms that the ordinary empty cloud case from the predecessor rejection is no longer broken."
+    }
+  ],
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-package-style-empty-leaf-fallback/",
+    "review": "docs/parity-reviews/class-package-style-empty-leaf-fallback/review.json",
+    "production_files_modified": false,
+    "account_modified": false
+  },
+  "verdict": "REJECT"
+}

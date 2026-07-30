@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam packageStyle cloud
+package OuterFollow8817 {
+  package "Followup Empty Fallback 8819" as FollowEmpty8819 <<Queue>> {
+  }
+  package FilledFollow8821 {
+    class FilledFollow8823
+  }
+}
+class RemoteFollow8825
+FilledFollow8823 --> RemoteFollow8825
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam packageStyle database
+package OuterHdr8411 {
+  package "Fallback Ledger 8413" as FallbackHdr8413 <<ReplicationLedger>> {
+    class FallbackLeaf8415
+  }
+  database "Explicit Ledger 8417" as ExplicitHdr8417 <<ReplicationLedger>> {
+    class ExplicitLeaf8419
+  }
+}
+FallbackLeaf8415 --> ExplicitLeaf8419
+@enduml

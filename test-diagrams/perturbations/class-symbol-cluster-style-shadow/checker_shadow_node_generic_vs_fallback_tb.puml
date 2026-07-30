@@ -1,0 +1,16 @@
+@startuml
+skinparam shadowing true
+skinparam packageStyle node
+skinparam PackageBackgroundColor HoneyDew
+skinparam PackageBorderColor SeaGreen
+skinparam PackageBorderThickness 3
+skinparam PackageFontColor DarkSlateBlue
+skinparam NodeFontColor FireBrick
+node "Explicit Node Style 8601" as ExplicitNode8601 {
+  class ExplicitLeaf8603
+}
+package "Fallback Node Style 8605" as FallbackNode8605 {
+  class FallbackLeaf8607
+}
+ExplicitLeaf8603 --> FallbackLeaf8607
+@enduml

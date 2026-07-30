@@ -1,0 +1,18 @@
+@startuml
+skinparam packageStyle database
+package "Followup Fallback Store 8801" as FollowFallback8801 {
+  class FollowLeaf8803
+}
+node "Followup Explicit Rack 8805" as FollowExplicit8805 {
+  class FollowLeaf8807
+}
+frame "Followup Explicit Frame 8809" as FollowFrame8809 {
+  class FollowLeaf8811
+}
+cloud "Followup Explicit Cloud 8813" as FollowCloud8813 {
+  class FollowLeaf8815
+}
+FollowLeaf8803 --> FollowLeaf8807
+FollowLeaf8807 --> FollowLeaf8811
+FollowLeaf8811 --> FollowLeaf8815
+@enduml

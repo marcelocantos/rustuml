@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam packageStyle node
+package OuterEmpty8511 {
+  package "Fallback Empty Node 8513" as FallbackEmpty8513 <<OpsCache>> {
+  }
+  node "Explicit Empty Node 8515" as ExplicitEmpty8515 <<OpsCache>> {
+  }
+  class Resident8517
+}
+class Remote8519
+Resident8517 --> Remote8519
+@enduml
