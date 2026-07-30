@@ -701,6 +701,12 @@ impl ClassParser {
         if self.try_package(line) {
             return Ok(());
         }
+        if looks_like_package_opener(line) {
+            return Err(ParseError {
+                line: self.current_line,
+                message: "invalid package or symbol-container declaration".to_string(),
+            });
+        }
         if self.try_enum_decl(line) {
             return Ok(());
         }
@@ -1265,13 +1271,25 @@ impl ClassParser {
     }
 
     fn try_package(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
+        static ORDINARY_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?i:package)\s+(?:"([^"]+)"|([^\s#{}"]+))(?:\s+(?i:as)\s+([[:alnum:]_.]+))?(.*?)\{\s*$"#,
+            )
+            .unwrap()
+        });
+        static ORDINARY_MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(<<.*>>)?\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
+            )
+            .unwrap()
+        });
+        static SYMBOL_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
             )
             .unwrap()
         });
-        static MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
+        static SYMBOL_MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*((?:<<\s*[^<>]+?\s*>>\s*)+)?(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
             )
@@ -1280,12 +1298,48 @@ impl ClassParser {
         static STEREOTYPE_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"<<\s*([^<>]+?)\s*>>").unwrap());
 
-        if let Some(caps) = RE.captures(line) {
-            let Some(modifiers) = MODIFIERS_RE.captures(caps.get(13).unwrap().as_str()) else {
-                return false;
+        let topurl = self
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|param| param.key.eq_ignore_ascii_case("topurl"))
+            .map(|param| param.value.as_str());
+
+        let ordinary = ORDINARY_RE.captures(line).and_then(|caps| {
+            let modifiers = ORDINARY_MODIFIERS_RE.captures(caps.get(4)?.as_str())?;
+            let display = caps.get(1).or(caps.get(2))?.as_str().to_string();
+            let alias = caps.get(3).map(|value| value.as_str().to_string());
+            let code = alias.clone().unwrap_or_else(|| display.clone());
+            let (url, url_tooltip) = if let Some(link) = modifiers.get(2) {
+                let (href, tooltip) = parse_package_link(link.as_str(), topurl)?;
+                (Some(href), tooltip)
+            } else {
+                (None, None)
             };
+            let color = modifiers.get(3).map(|m| m.as_str().to_string());
+            let stereotypes = modifiers
+                .get(1)
+                .into_iter()
+                .flat_map(|value| STEREOTYPE_RE.captures_iter(value.as_str()))
+                .map(|capture| capture[1].trim().to_string())
+                .collect::<Vec<_>>();
+            Some((
+                PackageKind::Package,
+                display,
+                code,
+                alias.is_some(),
+                stereotypes,
+                url,
+                url_tooltip,
+                color,
+            ))
+        });
+
+        let parsed = ordinary.or_else(|| {
+            let caps = SYMBOL_RE.captures(line)?;
+            let modifiers = SYMBOL_MODIFIERS_RE.captures(caps.get(13)?.as_str())?;
             let kind_key = caps[1].to_ascii_lowercase();
-            let kind_str = kind_key.as_str();
             let (display, code, explicit_alias, identity_stereotype) =
                 if let (Some(display), Some(code)) = (caps.get(2), caps.get(4)) {
                     (
@@ -1317,33 +1371,22 @@ impl ClassParser {
                     (code.clone(), code, false, None)
                 };
             let (url, url_tooltip) = if let Some(link) = modifiers.get(2) {
-                let Some((href, tooltip)) = parse_package_link(
-                    link.as_str(),
-                    self.meta
-                        .skinparams
-                        .iter()
-                        .rev()
-                        .find(|param| param.key.eq_ignore_ascii_case("topurl"))
-                        .map(|param| param.value.as_str()),
-                ) else {
-                    return false;
-                };
+                let (href, tooltip) = parse_package_link(link.as_str(), topurl)?;
                 (Some(href), tooltip)
             } else {
                 (None, None)
             };
             let color = modifiers.get(3).map(|m| m.as_str().to_string());
-            // `StereotypePattern` captures the complete sequence, and
-            // `StereotypeDecoration#cutLabels` preserves every label in
-            // declaration order. Keep that sequence as package metadata
-            // before the group is materialized and pushed as current scope.
-            let stereotypes = identity_stereotype
+            // `CommandPackageWithUSymbol#executeArg` asks RegexResult for one
+            // lazy STEREOTYPE capture. A populated trailing capture owns the
+            // metadata; the identity-slot capture is only the fallback.
+            let stereotype_source = modifiers.get(1).or(identity_stereotype);
+            let stereotypes = stereotype_source
                 .into_iter()
-                .chain(modifiers.get(1))
                 .flat_map(|value| STEREOTYPE_RE.captures_iter(value.as_str()))
                 .map(|capture| capture[1].trim().to_string())
                 .collect::<Vec<_>>();
-            let kind = match kind_str {
+            let kind = match kind_key.as_str() {
                 "namespace" => PackageKind::Namespace,
                 "cloud" => PackageKind::Cloud,
                 "database" => PackageKind::Database,
@@ -1353,6 +1396,21 @@ impl ClassParser {
                 "node" => PackageKind::Node,
                 _ => PackageKind::Package,
             };
+            Some((
+                kind,
+                display,
+                code,
+                explicit_alias,
+                stereotypes,
+                url,
+                url_tooltip,
+                color,
+            ))
+        });
+
+        if let Some((kind, display, code, explicit_alias, stereotypes, url, url_tooltip, color)) =
+            parsed
+        {
             // `CommandPackage#getRegexConcat` consumes the complete line.
             // `CommandPackage#executeArg` sends `AS` to `quarkInContext` and
             // keeps `NAME` solely as display; `CommandNamespace#executeArg`
@@ -2526,6 +2584,14 @@ fn parse_package_link(raw: &str, topurl: Option<&str>) -> Option<(String, Option
     Some((href, tooltip))
 }
 
+fn looks_like_package_opener(line: &str) -> bool {
+    static RE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"^(?i:package|namespace|cloud|database|folder|frame|rectangle|node)\s+.*\{\s*$")
+            .unwrap()
+    });
+    RE.is_match(line)
+}
+
 fn text_outside_double_quotes(s: &str) -> String {
     let mut out = String::with_capacity(s.len());
     let mut in_quote = false;
@@ -3393,6 +3459,63 @@ mod tests {
             d.entities
                 .iter()
                 .any(|entity| entity.id == "Envelope.ExplicitFrame.NestedChild")
+        );
+    }
+
+    #[test]
+    fn package_command_precedence_preserves_java_identity_and_stereotype_slots() {
+        let d = parse(
+            "package Host {\n\
+               package \"Split Fallback\" <<PreOne>> as SplitFallback $core \
+                 <<PostTwo>> <<PostThree>> #MistyRose {\n\
+                 class SplitLeaf\n\
+               }\n\
+             }\n\
+             cloud \"Split Explicit\" <<North>> <<South>> as SplitExplicit \
+               $ops <<East>> #Thistle {\n\
+               class CloudLeaf\n\
+             }",
+        );
+
+        let fallback = d
+            .packages
+            .iter()
+            .find(|package| package.name == "Host.Split Fallback")
+            .unwrap();
+        assert_eq!(fallback.stereotypes, ["PreOne", "PostTwo", "PostThree"]);
+        assert!(
+            d.entities
+                .iter()
+                .any(|entity| entity.id == "Host.Split Fallback.SplitLeaf")
+        );
+
+        let explicit = d
+            .packages
+            .iter()
+            .find(|package| package.name == "SplitExplicit")
+            .unwrap();
+        assert_eq!(explicit.stereotypes, ["East"]);
+        assert!(
+            d.entities
+                .iter()
+                .any(|entity| entity.id == "SplitExplicit.CloudLeaf")
+        );
+    }
+
+    #[test]
+    fn malformed_package_opener_fails_closed() {
+        let lines = [
+            "package \"Broken\" <<PreOne>> as Broken $ops <<PostTwo> #Pink {",
+            "class BrokenLeaf",
+            "}",
+        ]
+        .map(str::to_string);
+
+        let error = parse_class(&lines).unwrap_err();
+        assert_eq!(error.line, 1);
+        assert_eq!(
+            error.message,
+            "invalid package or symbol-container declaration"
         );
     }
 
