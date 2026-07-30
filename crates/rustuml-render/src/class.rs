@@ -322,8 +322,9 @@ const DATABASE_CLUSTER_ENVELOPE_EXTRA: f64 = 10.0;
 /// `suppHeightBecauseOfShape()` enlarge the title placeholder fed to SVEK.
 const NODE_CLUSTER_TITLE_WIDTH_EXTRA: f64 = 60.0;
 const NODE_CLUSTER_TITLE_HEIGHT_EXTRA: f64 = 5.0;
-/// `USymbolNode.drawNode()` offsets the visible bevel by ten pixels and emits
-/// a lower-right `UEmpty(10, 10)`, extending the calculated SVEK envelope.
+/// `LimitFinder.drawUPolygon()` expands the node polygon by ten pixels on
+/// each horizontal side. `USymbolNode.drawNode()` also emits a lower-right
+/// `UEmpty(10, 10)`, extending the calculated SVEK envelope.
 const NODE_CLUSTER_ENVELOPE_X_EXTRA: f64 = 20.0;
 const NODE_CLUSTER_ENVELOPE_Y_EXTRA: f64 = 10.0;
 const NODE_BEVEL: f64 = 10.0;
@@ -3818,31 +3819,29 @@ fn relationship_endpoint_name<'a>(
     std::borrow::Cow::Borrowed(local_name.unwrap_or(id))
 }
 
-fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {
-    let PackageRenderModel {
-        parent_pkg,
-        innermost_pkg,
-        roles,
-    } = package_render_model(diagram);
-    innermost_pkg
-        .into_iter()
-        .map(|package_idx| {
-            let Some(mut package_idx) = package_idx else {
-                return (0.0, 0.0);
-            };
-            while let Some(parent) = parent_pkg[package_idx] {
-                if roles[parent] != PackageRenderRole::Cluster {
-                    break;
-                }
-                package_idx = parent;
-            }
-            match effective_package_kind(&diagram.packages[package_idx]) {
-                PackageKind::Frame | PackageKind::Rectangle => (1.0, 1.0),
-                PackageKind::Node => (NODE_BEVEL, 0.0),
-                _ => (0.0, 0.0),
-            }
-        })
-        .collect()
+fn package_cluster_painted_min(diagram: &ClassDiagram, position: &ClusterPosition) -> (f64, f64) {
+    let kind = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .find(|(idx, _)| package_cluster_id(*idx) == position.id)
+        .map(|(_, package)| effective_package_kind(package));
+
+    match kind {
+        // Java `LimitFinder.drawRectangle()` measures a `URectangle` from
+        // `(x - 1, y - 1)`.
+        Some(PackageKind::Frame | PackageKind::Rectangle) => (
+            position.x - LIMIT_FINDER_RECTANGLE_INSET,
+            position.y - LIMIT_FINDER_RECTANGLE_INSET,
+        ),
+        // Java `LimitFinder.drawUPolygon()` expands every polygon by ten
+        // pixels horizontally while preserving its vertical minimum.
+        Some(PackageKind::Node) => (position.x - LIMIT_FINDER_POLYGON_OVERSCAN_X, position.y),
+        Some(PackageKind::Cloud) => package_cloud_frontier(diagram, position)
+            .map(|frontier| (position.x + frontier.min_x, position.y + frontier.min_y))
+            .unwrap_or((position.x, position.y)),
+        _ => (position.x, position.y),
+    }
 }
 
 /// Java `SvekResult.calculateDimension` measures only renderer-visible shapes
@@ -3862,11 +3861,7 @@ fn normalize_svek_package_envelope(
     let min_x = cluster_positions
         .iter()
         .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
-        .map(|position| {
-            package_cloud_frontier(diagram, position)
-                .map(|frontier| position.x + frontier.min_x)
-                .unwrap_or(position.x)
-        })
+        .map(|position| package_cluster_painted_min(diagram, position).0)
         .chain(node_positions.iter().enumerate().map(|(idx, position)| {
             position.x
                 - if idx < diagram.entities.len() {
@@ -3879,11 +3874,7 @@ fn normalize_svek_package_envelope(
     let min_y = cluster_positions
         .iter()
         .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
-        .map(|position| {
-            package_cloud_frontier(diagram, position)
-                .map(|frontier| position.y + frontier.min_y)
-                .unwrap_or(position.y)
-        })
+        .map(|position| package_cluster_painted_min(diagram, position).1)
         .chain(node_positions.iter().enumerate().map(|(idx, position)| {
             position.y
                 - if idx < diagram.entities.len() {
@@ -4411,40 +4402,7 @@ fn render_plantuml_svg(
     let shadow_filter_id = has_shadowing_skinparam(diagram).then(|| {
         crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
     });
-    let package_content_offsets = package_content_offsets(diagram);
     let mut adjusted_edge_paths = edge_paths.to_vec();
-    for edge in &mut adjusted_edge_paths {
-        let endpoint_offset = |id: &str| {
-            diagram
-                .entities
-                .iter()
-                .position(|entity| entity.id == id)
-                .map(|idx| package_content_offsets[idx])
-                .unwrap_or((0.0, 0.0))
-        };
-        let from_offset = endpoint_offset(&edge.from);
-        if from_offset == endpoint_offset(&edge.to) && from_offset != (0.0, 0.0) {
-            for point in &mut edge.points {
-                point.0 += from_offset.0;
-                point.1 += from_offset.1;
-            }
-            if let Some(point) = &mut edge.start_point {
-                point.0 += from_offset.0;
-                point.1 += from_offset.1;
-            }
-            if let Some(point) = &mut edge.end_point {
-                point.0 += from_offset.0;
-                point.1 += from_offset.1;
-            }
-            for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
-                .into_iter()
-                .flatten()
-            {
-                label.x += from_offset.0;
-                label.y += from_offset.1;
-            }
-        }
-    }
     let layout_x_bias = svek_layout_x_bias(
         diagram,
         positions,
@@ -4485,10 +4443,9 @@ fn render_plantuml_svg(
     // Compute entity positions (offset from layout).
     let mut entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
         .map(|i| {
-            let (content_dx, content_dy) = package_content_offsets[i];
             (
-                positions[i].x + MARGIN + layout_x_bias + content_dx,
-                positions[i].y + MARGIN + content_dy,
+                positions[i].x + MARGIN + layout_x_bias,
+                positions[i].y + MARGIN,
             )
         })
         .collect();
@@ -6162,8 +6119,8 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
 }
 
 fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
-    let x = cluster.x + 1.0;
-    let y = cluster.y + 1.0;
+    let x = cluster.x;
+    let y = cluster.y;
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
     let path_right = x + label_w + FRAME_TITLE_CORNER;
     let upper_y = cluster.y + PACKAGE_TAB_H - 12.0;
@@ -6207,8 +6164,8 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
 }
 
 fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
-    let x = cluster.x + 1.0;
-    let y = cluster.y + 1.0;
+    let x = cluster.x;
+    let y = cluster.y;
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
 
     // Java `USymbolRectangle.asBig()` delegates to `drawRect()` and centres
@@ -6234,7 +6191,7 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
 }
 
 fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
-    let x = cluster.x + NODE_BEVEL;
+    let x = cluster.x;
     let y = cluster.y;
     let right = x + cluster.width;
     let front_right = right - NODE_BEVEL;
@@ -11464,7 +11421,6 @@ fn svek_layout_x_bias(
     edge_paths: &[EdgePath],
     font: &ClassFontOverrides,
 ) -> f64 {
-    let package_offsets = package_content_offsets(diagram);
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
@@ -11485,7 +11441,7 @@ fn svek_layout_x_bias(
                 })
                 .filter_map(|(index, _)| {
                     positions.get(index).map(|position| {
-                        position.x + package_offsets[index].0 + icon.center_offset
+                        position.x + icon.center_offset
                             - icon.angled_half
                             - LIMIT_FINDER_POLYGON_OVERSCAN_X
                     })
