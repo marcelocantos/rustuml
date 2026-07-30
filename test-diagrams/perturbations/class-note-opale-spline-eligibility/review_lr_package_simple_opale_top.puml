@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+class EntryA9711
+package VaultA9713 {
+  class CenterA9715
+}
+class ExitA9717
+EntryA9711 --> VaultA9713.CenterA9715
+VaultA9713.CenterA9715 --> ExitA9717
+package VaultA9713 {
+  note top of VaultA9713.CenterA9715 : package simple top
+}
+@enduml

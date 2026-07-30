@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+class StartA9721
+class BufferA9723
+class HubA9725
+class BranchA9727
+class BranchB9729
+class BranchC9731
+class EndA9733
+StartA9721 --> BufferA9723
+BufferA9723 --> HubA9725
+HubA9725 --> BranchA9727
+HubA9725 --> BranchB9729
+HubA9725 --> BranchC9731
+BranchA9727 --> EndA9733
+BranchB9729 --> EndA9733
+note left of HubA9725 : dense left route
+note right of HubA9725 : dense right route
+note top of HubA9725 : dense top route
+note bottom of HubA9725 : dense bottom route
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+class OriginA9801
+class RelayA9803
+package LatticeA9805 {
+  class FocusA9807
+  class SupportA9809
+}
+class TailA9811
+OriginA9801 --> RelayA9803
+RelayA9803 --> LatticeA9805.FocusA9807
+LatticeA9805.FocusA9807 --> TailA9811
+LatticeA9805.SupportA9809 --> TailA9811
+note left of LatticeA9805.FocusA9807 : lattice left probe
+note right of LatticeA9805.SupportA9809 : lattice right probe
+note top of LatticeA9805.FocusA9807 : lattice top probe
+note bottom of LatticeA9805.SupportA9809 : lattice bottom probe
+@enduml

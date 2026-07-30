@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+class NorthA9787
+class WestA9789
+class CoreA9791
+class EastA9793
+class SouthA9795
+class TailA9797
+NorthA9787 --> CoreA9791
+WestA9789 --> CoreA9791
+CoreA9791 --> SouthA9795
+CoreA9791 --> TailA9797
+EastA9793 --> TailA9797
+note left of CoreA9791 : tb dense left
+note right of CoreA9791 : tb dense right
+note top of CoreA9791 : tb dense top
+note bottom of CoreA9791 : tb dense bottom
+@enduml

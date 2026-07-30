@@ -1,0 +1,20 @@
+@startuml
+top to bottom direction
+class SourceA9741
+class SourceB9743
+package NestA9745 {
+  class PivotA9747
+  class AssistA9749
+}
+class SinkA9751
+class SinkB9753
+SourceA9741 --> NestA9745.PivotA9747
+SourceB9743 --> NestA9745.PivotA9747
+NestA9745.PivotA9747 --> SinkA9751
+NestA9745.PivotA9747 --> SinkB9753
+NestA9745.AssistA9749 --> SinkB9753
+package NestA9745 {
+  note top of NestA9745.PivotA9747 : package fanout top
+  note bottom of NestA9745.PivotA9747 : package fanout bottom
+}
+@enduml
