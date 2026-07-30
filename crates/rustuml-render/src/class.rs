@@ -3796,7 +3796,14 @@ fn normalize_svek_package_envelope(
                 .map(|frontier| position.x + frontier.min_x)
                 .unwrap_or(position.x)
         })
-        .chain(node_positions.iter().map(|position| position.x))
+        .chain(node_positions.iter().enumerate().map(|(idx, position)| {
+            position.x
+                - if idx < diagram.entities.len() {
+                    LIMIT_FINDER_RECTANGLE_INSET
+                } else {
+                    0.0
+                }
+        }))
         .fold(f64::INFINITY, f64::min);
     let min_y = cluster_positions
         .iter()
@@ -3806,7 +3813,14 @@ fn normalize_svek_package_envelope(
                 .map(|frontier| position.y + frontier.min_y)
                 .unwrap_or(position.y)
         })
-        .chain(node_positions.iter().map(|position| position.y))
+        .chain(node_positions.iter().enumerate().map(|(idx, position)| {
+            position.y
+                - if idx < diagram.entities.len() {
+                    LIMIT_FINDER_RECTANGLE_INSET
+                } else {
+                    0.0
+                }
+        }))
         .fold(f64::INFINITY, f64::min);
     let target = SVEK_LABEL_ENVELOPE_MARGIN - MARGIN;
     let dx = target - min_x;
