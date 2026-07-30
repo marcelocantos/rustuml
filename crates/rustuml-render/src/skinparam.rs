@@ -120,7 +120,9 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
                 }
             }
             "titleFontStyle" => t.global.title_font_style = param.value.clone(),
-            "svgLinkTarget" => t.global.svg_link_target = param.value.clone(),
+            "svgLinkTarget" | "svglinktarget" => {
+                t.global.svg_link_target = param.value.clone();
+            }
             "style" => {}      // Diagram style variant — ignored at theme level.
             "guillemet" => {}  // Stereotype angle bracket style — ignored.
             "autonumber" => {} // Sequence autonumber — handled by parser.
@@ -1033,15 +1035,15 @@ mod tests {
                 value: "italic".into(),
             },
             SkinParam {
-                key: "svgLinkTarget".into(),
-                value: "_blank".into(),
+                key: "svglinktarget".into(),
+                value: "_parent".into(),
             },
         ];
         let t = apply_skinparams(&theme, &params);
         assert_eq!(t.global.title_font_size, 20.0);
         assert_eq!(t.global.title_font_style, "bold");
         assert_eq!(t.global.arrow_font_style, "italic");
-        assert_eq!(t.global.svg_link_target, "_blank");
+        assert_eq!(t.global.svg_link_target, "_parent");
     }
 
     #[test]

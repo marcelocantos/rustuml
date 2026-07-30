@@ -1373,7 +1373,13 @@ impl ClassParser {
                             package.url = url.clone();
                             package.url_tooltip = url_tooltip.clone();
                         }
-                        package.stereotypes = stereotypes.clone();
+                        // CommandPackage.executeArg and
+                        // CommandPackageWithUSymbol.executeArg call
+                        // Entity.setStereotype only when this declaration
+                        // supplied one.
+                        if !stereotypes.is_empty() {
+                            package.stereotypes = stereotypes.clone();
+                        }
                         if package.source_line == 0 {
                             package.source_line = self.current_line;
                         }
@@ -3357,6 +3363,7 @@ mod tests {
             .unwrap();
         assert_eq!(promoted.url.as_deref(), Some("https://docs.example/guide"));
         assert_eq!(promoted.url_tooltip.as_deref(), Some("Guide & docs"));
+        assert_eq!(promoted.stereotypes, ["Application"]);
         assert!(!promoted.phantom);
 
         let absolute = d

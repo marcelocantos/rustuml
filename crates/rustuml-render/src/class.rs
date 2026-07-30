@@ -1620,6 +1620,36 @@ fn effective_svg_link_target(theme: &Theme) -> &str {
     }
 }
 
+fn normalize_svg_link_title(title: &str) -> String {
+    let mut normalized = String::with_capacity(title.len());
+    let mut rest = title;
+    while let Some(start) = rest.find("<U+") {
+        normalized.push_str(&rest[..start]);
+        let after_marker = &rest[start + 3..];
+        let Some(end) = after_marker.find('>') else {
+            normalized.push_str(&rest[start..]);
+            rest = "";
+            break;
+        };
+        let hex = &after_marker[..end];
+        let decoded = (!hex.is_empty() && hex.chars().all(|ch| ch.is_ascii_hexdigit()))
+            .then(|| u32::from_str_radix(hex, 16).ok())
+            .flatten()
+            // SvgGraphics.LinkData.getXlinkTitle casts the parsed value to
+            // Java `char` before XML serialization.
+            .and_then(|value| char::from_u32(u32::from(value as u16)));
+        if let Some(decoded) = decoded {
+            normalized.push(decoded);
+            rest = &after_marker[end + 1..];
+        } else {
+            normalized.push_str("<U+");
+            rest = after_marker;
+        }
+    }
+    normalized.push_str(rest);
+    normalized.replace("\\n", "\n")
+}
+
 fn emit_package_link_open(
     svg: &mut String,
     href: Option<&str>,
@@ -1630,7 +1660,8 @@ fn emit_package_link_open(
         return false;
     };
     let escaped_href = escape_xml(href);
-    let escaped_title = escape_xml(tooltip.unwrap_or(href));
+    let normalized_title = normalize_svg_link_title(tooltip.unwrap_or(href));
+    let escaped_title = escape_xml(&normalized_title);
     let escaped_target = escape_xml(target);
     write!(
         svg,
@@ -5484,13 +5515,12 @@ fn render_plantuml_svg(
         // viewers.
         let link_anchor = entity.url.as_deref().map(|url| {
             let h = escape_xml(url);
-            let title = entity
-                .url_tooltip
-                .as_deref()
-                .map(escape_xml)
-                .unwrap_or_else(|| h.clone());
+            let normalized_title =
+                normalize_svg_link_title(entity.url_tooltip.as_deref().unwrap_or(url));
+            let title = escape_xml(&normalized_title);
+            let target = escape_xml(svg_link_target);
             format!(
-                r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
+                r#"<a href="{h}" target="{target}" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
             )
         });
         let entity_font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
@@ -15557,6 +15587,18 @@ mod tests {
             &svg[open_end..close],
             &svg[close + 4..]
         )
+    }
+
+    #[test]
+    fn svg_link_titles_follow_java_unicode_and_newline_normalization() {
+        assert_eq!(
+            normalize_svg_link_title("Docs <U+0026> Support\\nPortal"),
+            "Docs & Support\nPortal"
+        );
+        assert_eq!(
+            normalize_svg_link_title("Keep <U+ZZZZ> literal"),
+            "Keep <U+ZZZZ> literal"
+        );
     }
 
     #[test]
