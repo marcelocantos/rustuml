@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-node-paint-order",
+  "reviewed_at": "2026-07-30",
+  "supersedes": [
+    "docs/parity-reviews/class-svek-node-paint-order/review-followup-2.json"
+  ],
+  "reviewer": {
+    "identity": "Codex independent adversarial checker; not the implementer",
+    "model": "gpt-5.4",
+    "reasoning_effort": "xhigh",
+    "tool": "Codex desktop shell with zsh, Git 2.55.0, Cargo, OpenJDK 21.0.11, the pinned Java PlantUML JAR, and an exact 34cc76f1-built diff_one helper"
+  },
+  "revisions": {
+    "account_commit": "dbdfe6ae3895155ffae050d83aa9e5b6dc536587",
+    "implementation_commit": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+    "checker_repo_head_before_review": "c286779f12fac1aa3076d47867700b52f28e156f",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML 1.2026.3beta6 / 71806a2"
+    },
+    "diff_one": {
+      "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+      "sha256": "eb8f9de5d9a8bf93173a8f9d90ebb84bf923cd7dcce6f0b8164ce9f1b3888457",
+      "source_revision": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+      "source_export_dir": "/tmp/rustuml-34cc-build.OnxOO7",
+      "source_class_blob_sha1": "89ed99f2179b5ce8f6cba38d01add4f011974463",
+      "build_workdir": "/tmp/rustuml-34cc-build.OnxOO7",
+      "build_command": "env CARGO_TARGET_DIR=/tmp/rustuml-checker-1482/target cargo build -p rustuml-oracle --example diff_one",
+      "cargo_invocations": 1,
+      "provenance_note": "This helper was rebuilt from a git archive of implementation commit 34cc76f1, not from the later candidate 17888365 checkout. The exact class.rs blob hash matches the implementation commit under review."
+    }
+  },
+  "commands": [
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "sed -n '1,240p' docs/parity-reviews/class-svek-node-paint-order/account.json",
+    "sed -n '1,260p' docs/parity-reviews/class-svek-node-paint-order/review.json",
+    "sed -n '1,260p' docs/parity-reviews/class-svek-node-paint-order/review-followup.json",
+    "sed -n '1,260p' docs/parity-reviews/class-svek-node-paint-order/review-followup-2.json",
+    "git -C /tmp/rustuml-review-paint-34cc diff 34cc76f1^ 34cc76f1 -- crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,310p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '200,470p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java | sed -n '1,260p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekResult.java | sed -n '1,180p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java | sed -n '1,420p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2338,2495p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '4242,4368p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '12735,13440p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.puml",
+    "mktemp -d /tmp/rustuml-34cc-build.XXXXXX",
+    "git -C /tmp/rustuml-review-paint-34cc archive 34cc76f1 | tar -x -C /tmp/rustuml-34cc-build.OnxOO7",
+    "git hash-object /tmp/rustuml-34cc-build.OnxOO7/crates/rustuml-render/src/class.rs",
+    "env CARGO_TARGET_DIR=/tmp/rustuml-checker-1482/target cargo build -p rustuml-oracle --example diff_one",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-svek-node-paint-order/followup2_*.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_*.svg",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml > /tmp/followup2_lr_dense_attached_notes_flip_probe.exact34cc.rust.svg",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml > /tmp/followup2_tb_reopened_outer_mixed_attached_floating.exact34cc.rust.svg",
+    "git -C /tmp/rustuml-review-paint-34cc diff --unified=0 34cc76f1^ 34cc76f1 -- crates/rustuml-render/src/class.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})'",
+    "git -C /tmp/rustuml-review-paint-34cc grep -n -E 'ReviewRootA9301|ReviewVault9303|Orbit9403|FloatDesc9413|Start9501|Archive9603|Floating9613' 34cc76f1 -- crates"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandFactoryNoteOnEntity.executeInternal creates attached notes as real NOTE leaves in the current namespace and gives LEFT/RIGHT links length 1 and TOP/BOTTOM links length 2.",
+      "GraphvizImageBuilder.buildImage calls printGroups before getUnpackagedEntities; printGroup emits direct leaves before child groups, so package-first traversal rather than one global constructor order controls node creation.",
+      "Bibliotekon stores nodes in a LinkedHashMap and partitions length-one links into lines0; SvekResult.drawU paints allNodes in insertion order and leaves EntityImageNote to consume the solved edge path.",
+      "EntityImageNote.drawU reverses the solved path when necessary so the note-side contact is the start point, then getOpaleStrategy chooses the nearest note side by orthogonal distance with left, right, up, down tie priority."
+    ],
+    "rust": [
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:2262-2274 registers LEFT/RIGHT attached notes as PlantUML line0 edges plus same-rank minlen-zero edges, mirroring Java length-one note links.",
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:2341-2368 routes note layout nodes through svek_node_emission_order and attaches them to the owner package cluster instead of emitting them in a later kind-specific batch.",
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:4276-4284 qualifies attached GMN names and floating aliases with the owner package path so reopened package notes resolve to the same namespace model as Java.",
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:12735-12749 and 13196-13240 choose the rendered note callout side from the solved contact geometry rather than from the declared note keyword alone."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in the 34cc76f1 production diff.",
+    "unexplained_constants": "No new high-precision parity constant was introduced by 34cc76f1.",
+    "golden_reads": "No include_str/include_bytes or test-diagrams/golden reads were added in the 34cc76f1 production diff.",
+    "output_surgery": "No replace/replacen or coordinate-keyed post-hoc SVG rewriting was added in the 34cc76f1 production diff.",
+    "held_out_label_search": "The fresh held-out labels from this review do not appear under crates at implementation commit 34cc76f1."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.svg",
+      "sha256": {
+        "puml": "4024fcc817b33f462edad6d033167abe3459e593175df86d0631150cae533494",
+        "svg": "92f4e613219494a4aafaf0b73123e6070dcde2a4dd64b4cbaaaac6971e2834be"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "reopened outer package ownership",
+        "direct-vs-descendant attached targets",
+        "all four attached-note positions",
+        "multiple notes"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Java canvas 501x416 versus Rust 898x281. Reopened-package contents and attached notes are spatially reorganized, and dependency arrows collapse into a different left-to-right solve."
+      },
+      "mechanism_shaped_counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.svg",
+      "sha256": {
+        "puml": "32f6d5b0f9230ebf3c3044c447e3a07625dfb50f0b42643f0edc5f54b4689424",
+        "svg": "cf4be84d136710f7c2f51dc31c18fc02f17b9c58a2413c98b5a101f8206f388d"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "reopened outer package ownership",
+        "mixed attached and floating notes",
+        "direct-vs-descendant targets",
+        "declaration-order changes"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Element count grows from 63 to 79. Expected entity order around Orbit9403 is replaced by a different note/class sequence, including Orbit9403.FloatDirect9415 versus actual Orbit9403.FloatDesc9413 at the same position in the stream."
+      },
+      "mechanism_shaped_counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.svg",
+      "sha256": {
+        "puml": "8620eb94a3c82850081a632d7eefe899d7f22946c189a4ed42cad5f7ce6dc476",
+        "svg": "98e56dbb0dab87967e48da2d05fdee4b3ed4d2497b445e00c7afc707e2e5c69f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "multiple attached notes",
+        "all four attached-note positions",
+        "cases where layout places a note opposite its declared side"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Element count drops from 74 to 70. The exact 34cc-built helper permutes the four attached-note callouts onto the wrong solved geometries: GMN12 declared left renders on the bottom geometry, GMN15 declared right renders on the top geometry, GMN18 declared top renders on the left geometry, and GMN21 declared bottom renders on the right geometry."
+      },
+      "mechanism_shaped_counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.svg",
+      "sha256": {
+        "puml": "38b196336e9b914c3cc025753dbc0504b0b35e0223576409c6fdb90008fefb68",
+        "svg": "20bc040ac038d64ee9550259c4659471ef240b191bcddf6cd7c8261dc302aad4"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "reopened outer package ownership",
+        "multiple attached notes on one descendant target",
+        "floating sibling note"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Element count grows from 59 to 66 and width expands from 738 to 895. Expected Archive9603.Inner9607.Nested9609 appears where actual output emits Archive9603.Floating9613, and root lead/tail class order is displaced around the reopened package."
+      },
+      "mechanism_shaped_counterexample": true
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "summary": "An exact 34cc76f1-built helper still fails all four fresh valid perturbations, so parity rule 10 rejects the mechanism claim.",
+      "evidence": "I rebuilt diff_one from a git archive of 34cc76f1 with one Cargo invocation, verified the source class.rs blob hash as 89ed99f2179b5ce8f6cba38d01add4f011974463, and reran the four preserved followup2 cases. Every case still exits 1 under --no-oracle."
+    },
+    {
+      "severity": "high",
+      "summary": "The dense attached-note flip probe remains a mechanism-shaped counterexample against solved-contact side selection and note rendering order.",
+      "evidence": "In followup2_lr_dense_attached_notes_flip_probe, the exact 34cc-built helper maps the note texts to the wrong geometry blocks: declared left lands on the bottom geometry, declared right lands on the top geometry, declared top lands on the left geometry, and declared bottom lands on the right geometry."
+    },
+    {
+      "severity": "medium",
+      "summary": "Reopened package ownership plus mixed attached/floating notes still breaks unified direct-leaf order.",
+      "evidence": "In followup2_tb_reopened_outer_mixed_attached_floating, Rust emits 79 elements versus Java 63 and reorders the note/class stream around Orbit9403, including swapping the expected FloatDirect9415 position for FloatDesc9413."
+    },
+    {
+      "severity": "medium",
+      "summary": "Reopened package descendants with multiple notes still misorder entities and note ownership in both rank directions.",
+      "evidence": "followup2_lr_reopened_outer_all_positions_direct_descendant and followup2_tb_reopened_outer_two_notes_same_target both produce broad but mechanism-shaped reorganizations of package contents, attached notes, and linked classes under reopened owners."
+    },
+    {
+      "severity": "informational",
+      "summary": "I still found no fixture-shaped logic, golden reads, output surgery, or unexplained high-precision constants in the 34cc76f1 production diff.",
+      "evidence": "The rejecting verdict comes from failing held-out perturbations, not from evidence of cheating."
+    }
+  ],
+  "verdict": "REJECT"
+}
