@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "class-cloud-coordinate-distance",
-  "status": "disproved",
+  "status": "contributing",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "net.sourceforge.plantuml.decoration.symbol.USymbolCloud#getSpecificFrontierForCloudNew",
@@ -17,9 +17,9 @@
     "crates/rustuml-render/src/class.rs::cloud_special_line",
     "crates/rustuml-render/src/class.rs::cloud_frontier"
   ],
-  "invariant": "Every USymbolCloud segment constructs CoordinateChange, whose length is XPoint2D.distance: Math.sqrt(dx * dx + dy * dy). That operation order can affect unit vectors and integer bubble counts, but it is not the source of the observed 171 by 99 cluster divergence.",
-  "causal_divergence": "Disproved by implementation and exact rerun: replacing every cloud f64::hypot call with Java's multiply-add-then-sqrt expression left the residual path byte-for-byte unchanged. A JDK debugger trace subsequently showed the actual discontinuity: PlantUML's LimitFinder measurement pass calls USymbolCloud with width 171.0, while the translated final SVG pass calls it with 170.99999999999997 and therefore selects a different integer seed. Rust retained 171.0 across normalization.",
-  "planned_change": "No production change is justified by this account. Revert the exploratory distance substitution and address the independently established post-normalization dimension mechanism in class-cluster-post-normalization-dimensions.",
+  "invariant": "Every USymbolCloud segment constructs CoordinateChange, whose length is XPoint2D.distance: Math.sqrt(dx * dx + dy * dy). The measurement pass uses the resulting frontier minimum to choose SvekResult's translation delta. The final pass then redraws the cloud after that delta has been applied to its RectangleArea endpoints.",
+  "causal_divergence": "Replacing f64::hypot with Java's operation order did not change the residual path by itself, so the original standalone bubble-count explanation was false. Endpoint tracing then showed the interaction: with hypot, Rust's final cluster origin is 236.55786752250148; Java's multiply-add-then-sqrt measurement frontier produces 236.5578599221549. At the Java origin, translating and subtracting the RectangleArea endpoints yields 170.99999999999997 and seed 170. At the Rust origin, the same endpoint operation yields 171.00000000000003 and still casts to seed 171. Distance arithmetic is therefore a necessary input to the independently accounted post-normalization dimension discontinuity, not a standalone seed divergence.",
+  "planned_change": "Use (dx * dx + dy * dy).sqrt() everywhere the cloud port mirrors CoordinateChange.getLength so the LimitFinder-equivalent frontier and normalization delta match Java. Combine this with class-cluster-post-normalization-dimensions; neither partial change is accepted independently.",
   "perturbation_axes": [
     "segment lengths immediately below crossed with immediately above a bubble-count multiple",
     "simple width/height branch crossed with complex branch",
