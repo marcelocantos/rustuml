@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+class RootAnchor7801
+note right of RootAnchor7801 : root note created before package
+package VaultScope7807 {
+  class NestedLedger7811
+}
+class RootTail7817
+@enduml

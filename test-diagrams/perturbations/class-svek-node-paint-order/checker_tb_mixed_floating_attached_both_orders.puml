@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+class EmberStore7501
+note right of EmberStore7501 : attached before floating
+note "floating after attached" as FallowMemo7507
+class HarborIndex7517
+note "floating before attached" as GarnetMemo7519
+note left of HarborIndex7517 : attached after floating
+class IvoryTail7523
+EmberStore7501 --> HarborIndex7517
+HarborIndex7517 --> IvoryTail7523
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+class CopperArchive7301
+note left of CopperArchive7301 : west before later declarations
+class IndigoQueue7303
+note top of IndigoQueue7303 : north between declarations
+class SilverLedger7307
+note right of SilverLedger7307 : east after final declaration
+note bottom of SilverLedger7307 : south after final declaration
+CopperArchive7301 --> IndigoQueue7303
+IndigoQueue7303 --> SilverLedger7307
+@enduml

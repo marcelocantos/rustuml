@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+class RootPrelude7901
+package WorkshopScope7907 {
+  class NestedIndex7919
+  note left of NestedIndex7919 : nested note before root tail
+}
+class RootCoda7927
+@enduml

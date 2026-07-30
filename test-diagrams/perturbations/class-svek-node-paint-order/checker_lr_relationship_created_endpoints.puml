@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+AsterOrigin7411 --> BerylEndpoint7417
+note top of AsterOrigin7411 : north on first implicit endpoint
+note right of BerylEndpoint7417 : east before another endpoint exists
+BerylEndpoint7417 --> CinderTail7421
+note bottom of CinderTail7421 : south on later implicit endpoint
+DuneHead7429 -left-> BerylEndpoint7417
+note left of DuneHead7429 : west after inverted relationship
+@enduml

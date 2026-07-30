@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+note "first floating note" as KestrelMemo7603
+class LumenMiddle7607
+note bottom of LumenMiddle7607 : attached after first floating
+MorrowOrigin7613 --> LumenMiddle7607
+note "second floating note" as NimbusMemo7619
+class MorrowOrigin7613
+note top of MorrowOrigin7613 : attached after redeclaration
+LumenMiddle7607 --> OpalTail7621
+@enduml

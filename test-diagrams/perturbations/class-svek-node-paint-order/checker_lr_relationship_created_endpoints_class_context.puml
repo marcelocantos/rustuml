@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+class ContextMarker7433
+AsterOrigin7439 --> BerylEndpoint7441
+note top of AsterOrigin7439 : north on first implicit endpoint
+note right of BerylEndpoint7441 : east before another endpoint exists
+BerylEndpoint7441 --> CinderTail7451
+note bottom of CinderTail7451 : south on later implicit endpoint
+DuneHead7457 -left-> BerylEndpoint7441
+note left of DuneHead7457 : west after inverted relationship
+ContextMarker7433 ..> AsterOrigin7439
+@enduml

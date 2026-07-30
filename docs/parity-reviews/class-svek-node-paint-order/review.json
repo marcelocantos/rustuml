@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-node-paint-order",
+  "reviewed_at": "2026-07-31T01:18:22+10:00",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker; not the implementer",
+    "model": "OpenAI GPT-5 Codex",
+    "tool": "Codex desktop shell with zsh, Git 2.55.0, OpenJDK 21.0.11, the pinned Java PlantUML JAR, and the user-specified prebuilt diff_one binary"
+  },
+  "revisions": {
+    "account_commit": "d5fde268457c251ee0f8659c9540eaca872c5757",
+    "implementation_commit": "544d24530c0dc2ed5784d7d26fe2a8d8481f873d",
+    "checker_repo_head_before_review": "40950562c1826af9b9dc28d816f20f5bdb49be9a",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML 1.2026.3beta6 / 71806a2"
+    },
+    "diff_one": {
+      "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+      "sha256": "e564a723cf16ec3a4fcc7ce2fce934befbd3712374fa6654988ade263a794488",
+      "source_checkout_head": "c0133a1d04e66c5d0cf2404a7ff2f5b218006970",
+      "source_checkout_head_class_blob": "49ecb32c7bc262c85c2ed06c8a540d9566ef492b",
+      "implementation_commit_class_blob": "49ecb32c7bc262c85c2ed06c8a540d9566ef492b",
+      "provenance_note": "The required binary predates the temporary checkout's later two-line dirty class.rs change; the checkout's committed class.rs blob is byte-identical to implementation commit 544d2453."
+    }
+  },
+  "commands": [
+    "git show d5fde268:docs/parity-reviews/class-svek-node-paint-order/account.json",
+    "git diff --find-renames --find-copies d5fde268..544d2453 -- crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/atmp/CucaDiagram.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/plasma/Plasma.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_attached_three_phases_four_positions.puml test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_mixed_floating_attached_both_orders.puml test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_mixed_notes_reordered_labels.puml test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_root_note_before_later_package.puml test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_nested_note_before_root_tail.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints_class_context.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_attached_three_phases_four_positions.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_mixed_floating_attached_both_orders.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_mixed_notes_reordered_labels.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_root_note_before_later_package.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_nested_note_before_root_tail.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints_class_context.puml",
+    "git diff --unified=0 d5fde268..544d2453 -- crates/rustuml-render/src/class.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})'",
+    "git grep -n -E 'CopperArchive7301|AsterOrigin74|EmberStore7501|KestrelMemo7603|RootAnchor7801|RootPrelude7901' 544d2453 -- crates",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-svek-node-paint-order/*.puml test-diagrams/perturbations/class-svek-node-paint-order/*.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandFactoryNoteOnEntity.executeInternal at lines 224-289 obtains the target in the current namespace context, consumes a GMN sequence value, creates a real NOTE leaf through reallyCreateLeaf, then creates its connector Link.",
+      "Plasma.register stores every Quark in an ArrayList and Quark stores children in a LinkedHashMap, so CucaDiagram.leafs at lines 919-929 exposes quark creation order.",
+      "CucaDiagramFileMakerSvek passes diagram.leafs into DotData, but GraphvizImageBuilder.buildImage at lines 209-229 does not create every SvekNode in that global leaf order: it calls printGroups first and getUnpackagedEntities second.",
+      "GraphvizImageBuilder.printGroup at lines 423-437 creates direct package leaves before child groups, while root leaves are deferred until all root groups have been traversed.",
+      "Bibliotekon.nodeMap is a LinkedHashMap; createNode inserts into it and allNodes returns its values in insertion order.",
+      "SvekResult.drawU at lines 67-99 paints clusters, then every SvekNode from Bibliotekon.allNodes in that insertion order.",
+      "Therefore Java paint order is SvekNode construction order from GraphvizImageBuilder's package-first traversal, not one globally monotonic Cuca UID or quark-insertion stream."
+    ],
+    "rust": [
+      "ClassUidEvent records package, entity, note, relationship, discarded relationship, and association constructor events; svek_id_allocation replays attached notes as three shared UID slots.",
+      "svek_node_emission_order walks rendered packages depth first and appends root entities afterward, matching the high-level Java GraphvizImageBuilder traversal.",
+      "The implementation builds one layout_note_emissions vector sorted globally by reconstructed entNNNN sequence and flushes notes while note_sequence < current_entity_sequence.",
+      "That merge assumes entity IDs are monotonic in svek_node_emission_order. They are not when a root entity or root note is constructed before a later package whose nodes GraphvizImageBuilder creates first.",
+      "render_svek_note_emission has no package traversal key, so the UID sort can move a root note ahead of a package node or leave a package note behind a root node."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in production additions. The implementation's PaintOrigin1031 and checkpoint strings occur only in its new unit test.",
+    "unexplained_constants": "No new high-precision parity constant was added. The attached-note entity offset note_start + 1 follows the traced GMN-name then Entity-constructor UID sequence and reuses the pre-existing attached-note renderer's ID calculation.",
+    "golden_reads": "No include_str, include_bytes, test-diagrams, golden, or fixture read was added by d5fde268..544d2453.",
+    "output_surgery": "No replace, replacen, coordinate-keyed SVG rewrite, or post-hoc output surgery was added by d5fde268..544d2453.",
+    "held_out_label_search": "No fresh held-out label appears under crates at implementation commit 544d2453."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_attached_three_phases_four_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_attached_three_phases_four_positions.svg",
+      "sha256": {
+        "puml": "c48868b397d48407ba465884b293524716caa33184614920511e0a8afe120faa",
+        "svg": "3ee214717401529cdff3a021c0739ce8ae6c86d09ecb92aa8621e0313d7556b8"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "attached notes before, between, and after ordinary declarations",
+        "left, top, right, and bottom note positions",
+        "fresh renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Structural mismatch. Java canvas is 751x371 and Rust is 660x371; the first class and note geometries diverge while element kinds remain aligned."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "Valid strict failure, but geometry differences make it weaker evidence for paint order than the package/root cases."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.svg",
+      "sha256": {
+        "puml": "bea6c0fc90f90c420514300a9f8a761e1052ff67d79aa002a7f5d5ed1e72134f",
+        "svg": "c9b01582a8097eb8635a5369f3d632677362593ed450d32bbcede6fd3da779f1"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "relationship-created endpoints before and after notes",
+        "inverted directional relationship",
+        "four note positions"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Rust dispatches the relationship-only source as SEQUENCE while Java renders CLASS; expected 58 elements and Rust produced 55."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "Preserved as required. The class-context variant below removes this dispatch confound."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints_class_context.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints_class_context.svg",
+      "sha256": {
+        "puml": "0ee00f6e7863094c8746d9badeae5ce22f0e3d0fc681840daca6fb86d6c3c551",
+        "svg": "716b6cfc6b35592fb1095a9c46614569c4903eb23afadb1bdfb6c741b70d4814"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction in explicit class context",
+        "relationship-created endpoints before and after notes",
+        "inverted directional relationship",
+        "fresh renamed labels and four note positions"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Structural mismatch with both outputs classified as CLASS. Java is 995x219 with 68 elements; Rust is 1226x310 with 66 elements, and note/link geometry and link sequence diverge."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "This exercises the requested endpoint axis without dispatch ambiguity, but its first differences are broader layout and link-order failures."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_mixed_floating_attached_both_orders.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_mixed_floating_attached_both_orders.svg",
+      "sha256": {
+        "puml": "e29d64bf09e6431a5ddc4b09bbde0e1d4db5b0ab2384d1347a71236b961d62a4",
+        "svg": "3fdb8d26d35a03fc518d688043b4ef77f3fcd04bd33a8b7dd4bd6872c113302e"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "attached then floating note order",
+        "floating then attached note order",
+        "declarations and relationships after both note kinds"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_mixed_notes_reordered_labels.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_mixed_notes_reordered_labels.svg",
+      "sha256": {
+        "puml": "f3ba26c0c4c5e168e99ee0c59bbf7b7ad79a3bdf4f0104ffc9cbdbfbb04171f2",
+        "svg": "62cff98ccd25866dda01846b37a7632aa068fdb2ff6a36a5ab0e4a6e7214dcfd"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "floating note before any class",
+        "mixed floating and attached notes",
+        "relationship-created entity later redeclared with fresh labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Structural geometry mismatch. Java canvas is 650x310 and Rust is 907x166; entity and note coordinates diverge from the first floating note onward."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "Valid strict failure, but the changed Graphviz arrangement is not an isolated paint-order mismatch."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_root_note_before_later_package.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_tb_root_note_before_later_package.svg",
+      "sha256": {
+        "puml": "c02f917f78d3b8cc3591e9e4de974f54fbc478f0c926a1704ac6a71150f25b74",
+        "svg": "93deb976ecb48bcd0d1d17ab841133c30e63c50221aa9127118243af090062cb"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "root attached note constructed before a later package",
+        "package-first versus root-leaf SVEK traversal",
+        "fresh labels and declaration-order crossing"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Direct paint-order mismatch. At the first entity after the package cluster Java emits VaultScope7807.NestedLedger7811 as ent0007, while Rust emits the root attached note GMN3 as ent0004."
+      },
+      "java_entity_order": [
+        "VaultScope7807.NestedLedger7811 ent0007",
+        "RootAnchor7801 ent0002",
+        "GMN3 ent0004",
+        "RootTail7817 ent0008"
+      ],
+      "mechanism_shaped_counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_nested_note_before_root_tail.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_nested_note_before_root_tail.svg",
+      "sha256": {
+        "puml": "ae32fb94a0b5a608f29f7e286c292e940a773bca5c83f89828c1271fee13cd02",
+        "svg": "1b3ffbbf516f9db78b38436decdf5680f67d35acc1f593570b95d004897000b1"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "attached note inside a package",
+        "root entity declared before the package and another after it",
+        "fresh labels and reverse package/root crossing"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Paint order and geometry mismatch. After NestedIndex7919, Java emits WorkshopScope7907.GMN5 as ent0006, while Rust emits RootPrelude7901 as ent0002."
+      },
+      "java_entity_order": [
+        "WorkshopScope7907.NestedIndex7919 ent0004",
+        "WorkshopScope7907.GMN5 ent0006",
+        "RootPrelude7901 ent0002",
+        "RootCoda7927 ent0008"
+      ],
+      "mechanism_shaped_counterexample": true
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The account's global insertion-order invariant is false across package/root traversal boundaries.",
+      "evidence": "CucaDiagram.leafs is quark insertion ordered, but GraphvizImageBuilder.buildImage creates package-tree nodes before unpackaged root nodes. Bibliotekon and SvekResult preserve this later SvekNode construction order, not globally monotonic constructor UID order."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The implementation merges notes with a non-monotonic entity stream using a monotonic UID comparison.",
+      "evidence": "checker_tb_root_note_before_later_package is an isolated document-order failure: Java emits packaged NestedLedger7811 ent0007 first, but Rust flushes earlier-UID root note GMN3 ent0004 before it. The condition layout_note_sequence < current_entity_sequence is invalid when package-first traversal presents ent0007 before root ent0002/ent0004."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The reverse crossing also fails for a note owned by a package.",
+      "evidence": "checker_lr_nested_note_before_root_tail expects nested ent0004, nested note ent0006, then root ent0002 and ent0008. Rust advances to RootPrelude7901 ent0002 where Java expects the nested note, leaving the package note until a later root ID exceeds it."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped production branch, golden read, unexplained high-precision constant, or output surgery was added by the implementation diff.",
+      "evidence": "The implementation diff and shipping-crate held-out-label searches were clean; the only implementation-specific labels are confined to its unit test."
+    },
+    {
+      "severity": "informational",
+      "summary": "The wider matrix found additional strict parity failures outside the isolated paint-order defect.",
+      "evidence": "The four-position TB case, reordered-label LR case, and class-context implicit-endpoint case fail on layout/link geometry. The relationship-only case also exposes CLASS-versus-SEQUENCE dispatch divergence. These are preserved but are not needed for the mechanism verdict."
+    }
+  ],
+  "verdict": "REJECTED",
+  "verdict_basis": "A single valid failing counterexample rejects. Two fresh valid cases directly contradict the claimed paint-order mechanism across package/root SVEK traversal boundaries.",
+  "notes": [
+    "All seven held-out PlantUML inputs produced non-error SVGs with the pinned Java JAR.",
+    "Every input and same-stem Java SVG, passing or failing, is preserved.",
+    "No Cargo or rustc command was run.",
+    "No implementation file was modified by this checker."
+  ]
+}
