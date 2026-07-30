@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-themed-pseudostate-paint",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model_tool": "GPT-5 / Codex desktop"
+  },
+  "verdict": "REJECT",
+  "revisions": {
+    "implementation_commit": "22f8bf85d189e8b949630204dc85018b0decbbf9",
+    "rust_exact_revision": "723af6cdc732456f7150e6501f1f0ad0c6f6ef0e",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "reviewed_account": "docs/parity-reviews/state-themed-pseudostate-paint/account.json",
+  "oracle": {
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_error_svg_count": 0
+  },
+  "helper": {
+    "required_path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "required_sha256": "7016bd7c6c39a34e7a978ffd991ea026fb7eb2d876c389aa0c69c69b3a6c710a",
+    "verified_before_initial_invocations": true,
+    "replacement_observed_after_initial_invocations": {
+      "sha256": "4ca91dffb9939e646cfd37e3f6726663deaaddb7ecc2e1b8e8f0fa5b7f574aa2",
+      "mtime": "2026-07-31 04:32:53 local",
+      "effect": "Post-replacement reruns are retained as diagnostic observations only, not frozen-helper evidence. No matching 7016... binary remained under /tmp, /private/tmp, or the repository target directories."
+    }
+  },
+  "commands": [
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "rg -n -i 'minty|metal|fixture|golden|test-diagrams|include_str|state-themed-pseudostate' crates/rustuml-render/src/state.rs",
+    "rg -n 'activity(Start|End|Bar|Diamond).*Color|circle.*start|circle.*end|activityBar|stateDiagram.*diamond' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-themed-pseudostate-paint/*.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <each .puml listed below>",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust checker_gradient_diagonal_policies_nested.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust checker_history_font_stereotype_bar_tb.puml"
+  ],
+  "inputs": [
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_activity_state_channel_conflicts_lr.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_bar_reserved_stereotype_style.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_gradient_diagonal_policies_nested.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_gradient_vertical_dedup_flat.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_history_font_state_channel.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_history_font_stereotype_bar_tb.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_metal_nested_gradient_scope.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_minty_flat_entity_ownership.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+    "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_transparent_background_source_order.puml"
+  ],
+  "axes": [
+    "minty solid channels versus metal gradient channels",
+    "activity and state channel conflicts",
+    "start/end entity fill overrides versus choice/fork/join/history declaration fills",
+    "vertical, horizontal, and both diagonal gradient policies with repeated paints",
+    "history state-font channel versus state-attribute font channel",
+    "transparent document background and later source-order overrides",
+    "flat and nested composite scopes",
+    "reserved fork/join stereotype style selectors"
+  ],
+  "static_review": {
+    "java_ownership_confirmed": [
+      "EntityImageCircleStart and EntityImageCircleEnd merge the stateDiagram circle signatures and pass entity Colors to CircleStart/CircleEnd.",
+      "EntityImageBranch owns activityDiagram.activity.diamond; EntityImageSynchroBar owns activityDiagram.activityBar; EntityImagePseudoState owns stateDiagram.diamond and FontParam.STATE.",
+      "FromSkinparamToStyle maps activityStartColor, activityEndColor, activityBarColor, activityDiamondBackgroundColor, and activityDiamondBorderColor onto those generic signatures."
+    ],
+    "rust_data_flow_confirmed": [
+      "state_pseudostate_style resolves the corresponding signatures, keeps StatePaint typed through StateGradientRegistry, and applies a state fill only to named start/end entities.",
+      "The corrected diagonal probe has byte-identical Java and Rust gradient definitions: backslash, slash, and pipe policies retain their endpoints and first-use order.",
+      "checker_history_font_state_channel is structurally equivalent, including Verdana, 17px state font, #1256A8 colour, and H/H* baseline placement."
+    ],
+    "no_overfit_signals_found": [
+      "No theme-name, fixture-name, golden-path, or include_str branch was found in state.rs.",
+      "New paint constants are represented as style defaults or Java-cited dimensions; the reviewed implementation does not contain a per-fixture constant ladder."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "blocking",
+      "finding": "The required frozen no-oracle held-out matrix is not green. Initial invocations with the verified 7016... helper returned non-equivalence for the original minty, metal, activity/state conflict, vertical-gradient, history/bar, transparent-background, and plain-state probes. Later renderer-reachable reruns also returned non-equivalence for every probe except checker_history_font_state_channel, but the helper had then been replaced and those runs cannot count as the required frozen evidence.",
+      "consequence": "T14 rule 10 requires the no-oracle perturbation test to pass before acceptance. The review cannot convert known failures into acceptable residue merely because several visible paint attributes agree."
+    },
+    {
+      "severity": "medium",
+      "finding": "The initial flat probes that contain only reserved <<...>> state declarations are classified as SEQUENCE or CLASS by the Rust subtype detector, although Java renders them as valid state diagrams. Composite variants render as STATE but still expose existing autonomous composite layout and scoped-pseudostate identity divergence.",
+      "consequence": "This is not evidence of a theme-name shortcut, but it prevents the proposed mechanism from establishing product parity across the declared flat/nested axes."
+    },
+    {
+      "severity": "medium",
+      "finding": "Java treats 'state X <<fork>> <<priority>>' and 'state X <<deepHistory>>' as ordinary states. Rust also does not model those forms as the requested pseudostates. The preserved probes establish that these spellings are not valid tests of the claimed bar-stereotype or deep-history channels; the valid Rust/Java spelling for deep history is <<history*>>. Reserved <<fork>> and <<join>> style selectors did not override Java's activityBarColor in the tested source.",
+      "consequence": "The implementation should not claim support for an unproven independent bar-stereotype channel from these forms."
+    }
+  ],
+  "positive_evidence": [
+    "checker_minty_flat_entity_ownership and checker_activity_state_channel_conflicts_lr show matching Java-owned start, end, choice, bar, and history paint values at the corresponding emitted primitives before unrelated layout divergence.",
+    "checker_gradient_diagonal_policies_nested shows matching Java/Rust <linearGradient> definitions after correcting the input to a single backslash policy separator.",
+    "checker_history_font_state_channel passes the strict structural comparator."
+  ],
+  "required_follow_up": "Re-establish an immutable helper at the documented 7016... hash, rerun every preserved input, and resolve or explicitly target the flat subtype detection plus autonomous composite/scoped-pseudostate divergences. A fresh independent review is required after the no-oracle matrix is green."
+}

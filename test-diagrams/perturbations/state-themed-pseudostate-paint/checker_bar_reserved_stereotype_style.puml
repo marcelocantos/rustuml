@@ -1,0 +1,16 @@
+@startuml
+skinparam activityBarColor #445566
+skinparam activityBar {
+  BackgroundColor<<fork>> #A855F7
+  BackgroundColor<<join>> #F97316
+}
+state BarHarness {
+  state "Style Fork" as StyleFork <<fork>>
+  state "Style Join" as StyleJoin <<join>>
+  [*] --> StyleFork
+  StyleFork --> StyleJoin
+  StyleJoin --> [*]
+}
+[*] --> BarHarness
+BarHarness --> [*]
+@enduml

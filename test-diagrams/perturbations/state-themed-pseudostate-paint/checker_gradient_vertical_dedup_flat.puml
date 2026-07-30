@@ -1,0 +1,22 @@
+@startuml
+skinparam activityDiamondBackgroundColor #112233-#AABBCC
+skinparam activityDiamondBorderColor #778899
+skinparam activityBarColor #112233-#AABBCC
+state VerticalHarness {
+  state "Vertical Start" as VerticalStart <<start>>
+  state "Vertical Choice" as VerticalChoice <<choice>>
+  state "Vertical History" as VerticalHistory <<history>>
+  state "Vertical Fork" as VerticalFork <<fork>>
+  state "Vertical Join" as VerticalJoin <<join>>
+  state "Vertical End" as VerticalEnd <<end>>
+  [*] --> VerticalStart
+  VerticalStart --> VerticalChoice
+  VerticalChoice --> VerticalHistory
+  VerticalHistory --> VerticalFork
+  VerticalFork --> VerticalJoin
+  VerticalJoin --> VerticalEnd
+  VerticalEnd --> [*]
+}
+[*] --> VerticalHarness
+VerticalHarness --> [*]
+@enduml

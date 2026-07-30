@@ -1,0 +1,18 @@
+@startuml
+skinparam activityDiamondBackgroundColor #102030\#C0D0E0
+skinparam activityDiamondBorderColor #304050/#E0D0C0
+skinparam activityBarColor #203040|#D0E0F0
+state "Diagonal Capsule" as DiagonalCapsule {
+  state "Diagonal Start" as DiagonalStart <<start>>
+  state "Diagonal Choice" as DiagonalChoice <<choice>>
+  state "Diagonal Memory" as DiagonalMemory <<deepHistory>>
+  state "Diagonal Fork" as DiagonalFork <<fork>>
+  state "Diagonal End" as DiagonalEnd <<end>>
+  DiagonalStart --> DiagonalChoice
+  DiagonalChoice --> DiagonalMemory
+  DiagonalMemory --> DiagonalFork
+  DiagonalFork --> DiagonalEnd
+}
+[*] --> DiagonalCapsule
+DiagonalCapsule --> [*]
+@enduml

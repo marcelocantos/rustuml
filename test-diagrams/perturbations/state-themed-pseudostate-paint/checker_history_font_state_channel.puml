@@ -1,0 +1,18 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam defaultFontSize 9
+skinparam stateFontName Verdana
+skinparam stateFontColor #1256A8
+skinparam stateFontSize 17
+skinparam stateAttributeFontColor #E85D04
+skinparam stateAttributeFontSize 7
+state HistoryHarness {
+  state "Font History" as FontHistory <<history>>
+  state "Font Deep" as FontDeep <<history*>>
+  [*] --> FontHistory
+  FontHistory --> FontDeep
+  FontDeep --> [*]
+}
+[*] --> HistoryHarness
+HistoryHarness --> [*]
+@enduml

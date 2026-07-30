@@ -1,0 +1,18 @@
+@startuml
+skinparam activityStartColor #1155AA
+skinparam activityEndColor #AA5511
+skinparam activityDiamondBackgroundColor #2266BB
+skinparam activityDiamondBorderColor #BB6622
+skinparam activityBarColor #22BB66
+state StartGate <<start>>
+state ChoiceGate <<choice>>
+state ForkGate <<fork>>
+state HistoryGate <<history>>
+state JoinGate <<join>>
+state EndGate <<end>>
+StartGate --> ChoiceGate
+ChoiceGate --> ForkGate
+ForkGate --> HistoryGate
+HistoryGate --> JoinGate
+JoinGate --> EndGate
+@enduml

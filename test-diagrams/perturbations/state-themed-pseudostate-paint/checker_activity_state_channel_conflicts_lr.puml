@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+skinparam stateStartColor #101010
+skinparam stateEndColor #202020
+skinparam stateBackgroundColor #303030
+skinparam stateBorderColor #404040
+skinparam activityStartColor #1155AA
+skinparam activityEndColor #AA5511
+skinparam activityDiamondBackgroundColor #2266BB
+skinparam activityDiamondBorderColor #BB6622
+skinparam activityBarColor #22BB66
+state ChannelHarness {
+  state "Source Gate" as SourceGate <<start>>
+  state "Channel Choice" as ChannelChoice <<choice>> #DD0000
+  state "Channel Fork" as ChannelFork <<fork>> #00DD00
+  state "Channel Memory" as ChannelMemory <<history>> #0000DD
+  state "Channel Join" as ChannelJoin <<join>> #DD00DD
+  state "Target Gate" as TargetGate <<end>>
+  [*] --> SourceGate
+  SourceGate --> ChannelChoice
+  ChannelChoice --> ChannelFork
+  ChannelFork --> ChannelMemory
+  ChannelMemory --> ChannelJoin
+  ChannelJoin --> TargetGate
+  TargetGate --> [*]
+}
+[*] --> ChannelHarness
+ChannelHarness --> [*]
+@enduml

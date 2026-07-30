@@ -1,0 +1,20 @@
+@startuml
+!theme minty
+state MintHarness {
+  state "Cedar Beginning" as CedarBeginning <<start>> #163A5F
+  state "Mango Decision" as MangoDecision <<choice>> #AA0000
+  state "Azure Fork" as AzureFork <<fork>> #00AA00
+  state "Memory Shelf" as MemoryShelf <<history>> #0000AA
+  state "Azure Join" as AzureJoin <<join>> #AA00AA
+  state "Cedar Ending" as CedarEnding <<end>> #F59E0B
+  [*] --> CedarBeginning
+  CedarBeginning --> MangoDecision
+  MangoDecision --> AzureFork
+  AzureFork --> MemoryShelf
+  MemoryShelf --> AzureJoin
+  AzureJoin --> CedarEnding
+  CedarEnding --> [*]
+}
+[*] --> MintHarness
+MintHarness --> [*]
+@enduml

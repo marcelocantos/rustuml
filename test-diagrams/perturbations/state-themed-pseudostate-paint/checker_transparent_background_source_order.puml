@@ -1,0 +1,24 @@
+@startuml
+skinparam backgroundColor transparent
+skinparam activityDiamondBackgroundColor #0E7490/#FDE047
+skinparam activityDiamondBackgroundColor #7C3AED|#F97316
+skinparam activityDiamondBorderColor #1E293B
+skinparam activityStartColor #0F766E
+skinparam activityEndColor #B91C1C
+skinparam activityBarColor #15803D
+state OrderHarness {
+  state "Order Start" as OrderStart <<start>>
+  state "Order Choice" as OrderChoice <<choice>>
+  state "Order Archive" as OrderArchive <<history>>
+  state "Order Fork" as OrderFork <<fork>>
+  state "Order End" as OrderEnd <<end>>
+  [*] --> OrderStart
+  OrderStart --> OrderChoice
+  OrderChoice --> OrderArchive
+  OrderArchive --> OrderFork
+  OrderFork --> OrderEnd
+  OrderEnd --> [*]
+}
+[*] --> OrderHarness
+OrderHarness --> [*]
+@enduml

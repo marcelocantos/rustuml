@@ -1,0 +1,30 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam defaultFontSize 9
+skinparam stateFontName Verdana
+skinparam stateFontColor #1256A8
+skinparam stateFontSize 17
+skinparam stateAttributeFontColor #E85D04
+skinparam stateAttributeFontSize 7
+skinparam activityBarColor #445566
+skinparam activityBar {
+  BackgroundColor<<priority>> #A855F7
+}
+state FontHarness {
+  state "Font Start" as FontStart <<start>>
+  state "Font Fork" as FontFork <<fork>> <<priority>>
+  state "Font History" as FontHistory <<history>>
+  state "Font Deep" as FontDeep <<deepHistory>>
+  state "Font Join" as FontJoin <<join>> <<priority>>
+  state "Font End" as FontEnd <<end>>
+  [*] --> FontStart
+  FontStart --> FontFork
+  FontFork --> FontHistory
+  FontHistory --> FontDeep
+  FontDeep --> FontJoin
+  FontJoin --> FontEnd
+  FontEnd --> [*]
+}
+[*] --> FontHarness
+FontHarness --> [*]
+@enduml

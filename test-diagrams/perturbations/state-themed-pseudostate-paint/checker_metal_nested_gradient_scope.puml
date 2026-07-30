@@ -1,0 +1,19 @@
+@startuml
+!theme metal
+left to right direction
+state "Copper Envelope" as CopperEnvelope {
+  state "Inner Start" as InnerStart <<start>>
+  state "Inner Choice" as InnerChoice <<choice>>
+  state "Inner Fork" as InnerFork <<fork>>
+  state "Inner Memory" as InnerMemory <<history>>
+  state "Inner Join" as InnerJoin <<join>>
+  state "Inner End" as InnerEnd <<end>>
+  InnerStart --> InnerChoice
+  InnerChoice --> InnerFork
+  InnerFork --> InnerMemory
+  InnerMemory --> InnerJoin
+  InnerJoin --> InnerEnd
+}
+[*] --> CopperEnvelope
+CopperEnvelope --> [*]
+@enduml
