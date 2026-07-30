@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-font-family-legacy-resolution",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "779ef0bc",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbol": "SkinParam.getFontFamily",
+      "lines": "429-449",
+      "role": "Legacy font-family resolution checks each requested FontParam-specific `<param>fontname` key, then `defaultfontname`; it never reads a generic `fontname` key."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbol": "SkinParam.getFirstValueNonNullWithSuffix",
+      "lines": "476-484",
+      "role": "Constructs the accepted specific keys from the FontParam enum name and the `fontname` suffix."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "symbol": "FromSkinparamToStyle constructor",
+      "line": "156",
+      "role": "Separately maps the legitimate `defaultFontName` legacy key to the root style `fontName` property."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "state_history_text_style",
+        "autonomous_state_style",
+        "StateArrowFont::from_skinparams",
+        "render_with_oracle state-node font resolver",
+        "render_oracle_transitions",
+        "has_only_autonomous_layout_skinparams",
+        "has_only_flat_label_skinparams"
+      ],
+      "role": "Raw legacy skinparam resolvers and capability predicates currently admit `fontName` alongside specific state/arrow keys and `defaultFontName`."
+    },
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "AutonomousTextStyle::apply_resolved",
+        "StateArrowFont::apply_resolved"
+      ],
+      "role": "Resolved style `fontName` properties are legitimate style-cascade inputs and are not part of the defect."
+    }
+  ],
+  "claimed_invariant": "Every state font-family consumer follows the same Java legacy precedence: a matching FontParam-specific key, then `defaultFontName`, then the FontParam default. A raw generic `fontName` skinparam has no effect. A resolved CSS/style `fontName` property remains effective.",
+  "causal_divergence": "Rust independently accumulated `fontName` as a raw fallback in node, history, transition, autonomous, oracle-assisted, and capability-gate code. Java never consults that key in legacy font lookup. This makes Rust apply Courier or another family to state text and labels that Java leaves at sans-serif, changing intrinsic measurements, Graphviz label boxes, routes, painted bounds, and final SVG dimensions.",
+  "planned_model_change": "Remove raw `fontName` from every state legacy skinparam resolver and from the autonomous/flat capability allowlists. Preserve specific `stateFontName`, `stateAttributeFontName`, `stateArrowFontName`, `arrowFontName`, and `defaultFontName` precedence. Preserve resolved style-cascade `fontName` handling. Add tests covering ignored raw generic fontName and accepted default/specific/style inputs.",
+  "perturbation_axes": [
+    "top-to-bottom versus left-to-right rank direction",
+    "state-node text versus transition labels versus history labels",
+    "generic fontName versus defaultFontName versus state-specific font names",
+    "monospace versus proportional font families",
+    "flat versus nested autonomous state topology"
+  ],
+  "known_counterexample": "test-diagrams/perturbations/state-flat-svek-label-skinparams/checker_tb_fontname_affects_nodes_and_labels.puml",
+  "acceptance": [
+    "The known generic-fontName counterexample is structurally equivalent in the no-oracle comparator.",
+    "Fresh held-out inputs show raw generic fontName is inert while defaultFontName and state-specific keys still affect the intended channels.",
+    "The full rustuml-render library suite passes.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
