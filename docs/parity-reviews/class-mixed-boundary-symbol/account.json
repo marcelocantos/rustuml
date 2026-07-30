@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-boundary-symbol",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2#getRegexConcat",
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2#executeArg",
+    "net.sourceforge.plantuml.descdiagram.command.CommandCreateElementFull#ALL_TYPES",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolBoundary#asSmall",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolSimpleAbstract#asSmall",
+    "net.sourceforge.plantuml.svek.image.EntityImageDescription#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.image.EntityImageDescription#drawU",
+    "net.sourceforge.plantuml.regex.Pattern2#compileInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs::EntityKind",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_entity_decl",
+    "crates/rustuml-parser/src/parse/class.rs::parse_entity_kind",
+    "crates/rustuml-render/src/class.rs::calc_entity_dims",
+    "crates/rustuml-render/src/class.rs::render_entity_content",
+    "crates/rustuml-render/src/deployment.rs::emit_icon_entity",
+    "crates/rustuml-render/src/deployment.rs::deployment_no_oracle_entity_rect"
+  ],
+  "invariant": "After CommandAllowMixing has executed, ClassDiagramFactory accepts the case-insensitive CommandCreateElementFull.ALL_TYPES family through CommandCreateElementFull2. A boundary declaration creates a DESCRIPTION Entity whose USymbol is USymbolBoundary. EntityImageDescription uses the same USymbolBoundary small image regardless of whether the owning diagram factory is CLASS or DESCRIPTION: a 49-pixel minimum-width node contains a 24-pixel circle, a 24-pixel vertical bar and 17-pixel horizontal stub to its left, four pixels of icon top inset inside the 32-pixel symbol band, and a centered label below. The path is painted before the ellipse. Layout dimensions and emitted geometry come from that symbol image; the line is not a tolerated unknown command.",
+  "causal_divergence": "Rust detect_uml_subtype can retain ClassDiagramFactory after allowmixing, but ClassParser::try_entity_decl uses a case-sensitive, incomplete keyword regex and has no Boundary EntityKind. It therefore drops uppercase and lowercase boundary declarations as unknown lines. The renderer never receives a node, causing constructor UID, package ownership, SVEK layout, canvas size, and SVG paint order to diverge. Rust's deployment path already ports the same Java USymbolBoundary dimension and paint model, so the missing behavior is shared symbol-image ownership in the class entity model, not a new layout constant.",
+  "planned_change": "Add Boundary to the class EntityKind model. Make the existing class entity command regex case-insensitive and normalize its captured command keyword before semantic matching, mirroring Pattern2.compileInternal. Parse boundary as a mixed description leaf. In calc_entity_dims and render_entity_content, use the Java-derived 49 by 48 minimum node, 24-pixel circle, 32-pixel symbol band, asymmetric boundary bar/stub, and centered 14-pixel label already established by the deployment renderer. Preserve package ownership, source line, constructor UID, colors, links, and rank-direction handling through the ordinary class SVEK pipeline. Add renamed lowercase, uppercase, and mixed-case perturbations with root and nested ownership and at least one connected topology; do not alter comparator slack or post-process SVG.",
+  "perturbation_axes": [
+    "lowercase, uppercase, and mixed-case boundary command spellings",
+    "root versus nested package or shared-symbol-container ownership",
+    "top-to-bottom versus left-to-right direction",
+    "isolated boundary versus boundary connected to a native class entity",
+    "short versus wider renamed labels",
+    "allowmixing before the declaration versus class-factory rejection without prior allowmixing"
+  ],
+  "observed_counterexamples": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml"
+  ],
+  "status": "proposed"
+}
