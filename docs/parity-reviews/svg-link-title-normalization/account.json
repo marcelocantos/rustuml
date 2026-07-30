@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "svg-link-title-normalization",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "9767b63e8a526706082d84b173561b6ab71fa45d",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/url/Url.java:50-57 stores the raw URL as the tooltip when no explicit tooltip is supplied",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:1169-1181 stores URL, title, and target as separate link fields",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:1184-1200 decodes <U+hex> markers and literal backslash-n sequences only in getXlinkTitle",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:1202-1211 writes the raw URL to href/xlink:href and the normalized title to title/xlink:title"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs normalize_svg_link_title already ports Java LinkData title normalization for class and package anchors",
+    "crates/rustuml-render/src/text_render.rs emit_text_segment escapes a creole link's explicit tooltip or raw URL directly without title normalization",
+    "crates/rustuml-render/src/creole.rs parse_segments correctly keeps link_url and optional link_title as separate fields"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-transition-display-lines/checker_link_raw_escape_outside_newline_lr.puml"
+  ],
+  "invariant": "Every SVG hyperlink keeps its parsed target byte sequence in href and xlink:href. Its title and xlink:title come from the explicit tooltip when present or the URL otherwise, then pass through the SVG backend's title-only normalization: valid <U+hex> markers become one Java char and literal backslash-n becomes an actual newline. The displayed label is independent of both fields.",
+  "causal_divergence": "The state transition fixture reaches the generic creole text renderer with link_url containing a literal backslash-n and no explicit link_title. Rust uses the escaped raw URL for all four attributes, so href is correct but title is not normalized. Java's Url fallback supplies that same URL as the tooltip and SvgGraphics normalizes only the title attributes. The class renderer already implements the complete rule privately, demonstrating that the missing behavior is shared link metadata ownership rather than state parsing, transition Display splitting, or geometry.",
+  "planned_change": "Move the existing Java-cited normalize_svg_link_title implementation from class.rs to the shared svg module and use it from both class/package anchor emission and generic creole text link emission. Preserve raw href escaping and normalize the explicit-tooltip-or-URL fallback before escaping title attributes. Add shared tests proving that href retains literal backslash-n while title receives a real newline, that explicit tooltips follow the same rule, and that invalid <U+...> markers remain literal. Re-run existing class link tests, the preserved state counterexample, and complete renderer tests.",
+  "perturbation_axes": [
+    "implicit URL tooltip versus explicit brace tooltip",
+    "literal backslash-n in URL versus tooltip",
+    "valid and invalid <U+hex> markers",
+    "renamed visible labels independent of target metadata",
+    "state transition creole links versus class/package anchors",
+    "multiple linked and unlinked runs on one Display row"
+  ],
+  "scope_boundary": "This mechanism only owns SVG anchor metadata normalization. It does not decode href targets, split Display rows inside [[...]], change visible link labels, alter URL security policy, or affect diagram geometry."
+}
