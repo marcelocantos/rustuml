@@ -817,27 +817,40 @@ impl ClassParser {
                 _ => {}
             }
         }
-        // Collect (supertype, kind, dashed) without borrowing self mutably yet.
-        let mut supers: Vec<(String, RelationshipKind, bool)> = Vec::new();
-        let mut current: Option<(RelationshipKind, bool)> = None;
+        let child_is_interface = self
+            .entities
+            .iter()
+            .find(|entity| entity.id == child_id)
+            .is_some_and(|entity| entity.kind == EntityKind::Interface);
+        // `CommandCreateClass` calls `manageExtends` for EXTENDS and then
+        // IMPLEMENTS. Missing implements targets, and missing parents of an
+        // interface, are materialized as interfaces.
+        let mut supers: Vec<(String, RelationshipKind)> = Vec::new();
+        let mut current: Option<RelationshipKind> = None;
         for tok in scan.split_whitespace() {
             match tok {
-                "extends" => current = Some((RelationshipKind::Inheritance, false)),
-                "implements" => current = Some((RelationshipKind::Implementation, true)),
+                "extends" => current = Some(RelationshipKind::Inheritance),
+                "implements" => current = Some(RelationshipKind::Implementation),
                 _ => {
-                    if let Some((kind, dashed)) = current {
+                    if let Some(kind) = current {
                         for name in tok.split(',') {
                             let name = name.trim();
                             if !name.is_empty() {
-                                supers.push((name.to_string(), kind, dashed));
+                                supers.push((name.to_string(), kind));
                             }
                         }
                     }
                 }
             }
         }
-        for (name, kind, dashed) in supers {
-            let parent = self.ensure_entity(&name);
+        for (name, kind) in supers {
+            let parent_kind = if kind == RelationshipKind::Implementation || child_is_interface {
+                EntityKind::Interface
+            } else {
+                EntityKind::Class
+            };
+            let parent = self.ensure_entity_kind(&name, parent_kind);
+            let dashed = parent_kind == EntityKind::Interface && !child_is_interface;
             self.relationships.push(Relationship {
                 from: parent,
                 to: child_id.to_string(),
@@ -1204,7 +1217,6 @@ impl ClassParser {
                         if package.source_line == 0 {
                             package.source_line = self.current_line;
                         }
-                        package.display_name = requested_display_name.clone();
                         package.phantom = false;
                     }
                     idx
@@ -2472,10 +2484,7 @@ mod tests {
             .iter()
             .find(|package| package.name == "FirstRealm.SharedGate")
             .unwrap();
-        assert_eq!(
-            reopened.display_name.as_deref(),
-            Some("Reopened First Gate")
-        );
+        assert_eq!(reopened.display_name.as_deref(), Some("SharedGate"));
         assert_eq!(
             first_then_second
                 .entities
@@ -2504,10 +2513,7 @@ mod tests {
             .iter()
             .find(|package| package.name == "SecondRealm.SharedGate")
             .unwrap();
-        assert_eq!(
-            reopened.display_name.as_deref(),
-            Some("Reopened Second Gate")
-        );
+        assert_eq!(reopened.display_name.as_deref(), Some("SharedGate"));
         assert_eq!(
             second_then_first
                 .entities
@@ -2871,6 +2877,34 @@ mod tests {
     }
 
     #[test]
+    fn reopened_package_preserves_its_first_display() {
+        let d = parse(
+            "package \"Original Display\" as ServiceCode {\n\
+               class First\n\
+             }\n\
+             together {\n\
+               package ServiceCode {\n\
+                 class Second\n\
+               }\n\
+             }",
+        );
+
+        assert_eq!(d.packages.len(), 1);
+        assert_eq!(d.packages[0].name, "ServiceCode");
+        assert_eq!(
+            d.packages[0].display_name.as_deref(),
+            Some("Original Display")
+        );
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["ServiceCode.First", "ServiceCode.Second"]
+        );
+    }
+
+    #[test]
     fn nested_qualified_endpoint_reuses_the_existing_leaf() {
         let d = parse(
             "package Outer {\n\
@@ -3165,6 +3199,42 @@ mod tests {
                     RelationshipEnd::From
                 ),
             ]
+        );
+    }
+
+    #[test]
+    fn missing_declaration_supertypes_use_java_materialization_kinds() {
+        let d = parse(
+            "class Child extends Base implements Port\n\
+             interface DerivedPort extends ParentPort\n\
+             class Existing\n\
+             class Other implements Existing",
+        );
+
+        let kind = |id: &str| {
+            d.entities
+                .iter()
+                .find(|entity| entity.id == id)
+                .map(|entity| entity.kind)
+                .unwrap()
+        };
+        assert_eq!(kind("Base"), EntityKind::Class);
+        assert_eq!(kind("Port"), EntityKind::Interface);
+        assert_eq!(kind("ParentPort"), EntityKind::Interface);
+        assert_eq!(kind("Existing"), EntityKind::Class);
+        assert!(
+            d.relationships
+                .iter()
+                .find(|rel| rel.from == "Port")
+                .unwrap()
+                .dashed
+        );
+        assert!(
+            !d.relationships
+                .iter()
+                .find(|rel| rel.from == "ParentPort")
+                .unwrap()
+                .dashed
         );
     }
 
