@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-explicit-parent-ownership",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.abel.Entity#getParentContainer",
+    "net.sourceforge.plantuml.cucadiagram.GroupHierarchy#getChildrenGroups",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs::Package::parent",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::ensure_phantom_packages",
+    "crates/rustuml-render/src/class.rs::package_parent_indices",
+    "crates/rustuml-render/src/class.rs::package_render_model",
+    "crates/rustuml-render/src/class.rs::svek_node_emission_order"
+  ],
+  "invariant": "A PlantUML group has one explicit parent-container identity fixed by the quark tree. GroupHierarchy.getChildrenGroups compares that identity; it never infers ancestry from overlap between descendant leaf collections. Rust ClassParser records the same identity in Package.parent for explicit and phantom packages, including an authoritative None for a root package.",
+  "causal_divergence": "package_parent_indices accepts Package.parent when it is Some but treats None as missing data and falls back to set-containment inference over Package.entities. None is actually the explicit root identity. The fallback is especially unsound for an empty package because the empty member set is a subset of every non-empty package, so an unrelated root empty package becomes a child of the smallest package. Non-empty sibling packages can also be mis-parented when their recursively inclusive entity sets overlap by construction or after filtering.",
+  "planned_change": "Use Package.parent as the sole package-parent source. Preserve None as root. Remove member-set ancestry inference from rendering and derive depth, direct children, roles, SVEK clusters, standalone ownership, and node emission from the parser's explicit tree. Add perturbations with empty root siblings, empty nested siblings, phantom namespace parents, filtered members, renamed labels, and reordered declarations.",
+  "perturbation_axes": [
+    "empty root package crossed with non-empty root package",
+    "empty nested package crossed with filled siblings",
+    "explicit packages crossed with phantom namespace groups",
+    "root and nested packages with overlapping descendant sets",
+    "removed or hidden member leaves",
+    "renamed labels and reordered declarations"
+  ]
+}
