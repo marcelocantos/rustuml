@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-body-block-visibility-lane",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "6d610c2d",
+  "supersedes_rejected_account": "class-ie-mandatory-compartment-icon-lane",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/BodierLikeClassOrObject.java",
+      "symbol": "BodierLikeClassOrObject.isBodyEnhanced",
+      "lines": "92-100",
+      "role": "Selects BodyEnhanced1 whenever the raw class body contains a block separator, table, or tree."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhanced1.java",
+      "symbol": "BodyEnhanced1.getArea",
+      "lines": "123-177",
+      "role": "Splits the raw body at each separator and constructs a separate MethodsOrFieldsArea for every resulting block."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/MethodsOrFieldsArea.java",
+      "symbols": [
+        "MethodsOrFieldsArea.hasSmallIcon",
+        "MethodsOrFieldsArea.calculateDimensionOnlyMembers"
+      ],
+      "lines": "125-170",
+      "role": "Activates one shared visibility lane only within that MethodsOrFieldsArea when any member has a non-null VisibilityModifier, including IE_MANDATORY."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/VisibilityModifier.java",
+      "symbol": "VisibilityModifier.getVisibilityModifierForField",
+      "lines": "267-283",
+      "role": "Maps a single leading `*` on an entity field to the non-null IE_MANDATORY modifier."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "calc_entity_dims",
+      "lines": "1150-1212",
+      "role": "Measures visibility lanes globally by field/method kind and special-cases IE_MANDATORY per row, so it cannot express separator-defined body blocks."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_body_blocks_generated",
+      "lines": "10972-11160",
+      "role": "Already splits document-order bodies at every separator and chooses the shared lane independently for each block."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "normal class field rendering",
+      "lines": "10361-10580",
+      "role": "Already resets default-member indentation after each inline field separator according to visibility modifiers in the following block."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_entity_relationships.puml",
+    "test-diagrams/golden/class/class_entity_basic.puml",
+    "test-diagrams/golden/class/class_entity_with_pk.puml",
+    "test-diagrams/golden/class/class_entity_er_ecommerce.puml"
+  ],
+  "claimed_invariant": "Visibility-lane ownership follows the Java MethodsOrFieldsArea instance. Without body separators, fields and methods form their ordinary independent areas. With a body separator, BodyEnhanced1 partitions members in document order at every separator and each resulting block independently reserves the shared icon lane when icons are enabled and any member in that block has a non-null VisibilityModifier. IE_MANDATORY participates exactly like other modifiers inside its own block and has no effect across a separator.",
+  "causal_divergence": "Rust painting already applies the Java block-scoped rule, but calc_entity_dims measures class modifiers across all fields or methods and measures IE_MANDATORY only on its owning row. A separator-free entity whose longest field is an unmarked sibling is therefore too narrow. Broadening IE_MANDATORY globally fixes that case but incorrectly widens default-only blocks after separators, explaining the observed regressions in all affected class entity fixtures and 152 ER fixtures.",
+  "planned_model_change": "Factor one body-block visibility-lane assignment used by dimension calculation. If any separator exists, partition all visible members at separator boundaries and decide lane activation independently per block. Otherwise retain the ordinary field/method partition. Treat every non-default Rust Visibility variant, including IeMandatory, as a non-null Java visibility modifier, subject to ClassAttributeIconSize zero. Use the assigned block decision for each member's measured text offset; do not change marker painting, text metrics, separator geometry, parser classification, or layout constants.",
+  "perturbation_axes": [
+    "no separator versus one and multiple separators",
+    "mandatory marker before versus after a separator",
+    "longest unmarked sibling inside the marker block versus in another block",
+    "field and method members mixed around separators",
+    "mandatory marker first, middle, and last within a block",
+    "default versus zero ClassAttributeIconSize"
+  ],
+  "scope_boundary": "This mechanism owns only the visibility-lane contribution to member width. It does not change body height, separator placement or styling, visibility glyph geometry, member parsing, crowfoot relationships, Graphviz layout, or comparator behavior.",
+  "acceptance": [
+    "class_entity_relationships becomes byte-exact while the previously exact separator-bearing class entity fixtures remain exact.",
+    "The full ER and type-detection family baselines do not regress.",
+    "Fresh valid inputs prove lane sharing within a block, isolation across separators, field/method partitioning without separators, order independence, and icon-size-zero suppression.",
+    "Renderer tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
