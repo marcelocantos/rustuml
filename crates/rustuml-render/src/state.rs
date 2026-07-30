@@ -1002,6 +1002,14 @@ fn ordinary_edge_label_size(label: &str, arrow_font: &StateArrowFont) -> EdgeLab
     }
 }
 
+fn state_edge_label_first_baseline_ascent(label: &str, arrow_font: &StateArrowFont) -> f64 {
+    text_render::label_first_baseline_ascent_with_family(
+        label,
+        arrow_font.size as f64,
+        &arrow_font.family,
+    )
+}
+
 /// Arrow-decoration clearance used by Java SVEK when Graphviz routes a
 /// labeled edge back to the same state.
 ///
@@ -1082,7 +1090,7 @@ fn emit_link_label_composition(
                     + offset_y
                     + SVEK_EDGE_LABEL_MARGIN
                     + arrow_font.padding
-                    + text_render::label_ascent(label, arrow_font.size as f64),
+                    + state_edge_label_first_baseline_ascent(label, arrow_font),
                 font_size: arrow_font.size,
                 font_family: &arrow_font.family,
                 fill: &arrow_font.color,
@@ -2884,7 +2892,7 @@ fn autonomous_scope_painted_bounds(
             let x = quantize_svek_coord(label_position.x) + label_margin;
             let baseline = quantize_svek_coord(label_position.y)
                 + label_margin
-                + text_render::label_ascent(label, transition_font.size as f64);
+                + state_edge_label_first_baseline_ascent(label, &transition_font);
             let width = text_render::measure_with_family(
                 label,
                 transition_font.size as f64,
@@ -4174,7 +4182,7 @@ fn emit_autonomous_scope_links(
                                 + scope.origin_y
                                 + offset_y
                                 + label_margin
-                                + text_render::label_ascent(label, arrow_font.size as f64),
+                                + state_edge_label_first_baseline_ascent(label, &arrow_font),
                         )
                     })
                     .unwrap_or_else(|| {
@@ -5221,7 +5229,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         let x = quantize_svek_coord(position.x) + margin;
         let baseline = quantize_svek_coord(position.y)
             + margin
-            + text_render::label_ascent(label, arrow_font.size as f64);
+            + state_edge_label_first_baseline_ascent(label, &arrow_font);
         let width = text_render::measure_with_family(
             label,
             arrow_font.size as f64,
@@ -11136,6 +11144,26 @@ CobaltDecision --> [*]
         let hidden_eight = layout_node_size_with_font(&hidden.id, Some(hidden), true, &font(8.0));
         assert!((hidden_eight.0 - hidden_five.0 - 6.0).abs() < f64::EPSILON);
         assert!((hidden_eight.1 - hidden_five.1 - 6.0).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn transition_label_baseline_uses_the_resolved_arrow_font_family() {
+        let font = |family: &str| StateArrowFont {
+            color: DEFAULT_TEXT_COLOR.to_string(),
+            family: family.to_string(),
+            size: 12,
+            bold: false,
+            italic: false,
+            padding: 0.0,
+        };
+
+        let verdana = state_edge_label_first_baseline_ascent("transition", &font("Verdana"));
+        let generic = state_edge_label_first_baseline_ascent("transition", &font("sans-serif"));
+        assert_eq!(
+            verdana,
+            text_render::label_first_baseline_ascent_with_family("transition", 12.0, "Verdana")
+        );
+        assert_ne!(verdana, generic);
     }
 
     #[test]
