@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "mechanism": "display-raw-newline-tokenization",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "7fe6c22d",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbol": "Display.getWithNewlines",
+      "lines": "258-315",
+      "role": "Scans Display source before row construction, enters raw mode for `[[...]]`, `<math>...</math>`, and `<latex>...</latex>`, and interprets escaped newline controls only outside raw mode."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+      "symbols": [
+        "S_LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL",
+        "UrlBuilder.getUrl"
+      ],
+      "lines": "77-130",
+      "role": "Consumes the complete raw `[[...]]` token and retains literal backslash-n bytes in URL and tooltip fields."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleUrl.java",
+      "symbols": [
+        "matchingSize",
+        "executeAndGetRemaining"
+      ],
+      "lines": "45-79",
+      "role": "Recognizes the complete raw URL token before ordinary Creole text processing."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/diagram/state.rs",
+      "symbol": "TransitionLabel::parse",
+      "lines": "294-335",
+      "role": "Already models Java Display raw mode correctly for state transition labels."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "message_label_width_with_family",
+        "message_label_block_height_with_family",
+        "SequenceSvg::emit_message_label"
+      ],
+      "role": "Splits literal backslash-n before Creole/link parsing, truncating URLs and rendering their suffix as ordinary text."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbol": "class body escaped-newline expansion",
+      "lines": "1565-1676",
+      "role": "Splits class member source on every literal backslash-n before a complete raw link token reaches the renderer."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "escaped_newline_lines",
+      "lines": "1887-1889",
+      "role": "Repeats the unconditional split while measuring and emitting class Display content."
+    }
+  ],
+  "claimed_invariant": "Escaped Display newline controls create rows only outside raw Creole URL, math, and LaTeX blocks. Raw block bytes reach their domain parser intact. In particular, a literal backslash-n inside a URL remains in href and is normalized only when producing the SVG title.",
+  "causal_divergence": "Rust has a correct raw-mode scanner only in the state transition model. Sequence measurement/emission and class member parsing/rendering independently split on every literal backslash-n first. The shared Creole parser therefore receives a truncated `[[...]]` token in those families, even though its direct unit path handles the complete token correctly.",
+  "planned_model_change": "Extract a parser-level raw-aware Display newline splitter from the existing state model. Use it in sequence Display row measurement/emission and class body/member row expansion. Keep the raw token unchanged; hyperlink parsing and title normalization remain separate downstream responsibilities. Add parser, sequence, and class tests with renamed labels and controls both inside and outside raw blocks.",
+  "perturbation_axes": [
+    "sequence message labels versus class member labels",
+    "literal backslash-n inside a URL versus outside a raw block",
+    "implicit URL tooltip versus explicit brace tooltip",
+    "URL raw blocks versus math and LaTeX raw blocks",
+    "single versus multiple linked and unlinked Creole runs"
+  ],
+  "known_counterexamples": [
+    "test-diagrams/perturbations/svg-link-title-normalization/sequence_mixed_generic_link_runs.puml",
+    "test-diagrams/perturbations/svg-link-title-normalization/class_mixed_generic_link_runs.puml"
+  ],
+  "acceptance": [
+    "Both known generic-creole counterexamples preserve URL bytes and pass the no-oracle structural comparator.",
+    "Fresh held-out inputs verify raw-block protection and ordinary escaped-newline splitting on independent axes.",
+    "Parser and renderer library suites pass.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
