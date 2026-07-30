@@ -1530,12 +1530,14 @@ impl LayoutGraph {
             while !e.is_null() {
                 let spl_count = graphviz_ffi::rustuml_edge_spl_count(e);
                 let mut points = Vec::new();
+                let mut bezier_count = 0;
 
                 for i in 0..spl_count {
                     // Max 256 points per bezier curve (generous).
                     let mut buf = vec![0.0f64; 256 * 2];
                     let n_pts =
                         graphviz_ffi::rustuml_edge_bezier_points(e, i, buf.as_mut_ptr(), 256);
+                    bezier_count += n_pts.saturating_sub(1) / 3;
                     for j in 0..n_pts {
                         points.push((buf[j * 2], buf[j * 2 + 1]));
                     }
@@ -1566,6 +1568,7 @@ impl LayoutGraph {
                         from,
                         to,
                         points,
+                        bezier_count,
                         has_start_arrow: sflag != 0,
                         start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
                         has_end_arrow: eflag != 0,
@@ -2347,6 +2350,9 @@ pub struct EdgePath {
     /// Cubic bezier control points: groups of 4 (start, cp1, cp2, end).
     /// For multi-segment splines, segments share endpoints.
     pub points: Vec<(f64, f64)>,
+    /// Number of cubic Bezier segments before their control points are
+    /// flattened into `points`.
+    pub bezier_count: usize,
     /// Whether this edge has a start arrowhead.
     pub has_start_arrow: bool,
     /// Arrow anchor at start (if present).
@@ -2404,6 +2410,7 @@ mod tests {
         let result = g.layout_full_no_timeout();
         assert_eq!(result.edge_paths.len(), 1);
         let path = &result.edge_paths[0];
+        assert_eq!(path.bezier_count, 1);
         assert!(
             !path.points.is_empty(),
             "edge should have spline control points"

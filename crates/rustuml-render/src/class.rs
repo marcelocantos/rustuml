@@ -2298,6 +2298,7 @@ fn render_with_oracle_uid_origin(
         let (Some(target), Some(position)) = (note.target.as_deref(), note.position) else {
             continue;
         };
+        let position = attached_note_layout_position(diagram.direction, position);
         let note_id = attached_note_layout_id(idx);
         match position {
             NotePosition::Left => {
@@ -4711,7 +4712,12 @@ fn render_plantuml_svg(
             note.target
                 .as_ref()
                 .zip(note.position)
-                .map(|(_, p)| (note_idx, p))
+                .map(|(_, position)| {
+                    (
+                        note_idx,
+                        attached_note_layout_position(diagram.direction, position),
+                    )
+                })
         })
         .enumerate()
         .map(|(ordinal, (note_idx, position))| {
@@ -5655,6 +5661,14 @@ fn render_plantuml_svg(
                 );
             }
         }
+        render_non_opale_attached_note_links(
+            &mut svg,
+            diagram,
+            &attached_notes,
+            edge_paths,
+            &svek_ids,
+            layout_x_bias,
+        );
     }
 
     // Bottom/default legends (anything not placed in the top group above) are
@@ -10837,6 +10851,106 @@ struct RelationshipRenderContext<'a> {
     cluster_positions: Option<&'a [ClusterPosition]>,
 }
 
+fn render_non_opale_attached_note_links(
+    svg: &mut String,
+    diagram: &ClassDiagram,
+    attached_notes: &[(usize, usize, NotePosition)],
+    edge_paths: &[EdgePath],
+    svek_ids: &SvekIdAllocation,
+    layout_x_bias: f64,
+) {
+    for &(note_idx, _, position) in attached_notes {
+        let note = &diagram.notes[note_idx];
+        let Some(target) = note.target.as_deref() else {
+            continue;
+        };
+        let Some(note_start) = svek_ids.attached_note_starts[note_idx] else {
+            continue;
+        };
+        let note_layout_id = attached_note_layout_id(note_idx);
+        let (edge_from, edge_to, from_name, to_name, entity_1, entity_2) = match position {
+            NotePosition::Left | NotePosition::Top => (
+                note_layout_id.as_str(),
+                target,
+                format!("GMN{note_start}"),
+                relationship_endpoint_name(diagram, target).into_owned(),
+                format!("ent{:04}", note_start + 1),
+                no_oracle_entity_id_from(
+                    diagram,
+                    Some(&svek_ids.package_ids),
+                    Some(&svek_ids.entity_ids),
+                    Some(&svek_ids.note_ids),
+                    target,
+                ),
+            ),
+            NotePosition::Right | NotePosition::Bottom => (
+                target,
+                note_layout_id.as_str(),
+                relationship_endpoint_name(diagram, target).into_owned(),
+                format!("GMN{note_start}"),
+                no_oracle_entity_id_from(
+                    diagram,
+                    Some(&svek_ids.package_ids),
+                    Some(&svek_ids.entity_ids),
+                    Some(&svek_ids.note_ids),
+                    target,
+                ),
+                format!("ent{:04}", note_start + 1),
+            ),
+        };
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.from == edge_from && edge.to == edge_to)
+        else {
+            continue;
+        };
+        if edge.bezier_count <= 1 || edge.points.is_empty() {
+            continue;
+        }
+
+        // Java `SvekEdge.solve()` only transfers an attached note link to
+        // `Opale` when its `DotPath` has one cubic. Multi-cubic paths remain
+        // ordinary dashed SvekEdges and are painted after the diagram links.
+        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="association" data-source-line="{}" id="lnk{}">"#,
+            note.source_line,
+            note_start + 2,
+        )
+        .unwrap();
+
+        let points = edge
+            .points
+            .iter()
+            .map(|(x, y)| (x + MARGIN + layout_x_bias, y + MARGIN))
+            .collect::<Vec<_>>();
+        let mut path = format!("M{},{}", fmt4(points[0].0), fmt4(points[0].1));
+        let mut index = 1;
+        while index + 2 < points.len() {
+            write!(
+                path,
+                " C{},{} {},{} {},{}",
+                fmt4(points[index].0),
+                fmt4(points[index].1),
+                fmt4(points[index + 1].0),
+                fmt4(points[index + 1].1),
+                fmt4(points[index + 2].0),
+                fmt4(points[index + 2].1),
+            )
+            .unwrap();
+            index += 3;
+        }
+        write!(
+            svg,
+            r##"<path d="{path}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g>"##,
+            escape_xml(&from_name),
+            escape_xml(&to_name),
+        )
+        .unwrap();
+    }
+}
+
 fn render_relationship_svg(
     svg: &mut String,
     rel: &Relationship,
@@ -12551,6 +12665,19 @@ fn attached_note_layout_id(note_idx: usize) -> String {
     format!("__attached_note_{note_idx}")
 }
 
+fn attached_note_layout_position(
+    direction: ClassLayoutDirection,
+    position: NotePosition,
+) -> NotePosition {
+    match (direction, position) {
+        (ClassLayoutDirection::TopToBottom, position) => position,
+        (ClassLayoutDirection::LeftToRight, NotePosition::Right) => NotePosition::Bottom,
+        (ClassLayoutDirection::LeftToRight, NotePosition::Left) => NotePosition::Top,
+        (ClassLayoutDirection::LeftToRight, NotePosition::Bottom) => NotePosition::Right,
+        (ClassLayoutDirection::LeftToRight, NotePosition::Top) => NotePosition::Left,
+    }
+}
+
 fn floating_note_layout_id(note_idx: usize) -> String {
     format!("__floating_note_{note_idx}")
 }
@@ -13320,6 +13447,29 @@ fn render_svek_note_emission(
             else {
                 return;
             };
+            let Some(pos) = positions.get(*node_idx) else {
+                return;
+            };
+            let qualified_name =
+                note_qualified_name(diagram, *note_idx, &format!("GMN{note_start}"));
+            let entity_id = format!("ent{:04}", note_start + 1);
+            let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
+            let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
+            if edge.bezier_count > 1 {
+                render_floating_note_entity(
+                    svg,
+                    diagram,
+                    note,
+                    x,
+                    y,
+                    pos.width,
+                    pos.height,
+                    &entity_id,
+                    &qualified_name,
+                    &diagram.meta.sprites,
+                );
+                return;
+            }
             let (contact, endpoint) = match position {
                 NotePosition::Left | NotePosition::Top => (
                     edge.start_point.or_else(|| edge.points.first().copied()),
@@ -13336,14 +13486,6 @@ fn render_svek_note_emission(
             let Some((contact_x, contact_y)) = contact else {
                 return;
             };
-            let Some(pos) = positions.get(*node_idx) else {
-                return;
-            };
-            let qualified_name =
-                note_qualified_name(diagram, *note_idx, &format!("GMN{note_start}"));
-            let entity_id = format!("ent{:04}", note_start + 1);
-            let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
-            let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
             let render_position = attached_note_render_position(
                 pos.width,
                 pos.height,
@@ -13398,6 +13540,7 @@ fn render_svek_floating_note(
     if let Some(relationship_idx) = opale_relationship
         && let Some(edge_idx) = relationship_edges.get(relationship_idx).copied().flatten()
         && let Some(edge) = edge_paths.get(edge_idx)
+        && edge.bezier_count <= 1
         && let Some(geometry) =
             floating_note_opale_geometry(edge, x, y, pos.width, pos.height, layout_x_bias)
     {
@@ -16728,6 +16871,37 @@ mod tests {
     }
 
     #[test]
+    fn attached_note_layout_positions_follow_java_rankdir_rotation() {
+        for position in [
+            NotePosition::Left,
+            NotePosition::Right,
+            NotePosition::Top,
+            NotePosition::Bottom,
+        ] {
+            assert_eq!(
+                attached_note_layout_position(ClassLayoutDirection::TopToBottom, position),
+                position
+            );
+        }
+        assert_eq!(
+            attached_note_layout_position(ClassLayoutDirection::LeftToRight, NotePosition::Right),
+            NotePosition::Bottom
+        );
+        assert_eq!(
+            attached_note_layout_position(ClassLayoutDirection::LeftToRight, NotePosition::Left),
+            NotePosition::Top
+        );
+        assert_eq!(
+            attached_note_layout_position(ClassLayoutDirection::LeftToRight, NotePosition::Bottom),
+            NotePosition::Right
+        );
+        assert_eq!(
+            attached_note_layout_position(ClassLayoutDirection::LeftToRight, NotePosition::Top),
+            NotePosition::Left
+        );
+    }
+
+    #[test]
     fn attached_note_before_relationship_claims_three_shared_uid_slots() {
         let input = "@startuml\n\
             class FreshOrigin1009\n\
@@ -17737,6 +17911,7 @@ mod tests {
             from: "Animal".into(),
             to: "Dog".into(),
             points: vec![(40.0, 50.0), (40.0, 80.0), (40.0, 120.0), (40.0, 150.0)],
+            bezier_count: 1,
             has_start_arrow: false,
             start_point: None,
             has_end_arrow: false,
