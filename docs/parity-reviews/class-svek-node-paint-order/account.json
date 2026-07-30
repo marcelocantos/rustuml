@@ -6,6 +6,7 @@
     "net.sourceforge.plantuml.command.note.CommandFactoryNoteOnEntity#executeInternal",
     "net.atmp.CucaDiagram#leafs",
     "net.sourceforge.plantuml.svek.GraphvizImageBuilder#buildImage",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup",
     "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printEntities",
     "net.sourceforge.plantuml.svek.Bibliotekon#createNode",
     "net.sourceforge.plantuml.svek.Bibliotekon#allNodes",
@@ -13,25 +14,38 @@
   ],
   "rust_locations": [
     "crates/rustuml-parser/src/diagram/class.rs::ClassUidEvent",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::push_note",
+    "crates/rustuml-render/src/class.rs::note_owner_packages",
+    "crates/rustuml-render/src/class.rs::render_with_oracle_uid_origin",
     "crates/rustuml-render/src/class.rs::svek_id_allocation",
-    "crates/rustuml-render/src/class.rs::render_svek_svg"
+    "crates/rustuml-render/src/class.rs::render_svek_note_emission"
   ],
-  "invariant": "PlantUML paints SVEK leaves in GraphvizImageBuilder construction order, which is namespace traversal order rather than one global constructor-ID order. buildImage calls printGroups before getUnpackagedEntities. For each nonempty group, printGroup creates that group's direct leaves in quark creation order, then recurses through child groups in group creation order. Empty package groups enter that child-group traversal as leaf nodes. Only after every root group is complete are unpackaged root leaves created. CommandFactoryNoteOnEntity creates its NOTE as a real leaf in the current namespace, so attached and floating notes participate in the same per-namespace direct-leaf order. Bibliotekon and SvekResult preserve this construction stream through painting.",
-  "causal_divergence": "Rust's package traversal stream contains ordinary entities and empty-package leaves but excludes notes. The first implementation then globally sorts notes by reconstructed ent ID and merges that monotonic stream into a package-first entity stream whose IDs are deliberately non-monotonic across package/root boundaries. A root note with an early ID is therefore painted before a later-created packaged entity that Java constructs first; the reverse crossing leaves a packaged note behind an earlier-ID root entity. Attached notes are also appended to the layout graph after ordinary leaves instead of entering the same namespace traversal.",
-  "planned_change": "Record each note constructor event's current package identity. Extend the existing SVEK node-emission traversal to include attached and floating notes among their owning package's direct leaves in constructor order, while preserving direct leaves before child groups and all root groups before root leaves. Use that single traversal stream for both LayoutGraph node creation and no-oracle SVG painting. Keep cpt1 UID allocation orthogonal: IDs retain constructor order even when paint order crosses them.",
+  "invariant": "PlantUML paints SVEK leaves in GraphvizImageBuilder construction order, which is namespace traversal order rather than one global constructor-ID order. buildImage calls printGroups before getUnpackagedEntities. For each nonempty group, printGroup creates that group's direct leaves in quark creation order, adds each resulting SvekNode to that group's Cluster, then recurses through child groups in group creation order. Empty package groups enter that child-group traversal as leaf nodes. Only after every root group is complete are unpackaged root leaves created. CommandFactoryNoteOnEntity creates attached notes as real NOTE leaves through quarkInContext in the parser's current namespace; floating named notes use the same quark ownership. A note owned by a reopened outer package therefore remains a direct leaf of that outer package even when it targets an entity in a nested child package. Cluster membership constrains the note in the owning package's layout solve, and the SVG data-qualified-name is the owning quark path plus the generated GMN or explicit note alias. Bibliotekon and SvekResult preserve this construction stream and ownership through painting.",
+  "causal_divergence": "The aa9c4cfa implementation now records owner_package and places notes correctly in the package-first/root-last emission stream, fixing the original global paint-order inversion. It does not carry that ownership through the rest of the model. render_with_oracle_uid_origin adds ordinary entity nodes and empty-package leaf nodes to package clusters, but never adds attached_note_layout_id or floating_note_layout_id nodes. Package-owned notes are consequently solved as root nodes even though their traversal position is package-local. render_svek_note_emission also emits attached notes with a bare GMN qualified name and floating notes with a bare alias, discarding the same owner path. Fresh reopened-package counterexamples therefore move the note outside its package and serialize the wrong identity, while a root-owned control passes.",
+  "planned_change": "Use the existing note_owner_packages projection as the single ownership source after note nodes are created. For every SVEK note leaf with an owning rendered package cluster, add its attached or floating layout node id to that cluster exactly as GraphvizImageBuilder#printGroup adds the note's SvekNode; do not infer ownership from the note target. Carry the same owner package path into note painting and qualify generated GMN and explicit aliases with the package name using the existing namespace identity rules. Root-owned notes remain unqualified. Preserve the already-correct traversal stream and cpt1 UID allocation, and introduce no geometry constants, dimension changes, or post-hoc SVG movement.",
   "perturbation_axes": [
     "attached notes before, between, and after ordinary declarations",
     "relationship-created endpoints interleaved with attached notes",
     "floating and attached notes mixed in both orders",
     "left, right, top, and bottom note positions",
     "renamed labels and reordered declarations",
-    "top-to-bottom and left-to-right layout"
+    "top-to-bottom and left-to-right layout",
+    "outer package reopened before a note crossed with a note declared in the original package block",
+    "package-owned attached note targeting a direct leaf crossed with a nested child-package leaf",
+    "package-owned floating alias crossed with generated attached GMN identity",
+    "root-owned note and empty-package endpoint controls"
   ],
   "rejected_attempt": {
-    "implementation_commit": "544d24530c0dc2ed5784d7d26fe2a8d8481f873d",
-    "review": "docs/parity-reviews/class-svek-node-paint-order/review.json",
-    "review_commit": "0293a0096a6802eb0c6a13278dd8d572716f73ca",
-    "result": "Rejected because globally merging notes by ent ID contradicts GraphvizImageBuilder's package-first, root-last construction traversal."
+    "implementation_commit": "aa9c4cfa9ff19c64070cee600356ba672172082d",
+    "review": "docs/parity-reviews/class-svek-node-paint-order/review-followup.json",
+    "review_commit": "7fece4ca",
+    "result": "Rejected because package-local traversal was not propagated to LayoutGraph cluster membership or note qualified names.",
+    "prior_rejection": {
+      "implementation_commit": "544d24530c0dc2ed5784d7d26fe2a8d8481f873d",
+      "review": "docs/parity-reviews/class-svek-node-paint-order/review.json",
+      "review_commit": "0293a0096a6802eb0c6a13278dd8d572716f73ca",
+      "result": "Rejected because globally merging notes by ent ID contradicted GraphvizImageBuilder's package-first, root-last construction traversal."
+    }
   },
   "status": "proposed"
 }
