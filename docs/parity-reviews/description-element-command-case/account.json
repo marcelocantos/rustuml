@@ -10,6 +10,7 @@
     "net.sourceforge.plantuml.regex.Pattern2#compileInternal"
   ],
   "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
     "crates/rustuml-parser/src/parse/deployment.rs::DEPLOYMENT_KEYWORDS",
     "crates/rustuml-parser/src/parse/deployment.rs::parse_deployment",
     "crates/rustuml-parser/src/parse/deployment.rs::kind_from_keyword",
@@ -18,8 +19,8 @@
     "crates/rustuml-parser/src/parse/component.rs::parse_component"
   ],
   "invariant": "DescriptionDiagramFactory command regexes are compiled through Pattern2.compileInternal with CASE_INSENSITIVE. Every spelling of a CommandCreateElementFull.ALL_TYPES keyword therefore selects the same USymbol and Entity type, and CommandPackageWithUSymbol treats container keywords and AS case-insensitively as well. Case changes affect neither identifier spelling nor label text, package ownership, constructor order, layout dimensions, nor SVG geometry.",
-  "causal_divergence": "Rust has two internal product paths that render Java DESCRIPTION diagrams. The deployment parser captures uppercase element keywords with a generic word regex but tests them directly against a lowercase DEPLOYMENT_KEYWORDS set. The component-backed DESCRIPTION path uses case-sensitive strip_prefix matching in container_keyword. Subtype detection can therefore route a complete source to the correct DESCRIPTION surface while whichever internal parser owns that grammar silently drops uppercase or mixed-case DATABASE, QUEUE, or BOUNDARY lines. This removes real nodes and corrupts package dimensions, SVEK layout, canvas size, and paint order. The defect is command-token normalization at both parser boundaries, not symbol geometry or dispatch scoring.",
-  "planned_change": "ASCII-case-fold only captured or compared command keywords before lowercase family membership and semantic kind dispatch in both DESCRIPTION parser paths, while preserving identifiers and labels verbatim. Make optional AS tokens case-insensitive in bare and quoted declaration forms. Add family-spanning parser tests for uppercase and mixed-case leaf/container declarations in the deployment and component-backed paths, then rerun the dispatch follow-up-3 DESCRIPTION pairs exactly. Do not change layout constants, symbol renderers, comparator behavior, or SVG output after rendering.",
+  "causal_divergence": "Rust has two internal product paths that render Java DESCRIPTION diagrams plus a shared subtype selector in front of them. The implementation commit correctly ASCII-case-folds captured command keywords in both deployment and component-backed parsers, but detect_uml_subtype still extracts the raw first token and compares it case-sensitively against lowercase DEPLOYMENT_KEYWORDS, package/container heuristics, exclusive-container membership, and quoted-container scoring. Uppercase DATABASE and mixed-case NoDe therefore receive no DESCRIPTION score and fall through to the welcome/error product before either corrected parser can run. The component-backed mixed-case FrAmE control passes because its bracket child independently supplies component evidence; the same token without that separate signal fails selection. This removes the entire diagram rather than one node. The residual defect is command-token normalization at the shared factory-selection boundary, not parser-local symbol geometry or a need to retune scoring weights.",
+  "planned_change": "At detect_uml_subtype's command boundary, derive one ASCII-lowercase keyword solely for semantic family membership and scoring while retaining the original source line, identifiers, quoted labels, and aliases verbatim. Use that normalized token consistently for package-with-brace exclusion, deployment-exclusive container membership, quoted-container classification, DEPLOYMENT_KEYWORDS membership, component keyword scoring, and the related shared-container heuristics. Keep the existing score magnitudes and tie-breaking model unchanged. Add dispatch tests proving uppercase and mixed-case root DESCRIPTION leaves and quoted containers select the same product as lowercase controls, then rerun the three fresh checker inputs exactly. Do not change layout constants, symbol renderers, comparator behavior, or SVG output after rendering.",
   "perturbation_axes": [
     "uppercase, lowercase, and mixed-case element keywords",
     "leaf versus shared-symbol container declarations",
@@ -31,7 +32,9 @@
   "observed_counterexamples": [
     "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
     "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
-    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml"
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml"
   ],
   "status": "proposed"
 }
