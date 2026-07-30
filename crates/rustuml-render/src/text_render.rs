@@ -148,7 +148,20 @@ pub fn measure(content: &str, font_size: f64, bold: bool) -> f64 {
 /// Creole segment overrides, while allowing diagram-wide `defaultFontName`
 /// skinparams to drive both emitted `font-family` and box/layout metrics.
 pub fn measure_with_family(content: &str, font_size: f64, bold: bool, font_family: &str) -> f64 {
-    measure_inner_with_family(content, font_size, bold, false, font_family)
+    measure_with_family_and_face(content, font_size, bold, false, font_family)
+}
+
+/// Width of `content` using a caller-selected base font family and complete
+/// face. Java PlantUML measures the same resolved AWT face that it emits, so
+/// callers with an italic skinparam must not silently measure a plain face.
+pub fn measure_with_family_and_face(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    font_family: &str,
+) -> f64 {
+    measure_inner_with_family(content, font_size, bold, italic, false, font_family)
 }
 
 /// Measure variant for class-entity labels where `__` is a literal pair of
@@ -165,17 +178,25 @@ pub fn measure_no_underline_with_family(
     bold: bool,
     font_family: &str,
 ) -> f64 {
-    measure_inner_with_family(content, font_size, bold, true, font_family)
+    measure_inner_with_family(content, font_size, bold, false, true, font_family)
 }
 
 fn measure_inner(content: &str, font_size: f64, bold: bool, skip_underline: bool) -> f64 {
-    measure_inner_with_family(content, font_size, bold, skip_underline, "sans-serif")
+    measure_inner_with_family(
+        content,
+        font_size,
+        bold,
+        false,
+        skip_underline,
+        "sans-serif",
+    )
 }
 
 fn measure_inner_with_family(
     content: &str,
     font_size: f64,
     bold: bool,
+    italic: bool,
     skip_underline: bool,
     font_family: &str,
 ) -> f64 {
@@ -186,7 +207,7 @@ fn measure_inner_with_family(
         font_family,
         fill: "#000000",
         bold,
-        italic: false,
+        italic,
         underline: false,
         skip_underline,
     };
@@ -560,10 +581,17 @@ fn trim_text_for_emit(text: &str, style: &Style, base: &TextBase<'_>) -> (f64, S
     }
     let trimmed = &text[lead..text.len() - trail];
     let bold = base.bold || style.bold;
+    let italic = base.italic || style.italic;
     let font_size = effective_font_size_for_style(style, base);
     let family = style_metric_family(style, base);
-    let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, family);
-    let trimmed_w = family_text_width(&unescape_for_metrics(trimmed), font_size, bold, family);
+    let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, italic, family);
+    let trimmed_w = family_text_width(
+        &unescape_for_metrics(trimmed),
+        font_size,
+        bold,
+        italic,
+        family,
+    );
     (lead_w, trimmed.to_string(), trimmed_w)
 }
 
@@ -577,8 +605,15 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
 fn text_width_for_style(text: &str, style: &Style, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(text);
     let bold = base.bold || style.bold;
+    let italic = base.italic || style.italic;
     let font_size = effective_font_size_for_style(style, base);
-    family_text_width(&raw, font_size, bold, style_metric_family(style, base))
+    family_text_width(
+        &raw,
+        font_size,
+        bold,
+        italic,
+        style_metric_family(style, base),
+    )
 }
 
 fn segment_advance(seg: &Segment, base: &TextBase<'_>, start: f64) -> f64 {
@@ -645,10 +680,12 @@ fn emit_tabbed_segment(
 fn tab_stop_width(style: &Style, base: &TextBase<'_>) -> f64 {
     let font_size = effective_font_size_for_style(style, base);
     let bold = base.bold || style.bold;
+    let italic = base.italic || style.italic;
     family_text_width(
         &" ".repeat(TAB_STOP_SPACES),
         font_size,
         bold,
+        italic,
         style_metric_family(style, base),
     )
 }
@@ -670,6 +707,7 @@ enum MetricFamily {
     Arial,
     Helvetica,
     Verdana,
+    TimesNewRoman,
 }
 
 fn segment_metric_family(seg: &Segment, base: &TextBase<'_>) -> MetricFamily {
@@ -743,6 +781,7 @@ fn metric_family(font_family: &str) -> MetricFamily {
         "arial" => MetricFamily::Arial,
         "helvetica" => MetricFamily::Helvetica,
         "verdana" => MetricFamily::Verdana,
+        "times new roman" => MetricFamily::TimesNewRoman,
         _ => MetricFamily::Sans,
     }
 }
@@ -1308,7 +1347,13 @@ fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
         .sum()
 }
 
-fn family_text_width(text: &str, font_size: f64, bold: bool, family: MetricFamily) -> f64 {
+fn family_text_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    family: MetricFamily,
+) -> f64 {
     match family {
         MetricFamily::Mono => pm::mono_text_width(text, font_size),
         MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size),
@@ -1318,6 +1363,9 @@ fn family_text_width(text: &str, font_size: f64, bold: bool, family: MetricFamil
         MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold),
         MetricFamily::Verdana => {
             family_table_text_width(text, font_size, bold, &VERDANA_WIDTH, &VERDANA_BOLD_WIDTH)
+        }
+        MetricFamily::TimesNewRoman => {
+            pm::times_new_roman_text_width(text, font_size, bold, italic)
         }
         MetricFamily::Sans => sans_text_width(text, font_size, bold),
     }
@@ -1330,6 +1378,7 @@ fn family_text_height(font_size: f64, family: MetricFamily) -> f64 {
         MetricFamily::Arial => font_size * 1.14990234375,
         MetricFamily::Helvetica => font_size,
         MetricFamily::Verdana => font_size * 1.21533203125,
+        MetricFamily::TimesNewRoman => pm::times_new_roman_text_height(font_size),
         MetricFamily::Sans => pm::text_height(font_size),
     }
 }
@@ -1344,6 +1393,7 @@ fn family_ascent(font_size: f64, family: MetricFamily) -> f64 {
         MetricFamily::Arial => font_size * 0.93798828125,
         MetricFamily::Helvetica => font_size * 0.77001953125,
         MetricFamily::Verdana => font_size * 1.00537109375,
+        MetricFamily::TimesNewRoman => pm::times_new_roman_ascent(font_size),
         MetricFamily::Sans => pm::ascent(font_size),
     }
 }
@@ -1914,6 +1964,56 @@ mod tests {
             "72.6914"
         );
         assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "M",
+                16.0,
+                false,
+                false,
+                "Times New Roman"
+            )),
+            "14.2266"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "M",
+                16.0,
+                true,
+                false,
+                "Times New Roman"
+            )),
+            "15.1016"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "M",
+                16.0,
+                false,
+                true,
+                "Times New Roman"
+            )),
+            "13.3281"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "M",
+                16.0,
+                true,
+                true,
+                "Times New Roman"
+            )),
+            "14.2266"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "italic self label",
+                18.0,
+                false,
+                true,
+                "Times New Roman"
+            )),
+            "106.9805"
+        );
+        assert_eq!(
             pm::fmt_coord(text_height_for_family(16.0, "Arial")),
             "18.3984"
         );
@@ -1925,6 +2025,14 @@ mod tests {
         assert_eq!(
             pm::fmt_coord(ascent_for_family(12.0, "Helvetica")),
             "9.2402"
+        );
+        assert_eq!(
+            pm::fmt_coord(text_height_for_family(16.0, "Times New Roman")),
+            "18.3984"
+        );
+        assert_eq!(
+            pm::fmt_coord(ascent_for_family(16.0, "Times New Roman")),
+            "14.9375"
         );
     }
 

@@ -36,7 +36,7 @@ public class PhysicalFontMetricsExtract {
         }
         Graphics2D graphics = graphics();
         int[] sizes = {10, 11, 12, 13, 14, 16, 21};
-        int[] styles = {Font.PLAIN, Font.BOLD, Font.ITALIC};
+        int[] styles = {Font.PLAIN, Font.BOLD, Font.ITALIC, Font.BOLD | Font.ITALIC};
 
         for (int size : sizes) {
             for (int style : styles) {
@@ -56,6 +56,32 @@ public class PhysicalFontMetricsExtract {
                     repr(line.getHeight()));
             }
         }
+
+        int unitsPerEm = 2048;
+        for (int style : styles) {
+            Font font = new Font(args[0], style, unitsPerEm);
+            FontMetrics metrics = graphics.getFontMetrics(font);
+            StringBuilder units = new StringBuilder();
+            for (char c = 32; c <= 126; c++) {
+                if (units.length() > 0) {
+                    units.append(',');
+                }
+                units.append(Math.round(metrics.getStringBounds(
+                    Character.toString(c), graphics).getWidth()));
+            }
+            LineMetrics line = metrics.getLineMetrics("M", graphics);
+            System.out.printf(
+                "table requested=%s resolved=%s style=%d unitsPerEm=%d ascent=%d descent=%d height=%d%n%s%n",
+                args[0],
+                font.getFamily(),
+                style,
+                unitsPerEm,
+                Math.round(line.getAscent()),
+                Math.round(line.getDescent()),
+                Math.round(line.getHeight()),
+                units);
+        }
+        graphics.dispose();
     }
 
     static String repr(double value) {

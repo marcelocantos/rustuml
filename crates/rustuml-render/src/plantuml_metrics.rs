@@ -121,6 +121,83 @@ pub fn courier_new_text_height(font_size: f64) -> f64 {
     font_size * COURIER_NEW_HEIGHT_PER_SIZE
 }
 
+// Java AWT physical "Times New Roman" metrics extracted at 2048px by
+// `tools/PhysicalFontMetricsExtract.java` with PlantUML's fractional-metrics
+// rendering hints. `UFontFactory.build` and `FileFormat.getJavaDimension`
+// measure the resolved family and complete face, so all four face tables are
+// kept distinct. Each entry is the printable-ASCII advance for codepoints
+// 32..=126 in integer font units.
+const TIMES_NEW_ROMAN_UNITS_PER_EM: f64 = 2048.0;
+// PlantUML's SVG text baseline includes AWT leading: height - descent
+// (2355 - 443), matching `StringBounderRaw`/`AtomText` baseline placement.
+const TIMES_NEW_ROMAN_BASELINE_ASCENT_UNITS: f64 = 1912.0;
+const TIMES_NEW_ROMAN_HEIGHT_UNITS: f64 = 2355.0;
+
+const TIMES_NEW_ROMAN_PLAIN_UNITS: [u16; 95] = [
+    512, 682, 836, 1024, 1024, 1706, 1593, 369, 682, 682, 1024, 1155, 512, 682, 512, 569, 1024,
+    1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 569, 569, 1155, 1155, 1155, 909, 1886,
+    1479, 1366, 1366, 1479, 1251, 1139, 1479, 1479, 682, 797, 1479, 1251, 1821, 1479, 1479, 1139,
+    1479, 1366, 1139, 1251, 1479, 1479, 1933, 1479, 1479, 1251, 682, 569, 682, 961, 1024, 682, 909,
+    1024, 909, 1024, 909, 682, 1024, 1024, 569, 569, 1024, 569, 1593, 1024, 1024, 1024, 1024, 682,
+    797, 569, 1024, 1024, 1479, 1024, 1024, 909, 983, 410, 983, 1108,
+];
+const TIMES_NEW_ROMAN_BOLD_UNITS: [u16; 95] = [
+    512, 682, 1137, 1024, 1024, 2048, 1706, 569, 682, 682, 1024, 1167, 512, 682, 512, 569, 1024,
+    1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 682, 682, 1167, 1167, 1167, 1024, 1905,
+    1479, 1366, 1479, 1479, 1366, 1251, 1593, 1593, 797, 1024, 1593, 1366, 1933, 1479, 1593, 1251,
+    1593, 1479, 1139, 1366, 1479, 1479, 2048, 1479, 1479, 1366, 682, 569, 682, 1190, 1024, 682,
+    1024, 1139, 909, 1139, 909, 682, 1024, 1139, 569, 682, 1139, 569, 1706, 1139, 1024, 1139, 1139,
+    909, 797, 682, 1139, 1024, 1479, 1024, 1024, 909, 807, 451, 807, 1065,
+];
+const TIMES_NEW_ROMAN_ITALIC_UNITS: [u16; 95] = [
+    512, 682, 860, 1024, 1024, 1706, 1593, 438, 682, 682, 1024, 1382, 512, 682, 512, 569, 1024,
+    1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 682, 682, 1382, 1382, 1382, 1024, 1884,
+    1251, 1251, 1366, 1479, 1251, 1251, 1479, 1479, 682, 909, 1366, 1139, 1706, 1366, 1479, 1251,
+    1479, 1251, 1024, 1139, 1479, 1251, 1706, 1251, 1139, 1139, 797, 569, 797, 864, 1024, 682,
+    1024, 1024, 909, 1024, 909, 569, 1024, 1024, 569, 569, 909, 569, 1479, 1024, 1024, 1024, 1024,
+    797, 797, 569, 1024, 909, 1366, 909, 909, 797, 819, 563, 819, 1108,
+];
+const TIMES_NEW_ROMAN_BOLD_ITALIC_UNITS: [u16; 95] = [
+    512, 797, 1137, 1024, 1024, 1706, 1593, 569, 682, 682, 1024, 1167, 512, 682, 512, 569, 1024,
+    1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 682, 682, 1167, 1167, 1167, 1024, 1704,
+    1366, 1366, 1366, 1479, 1366, 1366, 1479, 1593, 797, 1024, 1366, 1251, 1821, 1479, 1479, 1251,
+    1479, 1366, 1139, 1251, 1479, 1366, 1821, 1366, 1251, 1251, 682, 569, 682, 1167, 1024, 682,
+    1024, 1024, 909, 1024, 909, 682, 1024, 1139, 569, 569, 1024, 569, 1593, 1139, 1024, 1024, 1024,
+    797, 797, 569, 1139, 909, 1366, 1024, 909, 797, 713, 451, 713, 1167,
+];
+
+/// Width of `text` rendered with Java AWT's physical Times New Roman face.
+pub fn times_new_roman_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let table = match (bold, italic) {
+        (false, false) => &TIMES_NEW_ROMAN_PLAIN_UNITS,
+        (true, false) => &TIMES_NEW_ROMAN_BOLD_UNITS,
+        (false, true) => &TIMES_NEW_ROMAN_ITALIC_UNITS,
+        (true, true) => &TIMES_NEW_ROMAN_BOLD_ITALIC_UNITS,
+    };
+    text.chars()
+        .map(|c| {
+            let code = c as u32;
+            let units = if (32..=126).contains(&code) {
+                table[(code - 32) as usize] as f64
+            } else {
+                // The checked-in extractor currently derives printable ASCII.
+                // Keep unknown glyphs on the face's half-em fallback rather
+                // than borrowing a different family's metrics.
+                1024.0
+            };
+            units / TIMES_NEW_ROMAN_UNITS_PER_EM * font_size
+        })
+        .sum()
+}
+
+pub fn times_new_roman_ascent(font_size: f64) -> f64 {
+    font_size * TIMES_NEW_ROMAN_BASELINE_ASCENT_UNITS / TIMES_NEW_ROMAN_UNITS_PER_EM
+}
+
+pub fn times_new_roman_text_height(font_size: f64) -> f64 {
+    font_size * TIMES_NEW_ROMAN_HEIGHT_UNITS / TIMES_NEW_ROMAN_UNITS_PER_EM
+}
+
 // ─── Serif metrics ──────────────────────────────────────────────────
 // Java AWT's `Serif` logical font on macOS maps to "Times", a TrueType
 // face with unitsPerEm = 2048. Advance widths are exact integer font

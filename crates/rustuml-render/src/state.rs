@@ -645,6 +645,7 @@ struct StateNodeFont<'a> {
     name: Option<&'a str>,
     monospace: bool,
     bold: bool,
+    italic: bool,
     padding: f64,
 }
 
@@ -669,8 +670,14 @@ fn layout_node_size_with_font(
     let label = state_def.map_or(id, |state| state.label.as_str());
     let descriptions = state_def.map_or(&[][..], |state| state.descriptions.as_slice());
     let family = font.name.unwrap_or("sans-serif");
-    let title_width =
-        state_text_width_with_family(label, font.name_size, font.bold, font.name, font.monospace);
+    let title_width = state_text_width_with_family(
+        label,
+        font.name_size,
+        font.bold,
+        font.italic,
+        font.name,
+        font.monospace,
+    );
     let fields_width = descriptions
         .iter()
         .map(|description| {
@@ -678,6 +685,7 @@ fn layout_node_size_with_font(
                 description,
                 font.desc_size,
                 font.bold,
+                font.italic,
                 font.name,
                 font.monospace,
             )
@@ -1063,10 +1071,11 @@ impl StateTransitionLabelBlock {
             .rows()
             .iter()
             .map(|row| {
-                text_render::measure_with_family(
+                text_render::measure_with_family_and_face(
                     Self::paint_row(row),
                     arrow_font.size as f64,
                     arrow_font.bold,
+                    arrow_font.italic,
                     &arrow_font.family,
                 )
             })
@@ -1662,6 +1671,7 @@ fn state_text_width_with_family(
     text: &str,
     font_size: f64,
     bold: bool,
+    italic: bool,
     font_name: Option<&str>,
     monospace: bool,
 ) -> f64 {
@@ -1674,7 +1684,7 @@ fn state_text_width_with_family(
         {
             arial_text_width(text, font_size, bold)
         } else {
-            text_render::measure_with_family(text, font_size, bold, font_name)
+            text_render::measure_with_family_and_face(text, font_size, bold, italic, font_name)
         }
     } else {
         text_render::measure(text, font_size, bold)
@@ -2369,6 +2379,7 @@ impl AutonomousTextStyle {
             text,
             self.size,
             self.bold,
+            self.italic,
             Some(&self.family),
             is_state_monospace_family(&self.family),
         )
@@ -6078,6 +6089,7 @@ pub fn render_with_oracle(
         .map(|sp| sp.value.to_ascii_lowercase())
         .unwrap_or_default();
     let state_font_bold = state_font_style.contains("bold");
+    let state_font_italic = state_font_style.contains("italic");
     let state_padding = state_text_block_padding(diagram);
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
@@ -6090,6 +6102,7 @@ pub fn render_with_oracle(
         name: state_font_name.as_deref(),
         monospace: state_name_is_mono,
         bold: state_font_bold,
+        italic: state_font_italic,
         padding: state_padding,
     };
 
@@ -7600,6 +7613,7 @@ pub fn render_with_oracle(
                             label,
                             title_style.size,
                             title_style.bold,
+                            title_style.italic,
                             Some(&title_style.family),
                             is_state_monospace_family(&title_style.family),
                         );
@@ -7718,6 +7732,7 @@ pub fn render_with_oracle(
                             label,
                             title_style.size,
                             title_style.bold,
+                            title_style.italic,
                             Some(&title_style.family),
                             is_state_monospace_family(&title_style.family),
                         );
@@ -7854,6 +7869,7 @@ pub fn render_with_oracle(
                                     &content,
                                     attribute_style.size,
                                     attribute_style.bold,
+                                    attribute_style.italic,
                                     Some(&attribute_style.family),
                                     is_state_monospace_family(&attribute_style.family),
                                 );
@@ -11551,6 +11567,7 @@ CobaltDecision --> [*]
             name: None,
             monospace: false,
             bold: false,
+            italic: false,
             padding,
         };
 
