@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-legend-decoration-model",
   "created": "2026-07-31",
-  "status": "planned",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "1f7faee3",
   "java_locations": [
@@ -82,6 +82,34 @@
       "derivation": "The 90.582px legend rectangle yields a 115.582px inner legend-wrapped width, which is narrower than the 188.8633px title block. Because Java adds the title after the legend, the complete legend/body child is translated by (188.8633 - 115.582) / 2 = 36.64065px; adding the legend's 12px margin produces the expected rectangle x=48.6406."
     }
   ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "observed_result": "The shipped no-oracle census rises from 11,145/11,251 to 11,149/11,251, with edge-cases improving from 744/777 to 748/777 and every other family unchanged. edge_meta_legend_center, edge_meta_legend_left, edge_meta_legend_right, and edge_meta_all_combined become structurally equivalent. Existing title, caption, title/header/footer, caption-only, and empty-body legend controls remain structurally equivalent.",
+    "model_evidence": "The class parser now retains the horizontal and vertical tokens in the shared DiagramMeta enums. DecorationLayout measures the legend as a bordered 14px text block, wraps it around the lifecycle-derived body dimension, and only then composes the existing outer page chrome. A fresh wide-body test makes left, center, and right produce distinct positions, checks top and bottom stacking, and derives a three-line rectangle height from measured row heights. No fixture names, legend text, observed coordinate deltas, comparator values, or corpus inventory enter shipping code.",
+    "commands": [
+      "cargo test -p rustuml-parser multiline_decoration_blocks_preserve_line_breaks --lib",
+      "cargo test -p rustuml-render class_legend_wrapper_preserves_alignment_stack_and_measured_rows --lib",
+      "cargo build --release --example diff_one -p rustuml-oracle",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_legend_center.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_legend_left.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_legend_right.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_all_combined.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_minimal_legend_only.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_title_basic.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_caption.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_decoration_thf.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_decoration_hf.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release",
+      "cargo test -p rustuml-parser --lib",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-parser -p rustuml-render --lib -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal -- --exact"
+    ],
+    "review_status": "Independent adversarial review and checker-authored Java held-outs remain pending because reviewer task capacity and the local Java oracle are unavailable. This record does not self-attest acceptance."
+  },
   "perturbation_axes": [
     "left, center, and right horizontal alignment with a body wider than the legend",
     "top versus bottom vertical placement",

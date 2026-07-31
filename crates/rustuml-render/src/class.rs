@@ -19,9 +19,9 @@ use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
     NodePosition, SplineRouting,
 };
-use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
 use rustuml_parser::diagram::style::StyleScheme;
+use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment, SpriteData};
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
@@ -326,6 +326,12 @@ const DECORATION_CAPTION_GAP_BELOW_BODY: f64 = 23.5352;
 /// `TextBlockBordered.calculateDimension` adds one pixel to both dimensions,
 /// even when the decoration border is transparent.
 const DECORATION_BORDER_EXTENT: f64 = 1.0;
+/// `plantuml.skin` document.legend defaults, consumed by
+/// `EntityImageLegend.create` through `Style.createTextBlockBordered`.
+const LEGEND_FONT_SIZE: f64 = 14.0;
+const LEGEND_PADDING: f64 = 5.0;
+const LEGEND_OUTER_MARGIN: f64 = 12.0;
+const LEGEND_ROUND_CORNER: f64 = 7.5;
 const GRID_MARGIN: f64 = 30.0;
 #[allow(dead_code)]
 const CLASS_MIN_WIDTH: f64 = 120.0;
@@ -5366,7 +5372,8 @@ fn render_plantuml_svg(
         BODY_DECORATION_MARGIN
     };
     let body_inner_w = (body_max_x - body_min_x) + body_dimension_margin;
-    let layout = DecorationLayout::new(diagram, body_inner_w);
+    let body_inner_h = (body_bottom - body_top) + body_dimension_margin;
+    let layout = DecorationLayout::new(diagram, body_inner_w, body_inner_h);
     let (body_dx, body_dy) = if oracle.is_none() {
         ((layout.dim_total_w - body_inner_w) / 2.0, layout.top_h)
     } else {
@@ -5721,7 +5728,7 @@ fn render_plantuml_svg(
         "title",
         diagram.meta.title.as_deref(),
         diagram.title_line,
-        body_top - DECORATION_TITLE_GAP_ABOVE_BODY,
+        body_top - layout.legend_top_h - DECORATION_TITLE_GAP_ABOVE_BODY,
         oracle_decoration_texts("title"),
     );
 
@@ -5737,6 +5744,8 @@ fn render_plantuml_svg(
         for legend in orc.legends.iter().filter(|l| is_top_legend(l)) {
             emit_oracle_legend(&mut svg, legend, diagram.legend_line);
         }
+    } else if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Top {
+        layout.emit_legend(&mut svg, diagram);
     }
 
     // Render any oracle-captured clusters (package/database/folder/...)
@@ -6236,6 +6245,8 @@ fn render_plantuml_svg(
         for legend in orc.legends.iter().filter(|l| !is_top_legend(l)) {
             emit_oracle_legend(&mut svg, legend, diagram.legend_line);
         }
+    } else if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Bottom {
+        layout.emit_legend(&mut svg, diagram);
     }
 
     // Bottom-of-canvas decorations: caption (above footer), then footer. Both
@@ -6246,7 +6257,7 @@ fn render_plantuml_svg(
         "caption",
         diagram.meta.caption.as_deref(),
         diagram.caption_line,
-        body_bottom + DECORATION_CAPTION_GAP_BELOW_BODY,
+        body_bottom + layout.legend_bottom_h + DECORATION_CAPTION_GAP_BELOW_BODY,
         oracle_decoration_texts("caption"),
     );
     let footer_bottom_slack = if uses_degenerated_entity {
@@ -6254,8 +6265,11 @@ fn render_plantuml_svg(
     } else {
         SVEK_DECORATION_BOTTOM_SLACK
     };
-    let footer_y =
-        body_bottom + footer_bottom_slack + DECORATION_HEADER_BASELINE_Y + layout.caption_h;
+    let footer_y = body_bottom
+        + layout.legend_bottom_h
+        + footer_bottom_slack
+        + DECORATION_HEADER_BASELINE_Y
+        + layout.caption_h;
     layout.emit(
         &mut svg,
         "footer",
@@ -8686,6 +8700,9 @@ struct DecorationLayout {
     top_h: f64,
     bottom_h: f64,
     caption_h: f64,
+    legend_top_h: f64,
+    legend_bottom_h: f64,
+    legend_rect: Option<(f64, f64, f64, f64)>,
     has_decorations: bool,
 }
 
@@ -8764,11 +8781,60 @@ impl DecorationLayout {
             + DECORATION_BORDER_EXTENT
     }
 
-    /// Build the layout, computing `dimTotal` from the body width and any
-    /// present decorations.
-    fn new(diagram: &ClassDiagram, body_inner_w: f64) -> Self {
-        let mut dim_total_w = body_inner_w;
-        let mut has_decorations = false;
+    fn legend_rect_size(text: &str) -> (f64, f64) {
+        let width = text
+            .lines()
+            .map(|line| text_render::measure_no_underline(line, LEGEND_FONT_SIZE, false))
+            .fold(0.0_f64, f64::max)
+            + 2.0 * LEGEND_PADDING;
+        let height = text
+            .lines()
+            .map(|line| text_render::label_height(line, LEGEND_FONT_SIZE))
+            .sum::<f64>()
+            + 2.0 * LEGEND_PADDING;
+        (width, height)
+    }
+
+    /// Build the wrappers in `DiagramChromeFactory12026.create` order:
+    /// legend first, then title, caption, and header/footer.
+    fn new(diagram: &ClassDiagram, body_inner_w: f64, body_inner_h: f64) -> Self {
+        let legend_text = diagram
+            .meta
+            .legend
+            .as_deref()
+            .filter(|text| !text.is_empty());
+        let (legend_wrapped_w, legend_top_h, legend_bottom_h, legend_rect_before_outer_chrome) =
+            if let Some(text) = legend_text {
+                let (rect_w, rect_h) = Self::legend_rect_size(text);
+                let block_w = rect_w + DECORATION_BORDER_EXTENT + 2.0 * LEGEND_OUTER_MARGIN;
+                let block_h = rect_h + DECORATION_BORDER_EXTENT + 2.0 * LEGEND_OUTER_MARGIN;
+                let wrapped_w = body_inner_w.max(block_w);
+                let block_x = match diagram.meta.legend_horizontal_alignment {
+                    LegendHorizontalAlignment::Left => 0.0,
+                    LegendHorizontalAlignment::Center => (wrapped_w - block_w) / 2.0,
+                    LegendHorizontalAlignment::Right => wrapped_w - block_w,
+                };
+                let (block_y, top_h, bottom_h) = match diagram.meta.legend_vertical_alignment {
+                    LegendVerticalAlignment::Top => (0.0, block_h, 0.0),
+                    LegendVerticalAlignment::Bottom => (body_inner_h, 0.0, block_h),
+                };
+                (
+                    wrapped_w,
+                    top_h,
+                    bottom_h,
+                    Some((
+                        block_x + LEGEND_OUTER_MARGIN,
+                        block_y + LEGEND_OUTER_MARGIN,
+                        rect_w,
+                        rect_h,
+                    )),
+                )
+            } else {
+                (body_inner_w, 0.0, 0.0, None)
+            };
+
+        let mut dim_total_w = legend_wrapped_w;
+        let mut has_decorations = legend_text.is_some();
         for (class_name, text) in [
             ("title", diagram.meta.title.as_deref()),
             ("header", diagram.meta.header.as_deref()),
@@ -8790,13 +8856,69 @@ impl DecorationLayout {
         let title_h = block_height("title", diagram.meta.title.as_deref());
         let caption_h = block_height("caption", diagram.meta.caption.as_deref());
         let footer_h = block_height("footer", diagram.meta.footer.as_deref());
+        let outer_body_dx = (dim_total_w - legend_wrapped_w) / 2.0;
+        let legend_rect = legend_rect_before_outer_chrome.map(|(x, y, width, height)| {
+            (x + outer_body_dx, y + header_h + title_h, width, height)
+        });
         Self {
             dim_total_w,
-            top_h: header_h + title_h,
-            bottom_h: caption_h + footer_h,
+            top_h: header_h + title_h + legend_top_h,
+            bottom_h: legend_bottom_h + caption_h + footer_h,
             caption_h,
+            legend_top_h,
+            legend_bottom_h,
+            legend_rect,
             has_decorations,
         }
+    }
+
+    fn emit_legend(&self, svg: &mut String, diagram: &ClassDiagram) {
+        let Some((rect_x, rect_y, rect_w, rect_h)) = self.legend_rect else {
+            return;
+        };
+        let Some(text) = diagram
+            .meta
+            .legend
+            .as_deref()
+            .filter(|text| !text.is_empty())
+        else {
+            return;
+        };
+        let source_line = diagram.legend_line.unwrap_or(1);
+        write!(
+            svg,
+            r##"<g class="legend" data-source-line="{source_line}"><rect fill="#DDDDDD" height="{}" rx="{}" ry="{}" style="stroke:#000000;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+            crate::plantuml_metrics::fmt_coord(rect_h),
+            crate::plantuml_metrics::fmt_coord(LEGEND_ROUND_CORNER),
+            crate::plantuml_metrics::fmt_coord(LEGEND_ROUND_CORNER),
+            crate::plantuml_metrics::fmt_coord(rect_w),
+            crate::plantuml_metrics::fmt_coord(rect_x),
+            crate::plantuml_metrics::fmt_coord(rect_y),
+        )
+        .unwrap();
+
+        let mut baseline_y = rect_y
+            + LEGEND_PADDING
+            + text_render::label_ascent(text.lines().next().unwrap_or_default(), LEGEND_FONT_SIZE);
+        for line in text.lines() {
+            text_render::emit_text(
+                svg,
+                line,
+                &text_render::TextBase {
+                    x: rect_x + LEGEND_PADDING,
+                    y: baseline_y,
+                    font_size: LEGEND_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            baseline_y += text_render::label_height(line, LEGEND_FONT_SIZE);
+        }
+        svg.push_str("</g>");
     }
 
     /// Emit a single decoration's `<g>`/`<text>` at the given glyph baseline `y`.
@@ -21723,6 +21845,72 @@ mod tests {
                 - entity_bottom(&svek_svg, "RenamedTargetArchive"),
             SVEK_DECORATION_BOTTOM_SLACK + DECORATION_HEADER_BASELINE_Y,
         );
+    }
+
+    #[test]
+    fn class_legend_wrapper_preserves_alignment_stack_and_measured_rows() {
+        fn legend_rect(svg: &str) -> &str {
+            let legend = svg.split_once(r#"<g class="legend""#).unwrap().1;
+            legend
+                .split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0
+        }
+
+        let render = |placement: &str, lines: &str| {
+            let source = format!(
+                "@startuml\n\
+                 legend {placement}\n\
+                 {lines}\n\
+                 endlegend\n\
+                 class RenamedLedgerWithAnIntentionallyWideBody\n\
+                 @enduml"
+            );
+            crate::render_svg(&rustuml_parser::parse::parse(&source).unwrap())
+        };
+        let entity_rect_y = |svg: &str| {
+            let entity = svg
+                .split_once("<!--class RenamedLedgerWithAnIntentionallyWideBody-->")
+                .unwrap()
+                .1;
+            let rect = entity
+                .split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            attr_value(rect, " y").unwrap().parse::<f64>().unwrap()
+        };
+        let attr = |tag: &str, name: &str| attr_value(tag, name).unwrap().parse::<f64>().unwrap();
+
+        let left = render("left", "Fresh guide");
+        let center = render("center", "Fresh guide");
+        let right = render("right", "Fresh guide");
+        let left_x = attr(legend_rect(&left), " x");
+        let center_x = attr(legend_rect(&center), " x");
+        let right_x = attr(legend_rect(&right), " x");
+        assert!(left_x < center_x && center_x < right_x);
+        assert!((center_x - (left_x + right_x) / 2.0).abs() < 0.001);
+
+        let top = render("top right", "Fresh guide");
+        let bottom = render("bottom right", "Fresh guide");
+        assert!(attr(legend_rect(&top), " y") < entity_rect_y(&top));
+        assert!(attr(legend_rect(&bottom), " y") > entity_rect_y(&bottom));
+
+        let multiline = render(
+            "bottom center",
+            "Fresh guide alpha\nFresh guide beta\nFresh guide gamma",
+        );
+        let expected_height = ["Fresh guide alpha", "Fresh guide beta", "Fresh guide gamma"]
+            .into_iter()
+            .map(|line| text_render::label_height(line, LEGEND_FONT_SIZE))
+            .sum::<f64>()
+            + 2.0 * LEGEND_PADDING;
+        assert!((attr(legend_rect(&multiline), " height") - expected_height).abs() < 0.001);
     }
 
     #[test]
