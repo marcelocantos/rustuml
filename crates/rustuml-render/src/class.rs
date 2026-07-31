@@ -2913,69 +2913,84 @@ fn render_with_oracle_uid_origin(
 
 /// Port of `CucaDiagram.applySingleStrategy` via `Magma` and `SquareMaker`.
 ///
-/// Each container's entities that have no links are joined by invisible
-/// length-one rows and length-two columns. The links are layout inputs only:
-/// dot still chooses every coordinate and route.
+/// Each container's immediate leaves that have no links are joined by
+/// invisible rows and columns. The links are layout inputs only: dot still
+/// chooses every coordinate and route.
 fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
-    let mut linked = HashSet::new();
+    let mut linked = HashSet::<String>::new();
     for relationship in &diagram.relationships {
-        linked.insert(relationship.from.as_str());
-        linked.insert(relationship.to.as_str());
+        linked.insert(relationship_layout_id(diagram, &relationship.from).into_owned());
+        linked.insert(relationship_layout_id(diagram, &relationship.to).into_owned());
     }
     for association in &diagram.association_classes {
-        linked.insert(association.a.as_str());
-        linked.insert(association.b.as_str());
-        linked.insert(association.c.as_str());
+        linked.insert(relationship_layout_id(diagram, &association.a).into_owned());
+        linked.insert(relationship_layout_id(diagram, &association.b).into_owned());
+        linked.insert(relationship_layout_id(diagram, &association.c).into_owned());
     }
     for target in diagram
         .notes
         .iter()
         .filter_map(|note| note.target.as_deref())
     {
-        linked.insert(target);
+        linked.insert(relationship_layout_id(diagram, target).into_owned());
     }
 
-    // Java `Entity.leafs()` returns only immediate quark children. The parser's
-    // `Package.entities` is recursively inclusive, so project it back to one
-    // innermost owner before applying `CucaDiagram.applySingleStrategy`.
-    let parent_pkg = package_parent_indices(diagram);
-    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
-    let root = diagram
-        .entities
-        .iter()
-        .enumerate()
-        .filter(|(entity_idx, _)| innermost_pkg[*entity_idx].is_none())
-        .map(|(_, entity)| entity.id.as_str())
-        .filter(|id| !linked.contains(id))
-        .collect::<Vec<_>>();
+    // Java `CucaDiagram.applySingleStrategy` passes every immediate unlinked
+    // `Entity` leaf from `Entity.leafs()` to `Magma`, including floating notes
+    // and empty-package leaves. Reuse SVEK's creation-order inventory so the
+    // strategy sees the same leaf universe as node emission.
+    let package_render = package_render_model(diagram);
+    let note_owners = note_owner_packages(diagram, &package_render.innermost_pkg);
+    let mut root = Vec::<String>::new();
+    let mut packages = vec![Vec::<String>::new(); diagram.packages.len()];
+    for emission in svek_node_emission_order(diagram) {
+        let (owner, layout_id) = match emission {
+            SvekNodeEmission::Entity(entity_idx) => (
+                package_render.innermost_pkg[entity_idx],
+                diagram.entities[entity_idx].id.clone(),
+            ),
+            SvekNodeEmission::Note(note_idx)
+                if diagram.notes[note_idx].target.is_none()
+                    && diagram.notes[note_idx].alias.is_some() =>
+            {
+                (note_owners[note_idx], floating_note_layout_id(note_idx))
+            }
+            SvekNodeEmission::EmptyPackage(package_idx) => {
+                let owner = package_render.parent_pkg[package_idx]
+                    .filter(|parent| package_render.roles[*parent] == PackageRenderRole::Cluster);
+                (owner, empty_package_layout_id(package_idx))
+            }
+            SvekNodeEmission::Note(_) => continue,
+        };
+        if linked.contains(&layout_id) {
+            continue;
+        }
+        match owner {
+            Some(package_idx) => packages[package_idx].push(layout_id),
+            None => root.push(layout_id),
+        }
+    }
+
     add_square_invisible_links(layout, &root);
 
-    for package_idx in 0..diagram.packages.len() {
-        let standalones = diagram
-            .entities
-            .iter()
-            .enumerate()
-            .filter(|(entity_idx, _)| innermost_pkg[*entity_idx] == Some(package_idx))
-            .map(|(_, entity)| entity.id.as_str())
-            .filter(|id| !linked.contains(id))
-            .collect::<Vec<_>>();
-        add_square_invisible_links(layout, &standalones);
+    for standalones in &packages {
+        add_square_invisible_links(layout, standalones);
     }
 }
 
-fn add_square_invisible_links(layout: &mut LayoutGraph, entities: &[&str]) {
-    if entities.len() < 3 {
+fn add_square_invisible_links(layout: &mut LayoutGraph, entities: &[String]) {
+    if entities.len() < 2 {
         return;
     }
     let branch = (entities.len() as f64).sqrt().ceil() as usize;
     let mut row_head = 0usize;
     for index in 1..entities.len() {
         if index - row_head == branch {
-            layout.add_invisible_edge_with_minlen(entities[row_head], entities[index], 1);
+            layout.add_invisible_edge_with_minlen(&entities[row_head], &entities[index], 1);
             row_head = index;
         } else {
-            layout.add_plantuml_svek_line0_edge(entities[index - 1], entities[index]);
-            layout.add_invisible_edge_with_minlen(entities[index - 1], entities[index], 0);
+            layout.add_plantuml_svek_line0_edge(&entities[index - 1], &entities[index]);
+            layout.add_invisible_edge_with_minlen(&entities[index - 1], &entities[index], 0);
         }
     }
 }
@@ -19103,6 +19118,40 @@ mod tests {
         assert!(svg.contains(r#"data-qualified-name="FreshAuditQueue4211""#));
         assert!(svg.contains(r#"data-qualified-name="FreshArchiveQueue4217""#));
         assert!(svg.contains(r##"fill="#ADD8E6""##), "{svg}");
+    }
+
+    #[test]
+    fn standalone_notes_and_class_follow_java_magma_rows() {
+        fn first_text_y(svg: &str, qualified_name: &str) -> f64 {
+            let marker = format!(r#"data-qualified-name="{qualified_name}""#);
+            let entity = &svg[svg.find(&marker).expect("entity marker")..];
+            let text = &entity[entity.find("<text ").expect("entity text")..];
+            let y = &text[text.find(r#" y=""#).expect("text y") + 4..];
+            y[..y.find('"').expect("text y end")]
+                .parse()
+                .expect("numeric text y")
+        }
+
+        let input = "@startuml\n\
+                     note as FreshAuditQueue4211\n\
+                       first renamed floating note\n\
+                     end note\n\
+                     note as FreshArchiveQueue4217 #lightblue\n\
+                       second renamed floating note\n\
+                     end note\n\
+                     class FreshStandaloneLedger4229\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Java SquareMaker.putInSquare puts the first two immediate leaves in
+        // one length-zero row and starts the third leaf in the next row.
+        let first_note_y = first_text_y(&svg, "FreshAuditQueue4211");
+        let second_note_y = first_text_y(&svg, "FreshArchiveQueue4217");
+        let class_y = first_text_y(&svg, "FreshStandaloneLedger4229");
+        assert_eq!(first_note_y, second_note_y, "{svg}");
+        assert!(class_y > first_note_y, "{svg}");
+        assert!(svg.contains(r#"viewBox="0 0 474 154""#), "{svg}");
     }
 
     #[test]
