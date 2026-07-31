@@ -41,6 +41,184 @@ static EXTERNAL_MESSAGE_OUT_RE: LazyLock<Regex> = LazyLock::new(|| {
     .unwrap()
 });
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) enum SequenceFactoryLine {
+    NotSequence,
+    SharedWithLater,
+    SequenceOnly(SequenceOnlyCommand),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) enum SequenceOnlyCommand {
+    Participant,
+    Lifecycle,
+    MessageExtension,
+    Grouping,
+    Box,
+    Divider,
+    Delay,
+    HorizontalSpace,
+    Autonumber,
+    Autoactivate,
+    Return,
+    Reference,
+    Pagination,
+    Footbox,
+    Note,
+    Anchor,
+}
+
+/// Classify the exact command grammar that SequenceDiagramFactory owns.
+///
+/// Java provenance: `SequenceDiagramFactory.initCommandsList` at
+/// 71806a23780b04a5ccde2f8ceb5121edad5eb711, with the command regexes cited
+/// beside each branch below. Shared forms remain available to later UML
+/// factories after `CommandRankDir` eliminates Sequence.
+pub(super) fn factory_line_consumability(line: &str) -> SequenceFactoryLine {
+    let line = line.trim();
+    let lower = line.to_ascii_lowercase();
+
+    // Description/Class/State register `CommandFootboxIgnored`, and their
+    // `CommandNewpage` accepts the bare form only.
+    if lower == "newpage"
+        || matches!(
+            lower.as_str(),
+            "footbox" | "hide footbox" | "show footbox" | "hide unlinked" | "show unlinked"
+        )
+    {
+        return SequenceFactoryLine::SharedWithLater;
+    }
+
+    // Sequence `CommandNewpage` additionally accepts @ and a label;
+    // `CommandIgnoreNewpage` and `CommandAutoNewpage` have no later analogue.
+    static PAGINATION: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^(?:@newpage(?:\s*(?::\s*)?.*)?|newpage(?:\s*(?::\s*)?\S.*)|ignore\s*newpage|autonewpage\s+\d+)\s*$")
+            .unwrap()
+    });
+    if PAGINATION.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Pagination);
+    }
+
+    // `CommandParticipantA*`: participant itself, multiline participant
+    // declarations and the Sequence-only `order` suffix. Plain actor,
+    // database, queue, etc. declarations are shared with Description.
+    static PARTICIPANT: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^participant(?:\s|$)|(?i)^(?:actor|boundary|control|entity|database|collections|queue)\b.*\s+order\s+\d+\s*$")
+            .unwrap()
+    });
+    if PARTICIPANT.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Participant);
+    }
+
+    // `CommandActivate`, `CommandDeactivateShort`, `CommandActivate2` and
+    // create/destroy participant lifecycle commands.
+    static LIFECYCLE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^(?:(?:activate|deactivate|destroy|create)(?:\s+.*)?|[\p{L}\p{N}_.@]+\s*(?:\+\+|--)\s*(?:#\w+)?\s*)$")
+            .unwrap()
+    });
+    if LIFECYCLE.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Lifecycle);
+    }
+
+    // `CommandGrouping`; Activity also owns the partition opener, so keep that
+    // exact family available to the later Activity factory.
+    static GROUPING: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^&?\s*(?:opt|alt|loop|par|par2|break|critical|else|end|also|group)(?:#\w+)?(?:\s+#\w+)?(?:\s+.*?)?\s*$")
+            .unwrap()
+    });
+    if GROUPING.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Grouping);
+    }
+    if lower == "partition" || lower.starts_with("partition ") {
+        return SequenceFactoryLine::SharedWithLater;
+    }
+
+    if lower == "box" || lower.starts_with("box ") || lower == "end box" {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Box);
+    }
+
+    // A triple-equals synchronization bar is shared with legacy Activity;
+    // Sequence's ordinary `== label ==` divider is not.
+    if line.starts_with("===") && line.ends_with("===") && line.len() > 6 {
+        return SequenceFactoryLine::SharedWithLater;
+    }
+    if line.starts_with("==") && line.ends_with("==") {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Divider);
+    }
+    if line == "..."
+        || line == "…"
+        || (line.starts_with("...") && line.ends_with("..."))
+        || (line.starts_with('…') && line.ends_with('…'))
+    {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Delay);
+    }
+    static HSPACE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\|\|\d*\|+$").unwrap());
+    if HSPACE.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::HorizontalSpace);
+    }
+
+    if lower == "autonumber" || lower.starts_with("autonumber ") {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Autonumber);
+    }
+    if lower == "autoactivate on" || lower == "autoactivate off" {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Autoactivate);
+    }
+    if lower == "return"
+        || lower.starts_with("return ")
+        || lower == "&return"
+        || lower.starts_with("&return ")
+        || lower.starts_with("& return")
+    {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Return);
+    }
+    static REFERENCE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"(?i)^ref(?:#\w+)?\s+over\s+").unwrap());
+    if REFERENCE.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Reference);
+    }
+
+    if matches!(lower.as_str(), "footbox on" | "footbox off") {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Footbox);
+    }
+
+    static SEQUENCE_NOTE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^(?:(?:[&/]\s*)?(?:h|r)?note\s+(?:over|across|accross)(?:\s|$)|[&/]\s*(?:h|r)?note\b|(?:h|r)note\b)")
+            .unwrap()
+    });
+    let sequence_side_note = (lower == "note left"
+        || lower.starts_with("note left ")
+        || lower == "note right"
+        || lower.starts_with("note right "))
+        && !lower.starts_with("note left of ")
+        && !lower.starts_with("note right of ");
+    if SEQUENCE_NOTE.is_match(line) || sequence_side_note {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Note);
+    }
+
+    static ANCHOR: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^\{[\p{L}\p{N}_]+\}\s*<->\s*\{[\p{L}\p{N}_]+\}(?:\s*:\s*.*)?$").unwrap()
+    });
+    if ANCHOR.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::Anchor);
+    }
+
+    if let Some(captures) = MESSAGE_RE.captures(line)
+        && captures.get(4).is_some()
+    {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::MessageExtension);
+    }
+    if let Some(rest) = line.strip_prefix('&')
+        && looks_like_message(rest.trim_start())
+    {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::MessageExtension);
+    }
+    if EXTERNAL_MESSAGE_IN_RE.is_match(line) || EXTERNAL_MESSAGE_OUT_RE.is_match(line) {
+        return SequenceFactoryLine::SequenceOnly(SequenceOnlyCommand::MessageExtension);
+    }
+
+    SequenceFactoryLine::NotSequence
+}
+
 /// Parse preprocessed lines into a sequence diagram.
 pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     let mut parser = SeqParser::new();
@@ -2013,5 +2191,74 @@ mod tests {
         let d = parse("participant Alice\nparticipant Bob\nAlice -> Bob : hi");
         assert_eq!(d.participants[0].url, None);
         assert_eq!(d.participants[1].url, None);
+    }
+
+    #[test]
+    fn factory_consumability_distinguishes_registered_grammar_variants() {
+        for shared in [
+            "newpage",
+            "footbox",
+            "hide footbox",
+            "show footbox",
+            "hide unlinked",
+            "show unlinked",
+            "partition LegacyLane",
+            "===SYNC===",
+        ] {
+            assert_eq!(
+                factory_line_consumability(shared),
+                SequenceFactoryLine::SharedWithLater,
+                "{shared}"
+            );
+        }
+
+        for (line, family) in [
+            ("participant FreshSender", SequenceOnlyCommand::Participant),
+            (
+                "database SharedDb order 7",
+                SequenceOnlyCommand::Participant,
+            ),
+            ("deactivate", SequenceOnlyCommand::Lifecycle),
+            ("FreshWorker ++ #Gold", SequenceOnlyCommand::Lifecycle),
+            ("AlT #Red fallback", SequenceOnlyCommand::Grouping),
+            ("par2 concurrent", SequenceOnlyCommand::Grouping),
+            ("== renamed phase ==", SequenceOnlyCommand::Divider),
+            ("… translated delay …", SequenceOnlyCommand::Delay),
+            ("||37|||", SequenceOnlyCommand::HorizontalSpace),
+            ("AUTONUMBER INC C", SequenceOnlyCommand::Autonumber),
+            ("autoactivate on", SequenceOnlyCommand::Autoactivate),
+            ("& return #Red result", SequenceOnlyCommand::Return),
+            (
+                "ref#Blue over A, B : detail",
+                SequenceOnlyCommand::Reference,
+            ),
+            ("newpage : renamed page", SequenceOnlyCommand::Pagination),
+            ("@newpage", SequenceOnlyCommand::Pagination),
+            ("ignore newpage", SequenceOnlyCommand::Pagination),
+            ("autonewpage 29", SequenceOnlyCommand::Pagination),
+            ("footbox off", SequenceOnlyCommand::Footbox),
+            ("hnote over A", SequenceOnlyCommand::Note),
+            ("note left", SequenceOnlyCommand::Note),
+            ("{from}<->{to} : anchor", SequenceOnlyCommand::Anchor),
+        ] {
+            assert_eq!(
+                factory_line_consumability(line),
+                SequenceFactoryLine::SequenceOnly(family),
+                "{line}"
+            );
+        }
+
+        for ordinary in [
+            "database SharedDb",
+            "note left of SharedDb : ordinary",
+            "Alpha -> Beta : shared link",
+            "title Shared title",
+        ] {
+            assert_eq!(
+                factory_line_consumability(ordinary),
+                SequenceFactoryLine::NotSequence,
+                "{ordinary}"
+            );
+        }
     }
 }

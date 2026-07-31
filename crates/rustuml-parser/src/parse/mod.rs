@@ -499,29 +499,19 @@ fn detect_type(input: &str) -> &str {
 /// complete source. Explicit JSON and YAML starts bypass this competition via
 /// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
 /// `YamlDiagramFactory`.
-fn looks_like_sequence_only_factory_command(line: &str) -> bool {
-    // Java provenance: `SequenceDiagramFactory.initCommandsList` registers
-    // these commands, while the later Class and Description factories do not.
-    // Keep shared commands (messages, actor/database/queue declarations,
-    // notes, newpage and page decoration) out of this inventory.
-    let line = line.to_ascii_lowercase();
-    line == "participant"
-        || line.starts_with("participant ")
-        || line == "autonumber"
-        || line.starts_with("autonumber ")
-        || line == "activate"
-        || line.starts_with("activate ")
-        || line == "deactivate"
-        || line.starts_with("deactivate ")
-        || line == "autoactivate"
-        || line.starts_with("autoactivate ")
-        || line == "return"
-        || line.starts_with("return ")
-        || line == "box"
-        || line.starts_with("box ")
-        || line == "end box"
-        || line.starts_with("ref over ")
-        || matches!(line.as_str(), "footbox" | "hide footbox" | "show footbox")
+fn is_rank_direction_command(line: &str) -> bool {
+    static COMMAND: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        // Java provenance: `CommandRankDir.getRegexConcat` uses one `%s` at
+        // each internal separator, `spaceOneOrMore` before `direction`, and
+        // Pattern2's case-insensitive compilation.
+        regex::Regex::new(r"(?i)^(?:left\sto\sright|top\sto\sbottom)\s+direction$").unwrap()
+    });
+    COMMAND.is_match(line)
+}
+
+fn looks_like_rank_direction_attempt(line: &str) -> bool {
+    let lower = line.to_ascii_lowercase();
+    (lower.starts_with("left") || lower.starts_with("top")) && lower.ends_with("direction")
 }
 
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
@@ -538,6 +528,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_class_association_line = false;
     let mut has_class_lollipop_command = false;
     let mut has_direction_directive = false;
+    let mut has_malformed_direction_directive = false;
     let mut has_sequence_only_command = false;
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
@@ -704,13 +695,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("skinparam ") {
             has_skinparam = true;
         }
-        if matches!(
-            trimmed,
-            "left to right direction" | "top to bottom direction"
-        ) {
+        if is_rank_direction_command(trimmed) {
             has_direction_directive = true;
+        } else if looks_like_rank_direction_attempt(trimmed) {
+            has_malformed_direction_directive = true;
         }
-        if !inside_class_leaf_body && looks_like_sequence_only_factory_command(trimmed) {
+        if !inside_class_leaf_body
+            && matches!(
+                sequence::factory_line_consumability(trimmed),
+                sequence::SequenceFactoryLine::SequenceOnly(_)
+            )
+        {
             has_sequence_only_command = true;
         }
 
@@ -1285,7 +1280,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // `CommandRankDir`; Java discards that factory before trying Class and
     // Description. A command exclusive to the discarded Sequence inventory
     // cannot then be laundered through a permissive later Rust parser.
-    if has_direction_directive && has_sequence_only_command {
+    if has_malformed_direction_directive || (has_direction_directive && has_sequence_only_command) {
         return UmlSubtype::Unconsumable;
     }
     let sequence_factory_viable = !has_direction_directive;
@@ -1791,16 +1786,14 @@ pub fn parse_with_base(
                 let line = lines
                     .iter()
                     .position(|line| {
-                        matches!(
-                            source_text(line).trim(),
-                            "left to right direction" | "top to bottom direction"
-                        )
+                        let line = source_text(line).trim();
+                        is_rank_direction_command(line) || looks_like_rank_direction_attempt(line)
                     })
                     .map(|index| index + 1)
                     .unwrap_or(1);
                 Err(ParseError {
                     line,
-                    message: "no UML factory consumes rank direction with sequence-only commands"
+                    message: "no UML factory consumes this rank direction command combination"
                         .to_string(),
                 })
             }
@@ -2416,14 +2409,31 @@ mod tests {
 
     #[test]
     fn rank_direction_falls_through_to_class_for_zero_or_weak_graph_evidence() {
-        assert!(matches!(
-            parse("@startuml\nleft to right direction\n@enduml").unwrap(),
-            Diagram::Class(_)
-        ));
-        assert!(matches!(
-            parse("@startuml\ntop to bottom direction\nAlpha -> Beta : weak\n@enduml").unwrap(),
-            Diagram::Class(_)
-        ));
+        for direction in [
+            "left to right direction",
+            "LeFt to RiGhT    DiReCtIoN",
+            "top to bottom direction",
+            "ToP to BoTtOm\tDiReCtIoN",
+        ] {
+            let source = format!("@startuml\n{direction}\nAlpha -> Beta : weak\n@enduml");
+            assert!(
+                matches!(parse(&source).unwrap(), Diagram::Class(_)),
+                "{direction}"
+            );
+        }
+
+        for direction in [
+            "left  to right direction",
+            "top to  bottom direction",
+            "left to wrong direction",
+        ] {
+            let source = format!("@startuml\n{direction}\nAlpha -> Beta : weak\n@enduml");
+            assert_eq!(
+                parse(&source).unwrap_err().message,
+                "no UML factory consumes this rank direction command combination",
+                "{direction}"
+            );
+        }
     }
 
     #[test]
@@ -2431,18 +2441,49 @@ mod tests {
         for command in [
             "participant Sender",
             "autonumber 10 5",
+            "autonumber inc A",
             "activate Worker",
+            "Worker ++ #Gold",
+            "destroy Worker",
             "return result",
             "box Clients",
+            "alt accepted path",
+            "par2 concurrent path",
+            "== phase boundary ==",
+            "… translated delay …",
+            "||30||",
             "ref over Sender : detail",
-            "hide footbox",
+            "autonewpage 17",
+            "newpage : second page",
+            "@newpage",
+            "footbox on",
         ] {
             let source = format!(
                 "@startuml\nleft to right direction\n{command}\nSender -> Worker : request\n@enduml"
             );
             let error = parse(&source).unwrap_err();
             assert_eq!(
-                error.message, "no UML factory consumes rank direction with sequence-only commands",
+                error.message, "no UML factory consumes this rank direction command combination",
+                "{command}"
+            );
+        }
+    }
+
+    #[test]
+    fn rank_direction_keeps_shared_sequence_lookalikes_available_to_later_factories() {
+        for command in [
+            "newpage",
+            "footbox",
+            "hide footbox",
+            "show footbox",
+            "hide unlinked",
+            "show unlinked",
+        ] {
+            let source = format!(
+                "@startuml\nleft to right direction\n{command}\nAlpha -> Beta : shared\n@enduml"
+            );
+            assert!(
+                matches!(parse(&source).unwrap(), Diagram::Class(_)),
                 "{command}"
             );
         }
