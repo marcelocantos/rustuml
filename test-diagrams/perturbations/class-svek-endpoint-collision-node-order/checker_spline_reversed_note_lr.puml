@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+hide empty members
+
+class RootGauge83801
+package Hangar83803 {
+  class DirectWing83805
+  note left of DirectWing83805 : plain wing memo 83807
+  package ToolBay83811 {
+    class NestedClamp83813
+    class NestedMeter83817
+  }
+  class DirectWheel83819
+}
+
+RootGauge83801 "reverse spline tail 83823" -- "reverse spline head 83829" NestedClamp83813
+RootGauge83801 -- Hangar83803
+DirectWing83805 -- DirectWheel83819
+NestedClamp83813 -- NestedMeter83817
+@enduml

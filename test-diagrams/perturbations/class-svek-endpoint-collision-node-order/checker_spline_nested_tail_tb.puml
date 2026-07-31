@@ -1,0 +1,19 @@
+@startuml
+top to bottom direction
+hide empty members
+
+package Laboratory83701 {
+  class DirectLens83703
+  package InnerBench83707 {
+    class NestedEmitter83711
+    class NestedTarget83713
+  }
+  class DirectPrism83717
+}
+class RootReader83719
+
+NestedEmitter83711 "spline tail 83723" -- "spline head 83729" RootReader83719
+DirectLens83703 -- DirectPrism83717
+NestedTarget83713 -- NestedEmitter83711
+RootReader83719 -- Laboratory83701
+@enduml

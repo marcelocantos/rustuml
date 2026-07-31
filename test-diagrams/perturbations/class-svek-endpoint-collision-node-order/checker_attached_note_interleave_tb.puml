@@ -1,0 +1,21 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+hide empty members
+
+package SignalRoom83301 {
+  class DirectReceiver83303
+  note right of DirectReceiver83303 : plain checker memo 83305
+  package InnerRack83307 {
+    class NestedSource83311
+    class NestedSink83313
+  }
+  class DirectArchive83317
+}
+class RootMonitor83319
+
+NestedSource83311 "note-side tail 83323" -- "root-side head 83329" RootMonitor83319 : checked route
+RootMonitor83319 -- SignalRoom83301
+DirectReceiver83303 -- DirectArchive83317
+NestedSink83313 -- NestedSource83311
+@enduml
