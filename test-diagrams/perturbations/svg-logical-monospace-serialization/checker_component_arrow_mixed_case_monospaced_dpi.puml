@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+skinparam dpi 144
+skinparam ArrowFontName mOnOsPaCeD
+[Gateway] --> [Archive] : grid  gap   label
+@enduml

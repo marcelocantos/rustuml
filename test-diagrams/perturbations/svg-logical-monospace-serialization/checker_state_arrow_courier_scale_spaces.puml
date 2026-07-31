@@ -1,0 +1,7 @@
+@startuml
+scale 1.25
+skinparam State.Arrow_Font.Name Courier
+[*] --> Idle
+Idle --> Busy : queue  hold   ack
+Busy --> [*]
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName "Monospaced"
+hide footbox
+Alice -> Bob : base  spacing
+note right : quoted  family  control
+@enduml

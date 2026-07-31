@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "mechanism": "svg-logical-monospace-serialization",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-svg-logical-monospace-serialization-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, headless Java PlantUML JAR, and /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit 336db230ac225bad71037bf000750b4268ed07eb, did not edit shipping Rust, and did not edit account.json."
+  },
+  "checker": {
+    "date": "2026-07-31",
+    "workspace": "/private/tmp/rustuml-integrate-20260731a",
+    "mode": "adversarial maker-checker review"
+  },
+  "revisions": {
+    "worktree_head": "743d463a655367f936e2a40368015b0bd00b4060",
+    "pre_account_commit": "bc9e5362bd023be406982ac56d790be5600b9b3b",
+    "implementation_commit": "336db230ac225bad71037bf000750b4268ed07eb",
+    "evidence_commit": "060fdbe6a010ccb6dbc6396febe8019f514cd253",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "comparator": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "comparator_sha256": "df036e55369a49b12f73f2d38190b555a48472f758545522e1699620bdc98fa3",
+    "comparator_provenance": "Per the no-rebuild constraint I used the existing shared-worktree comparator binary. The worktree head is later than 060fdbe6 by docs commits plus 743d463a in crates/rustuml-render/src/class.rs for stack painted-frontier logic; no later commit touches crates/rustuml-render/src/text_render.rs or crates/rustuml-render/src/creole.rs."
+  },
+  "documents_read": [
+    "AGENTS.md parity honesty and T14 rules",
+    "docs/parity-reviews/svg-logical-monospace-serialization/account.json at 060fdbe6a010ccb6dbc6396febe8019f514cd253",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "crates/rustuml-render/src/text_render.rs at 060fdbe6a010ccb6dbc6396febe8019f514cd253",
+    "crates/rustuml-render/src/creole.rs at 060fdbe6a010ccb6dbc6396febe8019f514cd253"
+  ],
+  "source_inspection": {
+    "java": [
+      "UFontImpl#getFamily for SVG replaces double quotes with single quotes and normalizes SansSerif to sans-serif, but does not itself canonicalize Monospaced to monospace on the non-TeaVM SVG path.",
+      "SvgGraphics#text performs the final backend-wide serialization step: it canonicalizes fontFamily equal to Monospaced (case-insensitive) to monospace immediately before writing the attribute, then replaces ASCII spaces with U+00A0 only when the emitted family is monospace or Courier.",
+      "Quoted families therefore remain quoted in Java SVG and do not receive NBSP conversion merely because their unquoted payload spells Monospaced."
+    ],
+    "rust": [
+      "Commit 336db230 narrows the reviewed production change to text_render::write_text_element by adding svg_font_family and svg_font_family_uses_nbsp, then canonicalizing only exact logical Monospaced and converting spaces after final family resolution.",
+      "I found no shipping-path fixture names, golden-data reads, coordinate keyed rewrites, or new unexplained parity constants in that implementation diff; the only fixture-like strings are in the added unit test.",
+      "However, creole::handle_tag still treats every <font:Name> tag as monospace by setting nested.monospace = true regardless of Name. Because push_literal converts spaces to NBSP whenever style.monospace is true, inline <font:Courier New> content reaches text_render already NBSP-expanded even though Java only does that for Courier and monospace."
+    ],
+    "fixture_shape_search": {
+      "command": "git -C /private/tmp/rustuml-integrate-20260731a show --format= --no-ext-diff 336db230 -- crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/creole.rs | rg -n 'include_str|include_bytes|read_to_string|checker_|test-diagrams|golden|viewBox|x=|y=|Monospaced|Courier New|grid gap|wide lane'",
+      "result": "Matches are confined to the newly added unit test expectations; I found no shipping-path fixture reads or coordinate-specific production branches."
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a status --short",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline -n 8",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --stat --summary 336db230",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+    "sed -n '640,730p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "git -C /private/tmp/rustuml-integrate-20260731a show 336db230 -- crates/rustuml-render/src/text_render.rs",
+    "sed -n '1308,1340p' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/creole.rs",
+    "sed -n '900,935p' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/creole.rs",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml",
+    "xmllint --noout /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|Assumed diagram type' /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization -g '*.svg'",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml",
+    "git -C /private/tmp/rustuml-integrate-20260731a rev-parse HEAD bc9e5362 336db230 060fdbe6",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor bc9e5362 060fdbe6 && git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor 336db230 060fdbe6",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline 060fdbe6..743d463a",
+    "git -C /private/tmp/rustuml-integrate-20260731a diff --stat 060fdbe6..743d463a -- crates/rustuml-render/src",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/svg-logical-monospace-serialization/account.json /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.svg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.svg"
+  ],
+  "constraints_observed": {
+    "ran_cargo": false,
+    "rebuilt_rust": false,
+    "edited_shipping_code": false,
+    "edited_account": false,
+    "edited_prior_reviews": false,
+    "review_only_changes": true,
+    "java_syntax_errors": 0
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "f3ade02648edb5b19c5243be238bf12b70544e693489679e9f86364d4e0a5733",
+    "sources": {
+      "checker_component_arrow_mixed_case_monospaced_dpi.puml": "158eb22630694974dd46757111e6df39bd42bab13e86ff592beceaa56018eab7",
+      "checker_state_arrow_courier_scale_spaces.puml": "d6f1bce08f4296f72f99d766009f2d8559f253f03c55e9d067352324a8acce91",
+      "checker_inline_font_family_matrix_note.puml": "b16ae744cf4f1a1f61df942d5f4c169ae406df14654b8ebc7f11c07be5095531",
+      "checker_sequence_quoted_monospaced_defaultfont.puml": "c6e6859dad626a3d0231918de5767b2df3fa853bf6e225ad1f601faba5ba9b13",
+      "checker_sequence_inline_family_matrix_scale.puml": "a4f94be531b3e95fe07f0c50b66aa4b1ded341ad2c67a33deabaa0836d12ee9b",
+      "checker_sequence_inline_arrow_family_matrix_scale.puml": "fb373cbf2c82da0644900fd0e8db425c418804bbf27dfa9b6d52d4925de5c485"
+    },
+    "java_svgs": {
+      "checker_component_arrow_mixed_case_monospaced_dpi.svg": "b7240ea1460f8d0c28947c7a9a821d1856f55afcd4dfca8ded6b0d1690b8587f",
+      "checker_state_arrow_courier_scale_spaces.svg": "0b9b24d07f958225906cdbe0342676b30ef052b7908304fc2a9cd4acb2bde9d3",
+      "checker_inline_font_family_matrix_note.svg": "920a2719a59e2331e86dc957fdaf846e5696957d9917e18a3109fb52ef35de6b",
+      "checker_sequence_quoted_monospaced_defaultfont.svg": "7504b8c668835828d39dd78835d4c41c3ab6734dd3e212b3e894dff539119892",
+      "checker_sequence_inline_family_matrix_scale.svg": "c77b36d9f1224da63632ca059129ee78415482057db9118388de6126e39e8d86",
+      "checker_sequence_inline_arrow_family_matrix_scale.svg": "9e94adca2737f306d6ea6ef69b149001f7a3d039f1cd92cfb29c356ebb4f39b1"
+    }
+  },
+  "perturbation_directory": "test-diagrams/perturbations/svg-logical-monospace-serialization",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+      "golden": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.svg",
+      "axes": [
+        "preserved implementer evidence input",
+        "component arrow label",
+        "Monospaced base family",
+        "dpi 100"
+      ],
+      "used_by_implementer": true,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.svg",
+      "axes": [
+        "component arrow renderer",
+        "mixed-case base Monospaced family",
+        "multiple internal spaces",
+        "dpi 144"
+      ],
+      "used_by_implementer": false,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.svg",
+      "axes": [
+        "state arrow renderer",
+        "base Courier family",
+        "multiple internal spaces",
+        "explicit scale 1.25"
+      ],
+      "used_by_implementer": false,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.svg",
+      "axes": [
+        "sequence renderer",
+        "quoted base family",
+        "internal spaces",
+        "quoted-family edge case"
+      ],
+      "used_by_implementer": false,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.svg",
+      "axes": [
+        "note-only renderer",
+        "inline mixed-case Monospaced",
+        "inline Courier New control",
+        "multiple internal spaces"
+      ],
+      "used_by_implementer": false,
+      "result": "fail",
+      "failure_summary": "Java renders a CLASS note with separate monospace and Courier New text runs, but Rust renders a DESCRIPTION diagram instead; this is a valid fresh product-path divergence even before narrowing to the inline spacing mechanism."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.svg",
+      "axes": [
+        "sequence message plus note",
+        "inline mixed-case Monospaced",
+        "inline Courier New control",
+        "explicit scale 1.2"
+      ],
+      "used_by_implementer": false,
+      "result": "fail",
+      "failure_summary": "The inline Courier New note segment is emitted with NBSP-expanded text on the Rust side (wide&#160;&#160;lane) and a wider measured textLength, while Java leaves literal spaces for Courier New. The resulting note box and participant placement shrink left by about 16px on Rust."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.svg",
+      "axes": [
+        "sequence message renderer only",
+        "inline mixed-case Monospaced",
+        "inline Courier New control",
+        "explicit scale 1.2"
+      ],
+      "used_by_implementer": false,
+      "result": "fail",
+      "failure_summary": "Within one message label, Java emits grid&#160;&#160;gap for inline Monospaced and plain wide  lane for inline Courier New. Rust still emits wide&#160;&#160;lane under Courier New, inflating textLength from 93.6152 to 93.9199 and shifting the arrow endpoint and Bob participant left by about 15.75px."
+    }
+  ],
+  "findings": [
+    "The claimed Java account is largely correct at the final SVG backend stage. UFontImpl#getFamily does quote normalization and SansSerif canonicalization, while SvgGraphics#text performs the actual Monospaced->monospace rewrite and only then applies NBSP conversion for monospace or Courier.",
+    "The reviewed production diff in 336db230 is narrow and non-fixture-shaped. It centralizes logical Monospaced canonicalization in text_render::write_text_element and leaves quoted-family behavior alone, which the passing checker_sequence_quoted_monospaced_defaultfont case confirms.",
+    "Base-family paths behave as claimed on fresh inputs: component labels with mixed-case Monospaced and state arrows with Courier both match Java exactly through diff_one --no-oracle, and the preserved checker_monospaced_lr_dpi evidence case now passes.",
+    "The mechanism fails on inline <font:...> families because Rust still has an upstream scope gap in creole::handle_tag. For every <font:Name> tag it sets nested.monospace = true unconditionally, so push_literal converts spaces to NBSP before text_render sees the finalized family. Java does not do that; it keeps Courier New spaces literal.",
+    "That gap is executable on a fresh sequence-message counterexample. checker_sequence_inline_arrow_family_matrix_scale is valid Java input, preserves both Java SVG and product-path Rust output, and fails solely because Rust emits NBSP-expanded Courier New text and the resulting wider width perturbs layout.",
+    "A second fresh sequence counterexample, checker_sequence_inline_family_matrix_scale, fails for the same reason in the note segment, so the bug is not confined to one exact line shape.",
+    "I also found a broader valid failure in checker_inline_font_family_matrix_note, where Java renders a note-only diagram as CLASS while Rust renders DESCRIPTION. That failure is adjacent rather than the primary causal disproof, but under the T14 rule it still remains preserved executable drift."
+  ],
+  "summary": {
+    "preserved_inputs_rerun": 1,
+    "fresh_inputs": 6,
+    "passes": 4,
+    "failures": 3,
+    "java_syntax_errors": 0
+  },
+  "verdict": "rejected",
+  "verdict_reason": "I found fresh valid no-oracle counterexamples that disprove the mechanism's claimed inline-family coverage. Base-family Monospaced and Courier serialization now match Java, but inline <font:Courier New> still takes the Rust monospace spacing path, producing NBSP-expanded text and wider geometry on fresh sequence inputs. Under the T14 checker rule, those valid preserved failures reject the change."
+}
