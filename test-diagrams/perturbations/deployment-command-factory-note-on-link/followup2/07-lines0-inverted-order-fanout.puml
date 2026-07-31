@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Alpha Deck 871" as Alpha871
+node "Beta Deck 872" as Beta872
+node "Gamma Deck 873" as Gamma873
+Beta872 -left-> Alpha871 : inverted left label 874
+note right on link #PaleGreen : Right note on inverted link 875
+Beta872 --> Gamma873 : fanout ordinary 876
+Gamma873 -right-> Alpha871 : final horizontal 877
+@enduml

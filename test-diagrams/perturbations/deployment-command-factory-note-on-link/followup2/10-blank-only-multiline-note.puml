@@ -1,0 +1,9 @@
+@startuml
+agent "Blank Source 901" as BlankSrc901
+cloud "Blank Target 902" as BlankTgt902
+BlankSrc901 --> BlankTgt902
+note top on link #GhostWhite
+
+endnote
+BlankTgt902 --> BlankSrc901 : return 903
+@enduml

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="228px" preserveAspectRatio="none" style="width:504px;height:228px;background:#FFFFFF;" version="1.1" viewBox="0 0 504 228" width="504px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Packet Loom 811-->
+<g class="entity" data-qualified-name="PktLoom811" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="147.0107" x="337.15" y="175.3533"/>
+<polygon fill="#F1F1F1" points="467.1607,180.3533,467.1607,194.3533,479.1607,194.3533,479.1607,186.3533,473.1607,180.3533,467.1607,180.3533" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="473.1607" x2="473.1607" y1="180.3533" y2="186.3533"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="479.1607" x2="473.1607" y1="186.3533" y2="186.3533"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117.0107" x="347.15" y="201.8884">Packet Loom 811</text>
+</g>
+<!--entity Relay Cloud 812-->
+<g class="entity" data-qualified-name="RelayCloud812" data-source-line="3" id="ent0003">
+<path d="M349.7107,14.9909 C351.8842,8.0152 357.652,7.8515 361.607,13.2827 C366.2274,6.5254 371.6358,6.4783 375.2265,14.248 C377.3858,8.3091 381.6134,7.4478 385.7261,12.3574 C389.9078,6.0363 396.7994,6.098 400.2439,13.1573 C403.4471,8.0912 407.6703,7.9807 411.2938,12.6817 C415.0124,6 420.2886,7.431 423.8193,12.8757 C427.3785,7.1133 433.8233,7.1587 437.3398,12.9256 C440.5525,7.6457 446.3445,6.9468 449.4747,13.0139 C454.4665,7.652 458.1317,9.185 460.9973,15.1725 C464.3434,8.2973 469.2699,8.5451 473.3274,14.4883 C483.0396,17.142 483.7958,23.5408 477.5502,30.4234 C482.5895,36.8686 481.6379,41.2047 473.9867,44.4186 C470.4116,51.5162 466.1846,51.9656 461.0918,45.906 C458.3538,52.0357 452.9087,53.5994 448.6816,47.4055 C445.9978,53.6448 441.337,54.9267 436.1236,50.3396 C433.3578,56.269 428.7373,56.411 425.1066,51.1945 C422.5038,57.9125 416.7928,57.5865 412.6464,52.8775 C408.4208,57.78 402.3911,57.3207 400.1511,50.7205 C396.6709,57.1366 390.839,57.5791 387.3684,50.7113 C381.9527,56.3341 376.2707,55.8913 373.7464,47.8324 C369.9746,54.1855 364.407,52.7275 361.193,47.241 C357.81,52.2788 352.4117,51.6516 349.6894,46.4953 C340.4964,45.5229 334.6212,38.3432 341.7922,29.6837 C337.5829,22.5527 340.1548,14.7033 349.7107,14.9909" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110.9951" x="355.16" y="34.3884">Relay Cloud 812</text>
+</g>
+<!--entity Cold Vault 815-->
+<g class="entity" data-qualified-name="ColdVault815" data-source-line="6" id="ent0006">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="121.418" x="349.95" y="103.8533"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101.418" x="359.95" y="127.3884">Cold Vault 815</text>
+</g>
+<!--reverse link RelayCloud812 to PktLoom811-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M333.8904,28.489 C216.2004,29.779 6,43.6333 78.73,131.5933 C140.14,205.8633 259.39,210.9733 336.97,205.0933" fill="none" id="RelayCloud812-backto-PktLoom811" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="339.89,28.4233,330.8467,24.5222,334.8903,28.4781,330.9344,32.5217,339.89,28.4233" style="stroke:#181818;stroke-width:1;"/>
+<path d="M44.15,101.5933 L44.15,126.5933 L210.15,126.5933 L210.15,111.5933 L200.15,101.5933 L44.15,101.5933" fill="#F5FFFA" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M200.15,101.5933 L200.15,111.5933 L210.15,111.5933 L200.15,101.5933" fill="#F5FFFA" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.8184" x="50.15" y="119.1616">Lefton bridge note 814</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="30.8623" x="246.2596" y="111.5064">hops</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="89.4448" x="216.9684" y="126.8169">over fiber 813</text>
+</g>
+<!--link RelayCloud812 to ColdVault815-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M410.66,52.7333 C410.66,68.5733 410.66,83.1133 410.66,97.7233" fill="none" id="RelayCloud812-to-ColdVault815" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="410.66,103.7233,414.66,94.7233,410.66,98.7233,406.66,94.7233,410.66,103.7233" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="125.6836" x="336.66" y="83.1616">later horizontal 816</text>
+</g>
+</g></svg>

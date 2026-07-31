@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+node "North Rack 981" as North981
+node "South Rack 982" as South982
+South982 .up.> North981 : dashed\nupstream 983
+note left of link #LightSteelBlue : Upward dashed left note 984
+database "Later Sink 985" as Sink985
+North981 --> Sink985 : later down 986
+@enduml

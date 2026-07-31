@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="218px" preserveAspectRatio="none" style="width:529px;height:218px;background:#FFFFFF;" version="1.1" viewBox="0 0 529 218" width="529px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity North Rack 981-->
+<g class="entity" data-qualified-name="North981" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="188.08,16,198.08,6,334.0302,6,334.0302,42.4883,324.0302,52.4883,188.08,52.4883,188.08,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="324.0302" x2="334.0302" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="188.08" x2="324.0302" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="324.0302" x2="324.0302" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105.9502" x="203.08" y="39.5352">North Rack 981</text>
+</g>
+<!--entity South Rack 982-->
+<g class="entity" data-qualified-name="South982" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="16,157.49,26,147.49,162.1074,147.49,162.1074,183.9783,152.1074,193.9783,16,193.9783,16,157.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="152.1074" x2="162.1074" y1="157.49" y2="147.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="152.1074" y1="157.49" y2="157.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="152.1074" x2="152.1074" y1="157.49" y2="193.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.1074" x="31" y="181.0252">South Rack 982</text>
+</g>
+<!--entity Later Sink 985-->
+<g class="entity" data-qualified-name="Sink985" data-source-line="6" id="ent0006">
+<path d="M374.14,157.99 C374.14,147.99 433.058,147.99 433.058,147.99 C433.058,147.99 491.9759,147.99 491.9759,157.99 L491.9759,183.4783 C491.9759,193.4783 433.058,193.4783 433.058,193.4783 C433.058,193.4783 374.14,193.4783 374.14,183.4783 L374.14,157.99" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M374.14,157.99 C374.14,167.99 433.058,167.99 433.058,167.99 C433.058,167.99 491.9759,167.99 491.9759,157.99" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.8359" x="384.14" y="185.5252">Later Sink 985</text>
+</g>
+<!--reverse link North981 to South982-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M182.0127,44.2848 C139.8827,53.2948 98.7,65.52 86.05,82.49 C72.38,100.84 75.88,127.9 81.05,147" fill="none" id="North981-backto-South982" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="187.88,43.03,178.2425,41.0006,182.9906,44.0757,179.9155,48.8237,187.88,43.03" style="stroke:#181818;stroke-width:1;"/>
+<path d="M91.05,87.49 L91.05,112.49 L295.05,112.49 L295.05,97.49 L285.05,87.49 L91.05,87.49" fill="#B0C4DE" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M285.05,87.49 L285.05,97.49 L295.05,97.49 L285.05,87.49" fill="#B0C4DE" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="183.2822" x="97.05" y="105.0584">Upward dashed left note 984</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="45.481" x="322.7873" y="97.4031">dashed</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="88.3911" x="301.3322" y="112.7136">upstream 983</text>
+</g>
+<!--link North981 to Sink985-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0006" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M334.2,47.56 C355.49,55.42 377.46,66.64 394.05,82.49 C412.53,100.13 421.3108,122.3316 426.6308,141.8316" fill="none" id="North981-to-Sink985" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="428.21,147.62,429.7002,137.8845,426.894,142.7963,421.9822,139.9901,428.21,147.62" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="95.5005" x="418.11" y="105.0584">later down 986</text>
+</g>
+</g></svg>

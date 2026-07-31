@@ -1,0 +1,5 @@
+@startuml
+[*] --> Waiting951 : boot 952
+note on link : State transition note 953
+Waiting951 --> [*] : done 954
+@enduml

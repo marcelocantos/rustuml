@@ -1,0 +1,7 @@
+@startuml
+note as LoneNote921
+  Lone body 922
+end note
+LoneNote921 --> LoneNote921
+note bottom on link : Should not find eligible link 923
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+storage "Primary Store 851" as Store851
+queue "Retry Pipe 852" as Pipe852
+Store851 "tail a 853" --> "head b 854" Pipe852 : solid lane 855
+Store851 "tail c 856" ..> "head d 857" Pipe852 : dotted lane 858
+note left on link #Thistle : Latest dotted lane note 859
+card "Post Card 860" as PostCard860
+Pipe852 --> PostCard860 : later topology 861
+@enduml

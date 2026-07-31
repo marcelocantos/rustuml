@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="440px" preserveAspectRatio="none" style="width:303px;height:440px;background:#FFFFFF;" version="1.1" viewBox="0 0 303 440" width="303px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="g13nnsug21qv4k0" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#F0F8FF"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs><g><!--cluster Harbor Rack 821-->
+<g class="cluster" data-qualified-name="HarborRack821" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,278,6,278,316.97,268,326.97,16,326.97,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="268" x2="278" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="268" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="268" x2="268" y1="16" y2="326.97"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="121.2354" x="82.3823" y="32.5352">Harbor Rack 821</text>
+</g>
+<!--entity Meter API 822-->
+<g class="entity" data-qualified-name="HarborRack821.MeterApi822" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="135.4707" x="32.26" y="46"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="147.7307" y="51"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="145.7307" y="53"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="145.7307" y="57"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95.4707" x="47.26" y="79.5352">Meter API 822</text>
+</g>
+<!--entity Meter DB 823-->
+<g class="entity" data-qualified-name="HarborRack821.MeterDb823" data-source-line="3" id="ent0004">
+<path d="M31.71,275.49 C31.71,265.49 87.9996,265.49 87.9996,265.49 C87.9996,265.49 144.2891,265.49 144.2891,275.49 L144.2891,300.9783 C144.2891,310.9783 87.9996,310.9783 87.9996,310.9783 C87.9996,310.9783 31.71,310.9783 31.71,300.9783 L31.71,275.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M31.71,275.49 C31.71,285.49 87.9996,285.49 87.9996,285.49 C87.9996,285.49 144.2891,285.49 144.2891,275.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92.5791" x="41.71" y="303.0252">Meter DB 823</text>
+</g>
+<!--entity Outside Probe 827-->
+<g class="entity" data-qualified-name="Probe827" data-source-line="11" id="ent0006">
+<rect fill="#F1F1F1" height="36.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="146.6904" x="14.65" y="389.98"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126.6904" x="24.65" y="413.5152">Outside Probe 827</text>
+</g>
+<!--link MeterApi822 to MeterDb823-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M98.76,92.65 C96.45,134.45 91.8424,217.8292 89.5424,259.2792" fill="none" id="MeterApi822-to-MeterDb823" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="89.21,265.27,93.7025,256.5054,89.487,260.2777,85.7148,256.0622,89.21,265.27" style="stroke:#181818;stroke-width:1;"/>
+<path d="M102.1,127.49 L102.1,182.49 L287.1,182.49 L287.1,137.49 L277.1,127.49 L102.1,127.49" fill="url(#g13nnsug21qv4k0)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M277.1,127.49 L277.1,137.49 L287.1,137.49 L277.1,127.49" fill="url(#g13nnsug21qv4k0)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="128.0767" x="108.1" y="145.0584">First stored row 825</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="4.1133" x="108.1" y="160.3689">&#160;</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="156.7617" x="116.3266" y="175.6795">Indented after blank 826</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32.0366" x="179.0758" y="201.99">store</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="4.1133" x="193.0375" y="217.3005">&#160;</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="75.7847" x="157.2018" y="232.6111">verified 824</text>
+</g>
+<!--link MeterDb823 to Probe827-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0006" data-link-type="dependency" data-source-line="12" id="lnk7">
+<path d="M88,311.43 C88,334.12 88,362.92 88,383.74" fill="none" id="MeterDb823-to-Probe827" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="88,389.74,92,380.74,88,384.74,84,380.74,88,389.74" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92.022" x="89" y="356.5484">later edge 828</text>
+</g>
+</g></svg>

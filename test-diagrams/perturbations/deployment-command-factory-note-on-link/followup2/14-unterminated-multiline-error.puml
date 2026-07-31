@@ -1,0 +1,7 @@
+@startuml
+node "Open Host 941" as OpenHost941
+database "Open DB 942" as OpenDb942
+OpenHost941 --> OpenDb942
+note top of link #LightGreen
+  Missing terminator row 943
+@enduml

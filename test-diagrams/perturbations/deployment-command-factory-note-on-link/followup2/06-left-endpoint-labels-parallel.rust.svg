@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="278px" preserveAspectRatio="none" style="width:489px;height:278px;background:#FFFFFF;" version="1.1" viewBox="0 0 489 278" width="489px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Primary Store 851-->
+<g class="entity" data-qualified-name="Store851" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="141.6797" x="65.9672" y="7"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.6797" x="75.9672" y="30.5352">Primary Store 851</text>
+</g>
+<!--entity Retry Pipe 852-->
+<g class="entity" data-qualified-name="Pipe852" data-source-line="2" id="ent0003">
+<path d="M82.4372,138.49 L191.1823,138.49 C196.1823,138.49 196.1823,151.7341 196.1823,151.7341 C196.1823,151.7341 196.1823,164.9783 191.1823,164.9783 L82.4372,164.9783 C77.4372,164.9783 77.4372,151.7341 77.4372,151.7341 C77.4372,151.7341 77.4372,138.49 82.4372,138.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M191.1823,138.49 C186.1823,138.49 186.1823,151.7341 186.1823,151.7341 C186.1823,164.9783 191.1823,164.9783 191.1823,164.9783" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98.7451" x="82.4372" y="157.0252">Retry Pipe 852</text>
+</g>
+<!--entity Post Card 860-->
+<g class="entity" data-qualified-name="PostCard860" data-source-line="6" id="ent0006">
+<rect fill="#F1F1F1" height="22.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="116.0859" x="78.7672" y="241.98"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96.0859" x="88.7672" y="258.5152">Post Card 860</text>
+</g>
+<!--link Store851 to Pipe852-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M98.1772,43.98 C86.5972,51.36 75.2672,61.13 68.8072,73.49 C61.5972,87.27 61.2472,94.89 68.8072,108.49 C76.1672,121.73 84.2531,128.6029 97.2431,135.2929" fill="none" id="Store851-to-Pipe852" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="102.5772,138.04,96.4074,130.3632,98.1321,135.7507,92.7446,137.4754,102.5772,138.04" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="89.4448" x="69.8072" y="96.0584">solid lane 855</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="59.6235" x="20.1034" y="63.9709">tail a 853</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="71.7412" x="6" y="127.8503">head b 854</text>
+</g>
+<!--link Store851 to Pipe852-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M149.6772,43.68 C155.1872,52.2 160.9972,62.9 163.8072,73.49 C167.8072,88.52 168.1772,93.56 163.8072,108.49 C160.6372,119.35 157.3628,125.2969 151.3228,133.2269" fill="none" id="Store851-to-Pipe852-1" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="147.6872,138,156.3226,133.264,150.7168,134.0224,149.9584,128.4166,147.6872,138" style="stroke:#181818;stroke-width:1;"/>
+<path d="M171.9472,78.49 L171.9472,103.49 L366.9472,103.49 L366.9472,88.49 L356.9472,78.49 L171.9472,78.49" fill="#D8BFD8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M356.9472,78.49 L356.9472,88.49 L366.9472,88.49 L356.9472,78.49" fill="#D8BFD8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="174.5415" x="177.9472" y="96.0584">Latest dotted lane note 859</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="100.4517" x="373.4887" y="96.0584">dotted lane 858</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="59.103" x="162.1386" y="63.9126">tail c 856</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="71.7412" x="164.9256" y="127.7955">head d 857</text>
+</g>
+<!--link Pipe852 to PostCard860-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M136.8072,165.33 C136.8072,185.1 136.8072,217.04 136.8072,235.54" fill="none" id="Pipe852-to-PostCard860" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="136.8072,241.54,140.8072,232.54,136.8072,236.54,132.8072,232.54,136.8072,241.54" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="116.9048" x="137.8072" y="208.5484">later topology 861</text>
+</g>
+</g></svg>

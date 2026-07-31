@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="196px" preserveAspectRatio="none" style="width:658px;height:196px;background:#FFFFFF;" version="1.1" viewBox="0 0 658 196" width="658px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Alpha Deck 871-->
+<g class="entity" data-qualified-name="Alpha871" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="137,16,147,6,284.9941,6,284.9941,42.4883,274.9941,52.4883,137,52.4883,137,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="274.9941" x2="284.9941" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="137" x2="274.9941" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="274.9941" x2="274.9941" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.9941" x="152" y="39.5352">Alpha Deck 871</text>
+</g>
+<!--entity Beta Deck 872-->
+<g class="entity" data-qualified-name="Beta872" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="142.06,135,152.06,125,279.937,125,279.937,161.4883,269.937,171.4883,142.06,171.4883,142.06,135" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="269.937" x2="279.937" y1="135" y2="125"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="142.06" x2="269.937" y1="135" y2="135"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="269.937" x2="269.937" y1="135" y2="171.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.877" x="157.06" y="158.5352">Beta Deck 872</text>
+</g>
+<!--entity Gamma Deck 873-->
+<g class="entity" data-qualified-name="Gamma873" data-source-line="4" id="ent0004">
+<polygon fill="#F1F1F1" points="472.99,76,482.99,66,633.7673,66,633.7673,102.4883,623.7673,112.4883,472.99,112.4883,472.99,76" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="623.7673" x2="633.7673" y1="76" y2="66"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="472.99" x2="623.7673" y1="76" y2="76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="623.7673" x2="623.7673" y1="76" y2="112.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120.7773" x="487.99" y="99.5352">Gamma Deck 873</text>
+</g>
+<!--reverse link Alpha871 to Beta872-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M211,58.71 C211,79.55 211,103.87 211,124.73" fill="none" id="Alpha871-backto-Beta872" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="211,52.71,207,61.71,211,57.71,215,61.71,211,52.71" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="139.166" x="7" y="93.8084">inverted left label 874</text>
+<path d="M152.166,76.24 L152.166,101.24 L370.166,101.24 L370.166,86.24 L360.166,76.24 L152.166,76.24" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M360.166,76.24 L360.166,86.24 L370.166,86.24 L360.166,76.24" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="197.0376" x="158.166" y="93.8084">Right note on inverted link 875</text>
+</g>
+<!--link Beta872 to Gamma873-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M280.22,136.44 C326.22,128.48 388.26,117.74 442.99,108.24 C452.59,106.58 456.7382,105.8548 466.7182,104.1248" fill="none" id="Beta872-to-Gamma873" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="472.63,103.1,463.079,100.696,467.7035,103.954,464.4454,108.5784,472.63,103.1" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="126.4326" x="315.99" y="104.8084">fanout ordinary 876</text>
+</g>
+<!--link Gamma873 to Alpha871-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0002" data-link-type="dependency" data-source-line="8" id="lnk8">
+<path d="M472.54,75.17 C415.93,65.19 346.459,52.9411 291.349,43.2311" fill="none" id="Gamma873-to-Alpha871" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="285.44,42.19,293.6094,47.691,290.3642,43.0576,294.9976,39.8124,285.44,42.19" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124.8647" x="316.99" y="45.2184">final horizontal 877</text>
+</g>
+</g></svg>

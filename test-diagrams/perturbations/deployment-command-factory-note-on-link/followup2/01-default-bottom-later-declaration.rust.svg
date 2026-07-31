@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="311px" preserveAspectRatio="none" style="width:346px;height:311px;background:#FFFFFF;" version="1.1" viewBox="0 0 346 311" width="346px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Nexus Gateway 701-->
+<g class="entity" data-qualified-name="NxGate701" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,190.6885,6,190.6885,42.4883,180.6885,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.6885" x2="190.6885" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="180.6885" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.6885" x2="180.6885" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134.6885" x="31" y="39.5352">Nexus Gateway 701</text>
+</g>
+<!--entity Archive Ledger 702-->
+<g class="entity" data-qualified-name="ArcLedger702" data-source-line="2" id="ent0003">
+<path d="M27.3,157.49 C27.3,147.49 103.3454,147.49 103.3454,147.49 C103.3454,147.49 179.3908,147.49 179.3908,157.49 L179.3908,182.9783 C179.3908,192.9783 103.3454,192.9783 103.3454,192.9783 C103.3454,192.9783 27.3,192.9783 27.3,182.9783 L27.3,157.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M27.3,157.49 C27.3,167.49 103.3454,167.49 103.3454,167.49 C103.3454,167.49 179.3908,167.49 179.3908,157.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="132.0908" x="37.3" y="185.0252">Archive Ledger 702</text>
+</g>
+<!--entity Late Audit Queue 704-->
+<g class="entity" data-qualified-name="AuditQ704" data-source-line="5" id="ent0005">
+<path d="M24.16,269.98 L182.534,269.98 C187.534,269.98 187.534,283.2241 187.534,283.2241 C187.534,283.2241 187.534,296.4683 182.534,296.4683 L24.16,296.4683 C19.16,296.4683 19.16,283.2241 19.16,283.2241 C19.16,283.2241 19.16,269.98 24.16,269.98" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M182.534,269.98 C177.534,269.98 177.534,283.2241 177.534,283.2241 C177.534,296.4683 182.534,296.4683 182.534,296.4683" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="148.374" x="24.16" y="288.5152">Late Audit Queue 704</text>
+</g>
+<!--link NxGate701 to ArcLedger702-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M103.34,52.88 C103.34,78.88 103.34,115.26 103.34,141.06" fill="none" id="NxGate701-to-ArcLedger702" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="103.34,147.06,107.34,138.06,103.34,142.06,99.34,138.06,103.34,147.06" style="stroke:#181818;stroke-width:1;"/>
+<path d="M108.34,87.49 L108.34,112.49 L331.34,112.49 L331.34,97.49 L321.34,87.49 L108.34,87.49" fill="#FFFFE0" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M321.34,87.49 L321.34,97.49 L331.34,97.49 L321.34,87.49" fill="#FFFFE0" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="202.8901" x="114.34" y="105.0584">Canary note default bottom 703</text>
+</g>
+<!--link ArcLedger702 to AuditQ704-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M103.34,193.43 C103.34,216.33 103.34,245.23 103.34,263.72" fill="none" id="ArcLedger702-to-AuditQ704" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="103.34,269.72,107.34,260.72,103.34,264.72,99.34,260.72,103.34,269.72" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="117.7236" x="104.34" y="236.5484">after note link 705</text>
+</g>
+</g></svg>

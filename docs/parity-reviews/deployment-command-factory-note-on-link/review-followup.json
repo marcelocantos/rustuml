@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "review_version": "followup2",
+  "mechanism": "deployment-command-factory-note-on-link",
+  "verdict": "REJECT",
+  "checked_at": "2026-08-01",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-followup2-2026-08-01",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not implement the reviewed change and was instructed to try to disprove the mechanism rather than confirm it."
+  },
+  "revisions": {
+    "rust": "860e3540a62c3f3105d27f9d2b0495413cc6e55e",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account": "docs/parity-reviews/deployment-command-factory-note-on-link/account.json",
+    "implementation_revision_under_test": "860e3540a62c3f3105d27f9d2b0495413cc6e55e"
+  },
+  "binaries": {
+    "rust_binary": "/private/tmp/rustuml-deployment-link-notes/target/release/rustuml",
+    "rust_binary_sha256_before": "8982811e19d632fec4a523881de627d52e97a6ab8c375cfb7a60aca09ad0caf3",
+    "rust_binary_sha256_after": "8982811e19d632fec4a523881de627d52e97a6ab8c375cfb7a60aca09ad0caf3",
+    "rust_binary_version": "rustuml 0.7.0",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "scope_and_constraints": {
+    "worktree": "/private/tmp/rustuml-deployment-link-notes-checker2",
+    "cargo_or_rustc_run": false,
+    "modified_shipping_rust": false,
+    "modified_parser_or_renderer_tests": false,
+    "modified_account_json": false,
+    "modified_baselines_or_comparator_settings": false,
+    "modified_existing_review_json": false,
+    "old_perturbations_modified": false
+  },
+  "reviewed_sources": {
+    "rust": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-parser/src/diagram/deployment.rs",
+      "crates/rustuml-render/src/deployment.rs"
+    ],
+    "java": [
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+      "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "src/main/java/net/atmp/CucaDiagram.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+      "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockMarged.java"
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git status --short",
+    "shasum -a 256 /private/tmp/rustuml-deployment-link-notes/target/release/rustuml",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '1,520p' docs/parity-reviews/deployment-command-factory-note-on-link/account.json",
+    "sed -n '<cited ranges>' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java and other cited Java files",
+    "sed -n '<cited ranges>' crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/diagram/deployment.rs crates/rustuml-render/src/deployment.rs",
+    "mkdir -p test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2",
+    "for f in test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/*.puml; do base=${f%.puml}; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -pipe -tsvg < \"$f\" > \"$base.java.svg\" 2> \"$base.java.stderr\"; /private/tmp/rustuml-deployment-link-notes/target/release/rustuml -pipe --no-oracle < \"$f\" > \"$base.rust.svg\" 2> \"$base.rust.stderr\"; done",
+    "for f in test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/*.java.svg test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/*.rust.svg; do if test -s \"$f\"; then xmllint --noout \"$f\" || exit 1; fi; done",
+    "for f in test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/*.puml; do /private/tmp/rustuml-deployment-link-notes/target/release/rustuml --yaml \"$f\"; done",
+    "rg -n '<focused text/id/source-line patterns>' test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/*.svg",
+    "shasum -a 256 /private/tmp/rustuml-deployment-link-notes/target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "artifact_convention": "Every BASE.puml in followup2 preserves BASE.java.svg, BASE.java.stderr, BASE.rust.svg, and BASE.rust.stderr. Zero-byte Rust SVG files are the exact captured stdout for Rust terminal parse errors.",
+  "verification_summary": {
+    "input_sources": 18,
+    "artifact_files": 90,
+    "java_valid_sources": 15,
+    "both_valid_render_pairs": 14,
+    "java_error_sources": 3,
+    "rust_error_sources": 3,
+    "raw_byte_exact_pairs": 0,
+    "xml_validated_nonempty_svgs": 33,
+    "rejecting_counterexamples": 3,
+    "deployment_mechanism_pass_observations": [
+      "01-default-bottom-later-declaration",
+      "02-lefton-horizontal-label",
+      "03-top-multiline-gradient-blank",
+      "04-bottom-note-only-hidden-link",
+      "05-replacement-skips-note-edge",
+      "06-left-endpoint-labels-parallel",
+      "07-lines0-inverted-order-fanout",
+      "09-empty-inline-description-control",
+      "10-blank-only-multiline-note",
+      "18-dashed-up-length-label-note"
+    ]
+  },
+  "root_geometry": [
+    "01 Java 346x311, Rust 346x311",
+    "02 Java 504x228, Rust 504x228",
+    "03 Java 303x440, Rust 303x440",
+    "04 Java 329x218, Rust 329x218",
+    "05 Java 481x315, Rust 481x315",
+    "06 Java 489x278, Rust 489x278",
+    "07 Java 658x196, Rust 658x196",
+    "08 Java 512x333, Rust 468x283",
+    "09 Java 270x202, Rust 270x202",
+    "10 Java 170x188, Rust 170x188",
+    "11 Java error SVG 585x344, Rust empty stdout with parse error",
+    "12 Java error SVG 460x186, Rust success SVG 400x71",
+    "13 Java success SVG 330x217, Rust empty stdout with parse error",
+    "14 Java error SVG 460x170, Rust empty stdout with parse error",
+    "15 Java 252x301, Rust 252x301",
+    "16 Java 516x95, Rust 346x95",
+    "17 Java 272x225, Rust 170x190",
+    "18 Java 529x218, Rust 529x218"
+  ],
+  "input_inventory": [
+    {
+      "stem": "01-default-bottom-later-declaration",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/01-default-bottom-later-declaration.puml",
+      "outputs": ["01-default-bottom-later-declaration.java.svg", "01-default-bottom-later-declaration.java.stderr", "01-default-bottom-later-declaration.rust.svg", "01-default-bottom-later-declaration.rust.stderr"],
+      "axes": ["default bottom position", "inline on link", "renamed node/database endpoints", "later declaration and later link IDs"],
+      "java_result": "valid DESCRIPTION, one link-owned bottom note on lnk4, later lnk6 preserved",
+      "rust_result": "valid Deployment, matching root 346x311, ent/lnk IDs and source lines preserved",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "02-lefton-horizontal-label",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/02-lefton-horizontal-label.puml",
+      "outputs": ["02-lefton-horizontal-label.java.svg", "02-lefton-horizontal-label.java.stderr", "02-lefton-horizontal-label.rust.svg", "02-lefton-horizontal-label.rust.stderr"],
+      "axes": ["case-insensitive grammar", "Java-valid leftON concatenation", "explicit horizontal left/right directions", "ordinary escaped Display label", "simple color"],
+      "java_result": "valid DESCRIPTION, inverted horizontal link, split ordinary label rows, left note in owning link group",
+      "rust_result": "valid Deployment, matching root 504x228, matching lnk5/lnk7 IDs and source lines",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "03-top-multiline-gradient-blank",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/03-top-multiline-gradient-blank.puml",
+      "outputs": ["03-top-multiline-gradient-blank.java.svg", "03-top-multiline-gradient-blank.java.stderr", "03-top-multiline-gradient-blank.rust.svg", "03-top-multiline-gradient-blank.rust.stderr"],
+      "axes": ["nested container", "multiline note", "top position", "gradient color", "ordinary label with escaped blank row", "body blank row and relative indentation"],
+      "java_result": "valid DESCRIPTION, gradient folded note, blank Display rows rendered as NBSP, root 303x440",
+      "rust_result": "valid Deployment, matching root 303x440, NBSP rows and gradient preserved",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "04-bottom-note-only-hidden-link",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/04-bottom-note-only-hidden-link.puml",
+      "outputs": ["04-bottom-note-only-hidden-link.java.svg", "04-bottom-note-only-hidden-link.java.stderr", "04-bottom-note-only-hidden-link.rust.svg", "04-bottom-note-only-hidden-link.rust.stderr"],
+      "axes": ["hidden link", "bottom multiline note", "note-only link", "later visible link"],
+      "java_result": "valid DESCRIPTION; the hidden link is solved but not painted, and the later visible lnk5/root geometry remain stable",
+      "rust_result": "valid Deployment, matching root 329x218 and visible link metadata",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "05-replacement-skips-note-edge",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/05-replacement-skips-note-edge.puml",
+      "outputs": ["05-replacement-skips-note-edge.java.svg", "05-replacement-skips-note-edge.java.stderr", "05-replacement-skips-note-edge.rust.svg", "05-replacement-skips-note-edge.rust.stderr"],
+      "axes": ["last eligible non-note link", "named note endpoint link", "replacement semantics", "top then right", "later declaration IDs"],
+      "java_result": "valid DESCRIPTION; first link note skips the note-edge link, second replaces it, only Final replacement 847 remains on lnk4",
+      "rust_result": "valid Deployment; Final replacement 847, lnk4, lnk8, ent0007, and root 481x315 match",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "06-left-endpoint-labels-parallel",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/06-left-endpoint-labels-parallel.puml",
+      "outputs": ["06-left-endpoint-labels-parallel.java.svg", "06-left-endpoint-labels-parallel.java.stderr", "06-left-endpoint-labels-parallel.rust.svg", "06-left-endpoint-labels-parallel.rust.stderr"],
+      "axes": ["parallel links", "last ordinary link selection", "left note", "endpoint labels", "dotted style", "later topology"],
+      "java_result": "valid DESCRIPTION; note attaches to latest dotted Store851-to-Pipe852 link, endpoint labels and later lnk7 preserved",
+      "rust_result": "valid Deployment; matching root 489x278, link grouping, endpoint labels, and IDs",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "07-lines0-inverted-order-fanout",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/07-lines0-inverted-order-fanout.puml",
+      "outputs": ["07-lines0-inverted-order-fanout.java.svg", "07-lines0-inverted-order-fanout.java.stderr", "07-lines0-inverted-order-fanout.rust.svg", "07-lines0-inverted-order-fanout.rust.stderr"],
+      "axes": ["left-to-right graph", "explicit left inverted link", "right note", "fanout", "horizontal line0 ordering", "later horizontal link"],
+      "java_result": "valid DESCRIPTION; inverted lnk6, note-label merge, and lnk7/lnk8 order preserved",
+      "rust_result": "valid Deployment; matching root 658x196, link IDs/source lines, and relevant label coordinates within formatter precision",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "08-nested-later-ids-source",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/08-nested-later-ids-source.puml",
+      "outputs": ["08-nested-later-ids-source.java.svg", "08-nested-later-ids-source.java.stderr", "08-nested-later-ids-source.rust.svg", "08-nested-later-ids-source.rust.stderr"],
+      "axes": ["nested ownership", "component leaf inside deployment-shaped frame/node/database/artifact diagram", "explicit up direction", "bottom note", "ordinary escaped Display label", "later declaration and source-line IDs"],
+      "java_result": "valid DESCRIPTION; Outer881 and nested Worker882 clusters, link-owned Nested bottom note 886 on lnk7, Display label split into owned/link 885 rows, later ent0008 and lnk9 preserved, root 512x333",
+      "rust_result": "success but --yaml classifies the source as Component, not Deployment; Nested bottom note 886 is absent, label is one literal owned\\nlink 885 text row, and root shrinks to 468x283",
+      "finding": "REJECT_COUNTEREXAMPLE"
+    },
+    {
+      "stem": "09-empty-inline-description-control",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/09-empty-inline-description-control.puml",
+      "outputs": ["09-empty-inline-description-control.java.svg", "09-empty-inline-description-control.java.stderr", "09-empty-inline-description-control.rust.svg", "09-empty-inline-description-control.rust.stderr"],
+      "axes": ["empty inline note text", "right position", "ordinary label", "description leaves force Deployment"],
+      "java_result": "valid DESCRIPTION, empty right folded note on owning link, root 270x202",
+      "rust_result": "valid Deployment, matching root 270x202 and link metadata",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "10-blank-only-multiline-note",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/10-blank-only-multiline-note.puml",
+      "outputs": ["10-blank-only-multiline-note.java.svg", "10-blank-only-multiline-note.java.stderr", "10-blank-only-multiline-note.rust.svg", "10-blank-only-multiline-note.rust.stderr"],
+      "axes": ["blank-only multiline body", "top position", "note-only link", "compact endnote", "later return link"],
+      "java_result": "valid DESCRIPTION, blank note accepted and rendered with root 170x188",
+      "rust_result": "valid Deployment, matching root 170x188 and route/link grouping",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    },
+    {
+      "stem": "11-no-prior-link-error",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/11-no-prior-link-error.puml",
+      "outputs": ["11-no-prior-link-error.java.svg", "11-no-prior-link-error.java.stderr", "11-no-prior-link-error.rust.svg", "11-no-prior-link-error.rust.stderr"],
+      "axes": ["no prior link", "inline command", "simple color", "left position"],
+      "java_result": "terminal syntax/error SVG, stderr reports ERROR line 2 Syntax Error? (Assumed diagram type: state)",
+      "rust_result": "terminal parse error line 1: no link defined for note on link; empty SVG stdout",
+      "finding": "NEGATIVE_CONTROL_AGREES_ON_REJECTION"
+    },
+    {
+      "stem": "12-only-note-edge-error",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/12-only-note-edge-error.puml",
+      "outputs": ["12-only-note-edge-error.java.svg", "12-only-note-edge-error.java.stderr", "12-only-note-edge-error.rust.svg", "12-only-note-edge-error.rust.stderr"],
+      "axes": ["only prior link touches a note leaf", "last eligible link filtering", "bottom note", "self-link topology"],
+      "java_result": "terminal error SVG, stderr reports ERROR line 5 No link defined (Assumed diagram type: class)",
+      "rust_result": "success SVG classified as State, renders LoneNote921 plus a self-link lnk2 and paints Should not find eligible link 923",
+      "finding": "REJECT_COUNTEREXAMPLE"
+    },
+    {
+      "stem": "13-malformed-composite-color-error",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/13-malformed-composite-color-error.puml",
+      "outputs": ["13-malformed-composite-color-error.java.svg", "13-malformed-composite-color-error.java.stderr", "13-malformed-composite-color-error.rust.svg", "13-malformed-composite-color-error.rust.stderr"],
+      "axes": ["ColorParser.PART2 composite color", "inline command", "left position", "ordinary link"],
+      "java_result": "valid DESCRIPTION; note is painted on lnk4 with fill #FF0000 and stroke #00FF00, text Composite color should fail 933, root 330x217",
+      "rust_result": "terminal parse error line 4: invalid note-on-link color; empty SVG stdout",
+      "finding": "REJECT_COUNTEREXAMPLE"
+    },
+    {
+      "stem": "14-unterminated-multiline-error",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/14-unterminated-multiline-error.puml",
+      "outputs": ["14-unterminated-multiline-error.java.svg", "14-unterminated-multiline-error.java.stderr", "14-unterminated-multiline-error.rust.svg", "14-unterminated-multiline-error.rust.stderr"],
+      "axes": ["unterminated multiline", "top position", "simple color", "ordinary prior link"],
+      "java_result": "terminal syntax-error SVG, stderr reports ERROR line 4 Syntax Error? (Assumed diagram type: component)",
+      "rust_result": "terminal parse error line 4: unterminated note on link; empty SVG stdout",
+      "finding": "NEGATIVE_CONTROL_AGREES_ON_REJECTION"
+    },
+    {
+      "stem": "15-state-control-note-on-link",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/15-state-control-note-on-link.puml",
+      "outputs": ["15-state-control-note-on-link.java.svg", "15-state-control-note-on-link.java.stderr", "15-state-control-note-on-link.rust.svg", "15-state-control-note-on-link.rust.stderr"],
+      "axes": ["State control", "default note on transition", "pseudostate endpoints", "later transition"],
+      "java_result": "valid STATE root 252x301 with link-owned State transition note 953",
+      "rust_result": "valid State root 252x301 with matching entities, links, note text, and source metadata",
+      "finding": "PASS_CONTROL_FAMILY_SELECTION"
+    },
+    {
+      "stem": "16-usecase-control-note-on-link",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/16-usecase-control-note-on-link.puml",
+      "outputs": ["16-usecase-control-note-on-link.java.svg", "16-usecase-control-note-on-link.java.stderr", "16-usecase-control-note-on-link.rust.svg", "16-usecase-control-note-on-link.rust.stderr"],
+      "axes": ["UseCase control", "actor/usecase evidence", "right note", "simple color"],
+      "java_result": "valid DESCRIPTION/usecase-shaped output, actor and oval usecase with Usecase link note 964, root 516x95",
+      "rust_result": "valid UseCase classification and actor/oval shapes, but the link note is absent and root is 346x95",
+      "finding": "CONTROL_SELECTS_NON_DEPLOYMENT; note rendering gap is recorded but not counted as a Deployment-mechanism rejection because the account scopes non-Deployment note-on-link behavior separately"
+    },
+    {
+      "stem": "17-component-control-note-on-link",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/17-component-control-note-on-link.puml",
+      "outputs": ["17-component-control-note-on-link.java.svg", "17-component-control-note-on-link.java.stderr", "17-component-control-note-on-link.rust.svg", "17-component-control-note-on-link.rust.stderr"],
+      "axes": ["Component control", "explicit component evidence", "bottom note", "simple color"],
+      "java_result": "valid DESCRIPTION/component-shaped output with Component link note 974, root 272x225",
+      "rust_result": "valid Component classification and component shapes, but the link note is absent and root is 170x190",
+      "finding": "CONTROL_SELECTS_NON_DEPLOYMENT; note rendering gap is recorded but not counted as a Deployment-mechanism rejection because the account scopes Component note-on-link behavior separately"
+    },
+    {
+      "stem": "18-dashed-up-length-label-note",
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/followup2/18-dashed-up-length-label-note.puml",
+      "outputs": ["18-dashed-up-length-label-note.java.svg", "18-dashed-up-length-label-note.java.stderr", "18-dashed-up-length-label-note.rust.svg", "18-dashed-up-length-label-note.rust.stderr"],
+      "axes": ["explicit up direction", "dashed style", "left note", "escaped ordinary label rows", "later declaration", "vertical length"],
+      "java_result": "valid DESCRIPTION, reverse/inverted dashed lnk5 with split label rows and left note, root 529x218",
+      "rust_result": "valid Deployment, matching root 529x218, split rows, lnk5/lnk7 metadata, and note text",
+      "finding": "PASS_MECHANISM_STRUCTURE"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "A note-on-link after only note-endpoint links succeeds in Rust but Java terminally rejects it",
+      "java_mechanism": "CucaDiagram.getLastLink scans backward and returns only links whose two endpoints are not NOTE leaves. In case 12 the only prior link touches LoneNote921, a note leaf, so CommandFactoryNoteOnLink.executeInternal returns No link defined and Java emits an error SVG.",
+      "rust_mechanism": "The frozen Rust binary classifies the same source as State and renders LoneNote921 plus a self-link lnk2 with the text Should not find eligible link 923. That is exactly the Java syntax-error/Rust success rejection class the checker was asked to treat as fatal.",
+      "impact": "The last-eligible-link invariant is not preserved under this topology/factory combination, and invalid input becomes a successful diagram on the shipped path.",
+      "evidence": ["12-only-note-edge-error.puml", "12-only-note-edge-error.java.stderr", "12-only-note-edge-error.rust.svg"]
+    },
+    {
+      "severity": "rejecting",
+      "title": "Java accepts composite note colors that Rust rejects before rendering",
+      "java_mechanism": "ColorParser.simpleColor includes PART2. With a complete inline command, `#back:FF0000;line:00FF00` reaches CucaNote construction and paints a folded note with red fill and green stroke.",
+      "rust_mechanism": "parse_deployment_link_note_command accepts only the simple/gradient token shape checked by named_note_color_is_valid, so the same Java-valid command reports `invalid note-on-link color` and emits no SVG.",
+      "impact": "The account's declared residue was based on an incomplete command-line probe and is false for a complete inline note-on-link. A Java-valid Deployment command is rejected by Rust.",
+      "evidence": ["13-malformed-composite-color-error.puml", "13-malformed-composite-color-error.java.svg", "13-malformed-composite-color-error.rust.stderr"]
+    },
+    {
+      "severity": "rejecting",
+      "title": "A nested deployment-shaped diagram with a component leaf is routed to Component and loses the link note",
+      "java_mechanism": "The shared DESCRIPTION factory consumes frame/node/artifact/database/component leaves, explicit up link direction, multiline Display label rows, and the bottom note-on-link as one CucaDiagram. Java preserves Outer881/Worker882 ownership, lnk7's link-owned note, later ent0008/lnk9, and renders 512x333.",
+      "rust_mechanism": "detect_uml_subtype classifies case 08 as Component. The rendered SVG keeps similar entity IDs but omits Nested bottom note 886, emits the ordinary label as a literal `owned\\nlink 885` row, and shrinks the root to 468x283.",
+      "impact": "The Deployment mechanism is bypassed by valid Java DESCRIPTION input that combines nested ownership and a later component declaration. This directly challenges factory selection, nested containers, Display rows, and later declaration IDs.",
+      "evidence": ["08-nested-later-ids-source.puml", "08-nested-later-ids-source.java.svg", "08-nested-later-ids-source.rust.svg"]
+    }
+  ],
+  "counterexamples": [
+    {
+      "stem": "12-only-note-edge-error",
+      "classification": "Java terminal error versus Rust success",
+      "reason": "No eligible prior non-note link exists; Java rejects, Rust renders."
+    },
+    {
+      "stem": "13-malformed-composite-color-error",
+      "classification": "Java success versus Rust terminal error",
+      "reason": "Complete inline PART2 color command is Java-valid and visibly styles the link note; Rust rejects the color."
+    },
+    {
+      "stem": "08-nested-later-ids-source",
+      "classification": "Wrong Rust factory/family with visible semantic loss",
+      "reason": "Rust selects Component instead of the Deployment path for a nested deployment-shaped DESCRIPTION input, dropping the link-owned note and Display-row behavior."
+    }
+  ],
+  "non_rejecting_observations": [
+    "The earlier default-position Deployment stealing bug appears corrected for fresh Deployment leaves in case 01.",
+    "Escaped ordinary label rows, including an interior blank row, are preserved in Deployment cases 03 and 18.",
+    "Replacement and last eligible non-note link semantics pass in case 05 when Rust remains in the Deployment parser.",
+    "Hidden links do not paint their attached link note in either Java or Rust for case 04; the visible later link and root geometry match.",
+    "State control selection and note-on-link rendering match in case 15.",
+    "UseCase and Component controls select non-Deployment families in cases 16 and 17; their missing link-note rendering is preserved as evidence but not used as a Deployment-mechanism rejection under the account's stated scope boundary."
+  ],
+  "residue": [
+    "Exact Java error artwork and exact error wording are not asserted beyond preserving stdout/stderr and distinguishing Java terminal error from Java success.",
+    "Byte identity is not expected because Rust omits PlantUML processing metadata; semantic comparison used root geometry, SVG group IDs/classes, source-line metadata, link grouping, text rows, note fills/strokes, and relevant coordinates."
+  ]
+}
