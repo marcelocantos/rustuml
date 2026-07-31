@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-center-label-painted-frontier",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "8ae638f647c4e7c6cb2b23c3ba30ec41607d2161",
+  "triggering_review": "docs/parity-reviews/class-link-note-component-preferred-dimensions/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["appendTable", "solveLine", "drawU"],
+      "lines": "428-460,497-515,730-750,936-955",
+      "role": "Sends an integer-truncated fixed table to Graphviz, recovers its solved origin, but paints the original natural labelText at that origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["calculateDimension"],
+      "lines": "96-125",
+      "role": "Draws the complete solved graph through LimitFinder and translates by the resulting painted minimum, so invisible Graphviz placeholder area does not define the document origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": ["drawText", "drawUPath"],
+      "lines": "103-115,203-211",
+      "role": "Measures actual painted primitives. Text begins at baseline minus measured height plus 1.5px, while note paths begin at their translated polygon origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockVertical.java",
+      "symbols": ["calculateDimension", "drawU"],
+      "lines": "71-102",
+      "role": "Stacks the ordinary relationship label and EntityImageNoteLink using natural child dimensions; a child component's preferred-size padding participates in layout even where no primitive occupies that leading area."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "symbols": ["getPreferredHeight", "drawInternalU"],
+      "lines": "77-85,99-128",
+      "role": "Adds Rose padding to preferred height but draws the visible folded polygon and text from component-local primitive coordinates, making preferred bounds and painted bounds observably different."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["svek_layout_y_bias"],
+      "lines": "14384-14443",
+      "role": "Currently includes edge.label.y, the top of Graphviz's fixed placeholder, directly in the normalization minimum."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["relationship_center_layout", "render_relationship_svg"],
+      "lines": "13390-13470,14599-14715",
+      "role": "Already has the natural compound dimensions and exact label baseline/note-polygon translations needed to derive the visible center-label frontier."
+    },
+    {
+      "path": "crates/rustuml-render/src/text_render.rs",
+      "symbols": ["label_height_with_family", "label_ascent_with_family"],
+      "lines": "217-250",
+      "role": "Provides the same resolved row height and ascent used by emitted relationship text, allowing its LimitFinder top to be calculated from the rendering model."
+    }
+  ],
+  "claimed_invariant": "Class SVEK normalization is driven by the minimum of painted primitives, not by the outer rectangle of Graphviz's color-coded edge-label placeholder. For ordinary relationship text, the visible minimum is its emitted baseline minus resolved text height plus LimitFinder's 1.5px tail convention. For a folded link note, the visible minimum is the translated note polygon origin; preferred component padding counts in Graphviz sizing but counts in normalization only where a primitive actually occupies it. Endpoint labels and unmatched placeholders retain their own existing handling.",
+  "causal_divergence": "Rust feeds edge.label.y directly into svek_layout_y_bias. In the rejected left-to-right label-plus-note case, the emitted ordinary text extends 0.2422px above that placeholder top under LimitFinder's text formula, so Java translates the entire graph down by 0.2422px and Rust does not. In a note-only left-to-right control, Rust normalizes from five pixels of leading component area before its first visible note path, shifting the entire graph down by 5px relative to Java. Both errors arise before SVG formatting and move every node, edge, and center-label child together.",
+  "planned_model_change": "Replace center edge-label placeholder minima in svek_layout_y_bias with a relationship-aware painted-frontier calculation derived from the same RelationshipCenterLayout and font metrics used to render the label. Include ordinary text, magic-arrow, and folded-note primitive minima as applicable; retain solved placeholder minima only for edge labels that are not mapped to a rendered relationship center block. Do not alter Graphviz dimensions, routing, comparator slack, or per-fixture coordinates.",
+  "perturbation_axes": [
+    "left-to-right versus top-to-bottom direction",
+    "ordinary-label-only, note-only, and combined label-plus-note center blocks",
+    "single-row versus multiline folded notes with changed fractional text metrics",
+    "forward versus reversed relationship arrows",
+    "note position top versus bottom and label-dominant versus note-dominant width",
+    "renamed class identifiers and changed label/body strings"
+  ],
+  "scope_boundary": "This mechanism owns only the painted vertical frontier used for Class SVEK center-label normalization. It does not change natural component width/height composition, visible note dimensions, Graphviz table serialization, parser ownership, endpoint labels, routing, canvas extent rules, comparator behavior, baselines, park lists, or guard allow-lists.",
+  "acceptance": [
+    "The preserved rejected left-to-right multiline label-plus-note case becomes structurally equivalent without changing its source or comparator.",
+    "A fresh left-to-right note-only control loses the observed 5px global shift, while the matching label-only control remains equivalent.",
+    "Unit tests derive the fractional text frontier and note-only leading-padding frontier from metrics rather than expected fixture coordinates.",
+    "The original edge_class_note_on_link golden and all five previously passing checker perturbations remain structurally equivalent.",
+    "Focused tests, the full renderer suite, clippy with warnings denied, and frozen release binaries pass before independent review.",
+    "A separate checker generates fresh direction, center-block-composition, and note-position perturbations and records exact revisions, commands, evidence, findings, and verdict."
+  ],
+  "forbidden_approaches": [
+    "adding the observed 0.2422px or 5px as unconditional or fixture-keyed offsets",
+    "matching checker labels, endpoint names, source lines, or branch counts",
+    "moving solved Graphviz nodes independently of the painted normalization model",
+    "post-hoc SVG coordinate surgery or golden reads from shipping code",
+    "changing comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
