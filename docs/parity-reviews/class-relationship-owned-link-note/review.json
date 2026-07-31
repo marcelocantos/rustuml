@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-relationship-owned-link-note",
+  "created": "2026-08-01T07:48:26+10:00",
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, frozen rustuml CLI, frozen diff_one --no-oracle",
+    "independence": "Did not implement ad0862f9, 74e2f9f6, 134de8a2, e96b82a3, or 388e22e7; did not edit production code, accounts, baselines, comparator settings, or allow-lists."
+  },
+  "account_commit": "ad0862f957a00bc2284bf68e7b428feefb301a51",
+  "implementation_commits": [
+    "74e2f9f67c599886474b6ce3d341630d872a7d12",
+    "134de8a2aadf8239f5fd032728fb0c66f2209507",
+    "e96b82a3cafa4deb87f3279df6e56696078ec8d9"
+  ],
+  "evaluated_rust_revision": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reassessed_prior_rejects": [
+    {
+      "commit": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+      "evidence": [
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_04_lr_combined_top_note.head388e22e7.diff.txt",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_05_tb_explicit_bottom_combined.head388e22e7.diff.txt"
+      ],
+      "result": "resolved: both explicit top/bottom link-note omissions pass at 388e22e7"
+    }
+  ],
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_worktree_status": "At requested revision; dirty unrelated file observed and not edited: CLAUDE.md."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml",
+      "sha256": "9e54aa450a04f04c7266c4156ce99a222a8405eb763f825fd80d1ef198edc09f"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one",
+      "sha256": "f977c8704a2d7ae1492a4a8d504ed5ea54f9de4993c98fec1e5c3949c957cad7",
+      "mode": "--no-oracle"
+    },
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "nl -ba Java CommandFactoryNoteOnLink.java, Link.java, CucaDiagram.java, and SvekEdge.java at cited account ranges",
+    "nl -ba crates/rustuml-parser/src/diagram/class.rs | sed -n '280,345p'",
+    "nl -ba crates/rustuml-parser/src/parse/class.rs | sed -n '620,700p;1720,1820p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '13400,13476p;14620,14820p'",
+    "rg -n replacement owner, first note should be replaced, and owned right row in fresh Java/Rust SVGs",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <fresh puml>",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml -tsvg <fresh puml> > <fresh>.rust.svg",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <fresh puml> > <fresh>.diff.txt",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <preserved prior puml> > <prior>.head388e22e7.diff.txt",
+    "xmllint --noout <fresh Java SVGs and Rust SVGs>",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      "CommandFactoryNoteOnLink.java:75-102 and 155-172 parse note [position] on/of link, default to BOTTOM, call diagram.getLastLink(), and add the CucaNote to that Link.",
+      "Link.java:328-334 stores one note, so a later link note replaces the prior one.",
+      "SvekEdge.java:301-318 reads link.getNote() and composes LEFT/RIGHT with mergeLR and TOP/BOTTOM with mergeTB before Graphviz and painting."
+    ],
+    "rust": [
+      "diagram/class.rs:283-337 models a relationship-owned ClassLinkNote on Relationship rather than a generic standalone Note.",
+      "parse/class.rs:1741-1807 parses optional position, on/of link, color, single-line and multiline bodies, and stores the note on the latest relationship.",
+      "parse/class.rs:659-675 finalizes multiline owned notes; class.rs:14739-14785 composes left/right/top/bottom positions into the center block.",
+      "class.rs:13400-13476 preserves Java child paint order for left/top notes before labels and right/bottom labels before notes."
+    ],
+    "fixture_shape_review": "Static search found no production references to the fresh owned-note probe names, explicit counterexample names, golden reads, include_str/include_bytes of fixtures, or coordinate-keyed SVG surgery."
+  },
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_01_of_link_replacement_left_color.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_01_of_link_replacement_left_color.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_01_of_link_replacement_left_color.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_01_of_link_replacement_left_color.diff.txt",
+      "axes": ["on link then of link", "replacement semantics", "inline colors", "default bottom after replacement", "left-to-right direction"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "finding": "Both SVGs contain only the replacement D1C4E9 note text and do not contain the first note text, confirming Link.addNote replacement semantics."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_02_multiline_right_after_standalone.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_02_multiline_right_after_standalone.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_02_multiline_right_after_standalone.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-relationship-owned-link-note/owned_02_multiline_right_after_standalone.diff.txt",
+      "axes": ["multiline owned note", "explicit right position", "intervening standalone note", "top-to-bottom direction", "label plus note composition"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "finding": "Both SVGs keep the standalone note separate and still attach the multiline right-position note to the prior relationship."
+    }
+  ],
+  "artifact_hashes": {
+    "account_json_sha256": "c4fa225d5dce18ff0e8b43cb24da802d797a205616b47f52ce09ec62713389ee",
+    "fresh_sources_sha256": {
+      "owned_01_of_link_replacement_left_color.puml": "93ecb6e81ddef4036d0997e0d440fd18ca7562bc275bc8abaed086cb6ff7daf4",
+      "owned_02_multiline_right_after_standalone.puml": "b6be6fd34557c469039d27dc9ae7bf32f06888a399ef72523640b2e6bba781c8"
+    },
+    "all_passing_diff_text_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  "findings": [
+    "The Java account is supported: link notes are owned by the last Link, default to bottom, support on/of link syntax where command dispatch allows it, and replace prior notes.",
+    "Rust now stores owned notes on Relationship and uses that owned model for parser output, layout dimensions, painting, and painted bounds.",
+    "The preserved explicit top and bottom omissions from da1a9a64 are resolved at 388e22e7.",
+    "Fresh replacement/of-link and multiline-right-after-standalone probes pass strict no-oracle comparison."
+  ],
+  "verdict": "accepted",
+  "verdict_reason": "ACCEPTED. The relationship-owned note model matches Java Link.addNote/SvekEdge ownership and composition, prior explicit-position counterexamples are resolved, and fresh valid ownership/replacement/intervening-note probes are exact."
+}

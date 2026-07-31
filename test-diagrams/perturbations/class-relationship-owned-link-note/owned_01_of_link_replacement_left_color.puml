@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class OwnReplaceLeft801
+class OwnReplaceRight809
+OwnReplaceLeft801 --> OwnReplaceRight809 : replacement label 811
+note right on link #FFE0B2 : first note should be replaced 817
+note of link #D1C4E9 : replacement owner Wwm 823
+@enduml

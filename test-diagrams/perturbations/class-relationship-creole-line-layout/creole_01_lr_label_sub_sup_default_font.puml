@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+class CreoleFreshLeft501
+class CreoleFreshRight509
+CreoleFreshLeft501 --> CreoleFreshRight509 : Alpha <size:18>MAX</size> H<sub>2</sub> and X<sup>9</sup> tail 521
+@enduml

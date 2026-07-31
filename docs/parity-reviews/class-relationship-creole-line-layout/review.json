@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-relationship-creole-line-layout",
+  "created": "2026-08-01T07:48:26+10:00",
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, frozen rustuml CLI, frozen diff_one --no-oracle",
+    "independence": "Did not implement ad0862f9, 74e2f9f6, 48b83646, e96b82a3, or 388e22e7; did not edit production code, accounts, baselines, comparator settings, or allow-lists."
+  },
+  "account_commit": "ad0862f957a00bc2284bf68e7b428feefb301a51",
+  "implementation_commits": [
+    "74e2f9f67c599886474b6ce3d341630d872a7d12",
+    "48b836461aa538c4b2f84a1a999b5da892ffd8fa"
+  ],
+  "evaluated_rust_revision": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reassessed_prior_rejects": [
+    {
+      "commit": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+      "evidence": [
+        "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_07_three_node_styled_label_note_fractional.head388e22e7.diff.txt",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_03_tb_label_only_styled_mixed_font.head388e22e7.diff.txt"
+      ],
+      "result": "resolved: both diff exits are 0 at 388e22e7"
+    }
+  ],
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_worktree_status": "At requested revision; dirty unrelated file observed and not edited: CLAUDE.md."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml",
+      "sha256": "9e54aa450a04f04c7266c4156ce99a222a8405eb763f825fd80d1ef198edc09f"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one",
+      "sha256": "f977c8704a2d7ae1492a4a8d504ed5ea54f9de4993c98fec1e5c3949c957cad7",
+      "mode": "--no-oracle"
+    },
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "nl -ba Java Sea.java, AtomText.java, FontPosition.java, SvekEdge.java, and LimitFinder.java at cited account ranges",
+    "nl -ba crates/rustuml-render/src/text_render.rs | sed -n '70,260p;360,480p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '13400,13460p;14487,14509p;14662,14682p'",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <fresh puml>",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml -tsvg <fresh puml> > <fresh>.rust.svg",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <fresh puml> > <fresh>.diff.txt",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <preserved prior puml> > <prior>.head388e22e7.diff.txt",
+    "xmllint --noout <fresh Java SVGs and Rust SVGs>",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      "Sea.java:60-83 places each atom at -height + atom.getStartingAltitude and then translates the row minimum to zero.",
+      "FontPosition.java:41-59 defines superscript/subscript spaces and reduced font sizes; positioned atoms move themselves, not the entire line.",
+      "SvekEdge.java:285-318 feeds the natural Creole TextBlock into the same labelText used for Graphviz and painting."
+    ],
+    "rust": [
+      "text_render.rs:80-188 calculates one NoMonoLineLayout containing width, height, first baseline, per-run baselines, and painted bounds.",
+      "text_render.rs:190-200 emits the same parsed segments with the stored run baselines.",
+      "class.rs:13439-13459, 14495-14502, and 14672-14682 all consume layout_no_mono_line for paint, painted frontier, and preferred dimensions."
+    ],
+    "fixture_shape_review": "Static search found no production references to the fresh Creole probe names, old checker labels, observed three-pixel deltas, golden reads, include_str/include_bytes of fixtures, or coordinate-keyed SVG surgery."
+  },
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_01_lr_label_sub_sup_default_font.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_01_lr_label_sub_sup_default_font.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_01_lr_label_sub_sup_default_font.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_01_lr_label_sub_sup_default_font.diff.txt",
+      "axes": ["left-to-right direction", "label-only center block", "large size atom", "subscript and superscript"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_02_tb_combined_label_note_subscript.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_02_tb_combined_label_note_subscript.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_02_tb_combined_label_note_subscript.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-relationship-creole-line-layout/creole_02_tb_combined_label_note_subscript.diff.txt",
+      "axes": ["top-to-bottom direction", "label composed with link note", "Arial arrow font", "subscript plus small-size atom"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0
+    }
+  ],
+  "artifact_hashes": {
+    "account_json_sha256": "a2fd077155180fdf2cfc344223981d663ae1642626ec567561948249355fff4e",
+    "fresh_sources_sha256": {
+      "creole_01_lr_label_sub_sup_default_font.puml": "769e628c69e310160d755c78f358a3d9db6b91bd46249709a7c84d46640a1e0c",
+      "creole_02_tb_combined_label_note_subscript.puml": "36a24992280d9207beb4514e50a717fd8c2bd766b85e7e0d40c94bcfe8847157"
+    },
+    "all_passing_diff_text_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  "findings": [
+    "The Java account is supported: subscript and superscript alter their own atom altitude/size, while Sea computes one shared line top.",
+    "Rust now uses one NoMonoLineLayout for measurement, SVG emission, and painted frontier, avoiding the prior parallel baseline models.",
+    "Both preserved styled-label failures now pass at 388e22e7.",
+    "Fresh Creole-only and Creole-plus-note probes pass strict no-oracle comparison."
+  ],
+  "verdict": "accepted",
+  "verdict_reason": "ACCEPTED. The line-layout model follows Java Sea/FontPosition, old styled-label counterexamples are resolved, and fresh valid sub/sup/mixed-size probes are exact."
+}

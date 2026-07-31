@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontName Arial
+class CreoleNorth541
+class CreoleSouth547
+CreoleNorth541 -down-> CreoleSouth547 : pre H<sub>2</sub> mid <size:10>small</size> end 557
+note on link : note body dims Wwm 563
+@enduml
