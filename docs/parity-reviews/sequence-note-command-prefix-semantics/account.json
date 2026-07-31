@@ -41,6 +41,43 @@
       "role": "Makes a merged Notes event a horizontal-layout aggregate as well as a shared vertical row: every member reserves half its raw component preferred width before its first participant and after its second participant, and adjacent members on distinct participants reserve half the sum between them."
     },
     {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "symbols": [
+        "FactorySequenceNoteOverSeveralCommand.getRegexConcatMultiLine",
+        "FactorySequenceNoteOverSeveralCommand.getRegexConcatSingleLine",
+        "FactorySequenceNoteOverSeveralCommand.executeInternal"
+      ],
+      "lines": "73-116,156-186",
+      "role": "Applies the same ordered PARALLEL then VMERGE grammar to two-participant notes, accepts Unicode/dotted/@ identifiers or quoted operands, removes operand quotes before participant lookup, and preserves the individual Note flags before insertion."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/NotesTile.java",
+      "symbols": [
+        "NotesTile.getEvent",
+        "NotesTile.getX",
+        "NotesTile.addConstraints"
+      ],
+      "lines": "67-69,118-178",
+      "role": "Implements Teoz merged-note placement separately from classic NotesBoxes: positions each member from living-space Real centers and constrains pairwise painted intervals, including reversed and over-several participant spans."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/GroupingTile.java",
+      "symbols": [
+        "GroupingTile.mergeParallel",
+        "GroupingTile.isParallel"
+      ],
+      "lines": "353-375,414-416",
+      "role": "Groups an unmerged parallel Note tile with its preceding tile by consulting tile.getEvent().isParallel()."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/Notes.java",
+      "symbols": [
+        "Notes"
+      ],
+      "lines": "43-75",
+      "role": "A slash merge replaces individual events with a Notes aggregate. Notes inherits AbstractEvent.isParallel=false, so an ampersand on a member does not make the merged aggregate event parallel."
+    },
+    {
       "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
       "symbols": [
         "PSystemCommandFactory.getCandidate",
@@ -86,24 +123,28 @@
       "role": "Places ordinary Note events and message-attached notes without any parallel-frontier or merged-notes state because that information is absent from the AST."
     }
   ],
-  "claimed_invariant": "The sequence note command grammar accepts an optional ampersand parallel prefix, then an optional slash vertical-merge prefix, before note, hnote, or rnote in both single- and multiline forms. These prefixes are semantic: ampersand makes the note event parallel in sequence layout, while slash asks event insertion to merge the note with the immediately preceding Note or Notes event and has no effect when the predecessor is another event kind. Span ownership, parser construction, event insertion, and rendering must all consume one parsed prefix record.",
-  "causal_divergence": "Rust's shared note_command_parts knows enough to strip ampersand and slash for completed-body masking, but SeqParser::try_note independently starts its regex at the note keyword. The selected sequence consumer therefore rejects the opener after dispatch has hidden its body, drops the note, and may create participants from exposed or subsequently parsed payload in related paths. Merely admitting the opener would still be wrong: NoteBuffer and sequence::Note have no parallel or try-merge state, and the renderer only knows ordinary note rows. The missing mechanism spans command parsing and sequence event semantics, not two prefix-specific fixture exceptions.",
-  "planned_model_change": "Replace destructive prefix stripping with a canonical SequenceNoteCommand parse result carrying parallel, try_merge, shape, position, participants, color, inline/body mode, and source line. Use it for both dispatch span recognition and SeqParser construction. Preserve parallel and try_merge through NoteBuffer and the sequence event model. Centralize note insertion to mirror SequenceDiagram.addNote: slash coalesces only with an immediately preceding note group; ampersand marks the event for the renderer's parallel frontier. Represent a coalesced Notes event in layout with one shared vertical frontier and the same raw preferred-width participant constraints installed by NotesBoxes.ensureConstraints, rather than applying coordinate offsets. Honor Java's prefix order and whitespace grammar, including a combined ampersand-plus-slash form, across note, hnote, and rnote.",
+  "claimed_invariant": "The sequence note command grammar accepts an optional ampersand parallel prefix, then an optional slash vertical-merge prefix, before note, hnote, or rnote in single- and multiline one- or two-participant forms, using Java's Unicode/dotted/@ or quoted participant operand grammar. Slash asks insertion to merge only with an immediately preceding Note or Notes event. Ampersand makes an unmerged Note event parallel; when slash replaces it with a Notes aggregate, the aggregate retains AbstractEvent.isParallel=false even though the member Note still carries its flag. Classic and Teoz renderers consume the same event semantics through different merged-note constraint models.",
+  "causal_divergence": "Rust initially dropped both prefixes entirely. The first implementation preserved flags and reconstructed basic classic NotesBoxes behavior, but its sequence consumer still parses only unquoted word operands, never consumes Note.parallel in grouped Teoz layout, and applies the classic half-preferred-width aggregate model to Teoz cases whose NotesTile uses living-space centers and pairwise painted-interval constraints. It also overstated combined ampersand-plus-slash semantics by treating the member flag as an aggregate event flag. The remaining failures are missing command/event/tile model branches, not coordinate constants.",
+  "planned_model_change": "Introduce a canonical SequenceNoteCommand parse result shared by dispatch and SeqParser, with Java-compatible quoted and Unicode/dotted/@ participant operands, ordered prefix flags, shape, position, participants, color, inline/body mode, and source line. Centralize insertion into an explicit Note-versus-Notes event model: slash coalesces only with an immediate note group, and aggregate is_parallel remains false. Make grouped Teoz vertical layout consume unmerged Note.parallel like GroupingTile.mergeParallel. Keep classic merged-note constraints sourced from NotesBoxes, but implement a separate Teoz NotesTile projection using living-space centers, member preferred widths, and pairwise interval constraints for ordinary and reversed over-several spans. Do not translate members post hoc.",
   "perturbation_axes": [
     "ampersand parallel versus slash vertical merge versus both prefixes versus neither",
     "note versus hnote versus rnote shapes",
     "single-line versus multiline commands",
     "slash after Note or Notes versus slash after Message, Delay, Group, or diagram start",
-    "ampersand after messages with different participant ranges and self messages",
+    "ampersand on unmerged Note versus ampersand-plus-slash inside a Notes aggregate",
+    "classic NotesBoxes versus Teoz NotesTile merged-note layout",
+    "bare Unicode/dotted/@ versus quoted participant operands",
+    "ordinary versus reversed two-participant spans",
     "prefix whitespace and mixed-case command spelling",
     "body-leading participant keywords plus post-terminator replies",
     "one participant versus several participants and left, right, or over positions"
   ],
   "scope_boundary": "This mechanism owns sequence note prefix grammar, preservation of parallel and try-merge intent, structural note-event insertion, and corresponding sequence layout behavior. It does not own ordinary-note terminator policy, class or DESCRIPTION aliases, deployment note colors, general message parallel syntax, unrelated sequence note geometry constants, comparator behavior, baselines, or fixture eligibility.",
   "acceptance": [
-    "checker_sequence_parallel_hnote_mixed_case constructs a colored hexagonal note with parallel semantics, retains its body, and parses the reply without spurious participants.",
+    "Unmerged parallel notes share the Java Teoz/group vertical frontier, while merged Notes aggregates do not acquire event-level parallel semantics from a member.",
     "checker_sequence_vmerge_rnote_after_note coalesces the rectangular note with the immediately preceding ordinary note as Java does and retains the later reply.",
-    "Fresh parser and layout inputs cover ampersand, slash, both prefixes, all three note shapes, inline and multiline forms, and slash controls after both mergeable and non-mergeable predecessor event kinds.",
+    "Fresh parser and layout inputs cover quoted and Unicode/dotted/@ operands, ampersand, slash, both prefixes, all three shapes, inline and multiline forms, and mergeable/non-mergeable predecessors.",
+    "Classic and Teoz merged-note held-outs cover one- and two-participant members, reversed spans, and three-member aggregates without sharing the wrong constraint model.",
     "The AST or normalized event graph visibly retains both semantics; acceptance is not satisfied by parsing and then discarding either prefix.",
     "Relevant diff_one --no-oracle perturbations and the no-oracle ratchet pass without body-word, alias, or coordinate special cases.",
     "An independent checker attacks prefix order, whitespace, predecessor type, and participant topology at the exact implementation revision and records its verdict and inputs."
