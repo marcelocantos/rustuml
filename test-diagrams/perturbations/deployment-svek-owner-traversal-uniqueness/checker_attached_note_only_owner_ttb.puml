@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+node RootProbe
+node "Envelope A" as EnvelopeA {
+  note right of RootProbe
+    cross-owner note
+  end note
+}
+@enduml

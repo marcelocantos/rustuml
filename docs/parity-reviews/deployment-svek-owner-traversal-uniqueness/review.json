@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-svek-owner-traversal-uniqueness",
+  "review_date": "2026-07-31",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop using exec_command, apply_patch, and bullseye tools",
+    "role": "checker-only; did not implement be05a84e"
+  },
+  "revisions": {
+    "requested_rust_revision": "be05a84e723a7384787bbef25052833d1c7ffb4e",
+    "implementation_commit_under_review": "be05a84e723a7384787bbef25052833d1c7ffb4e",
+    "review_worktree_head": "8212f2214fa60276a3e35953597937afb3819b01",
+    "head_advance_after_spawn": {
+      "docs_only": true,
+      "verified_with": "git diff --stat be05a84e723a7384787bbef25052833d1c7ffb4e..HEAD -- crates",
+      "docs_delta": "docs/parity-reviews account/review files and test-diagrams/perturbations/sequence-note-command-prefix-semantics fixtures only"
+    },
+    "account_commit": "af4557c0499600a3c330b0a60b4beb82dc9a574f",
+    "account_is_ancestor_of_reviewed_revision": true,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "diff_one_sha256": "e51bc679b3001a0a67959b86b6979a51afb01b3d82b2a9f81170cdf33d76c07d",
+    "cargo_was_run": false,
+    "rustc_was_run": false,
+    "shipping_code_edited": false,
+    "account_edited": false
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "67207235e959d1da023d921629c92b4de32b0ee0bcd487fa947fa9248a8f8350",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "sources": {
+      "checker_attached_note_only_owner_ttb.puml": "b2014ab9b460348b7324fd6f9a09c66ded52b87d6140752a2fc78b88a408a005",
+      "checker_nested_duplicate_leaf_note_owner_ttb.puml": "fe98bbdffd5bf1a24dee8a26c862847fdb7fc5fbdab06186b3dab835f7b9182d",
+      "checker_nested_note_only_inner_owner_ttb.puml": "c2d73d946ed2830f6c5aa892c66a3f6422038c304ecce330703022eca1e37dec",
+      "checker_root_note_only_owner_with_link_ltr.puml": "c60a87987378a2b8e5eb3d6ac3458ffdbab5f9d4b2a2c2a70db5e63ed86626e8",
+      "checker_sibling_duplicate_leaf_control_ltr.puml": "79d4f3b62041dcc833aaa7fc79ec0bba1201ffdd33f1d3a611f8c170bf786ae5",
+      "checker_sibling_duplicate_leaf_note_owner_ltr.puml": "c4a354643e3d6e43a11efc8e77104e004bbdbe113d932e6648bcca080daf45b0"
+    },
+    "java_svgs": {
+      "checker_attached_note_only_owner_ttb.svg": "2e8695e14499466e1e4016cbf8173e1528e9977f92b6dcc0432f8f9104465b0a",
+      "checker_nested_duplicate_leaf_note_owner_ttb.svg": "5357a016e5a53ef967a466b1a25ff546d01f65c73773c62590bbaf39f5271d98",
+      "checker_nested_note_only_inner_owner_ttb.svg": "404e788e3e4f45f63a09ff79333a4e023abd4f638cb20f3b3dc1b94a061ef7dd",
+      "checker_root_note_only_owner_with_link_ltr.svg": "bd5100996db3266a1caddb2b6cc9d1dadf9ce342f05e7a1ee0bbe4cfd8cb33a2",
+      "checker_sibling_duplicate_leaf_control_ltr.svg": "6ecd480d7d225b6794c67500aa51e658158bc889e0cd9669d76712df740b8cad",
+      "checker_sibling_duplicate_leaf_note_owner_ltr.svg": "e8d655d6b4c225c3e342de061526545c217d914f94819aa8835b999da2c0de21"
+    }
+  },
+  "commands": [
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a rev-parse HEAD",
+      "result": "8212f2214fa60276a3e35953597937afb3819b01"
+    },
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a diff --stat be05a84e723a7384787bbef25052833d1c7ffb4e..HEAD -- crates",
+      "result": "empty"
+    },
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a diff --stat be05a84e723a7384787bbef25052833d1c7ffb4e..HEAD -- docs/parity-reviews test-diagrams/perturbations/sequence-note-command-prefix-semantics",
+      "result": "only docs/parity-reviews account/review files and sequence-note-command-prefix-semantics checker fixtures changed"
+    },
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor af4557c0499600a3c330b0a60b4beb82dc9a574f be05a84e723a7384787bbef25052833d1c7ffb4e && echo ancestor",
+      "result": "ancestor"
+    },
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a show --stat --summary --oneline af4557c0499600a3c330b0a60b4beb82dc9a574f",
+      "result": "account commit inspected"
+    },
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a show --stat --summary --oneline be05a84e723a7384787bbef25052833d1c7ffb4e",
+      "result": "implementation commit inspected"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "result": "exact Java revision present locally"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '208,235p;348,470p'",
+      "result": "Java groups-first then unpackaged-entities traversal inspected"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java | sed -n '50,90p;150,165p'",
+      "result": "Java unique SvekNode inventory inspected"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/abel/Entity.java | rg -n 'leafs\\(|getParentContainer\\(|isGroup\\(|countChildren|quark' -n -C 2",
+      "result": "Java quark-backed owner and leaf enumeration inspected"
+    },
+    {
+      "cmd": "git -C /private/tmp/rustuml-integrate-20260731a show be05a84e723a7384787bbef25052833d1c7ffb4e:crates/rustuml-render/src/deployment.rs | sed -n '3920,4270p'",
+      "result": "reviewed Rust owner traversal and slot remap inspected"
+    },
+    {
+      "cmd": "rg -n 'declared_container|cluster_ids|emit_clusters_dfs|collect_entities_svek_order|qualified_name|deployment_parent_map' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/deployment.rs -n -C 2",
+      "result": "reviewed Rust final-emission owner walk and cluster admission inspected"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/*.puml",
+      "result": "fresh same-stem Java SVGs generated for all six held-outs"
+    },
+    {
+      "cmd": "find /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness -name '*.svg' -print0 | xargs -0 xmllint --noout",
+      "result": "all Java SVGs are well-formed XML"
+    },
+    {
+      "cmd": "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness -g '*.svg'",
+      "result": "no Java error-page markers found"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_note_owner_ltr.puml",
+      "result": "FAIL"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.puml",
+      "result": "FAIL"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.puml",
+      "result": "FAIL"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.puml",
+      "result": "FAIL"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_root_note_only_owner_with_link_ltr.puml",
+      "result": "FAIL"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_duplicate_leaf_note_owner_ttb.puml",
+      "result": "FAIL"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.puml | rg -n 'data-qualified-name|class=\"cluster\"|class=\"entity\"'",
+      "result": "Rust emits cluster OuterAlpha, cluster OuterBeta, entity OuterBeta.SharedLeaf, entity RootProbe"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.puml | rg -n 'data-qualified-name|class=\"cluster\"|class=\"entity\"'",
+      "result": "Rust emits entity RootProbe and entity EnvelopeA only; the owned attached note is absent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.puml | rg -n 'data-qualified-name|class=\"cluster\"|class=\"entity\"'",
+      "result": "Rust emits cluster OuterShell, entity OuterShell.OuterDirect, entity OuterShell.InnerShell, entity RootStore; InnerLedger is absent"
+    },
+    {
+      "cmd": "python3 - <<'PY'\nimport re, pathlib\nsvg = pathlib.Path('/private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.svg').read_text()\nfor m in re.finditer(r'<g class=\"(cluster|entity)\" data-qualified-name=\"([^\"]+)\"', svg):\n    print(m.group(1), m.group(2))\nPY",
+      "result": "Java order is cluster OuterAlpha, entity OuterAlpha.SharedLeaf, entity OuterBeta, entity RootProbe"
+    },
+    {
+      "cmd": "python3 - <<'PY'\nimport re, subprocess\nsvg = subprocess.check_output(['target/release/examples/diff_one', '--no-oracle', '--print-rust', '/private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.puml'], text=True)\nfor m in re.finditer(r'<g class=\"(cluster|entity)\" data-qualified-name=\"([^\"]+)\"', svg):\n    print(m.group(1), m.group(2))\nPY",
+      "result": "Rust order is cluster OuterAlpha, cluster OuterBeta, entity OuterBeta.SharedLeaf, entity RootProbe"
+    },
+    {
+      "cmd": "rg -n 'deployment-svek-owner-traversal-uniqueness|checker_sibling_duplicate_leaf_note_owner_ltr|checker_attached_note_only_owner_ttb|checker_nested_note_only_inner_owner_ttb|checker_sibling_duplicate_leaf_control_ltr|checker_root_note_only_owner_with_link_ltr|checker_nested_duplicate_leaf_note_owner_ttb|OuterAlpha|OuterBeta|EnvelopeA|EnvelopeC|InnerShell|BetaMemo|OwnedMemo|RootProbe|RootFile|SharedLeaf' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-parser/src/parse/deployment.rs /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/deployment.rs /private/tmp/rustuml-integrate-20260731a/crates/rustuml/src/main.rs",
+      "result": "no fixture-shaped hits in shipping files"
+    },
+    {
+      "cmd": "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/deployment-svek-owner-traversal-uniqueness/account.json /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/*.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/*.svg",
+      "result": "artifact hashes recorded below"
+    }
+  ],
+  "source_audit": {
+    "java_model": [
+      "GraphvizImageBuilder.buildImage calls printGroups(root) before printEntities(getUnpackagedEntities()), and printGroup emits g.leafs() before recursing into child groups. The Java traversal is therefore groups-first with owner-local direct leaves before child groups.",
+      "Bibliotekon.createNode stores each Entity's SvekNode in a LinkedHashMap, so downstream painting consumes one unique SvekNode inventory in insertion order.",
+      "Entity.getParentContainer() and Entity.leafs() are quark-backed. Valid same-kind duplicate DESCRIPTION redeclarations reuse the existing leaf instead of creating a second one, so Java keeps the first owner while later would-be containers may stay childless."
+    ],
+    "rust_model": [
+      "deployment_svek_leaf_order derives owner roots only from cluster_ids, and cluster_ids are nodes with non-empty node.children. Notes carry owner metadata but do not make their owner a cluster, so note-only owners are never traversed and their notes receive no logical layout slot.",
+      "The final SVG walk is a separate owner model: emit_clusters_dfs and collect_entities_svek_order recurse only through node.children, and the root fallback emits childless declared containers as ordinary leaves. Note-only owners therefore collapse to entities even when Java renders them as clusters with owned notes.",
+      "The shipped be05a84e binary no longer panics on these held-outs, but the fresh corpus still falsifies the claimed partition by omission and reparenting rather than by an index panic."
+    ],
+    "fixture_logic_search": [
+      "No references to the mechanism name, the six held-out filenames, or their distinctive labels were found in the inspected shipping Rust files.",
+      "No evidence of golden-file reads, include_str!-based fixture replay, or label-shaped conditional branches tied to these held-outs appeared in the inspected deployment parser or renderer sources."
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_note_owner_ltr.puml",
+      "golden": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_note_owner_ltr.svg",
+      "axes": [
+        "sibling root owners",
+        "same-kind duplicate leaf redeclaration",
+        "owned floating note in the later owner",
+        "root/group leaf mix",
+        "left-to-right direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java renders SharedLeaf only under OuterAlpha and keeps BetaMemo inside OuterBeta. Rust renders OuterBeta as a cluster, reparents SharedLeaf to OuterBeta, and omits BetaMemo entirely."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.puml",
+      "golden": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.svg",
+      "axes": [
+        "note-only owner",
+        "attached note targeting a root leaf",
+        "root/group ownership split",
+        "top-to-bottom direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java renders EnvelopeA as a cluster containing the attached note. Rust renders only RootProbe and an empty EnvelopeA entity; the owned attached note never appears."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.puml",
+      "golden": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.svg",
+      "axes": [
+        "deep nesting",
+        "note-only inner owner",
+        "direct outer leaf plus root leaf",
+        "top-to-bottom direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java renders InnerShell as a cluster containing InnerLedger. Rust emits OuterShell, OuterDirect, InnerShell, and RootStore, but drops InnerLedger and collapses InnerShell to a plain entity."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.puml",
+      "golden": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.svg",
+      "axes": [
+        "sibling root owners",
+        "same-kind duplicate leaf redeclaration",
+        "root/group leaf mix",
+        "left-to-right direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java's valid control keeps SharedLeaf under the first owner OuterAlpha and renders OuterBeta as a childless entity. The reviewed Rust binary emits OuterBeta as a cluster and reparents SharedLeaf to OuterBeta."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_root_note_only_owner_with_link_ltr.puml",
+      "golden": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_root_note_only_owner_with_link_ltr.svg",
+      "axes": [
+        "root note-only owner",
+        "independent root link",
+        "mixed root and grouped leaves",
+        "left-to-right direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java renders EnvelopeC as a cluster with OwnedMemo alongside the RootA-to-RootB dependency. Rust renders RootA, RootB, the dependency, and an empty EnvelopeC entity; OwnedMemo is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_duplicate_leaf_note_owner_ttb.puml",
+      "golden": "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_duplicate_leaf_note_owner_ttb.svg",
+      "axes": [
+        "deep nesting",
+        "sibling inner owners",
+        "same-kind duplicate leaf redeclaration",
+        "owned floating note in the later inner owner",
+        "root/group leaf mix",
+        "top-to-bottom direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java renders InnerAlpha with SharedLeaf and InnerBeta with BetaMemo. Rust narrows the canvas, collapses InnerBeta to a plain entity, and omits BetaMemo."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Note-only owners are still absent from the SVEK owner partition",
+      "evidence": "The reviewed Rust code builds cluster_ids only from nodes with non-empty node.children and traverses owned notes only when their owner is one of those clusters. The fresh held-outs checker_attached_note_only_owner_ttb, checker_nested_note_only_inner_owner_ttb, and checker_root_note_only_owner_with_link_ltr all produce Java note entities that are completely absent from Rust's no-oracle SVG.",
+      "interpretation": "The claim that every leaf appears exactly once is false for valid DESCRIPTION owners whose direct children are only notes. Those notes receive no logical layout slot at all."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Valid same-kind duplicate redeclarations still violate the unique immediate-owner partition",
+      "evidence": "Java accepts checker_sibling_duplicate_leaf_control_ltr and emits OuterAlpha.SharedLeaf while leaving OuterBeta childless. The reviewed Rust binary emits cluster OuterBeta and entity OuterBeta.SharedLeaf instead. The note-bearing variant checker_sibling_duplicate_leaf_note_owner_ltr compounds this by omitting BetaMemo.",
+      "interpretation": "The mechanism's narrow claim fails even without the earlier panic: the shipped binary does not preserve Java's first-owner partition on valid duplicate-leaf DESCRIPTION inputs."
+    },
+    {
+      "severity": "supporting",
+      "title": "The old slot-remap panic appears fixed, but the partition claim still fails by omission and reparenting",
+      "evidence": "All six fresh held-outs failed structurally, and none crashed the be05a84e release binary.",
+      "interpretation": "The implementation did remove the earlier out-of-bounds failure mode, but that narrower win does not salvage the broader uniqueness claim under held-out review."
+    },
+    {
+      "severity": "method",
+      "title": "The rejection is not based on generic geometry drift",
+      "evidence": "The decisive symptoms are missing note entities, childless containers rendered where Java has clusters, and later-owner qualified names on a duplicate-leaf control. Minor width or coordinate differences in the same SVGs were treated as residue only.",
+      "interpretation": "These failures evidence traversal omission or ownership mismatch, which is exactly the surface the mechanism claims to fix."
+    },
+    {
+      "severity": "method",
+      "title": "No fixture-shaped logic was found in the inspected shipping deployment code",
+      "evidence": "The anti-overfit search found no held-out filenames, mechanism names, or distinctive label tokens in the inspected shipping parser or renderer files.",
+      "interpretation": "This review rejects the mechanism because the behavioral claim is false at the reviewed binary, not because of bespoke checker-label conditionals."
+    }
+  ],
+  "residue": [
+    "The exact internal branch that reparents SharedLeaf to the later sibling owner in the shipped be05a84e binary was not further instrumented because the review was constrained to the existing release binary and no rebuilds. The binary counterexample itself is sufficient to reject.",
+    "Several failing held-outs also differ in canvas width or placement. Those geometric deltas were not used as the rejection basis once note omission or owner mismatch had already been established."
+  ],
+  "worktree_notes": {
+    "status_after_review_writes": [
+      "?? test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/",
+      "?? test-diagrams/perturbations/sequence-note-command-prefix-semantics/"
+    ],
+    "note": "The unrelated sequence-note-command-prefix-semantics directory was already outside this checker's scope and was left untouched."
+  },
+  "summary": {
+    "fresh_valid_inputs": 6,
+    "passes": 0,
+    "structural_failures": 6,
+    "panics": 0
+  },
+  "verdict_reason": "REJECTED. The reviewed be05a84e binary does remove the old duplicate-slot panic, but the fresh held-out corpus still disproves the narrower mechanism claim. Valid DESCRIPTION owners whose direct children are only notes are excluded from the SVEK owner traversal and final cluster emission, so their notes never appear and therefore never receive a unique logical slot. Valid same-kind duplicate leaf redeclarations also fail the claimed immediate-owner partition: Java keeps SharedLeaf under the first owner, while the reviewed Rust binary emits it under the later sibling owner. Under the held-out adversarial rule, those traversal- and ownership-shaped counterexamples reject the mechanism."
+}

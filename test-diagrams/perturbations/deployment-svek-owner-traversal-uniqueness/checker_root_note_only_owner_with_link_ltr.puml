@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+node RootA
+node RootB
+node "Envelope C" as EnvelopeC {
+  note as OwnedMemo
+    owned memo
+  end note
+}
+RootA --> RootB
+@enduml

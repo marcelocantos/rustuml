@@ -1,0 +1,15 @@
+@startuml
+top to bottom direction
+node "Outer Shell" as OuterShell {
+  node "Inner Alpha" as InnerAlpha {
+    component SharedLeaf
+  }
+  node "Inner Beta" as InnerBeta {
+    component SharedLeaf
+    note as BetaMemo
+      beta inner memo
+    end note
+  }
+}
+file RootFile
+@enduml

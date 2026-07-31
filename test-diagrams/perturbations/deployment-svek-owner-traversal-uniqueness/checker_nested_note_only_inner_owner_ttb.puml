@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+node "Outer Shell" as OuterShell {
+  component OuterDirect
+  node "Inner Shell" as InnerShell {
+    note as InnerLedger
+      inner ledger
+    end note
+  }
+}
+database RootStore
+@enduml

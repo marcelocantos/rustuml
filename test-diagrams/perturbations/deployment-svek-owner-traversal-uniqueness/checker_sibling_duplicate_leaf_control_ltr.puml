@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Outer Alpha" as OuterAlpha {
+  component SharedLeaf
+}
+node "Outer Beta" as OuterBeta {
+  component SharedLeaf
+}
+component RootProbe
+@enduml
