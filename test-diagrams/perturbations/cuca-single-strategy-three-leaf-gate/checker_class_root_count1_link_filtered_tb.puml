@@ -1,0 +1,7 @@
+@startuml
+class SoloLeaf
+class LinkedNorth
+class LinkedSouth
+
+LinkedNorth --> LinkedSouth
+@enduml

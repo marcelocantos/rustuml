@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "mechanism": "ordinary-note-command-end-grammar",
+  "review_date": "2026-07-31",
+  "reviewer": {
+    "task_id": "codex-desktop-shared-checker-2026-07-31",
+    "identity": "Codex desktop independent adversarial checker",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop",
+    "role": "Independent checker only; did not implement the mechanism and did not edit shipping code or account files.",
+    "independence": "This review used the shared worktree at /private/tmp/rustuml-integrate-20260731a, preserved fresh held-outs under the mechanism directory, and ran only the existing Java jar plus target/release/examples/diff_one --no-oracle."
+  },
+  "verdict": "ACCEPT",
+  "verdict_basis": "I tried to break the command-specific end-note policy with fresh valid wrong-family, tab-separated, compact, and spaced ordinary note terminators across CLASS and DESCRIPTION inputs. The decisive ownership probes all pass at Rust revision 082981d14ae7cc1e177c9437f38da296f44b4031: wrong-family end hnote/end rnote remain payload, a literal tab between end and note closes the block, and later declarations remain visible. Two DESCRIPTION attached-note controls still fail, but the same width-and-text-position drift reproduces with both spaced and compact ordinary terminators, so it does not falsify the end-grammar mechanism under review.",
+  "revisions": {
+    "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
+    "implementation_commits": [
+      "bf402b565d6cdc8ca9ebf4e5b2b56cbdb8005d96",
+      "15980239c9971d79752cc3914b844f7376d167c2"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account": {
+      "path": "docs/parity-reviews/ordinary-note-command-end-grammar/account.json",
+      "sha256": "7d226ea6d9c22b268e93290b17c6767e1d08aff4489993e7f92bdbccac7a9ae3"
+    },
+    "diff_one": {
+      "path": "target/release/examples/diff_one",
+      "mode": "--no-oracle",
+      "sha256": "0e8ca7d0edae26c952b918a94b0e1675971aa1a60bc4283133c1ec4b0d947f07"
+    },
+    "cargo_or_rustc_invoked": false
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git rev-parse --verify 082981d1^{commit}",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/ordinary-note-command-end-grammar/account.json",
+    "sed -n '1,220p' docs/parity-reviews/ordinary-note-command-end-grammar/account.json",
+    "sed -n '1090,1185p' crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n '1680,1855p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '430,700p' crates/rustuml-parser/src/parse/deployment.rs",
+    "sed -n '110,170p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "sed -n '180,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "git show --stat --summary bf402b56 15980239",
+    "git grep -n \"class_wrong_family_payload_then_real_endnote\\|class_tab_terminator_following_class\\|deployment_spaced_terminator_following_artifact\\|ordinary-note-command-end-grammar\" HEAD -- crates/rustuml-parser/src crates/rustuml-render/src crates/rustuml-layout/src crates/rustuml/src docs/parity-reviews || true",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/ordinary-note-command-end-grammar/*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/ordinary-note-command-end-grammar/class_wrong_family_payload_then_real_endnote.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/ordinary-note-command-end-grammar/class_tab_terminator_following_class.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_wrong_family_payload_then_real_endnote.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_spaced_terminator_following_artifact.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_compact_terminator_following_artifact_control.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_spaced_terminator_following_artifact.puml | rg -o 'width:[0-9]+px;height:[0-9]+px|data-qualified-name=\"[^\"]+\"|fill=\"#[0-9A-Fa-f]+\"'"
+  ],
+  "source_audit": {
+    "java": [
+      "CommandFactoryNote keeps ordinary floating notes on END = ^[%s]*end[%s]?note$, so wrong-family end hnote/end rnote lines remain payload and any single PlantUML whitespace, including a tab, can separate end from note.",
+      "CommandFactoryNoteOnEntity uses the same ordinary END matcher for attached notes and reserves the brace-only END_WITH_BRACKET matcher for the alternate bracket form."
+    ],
+    "rust": [
+      "At 082981d1, parse/mod.rs note_command_parts strips sequence-only prefixes but completed_multiline_note_payload only consults the broader note-family terminator set when the opener is sequence-shaped (left/right/over/across without of). Ordinary note-as and ordinary attached note forms now stay on is_ordinary_note_terminator.",
+      "is_ordinary_note_terminator checks the post-end separator with char::is_whitespace, so a literal tab terminator is accepted by the same helper used by dispatch masking and by the class/deployment multiline consumers."
+    ],
+    "prohibited_pattern_audit": [
+      "A targeted git grep for the fresh stems and mechanism name found no fixture-shaped conditionals in shipping Rust files.",
+      "No new parity-specific constants or comparator edits were introduced by the held-outs; the residual DESCRIPTION failure is a geometry delta in an already-rendered attached note."
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/class_wrong_family_payload_then_real_endnote.puml",
+      "golden": "test-diagrams/perturbations/ordinary-note-command-end-grammar/class_wrong_family_payload_then_real_endnote.svg",
+      "axes": [
+        "ordinary floating class note",
+        "wrong-family end hnote payload",
+        "mixed-case legal terminator",
+        "post-terminator class declaration"
+      ],
+      "result": "pass",
+      "finding": "Rust and Java both keep end hnote plus the following control line inside the note body until EnD NoTe, then render the later class."
+    },
+    {
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/class_tab_terminator_following_class.puml",
+      "golden": "test-diagrams/perturbations/ordinary-note-command-end-grammar/class_tab_terminator_following_class.svg",
+      "axes": [
+        "ordinary floating class note",
+        "literal tab separator in end-note terminator",
+        "later class declaration"
+      ],
+      "result": "pass",
+      "finding": "The Java-valid end<TAB>note terminator closes the block on both sides and leaves the following class visible."
+    },
+    {
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_wrong_family_payload_then_real_endnote.puml",
+      "golden": "test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_wrong_family_payload_then_real_endnote.svg",
+      "axes": [
+        "ordinary attached DESCRIPTION note",
+        "wrong-family end rnote payload",
+        "compact endnote terminator",
+        "later artifact declaration"
+      ],
+      "result": "pass",
+      "finding": "Rust and Java both retain end rnote as display text and only close on endnote, with the later artifact still present."
+    },
+    {
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_spaced_terminator_following_artifact.puml",
+      "golden": "test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_spaced_terminator_following_artifact.svg",
+      "axes": [
+        "ordinary attached DESCRIPTION note",
+        "single-space terminator",
+        "indented payload rows",
+        "later artifact declaration"
+      ],
+      "result": "fail",
+      "finding": "The block closes and the later artifact survives, but the no-oracle renderer draws the attached note narrower than Java and shifts the second text row left. This is geometry residue, not a terminator-ownership failure."
+    },
+    {
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_compact_terminator_following_artifact_control.puml",
+      "golden": "test-diagrams/perturbations/ordinary-note-command-end-grammar/deployment_compact_terminator_following_artifact_control.svg",
+      "axes": [
+        "ordinary attached DESCRIPTION note",
+        "compact endnote terminator",
+        "same payload shape as spaced control",
+        "later artifact declaration"
+      ],
+      "result": "fail",
+      "finding": "The same canvas-width and note-text drift reproduces when the only change is endnote replacing end note, isolating the residue away from ordinary note end grammar."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "supporting",
+      "title": "Wrong-family ordinary note terminators remain payload at the pinned revision",
+      "evidence": "Both class_wrong_family_payload_then_real_endnote and deployment_wrong_family_payload_then_real_endnote pass.",
+      "interpretation": "The old family-wide closing bug has been repaired for ordinary note commands."
+    },
+    {
+      "severity": "supporting",
+      "title": "A literal tab separator now closes ordinary notes consistently",
+      "evidence": "class_tab_terminator_following_class passes with end<TAB>note.",
+      "interpretation": "Dispatch masking and the class consumer share the Java-compatible whitespace policy."
+    },
+    {
+      "severity": "residual",
+      "title": "Attached DESCRIPTION notes still have a separate width/text geometry drift",
+      "evidence": "The spaced and compact attached-note controls both fail with the same 8px canvas-width delta and left-shifted second text row.",
+      "interpretation": "That residue sits in DESCRIPTION attached-note layout/measurement, not in ordinary note command boundaries."
+    }
+  ],
+  "preserved_evidence_root": "test-diagrams/perturbations/ordinary-note-command-end-grammar",
+  "review_file": "docs/parity-reviews/ordinary-note-command-end-grammar/review.json"
+}

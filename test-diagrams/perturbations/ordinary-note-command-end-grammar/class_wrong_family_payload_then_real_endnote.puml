@@ -1,0 +1,7 @@
+@startuml
+NoTe as AuditOrdinary
+end hnote
+control payload remains display text
+EnD NoTe
+class AfterOrdinary
+@enduml

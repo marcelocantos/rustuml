@@ -1,0 +1,7 @@
+@startuml
+NoTe as Audit.审计_42 #LightGreen
+payload line
+EnD NoTe
+class Ledger42
+Audit.审计_42 .. Ledger42
+@enduml

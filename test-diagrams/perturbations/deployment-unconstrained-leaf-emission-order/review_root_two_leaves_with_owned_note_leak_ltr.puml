@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Envelope 661" as Envelope661 {
+  note as OwnedMemo661
+    owned note body 661
+  end note
+}
+control "Ingress 662" as Ingress662
+file "Archive 663" as Archive663
+@enduml

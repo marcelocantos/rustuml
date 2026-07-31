@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-unconstrained-leaf-emission-order",
+  "review_date": "2026-07-31",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "role": "checker-only; did not implement the mechanism"
+  },
+  "revisions": {
+    "requested_rust_revision": "082981d1",
+    "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
+    "rust_short_revision": "082981d1",
+    "account_commit": "b6037b3be40571ae7f2ae6962d9042019035f83b",
+    "account_is_ancestor_of_rust_revision": true,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "cargo_was_run": false,
+    "rustc_was_run": false,
+    "shipping_code_edited": false,
+    "account_edited": false
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "c3a1ed856366f496ca7447dfa319c3bc7b38dc1e4c5b907670eab2e25eeb9398",
+    "diff_one_sha256": "df96ef55d9d87b8b6c83fc1e80ee9e8b898aba6c521d74e55bd81af6789adbb7",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "sources": {
+      "review_nested_link_before_decl_note_controls_ltr.puml": "4a72e2a859d59870e8f0062bc1f1a10d6f08ef72f6388ad561327084f509e0d1",
+      "review_nested_single_owned_note_ttb.puml": "81a31e15be25b1e16b58ca7b5050017f4f605abab082eb32a17cff6e451efba1",
+      "review_nested_three_member_note_control_file_ltr.puml": "ee910a18f6b5eb241218ef95ee8b12ea488388b926ad511d889451916f5bb0da",
+      "review_root_linked_controls_note_ttb.puml": "4d361103e923fb0387b0978e75c7d8d155088132a4e99f10b7c3393796f20740",
+      "review_root_three_member_note_control_file_ltr.puml": "80ad97a297a8dfb0e5b2b007d4355e8956aef16ee3872156d6eb2e98f3be0037",
+      "review_root_two_leaves_with_owned_note_leak_ltr.puml": "8e5632c1121b3a8fcceb924d1fed5d35c8b68d09ee25547a4bfb3cbf267f1eb0",
+      "review_root_two_member_control_before_note_ttb.puml": "8be3316f3a1fa0f21b3ddbc43f6f38e079a87e0b793382742f443c93e412017f",
+      "review_root_two_member_note_before_node_ltr.puml": "04e817a26f08c7eba1482f80db956395f5a7c0252e3d63c247a230a44d04936d"
+    },
+    "java_svgs": {
+      "review_nested_link_before_decl_note_controls_ltr.svg": "60864dbbefa824f17d89b74c505d98564ae0e51bf3fa6920868b7bab54baa281",
+      "review_nested_single_owned_note_ttb.svg": "462257a7403ed2f0a4c37b28f017ed4e8281d8737f8ee8b0aac91e4f10eb5a25",
+      "review_nested_three_member_note_control_file_ltr.svg": "e7a6ad320f7f0187453aa1a976c3ecb4b7ad4935972f0a69a7749cf1a6544f3f",
+      "review_root_linked_controls_note_ttb.svg": "d3a4988590b92ff720d4e64893911c2c0f46a0674cdef541edc59a42b8d5e2f6",
+      "review_root_three_member_note_control_file_ltr.svg": "f8fb4556344b017da3343439c400a90b0a0ab0d31cc7ca411f1bfc6dbdc9d324",
+      "review_root_two_leaves_with_owned_note_leak_ltr.svg": "ae2ec64c1e9ac3f9507dbb6787eb11755aa1fcbcf5374d3be754941ea6343283",
+      "review_root_two_member_control_before_note_ttb.svg": "0dce7db80dc3343e70afa17a4f2c21f7b3daaa70225f690e219e119545dd6ff7",
+      "review_root_two_member_note_before_node_ltr.svg": "190ef6a4910703d18300c30e0b9d39a2eaa53c78ce81834bbb51c62a96d6ed63"
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a rev-parse HEAD",
+    "git -C /private/tmp/rustuml-integrate-20260731a log -n 1 --format=%H -- docs/parity-reviews/deployment-unconstrained-leaf-emission-order/account.json",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor b6037b3be40571ae7f2ae6962d9042019035f83b 082981d14ae7cc1e177c9437f38da296f44b4031",
+    "git -C /private/tmp/rustuml-integrate-20260731a diff --unified=20 55c26983cc45b8761d1b9512378143383eefb6fa 082981d14ae7cc1e177c9437f38da296f44b4031 -- crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-render/src/deployment.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/*.puml",
+    "xmllint --noout test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|Use ''allowmixing''|No class ' test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order -g '*.svg'",
+    "for p in test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/*.puml; do out=$(target/release/examples/diff_one --no-oracle \"$p\" 2>&1); code=$?; printf '%s\\texit=%s\\t%s\\n' \"$p\" \"$code\" \"${out%%$'\\n'*}\"; done",
+    "for p in test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_link_before_decl_note_controls_ltr.puml test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.puml; do RUST_BACKTRACE=1 target/release/examples/diff_one --no-oracle \"$p\"; done",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/deployment-unconstrained-leaf-emission-order/account.json /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/*.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/*.svg",
+    "printf '%s\\n' '@startuml' 'node \"Outer\" as Outer {' 'A --> B' 'node A' 'node B' '}' '@enduml' | java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe | rg -n 'Syntax Error|Use .*allowmixing|error line|No class |Assumed diagram type|<svg'",
+    "printf '%s\\n' '@startuml' 'node \"Outer\" as Outer {' 'A --> B' 'component A' 'component B' '}' '@enduml' | java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe | rg -n 'Syntax Error|Use .*allowmixing|error line|No class |Assumed diagram type|<svg'",
+    "printf '%s\\n' '@startuml' 'node \"Outer\" as Outer {' 'node A' 'A --> B' 'node B' '}' '@enduml' | java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe | rg -n 'Syntax Error|Use .*allowmixing|error line|No class |Assumed diagram type|<svg'",
+    "printf '%s\\n' '@startuml' 'left to right direction' 'node A' 'A --> B' 'node B' '@enduml' | java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe | rg -n 'Syntax Error|Use .*allowmixing|error line|No class |Assumed diagram type|<svg'"
+  ],
+  "method_note": "Java rejects the literal late-redeclaration form I first tried for the link-before-declaration axis, so the preserved valid held-out uses a link-created companion leaf rather than an invalid later redeclaration.",
+  "worktree_notes": {
+    "status_after_review_writes": [
+      "M crates/rustuml-parser/src/diagram/sequence.rs",
+      "M crates/rustuml-parser/src/parse/sequence.rs",
+      "M crates/rustuml-render/src/sequence.rs",
+      "?? test-diagrams/perturbations/class-floating-note-quark-alias-grammar/",
+      "?? test-diagrams/perturbations/class-standalone-leaf-magma-ordering/",
+      "?? test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/",
+      "?? test-diagrams/perturbations/deployment-note-background-color-retention/",
+      "?? test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/",
+      "?? test-diagrams/perturbations/ordinary-note-command-end-grammar/"
+    ],
+    "note": "The sequence-file modifications and the non-mechanism perturbation directories were already outside this checker's scope and were left untouched."
+  },
+  "perturbations": [
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_link_before_decl_note_controls_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_link_before_decl_note_controls_ltr.svg",
+      "axes": [
+        "nested container",
+        "link-created companion leaf",
+        "owned floating note",
+        "linked control",
+        "left-to-right direction"
+      ],
+      "result": "PANIC",
+      "failure_summary": "Rust panics in deployment.rs:4238 during post-layout slot remapping (`index out of bounds: the len is 3 but the index is 3`). Java renders a valid DESCRIPTION SVG."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_single_owned_note_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_single_owned_note_ttb.svg",
+      "axes": [
+        "one-leaf threshold case",
+        "owned floating note only",
+        "nested container",
+        "top-to-bottom direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Rust remains structurally divergent on the owned-note-only container path. The delta is small in pixels, but the failing shape is still a valid counterexample and overlaps the cluster/owned-note model under review."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.svg",
+      "axes": [
+        "three-leaf Magma threshold",
+        "owned floating note plus two ordinary leaves",
+        "nested container",
+        "control/file permutation",
+        "left-to-right direction"
+      ],
+      "result": "PANIC",
+      "failure_summary": "Rust panics in deployment.rs:4238 during post-layout slot remapping (`index out of bounds: the len is 3 but the index is 4`). Java renders a valid DESCRIPTION SVG."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_linked_controls_note_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_linked_controls_note_ttb.svg",
+      "axes": [
+        "root linked controls",
+        "floating note",
+        "top-to-bottom direction"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_three_member_note_control_file_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_three_member_note_control_file_ltr.svg",
+      "axes": [
+        "three-leaf Magma threshold",
+        "root stream",
+        "floating note plus control/file",
+        "left-to-right direction"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_leaves_with_owned_note_leak_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_leaves_with_owned_note_leak_ltr.svg",
+      "axes": [
+        "two root leaves below Magma threshold",
+        "owned floating note in nested container",
+        "root-versus-owned membership split",
+        "left-to-right direction"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java renders a 231x239 diagram with `Envelope661` as a cluster containing its note and the two root leaves below it. Rust renders a 333x151 diagram, emits `Envelope661` as a plain entity, and solves the root leaves on the same row, consistent with owned-note leakage into the root standalone model."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_member_control_before_note_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_member_control_before_note_ttb.svg",
+      "axes": [
+        "two-leaf below-threshold root stream",
+        "control before note",
+        "top-to-bottom direction"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_member_note_before_node_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_member_note_before_node_ltr.svg",
+      "axes": [
+        "two-leaf below-threshold root stream",
+        "note before node",
+        "left-to-right direction"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Owned-note-only containers never become SVEK clusters",
+      "evidence": "The parser records `note.owner` for floating notes (`crates/rustuml-parser/src/parse/deployment.rs:631-637` and `647-652`), but only ordinary node declarations call `add_child` (`815-816` and `851-852`). The renderer then defines `cluster_ids` solely from `node.children` (`crates/rustuml-render/src/deployment.rs:4049-4054`). In `review_root_two_leaves_with_owned_note_leak_ltr.puml`, Java emits `Envelope661` as a cluster; Rust emits it as a plain entity.",
+      "interpretation": "Any DESCRIPTION container whose only direct child is a floating note falls off the Java cluster path in Rust."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Root Magma still treats owned floating notes as root standalones",
+      "evidence": "`add_deployment_magma_constraints` extends `root_members` with every targetless note regardless of `note.owner` (`crates/rustuml-render/src/deployment.rs:4902-4908`). The fresh `review_root_two_leaves_with_owned_note_leak_ltr.puml` control should give Java a two-leaf root stream plus an inner note, but Rust widens the root solve and produces a materially different canvas and placement.",
+      "interpretation": "Owned floating notes leak into the root standalone model, so the below-threshold root behavior is still wrong once containers enter the picture."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Fresh nested owned-note inputs crash during post-layout slot remapping",
+      "evidence": "`review_nested_link_before_decl_note_controls_ltr.puml` and `review_nested_three_member_note_control_file_ltr.puml` both panic at `crates/rustuml-render/src/deployment.rs:4238` while remapping `solved_positions`; the first indexes slot 3 with len 3, the second slot 4 with len 3.",
+      "interpretation": "The revised unified emission model is not total for valid nested DESCRIPTION inputs involving owned notes. At minimum, the node-position remap still assumes a slot inventory that the nested solve does not provide."
+    },
+    {
+      "severity": "supporting",
+      "title": "The simple root-only quark-order path now works on fresh valid controls",
+      "evidence": "`review_root_two_member_note_before_node_ltr.puml`, `review_root_two_member_control_before_note_ttb.puml`, `review_root_three_member_note_control_file_ltr.puml`, and `review_root_linked_controls_note_ttb.puml` all pass `diff_one --no-oracle`.",
+      "interpretation": "The rejection is narrower than the whole quark-order idea. The root-only standalone ordering improved, but the owned-note/container model is still incomplete."
+    },
+    {
+      "severity": "method",
+      "title": "Java rejects explicit late redeclaration after a link-created alias",
+      "evidence": "Four exploratory `-pipe` probes showed that `A --> B` followed by later explicit `node B` or `component B` is rejected by Java with `Use 'allowmixing'...` or `This element (B) is already defined`.",
+      "interpretation": "The preserved link-before-declaration axis uses a valid link-created companion leaf instead of an invalid later explicit redeclaration."
+    }
+  ],
+  "summary": {
+    "fresh_valid_inputs": 8,
+    "passes": 4,
+    "structural_failures": 2,
+    "panics": 2
+  },
+  "verdict_reason": "REJECTED. The implementation does fix the simple root-only emission-order cases, but fresh valid owned-note/container inputs still either diverge or crash. The rejecting evidence is mechanism-shaped: note ownership is recorded in the parser, then dropped from cluster formation, then ignored again by root Magma membership, and the new slot-remapping logic panics on nested owned-note cases. Under the T14 held-out rule, those counterexamples reject the mechanism at Rust revision 082981d1."
+}

@@ -1,0 +1,7 @@
+@startuml
+stack SoloStack
+agent LinkedAgent
+file LinkedFile
+
+LinkedAgent --> LinkedFile
+@enduml

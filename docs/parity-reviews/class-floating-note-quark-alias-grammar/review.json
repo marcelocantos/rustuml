@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-floating-note-quark-alias-grammar",
+  "review_date": "2026-07-31",
+  "reviewer": {
+    "task_id": "codex-desktop-shared-checker-2026-07-31",
+    "identity": "Codex desktop independent adversarial checker",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop",
+    "role": "Independent checker only; did not implement the mechanism and did not edit shipping code or account files.",
+    "independence": "This review attacked the pinned revision 082981d14ae7cc1e177c9437f38da296f44b4031 with fresh Unicode and multi-dot alias inputs spanning single-line and multiline forms, root and nested ownership, and note-to-class linking."
+  },
+  "verdict": "REJECT",
+  "verdict_basis": "The mechanism is still incomplete at Rust revision 082981d14ae7cc1e177c9437f38da296f44b4031. A root multiline dotted alias now works, but fresh single-line dotted aliases and a nested multi-dot alias do not preserve Java's namespace ownership. The Rust SVGs contain the note entities (`Audit..._43`, `Review..._45`, `Vault.Inner..._44`) but omit the expected namespace clusters (`Audit`, `Review`, `Vault.Inner`) or collapse the note into the outer owner. Those are in-scope failures against the claimed quark ownership and single-versus-multiline parity.",
+  "revisions": {
+    "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
+    "implementation_commits": [
+      "3d56bdbf58af8c2f7d715e413b5974d9c6ce7e6b",
+      "8c7eb2d8d4aa62309218dc141d332c59d371d7d1"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account": {
+      "path": "docs/parity-reviews/class-floating-note-quark-alias-grammar/account.json",
+      "sha256": "3559e78f0b0338417b17b666a64a8ca95bf1d91b131c774879d2468c29a9f696"
+    },
+    "diff_one": {
+      "path": "target/release/examples/diff_one",
+      "mode": "--no-oracle",
+      "sha256": "0e8ca7d0edae26c952b918a94b0e1675971aa1a60bc4283133c1ec4b0d947f07"
+    },
+    "cargo_or_rustc_invoked": false
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-floating-note-quark-alias-grammar/account.json",
+    "sed -n '1,220p' docs/parity-reviews/class-floating-note-quark-alias-grammar/account.json",
+    "sed -n '1680,1855p' crates/rustuml-parser/src/parse/class.rs",
+    "rg -n \"resolve_quark_path|push_note|floating_note_aliases_share_the_qualified_quark_grammar\" crates/rustuml-parser/src/parse/class.rs",
+    "git show --stat --summary 3d56bdbf 8c7eb2d8",
+    "git grep -n \"Audit\\.审计_43\\|Vault\\.Inner\\.审计_44\\|Review\\.审计_45\\|class-floating-note-quark-alias-grammar\" HEAD -- crates/rustuml-parser/src crates/rustuml-render/src crates/rustuml-layout/src crates/rustuml/src docs/parity-reviews || true",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-floating-note-quark-alias-grammar/*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_multiline_note_before_class_link.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_inline_note_after_class_link.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-floating-note-quark-alias-grammar/multidot_nested_note_targets_reopened_package.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-floating-note-quark-alias-grammar/reordered_inline_multidot_alias_with_target_note.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_inline_note_after_class_link.puml | rg -o 'data-qualified-name=\"[^\"]+\"|class=\"cluster\"|class=\"entity\"'",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-floating-note-quark-alias-grammar/multidot_nested_note_targets_reopened_package.puml | rg -o 'data-qualified-name=\"[^\"]+\"|class=\"cluster\"|class=\"entity\"'"
+  ],
+  "source_audit": {
+    "java": [
+      "CommandFactoryNote uses the same CODE grammar for single-line and multiline floating notes and resolves the accepted alias through diagram.quarkInContext(false, cleanId(CODE)), so a dotted alias participates in normal namespace ownership.",
+      "Java's SVGs for the fresh inline and nested cases create the expected clusters (Audit, Review, Vault.Inner) before the note entity, showing that dotted aliases are not rendered as flat root notes."
+    ],
+    "rust": [
+      "The pinned Rust revision accepts multiline and inline floating-note aliases matching [\\p{L}\\p{N}_.]+ and emits note entities with qualified names such as Audit..._43 and Vault.Inner..._44.",
+      "However, the printed Rust SVG for the failing inline cases contains only entity groups for Ledger43 and Audit..._43 with no Audit cluster, and the printed Rust SVG for the nested case contains Vault plus the note entity Vault.Inner..._44 but no Vault.Inner cluster."
+    ],
+    "prohibited_pattern_audit": [
+      "A targeted git grep for the fresh alias strings and mechanism name found no fixture-shaped conditionals in shipping Rust files.",
+      "The observed failures are ownership and cluster-emission mismatches, not comparator slack or post-hoc SVG surgery."
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_multiline_note_before_class_link.puml",
+      "golden": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_multiline_note_before_class_link.svg",
+      "axes": [
+        "root context",
+        "multiline floating note",
+        "Unicode plus dotted alias",
+        "note declared before target class",
+        "note-to-class link"
+      ],
+      "result": "pass",
+      "finding": "The multiline root dotted alias survives with the expected Audit cluster and linked class."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_inline_note_after_class_link.puml",
+      "golden": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/root_unicode_dotted_inline_note_after_class_link.svg",
+      "axes": [
+        "root context",
+        "single-line floating note",
+        "Unicode plus dotted alias",
+        "note declared after target class",
+        "class-to-note link"
+      ],
+      "result": "fail",
+      "finding": "Rust emits the note entity Audit..._43 but omits Java's Audit namespace cluster, collapsing the ownership structure for the single-line dotted alias."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/multidot_nested_note_targets_reopened_package.puml",
+      "golden": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/multidot_nested_note_targets_reopened_package.svg",
+      "axes": [
+        "multidot alias",
+        "nested namespace ownership",
+        "multiline floating note",
+        "reopened outer package",
+        "fully qualified note-to-class link"
+      ],
+      "result": "fail",
+      "finding": "Rust emits Vault and the note entity Vault.Inner..._44, but it omits the intermediate Vault.Inner cluster that Java creates for the nested dotted alias."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/reordered_inline_multidot_alias_with_target_note.puml",
+      "golden": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar/reordered_inline_multidot_alias_with_target_note.svg",
+      "axes": [
+        "single-line floating note",
+        "root dotted alias",
+        "declaration order reversed relative to multiline pass",
+        "note-to-class link"
+      ],
+      "result": "fail",
+      "finding": "The single-line reordered alias produces Review..._45 without the Review cluster, repeating the root inline ownership failure on a fresh label."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Single-line dotted floating note aliases still lose namespace ownership",
+      "evidence": "Both root_unicode_dotted_inline_note_after_class_link and reordered_inline_multidot_alias_with_target_note fail, and --print-rust shows note entities but no Audit/Review cluster groups.",
+      "interpretation": "The mechanism is not yet parity-complete across single-line and multiline forms."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Nested multi-dot aliases still skip intermediate namespace clusters",
+      "evidence": "multidot_nested_note_targets_reopened_package fails, and --print-rust shows Vault plus Vault.Inner..._44 but no Vault.Inner cluster.",
+      "interpretation": "Qualified note ownership does not yet generalize to deeper dotted paths."
+    },
+    {
+      "severity": "supporting",
+      "title": "Root multiline dotted aliases are now materially better",
+      "evidence": "root_unicode_dotted_multiline_note_before_class_link passes and Java/Rust both render the Audit cluster plus linked class.",
+      "interpretation": "The rejection is narrower than the whole surface, but the account's broader claim still fails."
+    }
+  ],
+  "preserved_evidence_root": "test-diagrams/perturbations/class-floating-note-quark-alias-grammar",
+  "review_file": "docs/parity-reviews/class-floating-note-quark-alias-grammar/review.json"
+}

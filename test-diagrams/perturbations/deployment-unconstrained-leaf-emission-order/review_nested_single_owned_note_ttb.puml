@@ -1,0 +1,7 @@
+@startuml
+node "Outer 641" as Outer641 {
+  note as OwnedMemo641
+    single owned body 641
+  end note
+}
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+package ObservatoryThree7121 {
+  note "outer memo three" as OuterMemoThree7123
+  class OuterLedgerThree7125
+  package DeepFilledThree7129 {
+    class DeepAlpha7131
+    class DeepBeta7133
+    class DeepGamma7137
+  }
+  package "Outer Empty Three 7141" as OuterEmptyThree7141 {
+  }
+}
+@enduml

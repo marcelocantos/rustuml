@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "mechanism": "cuca-single-strategy-three-leaf-gate",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "role": "checker-only; no shipping-code edits; no cargo/rustc"
+  },
+  "revisions": {
+    "requested_rust_revision": "082981d1",
+    "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
+    "rust_short_revision": "082981d1",
+    "review_worktree_head": "082981d14ae7cc1e177c9437f38da296f44b4031",
+    "account_commit": "8dc3fd8ea1874e56b4f4138a53164408230b463e",
+    "implementation_commit": "550ae69e0d5a766ea77ff1818b8a962bf900710b",
+    "implementation_is_ancestor_of_reviewed_revision": true,
+    "account_is_ancestor_of_implementation": true,
+    "reviewed_descendant_commits_on_description_path": [
+      "5954b9b1e426545bc334d87d8ac048a9f3b85dd9 fix: retain deployment note background colors",
+      "082981d14ae7cc1e177c9437f38da296f44b4031 fix: preserve DESCRIPTION quark order into SVEK"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one"
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "738389a659f449b66da13f64a41f9b18e151b3b151212c292d97fecda38df152",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_sha256": "df96ef55d9d87b8b6c83fc1e80ee9e8b898aba6c521d74e55bd81af6789adbb7",
+    "sources": {
+      "checker_class_root_count1_link_filtered_tb.puml": "3021b21cd476118b91ede2606d14d133b92b5945e1707c53105272a6ecf569ad",
+      "checker_class_nested_count2_ltr_note_then_class.puml": "689286798ed473940024d04e1d0a29b9f317965be3b7ccd45eea12ae4dc8ed99",
+      "checker_class_root_count3_tb_note_class_note.puml": "ef3e83f7e603de6ba292c80d6c1bad2a63fca97040d107639442efa6dfb792dc",
+      "checker_class_nested_count4_ltr_permuted.puml": "6a425d1ef03612043088c3f3e87956fc5eb98795d1627a333dfcada5fb2bc347",
+      "checker_description_root_count1_link_filtered_tb.puml": "b5608f1a88fe1943db4417b0bd6960667167048a4df10f03e7edcc5bf73c186b",
+      "checker_description_nested_count2_link_filtered_ltr.puml": "fbfea17fc7603f0f8a2b388416e0da90bd1fbd8a122042275077fe8d9d77d229",
+      "checker_description_root_count3_lr_note_file_stack.puml": "febd93b0ba3c427dee808c8beb912204574a7c7226edffd322a9075b7f21c363",
+      "checker_description_nested_count4_tb_note_agent_file_card.puml": "79e75d2e48686f7902caca26b5e9b568b75b5c7d1390717f1767e522fef34913"
+    },
+    "java_svgs": {
+      "checker_class_root_count1_link_filtered_tb.svg": "f3f69f1067d228248d1062e9f604fd73d47c2268652b36d4ecc6e8280c55ec42",
+      "checker_class_nested_count2_ltr_note_then_class.svg": "77fed210a931ab70cfcde7c09f242b1975a11b7f94192dc9b668d0d9be3d99ff",
+      "checker_class_root_count3_tb_note_class_note.svg": "45e63941cbc2f164b9efe8684c05002af877573530a8e8fa277e798c0567e64f",
+      "checker_class_nested_count4_ltr_permuted.svg": "ee4e79bd487d4e920d678cfcf3b10ae149908a805f00dd14a01d2b189dee9e0f",
+      "checker_description_root_count1_link_filtered_tb.svg": "4972b477597ddeaacde8f1424a256ba6cf59cd5a646c1a0af5a504903a71e03d",
+      "checker_description_nested_count2_link_filtered_ltr.svg": "f68655026b63c09c345dec9409a6c1d42c7d8edee8c00cce9178d4ac1ac2d59c",
+      "checker_description_root_count3_lr_note_file_stack.svg": "d08e9b8e072f9d68aa88ca562cba31170f87c84aab343a8a24804e022a8ae608",
+      "checker_description_nested_count4_tb_note_agent_file_card.svg": "fb033aa9c4ac0e698376f37544227ec6716d3be2c22a05569e578afa1aadf589"
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a rev-parse HEAD",
+    "git -C /private/tmp/rustuml-integrate-20260731a rev-parse 082981d1",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --diff-filter=A --format='%H %s' -- docs/parity-reviews/cuca-single-strategy-three-leaf-gate/account.json",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline 550ae69e0d5a766ea77ff1818b8a962bf900710b..082981d14ae7cc1e177c9437f38da296f44b4031 -- crates/rustuml-parser/src/diagram/deployment.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-render/src/deployment.rs",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor 8dc3fd8ea1874e56b4f4138a53164408230b463e 550ae69e0d5a766ea77ff1818b8a962bf900710b",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor 550ae69e0d5a766ea77ff1818b8a962bf900710b 082981d14ae7cc1e177c9437f38da296f44b4031",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '758,790p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+    "sed -n '47,80p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java",
+    "sed -n '40,90p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java",
+    "sed -n '2914,3015p' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/class.rs",
+    "sed -n '4858,4918p' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/deployment.rs",
+    "sed -n '3990,4245p' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/deployment.rs",
+    "nl -ba /private/tmp/rustuml-integrate-20260731a/crates/rustuml-render/src/deployment.rs | sed -n '4226,4246p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count1_link_filtered_tb.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count2_ltr_note_then_class.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count3_tb_note_class_note.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count4_ltr_permuted.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count1_link_filtered_tb.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count2_link_filtered_ltr.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count3_lr_note_file_stack.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count4_tb_note_agent_file_card.puml",
+    "xmllint --noout /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate -g '*.svg'",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count1_link_filtered_tb.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count2_ltr_note_then_class.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count3_tb_note_class_note.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count4_ltr_permuted.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count1_link_filtered_tb.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count2_link_filtered_ltr.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count3_lr_note_file_stack.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count4_tb_note_agent_file_card.puml",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/cuca-single-strategy-three-leaf-gate/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/*.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/*.svg"
+  ],
+  "no_cargo_or_rustc": true,
+  "java_svgs_well_formed_xml": true,
+  "java_svg_error_markers_found": false,
+  "source_inspection": {
+    "java_model_checked": [
+      "CucaDiagram.applySingleStrategy at src/main/java/net/atmp/CucaDiagram.java:762-786 filters each group's immediate standalone leaves and continues when standalones.size() < 3.",
+      "Magma.putInSquare at src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java:58-70 delegates the surviving leaves to SquareMaker with invisible left-right noDisplay(1) and top-down noDisplay(2) links.",
+      "SquareMaker.putInSquare and computeBranch at src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java:42-68 implement ceil(sqrt(n)) branching for n >= 1."
+    ],
+    "rust_model_checked": [
+      "ClassDiagram no-oracle rendering routes immediate unlinked SVEK leaves through add_single_strategy_links at crates/rustuml-render/src/class.rs:2919-2977 and returns early for entities.len() < 3 at :2981-2986.",
+      "DESCRIPTION/deployment no-oracle rendering routes standalone leaves through add_deployment_magma_constraints at crates/rustuml-render/src/deployment.rs:4861-4910 and returns early for members.len() < 3 at :4871-4876."
+    ],
+    "reviewed_descendant_state_checked": [
+      "The exact reviewed revision also includes the later DESCRIPTION leaf-order remapping block at crates/rustuml-render/src/deployment.rs:3928-4245.",
+      "Both rejecting fresh DESCRIPTION perturbations panic inside that later remapping block when it indexes solved_positions[slot] at crates/rustuml-render/src/deployment.rs:4235-4243."
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count1_link_filtered_tb.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count1_link_filtered_tb.svg",
+      "axes": [
+        "class family",
+        "count 1 after link filtering",
+        "root ownership",
+        "top-to-bottom direction",
+        "linked controls"
+      ],
+      "result": "PASS",
+      "diff_one": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count2_ltr_note_then_class.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count2_ltr_note_then_class.svg",
+      "axes": [
+        "class family",
+        "count 2",
+        "nested ownership",
+        "left-to-right direction",
+        "declaration permutation",
+        "floating note plus class"
+      ],
+      "result": "PASS",
+      "diff_one": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count3_tb_note_class_note.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_root_count3_tb_note_class_note.svg",
+      "axes": [
+        "class family",
+        "count 3",
+        "root ownership",
+        "top-to-bottom direction",
+        "floating note and class ordering"
+      ],
+      "result": "PASS",
+      "diff_one": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count4_ltr_permuted.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_class_nested_count4_ltr_permuted.svg",
+      "axes": [
+        "class family",
+        "count 4",
+        "nested ownership",
+        "left-to-right direction",
+        "declaration permutation",
+        "perfect-square branch size"
+      ],
+      "result": "PASS",
+      "diff_one": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count1_link_filtered_tb.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count1_link_filtered_tb.svg",
+      "axes": [
+        "DESCRIPTION family",
+        "count 1 after link filtering",
+        "root ownership",
+        "top-to-bottom direction",
+        "linked controls"
+      ],
+      "result": "PASS",
+      "diff_one": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count2_link_filtered_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count2_link_filtered_ltr.svg",
+      "axes": [
+        "DESCRIPTION family",
+        "count 2 after link filtering",
+        "nested ownership",
+        "left-to-right direction",
+        "linked controls",
+        "exclusive DESCRIPTION leaves"
+      ],
+      "result": "FAIL",
+      "diff_one": "panic at crates/rustuml-render/src/deployment.rs:4238:42: index out of bounds: the len is 4 but the index is 4"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count3_lr_note_file_stack.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_root_count3_lr_note_file_stack.svg",
+      "axes": [
+        "DESCRIPTION family",
+        "count 3",
+        "root ownership",
+        "left-to-right direction",
+        "floating note plus exclusive leaves",
+        "declaration permutation"
+      ],
+      "result": "PASS",
+      "diff_one": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count4_tb_note_agent_file_card.puml",
+      "java_svg": "test-diagrams/perturbations/cuca-single-strategy-three-leaf-gate/checker_description_nested_count4_tb_note_agent_file_card.svg",
+      "axes": [
+        "DESCRIPTION family",
+        "count 4",
+        "nested ownership",
+        "top-to-bottom direction",
+        "floating note plus exclusive leaves",
+        "perfect-square branch size"
+      ],
+      "result": "FAIL",
+      "diff_one": "panic at crates/rustuml-render/src/deployment.rs:4238:42: index out of bounds: the len is 4 but the index is 5"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "evidence",
+      "title": "The three-leaf gate itself matches Java on the class family and on root DESCRIPTION controls",
+      "evidence": "Fresh class held-outs covering counts 1, 2, 3, and 4 all compare structurally equal through diff_one --no-oracle. Fresh root DESCRIPTION held-outs covering count 1 after link filtering and count 3 with a floating note also compare structurally equal.",
+      "interpretation": "I did not find a direct counterexample to the claimed Java threshold invariant itself. The reviewed Rust state does honor the <3 gate on the cases that reach comparison."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Fresh nested DESCRIPTION held-outs crash in the product path at the exact reviewed revision",
+      "evidence": "checker_description_nested_count2_link_filtered_ltr and checker_description_nested_count4_tb_note_agent_file_card both generate valid Java SVGs, but diff_one --no-oracle panics in Rust at crates/rustuml-render/src/deployment.rs:4238:42 while remapping solved_positions[slot]. The first panic reports len 4/index 4; the second reports len 4/index 5.",
+      "interpretation": "The exact reviewed descendant state 082981d1 does not survive the mechanism's declared nested DESCRIPTION perturbation axes. Even if the underlying three-leaf threshold is correct, the state being attested is not acceptable under T14 because fresh valid inputs on those axes still fail in the shipped no-oracle path."
+    },
+    {
+      "severity": "rejecting",
+      "title": "The rejecting counterexamples land in later DESCRIPTION ordering machinery, not in Java or the comparator",
+      "evidence": "The panic site is inside the DESCRIPTION leaf-order remapping block added by the reviewed descendant state at crates/rustuml-render/src/deployment.rs:3928-4245, not inside add_deployment_magma_constraints itself. Java rendered both same-stem SVGs successfully, xmllint accepted every Java SVG, and the error-marker scan found no Java-side syntax output.",
+      "interpretation": "I cannot honestly ACCEPT the mechanism at exact revision 082981d1 because the reviewed state includes later DESCRIPTION changes that break fresh held-outs on declared axes. This review therefore rejects the state under review while preserving that the causal threshold account itself still looks plausible."
+    }
+  ],
+  "verdict_reason": "Fresh class and root DESCRIPTION perturbations support the claimed Java three-leaf gate, but the exact reviewed state 082981d1 still crashes on fresh nested DESCRIPTION held-outs that lie on the mechanism's declared axes. Under the T14 held-out rule, those valid no-oracle product-path failures reject attestation of the reviewed revision."
+}

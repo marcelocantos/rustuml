@@ -1,0 +1,6 @@
+@startuml
+control "Gate 621" as Gate621
+note as RootMemo621
+  vertically stacked body 621
+end note
+@enduml

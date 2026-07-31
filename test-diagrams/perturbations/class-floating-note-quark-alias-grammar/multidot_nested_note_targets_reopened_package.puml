@@ -1,0 +1,9 @@
+@startuml
+package Vault {
+  class Ledger44
+}
+note as Vault.Inner.审计_44 #LightBlue
+payload for nested alias
+end note
+Vault.Inner.审计_44 .. Vault.Ledger44
+@enduml

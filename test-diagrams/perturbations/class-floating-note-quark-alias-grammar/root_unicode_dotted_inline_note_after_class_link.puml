@@ -1,0 +1,5 @@
+@startuml
+class Ledger43
+note "inline payload" as Audit.审计_43
+Ledger43 .. Audit.审计_43
+@enduml

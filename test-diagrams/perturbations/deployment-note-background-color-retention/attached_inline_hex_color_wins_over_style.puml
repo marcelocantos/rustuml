@@ -1,0 +1,7 @@
+@startuml
+skinparam noteBackgroundColor Wheat
+node QueueNode
+note right of QueueNode #FFEECC: explicit attached color
+artifact AfterAttached
+QueueNode --> AfterAttached
+@enduml

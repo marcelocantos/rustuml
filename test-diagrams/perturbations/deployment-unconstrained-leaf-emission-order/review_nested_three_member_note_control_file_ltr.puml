@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Outer 651" as Outer651 {
+  note as OwnedMemo651
+    nested three leaf body 651
+  end note
+  control "Valve 652" as Valve652
+  file "Ledger 653" as Ledger653
+}
+@enduml

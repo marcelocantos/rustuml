@@ -1,0 +1,9 @@
+@startuml
+note as IntakeMemo
+  intake
+endnote
+class ProcessingHub
+note as ExitMemo
+  exit
+endnote
+@enduml

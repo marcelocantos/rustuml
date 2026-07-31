@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+class RootLedgerThree7111
+package "Root Empty Three 7113" as RootEmptyThree7113 {
+}
+note "root floating memo three" as RootMemoThree7117
+@enduml

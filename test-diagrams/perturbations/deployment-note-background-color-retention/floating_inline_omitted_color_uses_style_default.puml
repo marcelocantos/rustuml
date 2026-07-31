@@ -1,0 +1,5 @@
+@startuml
+skinparam noteBackgroundColor PaleGreen
+note "unstyled floating" as DefaultMemo
+artifact DefaultArtifact
+@enduml

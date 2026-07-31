@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package MixedBayFour7143 {
+  class LeadFour7147
+  note "pkg memo four" as PkgMemoFour7151
+  package "Empty Pocket Four 7153" as EmptyPocketFour7153 {
+  }
+  class TailFour7157
+  class AttachedFour7161
+  note left of AttachedFour7161 : attached blocker
+}
+@enduml

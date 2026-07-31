@@ -1,0 +1,11 @@
+@startuml
+class DirectAlphaFive7163
+note "root memo first five" as RootMemoFirstFive7167
+package "Root Empty Five 7171" as RootEmptyFive7171 {
+}
+class LinkedBlockFive7173
+note "root memo second five" as RootMemoSecondFive7177
+class DirectOmegaFive7181
+class OutsideFive7183
+LinkedBlockFive7173 --> OutsideFive7183
+@enduml

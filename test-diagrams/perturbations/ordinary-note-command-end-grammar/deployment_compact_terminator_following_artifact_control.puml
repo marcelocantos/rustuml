@@ -1,0 +1,9 @@
+@startuml
+node EntryPointCompact
+note right of EntryPointCompact
+payload line one
+  payload line two
+endnote
+artifact AfterCompact
+EntryPointCompact --> AfterCompact
+@enduml

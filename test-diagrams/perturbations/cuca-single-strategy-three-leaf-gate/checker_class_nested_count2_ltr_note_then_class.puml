@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+
+package OuterPkg {
+  note as LedgerNote
+    queued work
+  endnote
+  class ComputeNode
+}
+@enduml

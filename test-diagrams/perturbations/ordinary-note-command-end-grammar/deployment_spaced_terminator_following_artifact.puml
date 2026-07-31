@@ -1,0 +1,9 @@
+@startuml
+node EntryPoint
+note right of EntryPoint
+payload line one
+  payload line two
+  end note
+artifact AfterSpacing
+EntryPoint --> AfterSpacing
+@enduml

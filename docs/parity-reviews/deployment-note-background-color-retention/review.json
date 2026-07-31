@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-note-background-color-retention",
+  "review_date": "2026-07-31",
+  "reviewer": {
+    "task_id": "codex-desktop-shared-checker-2026-07-31",
+    "identity": "Codex desktop independent adversarial checker",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop",
+    "role": "Independent checker only; did not implement the mechanism and did not edit shipping code or account files.",
+    "independence": "This review used only the pinned Java jar and target/release/examples/diff_one --no-oracle at the shared worktree revision 082981d14ae7cc1e177c9437f38da296f44b4031."
+  },
+  "verdict": "REJECT",
+  "verdict_basis": "Explicit note colors now survive in-scope attached and floating deployment notes, but the mechanism's default-style fallback claim is still false at Rust revision 082981d14ae7cc1e177c9437f38da296f44b4031. Fresh uncolored floating and attached notes with skinparam noteBackgroundColor keep Java's style-derived fills (#98FB98 and #F0FFF0) yet Rust still paints both faces with the hardcoded #FEFFDD note fill. Because omitted-color style fallback is in the account's claimed invariant and acceptance surface, these held-outs reject the mechanism.",
+  "revisions": {
+    "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
+    "implementation_commits": [
+      "5954b9b1e426545bc334d87d8ac048a9f3b85dd9",
+      "082981d14ae7cc1e177c9437f38da296f44b4031"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account": {
+      "path": "docs/parity-reviews/deployment-note-background-color-retention/account.json",
+      "sha256": "730db6d2c7f34329dbabbce81658f1814a8a5559c4344c31ada5f35aa699c991"
+    },
+    "diff_one": {
+      "path": "target/release/examples/diff_one",
+      "mode": "--no-oracle",
+      "sha256": "0e8ca7d0edae26c952b918a94b0e1675971aa1a60bc4283133c1ec4b0d947f07"
+    },
+    "cargo_or_rustc_invoked": false
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/deployment-note-background-color-retention/account.json",
+    "sed -n '1,220p' docs/parity-reviews/deployment-note-background-color-retention/account.json",
+    "sed -n '430,700p' crates/rustuml-parser/src/parse/deployment.rs",
+    "sed -n '3160,3515p' crates/rustuml-render/src/deployment.rs",
+    "sed -n '90,130p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+    "git show --stat --summary 5954b9b1 082981d1",
+    "git grep -n \"DefaultMemo\\|FloatingMemo\\|StyledNode\\|deployment-note-background-color-retention\" HEAD -- crates/rustuml-parser/src crates/rustuml-render/src crates/rustuml-layout/src crates/rustuml/src docs/parity-reviews || true",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/deployment-note-background-color-retention/*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-note-background-color-retention/floating_multiline_named_color_wins_over_style.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-note-background-color-retention/attached_inline_hex_color_wins_over_style.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-note-background-color-retention/floating_inline_omitted_color_uses_style_default.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-note-background-color-retention/attached_multiline_omitted_color_uses_style_default.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/deployment-note-background-color-retention/floating_inline_omitted_color_uses_style_default.puml | rg -o 'fill=\"#[0-9A-Fa-f]+\"|data-qualified-name=\"[^\"]+'"
+  ],
+  "source_audit": {
+    "java": [
+      "EntityImageNote uses entity.getColors().getColor(ColorType.BACK) when present and falls back to the merged note style background only when there is no explicit BACK color.",
+      "The fresh Java SVGs confirm both sides of that contract: explicit colors survive for floating and attached notes, and omitted-color notes pick up the skinparam noteBackgroundColor values."
+    ],
+    "rust": [
+      "The pinned Rust deployment parser and renderer now retain explicit note.color and use deployment_note_fill(note) in the no-oracle attached and floating painters, which explains the passing explicit-color cases.",
+      "But deployment_note_fill(note) still falls back to NOTE_FILL (#FEFFDD) rather than any merged note style, so uncolored notes ignore skinparam noteBackgroundColor entirely."
+    ],
+    "prohibited_pattern_audit": [
+      "A targeted git grep for the fresh note ids and mechanism name found no fixture-shaped conditionals in shipping Rust files.",
+      "The decisive failures are pure fill mismatches on otherwise matching paths, not comparator slack or post-render SVG surgery."
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/deployment-note-background-color-retention/floating_multiline_named_color_wins_over_style.puml",
+      "golden": "test-diagrams/perturbations/deployment-note-background-color-retention/floating_multiline_named_color_wins_over_style.svg",
+      "axes": [
+        "floating note",
+        "multiline construction",
+        "explicit named color",
+        "conflicting style default",
+        "source-order node and artifact context"
+      ],
+      "result": "pass",
+      "finding": "Rust and Java both paint the floating note MistyRose despite a Wheat noteBackgroundColor style default."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-note-background-color-retention/attached_inline_hex_color_wins_over_style.puml",
+      "golden": "test-diagrams/perturbations/deployment-note-background-color-retention/attached_inline_hex_color_wins_over_style.svg",
+      "axes": [
+        "attached note",
+        "inline construction",
+        "explicit hexadecimal color",
+        "conflicting style default"
+      ],
+      "result": "pass",
+      "finding": "Rust and Java both honor the explicit #FFEECC attached-note background over the Wheat style default."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-note-background-color-retention/floating_inline_omitted_color_uses_style_default.puml",
+      "golden": "test-diagrams/perturbations/deployment-note-background-color-retention/floating_inline_omitted_color_uses_style_default.svg",
+      "axes": [
+        "floating note",
+        "inline construction",
+        "omitted explicit color",
+        "style default fallback"
+      ],
+      "result": "fail",
+      "finding": "Java fills the note with PaleGreen from skinparam noteBackgroundColor, while Rust paints the same geometry with hardcoded #FEFFDD."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-note-background-color-retention/attached_multiline_omitted_color_uses_style_default.puml",
+      "golden": "test-diagrams/perturbations/deployment-note-background-color-retention/attached_multiline_omitted_color_uses_style_default.svg",
+      "axes": [
+        "attached note",
+        "multiline construction",
+        "omitted explicit color",
+        "style default fallback"
+      ],
+      "result": "fail",
+      "finding": "Java fills the attached note with HoneyDew from skinparam noteBackgroundColor, while Rust still paints both note faces with #FEFFDD."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "supporting",
+      "title": "Explicit deployment note colors now survive both floating and attached forms",
+      "evidence": "floating_multiline_named_color_wins_over_style and attached_inline_hex_color_wins_over_style both pass.",
+      "interpretation": "The model state introduced by 5954b9b1 is real and materially improves the mechanism."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Omitted-color notes still ignore the note style background",
+      "evidence": "floating_inline_omitted_color_uses_style_default and attached_multiline_omitted_color_uses_style_default both fail only on fill, with Java using #98FB98 and #F0FFF0 while Rust uses #FEFFDD.",
+      "interpretation": "The fallback half of the claimed color precedence model is still missing."
+    }
+  ],
+  "preserved_evidence_root": "test-diagrams/perturbations/deployment-note-background-color-retention",
+  "review_file": "docs/parity-reviews/deployment-note-background-color-retention/review.json"
+}

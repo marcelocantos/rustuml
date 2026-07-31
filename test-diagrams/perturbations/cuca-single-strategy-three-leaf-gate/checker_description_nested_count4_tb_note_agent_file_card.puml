@@ -1,0 +1,10 @@
+@startuml
+frame Capsule {
+  note as StagePad
+    prepared
+  endnote
+  agent ShellRunner
+  file ArtifactBox
+  card PortalCard
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+
+note as LedgerPad
+  staged
+endnote
+file ReleaseBundle
+stack CoreStack
+@enduml

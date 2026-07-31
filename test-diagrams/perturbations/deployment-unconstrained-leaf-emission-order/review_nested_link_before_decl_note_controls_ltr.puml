@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Envelope 671" as Envelope671 {
+  control "Control 671" as Control671
+  Control671 --> Shadow671
+  note as OwnedMemo671
+    link-created companion 671
+  end note
+}
+@enduml

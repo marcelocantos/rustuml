@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+
+rectangle Ops {
+  file ConfigBlob
+  card GatewayCard
+  agent ShellAgent
+}
+component ExternalPeer
+
+GatewayCard --> ExternalPeer
+@enduml

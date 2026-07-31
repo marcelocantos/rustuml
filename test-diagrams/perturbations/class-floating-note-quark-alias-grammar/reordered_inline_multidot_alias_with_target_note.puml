@@ -1,0 +1,5 @@
+@startuml
+class Ledger45
+note "after declaration" as Review.审计_45
+Review.审计_45 .. Ledger45
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+skinparam noteBackgroundColor Wheat
+node EntryNode
+NoTe as FloatingMemo #MistyRose
+first payload line
+second payload line
+EnD NoTe
+artifact AfterFloating
+EntryNode --> AfterFloating
+@enduml

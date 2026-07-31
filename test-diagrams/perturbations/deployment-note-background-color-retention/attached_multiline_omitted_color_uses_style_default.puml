@@ -1,0 +1,10 @@
+@startuml
+skinparam noteBackgroundColor HoneyDew
+node StyledNode
+note left of StyledNode
+default attached line one
+default attached line two
+end note
+artifact StyledArtifact
+StyledNode --> StyledArtifact
+@enduml

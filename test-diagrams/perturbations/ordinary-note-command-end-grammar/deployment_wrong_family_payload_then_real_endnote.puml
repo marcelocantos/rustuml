@@ -1,0 +1,9 @@
+@startuml
+node QueueNode
+note right of QueueNode
+end rnote
+database payload remains display text
+endnote
+artifact AfterWrongFamily
+QueueNode --> AfterWrongFamily
+@enduml

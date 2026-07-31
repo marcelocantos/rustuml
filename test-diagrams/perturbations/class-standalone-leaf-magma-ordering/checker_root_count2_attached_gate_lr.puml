@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+note "root floating memo two" as RootMemoTwo7101
+class RootLedgerTwo7103
+class AttachedControlTwo7107
+note right of AttachedControlTwo7107 : attached blocker
+@enduml

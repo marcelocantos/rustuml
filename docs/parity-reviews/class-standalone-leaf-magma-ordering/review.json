@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-standalone-leaf-magma-ordering",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and existing target/release/examples/diff_one --no-oracle"
+  },
+  "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
+  "rust_short_revision": "082981d1",
+  "account_commit": "9e0a34d106924db9b2ae5cd82a776f903b069b7c",
+  "corrective_account_commit": "8dc3fd8ea1874e56b4f4138a53164408230b463e",
+  "implementation_commit": "082981d14ae7cc1e177c9437f38da296f44b4031",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rejected_claim": "The class-standalone-leaf-magma-ordering account's invariant that Java applySingleStrategy hands rendered empty-package leaves to Magma alongside ordinary class leaves and named floating notes.",
+  "commands": [
+    "git rev-parse HEAD",
+    "git status --short",
+    "git log --format=%H -- docs/parity-reviews/class-standalone-leaf-magma-ordering/account.json | head -n 1",
+    "git log --format=%H -- docs/parity-reviews/cuca-single-strategy-three-leaf-gate/account.json | head -n 1",
+    "git merge-base --is-ancestor 9e0a34d106924db9b2ae5cd82a776f903b069b7c 082981d14ae7cc1e177c9437f38da296f44b4031",
+    "git merge-base --is-ancestor 8dc3fd8ea1874e56b4f4138a53164408230b463e 082981d14ae7cc1e177c9437f38da296f44b4031",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/atmp/CucaDiagram.java | sed -n '760,790p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java | sed -n '1,140p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java | sed -n '1,140p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/abel/Entity.java | rg -n 'leafs\\(|isGroup\\(|groupType|leafType|countChildren' -n -C 2",
+    "sed -n '2914,3008p' crates/rustuml-render/src/class.rs",
+    "rg -n 'SvekNodeEmission::EmptyPackage|package_render_model|note_owner_packages|svek_node_emission_order' crates/rustuml-render/src/class.rs -n -C 2",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count2_attached_gate_lr.puml test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count3_mixed_order_lr.puml test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count3_descendant_exclusion_tb.puml test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count4_attached_exclusion_lr.puml test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count5_linked_exclusion_tb.puml",
+    "find test-diagrams/perturbations/class-standalone-leaf-magma-ordering -name '*.svg' -print0 | xargs -0 xmllint --noout",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/class-standalone-leaf-magma-ordering -g '*.svg'",
+    "for f in test-diagrams/perturbations/class-standalone-leaf-magma-ordering/*.puml; do target/release/examples/diff_one --no-oracle \"$f\"; done",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count3_mixed_order_lr.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count3_descendant_exclusion_tb.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count4_attached_exclusion_lr.puml",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-standalone-leaf-magma-ordering/account.json docs/parity-reviews/cuca-single-strategy-three-leaf-gate/account.json",
+    "for f in test-diagrams/perturbations/class-standalone-leaf-magma-ordering/*.puml test-diagrams/perturbations/class-standalone-leaf-magma-ordering/*.svg; do shasum -a 256 \"$f\"; done",
+    "rg -n 'include_str!|include_bytes!|golden|checker_|perturbation|RootEmptyThree|OuterEmptyThree|Empty Pocket Four|RootEmptyFive|ObservatoryThree7121|MixedBayFour7143' crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml/src/main.rs -S"
+  ],
+  "no_cargo_or_rustc": true,
+  "artifacts": {
+    "diff_one": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+      "sha256": "0e8ca7d0edae26c952b918a94b0e1675971aa1a60bc4283133c1ec4b0d947f07"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account_json_sha256": "76395cacbd0697c330bcbff8425ec742296b3bbce9cd393c4c2b88a0f87c87a4",
+    "corrective_account_json_sha256": "738389a659f449b66da13f64a41f9b18e151b3b151212c292d97fecda38df152",
+    "sources": {
+      "checker_nested_count3_descendant_exclusion_tb.puml": "b6b1c4f62d57d55ce505d6ba6d0addda34a8ae930b1869ab56b2336b3e30b9e6",
+      "checker_nested_count4_attached_exclusion_lr.puml": "e7cb9a449688dacff0db54e9772827bf0a108d0a2852c77eb7b8e457049a010f",
+      "checker_root_count2_attached_gate_lr.puml": "5ccb6b34d88025dd1b1e210c865bfa9c90b93b41f7932574454ced74acb8971e",
+      "checker_root_count3_mixed_order_lr.puml": "c1893bf92c419e4c4ecbce9537be754d2fc266e5ef885b54d0a440cd3bda2424",
+      "checker_root_count5_linked_exclusion_tb.puml": "02efe8688f27a4728a147fcd676308b23532c73add56a2e23f099a84d44f5dcd"
+    },
+    "java_svgs": {
+      "checker_nested_count3_descendant_exclusion_tb.svg": "8517a622d74287a69f43167caa8b6fab61d527bca72f8721788e40cfb647b7c8",
+      "checker_nested_count4_attached_exclusion_lr.svg": "a2b033722b953f8c2ad78f0e8e79c840f8b727e16c3b0eff4ea6c58ca342ff61",
+      "checker_root_count2_attached_gate_lr.svg": "2ea1f16275a98ffc78a5dcba19739a6ff49b64a4f16b370dec1d40e0e91b34dd",
+      "checker_root_count3_mixed_order_lr.svg": "835febb1738c63f3282eefc58cbda3a6fd49ece7caefd5585c6d30135e8cc5fb",
+      "checker_root_count5_linked_exclusion_tb.svg": "7b6d31632eb401338c0835b4151218a8a414b3073e2c5bc905554e3be0645d7b"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count2_attached_gate_lr.puml",
+      "golden": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count2_attached_gate_lr.svg",
+      "axes": [
+        "root ownership",
+        "standalone count 2",
+        "floating note plus ordinary class",
+        "left-to-right direction",
+        "attached-note target exclusion"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count3_mixed_order_lr.puml",
+      "golden": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count3_mixed_order_lr.svg",
+      "axes": [
+        "root ownership",
+        "standalone count 3",
+        "ordinary class plus rendered empty package plus floating note",
+        "class before package before note declaration order",
+        "left-to-right direction"
+      ],
+      "result": "fail: SVG structural differences"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count3_descendant_exclusion_tb.puml",
+      "golden": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count3_descendant_exclusion_tb.svg",
+      "axes": [
+        "nested package ownership",
+        "standalone count 3",
+        "direct outer note plus direct outer class plus direct empty package",
+        "three descendant inner classes that should not join the outer Magma set",
+        "top-to-bottom direction"
+      ],
+      "result": "fail: SVG structural differences"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count4_attached_exclusion_lr.puml",
+      "golden": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count4_attached_exclusion_lr.svg",
+      "axes": [
+        "nested package ownership",
+        "standalone count 4",
+        "ordinary class plus floating note plus rendered empty package plus ordinary class",
+        "attached-note target exclusion on a fifth direct child",
+        "left-to-right direction"
+      ],
+      "result": "fail: SVG structural differences"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count5_linked_exclusion_tb.puml",
+      "golden": "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count5_linked_exclusion_tb.svg",
+      "axes": [
+        "root ownership",
+        "standalone count 5",
+        "two floating notes plus two ordinary classes plus one rendered empty package",
+        "linked ordinary class excluded by a visible relationship to an outside class",
+        "top-to-bottom direction"
+      ],
+      "result": "fail: SVG structural differences"
+    }
+  ],
+  "findings": [
+    "The corrective three-leaf gate is real. checker_root_count2_attached_gate_lr passes exactly, so a floating note plus ordinary class stays unconstrained when the third visible direct class is excluded by an attached note.",
+    "Java Entity.leafs() returns only immediate non-group children: it iterates quark children and appends only entries where data != null and data.isGroup() == false. Empty packages are groups, not leaf entities, so CucaDiagram.applySingleStrategy never hands rendered empty packages to Magma even though SVEK later paints them as empty leaf-like nodes.",
+    "Rust add_single_strategy_links explicitly appends SvekNodeEmission::EmptyPackage into the standalone owner buckets through package_render.parent_pkg and empty_package_layout_id. That means the Rust Magma adapter constrains rendered empty packages as if they were Java Entity leafs.",
+    "The fresh failure pattern is therefore mechanism-shaped, not random. Every mixed case that includes a rendered empty package fails strict no-oracle replay (counts 3, 3, 4, and 5), while the size-two attached-note control with no empty package passes.",
+    "checker_nested_count3_descendant_exclusion_tb isolates the divergence most cleanly. Java and Rust place the outer floating note, the outer class, and all three descendant inner classes in matching positions within sampling noise, but the direct empty package moves from Java's unconstrained right-hand slot to Rust's lower Magma-constrained slot. That rejects the account's empty-package membership claim without implicating descendant ownership or note/class participation.",
+    "checker_nested_count4_attached_exclusion_lr shows the attached-note control is not the failing axis. The attached class and GMN note stay outside the intended standalone cluster on both sides, yet Java and Rust still disagree on the empty package's placement relative to the three true standalone leaves.",
+    "checker_root_count3_mixed_order_lr and checker_root_count5_linked_exclusion_tb extend the same rejection to root ownership. Once a rendered empty package joins an otherwise note/class-only direct-leaf set, Rust adds Magma constraints that Java does not.",
+    "All five Java goldens are well-formed XML and the error-marker scan found no PlantUML syntax/error page output. The failures are valid-syntax behavior differences, not bad inputs.",
+    "The limited anti-overfit scan found no fresh checker labels, perturbation filenames, include_str!/include_bytes!, or SVG/golden lookups tied to these held-outs in the inspected Rust files. The rejection is about the causal account being wrong, not about fixture-shaped implementation logic."
+  ],
+  "verdict": "rejected"
+}
