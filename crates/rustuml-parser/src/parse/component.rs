@@ -31,10 +31,6 @@ const CONTAINER_KEYWORDS: &[&str] = &[
     "collections",
 ];
 
-// Java `CommandFactoryNote.CODE` is `[%pLN_.]+`: Unicode letters and
-// numbers plus underscore and the quark namespace separator.
-const NOTE_CODE_PATTERN: &str = r"[\p{L}\p{N}_.]+";
-
 static RE_DESCRIPTION_BRACKET_DECL: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(?:\[([^\[\]]+)\](?:\s+(?i:as)\s+([\w.]+))?|([\w.]+)\s+(?i:as)\s+\[([^\[\]]+)\])\s*$",
@@ -287,6 +283,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut note_target: Option<String> = None;
     let mut note_id: Option<String> = None;
     let mut note_owner: Option<String> = None;
+    let mut note_tags: Vec<String> = Vec::new();
+    let mut note_stereotype: Option<String> = None;
+    let mut note_color: Option<String> = None;
     let mut note_connection: Option<usize> = None;
     let mut note_position = ComponentNotePosition::Right;
     let mut note_source_line: Option<usize> = None;
@@ -329,19 +328,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         Regex::new(r"^note\s+(right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
             .unwrap()
     });
-    // Floating note: `note "text" as ID` or `note : text`
-    static RE_NOTE_INLINE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(&format!(
-            r#"^note\s+"([^"]+)"\s+as\s+({NOTE_CODE_PATTERN})(?:\s|$)"#
-        ))
-        .unwrap()
-    });
-    static RE_NOTE_MULTI: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(&format!(
-            r"^note(?:\s+as\s+({NOTE_CODE_PATTERN}))?(?:\s+#[^\s]+)?\s*$"
-        ))
-        .unwrap()
-    });
+    static RE_NOTE_MULTI_PLAIN: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^(?i:note)(?:\s+(#[^\s]+))?\s*$").unwrap());
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
@@ -380,12 +368,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
 
         // End of multi-line note.
         if in_note {
-            if trimmed == "end note" {
+            if super::is_ordinary_note_terminator(trimmed) {
                 let text = note_lines.join("\n").trim().to_string();
                 if !text.is_empty() {
                     notes.push(ComponentNote {
                         id: note_id.take(),
                         owner: note_owner.take(),
+                        tags: std::mem::take(&mut note_tags),
+                        stereotype: note_stereotype.take(),
+                        color: note_color.take(),
                         text,
                         target: note_target.take(),
                         connection: note_connection.take(),
@@ -396,6 +387,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 }
                 note_id = None;
                 note_owner = None;
+                note_tags.clear();
+                note_stereotype = None;
+                note_color = None;
                 note_target = None;
                 note_connection = None;
                 note_lines.clear();
@@ -685,6 +679,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 notes.push(ComponentNote {
                     id: None,
                     owner: package_qualified_name(&package_stack),
+                    tags: Vec::new(),
+                    stereotype: None,
+                    color: None,
                     text: inline_text,
                     target: Some(target),
                     connection: None,
@@ -695,6 +692,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_target = Some(target);
                 note_id = None;
                 note_owner = package_qualified_name(&package_stack);
+                note_tags.clear();
+                note_stereotype = None;
+                note_color = None;
                 note_connection = None;
                 note_position = position;
                 // `CommandFactoryNoteOnEntity.createMultiLine` removes the
@@ -707,12 +707,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
         // Floating inline note: `note "text" as ID`
-        if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
-            known_note_ids.insert(caps[2].to_string());
+        if let Some(command) = super::parse_named_note_inline(trimmed) {
+            known_note_ids.insert(command.code.clone());
             notes.push(ComponentNote {
-                id: Some(caps[2].to_string()),
+                id: Some(command.code),
                 owner: package_qualified_name(&package_stack),
-                text: caps[1].to_string(),
+                tags: command.tags,
+                stereotype: command.stereotype,
+                color: command.color,
+                text: command.display.expect("inline named note has display text"),
                 target: None,
                 connection: None,
                 position: ComponentNotePosition::Right,
@@ -730,6 +733,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 notes.push(ComponentNote {
                     id: None,
                     owner: None,
+                    tags: Vec::new(),
+                    stereotype: None,
+                    color: None,
                     text,
                     target: None,
                     connection: Some(connection),
@@ -741,6 +747,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_target = None;
                 note_id = None;
                 note_owner = None;
+                note_tags.clear();
+                note_stereotype = None;
+                note_color = None;
                 note_connection = Some(connection);
                 note_position = ComponentNotePosition::Bottom;
                 // `CommandFactoryNoteOnLink.createMultiLine` creates its note
@@ -761,6 +770,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 notes.push(ComponentNote {
                     id: None,
                     owner: package_qualified_name(&package_stack),
+                    tags: Vec::new(),
+                    stereotype: None,
+                    color: None,
                     text,
                     target: None,
                     connection: None,
@@ -771,13 +783,28 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
         }
         // Multi-line floating note: `note as ID` or plain `note`
-        if let Some(caps) = RE_NOTE_MULTI.captures(trimmed) {
+        if let Some(command) = super::parse_named_note_multiline(trimmed) {
             note_target = None;
-            note_id = caps.get(1).map(|id| id.as_str().to_string());
-            if let Some(id) = &note_id {
-                known_note_ids.insert(id.clone());
-            }
+            known_note_ids.insert(command.code.clone());
+            note_id = Some(command.code);
             note_owner = package_qualified_name(&package_stack);
+            note_tags = command.tags;
+            note_stereotype = command.stereotype;
+            note_color = command.color;
+            note_connection = None;
+            note_position = ComponentNotePosition::Right;
+            note_source_line = None;
+            note_lines.clear();
+            in_note = true;
+            continue;
+        }
+        if let Some(caps) = RE_NOTE_MULTI_PLAIN.captures(trimmed) {
+            note_target = None;
+            note_id = None;
+            note_owner = package_qualified_name(&package_stack);
+            note_tags.clear();
+            note_stereotype = None;
+            note_color = caps.get(1).map(|color| color.as_str().to_string());
             note_connection = None;
             note_position = ComponentNotePosition::Right;
             note_source_line = None;
@@ -1801,10 +1828,10 @@ mod tests {
     fn named_note_commands_share_the_complete_java_code_token() {
         let d = parse(
             "node OuterScope {\n\
-               note \"inline payload\" as Ledger.C464 #LightBlue\n\
-               note as Métrique.Δelta_7 #MistyRose\n\
+               note \"inline payload\" as Ledger.C464 $audit <<InlineLedger>> #LightBlue\n\
+               note as Métrique.Δelta_7 $retained <<MetricLedger>> #MistyRose\n\
                  multiline payload\n\
-               end note\n\
+               endnote\n\
              }",
         );
 
@@ -1813,6 +1840,12 @@ mod tests {
         assert_eq!(d.notes[1].id.as_deref(), Some("Métrique.Δelta_7"));
         assert_eq!(d.notes[0].owner.as_deref(), Some("OuterScope"));
         assert_eq!(d.notes[1].owner.as_deref(), Some("OuterScope"));
+        assert_eq!(d.notes[0].tags, ["audit"]);
+        assert_eq!(d.notes[1].tags, ["retained"]);
+        assert_eq!(d.notes[0].stereotype.as_deref(), Some("InlineLedger"));
+        assert_eq!(d.notes[1].stereotype.as_deref(), Some("MetricLedger"));
+        assert_eq!(d.notes[0].color.as_deref(), Some("#LightBlue"));
+        assert_eq!(d.notes[1].color.as_deref(), Some("#MistyRose"));
 
         let invalid = parse("note \"payload\" as ValidPrefix-invalid");
         assert!(invalid.notes.is_empty());
