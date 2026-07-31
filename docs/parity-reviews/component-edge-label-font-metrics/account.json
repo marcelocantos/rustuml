@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-edge-label-font-metrics",
+  "status": "corrected_account_committed_before_implementation",
+  "supersedes_account_revision": "8fd38e49",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:GraphvizImageBuilder#buildImage",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:SvekEdge constructor, SvekEdge#addVisibilityModifier, SvekEdge#appendLine, and SvekEdge#appendTable",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/component.rs:ComponentLinkRenderStyle",
+    "crates/rustuml-render/src/component.rs:component_link_styles construction",
+    "crates/rustuml-render/src/component.rs:component_edge_label_layout_width",
+    "crates/rustuml-render/src/component.rs:compute_no_oracle_canvas"
+  ],
+  "invariant": "A component relationship label has one resolved arrow FontConfiguration. PlantUML uses that same face to create the visible TextBlock and to calculate the hidden fixed-size Graphviz table consumed by layout. SvekEdge adds the one-pixel ordinary-link margin, calculates the resulting TextBlock dimension with its StringBounder, truncates that width in appendTable, and SvekResult includes the solved table envelope in its final dimension. The painted text and the layout placeholder therefore cannot use different font families.",
+  "causal_divergence": "Rust already paints component edge labels with ComponentLinkRenderStyle.font_family, but component_edge_label_layout_width accepts only the font size and calls text_render::measure, which silently measures the default sans-serif face. For the controlled Verdana label 'axis label', Java's visible text is 56.4902px and its margin-wrapped table is based on that width, while Rust lays out a 67px placeholder from the narrower default face; the hidden horizontal envelope is 1.4947px short. For the Cerulean/Minty/Superhero/United label 'queries', the resolved Verdana text plus margins is 56.0332px while Rust supplies a 54px placeholder, leaving the envelope 2.0369px short. Interior SVG coordinates and paint agree; only the root reveals the hidden table deficit, and dpi 100 magnifies it beyond the structural root slack. The earlier scaled-root-frontier hypothesis was therefore a symptom-level account and is superseded before implementation.",
+  "planned_change": "Pass each resolved ComponentLinkRenderStyle.font_family into component_edge_label_layout_width at every center-label and note-on-link sizing site, and measure with text_render::measure_with_family before applying the existing Java margin and fixed-table truncation model. Keep the visible renderer on the same family. Do not alter SvgBuilder root arithmetic, document scaling, component geometry, Graphviz constants, or comparator tolerance. Add tests that independently vary arrow font family and label text, including renamed labels and changed topology, and assert that the root envelope follows the resolved family while all interior paint remains stable.",
+  "perturbation_axes": [
+    "Verdana versus sans-serif and a metrically distinct serif family",
+    "short versus long relationship labels",
+    "vertical chain versus horizontal rank",
+    "dpi 96, dpi 100, and explicit fractional scale",
+    "ordinary center labels versus labels merged with link notes",
+    "font declaration before versus after link construction"
+  ],
+  "scope_boundary": "This mechanism owns only component relationship-label measurement used by Graphviz placeholders and the resulting solved envelope. It does not change component entity metrics, visible text rendering, root ensureVisible semantics, generic SVG scaling, class relationship labels, cardinality labels, comparator behavior, or fixture eligibility.",
+  "acceptance": [
+    "The controlled Verdana dpi pair and all four themed component failures become structurally equivalent through diff_one --no-oracle.",
+    "Fresh component perturbations vary font family, label length, topology, declaration order, and scale without fixture-shaped branches.",
+    "Existing component layout and renderer unit suites remain green, including short fixed-table compatibility cases.",
+    "The full no-oracle ratchet improves without any family regression.",
+    "An independent checker audits the exact Java/Rust revisions and preserves every passing or failing fresh perturbation."
+  ],
+  "forbidden_approaches": [
+    "adding pixels to SVG roots or keying a correction to dpi 100",
+    "matching theme names, component labels, fixture paths, or known dimensions",
+    "changing fixed-table compatibility constants to absorb font errors",
+    "changing comparator tolerance, baselines, skip markers, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_united_component.puml",
+    "/private/tmp/t14-component-axis-font.puml",
+    "/private/tmp/t14-component-axis-dpi96.puml",
+    "/private/tmp/t14-component-axis-dpi.puml"
+  ]
+}
