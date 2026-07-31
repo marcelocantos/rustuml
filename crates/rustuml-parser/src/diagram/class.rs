@@ -280,6 +280,18 @@ fn default_true() -> bool {
     true
 }
 
+/// A note owned by a relationship through `Link.addNote`.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClassLinkNote {
+    pub lines: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    pub position: NotePosition,
+    /// 1-based source line of the note command within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
 /// A relationship (association, inheritance, etc.) between entities.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Relationship {
@@ -319,6 +331,10 @@ pub struct Relationship {
     /// effective stroke and color.
     #[serde(default, skip_serializing_if = "RelationshipStyle::is_default")]
     pub style: RelationshipStyle,
+    /// `CommandFactoryNoteOnLink` stores this on the latest `Link`; a later
+    /// note replaces the previous value rather than creating a note entity.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub link_note: Option<ClassLinkNote>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

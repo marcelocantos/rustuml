@@ -356,6 +356,7 @@ mod tests {
                 dashed: false,
                 length: 2,
                 style: RelationshipStyle::default(),
+                link_note: None,
                 source_line: 0,
             }],
         );

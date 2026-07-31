@@ -34,7 +34,7 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
 
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
-        if parser.current_note.is_some() {
+        if parser.current_note.is_some() || parser.current_link_note.is_some() {
             // Java `CommandFactoryNote.createMultiLine` delegates to
             // `BlocLines.removeEmptyColumns`, which removes only common
             // leading columns. Terminal spaces remain in the Display and
@@ -48,7 +48,22 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
         parser.parse_line(source_line, trimmed)?;
     }
 
+    if let Some(note) = parser.current_link_note.as_ref() {
+        return Err(ParseError {
+            line: note.command_line,
+            message: "unterminated note on link".to_string(),
+        });
+    }
+
     Ok(parser.finish())
+}
+
+struct ClassLinkNoteAccum {
+    relationship_index: usize,
+    color: Option<String>,
+    position: NotePosition,
+    command_line: usize,
+    lines: Vec<String>,
 }
 
 struct ClassParser {
@@ -84,6 +99,8 @@ struct ClassParser {
     quark_creation_order: Vec<Vec<String>>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
+    /// Multiline note owned by the relationship selected at command time.
+    current_link_note: Option<ClassLinkNoteAccum>,
     /// Java's attached-note command also has a `{ ... }` multiline form.
     current_note_closes_with_brace: bool,
     /// ID of the last declared entity (for shorthand `note right : text`).
@@ -134,6 +151,7 @@ impl ClassParser {
             note_by_path: HashMap::new(),
             quark_creation_order: Vec::new(),
             current_note: None,
+            current_link_note: None,
             current_note_closes_with_brace: false,
             last_entity_id: None,
             namespace_sep: Some(".".to_string()),
@@ -638,6 +656,33 @@ impl ClassParser {
             return Ok(());
         }
 
+        // Inside a multi-line relationship-owned note?
+        if self.current_link_note.is_some() {
+            if super::is_ordinary_note_terminator(line) {
+                let mut accum = self.current_link_note.take().unwrap();
+                if accum.lines.is_empty() {
+                    return Err(ParseError {
+                        line: accum.command_line,
+                        message: "no note defined".to_string(),
+                    });
+                }
+                dedent_note_lines(&mut accum.lines);
+                self.relationships[accum.relationship_index].link_note = Some(ClassLinkNote {
+                    lines: accum.lines,
+                    color: accum.color,
+                    position: accum.position,
+                    source_line: accum.command_line,
+                });
+            } else {
+                self.current_link_note
+                    .as_mut()
+                    .unwrap()
+                    .lines
+                    .push(line.to_string());
+            }
+            return Ok(());
+        }
+
         // Inside a multi-line note?
         if self.current_note.is_some() {
             let is_terminator = if self.current_note_closes_with_brace {
@@ -741,6 +786,9 @@ impl ClassParser {
             });
         }
         if self.try_enum_decl(line) {
+            return Ok(());
+        }
+        if self.try_link_note(line)? {
             return Ok(());
         }
         if self.try_note(line) {
@@ -1014,6 +1062,7 @@ impl ClassParser {
                     declaration: true,
                     ..RelationshipStyle::default()
                 },
+                link_note: None,
                 source_line: self.current_line,
             });
         }
@@ -1213,6 +1262,7 @@ impl ClassParser {
                 dashed,
                 length,
                 style,
+                link_note: None,
                 source_line: self.current_line,
             });
             return true;
@@ -1248,6 +1298,7 @@ impl ClassParser {
                 dashed: false,
                 length: 2,
                 style: RelationshipStyle::default(),
+                link_note: None,
                 source_line: self.current_line,
             });
             return true;
@@ -1385,6 +1436,7 @@ impl ClassParser {
             dashed: false,
             length,
             style,
+            link_note: None,
             source_line: self.current_line,
         });
         Ok(true)
@@ -1686,6 +1738,75 @@ impl ClassParser {
         }
     }
 
+    fn try_link_note(&mut self, line: &str) -> Result<bool, ParseError> {
+        static PREFIX: LazyLock<Regex> = LazyLock::new(|| {
+            // Java `CommandFactoryNoteOnLink` allows no whitespace between an
+            // optional position and `on`; command ownership is terminal once
+            // this prefix has matched.
+            Regex::new(r"(?i)^note\s+(?:(right|left|top|bottom)\s*)?(?:on|of)\s+link\b(.*)$")
+                .unwrap()
+        });
+
+        let Some(captures) = PREFIX.captures(line) else {
+            return Ok(false);
+        };
+        let position = captures
+            .get(1)
+            .map(|value| parse_note_position(&value.as_str().to_ascii_lowercase()))
+            .unwrap_or(NotePosition::Bottom);
+        let mut suffix = captures.get(2).unwrap().as_str().trim_start();
+        let color = if suffix.starts_with('#') {
+            let end = suffix
+                .find(|character: char| character.is_whitespace() || character == ':')
+                .unwrap_or(suffix.len());
+            let token = &suffix[..end];
+            if !super::named_note_color_is_valid(token) {
+                return Err(ParseError {
+                    line: self.current_line,
+                    message: "invalid note-on-link color".to_string(),
+                });
+            }
+            suffix = suffix[end..].trim_start();
+            Some(token.to_string())
+        } else {
+            None
+        };
+        let Some(relationship_index) = self.relationships.len().checked_sub(1) else {
+            return Err(ParseError {
+                line: self.current_line,
+                message: "no link defined for note on link".to_string(),
+            });
+        };
+
+        if suffix.is_empty() {
+            self.current_link_note = Some(ClassLinkNoteAccum {
+                relationship_index,
+                color,
+                position,
+                command_line: self.current_line,
+                lines: Vec::new(),
+            });
+            return Ok(true);
+        }
+        let Some(text) = suffix.strip_prefix(':') else {
+            return Err(ParseError {
+                line: self.current_line,
+                message: "invalid note-on-link command".to_string(),
+            });
+        };
+        let lines = crate::display::split_escaped_newlines(text.trim_start())
+            .into_iter()
+            .map(|line| line.trim_end().to_string())
+            .collect();
+        self.relationships[relationship_index].link_note = Some(ClassLinkNote {
+            lines,
+            color,
+            position,
+            source_line: self.current_line,
+        });
+        Ok(true)
+    }
+
     fn try_note(&mut self, line: &str) -> bool {
         // Single-line attached note: `note <pos> of <entity> : <text>`
         // Entity may be a dotted name (e.g. `domain.User` in namespace diagrams).
@@ -1822,46 +1943,6 @@ impl ClassParser {
                 position: None,
                 alias: Some(alias),
                 color: caps.get(2).map(|m| m.as_str().to_string()),
-                source_line: self.current_line,
-            });
-            self.current_note_closes_with_brace = false;
-            return true;
-        }
-
-        // `note on link : text` or `note on link: text` — inline single-line note on the last relationship.
-        let note_on_link_text = line
-            .strip_prefix("note on link :")
-            .or_else(|| line.strip_prefix("note on link:"));
-        if let Some(text) = note_on_link_text {
-            let text = text.trim().to_string();
-            let lines = if text.is_empty() {
-                Vec::new()
-            } else {
-                crate::display::split_escaped_newlines(&text)
-                    .into_iter()
-                    .map(|s| s.trim_end().to_string())
-                    .collect()
-            };
-            self.push_note(Note {
-                lines,
-                id: None,
-                target: None,
-                position: None,
-                alias: None,
-                color: None,
-                source_line: self.current_line,
-            });
-            return true;
-        }
-        // `note on link` — multi-line note attached to the last relationship.
-        if line == "note on link" {
-            self.current_note = Some(Note {
-                lines: Vec::new(),
-                id: None,
-                target: None,
-                position: None,
-                alias: None,
-                color: None,
                 source_line: self.current_line,
             });
             self.current_note_closes_with_brace = false;
@@ -4759,6 +4840,66 @@ mod tests {
         let d = parse("note as FreshWhitespaceLedger4171\n  renamed audit value:   \nend note");
 
         assert_eq!(d.notes[0].lines, ["renamed audit value:   "]);
+    }
+
+    #[test]
+    fn link_note_commands_store_position_color_and_replace_on_relationship() {
+        let d = parse(
+            "class FreshLeft\n\
+             class FreshRight\n\
+             FreshLeft --> FreshRight : owned label\n\
+             note left on link #LightGreen : first payload\n\
+             note right of FreshLeft : standalone payload\n\
+             note top of link #AliceBlue : replacement\\nsecond line",
+        );
+
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].lines, ["standalone payload"]);
+        let note = d.relationships[0].link_note.as_ref().unwrap();
+        assert_eq!(note.position, NotePosition::Top);
+        assert_eq!(note.color.as_deref(), Some("#AliceBlue"));
+        assert_eq!(note.lines, ["replacement", "second line"]);
+    }
+
+    #[test]
+    fn multiline_link_note_dedents_and_defaults_to_bottom() {
+        let d = parse(
+            "class FreshLeft\n\
+             class FreshRight\n\
+             FreshLeft --> FreshRight\n\
+             note on link\n\
+                 first row  \n\
+                   nested row\n\
+             end note",
+        );
+
+        assert!(d.notes.is_empty());
+        let note = d.relationships[0].link_note.as_ref().unwrap();
+        assert_eq!(note.position, NotePosition::Bottom);
+        assert_eq!(note.lines, ["first row  ", "  nested row"]);
+    }
+
+    #[test]
+    fn malformed_link_note_commands_are_terminal_errors() {
+        for (input, message) in [
+            ("note on link : orphan", "no link defined for note on link"),
+            (
+                "class A\nclass B\nA --> B\nnote on link #NoSuchColor : payload",
+                "invalid note-on-link color",
+            ),
+            (
+                "class A\nclass B\nA --> B\nnote on link trailing",
+                "invalid note-on-link command",
+            ),
+            (
+                "class A\nclass B\nA --> B\nnote on link",
+                "unterminated note on link",
+            ),
+        ] {
+            let lines = input.lines().map(str::to_string).collect::<Vec<_>>();
+            let error = parse_class(&lines).unwrap_err();
+            assert_eq!(error.message, message);
+        }
     }
 
     #[test]

@@ -2730,7 +2730,6 @@ fn render_with_oracle_uid_origin(
         }
     }
     let uses_ortho_labels = has_ortho_linetype(diagram);
-    let relationship_note_indices = relationship_note_indices(diagram);
     for rel_idx in svek_relationship_order(diagram) {
         let rel = &diagram.relationships[rel_idx];
         let from = relationship_layout_id(diagram, &rel.from);
@@ -2754,7 +2753,7 @@ fn render_with_oracle_uid_origin(
         // Java `SvekEdge.appendDotString` sends center labels through
         // Graphviz's `xlabel` channel for `DotSplines.ORTHO`, so they do not
         // reserve rank space.
-        let note = relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]);
+        let note = rel.link_note.as_ref();
         let label_size = (!uses_ortho_labels)
             .then(|| relationship_center_layout(diagram, rel, note, &diagram.meta.sprites))
             .flatten()
@@ -5704,14 +5703,12 @@ fn render_plantuml_svg(
             max_x = max_x.max(polygon_max_x + MARGIN + layout_x_bias);
             max_y = max_y.max(polygon_max_y + MARGIN);
         }
-        let relationship_note_indices = relationship_note_indices(diagram);
-        for ((relationship, note_idx), edge_idx) in diagram
+        for (relationship, edge_idx) in diagram
             .relationships
             .iter()
-            .zip(&relationship_note_indices)
             .zip(relationship_edge_indices(diagram, edge_paths))
         {
-            let note = note_idx.map(|idx| &diagram.notes[idx]);
+            let note = relationship.link_note.as_ref();
             let Some(center) =
                 relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)
             else {
@@ -5728,14 +5725,25 @@ fn render_plantuml_svg(
                     position.x
                         + MARGIN
                         + layout_x_bias
-                        + (center.width - center.label_width) / 2.0
+                        + center.label_origin_x
                         + center.label_width,
                 );
+                max_y =
+                    max_y.max(position.y + MARGIN + center.label_origin_y + center.label_height);
+                if let Some(label) = relationship.label.as_deref() {
+                    let arrow_font = relationship_arrow_font(diagram, relationship);
+                    let line = text_render::layout_no_mono_line(
+                        label.trim_matches('"'),
+                        arrow_font.size,
+                        &arrow_font.family,
+                    );
+                    max_y = max_y
+                        .max(position.y + MARGIN + center.label_text_offset_y + line.painted_max_y);
+                }
             }
             if note.is_some() {
-                let note_x = relationship_note_x(position.x, center) + MARGIN + layout_x_bias;
-                let note_y =
-                    position.y + MARGIN + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
+                let note_x = position.x + center.note_x + MARGIN + layout_x_bias;
+                let note_y = position.y + center.note_y + MARGIN;
                 // `SvekResult.calculateDimension` measures the rendered graph
                 // through `LimitFinder`; its `drawUPath` includes the visible
                 // `ComponentRoseNote` polygon in the final envelope.
@@ -6353,7 +6361,6 @@ fn render_plantuml_svg(
         render_oracle_note_connectors(&mut svg, orc);
     } else {
         let edge_indices = relationship_edge_indices(diagram, edge_paths);
-        let relationship_note_indices = relationship_note_indices(diagram);
         let mut used_relationship_path_ids = HashSet::new();
         for rel_idx in svek_relationship_order(diagram) {
             let rel = &diagram.relationships[rel_idx];
@@ -6377,7 +6384,7 @@ fn render_plantuml_svg(
                     rel,
                     RelationshipRenderContext {
                         diagram,
-                        note: relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]),
+                        note: rel.link_note.as_ref(),
                         package_ids: Some(&svek_ids.package_ids),
                         entity_ids: Some(&svek_ids.entity_ids),
                         note_ids: Some(&svek_ids.note_ids),
@@ -12937,7 +12944,7 @@ fn oracle_polygon_fill(fill: Option<&str>, monochrome: bool) -> &str {
 
 struct RelationshipRenderContext<'a> {
     diagram: &'a ClassDiagram,
-    note: Option<&'a Note>,
+    note: Option<&'a ClassLinkNote>,
     package_ids: Option<&'a [Option<String>]>,
     entity_ids: Option<&'a [String]>,
     note_ids: Option<&'a [Option<String>]>,
@@ -13390,41 +13397,6 @@ fn render_relationship_svg(
         }
     }
 
-    let emit_label = |svg: &mut String,
-                      label: &str,
-                      position: Option<rustuml_layout::graph::EdgeLabelPosition>,
-                      horizontal_margin: f64,
-                      fallback: (f64, f64)| {
-        let (x, y) = position
-            .map(|position| {
-                (
-                    position.x + MARGIN + horizontal_margin,
-                    position.y
-                        + MARGIN
-                        + text_render::label_ascent_with_family(
-                            label,
-                            arrow_font.size,
-                            &arrow_font.family,
-                        ),
-                )
-            })
-            .unwrap_or(fallback);
-        let base = TextBase {
-            x,
-            y,
-            font_size: arrow_font.size as u32,
-            font_family: &arrow_font.family,
-            fill: &arrow_font.color,
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: true,
-        };
-        // `SvekEdge` center labels use Creole styling, but preserve `__`
-        // and neutralize the `""` monospace delimiter.
-        text_render::emit_text_no_mono(svg, label.trim_matches('"'), &base);
-    };
-
     let center_layout = relationship_center_layout(diagram, rel, note, &diagram.meta.sprites);
     if relationship_has_center_label(rel)
         && let Some(position) = edge_path.label
@@ -13432,36 +13404,47 @@ fn render_relationship_svg(
     {
         // Java `Display` pads the text, `SvekEdge` adds the relationship
         // margin, and `StringWithArrow` prepends the magic arrow last.
-        let label_x = position.x + (center.width - center.label_width) / 2.0;
-        let block_x = label_x + MARGIN + layout_x_bias;
         if rel.label_arrow != LinkArrow::None {
             let block_top = position.y + MARGIN + center.magic_arrow_offset_y;
-            emit_link_arrow(svg, rel.label_arrow, &path_points, block_x, block_top);
+            emit_link_arrow(
+                svg,
+                rel.label_arrow,
+                &path_points,
+                position.x + MARGIN + layout_x_bias + center.magic_arrow_offset_x,
+                block_top,
+            );
         }
         if let Some(label) = rel.label.as_deref() {
-            emit_label(
+            let line = text_render::layout_no_mono_line(
+                label.trim_matches('"'),
+                arrow_font.size,
+                &arrow_font.family,
+            );
+            text_render::emit_no_mono_line(
                 svg,
-                label,
-                Some(rustuml_layout::graph::EdgeLabelPosition {
-                    x: label_x + center.label_text_offset_x,
-                    y: position.y + center.label_text_offset_y,
-                    width: position.width,
-                    height: position.height,
-                }),
-                layout_x_bias,
-                (0.0, 0.0),
+                &line,
+                &TextBase {
+                    x: position.x + MARGIN + layout_x_bias + center.label_text_offset_x,
+                    y: position.y + MARGIN + center.label_text_offset_y + line.first_baseline,
+                    font_size: arrow_font.size as u32,
+                    font_family: &arrow_font.family,
+                    fill: &arrow_font.color,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: true,
+                },
             );
         }
     }
     if let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout) {
-        let note_x = relationship_note_x(position.x, center);
-        let note_y = position.y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
         render_relationship_note(
             svg,
             diagram,
+            rel,
             note,
-            note_x + MARGIN + layout_x_bias,
-            note_y + MARGIN,
+            position.x + center.note_x + MARGIN + layout_x_bias,
+            position.y + center.note_y + MARGIN,
             center.note_width,
             center.note_height,
             &diagram.meta.sprites,
@@ -14394,17 +14377,15 @@ fn svek_layout_y_bias(
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
     let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
-    let note_indices = relationship_note_indices(diagram);
     let edge_indices = relationship_edge_indices(diagram, edge_paths);
     let mapped_center_edges = diagram
         .relationships
         .iter()
-        .zip(&note_indices)
         .zip(&edge_indices)
-        .filter_map(|((relationship, note_idx), edge_idx)| {
+        .filter_map(|(relationship, edge_idx)| {
             let edge_idx = (*edge_idx)?;
             let edge = edge_paths.get(edge_idx)?;
-            let note = note_idx.and_then(|idx| diagram.notes.get(idx));
+            let note = relationship.link_note.as_ref();
             relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
             edge.label?;
             Some(edge_idx)
@@ -14413,12 +14394,11 @@ fn svek_layout_y_bias(
     let center_label_minima = diagram
         .relationships
         .iter()
-        .zip(&note_indices)
         .zip(&edge_indices)
-        .filter_map(|((relationship, note_idx), edge_idx)| {
+        .filter_map(|(relationship, edge_idx)| {
             let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
             let position = edge.label?;
-            let note = note_idx.and_then(|idx| diagram.notes.get(idx));
+            let note = relationship.link_note.as_ref();
             relationship_center_painted_min_y(diagram, relationship, note, position.y)
         })
         .collect::<Vec<_>>();
@@ -14483,31 +14463,24 @@ fn svek_layout_y_bias(
 fn relationship_center_painted_min_y(
     diagram: &ClassDiagram,
     relationship: &Relationship,
-    note: Option<&Note>,
+    note: Option<&ClassLinkNote>,
     position_y: f64,
 ) -> Option<f64> {
     let center = relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
     let mut min_y = f64::INFINITY;
     if let Some(label) = relationship.label.as_deref() {
         let arrow_font = relationship_arrow_font(diagram, relationship);
-        let baseline = position_y
-            + center.label_text_offset_y
-            + text_render::label_ascent_with_family(label, arrow_font.size, &arrow_font.family);
-        // `LimitFinder.drawText` records the resolved UText box from one and
-        // a half pixels below its emitted baseline.
-        let text_min = baseline
-            + text_render::label_painted_top_from_baseline_no_mono_with_family(
-                label,
-                arrow_font.size,
-                &arrow_font.family,
-            )
-            + LIMIT_FINDER_TEXT_BASELINE_TAIL;
-        min_y = min_y.min(text_min);
+        let line = text_render::layout_no_mono_line(
+            label.trim_matches('"'),
+            arrow_font.size,
+            &arrow_font.family,
+        );
+        min_y = min_y.min(position_y + center.label_text_offset_y + line.painted_min_y);
     }
     if note.is_some() {
         // `ComponentRoseNote` has five pixels of preferred-size padding, but
         // its first visible path starts only after that leading padding.
-        min_y = min_y.min(position_y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING);
+        min_y = min_y.min(position_y + center.note_y);
     }
     min_y.is_finite().then_some(min_y)
 }
@@ -14516,22 +14489,20 @@ fn class_magic_arrow_polygons(
     diagram: &ClassDiagram,
     edge_paths: &[EdgePath],
 ) -> Vec<[(f64, f64); 4]> {
-    let note_indices = relationship_note_indices(diagram);
     diagram
         .relationships
         .iter()
-        .zip(&note_indices)
         .zip(relationship_edge_indices(diagram, edge_paths))
-        .filter_map(|((relationship, note_idx), edge_idx)| {
+        .filter_map(|(relationship, edge_idx)| {
             if relationship.label_arrow == LinkArrow::None {
                 return None;
             }
             let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
             let position = edge.label?;
-            let note = note_idx.map(|idx| &diagram.notes[idx]);
+            let note = relationship.link_note.as_ref();
             let center =
                 relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
-            let label_x = position.x + (center.width - center.label_width) / 2.0;
+            let label_x = position.x + center.label_origin_x;
             let block_top = position.y + center.magic_arrow_offset_y;
             let (start_len, end_len) = relationship_retraction_lengths(relationship);
             let path_points = shortened_endpoint_points(&edge.points, start_len, end_len);
@@ -14634,48 +14605,29 @@ struct RelationshipCenterLayout {
     height: f64,
     label_width: f64,
     label_height: f64,
+    label_origin_x: f64,
+    label_origin_y: f64,
     label_text_offset_x: f64,
     label_text_offset_y: f64,
+    magic_arrow_offset_x: f64,
     magic_arrow_offset_y: f64,
     /// Natural Rose component width, including its five-pixel outer padding.
-    note_component_width: f64,
+    note_x: f64,
+    note_y: f64,
     /// Integer-truncated visible `ComponentRoseNote` polygon dimensions.
     note_width: f64,
     note_height: f64,
 }
 
-/// Mirrors `CommandFactoryNoteOnLink.executeInternal`: each relationship note
-/// belongs to the most recently created link, and a later note replaces the
-/// earlier one through `Link.addNote`.
-fn relationship_note_indices(diagram: &ClassDiagram) -> Vec<Option<usize>> {
-    let mut owners = vec![None; diagram.relationships.len()];
-    for (note_idx, note) in diagram.notes.iter().enumerate() {
-        if note.target.is_some() || note.alias.is_some() || note.position.is_some() {
-            continue;
-        }
-        let owner = diagram
-            .relationships
-            .iter()
-            .enumerate()
-            .filter(|(_, relationship)| relationship.source_line < note.source_line)
-            .max_by_key(|(idx, relationship)| (relationship.source_line, *idx))
-            .map(|(idx, _)| idx);
-        if let Some(owner) = owner {
-            owners[owner] = Some(note_idx);
-        }
-    }
-    owners
-}
-
 /// Port of `SvekEdge`'s `labelText` construction. `Display` applies the final
 /// global padding to the arrow-font text block, the relationship margin wraps
-/// that block, an optional magic arrow is prepended, and the default-bottom
-/// `EntityImageNoteLink` is merged last. `appendTable` truncates only the
-/// completed dimensions before dot solves the label box.
+/// that block, and an optional magic arrow is prepended. `SvekEdge` then
+/// composes its relationship-owned note with `mergeLR` or `mergeTB` according
+/// to the note position. `appendTable` truncates only the completed dimensions.
 fn relationship_center_layout(
     diagram: &ClassDiagram,
     relationship: &Relationship,
-    note: Option<&Note>,
+    note: Option<&ClassLinkNote>,
     sprites: &HashMap<String, SpriteData>,
 ) -> Option<RelationshipCenterLayout> {
     let has_label = relationship_has_center_label(relationship);
@@ -14693,20 +14645,16 @@ fn relationship_center_layout(
         .next_back()
         .unwrap_or(0.0);
     let margin = relationship_label_margin(relationship);
-    let (text_width, text_height) = relationship
-        .label
-        .as_deref()
-        .map(|label| {
-            (
-                text_render::measure_no_underline_with_family(
-                    label,
-                    arrow_font.size,
-                    false,
-                    &arrow_font.family,
-                ),
-                text_render::label_height_with_family(label, arrow_font.size, &arrow_font.family),
-            )
-        })
+    let text_layout = relationship.label.as_deref().map(|label| {
+        text_render::layout_no_mono_line(
+            label.trim_matches('"'),
+            arrow_font.size,
+            &arrow_font.family,
+        )
+    });
+    let (text_width, text_height) = text_layout
+        .as_ref()
+        .map(|layout| (layout.width, layout.height))
         .unwrap_or((0.0, 0.0));
     let has_text = relationship.label.is_some();
     let text_block_width = if has_text {
@@ -14731,7 +14679,7 @@ fn relationship_center_layout(
     } else {
         0.0
     });
-    let label_text_offset_x = if has_text {
+    let label_text_inner_x = if has_text {
         padding
             + margin
             + if has_magic_arrow {
@@ -14742,18 +14690,18 @@ fn relationship_center_layout(
     } else {
         0.0
     };
-    let label_text_offset_y = if has_text {
+    let label_text_inner_y = if has_text {
         (label_height - text_block_height) / 2.0 + padding + margin
     } else {
         0.0
     };
-    let magic_arrow_offset_y = if has_magic_arrow {
+    let magic_arrow_inner_y = if has_magic_arrow {
         (label_height - LINK_ARROW_BLOCK_SIZE) / 2.0
     } else {
         0.0
     };
     let (note_natural_width, note_natural_height) = note
-        .map(|note| note_box_dims(diagram, note, sprites))
+        .map(|note| relationship_note_box_dims(diagram, relationship, note, sprites))
         .unwrap_or((0.0, 0.0));
     let (note_width, note_height) = (note_natural_width.floor(), note_natural_height.floor());
     let note_component_padding = if note.is_some() {
@@ -14764,24 +14712,71 @@ fn relationship_center_layout(
     let note_component_width = note_natural_width + 2.0 * note_component_padding;
     let note_component_height = note_natural_height + 2.0 * note_component_padding;
 
+    let (width, height, label_origin_x, label_origin_y, note_component_x, note_component_y) =
+        match note.map(|note| note.position) {
+            None => (label_width, label_height, 0.0, 0.0, 0.0, 0.0),
+            Some(NotePosition::Left) => {
+                let height = label_height.max(note_component_height);
+                (
+                    note_component_width + label_width,
+                    height,
+                    note_component_width,
+                    (height - label_height) / 2.0,
+                    0.0,
+                    (height - note_component_height) / 2.0,
+                )
+            }
+            Some(NotePosition::Right) => {
+                let height = label_height.max(note_component_height);
+                (
+                    label_width + note_component_width,
+                    height,
+                    0.0,
+                    (height - label_height) / 2.0,
+                    label_width,
+                    (height - note_component_height) / 2.0,
+                )
+            }
+            Some(NotePosition::Top) => {
+                let width = label_width.max(note_component_width);
+                (
+                    width,
+                    note_component_height + label_height,
+                    (width - label_width) / 2.0,
+                    note_component_height,
+                    (width - note_component_width) / 2.0,
+                    0.0,
+                )
+            }
+            Some(NotePosition::Bottom) => {
+                let width = label_width.max(note_component_width);
+                (
+                    width,
+                    label_height + note_component_height,
+                    (width - label_width) / 2.0,
+                    0.0,
+                    (width - note_component_width) / 2.0,
+                    label_height,
+                )
+            }
+        };
+
     Some(RelationshipCenterLayout {
-        width: label_width.max(note_component_width),
-        height: label_height + note_component_height,
+        width,
+        height,
         label_width,
         label_height,
-        label_text_offset_x,
-        label_text_offset_y,
-        magic_arrow_offset_y,
-        note_component_width,
+        label_origin_x,
+        label_origin_y,
+        label_text_offset_x: label_origin_x + label_text_inner_x,
+        label_text_offset_y: label_origin_y + label_text_inner_y,
+        magic_arrow_offset_x: label_origin_x,
+        magic_arrow_offset_y: label_origin_y + magic_arrow_inner_y,
+        note_x: note_component_x + note_component_padding,
+        note_y: note_component_y + note_component_padding,
         note_width,
         note_height,
     })
-}
-
-fn relationship_note_x(position_x: f64, center: RelationshipCenterLayout) -> f64 {
-    position_x
-        + (center.width - center.note_component_width) / 2.0
-        + RELATIONSHIP_NOTE_COMPONENT_PADDING
 }
 
 fn relationship_label_margin(relationship: &Relationship) -> f64 {
@@ -14795,7 +14790,7 @@ fn relationship_label_margin(relationship: &Relationship) -> f64 {
 fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePath]) {
     let edge_indices = relationship_edge_indices(diagram, edge_paths);
     for (relationship, edge_idx) in diagram.relationships.iter().zip(edge_indices) {
-        if !relationship_has_center_label(relationship) {
+        if !relationship_has_center_label(relationship) && relationship.link_note.is_none() {
             continue;
         }
         let Some(edge) = edge_idx.and_then(|idx| edge_paths.get_mut(idx)) else {
@@ -14826,13 +14821,16 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
             continue;
         };
         let midpoint = ((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0);
-        let Some(center) =
-            relationship_center_layout(diagram, relationship, None, &diagram.meta.sprites)
-        else {
+        let Some(center) = relationship_center_layout(
+            diagram,
+            relationship,
+            relationship.link_note.as_ref(),
+            &diagram.meta.sprites,
+        ) else {
             continue;
         };
-        let width = center.label_width.floor();
-        let height = center.label_height.floor();
+        let width = center.width.floor();
+        let height = center.height.floor();
 
         let mostly_vertical = (end.1 - start.1).abs() >= (end.0 - start.0).abs();
         let (x, y) = if mostly_vertical {
@@ -15330,6 +15328,72 @@ impl ResolvedNoteStyle {
         }
     }
 
+    /// `EntityImageNoteLink` resolves the sequence-note signature from the
+    /// owning link's captured `StyleBuilder`. This is intentionally separate
+    /// from standalone class-note skinparam compatibility.
+    fn for_link_note(
+        diagram: &ClassDiagram,
+        relationship: &Relationship,
+        note: &ClassLinkNote,
+    ) -> Self {
+        let resolved = StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
+            &StyleSignature::from_selectors(["root", "element", "sequenceDiagram", "note"]),
+            StyleScheme::Regular,
+            relationship.source_line,
+        );
+        let solid_color = |value: &str| {
+            split_class_gradient(value)
+                .is_none()
+                .then(|| crate::sequence::resolve_color(value.trim()))
+        };
+        let background_value = note
+            .color
+            .as_deref()
+            .or_else(|| resolved.property("backgroundColor"));
+        let background = background_value
+            .and_then(|value| {
+                gradient_fill_from_registry(Some(value), &class_diagram_gradients(diagram))
+                    .or_else(|| solid_color(value))
+            })
+            .unwrap_or_else(|| NOTE_FILL.to_string());
+        let font_style = resolved
+            .property("fontStyle")
+            .unwrap_or_default()
+            .to_ascii_lowercase();
+        let alignment = match resolved.property("horizontalAlignment") {
+            Some(value) if value.eq_ignore_ascii_case("center") => NoteTextAlignment::Center,
+            Some(value) if value.eq_ignore_ascii_case("right") => NoteTextAlignment::Right,
+            _ => NoteTextAlignment::Left,
+        };
+        Self {
+            background,
+            border: resolved
+                .property("lineColor")
+                .and_then(solid_color)
+                .unwrap_or_else(|| NOTE_BORDER.to_string()),
+            border_width: resolved
+                .property("lineThickness")
+                .and_then(|value| value.parse().ok())
+                .unwrap_or(0.5),
+            font_color: resolved
+                .property("fontColor")
+                .and_then(solid_color)
+                .unwrap_or_else(|| "#000000".to_string()),
+            font_size: resolved
+                .property("fontSize")
+                .and_then(|value| value.parse().ok())
+                .filter(|&value| value > 0)
+                .unwrap_or(NOTE_FONT_SIZE as u32),
+            font_family: resolved
+                .property("fontName")
+                .map(canonical_class_font_family)
+                .unwrap_or_else(|| "sans-serif".to_string()),
+            bold: font_style.contains("bold"),
+            italic: font_style.contains("italic"),
+            alignment,
+        }
+    }
+
     fn line_x(&self, note_x: f64, note_width: f64, line_width: f64) -> f64 {
         let text_block_width = (note_width - NOTE_PAD_X - NOTE_PAD_RIGHT).max(0.0);
         let offset = match self.alignment {
@@ -15436,6 +15500,7 @@ fn association_replacement_relationships(
             dashed: false,
             length: 2,
             style: RelationshipStyle::default(),
+            link_note: None,
             source_line: association.source_line,
         });
     if base.style.inverted {
@@ -15470,6 +15535,7 @@ fn association_replacement_relationships(
         dashed: base.dashed,
         length: base.length,
         style: base.style.clone(),
+        link_note: None,
         source_line: association.source_line,
     };
     let second = Relationship {
@@ -15486,6 +15552,7 @@ fn association_replacement_relationships(
         dashed: base.dashed,
         length: base.length,
         style: base.style,
+        link_note: None,
         source_line: association.source_line,
     };
 
@@ -15515,6 +15582,7 @@ fn association_replacement_relationships(
             declaration: true,
             ..RelationshipStyle::default()
         },
+        link_note: None,
         source_line: association.source_line,
     };
     [first, second, third]
@@ -15725,7 +15793,17 @@ fn render_attached_note(
         f(style.border_width),
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width, sprites, &style);
+    emit_note_body(
+        svg,
+        &note.lines,
+        note.color.as_deref(),
+        note.target.is_some() && note.position.is_some(),
+        x,
+        y,
+        width,
+        sprites,
+        &style,
+    );
     svg.push_str("</g>");
 }
 
@@ -16245,7 +16323,17 @@ fn render_floating_note_entity(
         style.border,
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width, sprites, &style);
+    emit_note_body(
+        svg,
+        &note.lines,
+        note.color.as_deref(),
+        note.target.is_some() && note.position.is_some(),
+        x,
+        y,
+        width,
+        sprites,
+        &style,
+    );
     svg.push_str("</g>");
 }
 
@@ -16256,14 +16344,15 @@ fn render_floating_note_entity(
 fn render_relationship_note(
     svg: &mut String,
     diagram: &ClassDiagram,
-    note: &Note,
+    relationship: &Relationship,
+    note: &ClassLinkNote,
     x: f64,
     y: f64,
     width: f64,
     height: f64,
     sprites: &HashMap<String, SpriteData>,
 ) {
-    let style = ResolvedNoteStyle::for_note(diagram, note);
+    let style = ResolvedNoteStyle::for_link_note(diagram, relationship, note);
     let right = x + width;
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
@@ -16306,7 +16395,17 @@ fn render_relationship_note(
         f(style.border_width),
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width, sprites, &style);
+    emit_note_body(
+        svg,
+        &note.lines,
+        note.color.as_deref(),
+        false,
+        x,
+        y,
+        width,
+        sprites,
+        &style,
+    );
 }
 
 fn render_single_named_note(
@@ -16381,7 +16480,17 @@ fn render_single_named_note(
         style.border,
     )
     .unwrap();
-    emit_note_body(&mut body, note, x, y, width, sprites, &style);
+    emit_note_body(
+        &mut body,
+        &note.lines,
+        note.color.as_deref(),
+        note.target.is_some() && note.position.is_some(),
+        x,
+        y,
+        width,
+        sprites,
+        &style,
+    );
     body.push_str("</g>");
     svg.raw_inline(&body);
     let mut rendered = svg.finalize_plantuml();
@@ -16714,12 +16823,12 @@ fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
     Some(NoteBodySeparator { style, title })
 }
 
-fn note_body_blocks(note: &Note) -> Vec<NoteBodyBlock<'_>> {
+fn note_body_blocks(lines: &[String]) -> Vec<NoteBodyBlock<'_>> {
     let mut blocks = vec![NoteBodyBlock {
         separator: None,
         lines: Vec::new(),
     }];
-    for line in &note.lines {
+    for line in lines {
         if let Some(separator) = parse_note_body_separator(line) {
             blocks.push(NoteBodyBlock {
                 separator: Some(separator),
@@ -16956,13 +17065,13 @@ fn note_line_dimensions(
 }
 
 fn note_body_dimensions(
-    note: &Note,
+    lines: &[String],
     sprites: &HashMap<String, SpriteData>,
     style: &ResolvedNoteStyle,
 ) -> (f64, f64) {
     let mut width = 0.0_f64;
     let mut height = 0.0_f64;
-    for block in note_body_blocks(note) {
+    for block in note_body_blocks(lines) {
         let code = note_code_lines(&block.lines);
         let tree = note_tree_rows(&block.lines);
         let table = note_table_layout(&block.lines, style);
@@ -17057,7 +17166,21 @@ fn note_box_dims(
     sprites: &HashMap<String, SpriteData>,
 ) -> (f64, f64) {
     let style = ResolvedNoteStyle::for_note(diagram, note);
-    let (body_width, body_height) = note_body_dimensions(note, sprites, &style);
+    let (body_width, body_height) = note_body_dimensions(&note.lines, sprites, &style);
+    (
+        body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
+        body_height + NOTE_PAD_Y * 2.0,
+    )
+}
+
+fn relationship_note_box_dims(
+    diagram: &ClassDiagram,
+    relationship: &Relationship,
+    note: &ClassLinkNote,
+    sprites: &HashMap<String, SpriteData>,
+) -> (f64, f64) {
+    let style = ResolvedNoteStyle::for_link_note(diagram, relationship, note);
+    let (body_width, body_height) = note_body_dimensions(&note.lines, sprites, &style);
     (
         body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
         body_height + NOTE_PAD_Y * 2.0,
@@ -17269,7 +17392,9 @@ fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64, style: &Reso
 
 fn emit_note_body(
     svg: &mut String,
-    note: &Note,
+    lines: &[String],
+    note_color: Option<&str>,
+    attached_entity_note: bool,
     x: f64,
     y: f64,
     width: f64,
@@ -17277,7 +17402,7 @@ fn emit_note_body(
     style: &ResolvedNoteStyle,
 ) {
     let mut block_top = y + NOTE_PAD_Y;
-    for block in note_body_blocks(note) {
+    for block in note_body_blocks(lines) {
         if let Some(code) = note_code_lines(&block.lines) {
             emit_note_code(svg, &code, x, block_top, style);
             block_top += code.len() as f64 * note_code_line_height(style.font_size as f64);
@@ -17286,7 +17411,7 @@ fn emit_note_body(
         if let Some(tree) = note_tree_rows(&block.lines) {
             // `Opale.drawU` applies the note stroke before drawing attached
             // note content. `EntityImageNote.drawNormal` does not.
-            let tree_stroke_width = if note.target.is_some() && note.position.is_some() {
+            let tree_stroke_width = if attached_entity_note {
                 style.border_width
             } else {
                 DEFAULT_NOTE_CONTENT_STROKE_WIDTH
@@ -17362,7 +17487,7 @@ fn emit_note_body(
                         width,
                         line_top,
                         &mut number_counters,
-                        note,
+                        note_color,
                         sprites,
                         style,
                     );
@@ -17390,7 +17515,7 @@ fn emit_note_body(
                 width,
                 line_top,
                 &mut number_counters,
-                note,
+                note_color,
                 sprites,
                 style,
             );
@@ -17497,7 +17622,7 @@ fn emit_note_line(
     width: f64,
     line_top: f64,
     number_counters: &mut Vec<usize>,
-    note: &Note,
+    note_color: Option<&str>,
     sprites: &HashMap<String, SpriteData>,
     style: &ResolvedNoteStyle,
 ) -> f64 {
@@ -17605,9 +17730,7 @@ fn emit_note_line(
     // ascent of every run (notably monospace followed by sans-serif).
     let content = style.text_content(note_creole_content(content));
     if content.contains("<$") {
-        let fill = note
-            .color
-            .as_deref()
+        let fill = note_color
             .map(crate::sequence::resolve_color)
             .unwrap_or_else(|| NOTE_FILL.to_string());
         return emit_note_sprite_line(svg, &content, text_x, line_top, sprites, &fill, style);
@@ -17697,7 +17820,17 @@ fn render_note_box(
     svg.polygon(fold_pts, &style.background, &style.border);
 
     let mut body = String::new();
-    emit_note_body(&mut body, note, x, y, w, sprites, &style);
+    emit_note_body(
+        &mut body,
+        &note.lines,
+        note.color.as_deref(),
+        note.target.is_some() && note.position.is_some(),
+        x,
+        y,
+        w,
+        sprites,
+        &style,
+    );
     svg.raw_inline(&body);
 }
 
@@ -18070,6 +18203,7 @@ mod tests {
                 dashed: false,
                 length: 2,
                 style: RelationshipStyle::default(),
+                link_note: None,
                 source_line: 0,
             }],
             association_classes: vec![],
@@ -21047,9 +21181,27 @@ mod tests {
             panic!("expected class diagram");
         };
 
+        assert!(diagram.notes.is_empty());
         assert_eq!(
-            relationship_note_indices(&diagram),
-            [Some(0), None, Some(1)]
+            diagram.relationships[0]
+                .link_note
+                .as_ref()
+                .map(|note| note.lines.as_slice()),
+            Some(["first renamed memo".to_string()].as_slice())
+        );
+        assert!(diagram.relationships[1].link_note.is_none());
+        assert_eq!(
+            diagram.relationships[2]
+                .link_note
+                .as_ref()
+                .map(|note| note.lines.as_slice()),
+            Some(
+                [
+                    "final renamed line one".to_string(),
+                    "final renamed line two".to_string(),
+                ]
+                .as_slice()
+            )
         );
     }
 
@@ -21066,21 +21218,19 @@ mod tests {
             panic!("expected class diagram");
         };
         let relationship = &diagram.relationships[0];
-        let note = &diagram.notes[0];
-        let (natural_width, _) = note_box_dims(&diagram, note, &diagram.meta.sprites);
+        let note = relationship.link_note.as_ref().unwrap();
+        let (natural_width, _) =
+            relationship_note_box_dims(&diagram, relationship, note, &diagram.meta.sprites);
         let center =
             relationship_center_layout(&diagram, relationship, Some(note), &diagram.meta.sprites)
                 .unwrap();
 
         assert_ne!(natural_width, natural_width.floor());
         assert_eq!(center.note_width, natural_width.floor());
-        assert_eq!(
-            center.note_component_width,
-            natural_width + 2.0 * RELATIONSHIP_NOTE_COMPONENT_PADDING
-        );
+        let natural_component_width = natural_width + 2.0 * RELATIONSHIP_NOTE_COMPONENT_PADDING;
         assert_eq!(
             center.width,
-            center.note_component_width.max(center.label_width)
+            natural_component_width.max(center.label_width)
         );
 
         let old_label_x = (center.note_width + 2.0 * RELATIONSHIP_NOTE_COMPONENT_PADDING
@@ -21110,23 +21260,16 @@ mod tests {
             panic!("expected class diagram");
         };
         let relationship = &diagram.relationships[0];
-        let note = &diagram.notes[0];
+        let note = relationship.link_note.as_ref().unwrap();
         let center =
             relationship_center_layout(&diagram, relationship, Some(note), &diagram.meta.sprites)
                 .unwrap();
         let arrow_font = relationship_arrow_font(&diagram, relationship);
         let label = relationship.label.as_deref().unwrap();
         let position_y = 19.75;
-        let text_min = position_y
-            + center.label_text_offset_y
-            + text_render::label_ascent_with_family(label, arrow_font.size, &arrow_font.family)
-            + text_render::label_painted_top_from_baseline_no_mono_with_family(
-                label,
-                arrow_font.size,
-                &arrow_font.family,
-            )
-            + LIMIT_FINDER_TEXT_BASELINE_TAIL;
-        let note_min = position_y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
+        let line = text_render::layout_no_mono_line(label, arrow_font.size, &arrow_font.family);
+        let text_min = position_y + center.label_text_offset_y + line.painted_min_y;
+        let note_min = position_y + center.note_y;
 
         assert!(text_min < position_y);
         assert_eq!(
@@ -21149,13 +21292,84 @@ mod tests {
             panic!("expected class diagram");
         };
         let relationship = &diagram.relationships[0];
-        let note = &diagram.notes[0];
+        let note = relationship.link_note.as_ref().unwrap();
         let position_y = 23.5;
 
         assert_eq!(
             relationship_center_painted_min_y(&diagram, relationship, Some(note), position_y),
             Some(position_y + RELATIONSHIP_NOTE_COMPONENT_PADDING)
         );
+    }
+
+    #[test]
+    fn relationship_note_positions_compose_the_owned_blocks() {
+        let parse_position = |position: &str| {
+            let input = format!(
+                "@startuml\nclass FreshLeft\nclass FreshRight\nFreshLeft --> FreshRight : label\nnote {position} on link : payload\n@enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+                panic!("expected class diagram");
+            };
+            let relationship = &diagram.relationships[0];
+            relationship_center_layout(
+                &diagram,
+                relationship,
+                relationship.link_note.as_ref(),
+                &diagram.meta.sprites,
+            )
+            .unwrap()
+        };
+
+        let left = parse_position("left");
+        assert_eq!(left.width, left.label_origin_x + left.label_width);
+
+        let right = parse_position("right");
+        assert_eq!(
+            right.note_x,
+            right.label_width + RELATIONSHIP_NOTE_COMPONENT_PADDING
+        );
+        assert!(right.width > right.label_width);
+
+        let top = parse_position("top");
+        assert_eq!(top.note_y, RELATIONSHIP_NOTE_COMPONENT_PADDING);
+        assert!(top.label_text_offset_y > top.note_y);
+        assert!(top.height > top.label_height);
+
+        let bottom = parse_position("bottom");
+        assert_eq!(
+            bottom.note_y,
+            bottom.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING
+        );
+        assert!(bottom.height > bottom.label_height);
+    }
+
+    #[test]
+    fn relationship_note_uses_owning_link_style_context() {
+        let input = "@startuml\n\
+            skinparam defaultFontName Arial\n\
+            skinparam noteFontColor #2468AC\n\
+            class FreshLeft\n\
+            class FreshRight\n\
+            FreshLeft --> FreshRight\n\
+            skinparam defaultFontName Courier New\n\
+            note on link : styled payload\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let relationship = &diagram.relationships[0];
+        let note = relationship.link_note.as_ref().unwrap();
+        let style = ResolvedNoteStyle::for_link_note(&diagram, relationship, note);
+
+        assert_eq!(style.font_family, "Arial");
+        assert_eq!(style.font_color, "#2468AC");
+        let svg = crate::render_svg(&rustuml_parser::diagram::Diagram::Class(diagram));
+        let payload = svg.split_once(">styled payload</text>").unwrap().0;
+        let text = payload.rsplit_once("<text ").unwrap().1;
+        assert!(text.contains(r#"font-family="Arial""#));
+        assert!(text.contains(r#"fill="#2468AC""#));
     }
 
     #[test]
@@ -21998,6 +22212,7 @@ mod tests {
             dashed: false,
             length: 2,
             style: RelationshipStyle::default(),
+            link_note: None,
             source_line: 17,
         };
         diagram.relationships = vec![rel.clone()];

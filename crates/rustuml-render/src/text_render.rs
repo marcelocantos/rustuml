@@ -23,6 +23,8 @@ use crate::plantuml_metrics as pm;
 use crate::svg::normalize_svg_link_title;
 
 const TAB_STOP_SPACES: usize = 8;
+/// Java `LimitFinder.drawText` records a `UText` through baseline + 1.5.
+const LIMIT_FINDER_TEXT_BASELINE_TAIL: f64 = 1.5;
 
 /// Effective styling for a base font that the caller controls. Each call to
 /// [`emit_text`] starts from this base; segment-level styles add on top.
@@ -73,6 +75,129 @@ pub fn emit_text_no_mono(buf: &mut String, content: &str, base: &TextBase<'_>) -
         seg.style.monospace = false;
     }
     emit_segments(buf, &segments, base)
+}
+
+/// Complete `Sea` layout for one class-relationship Creole line.
+///
+/// Java positions each `AtomText` at `-height + FontPosition.getSpace()`,
+/// translates the resulting row to a zero minimum, and paints that same row.
+/// Keeping the parsed runs and all vertical products together prevents
+/// measurement, SVG emission, and `LimitFinder` from inventing independent
+/// baseline rules.
+#[derive(Debug, Clone)]
+pub(crate) struct NoMonoLineLayout {
+    segments: Vec<Segment>,
+    run_baselines: Vec<f64>,
+    pub width: f64,
+    pub height: f64,
+    pub first_baseline: f64,
+    pub painted_min_y: f64,
+    pub painted_max_y: f64,
+}
+
+pub(crate) fn layout_no_mono_line(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> NoMonoLineLayout {
+    let content = normalize_tab_escapes(content);
+    let mut segments = creole::parse_segments_no_underline(&content);
+    for segment in &mut segments {
+        segment.style.monospace = false;
+    }
+    let base = TextBase {
+        x: 0.0,
+        y: 0.0,
+        font_size: font_size as u32,
+        font_family,
+        fill: "#000000",
+        bold: false,
+        italic: false,
+        underline: false,
+        skip_underline: true,
+    };
+    if segments.is_empty() {
+        let height = family_text_height(font_size, metric_family(font_family));
+        let baseline = family_ascent(font_size, metric_family(font_family));
+        return NoMonoLineLayout {
+            segments,
+            run_baselines: Vec::new(),
+            width: 0.0,
+            height,
+            first_baseline: baseline,
+            painted_min_y: baseline - height + LIMIT_FINDER_TEXT_BASELINE_TAIL,
+            painted_max_y: baseline + LIMIT_FINDER_TEXT_BASELINE_TAIL,
+        };
+    }
+
+    let (line_min_y, line_max_y) = segments
+        .iter()
+        .map(|segment| {
+            let size = positioned_segment_size(segment, font_size);
+            let height =
+                family_text_height(size, segment_metric_family_for_family(segment, font_family))
+                    .max(10.0);
+            let altitude = segment_starting_altitude(segment);
+            (-height + altitude, altitude)
+        })
+        .fold(
+            (f64::INFINITY, f64::NEG_INFINITY),
+            |(min_y, max_y), (top, bottom)| (min_y.min(top), max_y.max(bottom)),
+        );
+    let first = &segments[0];
+    let first_size = positioned_segment_size(first, font_size);
+    let first_family = segment_metric_family_for_family(first, font_family);
+    let first_height = family_text_height(first_size, first_family).max(10.0);
+    let first_top = -first_height + segment_starting_altitude(first);
+    let first_baseline = first_top - line_min_y + family_ascent(first_size, first_family)
+        - positioned_segment_emission_offset(first, font_size);
+    let first_nominal_size = first.style.size.map(f64::from).unwrap_or(font_size);
+    let line_bottom_drop = clamp_drop(first_nominal_size, first_family);
+    let run_baselines = segments
+        .iter()
+        .map(|segment| {
+            let nominal_size = segment.style.size.map(f64::from).unwrap_or(font_size);
+            let family = segment_metric_family_for_family(segment, font_family);
+            first_baseline
+                + positioned_segment_emission_offset(segment, font_size)
+                + line_bottom_drop
+                - clamp_drop(nominal_size, family)
+        })
+        .collect::<Vec<_>>();
+    let painted_min_y = first_baseline
+        + label_painted_top_from_baseline_no_mono_with_family(&content, font_size, font_family)
+        + LIMIT_FINDER_TEXT_BASELINE_TAIL;
+    let painted_max_y = run_baselines
+        .iter()
+        .map(|baseline| baseline + LIMIT_FINDER_TEXT_BASELINE_TAIL)
+        .fold(f64::NEG_INFINITY, f64::max);
+    let mut width = 0.0;
+    for segment in &segments {
+        width = segment_advance(segment, &base, width);
+    }
+
+    NoMonoLineLayout {
+        segments,
+        run_baselines,
+        width,
+        height: line_max_y - line_min_y,
+        first_baseline,
+        painted_min_y,
+        painted_max_y,
+    }
+}
+
+pub(crate) fn emit_no_mono_line(
+    buf: &mut String,
+    layout: &NoMonoLineLayout,
+    base: &TextBase<'_>,
+) -> f64 {
+    emit_segments_with_baselines(
+        buf,
+        &layout.segments,
+        base,
+        Some((&layout.run_baselines, layout.first_baseline)),
+    )
 }
 
 /// Number of distinct baseline y-values [`emit_text`] will produce for one
@@ -333,7 +458,7 @@ pub(crate) fn label_limit_finder_height_with_family(
     let segments = creole::parse_segments(content);
     let first_baseline = label_first_baseline_ascent_with_family(content, font_size, font_family);
     let Some(first) = segments.first() else {
-        return first_baseline + 1.5;
+        return first_baseline + LIMIT_FINDER_TEXT_BASELINE_TAIL;
     };
     let first_baseline = first_baseline + positioned_segment_emission_offset(first, font_size);
     let first_size = first.style.size.map(f64::from).unwrap_or(font_size);
@@ -363,7 +488,7 @@ pub(crate) fn label_limit_finder_height_with_family(
             }
         })
         .fold(0.0_f64, f64::max);
-    first_baseline + max_baseline_offset + 1.5
+    first_baseline + max_baseline_offset + LIMIT_FINDER_TEXT_BASELINE_TAIL
 }
 
 /// Minimum painted y relative to the baseline passed to
@@ -384,6 +509,14 @@ pub(crate) fn label_painted_top_from_baseline_no_mono_with_family(
     for segment in &mut segments {
         segment.style.monospace = false;
     }
+    painted_top_from_baseline_no_mono_segments(&segments, font_size, font_family)
+}
+
+fn painted_top_from_baseline_no_mono_segments(
+    segments: &[Segment],
+    font_size: f64,
+    font_family: &str,
+) -> f64 {
     let Some(first) = segments.first() else {
         return -family_text_height(font_size, metric_family(font_family));
     };
@@ -509,6 +642,15 @@ fn normalize_tab_escapes(s: &str) -> Cow<'_, str> {
 /// segment 2 becomes a gap between the two text elements). Monospace
 /// segments use NBSP (U+00A0) instead of ASCII space; NBSP is not stripped.
 fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) -> f64 {
+    emit_segments_with_baselines(buf, segments, base, None)
+}
+
+fn emit_segments_with_baselines(
+    buf: &mut String,
+    segments: &[Segment],
+    base: &TextBase<'_>,
+    baselines: Option<(&[f64], f64)>,
+) -> f64 {
     if segments.is_empty() {
         // Nothing to emit. Still produce an empty <text> with zero width so
         // surrounding layout stays consistent — matches PlantUML behaviour
@@ -521,6 +663,7 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
             base.x,
             0.0,
             pm::descent(base.font_size as f64),
+            None,
         );
         return 0.0;
     }
@@ -549,9 +692,10 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
     let line_bottom_drop = clamp_drop(first_size, segment_metric_family(first, base));
 
     let mut advance = 0.0;
-    for seg in segments {
+    for (index, seg) in segments.iter().enumerate() {
+        let run_y_offset = baselines.map(|(runs, base_baseline)| runs[index] - base_baseline);
         if seg.text.contains('\t') {
-            advance = emit_tabbed_segment(buf, seg, base, advance, line_bottom_drop);
+            advance = emit_tabbed_segment(buf, seg, base, advance, line_bottom_drop, run_y_offset);
         } else {
             let full_w = segment_width(seg, base);
             let (lead_w, trimmed_text, trimmed_w) = trim_segment_for_emit(seg, base);
@@ -563,6 +707,7 @@ fn emit_segments(buf: &mut String, segments: &[Segment], base: &TextBase<'_>) ->
                 base.x + advance + lead_w,
                 trimmed_w,
                 line_bottom_drop,
+                run_y_offset,
             );
             advance += full_w;
         }
@@ -692,6 +837,7 @@ fn emit_tabbed_segment(
     base: &TextBase<'_>,
     start: f64,
     line_bottom_drop: f64,
+    run_y_offset: Option<f64>,
 ) -> f64 {
     let mut advance = start;
     let mut rest = seg.text.as_str();
@@ -714,6 +860,7 @@ fn emit_tabbed_segment(
                     base.x + advance + lead_w,
                     trimmed_w,
                     line_bottom_drop,
+                    run_y_offset,
                 );
             }
         }
@@ -1665,6 +1812,7 @@ fn write_text_element(
     x: f64,
     width: f64,
     line_bottom_drop: f64,
+    run_y_offset: Option<f64>,
 ) {
     let bold = base.bold || style.bold;
     let italic = base.italic || style.italic;
@@ -1696,7 +1844,7 @@ fn write_text_element(
     // line).
     let own_drop = clamp_drop(nominal_size as f64, style_metric_family(style, base));
     let line_descent_diff = line_bottom_drop - own_drop;
-    let (font_size, y_offset) = match style.baseline_shift {
+    let (font_size, computed_y_offset) = match style.baseline_shift {
         Some("sub") => {
             let small = (nominal_size as i32 - 3).max(2) as u32;
             let descent_diff = pm::descent(nominal_size as f64) - pm::descent(small as f64);
@@ -1709,6 +1857,7 @@ fn write_text_element(
         }
         _ => (nominal_size, line_descent_diff),
     };
+    let y_offset = run_y_offset.unwrap_or(computed_y_offset);
     let raw_fill = style.fill.as_deref().unwrap_or(base.fill);
     let fill = normalize_color(raw_fill);
 
@@ -1971,6 +2120,45 @@ mod tests {
                 buf.contains(&format!(r#" y="{expected_baseline}">"#)),
                 "{content} emitted at the wrong baseline: {buf}"
             );
+        }
+    }
+
+    #[test]
+    fn no_mono_line_layout_keeps_positioned_runs_local_to_their_atoms() {
+        let large = "<size:18>Wide anchor</size>";
+        let mixed = "<size:18>Wide anchor</size> H<sub>2</sub>O x<sup>3</sup>";
+        let large_layout = layout_no_mono_line(large, 12.0, "Arial");
+        let mixed_layout = layout_no_mono_line(mixed, 12.0, "Arial");
+
+        assert_eq!(mixed_layout.first_baseline, large_layout.first_baseline);
+        assert!(mixed_layout.height >= large_layout.height);
+        assert!(mixed_layout.painted_min_y <= mixed_layout.first_baseline);
+        assert!(mixed_layout.painted_max_y >= mixed_layout.first_baseline);
+
+        let mut buf = String::new();
+        let emitted_width = emit_no_mono_line(
+            &mut buf,
+            &mixed_layout,
+            &TextBase {
+                x: 13.0,
+                y: 21.0 + mixed_layout.first_baseline,
+                font_size: 12,
+                font_family: "Arial",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: true,
+            },
+        );
+        assert_eq!(emitted_width, mixed_layout.width);
+        assert!(buf.contains(r#"font-size="9""#));
+        assert_eq!(
+            mixed_layout.run_baselines.len(),
+            mixed_layout.segments.len()
+        );
+        for baseline in &mixed_layout.run_baselines {
+            assert!(buf.contains(&format!(r#" y="{}">"#, pm::fmt_coord(21.0 + baseline))));
         }
     }
 
