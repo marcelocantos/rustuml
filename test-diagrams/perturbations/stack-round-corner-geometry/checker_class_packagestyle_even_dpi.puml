@@ -1,0 +1,25 @@
+@startuml
+skinparam dpi 168
+skinparam packageStyle stack
+
+package "Shelf Wrapper 927" as ShelfWrapper927 {
+  package "Ledger Shelf 927" as LedgerShelf927 {
+  }
+  class "External Probe 927" as ExternalProbe927
+}
+
+<style>
+classDiagram {
+  group {
+    stack {
+      RoundCorner 5
+    }
+  }
+  package {
+    title {
+      RoundCorner 24
+    }
+  }
+}
+</style>
+@enduml

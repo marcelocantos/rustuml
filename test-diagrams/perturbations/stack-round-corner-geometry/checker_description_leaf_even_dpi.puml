@@ -1,0 +1,24 @@
+@startuml
+skinparam dpi 168
+skinparam roundcorner 8
+
+stack "Transit Shelf 941" as TransitShelf941
+node "Relay 941" as Relay941
+
+TransitShelf941 --> Relay941 : export_batch_941
+
+<style>
+componentDiagram {
+  group {
+    stack {
+      RoundCorner 4
+    }
+  }
+  stack {
+    title {
+      RoundCorner 26
+    }
+  }
+}
+</style>
+@enduml

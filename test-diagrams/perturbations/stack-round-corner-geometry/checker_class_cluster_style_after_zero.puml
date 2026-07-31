@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+
+stack "Cluster Archive 901" as ClusterArchive901 {
+  class Intake901
+  class Audit901
+}
+
+Intake901 --> Audit901 : renamed_cluster_route_901
+
+<style>
+classDiagram {
+  group {
+    stack {
+      RoundCorner 0
+    }
+  }
+}
+</style>
+@enduml

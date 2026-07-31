@@ -1,0 +1,11 @@
+@startuml
+scale 1.75
+skinparam roundcorner 17
+
+stack "Transit Cluster 953" as TransitCluster953 {
+  node Worker953
+  artifact Log953
+}
+
+Worker953 --> Log953 : stream_953
+@enduml

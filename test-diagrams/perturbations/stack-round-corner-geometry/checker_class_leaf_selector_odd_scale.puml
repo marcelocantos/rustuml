@@ -1,0 +1,17 @@
+@startuml
+scale 1.25
+
+frame "Leaf Wrapper 913" as LeafWrapper913 {
+  stack "Leaf Cache 913" as LeafCache913 {
+  }
+  class "Peer Ledger 913" as PeerLedger913
+}
+
+<style>
+classDiagram {
+  stack {
+    RoundCorner 19
+  }
+}
+</style>
+@enduml

@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "mechanism": "stack-round-corner-geometry",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and the existing target/release/examples/diff_one --no-oracle helper"
+  },
+  "revisions": {
+    "review_checkout_head": "57da4ff4d73fc0b10c9622a6b9420cbde2731b8d",
+    "review_worktree_dirty_paths": [
+      "crates/rustuml-render/src/creole.rs",
+      "crates/rustuml-render/src/text_render.rs"
+    ],
+    "account_commit": "fe4f07b48dd9e6e27897e3b4af146160c3dd195c",
+    "scope_correction_commit": "00c4fb8fa130ff5cf8d2369c6b6bd839e16a86a7",
+    "implementation_commit": "2ed0e2490645676455fe1971915fa06fba1e4fad",
+    "evidence_commit": "3d437ac08936454df88082aa49f406cddf0627e7",
+    "implementation_tree": "943e7af711653d8ee3ff4782e756dcb34e0d04d5",
+    "evidence_tree": "c35153d382847061f44313ae12ddf15a3711d953",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "artifacts": {
+    "diff_one": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+      "sha256": "febac62ebdd7e0f8b71195b9a34974ed53d42c459502a2b4e99ca485ffae2277",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a status --short",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline -12",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --stat --oneline 2ed0e249",
+    "git -C /private/tmp/rustuml-integrate-20260731a show 2ed0e249 -- crates/rustuml-render/src/class.rs crates/rustuml-render/src/deployment.rs",
+    "git -C /private/tmp/rustuml-integrate-20260731a diff --check 00c4fb8f..2ed0e249",
+    "git -C /private/tmp/rustuml-integrate-20260731a diff --stat 2ed0e249..57da4ff4 -- crates/rustuml-render/src/class.rs crates/rustuml-render/src/deployment.rs docs/parity-reviews/stack-round-corner-geometry",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/core/DiagramType.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_cluster_style_after_zero.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_leaf_selector_odd_scale.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_description_leaf_even_dpi.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_cluster_style_after_zero.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_leaf_selector_odd_scale.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_description_leaf_even_dpi.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/checker_class_leaf_selector_odd_scale.puml",
+    "rg -n \"Leaf Cache 913|Ledger Shelf 927|Transit Shelf 941|Transit Cluster 953|Cluster Archive 901|stack-round-corner-geometry\" /private/tmp/rustuml-integrate-20260731a/crates /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/stack-round-corner-geometry /private/tmp/rustuml-integrate-20260731a/test-diagrams/no_oracle_baseline.txt",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/*.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-round-corner-geometry/*.svg",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "source_inspection": {
+    "java_model_supported": [
+      "ClusterDecoration builds a Fashion with the caller's RoundCorner and passes it unchanged to symbol.asBig().",
+      "EntityImageDescription resolves explicit symbol leaves from root.element.<diagramStyle>.<symbol>.title, while EntityImageEmptyPackage resolves ordinary empty packages from root.element.<diagramStyle>.package.title.",
+      "DiagramType.CLASS maps to classDiagram and DiagramType.DESCRIPTION maps to componentDiagram before those style signatures are merged.",
+      "USymbolStack.drawQueue uses a zero-only straight polyline branch and otherwise rounds both the inset rectangle and the outer path from the resolved diameter."
+    ],
+    "rust_model_audit": [
+      "class.rs introduces stack_round_corner() that always resolves root.element.classDiagram.group.stack and writes that same value into both LayoutPackageCluster.round_corner and EmptyPackageLayout.round_corner.",
+      "The class explicit-symbol and packageStyle-derived empty-package paths therefore share a cluster signature in Rust even though Java splits them across explicit-symbol and package-title signatures.",
+      "deployment.rs introduces deployment_stack_round_corner(diagram, cluster), but it resolves only diagram.meta.style_program and falls back to the hardcoded 5px default; legacy generic roundcorner skinparams never reach the deployment cluster path.",
+      "The deployment explicit leaf path still honors selector-specific style-program data, which is why the DESCRIPTION leaf perturbation passes while the DESCRIPTION cluster perturbation fails."
+    ],
+    "fixture_logic_audit": [
+      "The implementation diff at 2ed0e249 touches only crates/rustuml-render/src/class.rs and crates/rustuml-render/src/deployment.rs.",
+      "git diff --check 00c4fb8f..2ed0e249 reported no whitespace or patch-shape issues.",
+      "rg found no fresh-label strings, mechanism-name branches, or baseline/comparator edits in production crates."
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_cluster_style_after_zero.puml",
+      "golden": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_cluster_style_after_zero.svg",
+      "axes": [
+        "CLASS cluster",
+        "selector-specific group.stack style",
+        "roundcorner zero",
+        "style declared after construction",
+        "left-to-right direction",
+        "renamed topology"
+      ],
+      "source_sha256": "34263648f391e28ec3eb4e774c63c99e3c727b1440b89b7cbc5ed5ac18322ba6",
+      "golden_sha256": "ba146e6c74d3810a43d034c4145ec5007281ba09e4e7ba82a304bcb524118c5f",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_leaf_selector_odd_scale.puml",
+      "golden": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_leaf_selector_odd_scale.svg",
+      "axes": [
+        "explicit CLASS symbol leaf",
+        "selector-specific stack style",
+        "odd nonzero roundcorner",
+        "scale 1.25",
+        "style declared after construction",
+        "renamed sibling topology"
+      ],
+      "source_sha256": "79482826445d2019ab31ef2a13cc192543b3eed4a8be8dcf06365e6b8983a60d",
+      "golden_sha256": "482aa05e336cb930c1aec56bf24bcf16f84d86888348c0bd1881d442637ae5da",
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+      "golden": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.svg",
+      "axes": [
+        "packageStyle-derived empty package",
+        "selector-specific package title style",
+        "even nonzero roundcorner",
+        "dpi 168",
+        "nested wrapper cluster",
+        "renamed labels"
+      ],
+      "source_sha256": "9f5f32ce821934067955804a369de8408a0709672bf8d226d5538962b441209a",
+      "golden_sha256": "5a34d94ecbbb6c9b65a5c8922f88620ef6fc60caa956da97ad09eb94a762e0ed",
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-round-corner-geometry/checker_description_leaf_even_dpi.puml",
+      "golden": "test-diagrams/perturbations/stack-round-corner-geometry/checker_description_leaf_even_dpi.svg",
+      "axes": [
+        "DESCRIPTION leaf",
+        "selector-specific stack style",
+        "even nonzero roundcorner",
+        "dpi 168",
+        "style declared after construction",
+        "renamed topology"
+      ],
+      "source_sha256": "ecf7382db5fdc2f2b1323a330789384419a67a842cacf2edb7a23e6dd78b92dd",
+      "golden_sha256": "e8c3efe4bc11f9bd155b9076528c4163d4e11040f69929dbc2446c8ad9fc1305",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.puml",
+      "golden": "test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.svg",
+      "axes": [
+        "DESCRIPTION cluster",
+        "generic roundcorner skinparam",
+        "odd nonzero roundcorner",
+        "scale 1.75",
+        "renamed topology"
+      ],
+      "source_sha256": "78a58f4cf6492b3b2af42657a9da7accfd3eb0e6ae665f3ceb5bb57a99ebab66",
+      "golden_sha256": "790e743d4948542be3767e171d8941a50ec4ae5dd82ba87b24d78c491ca72252",
+      "result": "fail"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs": 5,
+    "passes": 2,
+    "failures": 3
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The class explicit stack leaf still resolves the wrong corner style.",
+      "detail": "In checker_class_leaf_selector_odd_scale, Java keeps LeafCache913 at the default 5px diameter (scaled rx/ry 3.125), while Rust rounds the same leaf to 19px (scaled rx/ry 11.875). The class wrapper frame itself stays at the default radius in both outputs, so the divergence is isolated to the explicit stack leaf branch."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The class packageStyle empty-package path still uses cluster-style stack corners instead of package-title corners.",
+      "detail": "In checker_class_packagestyle_even_dpi, Java paints the nested LedgerShelf927 empty package with large stack arcs from the package-title selector (scaled 31.5 / 21 corner geometry), while Rust keeps the same leaf on the 5px cluster-style path (scaled 6.5625 / 4.375 geometry)."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The deployment stack cluster still ignores the generic roundcorner skinparam.",
+      "detail": "In checker_description_cluster_odd_scale, Java applies skinparam roundcorner 17 to the DESCRIPTION stack cluster and emits rx/ry 14.875 after scale 1.75; Rust stays on the default rx/ry 4.375, which matches the hardcoded 5px diameter rather than the requested style."
+    },
+    {
+      "severity": "informational",
+      "summary": "Two held-outs do support the narrow pieces of the account.",
+      "detail": "checker_class_cluster_style_after_zero and checker_description_leaf_even_dpi both compare structurally equal. Class cluster zero-corner handling and deployment explicit-leaf selector handling therefore generalize across these fresh renamed inputs."
+    },
+    {
+      "severity": "informational",
+      "summary": "No overfitting signal was found in the implementation diff.",
+      "detail": "The rejecting verdict comes from fresh valid inputs and source-audited dispatch gaps, not from fixture-shaped logic, comparator slack, or baseline changes."
+    }
+  ],
+  "verdict": "REJECTED",
+  "verdict_reason": "The shared stack-corner model is not complete at 2ed0e249. Fresh valid perturbations still break three distinct branches: explicit CLASS stack leaves, packageStyle-derived CLASS empty packages, and generic-roundcorner DESCRIPTION stack clusters. Under the held-out rule, any one of those failures rejects the mechanism; together they show the class and deployment consumers still do not share Java's full round-corner dispatch."
+}
