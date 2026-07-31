@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "preprocessed-source-comment-identity",
-  "status": "corrected_implementation_awaiting_independent_rereview",
+  "status": "second_correction_account_pending_commit",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/tim/TContext.java:TContext#buildCodeIterator",
@@ -133,5 +133,31 @@
       "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml"
     ],
     "required_correction": "Replace the first implementation's broad inline-apostrophe heuristic with the exact Java TIM iterator and StringLocated.removeInnerComment model before requesting a new checker verdict."
+  },
+  "second_correction_account": {
+    "checker_revision": "7ce59a42",
+    "review_record": "docs/parity-reviews/preprocessed-source-comment-identity/review-2.json",
+    "causal_divergence": "The corrected tim_comment_line still tests trimmed.starts_with(\"/'\") before recognizing Java's whole-line COMMENT_SIMPLE form. For a line that starts with /' and whose final non-whitespace token is '/, but which contains an earlier closing token and another opening token inside, Rust treats the first closing token as a prefix-inner-comment boundary and returns the remaining suffix as live code. Java TLineType.getFromLineInternal applies ^\\s*/'.*'/\\s*$ greedily to the complete line, CodeIteratorShortComment consumes that COMMENT_SIMPLE line, and CodeIteratorInnerComment never sees it. The review-2 counterexamples therefore materialize GhostAlpha, HiddenReview2, and PhantomReview2 only in Rust, shifting source identity and resource seeds.",
+    "planned_change": "Classify whole-line /' ... '/ comments before prefix/suffix inner-comment removal in the shared tim_comment_line state machine. A trimmed line that begins with /' and ends with '/ is consumed in full regardless of interior closing/opening pairs. Preserve the existing Java behavior for a prefix comment followed by genuine code after the final closing token, a suffix comment preceded by genuine code before the first opening token, multiline long-comment state, special triple payload removal, ordinary apostrophes, and source-line placeholders. Drive parser and seed streams through the same precedence rule.",
+    "perturbation_axes": [
+      "whole-line comments with one versus multiple interior /' and '/ tokens",
+      "whole-line removal versus prefix code after the final closing token",
+      "whole-line removal versus suffix code before the first opening token",
+      "theme expansion before and after the comment",
+      "special triple payloads on surviving lines",
+      "renamed entities, changed topology, and source-order-sensitive metadata"
+    ],
+    "forbidden_approaches": [
+      "matching GhostAlpha, HiddenReview2, PhantomReview2, fixture stems, or expected seed prefixes",
+      "dropping all lines that merely start with /' when code survives after the final closing token",
+      "post-hoc entity, source-line, gradient-id, or SVG rewriting",
+      "changing comparator behavior, baselines, skip markers, or fixture eligibility"
+    ],
+    "acceptance": [
+      "All six preserved review-1 and review-2 perturbations pass through diff_one --no-oracle.",
+      "Unit tests distinguish whole-line precedence from valid prefix and suffix retention with repeated delimiter pairs.",
+      "Parser output and expanded-theme seed identity use the same classification result.",
+      "A fresh independent review-3 creates new valid Java perturbations and records an accepted verdict before this mechanism is accepted."
+    ]
   }
 }
