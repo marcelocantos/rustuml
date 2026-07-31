@@ -14394,6 +14394,34 @@ fn svek_layout_y_bias(
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
     let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
+    let note_indices = relationship_note_indices(diagram);
+    let edge_indices = relationship_edge_indices(diagram, edge_paths);
+    let mapped_center_edges = diagram
+        .relationships
+        .iter()
+        .zip(&note_indices)
+        .zip(&edge_indices)
+        .filter_map(|((relationship, note_idx), edge_idx)| {
+            let edge_idx = (*edge_idx)?;
+            let edge = edge_paths.get(edge_idx)?;
+            let note = note_idx.and_then(|idx| diagram.notes.get(idx));
+            relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
+            edge.label?;
+            Some(edge_idx)
+        })
+        .collect::<HashSet<_>>();
+    let center_label_minima = diagram
+        .relationships
+        .iter()
+        .zip(&note_indices)
+        .zip(&edge_indices)
+        .filter_map(|((relationship, note_idx), edge_idx)| {
+            let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
+            let position = edge.label?;
+            let note = note_idx.and_then(|idx| diagram.notes.get(idx));
+            relationship_center_painted_min_y(diagram, relationship, note, position.y)
+        })
+        .collect::<Vec<_>>();
     let min_y = positions
         .iter()
         .enumerate()
@@ -14418,8 +14446,16 @@ fn svek_layout_y_bias(
                 .iter()
                 .flat_map(|edge| edge.points.iter().map(|point| point.1)),
         )
+        .chain(center_label_minima)
+        .chain(
+            edge_paths
+                .iter()
+                .enumerate()
+                .filter(|(idx, _)| !mapped_center_edges.contains(idx))
+                .filter_map(|(_, edge)| edge.label.map(|label| label.y)),
+        )
         .chain(edge_paths.iter().flat_map(|edge| {
-            [edge.label, edge.tail_label, edge.head_label]
+            [edge.tail_label, edge.head_label]
                 .into_iter()
                 .flatten()
                 .map(|label| label.y)
@@ -14439,6 +14475,41 @@ fn svek_layout_y_bias(
     } else {
         envelope_bias.max(0.0)
     }
+}
+
+/// The vertical frontier Java obtains by painting a relationship's natural
+/// center block through `LimitFinder`. Graphviz's fixed table only reserves
+/// space; it does not itself contribute a primitive to that frontier.
+fn relationship_center_painted_min_y(
+    diagram: &ClassDiagram,
+    relationship: &Relationship,
+    note: Option<&Note>,
+    position_y: f64,
+) -> Option<f64> {
+    let center = relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
+    let mut min_y = f64::INFINITY;
+    if let Some(label) = relationship.label.as_deref() {
+        let arrow_font = relationship_arrow_font(diagram, relationship);
+        let baseline = position_y
+            + center.label_text_offset_y
+            + text_render::label_ascent_with_family(label, arrow_font.size, &arrow_font.family);
+        // `LimitFinder.drawText` records the resolved UText box from one and
+        // a half pixels below its emitted baseline.
+        let text_min = baseline
+            + text_render::label_painted_top_from_baseline_no_mono_with_family(
+                label,
+                arrow_font.size,
+                &arrow_font.family,
+            )
+            + LIMIT_FINDER_TEXT_BASELINE_TAIL;
+        min_y = min_y.min(text_min);
+    }
+    if note.is_some() {
+        // `ComponentRoseNote` has five pixels of preferred-size padding, but
+        // its first visible path starts only after that leading padding.
+        min_y = min_y.min(position_y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING);
+    }
+    min_y.is_finite().then_some(min_y)
 }
 
 fn class_magic_arrow_polygons(
@@ -21019,6 +21090,71 @@ mod tests {
         assert_eq!(
             natural_label_x - old_label_x,
             (natural_width - natural_width.floor()) / 2.0
+        );
+    }
+
+    #[test]
+    fn combined_link_label_frontier_comes_from_emitted_text_metrics() {
+        let input = "@startuml\n\
+            left to right direction\n\
+            class FreshWest1301\n\
+            class FreshEast1303\n\
+            FreshWest1301 <-- FreshEast1303 : changed center label iiww 1307\n\
+            note on link\n\
+              renamed first row 1319\n\
+              renamed wider row Wwm 1321\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let relationship = &diagram.relationships[0];
+        let note = &diagram.notes[0];
+        let center =
+            relationship_center_layout(&diagram, relationship, Some(note), &diagram.meta.sprites)
+                .unwrap();
+        let arrow_font = relationship_arrow_font(&diagram, relationship);
+        let label = relationship.label.as_deref().unwrap();
+        let position_y = 19.75;
+        let text_min = position_y
+            + center.label_text_offset_y
+            + text_render::label_ascent_with_family(label, arrow_font.size, &arrow_font.family)
+            + text_render::label_painted_top_from_baseline_no_mono_with_family(
+                label,
+                arrow_font.size,
+                &arrow_font.family,
+            )
+            + LIMIT_FINDER_TEXT_BASELINE_TAIL;
+        let note_min = position_y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
+
+        assert!(text_min < position_y);
+        assert_eq!(
+            relationship_center_painted_min_y(&diagram, relationship, Some(note), position_y),
+            Some(text_min.min(note_min))
+        );
+    }
+
+    #[test]
+    fn note_only_link_frontier_excludes_unpainted_component_padding() {
+        let input = "@startuml\n\
+            left to right direction\n\
+            class FreshNoteWest1327\n\
+            class FreshNoteEast1361\n\
+            FreshNoteWest1327 --> FreshNoteEast1361\n\
+            note on link : renamed note-only payload 1367\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let relationship = &diagram.relationships[0];
+        let note = &diagram.notes[0];
+        let position_y = 23.5;
+
+        assert_eq!(
+            relationship_center_painted_min_y(&diagram, relationship, Some(note), position_y),
+            Some(position_y + RELATIONSHIP_NOTE_COMPONENT_PADDING)
         );
     }
 
