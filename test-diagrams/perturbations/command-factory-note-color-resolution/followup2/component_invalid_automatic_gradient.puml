@@ -1,0 +1,6 @@
+@startuml
+component "F2 automatic boundary anchor" as F2AutomaticBoundaryAnchor
+note "F2 invalid automatic endpoint" as F2InvalidAutomaticEndpoint #automatic|Gold
+component "F2 automatic boundary survivor" as F2AutomaticBoundarySurvivor
+F2InvalidAutomaticEndpoint --> F2AutomaticBoundarySurvivor
+@enduml

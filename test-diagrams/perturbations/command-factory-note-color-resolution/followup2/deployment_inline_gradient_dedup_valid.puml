@@ -1,0 +1,25 @@
+@startuml
+node "Ion Harbor F2" as IonHarborF2
+database "Nova Ledger F2" as NovaLedgerF2
+
+note "F2 deploy dash alpha" as F2DeployDashAlpha #31415901-265358FE
+note "F2 deploy dash opaque" as F2DeployDashOpaque #314159-265358
+note "F2 deploy backslash alpha" as F2DeployBackslashAlpha #1029387F\47586980
+note "F2 deploy backslash opaque" as F2DeployBackslashOpaque #102938\475869
+note "F2 deploy pipe alpha" as F2DeployPipeAlpha #A1B2C300|D4E5F6FF
+note "F2 deploy pipe opaque" as F2DeployPipeOpaque #A1B2C3|D4E5F6
+note "F2 deploy slash alpha" as F2DeploySlashAlpha #0F1E2D80/3C4B5A7F
+note "F2 deploy slash opaque" as F2DeploySlashOpaque #0F1E2D/3C4B5A
+note "F2 deploy slash reversed" as F2DeploySlashReversed #3C4B5A/0F1E2D
+
+F2DeployDashAlpha --> IonHarborF2
+F2DeployDashOpaque --> NovaLedgerF2
+F2DeployBackslashAlpha --> IonHarborF2
+F2DeployBackslashOpaque --> NovaLedgerF2
+F2DeployPipeAlpha --> IonHarborF2
+F2DeployPipeOpaque --> NovaLedgerF2
+F2DeploySlashAlpha --> IonHarborF2
+F2DeploySlashOpaque --> NovaLedgerF2
+F2DeploySlashReversed --> IonHarborF2
+F2DeploySlashReversed --> NovaLedgerF2
+@enduml

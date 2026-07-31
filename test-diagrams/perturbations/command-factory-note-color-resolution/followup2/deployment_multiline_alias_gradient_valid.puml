@@ -1,0 +1,72 @@
+@startuml
+node "Aurora Rack F2" as AuroraRackF2
+artifact "Beacon Archive F2" as BeaconArchiveF2
+
+note as F2DashForward #bUsInEsS-aPpLiCaTiOn
+  F2 dash forward alias gradient
+end note
+note as F2DashReverse #ApPlIcAtIoN-BuSiNeSs
+  F2 dash reverse alias gradient
+end note
+note as F2BackslashForward #mOtIvAtIoN\StRaTeGy
+  F2 backslash forward alias gradient
+end note
+note as F2BackslashReverse #sTrAtEgY\MoTiVaTiOn
+  F2 backslash reverse alias gradient
+end note
+note as F2PipeForward #tEcHnOlOgY|pHySiCaL
+  F2 pipe forward alias gradient
+end note
+note as F2PipeReverse #PhYsIcAl|TeChNoLoGy
+  F2 pipe reverse alias gradient
+end note
+note as F2SlashForward #iMpLeMeNtAtIoN/BuSiNeSs
+  F2 slash forward alias gradient
+end note
+note as F2SlashReverse #bUsInEsS/ImPlEmEnTaTiOn
+  F2 slash reverse alias gradient
+end note
+
+note as F2DeployAlpha00 #71829300
+  F2 deployment alpha zero
+end note
+note as F2DeployAlpha01 #8293A401
+  F2 deployment alpha one
+end note
+note as F2DeployAlpha7F #93A4B57f
+  F2 deployment alpha seven f
+end note
+note as F2DeployAlpha80 #A4B5C680
+  F2 deployment alpha eight zero
+end note
+note as F2DeployAlphaFE #B5C6D7fe
+  F2 deployment alpha f e
+end note
+note as F2DeployAlphaFF #C6D7E8ff
+  F2 deployment alpha f f
+end note
+note as F2DeployTransparent #tRaNsPaReNt
+  F2 deployment whole transparent
+end note
+note as F2DeployBackground #bAcKgRoUnD
+  F2 deployment whole background
+end note
+
+F2DashForward --> AuroraRackF2
+F2DashForward --> BeaconArchiveF2
+F2DashReverse --> AuroraRackF2
+F2BackslashForward --> BeaconArchiveF2
+F2BackslashReverse --> AuroraRackF2
+F2PipeForward --> BeaconArchiveF2
+F2PipeReverse --> AuroraRackF2
+F2SlashForward --> BeaconArchiveF2
+F2SlashReverse --> AuroraRackF2
+F2DeployAlpha00 --> AuroraRackF2
+F2DeployAlpha01 --> BeaconArchiveF2
+F2DeployAlpha7F --> AuroraRackF2
+F2DeployAlpha80 --> BeaconArchiveF2
+F2DeployAlphaFE --> AuroraRackF2
+F2DeployAlphaFF --> BeaconArchiveF2
+F2DeployTransparent --> AuroraRackF2
+F2DeployBackground --> BeaconArchiveF2
+@enduml

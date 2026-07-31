@@ -1,0 +1,41 @@
+@startuml
+component "Quartz Gateway F2" as QuartzGatewayF2
+component "Lumen Store F2" as LumenStoreF2
+
+note "F2 flat business" as F2FlatBusiness #bUsInEsS
+note "F2 flat application" as F2FlatApplication #ApPlIcAtIoN
+note "F2 flat motivation" as F2FlatMotivation #mOtIvAtIoN
+note "F2 flat strategy" as F2FlatStrategy #StRaTeGy
+note "F2 flat technology" as F2FlatTechnology #tEcHnOlOgY
+note "F2 flat physical" as F2FlatPhysical #PhYsIcAl
+note "F2 flat implementation" as F2FlatImplementation #iMpLeMeNtAtIoN
+
+note "F2 alpha zero" as F2Alpha00 #10213200
+note "F2 alpha one" as F2Alpha01 #21324301
+note "F2 alpha seven f" as F2Alpha7F #3243547F
+note "F2 alpha eight zero" as F2Alpha80 #43546580
+note "F2 alpha f e" as F2AlphaFE #546576FE
+note "F2 alpha f f" as F2AlphaFF #657687FF
+
+note "F2 whole transparent" as F2WholeTransparent #TrAnSpArEnT
+note "F2 whole background" as F2WholeBackground #BaCkGrOuNd
+note "F2 three digit hex" as F2ShortHex #b7D
+
+F2FlatBusiness --> QuartzGatewayF2
+F2FlatBusiness --> LumenStoreF2
+F2FlatApplication --> QuartzGatewayF2
+F2FlatMotivation --> LumenStoreF2
+F2FlatStrategy --> QuartzGatewayF2
+F2FlatTechnology --> LumenStoreF2
+F2FlatPhysical --> QuartzGatewayF2
+F2FlatImplementation --> LumenStoreF2
+F2Alpha00 --> QuartzGatewayF2
+F2Alpha01 --> LumenStoreF2
+F2Alpha7F --> QuartzGatewayF2
+F2Alpha80 --> LumenStoreF2
+F2AlphaFE --> QuartzGatewayF2
+F2AlphaFF --> LumenStoreF2
+F2WholeTransparent --> QuartzGatewayF2
+F2WholeBackground --> LumenStoreF2
+F2ShortHex --> LumenStoreF2
+@enduml

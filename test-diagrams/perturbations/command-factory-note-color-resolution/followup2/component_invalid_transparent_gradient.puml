@@ -1,0 +1,6 @@
+@startuml
+component "F2 transparent boundary anchor" as F2TransparentBoundaryAnchor
+note "F2 invalid transparent endpoint" as F2InvalidTransparentEndpoint #transparent/Coral
+component "F2 transparent boundary survivor" as F2TransparentBoundarySurvivor
+F2InvalidTransparentEndpoint --> F2TransparentBoundarySurvivor
+@enduml

@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-color-resolution",
+  "reviewed_at": "2026-07-31T18:48:44Z",
+  "verdict": "ACCEPT",
+  "checker": {
+    "identity": "Codex (GPT-5), independent adversarial second follow-up checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop exec_command/apply_patch with Ruby REXML and xmllint",
+    "role": "Adversarial checker; did not implement the audited change, did not modify shipping code, did not run Cargo, and did not rebuild Rust"
+  },
+  "revisions": {
+    "rust_worktree": "/private/tmp/rustuml-note-color-followup2",
+    "rust_revision": "6256529d1b53cbfb3ade2351ee15cfedaf21c531",
+    "implementation_commit": "6256529d1b53cbfb3ade2351ee15cfedaf21c531",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "rust_binary": {
+    "path": "/private/tmp/rustuml-note-color-followup2/target/release/rustuml",
+    "sha256": "2f11372ab091e0b51c4051641d5fd62672761a3b5de60b68e2e351d0dbee2b43",
+    "invocation": "/private/tmp/rustuml-note-color-followup2/target/release/rustuml --no-oracle -pipe -tsvg",
+    "no_oracle_note": "The shipped CLI has no oracle-assisted render option. With -pipe, stdin overrides positional tokens and main.rs calls render_svg_with_theme, so this invocation exercised the shipped no-oracle path without rebuilding."
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "invocation": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe"
+  },
+  "prior_records_preserved": {
+    "account.json": "bd029f0477368ac69953ddd748dbb76d3d86e39a3b774d6fde01129bd7202059",
+    "review.json": "4d246925645cae618b480cab48d9eed945b32a991bb5b2ed314bfa0a148b155e",
+    "review-followup.json": "e413e0c2c75318f768c1fb0765371b07db4275d7641fabdfca3d2a4a13d95315"
+  },
+  "source_inspection": [
+    {
+      "area": "Java color acceptance and sentinels",
+      "paths": [
+        "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+        "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+        "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java"
+      ],
+      "finding": "ColorParser first constrains the complete suffix; CommandFactoryNote then resolves that same token with HColorSet. Whole transparent/background become HColors.none, whole automatic becomes HColorAutomagic, and gradient endpoints use parseSimpleColor so sentinel endpoints are invalid."
+    },
+    {
+      "area": "Java flat RGBA serialization",
+      "paths": [
+        "src/main/java/net/sourceforge/plantuml/klimt/color/HColor.java",
+        "src/main/java/net/sourceforge/plantuml/klimt/awt/XColor.java",
+        "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPathSvg.java",
+        "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java"
+      ],
+      "finding": "HColor.toSvg preserves intermediate alpha, XColor.toSvg canonicalizes alpha zero to #00000000 and alpha FF to RGB, DriverPathSvg uses WITH_FILL_NONE, fixColor maps #00000000 to none, and fillMe emits five-decimal A/255 opacity for remaining eight-digit fills."
+    },
+    {
+      "area": "Java gradient and alias behavior",
+      "paths": [
+        "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
+        "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java"
+      ],
+      "finding": "ColorTrieNode case-insensitively resolves the seven ArchiMate aliases to FFFFCC, C2F0FF, CCCCFF, F8E7C0, C9FFC9, 97FF97 and FFE0E0. Legacy gradient creation calls HColor.toRGB on both endpoints and therefore discards alpha before resource creation."
+    },
+    {
+      "area": "Rust parser and renderer flow",
+      "paths": [
+        "crates/rustuml-parser/src/parse/mod.rs",
+        "crates/rustuml-parser/src/parse/component.rs",
+        "crates/rustuml-parser/src/parse/deployment.rs",
+        "crates/rustuml-render/src/sequence.rs",
+        "crates/rustuml-render/src/component.rs",
+        "crates/rustuml-render/src/deployment.rs"
+      ],
+      "finding": "The shared named-note parser validates grammar and resolution before either family creates an entity. The implementation revision adds the seven source-cited aliases, resolve_color_rgb for gradient projection/dedup, and hcolor_fill_attributes for transparent and flat RGBA body/fold paint in both families."
+    }
+  ],
+  "prohibited_pattern_audit": {
+    "result": "PASS",
+    "scope": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/component.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-render/src/component.rs",
+      "crates/rustuml-render/src/deployment.rs",
+      "crates/rustuml-render/src/sequence.rs",
+      "crates/rustuml-render/src/filter_registry.rs"
+    ],
+    "finding": "Commit 6256529d changes only component.rs, deployment.rs and sequence.rs. No fresh F2 label, fixture path, golden read, coordinate-keyed surgery, branch-count ladder, unexplained layout constant or binary-hash branch occurs in shipping code. Alias constants have adjacent ColorTrieNode provenance; alpha zero/FF and five-decimal opacity follow the inspected Java methods."
+  },
+  "evidence_manifest": {
+    "directory": "test-diagrams/perturbations/command-factory-note-color-resolution/followup2",
+    "file_count": 91,
+    "naming": "Each of 13 fresh .puml inputs has same-stem .java.svg, .rust.svg, .java.stderr, .rust.stderr, .java.status and .rust.status artifacts.",
+    "inputs": [
+      "component_automatic_whole_sentinel.puml",
+      "component_inline_alias_alpha_valid.puml",
+      "component_invalid_automatic_gradient.puml",
+      "component_invalid_nonhex_nibble.puml",
+      "component_invalid_single_hex_nibble.puml",
+      "component_invalid_transparent_gradient.puml",
+      "component_multiline_gradient_dedup_valid.puml",
+      "deployment_inline_gradient_dedup_valid.puml",
+      "deployment_invalid_background_gradient.puml",
+      "deployment_invalid_composite_color.puml",
+      "deployment_invalid_seven_digit_hex.puml",
+      "deployment_invalid_unknown_color.puml",
+      "deployment_multiline_alias_gradient_valid.puml"
+    ]
+  },
+  "valid_heldouts": [
+    {
+      "input": "component_inline_alias_alpha_valid.puml",
+      "axes": [
+        "Component inline",
+        "all seven mixed-case ArchiMate aliases as flat colors",
+        "RGBA alpha 00/01/7F/80/FE/FF",
+        "whole transparent/background",
+        "three-digit hex",
+        "renamed targets and multi-link named note"
+      ],
+      "result": "PASS",
+      "evidence": "All 16 named-note entities have identical Java/Rust body and fold fill/opacity attributes. The multi-link Business note has both explicit links on both sides."
+    },
+    {
+      "input": "deployment_multiline_alias_gradient_valid.puml",
+      "axes": [
+        "Deployment multiline",
+        "all seven mixed-case ArchiMate aliases as gradient endpoints",
+        "all four policies",
+        "both endpoint orders",
+        "RGBA alpha 00/01/7F/80/FE/FF",
+        "whole transparent/background",
+        "renamed targets and multi-link named note"
+      ],
+      "result": "PASS",
+      "evidence": "All 16 named-note entities and all eight alias gradient resources canonicalize identically, including RGB stops and vectors. The multi-link DashForward note has both explicit links on both sides."
+    },
+    {
+      "input": "component_multiline_gradient_dedup_valid.puml",
+      "axes": [
+        "Component multiline",
+        "all four gradient policies",
+        "equivalent six/eight-digit endpoint dedup",
+        "reversed endpoint order",
+        "renamed multi-link named note"
+      ],
+      "result": "PASS",
+      "evidence": "Nine notes produce five identical Java/Rust resources: four alpha/opaque pairs reuse one resource per policy, while reversed slash endpoints remain a distinct fifth resource. Both body/fold references and both multi-links match."
+    },
+    {
+      "input": "deployment_inline_gradient_dedup_valid.puml",
+      "axes": [
+        "Deployment inline",
+        "all four gradient policies",
+        "equivalent six/eight-digit endpoint dedup",
+        "reversed endpoint order",
+        "renamed multi-link named note"
+      ],
+      "result": "PASS",
+      "evidence": "Nine notes produce five identical Java/Rust resources with matching IDs, vectors, RGB stops and references; the reversed note retains both links on both sides."
+    }
+  ],
+  "invalid_boundary_probes": [
+    {
+      "input": "component_invalid_transparent_gradient.puml",
+      "boundary": "transparent as a gradient endpoint",
+      "result": "PASS: Java rejects with No such color; Rust rejects the named-note command and emits zero SVG bytes."
+    },
+    {
+      "input": "deployment_invalid_background_gradient.puml",
+      "boundary": "background as a gradient endpoint",
+      "result": "PASS: Java rejects with No such color; Rust rejects the named-note command and emits zero SVG bytes."
+    },
+    {
+      "input": "component_invalid_automatic_gradient.puml",
+      "boundary": "automatic as a gradient endpoint",
+      "result": "PASS: Java rejects with No such color; Rust rejects the named-note command and emits zero SVG bytes."
+    },
+    {
+      "input": "deployment_invalid_unknown_color.puml",
+      "boundary": "unknown alphabetic color",
+      "result": "PASS: both sides reject the complete command."
+    },
+    {
+      "input": "component_invalid_single_hex_nibble.puml",
+      "boundary": "one-character hex is HColorSet-resolvable but misses ColorParser.COLOR_REGEXP",
+      "result": "PASS: Java reports syntax error and Rust rejects the complete command."
+    },
+    {
+      "input": "component_invalid_nonhex_nibble.puml",
+      "boundary": "one-character non-hex token",
+      "result": "PASS: Java reports syntax error and Rust rejects the complete command."
+    },
+    {
+      "input": "deployment_invalid_composite_color.puml",
+      "boundary": "ColorParser multi-channel composite passed to CommandFactoryNote HColor resolution",
+      "result": "PASS: Java reports No such color and Rust rejects the complete command."
+    },
+    {
+      "input": "deployment_invalid_seven_digit_hex.puml",
+      "boundary": "unsupported hex arity",
+      "result": "PASS: Java reports No such color and Rust rejects the complete command."
+    }
+  ],
+  "accepted_automatic_residue": {
+    "input": "component_automatic_whole_sentinel.puml",
+    "result": "The frozen Java parser accepts whole automatic, then SVG rendering throws UnsupportedOperationException from HColorAutomagic and emits an error SVG. Rust renders successfully. This is the account's declared residue and is not counted as a valid held-out parity case."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "passing",
+      "summary": "Corrected transparent behavior matches Java in both named-note consumers.",
+      "evidence": [
+        "Whole transparent and background produce fill=none on both body and fold paths in Component inline and Deployment multiline outputs.",
+        "RGBA alpha 00 likewise produces fill=none on both paths in both families, with no fill-opacity attribute.",
+        "The remaining alpha values produce exact Java opacity strings: 01=0.00392, 7F=0.49804, 80=0.50196 and FE=0.99608; FF omits opacity."
+      ]
+    },
+    {
+      "id": "F2",
+      "severity": "passing",
+      "summary": "All seven ArchiMate aliases resolve and paint at their Java ColorTrieNode RGB values.",
+      "evidence": [
+        "Fresh mixed-case flat Component notes match FFFFCC, C2F0FF, CCCCFF, F8E7C0, C9FFC9, 97FF97 and FFE0E0 on body and fold.",
+        "Fresh mixed-case Deployment gradient endpoints match the same values in both endpoint orders."
+      ]
+    },
+    {
+      "id": "F3",
+      "severity": "passing",
+      "summary": "Gradient alpha projection, policy vectors, endpoint order and deduplication match Java.",
+      "evidence": [
+        "Component and Deployment each reduce four six/eight-digit equivalent pairs to four resources and retain reversed slash endpoints as a distinct fifth resource.",
+        "All 18 fresh Java/Rust gradient resources match in ID, vector, ordered RGB stops and body/fold references; no stop retains alpha."
+      ]
+    },
+    {
+      "id": "F4",
+      "severity": "passing",
+      "summary": "The two-stage grammar/resolution boundary rejects every fresh invalid and sentinel-endpoint probe.",
+      "evidence": [
+        "All eight invalid Java runs emit an error SVG/status 200 and all eight Rust runs exit 1 with an invalid named-note command and zero SVG bytes.",
+        "The one-character #a probe confirms that HColorSet support alone is insufficient when ColorParser.exp1 does not capture the token."
+      ]
+    },
+    {
+      "id": "F5",
+      "severity": "passing",
+      "summary": "Fresh renamed and multi-link topologies do not expose fixture-shaped behavior or color-dependent edge loss.",
+      "evidence": [
+        "The selected Component and Deployment multi-link notes each retain two connections in Java and Rust across inline and multiline forms.",
+        "No fresh label occurs in shipping Rust source."
+      ]
+    },
+    {
+      "id": "F6",
+      "severity": "non_rejecting",
+      "summary": "Whole automatic reproduces the account's declared Java renderer residue.",
+      "evidence": [
+        "Java stderr records UnsupportedOperationException: HColorAutomagic through HColor.toSvg and DriverPathSvg.",
+        "Because no normal Java SVG exists, this sentinel was preserved but excluded from valid parity adjudication."
+      ]
+    }
+  ],
+  "commands": [
+    "git -C /private/tmp/rustuml-note-color-followup2 rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-note-color-followup2/target/release/rustuml",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "jq . docs/parity-reviews/command-factory-note-color-resolution/account.json",
+    "jq . docs/parity-reviews/command-factory-note-color-resolution/review.json",
+    "jq . docs/parity-reviews/command-factory-note-color-resolution/review-followup.json",
+    "git show --format=fuller --find-renames 6256529d1b53cbfb3ade2351ee15cfedaf21c531",
+    "rg/sed source inspection of Java HColorSet, HColor, XColor, DriverPathSvg, SvgGraphics, ColorTrieNode, ColorParser and CommandFactoryNote",
+    "rg/sed source inspection of Rust named-note parser flow, resolve_color_rgb, hcolor_fill_attributes, gradient registration and Component/Deployment note painters",
+    "for INPUT in followup2/*.puml; do java -Djava.awt.headless=true -jar plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > STEM.java.svg 2> STEM.java.stderr; record status; done",
+    "for INPUT in followup2/*.puml; do /private/tmp/rustuml-note-color-followup2/target/release/rustuml --no-oracle -pipe -tsvg < INPUT > STEM.rust.svg 2> STEM.rust.stderr; record status; done",
+    "Ruby REXML canonicalization and equality check of every F2 named-note body/fold fill, fill-opacity, gradient ID/vector/ordered stops and selected multi-link relations",
+    "xmllint --noout on every nonempty Java and Rust SVG artifact",
+    "rg fresh F2 labels and forbidden fixture/golden patterns in parser/render shipping paths",
+    "git diff --check",
+    "jq empty docs/parity-reviews/command-factory-note-color-resolution/review-followup2.json"
+  ],
+  "conclusion": "ACCEPT. The corrected transparent/background and alpha-zero behavior is exact on both body and fold paths, and no material mismatch was found across the fresh valid Component/Deployment matrix. Alias resolution, intermediate/opaque alpha, legacy gradient alpha dropping, equivalent endpoint deduplication, all policies and orders, parser rejection boundaries, and renamed multi-link topologies also survived. Whole automatic remains only the already-declared frozen-Java renderer residue."
+}

@@ -1,0 +1,6 @@
+@startuml
+node "F2 unknown boundary anchor" as F2UnknownBoundaryAnchor
+note "F2 invalid unknown color" as F2InvalidUnknownColor #UltravioletQuasarF2
+node "F2 unknown boundary survivor" as F2UnknownBoundarySurvivor
+F2InvalidUnknownColor --> F2UnknownBoundarySurvivor
+@enduml

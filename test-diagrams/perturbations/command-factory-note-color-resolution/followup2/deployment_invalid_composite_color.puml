@@ -1,0 +1,6 @@
+@startuml
+node "F2 composite boundary anchor" as F2CompositeBoundaryAnchor
+note "F2 invalid composite color" as F2InvalidCompositeColor #back:Red;line:Blue
+artifact "F2 composite boundary survivor" as F2CompositeBoundarySurvivor
+F2InvalidCompositeColor --> F2CompositeBoundarySurvivor
+@enduml

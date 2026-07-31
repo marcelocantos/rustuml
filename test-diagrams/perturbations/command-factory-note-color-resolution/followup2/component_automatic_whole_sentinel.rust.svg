@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="151px" preserveAspectRatio="none" style="width:244px;height:151px;background:#FFFFFF;" version="1.1" viewBox="0 0 244 151" width="244px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity F2WholeAutomaticAnchor-->
+<g class="entity" data-qualified-name="F2WholeAutomaticAnchor" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="223.6885" x="7" y="91.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="210.6885" y="96.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="208.6885" y="98.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="208.6885" y="102.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="183.6885" x="22" y="124.8452">F2 whole automatic anchor</text>
+</g>
+<g class="entity" data-qualified-name="F2WholeAutomatic" data-source-line="2" id="ent0003">
+<path d="M19.89,6 L19.89,31.3105 A0,0 0 0 0 19.89,31.3105 L114.84,31.3105 L118.84,91.01 L122.84,31.3105 L217.8055,31.3105 A0,0 0 0 0 217.8055,31.3105 L217.8055,16 L207.8055,6 L19.89,6 A0,0 0 0 0 19.89,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M207.8055,6 L207.8055,16 L217.8055,16 L207.8055,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="176.9155" x="25.89" y="23.5684">F2 whole automatic sentinel</text>
+</g>
+</g></svg>

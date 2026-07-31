@@ -1,0 +1,6 @@
+@startuml
+component "F2 single hex boundary anchor" as F2SingleHexBoundaryAnchor
+note "F2 invalid single hex nibble" as F2InvalidSingleHexNibble #a
+component "F2 single hex boundary survivor" as F2SingleHexBoundarySurvivor
+F2InvalidSingleHexNibble --> F2SingleHexBoundarySurvivor
+@enduml
