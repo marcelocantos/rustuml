@@ -270,8 +270,41 @@ pub fn scale_svg_numbers(svg: &str, k: f64) -> String {
     let mut first_tag = true;
     while i < bytes.len() {
         if bytes[i] == b'<' {
-            // Find the end of this tag (next unquoted '>').
             let tag_start = i;
+            let tail = &svg[i..];
+            let terminator = if tail.starts_with("<!--") {
+                Some("-->")
+            } else if tail.starts_with("<![CDATA[") {
+                Some("]]>")
+            } else if tail.starts_with("<?") {
+                Some("?>")
+            } else {
+                None
+            };
+            if let Some(terminator) = terminator {
+                let Some(relative_end) = tail.find(terminator) else {
+                    out.push_str(tail);
+                    break;
+                };
+                let end = i + relative_end + terminator.len();
+                out.push_str(&svg[i..end]);
+                i = end;
+                continue;
+            }
+
+            let is_element = bytes.get(i + 1).is_some_and(|c| c.is_ascii_alphabetic());
+            if !is_element {
+                let Some(relative_end) = tail.find('>') else {
+                    out.push_str(tail);
+                    break;
+                };
+                let end = i + relative_end + 1;
+                out.push_str(&svg[i..end]);
+                i = end;
+                continue;
+            }
+
+            // Actual element tags end at the next unquoted `>`.
             let mut j = i + 1;
             let mut in_quote = 0u8;
             while j < bytes.len() {
@@ -289,18 +322,9 @@ pub fn scale_svg_numbers(svg: &str, k: f64) -> String {
             }
             // `j` now points at '>' (or end of input for malformed SVG).
             let tag = &svg[tag_start..j.min(bytes.len())];
-            // Processing instructions / comments / closing tags: copy verbatim.
-            let is_element = tag
-                .as_bytes()
-                .get(1)
-                .is_some_and(|&c| c.is_ascii_alphabetic());
-            if !is_element {
-                out.push_str(tag);
-            } else {
-                let is_root_svg = first_tag && tag.starts_with("<svg");
-                out.push_str(&scale_tag(tag, k, is_root_svg));
-                first_tag = false;
-            }
+            let is_root_svg = first_tag && tag.starts_with("<svg");
+            out.push_str(&scale_tag(tag, k, is_root_svg));
+            first_tag = false;
             if j < bytes.len() {
                 out.push('>');
             }
@@ -1040,6 +1064,31 @@ mod tests {
         assert!(out.contains(r#"stroke-width:0.7813"#), "{out}");
         assert!(out.contains(r##"fill="#F1F1F1""##), "{out}");
         assert!(out.contains(r##"stroke:#181818"##), "{out}");
+    }
+
+    #[test]
+    fn non_element_markup_cannot_interrupt_uniform_scaling() {
+        let svg = concat!(
+            "<?xml version=\"1.0\" note=\"O'Brien > marker\"?>",
+            "<!DOCTYPE svg>",
+            "<svg width=\"20px\" height=\"10px\" viewBox=\"0 0 20 10\" ",
+            "style=\"width:20px;height:10px;\">",
+            "<!--class O'Brien > Ledger-->",
+            "<![CDATA[O'Brien > payload]]>",
+            "<rect x=\"2\" y=\"3\" width=\"4\" height=\"5\"/>",
+            "</svg>",
+        );
+        let out = scale_svg_numbers(svg, 2.0);
+
+        assert!(out.starts_with("<?xml version=\"1.0\" note=\"O'Brien > marker\"?>"));
+        assert!(out.contains("<!DOCTYPE svg>"));
+        assert!(out.contains("<!--class O'Brien > Ledger-->"));
+        assert!(out.contains("<![CDATA[O'Brien > payload]]>"));
+        assert!(
+            out.contains("<rect x=\"4\" y=\"6\" width=\"8\" height=\"10\"/>"),
+            "{out}"
+        );
+        assert!(out.ends_with("</svg>"));
     }
 
     #[test]
