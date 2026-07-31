@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "class-inline-gradient-resource-generation",
-  "status": "account_committed_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -90,9 +90,24 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "449bb684",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "Pending implementation and independent review.",
-    "review_status": "This account predates implementation and does not attest acceptance."
+    "accepted_result": "edge_color_gradient becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,165/11,251 to 11,166/11,251, with edge-cases moving from 754/777 to 755/777 and every other family unchanged.",
+    "model_evidence": "The generated class resource inventory now follows SVEK entity emission order and selects each entity's inline BACK color before its merged class style. Inline paint is copied to the header selection, while a style-selected body can retain a distinct header gradient. Resource identity includes canonical color1, color2, and policy. Fresh renamed inputs exercise all four policies, five declarations, duplicate tuple reuse, and inline-over-global-style precedence. The perturbation also confirmed Java's legacy skinparam refresh behavior: the final global class background applies retroactively, while the inline entity color still wins.",
+    "commands": [
+      "cargo test -p rustuml-render --lib no_oracle_inline -- --nocapture",
+      "cargo test -p rustuml-render --lib no_oracle_class_gradients_are_generated_in_body_then_header_order -- --nocapture",
+      "cargo build -p rustuml-oracle --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_color_gradient.puml",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java runtime are unavailable. This record does not self-attest acceptance."
   }
 }

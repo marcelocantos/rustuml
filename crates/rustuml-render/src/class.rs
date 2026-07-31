@@ -3565,16 +3565,13 @@ impl VisibilityIconGeom {
     }
 }
 
-/// Resolve the `<defs>` linearGradient id whose two stops match the gradient
-/// spelled `c1/c2` (PlantUML's `#c1/#c2` shorthand). `defs_inner_xml` carries
-/// the captured `<linearGradient id=…><stop stop-color=…/><stop stop-color=…/>`
-/// entries; we parse each gradient's id and its two stop colours and pick the
-/// one whose colours match (case-insensitively). Returns `None` when no
-/// gradient matches (e.g. the header colour is solid, or the value isn't a
-/// gradient at all). Only granular id + stop-colour scalars are consumed.
-fn resolve_gradient_id(defs_inner_xml: &str, c1: &str, c2: &str) -> Option<String> {
+/// Resolve the `<defs>` linearGradient id whose stops and orientation match a
+/// typed PlantUML gradient paint. Only granular id, endpoint, and stop-colour
+/// scalars are consumed from captured oracle definitions.
+fn resolve_gradient_id(defs_inner_xml: &str, c1: &str, c2: &str, policy: char) -> Option<String> {
     let c1 = c1.trim_start_matches('#');
     let c2 = c2.trim_start_matches('#');
+    let (x1, x2, y1, y2) = class_gradient_endpoints(policy);
     let mut rest = defs_inner_xml;
     while let Some(start) = rest.find("<linearGradient") {
         rest = &rest[start..];
@@ -3599,6 +3596,10 @@ fn resolve_gradient_id(defs_inner_xml: &str, c1: &str, c2: &str) -> Option<Strin
         if let (Some(id), [s0, s1, ..]) = (id, stops.as_slice())
             && s0.trim_start_matches('#').eq_ignore_ascii_case(c1)
             && s1.trim_start_matches('#').eq_ignore_ascii_case(c2)
+            && attr_value(elem, "x1") == Some(x1)
+            && attr_value(elem, "x2") == Some(x2)
+            && attr_value(elem, "y1") == Some(y1)
+            && attr_value(elem, "y2") == Some(y2)
         {
             return Some(id.to_string());
         }
@@ -3643,32 +3644,51 @@ fn split_class_gradient(value: &str) -> Option<(&str, &str, char)> {
     None
 }
 
-fn class_gradients(diagram: &ClassDiagram, font: &ClassFontOverrides) -> Vec<ClassGradient> {
+fn class_gradient_endpoints(
+    policy: char,
+) -> (&'static str, &'static str, &'static str, &'static str) {
+    // Java `SvgGraphics.createSvgGradient` maps `HColorGradient` policies to
+    // these endpoint pairs.
+    match policy {
+        '|' => ("0%", "100%", "50%", "50%"),
+        '\\' => ("0%", "100%", "100%", "0%"),
+        '-' => ("50%", "50%", "0%", "100%"),
+        _ => ("0%", "100%", "0%", "100%"),
+    }
+}
+
+fn class_gradients(diagram: &ClassDiagram) -> Vec<ClassGradient> {
     let source = diagram.meta.source.as_deref().unwrap_or("");
     let mut gradients: Vec<ClassGradient> = Vec::new();
-    for value in [
-        font.class_background.as_deref(),
-        font.header_background.as_deref(),
-    ]
-    .into_iter()
-    .flatten()
-    {
-        let Some((raw1, raw2, policy)) = split_class_gradient(value) else {
-            continue;
+    for entity_index in entity_emission_order(diagram) {
+        let entity = &diagram.entities[entity_index];
+        let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+        let body = entity.color.as_deref().or(font.class_background.as_deref());
+        // Java `EntityImageClass.drawInternal` copies an entity BACK color to
+        // HEADER. Only a style-selected body can have a distinct header paint.
+        let header = if entity.color.is_some() {
+            body
+        } else {
+            font.header_background.as_deref().or(body)
         };
-        let color1 = crate::sequence::resolve_color(raw1);
-        let color2 = crate::sequence::resolve_color(raw2);
-        if gradients.iter().any(|gradient| {
-            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
-        }) {
-            continue;
+        for value in [body, header].into_iter().flatten() {
+            let Some((raw1, raw2, policy)) = split_class_gradient(value) else {
+                continue;
+            };
+            let color1 = crate::sequence::resolve_color(raw1);
+            let color2 = crate::sequence::resolve_color(raw2);
+            if gradients.iter().any(|gradient| {
+                gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+            }) {
+                continue;
+            }
+            gradients.push(ClassGradient {
+                color1,
+                color2,
+                policy,
+                id: crate::filter_registry::gradient_id_for(source, gradients.len()),
+            });
         }
-        gradients.push(ClassGradient {
-            color1,
-            color2,
-            policy,
-            id: crate::filter_registry::gradient_id_for(source, gradients.len()),
-        });
     }
     gradients
 }
@@ -3676,14 +3696,7 @@ fn class_gradients(diagram: &ClassDiagram, font: &ClassFontOverrides) -> Vec<Cla
 fn class_gradient_defs(gradients: &[ClassGradient]) -> String {
     let mut defs = String::new();
     for gradient in gradients {
-        // Java `SvgGraphics.createSvgGradient` maps `HColorGradient` policies
-        // to these endpoint pairs and emits attributes alphabetically.
-        let (x1, x2, y1, y2) = match gradient.policy {
-            '|' => ("0%", "100%", "50%", "50%"),
-            '\\' => ("0%", "100%", "100%", "0%"),
-            '-' => ("50%", "50%", "0%", "100%"),
-            _ => ("0%", "100%", "0%", "100%"),
-        };
+        let (x1, x2, y1, y2) = class_gradient_endpoints(gradient.policy);
         write!(
             defs,
             r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
@@ -3695,10 +3708,12 @@ fn class_gradient_defs(gradients: &[ClassGradient]) -> String {
 }
 
 fn gradient_fill_from_defs(value: Option<&str>, defs: Option<&str>) -> Option<String> {
-    let (c1, c2) = split_gradient_colors(value?)?;
-    defs.and_then(|defs| resolve_gradient_id(defs, c1, c2))
+    let (raw1, raw2, policy) = split_class_gradient(value?)?;
+    let color1 = crate::sequence::resolve_color(raw1);
+    let color2 = crate::sequence::resolve_color(raw2);
+    defs.and_then(|defs| resolve_gradient_id(defs, &color1, &color2, policy))
         .map(|id| format!("url(#{id})"))
-        .or_else(|| Some(crate::sequence::resolve_color(c1)))
+        .or(Some(color1))
 }
 
 fn resolve_flat_or_gradient_start(value: &str) -> String {
@@ -5646,7 +5661,7 @@ fn render_plantuml_svg(
     // `<linearGradient>` PlantUML generates for a `#c1/c2` gradient
     // background, or background-colour filters). The entity rects reference
     // these via oracle-captured `fill="url(#...)"`, so the ids must be live.
-    let gradients = class_gradients(diagram, &font);
+    let gradients = class_gradients(diagram);
     let mut generated_defs = class_gradient_defs(&gradients);
     if let Some(shadow_defs) = shadow_filter_id
         .as_deref()
@@ -6035,15 +6050,21 @@ fn render_plantuml_svg(
             )
         });
         let entity_font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
-        let body_gradient_fill =
-            gradient_fill_from_defs(entity_font.class_background.as_deref(), active_defs);
+        let selected_body_background = entity
+            .color
+            .as_deref()
+            .or(entity_font.class_background.as_deref());
+        let body_gradient_fill = gradient_fill_from_defs(selected_body_background, active_defs);
         // When `classHeaderBackgroundColor` is itself a gradient distinct from
         // the body gradient, the header repaint must reference the header
         // gradient's own `<defs>` id. Resolve it by matching the header
         // colour's two stops against the captured `<defs>`; otherwise the
         // header reuses the body fill (single-gradient case).
-        let header_gradient_fill =
-            gradient_fill_from_defs(entity_font.header_background.as_deref(), active_defs);
+        let header_gradient_fill = entity
+            .color
+            .is_none()
+            .then(|| gradient_fill_from_defs(entity_font.header_background.as_deref(), active_defs))
+            .flatten();
         let entity_suppress_header_icon = suppress_header_icon
             || entity
                 .stereotypes
@@ -9307,10 +9328,16 @@ fn render_entity_content(
         .is_some_and(|c| split_gradient_colors(c).is_some());
     let (stereotype_background, stereotype_border, stereotype_font_color) =
         font.stereotype_colors(&entity.stereotypes);
-    let fill_default = entity
-        .color
-        .as_deref()
-        .map(resolve_flat_or_gradient_start)
+    let entity_fill = entity.color.as_deref().map(|color| {
+        if entity_gradient_fill {
+            body_gradient_fill
+                .map(str::to_string)
+                .unwrap_or_else(|| resolve_flat_or_gradient_start(color))
+        } else {
+            resolve_flat_or_gradient_start(color)
+        }
+    });
+    let fill_default = entity_fill
         .or_else(|| stereotype_background.map(resolve_flat_or_gradient_start))
         .or_else(|| body_gradient_fill.map(str::to_string))
         .or_else(|| {
@@ -21320,6 +21347,88 @@ mod tests {
         assert!(body_gradient < header_gradient);
         assert_eq!(svg.matches("<linearGradient ").count(), 2);
         assert!(svg.matches(r#"fill="url(#"#).count() >= 2);
+    }
+
+    #[test]
+    fn no_oracle_inline_class_gradients_preserve_policy_order_and_reuse() {
+        let input = r#"@startuml
+class VerticalFresh1103 #102030-#405060
+class HorizontalFresh1109 #A0B0C0|#D0E0F0
+class RisingFresh1117 #123456\#ABCDEF
+class FallingFresh1123 #654321/#FEDCBA
+class HorizontalReuseFresh1129 #A0B0C0|#D0E0F0
+@enduml"#;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let source = diagram.meta().source.as_deref().unwrap();
+        let ids = (0..4)
+            .map(|index| crate::filter_registry::gradient_id_for(source, index))
+            .collect::<Vec<_>>();
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 4, "{svg}");
+        assert!(
+            svg.contains(&format!(
+                r#"<linearGradient id="{}" x1="50%" x2="50%" y1="0%" y2="100%">"#,
+                ids[0]
+            )),
+            "{svg}"
+        );
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="0%" x2="100%" y1="50%" y2="50%">"#,
+            ids[1]
+        )));
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="0%" x2="100%" y1="100%" y2="0%">"#,
+            ids[2]
+        )));
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="0%" x2="100%" y1="0%" y2="100%">"#,
+            ids[3]
+        )));
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{})""#, ids[1])).count(),
+            2,
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_inline_gradient_overrides_global_class_gradient() {
+        let input = "@startuml\n\
+            skinparam classBackgroundColor #102132/#435465\n\
+            class EpochBeforeFresh1201\n\
+            class InlineFresh1213 #A1B2C3|#D4E5F6\n\
+            skinparam classBackgroundColor #708192/#A3B4C5\n\
+            class EpochAfterFresh1217\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let source = diagram.meta().source.as_deref().unwrap();
+        let ids = (0..2)
+            .map(|index| crate::filter_registry::gradient_id_for(source, index))
+            .collect::<Vec<_>>();
+        let entity_body = |name: &str| {
+            svg.split_once(&format!("<!--class {name}-->"))
+                .unwrap_or_else(|| panic!("missing {name}"))
+                .1
+                .split_once("</g>")
+                .unwrap()
+                .0
+        };
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 2, "{svg}");
+        assert!(
+            entity_body("EpochBeforeFresh1201").contains(&format!(r#"fill="url(#{})""#, ids[0])),
+            "{svg}"
+        );
+        assert!(
+            entity_body("InlineFresh1213").contains(&format!(r#"fill="url(#{})""#, ids[1])),
+            "{svg}"
+        );
+        assert!(
+            entity_body("EpochAfterFresh1217").contains(&format!(r#"fill="url(#{})""#, ids[0])),
+            "{svg}"
+        );
     }
 
     #[test]
