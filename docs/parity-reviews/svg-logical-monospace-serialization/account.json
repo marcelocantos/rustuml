@@ -1,22 +1,27 @@
 {
   "schema_version": 1,
   "mechanism": "svg-logical-monospace-serialization",
-  "status": "implementation_green_pending_independent_review",
+  "status": "rejected_remediation_accounted_before_code",
   "account_revision": "bc9e5362",
   "implementation_revision": "336db230",
+  "rejected_review_revision": "666c0b74",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java:UFontImpl#getFamily",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleFontFamilyChange.java:CommandCreoleFontFamilyChange#executeAndGetRemaining",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleMonospaced.java:CommandCreoleMonospaced#executeAndGetRemaining",
+    "src/main/java/net/sourceforge/plantuml/klimt/font/FontConfiguration.java:FontConfiguration#changeFamily",
     "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:SvgGraphics#text"
   ],
   "rust_locations": [
     "crates/rustuml-render/src/text_render.rs:write_text_element",
     "crates/rustuml-render/src/text_render.rs:trim_text_for_emit",
+    "crates/rustuml-render/src/creole.rs:handle_tag and push_literal",
     "crates/rustuml-render/src/component.rs:canonical_font_family and component edge label emission"
   ],
   "invariant": "PlantUML's SVG serialization is a backend-wide finalization step: a logical font family equal to Monospaced is emitted as CSS family monospace, and text painted with effective family monospace or Courier has every ASCII space converted to U+00A0 before the DOM serializes it. The conversion depends on the effective emitted font family, whether that family came from the base FontConfiguration or an inline Creole atom.",
-  "causal_divergence": "Rust recognizes Monospaced as a monospace metric family, so the rejected component checker has matching geometry, but text_render::write_text_element emits the uncanonicalized base family and only receives NBSP text when the Creole parser marked an inline segment as monospace. A style-selected base family Monospaced therefore emits font-family=\"Monospaced\" with literal spaces, while Java's SvgGraphics emits font-family=\"monospace\" with numeric NBSP entities.",
-  "planned_change": "Centralize Java's SvgGraphics family finalization in text_render::write_text_element. Resolve the effective family from inline style or TextBase, canonicalize logical Monospaced to monospace case-insensitively, and convert ASCII spaces to U+00A0 whenever the finalized family is monospace or Courier. Preserve metrics and layout, which already consume the original family through metric_family, and leave all other family names byte-compatible.",
+  "causal_divergence": "The initial change fixed base-family finalization, but the independent review exposed an upstream Creole scope error. Java's CommandCreoleFontFamilyChange changes only the current family and leaves SvgGraphics#text to decide whether that effective family is exactly monospace or Courier. Java's distinct CommandCreoleMonospaced selects the configured monospaced family for double-quoted Creole. Rust instead sets Style.monospace for every <font:Name> tag, so push_literal converts spaces before final-family classification; proportional names such as Courier New therefore receive NBSP and wider geometry even though Java leaves their spaces literal.",
+  "planned_change": "Keep the shared SVG backend finalization from 336db230. In the Creole family-change branch, store the requested font family without setting the semantic monospace-markup flag; let text_render classify the effective family exactly as Java's SvgGraphics does. Preserve Style.monospace for the dedicated double-quote, backtick, and code markup paths. Update the Style documentation and add paired parser/backend tests proving that inline Courier New retains literal spaces while inline Courier and mixed-case Monospaced receive NBSP only at final SVG emission.",
   "perturbation_axes": [
     "logical Monospaced versus CSS monospace versus Courier and unrelated proportional families",
     "mixed case family spelling",
@@ -26,6 +31,11 @@
     "dpi or explicit scale with renamed labels"
   ],
   "scope_boundary": "This mechanism owns SVG font-family canonicalization and space serialization in the shared text renderer. It does not alter font metrics, label dimensions, Graphviz topology, style snapshot timing, comparator behavior, baselines, direct SVG emitters outside text_render, or fixture eligibility.",
+  "rejected_review": "docs/parity-reviews/svg-logical-monospace-serialization/review.json",
+  "remediation_inputs": [
+    "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml",
+    "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml"
+  ],
   "acceptance": [
     "The preserved checker_monospaced_lr_dpi input passes diff_one --no-oracle.",
     "Unit tests cover logical Monospaced, Courier, and an unrelated family without changing measured width.",
