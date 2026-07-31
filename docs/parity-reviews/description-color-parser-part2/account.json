@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-color-parser-part2",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "c62ee2abc330f7f0c1d703cdba57a25a9635fd43",
+  "triggering_review": "docs/parity-reviews/deployment-command-factory-note-on-link/review-followup.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "symbols": [
+        "ColorParser.COLOR_REGEXP",
+        "ColorParser.PART2",
+        "ColorParser.COLORS_REGEXP",
+        "ColorParser.simpleColor"
+      ],
+      "lines": "41-80",
+      "role": "Defines the shared simple-color language: one ordinary or gradient color, or the semicolon-separated PART2 form with an optional leading main-channel value and keyed text, back, header, line, line.dashed, line.dotted, line.bold, and shadowing directives."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/Colors.java",
+      "symbols": [
+        "Colors.Colors",
+        "Colors.getColor",
+        "Colors.getSpecificLineStroke"
+      ],
+      "lines": "54-145",
+      "role": "Lowercases and tokenizes the accepted color expression, maps an unkeyed value to the command-provided main ColorType, maps keyed values independently, and retains a specific dashed, dotted, or bold line stroke."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "symbols": [
+        "CommandFactoryNoteOnLink.color",
+        "CommandFactoryNoteOnLink.executeInternal"
+      ],
+      "lines": "104-173",
+      "role": "Instantiates ColorParser.simpleColor(ColorType.BACK) and stores the resulting typed Colors value on the link-owned CucaNote."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "symbols": [
+        "Style.eventuallyOverride(Colors)",
+        "Style.getStroke(Colors)"
+      ],
+      "lines": "157-176,282-291",
+      "role": "Applies BACK, LINE, and TEXT to independent note style channels and applies the specific line stroke independently of the line color."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "symbols": [
+        "ComponentRoseNote.ComponentRoseNote",
+        "ComponentRoseNote.drawInternalU"
+      ],
+      "lines": "64-112",
+      "role": "Uses the Colors-overridden symbol context to paint the folded note body and border, while its textual base consumes the overridden font color."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "named_note_color_is_valid"
+      ],
+      "lines": "69-122",
+      "role": "Recognizes only the ordinary/gradient branch and rejects every PART2 expression before a diagram parser can retain it."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "parse_deployment_link_note_command"
+      ],
+      "lines": "516-560",
+      "role": "Stores one opaque color string on DeploymentLinkNote and treats shared color validation as a boolean gate."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": [
+        "DeploymentLinkNote"
+      ],
+      "lines": "161-168",
+      "role": "Has only a background-like color field and cannot preserve independent fill, border, text, or stroke-style channels."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "deployment_note_fill_from_color",
+        "render_deployment_link_note"
+      ],
+      "lines": "3160-3197,3571-3614",
+      "role": "Interprets the opaque value only as a fill and always paints the default border and text colors with a solid half-pixel stroke."
+    }
+  ],
+  "claimed_invariant": "Where a Java command uses ColorParser.simpleColor(BACK), an accepted color suffix denotes a typed sparse Colors value rather than one paint string. A leading unkeyed ordinary or gradient value sets BACK. Keyed back, line, and text directives independently set note fill, border, and text; line.dashed, line.dotted, and line.bold independently select the border stroke; header and shadowing remain valid retained channels even where a folded note does not visibly consume them. Invalid keys, missing required values, unknown colors, malformed separators, and trailing color-language junk reject the command. Directive order follows Colors' map assignment semantics, so later values for a channel replace earlier values, while the final line-style precedence is dashed before dotted before bold because Colors inspects the complete lowercased expression in that order.",
+  "causal_divergence": "Rust modeled the color suffix as one optional string and its validator implemented only ColorParser.COLOR_REGEXP. Therefore Java-valid PART2 expressions such as #back:FF0000;line:00FF00 are rejected during parsing; merely widening the validator would still paint the complete expression as a background token and lose Java's independent style channels. The missing model is the typed Colors value produced after grammar recognition, not one exceptional spelling from the rejecting fixture.",
+  "planned_model_change": "Introduce a renderer-neutral PlantUML color-spec value shared by diagram ASTs, with optional back, line, text, and header channels, line style, and shadowing. Replace the boolean note-color validator with a parser that implements ColorParser's ordinary/gradient and PART2 branches, resolves every actual color value with the existing HColorSet-compatible vocabulary, maps a leading unkeyed value to a caller-supplied main channel, and returns the typed value. Retain the original source token only where gradient definition identity requires it. Carry the typed value on DeploymentLinkNote and use it to paint fill, border, text, and border stroke. Reuse the shared parser for named-note validation so all DESCRIPTION note forms accept or reject the same language even where their older ASTs still retain only the raw token.",
+  "perturbation_axes": [
+    "ordinary named and hexadecimal colors versus two-endpoint gradients",
+    "leading unkeyed BACK value versus keyed back value",
+    "independent back, line, and text channels in varied order",
+    "dashed, dotted, and bold line-style directives with and without explicit line color",
+    "repeated channel directives with changed values",
+    "header and shadowing directives that are valid but not visibly consumed by folded notes",
+    "upper-, lower-, and mixed-case directive names and color names",
+    "inline versus multiline note-on-link forms and changed note positions",
+    "renamed endpoints and changed note text",
+    "invalid keys, unknown values, omitted values, doubled separators, and trailing junk"
+  ],
+  "scope_boundary": "This mechanism owns the shared ColorParser/Colors grammar and typed channel semantics used by DESCRIPTION note commands, plus Deployment link-note paint consumption. It does not change UML subtype selection, DESCRIPTION factory consumability, last-link eligibility, note geometry, Graphviz routing, comparator behavior, baselines, park lists, or guard allow-lists.",
+  "acceptance": [
+    "Parser unit tests exercise both grammar branches, every retained channel, repeated directives, line-style precedence, mixed case, gradients, and malformed or unresolvable expressions.",
+    "Deployment parser tests prove inline and multiline link notes retain independent fill, line, text, and line-style values without changing link ownership or source identity.",
+    "Renderer tests prove independent fill, border, text, dashed, dotted, and bold output from the typed AST.",
+    "The preserved rejecting perturbation case 13 becomes Java/Rust acceptance-compatible and paints a red body with a green border.",
+    "Focused tests, affected-crate tests, clippy with warnings denied, and a release binary pass before independent review.",
+    "A separate checker generates fresh color-language perturbations and records the exact revisions, commands, evidence, findings, and verdict without editing this account or implementation."
+  ],
+  "forbidden_approaches": [
+    "special-casing the rejecting color string, its endpoint names, note text, or expected SVG colors",
+    "accepting PART2 while preserving it as one opaque background string",
+    "loosening validation to arbitrary hash-prefixed text",
+    "post-hoc SVG string replacement or coordinate surgery",
+    "reading golden SVGs or oracle output from shipping crates",
+    "changing subtype scores, comparator slack, baselines, park lists, or guard allow-lists"
+  ]
+}
