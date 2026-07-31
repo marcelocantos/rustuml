@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "mechanism": "sequence-group-round-corner-style",
-  "status": "account_committed_before_implementation",
+  "status": "implementation_green_pending_independent_review",
+  "account_revision": "2c421f2e",
+  "implementation_revision": "5e40cda7",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/sequencediagram/Grouping.java:Grouping constructor and Grouping#getUsedStyles",
@@ -41,5 +43,23 @@
   "evidence_inputs": [
     "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.puml",
     "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.svg"
+  ],
+  "implementation_evidence": [
+    {
+      "command": "cargo test -p rustuml-render sequence_groups_keep_their_creation_time_round_corner_style",
+      "result": "passed; source-order regression proves an earlier rounded group and later square group retain distinct creation-time style snapshots"
+    },
+    {
+      "command": "cargo test -p rustuml-render --lib",
+      "result": "820 passed, 0 failed"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "command": "cargo test --test golden_no_oracle --release",
+      "result": "passed at the ratcheted product baseline of 11174 / 11250"
+    }
   ]
 }
