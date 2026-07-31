@@ -1,0 +1,29 @@
+class-dotpath-start-retraction-segment-consumption checker binary contamination note
+
+The checker was instructed to use frozen binaries in:
+
+  /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml
+  /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one
+
+Initial hashes observed before generating the first evidence batch:
+
+  d211745456776fc03d72516bbf08d92991486ca3daa64567a38667586b95bad5  rustuml
+  ee5cb243127f045524dabb00e5504f3cc862d5c214a09b98288cef99adf65cf8  diff_one
+
+Later hashes observed after diff evidence was regenerated:
+
+  07c5cadd202782713600039c22f1e88b84584619774456ae8bbe640c788f385c  rustuml
+  ad4351991f36728379bffb827309ce4d8ef7d405fd029ed686859cd705faa3da  diff_one
+
+Current mtimes after the overwrite:
+
+  Aug  1 08:45:30 2026  rustuml
+  Aug  1 08:44:28 2026  diff_one
+
+The preserved file
+`ortho_lr_inheritance_package_consume.rust.svg` was generated before the
+`rustuml` overwrite and matches the Java path for `SourceBox-backto-TargetNode`.
+The file `ortho_lr_inheritance_package_consume.overwritten-rustuml.svg` was
+rendered after the overwrite and contains the old extra leading cubic for the
+same path. Because the executable identity changed during review, the checker
+does not issue an accepted verdict from this evidence batch.

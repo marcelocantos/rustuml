@@ -1,0 +1,5 @@
+SVG structural differences:
+  [52] <path> attr mismatch:
+    expected: [("codeLine", "16"), ("d", "M185.1752,43 C185.9552,43 169.9053,43 170.6859,43 C172.2473,43 173.8095,43 175.3706,43 C178.4927,43 181.6102,43 184.7065,43 C190.8992,43 197.0075,43 202.9,43"), ("fill", "none"), ("id", "SourceBox-backto-TargetNode"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "16"), ("d", "M185.1752,43 C185.565,43 167.9548,43 168.3448,43 C169.1248,43 169.9053,43 170.6859,43 C172.2473,43 173.8095,43 175.3706,43 C178.4927,43 181.6102,43 184.7065,43 C190.8992,43 197.0075,43 202.9,43"), ("fill", "none"), ("id", "SourceBox-backto-TargetNode"), ("style", "stroke:#181818;stroke-width:1;")]
+

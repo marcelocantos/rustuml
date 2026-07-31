@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+package "Source Box" as SourceBox {
+  class SourceNode
+}
+
+class PivotOne
+class PivotTwo
+class TargetNode
+class LowerAnchor
+
+SourceNode --> PivotOne
+PivotOne --> PivotTwo
+PivotTwo --> LowerAnchor
+SourceBox <|-- TargetNode
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam linetype spline
+
+package "Parent Endpoint" as ParentEndpoint {
+  interface ParentFace
+}
+
+class ReceiverOne
+class ReceiverTwo
+class DetourAlpha
+class DetourBeta
+
+DetourAlpha --> ReceiverOne
+ReceiverOne --> ReceiverTwo
+ParentEndpoint )-- ReceiverTwo
+DetourBeta --> ParentFace
+@enduml
