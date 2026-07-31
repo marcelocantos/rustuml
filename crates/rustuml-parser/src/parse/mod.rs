@@ -341,6 +341,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_quoted_deployment_container = false;
     let mut has_component_package_container = false;
     let mut has_top_level_component_leaf = false;
+    let mut has_description_only_leaf = false;
     let mut has_non_interface_class_decl = false;
     let mut has_class_factory_decl = false;
     let mut has_entity_class_factory_decl = false;
@@ -617,6 +618,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // boost to it so that `usecase` keywords can tip the balance.
             let after_kw = trimmed[kw_end..].trim_start();
             let deployment_keyword_arg = !after_kw.starts_with(':');
+            // Rust splits Java's DescriptionDiagramFactory between Component
+            // and Deployment models. These valid DESCRIPTION leaves are not
+            // consumed by the Component parser, so one occurrence rejects that
+            // candidate regardless of other component declarations.
+            has_description_only_leaf |= !trimmed.contains('{')
+                && matches!(kw, "card" | "stack" | "file" | "agent")
+                && kw_end < trimmed.len()
+                && deployment_keyword_arg;
             let is_quoted_container = trimmed.contains('{')
                 && after_kw.starts_with('"')
                 && kw != "package"
@@ -943,6 +952,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // deployment bonus when no declaration makes the class grammar viable.
     if !class_factory_viable {
         scores[7] += 20 * quoted_shared_deployment_containers;
+    }
+
+    if has_description_only_leaf {
+        let competing = scores
+            .iter()
+            .enumerate()
+            .filter(|&(index, _)| index != 7)
+            .map(|(_, &score)| score)
+            .max()
+            .unwrap_or(0);
+        scores[7] = scores[7].max(competing + 1);
     }
 
     // Standalone floating notes (`note as X` or `note "text" as X`) can attach
@@ -1648,6 +1668,33 @@ mod tests {
              node RuntimeNode",
         );
         assert_eq!(detect_uml_subtype(&single_line), UmlSubtype::Deployment);
+    }
+
+    #[test]
+    fn description_only_leaves_reject_the_component_subtype() {
+        let lines = |source: &str| source.lines().map(str::to_string).collect::<Vec<_>>();
+
+        for keyword in ["card", "stack", "file", "agent"] {
+            for source in [
+                format!("component SharedComponent\n{keyword} ExclusiveLeaf"),
+                format!("{keyword} \"Exclusive Leaf\" as ExclusiveLeaf\ncomponent SharedComponent"),
+            ] {
+                assert_eq!(
+                    detect_uml_subtype(&lines(&source)),
+                    UmlSubtype::Deployment,
+                    "{source}"
+                );
+            }
+        }
+
+        for keyword in ["artifact", "storage"] {
+            let source = format!("component SharedComponent\n{keyword} SharedLeaf");
+            assert_eq!(
+                detect_uml_subtype(&lines(&source)),
+                UmlSubtype::Component,
+                "{source}"
+            );
+        }
     }
 
     #[test]
