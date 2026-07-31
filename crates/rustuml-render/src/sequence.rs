@@ -10,6 +10,7 @@ use std::collections::HashMap;
 use std::fmt::Write;
 
 use rustuml_parser::diagram::sequence::*;
+use rustuml_parser::diagram::style::StyleScheme;
 
 use crate::creole::{self, CreoleLine};
 use crate::handwritten::{
@@ -22,6 +23,7 @@ use crate::handwritten::{
 use crate::layout_oracle::{OracleHandwrittenWarning, OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics;
 use crate::style::Theme;
+use crate::style_cascade::{StyleCascade, StyleSignature};
 use crate::text_render::{self, TextBase};
 
 /// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
@@ -1913,6 +1915,35 @@ fn group_header_parts<'a>(
         }
         _ => (kind_str, label.map(String::as_str), None),
     }
+}
+
+fn emit_group_frame_rect(
+    svg: &mut String,
+    left: f64,
+    top: f64,
+    width: f64,
+    height: f64,
+    corner_radius: f64,
+) {
+    let corner_attrs = if corner_radius > 0.0 {
+        format!(
+            r#" rx="{}" ry="{}""#,
+            fmt_coord(corner_radius),
+            fmt_coord(corner_radius)
+        )
+    } else {
+        String::new()
+    };
+    write!(
+        svg,
+        r##"<rect fill="none" height="{}"{} style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+        fmt_coord(height),
+        corner_attrs,
+        fmt_coord(width),
+        fmt_coord(left),
+        fmt_coord(top),
+    )
+    .unwrap();
 }
 
 fn group_guard_width_with_family(label: &str, font_family: &str) -> f64 {
@@ -5948,6 +5979,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
     let mut note_corner_radius = 0.0;
+    let mut final_group_corner_radius = 0.0;
     // `SvgGraphics.createSvgGradient` assigns source-seeded ids in first-use
     // order. Sequence skinparams are resolved before painting, so retain their
     // declaration order while deduplicating the same colour/policy tuple.
@@ -6248,6 +6280,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if let Ok(v) = val.parse::<f64>() {
                     head_box_rx = v / 2.0;
                     note_corner_radius = v / 2.0;
+                    final_group_corner_radius = v / 2.0;
                 }
             }
             _ => {}
@@ -6262,6 +6295,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if monochrome && participant_fill == "#E2E2F0" {
         participant_fill = "#E3E3E3".to_string();
     }
+    let group_style_cascade = StyleCascade::new(&diagram.meta.style_program);
+    let group_style_signature =
+        StyleSignature::from_selectors(["root", "element", "sequenceDiagram", "group"]);
+    let group_corner_radius = |group: &GroupStart| {
+        if group.source_line == 0 {
+            return final_group_corner_radius;
+        }
+        group_style_cascade
+            .resolve_at_source_line(
+                &group_style_signature,
+                StyleScheme::Regular,
+                group.source_line,
+            )
+            .property("roundCorner")
+            .and_then(|value| value.parse::<f64>().ok())
+            .map(|diameter| diameter / 2.0)
+            .unwrap_or(0.0)
+    };
     // Default fill/border for non-`participant` shape kinds (actor, boundary,
     // ...). These ignore `ParticipantBackgroundColor`/`ParticipantBorderColor`
     // but still honour monochrome. When the participant override was NOT set,
@@ -10382,15 +10433,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if !diagram.teoz {
         for frame in &group_frames {
             let frame_height = frame.bottom - frame.top;
-            write!(
-                svg.buf,
-                r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
-                fmt_coord(frame_height),
-                fmt_coord(frame.right - frame.left),
-                fmt_coord(frame.left),
-                fmt_coord(frame.top),
-            )
-            .unwrap();
+            let corner_radius = match &diagram.events[frame.event_idx] {
+                Event::GroupStart(group) => group_corner_radius(group),
+                _ => 0.0,
+            };
+            emit_group_frame_rect(
+                &mut svg.buf,
+                frame.left,
+                frame.top,
+                frame.right - frame.left,
+                frame_height,
+                corner_radius,
+            );
         }
     }
 
@@ -12756,29 +12810,47 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let tab_right = frame_left + kind_w + 45.0;
                 let tab_bottom_left = frame_top + group_header_height;
                 let tab_bottom_right = frame_top + group_header_height - 10.0;
+                let corner_radius = group_corner_radius(g);
+                let header_path = if corner_radius > 0.0 {
+                    format!(
+                        "M{start},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{arc_y} A{radius},{radius} 0 0 1 {start},{top}",
+                        start = fmt_coord(frame_left + corner_radius),
+                        top = fmt_coord(frame_top),
+                        right = fmt_coord(tab_right),
+                        br = fmt_coord(tab_bottom_right),
+                        diag = fmt_coord(tab_right - 10.0),
+                        bl = fmt_coord(tab_bottom_left),
+                        left = fmt_coord(frame_left),
+                        arc_y = fmt_coord(frame_top + corner_radius),
+                        radius = fmt_coord(corner_radius),
+                    )
+                } else {
+                    format!(
+                        "M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}",
+                        left = fmt_coord(frame_left),
+                        top = fmt_coord(frame_top),
+                        right = fmt_coord(tab_right),
+                        br = fmt_coord(tab_bottom_right),
+                        diag = fmt_coord(tab_right - 10.0),
+                        bl = fmt_coord(tab_bottom_left),
+                    )
+                };
                 write!(
                     svg.buf,
-                    r##"<path d="M{left},{top} L{right},{top} L{right},{br} L{diag},{bl} L{left},{bl} L{left},{top}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"##,
-                    left = fmt_coord(frame_left),
-                    top = fmt_coord(frame_top),
-                    right = fmt_coord(tab_right),
-                    br = fmt_coord(tab_bottom_right),
-                    diag = fmt_coord(tab_right - 10.0),
-                    bl = fmt_coord(tab_bottom_left),
+                    r##"<path d="{header_path}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"##,
                     fill = fill_override.map(resolve_color).unwrap_or_else(|| group_background.clone()),
                 )
                 .unwrap();
 
                 // Emit second frame rect (the inline instance)
-                write!(
-                    svg.buf,
-                    r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
-                    fmt_coord(frame_height),
-                    fmt_coord(frame_right - frame_left),
-                    fmt_coord(frame_left),
-                    fmt_coord(frame_top),
-                )
-                .unwrap();
+                emit_group_frame_rect(
+                    &mut svg.buf,
+                    frame_left,
+                    frame_top,
+                    frame_right - frame_left,
+                    frame_height,
+                    corner_radius,
+                );
 
                 // Emit tab text (bold) — the label for `group`, else the keyword.
                 text_render::emit_text(
@@ -14013,6 +14085,36 @@ mod tests {
 
         assert_eq!(message.matches("<polygon").count(), 2);
         assert!(message.contains("stroke-dasharray:2,2"));
+    }
+
+    #[test]
+    fn sequence_groups_keep_their_creation_time_round_corner_style() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam roundcorner 18\n",
+            "Alice -> Bob : open rounded group\n",
+            "group Rounded epoch\n",
+            "  Bob --> Alice : inside rounded\n",
+            "end\n",
+            "skinparam roundcorner 0\n",
+            "group Square epoch\n",
+            "  Alice -> Bob : inside square\n",
+            "end\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(
+            svg.matches(r#"rx="9" ry="9""#).count(),
+            2,
+            "the rounded group's back and inline frames must share its captured style: {svg}"
+        );
+        assert_eq!(
+            svg.matches("A9,9 0 0 1").count(),
+            1,
+            "only the rounded group's header should close with an arc: {svg}"
+        );
     }
 
     #[test]
