@@ -1,0 +1,137 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\npackage \"Operations\" as Ops {\n  component \"Core API\" as Core\n  note as Memo.Ω_41 $ops $fresh <<Runbook>> #A1B2C3\n    rotate credentials after handoff\n    retain the previous audit marker\n  end note\n  Memo.Ω_41 --> Core : governs\n  Core --> [Later Peer] : exposes\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        components: [
+            Component {
+                id: "Core",
+                label: "Core API",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 2,
+                kind: Component,
+            },
+            Component {
+                id: "Later Peer",
+                label: "Later Peer",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 8,
+                kind: Component,
+            },
+        ],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [],
+        connections: [
+            Connection {
+                from: "Memo.Ω_41",
+                to: "Core",
+                label: Some(
+                    "governs",
+                ),
+                from_mult: None,
+                to_mult: None,
+                dashed: false,
+                has_arrow: true,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                extension_at_start: false,
+                extension_at_end: false,
+                direction: Some(
+                    Down,
+                ),
+                length: 2,
+                shape: Plain,
+                source_line: 7,
+            },
+            Connection {
+                from: "Core",
+                to: "Later Peer",
+                label: Some(
+                    "exposes",
+                ),
+                from_mult: None,
+                to_mult: None,
+                dashed: false,
+                has_arrow: true,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                extension_at_start: false,
+                extension_at_end: false,
+                direction: Some(
+                    Down,
+                ),
+                length: 2,
+                shape: Plain,
+                source_line: 8,
+            },
+        ],
+        removed_connections: [],
+        packages: [
+            ComponentPackage {
+                name: "Ops",
+                label: "Operations",
+                stereotype: None,
+                kind: Package,
+                color: None,
+                source_line: 1,
+                components: [
+                    "Core",
+                    "Later Peer",
+                ],
+                packages: [],
+            },
+        ],
+        together: [],
+        notes: [
+            ComponentNote {
+                id: Some(
+                    "Memo.Ω_41",
+                ),
+                owner: Some(
+                    "Ops",
+                ),
+                tags: [
+                    "ops",
+                    "fresh",
+                ],
+                stereotype: Some(
+                    "Runbook",
+                ),
+                color: Some(
+                    "#A1B2C3",
+                ),
+                text: "rotate credentials after handoff\nretain the previous audit marker",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 4,
+            },
+        ],
+        removed_notes: [],
+    },
+)

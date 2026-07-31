@@ -1,0 +1,39 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor" as Anchor
+      note : plain floating deployment note
+      Anchor --> [After] : later relation
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Anchor
+  - !Entity note
+  entities:
+  - id: Anchor
+    label: Anchor
+    explicit_alias: true
+    kind: Node
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: note
+    label: note
+    explicit_alias: false
+    kind: Class
+    members:
+    - name: plain floating deployment note
+      return_type: null
+      visibility: Default
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: plain floating deployment note
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

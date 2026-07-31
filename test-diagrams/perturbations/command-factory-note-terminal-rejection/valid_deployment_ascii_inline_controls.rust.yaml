@@ -1,0 +1,71 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Edge Rack" as Rack {
+        node "Worker" as Worker
+        artifact "Bundle" as Bundle
+        note "release marker" as Deploy.Valid_29 $release <<Marker>> #Gold-White
+        Deploy.Valid_29 --> Worker : consult
+        Worker --> Bundle : loads
+        note left of Worker : attached deployment detail
+        note on link : bundle edge
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Rack
+    label: Edge Rack
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - Worker
+    - Bundle
+    source_line: 1
+    quark_order: 0
+  - id: Worker
+    label: Worker
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: Bundle
+    label: Bundle
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  connections:
+  - from: Deploy.Valid_29
+    to: Worker
+    label: consult
+    arrow_at_end: true
+    source_line: 5
+  - from: Worker
+    to: Bundle
+    label: loads
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Deploy.Valid_29
+    text: release marker
+    color: '#Gold-White'
+    tags:
+    - release
+    stereotype: Marker
+    owner: Rack
+    quark_order: 3
+    position: Right
+    source_line: 4
+  - target: Worker
+    text: attached deployment detail
+    owner: Rack
+    quark_order: 4
+    position: Left
+    source_line: 7

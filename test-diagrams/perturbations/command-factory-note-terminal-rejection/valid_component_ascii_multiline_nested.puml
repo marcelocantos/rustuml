@@ -1,0 +1,11 @@
+@startuml
+package "Operations" as Ops {
+  component "Core API" as Core
+  note as Memo.Ω_41 $ops $fresh <<Runbook>> #A1B2C3
+    rotate credentials after handoff
+    retain the previous audit marker
+  end note
+  Memo.Ω_41 --> Core : governs
+  Core --> [Later Peer] : exposes
+}
+@enduml

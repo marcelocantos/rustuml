@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="312px" preserveAspectRatio="none" style="width:235px;height:312px;background:#FFFFFF;" version="1.1" viewBox="0 0 235 312" width="235px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Outer Host-->
+<g class="cluster" data-qualified-name="Outer" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,123.9883,26,113.9883,171,113.9883,171,277.1983,161,287.1983,16,287.1983,16,123.9883" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="161" x2="171" y1="123.9883" y2="113.9883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="161" y1="123.9883" y2="123.9883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="161" x2="161" y1="123.9883" y2="287.1983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="79.0303" x="49.9849" y="140.5234">Outer Host</text>
+</g>
+<!--entity Payload-->
+<g class="entity" data-qualified-name="Outer.Payload" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="81.9736" x="40.01" y="161.9917"/>
+<polygon fill="#F1F1F1" points="104.9836,166.9917,104.9836,180.9917,116.9836,180.9917,116.9836,172.9917,110.9836,166.9917,104.9836,166.9917" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="110.9836" x2="110.9836" y1="166.9917" y2="172.9917"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="116.9836" x2="110.9836" y1="172.9917" y2="172.9917"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="51.9736" x="50.01" y="188.5269">Payload</text>
+</g>
+<!--entity Curly.Deploy_67-->
+<g class="entity" data-qualified-name="Curly.Deploy_67" data-source-line="4" id="ent0004">
+<ellipse cx="80.9991" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.6582" x="25.17" y="44.5352">Curly.Deploy_67</text>
+</g>
+<!--link Curly.Deploy_67 to Payload-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M81,22.9517 C81,42.0017 81,84.7517 81,155.9017" fill="none" id="Curly.Deploy_67-to-Payload" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="81,161.9017,85,152.9017,81,156.9017,77,152.9017,81,161.9017" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="137.8584" x="82" y="86.5601">should reuse the note</text>
+</g>
+<!--link Payload to Outer-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M81,201.6517 C81,228.6817 81,269.4417 81,272.3317" fill="none" id="Payload-to-Outer" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="81,278.3317,85,269.3317,81,273.3317,77,269.3317,81,278.3317" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="80.647" x="82" y="245.0401">later relation</text>
+</g>
+</g></svg>

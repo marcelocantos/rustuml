@@ -1,0 +1,5 @@
+@startuml
+node "Anchor" as Anchor
+note : plain floating deployment note
+Anchor --> [After] : later relation
+@enduml

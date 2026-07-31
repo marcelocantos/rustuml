@@ -1,0 +1,70 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      cloud "Region" as Region {
+        node "Host" as Host {
+          artifact "Agent" as Agent
+          note as Runbook.Valid_53 $ops $blue <<Runbook>> #80FFAA00
+            restart only after the drain completes
+            verify the alias relation remains stable
+          endnote
+          Runbook.Valid_53 --> Agent : consult
+          Agent --> Host : reports
+        }
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Region
+    label: Region
+    kind: Cloud
+    stereotype: null
+    declared_container: true
+    children:
+    - Host
+    source_line: 1
+    quark_order: 0
+  - id: Host
+    label: Host
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - Agent
+    source_line: 2
+    quark_order: 1
+  - id: Agent
+    label: Agent
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  connections:
+  - from: Runbook.Valid_53
+    to: Agent
+    label: consult
+    arrow_at_end: true
+    source_line: 8
+  - from: Agent
+    to: Host
+    label: reports
+    arrow_at_end: true
+    source_line: 9
+  notes:
+  - id: Runbook.Valid_53
+    text: |-
+      restart only after the drain completes
+      verify the alias relation remains stable
+    color: '#80FFAA00'
+    tags:
+    - ops
+    - blue
+    stereotype: Runbook
+    owner: Host
+    quark_order: 3
+    position: Right
+    source_line: 5

@@ -1,0 +1,6 @@
+@startuml
+node "Anchor" as Anchor
+note "reordered decorations" as Bad.Deploy #MistyRose <<WrongOrder>>
+Bad.Deploy --> Anchor : must not synthesize a node
+Anchor --> [After] : later relation
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+package "Ledger Zone" as Zone {
+  component "Ingress" as IN
+  component "Archive" as AR
+  note "handoff memo" as Memo.Valid_17 $audit $night <<Ledger>> #LightBlue/White
+  Memo.Valid_17 --> IN : consult
+  IN --> AR : persist
+  note right of IN : attached detail
+  note on link : archive edge
+}
+@enduml

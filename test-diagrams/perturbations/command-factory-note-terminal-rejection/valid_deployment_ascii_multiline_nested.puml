@@ -1,0 +1,13 @@
+@startuml
+cloud "Region" as Region {
+  node "Host" as Host {
+    artifact "Agent" as Agent
+    note as Runbook.Valid_53 $ops $blue <<Runbook>> #80FFAA00
+      restart only after the drain completes
+      verify the alias relation remains stable
+    endnote
+    Runbook.Valid_53 --> Agent : consult
+    Agent --> Host : reports
+  }
+}
+@enduml
