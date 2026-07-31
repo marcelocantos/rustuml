@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-relationship-creole-line-layout",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:SvekEdge constructor, appendTable, and drawU",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:SheetBlock1#calculateDimensionSlow and drawU",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Sea.java:Sea#add and doAlign",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java:AtomText#getStartingAltitude",
+    "src/main/java/net/sourceforge/plantuml/klimt/font/FontPosition.java:FontPosition#mute and getSpace"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:relationship_center_layout and render_no_oracle_relationship",
+    "crates/rustuml-render/src/text_render.rs:label_ascent_with_family and label_first_baseline_ascent_with_family",
+    "crates/rustuml-render/src/text_render.rs:Creole segment measurement and emission"
+  ],
+  "claimed_invariant": "A relationship center label's preferred dimensions, painted run positions, and painted bounds are projections of one Creole line layout. Java Sea places each atom at `-atomHeight + FontPosition.getSpace()`, takes the minimum as the line top, and derives each atom baseline from that common top plus its own ascent. Subscript and superscript alter only their own reduced-size atoms by +3 and -6 respectively; they do not translate the base-font runs or the whole line. SvekEdge supplies the resulting natural block to Graphviz and paints that same block from the solved top-left.",
+  "causal_divergence": "Rust's relationship paint path uses label_ascent_with_family, which adds three pixels to the shared baseline whenever any subscript is present. Every run therefore moves down by exactly three pixels even though widths, run-relative sub/sup offsets, and Graphviz placement agree. The code already contains a closer Java Sea projection in label_first_baseline_ascent_with_family, but measurement, emission, and painted-frontier calculations do not consume a single shared line-layout result. The preserved checker_07 counterexample exposes this fault together with a separate link-note font-context fault; each must be repaired and checked independently.",
+  "planned_model_change": "Represent a Creole line layout explicitly, including natural width and height, the first/base baseline, per-run baselines, and painted bounds. Derive those fields from Java Sea's atom-top formula and FontPosition size/space semantics. Make relationship preferred dimensions, SVG run emission, and painted-frontier projection consume that same result. Do not compensate with a literal negative-three offset and do not alter Graphviz coordinates or route geometry.",
+  "perturbation_axes": [
+    "subscript only, superscript only, and both in one relationship label",
+    "large or base-size run before versus after the positioned run",
+    "sans-serif versus Arial inherited arrow font",
+    "top-to-bottom versus left-to-right direction",
+    "label-only versus label composed with a link note",
+    "renamed entities and labels with different glyph widths"
+  ],
+  "scope_boundary": "This mechanism owns Creole atom vertical alignment and the consistency of relationship-label dimensions, painting, and painted bounds. It does not own link-note style inheritance, link-note grammar or position, route synthesis, entity dimensions, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "Fresh valid labels prove subscript and superscript move only their own atoms while base runs retain Java baselines.",
+    "The same line-layout result drives Graphviz dimensions, SVG emission, and painted-frontier calculation.",
+    "Plain-text and no-label controls retain their existing exact output.",
+    "An independent checker audits the Java and Rust data flow, generates held-outs over at least two axes, and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "subtracting three pixels from labels that contain a subscript",
+    "keying behavior to checker_07 text, fixture names, coordinates, or branch counts",
+    "changing route geometry, comparator tolerance, baselines, skips, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_07_three_node_styled_label_note_fractional.puml",
+    "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_03_mixed_size_sub_sup_label.puml"
+  ]
+}

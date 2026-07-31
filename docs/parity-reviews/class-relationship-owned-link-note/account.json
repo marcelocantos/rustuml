@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-relationship-owned-link-note",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java:CommandFactoryNoteOnLink#createSingleLine and createMultiLine",
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java:CommandFactoryNoteOnLink#executeNow",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/CucaDiagram.java:CucaDiagram#getLastLink",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/Link.java:Link#addNote",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:SvekEdge constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs:Relationship and Note",
+    "crates/rustuml-parser/src/parse/class.rs:ClassParser link-note command handling",
+    "crates/rustuml-render/src/class.rs:relationship_note_indices",
+    "crates/rustuml-render/src/class.rs:relationship_center_layout and render_no_oracle_relationship"
+  ],
+  "claimed_invariant": "A Java `note [right|left|top|bottom] (on|of) link [color]` command is relationship-owned state, not an anonymous diagram note. It attaches to the last ordinary Link, defaults to BOTTOM, and a later command replaces the link's prior note. SvekEdge composes the resulting note block with the center-label block according to position: LEFT/RIGHT horizontally and TOP/BOTTOM vertically. The composed natural dimensions enter Graphviz and the same composition determines painting and painted bounds. Single-line and multiline commands share these semantics.",
+  "causal_divergence": "Rust recognizes only three exact lowercase `note on link` spellings, stores the result as a targetless generic Note with no position, and later guesses the owner from source-line order. Positioned and `of link` forms are not parsed, while relationship_note_indices explicitly rejects generic notes whose position is set. The preserved painted_04 and painted_05 inputs therefore omit the note before the painted-frontier mechanism can be evaluated. Generic-note ownership also cannot faithfully represent replacement, default-bottom semantics, or the four Java block compositions.",
+  "planned_model_change": "Add an optional relationship-owned ClassLinkNote carrying lines, color, position, and source line. Parse Java's single-line and multiline grammar with optional position and `on|of`, default omitted position to Bottom, attach to the last ordinary relationship, and replace an earlier link note. Keep a dedicated multiline accumulator so generic standalone-note state cannot steal ownership. Compose note and label blocks by position for preferred dimensions, painting, and painted bounds. Preserve terminal parse errors for Java-shaped malformed link-note commands instead of silently converting them to generic text.",
+  "perturbation_axes": [
+    "on link versus of link",
+    "default bottom versus explicit top, bottom, left, and right",
+    "single-line versus multiline note body",
+    "label-only, note-only, and combined label-plus-note relationships",
+    "top-to-bottom versus left-to-right diagram direction",
+    "note color, repeated replacement, and intervening standalone notes",
+    "renamed classes, labels, and note text"
+  ],
+  "scope_boundary": "This mechanism owns class link-note parsing, relationship ownership, replacement, position, and block composition. It does not own link-note font inheritance, Creole atom alignment, the generic standalone-note model, route synthesis, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "Parser tests cover on/of, all positions, default bottom, color, replacement, multiline input, no prior link, malformed suffix, bad color, and empty multiline body.",
+    "Fresh valid inputs prove all four compositions use the same relationship-owned note for Graphviz dimensions, painting, and painted bounds.",
+    "Intervening standalone or attached notes do not change the last ordinary relationship owner.",
+    "An independent checker audits the Java and Rust ownership model, generates held-outs over at least two axes, and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "inferring link-note ownership from fixture text or expected coordinates",
+    "treating top and bottom as render-only offsets while leaving natural dimensions unchanged",
+    "changing route geometry, comparator tolerance, baselines, skips, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_04_note_top_on_link.puml",
+    "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_05_note_bottom_on_link.puml"
+  ]
+}
