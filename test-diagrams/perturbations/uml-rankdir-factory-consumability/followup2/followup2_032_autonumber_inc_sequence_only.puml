@@ -1,0 +1,6 @@
+@startuml
+autonumber 1
+autonumber inc C
+Maker -> Sink : numbered
+left to right direction
+@enduml

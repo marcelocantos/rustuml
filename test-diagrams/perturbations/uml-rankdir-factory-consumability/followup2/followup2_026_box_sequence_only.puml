@@ -1,0 +1,6 @@
+@startuml
+box "Fresh Box" #LightBlue
+participant Maker
+end box
+left to right direction
+@enduml

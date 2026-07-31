@@ -1,0 +1,7 @@
+@startuml
+!procedure $dir()
+left to right direction
+!endprocedure
+$dir()
+class PreprocClass
+@enduml

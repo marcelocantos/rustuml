@@ -1,0 +1,976 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-rankdir-factory-consumability",
+  "checker": "followup2",
+  "rust_revision": "afee6a17ad5643b93325563d09488d0e710394b4",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_binary": "/private/tmp/rustuml-uml-factory-consumability/target/release/rustuml",
+  "rust_binary_sha256": "49a81f0808d1fd4df88aaac25108b0475ec5fd84c19eb217c81d843d6c4a27e7",
+  "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+  "commands": [
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <case>.puml",
+    "/private/tmp/rustuml-uml-factory-consumability/target/release/rustuml -tsvg <case>.puml",
+    "shasum -a 256 /private/tmp/rustuml-uml-factory-consumability/target/release/rustuml"
+  ],
+  "case_count": 48,
+  "failures": [
+    "followup2_004_nbsp_rankdir_description",
+    "followup2_005_tab_rankdir_class",
+    "followup2_009_em_space_invalid_unicode_separator",
+    "followup2_022_message_extension_sequence_only",
+    "followup2_028_triple_equals_activity_shared",
+    "followup2_042_note_side_sequence_only",
+    "followup2_046_partition_shared_with_activity",
+    "followup2_047_note_on_link_shared"
+  ],
+  "results": [
+    {
+      "id": "followup2_001_direction_only_lr",
+      "axes": [
+        "valid rankdir",
+        "direction only",
+        "later Class factory"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_001_direction_only_lr.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": null,
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_002_weak_arrow_tb",
+      "axes": [
+        "valid top-to-bottom rankdir",
+        "weak ambiguous arrow"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_002_weak_arrow_tb.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_003_mixed_case_rankdir_weak_arrow",
+      "axes": [
+        "case-insensitive rankdir",
+        "weak ambiguous arrow"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_003_mixed_case_rankdir_weak_arrow.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_004_nbsp_rankdir_description",
+      "axes": [
+        "NBSP internal and final rankdir whitespace",
+        "description declarations"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_004_nbsp_rankdir_description.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "java_status": "error",
+      "rust_status": "accept",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": "DESCRIPTION",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "DESCRIPTION"
+        ],
+        "rust": [
+          "DEPLOYMENT",
+          "COMPONENT"
+        ]
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_005_tab_rankdir_class",
+      "axes": [
+        "tab rankdir separators",
+        "class declaration"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_005_tab_rankdir_class.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "java_status": "error",
+      "rust_status": "accept",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_006_final_space_repetition",
+      "axes": [
+        "one internal separator",
+        "multiple final spaces before direction"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_006_final_space_repetition.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_007_double_internal_space_invalid",
+      "axes": [
+        "invalid doubled internal rankdir separator",
+        "weak arrow"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_007_double_internal_space_invalid.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_008_double_nbsp_internal_invalid",
+      "axes": [
+        "invalid doubled NBSP internal rankdir separator",
+        "weak arrow"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_008_double_nbsp_internal_invalid.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_009_em_space_invalid_unicode_separator",
+      "axes": [
+        "invalid non-Pattern2 Unicode whitespace",
+        "weak arrow"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_009_em_space_invalid_unicode_separator.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "java_status": "error",
+      "rust_status": "accept",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": "CLASS",
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_010_class_entity_body_rankdir_after",
+      "axes": [
+        "rankdir after class body",
+        "earlier Class factory"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_010_class_entity_body_rankdir_after.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_011_bare_newpage_shared",
+      "axes": [
+        "bare newpage",
+        "shared later command",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_011_bare_newpage_shared.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": null,
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_012_hide_footbox_shared",
+      "axes": [
+        "hide footbox shared variant",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_012_hide_footbox_shared.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_013_hidefootbox_compact_shared",
+      "axes": [
+        "hidefootbox zero-whitespace Java variant",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_013_hidefootbox_compact_shared.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_014_show_unlinked_shared",
+      "axes": [
+        "show unlinked shared variant",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_014_show_unlinked_shared.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_015_named_note_body_rankdir_class",
+      "axes": [
+        "rankdir text inside note body",
+        "autonumber text inside note body",
+        "class"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_015_named_note_body_rankdir_class.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_016_sequence_note_body_no_rankdir",
+      "axes": [
+        "rankdir text inside sequence note payload",
+        "no real rankdir"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_016_sequence_note_body_no_rankdir.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "SEQUENCE",
+      "rust_type": "SEQUENCE",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "SEQUENCE"
+        ],
+        "rust": [
+          "SEQUENCE"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_017_comments_fake_rankdir_sequence",
+      "axes": [
+        "line comment rankdir",
+        "block comment sequence-only text",
+        "real sequence"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_017_comments_fake_rankdir_sequence.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "SEQUENCE",
+      "rust_type": "SEQUENCE",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "SEQUENCE"
+        ],
+        "rust": [
+          "SEQUENCE"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_018_preprocessor_rankdir_class",
+      "axes": [
+        "TIM procedure emits rankdir",
+        "class"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_018_preprocessor_rankdir_class.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_019_preprocessor_rankdir_participant",
+      "axes": [
+        "TIM procedure emits rankdir",
+        "participant sequence-only"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_019_preprocessor_rankdir_participant.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_CLASS",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_020_participant_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Participant",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_020_participant_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_021_lifecycle_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Lifecycle",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_021_lifecycle_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_CLASS",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_022_message_extension_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::MessageExtension",
+        "inline activation"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_022_message_extension_sequence_only.puml",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "java_status": "accept",
+      "rust_status": "error",
+      "java_type": "ACTIVITY",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_023_external_message_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::MessageExtension",
+        "external message boundary"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_023_external_message_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_024_grouping_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Grouping",
+        "alt else end",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_024_grouping_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_025_grouping_par2_also",
+      "axes": [
+        "SequenceOnlyCommand::Grouping",
+        "par2 also",
+        "mixed case rankdir"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_025_grouping_par2_also.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_026_box_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Box",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_026_box_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_027_divider_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Divider",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_027_divider_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_CLASS",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_028_triple_equals_activity_shared",
+      "axes": [
+        "shared triple-equals sync bar",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_028_triple_equals_activity_shared.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "java_status": "error",
+      "rust_status": "accept",
+      "java_type": "ERROR_ASSUMED_CLASS",
+      "rust_type": "ACTIVITY",
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_029_delay_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Delay",
+        "unicode ellipsis",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_029_delay_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_030_hspace_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::HorizontalSpace",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_030_hspace_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_CLASS",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_031_autonumber_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Autonumber",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_031_autonumber_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_032_autonumber_inc_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Autonumber",
+        "inc variant",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_032_autonumber_inc_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_033_autoactivate_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Autoactivate",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_033_autoactivate_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_034_return_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Return",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_034_return_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_035_reference_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Reference",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_035_reference_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_CLASS",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_036_reference_multiline_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Reference",
+        "multiline ref",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_036_reference_multiline_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_037_pagination_labeled_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Pagination",
+        "labeled newpage",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_037_pagination_labeled_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_038_pagination_ignore_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Pagination",
+        "ignore newpage",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_038_pagination_ignore_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_039_pagination_autonewpage_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Pagination",
+        "autonewpage",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_039_pagination_autonewpage_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_040_footbox_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Footbox",
+        "footbox off",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_040_footbox_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_041_note_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Note",
+        "note over",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_041_note_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_042_note_side_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Note",
+        "bare note left",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_042_note_side_sequence_only.puml",
+      "java_exit": 0,
+      "rust_exit": 1,
+      "java_status": "accept",
+      "rust_status": "error",
+      "java_type": "CLASS",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_043_anchor_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Anchor",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_043_anchor_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_044_create_destroy_sequence_only",
+      "axes": [
+        "SequenceOnlyCommand::Lifecycle",
+        "create/destroy",
+        "rankdir after"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_044_create_destroy_sequence_only.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_045_footbox_show_compact_shared",
+      "axes": [
+        "showfootbox zero-whitespace Java variant",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_045_footbox_show_compact_shared.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "CLASS",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "PASS"
+    },
+    {
+      "id": "followup2_046_partition_shared_with_activity",
+      "axes": [
+        "partition shared classifier branch",
+        "rankdir before"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_046_partition_shared_with_activity.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "java_status": "error",
+      "rust_status": "accept",
+      "java_type": "ERROR_ASSUMED_ACTIVITY",
+      "rust_type": "ACTIVITY",
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_047_note_on_link_shared",
+      "axes": [
+        "ordinary note on link",
+        "rankdir before",
+        "state/usecase shared note command"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_047_note_on_link_shared.puml",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "java_status": "accept",
+      "rust_status": "accept",
+      "java_type": "CLASS",
+      "rust_type": "STATE",
+      "expect": "match_accept",
+      "allowed": {
+        "java": [
+          "CLASS"
+        ],
+        "rust": [
+          "CLASS"
+        ]
+      },
+      "verdict": "FAIL"
+    },
+    {
+      "id": "followup2_048_direction_inside_comment_then_real_rankdir",
+      "axes": [
+        "comment ignored",
+        "real rankdir after",
+        "participant sequence-only"
+      ],
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2_048_direction_inside_comment_then_real_rankdir.puml",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "java_status": "error",
+      "rust_status": "error",
+      "java_type": "ERROR_ASSUMED_SEQUENCE",
+      "rust_type": null,
+      "expect": "match_error",
+      "allowed": null,
+      "verdict": "PASS"
+    }
+  ]
+}

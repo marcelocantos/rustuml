@@ -1,0 +1,6 @@
+@startuml
+entity FreshRecord {
+  id : UUID
+}
+top to bottom direction
+@enduml

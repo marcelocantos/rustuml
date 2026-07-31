@@ -1,0 +1,5 @@
+@startuml
+left to right direction
+show unlinked
+class VisibleUnlinked
+@enduml

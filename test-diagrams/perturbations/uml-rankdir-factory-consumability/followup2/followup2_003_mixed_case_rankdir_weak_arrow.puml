@@ -1,0 +1,4 @@
+@startuml
+LeFt to RiGhT DiReCtIoN
+Gamma -> Delta : mixed case
+@enduml

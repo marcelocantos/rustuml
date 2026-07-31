@@ -1,0 +1,4 @@
+@startuml
+Maker -> Sink ++ #Gold : call
+left to right direction
+@enduml

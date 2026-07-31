@@ -1,0 +1,5 @@
+@startuml
+participant "Fresh Maker" as Maker
+Maker -> Sink : hi
+left to right direction
+@enduml

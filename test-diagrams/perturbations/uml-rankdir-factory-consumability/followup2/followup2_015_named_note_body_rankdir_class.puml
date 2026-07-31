@@ -1,0 +1,7 @@
+@startuml
+note as DispatchMemo
+left to right direction
+autonumber 99
+end note
+class BodyTextOnly
+@enduml

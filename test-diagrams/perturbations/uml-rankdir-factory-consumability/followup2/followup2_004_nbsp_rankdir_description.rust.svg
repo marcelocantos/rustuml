@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="169px" preserveAspectRatio="none" style="width:138px;height:169px;background:#FFFFFF;" version="1.1" viewBox="0 0 138 169" width="138px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Fresh Ledger-->
+<g class="entity" data-qualified-name="Ledger" data-source-line="2" id="ent0002">
+<path d="M6,16 C6,6 59.8115,6 59.8115,6 C59.8115,6 113.623,6 113.623,16 L113.623,41.4883 C113.623,51.4883 59.8115,51.4883 59.8115,51.4883 C59.8115,51.4883 6,51.4883 6,41.4883 L6,16" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M6,16 C6,26 59.8115,26 59.8115,26 C59.8115,26 113.623,26 113.623,16" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87.623" x="16" y="43.5352">Fresh Ledger</text>
+</g>
+<!--entity Fresh Pipe-->
+<g class="entity" data-qualified-name="Pipe" data-source-line="3" id="ent0003">
+<path d="M19.97,128.49 L99.6555,128.49 C104.6555,128.49 104.6555,141.7341 104.6555,141.7341 C104.6555,141.7341 104.6555,154.9783 99.6555,154.9783 L19.97,154.9783 C14.97,154.9783 14.97,141.7341 14.97,141.7341 C14.97,141.7341 14.97,128.49 19.97,128.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M99.6555,128.49 C94.6555,128.49 94.6555,141.7341 94.6555,141.7341 C94.6555,154.9783 99.6555,154.9783 99.6555,154.9783" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69.6855" x="19.97" y="147.0252">Fresh Pipe</text>
+</g>
+<!--link Ledger to Pipe-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk4">
+<path d="M59.81,51.94 C59.81,74.84 59.81,103.74 59.81,122.23" fill="none" id="Ledger-to-Pipe" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="59.81,128.23,63.81,119.23,59.81,123.23,55.81,119.23,59.81,128.23" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="33.2617" x="60.81" y="95.0584">ships</text>
+</g>
+</g></svg>

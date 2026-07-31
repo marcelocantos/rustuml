@@ -1,0 +1,5 @@
+@startuml
+left to right direction
+hide footbox
+class HiddenFoot
+@enduml

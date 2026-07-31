@@ -1,0 +1,4 @@
+@startuml
+note over Maker : sequence-only note
+left to right direction
+@enduml

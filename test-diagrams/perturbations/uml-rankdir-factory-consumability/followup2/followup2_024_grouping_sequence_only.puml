@@ -1,0 +1,8 @@
+@startuml
+alt #MistyRose first branch
+Maker -> Sink : first
+else #HoneyDew second branch
+Maker -> Sink : second
+end
+left to right direction
+@enduml

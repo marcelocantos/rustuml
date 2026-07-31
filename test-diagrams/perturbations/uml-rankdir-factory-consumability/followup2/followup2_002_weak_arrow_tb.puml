@@ -1,0 +1,4 @@
+@startuml
+top to bottom direction
+Alpha -> Beta : weak
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+participant Maker
+participant Checker
+note over Maker
+left to right direction
+autonumber 7
+end note
+Maker -> Checker : payload only
+@enduml
