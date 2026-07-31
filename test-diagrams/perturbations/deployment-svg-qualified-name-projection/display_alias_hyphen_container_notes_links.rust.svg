@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="118px" preserveAspectRatio="none" style="width:487px;height:118px;background:#FFFFFF;" version="1.1" viewBox="0 0 487 118" width="487px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Tenant Display-->
+<g class="cluster" data-qualified-name="tenant" data-source-line="2" id="ent0002">
+<path d="M8.5,6 L118.0615,6 A3.75,3.75 0 0 1 120.5615,8.5 L127.5615,28.4883 L302.22,28.4883 A2.5,2.5 0 0 1 304.72,30.9883 L304.72,100.5 A2.5,2.5 0 0 1 302.22,103 L8.5,103 A2.5,2.5 0 0 1 6,100.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="127.5615" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="108.5615" x="10" y="21.5352">Tenant Display</text>
+</g>
+<!--entity Visible/API-->
+<g class="entity" data-qualified-name="tenant.api.one" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="174.9,50.76,184.9,40.76,288.7145,40.76,288.7145,77.2483,278.7145,87.2483,174.9,87.2483,174.9,50.76" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="278.7145" x2="288.7145" y1="50.76" y2="40.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="174.9" x2="278.7145" y1="50.76" y2="50.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="278.7145" x2="278.7145" y1="50.76" y2="87.2483"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73.8145" x="189.9" y="74.2952">Visible/API</text>
+</g>
+<g class="entity" data-qualified-name="tenant.note.one" data-source-line="4" id="ent0004">
+<path d="M22,51.34 L22,76.6505 A0,0 0 0 0 22,76.6505 L113.9033,76.6505 A0,0 0 0 0 113.9033,76.6505 L113.9033,69.34 L174.41,64 L113.9033,61.34 L113.9033,61.34 L103.9033,51.34 L22,51.34 A0,0 0 0 0 22,51.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M103.9033,51.34 L103.9033,61.34 L113.9033,61.34 L103.9033,51.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70.9033" x="28" y="68.9084">owner note</text>
+</g>
+<!--entity Sink/One-->
+<g class="entity" data-qualified-name="sink.one" data-source-line="6" id="ent0005">
+<path d="M379.72,51.26 C379.72,41.26 421.302,41.26 421.302,41.26 C421.302,41.26 462.8841,41.26 462.8841,51.26 L462.8841,76.7483 C462.8841,86.7483 421.302,86.7483 421.302,86.7483 C421.302,86.7483 379.72,86.7483 379.72,76.7483 L379.72,51.26" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M379.72,51.26 C379.72,61.26 421.302,61.26 421.302,61.26 C421.302,61.26 462.8841,61.26 462.8841,51.26" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63.1641" x="389.72" y="78.7952">Sink/One</text>
+</g>
+<!--link api.one to sink.one-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="7" id="lnk6">
+<path d="M289.06,64 C318.08,64 346.83,64 373.28,64" fill="none" id="api.one-to-sink.one" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="379.28,64,370.28,60,374.28,64,370.28,68,379.28,64" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="27.9805" x="321.72" y="60.5684">calls</text>
+</g>
+</g></svg>
