@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-endpoint-collision-node-order",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["buildImage", "printGroups", "printGroup", "printEntities", "printEntity"],
+      "lines": "226-227, 350-363, 408-436",
+      "role": "Creates SVEK nodes by recursively visiting packages, creating every direct leaf before nested groups, then creating unpackaged leaves."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": ["nodeMap", "createNode", "allNodes"],
+      "lines": "52, 68-73, 182-184",
+      "role": "Stores created nodes in a LinkedHashMap and exposes its insertion-ordered values to later SVEK phases."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": ["solve"],
+      "lines": "440-449",
+      "role": "Solves every edge label, then passes Bibliotekon.allNodes() to each edge's collision resolver."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["manageCollision"],
+      "lines": "1198-1212",
+      "role": "Mutates endpoint-label positions sequentially while traversing allNodes; a move caused by one node becomes the input to the next node."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["svek_node_emission_order", "render_class_impl"],
+      "lines": "2483-2529, 2788-2814, 4939-4973",
+      "role": "Already records the Java node-creation order and maps it to Graphviz layout slots, but reconstructs result.node_positions into renderer/parser order after the solve."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["resolve_endpoint_label_collisions"],
+      "lines": "14082-14116",
+      "role": "Traverses reconstructed result.node_positions, so collision order is parser order rather than SVEK node-creation order."
+    }
+  ],
+  "claimed_invariant": "Class SVEK endpoint-label collision resolution visits painted nodes in Bibliotekon insertion order. That order is the node-creation order produced by GraphvizImageBuilder: direct leaves of a package before recursively nested groups, package trees before unpackaged leaves, with notes and empty package leaves occupying the same unified stream. Because each move mutates the label rectangle, this order is semantically observable and must not be replaced by parser or renderer order.",
+  "causal_divergence": "Rust correctly emits Graphviz nodes in svek_node_emission_order, but after solving it reconstructs node_positions into entity/parser order for rendering and supplies that reordered slice to collision resolution. In a nested-package case, Java visits Alpha, Delta, Gamma, Beta, Root while Rust visits Alpha, Gamma, Beta, Delta, Root. A tail label intersects both Delta and Gamma; applying the same move-away algorithm in the two orders yields different final coordinates. Moving Delta's declaration earlier changes Rust to Java's result while leaving Java unchanged, isolating traversal order rather than extraction, dimensions, or collision arithmetic.",
+  "planned_model_change": "Retain solved_positions in Graphviz/SVEK emission order for endpoint-label collision traversal while preserving the existing parser-ordered result.node_positions for rendering and all downstream entity/note/package indexing. Build the collision-only node view by selecting solved layout slots in svek_node_emission_order and append non-Class auxiliary nodes only according to their Java creation order when they are collision participants. Add tests that demonstrate non-commutative collision moves and that nested direct leaves precede nested-group leaves independently of declaration order.",
+  "perturbation_axes": [
+    "direct sibling declared before versus after nested-package leaves",
+    "tail label versus head label and reversed link direction",
+    "top-to-bottom versus left-to-right layout",
+    "one collision versus two non-commutative node intersections",
+    "one nesting level versus multiple nesting levels",
+    "ordinary entities versus notes and empty-package leaves in the unified node stream",
+    "renamed labels that change node dimensions without changing creation order"
+  ],
+  "scope_boundary": "This mechanism owns only the traversal order of Class SVEK nodes during endpoint-label collision resolution. It does not own label extraction, label dimensions, move-away arithmetic, edge routing or shortening, node coordinates, rendering order, package normalization, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved nested-package endpoint-label case matches Java without changing declarations or collision arithmetic.",
+    "A declaration-order perturbation leaves the Java-derived result and Rust result unchanged when SVEK creation order is unchanged.",
+    "Unit tests prove collision updates are non-commutative and the collision node view follows svek_node_emission_order rather than parser order.",
+    "Full renderer and no-oracle suites show no new failures.",
+    "A separate checker creates fresh valid inputs over at least two independent perturbation axes and records a verdict."
+  ],
+  "forbidden_approaches": [
+    "sorting nodes by coordinates, labels, fixture names, relationship endpoint, or topology counts",
+    "changing the move-away constants or arithmetic to compensate for traversal order",
+    "reordering result.node_positions globally and breaking renderer-owned parser indexing",
+    "post-processing emitted SVG coordinates",
+    "changing comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
