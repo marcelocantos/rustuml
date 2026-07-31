@@ -4258,6 +4258,19 @@ fn empty_package_painted_frontier(
             max_x: width,
             max_y: height,
         },
+        Some(PackageKind::Folder | PackageKind::Package) | None
+            if empty_package_round_corner(diagram) == 0.0 =>
+        {
+            // Java `USymbolFolder` switches from UPath to UPolygon at zero
+            // diameter. `LimitFinder#drawUPolygon` applies its deliberate
+            // ten-pixel horizontal overscan to that painted primitive.
+            PaintedFrontier {
+                min_x: -LIMIT_FINDER_POLYGON_OVERSCAN_X,
+                min_y: 0.0,
+                max_x: width + LIMIT_FINDER_POLYGON_OVERSCAN_X,
+                max_y: height,
+            }
+        }
         _ => PaintedFrontier {
             min_x: 0.0,
             min_y: 0.0,
@@ -7398,9 +7411,11 @@ fn emit_empty_folder_envelope(
     // RoundCorner diameter. Otherwise body arcs use diameter/2 and the tab
     // shoulder uses 1.5 times that radius.
     if round_corner == 0.0 {
+        // `UGraphicSvg#drawPolygon` serializes `UPolygon` as one flat,
+        // comma-separated coordinate stream.
         write!(
             svg,
-            r#"<polygon fill="{}" points="{},{} {},{} {},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+            r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
             fill,
             fmt4(x),
             fmt4(y),
@@ -14478,10 +14493,15 @@ fn empty_package_frontier_minima(
         .enumerate()
         .filter_map(|(ordinal, (package_idx, _))| {
             let package = &diagram.packages[package_idx];
-            if !matches!(
-                empty_package_symbol_kind(diagram, package),
+            let symbol_kind = empty_package_symbol_kind(diagram, package);
+            let has_external_frontier = matches!(
+                symbol_kind,
                 Some(PackageKind::Cloud | PackageKind::ComponentUml1 | PackageKind::Stack)
-            ) {
+            ) || (matches!(
+                symbol_kind,
+                Some(PackageKind::Folder | PackageKind::Package) | None
+            ) && empty_package_round_corner(diagram) == 0.0);
+            if !has_external_frontier {
                 return None;
             }
             let position = positions.get(empty_package_start + ordinal)?;
@@ -18427,6 +18447,24 @@ mod tests {
         let zero_svg = crate::render_svg(&zero);
         assert!(zero_svg.contains("<polygon"), "{zero_svg}");
         assert!(!zero_svg.contains(" A"), "{zero_svg}");
+        assert!(
+            zero_svg.contains(r#"points="16,6,99.9092,6,106.9092,28.4883,"#),
+            "{zero_svg}"
+        );
+        let rustuml_parser::diagram::Diagram::Class(zero) = zero else {
+            panic!("expected class diagram");
+        };
+        let zero_package = &zero.packages[0];
+        let (zero_width, zero_height) = empty_package_intrinsic_dims(&zero, zero_package);
+        let zero_frontier =
+            empty_package_painted_frontier(&zero, zero_package, zero_width, zero_height);
+        assert_eq!(
+            (zero_frontier.min_x, zero_frontier.max_x),
+            (
+                -LIMIT_FINDER_POLYGON_OVERSCAN_X,
+                zero_width + LIMIT_FINDER_POLYGON_OVERSCAN_X,
+            )
+        );
 
         let cluster = rustuml_parser::parse::parse(
             "@startuml\n\
