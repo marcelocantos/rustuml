@@ -502,24 +502,38 @@ fn scale_style(value: &str, k: f64) -> String {
 /// Scale every number in a whitespace/comma-separated list (`points`,
 /// `stroke-dasharray`), preserving the original separators.
 fn scale_number_list(value: &str, k: f64) -> String {
-    scale_numbers_in(value, k, |c| c == ',' || c.is_whitespace())
+    scale_numbers_in(value, k, |c| c == ',' || c.is_whitespace(), |_, _| false)
 }
 
-/// Scale every number embedded in an SVG path `d` attribute, preserving
-/// command letters and separators.
+/// Scale geometric numbers in an SVG path `d` attribute while preserving
+/// command letters, separators, and the two boolean flags in each arc tuple.
 fn scale_path_d(value: &str, k: f64) -> String {
-    scale_numbers_in(value, k, |c| {
-        c == ',' || c.is_whitespace() || c.is_ascii_alphabetic()
-    })
+    scale_numbers_in(
+        value,
+        k,
+        |c| c == ',' || c.is_whitespace() || c.is_ascii_alphabetic(),
+        |command, parameter_index| {
+            matches!(command, Some('A' | 'a')) && matches!(parameter_index % 7, 3 | 4)
+        },
+    )
 }
 
 /// Walk `s`, scaling each maximal numeric run (matching a signed decimal /
 /// exponent token) by `k` and copying every other byte (separators, command
-/// letters) verbatim. `is_sep` identifies bytes that delimit numbers.
-fn scale_numbers_in(s: &str, k: f64, is_sep: impl Fn(char) -> bool) -> String {
+/// letters) verbatim. `is_sep` identifies bytes that delimit numbers;
+/// `preserve` identifies command parameters whose literal value is not a
+/// geometric length.
+fn scale_numbers_in(
+    s: &str,
+    k: f64,
+    is_sep: impl Fn(char) -> bool,
+    mut preserve: impl FnMut(Option<char>, usize) -> bool,
+) -> String {
     let bytes = s.as_bytes();
     let mut out = String::with_capacity(s.len() + s.len() / 8);
     let mut i = 0;
+    let mut command = None;
+    let mut parameter_index = 0;
     while i < bytes.len() {
         let c = bytes[i] as char;
         // Start of a number: digit, leading '.', or sign immediately before a
@@ -548,10 +562,15 @@ fn scale_numbers_in(s: &str, k: f64, is_sep: impl Fn(char) -> bool) -> String {
                 }
             }
             let tok = &s[start..i];
-            match tok.parse::<f64>() {
-                Ok(v) => out.push_str(&fmt_num(v * k)),
-                Err(_) => out.push_str(tok),
+            if preserve(command, parameter_index) {
+                out.push_str(tok);
+            } else {
+                match tok.parse::<f64>() {
+                    Ok(v) => out.push_str(&fmt_num(v * k)),
+                    Err(_) => out.push_str(tok),
+                }
             }
+            parameter_index += 1;
         } else {
             // Copy the separator/letter byte run verbatim.
             let start = i;
@@ -568,6 +587,10 @@ fn scale_numbers_in(s: &str, k: f64, is_sep: impl Fn(char) -> bool) -> String {
                 // Only advance over separator chars; if we hit something that
                 // is neither a separator nor a number start, still copy it.
                 let _ = is_sep(d);
+                if d.is_ascii_alphabetic() {
+                    command = Some(d);
+                    parameter_index = 0;
+                }
                 i += 1;
             }
             out.push_str(&s[start..i]);
@@ -1107,6 +1130,37 @@ mod tests {
         // 67.22*1.5625 = 105.03125 -> 105.0313 (HALF_UP at 4dp)
         assert!(out.contains("M105.0313,112.1406"), "{out}");
         assert!(out.contains("points=\"105.0313,204.7656"), "{out}");
+    }
+
+    #[test]
+    fn path_scaling_preserves_arc_flags_by_parameter_role() {
+        let svg = concat!(
+            r#"<path d="M1,2 A3,4 5 0 0 6,7 8,9 10 0 1 11,12 "#,
+            r#"a13,14 15 1 0 16-17 18,19 20 1 1 21,22 Z"/>"#,
+        );
+        let out = scale_svg_numbers(svg, 2.0);
+
+        assert!(
+            out.contains(concat!(
+                r#"d="M2,4 A6,8 10 0 0 12,14 16,18 20 0 1 22,24 "#,
+                r#"a26,28 30 1 0 32-34 36,38 40 1 1 42,44 Z""#,
+            )),
+            "{out}"
+        );
+    }
+
+    #[test]
+    fn path_scaling_resets_arc_roles_across_mixed_commands() {
+        let svg = r#"<path d="A2,3 45 1 0 4,5 L6,7 a8,9 30 0 1 10,11 C12,13 14,15 16,17"/>"#;
+        let out = scale_svg_numbers(svg, 1.5);
+
+        assert!(
+            out.contains(concat!(
+                r#"d="A3,4.5 67.5 1 0 6,7.5 L9,10.5 "#,
+                r#"a12,13.5 45 0 1 15,16.5 C18,19.5 21,22.5 24,25.5""#,
+            )),
+            "{out}"
+        );
     }
 
     #[test]
