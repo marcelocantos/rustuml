@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dotpath-start-retraction-segment-consumption",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "55c07f493c79cda2a3bd9f7544392623c5b4a23a",
+  "triggering_evidence": [
+    "docs/parity-reviews/class-dot-ortho-er-migration/review.json",
+    "docs/parity-reviews/class-parenthesis-endpoint-decoration/review.json"
+  ],
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["getExtremitySimplier", "solveLine"],
+      "lines": "532-557,620-705",
+      "role": "Builds the DotPath from Graphviz SVG, creates the start decoration, and passes its provenance-owned decoration length along the solved start tangent to DotPath.moveStartPoint."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+      "symbols": ["moveStartPoint", "getStartTangeante"],
+      "lines": "198-216,305-313",
+      "role": "If more than one cubic remains and the requested move is at least the first cubic's endpoint-chord length, removes exactly that first cubic, subtracts the consumed chord from the move, and translates the surviving start plus first control by the residual. The start tangent falls back from a coincident first control to the first cubic endpoint chord."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/geom/XCubicCurve2D.java",
+      "symbols": ["getLength"],
+      "lines": "52-56",
+      "role": "Defines the consumption threshold as endpoint chord length, not Bezier arc length or control-point distance."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["shortened_endpoint_points", "unit_vector", "render_relationship_svg"],
+      "lines": "13234-13238,14844-14891",
+      "role": "Copies the solved points and translates the first endpoint/control by the full decoration length, but never consumes a short leading cubic and returns a zero tangent when the first control is coincident."
+    },
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": ["retract_dependency_arrow_path_start", "start_arrow_retraction_discards_a_short_first_cubic"],
+      "lines": "8686-8728,12706-12728",
+      "role": "An existing family-specific port and perturbation test already encode Java's one-segment consumption and residual movement for state dependency arrows."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["trim_deployment_edge_endpoint"],
+      "lines": "7152-7187",
+      "role": "A second family-specific port independently applies the same DotPath start-segment consumption invariant."
+    }
+  ],
+  "claimed_invariant": "Every Class relationship decoration placed at the solved path start retracts the shaft through Java DotPath.moveStartPoint. The requested movement follows the first nondegenerate start tangent. If another cubic exists and the movement magnitude is at least the first cubic's endpoint chord, exactly one leading cubic is removed; the consumed chord is subtracted from the movement and the residual translates the surviving start and first control. End retraction remains DotPath.moveEndPoint, which translates the final endpoint/control and never removes a segment.",
+  "causal_divergence": "The fresh mixed-case ORTHO inheritance route contains a 13.5px leading vertical cubic before a longer horizontal cubic, while the hollow-triangle decoration retracts the start by 18px. Java consumes that first cubic and emits one surviving cubic whose start is still the requested retracted point. Rust retains both cubics and merely moves the first endpoint/control, producing an extra vertical detour. The same missing generic behavior was independently exposed by a package-source parenthesis held-out; it is not specific to ORTHO, fixture names, or serialized decimal precision.",
+  "planned_model_change": "Replace Class shortened_endpoint_points start handling with a direct port of DotPath.moveStartPoint: derive the start tangent from the first control with endpoint-chord fallback, consume at most one complete leading cubic when the provenance-owned decoration length reaches its chord, and apply the residual to the surviving start/control. Preserve existing end handling and raw contact points used for endpoint decorations. Add model-level tests for consumed and non-consumed starts plus a coincident-control fallback. Do not simplify arbitrary collinear segments or post-process SVG strings.",
+  "perturbation_axes": [
+    "ORTHO versus spline routing",
+    "horizontal versus vertical leading cubic",
+    "decoration shorter than, equal to, and longer than the first chord",
+    "inheritance, dependency, aggregation, and parenthesis start decorations",
+    "ordinary nodes versus package/cluster endpoints",
+    "top-to-bottom versus left-to-right direction and renamed topology"
+  ],
+  "scope_boundary": "This mechanism owns only Class start-decoration shaft retraction after Graphviz solve and compound clipping. It does not own Graphviz routing, center/endpoint label placement, path coordinate quantization, cluster clipping, decoration shape geometry, end retraction, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved mixed-case ORTHO held-out emits the same single post-retraction cubic as Java.",
+    "The preserved parenthesis rejection's short-leading-cubic finding is re-evaluated without fixture-specific logic.",
+    "Unit tests prove one-segment consumption, residual movement, non-consumption, and coincident-control tangent fallback from synthetic Bezier streams.",
+    "The full renderer and no-oracle suites show no new failures.",
+    "A separate checker generates fresh valid decorated routes across at least two routing modes and two topology/direction axes."
+  ],
+  "forbidden_approaches": [
+    "collapsing all ORTHO or collinear cubic segments",
+    "rounding or rewriting the final SVG path to match one fixture",
+    "matching fixture names, labels, source lines, branch counts, or coordinates",
+    "changing decoration lengths without their existing Java class provenance",
+    "changing comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
