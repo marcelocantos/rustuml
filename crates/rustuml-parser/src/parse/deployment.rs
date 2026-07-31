@@ -68,6 +68,30 @@ fn resolve_id(nodes: &[DeploymentNode], raw: &str) -> String {
     label_to_id(raw)
 }
 
+fn resolve_connection_endpoint(
+    nodes: &[DeploymentNode],
+    notes: &[DeploymentNote],
+    raw: &str,
+) -> String {
+    // Java `CommandLinkElement.getDummy` resolves existing quark data before
+    // creating a dummy leaf. Named notes therefore share the ordinary
+    // relation endpoint namespace without becoming DeploymentNode values.
+    if notes.iter().any(|note| note.id.as_deref() == Some(raw)) {
+        raw.to_string()
+    } else {
+        resolve_id(nodes, raw)
+    }
+}
+
+fn deployment_identity_exists(
+    nodes: &[DeploymentNode],
+    notes: &[DeploymentNote],
+    id: &str,
+) -> bool {
+    nodes.iter().any(|node| node.id == id)
+        || notes.iter().any(|note| note.id.as_deref() == Some(id))
+}
+
 fn kind_from_keyword(keyword: &str) -> DeploymentNodeKind {
     match keyword {
         "artifact" => DeploymentNodeKind::Artifact,
@@ -465,10 +489,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             .unwrap()
     });
 
-    // N1 .. N2  — note link (N1 is the note ID, N2 is the target)
-    static RE_NOTE_LINK: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^(\w+)\s+\.\.\s+(\w+)\s*$").unwrap());
-
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
@@ -701,30 +721,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             continue;
         }
 
-        // Note link: N1 .. N2 — only when one endpoint is a known floating
-        // note id. Otherwise `X .. Y` is an ordinary (dotted) association
-        // between two nodes and must fall through to connection parsing.
-        if let Some(caps) = RE_NOTE_LINK.captures(trimmed) {
-            let lhs = caps[1].to_string();
-            let rhs = caps[2].to_string();
-            let lhs_note = notes.iter().any(|n| n.id.as_deref() == Some(lhs.as_str()));
-            let rhs_note = notes.iter().any(|n| n.id.as_deref() == Some(rhs.as_str()));
-            if lhs_note || rhs_note {
-                // Attach the note to the non-note endpoint.
-                let (note_id, target_id, position) = if lhs_note {
-                    (lhs, rhs, DeploymentNotePosition::Top)
-                } else {
-                    (rhs, lhs, DeploymentNotePosition::Bottom)
-                };
-                if let Some(note) = notes.iter_mut().find(|n| n.id.as_deref() == Some(&note_id)) {
-                    note.target = Some(target_id);
-                    note.position = position;
-                }
-                continue;
-            }
-            // Not a note link — fall through to connection handling below.
-        }
-
         // Check if the first word is a deployment keyword.
         let first_word = trimmed
             .split_whitespace()
@@ -748,11 +744,11 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     style,
                     length,
                 } = parsed;
-                let from = resolve_id(&nodes, &raw_from);
-                let to = resolve_id(&nodes, &raw_to);
+                let from = resolve_connection_endpoint(&nodes, &notes, &raw_from);
+                let to = resolve_connection_endpoint(&nodes, &notes, &raw_to);
 
                 for (id, lbl) in [(&from, &raw_from), (&to, &raw_to)] {
-                    if !nodes.iter().any(|n| n.id == *id) {
+                    if !deployment_identity_exists(&nodes, &notes, id) {
                         let quark_order = next_quark_order;
                         next_quark_order += 1;
                         nodes.push(DeploymentNode {
@@ -873,12 +869,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 style,
                 length,
             } = parsed;
-            let from = resolve_id(&nodes, &raw_from);
-            let to = resolve_id(&nodes, &raw_to);
+            let from = resolve_connection_endpoint(&nodes, &notes, &raw_from);
+            let to = resolve_connection_endpoint(&nodes, &notes, &raw_to);
 
             // Auto-create nodes for any unknown IDs in connections.
             for (id, lbl) in [(&from, &raw_from), (&to, &raw_to)] {
-                if !nodes.iter().any(|n| n.id == *id) {
+                if !deployment_identity_exists(&nodes, &notes, id) {
                     let quark_order = next_quark_order;
                     next_quark_order += 1;
                     nodes.push(DeploymentNode {
@@ -1110,13 +1106,20 @@ mod tests {
     }
 
     #[test]
-    fn note_floating() {
+    fn named_note_relation_reuses_the_note_without_turning_it_into_an_attachment() {
         let d = parse("node Server\nnote \"Primary server\" as N1\nN1 .. Server");
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "Primary server");
-        assert_eq!(d.notes[0].target.as_deref(), Some("Server"));
-        assert_eq!(d.notes[0].position, DeploymentNotePosition::Top);
+        assert_eq!(d.notes[0].target, None);
+        assert_eq!(d.notes[0].position, DeploymentNotePosition::Right);
         assert_eq!(d.notes[0].source_line, 2);
+        assert_eq!(d.nodes.len(), 1);
+        assert_eq!(d.nodes[0].id, "Server");
+        assert_eq!(d.connections.len(), 1);
+        assert_eq!(d.connections[0].from, "N1");
+        assert_eq!(d.connections[0].to, "Server");
+        assert_eq!(d.connections[0].style, DeploymentLinkStyle::Dashed);
+        assert_eq!(d.connections[0].source_line, 3);
     }
 
     #[test]
