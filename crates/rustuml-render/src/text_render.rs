@@ -1602,6 +1602,21 @@ fn css_color_hex(name: &str) -> Option<&'static str> {
     }
 }
 
+fn svg_font_family(font_family: &str) -> Cow<'_, str> {
+    // Java `SvgGraphics#text` canonicalizes the AWT logical family immediately
+    // before writing the SVG attribute (PlantUML QA-5432).
+    if font_family.eq_ignore_ascii_case("monospaced") {
+        Cow::Borrowed("monospace")
+    } else {
+        Cow::Borrowed(font_family)
+    }
+}
+
+fn svg_font_family_uses_nbsp(font_family: &str) -> bool {
+    // The same Java backend converts spaces after family canonicalization.
+    font_family.eq_ignore_ascii_case("monospace") || font_family.eq_ignore_ascii_case("courier")
+}
+
 fn write_text_element(
     buf: &mut String,
     content: &str,
@@ -1617,13 +1632,14 @@ fn write_text_element(
     // (so widths use monospace metrics and spaces become NBSP), but the
     // emitted `font-family` attribute must carry the user-supplied name —
     // not the literal string "monospace".
-    let font_family = if let Some(f) = style.font_family.as_deref() {
+    let requested_font_family = if let Some(f) = style.font_family.as_deref() {
         f
     } else if style.monospace {
         "monospace"
     } else {
         base.font_family
     };
+    let font_family = svg_font_family(requested_font_family);
     let nominal_size = style.size.unwrap_or(base.font_size);
     // Sub/sup: render with a smaller font and a y offset, matching Java
     // PlantUML's `FontPosition.mute(font)` (size -= 3, min 2) plus a
@@ -1721,6 +1737,11 @@ fn write_text_element(
     };
     // PlantUML emits the no-break space (U+00A0, used for inter-run gaps and
     // monospace padding) as the XML entity `&#160;`, never as the raw byte.
+    let content = if svg_font_family_uses_nbsp(&font_family) {
+        Cow::Owned(content.replace(' ', "\u{00a0}"))
+    } else {
+        Cow::Borrowed(content)
+    };
     let content = content.replace('\u{00a0}', "&#160;");
     write!(
         buf,
@@ -1813,6 +1834,32 @@ mod tests {
             r#"textLength="{}""#,
             pm::fmt_coord(pm::mono_text_width("Alice", 12.0))
         )));
+    }
+
+    #[test]
+    fn svg_backend_canonicalizes_logical_monospace_and_its_spaces() {
+        let expected_width = pm::mono_text_width("grid gap", 12.0);
+        for (family, emitted_family) in [
+            ("Monospaced", "monospace"),
+            ("mOnOsPaCeD", "monospace"),
+            ("Courier", "Courier"),
+        ] {
+            let mut b = base(10.0, 20.0);
+            b.font_family = family;
+            let mut buf = String::new();
+            let width = emit_text(&mut buf, "grid gap", &b);
+
+            assert_eq!(pm::fmt_coord(width), pm::fmt_coord(expected_width));
+            assert!(buf.contains(&format!(r#"font-family="{emitted_family}""#)));
+            assert!(buf.contains(">grid&#160;gap</text>"));
+        }
+
+        let mut proportional = base(10.0, 20.0);
+        proportional.font_family = "Helvetica";
+        let mut buf = String::new();
+        emit_text(&mut buf, "grid gap", &proportional);
+        assert!(buf.contains(r#"font-family="Helvetica""#));
+        assert!(buf.contains(">grid gap</text>"));
     }
 
     #[test]
