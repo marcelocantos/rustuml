@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "mechanism": "stack-transparent-rectangle-stroke-state",
+  "status": "account_committed_before_implementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:USymbolStack#drawQueue",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:SvgGraphics#createRectangleInternal and SvgGraphics#styleMe"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:emit_stack_envelope",
+    "crates/rustuml-render/src/scale.rs:scale_style"
+  ],
+  "invariant": "USymbolStack's inset rectangle has no visible stroke color but still carries the active stroke width. Java applies HColors.none() without clearing UStroke, and SvgGraphics.styleMe serializes both stroke:none and stroke-width. A later document scale multiplies that ordinary geometric stroke width exactly like every other primitive.",
+  "causal_divergence": "Rust emit_stack_envelope hardcodes style=stroke:none on the inset rectangle and discards the already-resolved stroke_width argument that it uses for the surrounding path. At scale 1.75 the Java rectangle therefore contains stroke-width:1.75 while Rust has no width token. All geometry, arc flags, fill, and the visible stack outline already agree in the preserved checker input.",
+  "planned_change": "Emit stroke-width from emit_stack_envelope's existing stroke_width argument on the transparent inset rectangle, preserving stroke:none and attribute order. Keep the surrounding path, geometry, style resolution, and generic scaler unchanged. Update the stack primitive test to require the complete transparent-stroke state and add a scaled renamed stack regression.",
+  "perturbation_axes": [
+    "unscaled versus explicit fractional scale and dpi",
+    "default versus custom package line thickness",
+    "empty stack leaf versus stack cluster containing classes",
+    "renamed labels and changed child counts",
+    "rounded versus zero-corner stack paths"
+  ],
+  "scope_boundary": "This mechanism owns only the SVG paint state of the transparent inset rectangle emitted for stack symbols. It does not alter path arc flags, stack dimensions, layout, fill, shadow, root scaling, comparator behavior, or fixture eligibility.",
+  "acceptance": [
+    "The preserved folder/stack/file checker input passes diff_one --no-oracle.",
+    "Unscaled and scaled tests prove that stroke:none retains the active stroke width and that scaling multiplies it.",
+    "Fresh Java perturbations vary line thickness, scale form, topology, labels, and stack ownership.",
+    "The renderer suite and no-oracle ratchet remain green without family regression.",
+    "An independent checker records an accepted verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "matching the checker fixture, StackB, Batch Stack, or a scale factor",
+    "adding the width in the generic scaler after emission",
+    "changing arc flags, comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml",
+    "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.svg"
+  ]
+}
