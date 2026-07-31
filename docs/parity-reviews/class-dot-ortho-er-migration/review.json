@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dot-ortho-er-migration",
+  "created": "2026-08-01T08:20:00+10:00",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, frozen target/release/rustuml, frozen target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement 844de9cb or fa3d6f2f; did not edit production code, accounts, baselines, comparator settings, park lists, error markers, or allow-lists."
+  },
+  "account_commit": "844de9cb7cb1ac4fd3d08a58e02cbd4bef2ebde0",
+  "implementation_commit": "fa3d6f2f2fdde5864eb14449b5a36fb916efbb76",
+  "evaluated_rust_revision": "fa3d6f2f2fdde5864eb14449b5a36fb916efbb76",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "supersedes_rejected_account": {
+    "path": "docs/parity-reviews/class-dot-spline-routing-mode/account.json",
+    "sha256": "8494745debd32afc1667ce96dce0607a74d2a71445443f895f9420b8606089e8",
+    "prior_verdict": "rejected",
+    "rejection_used": "The predecessor proved the graph attribute path but rejected global ORTHO enablement because ER parity depended on a separate cubic-route normalization."
+  },
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_worktree_status": "At requested revision; dirty unrelated file observed and not edited: CLAUDE.md.",
+    "headless_note": "Plain java -jar aborted with exit 134 before input. java -Djava.awt.headless=true -jar reported PlantUML version 1.2026.3beta6 / 71806a2 and was used for every Java SVG."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "target/release/rustuml",
+      "sha256": "0e5ad8f8301f7d3e90aeb6fb7617a250957bae6d5064b114dd469b71002a03d0",
+      "version": "rustuml 0.7.0"
+    },
+    "diff_one": {
+      "path": "target/release/examples/diff_one",
+      "sha256": "a396fa1b5b473a1890549e409494f7077977bbb82ebdb4ebe06dee28a88b5ba4",
+      "mode": "--no-oracle",
+      "product_alignment_check": "For review_er_last_ortho_chain_tb, diff_one --print-rust and target/release/rustuml emitted the same SVG body; the byte mismatch was only output framing/trailing newline."
+    }
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "sed -n '1,260p' AGENTS.md",
+    "sed -n '1,260p' ~/.claude/rust.md",
+    "sed -n '1,251p' ~/.codex/skills/oracle-first/SKILL.md",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | nl -ba | sed -n '600,660p'",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java | nl -ba | sed -n '130,190p'",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | nl -ba | sed -n '350,980p'",
+    "nl -ba vendor/graphviz/lib/dotgen/dotsplines.c | sed -n '228,270p;420,470p'",
+    "nl -ba vendor/graphviz/lib/ortho/ortho.c | sed -n '1130,1225p'",
+    "nl -ba vendor/graphviz/lib/common/utils.c | sed -n '1370,1425p'",
+    "git diff 844de9cb..fa3d6f2f -- crates/rustuml-layout/build.rs crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs",
+    "rg -n fresh probe names, golden/test-diagrams references, include_str/include_bytes, linetype/ortho routing, and ER route shims in touched production paths",
+    "target/release/rustuml --ast test-diagrams/perturbations/class-dot-ortho-er-migration/*.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-dot-ortho-er-migration/*.puml",
+    "rg -n 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|[From string|Assumed diagram type' test-diagrams/perturbations/class-dot-ortho-er-migration/*.svg",
+    "target/release/rustuml -tsvg <fresh puml> > <fresh>.rust.svg",
+    "target/release/examples/diff_one --no-oracle <fresh puml> > <fresh>.diff.txt",
+    "target/release/examples/diff_one --no-oracle --print-rust review_er_last_ortho_chain_tb.puml > /tmp/review_er_last_ortho_chain_tb.diff_one.rust.svg",
+    "xmllint --noout test-diagrams/perturbations/class-dot-ortho-er-migration/*.svg",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      "SkinParam.java:628-636 maps effective linetype polyline/ortho to DotSplines.POLYLINE/DotSplines.ORTHO.",
+      "DotStringFactory.java:157-165 serializes splines=polyline or splines=ortho plus forcelabels=true before rankdir and edge emission.",
+      "SvekEdge.java:423-430 emits center relationship labels as xlabel whenever dotSplines == DotSplines.ORTHO; SvekEdge.java:440-459 keeps endpoint labels in taillabel/headlabel.",
+      "SvekEdge.java:734-759 recovers label, tail-label, and head-label positions from the Graphviz SVG by color.",
+      "Graphviz dotsplines.c:250-258 dispatches EDGETYPE_ORTHO to orthoEdges when ORTHO is defined; ortho.c:1200-1203 warns that ordinary edge labels are not handled and disables that label guidance, matching the use of xlabels."
+    ],
+    "rust": [
+      "crates/rustuml-layout/build.rs:38-41 defines ORTHO for the vendored Graphviz build.",
+      "crates/rustuml-layout/src/graph.rs:936-964 serializes splines=ortho and forcelabels=true when SplineRouting::Ortho is selected.",
+      "crates/rustuml-render/src/class.rs:12568-12582 selects SplineRouting::Ortho only from the latest case-insensitive skinparam linetype value.",
+      "crates/rustuml-render/src/class.rs:2748-2758 suppresses center label size for ortho instead of emitting an xlabel-sized table into the graph.",
+      "crates/rustuml-render/src/class.rs:14810-14868 synthesizes ortho center label positions from shortened endpoint midpoint plus ORTHO_XLABEL_VERTICAL_INSET, rather than consuming Graphviz's xlabel position.",
+      "The implementation removes normalize_ortho_er_vertical_route and ORTHO_ER_VERTICAL_ROUTE_DELTAS."
+    ],
+    "fixture_shape_review": "The implementation diff contains no fresh probe names, no directory/fixture-family keyed routing selection, no golden or perturbation reads, and no include_str/include_bytes fixture embedding in the changed production routing paths. The routing selector is the latest effective linetype. Older unrelated class renderer comments mention golden-derived constants, but they were not introduced by fa3d6f2f."
+  },
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_ortho_mixedcase_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_ortho_mixedcase_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_ortho_mixedcase_lr.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_ortho_mixedcase_lr.diff.txt",
+      "axes": ["ordinary Class", "left-to-right direction", "mixed-case linetype", "last declaration wins", "fanout plus inheritance", "center and endpoint labels", "renamed identifiers"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "result": "fail",
+      "difference_count": 5,
+      "finding": "The effective linetype selector reaches ORTHO, but the fresh ordinary Class graph is not exact: one inherited route shape and four center/endpoint text positions differ."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_spline_control_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_spline_control_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_last_spline_control_tb.rust.svg",
+      "diff_output": null,
+      "axes": ["ordinary Class", "top-to-bottom direction", "linetype ortho then spline", "last declaration resets away from ORTHO", "center and endpoint labels"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "result": "pass",
+      "finding": "The last-value control passes, so the linetype precedence part of the account is supported."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_nested_package_labels_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_nested_package_labels_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_nested_package_labels_tb.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_class_nested_package_labels_tb.diff.txt",
+      "axes": ["ordinary Class", "nested packages", "package endpoint relationship", "aggregation and inheritance decorations", "link note", "top-to-bottom direction", "uppercase linetype"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "result": "fail",
+      "difference_count": 41,
+      "finding": "Nested package and label geometry diverges broadly: canvas dimensions, package outlines, entity x positions, routes, note position, and center labels differ."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_last_ortho_chain_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_last_ortho_chain_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_last_ortho_chain_tb.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_last_ortho_chain_tb.diff.txt",
+      "axes": ["ER crow-foot", "top-to-bottom direction", "linetype polyline then mixed-case ortho", "chain plus branch", "renamed labels"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "result": "fail",
+      "difference_count": 2,
+      "finding": "The real router no longer needs the old ER path deltas, but center labels still differ by 5px and 10px vertically, consistent with the Rust synthetic xlabel heuristic."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_nested_package_order_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_nested_package_order_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_nested_package_order_lr.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_nested_package_order_lr.diff.txt",
+      "axes": ["ER crow-foot", "nested package", "left-to-right direction", "declaration order differs from relationship order", "last linetype ortho", "changed topology"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "result": "fail",
+      "difference_count": 3,
+      "finding": "The nested ER/LR perturbation routes but all three relationship label positions diverge from Java."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_crowfoot_reordered_topology_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_crowfoot_reordered_topology_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_crowfoot_reordered_topology_tb.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-dot-ortho-er-migration/review_er_crowfoot_reordered_topology_tb.diff.txt",
+      "axes": ["ER crow-foot", "top-to-bottom direction", "entity declaration order differs from relation order", "multiple crow-foot endpoint variants", "changed topology"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "result": "fail",
+      "difference_count": 2,
+      "finding": "The reordered ER perturbation preserves routes/decorations closely enough that only labels fail, again pointing at xlabel placement rather than the removed ER route delta."
+    }
+  ],
+  "artifact_hashes": {
+    "account_json_sha256": "260d5684917a4e66094f8c30f9af04c9ae9c412a14531e53369462798e57c1f2",
+    "fresh_sources_sha256": {
+      "review_class_last_ortho_mixedcase_lr.puml": "28025515cf160b5b5950824dffa161e10df09a3363aeb9e7d657e12a557395c3",
+      "review_class_last_spline_control_tb.puml": "b53bac43078184b8396f2958321351c52e5cdcd4508ddac57a0c56c0e37dae8e",
+      "review_class_nested_package_labels_tb.puml": "156cffab0d88a3f17d110586bef61d9df631e0ff0e795cf718bac8f1eed4871c",
+      "review_er_last_ortho_chain_tb.puml": "0c9c7a129a89ee4424b3caa2a8fe9d662abf15bc49d0c74aac1b2ed9aefbde35",
+      "review_er_nested_package_order_lr.puml": "65b508ef36a96413a8f0b2c685dea6ecb5941d45423145b95fb281ea9d06bb51",
+      "review_er_crowfoot_reordered_topology_tb.puml": "bf30f7b7da4ba6b9bb941317a0428c90458d215a274d8345517946a0e0922403"
+    },
+    "failure_diff_sha256": {
+      "review_class_last_ortho_mixedcase_lr.diff.txt": "73708951711c9d3f2d28053d8b69e2739bef578fec7e799dc2f3f057ef4a95f5",
+      "review_class_nested_package_labels_tb.diff.txt": "6d01b8950e5a5a96fbb7d2ae08f2ea00e2a0d96cbda589b6a88bc1f137383292",
+      "review_er_last_ortho_chain_tb.diff.txt": "621b07b4ee41a8d63305423f8ac20937c9762cd61ffb64abf5ad8c8e4d5ab003",
+      "review_er_nested_package_order_lr.diff.txt": "bbf9bdc74514c8bcf0addd215297edc9256de2e75de6f39068de3f9b3cbc0cf7",
+      "review_er_crowfoot_reordered_topology_tb.diff.txt": "2028ab1b42e80a05721693ca9834f7c035c5af5f4f9b051329b72d124eeb88e0"
+    }
+  },
+  "findings": [
+    "The account's graph-level routing premise is substantially supported: Java selects DotSplines.ORTHO from linetype, DotStringFactory serializes splines=ortho and forcelabels=true, vendored Graphviz dispatches EDGETYPE_ORTHO only under ORTHO, and Rust now sets that same graph-level mode from the effective linetype.",
+    "No fixture/family-keyed router selection or fresh-evidence keyed logic was found in the implementation diff. The old ER route-delta shim is removed.",
+    "Acceptance is nevertheless rejected by fresh valid held-outs: five of six perturbations fail strict no-oracle comparison. Failures span ordinary Class, nested packages, and ER crow-foot/nested cases.",
+    "The common unresolved mechanism is label placement under ORTHO. Java emits center labels through Graphviz xlabel and recovers the label position from Graphviz's solved SVG, while Rust still suppresses center labels in the graph and synthesizes positions from the shortened route midpoint plus ORTHO_XLABEL_VERTICAL_INSET.",
+    "The passing last-spline control supports case-insensitive/last-declaration linetype precedence, but it does not rescue the mechanism because the ORTHO held-outs fail.",
+    "Build portability was not recompiled by this review per instruction. The existing binary and Java references were sufficient for the requested evidence; no Cargo or rustc process was invoked."
+  ],
+  "verdict": "rejected",
+  "verdict_reason": "REJECTED. Effective linetype alone appears to activate the real graph-level orthogonal router, and removing the old ER path deltas is directionally generative, but the implementation is not acceptable because Rust still models ORTHO center labels with a synthetic midpoint heuristic instead of Java's Graphviz xlabel channel. Fresh ordinary Class, nested package, and ER crow-foot perturbations fail, so the mechanism has not survived held-out adversarial validation."
+}

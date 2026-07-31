@@ -1,0 +1,16 @@
+@startuml
+skinparam linetype polyline
+skinparam linetype OrThO
+hide empty members
+
+entity Customer9301
+entity Order9303
+entity Line9305
+entity Product9307
+entity Shipment9309
+
+Customer9301 ||--o{ Order9303 : places renamed order
+Order9303 ||--|{ Line9305 : owns changed lines
+Line9305 }o--|| Product9307 : references sku
+Order9303 }|--o{ Shipment9309 : fulfilled by
+@enduml

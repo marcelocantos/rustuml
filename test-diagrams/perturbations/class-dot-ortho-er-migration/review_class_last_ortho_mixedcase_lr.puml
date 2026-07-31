@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam linetype spline
+skinparam linetype OrThO
+hide empty members
+
+class DispatchPivot9131
+class IntakeLeaf9133
+class AuditLeaf9135
+class ArchiveLeaf9137
+class OutcomeLeaf9139
+
+ArchiveLeaf9137 <|-- OutcomeLeaf9139
+DispatchPivot9131 "one owner" -- "many intake" IntakeLeaf9133 : renamed intake lane
+DispatchPivot9131 -- AuditLeaf9135 : cross check route
+IntakeLeaf9133 -- ArchiveLeaf9137 : archive handoff
+AuditLeaf9135 -- OutcomeLeaf9139 : result lane
+@enduml

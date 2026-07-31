@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+skinparam linetype ORTHO
+hide empty members
+
+entity Warehouse9329
+entity Product9335
+entity Order9331
+entity Supplier9333
+entity Package9327
+
+Supplier9333 ||--o{ Product9335 : supplies
+Order9331 ||--|{ Package9327 : splits into
+Product9335 ||--o{ Package9327 : packed as
+Package9327 }o--|| Warehouse9329 : stocked at
+@enduml

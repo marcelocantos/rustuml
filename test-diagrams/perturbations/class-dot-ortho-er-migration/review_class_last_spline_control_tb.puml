@@ -1,0 +1,15 @@
+@startuml
+skinparam linetype ortho
+skinparam linetype spline
+hide empty members
+
+class ResetSource9141
+class ResetMiddle9143
+class ResetAudit9145
+class ResetTarget9147
+
+ResetSource9141 -- ResetMiddle9143 : first reset leg
+ResetSource9141 -- ResetAudit9145 : audit reset leg
+ResetMiddle9143 "tail reset" -- "head reset" ResetTarget9147 : final reset label
+ResetAudit9145 <|-- ResetTarget9147
+@enduml
