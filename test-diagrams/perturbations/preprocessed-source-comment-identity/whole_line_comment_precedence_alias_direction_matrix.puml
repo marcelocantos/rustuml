@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+!theme cerulean
+class "O'Brien Source" as SourceReview3
+/' review3: whole-line comment beats prefix parsing even with aliases '/ class GhostAlias /' terminal '/
+class "Visible O'Brien" as VisibleReview3
+SourceReview3 --> VisibleReview3 : pays
+@enduml

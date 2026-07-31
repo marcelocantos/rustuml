@@ -1,0 +1,10 @@
+@startuml
+!theme cerulean
+class LedgerReview3 {
+  +postedAt: String
+  /' review3: whole-line comment inside a class body still disappears '/ hiddenField /' terminal '/
+  +status: String
+}
+class AuditReview3
+LedgerReview3 --> AuditReview3 : audits
+@enduml

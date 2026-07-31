@@ -1,0 +1,10 @@
+@startuml
+!theme cerulean
+
+class BlankAnchor
+
+/' review3: whole-line comment should vanish even when it contains another /' pair '/ class GhostBlank /' terminal '/
+
+class BlankTarget
+BlankAnchor --> BlankTarget : keeps blank lines
+@enduml

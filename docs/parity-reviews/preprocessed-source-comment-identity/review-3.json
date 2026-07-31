@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "mechanism": "preprocessed-source-comment-identity",
+  "checker": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "implemented_mechanism": false,
+    "date": "2026-07-31",
+    "mode": "adversarial maker-checker review",
+    "workspace": "/private/tmp/rustuml-integrate-20260731a"
+  },
+  "revisions": {
+    "rust_review_revision": "ca98a5e97de3287674cf1969451e418442053411",
+    "implementation_commit": "be4f0c2feb131cfde8f46b239ffefd4a3e46a860",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "comparator": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "comparator_sha256": "3b1b131f01abcf19773378c64f99f89c5d529bca0c743ef43dd6d2f6fb8e15fb"
+  },
+  "documents_read": [
+    "AGENTS.md parity honesty and T14 rules",
+    "docs/parity-reviews/preprocessed-source-comment-identity/account.json",
+    "docs/parity-reviews/preprocessed-source-comment-identity/review.json",
+    "docs/parity-reviews/preprocessed-source-comment-identity/review-2.json",
+    "crates/rustuml-parser/src/preprocess/mod.rs:120-250 at ca98a5e97de3287674cf1969451e418442053411",
+    "src/main/java/net/sourceforge/plantuml/tim/TContext.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorLongComment.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorShortComment.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorInnerComment.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/text/TLineType.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/text/StringLocated.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  ],
+  "source_inspection": {
+    "java": [
+      "TContext.buildCodeIterator wraps the source in CodeIteratorLongComment, CodeIteratorShortComment, and CodeIteratorInnerComment before later consumers, including UmlSource.seed, see the resulting line stream.",
+      "TLineType.getFromLineInternal classifies a complete greedy ^\\s*/'.*'/\\s*$ line as COMMENT_SIMPLE before COMMENT_LONG_START is considered.",
+      "CodeIteratorShortComment removes COMMENT_SIMPLE lines entirely, so a whole-line /' ... '/ form never reaches StringLocated.removeInnerComment.",
+      "StringLocated.removeInnerComment only runs on surviving lines and preserves prefix code after the first closing token, preserves suffix code before the last opening token, and removes /'''[-\\w]*'''/ payloads on surviving lines."
+    ],
+    "rust": [
+      "post_tim_seed_line delegates to the shared tim_comment_line function unless @startebnf quote syntax preservation is active.",
+      "tim_comment_line now returns None for trimmed lines that start with /' and end with '/ before any prefix or suffix retention logic runs, matching Java's whole-line COMMENT_SIMPLE precedence.",
+      "The remaining branches still mirror Java's long-comment, prefix, suffix, and special-triple behavior on surviving lines.",
+      "The implementation introduces no parity-affecting numeric constants."
+    ],
+    "fixture_shape_search": {
+      "command": "git show --format= --no-ext-diff be4f0c2f -- crates/rustuml-parser/src/preprocess/mod.rs | rg -n 'include_str|include_bytes|read_to_string|quote_comment_axes|prefix_suffix_inner_comment_axes|triple_inner_comment_axes|whole_line_comment_precedence|g[0-9a-z]{6,}|test-diagrams|golden|cerulean|Ghost|Hidden|Phantom'",
+      "result": "Only the regression-test snippet added by be4f0c2f mentions Ghost or cerulean. No shipping-path golden reads, fixture stems, gradient ids, or post-hoc output fitting strings appear in production code."
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a status --short --branch",
+    "sed -n '120,250p' /private/tmp/rustuml-integrate-20260731a/crates/rustuml-parser/src/preprocess/mod.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TContext.java | sed -n '326,345p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorLongComment.java | sed -n '1,140p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorShortComment.java | sed -n '1,120p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorInnerComment.java | sed -n '1,140p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/text/TLineType.java | sed -n '1,220p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/text/StringLocated.java | sed -n '240,290p'",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --format=fuller --stat be4f0c2f -- crates/rustuml-parser/src/preprocess/mod.rs docs/parity-reviews/preprocessed-source-comment-identity/account.json",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --format= --no-ext-diff be4f0c2f -- crates/rustuml-parser/src/preprocess/mod.rs | rg -n 'include_str|include_bytes|read_to_string|quote_comment_axes|prefix_suffix_inner_comment_axes|triple_inner_comment_axes|whole_line_comment_precedence|g[0-9a-z]{6,}|test-diagrams|golden|cerulean|Ghost|Hidden|Phantom'",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor be4f0c2f ca98a5e97de3287674cf1969451e418442053411",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_blankline_identity_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_class_body_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_alias_direction_matrix.puml",
+    "xmllint --noout test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.svg test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_blankline_identity_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_class_body_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_alias_direction_matrix.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|Assumed diagram type' test-diagrams/perturbations/preprocessed-source-comment-identity -g '*.svg'",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "shasum -a 256 test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_blankline_identity_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_class_body_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_alias_direction_matrix.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_blankline_identity_matrix.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_class_body_matrix.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_alias_direction_matrix.puml"
+  ],
+  "constraints_observed": {
+    "local_java_oracle_available": true,
+    "java_syntax_errors": 0,
+    "ran_cargo": false,
+    "rebuilt_rust": false,
+    "edited_shipping_code": false,
+    "edited_account": false,
+    "edited_prior_reviews": false,
+    "review_only_changes": true
+  },
+  "perturbation_directory": "test-diagrams/perturbations/preprocessed-source-comment-identity",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg",
+      "axes": [
+        "full-line quote comment before theme",
+        "long comment after theme",
+        "ordinary trailing apostrophe after skinparam",
+        "quoted apostrophe in display label",
+        "renamed labels and two-edge topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.svg",
+      "axes": [
+        "prefix /' ... '/ inner comment with code after the closing token",
+        "suffix /' ... '/ inner comment with code before the opening token",
+        "source-order-sensitive entity ids",
+        "two-edge topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.svg",
+      "axes": [
+        "Java /'''[-\\w]*'''/ inner-comment payload",
+        "class member text",
+        "edge label text",
+        "theme resource seed"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.svg",
+      "axes": [
+        "whole-line /' ... '/ comment whose interior also contains code and a second /' ... '/ pair",
+        "theme expansion position",
+        "ordinary trailing apostrophe after skinparam",
+        "quoted apostrophe in a renamed class label"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.svg",
+      "axes": [
+        "whole-line /' ... '/ precedence versus prefix and suffix retention",
+        "preserved suffix comment on a different line",
+        "renamed labels and source-line identity",
+        "single-edge topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.svg",
+      "axes": [
+        "whole-line /' ... '/ comment whose interior also contains a second /' ... '/ pair",
+        "special /'''[-\\w]*'''/ payload removal on surviving lines",
+        "renamed labels and dependency edge text"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_blankline_identity_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_blankline_identity_matrix.svg",
+      "sha256": "95832fd2b8084a17419ecdcd0455fd6dba8d9bec687780eb22c4bf0a2cc91eb9",
+      "axes": [
+        "blank lines immediately before and after a removed whole-line /' ... '/ comment",
+        "source identity with empty-line preservation",
+        "single-edge topology"
+      ],
+      "used_by_implementer": false,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_class_body_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_class_body_matrix.svg",
+      "sha256": "c3151496d06a1c15bc6d36123eec8861fafa581a85304bb77d6b065829d045a5",
+      "axes": [
+        "whole-line /' ... '/ comment inside a class body rather than at top level",
+        "member-list source identity",
+        "two visible members bracketing the removed comment line"
+      ],
+      "used_by_implementer": false,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_alias_direction_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_alias_direction_matrix.svg",
+      "sha256": "cd24d051a277306f5e0c009946ef23d38a8d405242879cde55a1bb643f23cee7",
+      "axes": [
+        "left-to-right direction",
+        "alias-backed quoted labels containing ordinary apostrophes",
+        "whole-line /' ... '/ precedence in the same file as alias resolution"
+      ],
+      "used_by_implementer": false,
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "I tried to disprove the claim and failed. The six preserved review-1 and review-2 perturbations all remain structurally equivalent through /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle at rust revision ca98a5e97de3287674cf1969451e418442053411.",
+    "The three fresh review-3 perturbations are valid Java inputs. PlantUML emitted well-formed SVG for each, and the syntax-error scan found no Java error pages or diagnostic SVG content.",
+    "Java source inspection supports the claimed precedence model: a whole-line /' ... '/ form is classified as COMMENT_SIMPLE greedily and removed by CodeIteratorShortComment before StringLocated.removeInnerComment can retain any suffix after an earlier closing token.",
+    "Rust source inspection at ca98a5e9 matches that precedence: tim_comment_line returns None for any trimmed line that both starts with /' and ends with '/ before testing prefix or suffix retention. The surrounding branches still align with Java's long-comment, prefix, suffix, and special-triple cases.",
+    "The exact implementation commit be4f0c2f adds no parity-affecting numeric constants and no shipping-path fixture-shaped logic. The only fixture-like strings found by skeptical search are in the regression test added alongside the implementation.",
+    "Fresh axes not used by the implementer also hold: blank-line identity around a removed whole-line comment, removal inside a class body, and alias-plus-direction handling with quoted apostrophes all match the Java SVGs through the shipped no-oracle path."
+  ],
+  "summary": {
+    "preserved_inputs_rerun": 6,
+    "fresh_inputs": 3,
+    "java_syntax_errors": 0,
+    "passes": 9,
+    "failures": 0
+  },
+  "verdict": "ACCEPT",
+  "verdict_reason": "I found no valid fresh no-oracle counterexample at the requested Rust and Java revisions. The preserved rejecting cases from review-2 now pass, the new whole-line precedence probes on fresh axes also pass, and source inspection did not uncover fixture-shaped logic or unexplained parity constants."
+}
