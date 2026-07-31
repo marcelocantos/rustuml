@@ -1,0 +1,6 @@
+@startuml
+component "Gateway 971" as Gateway971
+component "Worker 972" as Worker972
+Gateway971 --> Worker972 : dispatch 973
+note bottom of link #Azure : Component link note 974
+@enduml

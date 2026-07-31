@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+actor "Buyer 961" as Buyer961
+usecase "Checkout 962" as Checkout962
+Buyer961 --> Checkout962 : starts 963
+note right on link #LightYellow : Usecase link note 964
+@enduml

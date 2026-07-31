@@ -1,0 +1,6 @@
+@startuml
+node "Empty Inline Node 891" as EmptyNode891
+database "Empty Inline DB 892" as EmptyDb892
+EmptyNode891 --> EmptyDb892 : carries empty 893
+note right of link #MistyRose :
+@enduml

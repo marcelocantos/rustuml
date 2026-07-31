@@ -1,0 +1,8 @@
+@startuml
+node "Nexus Gateway 701" as NxGate701
+database "Archive Ledger 702" as ArcLedger702
+NxGate701 --> ArcLedger702
+note on link #LightYellow : Canary note default bottom 703
+queue "Late Audit Queue 704" as AuditQ704
+ArcLedger702 --> AuditQ704 : after note link 705
+@enduml

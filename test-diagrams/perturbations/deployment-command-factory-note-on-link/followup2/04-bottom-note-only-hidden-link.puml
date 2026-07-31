@@ -1,0 +1,9 @@
+@startuml
+node "Visible Router 831" as VisRouter831
+node "Shadow Broker 832" as ShadowBroker832
+VisRouter831 -[hidden]-> ShadowBroker832
+note bottom on link #LavenderBlush
+  Hidden carrier row 833
+endnote
+ShadowBroker832 --> VisRouter831 : visible return 834
+@enduml

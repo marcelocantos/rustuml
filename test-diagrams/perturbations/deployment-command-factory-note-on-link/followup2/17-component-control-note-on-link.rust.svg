@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="190px" preserveAspectRatio="none" style="width:170px;height:190px;background:#FFFFFF;" version="1.1" viewBox="0 0 170 190" width="170px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Gateway971-->
+<g class="entity" data-qualified-name="Gateway971" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="127.7051" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="114.7051" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="112.7051" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="112.7051" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87.7051" x="22" y="40.5352">Gateway 971</text>
+</g>
+<!--entity Worker972-->
+<g class="entity" data-qualified-name="Worker972" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.0029" x="11.3511" y="130.4883"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="110.354" y="135.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="108.354" y="137.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="108.354" y="141.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.0029" x="26.3511" y="164.0235">Worker 972</text>
+</g>
+<!--link Gateway971 to Worker972-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M70.85,53.81 C70.85,75.64 70.85,102.51 70.85,124.29" fill="none" id="Gateway971-to-Worker972" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="70.85,130.29,74.85,121.29,70.85,125.29,66.85,121.29,70.85,130.29" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="82.291" x="71.8526" y="97.0567">dispatch 973</text>
+</g>
+</g></svg>

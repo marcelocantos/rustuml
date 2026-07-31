@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+artifact "Packet Loom 811" as PktLoom811
+cloud "Relay Cloud 812" as RelayCloud812
+PktLoom811 -left-> RelayCloud812 : hops\nover fiber 813
+NoTe leftON link #MintCream : Lefton bridge note 814
+storage "Cold Vault 815" as ColdVault815
+RelayCloud812 -right-> ColdVault815 : later horizontal 816
+@enduml

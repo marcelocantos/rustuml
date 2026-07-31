@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="95px" preserveAspectRatio="none" style="width:346px;height:95px;background:#FFFFFF;" version="1.1" viewBox="0 0 346 95" width="346px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Buyer 961-->
+<g class="entity" data-qualified-name="Buyer 961" data-source-line="2" id="ent0002">
+<ellipse cx="40.2856" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M40.2856,22 L40.2856,49 M27.2856,30 L53.2856,30 M40.2856,49 L27.2856,64 M40.2856,49 L53.2856,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="68.5713" x="6" y="79.0352">Buyer 961</text>
+</g>
+<!--entity Checkout962-->
+<g class="entity" data-qualified-name="Checkout962" data-source-line="3" id="ent0003">
+<ellipse cx="266.4784" cy="43.7441" fill="#F1F1F1" rx="65.9071" ry="15.5814" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95.04" x="218.9584" y="48.4883">Checkout 962</text>
+</g>
+<!--link Buyer 961 to Checkout962-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk4">
+<path d="M74.85,43.74 C107.83,43.74 153.04,43.74 194.08,43.74" fill="none" id="Buyer 961-to-Checkout962" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="200.08,43.74,191.08,39.74,195.08,43.74,191.08,47.74,200.08,43.74" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="64.251" x="105.57" y="40.3084">starts 963</text>
+</g>
+</g></svg>

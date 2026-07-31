@@ -1,0 +1,14 @@
+@startuml
+node "Harbor Rack 821" as HarborRack821 {
+  component "Meter API 822" as MeterApi822
+  database "Meter DB 823" as MeterDb823
+}
+MeterApi822 -down-> MeterDb823 : store\n\nverified 824
+note top of link #AliceBlue/Gold
+  First stored row 825
+
+    Indented after blank 826
+end note
+agent "Outside Probe 827" as Probe827
+MeterDb823 --> Probe827 : later edge 828
+@enduml

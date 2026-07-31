@@ -1,0 +1,13 @@
+@startuml
+node "Ordinary Origin 841" as Origin841
+artifact "Ordinary Target 842" as Target842
+Origin841 --> Target842 : original owned label 843
+note as MarkerNote844
+  Marker text 845
+end note
+Target842 .. MarkerNote844
+note top on link #HoneyDew : Superseded marker 846
+note right of link #LightCyan : Final replacement 847
+file "Late File 848" as LateFile848
+Target842 --> LateFile848 : later id edge 849
+@enduml

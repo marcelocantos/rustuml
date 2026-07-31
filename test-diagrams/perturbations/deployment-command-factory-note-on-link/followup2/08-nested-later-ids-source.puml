@@ -1,0 +1,12 @@
+@startuml
+frame "Outer Frame 881" as Outer881 {
+  node "Inner Worker 882" as Worker882 {
+    artifact "Owned Artifact 883" as Artifact883
+  }
+  database "Sibling Store 884" as Store884
+}
+Artifact883 -up-> Store884 : owned\nlink 885
+note bottom on link #Wheat : Nested bottom note 886
+component "Late Component 887" as LateComp887
+Store884 --> LateComp887 : source after note 888
+@enduml

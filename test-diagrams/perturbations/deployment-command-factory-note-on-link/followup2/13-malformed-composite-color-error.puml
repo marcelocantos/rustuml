@@ -1,0 +1,6 @@
+@startuml
+node "Color Host 931" as ColorHost931
+database "Color DB 932" as ColorDb932
+ColorHost931 --> ColorDb932
+note left on link #back:FF0000;line:00FF00 : Composite color should fail 933
+@enduml
