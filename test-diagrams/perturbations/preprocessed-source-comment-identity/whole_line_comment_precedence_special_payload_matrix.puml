@@ -1,0 +1,9 @@
+@startuml
+!theme cerulean
+class SourceReview2 {
+  field /'''hidden-field-review2'''/ visible
+}
+/' checker review2: this whole line should disappear '/ class PhantomReview2 /' terminal close '/
+class TargetReview2
+SourceReview2 --> TargetReview2 : edge /'''hidden-edge-review2'''/ label
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean
+class AnchorReview2
+/' checker review2: whole-line comment beats prefix/suffix parsing '/ class HiddenReview2 /' trailing close '/
+class VisibleReview2 /' preserved suffix comment '/
+AnchorReview2 --> VisibleReview2 : keeps order
+@enduml

@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "mechanism": "preprocessed-source-comment-identity",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-preprocessed-source-comment-identity-review-2",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "2e56baa97a0a8cdf1789243117f5f4026de31124",
+  "implementation_commit": "f5565704d4f07adb01d0a3c9843efe2bf1865bff",
+  "prior_review_commit": "fbf5f08562a37f6b05882a7cd4e8c95b031d190a",
+  "review_revision": "5067b2599899864cdf87851064377da83a36bb37",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git status --short --branch",
+    "sed -n '1,220p' docs/parity-reviews/preprocessed-source-comment-identity/account.json",
+    "sed -n '1,260p' docs/parity-reviews/preprocessed-source-comment-identity/review.json",
+    "sed -n '130,310p' crates/rustuml-parser/src/preprocess/mod.rs",
+    "sed -n '880,955p' crates/rustuml-parser/src/preprocess/mod.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TContext.java | sed -n '320,348p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorLongComment.java | sed -n '1,140p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorShortComment.java | sed -n '1,120p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorInnerComment.java | sed -n '1,140p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/text/StringLocated.java | sed -n '240,290p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/text/TLineType.java | sed -n '1,220p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/core/UmlSource.java | sed -n '170,205p'",
+    "git merge-base --is-ancestor 2e56baa97a0a8cdf1789243117f5f4026de31124 5067b2599899864cdf87851064377da83a36bb37",
+    "git merge-base --is-ancestor f5565704d4f07adb01d0a3c9843efe2bf1865bff 5067b2599899864cdf87851064377da83a36bb37",
+    "git log --format=%H -n 1 -- docs/parity-reviews/preprocessed-source-comment-identity/review.json",
+    "git show --format=fuller --stat f5565704d4f07adb01d0a3c9843efe2bf1865bff -- crates/rustuml-parser/src/preprocess/mod.rs docs/parity-reviews/preprocessed-source-comment-identity/account.json",
+    "git show --format= --no-ext-diff f5565704d4f07adb01d0a3c9843efe2bf1865bff -- crates/rustuml-parser/src/preprocess/mod.rs | rg -n 'include_str|include_bytes|read_to_string|quote_comment_axes|prefix_suffix_inner_comment_axes|triple_inner_comment_axes|whole_line_comment_precedence|g[0-9a-z]{6,}|test-diagrams|golden'",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml",
+    "xmllint --noout test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|Assumed diagram type' test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.svg test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.svg",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg",
+      "axes": [
+        "full-line quote comment before theme",
+        "long comment after theme",
+        "ordinary trailing apostrophe after skinparam",
+        "quoted apostrophe in display label",
+        "renamed labels and two-edge topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.svg",
+      "axes": [
+        "prefix /' ... '/ inner comment with code after the closing token",
+        "suffix /' ... '/ inner comment with code before the opening token",
+        "source-order-sensitive entity ids",
+        "two-edge topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.svg",
+      "axes": [
+        "Java /'''[-\\w]*'''/ inner-comment payload",
+        "class member text",
+        "edge label text",
+        "theme resource seed"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.svg",
+      "diff": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.diff.txt",
+      "sha256": "3680593b953410e5d982b79a0430ef3ec93ae23058b881cfc8b593f3c3e859b7",
+      "axes": [
+        "whole-line /' ... '/ comment whose interior also contains code and a second /' ... '/ pair",
+        "theme expansion position",
+        "ordinary trailing apostrophe after skinparam",
+        "quoted apostrophe in a renamed class label"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.svg",
+      "diff": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.diff.txt",
+      "sha256": "9e1ac1b54972e48dadc443ba9c4883b7e5b50ee634a48ef21d22a65bb48ae948",
+      "axes": [
+        "whole-line /' ... '/ precedence versus prefix and suffix retention",
+        "preserved suffix comment on a different line",
+        "renamed labels and source-line identity",
+        "single-edge topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.svg",
+      "diff": "test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.diff.txt",
+      "sha256": "0fcf4efb132cca86d437810c69b7e4b0fd53775ebc2683884b0d0f52ccbbb649",
+      "axes": [
+        "whole-line /' ... '/ comment whose interior also contains a second /' ... '/ pair",
+        "special /'''[-\\w]*'''/ payload removal on surviving lines",
+        "renamed labels and dependency edge text"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "This checker did not implement the mechanism, did not edit production code, did not edit account.json, and left docs/parity-reviews/preprocessed-source-comment-identity/review.json unchanged at commit fbf5f08562a37f6b05882a7cd4e8c95b031d190a. The corrected account 2e56baa97a0a8cdf1789243117f5f4026de31124 and corrected implementation f5565704d4f07adb01d0a3c9843efe2bf1865bff are both ancestors of the reviewed head 5067b2599899864cdf87851064377da83a36bb37.",
+    "Java inspection confirms the missing precedence rule. TLineType.getFromLineInternal classifies a line matching ^\\s*/'.*'/\\s*$ as COMMENT_SIMPLE before CodeIteratorInnerComment runs, and CodeIteratorShortComment removes that whole line from the post-TIM stream before UmlSource.seed hashes it. The current Rust tim_comment_line instead checks trimmed.starts_with(\"/'\") first and preserves the suffix after the first closing token whenever that suffix is nonblank.",
+    "The three preserved rejecting perturbations from review.json now pass exactly through target/release/examples/diff_one --no-oracle at 5067b259: quote_comment_axes, prefix_suffix_inner_comment_axes, and triple_inner_comment_axes are all structurally equivalent to their Java SVGs.",
+    "All three fresh review-2 perturbations are valid Java inputs. PlantUML emitted well-formed SVG for each, and the syntax-error/error-page scan reported no matches.",
+    "whole_line_comment_precedence_theme_matrix rejects cleanly. Java drops the crafted whole-line comment entirely and renders LedgerAlpha at data-source-line 5 on a 169.7917px-wide canvas. Rust preserves the suffix after the first closing token, materializes GhostAlpha at data-source-line 3, widens the canvas to 313.5417px, and changes the deterministic gradient prefix from g1gjmczjvxwqda* to gmlr1c0w6bvlz*.",
+    "whole_line_comment_precedence_source_order_matrix rejects on the same mechanism while keeping a separate valid suffix-retention control on the next line. Java's second entity is VisibleReview2 at source line 4. Rust instead materializes HiddenReview2 from the comment line at source line 3, shifts the second real entity to a later id, and widens the canvas from 189.5833px to 334.375px.",
+    "whole_line_comment_precedence_special_payload_matrix rejects while the corrected special-triple logic still works on surviving lines. Java removes the whole crafted comment line and keeps TargetReview2 as the second entity at source line 6. Rust still removes hidden-field-review2 and hidden-edge-review2 from surviving text, but it also incorrectly materializes PhantomReview2 from the whole-line comment, widens the canvas from 184.375px to 344.7917px, and shifts the source-line identity and gradient seed.",
+    "Static overfit inspection of f5565704 found no shipping golden reads, embedded fixture files, perturbation-stem branches, or output-fitting coordinate surgery. The rejection is a real remaining model gap in TIM comment precedence, not an obvious fixture-shaped patch.",
+    "No Cargo or rustc command was run during this review. The comparator was the prebuilt target/release/examples/diff_one binary with SHA-256 851173d3a2690ebc753cf6ccb34a0049ad3a1be6139c2cb66b18be0639be4515, and the pinned PlantUML jar SHA-256 remained c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45.",
+    "Verdict is rejected. The corrected implementation fixed the original quote/prefix/triple counterexamples, but it still does not model Java's whole-line /' ... '/ comment precedence over inner-comment stripping. A fresh checker can still disprove the mechanism on valid inputs without touching unrelated renderer code."
+  ],
+  "verdict": "rejected"
+}

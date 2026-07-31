@@ -1,0 +1,66 @@
+SVG structural differences:
+  element count: expected 36, got 46
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "255.2083px"), ("preserveAspectRatio", "none"), ("style", "width:169px;height:255px;"), ("version", "1.1"), ("viewBox", "0 0 169 255"), ("width", "169.7917px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "255.2083px"), ("preserveAspectRatio", "none"), ("style", "width:313px;height:255px;"), ("version", "1.1"), ("viewBox", "0 0 313 255"), ("width", "313.5417px"), ("zoomAndPan", "magnify")]
+  [2] <linearGradient> attr mismatch:
+    expected: [("id", "g1gjmczjvxwqda0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "gmlr1c0w6bvlz0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [5] <linearGradient> attr mismatch:
+    expected: [("id", "g1gjmczjvxwqda1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "gmlr1c0w6bvlz1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [9] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "LedgerAlpha"), ("data-source-line", "5"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "GhostAlpha"), ("data-source-line", "3"), ("id", "ent0002")]
+  [10] <rect> attr mismatch:
+    expected: [("fill", "url(#g1gjmczjvxwqda0)"), ("height", "75.768"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "131.3533"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#gmlr1c0w6bvlz0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "107.4905"), ("x", "17.7083"), ("y", "29.8795")]
+  [11] <rect> attr mismatch:
+    expected: [("fill", "url(#g1gjmczjvxwqda1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#g1gjmczjvxwqda1);stroke-width:1.0417;"), ("width", "131.3533"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#gmlr1c0w6bvlz1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#gmlr1c0w6bvlz1);stroke-width:1.0417;"), ("width", "107.4905"), ("x", "17.7083"), ("y", "29.8795")]
+  [12] <rect> attr mismatch:
+    expected: [("fill", "url(#g1gjmczjvxwqda1)"), ("height", "4.1667"), ("style", "stroke:url(#g1gjmczjvxwqda1);stroke-width:1.0417;"), ("width", "131.3533"), ("x", "17.7083"), ("y", "48.3007")]
+    actual:   [("fill", "url(#gmlr1c0w6bvlz1)"), ("height", "4.1667"), ("style", "stroke:url(#gmlr1c0w6bvlz1);stroke-width:1.0417;"), ("width", "107.4905"), ("x", "17.7083"), ("y", "60.4718")]
+  [13] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "75.768"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "131.3533"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "none"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "107.4905"), ("x", "17.7083"), ("y", "29.8795")]
+  [14] <ellipse> attr mismatch:
+    expected: [("cx", "34.2708"), ("cy", "35.0878"), ("fill", "#EDF0F2"), ("rx", "10.4167"), ("ry", "10.4167"), ("style", "stroke:#BABDBF;stroke-width:1.0417;")]
+    actual:   [("cx", "32.2917"), ("cy", "47.259"), ("fill", "#EDF0F2"), ("rx", "10.4167"), ("ry", "10.4167"), ("style", "stroke:#BABDBF;stroke-width:1.0417;")]
+  [15] <path> attr mismatch:
+    expected: [("d", "M36.1812,39.5129 Q35.754,39.7326 35.284,39.8425 Q34.814,39.9523 34.2952,39.9523 Q32.452,39.9523 31.4815,38.7377 Q30.511,37.5231 30.511,35.2282 Q30.511,32.9272 31.4815,31.7126 Q32.452,30.498 34.2952,30.498 Q34.814,30.498 35.2901,30.6079 Q35.7662,30.7177 36.1812,30.9374 L36.1812,32.9394 Q35.7173,32.5122 35.2809,32.3138 Q34.8445,32.1154 34.3807,32.1154 Q33.3919,32.1154 32.8884,32.8997 Q32.3848,33.684 32.3848,35.2282 Q32.3848,36.7663 32.8884,37.5506 Q33.3919,38.3349 34.3807,38.3349 Q34.8445,38.3349 35.2809,38.1365 Q35.7173,37.9382 36.1812,37.5109 Z "), ("fill", "#FFFFFF")]
+    actual:   [("d", "M34.2021,51.6841 Q33.7748,51.9038 33.3049,52.0136 Q32.8349,52.1235 32.316,52.1235 Q30.4728,52.1235 29.5024,50.9089 Q28.5319,49.6943 28.5319,47.3994 Q28.5319,45.0983 29.5024,43.8838 Q30.4728,42.6692 32.316,42.6692 Q32.8349,42.6692 33.3109,42.779 Q33.787,42.8889 34.2021,43.1086 L34.2021,45.1105 Q33.7382,44.6833 33.3018,44.4849 Q32.8654,44.2866 32.4016,44.2866 Q31.4127,44.2866 30.9093,45.0708 Q30.4057,45.8552 30.4057,47.3994 Q30.4057,48.9375 30.9093,49.7218 Q31.4127,50.506 32.4016,50.506 Q32.8654,50.506 33.3018,50.3077 Q33.7382,50.1094 34.2021,49.6821 Z "), ("fill", "#FFFFFF")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#F8F9FA"), ("font-family", "'Verdana'"), ("font-size", "11.4583"), ("lengthAdjust", "spacing"), ("textLength", "85.2885"), ("x", "53.4606"), ("y", "39.6449")]
+    actual:   [("fill", "#F8F9FA"), ("font-family", "'Verdana'"), ("font-size", "11.4583"), ("lengthAdjust", "spacing"), ("textLength", "65.8239"), ("x", "51.0417"), ("y", "51.816")]
+  [16] <text> text mismatch:
+    expected: Some("Ledger O'Brien")
+    actual:   Some("GhostAlpha")
+  [17] <line> attr mismatch:
+    expected: [("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "148.0199"), ("y1", "52.4673"), ("y2", "52.4673")]
+    actual:   [("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "124.1572"), ("y1", "64.6385"), ("y2", "64.6385")]
+  [18] tag mismatch: expected <g>, got <line>
+  [19] tag mismatch: expected <ellipse>, got <g>
+  [20] tag mismatch: expected <text>, got <rect>
+  [21] tag mismatch: expected <line>, got <rect>
+  [22] tag mismatch: expected <g>, got <rect>
+  [23] <rect> attr mismatch:
+    expected: [("fill", "url(#g1gjmczjvxwqda0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "103.7979"), ("x", "31.4896"), ("y", "183.0625")]
+    actual:   [("fill", "none"), ("height", "75.768"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "131.3533"), ("x", "162.027"), ("y", "17.7083")]
+  [24] tag mismatch: expected <rect>, got <ellipse>
+  [25] tag mismatch: expected <rect>, got <path>
+  [26] tag mismatch: expected <rect>, got <text>
+  [27] tag mismatch: expected <ellipse>, got <line>
+  [28] tag mismatch: expected <path>, got <g>
+  [29] tag mismatch: expected <text>, got <ellipse>
+  [30] tag mismatch: expected <line>, got <text>
+  [31] <line> attr mismatch:
+    expected: [("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("x1", "32.5313"), ("x2", "134.2458"), ("y1", "226.1548"), ("y2", "226.1548")]
+    actual:   [("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("x1", "163.0686"), ("x2", "292.3385"), ("y1", "85.143"), ("y2", "85.143")]
+  [32] <g> attr mismatch:
+    expected: [("class", "link"), ("data-entity-1", "ent0002"), ("data-entity-2", "ent0003"), ("data-link-type", "dependency"), ("data-source-line", "9"), ("id", "lnk4")]
+    actual:   [("class", "entity"), ("data-qualified-name", "AuditAlpha"), ("data-source-line", "8"), ("id", "ent0004")]
+  [33] tag mismatch: expected <path>, got <rect>
+  [34] tag mismatch: expected <polygon>, got <rect>
+  [35] tag mismatch: expected <text>, got <rect>
+

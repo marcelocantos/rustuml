@@ -1,0 +1,11 @@
+@startuml
+' checker review2: quote comment before theme
+!theme cerulean
+/' checker review2: Java whole-line comment must win '/ class GhostAlpha /' trailing comment still inside whole-line comment '/
+skinparam classBorderColor #224466 ' ordinary apostrophe remains parser-visible
+class "Ledger O'Brien" as LedgerAlpha {
+  +postedAt: String
+}
+class AuditAlpha
+LedgerAlpha --> AuditAlpha : records
+@enduml
