@@ -1,0 +1,6 @@
+@startuml
+note as RootLocationC
+  first body record
+end note
+component RootWorkerC
+@enduml

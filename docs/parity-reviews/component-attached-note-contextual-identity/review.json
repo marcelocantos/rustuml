@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-attached-note-contextual-identity",
+  "verdict": "ACCEPTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop terminal",
+    "implemented_change": false
+  },
+  "revisions": {
+    "combined_rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "implementation_revision": "8e3293558e45963ebd57d910370fbfa8d3660da3",
+    "pre_code_account": "docs/parity-reviews/component-attached-note-contextual-identity/account.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "product_binary": {
+    "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "sha256": "f94f13376321676b8ac7b37665f4717060f82db1429594850fdc0daad22307d7",
+    "modes": ["--yaml", "-tsvg"],
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-check-note-followups rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > INPUT.java.svg",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml --yaml INPUT > INPUT.rust.yaml",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -tsvg INPUT > INPUT.rust.svg",
+    "xmllint --noout INPUT.java.svg INPUT.rust.svg"
+  ],
+  "scope": {
+    "scored_inputs": "Every scored input has Rust YAML `type: Component`, a headless Java SVG that passed xmllint, and no Java error-page marker.",
+    "negative_control": "The forward declaration case is retained but excluded from scoring because Java reports `Not known: DeferredTargetA`; it tests Java command legality rather than the claimed behavior for valid inputs."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_inline_after_target.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_inline_after_target.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_inline_after_target.rust.svg",
+      "scored": true,
+      "axes": ["root declaration owner", "same target", "inline", "after target"],
+      "result": "PASS: Java and Rust both emit bare GMN3 at ent0004."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_same_target_multiline.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_same_target_multiline.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_same_target_multiline.rust.svg",
+      "scored": true,
+      "axes": ["two-level owner", "same target", "multiline"],
+      "result": "PASS: OuterA.InnerA.GMN5 at ent0006."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_ancestor_target.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_ancestor_target.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_ancestor_target.rust.svg",
+      "scored": true,
+      "axes": ["nested declaration owner", "ancestor target", "inline"],
+      "result": "PASS: OuterAncestorA.InnerAncestorA.GMN5 at ent0006."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_sibling_target.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_sibling_target.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_sibling_target.rust.svg",
+      "scored": true,
+      "axes": ["nested declaration owner", "sibling target", "inline"],
+      "result": "PASS: the note is OuterSiblingA.InnerOwnerScopeA.GMN6 rather than a child of the sibling target owner."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_root_target.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_root_target.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_root_target.rust.svg",
+      "scored": true,
+      "axes": ["nested declaration owner", "root target", "inline"],
+      "result": "PASS: OuterRootTargetA.InnerRootTargetA.GMN5 at ent0006."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_owner_nested_target.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_owner_nested_target.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_owner_nested_target.rust.svg",
+      "scored": true,
+      "axes": ["root declaration owner", "nested target", "inline"],
+      "result": "PASS: Java and Rust retain bare GMN4 at ent0005."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_multiple_notes_uid_order_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_multiple_notes_uid_order_ltr.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_multiple_notes_uid_order_ltr.rust.svg",
+      "scored": true,
+      "axes": ["three attached notes", "inline and multiline", "explicit link", "left-to-right UID stream"],
+      "result": "PASS: the complete inventory agrees: GMN3/ent0004, GMN7/ent0008, GMN11/ent0012, and the explicit link lnk10."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_aliased_nested_multiple_uid_order.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_aliased_nested_multiple_uid_order.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_aliased_nested_multiple_uid_order.rust.svg",
+      "scored": true,
+      "axes": ["aliased two-level owner", "root and nested notes", "multiple notes", "UID ordering"],
+      "result": "PASS: aliased owner paths agree exactly: GMN3, OuterAliasA.InnerAliasA.GMN9, and OuterAliasA.InnerAliasA.GMN12 with their Java entity IDs."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_target_before_declaration.puml",
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_target_before_declaration.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_target_before_declaration.rust.svg",
+      "scored": false,
+      "axes": ["nested declaration owner", "multiline", "before target declaration"],
+      "result": "Java emits a valid XML error page (`Not known: DeferredTargetA`); Rust currently auto-materializes the target and renders it. This is a separate invalid-syntax acceptance residue, not a counterexample to the valid-input contextual-identity invariant."
+    }
+  ],
+  "implementation_audit": {
+    "java_provenance": "CommandFactoryNoteOnEntity.executeInternal obtains GMN from the global sequence, resolves it in the current quark context, creates the leaf, then creates the hidden attachment link. Quark.getQualifiedName projects the declaration context.",
+    "rust_provenance": "crates/rustuml-render/src/component.rs:553-575 preserves the pre-existing three UID increments and now prefixes only diagram.notes[index].owner. The parser had already retained this declaration owner independently of target resolution.",
+    "anti_overfit": "The implementation diff contains no fixture labels, golden-data reads, baseline/comparator edits, per-branch constant ladder, or post-hoc SVG rewriting. No new parity-affecting numeric constant was introduced."
+  },
+  "findings": [],
+  "residue": [
+    "Rust accepts the Java-invalid forward attached-target command in the unscored negative control.",
+    "Rust and Java serialize entity groups in different textual paint order for some inputs, but all scored owner-qualified names, entity IDs, hidden-link IDs, and source lines agree."
+  ],
+  "conclusion": "ACCEPTED. The owner prefix is derived from declaration context rather than target context, root notes remain bare, and the existing GMN/entity/hidden-link UID stream is preserved across all valid adversarial probes."
+}

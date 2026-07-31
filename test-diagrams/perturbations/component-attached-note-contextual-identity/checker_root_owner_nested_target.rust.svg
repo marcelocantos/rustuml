@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="168px" preserveAspectRatio="none" style="width:202px;height:168px;background:#FFFFFF;" version="1.1" viewBox="0 0 202 168" width="202px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterNestedTargetA-->
+<g class="cluster" data-qualified-name="OuterNestedTargetA" data-source-line="1" id="ent0002">
+<path d="M13.5169,56.3105 L163.1848,56.3105 A3.75,3.75 0 0 1 165.6848,58.8105 L172.6848,78.7988 L180.5169,78.7988 A2.5,2.5 0 0 1 183.0169,81.2988 L183.0169,151.2988 A2.5,2.5 0 0 1 180.5169,153.7988 L13.5169,153.7988 A2.5,2.5 0 0 1 11.0169,151.2988 L11.0169,58.8105 A2.5,2.5 0 0 1 13.5169,56.3105" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="11.0169" x2="172.6848" y1="78.7988" y2="78.7988"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="148.668" x="15.0169" y="71.8457">OuterNestedTargetA</text>
+</g>
+<!--entity NestedTargetA-->
+<g class="entity" data-qualified-name="OuterNestedTargetA.NestedTargetA" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="140.8643" x="26.58" y="91.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="147.4443" y="96.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="145.4443" y="98.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="145.4443" y="102.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100.8643" x="41.58" y="124.8452">NestedTargetA</text>
+</g>
+<g class="entity" data-qualified-name="GMN4" data-source-line="4" id="ent0005">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L188.0337,31.3105 A0,0 0 0 0 188.0337,31.3105 L188.0337,31.3105 L97.02,91.01 L188.0337,23.3105 L188.0337,16 L178.0337,6 L6,6 A0,0 0 0 0 6,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M178.0337,6 L178.0337,16 L188.0337,16 L178.0337,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="161.0337" x="12" y="23.5684">root owner, nested target</text>
+</g>
+</g></svg>

@@ -1,0 +1,24 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component InlineWorkerC
+      note "inline control payload" as InlineLocationC
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: InlineWorkerC
+    label: InlineWorkerC
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: InlineLocationC
+    text: inline control payload
+    target: null
+    position: Right
+    source_line: 2

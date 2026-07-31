@@ -1,0 +1,13 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "invalid punctuation payload" as ValidPrefixB-invalid
+      @enduml
+  direction: TopToBottom
+  entities: []
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

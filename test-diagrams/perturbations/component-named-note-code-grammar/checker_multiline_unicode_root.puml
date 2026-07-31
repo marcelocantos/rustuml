@@ -1,0 +1,6 @@
+@startuml
+component UnicodeContextB
+note as Résumé.Δelta_9
+  unicode multiline payload
+end note
+@enduml

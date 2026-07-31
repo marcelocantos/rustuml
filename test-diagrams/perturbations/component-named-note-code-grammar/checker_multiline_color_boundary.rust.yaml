@@ -1,0 +1,26 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ColorContextB
+      note as Multi.Color.LedgerB #LightBlue
+        multiline color boundary payload
+      end note
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ColorContextB
+    label: ColorContextB
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: Multi.Color.LedgerB
+    text: multiline color boundary payload
+    target: null
+    position: Right
+    source_line: 3

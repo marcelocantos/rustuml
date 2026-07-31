@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-named-note-code-grammar",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop terminal",
+    "implemented_change": false
+  },
+  "revisions": {
+    "combined_rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "implementation_revision": "bd13f73ea672402344204283469aba8eeb916014",
+    "pre_code_account": "docs/parity-reviews/component-named-note-code-grammar/account.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "product_binary": {
+    "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "sha256": "f94f13376321676b8ac7b37665f4717060f82db1429594850fdc0daad22307d7",
+    "modes": ["--yaml", "-tsvg"],
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-check-note-followups rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > INPUT.java.svg",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml --yaml INPUT > INPUT.rust.yaml",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -tsvg INPUT > INPUT.rust.svg",
+    "xmllint --noout INPUT.java.svg INPUT.rust.svg"
+  ],
+  "scope": {
+    "scored_inputs": "Every scored input has Rust YAML `type: Component`, a headless Java SVG that passed xmllint, and no Java error-page marker.",
+    "negative_control": "The punctuation case is deliberately Java-invalid and excluded from scoring; it verifies that the new boundary does not silently retain a legal prefix from an illegal complete code."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_simple_root.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_simple_root.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_simple_root.rust.svg",
+      "scored": true,
+      "axes": ["inline", "simple root id"],
+      "result": "PASS: SimpleLedgerB is retained at ent0002."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_dotted_nested.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_dotted_nested.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_dotted_nested.rust.svg",
+      "scored": true,
+      "axes": ["inline", "dotted id", "nested owner"],
+      "result": "PASS: OuterCodeB.InnerCodeB.Ledger.C464 is retained once at ent0004."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_multiple_dots_root.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_multiple_dots_root.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_multiple_dots_root.rust.svg",
+      "scored": true,
+      "axes": ["multiline", "multiple dots", "root owner"],
+      "result": "PASS: Root.Ledger.C464 is retained at ent0002."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_unicode_nested.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_unicode_nested.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_unicode_nested.rust.svg",
+      "scored": true,
+      "axes": ["inline", "Unicode letters", "nested owner"],
+      "result": "FAIL: Java emits OuterUnicodeB.M.trique..elta_7 at ent0004 while Rust emits OuterUnicodeB.M\u00e9trique.\u0394elta_7. The raw Java SVG attribute is ASCII, not an XML-escaped spelling of the Rust identity."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_unicode_root.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_unicode_root.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_unicode_root.rust.svg",
+      "scored": true,
+      "axes": ["multiline", "Unicode letters", "root owner"],
+      "result": "FAIL: Java emits R.sum...elta_9 at ent0003 while Rust emits R\u00e9sum\u00e9.\u0394elta_9."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_color_stereotype_boundary.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_color_stereotype_boundary.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_inline_color_stereotype_boundary.rust.svg",
+      "scored": true,
+      "axes": ["inline", "dotted id", "stereotype and color suffix"],
+      "result": "PASS for the identity boundary: Color.LedgerB is retained at ent0002."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_color_boundary.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_color_boundary.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_color_boundary.rust.svg",
+      "scored": true,
+      "axes": ["multiline", "multiple dots", "color suffix"],
+      "result": "PASS for the identity boundary: Multi.Color.LedgerB is retained at ent0003."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_stereotype_boundary.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_stereotype_boundary.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_multiline_stereotype_boundary.rust.svg",
+      "scored": true,
+      "axes": ["multiline", "dotted id", "stereotype and color suffix"],
+      "result": "FAIL: Java emits Stereo.LedgerB at ent0003; Rust YAML has notes: [] and its SVG omits the note."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_dotted_relation_declared_residue.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_dotted_relation_declared_residue.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_dotted_relation_declared_residue.rust.svg",
+      "scored": true,
+      "axes": ["dotted id", "later relation reference"],
+      "result": "Declared residue confirmed: both sides retain Relation.LedgerB, but Java's note path carries the relation-to-component tail while Rust renders an unlinked plain note. The account explicitly excludes the narrower Component connection-endpoint grammar."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-named-note-code-grammar/checker_invalid_punctuation_negative_control.puml",
+      "java_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_invalid_punctuation_negative_control.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-named-note-code-grammar/checker_invalid_punctuation_negative_control.rust.svg",
+      "scored": false,
+      "axes": ["invalid punctuation after otherwise legal prefix"],
+      "result": "PASS as a negative control: Java emits an error page and Rust creates no note, so the legal prefix is not silently retained."
+    }
+  ],
+  "implementation_audit": {
+    "java_provenance": "CommandFactoryNote uses [%pLN_.]+ for both forms, then passes the captured code through diagram.cleanId before quark resolution; EntityImageNote emits the resulting quark qualified name. Its multiline regex permits optional tags, stereotype, and color after CODE.",
+    "rust_provenance": "crates/rustuml-parser/src/parse/component.rs:34 defines the shared code token; lines 333-343 use it for both forms. The multiline regex admits only an optional color after the code, unlike Java's optional stereotype path. Lines 711 and 776 store the raw capture without the Java-observed Unicode identity projection.",
+    "anti_overfit": "The diff adds a general Unicode regex token and no fixture-dependent branch, golden read, baseline/comparator edit, post-hoc SVG surgery, or unexplained parity constant. The failures are model omissions, not evidence of fixture shaping."
+  },
+  "findings": [
+    {
+      "severity": "P1",
+      "title": "Valid multiline note stereotypes erase the named note",
+      "rust_location": "crates/rustuml-parser/src/parse/component.rs:339-343",
+      "java_location": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:75-88",
+      "evidence": "checker_multiline_stereotype_boundary.puml",
+      "impact": "A Java-valid Component note with a legal dotted code has no Rust AST note or SVG entity, so the claimed shared command grammar is incomplete."
+    },
+    {
+      "severity": "P1",
+      "title": "Unicode named-note identity does not match Java's shipped SVG",
+      "rust_location": "crates/rustuml-parser/src/parse/component.rs:34, 711, 776",
+      "java_location": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:141-145 and src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java:199",
+      "evidence": ["checker_inline_unicode_nested.puml", "checker_multiline_unicode_root.puml"],
+      "impact": "Rust preserves raw Unicode in data-qualified-name while Java's rendered names are OuterUnicodeB.M.trique..elta_7 and R.sum...elta_9. The account's claim that the captured token proceeds unchanged is false for the product output."
+    }
+  ],
+  "residue": [
+    "The dotted later-relation endpoint remains unsupported in Component rendering, exactly as declared in the account; the valid residue input is preserved.",
+    "Detailed note color/stereotype styling is outside the claimed identity mechanism, but legal modifier recognition is not: without it, the named note disappears."
+  ],
+  "conclusion": "REJECTED. The dot-boundary repair works for ordinary ASCII codes, but it does not model the complete valid command suffix grammar or Java's observable Unicode identity projection."
+}

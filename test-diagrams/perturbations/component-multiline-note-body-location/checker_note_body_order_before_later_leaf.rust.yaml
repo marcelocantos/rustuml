@@ -1,0 +1,32 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component BeforeNoteC
+      note as OrderedBodyC
+        ordered note body
+      end note
+      component AfterNoteC
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: BeforeNoteC
+    label: BeforeNoteC
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: AfterNoteC
+    label: AfterNoteC
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: OrderedBodyC
+    text: ordered note body
+    target: null
+    position: Right
+    source_line: 3

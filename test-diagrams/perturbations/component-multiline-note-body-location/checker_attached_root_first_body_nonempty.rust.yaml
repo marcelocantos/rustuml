@@ -1,0 +1,25 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component AttachedRootC
+      note right of AttachedRootC
+        attached first body record
+      end note
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: AttachedRootC
+    label: AttachedRootC
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - text: attached first body record
+    target: AttachedRootC
+    position: Right
+    source_line: 3

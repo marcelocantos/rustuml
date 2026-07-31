@@ -1,0 +1,24 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "inline modifier payload" as Color.LedgerB <<Audit>> #MistyRose
+      component BoundaryWorkerB
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: BoundaryWorkerB
+    label: BoundaryWorkerB
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: Color.LedgerB
+    text: inline modifier payload
+    target: null
+    position: Right
+    source_line: 1

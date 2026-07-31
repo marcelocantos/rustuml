@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="255px" preserveAspectRatio="none" style="width:753px;height:255px;background:#FFFFFF;" version="1.1" viewBox="0 0 753 255" width="753px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity AlphaUidA-->
+<g class="entity" data-qualified-name="AlphaUidA" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="111.1553" x="31.88" y="100.41"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="123.0353" y="105.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="121.0353" y="107.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="121.0353" y="111.41"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71.1553" x="46.88" y="133.9452">AlphaUidA</text>
+</g>
+<!--entity BetaUidA-->
+<g class="entity" data-qualified-name="BetaUidA" data-source-line="4" id="ent0006">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="101.0381" x="399.91" y="100.41"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="480.9481" y="105.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="478.9481" y="107.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="478.9481" y="111.41"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61.0381" x="414.91" y="133.9452">BetaUidA</text>
+</g>
+<g class="entity" data-qualified-name="GMN3" data-source-line="3" id="ent0004">
+<path d="M8.43,216 L8.43,216 L87.46,147.34 L8.43,224 L8.43,241.3105 A0,0 0 0 0 8.43,241.3105 L166.4949,241.3105 A0,0 0 0 0 166.4949,241.3105 L166.4949,226 L156.4949,216 L8.43,216 A0,0 0 0 0 8.43,216" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M156.4949,216 L156.4949,226 L166.4949,226 L156.4949,216" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="137.0649" x="14.43" y="233.5684">first attached payload</text>
+</g>
+<g class="entity" data-qualified-name="GMN7" data-source-line="6" id="ent0008">
+<path d="M561.95,111 L561.95,136.3105 A0,0 0 0 0 561.95,136.3105 L739.4324,136.3105 A0,0 0 0 0 739.4324,136.3105 L739.4324,121 L729.4324,111 L569.95,111 L501.2,123.65 L561.95,111 L561.95,111 A0,0 0 0 0 561.95,111" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M729.4324,111 L729.4324,121 L739.4324,121 L729.4324,111" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="156.4824" x="567.95" y="128.5684">second attached payload</text>
+</g>
+<g class="entity" data-qualified-name="GMN11" data-source-line="9" id="ent0012">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L168.9082,31.3105 A0,0 0 0 0 168.9082,31.3105 L168.9082,31.3105 L87.46,100.28 L168.9082,23.3105 L168.9082,16 L158.9082,6 L6,6 A0,0 0 0 0 6,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M158.9082,6 L158.9082,16 L168.9082,16 L158.9082,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141.9082" x="12" y="23.5684">third attached payload</text>
+</g>
+<!--link AlphaUidA to BetaUidA-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0006" data-link-type="dependency" data-source-line="8" id="lnk10">
+<path d="M143.2835,123.6489 C213.0035,123.6489 326.3835,123.6489 393.6235,123.6489" fill="none" id="AlphaUidA-to-BetaUidA" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="399.6235,123.6489,390.6235,119.6489,394.6235,123.6489,390.6235,127.6489,399.6235,123.6489" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="169.3555" x="199.9117" y="120.2225">explicit link between notes</text>
+</g>
+</g></svg>

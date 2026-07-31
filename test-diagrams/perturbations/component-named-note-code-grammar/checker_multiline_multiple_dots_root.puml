@@ -1,0 +1,6 @@
+@startuml
+note as Root.Ledger.C464
+  root multi-dot payload
+end note
+component RootWorkerB
+@enduml

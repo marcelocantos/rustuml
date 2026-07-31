@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="67px" preserveAspectRatio="none" style="width:386px;height:67px;background:#FFFFFF;" version="1.1" viewBox="0 0 386 67" width="386px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity ProcedureWorkerC-->
+<g class="entity" data-qualified-name="ProcedureWorkerC" data-source-line="6" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="165.7676" x="206.75" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="352.5176" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="350.5176" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="350.5176" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="125.7676" x="221.75" y="40.5352">ProcedureWorkerC</text>
+</g>
+<g class="entity" data-qualified-name="ProcedureLocationC" data-source-line="3" id="ent0002">
+<path d="M6,17.59 L6,42.9005 L171.2759,42.9005 L171.2759,27.59 L161.2759,17.59 L6,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M161.2759,17.59 L161.2759,27.59 L171.2759,27.59 L161.2759,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="144.2759" x="12" y="35.1584">procedure body record</text>
+</g>
+</g></svg>

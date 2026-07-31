@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="164px" preserveAspectRatio="none" style="width:399px;height:164px;background:#FFFFFF;" version="1.1" viewBox="0 0 399 164" width="399px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterCodeB-->
+<g class="cluster" data-qualified-name="OuterCodeB" data-source-line="1" id="ent0002">
+<path d="M153.1782,6 L240.3521,6 A3.75,3.75 0 0 1 242.8521,8.5 L249.8521,28.4883 L382.1782,28.4883 A2.5,2.5 0 0 1 384.6782,30.9883 L384.6782,146.8105 A2.5,2.5 0 0 1 382.1782,149.3105 L153.1782,149.3105 A2.5,2.5 0 0 1 150.6782,146.8105 L150.6782,8.5 A2.5,2.5 0 0 1 153.1782,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="150.6782" x2="249.8521" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="86.1738" x="154.6782" y="21.5352">OuterCodeB</text>
+</g>
+<!--cluster InnerCodeB-->
+<g class="cluster" data-qualified-name="OuterCodeB.InnerCodeB" data-source-line="2" id="ent0003">
+<path d="M177.1782,49 L260.9888,49 A3.75,3.75 0 0 1 263.4888,51.5 L270.4888,71.4883 L358.1782,71.4883 A2.5,2.5 0 0 1 360.6782,73.9883 L360.6782,122.8105 A2.5,2.5 0 0 1 358.1782,125.3105 L177.1782,125.3105 A2.5,2.5 0 0 1 174.6782,122.8105 L174.6782,51.5 A2.5,2.5 0 0 1 177.1782,49" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="174.6782" x2="270.4888" y1="71.4883" y2="71.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="82.8105" x="178.6782" y="64.5352">InnerCodeB</text>
+</g>
+<!--entity RootWorkerB-->
+<g class="entity" data-qualified-name="RootWorkerB" data-source-line="6" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="127.3564" x="7" y="73.41"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="114.3564" y="78.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="112.3564" y="80.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="112.3564" y="84.41"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87.3564" x="22" y="106.9452">RootWorkerB</text>
+</g>
+<g class="entity" data-qualified-name="OuterCodeB.InnerCodeB.Ledger.C464" data-source-line="3" id="ent0004">
+<path d="M190.45,84 L190.45,109.3105 L344.9031,109.3105 L344.9031,94 L334.9031,84 L190.45,84" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M334.9031,84 L334.9031,94 L344.9031,94 L334.9031,84" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="133.4531" x="196.45" y="101.5684">inline dotted payload</text>
+</g>
+</g></svg>

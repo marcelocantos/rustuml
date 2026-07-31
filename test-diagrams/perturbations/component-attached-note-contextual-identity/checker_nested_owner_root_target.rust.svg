@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="227px" preserveAspectRatio="none" style="width:283px;height:227px;background:#FFFFFF;" version="1.1" viewBox="0 0 283 227" width="283px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterRootTargetA-->
+<g class="cluster" data-qualified-name="OuterRootTargetA" data-source-line="2" id="ent0003">
+<path d="M8.5,69.4883 L141.3516,69.4883 A3.75,3.75 0 0 1 143.8516,71.9883 L150.8516,91.9766 L265.5,91.9766 A2.5,2.5 0 0 1 268,94.4766 L268,210.2988 A2.5,2.5 0 0 1 265.5,212.7988 L8.5,212.7988 A2.5,2.5 0 0 1 6,210.2988 L6,71.9883 A2.5,2.5 0 0 1 8.5,69.4883" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="150.8516" y1="91.9766" y2="91.9766"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="131.8516" x="10" y="85.0235">OuterRootTargetA</text>
+</g>
+<!--cluster InnerRootTargetA-->
+<g class="cluster" data-qualified-name="OuterRootTargetA.InnerRootTargetA" data-source-line="3" id="ent0004">
+<path d="M32.5,112.4883 L161.9883,112.4883 A3.75,3.75 0 0 1 164.4883,114.9883 L171.4883,134.9766 L241.5,134.9766 A2.5,2.5 0 0 1 244,137.4766 L244,186.2988 A2.5,2.5 0 0 1 241.5,188.7988 L32.5,188.7988 A2.5,2.5 0 0 1 30,186.2988 L30,114.9883 A2.5,2.5 0 0 1 32.5,112.4883" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="30" x2="171.4883" y1="134.9766" y2="134.9766"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="128.4883" x="34" y="128.0235">InnerRootTargetA</text>
+</g>
+<!--entity RootTargetA-->
+<g class="entity" data-qualified-name="RootTargetA" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125.0254" x="74.49" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="179.5154" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="177.5154" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="177.5154" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.0254" x="89.49" y="40.5352">RootTargetA</text>
+</g>
+<g class="entity" data-qualified-name="OuterRootTargetA.InnerRootTargetA.GMN5" data-source-line="4" id="ent0006">
+<path d="M45.98,147.49 L45.98,147.49 L137,53.82 L45.98,155.49 L45.98,172.8005 A0,0 0 0 0 45.98,172.8005 L228.0137,172.8005 A0,0 0 0 0 228.0137,172.8005 L228.0137,157.49 L218.0137,147.49 L45.98,147.49 A0,0 0 0 0 45.98,147.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M218.0137,147.49 L218.0137,157.49 L228.0137,157.49 L218.0137,147.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="161.0337" x="51.98" y="165.0584">nested owner, root target</text>
+</g>
+</g></svg>

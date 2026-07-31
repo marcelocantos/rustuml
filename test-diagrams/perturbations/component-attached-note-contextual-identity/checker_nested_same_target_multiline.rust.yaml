@@ -1,0 +1,46 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      top to bottom direction
+      package OuterA {
+        package InnerA {
+          component SameTargetA
+          note right of SameTargetA
+            nested same-target payload
+          end note
+        }
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: SameTargetA
+    label: SameTargetA
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterA
+    label: OuterA
+    stereotype: null
+    kind: Package
+    source_line: 2
+    components: []
+    packages:
+    - name: InnerA
+      label: InnerA
+      stereotype: null
+      kind: Package
+      source_line: 3
+      components:
+      - SameTargetA
+      packages: []
+  notes:
+  - owner: OuterA.InnerA
+    text: nested same-target payload
+    target: SameTargetA
+    position: Right
+    source_line: 6

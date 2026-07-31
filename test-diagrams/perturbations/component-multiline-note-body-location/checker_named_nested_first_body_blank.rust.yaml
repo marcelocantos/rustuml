@@ -1,0 +1,38 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterLocationC {
+        component NestedContextC
+        note as NestedLocationC
+
+          second body record after blank
+        end note
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: NestedContextC
+    label: NestedContextC
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterLocationC
+    label: OuterLocationC
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - NestedContextC
+    packages: []
+  notes:
+  - id: NestedLocationC
+    owner: OuterLocationC
+    text: second body record after blank
+    target: null
+    position: Right
+    source_line: 4

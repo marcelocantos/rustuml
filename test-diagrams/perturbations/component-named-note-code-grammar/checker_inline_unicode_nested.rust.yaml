@@ -1,0 +1,35 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterUnicodeB {
+        component UnicodeContextB
+        note "unicode inline payload" as Métrique.Δelta_7
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: UnicodeContextB
+    label: UnicodeContextB
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterUnicodeB
+    label: OuterUnicodeB
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - UnicodeContextB
+    packages: []
+  notes:
+  - id: Métrique.Δelta_7
+    owner: OuterUnicodeB
+    text: unicode inline payload
+    target: null
+    position: Right
+    source_line: 3

@@ -1,0 +1,6 @@
+@startuml
+component AttachedRootC
+note right of AttachedRootC
+  attached first body record
+end note
+@enduml

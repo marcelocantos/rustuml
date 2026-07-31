@@ -1,0 +1,21 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component StereoContextB
+      note as Stereo.LedgerB <<Audit>> #MistyRose
+        multiline stereotype boundary payload
+      end note
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: StereoContextB
+    label: StereoContextB
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes: []

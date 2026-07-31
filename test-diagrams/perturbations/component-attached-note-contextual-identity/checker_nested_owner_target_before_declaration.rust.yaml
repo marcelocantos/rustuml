@@ -1,0 +1,46 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      left to right direction
+      package OuterDeferredA {
+        package InnerDeferredA {
+          note left of DeferredTargetA
+            note before its target
+          end note
+          component DeferredTargetA
+        }
+      }
+      @enduml
+  direction: LeftToRight
+  components:
+  - id: DeferredTargetA
+    label: DeferredTargetA
+    stereotypes: []
+    source_line: 7
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterDeferredA
+    label: OuterDeferredA
+    stereotype: null
+    kind: Package
+    source_line: 2
+    components: []
+    packages:
+    - name: InnerDeferredA
+      label: InnerDeferredA
+      stereotype: null
+      kind: Package
+      source_line: 3
+      components:
+      - DeferredTargetA
+      packages: []
+  notes:
+  - owner: OuterDeferredA.InnerDeferredA
+    text: note before its target
+    target: DeferredTargetA
+    position: Left
+    source_line: 5

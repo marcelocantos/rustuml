@@ -1,0 +1,7 @@
+@startuml
+component BeforeNoteC
+note as OrderedBodyC
+  ordered note body
+end note
+component AfterNoteC
+@enduml

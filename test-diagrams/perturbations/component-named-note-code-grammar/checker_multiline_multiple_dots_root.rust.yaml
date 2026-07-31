@@ -1,0 +1,26 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as Root.Ledger.C464
+        root multi-dot payload
+      end note
+      component RootWorkerB
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RootWorkerB
+    label: RootWorkerB
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: Root.Ledger.C464
+    text: root multi-dot payload
+    target: null
+    position: Right
+    source_line: 2

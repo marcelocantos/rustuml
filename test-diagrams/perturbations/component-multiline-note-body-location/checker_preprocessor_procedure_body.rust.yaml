@@ -1,0 +1,26 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ProcedureWorkerC
+      note as ProcedureLocationC
+        procedure body record
+      end note
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ProcedureWorkerC
+    label: ProcedureWorkerC
+    stereotypes: []
+    source_line: 6
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: ProcedureLocationC
+    text: procedure body record
+    target: null
+    position: Right
+    source_line: 3
