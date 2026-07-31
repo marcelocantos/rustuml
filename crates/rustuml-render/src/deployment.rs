@@ -3270,12 +3270,19 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
     svg.raw("</g>");
 }
 
+#[derive(Clone, Copy)]
+struct DeploymentNoteLeader<'a> {
+    position: DeploymentNotePosition,
+    edge: Option<&'a EdgePath>,
+    note_at_edge_start: Option<bool>,
+}
+
 fn render_attached_deployment_note(
     svg: &mut SvgBuilder,
     note: &DeploymentNote,
     layout: &DeploymentNoteLayout,
     uid: &DeploymentNoteUid,
-    edge: Option<&EdgePath>,
+    leader: DeploymentNoteLeader<'_>,
     body_margin_x: f64,
     body_margin_y: f64,
 ) {
@@ -3284,7 +3291,7 @@ fn render_attached_deployment_note(
         layout.x + layout.width / 2.0,
         layout.y + layout.height / 2.0,
     );
-    let fallback = match note.position {
+    let fallback = match leader.position {
         DeploymentNotePosition::Top => (
             (center.0, layout.y + layout.height),
             (center.0, layout.y + layout.height + NOTE_GAP),
@@ -3296,7 +3303,8 @@ fn render_attached_deployment_note(
         ),
         DeploymentNotePosition::Right => ((layout.x, center.1), (layout.x - NOTE_GAP, center.1)),
     };
-    let (note_point, target_point) = edge
+    let (note_point, target_point) = leader
+        .edge
         .map(|path| {
             deployment_svek_edge_points(
                 &path.points,
@@ -3308,9 +3316,13 @@ fn render_attached_deployment_note(
             )
         })
         .and_then(|points| points.first().copied().zip(points.last().copied()))
-        .map(|(first, last)| match note.position {
-            DeploymentNotePosition::Top | DeploymentNotePosition::Left => (first, last),
-            DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => (last, first),
+        .map(|(first, last)| match leader.note_at_edge_start {
+            Some(true) => (first, last),
+            Some(false) => (last, first),
+            None => match leader.position {
+                DeploymentNotePosition::Top | DeploymentNotePosition::Left => (first, last),
+                DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => (last, first),
+            },
         })
         .unwrap_or(fallback);
     let mouth_x = note_point.0 - layout.x;
@@ -3324,7 +3336,7 @@ fn render_attached_deployment_note(
 
     // `EntityImageNote.drawU` delegates to `Opale.getPolygon{Left,Right,Up,Down}`.
     // The hidden SVEK edge supplies the mouth and tip points embedded below.
-    let path = match note.position {
+    let path = match leader.position {
         DeploymentNotePosition::Right => {
             let y1 = (mouth_y - NOTE_CONNECTOR_HALF).clamp(0.0, h - NOTE_CONNECTOR_HALF * 2.0);
             format!(
@@ -4546,6 +4558,27 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
 
     let no_oracle_uids = build_deployment_no_oracle_uid_model(diagram);
     let id_for_node = &no_oracle_uids.entity_ids;
+    let opale_note_connections: HashMap<usize, usize> = result
+        .as_ref()
+        .map(|result| {
+            diagram
+                .notes
+                .iter()
+                .enumerate()
+                .filter_map(|(note_index, _)| {
+                    deployment_note_opale_connection(
+                        diagram,
+                        note_index,
+                        &result.edge_paths,
+                        &cluster_endpoint_nodes,
+                    )
+                    .map(|(connection_index, _)| (note_index, connection_index))
+                })
+                .collect()
+        })
+        .unwrap_or_default();
+    let opale_connection_indices: HashSet<usize> =
+        opale_note_connections.values().copied().collect();
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
     let sprite_cache = crate::sprite::SpriteCache::from_sprites_scaled_with_colors(
@@ -4600,7 +4633,46 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             return;
         };
         let Some(target) = note.target.as_deref() else {
-            render_floating_deployment_note(svg, note, layout, uid);
+            let opale =
+                opale_note_connections
+                    .get(&layout.note_index)
+                    .and_then(|&connection_index| {
+                        let connection = &diagram.connections[connection_index];
+                        let edge = deployment_connection_edge(
+                            diagram,
+                            connection_index,
+                            &result.edge_paths,
+                            &cluster_endpoint_nodes,
+                        )?;
+                        let (logical_from, logical_to, _) =
+                            deployment_connection_layout(connection);
+                        let geometry = deployment_opale_note_geometry(
+                            edge,
+                            layout,
+                            body_margin_x,
+                            body_margin_y,
+                            cluster_rects.get(logical_from),
+                            cluster_rects.get(logical_to),
+                        )?;
+                        Some((edge, geometry))
+                    });
+            if let Some((edge, (position, note_at_edge_start))) = opale {
+                render_attached_deployment_note(
+                    svg,
+                    note,
+                    layout,
+                    uid,
+                    DeploymentNoteLeader {
+                        position,
+                        edge: Some(edge),
+                        note_at_edge_start: Some(note_at_edge_start),
+                    },
+                    body_margin_x,
+                    body_margin_y,
+                );
+            } else {
+                render_floating_deployment_note(svg, note, layout, uid);
+            }
             return;
         };
         let note_id = deployment_note_layout_id(note, layout.note_index);
@@ -4620,7 +4692,19 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             .edge_paths
             .iter()
             .find(|edge| edge.from == from && edge.to == to);
-        render_attached_deployment_note(svg, note, layout, uid, edge, body_margin_x, body_margin_y);
+        render_attached_deployment_note(
+            svg,
+            note,
+            layout,
+            uid,
+            DeploymentNoteLeader {
+                position: note.position,
+                edge,
+                note_at_edge_start: None,
+            },
+            body_margin_x,
+            body_margin_y,
+        );
     };
 
     // Java `GraphvizImageBuilder.printGroups` paints each group's direct
@@ -4653,6 +4737,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             body_margin_y,
             &cluster_endpoint_nodes,
             &cluster_rects,
+            &opale_connection_indices,
             ctx.handwritten,
         );
     }
@@ -6262,24 +6347,17 @@ fn render_no_oracle_edges(
     body_margin_y: f64,
     cluster_endpoint_nodes: &HashMap<String, String>,
     cluster_rects: &HashMap<&str, LayoutRect>,
+    opale_connection_indices: &HashSet<usize>,
     handwritten: bool,
 ) {
     for (i, conn) in diagram.connections.iter().enumerate() {
+        // Java `SvekEdge.drawU` returns before opening the link group after
+        // GraphvizImageBuilder hands an eligible edge to EntityImageNote.
+        if opale_connection_indices.contains(&i) {
+            continue;
+        }
         let (logical_from, logical_to, reversed) = deployment_connection_layout(conn);
-        let (layout_from, layout_to, _) =
-            deployment_connection_layout_with_endpoints(conn, cluster_endpoint_nodes);
-        let matching_index = diagram.connections[..i]
-            .iter()
-            .filter(|previous| {
-                let (previous_from, previous_to, _) =
-                    deployment_connection_layout_with_endpoints(previous, cluster_endpoint_nodes);
-                previous_from == layout_from && previous_to == layout_to
-            })
-            .count();
-        let Some(edge) = edge_paths
-            .iter()
-            .filter(|edge| edge.from == layout_from && edge.to == layout_to)
-            .nth(matching_index)
+        let Some(edge) = deployment_connection_edge(diagram, i, edge_paths, cluster_endpoint_nodes)
         else {
             continue;
         };
@@ -6488,6 +6566,127 @@ fn deployment_connection_layout_with_endpoints<'a>(
             .unwrap_or(to),
         reversed,
     )
+}
+
+fn deployment_connection_edge<'a>(
+    diagram: &DeploymentDiagram,
+    connection_index: usize,
+    edge_paths: &'a [EdgePath],
+    cluster_endpoint_nodes: &HashMap<String, String>,
+) -> Option<&'a EdgePath> {
+    let connection = diagram.connections.get(connection_index)?;
+    let (layout_from, layout_to, _) =
+        deployment_connection_layout_with_endpoints(connection, cluster_endpoint_nodes);
+    let matching_index = diagram.connections[..connection_index]
+        .iter()
+        .filter(|previous| {
+            let (previous_from, previous_to, _) =
+                deployment_connection_layout_with_endpoints(previous, cluster_endpoint_nodes);
+            previous_from == layout_from && previous_to == layout_to
+        })
+        .count();
+    edge_paths
+        .iter()
+        .filter(|edge| edge.from == layout_from && edge.to == layout_to)
+        .nth(matching_index)
+}
+
+fn deployment_uses_strict_uml(diagram: &DeploymentDiagram) -> bool {
+    diagram.meta.skinparams.iter().any(|skinparam| {
+        skinparam.key.eq_ignore_ascii_case("style")
+            && skinparam.value.trim().eq_ignore_ascii_case("strictuml")
+    })
+}
+
+fn deployment_note_opale_connection<'a>(
+    diagram: &DeploymentDiagram,
+    note_index: usize,
+    edge_paths: &'a [EdgePath],
+    cluster_endpoint_nodes: &HashMap<String, String>,
+) -> Option<(usize, &'a EdgePath)> {
+    // Java `GraphvizImageBuilder.isOpalisable` and `onlyOneLink` classify the
+    // semantic relation graph first; `SvekEdge.solve` then revokes Opale when
+    // Graphviz returns a path with more than one cubic segment.
+    if deployment_uses_strict_uml(diagram) {
+        return None;
+    }
+    let note_id = diagram.notes.get(note_index)?.id.as_deref()?;
+    let mut incident = diagram
+        .connections
+        .iter()
+        .enumerate()
+        .filter(|(_, connection)| connection.from == note_id || connection.to == note_id);
+    let (connection_index, connection) = incident.next()?;
+    if incident.next().is_some() {
+        return None;
+    }
+    let peer = if connection.from == note_id {
+        connection.to.as_str()
+    } else {
+        connection.from.as_str()
+    };
+    if diagram
+        .notes
+        .iter()
+        .any(|candidate| candidate.id.as_deref() == Some(peer))
+    {
+        return None;
+    }
+    let edge = deployment_connection_edge(
+        diagram,
+        connection_index,
+        edge_paths,
+        cluster_endpoint_nodes,
+    )?;
+    (!edge.points.is_empty() && edge.bezier_count <= 1).then_some((connection_index, edge))
+}
+
+fn deployment_opale_note_geometry(
+    edge: &EdgePath,
+    layout: &DeploymentNoteLayout,
+    body_margin_x: f64,
+    body_margin_y: f64,
+    tail_cluster: Option<&LayoutRect>,
+    head_cluster: Option<&LayoutRect>,
+) -> Option<(DeploymentNotePosition, bool)> {
+    let points = deployment_svek_edge_points(
+        &edge.points,
+        body_margin_x,
+        body_margin_y,
+        tail_cluster,
+        head_cluster,
+        EdgeTrim::None,
+    );
+    let (first, last) = points.first().copied().zip(points.last().copied())?;
+    let center = (
+        layout.x + layout.width / 2.0,
+        layout.y + layout.height / 2.0,
+    );
+    let squared_distance = |point: (f64, f64)| {
+        let dx = point.0 - center.0;
+        let dy = point.1 - center.1;
+        dx * dx + dy * dy
+    };
+    let note_at_edge_start = squared_distance(first) <= squared_distance(last);
+    let note_point = if note_at_edge_start { first } else { last };
+
+    // Java `EntityImageNote.getOpaleStrategy` compares orthogonal distance to
+    // left, right, top and bottom in that tie order. DeploymentNotePosition
+    // names where the note sits, so it is the opposite of the connector side.
+    let left = (note_point.0 - layout.x).abs();
+    let right = (note_point.0 - (layout.x + layout.width)).abs();
+    let top = (note_point.1 - layout.y).abs();
+    let bottom = (note_point.1 - (layout.y + layout.height)).abs();
+    let position = if left <= right && left <= top && left <= bottom {
+        DeploymentNotePosition::Right
+    } else if right <= top && right <= bottom {
+        DeploymentNotePosition::Left
+    } else if top <= bottom {
+        DeploymentNotePosition::Bottom
+    } else {
+        DeploymentNotePosition::Top
+    };
+    Some((position, note_at_edge_start))
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -7852,17 +8051,66 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             "{svg}"
         );
         assert!(!svg.contains(r#"data-qualified-name="ArrowMemo""#), "{svg}");
-        assert!(
-            svg.contains(r#"data-entity-1="ent0003" data-entity-2="ent0004""#),
-            "{svg}"
-        );
-        assert!(svg.contains(r#"id="lnk5""#), "{svg}");
+        let note_group = svg
+            .split(r#"data-qualified-name="ArrowOwner.ArrowMemo""#)
+            .nth(1)
+            .and_then(|tail| tail.split("</g>").next())
+            .unwrap();
+        assert!(note_group.matches(" L").count() > 8, "{note_group}");
+        assert!(!svg.contains(r#"<g class="link""#), "{svg}");
+        assert!(!svg.contains(r#"id="lnk5""#), "{svg}");
         assert!(
             svg.contains(
                 r#"data-qualified-name="ArrowOwner.FreeObserver" data-source-line="6" id="ent0006""#
             ),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn named_note_opale_requires_one_non_note_link_outside_strict_uml() {
+        let two_links = "@startuml\n\
+                         note \"memo\" as Memo\n\
+                         node Left\n\
+                         node Right\n\
+                         Memo -- Left\n\
+                         Memo -- Right\n\
+                         @enduml";
+        let rustuml_parser::diagram::Diagram::Deployment(two_links) =
+            rustuml_parser::parse::parse_auto_with_base(two_links, None).unwrap()
+        else {
+            panic!("expected deployment diagram");
+        };
+        let svg = render(&two_links, &Theme::default());
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 2, "{svg}");
+
+        let note_to_note = "@startuml\n\
+                            note \"left memo\" as LeftMemo\n\
+                            note \"right memo\" as RightMemo\n\
+                            node DispatchAnchor\n\
+                            LeftMemo -- RightMemo\n\
+                            @enduml";
+        let rustuml_parser::diagram::Diagram::Deployment(note_to_note) =
+            rustuml_parser::parse::parse_auto_with_base(note_to_note, None).unwrap()
+        else {
+            panic!("expected deployment diagram");
+        };
+        let svg = render(&note_to_note, &Theme::default());
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 1, "{svg}");
+
+        let strict = "@startuml\n\
+                      skinparam style strictuml\n\
+                      note \"strict memo\" as StrictMemo\n\
+                      node StrictPeer\n\
+                      StrictMemo -- StrictPeer\n\
+                      @enduml";
+        let rustuml_parser::diagram::Diagram::Deployment(strict) =
+            rustuml_parser::parse::parse_auto_with_base(strict, None).unwrap()
+        else {
+            panic!("expected deployment diagram");
+        };
+        let svg = render(&strict, &Theme::default());
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 1, "{svg}");
     }
 
     #[test]
