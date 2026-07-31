@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "mechanism": "stack-transparent-inset-limitfinder-frontier",
-  "status": "account_committed_before_implementation",
+  "status": "implementation_green_pending_independent_review",
+  "account_revision": "fe4f07b4",
+  "implementation_revision": "743d463a",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:USymbolStack#drawQueue",
@@ -43,5 +45,27 @@
     "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.svg",
     "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
     "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.svg"
+  ],
+  "implementation_evidence": [
+    {
+      "command": "cargo test -p rustuml-render stack_transparent_inset_owns_limit_finder_min_y",
+      "result": "passed; the stack cluster keeps outer-path minX and derives minY from LIMIT_FINDER_RECTANGLE_INSET"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
+      "result": "the prior uniform vertical and root-height drift is gone; only the separately scoped round-corner geometry differs"
+    },
+    {
+      "command": "cargo test -p rustuml-render --lib",
+      "result": "822 passed, 0 failed"
+    },
+    {
+      "command": "cargo test --test golden_no_oracle --release",
+      "result": "passed at the ratcheted product baseline of 11174 / 11250"
+    }
   ]
 }
