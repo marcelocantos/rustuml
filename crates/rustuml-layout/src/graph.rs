@@ -46,6 +46,7 @@ pub enum SplineRouting {
     #[default]
     Splines,
     Polyline,
+    Ortho,
 }
 
 /// Graph-level spacing inputs for Graphviz dot, expressed in pixels.
@@ -932,9 +933,28 @@ impl LayoutGraph {
                 empty.as_ptr(),
             );
         }
-        if self.spline_routing == SplineRouting::Polyline {
+        if self.spline_routing != SplineRouting::Splines {
             let key = CString::new("splines").unwrap();
-            let value = CString::new("polyline").unwrap();
+            // PlantUML `DotStringFactory.createDotString` serializes the
+            // selected `DotSplines` enum as the graph-level value.
+            let value = CString::new(match self.spline_routing {
+                SplineRouting::Splines => unreachable!(),
+                SplineRouting::Polyline => "polyline",
+                SplineRouting::Ortho => "ortho",
+            })
+            .unwrap();
+            graphviz_ffi::agsafeset(
+                g as *mut c_void,
+                key.as_ptr(),
+                value.as_ptr(),
+                empty.as_ptr(),
+            );
+        }
+        if self.spline_routing == SplineRouting::Ortho {
+            // PlantUML `DotStringFactory.createDotString` enables external
+            // labels for `DotSplines.ORTHO` before emitting SVEK edges.
+            let key = CString::new("forcelabels").unwrap();
+            let value = CString::new("true").unwrap();
             graphviz_ffi::agsafeset(
                 g as *mut c_void,
                 key.as_ptr(),
@@ -2427,7 +2447,7 @@ mod tests {
     }
 
     #[test]
-    fn polyline_routing_changes_paths_without_moving_nodes() {
+    fn graph_routing_modes_change_paths_without_moving_nodes() {
         let solve = |direction, routing| {
             let mut graph = LayoutGraph::new(direction)
                 .with_plantuml_svek_spacing()
@@ -2444,13 +2464,16 @@ mod tests {
         for direction in [Direction::TopToBottom, Direction::LeftToRight] {
             let splines = solve(direction, SplineRouting::Splines);
             let polylines = solve(direction, SplineRouting::Polyline);
-            for (spline_node, polyline_node) in
-                splines.node_positions.iter().zip(&polylines.node_positions)
-            {
-                assert_eq!(spline_node.x, polyline_node.x);
-                assert_eq!(spline_node.y, polyline_node.y);
-                assert_eq!(spline_node.width, polyline_node.width);
-                assert_eq!(spline_node.height, polyline_node.height);
+            let orthogonal = solve(direction, SplineRouting::Ortho);
+            for routed in [&polylines, &orthogonal] {
+                for (spline_node, routed_node) in
+                    splines.node_positions.iter().zip(&routed.node_positions)
+                {
+                    assert_eq!(spline_node.x, routed_node.x);
+                    assert_eq!(spline_node.y, routed_node.y);
+                    assert_eq!(spline_node.width, routed_node.width);
+                    assert_eq!(spline_node.height, routed_node.height);
+                }
             }
             let spline_long_edge = splines
                 .edge_paths
@@ -2462,7 +2485,13 @@ mod tests {
                 .iter()
                 .find(|edge| edge.from == "FreshAlpha3313" && edge.to == "FreshGamma3323")
                 .unwrap();
+            let ortho_long_edge = orthogonal
+                .edge_paths
+                .iter()
+                .find(|edge| edge.from == "FreshAlpha3313" && edge.to == "FreshGamma3323")
+                .unwrap();
             assert_ne!(spline_long_edge.points, polyline_long_edge.points);
+            assert_ne!(spline_long_edge.points, ortho_long_edge.points);
         }
     }
 

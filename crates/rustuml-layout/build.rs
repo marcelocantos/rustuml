@@ -35,6 +35,10 @@ fn main() {
         .warnings(false) // Graphviz code has many warnings; suppress them
         .extra_warnings(false)
         .opt_level(2);
+    // Graphviz `dotgen/dotsplines.c::dot_splines_` compiles its
+    // `EDGETYPE_ORTHO -> orthoEdges` dispatch only under this feature gate.
+    // The complete vendored `lib/ortho` implementation is linked below.
+    build.define("ORTHO", None);
 
     // Include paths — order matters.
     // "config.h" and "graphviz_version.h" and "builddate.h" live in include/
