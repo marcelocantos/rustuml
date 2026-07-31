@@ -316,6 +316,7 @@ pub fn centered_character_path(c: char, font_size: f64, cx: f64, cy: f64) -> Opt
     let mut path = String::new();
     let mut current = None;
     let mut contour_start = None;
+    let mut contour_closed = false;
     for curve in outline.curves {
         let (start, end) = match &curve {
             OutlineCurve::Line(start, end)
@@ -325,12 +326,21 @@ pub fn centered_character_path(c: char, font_size: f64, cx: f64, cy: f64) -> Opt
         let start = transform(start);
         let end = transform(end);
         if current != Some(start) {
+            // Java: `drawing/svg/SvgGraphics.java` (`drawPathIterator`) maps
+            // every Java2D `SEG_CLOSE` to `Z`. TrueType contour closure is
+            // implicit, so ab_glyph may begin the next contour without an
+            // explicit line returning the previous one to its start.
+            if current.is_some() && !contour_closed {
+                path.push_str("Z ");
+            }
             write!(path, "M{},{} ", glyph_num(start.0), glyph_num(start.1)).unwrap();
             contour_start = Some(start);
+            contour_closed = false;
         }
         match curve {
             OutlineCurve::Line(_, _) if contour_start == Some(end) && current != contour_start => {
                 path.push_str("Z ");
+                contour_closed = true;
             }
             OutlineCurve::Line(_, _) if current == contour_start && start == end => {}
             OutlineCurve::Line(_, _) => {
@@ -365,6 +375,9 @@ pub fn centered_character_path(c: char, font_size: f64, cx: f64, cy: f64) -> Opt
             }
         }
         current = Some(end);
+    }
+    if current.is_some() && !contour_closed {
+        path.push_str("Z ");
     }
     Some(path)
 }
@@ -875,6 +888,25 @@ mod tests {
 
         let nineteen = centered_character_path('C', 19.0, 23.0, 24.0).unwrap();
         assert!(nineteen.starts_with("M25.5288,30.6011 "));
+    }
+
+    #[test]
+    fn centered_character_closes_every_implicit_truetype_contour() {
+        for (character, size, cx, cy) in [
+            ('W', 17.0, 41.0, -3.0),
+            ('B', 19.0, -7.5, 22.25),
+            ('8', 11.0, 13.25, -8.0),
+            ('g', 17.0, -19.5, -27.75),
+        ] {
+            let path = centered_character_path(character, size, cx, cy).unwrap();
+            let contours = path.matches('M').count();
+            let closures = path.matches('Z').count();
+            assert!(contours > 0, "{character} produced no contours: {path}");
+            assert_eq!(
+                closures, contours,
+                "{character} at {size}px did not close each contour exactly once: {path}"
+            );
+        }
     }
 
     #[test]

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "centered-character-contour-closure",
   "created": "2026-07-31",
-  "status": "planned",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "482588e7",
   "java_locations": [
@@ -63,6 +63,21 @@
     "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
     "An independent checker records a verdict and held-out Java/Rust evidence at the exact implementation revision."
   ],
+  "experimental_result": {
+    "implementation_revision": "this implementation commit",
+    "result": "Generic contour-boundary closure makes all four affected spot-character diagrams structurally equivalent: class_spot_letter_G, class_spot_letter_U, edge_class_spots, and edge_stereotype_spot_colors.",
+    "headline_effect": "No-oracle product parity increases from 11149/11251 to 11153/11251: class 1964/1971 to 1966/1971 and edge-cases 748/777 to 750/777.",
+    "counterexample_that_shaped_the_change": "The first endpoint-based implementation failed the fresh digit 8 perturbation because its quadratic contours already returned geometrically to their starts but still required distinct Java SEG_CLOSE commands. The final implementation tracks emitted closure semantics instead of endpoint equality.",
+    "verification": [
+      "cargo test -p rustuml-render --lib: 797 passed",
+      "cargo clippy -p rustuml-render --lib -- -D warnings: passed",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release: passed and ratchet updated",
+      "diff_one --no-oracle class_spot_letter_G.puml: structurally equivalent",
+      "diff_one --no-oracle class_spot_letter_U.puml: structurally equivalent",
+      "four frozen mechanical harness guards: passed"
+    ],
+    "independent_review": "Pending at the implementation revision."
+  },
   "forbidden_approaches": [
     "character-specific closure tables",
     "appending Z only for G, U, or named fixtures",

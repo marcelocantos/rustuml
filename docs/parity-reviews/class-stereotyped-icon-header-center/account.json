@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-stereotyped-icon-header-center",
   "created": "2026-07-31",
-  "status": "implemented_dependency_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "ee9594df",
   "java_locations": [
@@ -84,6 +84,11 @@
       "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release: passed with no baseline diff"
     ],
     "independent_review": "Pending; the checker pool was unavailable at this revision."
+  },
+  "dependency_result": {
+    "revision": "the centered-character-contour-closure implementation commit",
+    "result": "Once the independently traced contour-closure defect was repaired, the exact G and U coordinates produced by this header model became structurally equivalent to Java.",
+    "headline_effect": "The activated G and U gain is included in the contour-closure commit's no-oracle ratchet; this prerequisite commit still claims no standalone census gain."
   },
   "forbidden_approaches": [
     "per-character paths or offsets",
