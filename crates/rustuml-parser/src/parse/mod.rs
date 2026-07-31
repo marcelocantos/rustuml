@@ -168,6 +168,13 @@ pub(super) fn parse_named_note_inline(line: &str) -> Option<NamedNoteCommand> {
     })
 }
 
+pub(super) fn looks_like_named_note_inline_command(line: &str) -> bool {
+    static PREFIX: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(r#"^(?i:note)\s+"[^"]*"\s+(?i:as)(?:\s|$)"#).unwrap()
+    });
+    PREFIX.is_match(line)
+}
+
 pub(super) fn parse_named_note_multiline(line: &str) -> Option<NamedNoteCommand> {
     static COMMAND: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
         regex::Regex::new(&format!(
@@ -184,6 +191,12 @@ pub(super) fn parse_named_note_multiline(line: &str) -> Option<NamedNoteCommand>
         stereotype,
         color,
     })
+}
+
+pub(super) fn looks_like_named_note_multiline_command(line: &str) -> bool {
+    static PREFIX: std::sync::LazyLock<regex::Regex> =
+        std::sync::LazyLock::new(|| regex::Regex::new(r"^(?i:note)\s+(?i:as)(?:\s|$)").unwrap());
+    PREFIX.is_match(line)
 }
 
 /// Return the ordinary-key identity used by PlantUML's

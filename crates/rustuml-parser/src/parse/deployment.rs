@@ -735,6 +735,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             });
             continue;
         }
+        if super::looks_like_named_note_inline_command(trimmed) {
+            return Err(ParseError {
+                line: current_line,
+                message: "invalid named note command".to_string(),
+            });
+        }
 
         if let Some(command) = super::parse_named_note_multiline(trimmed) {
             let quark_order = next_quark_order;
@@ -755,6 +761,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 lines: Vec::new(),
             });
             continue;
+        }
+        if super::looks_like_named_note_multiline_command(trimmed) {
+            return Err(ParseError {
+                line: current_line,
+                message: "invalid named note command".to_string(),
+            });
         }
 
         // Attached note: note direction of target : text  (inline)
@@ -1365,6 +1377,23 @@ mod tests {
         assert_eq!(d.notes[1].tags, ["retained"]);
         assert_eq!(d.notes[0].stereotype.as_deref(), Some("InlineLedger"));
         assert_eq!(d.notes[1].stereotype.as_deref(), Some("MetricLedger"));
+    }
+
+    #[test]
+    fn invalid_named_note_commands_are_terminal() {
+        for source in [
+            "node Anchor\nnote \"bad code\" as Bad-Deployment $audit\nBad-Deployment --> Anchor",
+            "node Anchor\nnote \"bad order\" as Bad.Deployment #MistyRose <<WrongOrder>>\nBad.Deployment --> Anchor",
+            "node Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
+            "node Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
+        ] {
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let Err(error) = parse_deployment(&lines) else {
+                panic!("invalid named note parsed: {source}");
+            };
+            assert_eq!(error.line, 2, "{source}");
+            assert_eq!(error.message, "invalid named note command");
+        }
     }
 
     #[test]
