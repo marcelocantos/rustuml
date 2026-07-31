@@ -4571,6 +4571,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                         note_index,
                         &result.edge_paths,
                         &cluster_endpoint_nodes,
+                        &cluster_ids,
                     )
                     .map(|(connection_index, _)| (note_index, connection_index))
                 })
@@ -6603,6 +6604,7 @@ fn deployment_note_opale_connection<'a>(
     note_index: usize,
     edge_paths: &'a [EdgePath],
     cluster_endpoint_nodes: &HashMap<String, String>,
+    cluster_ids: &HashSet<&str>,
 ) -> Option<(usize, &'a EdgePath)> {
     // Java `GraphvizImageBuilder.isOpalisable` and `onlyOneLink` classify the
     // semantic relation graph first; `SvekEdge.solve` then revokes Opale when
@@ -6625,6 +6627,12 @@ fn deployment_note_opale_connection<'a>(
     } else {
         connection.from.as_str()
     };
+    // `GraphvizImageBuilder` marks the edge Opale only when
+    // `Bibliotekon.getNode(peer)` succeeds. A declared group is represented
+    // by a Cluster; its synthetic routing proxy is not the peer's SvekNode.
+    if cluster_ids.contains(peer) {
+        return None;
+    }
     if diagram
         .notes
         .iter()
@@ -8111,6 +8119,34 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         };
         let svg = render(&strict, &Theme::default());
         assert_eq!(svg.matches(r#"<g class="link""#).count(), 1, "{svg}");
+    }
+
+    #[test]
+    fn named_note_does_not_absorb_a_relation_to_a_container_proxy() {
+        let source = "@startuml\n\
+                      node \"Rack group\" as RackGroup {\n\
+                        node \"Resident service\" as ResidentService\n\
+                      }\n\
+                      note \"Group peer memo\" as GroupMemo\n\
+                      GroupMemo --> RackGroup\n\
+                      artifact \"Created later\" as LaterArtifact\n\
+                      @enduml";
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) =
+            rustuml_parser::parse::parse_auto_with_base(source, None).unwrap()
+        else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"<g class="link""#), "{svg}");
+        assert!(svg.contains(r#"id="lnk5""#), "{svg}");
+        assert!(svg.contains(r#"id="GroupMemo-to-RackGroup""#), "{svg}");
+        assert!(
+            svg.contains(
+                r#"data-qualified-name="LaterArtifact" data-source-line="6" id="ent0006""#
+            ),
+            "{svg}"
+        );
     }
 
     #[test]
