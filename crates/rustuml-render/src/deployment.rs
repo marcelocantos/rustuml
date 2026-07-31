@@ -245,7 +245,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // (nodes and connections interleaved as they appear in the .puml).
     let mut counter = 2usize;
     let mut id_for_node: HashMap<String, String> = HashMap::new();
-    let mut own_qname_for_id: HashMap<String, String> = HashMap::new();
     let mut link_id_for_conn: HashMap<usize, String> = HashMap::new();
 
     // Identify roots (nodes not listed as children of any other node).
@@ -273,9 +272,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         m
     };
     let qname_for_id = deployment_qnames(diagram, &parent_of);
-    for n in &diagram.nodes {
-        own_qname_for_id.insert(n.id.clone(), own_qname(n));
-    }
 
     // Merge nodes and connections by source_line; assign IDs sequentially.
     // Both kinds use the same counter, so a connection at line 6 gets the
@@ -441,7 +437,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             conn,
             oracle,
             &id_for_node,
-            &own_qname_for_id,
             &link_id,
             ctx.handwritten,
         );
@@ -789,11 +784,6 @@ fn skin_border_colors(
         }
     }
     map
-}
-
-/// Project a node's canonical quark code for SVG edge metadata.
-fn own_qname(node: &DeploymentNode) -> String {
-    translate_qualified_name(&node.id)
 }
 
 struct OracleRenderContext<'a> {
@@ -3626,33 +3616,22 @@ fn render_connection(
     conn: &DeploymentConnection,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
-    own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
     handwritten: bool,
 ) {
-    // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
-    // itself contain '.' (label-derived), so we can't recover it by splitting
-    // the full qualified path on '.'.
-    let from_qname = own_qname_for_id
-        .get(&conn.from)
-        .cloned()
-        .unwrap_or_else(|| conn.from.clone());
-    let to_qname = own_qname_for_id
-        .get(&conn.to)
-        .cloned()
-        .unwrap_or_else(|| conn.to.clone());
-    // PlantUML emits the path id as `{leftQname}-{kind}-{rightQname}` where
+    // `Link.idCommentForSvg` uses raw endpoint entity names. UGroup's
+    // qualified-name projection is a separate SVG metadata channel.
+    let from_name = &conn.from;
+    let to_name = &conn.to;
+    // PlantUML emits the path id as `{leftName}-{kind}-{rightName}` where
     // {kind} is `to`, `backto`, or empty (associations). Layout direction
     // can reverse the wire order (e.g. `A -left-> B` ⇒ `B-backto-A`), so we
     // probe both orderings.
     let candidates = [
-        format!("{from_qname}-to-{to_qname}"),
-        format!("{}-to-{}", conn.from, conn.to),
-        format!("{to_qname}-backto-{from_qname}"),
-        format!("{}-backto-{}", conn.to, conn.from),
-        format!("{from_qname}-{to_qname}"),
-        format!("{}-{}", conn.from, conn.to),
-        format!("{from_qname}-backto-{to_qname}"),
+        format!("{from_name}-to-{to_name}"),
+        format!("{to_name}-backto-{from_name}"),
+        format!("{from_name}-{to_name}"),
+        format!("{from_name}-backto-{to_name}"),
     ];
     let source_line = (conn.source_line > 0).then(|| conn.source_line.to_string());
     let oracle_edge = find_oracle_connection_edge(oracle, &candidates, source_line.as_deref());
@@ -3684,9 +3663,9 @@ fn render_connection(
         .map(|e| e.id.contains("-backto-"))
         .unwrap_or(false);
     let (comment_from, comment_to) = if is_reverse {
-        (&to_qname, &from_qname)
+        (to_name, from_name)
     } else {
-        (&from_qname, &to_qname)
+        (from_name, to_name)
     };
     let prefix = if is_reverse { "reverse link" } else { "link" };
     svg.raw(&format!("<!--{prefix} {comment_from} to {comment_to}-->"));
@@ -6800,22 +6779,12 @@ fn deployment_connection_layout(conn: &DeploymentConnection) -> (&str, &str, boo
 }
 
 fn deployment_connection_path_base_id(
-    diagram: &DeploymentDiagram,
+    _diagram: &DeploymentDiagram,
     conn: &DeploymentConnection,
     reversed: bool,
 ) -> String {
-    let from_name = diagram
-        .nodes
-        .iter()
-        .find(|node| node.id == conn.from)
-        .map(own_qname)
-        .unwrap_or_else(|| conn.from.clone());
-    let to_name = diagram
-        .nodes
-        .iter()
-        .find(|node| node.id == conn.to)
-        .map(own_qname)
-        .unwrap_or_else(|| conn.to.clone());
+    let from_name = &conn.from;
+    let to_name = &conn.to;
     if conn.arrow_at_start == conn.arrow_at_end {
         format!("{from_name}-{to_name}")
     } else if reversed {
@@ -8366,6 +8335,26 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(">Worker</text>"), "{svg}");
         assert!(svg.contains(">Visible Store</text>"), "{svg}");
         assert!(svg.contains(">Service/Ω</text>"), "{svg}");
+    }
+
+    #[test]
+    fn link_path_identity_stays_raw_while_group_identity_is_projected() {
+        let source = "@startuml\n\
+                      node \"Ingress: Canary\"\n\
+                      database \"Archive Sink\" as sink.v2\n\
+                      \"Ingress: Canary\" --> sink.v2\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let qnames = deployment_qnames(&diagram, &deployment_parent_map(&diagram));
+        assert_eq!(qnames["Ingress: Canary"], "Ingress. Canary");
+        assert_eq!(
+            deployment_connection_path_base_id(&diagram, &diagram.connections[0], false),
+            "Ingress: Canary-to-sink.v2"
+        );
     }
 
     #[test]
