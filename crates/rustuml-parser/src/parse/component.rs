@@ -725,6 +725,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             });
             continue;
         }
+        if super::looks_like_named_note_inline_command(trimmed) {
+            return Err(ParseError {
+                line: current_line,
+                message: "invalid named note command".to_string(),
+            });
+        }
         // `note on link : text` — inline note on the last link.
         if let Some(rest) = trimmed.strip_prefix("note on link") {
             let Some(connection) = connections.len().checked_sub(1) else {
@@ -799,6 +805,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             note_lines.clear();
             in_note = true;
             continue;
+        }
+        if super::looks_like_named_note_multiline_command(trimmed) {
+            return Err(ParseError {
+                line: current_line,
+                message: "invalid named note command".to_string(),
+            });
         }
         if let Some(caps) = RE_NOTE_MULTI_PLAIN.captures(trimmed) {
             note_target = None;
@@ -1849,8 +1861,8 @@ mod tests {
         assert_eq!(d.notes[0].color.as_deref(), Some("#LightBlue"));
         assert_eq!(d.notes[1].color.as_deref(), Some("#MistyRose"));
 
-        let invalid = parse("note \"payload\" as ValidPrefix-invalid");
-        assert!(invalid.notes.is_empty());
+        let invalid = ["note \"payload\" as ValidPrefix-invalid".to_string()];
+        assert!(parse_component(&invalid).is_err());
     }
 
     #[test]
@@ -1889,6 +1901,23 @@ mod tests {
                 .iter()
                 .any(|item| item.id == "Ledger.C464" || item.id == "Métrique.Δelta_7")
         );
+    }
+
+    #[test]
+    fn invalid_named_note_commands_are_terminal() {
+        for source in [
+            "component Anchor\nnote \"bad code\" as Bad-Component $audit\nBad-Component --> Anchor",
+            "component Anchor\nnote \"bad order\" as Bad.Note #MistyRose <<WrongOrder>>\nBad.Note --> Anchor",
+            "component Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
+            "component Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
+        ] {
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let Err(error) = parse_component(&lines) else {
+                panic!("invalid named note parsed: {source}");
+            };
+            assert_eq!(error.line, 2, "{source}");
+            assert_eq!(error.message, "invalid named note command");
+        }
     }
 
     #[test]
