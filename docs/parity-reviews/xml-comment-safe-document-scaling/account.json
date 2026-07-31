@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "mechanism": "xml-comment-safe-document-scaling",
-  "status": "planned",
+  "status": "implemented_awaiting_independent_review",
+  "account_revision": "9815098db073d56555286182405c44a9de4e393a",
+  "implementation_revision": "faa256fa99c254764ba7075dd4a2a0dc1df6cc56",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java:TextBlockExporter12026#exportDiagramInternal",
@@ -39,5 +41,16 @@
   "evidence_inputs": [
     "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
     "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg"
-  ]
+  ],
+  "implementation_evidence": {
+    "result": "The generated comment, entity shell, icon, header, and member geometry now all receive the same document scale. The malformed legacy color remains white. The source still differs from Java only by a separately reproduced class-layout gap that is identical in the token-free control.",
+    "commands": [
+      "cargo test -p rustuml-render --lib",
+      "cargo build --release -p rustuml-oracle --example diff_one",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle /private/tmp/t14-quote-clean.puml",
+      "cargo test --test golden_no_oracle --release -- --nocapture"
+    ],
+    "suite_evidence": "813/813 rustuml-render unit tests pass. The no-oracle product ratchet remains green at 11,170/11,250 with no family or baseline change."
+  }
 }

@@ -114,13 +114,13 @@
     "corrected_commands": [
       "cargo test -p rustuml-parser --lib",
       "cargo build --release --example diff_one",
-      "target/release/examples/diff_one test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
-      "target/release/examples/diff_one test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
-      "target/release/examples/diff_one test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
       "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/t14-triple-clean.puml /private/tmp/t14-prefix-clean.puml /private/tmp/t14-quote-clean.puml",
-      "target/release/examples/diff_one /private/tmp/t14-triple-clean.puml",
-      "target/release/examples/diff_one /private/tmp/t14-prefix-clean.puml",
-      "target/release/examples/diff_one /private/tmp/t14-quote-clean.puml"
+      "target/release/examples/diff_one --no-oracle /private/tmp/t14-triple-clean.puml",
+      "target/release/examples/diff_one --no-oracle /private/tmp/t14-prefix-clean.puml",
+      "target/release/examples/diff_one --no-oracle /private/tmp/t14-quote-clean.puml"
     ],
     "corrected_review_status": "Awaiting a new independent checker review. The prior REJECT remains authoritative until the preserved held-outs pass or explicit user sign-off changes the rule."
   },
