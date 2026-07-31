@@ -197,7 +197,7 @@
   ],
   "declared_residue": [
     "Exact Java syntax-error SVG artwork, exit code, error wording, and selected error line remain outside parser acceptance and AST non-mutation.",
-    "The full ColorParser PART2 style-color language is not required by this mechanism's simple background-color acceptance unless source evidence or the independent checker establishes a Java-valid Deployment case beyond the shared resolvable simple/gradient tokens.",
+    "ColorParser.PART2 is present in the factory's nominal regex, but frozen-oracle probes such as `note left on link #back:FF0000;line:00FF00` terminate with PlantUML's No such color error at the command line. This mechanism therefore accepts the simple and gradient values that reach CucaNote construction and terminally rejects the composite form; a future Java revision that executes PART2 successfully would require its own model change.",
     "Component note-on-link grammar and replacement behavior remain a separate existing-family mechanism even when its compound geometry informs this port.",
     "Handwritten note contours and theme-specific NOTE style overrides are not acceptance criteria unless the implementation changes those existing Deployment rendering paths.",
     "Independent perturbation artifacts and review.json are intentionally absent from the maker commit."
