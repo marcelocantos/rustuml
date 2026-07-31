@@ -2979,7 +2979,9 @@ fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
 }
 
 fn add_square_invisible_links(layout: &mut LayoutGraph, entities: &[String]) {
-    if entities.len() < 2 {
+    // Java CucaDiagram.applySingleStrategy does not construct a Magma until
+    // the immediate standalone set contains at least three leaves.
+    if entities.len() < 3 {
         return;
     }
     let branch = (entities.len() as f64).sqrt().ceil() as usize;

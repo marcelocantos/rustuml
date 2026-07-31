@@ -4723,7 +4723,9 @@ fn add_deployment_magma_constraints(
         .flat_map(|connection| [connection.from.as_str(), connection.to.as_str()])
         .collect();
     let add_group = |layout: &mut LayoutGraph, members: Vec<String>| {
-        if members.len() < 2 {
+        // Java CucaDiagram.applySingleStrategy skips one- and two-member
+        // standalone sets before constructing Magma.
+        if members.len() < 3 {
             return;
         }
         // Java `CucaDiagram.applySingleStrategy` delegates standalone
