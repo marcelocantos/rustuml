@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "mechanism": "svg-path-arc-flag-scaling",
+  "status": "account_committed_before_implementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:SvgGraphics#svgPath",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:SvgGraphics#format and SvgGraphics#formatBoolean",
+    "src/main/java/net/sourceforge/plantuml/klimt/UPath.java:UPath#arcTo"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/scale.rs:scale_path_d",
+    "crates/rustuml-render/src/scale.rs:scale_numbers_in"
+  ],
+  "invariant": "An SVG A/a command is a repeating seven-parameter tuple: rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y. PlantUML SvgGraphics serializes radii, rotation, and endpoint coordinates through its scale-aware numeric formatter, but serializes the two flags through formatBoolean so they remain exactly 0 or 1 under every dpi or explicit document scale. Rust's final-SVG scaler must preserve that command-aware distinction across repeated arc tuples and mixed path commands.",
+  "causal_divergence": "Rust scale_path_d delegates to scale_numbers_in and multiplies every numeric token without retaining SVG command or parameter position. Under scale 1.75, a valid rounded package outline segment such as A6.5625,6.5625 0 0 1 176.6252,14.875 becomes A6.5625,6.5625 0 0 1.75 176.6252,14.875. The checker produced the same failure with and without apostrophes, proving it is independent of XML comment boundary handling. All other attributes in the heldout path already match Java.",
+  "planned_change": "Replace the path-specific scale-every-number wrapper with a command-aware numeric walk. Track the active SVG path command and the parameter index within each command's repeating tuple. For A/a, copy tuple positions 3 and 4 verbatim and scale positions 0, 1, 2, 5, and 6; scale every numeric parameter for the other supported path commands. Reset tuple position on each explicit command, preserve command letters and separators byte-for-byte, and retain the existing numeric parsing and four-decimal formatting behavior.",
+  "perturbation_axes": [
+    "absolute A versus relative a commands",
+    "large-arc and sweep flag combinations 00, 01, 10, and 11",
+    "one arc tuple versus repeated tuples after a single command letter",
+    "arc commands interleaved with M, L, C, Q, H, V, and Z commands",
+    "dpi scaling versus explicit integer and fractional scale directives",
+    "rounded package, rounded rectangle, and independent hand-authored path topologies"
+  ],
+  "scope_boundary": "This mechanism owns numeric role classification inside SVG path d attributes during final document scaling. It does not alter XML token boundaries, path generation, rounded-corner geometry, root dimensions, style scaling, comparator behavior, fixture eligibility, or source comments.",
+  "acceptance": [
+    "The two preserved explicit-scale checker heldouts retain 0/1 arc flags and become exact through diff_one --no-oracle.",
+    "Unit tests cover absolute and relative arcs, all flag combinations, repeated tuples, adjacent signs, and mixed commands.",
+    "Radii, Java-scaled x-axis rotation, and arc endpoints retain existing numeric scaling and rounding behavior.",
+    "Non-arc path commands and non-path numeric-list scaling remain unchanged.",
+    "An independent checker audits this account and implementation at exact revisions and preserves fresh passing or failing perturbations."
+  ],
+  "forbidden_approaches": [
+    "replacing scaled values 1.75 or other known factors after serialization",
+    "matching package paths, rounded-corner coordinates, labels, or fixture names",
+    "disabling path scaling or changing scale factors to avoid the flags",
+    "changing comparator tolerance, baselines, skip markers, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.puml",
+    "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_no_apos_control.puml"
+  ]
+}
