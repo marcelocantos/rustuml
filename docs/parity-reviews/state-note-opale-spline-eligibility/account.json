@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-note-opale-spline-eligibility",
+  "created": "2026-07-31",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "29532452",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbol": "CommandFactoryNoteOnEntity.executeInternal",
+      "lines": "258-292",
+      "role": "Creates every attached note as a NOTE leaf plus one dashed solitary link to its target."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder.isOpalisable",
+        "GraphvizImageBuilder.buildImage",
+        "GraphvizImageBuilder.onlyOneLink"
+      ],
+      "lines": "133-148,229-259,313-325",
+      "role": "Initially transfers a note's sole link into EntityImageNote and suppresses independent painting when the note is eligible."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": [
+        "SvekEdge.solve",
+        "SvekEdge.isOpalisable",
+        "SvekEdge.drawU"
+      ],
+      "lines": "762-764,797-799,823-839",
+      "role": "After routing, revokes Opale when the DotPath has more than one cubic and paints the dashed link independently when Opale is revoked."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "attached_note_specs",
+        "emit_attached_svek_note",
+        "render_state"
+      ],
+      "lines": "946-993,1361-1549,6243-8460",
+      "role": "Predicts Opale from repeated-anchor order before layout, consumes every attached-note route into the note painter, and never emits revoked routes as dashed link groups."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbol": "EdgePath.bezier_count",
+      "lines": "2367-2382",
+      "role": "Already preserves the exact cubic-segment cardinality Java tests after solving."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "render_svek_note_emission",
+        "render_svek_floating_note"
+      ],
+      "lines": "12720-12805,15620-15755",
+      "role": "Existing cross-family implementation and independently reviewed evidence for the same Java SVEK mechanism."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/state/state_notes_count_3.puml",
+    "test-diagrams/golden/state/state_notes_count_4.puml",
+    "test-diagrams/golden/state/state_notes_count_5.puml"
+  ],
+  "claimed_invariant": "Every attached state note is laid out with its ordinary dashed solitary link. The link is consumed into the note's Opale pointer only when Java's solved DotPath contains at most one cubic segment and strict-UML style is inactive. A multi-cubic route leaves the note as an ordinary folded entity and remains visible as a dashed association link after ordinary diagram links.",
+  "causal_divergence": "Rust classifies notes before routing using repeated anchor order: the first repeated attachment is ordinary and all later attachments are Opale. Java does not inspect sibling order. In the count fixtures Graphviz gives the outer attachments multi-cubic routes and the innermost attachment a one-cubic route, so Java's outcome changes as topology grows. Rust happens to match some note bodies but omits every revoked dashed route and incorrectly keeps the middle A note Opale once a fifth note is added.",
+  "planned_model_change": "Determine each attached state note's Opale flag from its solved EdgePath.bezier_count, using the same at-most-one-cubic rule already ported and independently reviewed for class notes. Carry the note link UID through rendering and emit each non-Opale route as an ordinary dashed association group after state transitions. Preserve route direction, two-decimal SVEK coordinate ingestion, source-line ownership, and strict-UML disabling without consulting labels, note count, fixture names, or coordinates.",
+  "cross_family_evidence": {
+    "account": "docs/parity-reviews/class-note-opale-spline-eligibility/account.json",
+    "review": "docs/parity-reviews/class-note-opale-spline-eligibility/review.json",
+    "review_verdict": "ACCEPT",
+    "relevance": "The class renderer already generalizes this exact Java GraphvizImageBuilder/SvekEdge mechanism across one-cubic and multi-cubic attached-note routes."
+  },
+  "perturbation_axes": [
+    "one through six notes distributed over one, two, and three anchors",
+    "left and right solitary note links",
+    "short and multiline note dimensions",
+    "top-to-bottom and left-to-right rank direction",
+    "ordinary and strict-UML styles",
+    "renamed states and note text"
+  ],
+  "scope_boundary": "This mechanism owns post-layout Opale eligibility and painting of revoked attached-note links. It does not own note dimensions, UID allocation, Graphviz routing, state node positions, composite notes, floating notes, link-note labels, comparator behavior, or corpus eligibility.",
+  "acceptance": [
+    "The three evidence inputs become structurally equivalent with note-body and dashed-link element counts matching Java.",
+    "Fresh renamed inputs exercise changed anchor count, changed note count, both sides, multiline dimensions, and rank direction.",
+    "A route with one cubic is consumed into Opale while a route with multiple cubics remains an independently painted dashed association.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict and held-out Java/Rust evidence at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "note-count or sibling-position ladders",
+    "fixture-name, state-name, or note-text conditions",
+    "coordinate thresholds",
+    "captured edge path strings",
+    "post-hoc SVG insertion based on golden element counts",
+    "comparator changes"
+  ]
+}
