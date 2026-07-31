@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-note-style-context",
+  "created": "2026-08-01T07:48:26+10:00",
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, frozen rustuml CLI, frozen diff_one --no-oracle",
+    "independence": "Did not implement ad0862f9, 74e2f9f6, 96e1aae0, e96b82a3, or 388e22e7; did not edit production code, accounts, baselines, comparator settings, or allow-lists."
+  },
+  "account_commit": "ad0862f957a00bc2284bf68e7b428feefb301a51",
+  "implementation_commits": [
+    "74e2f9f67c599886474b6ce3d341630d872a7d12",
+    "96e1aae0428f3e0233179953a1c930efad32aa03"
+  ],
+  "evaluated_rust_revision": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reassessed_prior_rejects": [
+    {
+      "commit": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+      "evidence": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_07_three_node_styled_label_note_fractional.head388e22e7.diff.txt",
+      "result": "resolved: diff exit is 0 at 388e22e7"
+    }
+  ],
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_worktree_status": "At requested revision; dirty unrelated file observed and not edited: CLAUDE.md."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml",
+      "sha256": "9e54aa450a04f04c7266c4156ce99a222a8405eb763f825fd80d1ef198edc09f"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one",
+      "sha256": "f977c8704a2d7ae1492a4a8d504ed5ea54f9de4993c98fec1e5c3949c957cad7",
+      "mode": "--no-oracle"
+    },
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "nl -ba Java EntityImageNoteLink.java, ComponentType.java, AbstractTextualComponent.java, FromSkinparamToStyle.java, and SvekEdge.java at cited ranges",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '15270,15430p;16350,16430p;17200,17235p'",
+    "nl -ba crates/rustuml-render/src/style_cascade.rs | sed -n '148,236p;258,420p'",
+    "nl -ba crates/rustuml-parser/src/parse/style.rs | sed -n '1150,1285p;1400,1525p'",
+    "rg -n font-family and probe text in fresh Java/Rust SVGs",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <fresh puml>",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml -tsvg <fresh puml> > <fresh>.rust.svg",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <fresh puml> > <fresh>.diff.txt",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <preserved prior puml> > <prior>.head388e22e7.diff.txt",
+    "xmllint --noout <fresh Java SVGs and Rust SVGs>",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      "EntityImageNoteLink.java:61-65 creates a sequence NOTE component from ComponentType.NOTE.getStyleSignature().getMergedStyle(link.getStyleBuilder()).",
+      "ComponentType.java:98-99 defines NOTE as root.element.sequenceDiagram.note.",
+      "FromSkinparamToStyle.java and the style table map defaultFontName to root fontName and noteFontName to note fontName.",
+      "AbstractTextualComponent.java:77-93 builds one text block from the resolved FontConfiguration, which supplies both dimensions and painting."
+    ],
+    "rust": [
+      "class.rs:15355-15419 resolves link-owned notes through StyleCascade::resolve_link_at_source_line with root.element.sequenceDiagram.note.",
+      "style_cascade.rs:225-236 bounds link style resolution to the relationship creation source line.",
+      "class.rs:17200-17211 and 16368-16430 use ResolvedNoteStyle::for_link_note for both note dimensions and paint."
+    ],
+    "fixture_shape_review": "Static search found no production references to the fresh style probe names, checker_07 text, Arial/Verdana fixture shortcuts, golden reads, include_str/include_bytes of fixtures, or coordinate-keyed SVG surgery."
+  },
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-link-note-style-context/style_01_default_font_source_capture.puml",
+      "java_svg": "test-diagrams/perturbations/class-link-note-style-context/style_01_default_font_source_capture.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-style-context/style_01_default_font_source_capture.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-style-context/style_01_default_font_source_capture.diff.txt",
+      "axes": ["root defaultFontName", "style declaration after relationship creation", "link-owned source-line capture", "renamed classes"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "finding": "Both SVGs keep the relationship label and link note in Arial even though later class entity text uses the later Verdana default."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-style-context/style_02_note_font_override_and_color.puml",
+      "java_svg": "test-diagrams/perturbations/class-link-note-style-context/style_02_note_font_override_and_color.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-style-context/style_02_note_font_override_and_color.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-style-context/style_02_note_font_override_and_color.diff.txt",
+      "axes": ["defaultFontName plus noteFontName override", "noteFontSize override", "inline note color", "width-sensitive note text"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "finding": "Both SVGs render the link note with Verdana 15 and #FFFFE0 background while the relationship label remains Arial 13."
+    }
+  ],
+  "artifact_hashes": {
+    "account_json_sha256": "69fc76ed8e4cce78b7ac1838822d669b18d43fd733a6ac29f8674e6b9a9aa49b",
+    "fresh_sources_sha256": {
+      "style_01_default_font_source_capture.puml": "04ab4f765148f0d18160a411fb0d02436c5c2e2a59224ba9598b8150a0688698",
+      "style_02_note_font_override_and_color.puml": "6e8e94566a2ac08325b538cade53ad5e196f28d3dc09490204e93c4ae4955d35"
+    },
+    "all_passing_diff_text_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  "findings": [
+    "The Java account is supported: class link notes use the sequenceDiagram note style signature from the owning link's captured StyleBuilder.",
+    "The Rust implementation uses relationship source-line bounded style resolution for link-owned notes and applies that single style to measurement and painting.",
+    "The preserved checker_07 style counterexample now passes at 388e22e7.",
+    "Fresh source-capture and note override probes pass strict no-oracle comparison and visibly exercise different font-family outcomes."
+  ],
+  "verdict": "accepted",
+  "verdict_reason": "ACCEPTED. Link-owned note style resolution follows Java's owning-link style context, old style evidence is resolved, and fresh root-default/source-capture plus note override probes are exact."
+}

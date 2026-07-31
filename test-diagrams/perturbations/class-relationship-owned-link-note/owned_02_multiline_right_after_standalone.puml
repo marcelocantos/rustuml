@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+class OwnMultiNorth851
+class OwnMultiSouth859
+OwnMultiNorth851 -down-> OwnMultiSouth859 : multiline owner 863
+note "loose standalone note 867" as LooseNote867
+note right on link
+  owned right row Wwm 871
+  second owned row lIl 877
+end note
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class FrontierLeft601
+class FrontierRight607
+FrontierLeft601 --> FrontierRight607
+note right on link
+  right-only frontier row Wwm 611
+  second row lIl 613
+end note
+@enduml

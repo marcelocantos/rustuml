@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontSize 13
+class DimFreshNorth921
+class DimFreshSouth927
+DimFreshNorth921 -down-> DimFreshSouth927 : <size:15>Dominant label Wwm 929</size> with tail 931
+note top on link : tiny xi
+@enduml

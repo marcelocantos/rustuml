@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-note-component-preferred-dimensions",
+  "created": "2026-08-01T07:48:26+10:00",
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, frozen rustuml CLI, frozen diff_one --no-oracle",
+    "independence": "Did not implement e1f11afd, 24276de6, bd83ccd8, babd0f4f, ad0862f9, 74e2f9f6, e96b82a3, or 388e22e7; did not edit production code, accounts, baselines, comparator settings, or allow-lists."
+  },
+  "account_commit": "e1f11afd0334ffccc8f7876535304ce1c280bf7d",
+  "implementation_commits": [
+    "24276de6b82d8be9e697da12e20ce09b17f047e2",
+    "babd0f4f6a1e67a1d4d439c05e44cc9597ae5452",
+    "74e2f9f67c599886474b6ce3d341630d872a7d12",
+    "e96b82a3cafa4deb87f3279df6e56696078ec8d9"
+  ],
+  "evaluated_rust_revision": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "supersedes_non_accepting_reviews": [
+    {
+      "commit": "8ae638f647c4e7c6cb2b23c3ba30ec41607d2161",
+      "path": "docs/parity-reviews/class-link-note-component-preferred-dimensions/review.json",
+      "prior_verdict": "rejected",
+      "reassessment": "All six preserved checker_01 through checker_06 perturbations pass at 388e22e7 using *.head388e22e7.diff.txt outputs."
+    },
+    {
+      "commit": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+      "path": "docs/parity-reviews/class-link-note-component-preferred-dimensions/review-2.json",
+      "prior_verdict": "rejected",
+      "reassessment": "checker_07_three_node_styled_label_note_fractional and checker_08_tb_note_only_font_fractional both pass at 388e22e7 using *.head388e22e7.diff.txt outputs."
+    }
+  ],
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_worktree_status": "At requested revision; dirty unrelated file observed and not edited: CLAUDE.md."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml",
+      "sha256": "9e54aa450a04f04c7266c4156ce99a222a8405eb763f825fd80d1ef198edc09f"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one",
+      "sha256": "f977c8704a2d7ae1492a4a8d504ed5ea54f9de4993c98fec1e5c3949c957cad7",
+      "mode": "--no-oracle"
+    },
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "sed -n '1,240p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md and sed -n '241,520p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "mcp__bullseye.bullseye_frontier({\"cwd\":\"/Users/marcelo/work/github.com/marcelocantos/rustuml\"})",
+    "git rev-parse HEAD",
+    "git log --format='%H %s' --reverse e1f11afd^..388e22e7",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-t14-class-link-notes-target/release/rustuml /private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "nl -ba Java ComponentRoseNote.java, EntityImageNoteLink.java, TextBlockVertical.java, TextBlockUtils.java, and SvekEdge.java at cited account ranges",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14380,14560p;14620,14820p;16350,16430p;17200,17235p'",
+    "rg -n fixture-shaped labels, prior observed deltas, golden reads, include_str/include_bytes, and perturbation names in touched production paths",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <fresh puml>",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/rustuml -tsvg <fresh puml> > <fresh>.rust.svg",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <fresh puml> > <fresh>.diff.txt",
+    "/private/tmp/rustuml-t14-class-link-notes-target/release/examples/diff_one --no-oracle <preserved prior puml> > <prior>.head388e22e7.diff.txt",
+    "xmllint --noout <fresh Java SVGs and Rust SVGs>",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      "SvekEdge.java:301-318 composes EntityImageNoteLink with the center label using mergeLR/mergeTB according to note position.",
+      "EntityImageNoteLink.java:61-77 exposes ComponentRoseNote preferred dimensions and paints the same component.",
+      "ComponentRoseNote.java:77-128 keeps preferred dimensions distinct from the integer-truncated folded polygon.",
+      "TextBlockVertical.java:71-102 centers children from untruncated child dimensions; SvekEdge.java:497-500 truncates only at Graphviz fixed-table serialization."
+    ],
+    "rust": [
+      "class.rs:14651-14803 keeps note natural dimensions, visible floored polygon dimensions, component padding, and Graphviz dimensions as separate projections.",
+      "class.rs:13400-13476 paints link-note and label children through the same RelationshipCenterLayout offsets.",
+      "class.rs:17200-17211 resolves relationship-note body dimensions through ResolvedNoteStyle::for_link_note before adding note padding."
+    ],
+    "fixture_shape_review": "Static search found no production references to the fresh probe names, preserved checker stems, observed 0.2422/0.367/0.734 deltas, golden files, include_str/include_bytes of fixtures, or SVG coordinate surgery in the touched production paths."
+  },
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_09_fresh_left_note_dominant_fractional.puml",
+      "java_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_09_fresh_left_note_dominant_fractional.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_09_fresh_left_note_dominant_fractional.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_09_fresh_left_note_dominant_fractional.diff.txt",
+      "axes": ["left-to-right direction", "explicit left link-note position", "note-dominant multiline body", "renamed endpoints"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_10_fresh_top_label_dominant_fontsize.puml",
+      "java_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_10_fresh_top_label_dominant_fontsize.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_10_fresh_top_label_dominant_fontsize.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_10_fresh_top_label_dominant_fontsize.diff.txt",
+      "axes": ["top-to-bottom direction", "explicit top link-note position", "label-dominant styled label", "changed arrow font size"],
+      "result": "pass",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0
+    }
+  ],
+  "prior_reject_reassessment": [
+    "checker_01_note_dominant_fractional.head388e22e7.diff.exit = 0",
+    "checker_02_label_dominant_fractional.head388e22e7.diff.exit = 0",
+    "checker_03_reversed_multiline_fractional.head388e22e7.diff.exit = 0",
+    "checker_04_note_only_vertical_fractional.head388e22e7.diff.exit = 0",
+    "checker_05_label_only_control.head388e22e7.diff.exit = 0",
+    "checker_06_reversed_multiline_default_fractional.head388e22e7.diff.exit = 0",
+    "checker_07_three_node_styled_label_note_fractional.head388e22e7.diff.exit = 0",
+    "checker_08_tb_note_only_font_fractional.head388e22e7.diff.exit = 0"
+  ],
+  "artifact_hashes": {
+    "account_json_sha256": "518009158244084b69dfd6b187b9e741ec56d808c600178f00620bf2bd13b2dd",
+    "fresh_sources_sha256": {
+      "checker_09_fresh_left_note_dominant_fractional.puml": "5c92e417fd08e00c238900952b7ef8e6ca353f51d411588bb0c3de00f81057d9",
+      "checker_10_fresh_top_label_dominant_fontsize.puml": "5114e6353f473b537f0cf5f360ee98b708955d31082bdfdea8aff345d449521e"
+    },
+    "all_passing_diff_text_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  "findings": [
+    "The account was committed before implementation and the evaluated revision is a descendant of both prior rejected reviews and all follow-up mechanism commits.",
+    "The Java source trace supports the causal claim: a link note contributes natural ComponentRoseNote preferred dimensions to the SvekEdge center block, and integer truncation happens only at the Graphviz fixed-table boundary.",
+    "The Rust implementation preserves natural note dimensions separately from visible polygon dimensions and uses the same RelationshipCenterLayout for sizing and paint offsets.",
+    "All prior rejected perturbations for this mechanism now pass at 388e22e7; the old rejected records remain present and non-accepting.",
+    "Both fresh valid perturbations pass strict no-oracle comparison with the frozen binaries."
+  ],
+  "verdict": "accepted",
+  "verdict_reason": "ACCEPTED. The implementation is mechanism-shaped, prior counterexamples are resolved at the evaluated revision, and fresh left/top position plus note/label-dominance probes are Java-valid and exact under diff_one --no-oracle."
+}

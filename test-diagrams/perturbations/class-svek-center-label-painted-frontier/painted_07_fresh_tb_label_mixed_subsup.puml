@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontSize 14
+class FrontierNorth631
+class FrontierSouth637
+FrontierNorth631 -down-> FrontierSouth637 : start <size:18>Big</size> H<sub>2</sub> and X<sup>7</sup> zed 641
+@enduml

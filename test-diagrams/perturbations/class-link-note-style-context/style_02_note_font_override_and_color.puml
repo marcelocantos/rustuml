@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam noteFontName Verdana
+skinparam noteFontSize 15
+class StyleOverrideLeft731
+class StyleOverrideRight739
+StyleOverrideLeft731 --> StyleOverrideRight739 : note override 743
+note on link #LightYellow : override row Wwm 751
+@enduml

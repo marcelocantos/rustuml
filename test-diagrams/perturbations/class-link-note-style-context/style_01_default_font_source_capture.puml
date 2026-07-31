@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Arial
+class StyleCaptureLeft701
+class StyleCaptureRight709
+StyleCaptureLeft701 --> StyleCaptureRight709 : style link owner 711
+skinparam defaultFontName Verdana
+note on link : captured font row Wwm 719
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class DimFreshWest901
+class DimFreshEast907
+DimFreshWest901 --> DimFreshEast907 : q9
+note left on link
+  fractional width row mWmi 911
+  body narrow 913
+end note
+@enduml
