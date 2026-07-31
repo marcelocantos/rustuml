@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-grammar",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "7908a9cb0a607a6e86d2817b90cf95dd4ca16c15",
+  "triggering_reviews": [
+    "docs/parity-reviews/component-named-note-code-grammar/review.json",
+    "docs/parity-reviews/deployment-named-note-relation-identity-events/review.json"
+  ],
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.multiLine", "CommandFactoryNote.singleLine", "CommandFactoryNote.executeInternal"],
+      "lines": "70-114,141-166",
+      "role": "Defines one shared named-note command grammar for every AbstractEntityDiagram: CODE is Unicode letters/numbers plus underscore/dot, followed in order by optional tags, stereotype and color; execution creates one NOTE quark and stores every decoration."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/stereo/Stereotag.java",
+      "symbols": ["Stereotag.pattern"],
+      "lines": "42-48",
+      "role": "Defines one or more dollar-prefixed tags separated by whitespace before the stereotype slot."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java",
+      "symbols": ["StereotypePattern.optional", "StereotypePattern.mandatory"],
+      "lines": "39-56",
+      "role": "Defines the optional chevron stereotype slot between tags and color."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["NOTE_CODE_PATTERN", "RE_NOTE_INLINE", "RE_NOTE_MULTI"],
+      "lines": "34-36,332-345,709-791",
+      "role": "Uses the correct code token for Component notes, but the multiline grammar permits only color after the code and therefore drops Java-valid stereotype/tag declarations; note decorations are not preserved in ComponentNote."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["RE_NOTE_FLOATING", "RE_NOTE_FLOATING_MULTI"],
+      "lines": "469-477,645-683",
+      "role": "Uses inconsistent code grammars: inline accepts only a word while multiline accepts word-or-dot; neither follows the complete Java decoration sequence."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/component.rs",
+      "symbols": ["ComponentNote"],
+      "lines": "200-220",
+      "role": "Carries identity and ownership but currently has no fields for CommandFactoryNote tags, stereotype or color."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": ["DeploymentNote"],
+      "lines": "33-57",
+      "role": "Carries color but currently has no fields for CommandFactoryNote tags or stereotype."
+    }
+  ],
+  "claimed_invariant": "Inline and multiline named-note declarations in every AbstractEntityDiagram share one complete command grammar. CODE contains one or more Unicode letters, Unicode numbers, underscores or dots. After CODE, zero or more dollar tags, then at most one chevron stereotype, then at most one color token are accepted in that order with optional whitespace and no unconsumed suffix. A successful command creates exactly one named note at its command/body source location and preserves code, tags, stereotype and color in the AST; parser dispatch must not depend on the diagram family.",
+  "causal_divergence": "Rust independently reconstructed Component and Deployment note regexes. Component copied only the CODE token and a color suffix; Deployment uses two different ASCII/word token classes. Because recognition and semantic capture are split by family, valid Java commands either disappear entirely or fall through into later dummy-node creation, changing identity and UID order.",
+  "planned_model_change": "Move the Java-derived CODE and decoration grammar into shared parse helpers. Parse inline and multiline named-note openers into one structured result containing code, tags, stereotype and color, and use it from both Component and Deployment parsers. Extend both note AST records and their multiline accumulators to preserve those decorations. Keep Unicode code text unchanged in the parser; Java's later SVG metadata escaping is a separate rendering mechanism.",
+  "perturbation_axes": [
+    "Component versus Deployment dispatch",
+    "inline versus multiline note body",
+    "simple, dotted and Unicode code tokens",
+    "no decorations versus tags, stereotype and color individually and together",
+    "root versus nested owner",
+    "valid decoration order versus invalid reordered suffix",
+    "named note before versus after ordinary entities",
+    "relation endpoint reuse after declaration"
+  ],
+  "acceptance": [
+    "The two triggering valid counterexamples produce one named note rather than no note or a dummy node.",
+    "Component and Deployment parsers return identical structured code/tag/stereotype/color captures for the same valid opener forms.",
+    "Invalid code punctuation and reordered decorations do not partially match or create prefix identities.",
+    "Dotted Deployment note relations reuse the parsed note identity and preserve source-order UID events.",
+    "An independent checker generates fresh valid and invalid forms across both dispatch families, body modes, ownership depth and decoration combinations."
+  ],
+  "forbidden_approaches": [
+    "adding only a dot to the one rejecting Deployment regex",
+    "special-casing the reviewed note ids or suffix strings",
+    "accepting arbitrary trailing text after a valid code prefix",
+    "sanitizing Unicode code text in the parser to imitate SVG metadata",
+    "discarding tags, stereotype or color after using them only to make the regex match"
+  ],
+  "declared_residue": [
+    "Java's non-ASCII-to-dot SVG qualified-name normalization remains a separate rendering metadata mechanism.",
+    "Applying stereotype/tag-driven style selectors during note painting remains separate from command recognition and AST preservation.",
+    "Duplicate-note error page semantics and quoted relation endpoint cleanup remain separate mechanisms."
+  ]
+}
