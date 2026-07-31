@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "mechanism": "svg-logical-monospace-serialization",
-  "status": "account_committed_before_implementation",
+  "status": "implementation_green_pending_independent_review",
+  "account_revision": "bc9e5362",
+  "implementation_revision": "336db230",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java:UFontImpl#getFamily",
@@ -40,5 +42,23 @@
   "evidence_inputs": [
     "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
     "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.svg"
+  ],
+  "implementation_evidence": [
+    {
+      "command": "cargo test -p rustuml-render svg_backend_canonicalizes_logical_monospace_and_its_spaces",
+      "result": "passed for Monospaced, mixed-case Monospaced, Courier, and proportional-family control"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "command": "cargo test -p rustuml-render --lib",
+      "result": "821 passed, 0 failed"
+    },
+    {
+      "command": "cargo test --test golden_no_oracle --release",
+      "result": "passed at the ratcheted product baseline of 11174 / 11250"
+    }
   ]
 }
