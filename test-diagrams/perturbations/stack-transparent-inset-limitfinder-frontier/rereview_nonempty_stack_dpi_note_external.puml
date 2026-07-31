@@ -1,0 +1,12 @@
+@startuml
+skinparam dpi 216
+
+stack "Dpi Routed Stack" as DpiRoutedStack {
+  class LedgerNodeOne
+  class LedgerNodeTwo
+}
+
+class ExternalObserverZ
+note left of DpiRoutedStack : dpi stack with external sibling
+LedgerNodeOne --> ExternalObserverZ : publish_snapshot
+@enduml

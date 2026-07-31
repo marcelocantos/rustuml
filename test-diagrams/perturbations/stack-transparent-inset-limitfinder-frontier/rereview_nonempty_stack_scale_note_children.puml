@@ -1,0 +1,21 @@
+@startuml
+scale 1.625
+left to right direction
+skinparam packageBorderThickness 4
+
+stack "Transit Bundle Stack" as TransitBundleStack {
+  class IntakeWitnessA
+  class ReviewWitnessB
+  interface PublishWitnessC
+  class ArchiveWitnessD
+}
+
+folder "Parallel Folder Archive" as ParallelFolderArchive {
+  class FolderReaderQ
+}
+
+note top of TransitBundleStack : scaled stack with four children
+IntakeWitnessA --> PublishWitnessC : open_batch
+ReviewWitnessB --> PublishWitnessC : close_batch
+ArchiveWitnessD ..> FolderReaderQ : mirror_state
+@enduml

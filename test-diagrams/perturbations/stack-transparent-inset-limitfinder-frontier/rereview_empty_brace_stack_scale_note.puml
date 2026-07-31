@@ -1,0 +1,9 @@
+@startuml
+scale 1.7
+skinparam roundcorner 18
+
+stack "Brace Intake Vault" as BraceIntakeVault {
+}
+
+note right of BraceIntakeVault : empty brace stack with scaled note
+@enduml

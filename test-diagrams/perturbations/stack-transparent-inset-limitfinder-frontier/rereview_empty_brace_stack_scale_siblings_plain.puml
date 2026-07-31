@@ -1,0 +1,11 @@
+@startuml
+scale 1.7
+left to right direction
+
+stack "Brace Intake Plain" as BraceIntakePlain {
+}
+
+class AdjacentWitnessAlpha
+class AdjacentWitnessBeta
+AdjacentWitnessAlpha --> AdjacentWitnessBeta : retain_neighbor_layout
+@enduml

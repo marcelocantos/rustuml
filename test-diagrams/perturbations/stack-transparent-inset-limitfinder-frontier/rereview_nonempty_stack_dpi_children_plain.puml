@@ -1,0 +1,13 @@
+@startuml
+skinparam dpi 204
+
+stack "Dpi Ledger Cluster" as DpiLedgerCluster {
+  class RoutedArchiveAlpha
+  class RoutedArchiveBeta
+  interface RoutedArchiveGamma
+}
+
+class ExternalVerifierDelta
+RoutedArchiveAlpha --> RoutedArchiveGamma : audit_route
+RoutedArchiveBeta ..> ExternalVerifierDelta : publish_delta
+@enduml

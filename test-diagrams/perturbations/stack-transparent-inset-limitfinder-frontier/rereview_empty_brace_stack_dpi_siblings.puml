@@ -1,0 +1,12 @@
+@startuml
+skinparam dpi 192
+left to right direction
+
+stack "Brace Dispatch Cache" as BraceDispatchCache {
+}
+
+class WitnessLedgerOne
+class WitnessLedgerTwo
+note bottom of BraceDispatchCache : empty brace stack with siblings
+WitnessLedgerOne --> WitnessLedgerTwo : keep_adjacent_load
+@enduml
