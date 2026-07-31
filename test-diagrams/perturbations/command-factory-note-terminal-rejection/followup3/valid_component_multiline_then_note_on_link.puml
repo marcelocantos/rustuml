@@ -1,0 +1,9 @@
+@startuml
+component AnchorVCL
+component ArchiveVCL
+note as LinkCarryComp
+ready for link note
+endnote
+AnchorVCL --> ArchiveVCL : primary route
+note on link : component link note survives
+@enduml

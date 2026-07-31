@@ -1,0 +1,6 @@
+@startuml
+component AnchorCME
+note as EmptyCarryComp
+end note
+AnchorCME --> EmptyCarryComp : empty note relation
+@enduml

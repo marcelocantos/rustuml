@@ -1,0 +1,9 @@
+@startuml
+node AnchorDMG
+note as GapCarryDeploy
+first deployment line
+
+second deployment line
+endnote
+AnchorDMG --> GapCarryDeploy : gap note relation
+@enduml

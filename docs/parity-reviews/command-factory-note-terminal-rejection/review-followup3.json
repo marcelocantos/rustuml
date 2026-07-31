@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-terminal-rejection",
+  "review_kind": "third_follow_up",
+  "verdict": "REJECT",
+  "checked_at": "2026-07-31",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-2026-07-31-followup3",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not implement revision ecdaee0b1ec86743512494d07825800d0103ed52 and was explicitly instructed to try to disprove its claimed Java/Rust equivalence."
+  },
+  "revisions": {
+    "rust": "ecdaee0b1ec86743512494d07825800d0103ed52",
+    "rust_branch": "codex/t14-note-terminal-checker3",
+    "implementation_commit": "ecdaee0b1ec86743512494d07825800d0103ed52",
+    "implementation_parent": "cebf5f7e0ee10d80163f7d2180dc59aca85d5cd4",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256_before": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_jar_sha256_after": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "/private/tmp/rustuml-note-terminal-followup2/target/release/rustuml",
+    "rust_binary_sha256_before": "ad2e5a4bc2a1e7164ed3566c4ccce69635f79aa5afb2bb276c4657776ddaddf5",
+    "rust_binary_sha256_after": "ad2e5a4bc2a1e7164ed3566c4ccce69635f79aa5afb2bb276c4657776ddaddf5",
+    "rust_binary_version": "rustuml 0.7.0"
+  },
+  "preserved_prior_records": {
+    "account_json_sha256": "b51860d6b508e81980bcd49282bd3a54bbf7c71ebacd9714da4d6323ec0a0c27",
+    "review_json_sha256": "d37ae5a41fe3802e3c903be41863cd5b66177248dbe92febbf91662a9453e36e",
+    "review_followup_json_sha256": "571f185b72c7f37b032336b5ab716745f13633f323b6b14be5a3bbb1cdf35915",
+    "review_followup2_json_sha256": "cd89d9fb4e02fa1b0820edda23efc36bd3a8a5a32cbdbb9e0483e8de69c9fe90",
+    "modified_by_checker": false
+  },
+  "reviewed_sources": {
+    "account": [
+      "docs/parity-reviews/command-factory-note-terminal-rejection/account.json",
+      "docs/parity-reviews/command-factory-note-terminal-rejection/review.json",
+      "docs/parity-reviews/command-factory-note-terminal-rejection/review-followup.json",
+      "docs/parity-reviews/command-factory-note-terminal-rejection/review-followup2.json"
+    ],
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+        "symbols": [
+          "CommandFactoryNote.singleLine",
+          "CommandFactoryNote.multiLine",
+          "CommandFactoryNote.createSingleLine",
+          "CommandFactoryNote.createMultiLine"
+        ],
+        "assessment": "The inline named-note form owns `note + whitespace + %g` and the multiline form owns `note as CODE`; both execute even when the resulting Display is empty. The multiline body comes from `BlocLines.subExtract(1, 1).removeEmptyColumns().toDisplay()`."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+        "symbols": [
+          "Pattern2.QUOTED_REPLACEMENTS",
+          "Pattern2.compileInternal",
+          "Pattern2.transform"
+        ],
+        "assessment": "%g expands to U+0022, U+201C, U+201D and U+E121 everywhere, and %s includes NBSP in addition to ordinary whitespace."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/stereo/Stereotag.java",
+        "symbols": [
+          "Stereotag.SINGLE",
+          "Stereotag.pattern"
+        ],
+        "assessment": "Tag bodies exclude the full Pattern2 %g alphabet; fresh inline negative controls still reject in both products."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+        "symbols": [
+          "DescriptionDiagramFactory.initCommandsList"
+        ],
+        "assessment": "The Description command inventory registers named-note, note-on-link, and attached-note factories in the same family. Plain floating `note : ...` is not a valid Description command."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+        "symbols": [
+          "CommandFactoryNoteOnEntity.getRegexConcatSingleLine",
+          "CommandFactoryNoteOnEntity.getRegexConcatMultiLine"
+        ],
+        "assessment": "Attached-note commands remain valid after a completed named note; both fresh attached-note controls pass."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+        "symbols": [
+          "CommandFactoryNoteOnLink.getRegexConcatSingleLine",
+          "CommandFactoryNoteOnLink.getRegexConcatMultiLine",
+          "CommandFactoryNoteOnLink.executeInternal"
+        ],
+        "assessment": "Java accepts `note on link : ...` after the preceding link and emits the link note in both single-line and multiline forms."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+        "symbols": [
+          "PSystemCommandFactory.getCandidate",
+          "PSystemCommandFactory.isMultilineCommandOk",
+          "PSystemCommandFactory.executeFewLines"
+        ],
+        "assessment": "Java requires every source line to be consumed by a registered command and rejects unmatched candidates with syntax-error output."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+        "symbols": [
+          "PSystemBuilder.createPSystem"
+        ],
+        "assessment": "Factory selection returns the first Description diagram factory that parses successfully and otherwise merges errors."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/parse/mod.rs",
+        "symbols": [
+          "parse_named_note_inline",
+          "parse_named_note_multiline",
+          "looks_like_named_note_inline_command",
+          "looks_like_named_note_multiline_command",
+          "is_ordinary_note_terminator"
+        ],
+        "lines": "36-214,1310-1318",
+        "assessment": "The third follow-up keeps the repaired `%g` ownership model: fresh inline positive controls accept asymmetric delimiters and fresh `%g`-inside-DISPLAY/tag negatives still reject."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/component.rs",
+        "symbols": [
+          "parse_component"
+        ],
+        "lines": "372-407,798-833,1151-1154",
+        "assessment": "After a multiline note opener is accepted, the terminator path trims the accumulated body and emits no note when the trimmed body is empty. Component still also accepts plain floating notes through `RE_NOTE_MULTI_PLAIN`."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/deployment.rs",
+        "symbols": [
+          "parse_deployment"
+        ],
+        "lines": "566-610,722-818,1017-1021",
+        "assessment": "Deployment skips blank lines before checking whether a named-note accumulator is active, so blank body lines are lost. The family still has attached-note branches but no note-on-link branch after a completed named note."
+      }
+    ]
+  },
+  "causal_assessment": {
+    "inline_repair_status": "SUPPORTED",
+    "first_disproof": "Component multiline named notes still diverge after successful recognition: `parse_component` trims the accumulated body on terminator and suppresses note creation when the body is empty or blank-only, while Java still creates the named note entity.",
+    "second_disproof": "Deployment multiline named notes still diverge after successful recognition: `parse_deployment` skips blank lines before the `note_accum` branch, so valid blank body lines vanish from the note text even though Java preserves them as NBSP spacer lines in the rendered note.",
+    "third_disproof": "The Description-family ownership boundary remains incomplete after a completed named note. Deployment still drops a valid `note on link : ...` command, and a component-shaped source with a completed named note followed by plain `note : ...` falls into Rust Class parsing even though Java returns a syntax error."
+  },
+  "commands": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git show -s --format='%H%n%P%n%s' ecdaee0b1ec86743512494d07825800d0103ed52",
+    "git status --short",
+    "shasum -a 256 /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sed -n 1,220p docs/parity-reviews/command-factory-note-terminal-rejection/account.json",
+    "nl -ba docs/parity-reviews/command-factory-note-terminal-rejection/review.json | sed -n 1,303p",
+    "nl -ba docs/parity-reviews/command-factory-note-terminal-rejection/review-followup.json | sed -n 1,290p",
+    "nl -ba docs/parity-reviews/command-factory-note-terminal-rejection/review-followup2.json | sed -n 1,309p",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/stereo/Stereotag.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "sed -n 1,280p crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n 300,1200p crates/rustuml-parser/src/parse/component.rs",
+    "sed -n 520,1080p crates/rustuml-parser/src/parse/deployment.rs",
+    "ruby - <<'RUBY'  # generated 13 fresh followup3 sources, wrote cases.json/results.json, and for each case ran: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe ; /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml -pipe -tsvg ; /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml -pipe --yaml",
+    "find test-diagrams/perturbations/command-factory-note-terminal-rejection/followup3 -name '*.java.svg' -exec xmllint --noout {} +",
+    "find test-diagrams/perturbations/command-factory-note-terminal-rejection/followup3 -name '*.rust.svg' -size +0 -exec xmllint --noout {} +",
+    "rg -n 'command-factory-note-terminal-rejection|followup3|EmptyCarryComp|BlankCarryComp|GapCarryDeploy|GapNbspDeploy|ForceDeployLink|ForcePlainCarry|test-diagrams/perturbations|include_str!' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+  ],
+  "execution_constraints": {
+    "cargo_or_rustc_run": false,
+    "shipping_code_modified": false,
+    "account_modified": false,
+    "prior_reviews_modified": false,
+    "frozen_binary_hash_preserved": true,
+    "java_jar_hash_preserved": true,
+    "no_oracle_product_path": true
+  },
+  "case_evidence": {
+    "root": "test-diagrams/perturbations/command-factory-note-terminal-rejection/followup3",
+    "manifest": "test-diagrams/perturbations/command-factory-note-terminal-rejection/followup3/cases.json",
+    "manifest_sha256": "38cf3d6adc55cec5fc3e6d0a27288f04452a63e4aac15b45a9902fd49d8127df",
+    "results": "test-diagrams/perturbations/command-factory-note-terminal-rejection/followup3/results.json",
+    "results_sha256": "5dd4a888eb8f0edb2f9e5b0ac188a2da47dedb9778a5205475ad1f90cd8f9aad",
+    "artifact_convention": "Each source has same-stem .java.svg/.java.stderr/.java.status and .rust.svg/.rust.stderr/.rust.status/.rust.yaml/.rust.yaml.stderr/.rust.yaml.status artifacts. Empty Rust SVG/YAML outputs are preserved for parser rejections.",
+    "total_files": 132,
+    "missing_expected_artifacts": 0,
+    "java_svg_xml_valid": 13,
+    "nonempty_rust_svg_xml_valid": 11,
+    "nonempty_rust_yaml_outputs": 11,
+    "categories": [
+      {
+        "category": "inline_controls",
+        "count": 4,
+        "coverage": "Fresh Component and Deployment inline positive controls exercise asymmetric %g delimiter pairs, NBSP, nested ownership, multiple tags, stereotype/color ordering, attached-note follow-ups, and two preserved negative controls for embedded DISPLAY and tag-body %g members."
+      },
+      {
+        "category": "multiline_body",
+        "count": 4,
+        "coverage": "Fresh multiline cases exercise empty body, blank-only body, internal blank lines, NBSP-only blank lines, root versus nested ownership, mixed endnote/end note spelling, and later relations to the named-note code."
+      },
+      {
+        "category": "ownership_controls",
+        "count": 5,
+        "coverage": "Fresh boundary controls exercise attached-note, note-on-link, and plain floating-note ownership after a completed named note in Component and Deployment-shaped sources."
+      }
+    ]
+  },
+  "verification": {
+    "sources": 13,
+    "java_valid": 10,
+    "java_invalid": 3,
+    "valid_accept_agreements": 5,
+    "invalid_reject_agreements": 2,
+    "valid_java_mismatches": 5,
+    "java_invalid_rust_successes": 1,
+    "total_rejecting_cases": 6,
+    "cargo_or_rustc_invocations": 0
+  },
+  "inputs": [
+    {
+      "source": "component_multiline_blank_only_nested_relation.puml",
+      "axes": [
+        "Component",
+        "multiline named note",
+        "blank-only body line",
+        "nested package owner",
+        "later relation to note code"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING",
+      "detail": "Java SVG contains entity `OuterBlankComp.BlankCarryComp`; Rust Component YAML leaves `notes: []` while still emitting a connection to `BlankCarryComp`."
+    },
+    {
+      "source": "component_multiline_empty_body_relation.puml",
+      "axes": [
+        "Component",
+        "multiline named note",
+        "empty body",
+        "root owner",
+        "later relation to note code"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING",
+      "detail": "Java SVG contains entity `EmptyCarryComp`; Rust Component YAML leaves `notes: []` while still emitting a connection to `EmptyCarryComp`."
+    },
+    {
+      "source": "component_multiline_then_plain_floating_note.puml",
+      "axes": [
+        "Component-shaped source",
+        "completed multiline named note",
+        "plain floating note boundary",
+        "later relation to named-note code"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING",
+      "detail": "Java returns a syntax-error SVG; Rust succeeds by selecting the Class parser, materializing `note` as an ordinary class with a field, and retaining `ForcePlainCarry` as a class-diagram note."
+    },
+    {
+      "source": "deployment_multiline_internal_blank_line_relation.puml",
+      "axes": [
+        "Deployment",
+        "multiline named note",
+        "internal blank line",
+        "root owner",
+        "later relation to note code"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING",
+      "detail": "Java SVG contains `first deployment line`, an `&#160;` spacer line, and `second deployment line`; Rust Deployment YAML collapses the body to two adjacent lines with no blank separator."
+    },
+    {
+      "source": "deployment_multiline_nbsp_blank_line_nested_relation.puml",
+      "axes": [
+        "Deployment",
+        "multiline named note",
+        "NBSP-only blank line",
+        "nested owner",
+        "mixed-case spaced terminator",
+        "later relation to note code"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING",
+      "detail": "Java SVG preserves the NBSP-only body line as an `&#160;` spacer inside nested note `OuterGapDeploy.GapNbspDeploy`; Rust Deployment YAML drops it and joins the surrounding lines."
+    },
+    {
+      "source": "deployment_multiline_then_note_on_link.puml",
+      "axes": [
+        "Deployment",
+        "completed multiline named note",
+        "forced deployment via relation to note code",
+        "note-on-link control follows",
+        "later relation"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING",
+      "detail": "Java SVG contains the link-note text `deployment link note should survive`; Rust Deployment YAML contains only the named note `ForceDeployLink` and no on-link note entry or text."
+    },
+    {
+      "source": "invalid_component_embedded_right_display_rejects.puml",
+      "axes": [
+        "Component",
+        "inline named note",
+        "ASCII outer delimiters",
+        "embedded right-curly %g in DISPLAY",
+        "later relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "The third follow-up still rejects the prior embedded-DISPLAY ownership escape."
+    },
+    {
+      "source": "invalid_deployment_tag_contains_jaws_rejects.puml",
+      "axes": [
+        "Deployment",
+        "inline named note",
+        "ASCII outer delimiters",
+        "Jaws %g inside tag body",
+        "later relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "The third follow-up still rejects the prior tag-body `%g` failure path."
+    },
+    {
+      "source": "valid_component_inline_asymmetric_nbsp_multitag.puml",
+      "axes": [
+        "Component",
+        "inline named note",
+        "right-curly/ascii asymmetric %g pair",
+        "NBSP after note",
+        "multiple tags",
+        "stereotype then color",
+        "later relation",
+        "attached-note control"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS",
+      "detail": "Rust Component YAML retains owner `OuterComp`, tags `ops/kept`, stereotype `Ledger`, color `#MistyRose`, later relation, and attached-note control."
+    },
+    {
+      "source": "valid_component_multiline_then_attached_note.puml",
+      "axes": [
+        "Component",
+        "completed multiline named note",
+        "attached-note control follows",
+        "later relation"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS",
+      "detail": "Both products retain the completed named note and the later attached note."
+    },
+    {
+      "source": "valid_component_multiline_then_note_on_link.puml",
+      "axes": [
+        "Component",
+        "completed multiline named note",
+        "note-on-link control follows",
+        "later relation"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS",
+      "detail": "Rust Component YAML and SVG both retain the link-note text `component link note survives` after the completed named note."
+    },
+    {
+      "source": "valid_deployment_inline_jaws_nested_multitag.puml",
+      "axes": [
+        "Deployment",
+        "inline named note",
+        "left-curly/Jaws asymmetric %g pair",
+        "nested owner",
+        "multiple tags",
+        "stereotype then color",
+        "later relation",
+        "attached-note control"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS",
+      "detail": "Rust Deployment YAML retains nested owner `OuterVDI`, tags `ops/kept`, stereotype `Ledger`, later relation, and attached-note control."
+    },
+    {
+      "source": "valid_deployment_multiline_then_attached_note.puml",
+      "axes": [
+        "Deployment",
+        "completed multiline named note",
+        "attached-note control follows",
+        "later relation"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS",
+      "detail": "Both products retain the completed named note and the later attached note."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Component still drops valid empty or blank-only multiline named notes after successful recognition",
+      "java_provenance": "CommandFactoryNote.createMultiLine always executes `executeInternal` after `subExtract(1, 1)` and does not reject an empty Display; Java SVGs for `component_multiline_empty_body_relation` and `component_multiline_blank_only_nested_relation` both contain named note entities.",
+      "rust_data_flow": "`parse_component` joins the accumulated body, trims it, and only pushes a note when the trimmed text is non-empty ([component.rs] lines 374-390). The opener was already accepted at lines 798-812, so Rust returns success with no note object.",
+      "evidence": [
+        "component_multiline_empty_body_relation.java.svg",
+        "component_multiline_empty_body_relation.rust.yaml",
+        "component_multiline_blank_only_nested_relation.java.svg",
+        "component_multiline_blank_only_nested_relation.rust.yaml"
+      ],
+      "impact": "Fresh valid Java notes disappear in Rust while later connections still target the missing note codes."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Deployment still strips valid blank body lines from multiline named notes",
+      "java_provenance": "Java `CommandMultilines2` keeps the body lines inside the accepted multiline command, and the rendered note contains an `&#160;` spacer line for both blank-line probes.",
+      "rust_data_flow": "`parse_deployment` skips every blank trimmed line before it checks `note_accum` ([deployment.rs] lines 566-570), so blank and NBSP-only body lines never reach the accumulator. The terminator path then joins only the surviving nonblank lines ([deployment.rs] lines 589-607).",
+      "evidence": [
+        "deployment_multiline_internal_blank_line_relation.java.svg",
+        "deployment_multiline_internal_blank_line_relation.rust.yaml",
+        "deployment_multiline_nbsp_blank_line_nested_relation.java.svg",
+        "deployment_multiline_nbsp_blank_line_nested_relation.rust.yaml"
+      ],
+      "impact": "Fresh valid Deployment notes lose body structure even though the note itself is otherwise accepted."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Deployment still omits a valid note-on-link command after a completed named note",
+      "java_provenance": "DescriptionDiagramFactory registers `CommandFactoryNoteOnLink`, and the Java SVG for `deployment_multiline_then_note_on_link` contains the link-note text `deployment link note should survive`.",
+      "rust_data_flow": "After named-note and attached-note handling, `parse_deployment` has no note-on-link branch before it moves on to node and connection parsing ([deployment.rs] lines 774-820). The forced Deployment YAML therefore contains only the named note `ForceDeployLink` and no link note.",
+      "evidence": [
+        "deployment_multiline_then_note_on_link.java.svg",
+        "deployment_multiline_then_note_on_link.rust.svg",
+        "deployment_multiline_then_note_on_link.rust.yaml"
+      ],
+      "impact": "A valid Java control following a completed named note still vanishes in the frozen Rust product."
+    },
+    {
+      "severity": "rejecting",
+      "title": "A component-shaped plain floating-note boundary still succeeds under the wrong Rust family",
+      "java_provenance": "Plain floating `note : ...` is not registered as a valid Description command in Java, so `component_multiline_then_plain_floating_note` returns a syntax-error SVG.",
+      "rust_data_flow": "The frozen Rust product succeeds on the same source by selecting the Class parser and materializing `note` as an ordinary class with a field, while also retaining the previously completed named note. The resulting YAML has `type: Class` rather than a Component-family diagram.",
+      "evidence": [
+        "component_multiline_then_plain_floating_note.java.status",
+        "component_multiline_then_plain_floating_note.rust.yaml"
+      ],
+      "impact": "This remains an executable command-inventory and factory-selection mismatch at the boundary around completed named-note syntax."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The third follow-up keeps the earlier `%g` repairs intact on fresh inline probes",
+      "detail": "Fresh asymmetric-delimiter positives pass in both Component and Deployment, and fresh embedded-DISPLAY and tag-body `%g` negatives still reject before later relation mutation."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "Attached-note and Component note-on-link controls still work after completed named notes",
+      "detail": "Fresh Component attached-note and note-on-link controls, plus a fresh Deployment attached-note control, all survive in the frozen product."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "golden_or_perturbation_reads_found": false,
+    "unexplained_numeric_constants_found": false,
+    "evidence": "Searches of shipping crates found no mechanism name, followup3 case names, perturbation paths, or held-out labels. The only `include_str!` matches are pre-existing theme assets and the renderer oracle self-source table, not this mechanism's fixtures."
+  },
+  "residue_assessment": [
+    "Java versus Rust error-page SVG artwork, diagnostics, and line-number wording were not compared; acceptance, preserved SVG structure, and Rust YAML semantics were the oracle.",
+    "The deployment link-note mismatch was previously declared as a separate defect, but the prompt explicitly required challenging note-on-link ownership after completed named notes; the preserved case remains a valid Java-versus-Rust mismatch.",
+    "The component plain floating-note case is broader than the core terminal-rejection claim, but it directly exercises the requested plain-note and factory-selection boundary after a completed named note and remains executable."
+  ],
+  "verdict_reason": "REJECT. The third follow-up keeps the earlier `%g` ownership fixes intact, but it still fails six fresh executable probes: two Component cases where valid empty or blank-only multiline named notes disappear, two Deployment cases where valid blank body lines are stripped, one forced-Deployment case where a valid `note on link` still vanishes, and one component-shaped source where Java reports syntax error while Rust succeeds under the wrong parser family. The frozen Rust binary hash stayed ad2e5a4bc2a1e7164ed3566c4ccce69635f79aa5afb2bb276c4657776ddaddf5 before and after."
+}

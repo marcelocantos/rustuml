@@ -1,0 +1,226 @@
+[
+  {
+    "name": "valid_component_inline_asymmetric_nbsp_multitag",
+    "category": "inline_controls",
+    "axes": [
+      "Component",
+      "inline named note",
+      "right-curly/ascii asymmetric %g pair",
+      "NBSP after note",
+      "multiple tags",
+      "stereotype then color",
+      "later relation",
+      "attached-note control"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 3206,
+    "rust_svg_bytes": 3016,
+    "rust_yaml_bytes": 1250
+  },
+  {
+    "name": "valid_deployment_inline_jaws_nested_multitag",
+    "category": "inline_controls",
+    "axes": [
+      "Deployment",
+      "inline named note",
+      "left-curly/Jaws asymmetric %g pair",
+      "nested owner",
+      "multiple tags",
+      "stereotype then color",
+      "later relation",
+      "attached-note control"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 3213,
+    "rust_svg_bytes": 3018,
+    "rust_yaml_bytes": 1121
+  },
+  {
+    "name": "invalid_component_embedded_right_display_rejects",
+    "category": "inline_controls",
+    "axes": [
+      "Component",
+      "inline named note",
+      "ASCII outer delimiters",
+      "embedded right-curly %g in DISPLAY",
+      "later relation"
+    ],
+    "java_exit": 200,
+    "rust_exit": 1,
+    "rust_yaml_exit": 1,
+    "java_svg_bytes": 1862,
+    "rust_svg_bytes": 0,
+    "rust_yaml_bytes": 0
+  },
+  {
+    "name": "invalid_deployment_tag_contains_jaws_rejects",
+    "category": "inline_controls",
+    "axes": [
+      "Deployment",
+      "inline named note",
+      "ASCII outer delimiters",
+      "Jaws %g inside tag body",
+      "later relation"
+    ],
+    "java_exit": 200,
+    "rust_exit": 1,
+    "rust_yaml_exit": 1,
+    "java_svg_bytes": 1930,
+    "rust_svg_bytes": 0,
+    "rust_yaml_bytes": 0
+  },
+  {
+    "name": "component_multiline_empty_body_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Component",
+      "multiline named note",
+      "empty body",
+      "root owner",
+      "later relation to note code"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 1626,
+    "rust_svg_bytes": 1039,
+    "rust_yaml_bytes": 727
+  },
+  {
+    "name": "component_multiline_blank_only_nested_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Component",
+      "multiline named note",
+      "blank-only body line",
+      "nested package owner",
+      "later relation to note code"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 2354,
+    "rust_svg_bytes": 1740,
+    "rust_yaml_bytes": 929
+  },
+  {
+    "name": "deployment_multiline_internal_blank_line_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Deployment",
+      "multiline named note",
+      "internal blank line",
+      "root owner",
+      "later relation to note code"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 2129,
+    "rust_svg_bytes": 1848,
+    "rust_yaml_bytes": 738
+  },
+  {
+    "name": "deployment_multiline_nbsp_blank_line_nested_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Deployment",
+      "multiline named note",
+      "NBSP-only blank line",
+      "nested owner",
+      "mixed-case spaced terminator",
+      "later relation to note code"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 2886,
+    "rust_svg_bytes": 2568,
+    "rust_yaml_bytes": 999
+  },
+  {
+    "name": "valid_component_multiline_then_note_on_link",
+    "category": "ownership_controls",
+    "axes": [
+      "Component",
+      "completed multiline named note",
+      "note-on-link control follows",
+      "later relation"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 3521,
+    "rust_svg_bytes": 3410,
+    "rust_yaml_bytes": 1127
+  },
+  {
+    "name": "valid_component_multiline_then_attached_note",
+    "category": "ownership_controls",
+    "axes": [
+      "Component",
+      "completed multiline named note",
+      "attached-note control follows",
+      "later relation"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 3714,
+    "rust_svg_bytes": 3576,
+    "rust_yaml_bytes": 1142
+  },
+  {
+    "name": "deployment_multiline_then_note_on_link",
+    "category": "ownership_controls",
+    "axes": [
+      "Deployment",
+      "completed multiline named note",
+      "forced deployment via relation to note code",
+      "note-on-link control follows",
+      "later relation"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 3654,
+    "rust_svg_bytes": 3002,
+    "rust_yaml_bytes": 1031
+  },
+  {
+    "name": "valid_deployment_multiline_then_attached_note",
+    "category": "ownership_controls",
+    "axes": [
+      "Deployment",
+      "completed multiline named note",
+      "attached-note control follows",
+      "later relation"
+    ],
+    "java_exit": 0,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 3731,
+    "rust_svg_bytes": 3569,
+    "rust_yaml_bytes": 1038
+  },
+  {
+    "name": "component_multiline_then_plain_floating_note",
+    "category": "ownership_controls",
+    "axes": [
+      "Component-shaped source",
+      "completed multiline named note",
+      "plain floating note boundary",
+      "later relation to named-note code"
+    ],
+    "java_exit": 200,
+    "rust_exit": 0,
+    "rust_yaml_exit": 0,
+    "java_svg_bytes": 2394,
+    "rust_svg_bytes": 3719,
+    "rust_yaml_bytes": 1326
+  }
+]

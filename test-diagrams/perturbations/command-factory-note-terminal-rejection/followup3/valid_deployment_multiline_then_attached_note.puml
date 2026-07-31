@@ -1,0 +1,9 @@
+@startuml
+node AnchorVDA
+node ArchiveVDA
+note as AttachCarryDeploy
+ready for attached note
+endnote
+AnchorVDA --> ArchiveVDA : primary route
+note right of AnchorVDA : deployment attached note survives
+@enduml

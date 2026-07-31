@@ -1,0 +1,49 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node OuterGapDeploy {
+        node AnchorDMN
+        note as GapNbspDeploy
+        alpha deployment line
+         
+        omega deployment line
+        End Note
+        AnchorDMN --> GapNbspDeploy : nbsp gap relation
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: OuterGapDeploy
+    label: OuterGapDeploy
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - AnchorDMN
+    source_line: 1
+    quark_order: 0
+  - id: AnchorDMN
+    label: AnchorDMN
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: AnchorDMN
+    to: GapNbspDeploy
+    label: nbsp gap relation
+    arrow_at_end: true
+    source_line: 8
+  notes:
+  - id: GapNbspDeploy
+    text: |-
+      alpha deployment line
+      omega deployment line
+    owner: OuterGapDeploy
+    quark_order: 2
+    position: Right
+    source_line: 4

@@ -1,0 +1,64 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      component AnchorCPF
+      note as ForcePlainCarry
+      ready for plain note
+      endnote
+      note : floating note boundary
+      AnchorCPF --> ForcePlainCarry : plain-note follow-up
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity AnchorCPF
+  - !Note
+    index: 0
+    owner_package: null
+  - !Entity note
+  - !Relationship 0
+  entities:
+  - id: AnchorCPF
+    label: AnchorCPF
+    explicit_alias: false
+    kind: Component
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: note
+    label: note
+    explicit_alias: false
+    kind: Class
+    members:
+    - name: floating note boundary
+      return_type: null
+      visibility: Default
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: floating note boundary
+    stereotypes: []
+    source_line: 5
+  relationships:
+  - from: AnchorCPF
+    to: ForcePlainCarry
+    kind: Dependency
+    label: plain-note follow-up
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 6
+  packages: []
+  notes:
+  - lines:
+    - ready for plain note
+    id: ForcePlainCarry
+    target: null
+    position: null
+    alias: ForcePlainCarry
+    source_line: 3
+  hide_show: []

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="220px" preserveAspectRatio="none" style="width:346px;height:220px;background:#FFFFFF;" version="1.1" viewBox="0 0 346 220" width="346px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterComp-->
+<g class="cluster" data-qualified-name="OuterComp" data-source-line="1" id="ent0002">
+<path d="M8.5,6 L92.2285,6 A3.75,3.75 0 0 1 94.7285,8.5 L101.7285,28.4883 L328.5,28.4883 A2.5,2.5 0 0 1 331,30.9883 L331,203.2988 A2.5,2.5 0 0 1 328.5,205.7988 L8.5,205.7988 A2.5,2.5 0 0 1 6,203.2988 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="101.7285" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="82.7285" x="10" y="21.5352">OuterComp</text>
+</g>
+<!--entity AnchorVCI-->
+<g class="entity" data-qualified-name="OuterComp.AnchorVCI" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="111.4082" x="22.3" y="41"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="113.7082" y="46"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="111.7082" y="48"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="111.7082" y="52"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71.4082" x="37.3" y="74.5352">AnchorVCI</text>
+</g>
+<g class="entity" data-qualified-name="OuterComp.AuditComp" data-source-line="3" id="ent0004">
+<path d="M28.38,164.49 L28.38,189.8005 A0,0 0 0 0 28.38,189.8005 L127.6276,189.8005 A0,0 0 0 0 127.6276,189.8005 L127.6276,174.49 L117.6276,164.49 L82,164.49 L78,87.95 L74,164.49 L28.38,164.49 A0,0 0 0 0 28.38,164.49" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M117.6276,164.49 L117.6276,174.49 L127.6276,174.49 L117.6276,164.49" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="78.2476" x="34.38" y="182.0584">payload trail</text>
+</g>
+<g class="entity" data-qualified-name="OuterComp.GMN6" data-source-line="5" id="ent0007">
+<path d="M203.3,51.59 L203.3,60.24 L133.86,64.24 L203.3,68.24 L203.3,76.9005 A0,0 0 0 0 203.3,76.9005 L314.697,76.9005 A0,0 0 0 0 314.697,76.9005 L314.697,61.59 L304.697,51.59 L203.3,51.59 A0,0 0 0 0 203.3,51.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M304.697,51.59 L304.697,61.59 L314.697,61.59 L304.697,51.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90.397" x="209.3" y="69.1584">attached audit</text>
+</g>
+</g></svg>

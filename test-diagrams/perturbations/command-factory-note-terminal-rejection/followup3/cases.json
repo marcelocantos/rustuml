@@ -1,0 +1,148 @@
+[
+  {
+    "name": "valid_component_inline_asymmetric_nbsp_multitag",
+    "category": "inline_controls",
+    "axes": [
+      "Component",
+      "inline named note",
+      "right-curly/ascii asymmetric %g pair",
+      "NBSP after note",
+      "multiple tags",
+      "stereotype then color",
+      "later relation",
+      "attached-note control"
+    ]
+  },
+  {
+    "name": "valid_deployment_inline_jaws_nested_multitag",
+    "category": "inline_controls",
+    "axes": [
+      "Deployment",
+      "inline named note",
+      "left-curly/Jaws asymmetric %g pair",
+      "nested owner",
+      "multiple tags",
+      "stereotype then color",
+      "later relation",
+      "attached-note control"
+    ]
+  },
+  {
+    "name": "invalid_component_embedded_right_display_rejects",
+    "category": "inline_controls",
+    "axes": [
+      "Component",
+      "inline named note",
+      "ASCII outer delimiters",
+      "embedded right-curly %g in DISPLAY",
+      "later relation"
+    ]
+  },
+  {
+    "name": "invalid_deployment_tag_contains_jaws_rejects",
+    "category": "inline_controls",
+    "axes": [
+      "Deployment",
+      "inline named note",
+      "ASCII outer delimiters",
+      "Jaws %g inside tag body",
+      "later relation"
+    ]
+  },
+  {
+    "name": "component_multiline_empty_body_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Component",
+      "multiline named note",
+      "empty body",
+      "root owner",
+      "later relation to note code"
+    ]
+  },
+  {
+    "name": "component_multiline_blank_only_nested_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Component",
+      "multiline named note",
+      "blank-only body line",
+      "nested package owner",
+      "later relation to note code"
+    ]
+  },
+  {
+    "name": "deployment_multiline_internal_blank_line_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Deployment",
+      "multiline named note",
+      "internal blank line",
+      "root owner",
+      "later relation to note code"
+    ]
+  },
+  {
+    "name": "deployment_multiline_nbsp_blank_line_nested_relation",
+    "category": "multiline_body",
+    "axes": [
+      "Deployment",
+      "multiline named note",
+      "NBSP-only blank line",
+      "nested owner",
+      "mixed-case spaced terminator",
+      "later relation to note code"
+    ]
+  },
+  {
+    "name": "valid_component_multiline_then_note_on_link",
+    "category": "ownership_controls",
+    "axes": [
+      "Component",
+      "completed multiline named note",
+      "note-on-link control follows",
+      "later relation"
+    ]
+  },
+  {
+    "name": "valid_component_multiline_then_attached_note",
+    "category": "ownership_controls",
+    "axes": [
+      "Component",
+      "completed multiline named note",
+      "attached-note control follows",
+      "later relation"
+    ]
+  },
+  {
+    "name": "deployment_multiline_then_note_on_link",
+    "category": "ownership_controls",
+    "axes": [
+      "Deployment",
+      "completed multiline named note",
+      "forced deployment via relation to note code",
+      "note-on-link control follows",
+      "later relation"
+    ]
+  },
+  {
+    "name": "valid_deployment_multiline_then_attached_note",
+    "category": "ownership_controls",
+    "axes": [
+      "Deployment",
+      "completed multiline named note",
+      "attached-note control follows",
+      "later relation"
+    ]
+  },
+  {
+    "name": "component_multiline_then_plain_floating_note",
+    "category": "ownership_controls",
+    "axes": [
+      "Component-shaped source",
+      "completed multiline named note",
+      "plain floating note boundary",
+      "later relation to named-note code"
+    ]
+  }
+]

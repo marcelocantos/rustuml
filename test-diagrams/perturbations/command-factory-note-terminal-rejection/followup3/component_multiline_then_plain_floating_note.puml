@@ -1,0 +1,8 @@
+@startuml
+component AnchorCPF
+note as ForcePlainCarry
+ready for plain note
+endnote
+note : floating note boundary
+AnchorCPF --> ForcePlainCarry : plain-note follow-up
+@enduml

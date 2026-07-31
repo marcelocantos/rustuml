@@ -1,0 +1,9 @@
+@startuml
+package OuterBlankComp {
+  component AnchorCMB
+  note as BlankCarryComp
+
+  endnote
+  AnchorCMB --> BlankCarryComp : blank note relation
+}
+@enduml

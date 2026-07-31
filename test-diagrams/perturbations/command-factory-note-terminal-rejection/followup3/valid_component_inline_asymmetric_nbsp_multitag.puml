@@ -1,0 +1,8 @@
+@startuml
+package OuterComp {
+component AnchorVCI
+note ”payload trail" as AuditComp $ops $kept <<Ledger>> #MistyRose
+AnchorVCI --> AuditComp : traces
+note right of AnchorVCI : attached audit
+}
+@enduml
