@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-exclusive-leaf-dispatch",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:UML factory ordering",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:command inventory",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:ALL_TYPES",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java:mixed-leaf rejection without allowmixing"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/component.rs:CONTAINER_KEYWORDS and leaf parsing",
+    "crates/rustuml-parser/src/parse/deployment.rs:DEPLOYMENT_KEYWORDS and kind_from_keyword"
+  ],
+  "invariant": "Java's DescriptionDiagramFactory owns the complete CommandCreateElementFull symbol vocabulary. Rust splits that family into Component and Deployment models, so subtype selection must choose Deployment whenever the complete source contains a valid DESCRIPTION leaf that the Component parser cannot consume. In the current model, card, stack, file, and agent are DESCRIPTION-only leaf symbols; artifact and storage remain valid Component leaves. A component declaration elsewhere cannot revive a Component candidate that failed to consume the exclusive leaf.",
+  "causal_divergence": "Rust scores each component declaration at 15 and each deployment keyword leaf at 5. A document containing artifact, component, and file therefore selects UmlSubtype::Component even though the Component parser has no file command. The file line is dropped, a later link auto-creates an interface, and the artifact/component are rendered through the wrong style ownership path. The rejected deployment Fashion held-out is a dispatch failure before its renderer model is reached, not a StyleCascade precedence failure.",
+  "planned_change": "Track DESCRIPTION-only leaf commands by the parser capability boundary and make Deployment win over Component when one occurs, while retaining existing Class factory viability and allowmixing rules. Add parser tests proving card/stack/file/agent force the Deployment model even beside components, while artifact/storage controls remain Component. Do not key on labels, style values, or link topology.",
+  "perturbation_axes": [
+    "card, stack, file, and agent leaves",
+    "quoted labels versus bare identifiers",
+    "before versus after component declarations",
+    "linked versus disconnected symbols",
+    "artifact and storage Component controls",
+    "styles, scale, and dpi as inert dispatch controls"
+  ],
+  "scope_boundary": "This mechanism owns @startuml subtype selection at the Component/Deployment capability boundary. It does not alter symbol parsing, Fashion resolution, rendering, layout, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "fresh_specific_zero_dpi_component_file_artifact dispatches to Deployment and passes diff_one --no-oracle",
+    "Parser tests cover every exclusive leaf and artifact/storage controls with reordered declarations",
+    "Fresh valid Java perturbations cover at least two independent axes",
+    "Parser tests and the no-oracle product ratchet remain green",
+    "An independent checker records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "matching SpecificFile, RoundCorner values, dpi 150, or fixture topology",
+    "forcing all artifact/storage component diagrams to Deployment",
+    "adding file as an implicit interface",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/deployment-generic-round-corner-propagation/review.json",
+    "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.puml",
+    "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.svg"
+  ]
+}
