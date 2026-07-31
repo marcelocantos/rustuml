@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-physical-family-guillemet-advances",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "19c2e5d6baf0e6974baf30777ef9cba556445ed0",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/FileFormat.java:FileFormat#getJavaDimension",
+    "src/main/java/net/sourceforge/plantuml/klimt/font/StringBounderRaw.java:StringBounderRaw#calculateDimension and getDescent",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomText.java:AtomText#calculateDimension",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:EntityImageDescription constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs:family_table_text_width",
+    "crates/rustuml-render/src/text_render.rs:family_text_width",
+    "crates/rustuml-render/src/usecase.rs:actor_dim",
+    "crates/rustuml-render/src/usecase.rs:use_case_dim"
+  ],
+  "claimed_invariant": "Java resolves stereotype comparators to U+00AB and U+00BB before AtomText asks the SVG StringBounder for the exact resolved physical-font dimensions. FileFormat#getJavaDimension obtains those advances from java.awt.FontMetrics for the selected family and size. A physical Arial or Verdana text run therefore uses that family's guillemet advances, not the logical SansSerif fallback, and the same measured width controls textLength, actor blocks, use-case footprints, and relation-label obstacles.",
+  "causal_divergence": "Rust's Arial and Verdana ASCII tables are family-specific, but family_table_text_width delegates every non-ASCII character to sans_text_width. The two guillemets are consequently short by 0.966796875 pixels at Arial 15, 1.095703125 pixels at Arial 17, and 2.89453125 pixels at Verdana 12. The error is identical for unrelated stereotype contents at the same family and size, proving a shared glyph-advance gap rather than label-dependent geometry. It changes emitted textLength and feeds back into actor width, use-case ellipse fitting, and relation-label placement.",
+  "planned_model_change": "Extend the physical-family table path with family-owned guillemet advances derived from the pinned Java AWT output: Arial uses 0.55615234375 em for each guillemet and Verdana uses 0.64453125 em. Keep logical SansSerif's existing 0.52392578125 em advance and preserve the ordinary non-ASCII fallback for characters without a physical-family derivation. Add family/size perturbation tests that prove the advances scale and are independent of stereotype contents.",
+  "derivation": {
+    "arial": "For two unrelated Arial 15 strings, Java textLength minus Rust textLength is 0.966796875. Dividing by two glyphs and size 15 gives 0.0322265625 em above the existing SansSerif 0.52392578125 em, hence 0.55615234375 em per guillemet. The Arial 17 difference is 1.095703125, which independently yields the same advance.",
+    "verdana": "For Verdana 12, Java textLength minus Rust textLength is 2.89453125. Dividing by two glyphs and size 12 gives 0.12060546875 em above the existing SansSerif advance, hence 0.64453125 em per guillemet. Non-guillemet text in the same counterexample already matches exactly."
+  },
+  "perturbation_axes": [
+    "Arial versus Verdana versus logical SansSerif",
+    "font sizes 12, 15, and 17",
+    "actor stereotype versus use-case stereotype versus relation stereotype",
+    "short versus long stereotype contents",
+    "Padding 0 versus nonzero Padding"
+  ],
+  "scope_boundary": "This mechanism owns only U+00AB/U+00BB advances in the shared Arial and Verdana metric tables. It does not tune whole-string widths, coordinates, ellipse radii, Graphviz spacing, comparator tolerance, or any fixture-specific value.",
+  "acceptance": [
+    "Arial and Verdana guillemet pairs scale from one family-owned advance at multiple sizes and contents.",
+    "ASCII-only widths and logical SansSerif guillemet widths remain unchanged.",
+    "Actor, use-case, and relation stereotypes consume the same corrected shared metric path.",
+    "An independent checker creates fresh stereotype strings and family/size combinations not used in the derivation."
+  ],
+  "forbidden_approaches": [
+    "adding whole-string corrections keyed to known stereotype text",
+    "changing ASCII advances to hide the non-ASCII fallback error",
+    "copying textLength values from golden SVGs into renderer branches",
+    "editing Curie's rejected reviews or counterexamples"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-creole-padded-envelope-normalization",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "19c2e5d6baf0e6974baf30777ef9cba556445ed0",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:Display#getCreole",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:SheetBlock1#calculateDimensionSlow and drawU",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java:USymbolSimpleAbstract#asSmall",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:SvekEdge constructor and appendLine",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/usecase.rs:actor_dim",
+    "crates/rustuml-render/src/usecase.rs:layout_usecase_positions",
+    "crates/rustuml-render/src/usecase.rs:link_note_label_size",
+    "crates/rustuml-render/src/usecase.rs:link_note_blocks",
+    "crates/rustuml-render/src/usecase.rs:render_no_oracle_edges"
+  ],
+  "claimed_invariant": "Display#getCreole builds every Description-diagram Creole label as a SheetBlock1. SheetBlock1 reports the glyph dimensions plus twice the resolved global padding, then translates painted atoms by the left and top padding. USymbolSimpleAbstract passes the padded actor block to SvekNode, and SvekEdge passes the same padded relation-label block plus its one-pixel shield to Graphviz. After layout, SvekResult measures actual painted primitives and translates the complete image by 6 minus the painted minimum, so transparent left/top padding affects layout dimensions but is removed from the exported outer envelope when it owns the frontier.",
+  "causal_divergence": "The prior actor and use-case padding implementations model padded actor and oval text dimensions, but Rust keeps the Graphviz node-box origin when an actor's transparent left padding owns the painted frontier. That leaves the entire SVG shifted by exactly the padding value. Rust also gives ordinary and note-bearing relation labels only the one-pixel SvekEdge shield, omitting SheetBlock1's padding from both Graphviz dimensions and painted text translation. A padded link label is therefore too small, rank separation is too short, and its baseline remains near the route instead of moving upward with the expanded label obstacle. Actor stereotype offsets and painted minima are additionally derived from a default-font constant instead of the resolved block's family-specific height, ascent, and padding.",
+  "planned_model_change": "Represent actor stereotype baselines and painted bounds from the resolved block height and first-baseline ascent. Detect when the leftmost entity's reported node box begins before its painted content and run the same painted-minimum normalization already used for edges and clusters. Give every Svek relation label one shared natural block model: resolved family width, resolved family height/ascent, global padding on all sides, and the existing one-pixel label shield. Feed that model consistently to Graphviz sizing, painted-minimum calculation, ordinary label emission, and note-label composition.",
+  "perturbation_axes": [
+    "Padding 0, 3, 5, and 11",
+    "actor label wider than the stickman versus a narrow label",
+    "plain actor versus actor stereotype",
+    "ordinary relation label versus stereotype relation label versus note-bearing relation label",
+    "Arial, Verdana, and logical sans-serif at multiple sizes",
+    "top-to-bottom versus left-to-right direction and single edge versus fanout"
+  ],
+  "scope_boundary": "This mechanism owns transparent Creole padding in actor painted-envelope normalization and relation-label block sizing/painting for Description diagrams. It does not alter Graphviz algorithms, use-case ellipse fitting, comparator tolerance, fixture eligibility, theme names, or source-label-specific geometry.",
+  "acceptance": [
+    "The preserved Padding 11 Verdana actor fanout shifts from x=17 to Java's x=6 through painted-frontier normalization while retaining its relative actor geometry.",
+    "The preserved Padding 11 Verdana use-case relation receives Java's padded label obstacle, rank spacing, and baseline without a fixture-specific offset.",
+    "Padding 0 physical-font controls derive actor stereotype and relation-label baselines from their resolved family metrics.",
+    "An independent checker creates fresh valid inputs across at least two axes and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "subtracting a literal fixture padding value from final SVG coordinates",
+    "special-casing actor, use-case, relation, theme, or fixture labels",
+    "changing Graphviz spacing constants to compensate for a missing text-block dimension",
+    "editing Curie's rejected reviews or counterexamples"
+  ]
+}
