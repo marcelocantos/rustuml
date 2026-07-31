@@ -4,8 +4,9 @@
 //! Held-out maker/checker perturbations for T14 parity changes.
 
 use rustuml_oracle::compare;
-use rustuml_oracle::harness::golden_has_syntax_error;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
+
+mod parity_evidence;
 
 fn repo_root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -16,34 +17,24 @@ fn repo_root() -> PathBuf {
         .to_path_buf()
 }
 
-fn collect_sources(dir: &Path, out: &mut Vec<PathBuf>) {
-    let Ok(entries) = std::fs::read_dir(dir) else {
-        return;
-    };
-    for entry in entries.flatten() {
-        let path = entry.path();
-        if path.is_dir() {
-            collect_sources(&path, out);
-        } else if path
-            .extension()
-            .is_some_and(|extension| extension == "puml")
-        {
-            out.push(path);
-        }
-    }
-}
-
 #[test]
 fn held_out_perturbations_match_java_without_oracle_layout() {
-    let root = repo_root().join("test-diagrams/perturbations");
-    let mut sources = Vec::new();
-    collect_sources(&root, &mut sources);
-    sources.sort();
+    let root = repo_root();
+    let heldouts = match parity_evidence::accepted_java_success_heldouts(&root) {
+        Ok(heldouts) => heldouts,
+        Err(violations) => {
+            panic!(
+                "invalid T14 parity review evidence:\n  {}",
+                violations.join("\n  ")
+            );
+        }
+    };
 
     let mut failures = Vec::new();
-    for source_path in sources {
-        let golden_path = source_path.with_extension("svg");
-        let relative = source_path.strip_prefix(repo_root()).unwrap();
+    for heldout in heldouts {
+        let source_path = root.join(&heldout.source);
+        let golden_path = root.join(&heldout.golden);
+        let relative = &heldout.source;
         let source = match std::fs::read_to_string(&source_path) {
             Ok(source) => source,
             Err(error) => {
@@ -58,13 +49,6 @@ fn held_out_perturbations_match_java_without_oracle_layout() {
                 continue;
             }
         };
-        if golden_has_syntax_error(&golden) {
-            failures.push(format!(
-                "{}: checker preserved a Java error page instead of valid output",
-                relative.display()
-            ));
-            continue;
-        }
 
         let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let blocks = rustuml_parser::parse::split_blocks(&source);
