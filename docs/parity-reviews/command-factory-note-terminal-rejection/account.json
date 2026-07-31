@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-terminal-rejection",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "379887352ec585e0e1d05dcaa48b88496f9b095f",
+  "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.singleLine", "CommandFactoryNote.multiLine", "CommandFactoryNote.createSingleLine", "CommandFactoryNote.createMultiLine"],
+      "lines": "76-139",
+      "role": "Defines the complete inline and multiline named-note command forms; malformed codes or decoration order do not produce a note command result."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.getCandidate"],
+      "lines": "75-180",
+      "role": "Requires every source line to be consumed by a registered command; an unconsumed note-shaped line rejects the candidate diagram rather than allowing later lines to mutate it."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["PSystemBuilder.createPSystem"],
+      "lines": "203-282",
+      "role": "Returns syntax-error output when no diagram factory can consume the complete source."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["parse_named_note_inline", "parse_named_note_multiline", "named_note_decorations"],
+      "lines": "36-230",
+      "role": "Uses Option for both not-this-command and recognized-prefix-but-invalid suffix, losing command ownership."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["parse_component"],
+      "lines": "709-815,986-1134",
+      "role": "Continues after an invalid named-note helper result, so a later relation can materialize the missing code as an ordinary endpoint."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["parse_deployment"],
+      "lines": "700-950",
+      "role": "Likewise falls through, allowing later relations to create synthetic Deployment nodes and consume UIDs."
+    }
+  ],
+  "claimed_invariant": "Once a source line has the unambiguous inline `note <quoted display> as` or multiline `note as` prefix owned by CommandFactoryNote, failure of its CODE, tags, stereotype or color suffix rejects the diagram candidate. Component and Deployment do not reinterpret that line or permit later relations to synthesize the intended note code. Valid attached notes, note-on-link commands and plain floating notes remain owned by their distinct factories.",
+  "causal_divergence": "Rust represented command non-match and command validation failure with the same None. Family parsers therefore treated malformed named-note lines as ignorable text and continued mutating the AST, violating Java's all-lines-consumed factory contract and changing entity/link UID order.",
+  "planned_model_change": "Add shared prefix predicates for the two CommandFactoryNote forms. Each family first accepts a valid shared parse; if the corresponding unambiguous prefix matched but parsing failed, return ParseError at that source line before processing later input. Keep the predicates narrow enough not to claim attached notes, note-on-link or plain note syntax. Add family-level error tests for invalid code punctuation, decoration order, unknown color and composite color, plus valid siblings.",
+  "perturbation_axes": [
+    "inline versus multiline command",
+    "Component versus Deployment family",
+    "invalid code versus tag/stereotype/color order versus unresolved color",
+    "root versus nested package context",
+    "invalid command before versus after ordinary declarations",
+    "later relation to the would-be code versus no later relation",
+    "valid attached, note-on-link and plain-note controls"
+  ],
+  "acceptance": [
+    "The preserved invalid punctuation, reordered-decoration, single-character-color and composite-color sources return parser errors before later endpoint creation.",
+    "No invalid source creates a note, component, interface, deployment node, relation or UID event.",
+    "Valid inline and multiline named notes in both families still parse with their complete decorations.",
+    "Attached notes, note-on-link and plain floating note commands remain unaffected.",
+    "An independent checker attacks command prefix boundaries, family, nesting, error cause and later-line mutation."
+  ],
+  "forbidden_approaches": [
+    "deleting synthetic entities after parsing later relations",
+    "special-casing reviewed invalid strings or fixture codes",
+    "silently dropping only the invalid decoration while creating the note",
+    "treating every line beginning with `note` as CommandFactoryNote-owned"
+  ],
+  "declared_residue": [
+    "Other malformed note factories outside the two named-note prefixes require their own command-ownership analysis.",
+    "Top-level multi-factory subtype selection remains a separate consumability mechanism.",
+    "Java error SVG artwork and diagnostic wording remain separate from parser acceptance and AST non-mutation."
+  ]
+}
