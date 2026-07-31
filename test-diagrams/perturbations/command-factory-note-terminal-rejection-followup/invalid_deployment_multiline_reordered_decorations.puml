@@ -1,0 +1,9 @@
+@startuml
+node Anchor_581
+node Archive_589
+note as Broken.Deploy_587 #MistyRose <<Trace>> $audit
+  malformed decoration ordering must stop parsing
+end note
+Broken.Deploy_587 --> Anchor_581
+Anchor_581 --> Archive_589
+@enduml

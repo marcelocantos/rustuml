@@ -1,0 +1,48 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Anchor_521
+      node Archive_529
+      note “alphaomega” as Escape.Deploy_527 $audit <<Trace>> #MistyRose
+      Escape.Deploy_527 --> Anchor_521
+      Anchor_521 --> Archive_529
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor_521
+    label: Anchor_521
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: Archive_529
+    label: Archive_529
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: Escape.Deploy_527
+    label: Escape.Deploy_527
+    kind: Default
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 4
+    quark_order: 2
+  connections:
+  - from: Escape.Deploy_527
+    to: Anchor_521
+    label: null
+    arrow_at_end: true
+    source_line: 4
+  - from: Anchor_521
+    to: Archive_529
+    label: null
+    arrow_at_end: true
+    source_line: 5

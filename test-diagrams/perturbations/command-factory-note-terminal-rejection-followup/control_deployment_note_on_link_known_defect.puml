@@ -1,0 +1,6 @@
+@startuml
+node Anchor_631
+node Archive_639
+Anchor_631 --> Archive_639 : primary route
+note on link : deployment link-note control
+@enduml

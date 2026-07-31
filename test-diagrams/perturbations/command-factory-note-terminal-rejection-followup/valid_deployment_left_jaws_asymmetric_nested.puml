@@ -1,0 +1,9 @@
+@startuml
+node Outer_461 {
+  node Anchor_462
+  node Archive_469
+  note “raw jaws boundary as Deploy.Ledger_467 $audit <<Trace>> #MistyRose
+  Deploy.Ledger_467 --> Anchor_462 : checks
+  Anchor_462 --> Archive_469 : stores
+}
+@enduml

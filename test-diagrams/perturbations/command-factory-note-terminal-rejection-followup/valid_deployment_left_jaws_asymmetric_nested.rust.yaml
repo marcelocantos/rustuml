@@ -1,0 +1,63 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Outer_461 {
+        node Anchor_462
+        node Archive_469
+        note “raw jaws boundary as Deploy.Ledger_467 $audit <<Trace>> #MistyRose
+        Deploy.Ledger_467 --> Anchor_462 : checks
+        Anchor_462 --> Archive_469 : stores
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Outer_461
+    label: Outer_461
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - Anchor_462
+    - Archive_469
+    source_line: 1
+    quark_order: 0
+  - id: Anchor_462
+    label: Anchor_462
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: Archive_469
+    label: Archive_469
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  connections:
+  - from: Deploy.Ledger_467
+    to: Anchor_462
+    label: checks
+    arrow_at_end: true
+    source_line: 5
+  - from: Anchor_462
+    to: Archive_469
+    label: stores
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Deploy.Ledger_467
+    text: raw jaws boundary
+    color: '#MistyRose'
+    tags:
+    - audit
+    stereotype: Trace
+    owner: Outer_461
+    quark_order: 3
+    position: Right
+    source_line: 4

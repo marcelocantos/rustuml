@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="173px" preserveAspectRatio="none" style="width:337px;height:173px;background:#FFFFFF;" version="1.1" viewBox="0 0 337 173" width="337px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor_601-->
+<g class="entity" data-qualified-name="Anchor_601" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="122.0928" x="200.79" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="302.8828" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="300.8828" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="300.8828" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82.0928" x="215.79" y="40.5352">Anchor_601</text>
+</g>
+<!--entity Archive_609-->
+<g class="entity" data-qualified-name="Archive_609" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="123.8975" x="199.88" y="113.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="303.7775" y="118.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="301.7775" y="120.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="301.7775" y="124.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83.8975" x="214.88" y="147.0252">Archive_609</text>
+</g>
+<g class="entity" data-qualified-name="GMN4" data-source-line="3" id="ent0005">
+<path d="M6,17.59 L6,42.9005 A0,0 0 0 0 6,42.9005 L165.6646,42.9005 A0,0 0 0 0 165.6646,42.9005 L165.6646,35.59 L200.4,30.24 L165.6646,27.59 L165.6646,27.59 L155.6646,17.59 L6,17.59 A0,0 0 0 0 6,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M155.6646,17.59 L155.6646,27.59 L165.6646,27.59 L155.6646,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="138.6646" x="12" y="35.1584">attached-note control</text>
+</g>
+<!--link Anchor_601 to Archive_609-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk7">
+<path d="M261.8341,53.92 C261.8341,71.45 261.8341,89.59 261.8341,107.11" fill="none" id="Anchor_601-to-Archive_609" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="261.8341,113.11,265.8341,104.11,261.8341,108.11,257.8341,104.11,261.8341,113.11" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

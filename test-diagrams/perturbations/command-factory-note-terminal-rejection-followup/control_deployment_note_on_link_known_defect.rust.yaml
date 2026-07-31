@@ -1,0 +1,59 @@
+type: State
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Anchor_631
+      node Archive_639
+      Anchor_631 --> Archive_639 : primary route
+      note on link : deployment link-note control
+      @enduml
+  direction: TopToBottom
+  states:
+  - id: Anchor_631
+    label: Anchor_631
+    kind: Normal
+    descriptions: []
+    substates: []
+    source_line: 3
+    fill: null
+    stroke: null
+    stroke_style: null
+    stereotype: null
+    composite: false
+    concurrent_separator: null
+    concurrent_regions: []
+    parent: null
+    url: null
+    tooltip: null
+    decl_line: null
+  - id: Archive_639
+    label: Archive_639
+    kind: Normal
+    descriptions: []
+    substates: []
+    source_line: 3
+    fill: null
+    stroke: null
+    stroke_style: null
+    stereotype: null
+    composite: false
+    concurrent_separator: null
+    concurrent_regions: []
+    parent: null
+    url: null
+    tooltip: null
+    decl_line: null
+  transitions:
+  - from: Anchor_631
+    to: Archive_639
+    label: primary route
+    source_line: 3
+  notes:
+  - text: deployment link-note control
+    kind: !OnLink
+      transition_index: 0
+      position: Bottom
+    source_line: 4
+    command_line: 4
+    creation_order: 0

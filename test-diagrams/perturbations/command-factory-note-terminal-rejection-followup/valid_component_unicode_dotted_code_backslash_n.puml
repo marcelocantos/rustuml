@@ -1,0 +1,7 @@
+@startuml
+component Anchor_641
+component Archive_649
+note “unicode payload\\nwith a second line” as Métrique.Δelta_647 $audit <<Trace>> #MistyRose
+Métrique.Δelta_647 --> Anchor_641
+Anchor_641 --> Archive_649
+@enduml

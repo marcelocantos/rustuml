@@ -1,0 +1,7 @@
+@startuml
+component Anchor_431
+component Archive_439
+NoTe ”case boundary payload“ aS Case.Ledger_437 $audit <<Trace>> #LightBlue
+Case.Ledger_437 --> Anchor_431
+Anchor_431 --> Archive_439
+@enduml

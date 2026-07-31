@@ -1,0 +1,14 @@
+@startuml
+package Root_481 {
+  package Inner_482 {
+    component Anchor_483
+    component Archive_489
+    note as Metrique.Delta_487 $audit <<Trace>> #MistyRose
+      multiline validation body
+      retains named ownership
+    end note
+    Metrique.Delta_487 --> Anchor_483
+    Anchor_483 --> Archive_489
+  }
+}
+@enduml

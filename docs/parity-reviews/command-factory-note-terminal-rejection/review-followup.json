@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-terminal-rejection",
+  "verdict": "REJECT",
+  "checked_at": "2026-08-01",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-2026-08-01-followup",
+    "model": "gpt-5.6-terra xhigh",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not implement the reviewed correction and was instructed to disprove its claimed Java/Rust equivalence."
+  },
+  "revisions": {
+    "rust": "3dffefdb80bf8999370bf181012283278e0b48b8",
+    "rust_branch": "codex/review-note-terminal-followup",
+    "account_commit": "9059da16ac24a122d054326bc3aee32234636f6e",
+    "implementation_commit": "3dffefdb80bf8999370bf181012283278e0b48b8",
+    "implementation_parent": "9059da16ac24a122d054326bc3aee32234636f6e",
+    "account_parent": "5211a6603c44551d4193647a96d919cbdd49817b",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "/private/tmp/rustuml-note-terminal-followup/target/release/rustuml",
+    "rust_binary_sha256": "dacfc6df162d897df113e4e81e3b4f090cc64be170e13020608de7ce4d6fe8aa",
+    "rust_binary_version": "rustuml 0.7.0"
+  },
+  "chronology": {
+    "account_preceded_implementation": true,
+    "account_rust_revision_field": "5211a6604e619c523ad13eb703237815804579de",
+    "account_rust_revision_field_resolves_in_review_checkout": false,
+    "detail": "The corrected account commit is the direct parent of the implementation, but its rust_revision field does not resolve in this checkout and differs from the actual account parent recorded above. This provenance defect does not affect the frozen-binary failure below."
+  },
+  "reviewed_sources": {
+    "java": [
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "src/main/java/net/sourceforge/plantuml/jaws/Jaws.java",
+      "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java"
+    ],
+    "rust": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/component.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs"
+    ]
+  },
+  "causal_assessment": {
+    "java_model": "CommandFactoryNote.singleLine uses [%g] then ([^%g]+) then [%g]; Pattern2 expands %g to ASCII double quote, U+201C, U+201D, and Jaws.BLOCK_E1_INVISIBLE_QUOTE U+E121. Each boundary is independently any member. An embedded member ends DISPLAY, and a nonconforming remainder leaves no command candidate. PSystemCommandFactory then returns a syntax error instead of consuming later lines.",
+    "jaws_assessment": "Jaws defines U+E121 and expands Jaws text blocks with the same marker. The raw-U+E121 held-outs prove the Java JAR and frozen Rust binary both receive this Pattern2 delimiter case.",
+    "rust_model": "parse_named_note_inline correctly uses the four-member quote class for a fully valid command. looks_like_named_note_inline_command repeats that full delimiter grammar before terminal rejection. When an embedded %g member occurs before the delimiter that precedes 'as', its non-quote run cannot cross the member and the early candidate is not followed by whitespace plus 'as'; the ownership predicate returns false. Component and Deployment therefore fall through to their relation parsers, which synthesize endpoints.",
+    "conclusion": "The correction fixes valid curly, mixed, and Jaws delimiters but does not model the terminal rejection of malformed lines whose DISPLAY is cut short by an embedded %g member."
+  },
+  "commands": [
+    "git branch --show-current",
+    "git rev-parse HEAD",
+    "git status --short",
+    "shasum -a 256 /private/tmp/rustuml-note-terminal-followup/target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "git show --format=fuller --find-renames 3dffefdb80bf8999370bf181012283278e0b48b8 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+    "sed -n '45,155p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/jaws/Jaws.java",
+    "sed -n '60,200p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "sed -n '185,300p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "sed -n '1,250p' crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n '690,850p' crates/rustuml-parser/src/parse/component.rs",
+    "sed -n '950,1150p' crates/rustuml-parser/src/parse/component.rs",
+    "sed -n '690,1140p' crates/rustuml-parser/src/parse/deployment.rs",
+    "for each preserved source: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < source > stem.java.svg 2> stem.java.stderr",
+    "for each preserved source: /private/tmp/rustuml-note-terminal-followup/target/release/rustuml -pipe -tsvg < source > stem.rust.svg 2> stem.rust.stderr",
+    "for each preserved source: /private/tmp/rustuml-note-terminal-followup/target/release/rustuml -pipe --ast < source > stem.rust.ast.txt 2> stem.rust.ast.stderr",
+    "for each preserved source: /private/tmp/rustuml-note-terminal-followup/target/release/rustuml -pipe --yaml < source > stem.rust.yaml 2> stem.rust.yaml.stderr",
+    "xmllint --noout test-diagrams/perturbations/command-factory-note-terminal-rejection-followup/valid_*.java.svg test-diagrams/perturbations/command-factory-note-terminal-rejection-followup/valid_*.rust.svg test-diagrams/perturbations/command-factory-note-terminal-rejection-followup/control_*.java.svg test-diagrams/perturbations/command-factory-note-terminal-rejection-followup/control_*.rust.svg",
+    "rg -n 'command-factory-note-terminal-rejection|include_str!|test-diagrams|golden|Escape\\.(Component|Deploy)_5|alpha.*omega' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+  ],
+  "comparison_method": {
+    "mode": "no-oracle product execution",
+    "detail": "The supplied frozen rustuml binary rendered each source directly with -pipe -tsvg; no Cargo, rustc, oracle layout, or rebuilt executable was used. Java SVG validity/rejection, product exit status, retained SVG, and frozen AST/YAML constitute the comparison evidence. Java error-page artwork was not treated as a structural SVG comparator input."
+  },
+  "inputs_root": "test-diagrams/perturbations/command-factory-note-terminal-rejection-followup",
+  "inputs": [
+    {
+      "source": "valid_component_ascii_right_asymmetric_backslash_n_unicode.puml",
+      "axes": ["Component", "ASCII/right-curly asymmetric delimiters", "inline escaped-newline body", "ASCII dotted code", "tags/stereotype/color", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_component_right_left_asymmetric_case_nbsp.puml",
+      "axes": ["Component", "right/left-curly asymmetric delimiters", "case-insensitive note/as", "non-breaking whitespace", "tags/stereotype/color", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_component_jaws_same_delimiters_nested.puml",
+      "axes": ["Component", "raw U+E121 same delimiters", "nested package owner", "tags/stereotype/color", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_deployment_left_jaws_asymmetric_nested.puml",
+      "axes": ["Deployment", "left-curly/U+E121 asymmetric delimiters", "nested owner", "tags/stereotype/color", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_deployment_right_left_asymmetric_unicode_code.puml",
+      "axes": ["Deployment", "right/left-curly asymmetric delimiters", "root owner", "tags/stereotype/color", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_component_multiline_nested_unicode_code.puml",
+      "axes": ["Component", "multiline named note", "two nested packages", "decorations", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_deployment_multiline_root_decorations.puml",
+      "axes": ["Deployment", "multiline named note", "root owner", "decorations", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_component_unicode_dotted_code_backslash_n.puml",
+      "axes": ["Component", "Unicode curly delimiters", "Unicode dotted code", "escaped-newline body", "decorations", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_deployment_unicode_dotted_code_nested.puml",
+      "axes": ["Deployment", "asymmetric curly delimiters", "Unicode dotted code", "nested owner", "decorations", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "source": "valid_component_single_backslash_n_unicode_code.puml",
+      "axes": ["Component", "single backslash-n body", "Unicode dotted code", "curly delimiters", "decorations", "later and independent relations"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS; frozen YAML retains a two-line named-note display and no synthesized endpoint."
+    },
+    {
+      "source": "invalid_component_embedded_left_quote_terminates_display.puml",
+      "axes": ["Component", "ASCII outer delimiters", "embedded U+201C terminates DISPLAY", "invalid command before later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING; frozen YAML contains no note and synthesizes Escape.Component_517 as an Interface at source line 4, then retains both relations."
+    },
+    {
+      "source": "invalid_deployment_embedded_jaws_quote_terminates_display.puml",
+      "axes": ["Deployment", "curly outer delimiters", "embedded raw U+E121 terminates DISPLAY", "invalid command before later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "result": "FAIL_REJECTING; frozen YAML contains no note and synthesizes Escape.Deploy_527 as a Default node with quark_order 2 at source line 4, then retains both relations."
+    },
+    {
+      "source": "invalid_component_empty_inline_body.puml",
+      "axes": ["Component", "empty %g-delimited display", "later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS; terminal named-note error before AST output."
+    },
+    {
+      "source": "invalid_deployment_malformed_code_suffix.puml",
+      "axes": ["Deployment", "malformed code", "valid decorations", "later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS; terminal named-note error before AST output."
+    },
+    {
+      "source": "invalid_component_reordered_decorations.puml",
+      "axes": ["Component", "reordered color/stereotype/tag suffix", "later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS; terminal named-note error before AST output."
+    },
+    {
+      "source": "invalid_deployment_unknown_color_nested.puml",
+      "axes": ["Deployment", "nested owner", "raw U+E121 delimiters", "unknown color", "later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS; terminal named-note error before AST output."
+    },
+    {
+      "source": "invalid_component_multiline_bad_code.puml",
+      "axes": ["Component", "multiline malformed code", "later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS; terminal named-note error before AST output."
+    },
+    {
+      "source": "invalid_deployment_multiline_reordered_decorations.puml",
+      "axes": ["Deployment", "multiline reordered suffix", "later and independent relations"],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "result": "NEGATIVE_CONTROL_PASS; terminal named-note error before AST output."
+    },
+    {
+      "source": "control_component_attached_note_prefix.puml",
+      "axes": ["Component", "attached-note prefix control"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS; this CommandFactoryNote predicate does not claim the attached-note form."
+    },
+    {
+      "source": "control_deployment_attached_note_prefix.puml",
+      "axes": ["Deployment", "attached-note prefix control"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS; this CommandFactoryNote predicate does not claim the attached-note form."
+    },
+    {
+      "source": "control_component_note_on_link_prefix.puml",
+      "axes": ["Component", "note-on-link prefix control"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "PASS; this CommandFactoryNote predicate does not claim the Component link-note form."
+    },
+    {
+      "source": "control_deployment_note_on_link_known_defect.puml",
+      "axes": ["ambiguous top-level source", "note-on-link prefix control"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "NOT_COUNTED; frozen Rust selects State and retains a state link note, so this source does not exercise Deployment ownership."
+    },
+    {
+      "source": "control_deployment_note_on_link_forced_known_defect.puml",
+      "axes": ["Deployment forced by a valid named note", "note-on-link prefix control"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "result": "NOT_COUNTED_KNOWN_DEFECT; Java SVG contains the link-note text, while frozen Deployment YAML retains only Force.Deploy_677 and silently omits the link note. This is the separately declared CommandFactoryNoteOnLink defect and was neither repaired nor included in this verdict."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Embedded Pattern2 delimiters still escape terminal named-note ownership",
+      "java_provenance": "CommandFactoryNote.singleLine's DISPLAY is [^%g]+. Pattern2 includes U+201C and U+E121 in %g, so each held-out is a Java syntax error and PSystemCommandFactory stops before relation execution.",
+      "rust_data_flow": "parse_named_note_inline returns None for the malformed command. looks_like_named_note_inline_command also returns false because its non-quote run cannot cross the embedded delimiter and the early delimiter is not immediately followed by 'as'. Component then reaches its RE_DESCRIPTION_CONN endpoint synthesis; Deployment reaches try_parse_connection endpoint synthesis.",
+      "evidence": [
+        "invalid_component_embedded_left_quote_terminates_display.puml",
+        "invalid_component_embedded_left_quote_terminates_display.java.svg",
+        "invalid_component_embedded_left_quote_terminates_display.rust.yaml",
+        "invalid_deployment_embedded_jaws_quote_terminates_display.puml",
+        "invalid_deployment_embedded_jaws_quote_terminates_display.java.svg",
+        "invalid_deployment_embedded_jaws_quote_terminates_display.rust.yaml"
+      ],
+      "impact": "Both failures violate the corrected claimed invariant: an invalid CommandFactoryNote-shaped line allows later source to mutate the AST."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The corrected four-member delimiter model works for valid forms",
+      "detail": "Ten fresh valid probes cover Component and Deployment, ASCII/left/right/U+E121 delimiters, same and asymmetric pairs, case/NBSP whitespace, root/nested ownership, Unicode dotted codes, escaped-newline displays, tags, stereotypes, colors, and later relations. Each is accepted by Java and the frozen Rust binary."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "Ordinary invalid suffixes terminate before endpoint synthesis",
+      "detail": "Empty display, malformed code, reordered decorations, unknown color, and malformed multiline forms all produce Java error SVGs and frozen-Rust parse failures. The failure is limited to the embedded-delimiter ownership boundary."
+    },
+    {
+      "severity": "audit_defect",
+      "title": "The corrected account's rust_revision field is not resolvable in this checkout",
+      "detail": "The account is chronologically the direct parent of the implementation, but its stated 5211a6604e... revision differs from the actual 5211a6603c... parent and git cat-file cannot resolve the stated object."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "golden_or_perturbation_reads_found": false,
+    "unexplained_numeric_constants_found": false,
+    "evidence": "The implementation diff adds only Java-cited quote-class constants, shared regular expressions, and general unit cases. Searches of shipping crates found no mechanism name, held-out names, escaped test labels, perturbation paths, or fixture-dependent branch. The only matching include_str uses are existing theme assets, not this mechanism."
+  },
+  "declared_residue_assessment": [
+    "Deployment note-on-link is preserved as a separate known defect and is explicitly excluded from this mechanism's acceptance and verdict.",
+    "The unforced Deployment link-note control selected the State parser; it is preserved as a top-level subtype-selection observation and is not counted as Deployment evidence.",
+    "Java and Rust error-page SVG artwork, diagnostics, and line numbers are not compared; Java-valid acceptance/rejection and frozen AST mutation are the oracle for this review."
+  ],
+  "verdict_reason": "REJECT. The correction accepts valid Pattern2 delimiter combinations, but two fresh malformed inputs with embedded %g members are rejected by the exact Java oracle and accepted by frozen Rust. In both Component and Deployment, the named-note ownership predicate fails to claim the malformed line, and a later relation synthesizes the would-be note code. The failures are preserved and executable under the followup perturbation directory."
+}

@@ -1,0 +1,9 @@
+@startuml
+node Outer_651 {
+  node Anchor_652
+  node Archive_659
+  note ”unicode deployment payload“ as Dépôt.Δelta_657 $audit <<Trace>> #LightBlue
+  Dépôt.Δelta_657 --> Anchor_652
+  Anchor_652 --> Archive_659
+}
+@enduml

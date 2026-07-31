@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="284px" preserveAspectRatio="none" style="width:211px;height:284px;background:#FFFFFF;" version="1.1" viewBox="0 0 211 284" width="211px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor_491-->
+<g class="entity" data-qualified-name="Anchor_491" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="40.07,116.62,50.07,106.62,162.1628,106.62,162.1628,143.1083,152.1628,153.1083,40.07,153.1083,40.07,116.62" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="152.1628" x2="162.1628" y1="116.62" y2="106.62"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="40.07" x2="152.1628" y1="116.62" y2="116.62"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="152.1628" x2="152.1628" y1="116.62" y2="153.1083"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82.0928" x="55.07" y="140.1552">Anchor_491</text>
+</g>
+<!--entity Archive_499-->
+<g class="entity" data-qualified-name="Archive_499" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="39.17,223.11,49.17,213.11,163.0675,213.11,163.0675,249.5983,153.0675,259.5983,39.17,259.5983,39.17,223.11" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="153.0675" x2="163.0675" y1="223.11" y2="213.11"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="39.17" x2="153.0675" y1="223.11" y2="223.11"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="153.0675" x2="153.0675" y1="223.11" y2="259.5983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83.8975" x="54.17" y="246.6452">Archive_499</text>
+</g>
+<g class="entity" data-qualified-name="Deploy.Ledger_497" data-source-line="4" id="ent0004">
+<path d="M6,6 L6,46.6211 A0,0 0 0 0 6,46.6211 L97.11,46.6211 L101.11,106.15 L105.11,46.6211 L196.2285,46.6211 A0,0 0 0 0 196.2285,46.6211 L196.2285,16 L186.2285,6 L6,6 A0,0 0 0 0 6,6" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M186.2285,6 L186.2285,16 L196.2285,16 L186.2285,6" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="169.2285" x="12" y="23.5684">multiline deployment body</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="159.3579" x="12" y="38.8789">retains named ownership</text>
+</g>
+<!--link Anchor_491 to Archive_499-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="8" id="lnk6">
+<path d="M101.11,153.54 C101.11,171.06 101.11,189.21 101.11,206.73" fill="none" id="Anchor_491-to-Archive_499" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="101.11,212.73,105.11,203.73,101.11,207.73,97.11,203.73,101.11,212.73" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

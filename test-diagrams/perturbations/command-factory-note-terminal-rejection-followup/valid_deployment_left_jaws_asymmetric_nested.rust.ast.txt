@@ -1,0 +1,123 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode Outer_461 {\n  node Anchor_462\n  node Archive_469\n  note “raw jaws boundary\u{e121} as Deploy.Ledger_467 $audit <<Trace>> #MistyRose\n  Deploy.Ledger_467 --> Anchor_462 : checks\n  Anchor_462 --> Archive_469 : stores\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Outer_461",
+                label: "Outer_461",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [
+                    "Anchor_462",
+                    "Archive_469",
+                ],
+                source_line: 1,
+                quark_order: 0,
+            },
+            DeploymentNode {
+                id: "Anchor_462",
+                label: "Anchor_462",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 2,
+                quark_order: 1,
+            },
+            DeploymentNode {
+                id: "Archive_469",
+                label: "Archive_469",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 3,
+                quark_order: 2,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Deploy.Ledger_467",
+                to: "Anchor_462",
+                label: Some(
+                    "checks",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                hidden: false,
+                length: 2,
+                source_line: 5,
+            },
+            DeploymentConnection {
+                from: "Anchor_462",
+                to: "Archive_469",
+                label: Some(
+                    "stores",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                hidden: false,
+                length: 2,
+                source_line: 6,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "Deploy.Ledger_467",
+                ),
+                target: None,
+                text: "raw jaws boundary",
+                color: Some(
+                    "#MistyRose",
+                ),
+                tags: [
+                    "audit",
+                ],
+                stereotype: Some(
+                    "Trace",
+                ),
+                owner: Some(
+                    "Outer_461",
+                ),
+                quark_order: 3,
+                position: Right,
+                source_line: 4,
+            },
+        ],
+    },
+)

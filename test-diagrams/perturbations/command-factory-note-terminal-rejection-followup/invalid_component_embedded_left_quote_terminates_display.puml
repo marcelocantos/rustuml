@@ -1,0 +1,7 @@
+@startuml
+component Anchor_511
+component Archive_519
+note "alpha“omega" as Escape.Component_517 $audit <<Trace>> #MistyRose
+Escape.Component_517 --> Anchor_511
+Anchor_511 --> Archive_519
+@enduml

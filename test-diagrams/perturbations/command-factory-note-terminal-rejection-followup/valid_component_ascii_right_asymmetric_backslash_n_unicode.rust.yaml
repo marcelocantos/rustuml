@@ -1,0 +1,68 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor worker 411" as Anchor_411
+      component "Archive sink 419" as Archive_419
+      note "first validation\\nsecond validation” as Metrica.Delta_417 $audit <<Trace>> #MistyRose
+      Metrica.Delta_417 --> Anchor_411 : validates
+      Anchor_411 --> Archive_419 : persists
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Anchor_411
+    label: Anchor worker 411
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: Archive_419
+    label: Archive sink 419
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Metrica.Delta_417
+    to: Anchor_411
+    label: validates
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: Anchor_411
+    to: Archive_419
+    label: persists
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 5
+  packages: []
+  notes:
+  - id: Metrica.Delta_417
+    tags:
+    - audit
+    stereotype: Trace
+    color: '#MistyRose'
+    text: |-
+      first validation\
+      second validation
+    target: null
+    position: Right
+    source_line: 3

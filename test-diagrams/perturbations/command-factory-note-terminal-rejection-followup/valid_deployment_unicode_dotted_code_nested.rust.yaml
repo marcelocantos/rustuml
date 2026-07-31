@@ -1,0 +1,63 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Outer_651 {
+        node Anchor_652
+        node Archive_659
+        note ”unicode deployment payload“ as Dépôt.Δelta_657 $audit <<Trace>> #LightBlue
+        Dépôt.Δelta_657 --> Anchor_652
+        Anchor_652 --> Archive_659
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Outer_651
+    label: Outer_651
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - Anchor_652
+    - Archive_659
+    source_line: 1
+    quark_order: 0
+  - id: Anchor_652
+    label: Anchor_652
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: Archive_659
+    label: Archive_659
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  connections:
+  - from: Dépôt.Δelta_657
+    to: Anchor_652
+    label: null
+    arrow_at_end: true
+    source_line: 5
+  - from: Anchor_652
+    to: Archive_659
+    label: null
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Dépôt.Δelta_657
+    text: unicode deployment payload
+    color: '#LightBlue'
+    tags:
+    - audit
+    stereotype: Trace
+    owner: Outer_651
+    quark_order: 3
+    position: Right
+    source_line: 4

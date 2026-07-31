@@ -1,0 +1,6 @@
+@startuml
+component Anchor_621
+component Archive_629
+Anchor_621 --> Archive_629 : primary route
+note on link : component link-note control
+@enduml
