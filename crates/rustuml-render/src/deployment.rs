@@ -3474,7 +3474,7 @@ fn render_attached_deployment_note(
     ));
 
     let mut text_y = y + NOTE_MARGIN_Y;
-    for line in note.text.lines() {
+    for line in note.text.lines().map(deployment_note_display_row) {
         let ascent = text_render::label_ascent(line, NOTE_FONT_SIZE);
         text_y += ascent;
         emit_text(
@@ -3535,7 +3535,7 @@ fn render_floating_deployment_note(
         r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:1;"/>"#
     ));
     let mut text_y = y + NOTE_MARGIN_Y;
-    for line in note.text.lines() {
+    for line in note.text.lines().map(deployment_note_display_row) {
         let ascent = text_render::label_ascent(line, NOTE_FONT_SIZE);
         text_y += ascent;
         emit_text(
@@ -3587,7 +3587,7 @@ fn render_deployment_link_note(
     ));
 
     let mut baseline = y + NOTE_MARGIN_Y + pm::ascent(NOTE_FONT_SIZE);
-    for line in note.text.lines() {
+    for line in note.text.lines().map(deployment_note_display_row) {
         emit_text(
             svg,
             line,
@@ -3829,22 +3829,50 @@ fn deployment_link_note_dim(note: &DeploymentLinkNote) -> DeploymentNoteDim {
     deployment_note_text_dim(&note.text)
 }
 
+fn deployment_note_display_row(line: &str) -> &str {
+    if line.is_empty() { "\u{00A0}" } else { line }
+}
+
 fn deployment_note_text_dim(text: &str) -> DeploymentNoteDim {
     // `EntityImageNote` delegates text measurement and asymmetric margins to
     // `Opale`: six pixels left, fifteen right, and five on each vertical side.
     let width = text
         .lines()
+        .map(deployment_note_display_row)
         .map(|line| text_render::measure(line, NOTE_FONT_SIZE, false))
         .fold(0.0_f64, f64::max)
         + NOTE_MARGIN_X1
         + NOTE_MARGIN_X2;
     let text_height = text
         .lines()
+        .map(deployment_note_display_row)
         .map(|line| text_render::label_height(line, NOTE_FONT_SIZE))
         .sum::<f64>();
     DeploymentNoteDim {
         width,
         height: text_height + NOTE_MARGIN_Y * 2.0,
+    }
+}
+
+fn deployment_center_label_rows(label: &str) -> Vec<&str> {
+    rustuml_parser::display::split_escaped_newlines(label)
+}
+
+fn deployment_center_label_size(label: &str, floor_height: bool) -> EdgeLabelSize {
+    let rows = deployment_center_label_rows(label);
+    let width = rows
+        .iter()
+        .map(|row| text_render::measure(row, 13.0, false))
+        .fold(0.0_f64, f64::max)
+        + 2.0;
+    let height = rows
+        .iter()
+        .map(|row| text_render::label_height(row, 13.0))
+        .sum::<f64>()
+        + 2.0;
+    EdgeLabelSize {
+        width,
+        height: if floor_height { height.floor() } else { height },
     }
 }
 
@@ -4555,17 +4583,17 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     for conn in &diagram.connections {
         let (layout_from, layout_to, reversed) =
             deployment_connection_layout_with_endpoints(conn, &cluster_endpoint_nodes);
-        let ordinary_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-            // Java `SvekEdge.getLabelText` adds one pixel of margin on
-            // each side before `appendLine` emits a fixed HTML table.
-            width: text_render::measure(label, 13.0, false) + 2.0,
-            height: (text_render::label_height(label, 13.0) + 2.0).floor(),
-        });
+        // `SvekEdge.getLabelText` expands Display row controls before
+        // `appendLine` wraps the complete block in one-pixel margins.
+        let ordinary_label_size = conn
+            .label
+            .as_deref()
+            .map(|label| deployment_center_label_size(label, true));
         let label_size = if let Some(note) = conn.note.as_ref() {
-            let exact_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-                width: text_render::measure(label, 13.0, false) + 2.0,
-                height: text_render::label_height(label, 13.0) + 2.0,
-            });
+            let exact_label_size = conn
+                .label
+                .as_deref()
+                .map(|label| deployment_center_label_size(label, false));
             Some(deployment_link_note_label_size(
                 note,
                 deployment_link_note_dim(note),
@@ -6000,25 +6028,38 @@ fn deployment_edge_paint_bounds(
         if let (Some(note), Some(label)) = (conn.note.as_ref(), edge.label) {
             let x = (label.x * 100.0).round() / 100.0;
             let y = (label.y * 100.0).round() / 100.0;
-            let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-                width: text_render::measure(label, 13.0, false) + 2.0,
-                height: text_render::label_height(label, 13.0) + 2.0,
-            });
-            let compound =
-                deployment_link_note_label_size(note, deployment_link_note_dim(note), label_size);
-            bounds.include_rect(x, y, x + compound.width, y + compound.height);
+            let label_size = conn
+                .label
+                .as_deref()
+                .map(|label| deployment_center_label_size(label, false));
+            let note_dim = deployment_link_note_dim(note);
+            let (label_origin, note_origin) =
+                deployment_link_note_blocks(x, y, note, note_dim, label_size);
+            // The compound box constrains Graphviz, but LimitFinder observes
+            // only its painted children. Rose's outer five-pixel padding is
+            // deliberately absent from this projection.
+            bounds.include_rect(
+                note_origin.0,
+                note_origin.1,
+                note_origin.0 + note_dim.width.floor(),
+                note_origin.1 + note_dim.height.floor(),
+            );
+            if let (Some(origin), Some(size)) = (label_origin, label_size) {
+                bounds.include_rect(
+                    origin.0,
+                    origin.1,
+                    origin.0 + size.width,
+                    origin.1 + size.height,
+                );
+            }
         } else if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
             // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
             // Graphviz solves their origin from an integer-truncated placeholder,
             // then `LimitFinder` sees the original renderer width when drawing.
             let x = (label.x * 100.0).round() / 100.0;
             let y = (label.y * 100.0).round() / 100.0;
-            bounds.include_rect(
-                x,
-                y,
-                x + text_render::measure(label_text, 13.0, false) + 2.0,
-                y + text_render::label_height(label_text, 13.0) + 2.0,
-            );
+            let size = deployment_center_label_size(label_text, false);
+            bounds.include_rect(x, y, x + size.width, y + size.height);
         }
         let (tail_text, head_text) = if reversed {
             (conn.head_label.as_deref(), conn.tail_label.as_deref())
@@ -6721,10 +6762,10 @@ fn render_no_oracle_edges(
                 );
             }
         }
-        let exact_center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-            width: text_render::measure(label, 13.0, false) + 2.0,
-            height: text_render::label_height(label, 13.0) + 2.0,
-        });
+        let exact_center_label_size = conn
+            .label
+            .as_deref()
+            .map(|label| deployment_center_label_size(label, false));
         let link_note_layout = conn.note.as_ref().and_then(|note| {
             let position = edge.label?;
             let note_dim = deployment_link_note_dim(note);
@@ -6750,31 +6791,40 @@ fn render_no_oracle_edges(
             render_deployment_link_note(svg, note, note_x, note_y, dim, gradient_defs);
         }
         if let Some(label) = conn.label.as_deref() {
-            let (x, y) = edge
+            let label_size = deployment_center_label_size(label, false);
+            let (origin_x, origin_y) = edge
                 .label
                 .map(|position| {
                     let solved_origin = (
                         (position.x * 100.0).round() / 100.0 + body_margin_x,
                         (position.y * 100.0).round() / 100.0 + body_margin_y,
                     );
-                    let label_origin = link_note_layout
+                    link_note_layout
                         .and_then(|(_, _, label_origin, _)| label_origin)
-                        .unwrap_or(solved_origin);
-                    (
-                        label_origin.0 + 1.0,
-                        label_origin.1 + 1.0 + text_render::label_ascent(label, 13.0),
-                    )
+                        .unwrap_or(solved_origin)
                 })
                 .unwrap_or_else(|| {
                     points
                         .first()
                         .zip(points.last())
-                        .map(|(first, last)| {
-                            ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
-                        })
+                        .map(|(first, last)| ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0))
                         .unwrap_or((body_margin_x, body_margin_y))
                 });
-            emit_text(svg, label, x, y, 13.0, false, false);
+            let mut row_y = origin_y + 1.0;
+            for row in deployment_center_label_rows(label) {
+                let row_width = text_render::measure(row, 13.0, false);
+                let row_x = origin_x + 1.0 + (label_size.width - 2.0 - row_width) / 2.0;
+                emit_text(
+                    svg,
+                    row,
+                    row_x,
+                    row_y + text_render::label_ascent(row, 13.0),
+                    13.0,
+                    false,
+                    false,
+                );
+                row_y += text_render::label_height(row, 13.0);
+            }
         }
         if let Some((note, dim, _, (note_x, note_y))) = link_note_layout
             && matches!(
@@ -8589,6 +8639,45 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             deployment_link_note_blocks(100.0, 200.0, &note, dim, None),
             (None, (105.0, 205.0))
         );
+    }
+
+    #[test]
+    fn link_note_expands_display_rows_and_preserves_interior_blank_atoms() {
+        let label = "persist\\nwith checksum";
+        let rows = deployment_center_label_rows(label);
+        assert_eq!(rows, ["persist", "with checksum"]);
+        let size = deployment_center_label_size(label, false);
+        assert_eq!(
+            size.width,
+            text_render::measure("with checksum", 13.0, false) + 2.0
+        );
+        assert_eq!(
+            size.height,
+            text_render::label_height("persist", 13.0)
+                + text_render::label_height("with checksum", 13.0)
+                + 2.0
+        );
+
+        let source = "@startuml\n\
+                      node FreshIngress\n\
+                      database FreshArchive\n\
+                      FreshIngress --> FreshArchive : persist\\nwith checksum\n\
+                      note top on link\n\
+                        first row\n\
+                      \n\
+                        final row\n\
+                      end note\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(">persist</text>"), "{svg}");
+        assert!(svg.contains(">with checksum</text>"), "{svg}");
+        assert!(!svg.contains("persist\\nwith checksum</text>"), "{svg}");
+        assert!(svg.contains(">&#160;</text>"), "{svg}");
     }
 
     #[test]

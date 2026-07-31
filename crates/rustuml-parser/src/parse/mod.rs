@@ -32,6 +32,8 @@ mod style;
 use crate::diagram::Diagram;
 use crate::diagram::class::PackageKind;
 use crate::preprocess;
+use regex::Regex;
+use std::sync::LazyLock;
 
 const NAMED_NOTE_CODE_PATTERN: &str = r"[\p{L}\p{N}_.]+";
 
@@ -527,6 +529,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut class_factory_rejected_by_mixed_leaf = false;
     let mut has_class_symbol_container = false;
     let mut has_native_object_or_map = false;
+    let mut has_note_on_link_command = false;
+    let mut has_explicit_state_evidence = false;
+    let mut has_explicit_usecase_evidence = false;
     let mut object_containers_all_ordinary = true;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
@@ -688,14 +693,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Use case — must check before sequence (both use "actor").
         if trimmed.starts_with("usecase ") {
             scores[6] += 10;
+            has_explicit_usecase_evidence = true;
         }
         // :Actor: shorthand (but not activity :action; lines).
         if trimmed.starts_with(':') && trimmed.ends_with(':') && !trimmed.ends_with(';') {
             scores[6] += 5;
+            has_explicit_usecase_evidence = true;
         }
         // (UseCase) shorthand on its own line.
         if trimmed.starts_with('(') && trimmed.ends_with(')') {
             scores[6] += 5;
+            has_explicit_usecase_evidence = true;
         }
         // State.
         //
@@ -719,16 +727,20 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || state_decl
         {
             scores[3] += 50;
+            has_explicit_state_evidence = true;
         }
         // `note on link` annotates transitions (state diagrams) and connections
         // (use case diagrams). Score it for state so that state diagrams beat
         // the sequence scoring from `note left/right of` lines, but also score
         // use case so that a use case diagram with `usecase` keywords wins over
         // the state signal when both are present.
-        if trimmed == "note on link"
-            || trimmed.starts_with("note on link ")
-            || trimmed.starts_with("note on link:")
-        {
+        static NOTE_ON_LINK: LazyLock<Regex> = LazyLock::new(|| {
+            // Java `CommandFactoryNoteOnLink`: optional position permits the
+            // historical `lefton` concatenation before `on|of link`.
+            Regex::new(r"(?i)^note\s+(?:(?:right|left|top|bottom)\s*)?(?:on|of)\s+link\b").unwrap()
+        });
+        if NOTE_ON_LINK.is_match(trimmed) {
+            has_note_on_link_command = true;
             scores[3] += 15; // state
             scores[6] += 15; // use case
         }
@@ -1189,6 +1201,28 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             .enumerate()
             .filter(|&(i, _)| i != 7)
             .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[7] <= other_max {
+            scores[7] = other_max + 1;
+        }
+    }
+
+    // Java tries the complete DESCRIPTION factory rather than classifying a
+    // shared command in isolation. When deployment leaves and note-on-link are
+    // both consumable, retain that candidate unless explicit State or UseCase
+    // syntax establishes a different viable family.
+    if has_note_on_link_command
+        && scores[7] > 0
+        && scores[5] == 0
+        && !has_explicit_state_evidence
+        && !has_explicit_usecase_evidence
+    {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(index, _)| index != 7)
+            .map(|(_, &score)| score)
             .max()
             .unwrap_or(0);
         if scores[7] <= other_max {
@@ -2060,6 +2094,34 @@ mod tests {
              node RuntimeNode",
         );
         assert_eq!(detect_uml_subtype(&single_line), UmlSubtype::Deployment);
+    }
+
+    #[test]
+    fn note_on_link_participates_in_complete_factory_viability() {
+        let lines = |source: &str| source.lines().map(str::to_string).collect::<Vec<_>>();
+
+        assert_eq!(
+            detect_uml_subtype(&lines(
+                "node FreshIngress\ndatabase FreshArchive\nFreshIngress --> FreshArchive\nnote on link : retained"
+            )),
+            UmlSubtype::Deployment
+        );
+        assert_eq!(
+            detect_uml_subtype(&lines("Alpha --> Beta\nnote on link : transition memo")),
+            UmlSubtype::State
+        );
+        assert_eq!(
+            detect_uml_subtype(&lines(
+                "usecase FreshCase\nactor FreshActor\nFreshActor --> FreshCase\nnote on link : usecase memo"
+            )),
+            UmlSubtype::UseCase
+        );
+        assert_eq!(
+            detect_uml_subtype(&lines(
+                "component FreshA\ncomponent FreshB\nFreshA --> FreshB\nnote on link : component memo"
+            )),
+            UmlSubtype::Component
+        );
     }
 
     #[test]
