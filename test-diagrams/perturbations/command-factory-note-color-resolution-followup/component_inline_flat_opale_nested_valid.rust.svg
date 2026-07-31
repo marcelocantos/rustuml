@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="203px" preserveAspectRatio="none" style="width:1105px;height:203px;background:#FFFFFF;" version="1.1" viewBox="0 0 1105 203" width="1105px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster VerdantQuay-->
+<g class="cluster" data-qualified-name="VerdantQuay" data-source-line="1" id="ent0002">
+<path d="M244.5984,6 L385.6121,6 A3.75,3.75 0 0 1 388.1121,8.5 L395.1121,28.4883 L1087.5984,28.4883 A2.5,2.5 0 0 1 1090.0984,30.9883 L1090.0984,186.2988 A2.5,2.5 0 0 1 1087.5984,188.7988 L244.5984,188.7988 A2.5,2.5 0 0 1 242.0984,186.2988 L242.0984,8.5 A2.5,2.5 0 0 1 244.5984,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="242.0984" x2="395.1121" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="140.0137" x="246.0984" y="21.5352">Verdant Quay 7300</text>
+</g>
+<!--entity LateAlpha-->
+<g class="entity" data-qualified-name="VerdantQuay.LateAlpha" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.4395" x="369.38" y="126.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="500.8195" y="131.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="498.8195" y="133.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="498.8195" y="137.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.4395" x="384.38" y="159.8452">Late Alpha 7302</text>
+</g>
+<!--entity LateBeta-->
+<g class="entity" data-qualified-name="VerdantQuay.LateBeta" data-source-line="7" id="ent0007">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="141.3223" x="671.44" y="126.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="792.7623" y="131.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="790.7623" y="133.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="790.7623" y="137.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101.3223" x="686.44" y="159.8452">Late Beta 7304</text>
+</g>
+<!--entity Outside-->
+<g class="entity" data-qualified-name="Outside" data-source-line="18" id="ent0015">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="132.4355" x="47.88" y="126.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="160.3155" y="131.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="158.3155" y="133.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="158.3155" y="137.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92.4355" x="62.88" y="159.8452">Outside 7308</text>
+</g>
+<g class="entity" data-qualified-name="VerdantQuay.PaletteSingle" data-source-line="2" id="ent0003">
+<path d="M257.69,41 L257.69,66.3105 A0,0 0 0 0 257.69,66.3105 L432.5064,66.3105 A0,0 0 0 0 432.5064,66.3105 L432.5064,66.3105 L421.08,126.01 L432.5064,58.3105 L432.5064,51 L422.5064,41 L257.69,41 A0,0 0 0 0 257.69,41" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M422.5064,41 L422.5064,51 L432.5064,51 L422.5064,41" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="153.8164" x="263.69" y="58.5684">palette case single 7301</text>
+</g>
+<g class="entity" data-qualified-name="VerdantQuay.HexMulti" data-source-line="6" id="ent0006">
+<path d="M467.87,41 L467.87,66.3105 L624.3226,66.3105 L624.3226,51 L614.3226,41 L467.87,41" fill="#1A2B3C44" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M614.3226,41 L614.3226,51 L624.3226,51 L614.3226,41" fill="#1A2B3C44" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="135.4526" x="473.87" y="58.5684">hex alpha multi 7303</text>
+</g>
+<g class="entity" data-qualified-name="VerdantQuay.CssSingle" data-source-line="11" id="ent0010">
+<path d="M658.85,41 L658.85,66.3105 A0,0 0 0 0 658.85,66.3105 L738.1,66.3105 L742.1,126.01 L746.1,66.3105 L825.351,66.3105 A0,0 0 0 0 825.351,66.3105 L825.351,51 L815.351,41 L658.85,41 A0,0 0 0 0 658.85,41" fill="#DAA520" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M815.351,41 L815.351,51 L825.351,51 L815.351,41" fill="#DAA520" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.501" x="664.85" y="58.5684">css named single 7305</text>
+</g>
+<g class="entity" data-qualified-name="VerdantQuay.TransparentSingle" data-source-line="14" id="ent0012">
+<path d="M860.22,41 L860.22,58.3105 L796.34,125.92 L860.22,66.3105 L860.22,66.3105 A0,0 0 0 0 860.22,66.3105 L1073.9793,66.3105 A0,0 0 0 0 1073.9793,66.3105 L1073.9793,51 L1063.9793,41 L860.22,41 A0,0 0 0 0 860.22,41" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1063.9793,41 L1063.9793,51 L1073.9793,51 L1063.9793,41" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="192.7593" x="866.22" y="58.5684">whole transparent single 7306</text>
+</g>
+<g class="entity" data-qualified-name="BackgroundSingle" data-source-line="17" id="ent0014">
+<path d="M6,41 L6,66.3105 A0,0 0 0 0 6,66.3105 L110.1,66.3105 L114.1,126.01 L118.1,66.3105 L222.1968,66.3105 A0,0 0 0 0 222.1968,66.3105 L222.1968,51 L212.1968,41 L6,41 A0,0 0 0 0 6,41" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M212.1968,41 L212.1968,51 L222.1968,51 L212.1968,41" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="195.1968" x="12" y="58.5684">whole background single 7307</text>
+</g>
+</g></svg>

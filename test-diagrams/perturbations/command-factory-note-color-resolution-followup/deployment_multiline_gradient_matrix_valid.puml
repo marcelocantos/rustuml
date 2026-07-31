@@ -1,0 +1,34 @@
+@startuml
+node "Policy Campus 7330" as PolicyCampus {
+  folder "Nested Vault 7331" as NestedVault {
+    note as VerticalAlias #MoTiVaTiOn-StRaTeGy
+      vertical alias 7332
+    end note
+
+    note as DiagonalNamed #DarkCyan\LightSalmon
+      diagonal named multi 7333
+    end note
+
+    note as HorizontalHex #ABC|123456
+      horizontal hex 7334
+    end note
+
+    note as SlashAlpha #A1B2C3D4/10203040
+      slash alpha 7335
+    end note
+
+    note as VerticalDuplicate #motivation-strategy
+      duplicate vertical 7336
+    end note
+
+    artifact "Declared Runtime 7337" as DeclaredRuntime
+    artifact "Declared Store 7338" as DeclaredStore
+    VerticalAlias --> DeclaredRuntime
+    DiagonalNamed --> DeclaredRuntime
+    DiagonalNamed --> DeclaredStore
+    HorizontalHex --> DeclaredStore
+    SlashAlpha --> DeclaredRuntime
+    VerticalDuplicate --> DeclaredStore
+  }
+}
+@enduml

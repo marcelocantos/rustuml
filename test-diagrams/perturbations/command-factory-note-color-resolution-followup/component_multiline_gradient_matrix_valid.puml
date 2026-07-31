@@ -1,0 +1,32 @@
+@startuml
+package "Gradient Foundry 7310" as GradientFoundry {
+  note as VerticalNamed #Red-Blue
+    vertical named 7311
+  end note
+
+  note as DiagonalHex #0f0\0000FF
+    diagonal hex multi 7312
+  end note
+
+  note as HorizontalAlpha #11223344|AABBCCDD
+    horizontal alpha 7313
+  end note
+
+  note as SlashAlias #TeChNoLoGy/PhYsIcAl
+    slash alias 7314
+  end note
+
+  note as VerticalDuplicate #rEd-bLuE
+    duplicate vertical 7315
+  end note
+
+  component "Declared After One 7316" as AfterOne
+  component "Declared After Two 7317" as AfterTwo
+  VerticalNamed --> AfterOne
+  DiagonalHex --> AfterOne
+  DiagonalHex --> AfterTwo
+  HorizontalAlpha --> AfterTwo
+  SlashAlias --> AfterOne
+  VerticalDuplicate --> AfterTwo
+}
+@enduml

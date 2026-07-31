@@ -1,0 +1,6 @@
+@startuml
+component "Before Unknown 7370" as BeforeUnknown
+note "invalid unknown 7371" as MutatedUnknown #ChromaticVoid
+component "After Unknown 7372" as AfterUnknown
+MutatedUnknown --> AfterUnknown
+@enduml
