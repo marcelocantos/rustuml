@@ -68,19 +68,12 @@ fn resolve_id(nodes: &[DeploymentNode], raw: &str) -> String {
     label_to_id(raw)
 }
 
-fn resolve_connection_endpoint(
-    nodes: &[DeploymentNode],
-    notes: &[DeploymentNote],
-    raw: &str,
-) -> String {
-    // Java `CommandLinkElement.getDummy` resolves existing quark data before
-    // creating a dummy leaf. Named notes therefore share the ordinary
-    // relation endpoint namespace without becoming DeploymentNode values.
-    if notes.iter().any(|note| note.id.as_deref() == Some(raw)) {
-        raw.to_string()
-    } else {
-        resolve_id(nodes, raw)
-    }
+fn resolve_connection_endpoint(raw: &str) -> String {
+    // Java `CommandLinkElement.getDummy` calls `DescriptionDiagram.cleanId`
+    // and then asks the quark registry about that exact code. `parse_endpoint`
+    // has already removed ordinary quotes, so neither display-label lookup nor
+    // declaration-oriented `label_to_id` normalization belongs on this path.
+    raw.to_string()
 }
 
 fn deployment_identity_exists(
@@ -745,8 +738,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     style,
                     length,
                 } = parsed;
-                let from = resolve_connection_endpoint(&nodes, &notes, &raw_from);
-                let to = resolve_connection_endpoint(&nodes, &notes, &raw_to);
+                let from = resolve_connection_endpoint(&raw_from);
+                let to = resolve_connection_endpoint(&raw_to);
 
                 for (id, lbl) in [(&from, &raw_from), (&to, &raw_to)] {
                     if !deployment_identity_exists(&nodes, &notes, id) {
@@ -824,11 +817,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 let keyword = caps[1].to_ascii_lowercase();
                 if keyword_set.contains(keyword.as_str()) {
                     // Process `\n` escape sequences in quoted labels.
-                    let label = process_label(&caps[2]);
+                    let raw_label = caps[2].to_string();
+                    let label = process_label(&raw_label);
                     let id = caps
                         .get(3)
                         .map(|m| m.as_str().to_string())
-                        .unwrap_or_else(|| label_to_id(&label));
+                        // `CommandCreateElementFull` treats quoted CODE1 as
+                        // the quark code and applies newline expansion only to
+                        // the later Display value.
+                        .unwrap_or(raw_label);
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(&keyword);
@@ -870,8 +867,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 style,
                 length,
             } = parsed;
-            let from = resolve_connection_endpoint(&nodes, &notes, &raw_from);
-            let to = resolve_connection_endpoint(&nodes, &notes, &raw_to);
+            let from = resolve_connection_endpoint(&raw_from);
+            let to = resolve_connection_endpoint(&raw_to);
 
             // Auto-create nodes for any unknown IDs in connections.
             for (id, lbl) in [(&from, &raw_from), (&to, &raw_to)] {
@@ -881,7 +878,10 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     nodes.push(DeploymentNode {
                         id: id.clone(),
                         label: lbl.clone(),
-                        kind: DeploymentNodeKind::Node,
+                        // `CommandLinkElement.getDummy` creates an unknown
+                        // plain endpoint as `LeafType.STILL_UNKNOWN`, not as
+                        // an explicitly declared `node` symbol.
+                        kind: DeploymentNodeKind::Default,
                         stereotype: None,
                         color: None,
                         declared_container: false,
@@ -1001,14 +1001,15 @@ mod tests {
         let d = parse(r#"artifact "application.deb""#);
         let n = &d.nodes[0];
         assert_eq!(n.label, "application.deb");
-        assert_eq!(n.id, "application_deb");
+        assert_eq!(n.id, "application.deb");
     }
 
     #[test]
     fn quoted_connection() {
         let d = parse("artifact \"app.deb\"\nnode Server\n\"app.deb\" --> Server");
         assert_eq!(d.connections.len(), 1);
-        assert_eq!(d.connections[0].from, "app_deb");
+        assert_eq!(d.nodes.len(), 2);
+        assert_eq!(d.connections[0].from, "app.deb");
         assert_eq!(d.connections[0].to, "Server");
     }
 
@@ -1121,6 +1122,64 @@ mod tests {
         assert_eq!(d.connections[0].to, "Server");
         assert_eq!(d.connections[0].style, DeploymentLinkStyle::Dashed);
         assert_eq!(d.connections[0].source_line, 3);
+    }
+
+    #[test]
+    fn quoted_relation_code_does_not_alias_an_existing_display_label() {
+        let d = parse(
+            "node \"Service Label\" as ServiceAlias\n\
+             note \"Alias probe\" as AliasMemo\n\
+             AliasMemo -right-> \"Service Label\" : quoted target",
+        );
+
+        assert_eq!(d.nodes.len(), 2);
+        assert!(d.nodes.iter().any(|node| node.id == "ServiceAlias"));
+        let dummy = d
+            .nodes
+            .iter()
+            .find(|node| node.id == "Service Label")
+            .unwrap();
+        assert_eq!(dummy.label, "Service Label");
+        assert_eq!(dummy.kind, DeploymentNodeKind::Default);
+        assert_eq!(d.connections[0].from, "AliasMemo");
+        assert_eq!(d.connections[0].to, "Service Label");
+    }
+
+    #[test]
+    fn relation_code_reuses_alias_but_not_single_token_display_text() {
+        let d = parse(
+            "node \"DisplayToken\" as DeclaredAlias\n\
+             note \"memo\" as Memo\n\
+             Memo --> DeclaredAlias\n\
+             Memo --> DisplayToken",
+        );
+
+        assert_eq!(d.nodes.len(), 2);
+        assert!(d.nodes.iter().any(|node| node.id == "DeclaredAlias"));
+        assert!(d.nodes.iter().any(|node| node.id == "DisplayToken"));
+        assert_eq!(d.connections[0].to, "DeclaredAlias");
+        assert_eq!(d.connections[1].to, "DisplayToken");
+    }
+
+    #[test]
+    fn repeated_quoted_relation_code_reuses_one_exact_dummy_identity() {
+        let d = parse(
+            "note \"memo\" as Memo\n\
+             node FirstPeer\n\
+             node SecondPeer\n\
+             Memo --> \"Métrique.v2 Label\"\n\
+             SecondPeer --> \"Métrique.v2 Label\"",
+        );
+
+        assert_eq!(
+            d.nodes
+                .iter()
+                .filter(|node| node.id == "Métrique.v2 Label")
+                .count(),
+            1
+        );
+        assert_eq!(d.connections[0].to, "Métrique.v2 Label");
+        assert_eq!(d.connections[1].to, "Métrique.v2 Label");
     }
 
     #[test]
@@ -1301,7 +1360,7 @@ node "Validator Node 2" {
         assert!(first.declared_container);
         assert_eq!(
             first.children,
-            vec!["Consensus_Engine".to_string(), "Ledger".to_string()]
+            vec!["Consensus Engine".to_string(), "Ledger".to_string()]
         );
         let second = d
             .nodes
