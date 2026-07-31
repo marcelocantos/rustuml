@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-opale-peer-svek-node-gate",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "0917df14659aba3c8742bbc9d93187f9c1c7297c",
+  "triggering_review": "docs/parity-reviews/deployment-single-link-note-opale/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.isOpalisable", "GraphvizImageBuilder.buildImage"],
+      "lines": "129-147,238-258",
+      "role": "The semantic NOTE/single-link/non-note test is only preliminary. The edge is marked Opale only if Bibliotekon.getNode on the peer returns a SvekNode; a group is represented as a Cluster and fails that gate."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": ["Bibliotekon.getNode"],
+      "lines": "166-176",
+      "role": "Looks up leaf SVEK nodes independently from clusters, making peer renderability an explicit type boundary."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_note_opale_connection", "cluster_ids", "cluster_endpoint_nodes"],
+      "lines": "4194-4225,4558-4581,6601-6642",
+      "role": "The classifier excludes named-note peers but accepts every other endpoint string. A container peer is then mapped to a synthetic cluster endpoint node, which makes the relation routable but does not make the Java peer entity a SvekNode."
+    }
+  ],
+  "claimed_invariant": "A Deployment named note can absorb its sole eligible connection only when the other endpoint is a leaf represented by a real SVEK node. A declared container/group peer is never Opale, whether empty or populated, root or nested, because its endpoint proxy exists only to route compound edges. The connection remains an ordinary visible link and the note retains its normal folded polygon. Leaf peers continue through the existing strict-UML, note-peer, incidence and solved-cubic gates.",
+  "causal_divergence": "Rust collapsed two layout concepts into one string-addressable endpoint: leaf SVEK nodes and synthetic cluster endpoint proxies. The Opale classifier sees only endpoint ids, so successful routing through a proxy was mistaken for Java's Bibliotekon.getNode(peer) success.",
+  "planned_model_change": "Pass the already-derived Deployment cluster identity set into Opale classification and reject a connection when its peer id is a cluster. Do not remove the proxy or relation from layout. Keep the note normal and let render_no_oracle_edges paint the ordinary relation. Add populated, empty and nested container controls plus ordinary leaf controls.",
+  "perturbation_axes": [
+    "container versus leaf peer",
+    "empty versus populated container",
+    "root versus nested container",
+    "note as source versus destination",
+    "solid versus dotted relation",
+    "top-to-bottom versus left-to-right",
+    "container declared before versus after note",
+    "later entity UID progression"
+  ],
+  "acceptance": [
+    "The rejecting group-peer probe paints a normal note and visible lnk5 while retaining later entity UID progression.",
+    "Empty and nested declared containers also reject Opale even though a cluster endpoint proxy is routed.",
+    "An otherwise identical leaf peer still absorbs the sole eligible link.",
+    "No parser AST, link UID or cluster endpoint allocation changes are introduced.",
+    "An independent checker attacks peer kind, container population, depth, endpoint side and layout direction."
+  ],
+  "forbidden_approaches": [
+    "keying behavior to RackGroup or the held-out fixture",
+    "removing container relations from layout",
+    "treating every endpoint proxy as a leaf SvekNode",
+    "changing note or container ownership to avoid the classifier",
+    "post-hoc restoration of a hidden SVG link group"
+  ],
+  "declared_residue": [
+    "Parsing and retaining hidden/norank/style-decorated relations remains a separate CommandLinkElement mechanism.",
+    "Unsupported actor/component/interface/use-case endpoint notation remains separate.",
+    "Generic compound-edge geometry differences remain a layout mechanism."
+  ]
+}
