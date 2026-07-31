@@ -84,6 +84,8 @@ struct ClassParser {
     quark_creation_order: Vec<Vec<String>>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
+    /// Java's attached-note command also has a `{ ... }` multiline form.
+    current_note_closes_with_brace: bool,
     /// ID of the last declared entity (for shorthand `note right : text`).
     last_entity_id: Option<String>,
     /// Namespace separator string (default "."; `None` when `set namespaceSeparator none`).
@@ -132,6 +134,7 @@ impl ClassParser {
             note_by_path: HashMap::new(),
             quark_creation_order: Vec::new(),
             current_note: None,
+            current_note_closes_with_brace: false,
             last_entity_id: None,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
@@ -632,8 +635,14 @@ impl ClassParser {
 
         // Inside a multi-line note?
         if self.current_note.is_some() {
-            if line.trim() == "end note" {
+            let is_terminator = if self.current_note_closes_with_brace {
+                line.trim() == "}"
+            } else {
+                super::is_ordinary_note_terminator(line)
+            };
+            if is_terminator {
                 let mut note = self.current_note.take().unwrap();
+                self.current_note_closes_with_brace = false;
                 if note.lines.is_empty() {
                     // A body line that is itself an inline diagram directive
                     // is consumed by preprocessing. Java still attributes the
@@ -1676,27 +1685,31 @@ impl ClassParser {
         // Single-line attached note: `note <pos> of <entity> : <text>`
         // Entity may be a dotted name (e.g. `domain.User` in namespace diagrams).
         static ATTACHED_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*:\s*(.+)$").unwrap()
+            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*:\s*(.+)$").unwrap()
         });
-        // Multi-line attached note start: `note <pos> of <entity>` (optional color: `#color`)
+        // Multi-line attached note start: `note <pos> of <entity>` (optional
+        // color and Java's alternate final-bracket form).
         static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(#\S+)?\s*$").unwrap()
+            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(#\S+)?\s*(\{)?\s*$")
+                .unwrap()
         });
         // Shorthand single-line note attached to last entity: `note <pos> : <text>`
-        static SHORT_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap());
+        static SHORT_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap()
+        });
         // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
-        static SHORT_ML_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap());
+        static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap()
+        });
         // Floating named note: `note "text" as Name`
         static FLOATING_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+            LazyLock::new(|| Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
         // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
         static FLOATING_ML_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
+            LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
-            let position = parse_note_position(&caps[1]);
+            let position = parse_note_position(&caps[1].to_ascii_lowercase());
             let target = self.resolve_note_target(&caps[2]);
             let text = caps[3].trim().to_string();
             // Expand `\n` escape sequences into actual newlines.  Preserve
@@ -1721,7 +1734,7 @@ impl ClassParser {
         }
 
         if let Some(caps) = ATTACHED_ML_RE.captures(line) {
-            let position = parse_note_position(&caps[1]);
+            let position = parse_note_position(&caps[1].to_ascii_lowercase());
             let target = self.resolve_note_target(&caps[2]);
             self.current_note = Some(Note {
                 lines: Vec::new(),
@@ -1732,12 +1745,13 @@ impl ClassParser {
                 color: caps.get(3).map(|m| m.as_str().to_string()),
                 source_line: self.current_line,
             });
+            self.current_note_closes_with_brace = caps.get(4).is_some();
             return true;
         }
 
         // Shorthand: `note right : text` — attaches to the last declared entity.
         if let Some(caps) = SHORT_RE.captures(line) {
-            let position = parse_note_position(&caps[1]);
+            let position = parse_note_position(&caps[1].to_ascii_lowercase());
             let text = caps[2].trim().to_string();
             let lines = crate::display::split_escaped_newlines(&text)
                 .into_iter()
@@ -1758,7 +1772,7 @@ impl ClassParser {
 
         // Shorthand multi-line: `note right` — attaches to the last declared entity.
         if let Some(caps) = SHORT_ML_RE.captures(line) {
-            let position = parse_note_position(&caps[1]);
+            let position = parse_note_position(&caps[1].to_ascii_lowercase());
             let target = self.last_entity_id.clone();
             self.current_note = Some(Note {
                 lines: Vec::new(),
@@ -1769,6 +1783,7 @@ impl ClassParser {
                 color: caps.get(2).map(|m| m.as_str().to_string()),
                 source_line: self.current_line,
             });
+            self.current_note_closes_with_brace = false;
             return true;
         }
 
@@ -1802,6 +1817,7 @@ impl ClassParser {
                 color: caps.get(2).map(|m| m.as_str().to_string()),
                 source_line: self.current_line,
             });
+            self.current_note_closes_with_brace = false;
             return true;
         }
 
@@ -1841,6 +1857,7 @@ impl ClassParser {
                 color: None,
                 source_line: self.current_line,
             });
+            self.current_note_closes_with_brace = false;
             return true;
         }
 
@@ -4631,6 +4648,31 @@ mod tests {
             d.notes[0].lines,
             ["First content line", "Second content line"]
         );
+    }
+
+    #[test]
+    fn note_command_variants_preserve_atomic_payloads() {
+        let bracketed = parse(
+            "class BraceTarget\n\
+             note left of BraceTarget #LightYellow {\n\
+             control remains display text\n\
+             boundary remains display text too\n\
+             }",
+        );
+        assert_eq!(bracketed.entities.len(), 1);
+        assert_eq!(bracketed.notes.len(), 1);
+        assert_eq!(
+            bracketed.notes[0].lines,
+            [
+                "control remains display text",
+                "boundary remains display text too"
+            ]
+        );
+
+        let mixed_case = parse("NoTe as MixedCase #LightGreen\npayload line\nEnD NoTe");
+        assert_eq!(mixed_case.notes.len(), 1);
+        assert_eq!(mixed_case.notes[0].alias.as_deref(), Some("MixedCase"));
+        assert_eq!(mixed_case.notes[0].lines, ["payload line"]);
     }
 
     #[test]

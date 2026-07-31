@@ -725,11 +725,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // `note right/left/top/bottom of <id>` — valid in sequence, class, component,
         // and deployment diagrams. Score all four equally so that other keywords
         // determine the winner.
-        if trimmed.starts_with("note ")
-            && (trimmed.contains(" right of ")
-                || trimmed.contains(" left of ")
-                || trimmed.contains(" top of ")
-                || trimmed.contains(" bottom of "))
+        let normalized_note_line = trimmed.to_ascii_lowercase();
+        if normalized_note_line.starts_with("note ")
+            && (normalized_note_line.contains(" right of ")
+                || normalized_note_line.contains(" left of ")
+                || normalized_note_line.contains(" top of ")
+                || normalized_note_line.contains(" bottom of "))
         {
             scores[0] += 5; // sequence
             scores[1] += 5; // class
@@ -840,7 +841,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[8] += 10;
         }
-        if trimmed.starts_with("note as ") || trimmed.starts_with("note \"") {
+        if normalized_note_line.starts_with("note as ")
+            || normalized_note_line.starts_with("note \"")
+        {
             has_floating_note = true;
         }
         // A leading `note : text` line is parsed by Java PlantUML as a CLASS
@@ -1091,25 +1094,72 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     subtypes[max_idx]
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(super) enum NoteCommandFamily {
+    Note,
+    Hexagonal,
+    Rectangular,
+}
+
+fn note_command_parts(line: &str) -> Option<(NoteCommandFamily, &str)> {
+    let mut command = line.trim_start();
+    command = command.strip_prefix('&').unwrap_or(command).trim_start();
+    command = command.strip_prefix('/').unwrap_or(command).trim_start();
+    let keyword_end = command.find(char::is_whitespace).unwrap_or(command.len());
+    let keyword = &command[..keyword_end];
+    let rest = command[keyword_end..].trim_start();
+    let family = if keyword.eq_ignore_ascii_case("note") {
+        NoteCommandFamily::Note
+    } else if keyword.eq_ignore_ascii_case("hnote") {
+        NoteCommandFamily::Hexagonal
+    } else if keyword.eq_ignore_ascii_case("rnote") {
+        NoteCommandFamily::Rectangular
+    } else {
+        return None;
+    };
+    Some((family, rest))
+}
+
+pub(super) fn note_command_family(line: &str) -> Option<NoteCommandFamily> {
+    note_command_parts(line).map(|(family, _)| family)
+}
+
+pub(super) fn is_ordinary_note_terminator(line: &str) -> bool {
+    let line = line.trim();
+    line.eq_ignore_ascii_case("end note") || line.eq_ignore_ascii_case("endnote")
+}
+
+pub(super) fn is_note_family_terminator(line: &str) -> bool {
+    let line = line.trim();
+    is_ordinary_note_terminator(line)
+        || line.eq_ignore_ascii_case("end hnote")
+        || line.eq_ignore_ascii_case("endhnote")
+        || line.eq_ignore_ascii_case("end rnote")
+        || line.eq_ignore_ascii_case("endrnote")
+}
+
 fn completed_multiline_note_payload(lines: &[String]) -> Vec<bool> {
     let mut payload = vec![false; lines.len()];
     let mut line_index = 0;
     while line_index < lines.len() {
         let opener = source_text(&lines[line_index]).trim();
-        let is_note_opener = opener
-            .split_whitespace()
-            .next()
-            .is_some_and(|keyword| keyword.eq_ignore_ascii_case("note"));
-        let after_note = opener.get("note".len()..).unwrap_or_default().trim_start();
-        if !is_note_opener || opener.contains(':') || after_note.starts_with('"') {
+        let Some((family, after_keyword)) = note_command_parts(opener) else {
+            line_index += 1;
+            continue;
+        };
+        if opener.contains(':') || after_keyword.starts_with('"') {
             line_index += 1;
             continue;
         }
 
+        let closes_with_brace = family == NoteCommandFamily::Note && opener.ends_with('{');
         let Some(terminator) = ((line_index + 1)..lines.len()).find(|&candidate| {
-            source_text(&lines[candidate])
-                .trim()
-                .eq_ignore_ascii_case("end note")
+            let line = source_text(&lines[candidate]);
+            if closes_with_brace {
+                line.trim() == "}"
+            } else {
+                is_note_family_terminator(line)
+            }
         }) else {
             // Only completed commands own their interior. An unterminated
             // opener must not hide arbitrary later syntax from dispatch.
@@ -1646,6 +1696,25 @@ mod tests {
              end note",
         );
         assert_eq!(detect_uml_subtype(&attached), UmlSubtype::Class);
+
+        let bracketed = lines(
+            "class Ledger\n\
+             note left of Ledger #LightYellow {\n\
+             control is display text\n\
+             boundary is display text too\n\
+             }",
+        );
+        assert_eq!(detect_uml_subtype(&bracketed), UmlSubtype::Class);
+
+        let mixed_case = lines("NoTe as DispatchMemo\ncontrol is display text\nEnD NoTe");
+        assert_eq!(detect_uml_subtype(&mixed_case), UmlSubtype::Class);
+
+        for source in [
+            "participant A\nhnote over A\ncomponent payload\nend hnote",
+            "participant A\nrnote right of A\nnode payload\nendrnote",
+        ] {
+            assert_eq!(detect_uml_subtype(&lines(source)), UmlSubtype::Sequence);
+        }
     }
 
     #[test]

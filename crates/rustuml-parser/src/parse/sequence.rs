@@ -202,7 +202,7 @@ impl SeqParser {
         // Handle multiline note buffering.
         if self.note_buffer.is_some() {
             let trimmed = line.trim();
-            if trimmed == "endnote" || trimmed == "end note" {
+            if super::is_note_family_terminator(trimmed) {
                 let buf = self.note_buffer.take().unwrap();
                 let text = note_text_from_lines(&buf.lines);
                 self.events.push(Event::Note(Note {
@@ -555,16 +555,16 @@ impl SeqParser {
         // Allow optional color (#xxx) after participant list.
         // Capture shape prefix (h/r/note), position, participants, color, inline text.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(#\S+)?\s*(?::\s*(.*))?$").unwrap()
+            Regex::new(r"(?i)^(h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(#\S+)?\s*(?::\s*(.*))?$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let shape = match caps.get(1).map(|m| m.as_str()) {
-                Some("h") => NoteShape::Hexagonal,
-                Some("r") => NoteShape::Rectangular,
+            let shape = match super::note_command_family(line) {
+                Some(super::NoteCommandFamily::Hexagonal) => NoteShape::Hexagonal,
+                Some(super::NoteCommandFamily::Rectangular) => NoteShape::Rectangular,
                 _ => NoteShape::Note,
             };
-            let position = match &caps[2] {
+            let position = match caps[2].to_ascii_lowercase().as_str() {
                 "left" => NotePosition::Left,
                 "right" => NotePosition::Right,
                 "over" => NotePosition::Over,
@@ -1876,6 +1876,35 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn shaped_multiline_notes_accept_note_family_terminators() {
+        let d = parse(
+            "participant Alice\n\
+             participant Bob\n\
+             HNoTe over Alice, Bob #LightBlue\n\
+             component body text\n\
+             end hnote\n\
+             rnote right of Bob #LightYellow\n\
+             actor body text\n\
+             EnD RNoTe\n\
+             Bob --> Alice : response",
+        );
+        let notes = d
+            .events
+            .iter()
+            .filter_map(|event| match event {
+                Event::Note(note) => Some(note),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(notes.len(), 2);
+        assert_eq!(notes[0].shape, NoteShape::Hexagonal);
+        assert_eq!(notes[0].text, "component body text");
+        assert_eq!(notes[1].shape, NoteShape::Rectangular);
+        assert_eq!(notes[1].text, "actor body text");
+        assert!(matches!(d.events.last(), Some(Event::Message(_))));
     }
 
     #[test]

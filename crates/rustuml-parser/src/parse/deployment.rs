@@ -436,16 +436,21 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     // note "text" as ID  — floating note
     static RE_NOTE_FLOATING: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+
+    // note as ID [#color] — multiline floating note
+    static RE_NOTE_FLOATING_MULTI: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+([\w.]+)\s*(?:#\S+)?\s*$").unwrap());
 
     // note direction of target : text  (inline attached note)
     static RE_NOTE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+(top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#).unwrap()
+        Regex::new(r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#)
+            .unwrap()
     });
 
     // note direction of target  (multiline attached note — no colon)
     static RE_NOTE_ATTACHED_MULTI: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+(top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*$"#).unwrap()
+        Regex::new(r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*$"#).unwrap()
     });
 
     // N1 .. N2  — note link (N1 is the note ID, N2 is the target)
@@ -477,7 +482,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
         // Multiline note body.
         if note_accum.is_some() {
-            if trimmed == "end note" || trimmed == "endnote" {
+            if super::is_ordinary_note_terminator(trimmed) {
                 let accum = note_accum.take().unwrap();
                 let text = accum.lines.join("\n");
                 notes.push(DeploymentNote {
@@ -615,9 +620,20 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             continue;
         }
 
+        if let Some(caps) = RE_NOTE_FLOATING_MULTI.captures(trimmed) {
+            note_accum = Some(NoteAccum {
+                id: Some(caps[1].to_string()),
+                target: None,
+                position: DeploymentNotePosition::Right,
+                source_line: current_line + 1,
+                lines: Vec::new(),
+            });
+            continue;
+        }
+
         // Attached note: note direction of target : text  (inline)
         if let Some(caps) = RE_NOTE_ATTACHED.captures(trimmed) {
-            let position = deployment_note_position(&caps[1]);
+            let position = deployment_note_position(&caps[1].to_ascii_lowercase());
             let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
             let text = caps[3].trim().to_string();
@@ -633,7 +649,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
         // Multiline attached note: note direction of target  (no colon)
         if let Some(caps) = RE_NOTE_ATTACHED_MULTI.captures(trimmed) {
-            let position = deployment_note_position(&caps[1]);
+            let position = deployment_note_position(&caps[1].to_ascii_lowercase());
             let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
             note_accum = Some(NoteAccum {
@@ -1062,6 +1078,22 @@ mod tests {
         assert_eq!(d.notes[0].text, "first\nsecond");
         assert_eq!(d.notes[0].position, DeploymentNotePosition::Left);
         assert_eq!(d.notes[0].source_line, 3);
+    }
+
+    #[test]
+    fn floating_multiline_note_owns_payload_before_later_nodes() {
+        let d = parse(
+            "NoTe as DispatchPayload\n\
+             control body remains note text\n\
+             EnD NoTe\n\
+             node RuntimeNode",
+        );
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].id.as_deref(), Some("DispatchPayload"));
+        assert_eq!(d.notes[0].text, "control body remains note text");
+        assert_eq!(d.notes[0].source_line, 2);
+        assert_eq!(d.nodes.len(), 1);
+        assert_eq!(d.nodes[0].id, "RuntimeNode");
     }
 
     #[test]
