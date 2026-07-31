@@ -1,0 +1,6 @@
+@startuml
+node "Channel Source" as ChannelSource
+node "Channel Target" as ChannelTarget
+ChannelSource -right-> ChannelTarget : channel route
+note left on link #back:FFEECC;line.dashed:006400;text:0000FF : text and dash retained but not consumed
+@enduml

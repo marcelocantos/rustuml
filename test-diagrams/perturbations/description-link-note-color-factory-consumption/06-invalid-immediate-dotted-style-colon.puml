@@ -1,0 +1,6 @@
+@startuml
+node "Dotted Compact Source" as DottedCompactSource
+node "Dotted Compact Target" as DottedCompactTarget
+DottedCompactSource --> DottedCompactTarget : compact dotted route
+note on link #line.dotted:Olive: compact dotted boundary should reject
+@enduml

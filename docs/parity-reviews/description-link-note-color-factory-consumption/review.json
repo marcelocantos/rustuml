@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-link-note-color-factory-consumption",
+  "verdict": "ACCEPT",
+  "checker": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop shell/apply_patch; immutable shipped rustuml and diff_one binaries",
+    "implemented_mechanism": false
+  },
+  "scope": {
+    "worktree": "/private/tmp/rustuml-description-color-checker2",
+    "branch": "codex/t14-description-color-checker2",
+    "causal_account_commit": "b7760d64ade5713e6231e01ea5cae5810c284e4b",
+    "rust_implementation_revision": "66205cde03d1ce7be0f176cce4fdb69bc64ca8dc",
+    "java_oracle_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_oracle_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rust_binary": "/private/tmp/rustuml-deployment-link-notes/target/release/rustuml",
+    "rust_binary_sha256": "cd1ac5c568bf85d61bdb25887ebc70d702b12cdbb94169a3561cae335d7a9baa",
+    "diff_one_binary": "/private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one",
+    "diff_one_binary_sha256": "137a27f99ade15696e07dbb1f0b5fe7fadfc354fd9af51f2944a1c068843a383",
+    "cargo_or_build_invocations": []
+  },
+  "source_review": {
+    "read_files": [
+      "AGENTS.md parity honesty rules",
+      "docs/parity-reviews/description-link-note-color-factory-consumption/account.json",
+      "docs/parity-reviews/description-color-parser-part2/review.json",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/Colors.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/ColorType.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractComponent.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-render/src/deployment.rs"
+    ],
+    "java_model_observations": [
+      "DescriptionDiagramFactory registers CommandFactoryNoteOnLink single-line before multiline, so a first line consumable by both is owned by the single-line command.",
+      "CommandFactoryNoteOnLink builds complete single-line and multiline regexes around the same optional ColorParser leaf, then resolves Colors only in executeInternal after command selection.",
+      "ColorParser orders PART2 before ordinary COLOR_REGEXP. PART2 terminates with semicolon or a negative lookahead that excludes word, semicolon, colon, and dot; this is what prevents an immediate body colon from ending keyed PART2.",
+      "COLOR_REGEXP can still capture a shorter ordinary color such as #back, #text, or #header before a colon, causing later color resolution to fail terminally.",
+      "Colors lowercases and tokenizes the captured expression, retains sparse BACK/LINE/TEXT/HEADER channels plus lineStyle, and maps dotted directive names to their base ColorType via ColorType.getType.",
+      "ComponentRoseNote passes Colors only through getSymbolContext(colors), while AbstractTextualComponent constructs its text block from getFontConfiguration() without Colors; Style.getSymbolContext consumes BACK and LINE but calls getStroke() without Colors."
+    ],
+    "rust_model_observations": [
+      "parse_deployment_link_note_command now models Java factory ownership by checking single-line suffixes before multiline suffixes, and malformed suffixes under the note-on-link prefix are terminal parse errors.",
+      "single_line_link_note_suffix distinguishes PART2 syntax from ordinary syntax and rejects PART2 boundaries at an immediate colon unless a semicolon or Pattern2 whitespace makes the boundary explicit.",
+      "parse_plantuml_colors separates syntactic COLOR_REGEXP/PART2 recognition from resolvability and retains TEXT, HEADER, LINE, BACK, shadowing, and line-style channels in the AST.",
+      "render_deployment_link_note consumes only BACK and LINE for the folded note shape and emits text/default stroke without consulting TEXT or line_style."
+    ],
+    "anti_overfit_review": {
+      "fixture_shaped_logic": "No shipping-code branch keyed to the fresh checker stems, endpoint names, note bodies, perturbation directory, expected SVG bytes, or individual labels was found in the inspected parser/render/CLI files or the implementation diff.",
+      "opaque_output_replay": "No include_str/include_bytes read of golden or perturbation SVG/PUML data, fixture replay path, or post-hoc SVG coordinate surgery was introduced by 66205cde03d1ce7be0f176cce4fdb69bc64ca8dc in the inspected production files.",
+      "constants": "The changed production diff adds Java-provenance comments and no unexplained high-precision layout constants for this mechanism. LINK_NOTE_STROKE_WIDTH is used to preserve the Java ComponentRoseNote solid 0.5 stroke path.",
+      "grammar_shortcuts": "Fresh inputs exercised ordinary fallback, dotted-name multiline ownership, immediate colon rejection, tab and U+00A0 Pattern2 whitespace, trailing semicolon, unknown structurally valid values, and retained-but-inert channels; no accept/error mismatch or Java-valid structural failure was found.",
+      "subtype_boundary": "All generated probes use explicit Description/Deployment-style node declarations so the evidence targets this mechanism rather than unrelated diagram-family scoring."
+    }
+  },
+  "commands": [
+    "bullseye_frontier(cwd=/private/tmp/rustuml-description-color-checker2)",
+    "git status --short --branch",
+    "git rev-parse HEAD && git rev-parse --abbrev-ref HEAD && git show --stat --oneline --decorate -1",
+    "git cat-file -t b7760d64ade5713e6231e01ea5cae5810c284e4b && git cat-file -t 66205cde03d1ce7be0f176cce4fdb69bc64ca8dc",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD && shasum -a 256 /private/tmp/rustuml-deployment-link-notes/target/release/rustuml /private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one",
+    "sed -n '1,260p' AGENTS.md",
+    "sed -n '1,240p' docs/parity-reviews/description-link-note-color-factory-consumption/account.json",
+    "sed -n '1,620p' docs/parity-reviews/description-color-parser-part2/review.json",
+    "nl -ba JAVA_FILE | sed -n RANGE for DescriptionDiagramFactory, CommandFactoryNoteOnLink, ColorParser, Colors, ColorType, ComponentRoseNote, Style, AbstractComponent, and AbstractTextualComponent",
+    "nl -ba crates/rustuml-parser/src/parse/deployment.rs | sed -n '480,640p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '1,340p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '3560,3675p'",
+    "git diff --unified=0 b7760d64ade5713e6231e01ea5cae5810c284e4b..66205cde03d1ce7be0f176cce4fdb69bc64ca8dc -- crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/deployment.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,}|description-link-note|checker|stem|NoSuchColor|back:|text:|line\\.dashed|line\\.dotted|line\\.bold)'",
+    "rg -n 'description-link-note-color-factory-consumption|description-color-parser-part2|include_str!|include_bytes!|test-diagrams/(golden|perturbations)|fixture|NoSuchColor|RustUML_DEBUG|HARNESS_WRITE_BASELINES' crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/deployment.rs crates/rustuml/src/main.rs",
+    "for f in test-diagrams/perturbations/description-link-note-color-factory-consumption/*.puml; do base=${f%.puml}; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -pipe -tsvg < \"$f\" > \"$base.java.stdout\" 2> \"$base.java.stderr\"; printf \"%s\\n\" \"$?\" > \"$base.java.status\"; cp \"$base.java.stdout\" \"$base.java.svg\"; /private/tmp/rustuml-deployment-link-notes/target/release/rustuml -pipe -tsvg < \"$f\" > \"$base.rust.stdout\" 2> \"$base.rust.stderr\"; printf \"%s\\n\" \"$?\" > \"$base.rust.status\"; cp \"$base.rust.stdout\" \"$base.rust.svg\"; /private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one --no-oracle \"$f\" > \"$base.diff.stdout\" 2> \"$base.diff.stderr\"; printf \"%s\\n\" \"$?\" > \"$base.diff.status\"; done",
+    "for f in test-diagrams/perturbations/description-link-note-color-factory-consumption/*.puml; do base=${f%.puml}; cp \"$base.java.stdout\" \"$base.svg\"; /private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one --no-oracle \"$f\" > \"$base.diff.stdout\" 2> \"$base.diff.stderr\"; printf \"%s\\n\" \"$?\" > \"$base.diff.status\"; done",
+    "for f in test-diagrams/perturbations/description-link-note-color-factory-consumption/*.puml; do base=${f%.puml}; if [ \"$(cat \"$base.java.status\")\" = 0 ]; then xmllint --noout \"$base.svg\" \"$base.rust.svg\"; fi; done",
+    "rg -n '#0000FF|#006400|stroke-dasharray|stroke-width:2|stroke-width:1|#000000|text and dash retained' test-diagrams/perturbations/description-link-note-color-factory-consumption/11-inline-retained-text-style-inert.svg test-diagrams/perturbations/description-link-note-color-factory-consumption/11-inline-retained-text-style-inert.rust.svg",
+    "file test-diagrams/perturbations/description-link-note-color-factory-consumption/03-inline-keyed-nbsp-boundary.puml && perl -ne 'if($.==5){ print unpack(\"H*\", $_), \"\\n\" }' test-diagrams/perturbations/description-link-note-color-factory-consumption/03-inline-keyed-nbsp-boundary.puml"
+  ],
+  "evidence_directory": "test-diagrams/perturbations/description-link-note-color-factory-consumption",
+  "evidence_suffixes_per_stem": [
+    ".puml",
+    ".svg",
+    ".java.svg",
+    ".java.stdout",
+    ".java.stderr",
+    ".java.status",
+    ".rust.svg",
+    ".rust.stdout",
+    ".rust.stderr",
+    ".rust.status",
+    ".diff.stdout",
+    ".diff.stderr",
+    ".diff.status"
+  ],
+  "generated_inputs": [
+    {
+      "stem": "01-inline-ordinary-leading-renamed",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/01-inline-ordinary-leading-renamed.puml",
+      "axes": ["ordinary leading color control", "renamed endpoints", "inline compact ordinary color/body colon"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; structurally equivalent"
+    },
+    {
+      "stem": "02-inline-keyed-tab-boundary",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/02-inline-keyed-tab-boundary.puml",
+      "axes": ["Pattern2 tab whitespace before body colon", "BACK and LINE consumed", "renamed endpoints"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; structurally equivalent"
+    },
+    {
+      "stem": "03-inline-keyed-nbsp-boundary",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/03-inline-keyed-nbsp-boundary.puml",
+      "axes": ["Pattern2 U+00A0 NBSP before body colon", "BACK and LINE consumed", "renamed endpoints"],
+      "input_note": "Line 5 contains an actual U+00A0 before the body colon; UTF-8 bytes include c2a0.",
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; structurally equivalent"
+    },
+    {
+      "stem": "04-inline-keyed-trailing-semicolon",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/04-inline-keyed-trailing-semicolon.puml",
+      "axes": ["explicit trailing semicolon before body colon", "changed note position", "BACK and LINE consumed"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; structurally equivalent"
+    },
+    {
+      "stem": "05-invalid-immediate-keyed-back-colon",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/05-invalid-immediate-keyed-back-colon.puml",
+      "axes": ["immediate colon after keyed BACK", "single-line ordinary fallback", "invalid control"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports No such color, Rust reports invalid note-on-link color, diff_one skips Java error SVG"
+    },
+    {
+      "stem": "06-invalid-immediate-dotted-style-colon",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/06-invalid-immediate-dotted-style-colon.puml",
+      "axes": ["immediate colon after dotted style directive with color", "invalid control", "dotted directive boundary"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports syntax error, Rust reports invalid note-on-link color, diff_one skips Java error SVG"
+    },
+    {
+      "stem": "07-invalid-multiline-back-first-no-dot",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/07-invalid-multiline-back-first-no-dot.puml",
+      "axes": ["apparent multiline start", "first directive without dot", "single-line fallback rejects"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports No such color, Rust reports invalid note-on-link color"
+    },
+    {
+      "stem": "08-invalid-multiline-header-first-no-dot",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/08-invalid-multiline-header-first-no-dot.puml",
+      "axes": ["apparent multiline start", "header directive without dot", "single-line fallback rejects"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports No such color, Rust reports invalid note-on-link color"
+    },
+    {
+      "stem": "09-valid-multiline-line-dotted-first",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/09-valid-multiline-line-dotted-first.puml",
+      "axes": ["apparent multiline start", "first directive contains dot", "LINE consumed and line-style retained but inert"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; structurally equivalent"
+    },
+    {
+      "stem": "10-valid-multiline-leading-ordinary-then-style",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/10-valid-multiline-leading-ordinary-then-style.puml",
+      "axes": ["leading ordinary color before keyed directives", "multiline ownership", "retained TEXT and bold line-style inert"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; structurally equivalent"
+    },
+    {
+      "stem": "11-inline-retained-text-style-inert",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/11-inline-retained-text-style-inert.puml",
+      "axes": ["retained TEXT", "retained line.dashed", "BACK and LINE consumed", "renamed endpoints", "changed link direction"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; Java and Rust use fill #FFEECC, stroke #006400, black note text, and no dash array"
+    },
+    {
+      "stem": "12-inline-retained-text-only-control",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/12-inline-retained-text-only-control.puml",
+      "axes": ["TEXT-only channel", "ordinary default fill and line", "changed note position"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; text remains #000000 and folded note uses default fill/stroke"
+    },
+    {
+      "stem": "13-inline-line-color-consumed-style-inert",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/13-inline-line-color-consumed-style-inert.puml",
+      "axes": ["LINE color consumed through line.bold directive", "line-style retained but inert", "TEXT inert", "changed note position"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; stroke #FFA500 is consumed while bold/text are visually inert"
+    },
+    {
+      "stem": "14-invalid-unknown-ordinary-color",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/14-invalid-unknown-ordinary-color.puml",
+      "axes": ["unknown but structurally ordinary color", "invalid control"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports No such color, Rust reports invalid note-on-link color"
+    },
+    {
+      "stem": "15-invalid-unknown-keyed-value",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/15-invalid-unknown-keyed-value.puml",
+      "axes": ["unknown but structurally keyed value", "invalid control"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports No such color, Rust reports invalid note-on-link color"
+    },
+    {
+      "stem": "16-valid-shadowing-and-line-dotted",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/16-valid-shadowing-and-line-dotted.puml",
+      "axes": ["shadowing retained", "line.dotted retained but inert", "BACK and LINE consumed", "changed note position"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; stroke #6A5ACD is consumed and dotted style is visually inert"
+    },
+    {
+      "stem": "17-invalid-multiline-text-first-no-dot",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/17-invalid-multiline-text-first-no-dot.puml",
+      "axes": ["apparent multiline start", "text directive without dot", "single-line fallback rejects"],
+      "java_status": 200,
+      "rust_status": 1,
+      "diff_one_no_oracle_status": 2,
+      "semantic_result": "agree reject; Java reports No such color, Rust reports invalid note-on-link color"
+    },
+    {
+      "stem": "18-valid-multiline-line-bold-first",
+      "source": "test-diagrams/perturbations/description-link-note-color-factory-consumption/18-valid-multiline-line-bold-first.puml",
+      "axes": ["apparent multiline start", "first directive contains dot", "LINE color consumed", "bold line-style retained but inert", "changed note position"],
+      "java_status": 0,
+      "rust_status": 0,
+      "diff_one_no_oracle_status": 0,
+      "semantic_result": "agree accept; stroke #FF6347 is consumed and border remains solid 0.5"
+    }
+  ],
+  "findings": [],
+  "positive_controls": [
+    "Ordinary leading colors continue to work for inline and multiline command forms.",
+    "Pattern2 whitespace boundaries using tab and U+00A0 NBSP both agree with Java.",
+    "A consumed trailing semicolon before the body colon agrees with Java.",
+    "Immediate colon boundaries after keyed PART2 expressions reject rather than over-accept.",
+    "Apparent multiline starts whose first directive lacks a dot are stolen by single-line fallback and reject; dotted directive names own multiline input and accept.",
+    "BACK and LINE channels are consumed by folded link notes; TEXT, shadowing, and line-style are retained but visually inert.",
+    "Unknown but structurally valid ordinary and keyed color values reject in both Java and Rust."
+  ],
+  "residual_risk": [
+    "The invalid cases intentionally preserve Java error SVGs and Rust parser-error stderr, but strict structural comparison is skipped because the golden SVG contains a PlantUML error page.",
+    "This review does not claim broader Deployment geometry parity beyond the note-on-link color ownership and folded-note channel-consumption mechanism."
+  ],
+  "conclusion": "I could not disprove the revised causal claim. Source inspection supports the Java model and Rust data flow described in the account, and the held-out perturbation matrix produced no Java-valid failing counterexample and no accept/error mismatch. Every Java-valid input compared structurally equivalent under the frozen diff_one --no-oracle helper; every invalid control rejected on both sides. Verdict: ACCEPT."
+}

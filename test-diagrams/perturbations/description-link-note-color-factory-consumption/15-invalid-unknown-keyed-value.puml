@@ -1,0 +1,6 @@
+@startuml
+node "Unknown Keyed Source" as UnknownKeyedSource
+node "Unknown Keyed Target" as UnknownKeyedTarget
+UnknownKeyedSource --> UnknownKeyedTarget : unknown keyed route
+note on link #back:NotARealPlantColor : structurally keyed unknown value
+@enduml

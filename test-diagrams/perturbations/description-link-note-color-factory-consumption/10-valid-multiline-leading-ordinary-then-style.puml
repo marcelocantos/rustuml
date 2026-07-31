@@ -1,0 +1,9 @@
+@startuml
+node "Leading Ordinary Source" as LeadingOrdinarySource
+node "Leading Ordinary Target" as LeadingOrdinaryTarget
+LeadingOrdinarySource --> LeadingOrdinaryTarget : leading ordinary route
+note on link #HoneyDew;line.bold:DarkRed;text:Blue
+  leading ordinary color keeps multiline ownership
+  retained text and bold style are inert in the folded note
+endnote
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+node "Text Only Source" as TextOnlySource
+node "Text Only Target" as TextOnlyTarget
+TextOnlySource --> TextOnlyTarget : text only route
+note right of link #text:DarkRed : text-only channel remains visually default
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+node "Nbsp Source" as NbspSource
+node "Nbsp Target" as NbspTarget
+NbspSource --> NbspTarget : nbsp route
+note bottom of link #back:Wheat;line:Navy : nbsp boundary body
+@enduml
