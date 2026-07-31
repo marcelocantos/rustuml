@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-command-family-unification",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "b70be5ee7ae216b0b138ccf58060e672aa8b3430",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": [
+        "PSystemBuilder.PSystemBuilder"
+      ],
+      "lines": "128-135",
+      "role": "Tries SequenceDiagramFactory, ClassDiagramFactory, ActivityDiagramFactory, and then the single DescriptionDiagramFactory in fixed factory order."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": [
+        "DescriptionDiagramFactory.initCommandsList"
+      ],
+      "lines": "79-137",
+      "role": "Registers containers, together blocks, links, notes, and one CommandCreateElementFull command family on the same DESCRIPTION diagram model."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "symbols": [
+        "CommandCreateElementFull.ALL_TYPES",
+        "CommandCreateElementFull.executeArg"
+      ],
+      "lines": "73-114,140-233",
+      "role": "Accepts file, agent, card, stack, component, interface, port, portin, and portout through one grammar; derives LeafType independently from USymbol; and rejects PORTIN/PORTOUT when the current group is root."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagram.java",
+      "symbols": [
+        "DescriptionDiagram.makeDiagramReady",
+        "DescriptionDiagram.checkFinalError"
+      ],
+      "lines": "50-97",
+      "role": "Owns DESCRIPTION leaves as one entity graph, resolves still-unknown link-created leaves, and applies the common standalone strategy after parsing."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": [
+        "Entity.leafType",
+        "Entity.symbol",
+        "Entity.getLeafType",
+        "Entity.getUSymbol"
+      ],
+      "lines": "103-116,189-225,405-419",
+      "role": "Stores semantic LeafType and visual USymbol as distinct properties; ports therefore remain port leaf types with no ordinary symbol while DESCRIPTION leaves carry their concrete symbol."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype"
+      ],
+      "lines": "605-650,948-968",
+      "role": "Classifies file, agent, card, and stack as description-only leaves, then raises Deployment above every competing score instead of testing one complete DESCRIPTION grammar."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "DEPLOYMENT_KEYWORDS",
+        "keyword_to_kind",
+        "parse_deployment"
+      ],
+      "lines": "14-94,383-829",
+      "role": "Consumes the forced branch and models file, agent, card, stack, and component nodes, but has no interface, port, portin, or portout declarations."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": [
+        "parse_component",
+        "INTERFACE_QUOTED_RE",
+        "INTERFACE_BRACKET_RE",
+        "INTERFACE_BARE_RE"
+      ],
+      "lines": "200-1078,263-270,730-837",
+      "role": "Owns interface declarations and lollipop shorthand, but its element inventory cannot retain the complete DESCRIPTION symbol family that triggers the Deployment override."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/mod.rs",
+      "symbols": [
+        "Diagram"
+      ],
+      "lines": "54-81",
+      "role": "Has separate Component and Deployment variants and no canonical Description variant."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/component.rs",
+      "symbols": [
+        "ComponentDiagram",
+        "ComponentElementKind",
+        "Component",
+        "Interface"
+      ],
+      "lines": "10-37,64-109",
+      "role": "Splits ordinary components from interfaces and exposes only a subset of DESCRIPTION symbols."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": [
+        "DeploymentDiagram",
+        "DeploymentNode",
+        "DeploymentNodeKind"
+      ],
+      "lines": "12-21,59-106",
+      "role": "Provides the complementary node-kind subset but cannot represent Java port leaf types or interface symbols."
+    },
+    {
+      "path": "crates/rustuml-render/src/lib.rs",
+      "symbols": [
+        "render_with_oracle",
+        "render"
+      ],
+      "lines": "350-399",
+      "role": "Dispatches Component and Deployment ASTs to independent renderers, so parser branch selection also incorrectly determines the available DESCRIPTION paint vocabulary."
+    }
+  ],
+  "claimed_invariant": "After earlier Java factories have declined the complete source, every valid DESCRIPTION element declaration is consumed by the same CommandCreateElementFull grammar and retained in one ordered entity graph. File, agent, card, stack, component, and interface declarations may coexist in any valid order and topology. LeafType and USymbol are orthogonal: most named shapes are LeafType.DESCRIPTION plus a concrete USymbol, interface is a DESCRIPTION leaf with the interface symbol, and port/portin/portout are PORTIN or PORTOUT leaf types with no ordinary USymbol. Ports are valid only inside an element group and are syntax errors at the diagram root.",
+  "causal_divergence": "Rust replaced Java's one DESCRIPTION candidate with two incomplete Component and Deployment parsers, then uses keyword scores to choose between them. The b70be5ee override sees a standalone file, agent, card, or stack and forces Deployment above all competitors. That preserves the exclusive leaf but sends the entire valid source to a parser that cannot consume interface or port declarations; choosing Component has the reciprocal symbol-family loss. The resulting missing or implicitly recreated entities are caused by an absent shared grammar and AST, not by insufficient score weights. No score adjustment can make either lossy branch represent a valid mixed DESCRIPTION source.",
+  "planned_model_change": "Add a canonical DescriptionDiagram AST and parser corresponding to DescriptionDiagramFactory and CommandCreateElementFull. Represent each declaration as an ordered DescriptionElement carrying id, label, semantic leaf_type, optional visual symbol, declaration kind, style metadata, owner/group, and source_line; retain containers, links, notes, together membership, declaration order, and link-created unknown leaves in the same graph. Select DESCRIPTION by complete candidate viability in Java factory order after sequence, class, and activity candidates, rather than by keyword scores or fixture-shaped routing. Parse file, agent, card, stack, component, interface, port, portin, and portout through the same command path, preserving the LeafType/USymbol distinction and returning the Java-equivalent error for a root-level port. Build one DescriptionRenderPlan from the canonical AST and dispatch paint/layout by concrete leaf_type and symbol. Existing component and deployment painters may be reused behind bounded adapters, but parser branch identity must not select the render vocabulary and no valid declaration may be dropped or synthesized as a different kind.",
+  "perturbation_axes": [
+    "mixed file, agent, card, and stack leaves crossed with component and interface declarations",
+    "port, portin, and portout inside different valid container symbols versus the same declarations at root",
+    "quoted, bracketed, lollipop, aliased, and bare declaration forms",
+    "declaration order permutations with links declared before and after endpoints",
+    "root leaves versus one-level and nested containers",
+    "top-to-bottom versus left-to-right direction",
+    "renamed labels and aliases with unchanged topology",
+    "together blocks, attached notes, and floating notes crossed with mixed element kinds"
+  ],
+  "scope_boundary": "This mechanism owns DESCRIPTION factory selection, the shared element grammar and AST, semantic validation of port ownership, and construction of a symbol-complete render plan. It does not own magnetic edge anchoring for folder shapes, painted cluster-envelope normalization, symbol-specific geometry constants, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "Fresh valid inputs mixing each of file, agent, card, and stack with component and interface declarations preserve every Java entity, kind, owner, source order, and link endpoint in the no-oracle product path.",
+    "Fresh valid nested port, portin, and portout inputs preserve PORTIN/PORTOUT semantics separately from USymbol, while root-level variants fail with the Java validity outcome instead of being ignored or rendered.",
+    "Factory selection follows complete-source viability in Java order and contains no score override keyed to exclusive DESCRIPTION keywords.",
+    "The canonical AST and render plan retain containers, links, notes, together membership, aliases, styles, and declaration order across mixed symbol families.",
+    "Existing DESCRIPTION-family golden cases and independently generated perturbations pass without regressions in the full no-oracle ratchet.",
+    "An independent checker attempts to disprove the shared-model claim at the exact implementation revision and records its verdict and preserved Java/Rust evidence."
+  ],
+  "forbidden_approaches": [
+    "score bonuses or forced subtype routing keyed to file, agent, card, stack, interface, or port tokens",
+    "running the source through Component and Deployment and selecting whichever output looks closer",
+    "dropping unsupported declarations or recreating them from relationship endpoints",
+    "collapsing LeafType and USymbol into one shape enum",
+    "treating root-level ports as valid leaves or silently ignoring them",
+    "fixture labels, aliases, filenames, declaration counts, coordinates, or golden SVG data",
+    "comparator, baseline, corpus, syntax-error-marker, or park-list changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/description-exclusive-leaf-dispatch/review.json",
+    "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_file_interface_component_mix.puml",
+    "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_agent_interface_component_mix.puml",
+    "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_artifact_storage_interface_controls.puml"
+  ]
+}
