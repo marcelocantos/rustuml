@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-degenerated-decoration-dimension",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "809507cb59607e75c6a2eb199ec891eb380124fa",
   "java_locations": [
@@ -96,6 +96,32 @@
       "derivation": "The frozen Java title has textLength 1140.4736; title insets and the bordered extent give dimTotal 1161.4736. The entity is painted at x=552.3843 from a 7px degenerated inset and has intrinsic width 56.7051. The implied dimOriginal is 1161.4736 - 2 * (552.3843 - 7) = 70.7042, equal within SVG precision to the intrinsic width plus EntityImageDegenerated's 14."
     }
   ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "observed_result": "The shipped no-oracle census rises from 11,128/11,251 to 11,143/11,251, with edge-cases improving from 727/777 to 742/777 and every other family unchanged. Long, multiline, creole, hidden, left-header, long-size, and all Unicode title cases in the affected cluster become structurally equivalent. The decorated linked class control and its undecorated counterpart remain structurally equivalent. The mixed long-header/footer case retains only its pre-existing vertical footer difference.",
+    "model_evidence": "Shipping code branches only on the pre-existing Java lifecycle predicate, uses Java's 7px EntityImageDegenerated delta, models TextBlockBordered's universal final extent, and adapts SvekResult's LimitFinder-owned boundary into Rust's reconstructed visible span. A focused renamed perturbation varies class count and title/body width; an existing three-node fork perturbation exercises nested header, multiline title, caption, and footer composition. No fixture names, title text, coordinates, comparator values, or corpus inventory enter shipping code.",
+    "commands": [
+      "cargo test -p rustuml-render degenerated_decoration_dimensions_compose_before_centering --lib",
+      "cargo build --release --example diff_one -p rustuml-oracle",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_long_title.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_multiline_title.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_title_with_creole.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_render_no_title.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_render_left_header.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_size_long_title.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_unicode_chinese_title.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_title_basic.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_edge_two_classes_no_body.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --lib -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal -- --exact"
+    ],
+    "review_status": "Independent adversarial review and checker-authored Java held-outs remain pending because reviewer task capacity and the local Java oracle are unavailable. This record does not self-attest acceptance."
+  },
   "perturbation_axes": [
     "renamed single class with different intrinsic widths",
     "short, long, and multiline titles",

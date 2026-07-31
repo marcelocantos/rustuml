@@ -247,9 +247,14 @@ const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 // fixed gap from the body's top/bottom edges. All values verified against the
 // class golden SVGs (`class_title_basic`, `class_decoration_*`, etc.).
 //
-/// Left + right body margins added to the entity rect extent to form the body
-/// block width (`dimOriginal`): 7px left + 8px right.
-const BODY_DECORATION_MARGIN: f64 = 15.0;
+/// `SvekResult.calculateDimension` adds 15px to its `LimitFinder` MinMax.
+/// Rust reconstructs the visible span without that MinMax's left boundary, so
+/// the equivalent wrapped width adds 16px. See
+/// `docs/parity-reviews/class-degenerated-decoration-dimension/account.json`.
+const BODY_DECORATION_MARGIN: f64 = 16.0;
+/// `EntityImageDegenerated.calculateDimension` adds its 7px delta on both
+/// sides of the one-leaf entity image.
+const DEGENERATED_BODY_DECORATION_MARGIN: f64 = 14.0;
 /// The no-style SVEK envelope already carries PlantUML's 5px document margin
 /// on its right and bottom sides. An explicit `root { Margin ... }` replaces
 /// that amount in `TextBlockExporter12026.Builder.calculateMargin`.
@@ -5352,10 +5357,14 @@ fn render_plantuml_svg(
         body_top = 0.0;
         body_bottom = 0.0;
     }
-    // Rust's effective body dimension excludes the final one-pixel
-    // `TextBlockBordered` extent, so the 7px SVG envelope restores the same
-    // integer canvas size as Java's 6px `ImageBuilder` margin.
-    let body_inner_w = (body_max_x - body_min_x) + BODY_DECORATION_MARGIN;
+    // `GraphvizImageBuilder` returns `EntityImageDegenerated` for the one-leaf
+    // lifecycle; every other class graph reaches `SvekResult`.
+    let body_dimension_margin = if uses_degenerated_entity {
+        DEGENERATED_BODY_DECORATION_MARGIN
+    } else {
+        BODY_DECORATION_MARGIN
+    };
+    let body_inner_w = (body_max_x - body_min_x) + body_dimension_margin;
     let layout = DecorationLayout::new(diagram, body_inner_w);
     let (body_dx, body_dy) = if oracle.is_none() {
         ((layout.dim_total_w - body_inner_w) / 2.0, layout.top_h)
@@ -8724,7 +8733,7 @@ impl DecorationLayout {
         }
     }
 
-    /// Width of a decoration's bordered text block (glyph run + 2 * inset).
+    /// Width of a decoration's bordered text block.
     fn block_width(class_name: &str, text: &str) -> f64 {
         let st = Self::style(class_name);
         text.lines()
@@ -8733,6 +8742,7 @@ impl DecorationLayout {
                     + 2.0 * st.inset
             })
             .fold(0.0_f64, f64::max)
+            + DECORATION_BORDER_EXTENT
     }
 
     /// Height of the Java bordered text block. `Style.createTextBlockBordered`
@@ -19061,7 +19071,7 @@ mod tests {
         let decorated_svg = crate::render_svg(&decorated);
 
         assert!(plain_svg.contains(r#"style="width:280px;height:178px;background:#FFFFFF;""#));
-        assert!(decorated_svg.contains(r#"style="width:280px;height:277px;background:#FFFFFF;""#));
+        assert!(decorated_svg.contains(r#"style="width:281px;height:277px;background:#FFFFFF;""#));
         // Live PlantUML beta: DiagramChromeFactory12026.create nests header +
         // a two-line title into DecorateEntityImage, whose drawU accumulates
         // the two bordered text-block heights for this non-corpus fork.
@@ -21564,6 +21574,57 @@ mod tests {
         assert!(wildcard_svg.contains(
             r#"data-qualified-name="DurableRegistryMu" data-source-line="3" id="ent0004""#
         ));
+    }
+
+    #[test]
+    fn degenerated_decoration_dimensions_compose_before_centering() {
+        let one = rustuml_parser::parse::parse(
+            "@startuml\n\
+             title Fresh multilingual ledger title\n\
+             class RenamedLedgerWithLongerWidth\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::Class(one) = one else {
+            panic!("expected class diagram");
+        };
+        let two = rustuml_parser::parse::parse(
+            "@startuml\n\
+             title Fresh multilingual ledger title\n\
+             class RenamedLedgerWithLongerWidth\n\
+             class IndependentArchive\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::Class(two) = two else {
+            panic!("expected class diagram");
+        };
+
+        assert!(uses_degenerated_entity(&one, &[]));
+        assert!(!uses_degenerated_entity(&two, &[]));
+
+        let title = one.meta.title.as_deref().unwrap();
+        let bordered_width = DecorationLayout::block_width("title", title);
+        let style = DecorationLayout::style("title");
+        let unbordered_width =
+            text_render::measure_no_underline(title, style.font_size as f64, style.bold)
+                + 2.0 * style.inset;
+        assert_eq!(bordered_width - unbordered_width, DECORATION_BORDER_EXTENT);
+
+        let body_span = 100.0;
+        let degenerated_center =
+            (bordered_width - (body_span + DEGENERATED_BODY_DECORATION_MARGIN)) / 2.0;
+        let previous_body_margin = BODY_DECORATION_MARGIN - DECORATION_BORDER_EXTENT;
+        let previous_degenerated_center =
+            (unbordered_width - (body_span + previous_body_margin)) / 2.0;
+        assert_eq!(
+            degenerated_center - previous_degenerated_center,
+            DECORATION_BORDER_EXTENT
+        );
+
+        let svek_center = (bordered_width - (body_span + BODY_DECORATION_MARGIN)) / 2.0;
+        let previous_svek_center = (unbordered_width - (body_span + previous_body_margin)) / 2.0;
+        assert_eq!(svek_center, previous_svek_center);
     }
 
     #[test]
