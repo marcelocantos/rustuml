@@ -1,0 +1,9 @@
+@startuml
+node "North ingress" as NorthIngress
+node "South worker" as SouthWorker
+database "Observer store" as ObserverStore
+NorthIngress -[hidden]----> SouthWorker
+NorthIngress --> ObserverStore
+ObserverStore --> SouthWorker
+artifact "After route only" as AfterRouteOnly
+@enduml

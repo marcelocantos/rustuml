@@ -1,0 +1,6 @@
+@startuml
+note "Hidden only memo" as HiddenOnlyMemo
+component "Solo component" as SoloComponent
+HiddenOnlyMemo -[hidden]-> SoloComponent : hidden note-only relation label
+artifact "After hidden note only" as AfterHiddenNoteOnly
+@enduml

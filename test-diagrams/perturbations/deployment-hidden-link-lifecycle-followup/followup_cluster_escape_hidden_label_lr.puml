@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Outer rack" as OuterRack {
+  node "Inner service" as InnerService
+}
+database "External warehouse" as ExternalWarehouse
+InnerService -[hidden]-> ExternalWarehouse : hidden cluster escape label that should still affect the paint envelope
+InnerService --> ExternalWarehouse : visible cluster escape
+artifact "After cluster escape" as AfterClusterEscape
+@enduml

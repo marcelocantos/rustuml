@@ -1,0 +1,10 @@
+@startuml
+node "Start alpha" as StartAlpha
+node "End omega" as EndOmega
+node "Side relay" as SideRelay
+StartAlpha --> EndOmega : first visible lane
+StartAlpha "very long hidden tail cardinality" -[hidden]down-> "very long hidden head cardinality" EndOmega
+StartAlpha ..> EndOmega : second visible lane
+EndOmega --> SideRelay : after middle hidden
+artifact "After tail head" as AfterTailHead
+@enduml

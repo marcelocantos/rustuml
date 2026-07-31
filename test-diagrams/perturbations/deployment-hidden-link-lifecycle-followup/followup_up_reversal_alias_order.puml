@@ -1,0 +1,8 @@
+@startuml
+database "North archive" as ArchiveNorth
+storage "South cache" as CacheSouth
+artifact "Late target declaration" as LateTarget
+CacheSouth "tail before reversed hidden" -[hidden]up[#green]-> "head before reversed hidden" ArchiveNorth : upward hidden label
+ArchiveNorth --> LateTarget : visible after reversed hidden
+node "Declared after links" as DeclaredAfterLinks
+@enduml
