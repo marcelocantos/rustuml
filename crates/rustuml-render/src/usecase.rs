@@ -1132,15 +1132,40 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
 }
 
 struct ActorDim {
-    label_w: f64,
-    stereo_w: f64,
-    stereo_h: f64,
+    label: ActorTextBlock,
+    stereotype: Option<ActorTextBlock>,
     stroke_thickness: f64,
     label_gap: f64,
+    stereo_baseline_offset: f64,
     paint_min_x: f64,
     paint_min_y: f64,
     width: f64,
     height: f64,
+}
+
+#[derive(Clone, Copy)]
+// Java provenance: `SheetBlock1` expands a Creole block by its resolved
+// padding and translates its atoms by the same inset; `USymbolSimpleAbstract`
+// then centers and vertically stacks those natural blocks around the actor.
+struct ActorTextBlock {
+    content_width: f64,
+    content_height: f64,
+    padding: f64,
+    margin_x: f64,
+}
+
+impl ActorTextBlock {
+    fn width(self) -> f64 {
+        self.content_width + 2.0 * (self.padding + self.margin_x)
+    }
+
+    fn height(self) -> f64 {
+        self.content_height + 2.0 * self.padding
+    }
+
+    fn text_x(self, total_width: f64) -> f64 {
+        (total_width - self.width()) / 2.0 + self.margin_x + self.padding
+    }
 }
 
 struct UseCaseDim {
@@ -1214,6 +1239,7 @@ fn note_dim(note: &UseCaseNote) -> NoteDim {
 
 fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     let font_size = skin.actor_font_size as f64;
+    let padding = skin.creole_padding;
     let label_w =
         text_render::measure_with_family(&actor.label, font_size, false, &skin.actor_font_family);
     let label_h =
@@ -1223,33 +1249,36 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
         font_size,
         &skin.actor_font_family,
     );
-    let stereo_w = actor
-        .stereotype
-        .as_ref()
-        .map(|s| {
-            text_render::measure_with_family(
-                &format!("\u{00AB}{s}\u{00BB}"),
-                skin.actor_font_size as f64,
-                false,
-                &skin.actor_font_family,
-            ) + ACTOR_STEREOTYPE_MARGIN_X * 2.0
-        })
-        .unwrap_or(0.0);
+    let label = ActorTextBlock {
+        content_width: label_w,
+        content_height: label_h,
+        padding,
+        margin_x: 0.0,
+    };
     let stroke_thickness = skin.actor_border_thickness.parse::<f64>().unwrap_or(0.5);
     let text_block_h = pm::text_height(font_size);
-    let stereo_h = if actor.stereotype.is_some() {
-        text_block_h
-    } else {
-        0.0
-    };
+    let stereotype = actor.stereotype.as_ref().map(|stereotype| ActorTextBlock {
+        content_width: text_render::measure_with_family(
+            &format!("\u{00AB}{stereotype}\u{00BB}"),
+            font_size,
+            false,
+            &skin.actor_font_family,
+        ),
+        content_height: text_block_h,
+        padding,
+        margin_x: ACTOR_STEREOTYPE_MARGIN_X,
+    });
     let stickman_width = ACTOR_ARM_HALF * 2.0 + stroke_thickness * 2.0;
-    let width = label_w.max(stereo_w).max(stickman_width);
+    let width = label
+        .width()
+        .max(stereotype.map_or(0.0, ActorTextBlock::width))
+        .max(stickman_width);
     let stickman_height = ACTOR_STICKMAN_BASE_HEIGHT + stroke_thickness * 2.0;
     // Java provenance: `EntityImageDescription` draws the actor label as a
     // Creole `SheetBlock1`; `Sea.doAlign` bottom-aligns mixed `AtomText`
     // families, so the first run's baseline comes from its own descent within
     // the tallest atom box rather than from the surrounding sans-serif font.
-    let label_gap = label_first_baseline_ascent + 1.0 + stroke_thickness;
+    let label_gap = label_first_baseline_ascent + 1.0 + stroke_thickness + label.padding;
     // `SvekResult.calculateDimension` normalizes from the minimum painted
     // bound, not the node box. A stereotype's AWT line box overhangs the image
     // origin by the remainder after its baseline; without one, the stickman's
@@ -1258,23 +1287,22 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     // endpoint and each painted text block. A short label leaves the 26px arm
     // half a pixel inside its 27px fixed node; a wider label reaches the node
     // box edge and therefore owns normalization instead.
-    let mut paint_min_x = ((width - ACTOR_ARM_HALF * 2.0) / 2.0).min((width - label_w) / 2.0);
-    if actor.stereotype.is_some() {
-        let painted_stereo_w = stereo_w - ACTOR_STEREOTYPE_MARGIN_X * 2.0;
-        paint_min_x = paint_min_x.min((width - painted_stereo_w) / 2.0);
+    let mut paint_min_x = ((width - ACTOR_ARM_HALF * 2.0) / 2.0).min(label.text_x(width));
+    if let Some(stereotype) = stereotype {
+        paint_min_x = paint_min_x.min(stereotype.text_x(width));
     }
-    let paint_min_y = if actor.stereotype.is_some() {
+    let paint_min_y = if stereotype.is_some() {
         -(text_block_h - label_gap)
     } else {
         stroke_thickness
     };
-    let height = stickman_height + label_h + stereo_h;
+    let height = stickman_height + label.height() + stereotype.map_or(0.0, ActorTextBlock::height);
     ActorDim {
-        label_w,
-        stereo_w,
-        stereo_h,
+        label,
+        stereotype,
         stroke_thickness,
         label_gap,
+        stereo_baseline_offset: ACTOR_STEREO_OFFSET + padding,
         paint_min_x,
         paint_min_y,
         width,
@@ -2263,7 +2291,10 @@ fn layout_usecase_positions(
             let p = node_positions[actor.id.as_str()];
             (
                 p.x + origin_x + p.width / 2.0,
-                p.y + origin_y + dim.stereo_h + dim.stroke_thickness + ACTOR_HEAD_R,
+                p.y + origin_y
+                    + dim.stereotype.map_or(0.0, ActorTextBlock::height)
+                    + dim.stroke_thickness
+                    + ACTOR_HEAD_R,
             )
         })
         .collect();
@@ -2596,8 +2627,8 @@ fn compute_canvas(
         // `height - 1.5`, so its measured maximum is the emitted baseline plus
         // 1.5 rather than the baseline plus a full line box.
         let label_max_y = leg_y + actor_dims[i].label_gap + 1.5;
-        let stereotype_max_y = if actor_dims[i].stereo_h > 0.0 {
-            cy - ACTOR_STEREO_OFFSET + 1.5
+        let stereotype_max_y = if actor_dims[i].stereotype.is_some() {
+            cy - actor_dims[i].stereo_baseline_offset + 1.5
         } else {
             f64::NEG_INFINITY
         };
@@ -2915,7 +2946,7 @@ fn render_actor(
     let label_x = captured_x
         .first()
         .copied()
-        .unwrap_or(cx_anchor - dim.label_w / 2.0);
+        .unwrap_or(cx_anchor - dim.width / 2.0 + dim.label.text_x(dim.width));
     let label_y = captured_y.first().copied().unwrap_or(leg_y + dim.label_gap);
     let mut buf = String::new();
     text_render::emit_text(
@@ -2936,14 +2967,17 @@ fn render_actor(
     svg.raw(&buf);
     if let Some(stereo) = &actor.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
-        let stereo_x = captured_x
-            .get(1)
-            .copied()
-            .unwrap_or(cx_anchor - (dim.stereo_w - ACTOR_STEREOTYPE_MARGIN_X * 2.0) / 2.0);
+        let stereo_x = captured_x.get(1).copied().unwrap_or_else(|| {
+            cx_anchor - dim.width / 2.0
+                + dim
+                    .stereotype
+                    .expect("stereotype block exists")
+                    .text_x(dim.width)
+        });
         let stereo_y = captured_y
             .get(1)
             .copied()
-            .unwrap_or(cy - ACTOR_STEREO_OFFSET);
+            .unwrap_or(cy - dim.stereo_baseline_offset);
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
@@ -4689,13 +4723,14 @@ mod tests {
             false,
             &skin.actor_font_family,
         );
+        let stereotype = dim.stereotype.expect("stereotype block");
 
         assert_eq!(
-            dim.stereo_w,
+            stereotype.width(),
             bare_stereo_w + super::ACTOR_STEREOTYPE_MARGIN_X * 2.0
         );
         let text_block_h = super::pm::text_height(skin.actor_font_size as f64);
-        assert_eq!(dim.stereo_h, text_block_h);
+        assert_eq!(stereotype.height(), text_block_h);
         assert_eq!(
             dim.height,
             super::ACTOR_STICKMAN_BASE_HEIGHT + dim.stroke_thickness * 2.0 + text_block_h * 2.0
@@ -4707,6 +4742,180 @@ mod tests {
         assert!(svg.contains("\u{00AB}externalized\u{00BB}</text>"));
         assert!(svg.contains(r#"id="Portal-to-Flow""#));
         assert!(svg.contains(r##"<polygon fill="#181818" points=""##));
+    }
+
+    #[test]
+    fn global_padding_composes_actor_only_blocks_across_label_and_font_axes() {
+        let cases = [
+            ("sans-serif", 14, "I"),
+            ("Verdana", 12, "Renamed Wide Audit Operator"),
+            ("Arial", 17, "W"),
+        ];
+
+        for (font, font_size, label) in cases {
+            for padding in [0.0, 3.0, 11.0] {
+                let input = format!(
+                    "@startuml\n\
+                     skinparam defaultFontName {font}\n\
+                     skinparam defaultFontSize {font_size}\n\
+                     skinparam Padding {padding}\n\
+                     :{label}:\n\
+                     @enduml"
+                );
+                let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+                    panic!("expected use-case diagram");
+                };
+                let base = super::SkinColors::from_meta(&usecase.meta, None);
+                let skin = base.for_actor(&usecase.meta, &usecase.actors[0]);
+                let dim = super::actor_dim(&usecase.actors[0], &skin);
+                let expected_width = crate::text_render::measure_with_family(
+                    label,
+                    font_size as f64,
+                    false,
+                    &skin.actor_font_family,
+                );
+                let expected_height = crate::text_render::label_height_with_family(
+                    label,
+                    font_size as f64,
+                    &skin.actor_font_family,
+                );
+                let expected_ascent = crate::text_render::label_first_baseline_ascent_with_family(
+                    label,
+                    font_size as f64,
+                    &skin.actor_font_family,
+                );
+                let stickman_width = super::ACTOR_ARM_HALF * 2.0 + dim.stroke_thickness * 2.0;
+                let stickman_height =
+                    super::ACTOR_STICKMAN_BASE_HEIGHT + dim.stroke_thickness * 2.0;
+
+                assert_close(dim.label.content_width, expected_width);
+                assert_close(dim.label.content_height, expected_height);
+                assert_close(dim.label.width(), expected_width + 2.0 * padding);
+                assert_close(dim.label.height(), expected_height + 2.0 * padding);
+                assert_close(dim.width, dim.label.width().max(stickman_width));
+                assert_close(dim.height, stickman_height + dim.label.height());
+                assert_close(
+                    dim.label_gap,
+                    expected_ascent + 1.0 + dim.stroke_thickness + padding,
+                );
+                assert_close(dim.paint_min_y, dim.stroke_thickness);
+            }
+        }
+    }
+
+    #[test]
+    fn global_padding_composes_actor_stereotype_as_an_independent_block() {
+        let actor_dim = |padding: f64| {
+            let input = format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 actor \"Renamed Held Out Operator\" as Probe <<external-axis>>\n\
+                 :Dispatch Guard:\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+                panic!("expected use-case diagram");
+            };
+            let actor = usecase
+                .actors
+                .iter()
+                .find(|actor| actor.id == "Probe")
+                .unwrap();
+            let base = super::SkinColors::from_meta(&usecase.meta, None);
+            let skin = base.for_actor(&usecase.meta, actor);
+            super::actor_dim(actor, &skin)
+        };
+
+        let padding = 7.0;
+        let plain = actor_dim(0.0);
+        let padded = actor_dim(padding);
+        let plain_stereo = plain.stereotype.expect("stereotype block");
+        let padded_stereo = padded.stereotype.expect("stereotype block");
+
+        assert_close(padded.label.width() - plain.label.width(), 2.0 * padding);
+        assert_close(padded.label.height() - plain.label.height(), 2.0 * padding);
+        assert_close(padded_stereo.width() - plain_stereo.width(), 2.0 * padding);
+        assert_close(
+            padded_stereo.height() - plain_stereo.height(),
+            2.0 * padding,
+        );
+        assert_close(padded.height - plain.height, 4.0 * padding);
+        assert_close(
+            padded.stereo_baseline_offset - plain.stereo_baseline_offset,
+            padding,
+        );
+        assert_close(padded.paint_min_y - plain.paint_min_y, padding);
+        assert_close(padded_stereo.margin_x, super::ACTOR_STEREOTYPE_MARGIN_X);
+    }
+
+    #[test]
+    fn global_padding_actor_fanout_keeps_usecase_ellipse_model_independent() {
+        for direction in ["", "left to right direction\n"] {
+            for padding in [0.0, 5.0] {
+                let mut expected_radii: Option<Vec<(f64, f64)>> = None;
+                for actor_label in ["I", "Renamed Wide Fanout Operator"] {
+                    let input = format!(
+                        "@startuml\n\
+                         {direction}\
+                         skinparam defaultFontName Verdana\n\
+                         skinparam Padding {padding}\n\
+                         actor \"{actor_label}\" as Operator\n\
+                         usecase \"Renamed Intake\" as Intake\n\
+                         usecase \"Renamed Review\" as Review\n\
+                         usecase \"Renamed Archive\" as Archive\n\
+                         Operator --> Intake\n\
+                         Operator --> Review\n\
+                         Operator --> Archive\n\
+                         @enduml"
+                    );
+                    let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                    let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+                        panic!("expected use-case diagram");
+                    };
+                    let base = super::SkinColors::from_meta(&usecase.meta, None);
+                    let actor_style = base.for_actor(&usecase.meta, &usecase.actors[0]);
+                    let actor_dims = vec![super::actor_dim(&usecase.actors[0], &actor_style)];
+                    let usecase_dims: Vec<_> = usecase
+                        .use_cases
+                        .iter()
+                        .map(|item| {
+                            let style = base.for_use_case(&usecase.meta, item);
+                            super::use_case_dim(item, &style)
+                        })
+                        .collect();
+                    let radii: Vec<_> = usecase_dims.iter().map(|dim| (dim.rx, dim.ry)).collect();
+                    if let Some(expected) = &expected_radii {
+                        assert_eq!(&radii, expected);
+                    } else {
+                        expected_radii = Some(radii);
+                    }
+                    let connection_styles: Vec<_> = usecase
+                        .connections
+                        .iter()
+                        .map(|connection| base.for_connection(&usecase.meta, connection))
+                        .collect();
+                    let note_dims: Vec<_> = usecase.notes.iter().map(super::note_dim).collect();
+                    let positions = super::resolve_positions(
+                        usecase,
+                        &actor_dims,
+                        &usecase_dims,
+                        &note_dims,
+                        &connection_styles,
+                        None,
+                    );
+
+                    assert_eq!(positions.actors.len(), 1);
+                    assert_eq!(positions.use_cases.len(), 3);
+                    assert_eq!(positions.edge_paths.len(), 3);
+                    assert_close(
+                        actor_dims[0].label.width(),
+                        actor_dims[0].label.content_width + 2.0 * padding,
+                    );
+                }
+            }
+        }
     }
 
     #[test]
