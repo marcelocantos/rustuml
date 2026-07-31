@@ -1,0 +1,10 @@
+@startuml
+skinparam roundcorner 17
+
+artifact "Shared Artifact" as SharedArtifact
+interface "Shared Bus" as SharedBus
+storage "Shared Storage" as SharedStorage
+
+SharedArtifact --> SharedBus
+SharedBus --> SharedStorage
+@enduml

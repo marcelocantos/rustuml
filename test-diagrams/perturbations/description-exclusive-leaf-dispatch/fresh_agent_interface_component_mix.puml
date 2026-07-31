@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+
+component "Orchestrator" as Orchestrator
+interface "Ingress Contract" as IngressContract
+agent "Operator Shell" as OperatorShell
+
+Orchestrator --> IngressContract
+IngressContract --> OperatorShell
+@enduml

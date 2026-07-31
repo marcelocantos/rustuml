@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-generic-round-corner-propagation",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "role": "checker-only; did not implement deployment-generic-round-corner-propagation"
+  },
+  "revisions": {
+    "implementation_commit_under_review": "fea6427ebf9b0d67cd1a9d3f521f0f323e468203",
+    "dependency_implementation_commits": [
+      "a651bf6a973708970e6a5324defb2cffbb2dfeca"
+    ],
+    "pre_code_account_commits": [
+      "3d24e29b10ea74d90d5a60d119b372e0d8d13851",
+      "883c7ecdb37d2ca8d5354c016a7f2ba3abc3ba70",
+      "3432c11cac1e8a8397e7fea8650b91c47b72be04"
+    ],
+    "prior_rejected_review_commit": "80eff3d3c0d683f0e29a18597b3272e8f4c80faa",
+    "review_worktree_head": "9b8e3a33ca8fdbfae55ad36f38f7f1e220244d56",
+    "deployment_rs_changed_since_implementation_commit": false,
+    "parser_mod_changed_since_dependency_implementation_commit": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "target/release/examples/diff_one"
+  },
+  "source_inspection": {
+    "java_model_checked": [
+      "FromSkinparamToStyle maps generic skinparam roundcorner onto the root RoundCorner style and provides symbol-specific SName conversions.",
+      "EntityImageDescription resolves root.element.componentDiagram.<symbol>.title, reads PName.RoundCorner, and freezes the diameter into Fashion.withCorner at src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:126-175.",
+      "The DESCRIPTION command surface still comes from CommandCreateElementFull.ALL_TYPES, which includes file, stack, card, agent, component, interface, and the other claimed Fashion consumers."
+    ],
+    "rust_model_checked": [
+      "deployment_round_corner in crates/rustuml-render/src/deployment.rs now resolves either root.element.componentDiagram.group.<symbol> or root.element.componentDiagram.<symbol>.title at the entity source line and threads that value into artifact, rectangle/agent, card, component, frame, folder, file, stack, and collections painters.",
+      "No fixture-shaped branch, label check, or comparator slack change was found in crates/rustuml-render/src/deployment.rs for this remediation.",
+      "The paired parser-boundary implementation a651bf6a forces Deployment when card/stack/file/agent appear, but the separate review for description-exclusive-leaf-dispatch rejects that dependency on fresh valid interface-bearing inputs."
+    ],
+    "concerns": [
+      "The old deployment held-outs now pass, including the previously failing specific file/artifact/component case, so the original rejection is genuinely mitigated.",
+      "Fresh valid deployment consumer matrices still fail in the no-oracle path, and the dependency dispatch review is rejected separately, so the mechanism pair cannot be accepted."
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "git diff --name-only fea6427e..HEAD -- crates/rustuml-render/src/deployment.rs",
+      "result": "no output; deployment.rs unchanged since implementation commit"
+    },
+    {
+      "cmd": "git diff --name-only a651bf6a..HEAD -- crates/rustuml-parser/src/parse/mod.rs",
+      "result": "no output; parse/mod.rs unchanged since dependency implementation commit"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_generic_after_scale_artifact_rectangle_card.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_and_leaf_specific_lr_topology.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_leaf_specific_consumer_matrix.puml test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_specific_consumer_matrix.puml",
+      "result": "exit 0; same-stem Java SVGs generated for both fresh valid deployment consumer matrices"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_leaf_specific_consumer_matrix.puml",
+      "result": "FAILED; Java and Rust agree on the early consumer chain, but the product path diverges by the FrameTwenty -> FolderTwentyFour segment and the final canvas height (Java 1196px, Rust 1191px)."
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_specific_consumer_matrix.puml",
+      "result": "FAILED; the product path diverges in overall cluster extent (Java 1119x119, Rust 1129x129) under a fresh group-specific consumer matrix."
+    }
+  ],
+  "replayed_prior_held_outs": [
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_generic_after_scale_artifact_rectangle_card.puml",
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.puml",
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_and_leaf_specific_lr_topology.puml",
+      "result": "PASS"
+    }
+  ],
+  "fresh_held_outs": [
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_leaf_specific_consumer_matrix.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_leaf_specific_consumer_matrix.svg",
+      "axes": [
+        "every claimed leaf Fashion consumer",
+        "symbol-specific title overrides",
+        "generic root fallback",
+        "dpi",
+        "changed labels",
+        "longer consumer chain"
+      ],
+      "result": "FAIL",
+      "counterexample": "A fresh valid leaf consumer matrix still diverges in the no-oracle product path once the chain reaches the later frame/folder/file region, so the claimed generalization across the full consumer set is not yet established."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_specific_consumer_matrix.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_specific_consumer_matrix.svg",
+      "axes": [
+        "group-specific overrides",
+        "artifact/rectangle/component/frame/folder/stack clusters",
+        "generic root fallback",
+        "left-to-right direction",
+        "nested topology"
+      ],
+      "result": "FAIL",
+      "counterexample": "A fresh valid cluster consumer matrix still diverges in overall extent under group-specific RoundCorner values, so the big-symbol side of the model cannot be certified."
+    }
+  ],
+  "paired_dependency_review": {
+    "path": "docs/parity-reviews/description-exclusive-leaf-dispatch/review.json",
+    "verdict": "REJECTED",
+    "summary": "Fresh valid interface-bearing DESCRIPTION inputs mixing file/agent with shared syntax still fail after the dispatch change, so the parser-boundary dependency is not accepted."
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "The parser-boundary dependency remains rejected on fresh valid inputs",
+      "evidence": "The paired description-exclusive-leaf-dispatch rereview rejects a651bf6a with fresh_file_interface_component_mix and fresh_agent_interface_component_mix.",
+      "interpretation": "Because this deployment remediation explicitly depends on that dispatch rule to reach several consumers, the mechanism pair cannot be accepted while the dependency is disproven."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Fresh deployment consumer matrices still fail beyond the originally rejected case",
+      "evidence": "Both fresh_leaf_specific_consumer_matrix and fresh_group_specific_consumer_matrix are valid Java perturbations and both fail diff_one --no-oracle after the old held-outs pass.",
+      "interpretation": "The old counterexample is fixed, but the generalized claim across the full consumer set is still not established. Under the T14 held-out rule, those fresh failures reject the rereview."
+    }
+  ],
+  "verdict_reason": "The specific old deployment rejection is repaired, but the mechanism cannot be accepted. Its parser-boundary dependency is independently rejected on fresh valid DESCRIPTION inputs, and two fresh deployment consumer matrices still fail in the no-oracle product path. Under the T14 held-out rule, that is a rejecting rereview."
+}

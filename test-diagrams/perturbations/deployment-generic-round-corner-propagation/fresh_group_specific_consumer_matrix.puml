@@ -1,0 +1,54 @@
+@startuml
+left to right direction
+skinparam roundcorner 29
+
+<style>
+componentDiagram {
+  group {
+    artifact {
+      RoundCorner 0
+    }
+    rectangle {
+      RoundCorner 6
+    }
+    component {
+      RoundCorner 10
+    }
+    frame {
+      RoundCorner 14
+    }
+    folder {
+      RoundCorner 18
+    }
+    stack {
+      RoundCorner 22
+    }
+  }
+}
+</style>
+
+artifact "Artifact Cluster" as ArtifactCluster {
+  node ArtifactInner
+}
+rectangle "Rectangle Cluster" as RectangleCluster {
+  node RectangleInner
+}
+component "Component Cluster" as ComponentCluster {
+  node ComponentInner
+}
+frame "Frame Cluster" as FrameCluster {
+  node FrameInner
+}
+folder "Folder Cluster" as FolderCluster {
+  node FolderInner
+}
+stack "Stack Cluster" as StackCluster {
+  node StackInner
+}
+
+ArtifactInner --> RectangleInner
+RectangleInner --> ComponentInner
+ComponentInner --> FrameInner
+FrameInner --> FolderInner
+FolderInner --> StackInner
+@enduml

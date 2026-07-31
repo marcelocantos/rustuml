@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-exclusive-leaf-dispatch",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "role": "checker-only; did not implement description-exclusive-leaf-dispatch"
+  },
+  "revisions": {
+    "implementation_commit_under_review": "a651bf6a973708970e6a5324defb2cffbb2dfeca",
+    "pre_code_account_commits": [
+      "3432c11cac1e8a8397e7fea8650b91c47b72be04"
+    ],
+    "review_worktree_head": "9b8e3a33ca8fdbfae55ad36f38f7f1e220244d56",
+    "parser_mod_changed_since_implementation_commit": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "target/release/examples/diff_one"
+  },
+  "source_inspection": {
+    "java_model_checked": [
+      "PSystemBuilder tries DescriptionDiagramFactory after ClassDiagramFactory and ActivityDiagramFactory at src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:128-135.",
+      "DescriptionDiagramFactory registers CommandCreateElementFull and CommandFactoryNoteOnEntity on the DESCRIPTION path at src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:92-116.",
+      "CommandCreateElementFull.ALL_TYPES includes file, agent, stack, card, component, interface, port, portin, and portout at src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:75-83."
+    ],
+    "rust_model_checked": [
+      "detect_uml_subtype marks card, stack, file, and agent as description-only leaves at crates/rustuml-parser/src/parse/mod.rs:621-628 and then forces UmlSubtype::Deployment to beat every competitor at :957-965.",
+      "The deployment parser keyword inventory at crates/rustuml-parser/src/parse/deployment.rs:16-37 omits interface, port, portin, and portout.",
+      "The component parser still owns interface declarations and lollipop shorthand at crates/rustuml-parser/src/parse/component.rs:771-837."
+    ],
+    "concerns": [
+      "The implemented boundary rule assumes every valid Java DESCRIPTION source containing file/agent/card/stack can be handled by Rust's Deployment parser once dispatch is forced there.",
+      "Fresh valid Java inputs that mix an exclusive leaf with interface syntax disprove that assumption: Java DESCRIPTION accepts them, but Rust's forced Deployment path does not preserve the interface entity."
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "git diff --name-only a651bf6a..HEAD -- crates/rustuml-parser/src/parse/mod.rs",
+      "result": "no output; parse/mod.rs unchanged since implementation commit"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_file_interface_component_mix.puml test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_agent_interface_component_mix.puml test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_artifact_storage_interface_controls.puml",
+      "result": "exit 0; same-stem Java SVGs generated for all three fresh valid perturbations"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_file_interface_component_mix.puml",
+      "result": "FAILED; Java renders PipelineCore component -> DeployPort interface ellipse -> ReleaseBundle file, while Rust reorders the third entity to ReleaseBundle and never emits the Java DeployPort interface node."
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_agent_interface_component_mix.puml",
+      "result": "FAILED; Java renders IngressContract as an interface entity between Orchestrator and OperatorShell, while Rust renders OperatorShell as the third entity and moves IngressContract onto a later default/auto-created path."
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_artifact_storage_interface_controls.puml",
+      "result": "FAILED; the shared artifact/storage control does not reject through dispatch, but it still diverges on artifact round-corner rendering (Java rx/ry 8.5 from generic roundcorner 17, Rust rx/ry 2.5). This was preserved as a control observation, not used as the rejecting dispatch counterexample."
+    }
+  ],
+  "fresh_held_outs": [
+    {
+      "puml": "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_file_interface_component_mix.puml",
+      "java_svg": "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_file_interface_component_mix.svg",
+      "axes": [
+        "exclusive file leaf",
+        "shared component leaf",
+        "shared interface leaf",
+        "quoted labels",
+        "component before exclusive leaf",
+        "link topology"
+      ],
+      "result": "FAIL",
+      "counterexample": "A valid Java DESCRIPTION input mixing component, interface, and file syntax loses the interface entity in the Rust product path once the exclusive file leaf forces UmlSubtype::Deployment."
+    },
+    {
+      "puml": "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_agent_interface_component_mix.puml",
+      "java_svg": "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_agent_interface_component_mix.svg",
+      "axes": [
+        "exclusive agent leaf",
+        "shared component leaf",
+        "shared interface leaf",
+        "left-to-right direction",
+        "different declaration order",
+        "link topology"
+      ],
+      "result": "FAIL",
+      "counterexample": "A second valid Java DESCRIPTION input mixing component, interface, and agent syntax also loses the Java interface entity after the Rust dispatch rule forces Deployment."
+    },
+    {
+      "puml": "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_artifact_storage_interface_controls.puml",
+      "java_svg": "test-diagrams/perturbations/description-exclusive-leaf-dispatch/fresh_artifact_storage_interface_controls.svg",
+      "axes": [
+        "artifact/storage shared controls",
+        "shared interface leaf",
+        "generic roundcorner",
+        "link topology"
+      ],
+      "result": "FAIL",
+      "interpretation": "Preserved control. The failure appears to land in shared component-style artifact round-corner rendering rather than in the exclusive-leaf dispatch rule itself, so it is not the primary rejecting evidence for this mechanism."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Forcing Deployment on exclusive leaves breaks valid Java DESCRIPTION inputs that still require interface parsing",
+      "evidence": "Both fresh_file_interface_component_mix and fresh_agent_interface_component_mix are valid under the Java oracle. In each case Java renders an interface entity between the component and the exclusive leaf, but Rust's no-oracle product output never emits that Java interface node once the exclusive leaf forces UmlSubtype::Deployment.",
+      "interpretation": "The mechanism claim is false at the Component/Deployment capability boundary. An exclusive leaf does reject the Rust Component candidate, but the chosen Rust Deployment path cannot consume the full valid Java DESCRIPTION surface that remains in the same source."
+    },
+    {
+      "severity": "informational",
+      "title": "The shared artifact/storage control still diverges, but not for the rejecting reason",
+      "evidence": "fresh_artifact_storage_interface_controls keeps artifact and storage on the shared side, yet Rust renders the artifact with default rx/ry 2.5 instead of Java's generic-roundcorner rx/ry 8.5.",
+      "interpretation": "This prevents a clean positive control story, but it is best attributed to adjacent round-corner behavior rather than to the dispatch rule that this review is checking."
+    }
+  ],
+  "verdict_reason": "Fresh valid held-outs disprove the implemented dispatch rule. Rust now forces Deployment when file or agent appears, but the resulting Deployment parser cannot preserve shared Java DESCRIPTION interface syntax that remains valid in the same source. Under the T14 held-out rule, those counterexamples reject the change."
+}

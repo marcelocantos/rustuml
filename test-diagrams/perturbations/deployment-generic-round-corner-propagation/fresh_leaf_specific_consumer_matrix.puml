@@ -1,0 +1,80 @@
+@startuml
+skinparam dpi 120
+skinparam roundcorner 31
+
+<style>
+componentDiagram {
+  artifact {
+    title {
+      RoundCorner 0
+    }
+  }
+  rectangle {
+    title {
+      RoundCorner 4
+    }
+  }
+  agent {
+    title {
+      RoundCorner 8
+    }
+  }
+  card {
+    title {
+      RoundCorner 12
+    }
+  }
+  component {
+    title {
+      RoundCorner 16
+    }
+  }
+  frame {
+    title {
+      RoundCorner 20
+    }
+  }
+  folder {
+    title {
+      RoundCorner 24
+    }
+  }
+  file {
+    title {
+      RoundCorner 28
+    }
+  }
+  collections {
+    title {
+      RoundCorner 32
+    }
+  }
+  stack {
+    title {
+      RoundCorner 36
+    }
+  }
+}
+</style>
+
+artifact "Artifact Zero" as ArtifactZero
+rectangle "Rectangle Four" as RectangleFour
+agent "Agent Eight" as AgentEight
+card "Card Twelve" as CardTwelve
+component "Component Sixteen" as ComponentSixteen
+frame "Frame Twenty" as FrameTwenty
+folder "Folder Twenty Four" as FolderTwentyFour
+file "File Twenty Eight" as FileTwentyEight
+collections "Collections Thirty Two" as CollectionsThirtyTwo
+stack "Stack Thirty Six" as StackThirtySix
+
+ArtifactZero --> RectangleFour
+RectangleFour --> AgentEight
+AgentEight --> CardTwelve
+CardTwelve --> ComponentSixteen
+ComponentSixteen --> FrameTwenty
+FrameTwenty --> FolderTwentyFour
+FolderTwentyFour --> FileTwentyEight
+FileTwentyEight --> CollectionsThirtyTwo
+CollectionsThirtyTwo --> StackThirtySix
+@enduml

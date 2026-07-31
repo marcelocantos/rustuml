@@ -1,0 +1,10 @@
+@startuml
+skinparam dpi 140
+
+component "Pipeline Core" as PipelineCore
+interface "Deploy Port" as DeployPort
+file "Release Bundle" as ReleaseBundle
+
+PipelineCore --> DeployPort
+DeployPort --> ReleaseBundle
+@enduml
