@@ -3806,7 +3806,7 @@ fn build_state_group_outcome<'a>(
         for outcome in outcomes {
             collect_state_group_outcome(outcome, &mut region_images, &mut live_clusters);
         }
-        let transition_indices: Vec<usize> = if live_clusters.is_empty() {
+        let transition_indices = if live_clusters.is_empty() {
             diagram
                 .transitions
                 .iter()
@@ -3815,7 +3815,7 @@ fn build_state_group_outcome<'a>(
                     (transition_parent_scope(diagram, transition) == Some(Some(scope.as_str())))
                         .then_some(index)
                 })
-                .collect()
+                .collect::<Vec<_>>()
         } else {
             diagram
                 .transitions
@@ -3835,8 +3835,9 @@ fn build_state_group_outcome<'a>(
                     });
                     (inside_scope && !inside_image).then_some(index)
                 })
-                .collect()
+                .collect::<Vec<_>>()
         };
+        let transition_indices = plantuml_svek_transition_order(diagram, transition_indices);
         let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
             if live_clusters.is_empty() {
                 return state.parent.as_deref() == Some(scope.as_str());
@@ -4031,7 +4032,7 @@ fn build_autonomous_composite<'a>(
         let outcome = build_state_group_outcome(diagram, composite)?;
         collect_state_group_outcome(outcome, &mut composites, &mut live_clusters);
     }
-    let outer_transition_indices: Vec<usize> = if live_clusters.is_empty() {
+    let outer_transition_indices = if live_clusters.is_empty() {
         diagram
             .transitions
             .iter()
@@ -4039,7 +4040,7 @@ fn build_autonomous_composite<'a>(
             .filter_map(|(index, transition)| {
                 (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
             })
-            .collect()
+            .collect::<Vec<_>>()
     } else {
         diagram
             .transitions
@@ -4052,8 +4053,10 @@ fn build_autonomous_composite<'a>(
                 });
                 (!inside_image).then_some(index)
             })
-            .collect()
+            .collect::<Vec<_>>()
     };
+    let outer_transition_indices =
+        plantuml_svek_transition_order(diagram, outer_transition_indices);
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         if live_clusters.is_empty() {
             return state.parent.is_none();
@@ -10669,6 +10672,69 @@ CobaltDecision --> [*]
             label_positions.windows(2).all(|pair| pair[0] < pair[1]),
             "rendered links must follow PlantUML's grouped SVEK order"
         );
+    }
+
+    #[test]
+    fn autonomous_root_scope_groups_noncontiguous_reverse_transitions() {
+        let input = r#"@startuml
+state "Renamed Engine" as Engine {
+  [*] --> Warming
+  Warming --> [*]
+}
+state "Copper Harbor" as Copper
+state "Violet Relay" as Violet
+[*] --> Copper
+Copper --> Engine : engine-forward
+Copper --> Violet : relay-forward
+Engine --> Copper : engine-reverse
+Violet --> Copper : relay-reverse
+Violet --> [*]
+@enduml
+"#;
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let (_, _, outer) = build_autonomous_composite(diagram).unwrap();
+        let transition_index = |label: &str| {
+            diagram
+                .transitions
+                .iter()
+                .position(|transition| transition.label.as_deref() == Some(label))
+                .unwrap()
+        };
+        let engine_forward = transition_index("engine-forward");
+        let engine_reverse = transition_index("engine-reverse");
+        let relay_forward = transition_index("relay-forward");
+        let relay_reverse = transition_index("relay-reverse");
+
+        assert!(engine_forward.abs_diff(engine_reverse) > 1);
+        assert_eq!(
+            outer
+                .transition_indices
+                .iter()
+                .copied()
+                .filter(|index| {
+                    diagram.transitions[*index]
+                        .label
+                        .as_deref()
+                        .is_some_and(|label| {
+                            label.ends_with("forward") || label.ends_with("reverse")
+                        })
+                })
+                .collect::<Vec<_>>(),
+            vec![engine_forward, engine_reverse, relay_forward, relay_reverse]
+        );
+
+        let svg = render(diagram, &Theme::default());
+        let labels = [
+            "engine-forward",
+            "engine-reverse",
+            "relay-forward",
+            "relay-reverse",
+        ];
+        let positions = labels.map(|label| svg.find(&format!(">{label}</text>")).unwrap());
+        assert!(positions.windows(2).all(|pair| pair[0] < pair[1]), "{svg}");
     }
 
     #[test]
