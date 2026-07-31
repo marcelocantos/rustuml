@@ -14,11 +14,12 @@
     "crates/rustuml-render/src/class.rs:package_cluster_painted_min",
     "crates/rustuml-render/src/class.rs:normalize_svek_package_envelope",
     "crates/rustuml-render/src/class.rs:empty_package_painted_frontier",
+    "crates/rustuml-render/src/class.rs:empty_package_frontier_minima and svek_layout_y_bias",
     "crates/rustuml-render/src/class.rs:class body envelope accounting for painted clusters"
   ],
   "invariant": "USymbolStack paints a transparent inset URectangle and an outer UPath. LimitFinder measures the rectangle even though its color is none: its minimum is translated by (-1,-1), while its maximum is width-1,height-1 and remains inside the outer path. SvekResult therefore normalizes a stack cluster from minY one unit above the outer path, moves the complete solved body down by one unit, and expands the final unscaled vertical extent by one unit.",
-  "causal_divergence": "Rust originally omitted the inset frontier from package_cluster_painted_min, leaving nonempty stack clusters one base unit too high and the root canvas one unit too short. Commit 743d463a fixed that path, but the independent review found the parallel empty-package path: empty_package_painted_frontier still falls through to minY zero. A brace-bearing empty class stack therefore retains the identical one-unit drift through a distinct render role.",
-  "planned_change": "Retain 743d463a's nonempty-cluster model and add the same Stack frontier to empty_package_painted_frontier: minX zero, minY minus the existing LIMIT_FINDER_RECTANGLE_INSET, and maxima still owned by the outer path at width and height. Do not derive any value from scaled checker coordinates; generic SVG scaling remains downstream.",
+  "causal_divergence": "Rust originally omitted the inset frontier from package_cluster_painted_min, leaving nonempty stack clusters one base unit too high and the root canvas one unit too short. Commit 743d463a fixed that path, but the independent review found the parallel empty-package path: empty_package_painted_frontier fell through to minY zero, and empty_package_frontier_minima admitted only cloud and ComponentUml1 external frontiers. A brace-bearing empty class stack therefore retained the identical one-unit drift through a distinct render role and collector filter.",
+  "planned_change": "Retain 743d463a's nonempty-cluster model, add Stack to empty_package_painted_frontier with minX zero, minY minus the existing LIMIT_FINDER_RECTANGLE_INSET, and outer-path maxima at width and height, then admit Stack to empty_package_frontier_minima so svek_layout_y_bias consumes that modeled minimum. Do not derive any value from scaled checker coordinates; generic SVG scaling remains downstream.",
   "perturbation_axes": [
     "unscaled versus explicit fractional scale and dpi",
     "stack cluster versus empty stack leaf control",
