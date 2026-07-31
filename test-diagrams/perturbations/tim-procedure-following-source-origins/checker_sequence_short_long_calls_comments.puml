@@ -1,0 +1,15 @@
+@startuml
+!procedure $signal($from, $to)
+$from -> $to : signal
+!endprocedure
+!procedure $roundtrip($from, $to, $label)
+$from -> $to : $label
+$to --> $from : ack
+!endprocedure
+$signal(CitrineCLI, GraphAPI)
+$roundtrip(GraphAPI, LedgerDB, "query")
+$signal(LedgerDB, CitrineCLI)
+
+' ordinary caller-file message after mixed procedure body lengths
+CitrineCLI -> LedgerDB : close
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+!procedure $leaf($name)
+class $name
+!endprocedure
+!procedure $record($name, $field)
+class $name {
+  +$field: String
+}
+!endprocedure
+$leaf(NorthwindLedger)
+$record(SaffronArchive, marker)
+$leaf(QuartzMirror)
+
+' caller comment after generated body lines
+NorthwindLedger --> SaffronArchive
+QuartzMirror --> SaffronArchive
+@enduml

@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-procedure-following-source-origins",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-2026-07-31",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "385977e38193bf6ca0a2649a33b82f6dabd6c6ff",
+  "implementation_commit": "a49d74243b77d691e78bd8df246cf28c78ec4b95",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TFunctionImpl.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TContext.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorProcedure.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/BlockUml.java",
+    "git diff --unified=0 a49d7424^ a49d7424 -- crates/rustuml-parser/src/preprocess/mod.rs | rg '^\\+[^+].*(preproc_complex|crud|Northwind|Saffron|test-diagrams|golden|include_str!|include_bytes!|read_to_string|replace\\(|replacen\\(|data-source-line|codeLine|57|58|27|28|[0-9]+\\.[0-9]{3,})'",
+    "git grep -n -E 'tim-procedure-following-source-origins|NorthwindLedger|SaffronArchive|QuartzMirror|IndigoVault|CopperQueue|AmberProxy|OrchidUI|SlateAPI|HarborDB|CitrineCLI|GraphAPI|LedgerDB|preproc_complex_crud_generator|data-source-line=\"(27|28|57|58)\"' HEAD -- crates",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_mixed_lengths_comments.puml test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_repeated_calls_reordered.puml test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_first_line_repeated_mixed.puml test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_short_long_calls_comments.puml",
+    "target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_mixed_lengths_comments.puml",
+    "target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_repeated_calls_reordered.puml",
+    "target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_first_line_repeated_mixed.puml",
+    "target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_short_long_calls_comments.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/golden/multi-diagram/preproc_05_procedure_header.puml",
+    "scripts/plantuml-server.sh 8791",
+    "POST /render to http://127.0.0.1:8791/render for a preamble-backed checker draft",
+    "cargo test -p rustuml-parser --lib parser_preprocessing_keeps_caller_origins_after_mixed_procedure_expansions -- --nocapture",
+    "cargo test -p rustuml-parser --lib parse_block_sequence_with_preamble_meta_procedure_stays_sequence -- --nocapture",
+    "cargo test -p rustuml-oracle --test parity_perturbations held_out_perturbations_match_java_without_oracle_layout -- --nocapture",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/debug/examples/diff_one test-diagrams/perturbations/tim-procedure-following-source-origins/*.puml test-diagrams/perturbations/tim-procedure-following-source-origins/*.svg"
+  ],
+  "revisions": {
+    "checker_branch": "codex/t14-integration",
+    "checker_worktree": "/private/tmp/rustuml-integrate-20260731a",
+    "rust_head_checked": "2e56baa97a0a8cdf1789243117f5f4026de31124",
+    "rust_source_flow_checked_at": "d04b7ec69d7f86aeafbc9202da3c41ef7569ddac",
+    "rust_tree_checked_before_review": "6c35c6e1e5d339ffe8d30e61dbcb76d5b828f94d",
+    "java_head_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "executables": {
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML version 1.2026.3beta6 / 71806a2 [2026-06-18 16:03:22 UTC]"
+    },
+    "diff_one": {
+      "path": "target/debug/examples/diff_one",
+      "sha256": "bffc9bcd94227ebe1b05a676c2477ef83d449f694034603955f7f530921a5f47",
+      "mode": "--no-oracle"
+    }
+  },
+  "source_audit": {
+    "java": [
+      "TFunctionImpl.addBody stores each procedure body line as its original StringLocated, including its LineLocation.",
+      "TFunctionImpl.executeProcedureInternal sends that stored body list to TContext.executeLines, so procedure-emitted plain lines keep definition-body ownership.",
+      "CodeIteratorProcedure consumes procedure declarations and body collection before returning later outer iterator lines, so ordinary lines after a call are still the original top-level StringLocated values.",
+      "TContext.addPlain and applyFunctionsAndVariablesInternal add transformed plain lines back to resultList with the input StringLocated location, including split newline results.",
+      "BlockUml constructs TimLoader over the extracted rawSource stream without replacing line locations, which supports the account's separate preamble-backed absolute location domain."
+    ],
+    "rust": [
+      "BufferedLine stores both raw_source_line and diagram source_line when a procedure body is collected.",
+      "process_buffered_line restores the stored source_line through source_line_override while evaluating procedure body lines.",
+      "try_function_call marks subsequent caller-file lines with explicit origins after any top-level procedure emits output, so later lines no longer inherit flattened vector positions.",
+      "current_diagram_source_line preserves zero-based first-line @start numbering while keeping absolute positions for extracted blocks whose @start line is greater than one.",
+      "The implementation does not change parser semantics, renderer geometry, golden data, comparator slack, park lists, or syntax-error eligibility."
+    ],
+    "fixture_shape_scan": "The production diff contains no golden reads, include_str/include_bytes of fixtures, SVG string surgery, fixture-path branches, CRUD label checks, expected source-line literals, or high-precision parity constants. Grep found fresh labels only in parser tests or held-out perturbations, not in shipping logic."
+  },
+  "preamble_probe": {
+    "status": "source-audited and parser-tested, not preserved as a Java SVG perturbation",
+    "direct_file_mode": "The pinned JAR returned exit 200 and a syntax-error SVG for preamble-backed sources such as test-diagrams/golden/multi-diagram/preproc_05_procedure_header.puml.",
+    "picoweb_mode": "A temporary picoweb server on port 8791 also returned a syntax-error SVG for a preamble-backed checker draft.",
+    "review_decision": "No preamble-backed perturbation pair was preserved because the local Java render endpoints could not generate a valid same-stem SVG. The preamble axis is covered by Java source provenance plus the green parse_block_sequence_with_preamble_meta_procedure_stays_sequence Rust parser test."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_mixed_lengths_comments.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_mixed_lengths_comments.svg",
+      "axes": [
+        "class family",
+        "mixed procedure body lengths",
+        "repeated calls",
+        "blank and comment after generated lines",
+        "two later caller-file relationships",
+        "renamed entities"
+      ],
+      "result": "pass",
+      "sha256": {
+        "source": "6b3993d6ca9103e6db6ba292db313f0d317a9f67d6fd07c33fd8bc2c94d16399",
+        "golden": "ee1314408b275dacc2d5a780802c4f0946827b372fd1c365174a35511bdc5062"
+      },
+      "diff_one_no_oracle": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_repeated_calls_reordered.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_class_repeated_calls_reordered.svg",
+      "axes": [
+        "class family",
+        "same procedure called repeatedly",
+        "short and long body mix",
+        "changed declaration and call order",
+        "later caller-file relationships",
+        "renamed entities"
+      ],
+      "result": "pass",
+      "sha256": {
+        "source": "d69c9dd41085398f166351ff030b4c5bdf06fab46cfc56d6ee97fac64bd0dc9f",
+        "golden": "5ca1843e9e74940dcb14c3cbd337a5505ccaeb3768b7c4cafbfb0da7811fa5b4"
+      },
+      "diff_one_no_oracle": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_first_line_repeated_mixed.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_first_line_repeated_mixed.svg",
+      "axes": [
+        "sequence family",
+        "non-class renderer",
+        "one-line and two-line procedure bodies",
+        "repeated procedure calls",
+        "comment after generated messages",
+        "later caller-file message"
+      ],
+      "result": "pass",
+      "sha256": {
+        "source": "1524b6d0fdd4dd7a585ddf04a8db5c7d7b85168569cfc82717ac9069eb7353d3",
+        "golden": "9737df7b709355e98c3585d966eafdf3115c933fd36ca2f5820f4ef4184673b6"
+      },
+      "diff_one_no_oracle": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_short_long_calls_comments.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-following-source-origins/checker_sequence_short_long_calls_comments.svg",
+      "axes": [
+        "sequence family",
+        "non-class renderer",
+        "short and long procedure bodies",
+        "repeated calls in changed order",
+        "comment after generated messages",
+        "later caller-file message"
+      ],
+      "result": "pass",
+      "sha256": {
+        "source": "e2dc5e7f0ab8415b02bf6db73e190b94b4cbfd504d137323a6fe24dbfe314194",
+        "golden": "cd402636bd58846c8889a8f1b95543e06414b348c94ab4c4d320d3711f77face"
+      },
+      "diff_one_no_oracle": "SVGs are structurally equivalent"
+    }
+  ],
+  "test_results": {
+    "parser_preprocessing_keeps_caller_origins_after_mixed_procedure_expansions": "pass",
+    "parse_block_sequence_with_preamble_meta_procedure_stays_sequence": "pass",
+    "four_mechanism_diff_one_no_oracle_runs": "pass",
+    "global_parity_perturbations": "failed on pre-existing unrelated perturbations outside this mechanism; the captured failure list did not identify any tim-procedure-following-source-origins input",
+    "parity_review_records_are_complete": "failed for this mechanism because the maker account uses object-valued java_locations/rust_locations plus claimed_invariant/planned_model_change, while the current guard expects string arrays named java_locations/rust_locations and string fields named invariant/planned_change. The checker did not edit the maker account."
+  },
+  "findings": [
+    "Accepted for this mechanism: the Java source flow and Rust implementation both support per-line source ownership after top-level TIM procedure expansion, with body-owned lines retaining definition locations and following caller-owned lines retaining caller locations.",
+    "Four fresh Java-valid perturbations passed strict no-oracle comparison, covering class and sequence families, mixed body lengths, repeated calls, blank/comment pressure, later ordinary caller lines, declaration order changes, and renamed entities.",
+    "I could not preserve a preamble-backed Java SVG pair honestly because both direct JAR file mode and picoweb returned syntax-error SVGs for preamble-backed sources. The preamble-backed axis is nevertheless checked by Java BlockUml/TimLoader source provenance and the green Rust parser test that preserves absolute line 8 after a preamble procedure call.",
+    "No fixture-shaped production logic, golden-data dependency, SVG post-processing, source-line literal ladder, unexplained parity constant, or comparator/eligibility change was found in the implementation diff.",
+    "The repository-wide parity_perturbations test remains red due to existing unrelated held-out failures, so this review does not claim the global perturbation suite is green.",
+    "The review completeness guard still flags this mechanism's pre-existing maker account schema. I left that account untouched because a checker-side post-hoc account rewrite would weaken the maker/checker trail."
+  ],
+  "verdict": "accepted"
+}

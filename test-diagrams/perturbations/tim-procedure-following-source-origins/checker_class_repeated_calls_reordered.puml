@@ -1,0 +1,17 @@
+@startuml
+!procedure $entity($name, $field)
+class $name {
+  +$field: Integer
+}
+!endprocedure
+!procedure $tag($name)
+class $name
+!endprocedure
+$entity(IndigoVault, capacity)
+$entity(CopperQueue, depth)
+$tag(AmberProxy)
+$entity(IndigoVault, capacity)
+
+AmberProxy --> IndigoVault
+CopperQueue --> AmberProxy
+@enduml

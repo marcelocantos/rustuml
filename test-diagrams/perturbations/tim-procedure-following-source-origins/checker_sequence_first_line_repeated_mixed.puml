@@ -1,0 +1,15 @@
+@startuml
+!procedure $ping($from, $to)
+$from -> $to : ping
+!endprocedure
+!procedure $roundtrip($from, $to, $label)
+$from -> $to : $label
+$to --> $from : reply
+!endprocedure
+$ping(OrchidUI, SlateAPI)
+$roundtrip(SlateAPI, HarborDB, "lookup")
+$ping(HarborDB, OrchidUI)
+
+' ordinary caller-file line after repeated generated sequence messages
+OrchidUI -> HarborDB : commit
+@enduml
