@@ -1397,6 +1397,29 @@ mod tests {
     }
 
     #[test]
+    fn pattern2_quoted_named_notes_keep_nested_identity_for_later_relations() {
+        for (opening, closing) in [
+            ('\u{201c}', '\u{201d}'),
+            ('\u{201d}', '\u{201c}'),
+            ('"', '\u{201d}'),
+            ('\u{e121}', '\u{e121}'),
+        ] {
+            let source = format!(
+                "node Outer {{\nnode Anchor\nnote {opening}quoted payload{closing} as Ledger.Note $audit <<Trace>> #MistyRose\nLedger.Note --> Anchor\n}}"
+            );
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let diagram =
+                parse_deployment(&lines).unwrap_or_else(|error| panic!("{source:?}: {error:?}"));
+            assert_eq!(diagram.notes.len(), 1, "{source:?}");
+            assert_eq!(diagram.notes[0].id.as_deref(), Some("Ledger.Note"));
+            assert_eq!(diagram.notes[0].owner.as_deref(), Some("Outer"));
+            assert_eq!(diagram.connections.len(), 1);
+            assert_eq!(diagram.connections[0].from, "Ledger.Note");
+            assert!(!diagram.nodes.iter().any(|item| item.id == "Ledger.Note"));
+        }
+    }
+
+    #[test]
     fn dotted_inline_named_note_is_reused_by_a_relation() {
         let d = parse(
             "note \"Dotted code note\" as memo.v1\n\
