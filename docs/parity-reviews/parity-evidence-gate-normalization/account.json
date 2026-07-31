@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-normalization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/SourceStringReader.java",
+    "src/main/java/net/sourceforge/plantuml/error/PSystemError.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-oracle/tests/harness_guards.rs",
+    "crates/rustuml-oracle/tests/parity_perturbations.rs"
+  ],
+  "invariant": "A parity mechanism is accepted only when its independent latest checker record names at least two valid Java-success held-outs spanning at least two axes and each held-out passes the shipped no-oracle renderer; rejected reviews and invalid-syntax controls remain preserved evidence but never count as accepted parity.",
+  "causal_divergence": "The evidence corpus has evolved several field aliases and verdict spellings under schema_version 1, while the guard validates one early concrete JSON shape. Independently, parity_perturbations recursively executes every preserved .puml as a valid positive case. That conflates record serialization with evidence semantics and makes the required preservation of rejected counterexamples and Java-error controls permanently fail the standing gate. PlantUML's SourceStringReader distinguishes a rendered diagram from PSystemError output; the Rust gate currently discards that distinction after artifacts are checked in.",
+  "planned_change": "Introduce a closed normalization layer for the known schema_version 1 aliases, then validate one semantic model: pending accounts are complete but non-accepting, rejected latest reviews are valid non-accepting evidence, and accepted latest reviews must declare two Java-success passing held-outs across two axes. Build the perturbation execution manifest from those accepted declarations instead of recursively walking every preserved source. Preserve and integrity-check invalid controls separately. Document one canonical record shape for all new reviews. Make the decimal-literal ratchet bidirectional without changing its frozen baseline, and leave the error-golden census, marker set, comparator slack, park list, and allow-lists unchanged.",
+  "perturbation_axes": [
+    "accepted latest review versus rejected latest review versus pending account",
+    "valid Java-success held-out versus Java-error negative control",
+    "legacy field aliases and verdict spellings versus the canonical future schema",
+    "unreferenced preserved artifact versus review-declared executable evidence"
+  ],
+  "scope_boundary": "This changes only evidence interpretation and test selection. It does not change SVG comparison, parser or renderer behavior, golden classification, the frozen error census, GEOM_EPS, park lists, or any shipping crate.",
+  "forbidden_approaches": [
+    "accept arbitrary verdict text or infer acceptance from a truthy field",
+    "count Java error pages or invalid controls as valid perturbation passes",
+    "require rejected mechanisms to be rewritten as accepted",
+    "silently ignore malformed review-declared evidence",
+    "update the error-golden census from the dirty golden submodule worktree",
+    "add open-ended compatibility aliases without a schema-version change"
+  ],
+  "acceptance": [
+    "Historical accepted, rejected, and pending records normalize without changing their authored verdicts.",
+    "Only latest accepted reviews contribute executable positive held-outs, and each contributes at least two valid passing sources over two axes.",
+    "Rejected counterexamples and invalid controls remain checked in and auditable but do not make parity_perturbations fail merely by existing.",
+    "A malformed accepted review or a diverging accepted held-out fails the gate.",
+    "The decimal-literal ratchet reports both growth and uncommitted decreases; its baseline update is a separate provenance audit.",
+    "The committed golden corpus still reports the frozen 1,199 error pages."
+  ],
+  "status": "planned"
+}
