@@ -1125,8 +1125,15 @@ pub(super) fn note_command_family(line: &str) -> Option<NoteCommandFamily> {
 }
 
 pub(super) fn is_ordinary_note_terminator(line: &str) -> bool {
-    let line = line.trim();
-    line.eq_ignore_ascii_case("end note") || line.eq_ignore_ascii_case("endnote")
+    let line = line.trim().to_ascii_lowercase();
+    if line == "endnote" {
+        return true;
+    }
+    let Some(rest) = line.strip_prefix("end") else {
+        return false;
+    };
+    let mut chars = rest.chars();
+    chars.next().is_some_and(char::is_whitespace) && chars.as_str() == "note"
 }
 
 pub(super) fn is_note_family_terminator(line: &str) -> bool {
@@ -1153,14 +1160,38 @@ fn completed_multiline_note_payload(lines: &[String]) -> Vec<bool> {
         }
 
         let closes_with_brace = family == NoteCommandFamily::Note && opener.ends_with('{');
-        let Some(terminator) = ((line_index + 1)..lines.len()).find(|&candidate| {
-            let line = source_text(&lines[candidate]);
-            if closes_with_brace {
-                line.trim() == "}"
-            } else {
-                is_note_family_terminator(line)
-            }
-        }) else {
+        let sequence_shaped = family != NoteCommandFamily::Note || {
+            let rest = after_keyword.to_ascii_lowercase();
+            (rest.starts_with("left")
+                || rest.starts_with("right")
+                || rest.starts_with("over")
+                || rest.starts_with("across"))
+                && !rest.contains(" of ")
+        };
+        let candidates = (line_index + 1)..lines.len();
+        let terminator = if closes_with_brace {
+            candidates
+                .clone()
+                .find(|&candidate| source_text(&lines[candidate]).trim() == "}")
+        } else if family == NoteCommandFamily::Note {
+            candidates
+                .clone()
+                .find(|&candidate| is_ordinary_note_terminator(source_text(&lines[candidate])))
+                .or_else(|| {
+                    if sequence_shaped {
+                        candidates.clone().find(|&candidate| {
+                            is_note_family_terminator(source_text(&lines[candidate]))
+                        })
+                    } else {
+                        None
+                    }
+                })
+        } else {
+            candidates
+                .clone()
+                .find(|&candidate| is_note_family_terminator(source_text(&lines[candidate])))
+        };
+        let Some(terminator) = terminator else {
             // Only completed commands own their interior. An unterminated
             // opener must not hide arbitrary later syntax from dispatch.
             line_index += 1;
@@ -1708,6 +1739,19 @@ mod tests {
 
         let mixed_case = lines("NoTe as DispatchMemo\ncontrol is display text\nEnD NoTe");
         assert_eq!(detect_uml_subtype(&mixed_case), UmlSubtype::Class);
+
+        let wrong_family_text = lines(
+            "note as DispatchMemo\n\
+             end hnote\n\
+             component remains display text\n\
+             end note\n\
+             class Ledger",
+        );
+        assert_eq!(detect_uml_subtype(&wrong_family_text), UmlSubtype::Class);
+
+        let tab_terminator =
+            lines("note as DispatchMemo\ncontrol is display text\nend\tnote\nclass Ledger");
+        assert_eq!(detect_uml_subtype(&tab_terminator), UmlSubtype::Class);
 
         for source in [
             "participant A\nhnote over A\ncomponent payload\nend hnote",
