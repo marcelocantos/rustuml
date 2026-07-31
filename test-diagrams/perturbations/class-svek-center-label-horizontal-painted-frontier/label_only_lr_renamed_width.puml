@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+skinparam Padding 9
+class "Review Unclustered Source Wide Alpha" as HFrontierSource
+class "Review Unclustered Target Wide Beta" as HFrontierTarget
+HFrontierSource --> HFrontierTarget : aggressively renamed width dominant horizontal label 7729
+@enduml

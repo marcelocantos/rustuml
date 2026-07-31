@@ -1,0 +1,17 @@
+@startuml
+skinparam linetype ortho
+skinparam Padding 4
+package "Bottom Review Source 9387" {
+  class "Bottom Review Entry 9387" as HBottomEntry9387
+}
+package "Bottom Review Sink 9387" {
+  package "Bottom Review Inner 9387" {
+    class "Bottom Review Exit 9387" as HBottomExit9387
+  }
+}
+HBottomExit9387 <-- HBottomEntry9387 : renamed bottom relation 9387
+note bottom on link
+  bottom note dominates the painted width with renamed text 9387
+  extra bottom evidence line 9387
+end note
+@enduml

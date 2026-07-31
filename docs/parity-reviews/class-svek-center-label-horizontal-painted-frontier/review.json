@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-center-label-horizontal-painted-frontier",
+  "review_status": "rejected",
+  "created": "2026-08-01T08:37:10+10:00",
+  "identity": {
+    "agent": "Codex",
+    "model": "GPT-5",
+    "role": "independent adversarial checker",
+    "implemented_change": false,
+    "notes": "Reviewed only the narrow horizontal painted-frontier claim. Did not edit production code, account, baselines, comparator, park list, error markers, or allow-lists. Did not run Cargo or rustc."
+  },
+  "revisions": {
+    "account_commit": "e0cdde4da08646939be03528983068df7714b5ed",
+    "account_subject": "account: class center label horizontal painted frontier",
+    "implementation_commit": "55c07f4940048eb54aff33685c6bded3098430d8",
+    "implementation_subject": "fix: normalize class center labels from painted x frontier",
+    "worktree_head": "55c07f4940048eb54aff33685c6bded3098430d8",
+    "java_plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "artifacts": {
+    "rustuml_binary": {
+      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml",
+      "sha256": "e83d0df6807c2f3e5ff49385e65e4a499fb00dcc563e7fb9c8e1fc082c414c41"
+    },
+    "diff_one_binary": {
+      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one",
+      "sha256": "ee5cb243127f045524dabb00e5504f3cc862d5c214a09b98288cef99adf65cf8"
+    },
+    "plantuml_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "commands": [
+    "git show --stat --oneline --decorate e0cdde4d",
+    "git show --stat --oneline --decorate 55c07f49",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '400,535p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '720,775p;928,960p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java | sed -n '60,150p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java | sed -n '85,165p;195,218p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java | sed -n '55,140p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java | sed -n '55,130p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractComponent.java | sed -n '130,160p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/Rose.java | sed -n '58,120p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java | sed -n '45,140p'",
+    "git show --find-renames --find-copies --unified=80 55c07f49 -- crates/rustuml-render/src/class.rs",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14400,14570p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14590,14845p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '13860,13935p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/*.puml",
+    "for f in test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/*.puml; do /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml -tsvg \"$f\" > \"${f%.puml}.rust.svg\"; rc=$?; printf '%s rustuml=%s\\n' \"$f\" \"$rc\"; done",
+    "for f in test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/*.puml; do stem=\"${f%.puml}\"; /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one --no-oracle \"$f\" > \"$stem.diff.txt\" 2>&1; rc=$?; printf '%s diff_one=%s\\n' \"$f\" \"$rc\"; done",
+    "shasum -a 256 /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "java_provenance_checked": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "lines": "423-436,734-739,944-947",
+      "finding": "Java serializes a fixed-size label table as xlabel under ORTHO, then paints the natural labelText at the solved position plus labelShield."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "lines": "130-135",
+      "finding": "Java measures the actual drawn SVEK result with TextBlockUtils.getMinMax(..., false) and moves the graph by 6 - painted min. The MinMax is not initialized to zero."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "lines": "101-158,203-211",
+      "finding": "LimitFinder records UPath and UText painted bounds. It does not record the invisible Graphviz placeholder table unless that table is actually painted."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "lines": "61-78",
+      "finding": "A link note is a Rose note component drawn as the natural TextBlock owned by SvekEdge."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/Rose.java",
+      "lines": "61-64,112-114",
+      "finding": "Rose supplies the link-note component with hard-coded 5px outer padding."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractComponent.java",
+      "lines": "142-147",
+      "finding": "The component applies its padding before ComponentRoseNote paints the folded note path."
+    }
+  ],
+  "rust_provenance_checked": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "14265-14418",
+      "finding": "The implementation maps relationship center labels to relationship_center_painted_min_x and excludes mapped edge.label placeholders, but svek_layout_x_bias still seeds root diagrams with 0.0 when diagram.together is empty."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "14651-14834",
+      "finding": "relationship_center_layout derives note_x as note_component_x + RELATIONSHIP_NOTE_COMPONENT_PADDING, matching the intended visible note-path offset."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "16310-16379",
+      "finding": "render_relationship_note paints the folded note path at the x passed from center.note_x."
+    }
+  ],
+  "fixture_shape_search": {
+    "result": "no fixture-specific keying found in the implementation diff",
+    "notes": "Searched touched production code and the account for fixture names, golden paths, review stem names, and new unexplained coordinate literals. The implementation did not add a new 5px literal; it reused the existing RELATIONSHIP_NOTE_COMPONENT_PADDING model. The rejection is for an unhandled frontier source, not fixture-shaped code."
+  },
+  "perturbations": [
+    {
+      "stem": "label_only_lr_renamed_width",
+      "axes": [
+        "left-to-right direction",
+        "unclustered topology",
+        "label-only center block",
+        "renamed width-dominant label"
+      ],
+      "files": {
+        "puml": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/label_only_lr_renamed_width.puml",
+        "java_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/label_only_lr_renamed_width.svg",
+        "rust_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/label_only_lr_renamed_width.rust.svg",
+        "diff": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/label_only_lr_renamed_width.diff.txt"
+      },
+      "result": "match",
+      "diff_one_exit": 0,
+      "classification": "Supports label-only part of the claim."
+    },
+    {
+      "stem": "note_only_tb_left_wide_note",
+      "axes": [
+        "top-to-bottom direction",
+        "unclustered topology",
+        "note-only center block",
+        "left positioned link note",
+        "renamed width-dominant note text"
+      ],
+      "files": {
+        "puml": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/note_only_tb_left_wide_note.puml",
+        "java_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/note_only_tb_left_wide_note.svg",
+        "rust_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/note_only_tb_left_wide_note.rust.svg",
+        "diff": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/note_only_tb_left_wide_note.diff.txt"
+      },
+      "result": "diff",
+      "diff_one_exit": 1,
+      "key_observation": "Java folded-note path begins at x=6; Rust folded-note path begins at x=11. Java class nodes are about 1px to the right of Rust, so this is not a simple global Java-right/Rust-left route shift. The note outline itself retains the 5px unpainted frontier.",
+      "classification": "Mechanism failure. The root-diagram 0.0 seed in svek_layout_x_bias can beat the painted center note minimum even after edge.label placeholders are excluded. Java's SvekResult/LimitFinder path does not initialize MinMax to zero."
+    },
+    {
+      "stem": "combined_lr_right_nested_package",
+      "axes": [
+        "left-to-right direction",
+        "nested package topology",
+        "combined label-plus-note center block",
+        "right positioned link note",
+        "renamed note-dominant width"
+      ],
+      "files": {
+        "puml": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_lr_right_nested_package.puml",
+        "java_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_lr_right_nested_package.svg",
+        "rust_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_lr_right_nested_package.rust.svg",
+        "diff": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_lr_right_nested_package.diff.txt"
+      },
+      "result": "diff",
+      "diff_one_exit": 1,
+      "classification": "Not used as the decisive rejection because nested package envelopes and note size/height deltas dominate the diff. Preserved as a valid held-out case spanning requested axes."
+    },
+    {
+      "stem": "combined_tb_top_nested_label_dominant",
+      "axes": [
+        "top-to-bottom direction",
+        "nested package topology",
+        "combined label-plus-note center block",
+        "top positioned link note",
+        "renamed label-dominant width"
+      ],
+      "files": {
+        "puml": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_top_nested_label_dominant.puml",
+        "java_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_top_nested_label_dominant.svg",
+        "rust_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_top_nested_label_dominant.rust.svg",
+        "diff": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_top_nested_label_dominant.diff.txt"
+      },
+      "result": "diff",
+      "diff_one_exit": 1,
+      "classification": "Not used as the decisive rejection because nested package envelopes, vertical layout, and note size deltas dominate the diff. Preserved as a valid held-out case spanning requested axes."
+    },
+    {
+      "stem": "combined_tb_bottom_nested_note_dominant_reversed",
+      "axes": [
+        "top-to-bottom direction",
+        "nested package topology",
+        "combined label-plus-note center block",
+        "bottom positioned link note",
+        "reversed relationship",
+        "renamed note-dominant width"
+      ],
+      "files": {
+        "puml": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_bottom_nested_note_dominant_reversed.puml",
+        "java_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_bottom_nested_note_dominant_reversed.svg",
+        "rust_svg": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_bottom_nested_note_dominant_reversed.rust.svg",
+        "diff": "test-diagrams/perturbations/class-svek-center-label-horizontal-painted-frontier/combined_tb_bottom_nested_note_dominant_reversed.diff.txt"
+      },
+      "result": "diff",
+      "diff_one_exit": 1,
+      "classification": "Not used as the decisive rejection because nested package envelopes, vertical layout, route serialization, and note size deltas dominate the diff. Preserved as a valid held-out case spanning requested axes."
+    }
+  ],
+  "verdict": {
+    "accepted": false,
+    "reason": "The implementation handles the edge.label placeholder for many center labels, but it does not fully implement the claimed global horizontal painted frontier. Root class SVEK x-normalization still has a non-painted 0.0 lower bound when diagram.together is empty. A valid note-only link-note perturbation makes the relationship center note the leftmost visible primitive; Java normalizes from the painted note path at x=6, while Rust keeps a 5px unpainted frontier and paints the note at x=11. This is inside the account scope and is not attributable to endpoint labels or route serialization.",
+    "required_followup": "Before acceptance, the model needs an account and implementation for root class SVEK x-normalization that removes or justifies the non-painted zero seed under Java's LimitFinder(initToZero=false) semantics, then reruns this preserved perturbation matrix with a separate checker."
+  }
+}

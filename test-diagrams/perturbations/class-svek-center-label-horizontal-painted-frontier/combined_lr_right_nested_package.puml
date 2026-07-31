@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+skinparam Padding 5
+package "Outer Review Envelope 8123" {
+  package "Inner Horizon 8123" {
+    class "Nested Source 8123" as HRightSource8123
+  }
+}
+package "Destination Envelope 8123" {
+  class "Nested Target 8123" as HRightTarget8123
+}
+HRightSource8123 --> HRightTarget8123 : center label with narrow text
+note right on link : right-side width-dominant folded note 8123
+@enduml

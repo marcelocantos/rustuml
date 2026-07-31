@@ -1,0 +1,14 @@
+@startuml
+skinparam linetype ortho
+skinparam Padding 6
+package "Top Claim Domain 6259" {
+  package "Inner Top Claim 6259" {
+    class "Top Nested Source 6259" as HTopSource6259
+  }
+}
+package "Top Claim Destination 6259" {
+  class "Top Nested Target 6259" as HTopTarget6259
+}
+HTopSource6259 --> HTopTarget6259 : label dominant top-note center block with renamed wide words 6259
+note top on link : top note
+@enduml
