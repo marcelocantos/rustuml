@@ -1,0 +1,6 @@
+@startuml
+node Service.v7 as "Service Seven"
+storage Archive
+"Service.v7" --> Archive : quoted exact dotted alias
+Archive --> Service.v7 : bare exact dotted alias
+@enduml

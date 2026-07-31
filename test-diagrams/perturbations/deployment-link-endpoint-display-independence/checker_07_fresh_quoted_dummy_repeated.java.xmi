@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><XMI xmlns:UML="href://org.omg/UML/1.3" xmi.version="1.1">
+    <XMI.header>
+        <XMI.metamodel xmi.name="UML" xmi.version="1.3"/>
+    </XMI.header>
+    <XMI.content>
+        <UML:Model name="PlantUML" xmi.id="model1">
+            <UML:Namespace.ownedElement>
+                <UML:Component name="FirstPeer" namespace="model1" xmi.id="ent0002">
+                    <UML:Classifier.feature/>
+                </UML:Component>
+                <UML:Component name="SecondPeer" namespace="model1" xmi.id="ent0003">
+                    <UML:Classifier.feature/>
+                </UML:Component>
+                <UML:Component name="Fresh.v2 Identity" namespace="model1" xmi.id="ent0004">
+                    <UML:Classifier.feature/>
+                </UML:Component>
+                <UML:Association name="create once" namespace="model1" xmi.id="ass8">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass8" type="ent0002" xmi.id="end9">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass8" type="ent0004" xmi.id="end10">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="reuse as source" namespace="model1" xmi.id="ass11">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass11" type="ent0004" xmi.id="end12">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass11" type="ent0003" xmi.id="end13">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+                <UML:Association name="reuse as target" namespace="model1" xmi.id="ass14">
+                    <UML:Association.connection>
+                        <UML:AssociationEnd association="ass14" type="ent0003" xmi.id="end15">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                        <UML:AssociationEnd association="ass14" type="ent0004" xmi.id="end16">
+                            <UML:AssociationEnd.participant/>
+                        </UML:AssociationEnd>
+                    </UML:Association.connection>
+                </UML:Association>
+            </UML:Namespace.ownedElement>
+        </UML:Model>
+    </XMI.content>
+</XMI>

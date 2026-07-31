@@ -1,0 +1,6 @@
+@startuml
+node "Nimbus" as NimbusAlias
+artifact Anchor
+Nimbus --> Anchor : display source
+Anchor --> Nimbus : display target
+@enduml

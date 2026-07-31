@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="261px" preserveAspectRatio="none" style="width:278px;height:261px;background:#FFFFFF;" version="1.1" viewBox="0 0 278 261" width="278px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity AlphaControl-->
+<g class="entity" data-qualified-name="AlphaControl" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="119.35,16,129.35,6,248.8734,6,248.8734,42.4883,238.8734,52.4883,119.35,52.4883,119.35,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="238.8734" x2="248.8734" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="119.35" x2="238.8734" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="238.8734" x2="238.8734" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.5234" x="134.35" y="39.5352">AlphaControl</text>
+</g>
+<!--entity OmegaControl-->
+<g class="entity" data-qualified-name="OmegaControl" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="114.72,97,124.72,87,253.513,87,253.513,123.4883,243.513,133.4883,114.72,133.4883,114.72,97" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="243.513" x2="253.513" y1="97" y2="87"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="114.72" x2="243.513" y1="97" y2="97"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="243.513" x2="243.513" y1="97" y2="133.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="98.793" x="129.72" y="120.5352">OmegaControl</text>
+</g>
+<!--entity Stage.v4-->
+<g class="entity" data-qualified-name="Stage.v4" data-source-line="4" id="ent0004">
+<ellipse cx="184.1127" cy="214.2483" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57.5654" x="155.33" y="244.7834">Stage.v4</text>
+</g>
+<!--link AlphaControl to Stage.v4-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M119.14,47.6 C87.98,60.03 53.53,79.95 35.28,110.74 C6,160.16 88.3103,190.1825 141.3103,204.2325" fill="none" id="AlphaControl-to-Stage.v4" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="147.11,205.77,139.4355,199.5974,142.2769,204.4888,137.3855,207.3303,147.11,205.77" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70.5415" x="13.72" y="124.3084">create bare</text>
+</g>
+<!--link Stage.v4 to OmegaControl-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M184.11,223.19 C184.11,242.24 184.11,174.63 184.11,139.8" fill="none" id="Stage.v4-to-OmegaControl" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="184.11,133.8,180.11,142.8,184.11,138.8,188.11,142.8,184.11,133.8" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="80.5137" x="132.61" y="164.4384">reuse source</text>
+</g>
+<!--link OmegaControl to Stage.v4-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M206.5,133.82 C207.6,148.24 207.896,164.4889 206.746,178.9389" fill="none" id="OmegaControl-to-Stage.v4" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="206.27,184.92,210.9714,176.2657,206.6667,179.9358,202.9966,175.631,206.27,184.92" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="76.1846" x="157.61" y="164.4384">reuse target</text>
+</g>
+</g></svg>

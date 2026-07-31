@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+node "Northern Gateway" as NorthAlias
+artifact Destination
+"Northern Gateway" -right-> Destination : distinct source
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+artifact "Release Bundle"
+node Builder
+Builder --> "Release Bundle" : declared code with space
+@enduml

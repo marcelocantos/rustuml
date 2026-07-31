@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node Peer
+artifact "Late Bound.v8"
+Peer -right-> "Late Bound.v8" : declaration before relation
+"Late Bound.v8" -right-> Peer : reverse endpoint side
+@enduml

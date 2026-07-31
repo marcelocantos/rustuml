@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="196px" preserveAspectRatio="none" style="width:394px;height:196px;background:#FFFFFF;" version="1.1" viewBox="0 0 394 196" width="394px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Rapport Central-->
+<g class="entity" data-qualified-name="Déclaré" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,135.23,26,125.23,163.1191,125.23,163.1191,161.7183,153.1191,171.7183,16,171.7183,16,135.23" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="153.1191" x2="163.1191" y1="135.23" y2="125.23"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="153.1191" y1="135.23" y2="135.23"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="153.1191" x2="153.1191" y1="135.23" y2="171.7183"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.1191" x="31" y="158.7652">Rapport Central</text>
+</g>
+<!--entity Source-->
+<g class="entity" data-qualified-name="Source" data-source-line="2" id="ent0003">
+<path d="M141.8,8.5 L141.8,39.9883 A2.5,2.5 0 0 0 144.3,42.4883 L204.8273,42.4883 A2.5,2.5 0 0 0 207.3273,39.9883 L207.3273,16 L197.3273,6 L144.3,6 A2.5,2.5 0 0 0 141.8,8.5" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M197.3273,6 L197.3273,13.5 A2.5,2.5 0 0 0 199.8273,16 L207.3273,16" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45.5273" x="151.8" y="29.5352">Source</text>
+</g>
+<!--entity Rapport Central-->
+<g class="entity" data-qualified-name="Rapport Central" data-source-line="4" id="ent0005">
+<ellipse cx="259.5596" cy="148.4783" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.1191" x="206" y="179.0134">Rapport Central</text>
+</g>
+<!--link Source to Déclaré-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M141.46,36.21 C124.45,43.65 105.13,55.32 94.56,72.49 C84.98,88.04 83.8395,103.0344 85.2695,118.8444" fill="none" id="Source-to-Déclaré" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="85.81,124.82,88.983,115.4963,85.3596,119.8403,81.0155,116.2169,85.81,124.82" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="120.6055" x="95.56" y="86.0584">exact unicode alias</text>
+</g>
+<!--link Source to Rapport Central-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="4" id="lnk6">
+<path d="M194.26,42.96 C202.96,51.39 212.92,61.91 220.56,72.49 C231.05,87 237.8275,99.2895 244.7375,113.8495" fill="none" id="Source-to-Rapport Central" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="247.31,119.27,247.0649,109.4242,245.1662,114.7529,239.8375,112.8542,247.31,119.27" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="146.7959" x="231.69" y="86.0584">distinct display dummy</text>
+</g>
+</g></svg>

@@ -1,0 +1,6 @@
+@startuml
+node "Visible Service" as ExactAlias
+database Store
+ExactAlias --> Store : alias source
+Store --> ExactAlias : alias target
+@enduml

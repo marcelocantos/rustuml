@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="179px" preserveAspectRatio="none" style="width:350px;height:179px;background:#FFFFFF;" version="1.1" viewBox="0 0 350 179" width="350px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Service Seven-->
+<g class="entity" data-qualified-name="Service.v7" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="59.21,16,69.21,6,190.0459,6,190.0459,42.4883,180.0459,52.4883,59.21,52.4883,59.21,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.0459" x2="190.0459" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="59.21" x2="180.0459" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.0459" x2="180.0459" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.8359" x="74.21" y="39.5352">Service Seven</text>
+</g>
+<!--entity Archive-->
+<g class="entity" data-qualified-name="Archive" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="70.3398" x="89.45" y="129.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50.3398" x="99.45" y="153.0252">Archive</text>
+</g>
+<!--link Service.v7 to Archive-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M58.92,48.31 C30.2,59.79 6,76.78 20.62,99.49 C35.66,122.83 59.5333,133.2981 83.3633,139.3281" fill="none" id="Service.v7-to-Archive" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="89.18,140.8,81.4362,134.7144,84.3328,139.5734,79.4738,142.47,89.18,140.8" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="160.5957" x="21.62" y="96.0584">quoted exact dotted alias</text>
+</g>
+<!--link Archive to Service.v7-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M158.94,128.99 C169.84,121.48 180.62,111.62 186.62,99.49 C195.36,81.85 186.4959,68.8822 169.7859,56.3922" fill="none" id="Archive-to-Service.v7" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="164.98,52.8,169.794,61.3922,168.9849,55.7935,174.5836,54.9844,164.98,52.8" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="143.9966" x="190.34" y="96.0584">bare exact dotted alias</text>
+</g>
+</g></svg>

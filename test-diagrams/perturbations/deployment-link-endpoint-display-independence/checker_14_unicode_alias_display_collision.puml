@@ -1,0 +1,6 @@
+@startuml
+node "Rapport Central" as Déclaré
+file Source
+Source --> Déclaré : exact unicode alias
+Source --> "Rapport Central" : distinct display dummy
+@enduml

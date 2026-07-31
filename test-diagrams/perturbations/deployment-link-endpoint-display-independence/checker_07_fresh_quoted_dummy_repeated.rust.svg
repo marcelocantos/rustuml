@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="335px" preserveAspectRatio="none" style="width:231px;height:335px;background:#FFFFFF;" version="1.1" viewBox="0 0 231 335" width="231px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FirstPeer-->
+<g class="entity" data-qualified-name="FirstPeer" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="38.7,16,48.7,6,137.4207,6,137.4207,42.4883,127.4207,52.4883,38.7,52.4883,38.7,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="127.4207" x2="137.4207" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="38.7" x2="127.4207" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="127.4207" x2="127.4207" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58.7207" x="53.7" y="39.5352">FirstPeer</text>
+</g>
+<!--entity SecondPeer-->
+<g class="entity" data-qualified-name="SecondPeer" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="29.22,274.46,39.22,264.46,146.8968,264.46,146.8968,300.9483,136.8968,310.9483,29.22,310.9483,29.22,274.46" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="136.8968" x2="146.8968" y1="274.46" y2="264.46"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="29.22" x2="136.8968" y1="274.46" y2="274.46"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="136.8968" x2="136.8968" y1="274.46" y2="310.9483"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77.6768" x="44.22" y="297.9952">SecondPeer</text>
+</g>
+<!--entity Fresh.v2 Identity-->
+<g class="entity" data-qualified-name="Fresh.v2 Identity" data-source-line="3" id="ent0004">
+<ellipse cx="88.0622" cy="158.4783" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112.9844" x="31.57" y="189.0134">Fresh.v2 Identity</text>
+</g>
+<!--link FirstPeer to Fresh.v2 Identity-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="3" id="lnk5">
+<path d="M88.06,52.7 C88.06,73.96 88.06,99.96 88.06,123.01" fill="none" id="FirstPeer-to-Fresh.v2 Identity" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="88.06,129.01,92.06,120.01,88.06,124.01,84.06,120.01,88.06,129.01" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72.5728" x="89.06" y="96.0584">create once</text>
+</g>
+<!--link Fresh.v2 Identity to SecondPeer-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk6">
+<path d="M34.53,187.83 C17.89,200.64 6,216.85 15.06,234.46 C21.26,246.52 26.7703,252.9569 37.8203,260.7669" fill="none" id="Fresh.v2 Identity-to-SecondPeer" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="42.72,264.23,37.6791,255.7689,38.6369,261.3441,33.0617,262.3019,42.72,264.23" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="98.4331" x="16.06" y="231.0284">reuse as source</text>
+</g>
+<!--link SecondPeer to Fresh.v2 Identity-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk7">
+<path d="M105.13,264 C110.71,255.24 116.21,244.84 119.06,234.46 C123.42,218.57 120.3021,206.7464 112.3921,192.9364" fill="none" id="SecondPeer-to-Fresh.v2 Identity" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="109.41,187.73,110.4122,197.5277,111.8951,192.0687,117.3541,193.5516,109.41,187.73" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="94.104" x="121.51" y="231.0284">reuse as target</text>
+</g>
+</g></svg>
