@@ -289,11 +289,6 @@ const SELF_RELATIONSHIP_LABEL_MARGIN: f64 = 6.0;
 // `SvekEdge.appendDotString` `xlabel` layouts with renamed labels and 2-9
 // chained nodes.
 const ORTHO_XLABEL_VERTICAL_INSET: f64 = 5.0;
-// Per-control-point deltas extracted from Java `SvekEdge.solveLine` for
-// vertical `DotSplines.ORTHO` links between `ExtremityDoubleLine` and
-// `ExtremityCircleCrowfoot`. The values are stable across renamed labels,
-// package depths, and chains of 2-9 nodes.
-const ORTHO_ER_VERTICAL_ROUTE_DELTAS: [f64; 4] = [-0.045, -0.075, -0.145, -0.155];
 /// Java `TextBlockArrow2` reserves one font-size square before the label. Its
 /// triangle size is `(int)(fontSize * .80)`, hence 10px at the 13px arrow font.
 const LINK_ARROW_BLOCK_SIZE: f64 = RELATIONSHIP_LABEL_FONT_SIZE;
@@ -12571,17 +12566,19 @@ fn has_ortho_linetype(diagram: &ClassDiagram) -> bool {
 }
 
 fn class_svek_spline_routing(diagram: &ClassDiagram) -> SplineRouting {
-    if diagram
+    let linetype = diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("linetype"))
-        .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("polyline"))
-    {
-        SplineRouting::Polyline
-    } else {
-        SplineRouting::Splines
+        .map(|sp| sp.value.trim());
+    match linetype {
+        Some(value) if value.eq_ignore_ascii_case("polyline") => SplineRouting::Polyline,
+        // PlantUML `SkinParam.getDotSplines` maps effective `linetype ortho`
+        // to `DotSplines.ORTHO` before `DotStringFactory` builds the graph.
+        Some(value) if value.eq_ignore_ascii_case("ortho") => SplineRouting::Ortho,
+        _ => SplineRouting::Splines,
     }
 }
 
@@ -13402,9 +13399,8 @@ fn render_relationship_svg(
     // child for LEFT/TOP and the label as the first child for RIGHT/BOTTOM
     // (`SvekEdge.java`, constructor branches around `mergeLR`/`mergeTB`). The
     // corresponding TextBlock composites paint children in that same order.
-    let note_precedes_label = note.is_some_and(|note| {
-        matches!(note.position, NotePosition::Left | NotePosition::Top)
-    });
+    let note_precedes_label =
+        note.is_some_and(|note| matches!(note.position, NotePosition::Left | NotePosition::Top));
     if note_precedes_label
         && let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout)
     {
@@ -14820,8 +14816,6 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
         let Some(edge) = edge_idx.and_then(|idx| edge_paths.get_mut(idx)) else {
             continue;
         };
-        normalize_ortho_er_vertical_route(relationship, edge);
-
         let start_len = relationship
             .from_decor
             .map(endpoint_decoration_length)
@@ -14871,27 +14865,6 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
             width,
             height,
         });
-    }
-}
-
-fn normalize_ortho_er_vertical_route(relationship: &Relationship, edge: &mut EdgePath) {
-    if relationship.from_decor != Some(EndpointDecor::DoubleLine)
-        || relationship.to_decor != Some(EndpointDecor::CircleCrowFoot)
-        || edge.points.len() != ORTHO_ER_VERTICAL_ROUTE_DELTAS.len()
-    {
-        return;
-    }
-    let first_x = edge.points[0].0;
-    if edge
-        .points
-        .iter()
-        .any(|point| (point.0 - first_x).abs() > 0.01)
-    {
-        return;
-    }
-    for (point, delta) in edge.points.iter_mut().zip(ORTHO_ER_VERTICAL_ROUTE_DELTAS) {
-        point.0 = (point.0 * 100.0).round() / 100.0;
-        point.1 = ((point.1 + delta) * 100.0).round() / 100.0;
     }
 }
 
@@ -19848,6 +19821,45 @@ mod tests {
             assert_eq!(reset_to_default, default);
             assert_eq!(last_polyline, polyline);
         }
+    }
+
+    #[test]
+    fn class_ortho_routing_is_case_insensitive_and_last_value_wins() {
+        let long_edge_path = |skinparams: &str| {
+            let input = format!(
+                "@startuml\n\
+                 {skinparams}\
+                 class FreshSource901\n\
+                 class FreshLeft907\n\
+                 class FreshRight911\n\
+                 class FreshTarget919\n\
+                 FreshSource901 -- FreshLeft907\n\
+                 FreshSource901 -- FreshRight911\n\
+                 FreshLeft907 -- FreshTarget919\n\
+                 FreshRight911 -- FreshTarget919\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let svg = crate::render_svg(&diagram);
+            let marker = r#" id="FreshSource901-FreshLeft907""#;
+            let marker_index = svg.find(marker).unwrap();
+            let path_start = svg[..marker_index].rfind("<path ").unwrap();
+            attr_value(&svg[path_start..marker_index + marker.len()], "d")
+                .unwrap()
+                .to_string()
+        };
+
+        let default = long_edge_path("");
+        let ortho = long_edge_path("skinparam linetype ortho\n");
+        let mixed_case = long_edge_path("skinparam linetype OrThO\n");
+        let reset_to_default =
+            long_edge_path("skinparam linetype ortho\nskinparam linetype spline\n");
+        let last_ortho = long_edge_path("skinparam linetype spline\nskinparam linetype ortho\n");
+
+        assert_ne!(default, ortho);
+        assert_eq!(mixed_case, ortho);
+        assert_eq!(reset_to_default, default);
+        assert_eq!(last_ortho, ortho);
     }
 
     #[test]
