@@ -1,0 +1,73 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode \"Service Label\" as ServiceAlias\nnote \"Alias probe\" as AliasMemo\nAliasMemo -right-> \"Service Label\" : quoted target\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "ServiceAlias",
+                label: "Service Label",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 1,
+                quark_order: 0,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "AliasMemo",
+                to: "ServiceAlias",
+                label: Some(
+                    "quoted target",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: Some(
+                    Right,
+                ),
+                style: Solid,
+                length: 2,
+                source_line: 3,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "AliasMemo",
+                ),
+                target: None,
+                text: "Alias probe",
+                color: None,
+                owner: None,
+                quark_order: 1,
+                position: Right,
+                source_line: 2,
+            },
+        ],
+    },
+)

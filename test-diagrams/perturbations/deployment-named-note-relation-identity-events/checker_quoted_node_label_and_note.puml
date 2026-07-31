@@ -1,0 +1,5 @@
+@startuml
+node "Service Label" as ServiceAlias
+note "Alias probe" as AliasMemo
+AliasMemo -right-> "Service Label" : quoted target
+@enduml

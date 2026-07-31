@@ -1,0 +1,5 @@
+@startuml
+note "Source note" as SourceMemo
+node "Later server" as LaterServer
+SourceMemo --> LaterServer : originates
+@enduml

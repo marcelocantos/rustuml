@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="77px" preserveAspectRatio="none" style="width:372px;height:77px;background:#FFFFFF;" version="1.1" viewBox="0 0 372 77" width="372px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Service Label-->
+<g class="entity" data-qualified-name="ServiceAlias" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="220.35,16,230.35,6,347.9662,6,347.9662,42.4883,337.9662,52.4883,220.35,52.4883,220.35,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="337.9662" x2="347.9662" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="220.35" x2="337.9662" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="337.9662" x2="337.9662" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87.6162" x="235.35" y="39.5352">Service Label</text>
+</g>
+<g class="entity" data-qualified-name="AliasMemo" data-source-line="2" id="ent0003">
+<path d="M6,16.59 L6,41.9005 L98.3159,41.9005 L98.3159,26.59 L88.3159,16.59 L6,16.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M88.3159,16.59 L88.3159,26.59 L98.3159,26.59 L88.3159,16.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="71.3159" x="12" y="34.1584">Alias probe</text>
+</g>
+<!--link AliasMemo to ServiceAlias-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M98.55,29.24 C133.46,29.24 175.72,29.24 214.27,29.24" fill="none" id="AliasMemo-to-ServiceAlias" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="220.27,29.24,211.27,25.24,215.27,29.24,211.27,33.24,220.27,29.24" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="86.2075" x="116.33" y="22.8084">quoted target</text>
+</g>
+</g></svg>

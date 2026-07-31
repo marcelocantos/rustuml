@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="178px" preserveAspectRatio="none" style="width:187px;height:178px;background:#FFFFFF;" version="1.1" viewBox="0 0 187 178" width="187px" zoomAndPan="magnify"><?plantuml ?><defs/><g><g class="entity" data-qualified-name="archive.v2" data-source-line="2" id="ent0002">
+<path d="M6,6 L6,31.3105 L172.9136,31.3105 L172.9136,16 L162.9136,6 L6,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M162.9136,6 L162.9136,16 L172.9136,16 L162.9136,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.9136" x="12" y="23.5684">Multiline dotted source</text>
+</g>
+<!--entity Archive target-->
+<g class="entity" data-qualified-name="ArchiveTarget" data-source-line="4" id="ent0003">
+<path d="M31.84,118.31 C31.84,108.31 89.4557,108.31 89.4557,108.31 C89.4557,108.31 147.0714,108.31 147.0714,118.31 L147.0714,143.7983 C147.0714,153.7983 89.4557,153.7983 89.4557,153.7983 C89.4557,153.7983 31.84,153.7983 31.84,143.7983 L31.84,118.31" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M31.84,118.31 C31.84,128.31 89.4557,128.31 89.4557,128.31 C89.4557,128.31 147.0714,128.31 147.0714,118.31" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95.2314" x="41.84" y="145.8452">Archive target</text>
+</g>
+<!--link archive.v2 to ArchiveTarget-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk4">
+<path d="M89.46,31.47 C89.46,49.71 89.46,79.04 89.46,102.08" fill="none" id="archive.v2-to-ArchiveTarget" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="89.46,108.08,93.46,99.08,89.46,103.08,85.46,99.08,89.46,108.08" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60.5122" x="90.46" y="74.8784">publishes</text>
+</g>
+</g></svg>

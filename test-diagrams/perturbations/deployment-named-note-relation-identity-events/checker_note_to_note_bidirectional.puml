@@ -1,0 +1,6 @@
+@startuml
+node "Deployment anchor" as Anchor
+note "Producer note" as ProducerMemo
+note "Consumer note" as ConsumerMemo
+ProducerMemo <--> ConsumerMemo : exchange
+@enduml

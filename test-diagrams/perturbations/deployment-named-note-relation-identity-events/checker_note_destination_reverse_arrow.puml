@@ -1,0 +1,5 @@
+@startuml
+node "Upstream" as Upstream
+note "Destination note" as DestMemo
+Upstream <-- DestMemo : reverse direction
+@enduml

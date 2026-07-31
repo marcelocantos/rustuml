@@ -1,0 +1,7 @@
+@startuml
+note as archive.v2
+  Multiline dotted source
+end note
+database "Archive target" as ArchiveTarget
+archive.v2 --> ArchiveTarget : publishes
+@enduml

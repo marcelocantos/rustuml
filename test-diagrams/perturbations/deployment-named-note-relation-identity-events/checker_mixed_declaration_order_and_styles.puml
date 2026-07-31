@@ -1,0 +1,7 @@
+@startuml
+note "Root source" as RootMemo
+node "Endpoint one" as EndpointOne
+database "Endpoint two" as EndpointTwo
+RootMemo -down-> EndpointOne : down
+EndpointTwo <.. RootMemo : dashed reverse
+@enduml

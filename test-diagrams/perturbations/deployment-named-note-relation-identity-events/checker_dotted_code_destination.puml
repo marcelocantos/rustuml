@@ -1,0 +1,5 @@
+@startuml
+note "Dotted code note" as memo.v1
+node "Service A" as ServiceA
+memo.v1 ..> ServiceA : audit route
+@enduml
