@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "preprocessed-source-comment-identity",
-  "status": "second_corrected_implementation_awaiting_review_3",
+  "status": "accepted_after_review_3",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/tim/TContext.java:TContext#buildCodeIterator",
@@ -122,7 +122,7 @@
       "target/release/examples/diff_one --no-oracle /private/tmp/t14-prefix-clean.puml",
       "target/release/examples/diff_one --no-oracle /private/tmp/t14-quote-clean.puml"
     ],
-    "corrected_review_status": "Awaiting a new independent checker review. The prior REJECT remains authoritative until the preserved held-outs pass or explicit user sign-off changes the rule."
+    "corrected_review_status": "The prior REJECT remained authoritative through review 2. Review 3 at commit 2ed7942b independently accepted the second correction after all six preserved inputs and three fresh valid Java perturbations passed through the shipped no-oracle path."
   },
   "review_rejection": {
     "review_revision": "fbf5f08562a37f6b05882a7cd4e8c95b031d190a",
@@ -170,6 +170,10 @@
       "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml",
       "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml",
       "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml"
-    ]
+    ],
+    "review_3_revision": "2ed7942b",
+    "review_3_record": "docs/parity-reviews/preprocessed-source-comment-identity/review-3.json",
+    "review_3_verdict": "ACCEPT",
+    "review_3_evidence": "A separate GPT-5 checker reran all six preserved review inputs and created three fresh Java-valid perturbations covering blank-line identity, class-body comments, and alias/direction handling. All nine passed diff_one --no-oracle; Java produced no syntax-error SVGs, and the checker found no fixture-shaped shipping logic or unexplained constants."
   }
 }

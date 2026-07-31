@@ -1,8 +1,10 @@
 {
   "schema_version": 1,
   "mechanism": "component-edge-label-font-metrics",
-  "status": "corrected_account_committed_before_implementation",
+  "status": "implementation_awaiting_independent_review",
   "supersedes_account_revision": "8fd38e49",
+  "corrected_account_revision": "f0262f69",
+  "implementation_revision": "72f73501",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:GraphvizImageBuilder#buildImage",
@@ -48,5 +50,17 @@
     "/private/tmp/t14-component-axis-font.puml",
     "/private/tmp/t14-component-axis-dpi96.puml",
     "/private/tmp/t14-component-axis-dpi.puml"
+  ],
+  "implementation_evidence": "Every component center-label placeholder now uses the same resolved font family and size as visible paint, including the horizontal short-table classifier, ordinary labels, and note-on-link labels. The rustuml-render library suite passes 818/818. The controlled no-DPI, dpi 96, and dpi 100 inputs plus the Cerulean, Minty, Superhero, and United golden inputs are structurally equivalent through diff_one --no-oracle.",
+  "commands": [
+    "cargo test -p rustuml-render --lib",
+    "cargo build --release -p rustuml-oracle --example diff_one",
+    "target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-font.puml",
+    "target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-dpi96.puml",
+    "target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-dpi.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_united_component.puml"
   ]
 }
