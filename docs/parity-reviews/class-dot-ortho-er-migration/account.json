@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dot-ortho-er-migration",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "0a2a8f8741280c74c57fc15d8457d4175c432fe1",
+  "supersedes_rejected_account": "docs/parity-reviews/class-dot-spline-routing-mode/account.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": ["getDotSplines"],
+      "role": "Resolves the latest effective linetype ortho declaration to DotSplines.ORTHO."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": ["createDotString"],
+      "role": "Serializes graph-level splines=ortho and forcelabels=true while preserving the SVEK node, cluster, rank, and edge statement model."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["appendLine", "solve", "drawU"],
+      "role": "Uses external xlabel channels under orthogonal routing and later associates solved route, label, endpoint-label, and extremity geometry with the semantic link."
+    },
+    {
+      "path": "vendor Graphviz dotgen/dotsplines.c and ortho/ortho.c",
+      "symbols": ["dot_splines_", "orthoEdges"],
+      "role": "Dispatches EDGETYPE_ORTHO through the orthogonal visibility-graph router when the Graphviz build enables ORTHO."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["class_svek_spline_routing", "synthesize_ortho_edge_labels", "normalize_ortho_er_vertical_route"],
+      "role": "Retains ortho only as a label-placement and narrow ER route-normalization signal while sending the layout engine ordinary cubic routing."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": ["SplineRouting", "LayoutGraph::run_graphviz_layout_inner"],
+      "role": "Supports Splines and Polyline but has no typed Ortho mode, splines=ortho attribute, or forcelabels projection."
+    },
+    {
+      "path": "crates/rustuml-layout/build.rs",
+      "symbols": ["main"],
+      "role": "Compiles the vendored ortho implementation and dotgen together but does not define ORTHO, so dotsplines.c cannot dispatch to orthoEdges."
+    }
+  ],
+  "claimed_invariant": "For Class-family diagrams whose latest effective linetype is ortho, PlantUML selects one graph-level orthogonal routing mode before layout. That mode is independent of entity kind, package depth, relationship decoration, label text, and corpus family. SVEK supplies the same semantic graph and uses external labels; Graphviz owns the orthogonal route. Endpoint decorations and painted-frontier normalization consume that solved route without fixture-shaped coordinate corrections. ER diagrams are not an exception to the routing invariant: any migration must explain and preserve their graph construction, statement order, cluster ownership, labels, and decorations under the real router rather than leaving them on a counterfeit cubic path.",
+  "causal_divergence": "Rust recognizes ortho for label handling but leaves Graphviz in cubic mode because the typed option and ORTHO build gate are absent. A prior controlled experiment proved the missing switch by fixing direct ortho goldens, then was correctly rejected because it reduced ER parity from 153/157 to 103/157. That regression shows that current ER success depends on differences elsewhere in the Rust SVEK projection, including a narrow normalize_ortho_er_vertical_route correction; it does not justify suppressing the real router. The migration therefore has two coupled surfaces: activate the Java-selected routing mode, and reconcile the ER graph/label/extremity model that the real router exposes.",
+  "planned_model_change": "Add a typed Ortho routing mode, serialize splines=ortho and forcelabels=true, and compile the vendored Graphviz dispatch with ORTHO enabled. First capture a deterministic differential inventory for every affected golden and fresh perturbation, separating node/cluster placement, route topology, label channels, decorations, and canvas frontier. Then change only the named Rust SVEK projections whose Java counterparts account for those differences. Remove normalize_ortho_er_vertical_route when the true route makes it obsolete. Do not choose routing mode by fixture family or entity labels; the latest linetype declaration is the sole selector.",
+  "perturbation_axes": [
+    "ordinary class, entity-relationship, component-shaped Class, and nested package entities",
+    "top-to-bottom versus left-to-right rank direction",
+    "unlabeled, center-labeled, endpoint-labeled, and link-note relationships",
+    "plain arrows, inheritance, bidirectional decorations, crow-foot, circle, and double-line endpoints",
+    "chain, fanout, diamond, crossing, parallel, self-loop, and multilevel topology",
+    "flat versus nested clusters and changed declaration order",
+    "renamed identifiers, changed label lengths, and changed node counts",
+    "mixed-case ortho and repeated linetype declarations with last value winning"
+  ],
+  "acceptance": [
+    "The shipped no-oracle path uses the vendored Graphviz orthogonal router for every effective Class-family linetype ortho diagram.",
+    "All currently passing ER pairs remain passing and the four current ER failures become structurally equivalent; no family baseline regresses.",
+    "The direct ortho failure cluster across class, combo, edge-cases, rendering, skinparam, component-shaped Class, and state-shaped Class improves as one routing mechanism rather than by per-fixture coordinate branches.",
+    "Fresh valid perturbations span at least two independent axes and include both ordinary Class and ER/crow-foot diagrams under changed topology and declaration order.",
+    "Full layout/parser/renderer suites, no-oracle perturbations, harness guards, and the shipped golden no-oracle ratchet pass before acceptance."
+  ],
+  "forbidden_approaches": [
+    "selecting cubic versus ortho by corpus directory, fixture name, entity label, relationship count, or ER-looking text",
+    "per-route coordinate deltas, branch-count constant ladders, or post-hoc path surgery",
+    "keeping a special cubic ER mode without a Java source counterpart",
+    "loosening comparator slack, baselines, selectors, eligibility, park lists, error markers, or guard allow-lists",
+    "reading golden or perturbation output from shipping crates"
+  ]
+}
