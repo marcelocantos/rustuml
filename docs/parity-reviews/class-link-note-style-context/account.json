@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-note-style-context",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:SvekEdge constructor",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java:EntityImageNoteLink constructor",
+    "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java:FromSkinparamToStyle#convertNow",
+    "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java:AbstractTextualComponent constructor and dimensions"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:ResolvedNoteStyle::for_note",
+    "crates/rustuml-render/src/class.rs:relationship_center_layout",
+    "crates/rustuml-render/src/class.rs:render_no_oracle_relationship",
+    "crates/rustuml-render/src/style.rs:StyleCascade::resolve_link_at_source_line"
+  ],
+  "claimed_invariant": "A note attached to a class relationship is styled in the owning link's captured style context. Java SvekEdge passes that StyleBuilder to EntityImageNoteLink, which resolves the inherited root.element.sequenceDiagram.note signature; root properties such as defaultFontName therefore participate unless a note-specific property overrides them. The resolved FontConfiguration is shared by preferred-dimension calculation and painting. Standalone notes retain their entity-style snapshot semantics.",
+  "causal_divergence": "Rust's parser and style program already retain root defaultFontName and noteFontName, but ResolvedNoteStyle::for_note reads only literal note skinparams and otherwise hardcodes sans-serif. A link note under `skinparam defaultFontName Arial` is consequently measured and painted with sans-serif, so its natural width and font-family diverge together. This is independent of the three-pixel relationship-label Creole baseline fault that appears in the same preserved checker_07 input.",
+  "planned_model_change": "Give link-owned notes an explicit owning-relationship style context. Resolve Java's link-note signature through StyleCascade::resolve_link_at_source_line at the relationship source line, including inherited root defaults and note-specific overrides, then use one resolved note style for both natural dimensions and SVG painting. Keep standalone-note resolution separate and preserve source-order capture semantics; do not globally replace all note styling.",
+  "perturbation_axes": [
+    "defaultFontName alone versus noteFontName override",
+    "legacy skinparam versus CSS root and note styles",
+    "style declaration before versus after relationship creation",
+    "width-sensitive short and long note text",
+    "link-owned versus standalone notes",
+    "plain relationship labels versus mixed Creole labels as a negative control"
+  ],
+  "scope_boundary": "This mechanism owns font and inherited style resolution for link-owned notes and the consistency of their measurement and painting. It does not own relationship-label Creole alignment, link-note grammar or position, standalone-note ownership, route synthesis, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "Fresh valid inputs show root font inheritance, note override precedence, and source-order link capture matching Java.",
+    "Link-note preferred dimensions and emitted text use the same resolved font family and size.",
+    "Standalone-note and no-note controls do not regress.",
+    "An independent checker audits the Java and Rust style data flow, generates held-outs over at least two axes, and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "special-casing Arial, checker_07 text, fixture names, or expected dimensions",
+    "changing note box constants, route geometry, comparator tolerance, baselines, skips, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_07_three_node_styled_label_note_fractional.puml",
+    "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_06_note_font_size_control.puml"
+  ]
+}
