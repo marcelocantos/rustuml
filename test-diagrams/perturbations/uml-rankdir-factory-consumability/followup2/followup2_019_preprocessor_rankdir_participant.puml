@@ -1,0 +1,7 @@
+@startuml
+!procedure $dir()
+top to bottom direction
+!endprocedure
+$dir()
+participant PreprocOnly
+@enduml

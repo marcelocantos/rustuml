@@ -1,0 +1,5 @@
+@startuml
+Maker -> Sink : call
+note left : side note
+left to right direction
+@enduml

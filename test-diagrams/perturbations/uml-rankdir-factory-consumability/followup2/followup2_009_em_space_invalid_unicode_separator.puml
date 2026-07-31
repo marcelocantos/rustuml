@@ -1,0 +1,4 @@
+@startuml
+left to right direction
+Alpha -> Beta : em space should not launder
+@enduml

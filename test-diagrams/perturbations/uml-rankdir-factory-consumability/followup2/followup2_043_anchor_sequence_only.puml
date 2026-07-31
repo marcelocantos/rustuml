@@ -1,0 +1,4 @@
+@startuml
+{from}<->{to} : anchor link
+left to right direction
+@enduml

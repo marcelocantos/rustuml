@@ -1,0 +1,5 @@
+@startuml
+Maker -> Sink : call
+return accepted
+left to right direction
+@enduml

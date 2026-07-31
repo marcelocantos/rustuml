@@ -1,0 +1,5 @@
+@startuml
+autonumber 42 3 "F-%03d"
+Maker -> Sink : numbered
+top to bottom direction
+@enduml

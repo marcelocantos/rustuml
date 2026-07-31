@@ -1,0 +1,6 @@
+@startuml
+create participant Worker
+Maker -> Worker : build
+destroy Worker
+top to bottom direction
+@enduml

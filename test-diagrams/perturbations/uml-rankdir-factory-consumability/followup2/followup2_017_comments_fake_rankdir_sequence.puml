@@ -1,0 +1,7 @@
+@startuml
+' left to right direction
+/' autonumber 5
+left to right direction
+'/
+Alice -> Bob : still sequence
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+database "Fresh Ledger" as Ledger
+queue "Fresh Pipe" as Pipe
+Ledger --> Pipe : ships
+@enduml

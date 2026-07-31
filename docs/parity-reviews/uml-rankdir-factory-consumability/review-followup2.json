@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-rankdir-factory-consumability",
+  "review_id": "followup2",
+  "verdict": "REJECT",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "role": "Skeptical checker only; did not implement the mechanism and did not edit implementation or account files"
+  },
+  "exact_revisions": {
+    "rust_revision": "afee6a17ad5643b93325563d09488d0e710394b4",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rust_binary": "/private/tmp/rustuml-uml-factory-consumability/target/release/rustuml",
+    "rust_binary_sha256": "49a81f0808d1fd4df88aaac25108b0475ec5fd84c19eb217c81d843d6c4a27e7",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "inputs_reviewed": {
+    "account": "docs/parity-reviews/uml-rankdir-factory-consumability/account.json",
+    "rust_sequence_classifier": "crates/rustuml-parser/src/parse/sequence.rs",
+    "rust_dispatch": "crates/rustuml-parser/src/parse/mod.rs",
+    "java_sources": [
+      "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "src/main/java/net/sourceforge/plantuml/command/CommandRankDir.java",
+      "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/activitydiagram/ActivityDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/activitydiagram3/ActivityDiagramFactory3.java"
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git status --short",
+    "shasum -a 256 /private/tmp/rustuml-uml-factory-consumability/target/release/rustuml",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "rg -n \"SequenceOnly|rankdir|factory|UmlFactory|detect|Dispatch|startuml|DiagramType|Sequence\" crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/parse/mod.rs",
+    "rg -n \"include_str!|golden|test-diagrams|\\\\.svg|fixture|label|Fresh|checker\" crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/parse/mod.rs",
+    "python3 test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/run_followup2.py",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <case>.puml",
+    "/private/tmp/rustuml-uml-factory-consumability/target/release/rustuml -tsvg <case>.puml"
+  ],
+  "source_review": {
+    "java_factory_order_confirmed": "PSystemBuilder registers SequenceDiagramFactory, ClassDiagramFactory, ActivityDiagramFactory, DescriptionDiagramFactory, StateDiagramFactory, ActivityDiagramFactory3 in that order, and PSystemCommandFactory rejects a candidate on the first unconsumed or failing command.",
+    "fixture_logic_search": "No shipping reads of golden SVGs, test-diagrams, include_str! fixtures, checker labels, or label-specific branch names were found in the inspected classifier/dispatch files. Test-only fixture labels remain in unit tests.",
+    "unexplained_constants": "No new parity-affecting numeric constant was found in the typed classifier itself; the observed failures come from grammar/factory ownership and dispatch ordering."
+  },
+  "perturbation_evidence": {
+    "directory": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/",
+    "runner": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/run_followup2.py",
+    "manifest": "test-diagrams/perturbations/uml-rankdir-factory-consumability/followup2/followup2-results.json",
+    "artifact_convention": "Each case preserves .puml, .java.svg, .java.stdout, .java.stderr, .java.exit, .rust.svg, .rust.stderr and .rust.exit artifacts.",
+    "case_count": 48,
+    "passing_cases": 40,
+    "failing_cases": [
+      "followup2_004_nbsp_rankdir_description",
+      "followup2_005_tab_rankdir_class",
+      "followup2_009_em_space_invalid_unicode_separator",
+      "followup2_022_message_extension_sequence_only",
+      "followup2_028_triple_equals_activity_shared",
+      "followup2_042_note_side_sequence_only",
+      "followup2_046_partition_shared_with_activity",
+      "followup2_047_note_on_link_shared"
+    ],
+    "coverage": [
+      "All SequenceOnlyCommand families were exercised: Participant, Lifecycle, MessageExtension, Grouping, Box, Divider, Delay, HorizontalSpace, Autonumber, Autoactivate, Return, Reference, Pagination, Footbox, Note and Anchor.",
+      "Shared variants exercised include bare newpage, hide/show footbox, compact hidefootbox/showfootbox, show unlinked, note on link, partition and triple-equals sync bars.",
+      "Rankdir axes include left-to-right, top-to-bottom, mixed case, repeated final spaces, doubled internal spaces, doubled NBSP, tabs, NBSP and U+2003 em space.",
+      "Non-command contexts include comments, TIM preprocessor output, named-note bodies and sequence-note bodies.",
+      "Later-factory axes include Class, Description/Deployment, Activity, State scoring and weak arrows."
+    ]
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "title": "Rankdir whitespace is over-accepted by Rust and NBSP/tab execute as Java errors",
+      "severity": "rejecting",
+      "java_provenance": [
+        "Pattern2.java:57 expands %s to Java whitespace plus NBSP.",
+        "CommandRankDir.java:55-57 matches internal %s separators and final spaceOneOrMore.",
+        "CommandRankDir.java:63 converts only ASCII space to underscore before Rankdir.valueOf."
+      ],
+      "rust_provenance": [
+        "crates/rustuml-parser/src/parse/mod.rs:502-509 uses Rust regex \\s, which is Unicode whitespace.",
+        "crates/rustuml-parser/src/parse/mod.rs:698-701 marks these lines as real rankdir directives.",
+        "Later parsers such as class.rs:707-712 only consume exact ASCII-spelled direction lines, so dispatch can accept a command that Java errors on."
+      ],
+      "evidence": [
+        {
+          "case": "followup2_004_nbsp_rankdir_description",
+          "input": "left\\u00a0to\\u00a0right\\u00a0direction plus database/queue",
+          "java": "exit 200; stderr contains No enum constant Rankdir.LEFT\\u00a0TO\\u00a0RIGHT",
+          "rust": "exit 0; SVG data-diagram-type DESCRIPTION"
+        },
+        {
+          "case": "followup2_005_tab_rankdir_class",
+          "input": "left\\tto\\tright\\tdirection plus class",
+          "java": "exit 200; stderr contains No enum constant Rankdir.LEFT\\tTO\\tRIGHT",
+          "rust": "exit 0; SVG data-diagram-type CLASS"
+        },
+        {
+          "case": "followup2_009_em_space_invalid_unicode_separator",
+          "input": "left\\u2003to\\u2003right direction plus weak arrow",
+          "java": "exit 200 syntax error",
+          "rust": "exit 0; SVG data-diagram-type CLASS"
+        }
+      ],
+      "conclusion": "The account's whitespace invariant is incomplete: regex recognition is not sufficient because Java execution accepts only ASCII spaces in the captured direction string. Rust accepts NBSP, tabs and broader Unicode whitespace where Java rejects."
+    },
+    {
+      "id": "F2",
+      "title": "Sequence-only classification rejects lines consumed by later Java factories",
+      "severity": "rejecting",
+      "java_provenance": [
+        "ActivityDiagramFactory.java:78 registers UBrexCommandRankDir before Activity commands.",
+        "ActivityDiagramFactory.java:96 registers CommandLinkActivity.",
+        "ClassDiagramFactory registers rankdir, class links and ordinary note commands before later factories."
+      ],
+      "rust_provenance": [
+        "sequence.rs:188-195 classifies note left/right forms without 'of' as SequenceOnlyCommand::Note.",
+        "sequence.rs:205-208 classifies a message with inline activation as SequenceOnlyCommand::MessageExtension.",
+        "parse/mod.rs:1283-1284 returns Unconsumable when a rankdir directive coexists with any sequence-only classifier hit."
+      ],
+      "evidence": [
+        {
+          "case": "followup2_022_message_extension_sequence_only",
+          "java": "exit 0; SVG data-diagram-type ACTIVITY",
+          "rust": "exit 1; no UML factory consumes this rank direction command combination"
+        },
+        {
+          "case": "followup2_042_note_side_sequence_only",
+          "java": "exit 0; SVG data-diagram-type CLASS with a note entity attached to the Maker/Sink dependency",
+          "rust": "exit 1; no UML factory consumes this rank direction command combination"
+        }
+      ],
+      "conclusion": "The typed classifier still treats some lines as Sequence-only even when the exact Java product finds a later consuming factory after rankdir eliminates Sequence."
+    },
+    {
+      "id": "F3",
+      "title": "Activity continuation does not model Java's v1/v3 factory ordering",
+      "severity": "rejecting",
+      "java_provenance": [
+        "ActivityDiagramFactory.java:78 registers rankdir in the earlier legacy Activity factory.",
+        "ActivityDiagramFactory.java:80 registers the legacy partition opener.",
+        "ActivityDiagramFactory3.java:105-116 starts with common commands, swimlane, partition3 and arrows, but does not register rankdir before v3 activity syntax."
+      ],
+      "rust_provenance": [
+        "sequence.rs:132-143 marks partition and triple-equals bars shared with later factories.",
+        "parse/mod.rs:759-780 scores v3 activity syntax and legacy sync bars as Activity.",
+        "activity.rs:14-26 collapses legacy/v3 parsing behind one Rust Activity subtype."
+      ],
+      "evidence": [
+        {
+          "case": "followup2_028_triple_equals_activity_shared",
+          "java": "exit 200; syntax error assumed class at ===SyncPoint===",
+          "rust": "exit 0; SVG data-diagram-type ACTIVITY"
+        },
+        {
+          "case": "followup2_046_partition_shared_with_activity",
+          "java": "exit 200; syntax error assumed activity at :do it;",
+          "rust": "exit 0; SVG data-diagram-type ACTIVITY"
+        }
+      ],
+      "conclusion": "A command being Activity-shaped is not enough; Java has separate Activity factories with different rankdir and command coverage. Rust's unified Activity path accepts combinations Java rejects."
+    },
+    {
+      "id": "F4",
+      "title": "note on link with rankdir selects Class in Java but State in Rust",
+      "severity": "rejecting",
+      "java_provenance": [
+        "ClassDiagramFactory registers rankdir and note-on-link support before StateDiagramFactory.",
+        "PSystemBuilder returns the first non-error factory."
+      ],
+      "rust_provenance": [
+        "parse/mod.rs:747-758 scores note on link for State and UseCase.",
+        "The rankdir fallback and weak arrow scoring do not preserve the earlier Class factory for this shared command."
+      ],
+      "evidence": [
+        {
+          "case": "followup2_047_note_on_link_shared",
+          "java": "exit 0; SVG data-diagram-type CLASS",
+          "rust": "exit 0; SVG data-diagram-type STATE"
+        }
+      ],
+      "conclusion": "Later-factory scoring still overrides Java's earlier Class factory for a rankdir-compatible shared note/link combination."
+    }
+  ],
+  "attestation": {
+    "accepted": false,
+    "reason": "The frozen Rust product mismatches the exact Java oracle on 8 of 48 fresh perturbations. Under T14, any mismatch rejects this mechanism.",
+    "implementation_edited": false,
+    "account_edited": false
+  }
+}

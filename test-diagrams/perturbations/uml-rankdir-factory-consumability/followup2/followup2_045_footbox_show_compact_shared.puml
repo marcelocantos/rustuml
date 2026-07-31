@@ -1,0 +1,5 @@
+@startuml
+left to right direction
+showfootbox
+class CompactShowFoot
+@enduml

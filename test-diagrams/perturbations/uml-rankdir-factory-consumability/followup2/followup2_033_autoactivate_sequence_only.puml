@@ -1,0 +1,5 @@
+@startuml
+autoactivate on
+Maker -> Sink : auto
+top to bottom direction
+@enduml
