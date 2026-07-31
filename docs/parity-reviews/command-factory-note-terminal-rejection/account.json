@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
   "mechanism": "command-factory-note-terminal-rejection",
-  "status": "corrected_before_second_follow_up_code",
+  "status": "corrected_after_second_follow_up_rejection_before_third_follow_up_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "c5a6884206a81b02adad9bbec44d1e22ffb14963",
+  "rust_revision": "052bab8e515df4b8ed137adc80389a6913903b54",
   "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
   "rejecting_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review.json",
   "rejecting_follow_up_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review-followup.json",
+  "rejecting_second_follow_up_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review-followup2.json",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
@@ -27,10 +28,22 @@
       "role": "Defines the fourth `%g` delimiter as private-use code point U+E121, used by Jaws preprocessing for invisible quotes."
     },
     {
+      "path": "src/main/java/net/sourceforge/plantuml/stereo/Stereotag.java",
+      "symbols": ["Stereotag.SINGLE", "Stereotag.pattern"],
+      "lines": "42-45",
+      "role": "Defines each tag body as characters excluding whitespace, braces, angle brackets, dollar signs, and every `%g` member. Pattern2 performs the same four-character quote substitution inside this suffix grammar as it does around DISPLAY."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+      "symbols": ["CommandMultilines2.isValid"],
+      "lines": "48-75",
+      "role": "Keeps a recognized multiline named-note opener in OK_PARTIAL state until the registered endnote/end note regex matches the final line."
+    },
+    {
       "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
-      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.getCandidate"],
-      "lines": "75-180",
-      "role": "Requires every source line to be consumed by a registered command; an unconsumed note-shaped line rejects the candidate diagram rather than allowing later lines to mutate it."
+      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.getCandidate", "PSystemCommandFactory.isMultilineCommandOk"],
+      "lines": "75-180,218-234",
+      "role": "Requires every source line to be consumed by a registered command. A partial multiline candidate that reaches EOF without becoming OK returns null, so the diagram factory is rejected rather than accepting or discarding the accumulated body."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
@@ -44,24 +57,24 @@
       "path": "crates/rustuml-parser/src/parse/mod.rs",
       "symbols": ["parse_named_note_inline", "parse_named_note_multiline", "named_note_decorations"],
       "lines": "36-230",
-      "role": "Uses Option for both not-this-command and recognized-prefix-but-invalid suffix, losing command ownership."
+      "role": "The ownership predicates now retain the uniquely owned opener, but named_note_decorations excludes only ASCII double quote from tag bodies. A left quote, right quote, or U+E121 therefore succeeds before terminal ownership rejection can run."
     },
     {
       "path": "crates/rustuml-parser/src/parse/component.rs",
       "symbols": ["parse_component"],
-      "lines": "709-815,986-1134",
-      "role": "Continues after an invalid named-note helper result, so a later relation can materialize the missing code as an ordinary endpoint."
+      "lines": "286-400,709-815,986-1134",
+      "role": "Uses a shared in_note body state for multiline commands. It consumes every later line until a terminator but has no EOF validation, so an unfinished named note silently discards its body and any swallowed declarations or relations."
     },
     {
       "path": "crates/rustuml-parser/src/parse/deployment.rs",
       "symbols": ["parse_deployment"],
-      "lines": "700-950",
-      "role": "Likewise falls through, allowing later relations to create synthetic Deployment nodes and consume UIDs."
+      "lines": "492-609,700-1011",
+      "role": "Its note_accum state likewise consumes every later line and is not checked at EOF, returning an accepted diagram after silently dropping the unfinished note and swallowed syntax."
     }
   ],
-  "claimed_invariant": "In Java's DESCRIPTION command inventory, `note` followed by whitespace and any Pattern2 `%g` delimiter uniquely enters CommandFactoryNote's inline command domain; no attached-note, note-on-link or other registered factory shares that opener. A fully valid command requires a non-empty DISPLAY containing no `%g`, then any `%g` closing delimiter, `as`, CODE and ordered decorations. Once the unique opener is present, failure anywhere in that remaining grammar rejects the diagram candidate. Component and Deployment do not reinterpret the line or permit later relations to synthesize the intended note code.",
-  "causal_divergence": "Rust originally collapsed command non-match and validation failure into None. The first terminal predicate modeled only ASCII quotes; the next correction modeled the full Pattern2 delimiter alphabet but still repeated the successful command shape through closing delimiter plus `as`. When an embedded `%g` terminates Java DISPLAY early and leaves intervening text, both Rust parse and ownership regexes fail. The family parser then ignores the uniquely owned malformed command and a later relation synthesizes an ordinary endpoint.",
-  "planned_model_change": "Keep the shared `%g` alphabet for successful parsing, but make terminal ownership follow Java's command-inventory boundary rather than duplicate the full success regex: case-insensitive `note`, required whitespace, then any `%g` opener. Once that prefix matches, any parse failure is terminal, including embedded delimiters, empty or missing closing delimiters, absent `as`, malformed CODE, and invalid decorations. Attached-note and note-on-link commands do not begin with `%g` and remain outside this predicate. Add Component and Deployment regressions where embedded delimiters are followed by relations to the would-be code. Deployment note-on-link consumption remains a separate CommandFactoryNoteOnLink mechanism.",
+  "claimed_invariant": "In Java's DESCRIPTION command inventory, `note` followed by whitespace and any Pattern2 `%g` delimiter uniquely enters CommandFactoryNote's inline command domain; no attached-note, note-on-link or other registered factory shares that opener. A fully valid command requires a non-empty DISPLAY containing no `%g`, then any `%g` closing delimiter, `as`, CODE and ordered decorations. Every Stereotag body also excludes the complete `%g` alphabet. The multiline `note as CODE` form remains an owned partial command until endnote/end note closes it; EOF while partial rejects the diagram. Once either unique opener is present, failure anywhere in that command state rejects the candidate. Component and Deployment do not reinterpret the line, accept malformed decorations, or silently discard an unfinished body and later swallowed syntax.",
+  "causal_divergence": "Rust originally collapsed command non-match and validation failure into None. The ownership corrections now claim the full inline opener, but successful suffix parsing still implements Stereotag with an ASCII-only quote exclusion. U+201C, U+201D, and U+E121 inside a tag therefore produce a successful NamedNoteCommand even though Pattern2 substitutes `%g` into Java's tag grammar and rejects them. Independently, Component's in_note and Deployment's note_accum represent a recognized multiline command but have no rejecting transition at EOF. Both consume later declarations and relations as body, then return Ok while discarding the unfinished accumulator. The shared causal defect is incomplete preservation of Java's owned command state through suffix validation and stream termination.",
+  "planned_model_change": "Make named_note_decorations exclude the same four-member `%g` alphabet from every tag body that parse_named_note_inline uses for DISPLAY boundaries. Preserve the family parsers' multiline command ownership through EOF: record the opener source line for every multiline note state, clear it only on a valid terminator, and return ParseError if input ends while the state remains active. This follows CommandMultilines2/PSystemCommandFactory rather than trying to recover swallowed declarations after the fact. Add Component and Deployment regressions for all three previously omitted tag quote characters and for unterminated bodies followed by declaration/relation-shaped lines. Attached and note-on-link multiline states share Java's terminator requirement and may use the same EOF transition; their grammar and AST ownership otherwise remain outside this mechanism.",
   "perturbation_axes": [
     "inline versus multiline command",
     "Component versus Deployment family",
@@ -70,13 +83,17 @@
     "root versus nested package context",
     "invalid command before versus after ordinary declarations",
     "later relation to the would-be code versus no later relation",
-    "valid attached-note controls and non-owned note-on-link prefixes"
+    "valid attached-note controls and non-owned note-on-link prefixes",
+    "tag bodies containing ASCII, left, right, and U+E121 `%g` members under independently varied outer delimiters",
+    "terminated versus unterminated multiline commands followed by declaration- and relation-shaped body lines"
   ],
   "acceptance": [
     "The preserved invalid punctuation, reordered-decoration, single-character-color and composite-color sources return parser errors before later endpoint creation.",
     "No invalid source creates a note, component, interface, deployment node, relation or UID event.",
     "Valid inline and multiline named notes in both families still parse with their complete decorations.",
     "Attached notes remain unaffected, while note-on-link lines remain outside this factory's ownership predicate.",
+    "Tag bodies containing any Pattern2 `%g` member reject before a note or later endpoint can be created.",
+    "Component and Deployment reject EOF with an active multiline note state and do not silently drop swallowed declarations or relations.",
     "An independent checker attacks command prefix boundaries, family, nesting, error cause and later-line mutation."
   ],
   "forbidden_approaches": [
