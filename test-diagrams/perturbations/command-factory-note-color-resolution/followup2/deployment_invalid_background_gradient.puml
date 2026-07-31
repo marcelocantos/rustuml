@@ -1,0 +1,6 @@
+@startuml
+node "F2 background boundary anchor" as F2BackgroundBoundaryAnchor
+note "F2 invalid background endpoint" as F2InvalidBackgroundEndpoint #SteelBlue-background
+artifact "F2 background boundary survivor" as F2BackgroundBoundarySurvivor
+F2InvalidBackgroundEndpoint --> F2BackgroundBoundarySurvivor
+@enduml

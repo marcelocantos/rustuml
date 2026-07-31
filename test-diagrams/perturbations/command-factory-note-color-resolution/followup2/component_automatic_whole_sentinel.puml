@@ -1,0 +1,5 @@
+@startuml
+component "F2 whole automatic anchor" as F2WholeAutomaticAnchor
+note "F2 whole automatic sentinel" as F2WholeAutomatic #AuToMaTiC
+F2WholeAutomatic --> F2WholeAutomaticAnchor
+@enduml

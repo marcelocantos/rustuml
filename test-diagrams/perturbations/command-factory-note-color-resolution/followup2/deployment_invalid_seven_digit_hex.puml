@@ -1,0 +1,6 @@
+@startuml
+node "F2 seven digit anchor" as F2SevenDigitAnchor
+note "F2 invalid seven digit hex" as F2InvalidSevenDigitHex #123ABCD
+node "F2 seven digit survivor" as F2SevenDigitSurvivor
+F2InvalidSevenDigitHex --> F2SevenDigitSurvivor
+@enduml

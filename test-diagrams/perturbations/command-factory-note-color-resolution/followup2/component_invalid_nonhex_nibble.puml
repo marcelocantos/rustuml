@@ -1,0 +1,6 @@
+@startuml
+component "F2 nibble boundary anchor" as F2NibbleBoundaryAnchor
+note "F2 invalid nonhex nibble" as F2InvalidNonhexNibble #Q
+component "F2 nibble boundary survivor" as F2NibbleBoundarySurvivor
+F2InvalidNonhexNibble --> F2NibbleBoundarySurvivor
+@enduml

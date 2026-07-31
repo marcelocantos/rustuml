@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="162px" preserveAspectRatio="none" style="width:3899px;height:162px;background:#FFFFFF;" version="1.1" viewBox="0 0 3899 162" width="3899px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="gpszfh0gn6lxs0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFFFCC"/><stop offset="100%" stop-color="#C2F0FF"/></linearGradient><linearGradient id="gpszfh0gn6lxs1" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#C2F0FF"/><stop offset="100%" stop-color="#FFFFCC"/></linearGradient><linearGradient id="gpszfh0gn6lxs2" x1="0%" x2="100%" y1="100%" y2="0%"><stop offset="0%" stop-color="#CCCCFF"/><stop offset="100%" stop-color="#F8E7C0"/></linearGradient><linearGradient id="gpszfh0gn6lxs3" x1="0%" x2="100%" y1="100%" y2="0%"><stop offset="0%" stop-color="#F8E7C0"/><stop offset="100%" stop-color="#CCCCFF"/></linearGradient><linearGradient id="gpszfh0gn6lxs4" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#C9FFC9"/><stop offset="100%" stop-color="#97FF97"/></linearGradient><linearGradient id="gpszfh0gn6lxs5" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#97FF97"/><stop offset="100%" stop-color="#C9FFC9"/></linearGradient><linearGradient id="gpszfh0gn6lxs6" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFE0E0"/><stop offset="100%" stop-color="#FFFFCC"/></linearGradient><linearGradient id="gpszfh0gn6lxs7" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFFFCC"/><stop offset="100%" stop-color="#FFE0E0"/></linearGradient></defs><g><!--entity Aurora Rack F2-->
+<g class="entity" data-qualified-name="AuroraRackF2" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="2772.61,101.31,2782.61,91.31,2915.901,91.31,2915.901,127.7983,2905.901,137.7983,2772.61,137.7983,2772.61,101.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="2905.901" x2="2915.901" y1="101.31" y2="91.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="2772.61" x2="2905.901" y1="101.31" y2="101.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="2905.901" x2="2905.901" y1="101.31" y2="137.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103.291" x="2787.61" y="124.8452">Aurora Rack F2</text>
+</g>
+<!--entity Beacon Archive F2-->
+<g class="entity" data-qualified-name="BeaconArchiveF2" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="153.6006" x="911.46" y="94.81"/>
+<polygon fill="#F1F1F1" points="1048.0606,99.81,1048.0606,113.81,1060.0606,113.81,1060.0606,105.81,1054.0606,99.81,1048.0606,99.81" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="1054.0606" x2="1054.0606" y1="99.81" y2="105.81"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="1060.0606" x2="1054.0606" y1="105.81" y2="105.81"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123.6006" x="921.46" y="121.3452">Beacon Archive F2</text>
+</g>
+<g class="entity" data-qualified-name="F2DashForward" data-source-line="5" id="ent0004">
+<path d="M1727.91,6 L1727.91,31.3105 L1940.6092,31.3105 L1940.6092,16 L1930.6092,6 L1727.91,6" fill="url(#gpszfh0gn6lxs0)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1930.6092,6 L1930.6092,16 L1940.6092,16 L1930.6092,6" fill="url(#gpszfh0gn6lxs0)" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="191.6992" x="1733.91" y="23.5684">F2 dash forward alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2DashReverse" data-source-line="8" id="ent0005">
+<path d="M1975.44,6 L1975.44,31.3105 A0,0 0 0 0 1975.44,31.3105 L2174.97,31.3105 L2772.31,104.71 L2182.97,31.3105 L2185.0796,31.3105 A0,0 0 0 0 2185.0796,31.3105 L2185.0796,16 L2175.0796,6 L1975.44,6 A0,0 0 0 0 1975.44,6" fill="url(#gpszfh0gn6lxs1)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M2175.0796,6 L2175.0796,16 L2185.0796,16 L2175.0796,6" fill="url(#gpszfh0gn6lxs1)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="188.6396" x="1981.44" y="23.5684">F2 dash reverse alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2BackslashForward" data-source-line="11" id="ent0006">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L235.37,31.3105 L911.13,105.13 L243.37,31.3105 L250.52,31.3105 A0,0 0 0 0 250.52,31.3105 L250.52,16 L240.52,6 L6,6 A0,0 0 0 0 6,6" fill="url(#gpszfh0gn6lxs2)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M240.52,6 L240.52,16 L250.52,16 L240.52,6" fill="url(#gpszfh0gn6lxs2)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="223.52" x="12" y="23.5684">F2 backslash forward alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2BackslashReverse" data-source-line="14" id="ent0007">
+<path d="M2220.53,6 L2220.53,31.3105 A0,0 0 0 0 2220.53,31.3105 L2402.25,31.3105 L2772.14,100.09 L2410.25,31.3105 L2461.9904,31.3105 A0,0 0 0 0 2461.9904,31.3105 L2461.9904,16 L2451.9904,6 L2220.53,6 A0,0 0 0 0 2220.53,6" fill="url(#gpszfh0gn6lxs3)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M2451.9904,6 L2451.9904,16 L2461.9904,16 L2451.9904,6" fill="url(#gpszfh0gn6lxs3)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="220.4604" x="2226.53" y="23.5684">F2 backslash reverse alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2PipeForward" data-source-line="17" id="ent0008">
+<path d="M285.26,6 L285.26,31.3105 A0,0 0 0 0 285.26,31.3105 L463.52,31.3105 L911.22,101.46 L471.52,31.3105 L495.2678,31.3105 A0,0 0 0 0 495.2678,31.3105 L495.2678,16 L485.2678,6 L285.26,6 A0,0 0 0 0 285.26,6" fill="url(#gpszfh0gn6lxs4)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M485.2678,6 L485.2678,16 L495.2678,16 L485.2678,6" fill="url(#gpszfh0gn6lxs4)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="189.0078" x="291.26" y="23.5684">F2 pipe forward alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2PipeReverse" data-source-line="20" id="ent0009">
+<path d="M2496.79,6 L2496.79,31.3105 A0,0 0 0 0 2496.79,31.3105 L2627.66,31.3105 L2785.44,90.92 L2635.66,31.3105 L2703.7382,31.3105 A0,0 0 0 0 2703.7382,31.3105 L2703.7382,16 L2693.7382,6 L2496.79,6 A0,0 0 0 0 2496.79,6" fill="url(#gpszfh0gn6lxs5)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M2693.7382,6 L2693.7382,16 L2703.7382,16 L2693.7382,6" fill="url(#gpszfh0gn6lxs5)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="185.9482" x="2502.79" y="23.5684">F2 pipe reverse alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2SlashForward" data-source-line="23" id="ent0010">
+<path d="M529.81,6 L529.81,31.3105 A0,0 0 0 0 529.81,31.3105 L678.43,31.3105 L916.49,94.35 L686.43,31.3105 L744.7119,31.3105 A0,0 0 0 0 744.7119,31.3105 L744.7119,16 L734.7119,6 L529.81,6 A0,0 0 0 0 529.81,6" fill="url(#gpszfh0gn6lxs6)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M734.7119,6 L734.7119,16 L744.7119,16 L734.7119,6" fill="url(#gpszfh0gn6lxs6)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="193.9019" x="535.81" y="23.5684">F2 slash forward alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2SlashReverse" data-source-line="26" id="ent0011">
+<path d="M2738.34,6 L2738.34,31.3105 A0,0 0 0 0 2738.34,31.3105 L2840.26,31.3105 L2844.26,91.01 L2848.26,31.3105 L2950.1823,31.3105 A0,0 0 0 0 2950.1823,31.3105 L2950.1823,16 L2940.1823,6 L2738.34,6 A0,0 0 0 0 2738.34,6" fill="url(#gpszfh0gn6lxs7)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M2940.1823,6 L2940.1823,16 L2950.1823,16 L2940.1823,6" fill="url(#gpszfh0gn6lxs7)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="190.8423" x="2744.34" y="23.5684">F2 slash reverse alias gradient</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployAlpha00" data-source-line="30" id="ent0012">
+<path d="M2985.59,6 L2985.59,31.3105 A0,0 0 0 0 2985.59,31.3105 L3044.15,31.3105 L2900.67,90.92 L3052.15,31.3105 L3170.9372,31.3105 A0,0 0 0 0 3170.9372,31.3105 L3170.9372,16 L3160.9372,6 L2985.59,6 A0,0 0 0 0 2985.59,6" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M3160.9372,6 L3160.9372,16 L3170.9372,16 L3160.9372,6" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="164.3472" x="2991.59" y="23.5684">F2 deployment alpha zero</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployAlpha01" data-source-line="33" id="ent0013">
+<path d="M779.94,6 L779.94,31.3105 A0,0 0 0 0 779.94,31.3105 L881.2,31.3105 L964.47,94.62 L889.2,31.3105 L960.5836,31.3105 A0,0 0 0 0 960.5836,31.3105 L960.5836,16 L950.5836,6 L779.94,6 A0,0 0 0 0 779.94,6" fill="#8293A4" fill-opacity="0.00392" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M950.5836,6 L950.5836,16 L960.5836,16 L950.5836,6" fill="#8293A4" fill-opacity="0.00392" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="159.6436" x="785.94" y="23.5684">F2 deployment alpha one</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployAlpha7F" data-source-line="36" id="ent0014">
+<path d="M3206.19,6 L3206.19,31.3105 A0,0 0 0 0 3206.19,31.3105 L3243.68,31.3105 L2916.15,98.98 L3251.68,31.3105 L3408.3394,31.3105 A0,0 0 0 0 3408.3394,31.3105 L3408.3394,16 L3398.3394,6 L3206.19,6 A0,0 0 0 0 3206.19,6" fill="#93A4B5" fill-opacity="0.49804" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M3398.3394,6 L3398.3394,16 L3408.3394,16 L3398.3394,6" fill="#93A4B5" fill-opacity="0.49804" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="181.1494" x="3212.19" y="23.5684">F2 deployment alpha seven f</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployAlpha80" data-source-line="39" id="ent0015">
+<path d="M995.51,6 L995.51,31.3105 A0,0 0 0 0 995.51,31.3105 L1087.32,31.3105 L1012.05,94.62 L1095.32,31.3105 L1217.0071,31.3105 A0,0 0 0 0 1217.0071,31.3105 L1217.0071,16 L1207.0071,6 L995.51,6 A0,0 0 0 0 995.51,6" fill="#A4B5C6" fill-opacity="0.50196" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1207.0071,6 L1207.0071,16 L1217.0071,16 L1207.0071,6" fill="#A4B5C6" fill-opacity="0.50196" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="200.4971" x="1001.51" y="23.5684">F2 deployment alpha eight zero</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployAlphaFE" data-source-line="42" id="ent0016">
+<path d="M3443.52,6 L3443.52,31.3105 A0,0 0 0 0 3443.52,31.3105 L3443.52,31.3105 L2916.29,103.7 L3451.52,31.3105 L3617.0034,31.3105 A0,0 0 0 0 3617.0034,31.3105 L3617.0034,16 L3607.0034,6 L3443.52,6 A0,0 0 0 0 3443.52,6" fill="#B5C6D7" fill-opacity="0.99608" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M3607.0034,6 L3607.0034,16 L3617.0034,16 L3607.0034,6" fill="#B5C6D7" fill-opacity="0.99608" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="152.4834" x="3449.52" y="23.5684">F2 deployment alpha f e</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployAlphaFF" data-source-line="45" id="ent0017">
+<path d="M1251.75,6 L1251.75,31.3105 A0,0 0 0 0 1251.75,31.3105 L1288.35,31.3105 L1059.62,94.35 L1296.35,31.3105 L1422.7705,31.3105 A0,0 0 0 0 1422.7705,31.3105 L1422.7705,16 L1412.7705,6 L1251.75,6 A0,0 0 0 0 1251.75,6" fill="#C6D7E8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1412.7705,6 L1412.7705,16 L1422.7705,16 L1412.7705,6" fill="#C6D7E8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="150.0205" x="1257.75" y="23.5684">F2 deployment alpha f f</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployTransparent" data-source-line="48" id="ent0018">
+<path d="M3651.78,6 L3651.78,23.3105 L2916.3,106.23 L3651.78,31.3105 L3651.78,31.3105 A0,0 0 0 0 3651.78,31.3105 L3884.7409,31.3105 A0,0 0 0 0 3884.7409,31.3105 L3884.7409,16 L3874.7409,6 L3651.78,6 A0,0 0 0 0 3651.78,6" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M3874.7409,6 L3874.7409,16 L3884.7409,16 L3874.7409,6" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="211.9609" x="3657.78" y="23.5684">F2 deployment whole transparent</text>
+</g>
+<g class="entity" data-qualified-name="F2DeployBackground" data-source-line="51" id="ent0019">
+<path d="M1457.56,6 L1457.56,31.3105 A0,0 0 0 0 1457.56,31.3105 L1495.42,31.3105 L1065.28,101.23 L1503.42,31.3105 L1692.9584,31.3105 A0,0 0 0 0 1692.9584,31.3105 L1692.9584,16 L1682.9584,6 L1457.56,6 A0,0 0 0 0 1457.56,6" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1682.9584,6 L1682.9584,16 L1692.9584,16 L1682.9584,6" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="214.3984" x="1463.56" y="23.5684">F2 deployment whole background</text>
+</g>
+<!--link F2DashForward to AuroraRackF2-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0002" data-link-type="dependency" data-source-line="54" id="lnk20">
+<path d="M1940.79,29.68 C1946.7,30.23 1952.55,30.78 1958.26,31.31 C2260.69,59.56 2615.2455,92.3775 2766.2155,106.3375" fill="none" id="F2DashForward-to-AuroraRackF2" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="2772.19,106.89,2763.5965,102.0783,2767.2112,106.4296,2762.8599,110.0443,2772.19,106.89" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link F2DashForward to BeaconArchiveF2-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="55" id="lnk21">
+<path d="M1727.54,31.5 C1554.64,50.69 1223.3034,87.468 1071.5134,104.318" fill="none" id="F2DashForward-to-BeaconArchiveF2" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="1065.55,104.98,1074.9364,107.9626,1070.5195,104.4283,1074.0537,100.0114,1065.55,104.98" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

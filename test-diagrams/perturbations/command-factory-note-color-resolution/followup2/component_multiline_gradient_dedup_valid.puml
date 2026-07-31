@@ -1,0 +1,43 @@
+@startuml
+component "Prism Console F2" as PrismConsoleF2
+component "Vector Relay F2" as VectorRelayF2
+
+note as F2DashAlpha #0A1B2C01-9D8E7FFE
+  F2 dash alpha endpoints
+end note
+note as F2DashOpaque #0A1B2C-9D8E7F
+  F2 dash opaque equivalent
+end note
+note as F2BackslashAlpha #1234567F\ABCDEF80
+  F2 backslash alpha endpoints
+end note
+note as F2BackslashOpaque #123456\ABCDEF
+  F2 backslash opaque equivalent
+end note
+note as F2PipeAlpha #22446600|88AACCEE
+  F2 pipe alpha endpoints
+end note
+note as F2PipeOpaque #224466|88AACC
+  F2 pipe opaque equivalent
+end note
+note as F2SlashAlpha #13579BFF/2468AC01
+  F2 slash alpha endpoints
+end note
+note as F2SlashOpaque #13579B/2468AC
+  F2 slash opaque equivalent
+end note
+note as F2SlashReversed #2468AC/13579B
+  F2 slash reversed endpoints
+end note
+
+F2DashAlpha --> PrismConsoleF2
+F2DashOpaque --> VectorRelayF2
+F2BackslashAlpha --> PrismConsoleF2
+F2BackslashOpaque --> VectorRelayF2
+F2PipeAlpha --> PrismConsoleF2
+F2PipeOpaque --> VectorRelayF2
+F2SlashAlpha --> PrismConsoleF2
+F2SlashOpaque --> VectorRelayF2
+F2SlashReversed --> PrismConsoleF2
+F2SlashReversed --> VectorRelayF2
+@enduml
