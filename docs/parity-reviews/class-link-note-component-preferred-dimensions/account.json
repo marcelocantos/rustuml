@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-note-component-preferred-dimensions",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "aac577de35cc8a02321ad80c1e0e73a6cb1feaf5",
+  "triggering_product_case": "test-diagrams/golden/edge-cases/edge_class_note_on_link.puml",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": [
+        "SvekEdge.SvekEdge",
+        "SvekEdge.appendTable",
+        "SvekEdge.solve",
+        "SvekEdge.drawU"
+      ],
+      "lines": "279-320,423-438,497-512,734-740,944-947",
+      "role": "Merges the ordinary label and EntityImageNoteLink with mergeTB, calculates the complete fractional labelText dimension, truncates only the fixed Graphviz table width and height, then paints the original untruncated labelText at the solved table origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "symbols": [
+        "EntityImageNoteLink.EntityImageNoteLink",
+        "EntityImageNoteLink.calculateDimensionSlow",
+        "EntityImageNoteLink.drawU"
+      ],
+      "lines": "57-82",
+      "role": "Exposes ComponentRoseNote's full preferred dimensions to the vertical merge and paints the component without becoming a graph node."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "symbols": [
+        "ComponentRoseNote.getPreferredWidth",
+        "ComponentRoseNote.getPreferredHeight",
+        "ComponentRoseNote.drawInternalU"
+      ],
+      "lines": "73-122",
+      "role": "Adds Rose's five-pixel padding on every side to fractional text dimensions for preferred size, but truncates getTextWidth/getTextHeight only when constructing the visible folded polygon."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockVertical.java",
+      "symbols": [
+        "TextBlockVertical.calculateDimensionSlow",
+        "TextBlockVertical.drawU"
+      ],
+      "lines": "65-100",
+      "role": "Uses the maximum untruncated child width as the merged width and centers each child from its own untruncated dimension."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "relationship_center_layout",
+        "render_no_oracle_relationship",
+        "note_box_dims"
+      ],
+      "lines": "13429-13470,14599-14705,16971-16984",
+      "role": "Computes the compound edge-label model, but floors note_box_dims before adding component padding and before centering the ordinary label. It then uses the same prematurely truncated width for Graphviz constraints and child paint placement."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": [
+        "edge_label_table"
+      ],
+      "lines": "2230-2240",
+      "role": "Already performs Java-compatible integer truncation at the Graphviz serialization boundary, so upstream render-model truncation is redundant and destroys paint-time fractional dimensions."
+    }
+  ],
+  "claimed_invariant": "A Class relationship note is a Rose component merged into SvekEdge's center label, not merely its visible folded polygon. The component preferred size retains fractional text width and height and adds five pixels on every side. TextBlockVertical uses those untruncated preferred dimensions to center the ordinary relationship label and the note component. SvekEdge truncates only when serializing the complete fixed-size Graphviz placeholder; after solve it paints the original fractional merged block at the solved origin. Inside ComponentRoseNote, only the folded polygon's text box is integer-truncated, while the component padding remains a distinct coordinate layer.",
+  "causal_divergence": "Rust note_box_dims correctly returns the visible note's fractional dimensions, but relationship_center_layout floors them immediately and then adds ten pixels. That collapsed value is used both as the Graphviz constraint and as the paint-time merge width. In edge_class_note_on_link, the note body has width 105.7349 pixels. Java centers the 30.5645-pixel ordinary label within the 115.7349-pixel component preferred width, while Graphviz receives width 115; Rust centers it within 115 exactly. The lost 0.7349 pixels shift the label left by 0.36745 pixels, matching the observed expected x=78.9352 versus actual x=78.5703. This is a dimension-layer error, not a tuned coordinate offset.",
+  "planned_model_change": "Retain separate natural component dimensions, visible integer-truncated note dimensions, and Graphviz serialization dimensions in RelationshipCenterLayout. Build the compound natural width and height from fractional note_box_dims plus Rose padding; let rustuml-layout perform the existing fixed-table truncation. Center the ordinary label within the natural compound width. Position the visible note polygon by centering the natural note component and then applying Rose's five-pixel internal padding, rather than centering the polygon directly. Apply the same coordinate model to rendering, painted-envelope calculation, magic-arrow placement, and tests.",
+  "perturbation_axes": [
+    "note text whose measured width has different fractional remainders",
+    "ordinary relationship labels shorter than, equal to, and wider than the note component",
+    "note-only edge labels versus ordinary-label-plus-note compounds",
+    "single-line versus multiline note bodies",
+    "renamed endpoints and changed note/label lengths",
+    "normal versus reversed link direction",
+    "default versus changed note font family and size",
+    "magic-arrow relationship labels combined with link notes"
+  ],
+  "scope_boundary": "This mechanism owns Class SvekEdge compound-label preferred dimensions and child paint origins. It does not change note command grammar, last-link eligibility, note position/color semantics, relationship routing, factory selection, comparator slack, baselines, park lists, or guard allow-lists.",
+  "acceptance": [
+    "The active no-oracle baseline case edge_class_note_on_link becomes structurally equivalent without changing comparator tolerance.",
+    "Unit tests distinguish natural component width, truncated visible polygon width, and fixed-table truncation, including a nonzero fractional-width case.",
+    "Fresh renamed perturbations cover label-dominant and note-dominant widths, multiline notes, reversed links, and changed font metrics.",
+    "Class and renderer library tests, clippy with warnings denied, and a release binary pass.",
+    "A separate checker reviews the exact implementation and creates held-out Java/Rust evidence before acceptance."
+  ],
+  "forbidden_approaches": [
+    "adding the observed 0.3649 or half-width residue as a coordinate constant",
+    "special-casing the baseline labels, endpoint names, source line, or note text",
+    "post-hoc SVG string or coordinate surgery",
+    "reading golden SVGs or oracle output from shipping crates",
+    "changing comparator slack, baselines, park lists, or guard allow-lists"
+  ]
+}
