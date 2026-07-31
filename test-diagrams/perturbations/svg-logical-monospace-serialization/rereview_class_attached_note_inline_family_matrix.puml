@@ -1,0 +1,8 @@
+@startuml
+class Foo
+note right of Foo
+  alpha <font:Monospaced>grid  gap</font>
+  beta <font:Courier New>wide  lane</font>
+  gamma <back:lightyellow><font:monospace>css  token</font></back>
+end note
+@enduml

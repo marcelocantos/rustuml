@@ -1,0 +1,375 @@
+{
+  "schema_version": 1,
+  "mechanism": "svg-logical-monospace-serialization",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-svg-logical-monospace-serialization-rereview-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, fixed PlantUML JAR, and /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement 001e13f27df15a1623f695fc38648bf83b8ba4af, did not edit shipping Rust, and did not edit account.json."
+  },
+  "checker": {
+    "date": "2026-07-31",
+    "workspace": "/private/tmp/rustuml-integrate-20260731a",
+    "mode": "adversarial maker-checker rereview"
+  },
+  "revisions": {
+    "worktree_head": "3d24e29b10ea74d90d5a60d119b372e0d8d13851",
+    "implementation_commit": "001e13f27df15a1623f695fc38648bf83b8ba4af",
+    "evidence_commit": "bab46e525fb2100335d8afc67dd294cb6e25e21b",
+    "remediation_account_commits": [
+      "75acf82a6ae44e487fbdae0bd91dc93b53bccc87",
+      "f40a6d8930578ab311fe7e0e6e09d5c2c09df8fb"
+    ],
+    "rejected_review_commit": "666c0b74ba777fdd1e7a90e3bfeef86fe8dba1e4",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "comparator": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "comparator_sha256": "b5e7b7a0c51a2cc8fa78142a6a2e43f8fbc90942e62212c0d4ca5a1c947cd9e7",
+    "comparator_provenance": "Per the no-Cargo constraint I used the existing shared-worktree comparator binary. HEAD advanced from 9023f7a6 to 3d24e29b during the review via an unrelated docs commit, but `git diff --stat bab46e52..HEAD -- crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/creole.rs` was empty, so the reviewed Rust implementation remained the 001e13f2/bab46e52 code."
+  },
+  "documents_read": [
+    "AGENTS.md parity honesty and T14 rules",
+    "docs/parity-reviews/svg-logical-monospace-serialization/account.json",
+    "docs/parity-reviews/svg-logical-monospace-serialization/review.json",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleFontFamilyChange.java",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleMonospaced.java",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/FontConfiguration.java",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/FontStack.java",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/text_render.rs",
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-parser/src/parse/class.rs",
+    "crates/rustuml-parser/src/parse/component.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "git show 001e13f2 -- crates/rustuml-render/src/creole.rs crates/rustuml-render/src/text_render.rs"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandCreoleFontFamilyChange changes only the current family on the active FontConfiguration, then restores the previous configuration after recursing into the tag body.",
+      "CommandCreoleMonospaced is separate and swaps in the skinparam monospaced family for dedicated double-quote markup.",
+      "FontStack delegates the requested family spelling to java.awt.Font.decode, while SvgGraphics#text performs the final backend step: exact Monospaced -> monospace canonicalization, then NBSP conversion only for emitted monospace or Courier."
+    ],
+    "rust": [
+      "001e13f2 removes the old `<font:Name>` -> `style.monospace = true` shortcut, stores the requested family on the segment, and routes inline metrics through `inline_metric_family` while leaving dedicated monospace markup on the `style.monospace` path.",
+      "Current `creole.rs` and `text_render.rs` at HEAD still match the remediated shipping code from 001e13f2/bab46e52.",
+      "The fresh failures are adjacent parser-dispatch drift, not a text-render serialization miss. `parse/mod.rs` scores every trimmed source line and does not suspend mixed-leaf or sequence-participant heuristics while inside a floating `note as ... end note` body, so note-body lines beginning with `control` or `boundary` poison diagram selection before `parse/class.rs` gets to buffer the multiline note."
+    ],
+    "fixture_shape_search": {
+      "command": "git -C /private/tmp/rustuml-integrate-20260731a show --format= --no-ext-diff 001e13f2 -- crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/creole.rs | rg -n 'include_str|include_bytes|read_to_string|checker_|test-diagrams|golden|viewBox|x=|y='",
+      "result": "No shipping-path fixture reads, coordinate-keyed rewrites, or golden-string conditionals appeared in the remediated implementation diff."
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a status --short",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline -n 12",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --stat --summary 001e13f2",
+    "git -C /private/tmp/rustuml-integrate-20260731a diff --stat bab46e52..HEAD -- crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/creole.rs",
+    "sed -n '1,240p' docs/parity-reviews/svg-logical-monospace-serialization/account.json",
+    "sed -n '1,260p' docs/parity-reviews/svg-logical-monospace-serialization/review.json",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+    "sed -n '700,780p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleFontFamilyChange.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleMonospaced.java",
+    "sed -n '1,240p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/font/FontStack.java",
+    "sed -n '1290,1365p' crates/rustuml-render/src/creole.rs",
+    "sed -n '720,780p' crates/rustuml-render/src/text_render.rs",
+    "sed -n '1588,1655p' crates/rustuml-render/src/text_render.rs",
+    "sed -n '1800,1895p' crates/rustuml-render/src/text_render.rs",
+    "sed -n '360,470p' crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n '1680,1715p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '680,760p' crates/rustuml-parser/src/parse/component.rs",
+    "sed -n '150,250p' crates/rustuml-parser/src/parse/sequence.rs",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/golden/activity/act_creole_monospace.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.puml",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_sequence_inline_family_nested_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_activity_inline_family_matrix.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_component_base_quoted_monospaced_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_state_inline_family_dpi_note.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_inline_family_matrix_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_class_attached_note_inline_family_matrix.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_mixed_case_monospaced.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_mixed_case_monospaced_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_exact_case_monospaced.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml",
+    "tmpdir=$(mktemp -d /tmp/rustuml-checker-noteonly.XXXXXX); cp test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml \"$tmpdir/\"; JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$tmpdir/checker_inline_font_family_matrix_note.puml\"; shasum -a 256 \"$tmpdir/checker_inline_font_family_matrix_note.svg\" test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.svg",
+    "rg -n -i 'syntax error|an error has occured|error line|cannot open|cannot read|compilation error' test-diagrams/perturbations/svg-logical-monospace-serialization -g 'rereview_*.svg'",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/svg-logical-monospace-serialization/account.json /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/svg-logical-monospace-serialization/review.json test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_*.puml test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_*.svg"
+  ],
+  "constraints_observed": {
+    "ran_cargo": false,
+    "rebuilt_rust": false,
+    "edited_shipping_code": false,
+    "edited_account": false,
+    "edited_prior_reviews": false,
+    "review_only_changes": true,
+    "java_syntax_errors": 0
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "6067f621a5129998f62309651207f5dd231468781088e788db1157c2e5d392eb",
+    "review_json_sha256": "3232c7d70cfb1e9469394b211976badbccdfe5ce9d56b335786976dd554ec5a4",
+    "sources": {
+      "rereview_activity_inline_family_matrix.puml": "01f3a06670c862770a977e0dbbdfd2943d97d420b0bc059b3b1822dc1c1098a0",
+      "rereview_class_attached_note_inline_family_matrix.puml": "dcd0b568aed9b019a6f60e20346b68b7dd45e9e85f1083e4adbe312649b8c558",
+      "rereview_component_base_quoted_monospaced_scale.puml": "be0cb655cf6de2a69bfa97176d6be3fd1b64ffd1567a87a63c0e834baf7f15e2",
+      "rereview_note_only_boundary_keyword_plain.puml": "9c12eb3e3bec16f30406348c4674c9ba2b248a231505183291d3122970ea760f",
+      "rereview_note_only_control_keyword_plain.puml": "c61f1b1390e79b5629f33d9c826bc56c58cbf25353fe6fda0cba4a908de50fd2",
+      "rereview_note_only_exact_case_monospaced.puml": "0c52a559491cec8adebdf74ff296067ef7d1c9dc87b8ccf27255776df0286d16",
+      "rereview_note_only_inline_family_matrix_scale.puml": "26f25ceee6286a2b18e97da5de4a567106b1c44b62c7a845e124c907309332ce",
+      "rereview_note_only_mixed_case_monospaced.puml": "321891701aae575c6f45b1248dca1d941b7df201c234ae10fe42b1c7dd0832e6",
+      "rereview_note_only_mixed_case_monospaced_scale.puml": "36901bd0d6dac4d7a8675220d1d1d3a1219ccb690a02a20785e1aa17fd3c07fb",
+      "rereview_note_only_prefix_control_exact_case.puml": "918611b107aa97036f423578f264854a719d40408109b3074a62a1cbef07b390",
+      "rereview_note_only_prefix_control_scale.puml": "11d8d4db77e6785dd0ab11b3035dc07093d7e950821582c48236709fb6438a7d",
+      "rereview_note_only_prefix_control_three_lines.puml": "4200597d62fc9e1877e89490384e350895d59a063864a56a9f6d93a1327fe4bc",
+      "rereview_sequence_inline_family_nested_scale.puml": "8186e79bb97b7e518c3fbaf628f1978aa023b45011ef9eb7f04066230d055fcd",
+      "rereview_state_inline_family_dpi_note.puml": "9a947a6b2ff53a2efe9c7c2032df24b132f3e4199ffce18b7d9c9ab0ddc46bff"
+    },
+    "java_svgs": {
+      "rereview_activity_inline_family_matrix.svg": "c1f30eae7e17633f1448aa0aeb3307308c3fbb2ae32e2de18d4578bfc4225208",
+      "rereview_class_attached_note_inline_family_matrix.svg": "f55665eddd516afd97b94e9eda4eb60ec9619b803c36b8d862162f80982b2783",
+      "rereview_component_base_quoted_monospaced_scale.svg": "e15f4500cc5544eead267bd8834d99199253dc65ecd9a04b97780583cb7d0acd",
+      "rereview_note_only_boundary_keyword_plain.svg": "3beb21964a72f74b5a2fceba25955c6c40245663bdf3f855af0ffc2209e5c0d0",
+      "rereview_note_only_control_keyword_plain.svg": "3e8204790a83fb584bc05e5d33036e6cc76230f830f4e2d091edb1f2679a7acc",
+      "rereview_note_only_exact_case_monospaced.svg": "e23e299b6e711361a898e10b08d6edc54b39ba1558381f010dc20e938cd66de1",
+      "rereview_note_only_inline_family_matrix_scale.svg": "7054cc4b5f32f39308a86b963d999f2142ae012d7d0acb77eacad534f24f6223",
+      "rereview_note_only_mixed_case_monospaced.svg": "32c7c95266a23107cf156e23fc20f0feb2d5aba2955628ac4009a80480759c4b",
+      "rereview_note_only_mixed_case_monospaced_scale.svg": "ea1864ea6a2ecf70e1659c4956ef352cf23b86817926d8e3ee6936ed3d1e4ac6",
+      "rereview_note_only_prefix_control_exact_case.svg": "de22c2479f5bb26ef594b908a1d7c224962d907ff603b864ce2d2eddc4ff0dbd",
+      "rereview_note_only_prefix_control_scale.svg": "ec7a3b6304d7ff73860790c9f5b79945c5a2564bbc29d7d580a47b63ddde4572",
+      "rereview_note_only_prefix_control_three_lines.svg": "8edcfa3b289e9c77b73ccbdf3fb0d2c1ae604044bcf093b2bfdd41da967e5e15",
+      "rereview_sequence_inline_family_nested_scale.svg": "a41c13337c91f0bdbeb741d3d1aac0f72ce57eb0deeb54b5a7376b45765c8350",
+      "rereview_state_inline_family_dpi_note.svg": "45567a683d2e0466026d32b6eec9e25c7be6dbef6a4a73b718f3ff514fca4876"
+    }
+  },
+  "preserved_replays": [
+    {
+      "source": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+      "golden": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.svg",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/golden/activity/act_creole_monospace.puml",
+      "golden": "test-diagrams/golden/activity/act_creole_monospace.svg",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_component_arrow_mixed_case_monospaced_dpi.svg",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_inline_font_family_matrix_note.svg",
+      "result": "fail",
+      "failure_summary": "Java CLASS note/entity SVG still mismatches Rust DESCRIPTION output. I regenerated the Java SVG with the fixed JAR and the SHA-256 matched the preserved artifact exactly, so this preserved failure is not stale oracle material."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_arrow_family_matrix_scale.svg",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_inline_family_matrix_scale.svg",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_sequence_quoted_monospaced_defaultfont.svg",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/checker_state_arrow_courier_scale_spaces.svg",
+      "result": "pass"
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_sequence_inline_family_nested_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_sequence_inline_family_nested_scale.svg",
+      "axes": [
+        "sequence message renderer",
+        "nested size plus inline Courier New",
+        "inline mixed-case Monospaced",
+        "dedicated double-quote monospace markup",
+        "scale 1.15"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_activity_inline_family_matrix.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_activity_inline_family_matrix.svg",
+      "axes": [
+        "activity renderer",
+        "inline Courier",
+        "inline Courier New control",
+        "dedicated double-quote monospace markup"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_component_base_quoted_monospaced_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_component_base_quoted_monospaced_scale.svg",
+      "axes": [
+        "component arrow renderer",
+        "quoted base defaultFontName and ArrowFontName",
+        "dedicated double-quote monospace markup",
+        "scale 1.1"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_state_inline_family_dpi_note.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_state_inline_family_dpi_note.svg",
+      "axes": [
+        "state arrow plus attached note",
+        "inline Monospaced, Courier New, and CSS monospace",
+        "dedicated double-quote monospace markup",
+        "dpi 130"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_inline_family_matrix_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_inline_family_matrix_scale.svg",
+      "axes": [
+        "note-only renderer",
+        "inline Monospaced and Courier New",
+        "dedicated double-quote monospace markup",
+        "scale 1.1"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_class_attached_note_inline_family_matrix.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_class_attached_note_inline_family_matrix.svg",
+      "axes": [
+        "class attached note",
+        "inline Monospaced and Courier New",
+        "nested back-color plus CSS monospace"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_mixed_case_monospaced.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_mixed_case_monospaced.svg",
+      "axes": [
+        "note-only renderer",
+        "two-line multiline note",
+        "inline mixed-case Monospaced",
+        "inline Courier New"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_mixed_case_monospaced_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_mixed_case_monospaced_scale.svg",
+      "axes": [
+        "note-only renderer",
+        "same text with scale 1.1",
+        "inline mixed-case Monospaced",
+        "inline Courier New"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_exact_case_monospaced.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_exact_case_monospaced.svg",
+      "axes": [
+        "note-only renderer",
+        "exact-case Monospaced",
+        "inline Courier New"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.svg",
+      "axes": [
+        "note-only renderer",
+        "same shape as preserved failure with exact-case Monospaced",
+        "note-body line beginning with control"
+      ],
+      "result": "fail",
+      "failure_summary": "Rust dispatches to DESCRIPTION instead of CLASS and interprets the note-body `control ...` line as a top-level entity declaration."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.svg",
+      "axes": [
+        "note-only renderer",
+        "same preserved lexical shape",
+        "mixed-case Monospaced",
+        "scale 1.1"
+      ],
+      "result": "fail",
+      "failure_summary": "Scaling does not matter; Rust still dispatches to DESCRIPTION because the note-body `control ...` line leaks into top-level keyword scoring."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.svg",
+      "axes": [
+        "note-only renderer",
+        "same preserved lexical shape",
+        "third dedicated monospace line"
+      ],
+      "result": "fail",
+      "failure_summary": "Adding a third line does not rescue dispatch; the `control` keyword still steals the diagram before note buffering."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.svg",
+      "axes": [
+        "note-only renderer",
+        "plain text only",
+        "note-body line beginning with control"
+      ],
+      "result": "fail",
+      "failure_summary": "This strips out all font-family markup and still fails. Rust emits DESCRIPTION, creates entity `queue`, and loses the floating note model entirely."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml",
+      "golden": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.svg",
+      "axes": [
+        "note-only renderer",
+        "plain text only",
+        "note-body line beginning with boundary"
+      ],
+      "result": "fail",
+      "failure_summary": "A second shared keyword reproduces the same adjacent dispatch leak, showing the failure is keyword-family based rather than tied to one exact token."
+    }
+  ],
+  "findings": [
+    "The remediated inline-family serialization claim survives the fresh mechanism-shaped cases I generated. Sequence, activity, component, state, attached-note, and several note-only variants all match Java across Monospaced, lowercase monospace, Courier, Courier New, dedicated double-quote markup, nesting, and scale/dpi changes.",
+    "The preserved input `checker_inline_font_family_matrix_note.puml` still fails at the reviewed head. I regenerated its Java SVG with the fixed JAR and got the exact preserved SHA-256 (`920a2719...`), so the red result is real and not caused by stale oracle material.",
+    "Fresh near-neighbor note-only controls isolate that preserved failure away from the inline-family mechanism. `alpha/beta` note bodies pass whether Monospaced is exact-case or mixed-case and whether scale is present, but `prefix/control` variants fail consistently, and even plain-text `control` and `boundary` variants fail with the same CLASS-versus-DESCRIPTION drift.",
+    "The adjacent causal scope is dispatch, not SVG font serialization. `parse/mod.rs` scores top-level lines for mixed-leaf DESCRIPTION and sequence participant keywords without suspending those heuristics inside a floating `note as ... end note` body, while `parse/class.rs` itself correctly has a floating-note buffer. As a result, note-body lines beginning with `control` or `boundary` are misread as top-level commands before the class note parser can consume them.",
+    "Because one preserved review input is still red and I produced fresh valid counterexamples in the adjacent note-only keyword family, the rereview must reject the change as shipped even though the narrow inline-family distinctions appear fixed."
+  ],
+  "summary": {
+    "preserved_inputs_rerun": 8,
+    "preserved_passes": 7,
+    "preserved_failures": 1,
+    "fresh_inputs": 14,
+    "fresh_passes": 9,
+    "fresh_failures": 5,
+    "java_syntax_errors": 0
+  },
+  "verdict": "rejected",
+  "verdict_reason": "The remediated text-render claim itself looks sound on fresh inline-family perturbations, but the reviewed head still fails one preserved input and five fresh valid note-only perturbations. Those fresh failures show an adjacent top-level dispatch bug: note-body lines beginning with shared keywords such as `control` or `boundary` leak into diagram selection and produce DESCRIPTION output instead of the Java CLASS floating-note model. Under the T14 rereview rules, those valid preserved and fresh failures reject the change."
+}

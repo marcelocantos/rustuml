@@ -1,0 +1,5 @@
+@startuml
+scale 1.15
+hide footbox
+Alice -> Bob : prefix <size:16><font:Courier New>wide  lane</font></size> / <font:mOnOsPaCeD>grid  gap</font> / ""mono  mark""
+@enduml

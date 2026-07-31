@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Helvetica
+start
+:<font:Courier>queue  hold</font> / <font:Courier New>wide  lane</font> / ""grid  gap"";
+stop
+@enduml

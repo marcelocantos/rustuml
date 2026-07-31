@@ -1,0 +1,7 @@
+@startuml
+note as N
+  prefix <font:mOnOsPaCeD>grid  gap</font>
+  control <font:Courier New>wide  lane</font>
+  suffix ""mono  mark""
+end note
+@enduml

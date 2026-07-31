@@ -1,0 +1,7 @@
+@startuml
+scale 1.1
+left to right direction
+skinparam defaultFontName "Monospaced"
+skinparam ArrowFontName "Monospaced"
+[Alpha] --> [Beta] : base  grid / ""wide  lane""
+@enduml

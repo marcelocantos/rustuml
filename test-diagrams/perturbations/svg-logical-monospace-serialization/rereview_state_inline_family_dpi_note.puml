@@ -1,0 +1,7 @@
+@startuml
+skinparam dpi 130
+[*] --> Idle
+Idle --> Busy : left <font:Monospaced>grid  gap</font> / <font:Courier New>wide  lane</font>
+note right of Busy : mix ""mono  mark"" / <font:monospace>css  token</font>
+Busy --> [*]
+@enduml

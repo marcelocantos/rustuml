@@ -1,0 +1,8 @@
+@startuml
+scale 1.1
+note as N
+  alpha <font:Monospaced>grid  gap</font>
+  beta <font:Courier New>wide  lane</font>
+  gamma ""mono  mark""
+end note
+@enduml

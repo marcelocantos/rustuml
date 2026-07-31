@@ -1,0 +1,6 @@
+@startuml
+note as N
+  alpha wide  lane
+  control queue  hold
+end note
+@enduml

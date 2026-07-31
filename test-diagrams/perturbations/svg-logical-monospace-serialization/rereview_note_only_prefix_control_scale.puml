@@ -1,0 +1,7 @@
+@startuml
+scale 1.1
+note as N
+  prefix <font:mOnOsPaCeD>grid  gap</font>
+  control <font:Courier New>wide  lane</font>
+end note
+@enduml

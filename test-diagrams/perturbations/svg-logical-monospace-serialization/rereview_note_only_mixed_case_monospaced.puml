@@ -1,0 +1,6 @@
+@startuml
+note as N
+  alpha <font:mOnOsPaCeD>grid  gap</font>
+  beta <font:Courier New>wide  lane</font>
+end note
+@enduml
