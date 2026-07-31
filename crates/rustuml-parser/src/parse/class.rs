@@ -1702,11 +1702,13 @@ impl ClassParser {
             Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap()
         });
         // Floating named note: `note "text" as Name`
-        static FLOATING_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+        static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+([\p{L}\p{N}_.]+)\s*$"#).unwrap()
+        });
         // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
-        static FLOATING_ML_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
+        static FLOATING_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"(?i)^note\s+as\s+([\p{L}\p{N}_.]+)\s*(#\S+)?\s*$").unwrap()
+        });
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
             let position = parse_note_position(&caps[1].to_ascii_lowercase());
@@ -4673,6 +4675,23 @@ mod tests {
         assert_eq!(mixed_case.notes.len(), 1);
         assert_eq!(mixed_case.notes[0].alias.as_deref(), Some("MixedCase"));
         assert_eq!(mixed_case.notes[0].lines, ["payload line"]);
+    }
+
+    #[test]
+    fn floating_note_aliases_share_the_qualified_quark_grammar() {
+        let multiline = parse(
+            "NoTe as Audit.审计_42 #LightGreen\n\
+             payload line\n\
+             EnD NoTe",
+        );
+        assert_eq!(multiline.notes.len(), 1);
+        assert_eq!(multiline.notes[0].alias.as_deref(), Some("Audit.审计_42"));
+        assert_eq!(multiline.notes[0].id.as_deref(), Some("Audit.审计_42"));
+
+        let inline = parse(r#"note "inline payload" as Audit.Inline_43"#);
+        assert_eq!(inline.notes.len(), 1);
+        assert_eq!(inline.notes[0].alias.as_deref(), Some("Audit.Inline_43"));
+        assert_eq!(inline.notes[0].id.as_deref(), Some("Audit.Inline_43"));
     }
 
     #[test]
