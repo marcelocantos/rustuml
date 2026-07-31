@@ -1,0 +1,39 @@
+@startuml
+left to right direction
+skinparam roundcorner 7
+
+<style>
+componentDiagram {
+  group {
+    folder {
+      RoundCorner 16
+    }
+    stack {
+      RoundCorner 0
+    }
+  }
+  collections {
+    title {
+      RoundCorner 12
+    }
+  }
+  frame {
+    title {
+      RoundCorner 24
+    }
+  }
+}
+</style>
+
+folder "Outer Folder" as OuterFolder {
+  collections "Catalog Set" as CatalogSet
+  frame "Frame Leaf" as FrameLeaf
+}
+
+stack "Zero Stack Group" as ZeroStackGroup {
+  node InnerNode
+}
+
+CatalogSet --> FrameLeaf
+FrameLeaf --> InnerNode
+@enduml

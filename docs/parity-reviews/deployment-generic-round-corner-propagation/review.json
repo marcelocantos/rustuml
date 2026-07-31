@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-generic-round-corner-propagation",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "role": "checker-only; did not implement deployment-generic-round-corner-propagation"
+  },
+  "revisions": {
+    "implementation_commit_under_review": "fea6427e",
+    "pre_code_account_commits": [
+      "3d24e29b",
+      "883c7ecd"
+    ],
+    "review_worktree_head": "1bf7053cf5e3c6f592fd69e757afe24a22b2ba5c",
+    "deployment_rs_changed_since_implementation_commit": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "target/release/examples/diff_one"
+  },
+  "source_inspection": {
+    "java_model_checked": [
+      "FromSkinparamToStyle converts generic skinparam roundCorner to root RoundCorner and adds symbol-specific <symbol>RoundCorner mappings for SName entries.",
+      "EntityImageDescription resolves root.element.<diagramStyleName>.<symbol>.title, reads PName.RoundCorner, and freezes it into Fashion.withCorner(roundCorner, diagonalCorner).",
+      "Cluster.getDefaultStyleDefinition resolves big deployment symbols through root.element.<diagramStyleName>.group.<symbol>.",
+      "USymbolStack, USymbolArtifact, USymbolRectangle, USymbolComponent1/2, USymbolFrame, USymbolFolder, USymbolFile, USymbolCard, and USymbolCollections consume Fashion.getRoundCorner in asSmall/asBig paths."
+    ],
+    "rust_model_checked": [
+      "deployment_round_corner resolves either root.element.componentDiagram.group.<symbol> or root.element.componentDiagram.<symbol>.title and passes the result into cluster and leaf emitters.",
+      "Artifact, card/rectangle/agent, component, frame, folder, file, stack, and collections emitters are parameterized with the resolved round_corner value.",
+      "No fixture label, scale, coordinate, or named-checker special-case was found in crates/rustuml-render/src/deployment.rs for this mechanism.",
+      "No unexplained new high-precision round-corner constant was found; the remaining fixed numeric values are symbol geometry constants with existing Java/golden provenance comments."
+    ],
+    "concerns": [
+      "The product path does not honor explicit componentDiagram.<symbol>.title RoundCorner overrides in a fresh valid deployment input.",
+      "The claimed file consumer is not reachable in the fresh valid deployment input: Java renders a file symbol, while Rust falls through to a link-created default ellipse."
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "git diff --name-only fea6427e..HEAD -- crates/rustuml-render/src/deployment.rs",
+      "result": "no output; deployment.rs unchanged since implementation commit"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_generic_after_scale_artifact_rectangle_card.puml test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.puml test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_and_leaf_specific_lr_topology.puml",
+      "result": "exit 0; same-stem Java SVGs generated"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_description_leaf_even_dpi.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_class_cluster_style_after_zero.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_class_leaf_selector_odd_scale.puml",
+      "result": "failed with CLASS svg size mismatch; recorded as out of scope for this deployment mechanism"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+      "result": "failed with CLASS package path round-corner mismatch; recorded as out of scope for this deployment mechanism"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_generic_after_scale_artifact_rectangle_card.puml",
+      "result": "SVGs are structurally equivalent"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.puml",
+      "result": "FAILED; Java artifact has no rx/ry for RoundCorner 0 but Rust emits rx=3.9063 ry=3.9063; Java component has rx=10.9375 ry=10.9375 for RoundCorner 14 at dpi 150 but Rust emits rx=16.4063 ry=16.4063, consistent with generic RoundCorner 21; Java renders SpecificFile as a file path while Rust renders a default ellipse named SpecificFile."
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_and_leaf_specific_lr_topology.puml",
+      "result": "SVGs are structurally equivalent"
+    }
+  ],
+  "fresh_held_outs": [
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_generic_after_scale_artifact_rectangle_card.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_generic_after_scale_artifact_rectangle_card.svg",
+      "axes": [
+        "generic root roundcorner",
+        "style declaration after entity declarations",
+        "scale",
+        "topology with two links",
+        "artifact, rectangle, and card consumers"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_specific_zero_dpi_component_file_artifact.svg",
+      "axes": [
+        "generic versus specific override",
+        "zero and nonzero roundcorner",
+        "dpi",
+        "artifact, component, and file consumers",
+        "changed labels and links"
+      ],
+      "result": "FAIL",
+      "counterexample": "Explicit componentDiagram artifact/component/file title RoundCorner values do not propagate correctly in Rust product output, and the claimed file consumer is not rendered as a file symbol."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_and_leaf_specific_lr_topology.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-generic-round-corner-propagation/fresh_group_and_leaf_specific_lr_topology.svg",
+      "axes": [
+        "group-specific and leaf-specific styles",
+        "generic root fallback",
+        "zero and nonzero roundcorner",
+        "left-to-right direction",
+        "nested topology",
+        "folder group, stack group, collections, and frame consumers"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Specific symbol-title RoundCorner overrides lose to generic/default values in product rendering",
+      "evidence": "fresh_specific_zero_dpi_component_file_artifact.puml sets artifact.title RoundCorner 0 and component.title RoundCorner 14 under componentDiagram, with skinparam roundcorner 21. Java renders artifact without rx/ry and component with rx/ry 10.9375 at dpi 150. Rust renders artifact with rx/ry 3.9063 and component with rx/ry 16.4063.",
+      "interpretation": "The account's precedence invariant is false in the shipped no-oracle path for explicit componentDiagram.<symbol>.title overrides."
+    },
+    {
+      "severity": "rejecting",
+      "title": "The claimed file Fashion consumer is not reached by valid deployment syntax",
+      "evidence": "fresh_specific_zero_dpi_component_file_artifact.puml contains `file \"Specific File\" as SpecificFile`. Java renders a file-shaped path with the specific corner radius; Rust emits a default ellipse for SpecificFile sourced from the link line.",
+      "interpretation": "Even though deployment.rs has a parameterized file painter, the product path does not create a file deployment entity for this valid syntax, so the claimed consumer set is incomplete at the parser/render boundary."
+    }
+  ],
+  "verdict_reason": "A fresh valid held-out counterexample failed in the no-oracle product path on the exact mechanism under review. Under the T14 held-out rule, any failing fresh counterexample rejects the parity change."
+}

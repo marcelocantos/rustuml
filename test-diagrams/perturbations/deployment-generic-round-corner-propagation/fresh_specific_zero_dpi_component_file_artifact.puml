@@ -1,0 +1,31 @@
+@startuml
+skinparam dpi 150
+skinparam roundcorner 21
+
+<style>
+componentDiagram {
+  artifact {
+    title {
+      RoundCorner 0
+    }
+  }
+  component {
+    title {
+      RoundCorner 14
+    }
+  }
+  file {
+    title {
+      RoundCorner 28
+    }
+  }
+}
+</style>
+
+artifact "Zero Artifact" as ZeroArtifact
+component "Specific Component" as SpecificComponent
+file "Specific File" as SpecificFile
+
+ZeroArtifact --> SpecificComponent
+SpecificComponent --> SpecificFile
+@enduml

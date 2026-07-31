@@ -1,0 +1,13 @@
+@startuml
+scale 1.4
+
+artifact "Payload Alpha" as PayloadAlpha
+rectangle "Ingress Rect" as IngressRect
+card "Ticket Card" as TicketCard
+
+PayloadAlpha --> IngressRect : first
+
+skinparam roundcorner 19
+
+IngressRect --> TicketCard : second
+@enduml
