@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-note-background-color-retention",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "55c26983cc45b8761d1b9512378143383eefb6fa",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": [
+        "DescriptionDiagramFactory.initCommandsList"
+      ],
+      "lines": "86-127",
+      "role": "Registers the shared floating and attached note factories on DESCRIPTION diagrams, so deployment-shaped sources use the same explicit note color semantics as other entity diagrams."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": [
+        "CommandFactoryNote.multiLine",
+        "CommandFactoryNote.singleLine",
+        "CommandFactoryNote.executeInternal"
+      ],
+      "lines": "76-106,141-163",
+      "role": "Parses ColorParser.exp1 for named floating notes and stores the resolved explicit background color on the created NOTE entity."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": [
+        "CommandFactoryNoteOnEntity.getRegexConcatMultiLine",
+        "CommandFactoryNoteOnEntity.executeInternal"
+      ],
+      "lines": "121-167,224-265",
+      "role": "Parses explicit background color for attached notes and retains Colors on the generated note entity, establishing that color belongs to the note model rather than one floating renderer branch."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": [
+        "EntityImageNote.EntityImageNote"
+      ],
+      "lines": "97-118",
+      "role": "Uses the entity's explicit BACK color when present and falls back to the merged note style only when no explicit background was supplied."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": [
+        "DeploymentNote"
+      ],
+      "lines": "31-48",
+      "role": "Stores id, target, text, position, and source line but has no explicit background color or general note-colors field."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "NoteAccum",
+        "RE_NOTE_FLOATING_MULTI",
+        "parse_deployment"
+      ],
+      "lines": "383-390,437-454,483-498,609-665",
+      "role": "Accepts an optional multiline floating-note color only as a non-capturing regex suffix, carries no color in NoteAccum, and constructs every DeploymentNote without that semantic value; attached forms likewise have no retained color path."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "NOTE_FILL",
+        "render_floating_deployment_note",
+        "render_deployment_note"
+      ],
+      "lines": "3161,3296-3449,3451-3507",
+      "role": "Paints both floating and attached note faces with the default #FEFFDD constant because the parser model cannot provide an explicit color."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "completed_multiline_note_payload",
+        "detect_uml_subtype"
+      ],
+      "lines": "337-356,844-847,1141-1172",
+      "role": "Can retain the command as a completed floating note for dispatch, but does not own or preserve its parsed style attributes."
+    }
+  ],
+  "claimed_invariant": "An explicit background color on a valid DESCRIPTION/deployment note command is a semantic attribute of the NOTE entity. It survives command parsing, multiline accumulation, AST construction, source-order layout, and rendering for both floating and attached forms. Rendering resolves and paints the explicit background when present and uses the ordinary note-style default only when absent; color does not affect command identity, note ordering, or geometry.",
+  "causal_divergence": "Rust's deployment multiline floating-note regex deliberately consumes an optional color without capturing it. NoteAccum and DeploymentNote have no color field, every construction site therefore discards the value, and both deployment note painters hardcode NOTE_FILL. f1378066 repaired floating-note lifecycle and source-order membership, so the fresh note now exists in the correct place, but its MistyRose command attribute cannot reach rendering. The remaining 0.01 coordinate residue is independent; the decisive mismatch is caused by lost model state, not note placement or a color-name table constant.",
+  "planned_model_change": "Add explicit note color state to the canonical DESCRIPTION note model, with the current DeploymentNote adapter carrying it until DESCRIPTION unification lands. Parse floating single-line, floating multiline, attached inline, and attached multiline note color syntax through a shared color-token parser matching the Java command forms; retain the value in NoteAccum and every constructor. Resolve it through the existing PlantUML color resolver at paint-plan construction, prefer it over the note style background, and feed the same resolved fill to every face/fold primitive for floating and attached notes. Preserve None as the default-style path. Keep source order, Magma membership, dimensions, and edge geometry unchanged in this mechanism.",
+  "perturbation_axes": [
+    "explicit named color versus hexadecimal color versus omitted color",
+    "floating versus attached notes",
+    "single-line versus multiline note construction",
+    "color before notes with different source-order positions among nodes",
+    "mixed-case color names and command keywords",
+    "style or skinparam note background crossed with an explicit command color",
+    "multiple notes using different colors and renamed aliases or targets"
+  ],
+  "scope_boundary": "This mechanism owns explicit deployment/DESCRIPTION note background-color parsing, retention, resolution, and paint precedence. It does not own multiline terminator grammar, DESCRIPTION element-family unification, floating-note Magma lifecycle, source-line arithmetic, dimensions, the observed 0.01 coordinate residue, note border/font style, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "checker_deployment_node_then_floating_endnote retains MistyRose in the parsed note model and paints that resolved fill on both floating-note face primitives while preserving the node-note-artifact source order.",
+    "Fresh tests cover named, hexadecimal, and omitted colors across floating and attached, inline and multiline forms; omitted color continues to use the default note style.",
+    "An explicit command color wins over a conflicting note background style exactly as Java EntityImageNote does, without changing note dimensions or layout membership.",
+    "Every DeploymentNote construction path initializes the color state deliberately; no regex consumes a supported color without retaining it.",
+    "Relevant diff_one --no-oracle perturbations and the no-oracle ratchet pass except separately accounted geometry residue.",
+    "An independent checker attacks color syntax, precedence, form, order, alias, and target permutations at the exact implementation revision and records its verdict."
+  ],
+  "forbidden_approaches": [
+    "hardcoding MistyRose or any fixture-observed color in the renderer",
+    "inferring color by rereading the original source during SVG emission",
+    "post-hoc SVG fill replacement or alias-keyed paint branches",
+    "changing NOTE_FILL globally so one colored fixture happens to match",
+    "mixing the independent coordinate residue into color acceptance",
+    "fixture filenames, aliases, labels, golden SVG data, comparator changes, or baseline changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-command-atomicity/review.json",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_deployment_node_then_floating_endnote.puml"
+  ]
+}

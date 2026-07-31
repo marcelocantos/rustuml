@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "mechanism": "ordinary-note-command-end-grammar",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "55c26983cc45b8761d1b9512378143383eefb6fa",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": [
+        "PSystemCommandFactory.getCandidate",
+        "PSystemCommandFactory.isMultilineCommandOk"
+      ],
+      "lines": "173-195,218-235",
+      "role": "Once a command returns OK_PARTIAL for its opener, feeds subsequent physical lines only to that same command until its own end predicate returns OK or rejects the candidate."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+      "symbols": [
+        "CommandMultilines2.isValid"
+      ],
+      "lines": "78-108",
+      "role": "Matches the selected command's starting regex and command-specific end Pattern2; interior lines remain owned while the last line does not match that end pattern."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": [
+        "CommandFactoryNote.END",
+        "CommandFactoryNote.createMultiLine"
+      ],
+      "lines": "121-138",
+      "role": "Defines ordinary floating-note termination as ^[%s]*end[%s]?note$, excluding hnote and rnote terminators."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": [
+        "CommandFactoryNoteOnEntity.END",
+        "CommandFactoryNoteOnEntity.END_WITH_BRACKET",
+        "CommandFactoryNoteOnEntity.createMultiLine"
+      ],
+      "lines": "187-221",
+      "role": "Uses the same ordinary end-note grammar for ordinary attached notes and a distinct closing-brace predicate for the bracket form."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "symbols": [
+        "FactorySequenceNoteCommand.END",
+        "FactorySequenceNoteCommand.createMultiLine"
+      ],
+      "lines": "116-133",
+      "role": "Intentionally contrasts with ordinary notes by accepting note, hnote, or rnote after end for every sequence note shape."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "symbols": [
+        "Pattern2.QUOTED_REPLACEMENTS",
+        "Pattern2.compileInternal"
+      ],
+      "lines": "51-62,108-118",
+      "role": "Expands %s to Java whitespace plus non-breaking space and compiles command patterns case-insensitively, so the optional separator includes a tab."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "NoteCommandFamily",
+        "is_ordinary_note_terminator",
+        "is_note_family_terminator",
+        "completed_multiline_note_payload"
+      ],
+      "lines": "1097-1172",
+      "role": "Defines literal ordinary and family-wide terminator helpers, but applies the family-wide helper to every non-brace opener during subtype masking."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::parse_line"
+      ],
+      "lines": "636-668",
+      "role": "Closes buffered non-brace class notes through the literal ordinary helper, which recognizes a regular-space separator but not a tab separator."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/sequence.rs",
+      "symbols": [
+        "SeqParser::parse_line"
+      ],
+      "lines": "202-220",
+      "role": "Correctly needs the broader sequence-family terminator policy, demonstrating why one global end matcher cannot serve every note command."
+    }
+  ],
+  "claimed_invariant": "A multiline note's selected Java command owns its interior until that command's own end predicate matches. Ordinary floating and attached notes close only on case-insensitive endnote or end<one PlantUML whitespace character>note, with optional leading PlantUML whitespace; end hnote and end rnote are ordinary payload. Sequence note, hnote, and rnote commands deliberately share a broader end(note|hnote|rnote) predicate. Final-bracket attached notes close only with their closing brace. Dispatch masking and the eventual consumer must use the same selected-command policy.",
+  "causal_divergence": "Rust collapsed command-specific end predicates into two string helpers without retaining which command grammar accepted the opener. completed_multiline_note_payload applies is_note_family_terminator to every non-brace opener, so an ordinary class note closes prematurely on end hnote and exposes its remaining payload to subtype scoring. Conversely, is_ordinary_note_terminator recognizes only the two literal strings endnote and end note after trimming, so Java-valid end-tab-note never closes either dispatch masking or the class buffer. The two failures share one causal owner: the missing selected-command terminator policy, not two fixture-specific parser omissions.",
+  "planned_model_change": "Represent the end policy selected with the opener as an explicit parser value, at minimum OrdinaryEndNote, SequenceNoteFamily, and FinalBracket. Implement one matcher per Java predicate using PlantUML's %s semantics and case-insensitive matching, including zero or one whitespace character between end and note for ordinary commands. Make completed-span discovery retain and use that policy, and make class, sequence, deployment/description, and other consumers call the same policy matcher rather than independently reinterpreting the terminator. Determine policy from the accepted command form and parser context; do not infer it solely from the word note because ordinary and sequence commands overlap. Preserve the rule that incomplete candidates do not mask arbitrary trailing source.",
+  "perturbation_axes": [
+    "ordinary class or DESCRIPTION note versus sequence note, hnote, and rnote command ownership",
+    "compact endnote versus one regular space, tab, newline-class whitespace, and non-breaking-space separators",
+    "ordinary note bodies containing end hnote or end rnote before the legal ordinary terminator",
+    "sequence notes closed by a different sequence note-family terminator",
+    "mixed-case opener and terminator spellings",
+    "final-bracket attached notes versus ordinary end-note forms",
+    "post-terminator declarations or messages versus unterminated trailing source"
+  ],
+  "scope_boundary": "This mechanism owns command-specific multiline note end matching and consistent span ownership between dispatch and consumers. It does not own floating-note alias syntax, sequence parallel or vertical-merge prefix semantics, note colors, class SVEK placement, note geometry, subtype score tuning, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "checker_class_wrong_family_text_then_real_end remains CLASS, retains end hnote and all following pre-end-note lines as note payload, and parses the later class command.",
+    "checker_class_tab_terminator_post_command parses the colored floating note and the later class with the Java-valid tab separator.",
+    "checker_sequence_cross_family_terminator_control continues to close on a different sequence note-family terminator, while the final-bracket control continues to close only on its brace.",
+    "Fresh inputs cover at least two whitespace characters, both compact and separated forms, mixed case, a wrong-family ordinary payload line, and an unterminated control.",
+    "Parser-level assertions prove dispatch span ownership and consumer construction agree for every tested policy; relevant diff_one --no-oracle perturbations pass except independently accounted rendering residues.",
+    "An independent checker attempts to disprove the policy model at the exact implementation revision and records its verdict and all fresh inputs."
+  ],
+  "forbidden_approaches": [
+    "using the sequence-family terminator set for every note opener",
+    "making end hnote or end rnote special only when a known fixture payload follows",
+    "replacing tabs in the whole source or globally normalizing payload whitespace",
+    "closing every note-shaped command on a brace",
+    "hiding unterminated trailing source to improve subtype scores",
+    "fixture aliases, payload keywords, filenames, golden SVG data, score constants, comparator changes, or baseline changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-command-atomicity/review.json",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_wrong_family_text_then_real_end.puml",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_tab_terminator_post_command.puml",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_cross_family_terminator_control.puml",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_brace_mixed_case_post_command.puml"
+  ]
+}

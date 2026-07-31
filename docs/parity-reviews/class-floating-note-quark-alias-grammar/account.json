@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-floating-note-quark-alias-grammar",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "55c26983cc45b8761d1b9512378143383eefb6fa",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbols": [
+        "ClassDiagramFactory.initCommandsList"
+      ],
+      "lines": "133-157",
+      "role": "Registers the shared CommandFactoryNote single- and multiline forms as native class-diagram commands."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": [
+        "CommandFactoryNote.multiLine",
+        "CommandFactoryNote.singleLine",
+        "CommandFactoryNote.executeInternal"
+      ],
+      "lines": "76-106,141-163",
+      "role": "Accepts CODE as [%pLN_.]+ for both forms, then creates the NOTE entity on quarkInContext(false, cleanId(CODE)); dots are part of the command's alias language and feed normal namespace/quark resolution."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.quarkInContext",
+        "CucaDiagram.quarkInContextSafe"
+      ],
+      "lines": "245-285",
+      "role": "Resolves qualified names through the configured namespace separator and current group, creating or reusing the contextual quark according to the command's false reuseExistingChild policy."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "symbols": [
+        "Pattern2.QUOTED_REPLACEMENTS",
+        "Pattern2.compileInternal"
+      ],
+      "lines": "51-62,108-118",
+      "role": "Defines %pLN as Unicode letters and numbers and compiles the note command case-insensitively."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::try_note.FLOATING_RE",
+        "ClassParser::try_note.FLOATING_ML_RE"
+      ],
+      "lines": "1704-1709,1790-1821",
+      "role": "Restricts both named floating-note forms to a single regex word, so the consumer rejects a dotted alias even after dispatch recognized the note command."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::push_note"
+      ],
+      "lines": "197-222",
+      "role": "Already resolves an accepted alias through the class parser's current-context quark path and records canonical id and owner information; the downstream identity model is present but never reached for the rejected opener."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "note_command_parts",
+        "completed_multiline_note_payload"
+      ],
+      "lines": "1104-1120,1141-1172",
+      "role": "Recognizes the note keyword and masks a completed body without validating the full floating alias grammar, allowing dispatch and the selected class consumer to disagree."
+    }
+  ],
+  "claimed_invariant": "A class floating-note alias accepted by CommandFactoryNote has the same identifier language in single- and multiline forms: one or more Unicode letters, Unicode numbers, underscores, or dots. The exact accepted alias is resolved through the diagram's ordinary current-context quark model, so qualified aliases participate in namespaces, package ownership, duplicate detection, links, UID allocation, and source order like other named entities. Dispatch recognition and class command construction must agree on this complete opener grammar.",
+  "causal_divergence": "Rust's shared masking sees note as Audit.Memo as a completed note-shaped span, but ClassParser::try_note requires the alias capture to be \\w+ and therefore drops the entire command. This is not a missing namespace renderer branch: ClassParser::push_note already passes accepted aliases through resolve_quark_path(CurrentContext). The causal gap is the narrower class command-consumer alias grammar and its disagreement with dispatch, which prevents the existing quark identity model from running.",
+  "planned_model_change": "Define one parser representation for the shared named floating-note opener and use it for dispatch viability plus class single- and multiline construction. Match Java's [%pLN_.]+ domain rather than a language-dependent ASCII word shortcut, preserve the exact alias string, and pass it unchanged into ClassParser::push_note so the existing current-context quark resolver determines canonical path and owner. Reuse the same opener parser in the canonical DESCRIPTION path where applicable, but do not synthesize namespaces in rendering or split aliases with fixture-specific string logic.",
+  "perturbation_axes": [
+    "bare versus one-dot and multi-dot aliases",
+    "root context versus current package or namespace context",
+    "single-line quoted-display form versus multiline body form",
+    "Unicode letter and number segments versus ASCII underscore segments",
+    "alias declaration before versus after related class declarations",
+    "links to the named note from qualified and local endpoints",
+    "mixed-case keyword and terminator plus optional explicit color"
+  ],
+  "scope_boundary": "This mechanism owns the named floating-note alias grammar and handoff to the existing class quark identity model. It does not own multiline terminator policy, note colors outside the already-retained class field, package rendering geometry, standalone Magma placement, relationship routing, namespace separator configuration, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "checker_class_floating_dotted_alias_mixed_case constructs the Audit.Memo note quark, preserves its body and color, retains the later class, and matches the Java namespace ownership in the no-oracle path.",
+    "Parser tests cover single- and multiline forms with root, current-package, one-dot, multi-dot, underscore, and Unicode aliases, plus duplicate and linked-note controls.",
+    "Dispatch and ClassParser consume exactly the same valid named-note opener set and leave invalid or unterminated forms visible for normal error handling.",
+    "No accepted qualified alias is flattened into a fixture-specific id or reconstructed by the renderer.",
+    "The relevant diff_one --no-oracle perturbations and no-oracle ratchet pass except separately accounted layout residues.",
+    "An independent checker generates fresh aliases and context permutations at the exact implementation revision and records an accepted verdict."
+  ],
+  "forbidden_approaches": [
+    "special-casing Audit.Memo or any observed alias depth",
+    "replacing dots with underscores or flattening qualified aliases before quark resolution",
+    "creating namespace SVG groups from alias text in the renderer",
+    "loosening every identifier regex in unrelated command families",
+    "treating dispatch masking as proof that command construction succeeded",
+    "fixture filenames, payload words, golden SVG data, subtype score changes, comparator changes, or baseline changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-command-atomicity/review.json",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_floating_dotted_alias_mixed_case.puml"
+  ]
+}

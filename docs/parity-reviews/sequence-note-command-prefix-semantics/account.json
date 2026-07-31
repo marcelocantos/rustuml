@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-command-prefix-semantics",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "55c26983cc45b8761d1b9512378143383eefb6fa",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "symbols": [
+        "FactorySequenceNoteCommand.getRegexConcatMultiLine",
+        "FactorySequenceNoteCommand.getRegexConcatSingleLine",
+        "FactorySequenceNoteCommand.executeInternal"
+      ],
+      "lines": "75-109,149-180",
+      "role": "Parses optional ampersand PARALLEL followed by optional slash VMERGE for note, hnote, and rnote; preserves both captures; marks the note parallel; and passes tryMerge into SequenceDiagram.addNote."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java",
+      "symbols": [
+        "SequenceDiagram.addNote"
+      ],
+      "lines": "216-230",
+      "role": "Implements slash semantics structurally: merge with the immediately preceding Note or Notes event, otherwise append a distinct note event."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/Note.java",
+      "symbols": [
+        "Note.goParallel",
+        "Note.isParallel"
+      ],
+      "lines": "178-186",
+      "role": "Stores ampersand parallel state on the sequence event for downstream layout rather than treating the prefix as ignorable syntax."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": [
+        "PSystemCommandFactory.getCandidate",
+        "PSystemCommandFactory.isMultilineCommandOk"
+      ],
+      "lines": "173-195,218-235",
+      "role": "Gives the prefixed multiline sequence command ownership of its body once its complete opener grammar returns OK_PARTIAL."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "note_command_parts",
+        "completed_multiline_note_payload"
+      ],
+      "lines": "1104-1120,1141-1172",
+      "role": "Destructively strips ampersand and slash while recognizing a note-shaped span, so dispatch masks the body but retains no prefix semantics for the sequence consumer."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/sequence.rs",
+      "symbols": [
+        "NoteBuffer",
+        "SeqParser::try_note.RE"
+      ],
+      "lines": "95-103,491-625",
+      "role": "Begins the consumer regex at note/hnote/rnote, rejects both prefixed openers, and has no fields in NoteBuffer to carry parallel or vertical-merge intent."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/sequence.rs",
+      "symbols": [
+        "sequence::Note"
+      ],
+      "lines": "201-220",
+      "role": "Represents shape, color, attachment, and source line but cannot represent either Java prefix semantic after parsing."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "sequence event vertical placement"
+      ],
+      "lines": "8060-8105,8245-8295",
+      "role": "Places ordinary Note events and message-attached notes without any parallel-frontier or merged-notes state because that information is absent from the AST."
+    }
+  ],
+  "claimed_invariant": "The sequence note command grammar accepts an optional ampersand parallel prefix, then an optional slash vertical-merge prefix, before note, hnote, or rnote in both single- and multiline forms. These prefixes are semantic: ampersand makes the note event parallel in sequence layout, while slash asks event insertion to merge the note with the immediately preceding Note or Notes event and has no effect when the predecessor is another event kind. Span ownership, parser construction, event insertion, and rendering must all consume one parsed prefix record.",
+  "causal_divergence": "Rust's shared note_command_parts knows enough to strip ampersand and slash for completed-body masking, but SeqParser::try_note independently starts its regex at the note keyword. The selected sequence consumer therefore rejects the opener after dispatch has hidden its body, drops the note, and may create participants from exposed or subsequently parsed payload in related paths. Merely admitting the opener would still be wrong: NoteBuffer and sequence::Note have no parallel or try-merge state, and the renderer only knows ordinary note rows. The missing mechanism spans command parsing and sequence event semantics, not two prefix-specific fixture exceptions.",
+  "planned_model_change": "Replace destructive prefix stripping with a canonical SequenceNoteCommand parse result carrying parallel, try_merge, shape, position, participants, color, inline/body mode, and source line. Use it for both dispatch span recognition and SeqParser construction. Preserve parallel and try_merge through NoteBuffer and the sequence event model. Centralize note insertion to mirror SequenceDiagram.addNote: slash coalesces only with an immediately preceding note group; ampersand marks the event for the renderer's parallel frontier. Extend sequence layout to consume those structural states rather than applying coordinate offsets. Honor Java's prefix order and whitespace grammar, including a combined ampersand-plus-slash form, across note, hnote, and rnote.",
+  "perturbation_axes": [
+    "ampersand parallel versus slash vertical merge versus both prefixes versus neither",
+    "note versus hnote versus rnote shapes",
+    "single-line versus multiline commands",
+    "slash after Note or Notes versus slash after Message, Delay, Group, or diagram start",
+    "ampersand after messages with different participant ranges and self messages",
+    "prefix whitespace and mixed-case command spelling",
+    "body-leading participant keywords plus post-terminator replies",
+    "one participant versus several participants and left, right, or over positions"
+  ],
+  "scope_boundary": "This mechanism owns sequence note prefix grammar, preservation of parallel and try-merge intent, structural note-event insertion, and corresponding sequence layout behavior. It does not own ordinary-note terminator policy, class or DESCRIPTION aliases, deployment note colors, general message parallel syntax, unrelated sequence note geometry constants, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "checker_sequence_parallel_hnote_mixed_case constructs a colored hexagonal note with parallel semantics, retains its body, and parses the reply without spurious participants.",
+    "checker_sequence_vmerge_rnote_after_note coalesces the rectangular note with the immediately preceding ordinary note as Java does and retains the later reply.",
+    "Fresh parser and layout inputs cover ampersand, slash, both prefixes, all three note shapes, inline and multiline forms, and slash controls after both mergeable and non-mergeable predecessor event kinds.",
+    "The AST or normalized event graph visibly retains both semantics; acceptance is not satisfied by parsing and then discarding either prefix.",
+    "Relevant diff_one --no-oracle perturbations and the no-oracle ratchet pass without body-word, alias, or coordinate special cases.",
+    "An independent checker attacks prefix order, whitespace, predecessor type, and participant topology at the exact implementation revision and records its verdict and inputs."
+  ],
+  "forbidden_approaches": [
+    "stripping ampersand or slash and rendering an ordinary sequential note",
+    "treating slash as a fixed negative y offset instead of conditional event insertion",
+    "applying slash merge after any preceding event rather than only Note or Notes",
+    "keying parallel placement to hnote or a fixture's participant names",
+    "masking prefixed bodies without requiring the sequence consumer to construct the command",
+    "fixture filenames, payload keywords, golden SVG coordinates, comparator changes, or baseline changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-command-atomicity/review.json",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_parallel_hnote_mixed_case.puml",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_vmerge_rnote_after_note.puml",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_cross_family_terminator_control.puml",
+    "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_rnote_case_order_control.puml"
+  ]
+}
