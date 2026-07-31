@@ -260,6 +260,8 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         .iter()
         .filter(|n| !all_children.contains(n.id.as_str()))
         .collect();
+    let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
+    let cluster_ids = deployment_cluster_ids(diagram, &laid_out_note_indices);
 
     // Pre-compute qualified names via DFS (so we know each node's full path).
     let parent_of: HashMap<String, String> = {
@@ -388,7 +390,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
 
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
-        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &cluster_ids, &ctx);
     }
     // Leaf-entity emission order is normally shallow-before-deep, then source
     // line. When duplicate child declarations are ignored by PlantUML, later
@@ -396,7 +398,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // order for that root-leaf shape.
     let mut leaves: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
     for root in &roots {
-        collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
+        collect_entities_dfs(root, &diagram.nodes, None, 0, &cluster_ids, &mut leaves);
     }
     if diagram.connections.is_empty() || leaves.iter().any(|(depth, _, _, _)| *depth == 0) {
         leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
@@ -411,7 +413,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         // contribution rather than globally.
         for root in &roots {
             let mut group: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
-            collect_entities_dfs(root, &diagram.nodes, None, 0, &mut group);
+            collect_entities_dfs(root, &diagram.nodes, None, 0, &cluster_ids, &mut group);
             group.sort_by_key(|a| (a.0, a.1));
             for (_, _, node, qname) in &group {
                 emit_entity(&mut svg, node, qname, &ctx);
@@ -825,10 +827,11 @@ fn emit_clusters_dfs(
     node: &DeploymentNode,
     all: &[DeploymentNode],
     parent_qname: Option<&str>,
+    cluster_ids: &HashSet<&str>,
     ctx: &OracleRenderContext<'_>,
 ) {
     let qname = qualified_name(node, parent_qname);
-    let is_cluster = !node.children.is_empty();
+    let is_cluster = cluster_ids.contains(node.id.as_str());
     if is_cluster {
         let ent_id = ctx.id_for_node.get(&node.id).cloned().unwrap_or_default();
         let rect = ctx
@@ -909,7 +912,7 @@ fn emit_clusters_dfs(
         }
         for child_id in &node.children {
             if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_clusters_dfs(svg, child, all, Some(&qname), ctx);
+                emit_clusters_dfs(svg, child, all, Some(&qname), cluster_ids, ctx);
             }
         }
     }
@@ -922,49 +925,18 @@ fn collect_entities_dfs<'a>(
     all: &'a [DeploymentNode],
     parent_qname: Option<&str>,
     depth: usize,
+    cluster_ids: &HashSet<&str>,
     out: &mut Vec<(usize, usize, &'a DeploymentNode, String)>,
 ) {
     let qname = qualified_name(node, parent_qname);
-    let is_cluster = !node.children.is_empty();
+    let is_cluster = cluster_ids.contains(node.id.as_str());
     if !is_cluster {
         out.push((depth, node.source_line, node, qname));
     } else {
         for child_id in &node.children {
             if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                collect_entities_dfs(child, all, Some(&qname), depth + 1, out);
+                collect_entities_dfs(child, all, Some(&qname), depth + 1, cluster_ids, out);
             }
-        }
-    }
-}
-
-/// Collect leaves in `GraphvizImageBuilder.printGroups` order: each group's
-/// direct leaves first, then each child group recursively. Unpackaged root
-/// leaves are emitted separately after all groups.
-fn collect_entities_svek_order<'a>(
-    node: &'a DeploymentNode,
-    all: &'a [DeploymentNode],
-    parent_qname: Option<&str>,
-    depth: usize,
-    out: &mut Vec<(usize, usize, &'a DeploymentNode, String)>,
-) {
-    let qname = qualified_name(node, parent_qname);
-    for child_id in &node.children {
-        if let Some(child) = all.iter().find(|candidate| candidate.id == *child_id)
-            && child.children.is_empty()
-        {
-            out.push((
-                depth + 1,
-                child.source_line,
-                child,
-                qualified_name(child, Some(&qname)),
-            ));
-        }
-    }
-    for child_id in &node.children {
-        if let Some(child) = all.iter().find(|candidate| candidate.id == *child_id)
-            && !child.children.is_empty()
-        {
-            collect_entities_svek_order(child, all, Some(&qname), depth + 1, out);
         }
     }
 }
@@ -3769,6 +3741,29 @@ fn laid_out_deployment_note_indices(diagram: &DeploymentDiagram) -> Vec<usize> {
         .collect()
 }
 
+fn deployment_cluster_ids<'a>(
+    diagram: &'a DeploymentDiagram,
+    laid_out_note_indices: &[usize],
+) -> HashSet<&'a str> {
+    let laid_out_notes = laid_out_note_indices
+        .iter()
+        .copied()
+        .collect::<HashSet<_>>();
+    let note_owners = diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter(|(index, _)| laid_out_notes.contains(index))
+        .filter_map(|(_, note)| note.owner.as_deref())
+        .collect::<HashSet<_>>();
+    diagram
+        .nodes
+        .iter()
+        .filter(|node| !node.children.is_empty() || note_owners.contains(node.id.as_str()))
+        .map(|node| node.id.as_str())
+        .collect()
+}
+
 fn is_degenerated_single_entity(diagram: &DeploymentDiagram) -> bool {
     diagram.nodes.len() == 1
         && diagram.nodes[0].children.is_empty()
@@ -4037,6 +4032,149 @@ fn deployment_svek_leaf_order(
     result
 }
 
+fn deployment_svek_paint_order(
+    diagram: &DeploymentDiagram,
+    parent_of: &HashMap<String, String>,
+    cluster_ids: &HashSet<&str>,
+    laid_out_note_indices: &[usize],
+) -> Vec<DeploymentSvekLeaf> {
+    fn collect_group(
+        diagram: &DeploymentDiagram,
+        parent_of: &HashMap<String, String>,
+        cluster_ids: &HashSet<&str>,
+        laid_out_notes: &HashSet<usize>,
+        owner: &str,
+        result: &mut Vec<DeploymentSvekLeaf>,
+    ) {
+        let mut direct = diagram
+            .nodes
+            .iter()
+            .enumerate()
+            .filter(|(_, node)| {
+                !cluster_ids.contains(node.id.as_str())
+                    && parent_of.get(&node.id).map(String::as_str) == Some(owner)
+            })
+            .map(|(index, node)| {
+                (
+                    node.quark_order,
+                    node.source_line,
+                    0_u8,
+                    index,
+                    DeploymentSvekLeaf::Node(index),
+                )
+            })
+            .chain(
+                diagram
+                    .notes
+                    .iter()
+                    .enumerate()
+                    .filter(|(index, note)| {
+                        laid_out_notes.contains(index) && note.owner.as_deref() == Some(owner)
+                    })
+                    .map(|(index, note)| {
+                        (
+                            note.quark_order,
+                            note.source_line,
+                            1_u8,
+                            index,
+                            DeploymentSvekLeaf::Note(index),
+                        )
+                    }),
+            )
+            .collect::<Vec<_>>();
+        direct.sort_by_key(|&(quark_order, source_line, kind, index, _)| {
+            (quark_order, source_line, kind, index)
+        });
+        result.extend(direct.into_iter().map(|(_, _, _, _, leaf)| leaf));
+
+        let mut child_groups = diagram
+            .nodes
+            .iter()
+            .filter(|node| {
+                cluster_ids.contains(node.id.as_str())
+                    && parent_of.get(&node.id).map(String::as_str) == Some(owner)
+            })
+            .collect::<Vec<_>>();
+        child_groups.sort_by_key(|node| (node.quark_order, node.source_line));
+        for child in child_groups {
+            collect_group(
+                diagram,
+                parent_of,
+                cluster_ids,
+                laid_out_notes,
+                &child.id,
+                result,
+            );
+        }
+    }
+
+    let laid_out_notes = laid_out_note_indices
+        .iter()
+        .copied()
+        .collect::<HashSet<_>>();
+    let mut result = Vec::with_capacity(diagram.nodes.len() + laid_out_note_indices.len());
+    for (index, root) in diagram
+        .nodes
+        .iter()
+        .enumerate()
+        .filter(|(_, node)| !parent_of.contains_key(&node.id))
+    {
+        if cluster_ids.contains(root.id.as_str()) {
+            collect_group(
+                diagram,
+                parent_of,
+                cluster_ids,
+                &laid_out_notes,
+                &root.id,
+                &mut result,
+            );
+        } else if root.declared_container {
+            result.push(DeploymentSvekLeaf::Node(index));
+        }
+    }
+
+    let mut root_leaves = diagram
+        .nodes
+        .iter()
+        .enumerate()
+        .filter(|(_, node)| {
+            !cluster_ids.contains(node.id.as_str())
+                && !node.declared_container
+                && !parent_of.contains_key(&node.id)
+        })
+        .map(|(index, node)| {
+            (
+                node.quark_order,
+                node.source_line,
+                0_u8,
+                index,
+                DeploymentSvekLeaf::Node(index),
+            )
+        })
+        .chain(
+            diagram
+                .notes
+                .iter()
+                .enumerate()
+                .filter(|(index, note)| laid_out_notes.contains(index) && note.owner.is_none())
+                .map(|(index, note)| {
+                    (
+                        note.quark_order,
+                        note.source_line,
+                        1_u8,
+                        index,
+                        DeploymentSvekLeaf::Note(index),
+                    )
+                }),
+        )
+        .collect::<Vec<_>>();
+    root_leaves.sort_by_key(|&(quark_order, source_line, kind, index, _)| {
+        (quark_order, source_line, kind, index)
+    });
+    result.extend(root_leaves.into_iter().map(|(_, _, _, _, leaf)| leaf));
+    result
+}
+
 fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // Java path: CucaDiagramFileMakerSvek builds a Bibliotekon of measured
     // SvekNodes, DotStringFactory serialises those node boxes to dot, then
@@ -4053,12 +4191,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let note_dims: Vec<DeploymentNoteDim> = diagram.notes.iter().map(deployment_note_dim).collect();
     let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
     let parent_of = deployment_parent_map(diagram);
-    let cluster_ids: HashSet<&str> = diagram
-        .nodes
-        .iter()
-        .filter(|node| !node.children.is_empty())
-        .map(|node| node.id.as_str())
-        .collect();
+    let cluster_ids = deployment_cluster_ids(diagram, &laid_out_note_indices);
     let cluster_endpoint_nodes: HashMap<String, String> = diagram
         .connections
         .iter()
@@ -4083,9 +4216,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let mut entity_layout_slots = vec![None; diagram.nodes.len()];
     let mut note_layout_slots = vec![None; diagram.notes.len()];
     let mut next_layout_slot = 0usize;
-    for leaf in
-        deployment_svek_leaf_order(diagram, &parent_of, &cluster_ids, &laid_out_note_indices)
-    {
+    let svek_leaf_order =
+        deployment_svek_leaf_order(diagram, &parent_of, &cluster_ids, &laid_out_note_indices);
+    let svek_paint_order =
+        deployment_svek_paint_order(diagram, &parent_of, &cluster_ids, &laid_out_note_indices);
+    for &leaf in &svek_leaf_order {
         match leaf {
             DeploymentSvekLeaf::Node(node_index) => {
                 let node = &diagram.nodes[node_index];
@@ -4161,6 +4296,14 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             && cluster_ids.contains(parent.as_str())
         {
             layout.add_cluster_node(parent, &node.id);
+        }
+    }
+    for &note_index in &laid_out_note_indices {
+        let note = &diagram.notes[note_index];
+        if let Some(owner) = note.owner.as_deref()
+            && cluster_ids.contains(owner)
+        {
+            layout.add_cluster_node(owner, &deployment_note_layout_id(note_index));
         }
     }
     add_deployment_magma_constraints(&mut layout, diagram, &parent_of, &cluster_ids);
@@ -4438,26 +4581,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .filter(|n| !all_children.contains(n.id.as_str()))
         .collect();
     for root in &roots {
-        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
-    }
-    let mut leaves = Vec::new();
-    // Java `GraphvizImageBuilder.buildImage` runs `printGroups(root)` before
-    // `printEntities(getUnpackagedEntities())`. `printGroup` itself emits the
-    // group's direct leaves before recursing into child groups.
-    for root in &roots {
-        if root.children.is_empty() {
-            if root.declared_container {
-                leaves.push((0, root.source_line, *root, qualified_name(root, None)));
-            }
-        } else {
-            collect_entities_svek_order(root, &diagram.nodes, None, 0, &mut leaves);
-        }
-    }
-    for root in roots
-        .iter()
-        .filter(|root| root.children.is_empty() && !root.declared_container)
-    {
-        leaves.push((0, root.source_line, *root, qualified_name(root, None)));
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &cluster_ids, &ctx);
     }
     let emit_note_layout = |svg: &mut SvgBuilder, layout: &DeploymentNoteLayout| {
         let Some(result) = result.as_ref() else {
@@ -4491,36 +4615,23 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         render_attached_deployment_note(svg, note, layout, uid, edge, body_margin_x, body_margin_y);
     };
 
-    if cluster_ids.is_empty() {
-        enum RootEntityEmission<'a> {
-            Node(&'a DeploymentNode, String),
-            Note(&'a DeploymentNoteLayout),
-        }
-        let mut emissions = leaves
-            .into_iter()
-            .map(|(_, source_line, node, qname)| {
-                (source_line, RootEntityEmission::Node(node, qname))
-            })
-            .collect::<Vec<_>>();
-        emissions.extend(note_layouts.iter().map(|layout| {
-            (
-                diagram.notes[layout.note_index].source_line,
-                RootEntityEmission::Note(layout),
-            )
-        }));
-        emissions.sort_by_key(|(source_line, _)| *source_line);
-        for (_, emission) in emissions {
-            match emission {
-                RootEntityEmission::Node(node, qname) => emit_entity(&mut svg, node, &qname, &ctx),
-                RootEntityEmission::Note(layout) => emit_note_layout(&mut svg, layout),
+    // Java `GraphvizImageBuilder.printGroups` paints each group's direct
+    // quark-ordered leaves before nested groups, then paints unpackaged
+    // leaves. Empty deduplicated groups retain their root traversal slot.
+    for leaf in &svek_paint_order {
+        match *leaf {
+            DeploymentSvekLeaf::Node(node_index) => {
+                let node = &diagram.nodes[node_index];
+                emit_entity(&mut svg, node, &qnames[&node.id], &ctx);
             }
-        }
-    } else {
-        for (_, _, node, qname) in leaves {
-            emit_entity(&mut svg, node, &qname, &ctx);
-        }
-        for layout in &note_layouts {
-            emit_note_layout(&mut svg, layout);
+            DeploymentSvekLeaf::Note(note_index) => {
+                if let Some(layout) = note_layouts
+                    .iter()
+                    .find(|layout| layout.note_index == note_index)
+                {
+                    emit_note_layout(&mut svg, layout);
+                }
+            }
         }
     }
     if let Some(result) = result.as_ref() {
@@ -4907,33 +5018,78 @@ fn add_deployment_magma_constraints(
                 && !parent_of.contains_key(&node.id)
                 && !linked.contains(node.id.as_str())
         })
-        .map(|node| (node.source_line, node.id.clone()))
+        .map(|node| (node.quark_order, node.source_line, 0_u8, node.id.clone()))
         .collect::<Vec<_>>();
     root_members.extend(
         diagram
             .notes
             .iter()
             .enumerate()
-            .filter(|(_, note)| note.target.is_none())
-            .map(|(index, note)| (note.source_line, deployment_note_layout_id(index))),
+            .filter(|(_, note)| {
+                note.target.is_none()
+                    && note.owner.is_none()
+                    && note.id.as_deref().is_none_or(|id| !linked.contains(id))
+            })
+            .map(|(index, note)| {
+                (
+                    note.quark_order,
+                    note.source_line,
+                    1_u8,
+                    deployment_note_layout_id(index),
+                )
+            }),
     );
-    root_members.sort_by_key(|(source_line, _)| *source_line);
-    add_group(layout, root_members.into_iter().map(|(_, id)| id).collect());
+    root_members
+        .sort_by_key(|(quark_order, source_line, kind, _)| (*quark_order, *source_line, *kind));
+    add_group(
+        layout,
+        root_members.into_iter().map(|(_, _, _, id)| id).collect(),
+    );
 
     for container in diagram
         .nodes
         .iter()
         .filter(|node| cluster_ids.contains(node.id.as_str()))
     {
-        let members = container
+        let mut members = container
             .children
             .iter()
             .filter(|child| {
                 !cluster_ids.contains(child.as_str()) && !linked.contains(child.as_str())
             })
-            .cloned()
-            .collect();
-        add_group(layout, members);
+            .filter_map(|child| {
+                diagram
+                    .nodes
+                    .iter()
+                    .find(|node| node.id == *child)
+                    .map(|node| (node.quark_order, node.source_line, 0_u8, node.id.clone()))
+            })
+            .chain(
+                diagram
+                    .notes
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, note)| {
+                        note.target.is_none()
+                            && note.owner.as_deref() == Some(container.id.as_str())
+                            && note.id.as_deref().is_none_or(|id| !linked.contains(id))
+                    })
+                    .map(|(index, note)| {
+                        (
+                            note.quark_order,
+                            note.source_line,
+                            1_u8,
+                            deployment_note_layout_id(index),
+                        )
+                    }),
+            )
+            .collect::<Vec<_>>();
+        members
+            .sort_by_key(|(quark_order, source_line, kind, _)| (*quark_order, *source_line, *kind));
+        add_group(
+            layout,
+            members.into_iter().map(|(_, _, _, id)| id).collect(),
+        );
     }
 }
 
@@ -5118,7 +5274,8 @@ fn deployment_body_margin_y(
     dims: &[DeploymentNodeDim],
     result: Option<&LayoutResult>,
 ) -> f64 {
-    if !diagram.nodes.iter().any(|node| !node.children.is_empty())
+    let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
+    if deployment_cluster_ids(diagram, &laid_out_note_indices).is_empty()
         && let Some(result) = result
     {
         let painted_min_y = diagram
@@ -5183,7 +5340,7 @@ fn deployment_body_y_frame(
     result: Option<&LayoutResult>,
 ) -> Option<DeploymentYFrame> {
     let result = result?;
-    if diagram.nodes.iter().any(|node| !node.children.is_empty()) {
+    if !deployment_cluster_ids(diagram, laid_out_note_indices).is_empty() {
         return None;
     }
 
@@ -5280,12 +5437,8 @@ fn deployment_cluster_frame(
         return None;
     }
     let parent_of = deployment_parent_map(diagram);
-    let cluster_ids: HashSet<&str> = diagram
-        .nodes
-        .iter()
-        .filter(|node| !node.children.is_empty())
-        .map(|node| node.id.as_str())
-        .collect();
+    let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
+    let cluster_ids = deployment_cluster_ids(diagram, &laid_out_note_indices);
     let leaf_positions: HashMap<&str, (&rustuml_layout::graph::NodePosition, &DeploymentNodeDim)> =
         diagram
             .nodes
@@ -5303,7 +5456,7 @@ fn deployment_cluster_frame(
         .filter(|node| !parent_of.contains_key(&node.id))
         .collect();
     for node in &roots {
-        let (x, y, local_min_x, local_min_y) = if node.children.is_empty() {
+        let (x, y, local_min_x, local_min_y) = if !cluster_ids.contains(node.id.as_str()) {
             let (position, dim) = leaf_positions.get(node.id.as_str())?;
             let (paint_dx, paint_dy) = deployment_layout_paint_offset(node.kind);
             let (local_min_x, _) = deployment_local_painted_x_bounds(node, dim);
@@ -5348,7 +5501,7 @@ fn deployment_cluster_frame(
     let outer_symbol_bounds: Option<Vec<_>> = roots
         .iter()
         .map(|node| {
-            if node.children.is_empty() {
+            if !cluster_ids.contains(node.id.as_str()) {
                 let (position, dim) = leaf_positions.get(node.id.as_str())?;
                 let (paint_dx, paint_dy) = deployment_layout_paint_offset(node.kind);
                 let (min_x, max_x) = deployment_local_painted_x_bounds(node, dim);
@@ -5430,7 +5583,7 @@ fn deployment_body_x_frame(
     result: Option<&LayoutResult>,
 ) -> Option<DeploymentXFrame> {
     let result = result?;
-    if diagram.nodes.iter().any(|node| !node.children.is_empty()) {
+    if !deployment_cluster_ids(diagram, laid_out_note_indices).is_empty() {
         return None;
     }
 
@@ -5564,12 +5717,8 @@ fn adjust_deployment_endpoint_labels(
     dims: &[DeploymentNodeDim],
     result: &mut LayoutResult,
 ) {
-    let cluster_ids: HashSet<&str> = diagram
-        .nodes
-        .iter()
-        .filter(|node| !node.children.is_empty())
-        .map(|node| node.id.as_str())
-        .collect();
+    let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
+    let cluster_ids = deployment_cluster_ids(diagram, &laid_out_note_indices);
     let mut positions = Vec::new();
     let mut leaf_positions = result.node_positions.iter();
     for (node, dim) in diagram.nodes.iter().zip(dims) {
@@ -5874,12 +6023,8 @@ fn layout_deployment_rects(
 ) -> (Vec<LayoutRect>, f64, f64) {
     let mut rects = Vec::new();
     if let Some(result) = result {
-        let cluster_ids: HashSet<&str> = diagram
-            .nodes
-            .iter()
-            .filter(|node| !node.children.is_empty())
-            .map(|node| node.id.as_str())
-            .collect();
+        let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
+        let cluster_ids = deployment_cluster_ids(diagram, &laid_out_note_indices);
         let cluster_positions: HashMap<&str, &rustuml_layout::graph::ClusterPosition> = result
             .cluster_positions
             .iter()
@@ -6034,6 +6179,8 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
     let mut entity_ids = HashMap::new();
     let mut note_ids = HashMap::new();
     let mut link_ids = vec![String::new(); diagram.connections.len()];
+    let parent_of = deployment_parent_map(diagram);
+    let qnames = deployment_qnames(diagram, &parent_of);
     for (_, item) in items {
         match item {
             Item::Node(node) => {
@@ -6042,7 +6189,7 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
             }
             Item::Note(index) => {
                 let note = &diagram.notes[index];
-                let qualified_name = if let Some(id) = note.id.as_ref() {
+                let own_name = if let Some(id) = note.id.as_ref() {
                     id.clone()
                 } else {
                     // `CommandFactoryNoteOnEntity.executeInternal` obtains a
@@ -6051,6 +6198,11 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
                     next_uid += 1;
                     name
                 };
+                let qualified_name = note
+                    .owner
+                    .as_ref()
+                    .and_then(|owner| qnames.get(owner))
+                    .map_or(own_name.clone(), |owner| format!("{owner}.{own_name}"));
                 let entity_id = format!("ent{next_uid:04}");
                 next_uid += 1;
                 note_ids.insert(
@@ -7567,13 +7719,8 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
                 panic!("expected deployment diagram");
             };
             let parent_of = deployment_parent_map(&diagram);
-            let cluster_ids = diagram
-                .nodes
-                .iter()
-                .filter(|node| !node.children.is_empty())
-                .map(|node| node.id.as_str())
-                .collect();
             let notes = laid_out_deployment_note_indices(&diagram);
+            let cluster_ids = deployment_cluster_ids(&diagram, &notes);
             deployment_svek_leaf_order(&diagram, &parent_of, &cluster_ids, &notes)
         }
 
@@ -7625,6 +7772,44 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
                 DeploymentSvekLeaf::Note(1),
                 DeploymentSvekLeaf::Node(2),
             ]
+        );
+    }
+
+    #[test]
+    fn owned_note_is_a_qualified_leaf_of_its_note_only_cluster() {
+        let source = "@startuml\n\
+                      node OuterShell {\n\
+                        node InnerShell {\n\
+                          note as InnerLedger\n\
+                            inner ledger\n\
+                          end note\n\
+                        }\n\
+                      }\n\
+                      database RootStore\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let notes = laid_out_deployment_note_indices(&diagram);
+        let cluster_ids = deployment_cluster_ids(&diagram, &notes);
+        assert!(cluster_ids.contains("OuterShell"));
+        assert!(cluster_ids.contains("InnerShell"));
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(
+            svg.contains(r#"class="cluster" data-qualified-name="OuterShell.InnerShell""#),
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(r#"data-qualified-name="OuterShell.InnerShell.InnerLedger""#)
+                .count(),
+            1,
+            "{svg}"
+        );
+        assert!(
+            !svg.contains(r#"data-qualified-name="InnerLedger""#),
+            "{svg}"
         );
     }
 
