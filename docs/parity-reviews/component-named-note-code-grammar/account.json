@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-named-note-code-grammar",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "03eb672a5c186c99fc0464cd2af1954af2944861",
+  "triggering_review": "docs/parity-reviews/description-owned-note-cluster-membership/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.CODE", "CommandFactoryNote.executeInternal"],
+      "lines": "76,141-163",
+      "role": "Uses one [%pLN_.]+ code grammar for inline and multiline named notes and resolves the complete code through the current quark context."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "symbols": ["Pattern2.cmpile"],
+      "lines": "51-59",
+      "role": "Defines %pLN as Unicode letters and digits; underscore and dot are the additional code characters supplied by CommandFactoryNote."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["RE_NOTE_INLINE", "RE_NOTE_MULTI"],
+      "lines": "329-332",
+      "role": "Uses divergent code tokens: inline captures only a non-anchored word prefix while multiline accepts dots."
+    }
+  ],
+  "claimed_invariant": "Inline and multiline Component named notes share the Java code token: one or more Unicode letters, digits, underscores, or dots. The entire legal token becomes ComponentNote.id and participates in known-note lookup, owner qualification, links, UID construction, and SVG identity; no valid suffix may be silently truncated to a word prefix.",
+  "causal_divergence": "RE_NOTE_INLINE captures only \\w+ and is not bounded after the capture, so Ledger.C464 is accepted as Ledger. RE_NOTE_MULTI independently encodes a wider token. The parser therefore changes a valid quark identity before ownership and rendering see it.",
+  "planned_model_change": "Define one Java-cited note code token and use it in both inline and multiline regexes. Require a command boundary after the inline capture while preserving legal trailing note modifiers for separate parsing. Store and register the complete captured code unchanged.",
+  "perturbation_axes": [
+    "inline versus multiline",
+    "root versus nested owner",
+    "simple, dotted and Unicode code",
+    "one versus multiple dots",
+    "trailing color or stereotype modifier",
+    "later explicit link endpoint",
+    "left-to-right versus top-to-bottom"
+  ],
+  "acceptance": [
+    "Fresh valid Component-dispatched Java inputs retain the complete named-note code in Rust AST and SVG identity.",
+    "Simple ids remain unchanged and invalid punctuation is not accepted as a legal prefix.",
+    "Nested dotted ids are qualified once beneath their declaration owner.",
+    "An independent checker attacks token boundaries, Unicode, ownership and later references."
+  ],
+  "forbidden_approaches": [
+    "special-casing Ledger or any held-out id",
+    "splitting dots after parsing or rewriting SVG qualified names",
+    "broadening the token to arbitrary punctuation",
+    "changing comparator, baseline, park list or error markers"
+  ],
+  "declared_residue": [
+    "Component connection endpoints still use a narrower grammar and require a separate link-command audit.",
+    "Note modifier fields beyond the identity boundary are outside this mechanism.",
+    "Multiline terminator spelling is a separate command-body grammar concern."
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_inline_dotted_note_id_ttb.puml"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-multiline-note-body-location",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "03eb672a5c186c99fc0464cd2af1954af2944861",
+  "triggering_review": "docs/parity-reviews/description-owned-note-cluster-membership/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.createMultiLine", "CommandFactoryNote.executeInternal"],
+      "lines": "119-131,141-163",
+      "role": "Removes the opener before passing the body block's LineLocation to reallyCreateLeaf."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": ["CommandFactoryNoteOnEntity.createMultiLine", "CommandFactoryNoteOnEntity.executeInternal"],
+      "lines": "188-200,246-268",
+      "role": "Uses the same first-body-record provenance for attached multiline notes."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["multiline note accumulation", "note_source_line"],
+      "lines": "334-386,653-685,755-770",
+      "role": "Stores the opener's current_line and never replaces it with the source-mapped first body record."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["source_line_and_trimmed"],
+      "lines": "236-251",
+      "role": "Provides source-mapped line records, so arithmetic opener+1 would be incorrect across preprocessing markers."
+    }
+  ],
+  "claimed_invariant": "A nonempty Component multiline note, named or attached, records the source-mapped line of its first body record, including an initially blank record, rather than the opener. Inline notes retain their command line. The provenance then drives SVG data-source-line and any source-ordered UID or emission decisions.",
+  "causal_divergence": "Rust initializes note_source_line from the opener and only accumulates body text afterward. Java removes the opener first and creates from the remaining block location. The mismatch is direct provenance loss, not a one-line geometric offset.",
+  "planned_model_change": "Initialize multiline note provenance as unset and capture current_line from the first body record encountered through source_line_and_trimmed, before empty-line normalization. Use that captured line when materializing the note; do not compute opener plus one. Leave inline-note provenance unchanged.",
+  "perturbation_axes": [
+    "named versus attached multiline note",
+    "root versus nested owner",
+    "first body record nonempty versus blank",
+    "preprocessor source-line marker discontinuity",
+    "one versus multiple body lines",
+    "note before versus after ordinary leaves"
+  ],
+  "acceptance": [
+    "Java and Rust data-source-line agree for fresh named and attached multiline notes.",
+    "Blank first body records and source markers use their actual mapped line rather than arithmetic.",
+    "Inline notes keep their command source line.",
+    "An independent checker attacks provenance discontinuities and source-ordered UID behavior."
+  ],
+  "forbidden_approaches": [
+    "adding one to the opener line",
+    "rewriting SVG metadata after rendering",
+    "keying on note text or fixture paths",
+    "changing comparator, baseline or source markers"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_note_only_nested_multiline_ttb.puml",
+    "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_named_note_explicit_link_ltr.puml"
+  ]
+}

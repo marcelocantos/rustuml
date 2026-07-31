@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-attached-note-contextual-identity",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "03eb672a5c186c99fc0464cd2af1954af2944861",
+  "triggering_review": "docs/parity-reviews/description-owned-note-cluster-membership/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": ["CommandFactoryNoteOnEntity.executeInternal"],
+      "lines": "246-268",
+      "role": "Generates GMN on the global UID stream, resolves it with quarkInContext(true, tmp), and creates the attached note under the declaration context."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "symbols": ["Quark.getQualifiedName"],
+      "lines": "57-64",
+      "role": "Projects the generated local GMN through its parent quark path."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": ["EntityImageNote.drawU"],
+      "lines": "190-198",
+      "role": "Emits the note entity with the quark-qualified name."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["attached note construction"],
+      "lines": "653-685",
+      "role": "Already retains ComponentNote.owner as the declaration context independently of the target."
+    },
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["Event::AttachedNote in component_uid_model"],
+      "lines": "553-568",
+      "role": "Consumes the correct GMN/entity/link UID sequence but stores only the bare generated name."
+    }
+  ],
+  "claimed_invariant": "An attached Component note consumes the existing global GMN and hidden-link UID sequence, but its data-qualified-name is the generated local GMN projected through note.owner. Nested declaration contexts prefix the name exactly once; root attached notes remain bare. Declaration owner, not target owner, determines the prefix.",
+  "causal_divergence": "The parser retains the correct owner and layout registers the note in that cluster, but the attached-note UID event discards owner while constructing qualified_name. Geometry is owner-local while product identity is falsely root-local.",
+  "planned_model_change": "When Event::AttachedNote allocates GMN, qualify that generated local name through ComponentNote.owner using the same owner projection already used by named floating notes. Preserve every UID increment, hidden attachment link, target resolution and layout id.",
+  "perturbation_axes": [
+    "root, one-level and two-level declaration context",
+    "target in same, ancestor, sibling and root context",
+    "note before versus after target declaration",
+    "inline versus multiline attached body",
+    "left-to-right versus top-to-bottom",
+    "multiple attached notes around explicit links"
+  ],
+  "acceptance": [
+    "Nested attached notes match Java's owner-qualified generated identity exactly.",
+    "Root attached notes remain bare GMN names.",
+    "GMN, entity and hidden-link UID numbering remains unchanged.",
+    "An independent checker attacks owner/target disagreement and multiple-note UID ordering."
+  ],
+  "forbidden_approaches": [
+    "deriving the prefix from the target owner",
+    "changing UID counts or layout ids",
+    "post-hoc SVG name rewriting",
+    "fixture labels, comparator or baseline changes"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_nested_attached_multiline_ttb.puml"
+  ]
+}
