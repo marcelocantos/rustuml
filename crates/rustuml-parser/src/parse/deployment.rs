@@ -501,11 +501,13 @@ struct NoteAccum {
     position: DeploymentNotePosition,
     source_line: usize,
     lines: Vec<String>,
+    connection: Option<usize>,
+    requires_body: bool,
 }
 
 pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseError> {
     let mut nodes: Vec<DeploymentNode> = Vec::new();
-    let mut connections = Vec::new();
+    let mut connections: Vec<DeploymentConnection> = Vec::new();
     let mut notes = Vec::new();
     let mut meta = DiagramMeta::default();
     let mut direction = DeploymentLayoutDirection::TopToBottom;
@@ -562,9 +564,63 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         Regex::new(r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*(#\S+)?\s*$"#)
             .unwrap()
     });
+    static RE_NOTE_ON_LINK: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r"(?i)^note\s+(?:(right|left|top|bottom)\s+)?(?:on|of)\s+link\s*(#\S+)?\s*:\s*(.*)$",
+        )
+        .unwrap()
+    });
+    static RE_NOTE_ON_LINK_MULTI: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"(?i)^note\s+(?:(right|left|top|bottom)\s+)?(?:on|of)\s+link\s*(#\S+)?\s*$")
+            .unwrap()
+    });
 
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
+
+        // A multiline command owns blank rows too. Java keeps them in
+        // `BlocLines` and removes only indentation columns at completion.
+        if note_accum.is_some() {
+            if super::is_ordinary_note_terminator(trimmed) {
+                let accum = note_accum.take().unwrap();
+                if accum.requires_body && accum.lines.is_empty() {
+                    return Err(ParseError {
+                        line: accum.command_line,
+                        message: "No note defined".to_string(),
+                    });
+                }
+                let text = super::normalize_multiline_note_body(&accum.lines);
+                if let Some(connection) = accum.connection {
+                    connections[connection].note = Some(DeploymentLinkNote {
+                        text,
+                        color: accum.color,
+                        position: accum.position,
+                        source_line: accum.source_line,
+                    });
+                } else {
+                    notes.push(DeploymentNote {
+                        id: accum.id,
+                        target: accum.target,
+                        text,
+                        color: accum.color,
+                        tags: accum.tags,
+                        stereotype: accum.stereotype,
+                        owner: accum.owner,
+                        quark_order: accum.quark_order,
+                        position: accum.position,
+                        source_line: accum.source_line,
+                    });
+                }
+            } else {
+                note_accum
+                    .as_mut()
+                    .unwrap()
+                    .lines
+                    .push(super::source_text(line).to_string());
+            }
+            continue;
+        }
+
         if trimmed.is_empty() {
             continue;
         }
@@ -582,29 +638,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         value: parts[1].trim().to_string(),
                     });
                 }
-            }
-            continue;
-        }
-
-        // Multiline note body.
-        if note_accum.is_some() {
-            if super::is_ordinary_note_terminator(trimmed) {
-                let accum = note_accum.take().unwrap();
-                let text = accum.lines.join("\n");
-                notes.push(DeploymentNote {
-                    id: accum.id,
-                    target: accum.target,
-                    text,
-                    color: accum.color,
-                    tags: accum.tags,
-                    stereotype: accum.stereotype,
-                    owner: accum.owner,
-                    quark_order: accum.quark_order,
-                    position: accum.position,
-                    source_line: accum.source_line,
-                });
-            } else {
-                note_accum.as_mut().unwrap().lines.push(trimmed.to_string());
             }
             continue;
         }
@@ -761,6 +794,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 // the adjacent original source line.
                 source_line: current_line.max(1) + 1,
                 lines: Vec::new(),
+                connection: None,
+                requires_body: false,
             });
             continue;
         }
@@ -769,6 +804,52 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 line: current_line,
                 message: "invalid named note command".to_string(),
             });
+        }
+
+        if let Some(caps) = RE_NOTE_ON_LINK.captures(trimmed) {
+            let Some(connection) = connections.len().checked_sub(1) else {
+                return Err(ParseError {
+                    line: current_line,
+                    message: "No link defined".to_string(),
+                });
+            };
+            connections[connection].note = Some(DeploymentLinkNote {
+                text: caps[3].to_string(),
+                color: caps.get(2).map(|value| value.as_str().to_string()),
+                position: caps
+                    .get(1)
+                    .map(|value| deployment_note_position(&value.as_str().to_ascii_lowercase()))
+                    .unwrap_or(DeploymentNotePosition::Bottom),
+                source_line: current_line,
+            });
+            continue;
+        }
+        if let Some(caps) = RE_NOTE_ON_LINK_MULTI.captures(trimmed) {
+            let Some(connection) = connections.len().checked_sub(1) else {
+                return Err(ParseError {
+                    line: current_line,
+                    message: "No link defined".to_string(),
+                });
+            };
+            note_accum = Some(NoteAccum {
+                command_line: current_line,
+                id: None,
+                target: None,
+                color: caps.get(2).map(|value| value.as_str().to_string()),
+                tags: Vec::new(),
+                stereotype: None,
+                owner: stack.last().cloned(),
+                quark_order: next_quark_order,
+                position: caps
+                    .get(1)
+                    .map(|value| deployment_note_position(&value.as_str().to_ascii_lowercase()))
+                    .unwrap_or(DeploymentNotePosition::Bottom),
+                source_line: current_line + 1,
+                lines: Vec::new(),
+                connection: Some(connection),
+                requires_body: true,
+            });
+            continue;
         }
 
         // Attached note: note direction of target : text  (inline)
@@ -813,6 +894,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 position,
                 source_line: current_line + 1,
                 lines: Vec::new(),
+                connection: None,
+                requires_body: false,
             });
             continue;
         }
@@ -865,6 +948,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     from,
                     to,
                     label,
+                    note: None,
                     tail_label,
                     head_label,
                     arrow_at_start,
@@ -1001,6 +1085,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 from,
                 to,
                 label,
+                note: None,
                 tail_label,
                 head_label,
                 arrow_at_start,
@@ -1619,6 +1704,55 @@ node "Validator Node 2" {
         assert_eq!(
             d.nodes.iter().find(|n| n.id == "Inner").unwrap().color,
             None
+        );
+    }
+
+    #[test]
+    fn named_note_body_preserves_blank_rows_and_common_indentation() {
+        let d = parse("node Anchor\nnote as Rows\n  first\n\n    second\nendnote\nAnchor --> Rows");
+        assert_eq!(d.notes[0].text, "first\n\n  second");
+    }
+
+    #[test]
+    fn note_on_link_attaches_to_the_latest_connection() {
+        let d = parse(
+            "node A\n\
+             node B\n\
+             node C\n\
+             A --> B\n\
+             B --> C\n\
+             note on link : latest route",
+        );
+        assert!(d.connections[0].note.is_none());
+        assert_eq!(
+            d.connections[1]
+                .note
+                .as_ref()
+                .map(|note| note.text.as_str()),
+            Some("latest route")
+        );
+    }
+
+    #[test]
+    fn multiline_note_on_link_preserves_rows_and_requires_a_link() {
+        let d = parse(
+            "node A\n\
+             node B\n\
+             A --> B\n\
+             note left of link\n\
+               first\n\
+             \n\
+               second\n\
+             end note",
+        );
+        let note = d.connections[0].note.as_ref().unwrap();
+        assert_eq!(note.text, "first\n\nsecond");
+        assert_eq!(note.position, DeploymentNotePosition::Left);
+
+        let lines = ["node A".to_string(), "note on link : orphan".to_string()];
+        assert_eq!(
+            parse_deployment(&lines).unwrap_err().message,
+            "No link defined"
         );
     }
 }

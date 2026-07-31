@@ -128,6 +128,9 @@ pub struct DeploymentConnection {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    /// Note attached to this link by `note on link` / `note of link`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub note: Option<DeploymentLinkNote>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tail_label: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -149,6 +152,17 @@ pub struct DeploymentConnection {
     )]
     pub length: usize,
     /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DeploymentLinkNote {
+    pub text: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    #[serde(default)]
+    pub position: DeploymentNotePosition,
     #[serde(default)]
     pub source_line: usize,
 }

@@ -331,8 +331,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         Regex::new(r"^note\s+(right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
             .unwrap()
     });
-    static RE_NOTE_MULTI_PLAIN: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^(?i:note)(?:\s+(#[^\s]+))?\s*$").unwrap());
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
@@ -372,22 +370,20 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // End of multi-line note.
         if in_note {
             if super::is_ordinary_note_terminator(trimmed) {
-                let text = note_lines.join("\n").trim().to_string();
-                if !text.is_empty() {
-                    notes.push(ComponentNote {
-                        id: note_id.take(),
-                        owner: note_owner.take(),
-                        tags: std::mem::take(&mut note_tags),
-                        stereotype: note_stereotype.take(),
-                        color: note_color.take(),
-                        text,
-                        target: note_target.take(),
-                        connection: note_connection.take(),
-                        position: note_position,
-                        source_line: note_source_line
-                            .expect("nonempty multiline note has a body source line"),
-                    });
-                }
+                let text = super::normalize_multiline_note_body(&note_lines);
+                notes.push(ComponentNote {
+                    id: note_id.take(),
+                    owner: note_owner.take(),
+                    tags: std::mem::take(&mut note_tags),
+                    stereotype: note_stereotype.take(),
+                    color: note_color.take(),
+                    text,
+                    target: note_target.take(),
+                    connection: note_connection.take(),
+                    position: note_position,
+                    source_line: note_source_line
+                        .unwrap_or_else(|| note_command_line.unwrap_or(current_line) + 1),
+                });
                 note_id = None;
                 note_owner = None;
                 note_tags.clear();
@@ -403,7 +399,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 if note_lines.is_empty() && note_source_line.is_none() {
                     note_source_line = Some(current_line);
                 }
-                note_lines.push(trimmed.to_string());
+                note_lines.push(super::source_text(line).to_string());
             }
             continue;
         }
@@ -772,29 +768,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
             continue;
         }
-        // `note : text` — inline floating note.
-        if let Some(rest) = trimmed
-            .strip_prefix("note :")
-            .or_else(|| trimmed.strip_prefix("note: "))
-        {
-            let text = rest.trim().to_string();
-            if !text.is_empty() {
-                notes.push(ComponentNote {
-                    id: None,
-                    owner: package_qualified_name(&package_stack),
-                    tags: Vec::new(),
-                    stereotype: None,
-                    color: None,
-                    text,
-                    target: None,
-                    connection: None,
-                    position: ComponentNotePosition::Right,
-                    source_line: current_line,
-                });
-                continue;
-            }
-        }
-        // Multi-line floating note: `note as ID` or plain `note`
+        // Multi-line floating named note: `note as ID`.
         if let Some(command) = super::parse_named_note_multiline(trimmed) {
             note_target = None;
             known_note_ids.insert(command.code.clone());
@@ -817,20 +791,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 message: "invalid named note command".to_string(),
             });
         }
-        if let Some(caps) = RE_NOTE_MULTI_PLAIN.captures(trimmed) {
-            note_target = None;
-            note_id = None;
-            note_owner = package_qualified_name(&package_stack);
-            note_tags.clear();
-            note_stereotype = None;
-            note_color = caps.get(1).map(|color| color.as_str().to_string());
-            note_connection = None;
-            note_position = ComponentNotePosition::Right;
-            note_source_line = None;
-            note_lines.clear();
-            in_note = true;
-            note_command_line = Some(current_line);
-            continue;
+        if trimmed.eq_ignore_ascii_case("note")
+            || trimmed
+                .get(..5)
+                .is_some_and(|prefix| prefix.eq_ignore_ascii_case("note:"))
+            || trimmed
+                .get(..6)
+                .is_some_and(|prefix| prefix.eq_ignore_ascii_case("note :"))
+        {
+            return Err(ParseError {
+                line: current_line,
+                message: "Description diagrams require a named, attached, or link note".to_string(),
+            });
         }
 
         // Component declaration.
@@ -2002,5 +1974,25 @@ mod tests {
         assert_eq!(d.notes[0].source_line, 90);
         assert_eq!(d.notes[1].source_line, 145);
         assert_eq!(d.notes[2].source_line, 400);
+    }
+
+    #[test]
+    fn completed_named_notes_preserve_empty_rows_and_common_indentation() {
+        let empty = parse("component Anchor\nnote as Empty\nendnote\nAnchor --> Empty");
+        assert_eq!(empty.notes.len(), 1);
+        assert_eq!(empty.notes[0].id.as_deref(), Some("Empty"));
+        assert_eq!(empty.notes[0].text, "");
+
+        let indented = parse("component Anchor\nnote as Rows\n  first\n\n    second\nendnote");
+        assert_eq!(indented.notes[0].text, "first\n\n  second");
+    }
+
+    #[test]
+    fn description_rejects_bare_floating_notes() {
+        let lines = "component Anchor\nnote : not registered"
+            .lines()
+            .map(str::to_string)
+            .collect::<Vec<_>>();
+        assert!(parse_component(&lines).is_err());
     }
 }

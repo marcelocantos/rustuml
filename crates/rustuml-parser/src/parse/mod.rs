@@ -426,6 +426,26 @@ pub(crate) fn source_text(line: &str) -> &str {
     preprocess::split_source_line_marker(line).map_or(line, |(_, text)| text)
 }
 
+/// Java `BlocLines.removeEmptyColumns` removes a leading space or tab only
+/// while every nonempty body row has one. Empty rows remain in the `Display`.
+pub(crate) fn normalize_multiline_note_body(lines: &[String]) -> String {
+    let common_indent = lines
+        .iter()
+        .filter(|line| !line.is_empty())
+        .map(|line| {
+            line.chars()
+                .take_while(|character| matches!(character, ' ' | '\t'))
+                .count()
+        })
+        .min()
+        .unwrap_or(0);
+    lines
+        .iter()
+        .map(|line| line.chars().skip(common_indent).collect::<String>())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 /// PlantUML's `CommandAllowMixing#getRegexConcat` anchors `allow_?mixing` at
 /// both ends, while `Pattern2#compileInternal` makes the match case-insensitive.
 /// Keep factory selection and command consumption on this one grammar.
@@ -701,6 +721,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with('(') && trimmed.ends_with(')') {
             scores[6] += 5;
         }
+        // Java `UsecaseDiagramFactory.initCommandsList` registers its
+        // `CommandLink`, whose arrow grammar includes generalization markers.
+        // Sequence does not consume these lines, so they distinguish the
+        // remaining factory after actor declarations have rejected Class.
+        if trimmed.contains("<|") || trimmed.contains("|>") {
+            scores[6] += 10;
+        }
         // State.
         //
         // `[*]` is the unmistakable state-diagram pseudostate marker; any line
@@ -724,18 +751,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[3] += 50;
         }
-        // `note on link` annotates transitions (state diagrams) and connections
-        // (use case diagrams). Score it for state so that state diagrams beat
-        // the sequence scoring from `note left/right of` lines, but also score
-        // use case so that a use case diagram with `usecase` keywords wins over
-        // the state signal when both are present.
-        if trimmed == "note on link"
-            || trimmed.starts_with("note on link ")
-            || trimmed.starts_with("note on link:")
-        {
-            scores[3] += 15; // state
-            scores[6] += 15; // use case
-        }
+        // `note on link` is registered by several UML factories. It carries no
+        // family evidence of its own; the preceding relation and declarations
+        // determine which command inventory owns it.
         // Activity (v3 new syntax).
         if trimmed == "start"
             || trimmed == "stop"
@@ -1250,6 +1268,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if scores[1] <= other_max {
             scores[1] = other_max + 1;
         }
+    }
+
+    // `PSystemCommandFactory` abandons ClassDiagramFactory as soon as a
+    // mixed-only leaf fails without a preceding allowmixing command. Later
+    // named-note or meta commands cannot make that candidate viable again.
+    if class_factory_rejected_by_mixed_leaf {
+        scores[1] = i32::MIN;
     }
 
     if (has_skinparam || has_meta_only_class_default) && scores.iter().all(|&s| s == 0) {
@@ -3722,6 +3747,19 @@ Policy --> Retry
         let input = "@startuml\nAlice -> Bob\n@enduml";
         let blocks = split_blocks(input);
         assert_eq!(blocks.len(), 1);
+    }
+
+    #[test]
+    fn rejected_class_factory_is_not_revived_by_later_notes() {
+        let input = "@startuml\n\
+                     component Anchor\n\
+                     note as Named\n\
+                     body\n\
+                     endnote\n\
+                     note : invalid for Description\n\
+                     Anchor --> Named\n\
+                     @enduml";
+        assert!(parse(input).is_err());
     }
 }
 

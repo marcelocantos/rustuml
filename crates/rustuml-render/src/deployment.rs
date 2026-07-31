@@ -3169,6 +3169,30 @@ fn deployment_note_gradient_defs(diagram: &DeploymentDiagram) -> String {
         let id = crate::filter_registry::gradient_id_for(source, gradients.len());
         gradients.push((color1, color2, policy, id));
     }
+    for note in diagram
+        .connections
+        .iter()
+        .filter_map(|connection| connection.note.as_ref())
+    {
+        let Some(color) = note.color.as_deref() else {
+            continue;
+        };
+        let Some((raw1, raw2, policy)) = crate::sequence::split_gradient_colors(color) else {
+            continue;
+        };
+        let color1 = crate::sequence::resolve_color(raw1);
+        let color2 = crate::sequence::resolve_color(raw2);
+        if gradients
+            .iter()
+            .any(|(existing1, existing2, existing_policy, _)| {
+                existing1 == &color1 && existing2 == &color2 && *existing_policy == policy
+            })
+        {
+            continue;
+        }
+        let id = crate::filter_registry::gradient_id_for(source, gradients.len());
+        gradients.push((color1, color2, policy, id));
+    }
 
     let mut defs = String::new();
     for (color1, color2, policy, id) in gradients {
@@ -3538,6 +3562,61 @@ fn render_floating_deployment_note(
     svg.raw("</g>");
 }
 
+fn render_deployment_link_note(
+    svg: &mut SvgBuilder,
+    note: &DeploymentLinkNote,
+    x: f64,
+    y: f64,
+    dim: DeploymentNoteDim,
+    gradient_defs: Option<&str>,
+) {
+    let right = x + dim.width;
+    let bottom = y + dim.height;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+    let fill = note
+        .color
+        .as_deref()
+        .map(|color| crate::sequence::gradient_fill_or(color, gradient_defs))
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    let path = format!(
+        "M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}",
+        x = fc(x),
+        y = fc(y),
+        bottom = fc(bottom),
+        right = fc(right),
+        fold_y = fc(fold_y),
+        fold_x = fc(fold_x),
+    );
+    let fold_path = format!(
+        "M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}",
+        fold_x = fc(fold_x),
+        y = fc(y),
+        fold_y = fc(fold_y),
+        right = fc(right),
+    );
+    svg.raw(&format!(
+        r#"<g class="note" data-source-line="{}"><path d="{path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/><path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:1;"/>"#,
+        note.source_line
+    ));
+    let mut text_y = y + NOTE_MARGIN_Y;
+    for line in note.text.lines() {
+        let ascent = text_render::label_ascent(line, NOTE_FONT_SIZE);
+        text_y += ascent;
+        emit_text(
+            svg,
+            line,
+            x + NOTE_MARGIN_X1,
+            text_y,
+            NOTE_FONT_SIZE,
+            false,
+            false,
+        );
+        text_y += text_render::label_height(line, NOTE_FONT_SIZE) - ascent;
+    }
+    svg.raw("</g>");
+}
+
 // ---------------------------------------------------------------------------
 // Connections (oracle-driven)
 // ---------------------------------------------------------------------------
@@ -3759,23 +3838,56 @@ fn deployment_note_layout_id(note: &DeploymentNote, index: usize) -> String {
 }
 
 fn deployment_note_dim(note: &DeploymentNote) -> DeploymentNoteDim {
+    deployment_note_text_dim(&note.text)
+}
+
+fn deployment_note_text_dim(text: &str) -> DeploymentNoteDim {
     // `EntityImageNote` delegates text measurement and asymmetric margins to
     // `Opale`: six pixels left, fifteen right, and five on each vertical side.
-    let width = note
-        .text
+    let width = text
         .lines()
         .map(|line| text_render::measure(line, NOTE_FONT_SIZE, false))
         .fold(0.0_f64, f64::max)
         + NOTE_MARGIN_X1
         + NOTE_MARGIN_X2;
-    let text_height = note
-        .text
+    let text_height = text
         .lines()
         .map(|line| text_render::label_height(line, NOTE_FONT_SIZE))
         .sum::<f64>();
     DeploymentNoteDim {
         width,
         height: text_height + NOTE_MARGIN_Y * 2.0,
+    }
+}
+
+fn deployment_connection_center_label_dim(
+    connection: &DeploymentConnection,
+) -> Option<EdgeLabelSize> {
+    let label = connection.label.as_deref().map(|label| EdgeLabelSize {
+        width: text_render::measure(label, 13.0, false) + 2.0,
+        height: text_render::label_height(label, 13.0) + 2.0,
+    });
+    let note = connection.note.as_ref().map(|note| {
+        let dim = deployment_note_text_dim(&note.text);
+        (note.position, dim)
+    });
+    match (label, note) {
+        (None, None) => None,
+        (Some(label), None) => Some(label),
+        (None, Some((_, note))) => Some(EdgeLabelSize {
+            width: note.width,
+            height: note.height,
+        }),
+        (Some(label), Some((position, note))) => Some(match position {
+            DeploymentNotePosition::Left | DeploymentNotePosition::Right => EdgeLabelSize {
+                width: label.width + note.width,
+                height: label.height.max(note.height),
+            },
+            DeploymentNotePosition::Top | DeploymentNotePosition::Bottom => EdgeLabelSize {
+                width: label.width.max(note.width),
+                height: label.height + note.height,
+            },
+        }),
     }
 }
 
@@ -4398,11 +4510,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     for conn in &diagram.connections {
         let (layout_from, layout_to, reversed) =
             deployment_connection_layout_with_endpoints(conn, &cluster_endpoint_nodes);
-        let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-            // Java `SvekEdge.getLabelText` adds one pixel of margin on
-            // each side before `appendLine` emits a fixed HTML table.
-            width: text_render::measure(label, 13.0, false) + 2.0,
-            height: (text_render::label_height(label, 13.0) + 2.0).floor(),
+        // `SvekEdge` merges a CucaNote with the ordinary center label before
+        // serializing the fixed-size Graphviz label table.
+        let label_size = deployment_connection_center_label_dim(conn).map(|size| EdgeLabelSize {
+            width: size.width,
+            height: size.height.floor(),
         });
         let endpoint_label_size = |label: Option<&str>| {
             label.map(|label| EdgeLabelSize {
@@ -4797,6 +4909,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             &cluster_rects,
             &opale_connection_indices,
             ctx.handwritten,
+            gradient_defs,
         );
     }
     if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Bottom {
@@ -5826,18 +5939,15 @@ fn deployment_edge_paint_bounds(
             let y = (y * 100.0).round() / 100.0;
             bounds.include_rect(x, y, x, y);
         }
-        if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
+        if let Some(label) = edge.label
+            && let Some(label_dim) = deployment_connection_center_label_dim(conn)
+        {
             // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
             // Graphviz solves their origin from an integer-truncated placeholder,
             // then `LimitFinder` sees the original renderer width when drawing.
             let x = (label.x * 100.0).round() / 100.0;
             let y = (label.y * 100.0).round() / 100.0;
-            bounds.include_rect(
-                x,
-                y,
-                x + text_render::measure(label_text, 13.0, false) + 2.0,
-                y + text_render::label_height(label_text, 13.0) + 2.0,
-            );
+            bounds.include_rect(x, y, x + label_dim.width, y + label_dim.height);
         }
         let (tail_text, head_text) = if reversed {
             (conn.head_label.as_deref(), conn.tail_label.as_deref())
@@ -6415,6 +6525,7 @@ fn render_no_oracle_edges(
     cluster_rects: &HashMap<&str, LayoutRect>,
     opale_connection_indices: &HashSet<usize>,
     handwritten: bool,
+    gradient_defs: Option<&str>,
 ) {
     for (i, conn) in diagram.connections.iter().enumerate() {
         if conn.hidden {
@@ -6539,28 +6650,65 @@ fn render_no_oracle_edges(
                 );
             }
         }
-        if let Some(label) = conn.label.as_deref() {
-            let (x, y) = edge
+        if conn.label.is_some() || conn.note.is_some() {
+            let (base_x, base_y) = edge
                 .label
                 .map(|position| {
                     (
-                        (position.x * 100.0).round() / 100.0 + body_margin_x + 1.0,
-                        (position.y * 100.0).round() / 100.0
-                            + body_margin_y
-                            + 1.0
-                            + text_render::label_ascent(label, 13.0),
+                        (position.x * 100.0).round() / 100.0 + body_margin_x,
+                        (position.y * 100.0).round() / 100.0 + body_margin_y,
                     )
                 })
                 .unwrap_or_else(|| {
                     points
                         .first()
                         .zip(points.last())
-                        .map(|(first, last)| {
-                            ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
-                        })
+                        .map(|(first, last)| ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0))
                         .unwrap_or((body_margin_x, body_margin_y))
                 });
-            emit_text(svg, label, x, y, 13.0, false, false);
+            let label_dim = conn.label.as_deref().map(|label| EdgeLabelSize {
+                width: text_render::measure(label, 13.0, false) + 2.0,
+                height: text_render::label_height(label, 13.0) + 2.0,
+            });
+            let note_dim = conn
+                .note
+                .as_ref()
+                .map(|note| deployment_note_text_dim(&note.text));
+            if let Some(label) = conn.label.as_deref() {
+                let (x, y) = match (conn.note.as_ref(), note_dim) {
+                    (Some(note), Some(note_dim)) => match note.position {
+                        DeploymentNotePosition::Top => {
+                            (base_x + 1.0, base_y + note_dim.height + 1.0)
+                        }
+                        DeploymentNotePosition::Left => {
+                            (base_x + note_dim.width + 1.0, base_y + 1.0)
+                        }
+                        _ => (base_x + 1.0, base_y + 1.0),
+                    },
+                    _ => (base_x + 1.0, base_y + 1.0),
+                };
+                emit_text(
+                    svg,
+                    label,
+                    x,
+                    y + text_render::label_ascent(label, 13.0),
+                    13.0,
+                    false,
+                    false,
+                );
+            }
+            if let (Some(note), Some(note_dim)) = (conn.note.as_ref(), note_dim) {
+                let (x, y) = match note.position {
+                    DeploymentNotePosition::Left | DeploymentNotePosition::Top => (base_x, base_y),
+                    DeploymentNotePosition::Right => {
+                        (base_x + label_dim.map_or(0.0, |label| label.width), base_y)
+                    }
+                    DeploymentNotePosition::Bottom => {
+                        (base_x, base_y + label_dim.map_or(0.0, |label| label.height))
+                    }
+                };
+                render_deployment_link_note(svg, note, x, y, note_dim, gradient_defs);
+            }
         }
         let (tail_text, head_text) = if reversed {
             (conn.head_label.as_deref(), conn.tail_label.as_deref())
@@ -8298,6 +8446,28 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         let svg = render(&diagram, &Theme::default());
         assert_eq!(svg.matches(r##"fill="#FFE4E1""##).count(), 2, "{svg}");
         assert!(svg.contains(">retained color payload</text>"), "{svg}");
+    }
+
+    #[test]
+    fn deployment_link_note_is_merged_into_the_svek_center_label() {
+        let source = "@startuml\n\
+            node FreshSender\n\
+            node FreshReceiver\n\
+            FreshSender --> FreshReceiver : ordinary label\n\
+            note on link : retained link note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(">ordinary label</text>"), "{svg}");
+        assert!(svg.contains(">retained link note</text>"), "{svg}");
+        assert!(
+            svg.contains(r#"<g class="note" data-source-line="4">"#),
+            "{svg}"
+        );
     }
 
     #[test]
