@@ -1385,6 +1385,7 @@ mod tests {
             "node Anchor\nnote \"bad code\" as Bad-Deployment $audit\nBad-Deployment --> Anchor",
             "node Anchor\nnote \"bad order\" as Bad.Deployment #MistyRose <<WrongOrder>>\nBad.Deployment --> Anchor",
             "node Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
+            "node Anchor\nnote \"left\u{e121}right\" as Embedded.Quote\nEmbedded.Quote --> Anchor",
             "node Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
         ] {
             let lines = source.lines().map(str::to_string).collect::<Vec<_>>();

@@ -180,10 +180,11 @@ pub(super) fn parse_named_note_inline(line: &str) -> Option<NamedNoteCommand> {
 
 pub(super) fn looks_like_named_note_inline_command(line: &str) -> bool {
     static PREFIX: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
-        regex::Regex::new(&format!(
-            r"^(?i:note)\s+{NAMED_NOTE_QUOTE_CLASS}{NAMED_NOTE_NON_QUOTE_CLASS}*{NAMED_NOTE_QUOTE_CLASS}\s+(?i:as)(?:\s|$)"
-        ))
-        .unwrap()
+        // Java command ownership starts at the unique CommandFactoryNote
+        // opener. Repeating the successful DISPLAY/closing/as grammar here
+        // would let malformed interior `%g` delimiters escape terminal
+        // rejection and reach later endpoint synthesis.
+        regex::Regex::new(&format!(r"^(?i:note)\s+{NAMED_NOTE_QUOTE_CLASS}")).unwrap()
     });
     PREFIX.is_match(line)
 }
@@ -1918,6 +1919,7 @@ mod tests {
         for embedded in ['"', '\u{201c}', '\u{201d}', '\u{e121}'] {
             let source = format!("note \"left{embedded}right\" as Ledger.Note");
             assert!(parse_named_note_inline(&source).is_none(), "{source:?}");
+            assert!(looks_like_named_note_inline_command(&source), "{source:?}");
         }
     }
 
