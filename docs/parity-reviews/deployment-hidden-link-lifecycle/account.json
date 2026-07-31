@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "mechanism": "deployment-hidden-link-lifecycle",
-  "status": "accounted_before_code",
+  "status": "corrected_before_followup_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "ee409384b62d0bd0ae0a237e25bfcd4828aa85e8",
+  "rust_revision": "9c78adae90ea2b59d22bdf97ee492902a3cfe27c",
   "triggering_review": "docs/parity-reviews/deployment-single-link-note-opale/review.json",
   "java_locations": [
     {
@@ -40,7 +40,13 @@
       "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
       "symbols": ["SvekResult.drawU"],
       "lines": "82-101",
-      "role": "Applies `UHidden.HIDDEN` only while drawing a hidden solved edge, preserving its semantic and layout participation."
+      "role": "Applies `UHidden.HIDDEN` only while drawing a hidden solved edge. The same draw operation is replayed through LimitFinder while calculating dimensions, so the route and labels still extend the paint envelope even though the real SVG driver emits no group, path or text."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": ["LimitFinder.apply", "LimitFinder.drawText", "LimitFinder.drawDotPath"],
+      "lines": "74-95,124-172,269-280",
+      "role": "Treats `UHidden` as a no-op drawing change and continues recording hidden edge text and solved DotPath control-point bounds during SvekResult.calculateDimension."
     }
   ],
   "rust_locations": [
@@ -63,9 +69,9 @@
       "role": "All retained connections already participate in layout and UID order, but every connection is counted for Opale incidence and painted because visibility is absent."
     }
   ],
-  "claimed_invariant": "A valid Deployment `hidden` bracket style creates one explicit paint-hidden DeploymentConnection at the command source line. It retains cleaned endpoints, direction, labels, shaft length and source-order link UID exactly like a visible relation. Unlike Graphviz `style=invis`, the edge is serialized and solved as an ordinary edge and is counted by GraphvizImageBuilder.onlyOneLink, so an incident hidden relation prevents named-note Opale absorption. Only SvekResult's final paint layer suppresses its SVG group, path, arrowhead and label.",
-  "causal_divergence": "Rust treated the arrow shaft as a flat character run and had no paint-hidden link channel. Encountering the Java bracket style terminates scanning, so the whole command falls through and disappears. That erases an event rather than retaining an ordinary solved edge whose paint is hidden, changing topology, layout constraints, Opale classification and every later global UID.",
-  "planned_model_change": "Extend Deployment arrow scanning to retain bracket style clauses while deriving arrowhead, direction, line style and length from the bracket-free shaft. Capture whether any style token is `hidden` and store it on DeploymentConnection. Add every hidden edge to layout, solved route matching, semantic Opale incidence and UID allocation exactly like a visible edge, then skip only its final SVG paint phase. Preserve labels and endpoint metadata in the AST even though paint is suppressed.",
+  "claimed_invariant": "A valid Deployment `hidden` bracket style creates one explicit paint-hidden DeploymentConnection at the command source line. It retains cleaned endpoints, direction, labels, shaft length and source-order link UID exactly like a visible relation. Unlike Graphviz `style=invis`, the edge is serialized and solved as an ordinary edge and is counted by GraphvizImageBuilder.onlyOneLink, so an incident hidden relation prevents named-note Opale absorption. SvekResult draws it under `UHidden`: the SVG driver suppresses its group, path, arrowhead and label, while the earlier LimitFinder dimension pass ignores the visibility change and still includes the solved route and all link labels in the final envelope.",
+  "causal_divergence": "The initial Rust fix repaired parsing, semantic incidence, layout and UID allocation, but modeled hidden as an early omission from every paint-related pass. `render_no_oracle_edges` correctly omits SVG emission, yet `deployment_body_x_frame`, `deployment_edge_label_x_bounds` and `deployment_body_y_frame` either skip hidden connections or never inspect edge geometry. Java instead replays the hidden edge through LimitFinder before SVG emission; UHidden does not stop DotPath or text bounds. A duplicate-endpoint hidden edge with a label therefore increases Java's canvas height while Rust truncates the envelope to visible entities and edges.",
+  "planned_model_change": "Keep hidden connections in the existing ordinary layout, Opale and UID paths. Introduce one shared solved-edge envelope accumulation path used by Deployment body X and Y framing. For every solved connection, including paint-hidden connections, include each rounded DotPath control point plus center, tail and head label rectangles using the same renderer measurements and endpoint reversal/collision-adjusted positions as visible links. Continue skipping hidden connections only in final SVG emission. Do not add hidden-specific dimensions or fixture-coordinate adjustments.",
   "perturbation_axes": [
     "hidden relation alone versus visible plus hidden",
     "note incident versus ordinary node-to-node",
@@ -74,6 +80,8 @@
     "top-to-bottom versus left-to-right",
     "hidden style in first versus second bracket slot",
     "labeled versus unlabeled relation",
+    "duplicate endpoints with a hidden edge between visible peers",
+    "route-only versus center/tail/head-label envelope expansion",
     "later entity UID and competing route complexity"
   ],
   "acceptance": [
@@ -81,6 +89,8 @@
     "The hidden edge participates in layout and semantic incidence so visible-plus-hidden note topology prevents preliminary Opale classification like Java.",
     "A lone hidden note link counts as the note's single semantic relation, consumes its link UID and is suppressed only at paint time.",
     "Ordinary hidden node-to-node links constrain layout, consume UIDs and paint nothing.",
+    "The rejecting duplicate-endpoint held-out has the same Java and Rust canvas envelope after its hidden route and label are included in bounds, while retaining no hidden SVG link group.",
+    "Hidden routes and center/tail/head labels may expand both horizontal and vertical bounds through the same generic edge-envelope code as visible connections.",
     "An independent checker attacks style slot, direction, endpoint side, labels, layout direction, incidence and downstream UID order."
   ],
   "forbidden_approaches": [
