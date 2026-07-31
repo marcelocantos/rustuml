@@ -293,6 +293,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut note_source_line: Option<usize> = None;
     let mut note_lines: Vec<String> = Vec::new();
     let mut in_note: bool = false;
+    let mut note_command_line: Option<usize> = None;
     // Multiline title accumulation.
     let mut in_title: bool = false;
     let mut title_lines: Vec<String> = Vec::new();
@@ -397,6 +398,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_lines.clear();
                 note_source_line = None;
                 in_note = false;
+                note_command_line = None;
             } else {
                 if note_lines.is_empty() && note_source_line.is_none() {
                     note_source_line = Some(current_line);
@@ -705,6 +707,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_source_line = None;
                 note_lines.clear();
                 in_note = true;
+                note_command_line = Some(current_line);
             }
             continue;
         }
@@ -765,6 +768,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_source_line = Some(current_line + 1);
                 note_lines.clear();
                 in_note = true;
+                note_command_line = Some(current_line);
             }
             continue;
         }
@@ -804,6 +808,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             note_source_line = None;
             note_lines.clear();
             in_note = true;
+            note_command_line = Some(current_line);
             continue;
         }
         if super::looks_like_named_note_multiline_command(trimmed) {
@@ -824,6 +829,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             note_source_line = None;
             note_lines.clear();
             in_note = true;
+            note_command_line = Some(current_line);
             continue;
         }
 
@@ -1140,6 +1146,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 });
             }
         }
+    }
+
+    if let Some(line) = note_command_line {
+        return Err(ParseError {
+            line,
+            message: "unterminated note command".to_string(),
+        });
     }
 
     // Close any unclosed blocks (defensive).
@@ -1910,6 +1923,9 @@ mod tests {
             "component Anchor\nnote \"bad order\" as Bad.Note #MistyRose <<WrongOrder>>\nBad.Note --> Anchor",
             "component Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
             "component Anchor\nnote \"left\u{201c}right\" as Embedded.Quote\nEmbedded.Quote --> Anchor",
+            "component Anchor\nnote \"payload\" as BadTag.Left $audit\u{201c}tail\nBadTag.Left --> Anchor",
+            "component Anchor\nnote \u{201c}payload\u{201d} as BadTag.Right $audit\u{201d}tail\nBadTag.Right --> Anchor",
+            "component Anchor\nnote \u{e121}payload\" as BadTag.Jaws $audit\u{e121}tail\nBadTag.Jaws --> Anchor",
             "component Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
         ] {
             let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
@@ -1919,6 +1935,19 @@ mod tests {
             assert_eq!(error.line, 2, "{source}");
             assert_eq!(error.message, "invalid named note command");
         }
+    }
+
+    #[test]
+    fn unterminated_named_note_rejects_swallowed_component_syntax() {
+        let source = "component Anchor\n\
+                      note as Pending.Note $audit <<Trace>> #MistyRose\n\
+                        body row\n\
+                      component SwallowedRelay\n\
+                      SwallowedRelay --> Anchor";
+        let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+        let error = parse_component(&lines).unwrap_err();
+        assert_eq!(error.line, 2);
+        assert_eq!(error.message, "unterminated note command");
     }
 
     #[test]

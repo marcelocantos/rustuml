@@ -490,6 +490,7 @@ fn deployment_note_position(value: &str) -> DeploymentNotePosition {
 
 /// Accumulator for multiline note bodies.
 struct NoteAccum {
+    command_line: usize,
     target: Option<String>,
     id: Option<String>,
     color: Option<String>,
@@ -746,6 +747,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let quark_order = next_quark_order;
             next_quark_order += 1;
             note_accum = Some(NoteAccum {
+                command_line: current_line,
                 id: Some(command.code),
                 target: None,
                 color: command.color,
@@ -800,6 +802,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let quark_order = next_quark_order;
             next_quark_order += 1;
             note_accum = Some(NoteAccum {
+                command_line: current_line,
                 id: None,
                 target: Some(target),
                 color: caps.get(3).map(|value| value.as_str().to_string()),
@@ -1009,6 +1012,13 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 source_line: current_line,
             });
         }
+    }
+
+    if let Some(accum) = note_accum {
+        return Err(ParseError {
+            line: accum.command_line,
+            message: "unterminated note command".to_string(),
+        });
     }
 
     Ok(DeploymentDiagram {
@@ -1386,6 +1396,9 @@ mod tests {
             "node Anchor\nnote \"bad order\" as Bad.Deployment #MistyRose <<WrongOrder>>\nBad.Deployment --> Anchor",
             "node Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
             "node Anchor\nnote \"left\u{e121}right\" as Embedded.Quote\nEmbedded.Quote --> Anchor",
+            "node Anchor\nnote \"payload\" as BadTag.Left $audit\u{201c}tail\nBadTag.Left --> Anchor",
+            "node Anchor\nnote \u{201c}payload\u{201d} as BadTag.Right $audit\u{201d}tail\nBadTag.Right --> Anchor",
+            "node Anchor\nnote \u{e121}payload\" as BadTag.Jaws $audit\u{e121}tail\nBadTag.Jaws --> Anchor",
             "node Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
         ] {
             let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
@@ -1395,6 +1408,19 @@ mod tests {
             assert_eq!(error.line, 2, "{source}");
             assert_eq!(error.message, "invalid named note command");
         }
+    }
+
+    #[test]
+    fn unterminated_named_note_rejects_swallowed_deployment_syntax() {
+        let source = "node Anchor\n\
+                      note as Pending.Note $audit <<Trace>> #MistyRose\n\
+                        body row\n\
+                      database SwallowedStore\n\
+                      SwallowedStore --> Anchor";
+        let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+        let error = parse_deployment(&lines).unwrap_err();
+        assert_eq!(error.line, 2);
+        assert_eq!(error.message, "unterminated note command");
     }
 
     #[test]

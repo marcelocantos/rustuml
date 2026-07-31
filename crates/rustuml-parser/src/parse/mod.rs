@@ -128,8 +128,11 @@ pub(super) struct NamedNoteCommand {
 
 fn named_note_decorations(suffix: &str) -> Option<(Vec<String>, Option<String>, Option<String>)> {
     static DECORATIONS: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        // Java provenance: `Stereotag.SINGLE` excludes Pattern2 `%g` from
+        // every tag body, so the same four-member quote alphabet used by the
+        // DISPLAY grammar is forbidden here too.
         regex::Regex::new(
-            r#"^\s*(?:(\$[^\s{}\"<>$]+(?:\s+\$[^\s{}\"<>$]+)*))?\s*(?:(<<.+?>>))?\s*(#[^\s]+)?\s*$"#,
+            r#"^\s*(?:(\$[^\s{}\"\u{201C}\u{201D}\u{E121}<>$]+(?:\s+\$[^\s{}\"\u{201C}\u{201D}\u{E121}<>$]+)*))?\s*(?:(<<.+?>>))?\s*(#[^\s]+)?\s*$"#,
         )
         .unwrap()
     });
@@ -1918,6 +1921,12 @@ mod tests {
 
         for embedded in ['"', '\u{201c}', '\u{201d}', '\u{e121}'] {
             let source = format!("note \"left{embedded}right\" as Ledger.Note");
+            assert!(parse_named_note_inline(&source).is_none(), "{source:?}");
+            assert!(looks_like_named_note_inline_command(&source), "{source:?}");
+        }
+
+        for embedded in ['"', '\u{201c}', '\u{201d}', '\u{e121}'] {
+            let source = format!("note \"payload\" as Ledger.Note $audit{embedded}tail");
             assert!(parse_named_note_inline(&source).is_none(), "{source:?}");
             assert!(looks_like_named_note_inline_command(&source), "{source:?}");
         }
