@@ -1,0 +1,12 @@
+@startuml
+node "Fabric Silver 1997" as FabricS1997 {
+  node "Ingress Teal 1999" as IngressT1999
+  artifact "Worker Rose 2003" as WorkerR2003
+  database "Store Navy 2011" as StoreN2011
+  IngressT1999 -right-> WorkerR2003 : nested primary 2017
+  IngressT1999 -down-> StoreN2011 : nested secondary 2027
+  note top on link #HoneyDew : nested fanout note 2029
+  artifact "Later Ochre 2039" as LaterO2039
+  StoreN2011 --> LaterO2039
+}
+@enduml

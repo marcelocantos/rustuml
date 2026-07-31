@@ -1,0 +1,7 @@
+@startuml
+node "Blank Violet 2251" as BlankV2251
+node "Blank Cyan 2267" as BlankC2267
+BlankV2251 --> BlankC2267
+note of link
+end note
+@enduml

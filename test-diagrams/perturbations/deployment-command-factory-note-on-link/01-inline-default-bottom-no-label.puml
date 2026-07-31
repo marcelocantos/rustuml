@@ -1,0 +1,6 @@
+@startuml
+node "Relay Kestrel 1701" as RelayK1701
+database "Archive Quartz 1709" as ArchiveQ1709
+RelayK1701 --> ArchiveQ1709
+note on link : stores audit shard 1723
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Intake Cobalt 1759" as IntakeC1759
+queue "Buffer Hazel 1777" as BufferH1777
+database "Vault Opal 1783" as VaultO1783
+IntakeC1759 --> BufferH1777 : enqueue renamed payload 1789
+BufferH1777 --> VaultO1783 : persist\nwith checksum 1801
+note right on link #AliceBlue/Gold : gradient retention 1811
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+note "Named Slate 2161" as NamedS2161
+node "Peer Amber 2179" as PeerA2179
+NamedS2161 --> PeerA2179
+note bottom of link : rejected note endpoint 2203
+@enduml

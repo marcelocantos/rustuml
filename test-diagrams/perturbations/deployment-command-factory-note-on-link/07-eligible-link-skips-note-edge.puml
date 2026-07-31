@@ -1,0 +1,8 @@
+@startuml
+node "Ordinary Ember 1951" as OrdinaryE1951
+database "Peer Azure 1973" as PeerA1973
+OrdinaryE1951 --> PeerA1973 : eligible route 1979
+note "Detached marker 1987" as MarkerM1987
+MarkerM1987 --> PeerA1973
+note left on link #Lavender : must select eligible route 1993
+@enduml

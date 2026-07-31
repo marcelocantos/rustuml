@@ -1,0 +1,7 @@
+@startuml
+node "Open Ruby 2237" as OpenR2237
+node "Open Aqua 2239" as OpenA2239
+OpenR2237 --> OpenA2239
+note top of link #Cornsilk
+  body without terminator 2243
+@enduml

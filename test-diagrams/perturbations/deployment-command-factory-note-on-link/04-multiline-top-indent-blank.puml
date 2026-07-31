@@ -1,0 +1,11 @@
+@startuml
+node "Producer Umber 1823" as ProducerU1823
+database "Ledger Mint 1831" as LedgerM1831
+ProducerU1823 --> LedgerM1831 : durable handoff 1847
+note top of link #DDEEFF
+    first retained row 1861
+      deeper relative row 1867
+
+    final retained row 1871
+end note
+@enduml

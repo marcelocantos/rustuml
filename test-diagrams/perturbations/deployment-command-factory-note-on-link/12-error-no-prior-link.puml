@@ -1,0 +1,4 @@
+@startuml
+node "Lonely Copper 2143" as LonelyC2143
+note right on link #SkyBlue : rejected without link 2153
+@enduml

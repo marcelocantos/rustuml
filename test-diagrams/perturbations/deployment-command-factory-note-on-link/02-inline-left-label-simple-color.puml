@@ -1,0 +1,6 @@
+@startuml
+artifact "Bundle Indigo 1733" as BundleI1733
+cloud "Gateway Saffron 1741" as GatewayS1741
+BundleI1733 --> GatewayS1741 : publish channel 1747
+note left of link #LightCyan : verifies signed bundle 1753
+@enduml

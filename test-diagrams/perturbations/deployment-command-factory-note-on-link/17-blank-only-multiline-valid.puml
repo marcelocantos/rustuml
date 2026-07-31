@@ -1,0 +1,8 @@
+@startuml
+artifact "Blank Parcel 2273" as BlankP2273
+cloud "Blank Horizon 2281" as BlankH2281
+BlankP2273 --> BlankH2281
+note top on link
+
+endnote
+@enduml

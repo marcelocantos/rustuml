@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="89px" preserveAspectRatio="none" style="width:1181px;height:89px;background:#FFFFFF;" version="1.1" viewBox="0 0 1181 89" width="1181px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="gqyd6ur98720v0" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#F0F8FF"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs><g><!--entity Intake Cobalt 1759-->
+<g class="entity" data-qualified-name="IntakeC1759" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="16,27.76,26,17.76,186.0537,17.76,186.0537,54.2483,176.0537,64.2483,16,64.2483,16,27.76" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="176.0537" x2="186.0537" y1="27.76" y2="17.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="176.0537" y1="27.76" y2="27.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="176.0537" x2="176.0537" y1="27.76" y2="64.2483"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="130.0537" x="31" y="51.2952">Intake Cobalt 1759</text>
+</g>
+<!--entity Buffer Hazel 1777-->
+<g class="entity" data-qualified-name="BufferH1777" data-source-line="3" id="ent0003">
+<path d="M456.05,27.76 L588.7756,27.76 C593.7756,27.76 593.7756,41.0041 593.7756,41.0041 C593.7756,41.0041 593.7756,54.2483 588.7756,54.2483 L456.05,54.2483 C451.05,54.2483 451.05,41.0041 451.05,41.0041 C451.05,41.0041 451.05,27.76 456.05,27.76" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M588.7756,27.76 C583.7756,27.76 583.7756,41.0041 583.7756,41.0041 C583.7756,54.2483 588.7756,54.2483 588.7756,54.2483" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122.7256" x="456.05" y="46.2952">Buffer Hazel 1777</text>
+</g>
+<!--entity Vault Opal 1783-->
+<g class="entity" data-qualified-name="VaultO1783" data-source-line="4" id="ent0004">
+<path d="M1025.78,28.26 C1025.78,18.26 1091.0759,18.26 1091.0759,18.26 C1091.0759,18.26 1156.3718,18.26 1156.3718,28.26 L1156.3718,53.7483 C1156.3718,63.7483 1091.0759,63.7483 1091.0759,63.7483 C1091.0759,63.7483 1025.78,63.7483 1025.78,53.7483 L1025.78,28.26" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1025.78,28.26 C1025.78,38.26 1091.0759,38.26 1091.0759,38.26 C1091.0759,38.26 1156.3718,38.26 1156.3718,28.26" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110.5918" x="1035.78" y="55.7952">Vault Opal 1783</text>
+</g>
+<!--link IntakeC1759 to BufferH1777-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M186.39,41 C264.01,41 371.82,41 444.76,41" fill="none" id="IntakeC1759-to-BufferH1777" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="450.76,41,441.76,37,445.76,41,441.76,45,450.76,41" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="203.9629" x="217.05" y="37.5684">enqueue renamed payload 1789</text>
+</g>
+<!--link BufferH1777 to VaultO1783-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M594.04,41 C705,41 912.53,41 1019.58,41" fill="none" id="BufferH1777-to-VaultO1783" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="1025.58,41,1016.58,37,1020.58,41,1016.58,45,1025.58,41" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="188.373" x="624.78" y="28.5684">persist\nwith checksum 1801</text>
+<path d="M819.153,11 L819.153,36 L991.153,36 L991.153,21 L981.153,11 L819.153,11" fill="url(#gqyd6ur98720v0)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M981.153,11 L981.153,21 L991.153,21 L981.153,11" fill="url(#gqyd6ur98720v0)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="151.2329" x="825.153" y="28.5684">gradient retention 1811</text>
+</g>
+</g></svg>
