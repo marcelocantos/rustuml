@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "mechanism": "circled-character-double-outline-transform",
+  "created": "2026-07-31",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "b39c489a",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/CircledCharacter.java",
+      "symbol": "CircledCharacter.drawU",
+      "lines": "62-74",
+      "role": "Places UCenteredCharacter at the double-precision center of the circled spot."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverCenteredCharacterSvg.java",
+      "symbol": "DriverCenteredCharacterSvg.draw",
+      "lines": "50-63",
+      "role": "Computes the UnusedSpace translation as doubles and passes the Java TextLayout outline PathIterator directly to the SVG backend."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics.drawPathIterator",
+        "SvgGraphics.format"
+      ],
+      "lines": "944-962,980-1002",
+      "role": "Adds double outline coordinates to the double translation and formats the resulting path coordinates to four decimal places."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UnusedSpace.java",
+      "symbol": "UnusedSpace constructor",
+      "lines": "86-131",
+      "role": "Derives the glyph center on a quarter-pixel raster grid and retains it as a double."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/metrics.rs",
+      "symbol": "centered_character_path",
+      "lines": "218-367",
+      "role": "Uses Java-compatible quarter-pixel centers but transforms integer font outline coordinates through ab_glyph's single-precision scale factor before formatting them to four places."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_entity_content circled-character branch",
+      "lines": "9831-9883",
+      "role": "Uses centered_character_path generatively for every ordinary or custom class spot glyph when no oracle geometry is present."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_spot_letter_G.puml",
+    "test-diagrams/golden/class/class_spot_letter_U.puml",
+    "test-diagrams/golden/edge-cases/edge_class_spots.puml",
+    "test-diagrams/golden/edge-cases/edge_stereotype_spot_colors.puml"
+  ],
+  "claimed_invariant": "Centered-character SVG coordinates are the embedded TrueType outline's font-unit coordinates multiplied by the requested font size divided by units-per-em, then translated by the Java-compatible quarter-pixel center and DriverCenteredCharacterSvg's half-pixel offset. Java performs the outline transform and translation in double precision and rounds only once when SvgGraphics formats each final coordinate to four decimal places.",
+  "causal_divergence": "Rust obtains the mathematically identical scale through ab_glyph::ScaleFont::scale_factor, whose horizontal and vertical components are f32. Multiplying large integer font-unit coordinates by this single-precision ratio introduces errors from 0.0001px to 0.0045px before the final four-place formatting. Characters whose coordinates land away from a rounding boundary still match, while G, U, and R expose the same precision loss at different canvas translations.",
+  "planned_model_change": "Keep ab_glyph's unscaled outline and the existing Java-derived UnusedSpace centers, but compute the outline transform ratio directly as f64 font_size / f64 units_per_em. Apply that double ratio to each font-unit point and perform the existing translation and four-place formatting once. Do not add character tables, per-letter offsets, fixture conditions, or tolerance.",
+  "checked_derivations": [
+    {
+      "input": "test-diagrams/golden/class/class_spot_letter_G.puml",
+      "derivation": "The Rust and Java command sequence, center, and every coarse coordinate agree; only final digits differ, such as expected 32.8228 versus actual 32.8227 and expected 34.0513 versus actual 34.0512. This is the signature of an upstream precision loss before identical four-place formatting, not a glyph, center, or placement mismatch."
+    },
+    {
+      "input": "test-diagrams/golden/edge-cases/edge_stereotype_spot_colors.puml",
+      "derivation": "The R outline retains its complete topology and y coordinates but Rust x coordinates differ by 0.0044-0.0045px throughout the contour. A constant translation of the same outline through a single-precision scale explains the coherent residual; changing the character center or entity layout would move the ellipse or produce larger quarter-pixel deltas."
+    }
+  ],
+  "perturbation_axes": [
+    "custom and default spot characters across the printable ASCII range",
+    "integer and fractional canvas translations",
+    "circled-character font sizes from 8 through 24",
+    "one-leaf EntityImageDegenerated and linked SVEK bodies",
+    "renamed labels and changed spot colors"
+  ],
+  "scope_boundary": "This mechanism owns numeric precision in the TrueType outline-to-SVG transform for centered characters. It does not own font selection, UnusedSpace center derivation, glyph topology, class header layout, spot color/style resolution, arbitrary text rendering, comparator tolerance, or corpus eligibility.",
+  "acceptance": [
+    "All four evidence inputs become structurally equivalent without oracle data.",
+    "Existing default C, E, A, and I spot paths do not regress.",
+    "A fresh multi-character perturbation proves one double-precision transform handles changed characters and placements without character-specific data.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "per-character path literals or coordinate offsets",
+    "fixture-name or label-text conditions",
+    "rounding intermediate coordinates",
+    "comparator epsilon changes",
+    "golden-data access from shipping crates"
+  ]
+}
