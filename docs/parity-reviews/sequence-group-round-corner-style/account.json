@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-group-round-corner-style",
+  "status": "account_committed_before_implementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/Grouping.java:Grouping constructor and Grouping#getUsedStyles",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseGroupingHeader.java:constructor, drawBackgroundInternalU, drawInternalU, and getCorner",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/GroupingTile.java:GroupingTile#drawBackground and drawCompBackground"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs:sequence skinparam resolution",
+    "crates/rustuml-render/src/sequence.rs:group frame back-layer emission",
+    "crates/rustuml-render/src/sequence.rs:Event::GroupStart paint emission"
+  ],
+  "invariant": "Each sequence group captures its merged root.element.sequenceDiagram.group style at construction. Its RoundCorner diameter drives both the full frame URectangle and the header tab: SVG frame rx/ry are RoundCorner/2, and a nonzero header begins at left+RoundCorner/2 and closes its top-left edge with an arc of that radius. The style snapshot is owned by the group source epoch, so later declarations do not restyle an earlier group.",
+  "causal_divergence": "Rust resolves skinparam roundcorner only into participant head and note radii. Both group-frame emission sites always serialize square rects, and the GroupStart header always emits the zero-corner polygon. In the preserved dpi 125 checker input, Java resolves RoundCorner 18 before the group and emits base radius 9 (scaled to rx/ry and arc radii 11.7188); Rust omits both. The frame dimensions, header dimensions, stroke, fill, text, note corner, and scaling already agree.",
+  "planned_change": "Resolve the sequence group style through StyleCascade at each GroupStart.source_line, falling back to the final compatibility value only for legacy zero-source-line models. Feed the resulting radius into both non-Teoz back-layer frame rects and inline frame rects, and emit ComponentRoseGroupingHeader's rounded top-left path when nonzero. Preserve the existing square byte shape when radius is zero, and retain the generic scaler as the sole document-scale step.",
+  "perturbation_axes": [
+    "roundcorner zero versus nonzero and odd versus even diameters",
+    "style or skinparam declaration before versus after group construction",
+    "standard sequence versus teoz",
+    "single versus nested groups and alt/else branches",
+    "dpi versus explicit fractional scale",
+    "renamed participants, group labels, and changed message counts"
+  ],
+  "scope_boundary": "This mechanism owns only sequence group frame and header round-corner style resolution and paint. It does not alter notes, participant heads, frame dimensions, group layout, colors, stroke widths, generic SVG scaling, comparator behavior, or fixture eligibility.",
+  "acceptance": [
+    "The preserved fractional-dpi group-and-note checker input passes diff_one --no-oracle.",
+    "Tests prove frame and header share one group-owned radius while zero remains byte-compatible.",
+    "Fresh Java perturbations cover source order, nested topology, Teoz, scale form, labels, and corner boundaries.",
+    "The renderer suite and no-oracle ratchet remain green without family regression.",
+    "An independent checker records an accepted verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "matching Review Window, the checker fixture, dpi 125, or known coordinates",
+    "post-hoc SVG surgery or adding arcs in the generic scaler",
+    "applying the final roundcorner value to every historical group regardless of source order",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.puml",
+    "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.svg"
+  ]
+}

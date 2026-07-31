@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Arial
+component Intake
+component Queue
+component Archive
+Intake --> Queue : pre style label
+skinparam ArrowFontName Monospaced
+skinparam ArrowFontSize 14
+skinparam dpi 125
+Queue --> Archive : post_style_batch_v2
+@enduml

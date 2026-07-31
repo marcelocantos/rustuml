@@ -1,0 +1,15 @@
+@startuml
+scale 1.375
+left to right direction
+skinparam defaultFontName Arial
+skinparam ArrowFontName Serif
+skinparam ArrowFontSize 13
+component Client
+component Gateway
+component Ledger
+Client --> Gateway : routed through cache
+note on link
+  cache note
+end note
+Gateway --> Ledger : async ledger replay
+@enduml

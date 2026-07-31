@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-edge-label-font-metrics",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-component-edge-label-font-metrics-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit 72f7350119ab8753b2cf036c86d6cc125fdb3231, did not edit production source, and did not edit account.json."
+  },
+  "rust_revision": "2b17872924dd2ed9cad52ebd2702c207d2878cf2",
+  "rust_short_revision": "2b178729",
+  "account_commit": "2b17872924dd2ed9cad52ebd2702c207d2878cf2",
+  "corrected_account_commit": "f0262f69a13be4d5bb8a4bf16b7b453fe4f0c4da",
+  "implementation_commit": "72f7350119ab8753b2cf036c86d6cc125fdb3231",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "comparator_build_revision": "bc90d3a7495fd96826cf68a5b16e35d5a11f5d05",
+  "comparator_provenance": "The comparator binary was built from bc90d3a7495fd96826cf68a5b16e35d5a11f5d05, whose only delta above 2b17872924dd2ed9cad52ebd2702c207d2878cf2 is test-diagrams/no_oracle_baseline.txt; no shipping code changed between the requested review revision and the binary used here.",
+  "commands": [
+    "git status --short",
+    "git log --oneline -12",
+    "cat docs/parity-reviews/component-edge-label-font-metrics/account.json",
+    "git show --stat --summary 72f73501",
+    "git show 72f73501 --",
+    "git show f0262f69:docs/parity-reviews/component-edge-label-font-metrics/account.json",
+    "rg -n \"buildImage|appendTable|appendLine|addVisibilityModifier|calculateDimension\" /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "sed -n '1,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sed -n '1,420p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '420,525p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '1,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "rg -n \"component_edge_label_layout_width|component_no_oracle_spacing|measure_with_family|measure\\(\" crates/rustuml-render/src/component.rs",
+    "sed -n '1560,1735p' crates/rustuml-render/src/component.rs",
+    "sed -n '1860,2195p' crates/rustuml-render/src/component.rs",
+    "sed -n '3245,3310p' crates/rustuml-render/src/component.rs",
+    "sed -n '3440,3765p' crates/rustuml-render/src/component.rs",
+    "sed -n '6410,6545p' crates/rustuml-render/src/component.rs",
+    "git merge-base --is-ancestor 72f73501 2b178729",
+    "git show --format= --no-ext-diff 72f73501 -- crates/rustuml-render/src/component.rs | rg -n 'include_str|include_bytes|read_to_string|component-edge-label-font-metrics|preproc_theme_|t14-component-axis|checker_|golden|cerulean|minty|superhero|united|dpi 100|169\\.7917|168\\.75'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.puml test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.puml test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+    "xmllint --noout test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.svg test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.svg test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|Assumed diagram type' test-diagrams/perturbations/component-edge-label-font-metrics -g '*.svg'",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_united_component.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-font.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-dpi96.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-dpi.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-rootpad.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-skinpad.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/t14-component-axis-bothpad.puml",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one docs/parity-reviews/component-edge-label-font-metrics/account.json test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.puml test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.puml test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.svg test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.svg test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.svg",
+    "git show --stat --summary bc90d3a7",
+    "git diff --stat 2b178729..bc90d3a7"
+  ],
+  "no_cargo_or_rustc": true,
+  "artifact_hashes": {
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_sha256": "3f8ef154951748e7fbd35aed7fe0d044b54fd6243ccfe48ee8db8f476e6cc924",
+    "account_json_sha256": "e7045a06ded522a9c89c0a62223ec6bc3f1d66a7a87bfe360768a0f0cc8e8ca9",
+    "sources": {
+      "checker_serif_lr_note_scale.puml": "447cc3b7b99d93080ff93e0fc8586e19e3e7e8d7a12ef668d9971dd394f463b1",
+      "checker_ordered_font_flip_tb.puml": "478d171980a25571efeb8138fcaa5563867326954410d21e66cb6cbbc721df1a",
+      "checker_monospaced_lr_dpi.puml": "ea362a76c28f2991ebfb4080628ad7ef207454b545860b36f0b59e981858aa05"
+    },
+    "java_svgs": {
+      "checker_serif_lr_note_scale.svg": "545b007a2d5375d3d7d434591aa4b5652e4f81283ed3503532f1442a1bcc3bb7",
+      "checker_ordered_font_flip_tb.svg": "d0e918b943a5bd1fd1fe0427544294bcf93efd59927aa22d5b4c0c547bb35efb",
+      "checker_monospaced_lr_dpi.svg": "76cae3dc0341bf5ee960fae8186455cc4d9c4c739eb1345a9f4ce79df69a3cd9"
+    }
+  },
+  "documents_read": [
+    "AGENTS.md parity honesty and T14 rules",
+    "docs/parity-reviews/component-edge-label-font-metrics/account.json at 2b17872924dd2ed9cad52ebd2702c207d2878cf2",
+    "docs/parity-reviews/component-edge-label-font-metrics/account.json at f0262f69a13be4d5bb8a4bf16b7b453fe4f0c4da",
+    "crates/rustuml-render/src/component.rs at 2b17872924dd2ed9cad52ebd2702c207d2878cf2",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  ],
+  "source_inspection": {
+    "java": [
+      "GraphvizImageBuilder.buildImage resolves one arrow FontConfiguration per link and passes it into the SvekEdge constructor.",
+      "SvekEdge constructs labelText from that same font, addVisibilityModifier wraps it with the ordinary one-pixel margin for non-autolinks, appendLine calls labelText.calculateDimension(stringBounder), and appendTable truncates that width and height to integers before emitting the fixed HTML table.",
+      "SvekResult.calculateDimension includes the solved edge envelope after Graphviz layout and then translates the whole diagram into its six-pixel frame."
+    ],
+    "rust": [
+      "component_link_styles resolves per-connection font_family and font_size through the source-line-aware link cascade.",
+      "The implementation threads link_style.font_family into component_edge_label_layout_width for ordinary center labels, note-on-link labels, and hidden right-edge bookkeeping, and component_no_oracle_spacing now measures the shortest horizontal table with that resolved family too.",
+      "The no-oracle draw loop rebinds component_arrow_font_family and component_arrow_font_size from component_link_styles[connection_index] before painting each edge label, so I did not find a remaining reviewed path that measures the placeholder with one face and paints the same component relationship label with another."
+    ],
+    "fixture_shape_search": {
+      "command": "git show --format= --no-ext-diff 72f73501 -- crates/rustuml-render/src/component.rs | rg -n 'include_str|include_bytes|read_to_string|component-edge-label-font-metrics|preproc_theme_|t14-component-axis|checker_|golden|cerulean|minty|superhero|united|dpi 100|169\\.7917|168\\.75'",
+      "result": "The shipping diff contains no golden-data reads, fixture stems, theme-name branches, or coordinate keyed rewrites. The only fixture-like strings are in the added regression test's expected width assertions."
+    }
+  },
+  "reruns": [
+    {
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/golden/preprocessing/preproc_theme_united_component.puml",
+      "result": "pass"
+    },
+    {
+      "source": "/private/tmp/t14-component-axis-font.puml",
+      "result": "pass"
+    },
+    {
+      "source": "/private/tmp/t14-component-axis-dpi96.puml",
+      "result": "pass"
+    },
+    {
+      "source": "/private/tmp/t14-component-axis-dpi.puml",
+      "result": "pass"
+    },
+    {
+      "source": "/private/tmp/t14-component-axis-rootpad.puml",
+      "result": "pass"
+    },
+    {
+      "source": "/private/tmp/t14-component-axis-skinpad.puml",
+      "result": "pass"
+    },
+    {
+      "source": "/private/tmp/t14-component-axis-bothpad.puml",
+      "result": "pass"
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.puml",
+      "golden": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_serif_lr_note_scale.svg",
+      "axes": [
+        "horizontal left-to-right topology",
+        "explicit fractional scale 1.375",
+        "serif ArrowFontName override",
+        "link-note composition",
+        "changed relationship labels"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.puml",
+      "golden": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_ordered_font_flip_tb.svg",
+      "axes": [
+        "vertical topology",
+        "font declaration after the first link",
+        "ArrowFontName flip from default Arial to Monospaced",
+        "fractional dpi 125",
+        "changed labels"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.puml",
+      "golden": "test-diagrams/perturbations/component-edge-label-font-metrics/checker_monospaced_lr_dpi.svg",
+      "axes": [
+        "horizontal left-to-right topology",
+        "Monospaced ArrowFontName",
+        "dpi 100",
+        "changed labels"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "I tried to disprove the causal claim and partially failed at the mechanism level: Java source inspection does support the account that one resolved arrow FontConfiguration feeds both the visible component relationship label and its hidden fixed-size Graphviz table, and the reviewed Rust patch now threads the resolved family through the reviewed placeholder measurement sites.",
+    "The four themed golden regressions named by the account all pass through diff_one --no-oracle, and every available controlled t14-component-axis case also passes on the shipped no-oracle path.",
+    "The checker's fresh serif-plus-note perturbation is valid Java input but fails badly on the shipped no-oracle path. Java places the three components in a single horizontal band with the note attached to the first edge, while Rust produces a materially different root envelope and edge/note placement. This is an executable counterexample, so the review cannot accept the mechanism even if the failure is adjacent.",
+    "The checker's declaration-order perturbation is also a valid Java input and fails no-oracle. The first link is created before ArrowFontName switches to Monospaced and the second after it, under dpi 125; Rust diverges structurally from the Java SVG across topology and label placement. That suggests unresolved behavior around source-order-sensitive link styling or downstream layout interactions, not a cleanly closed mechanism.",
+    "The checker's monospace horizontal perturbation fails in a narrower but still real way. Java emits font-family=\"monospace\" and converts label spaces to non-breaking spaces in the SVG text nodes, while Rust emits font-family=\"Monospaced\" and literal spaces. Even though the geometry matches, this remains a valid fresh no-oracle failure on the product path.",
+    "I did not find fixture-shaped logic, unexplained new parity constants, or a remaining reviewed path that measures the placeholder with one face and paints the same component relationship label with another. The rejection is driven by three preserved executable fresh counterexamples, not by source-audit suspicion alone."
+  ],
+  "summary": {
+    "preserved_inputs_rerun": 10,
+    "fresh_inputs": 3,
+    "java_syntax_errors": 0,
+    "passes": 10,
+    "failures": 3
+  },
+  "verdict": "rejected",
+  "verdict_reason": "The implementation closes the claimed font-metric measurement gap on the reviewed source path, but three fresh valid no-oracle perturbations still fail and must remain executable. Under the T14 checker rule, any valid fresh product-path failure rejects the change."
+}

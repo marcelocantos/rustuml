@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+skinparam defaultFontName Helvetica
+skinparam ArrowFontName Monospaced
+skinparam ArrowFontSize 15
+skinparam dpi 100
+component Alpha
+component Beta
+component Gamma
+Alpha --> Beta : mono grid
+Beta --> Gamma : monospace width audit
+@enduml
