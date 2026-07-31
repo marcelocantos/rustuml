@@ -1,0 +1,9 @@
+@startuml
+participant Alpha_847
+participant Beta_847
+RNoTe right of Beta_847 #Wheat
+boundary remains note payload
+control remains note payload too
+EnD RNoTe
+Alpha_847 -> Beta_847 : later command
+@enduml

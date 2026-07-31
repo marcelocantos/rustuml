@@ -1,0 +1,9 @@
+@startuml
+class BraceTarget_842
+NoTe BoTtOm of BraceTarget_842 #HoneyDew {
+control remains note payload
+database remains note payload too
+}
+class AfterBrace_842
+BraceTarget_842 --> AfterBrace_842
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+participant Client_845
+participant Service_845
+Client_845 -> Service_845 : call
+note right of Service_845
+ordinary note first
+end note
+/rnote right of Service_845 #LightGreen
+actor remains rectangular note payload
+node remains rectangular note payload too
+end rnote
+Service_845 --> Client_845 : result
+@enduml

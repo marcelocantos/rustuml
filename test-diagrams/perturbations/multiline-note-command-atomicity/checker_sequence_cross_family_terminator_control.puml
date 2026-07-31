@@ -1,0 +1,9 @@
+@startuml
+participant Left_846
+participant Right_846
+Left_846 -> Right_846 : ping
+hnote over Left_846 #Lavender
+component remains note payload
+end rnote
+Right_846 --> Left_846 : pong
+@enduml

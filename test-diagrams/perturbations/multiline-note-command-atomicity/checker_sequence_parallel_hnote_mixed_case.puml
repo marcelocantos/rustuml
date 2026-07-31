@@ -1,0 +1,10 @@
+@startuml
+participant Sender_844
+participant Receiver_844
+Sender_844 -> Receiver_844 : request
+& HNoTe over Receiver_844 #LightBlue
+component remains note payload
+database remains note payload too
+EnD HNoTe
+Receiver_844 --> Sender_844 : response
+@enduml

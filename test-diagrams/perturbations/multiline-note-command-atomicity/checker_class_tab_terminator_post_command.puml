@@ -1,0 +1,6 @@
+@startuml
+note as TabTerminated_848 #Azure
+control remains note payload
+end	note
+class AfterTab_848
+@enduml

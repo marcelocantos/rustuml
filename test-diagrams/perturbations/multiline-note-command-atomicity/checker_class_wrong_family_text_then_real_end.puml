@@ -1,0 +1,10 @@
+@startuml
+note as FamilyLiteral_841 #LightYellow
+end hnote
+component PayloadKeywordA_841
+component PayloadKeywordB_841
+component PayloadKeywordC_841
+database remains note payload too
+end note
+class AfterLiteral_841
+@enduml

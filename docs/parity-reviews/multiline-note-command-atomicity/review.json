@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "mechanism": "multiline-note-command-atomicity",
+  "account_commit": "3f97e1c131e7377188b4f3ac8df123ef753c1f0e",
+  "implementation_commits": [
+    "bf402b565d6cdc8ca9ebf4e5b2b56cbdb8005d96",
+    "f137806683f2dc6e90d681898703c0b8573c135b"
+  ],
+  "prior_rejected_review_commit": "9b8e3a33ca8fdbfae55ad36f38f7f1e220244d56",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "codex-desktop-current-task-2026-08-01",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop",
+    "role": "independent adversarial checker",
+    "independence": "The reviewer did not implement bf402b56 or f1378066 and was instructed to try to disprove the account."
+  },
+  "review_context": {
+    "rust_revision_under_review": "f137806683f2dc6e90d681898703c0b8573c135b",
+    "review_worktree_head_when_tests_began": "f137806683f2dc6e90d681898703c0b8573c135b",
+    "concurrent_unrelated_commits_observed": [
+      "9e0a34d106924db9b2ae5cd82a776f903b069b7c docs: account for class standalone leaf Magma",
+      "2d80529c249f760705f12998d3329ea9ec26c14d test: reject deployment floating note lifecycle review",
+      "b70be5ee7ae216b0b138ccf58060e672aa8b3430 fix: place every standalone class leaf through Magma"
+    ],
+    "concurrency_effect": "The concurrent commits change an unrelated class-layout mechanism or add another mechanism's review. They do not change the parser/deployment production paths under review or the already-built diff_one binary used here.",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_binary": "target/release/examples/diff_one",
+    "diff_one_sha256": "115c526d3ac980671c6ec937fd23fef2af9cc588945caf6573613dc76db8c14b",
+    "diff_one_mtime": "2026-08-01T00:15:26+1000",
+    "binary_provenance": "The existing release binary was built after f1378066 was committed at 2026-08-01T00:14:55+1000. The binary does not embed a Git revision, so its SHA-256 and timestamp are recorded rather than claiming stronger provenance.",
+    "cargo_or_rustc_invoked": false,
+    "unrelated_dirty_paths_not_touched": [
+      "crates/rustuml-render/src/class.rs",
+      "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/"
+    ]
+  },
+  "commands": [
+    "git show --stat --oneline 3f97e1c1",
+    "git show 3f97e1c1:docs/parity-reviews/multiline-note-command-atomicity/account.json",
+    "git show --stat --oneline bf402b56",
+    "git show --format=fuller --find-renames bf402b56 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/sequence.rs",
+    "git show --stat --oneline f1378066",
+    "git show --format=fuller f1378066 -- crates/rustuml-render crates/rustuml-parser",
+    "git show 9b8e3a33:docs/parity-reviews/multiline-note-body-dispatch-isolation/review.json",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+    "git grep -n -E 'fixture|golden|checker_|MixedCasePayload|DispatchPayload|BracePayload|multiline-note-command-atomicity' HEAD -- crates/rustuml-parser/src crates/rustuml-render/src docs/parity-reviews/multiline-note-command-atomicity",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/multiline-note-command-atomicity/*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_brace_payload_keywords.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_endnote_colored_indented.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_floating_mixed_case_colored.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_inline_before_multiline_note.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_multiple_note_blocks_then_class.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_hnote_body_keywords.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_note_on_arrow_keywords.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_rnote_right_keywords.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_floating_dotted_alias_mixed_case.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_wrong_family_text_then_real_end.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_brace_mixed_case_post_command.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_deployment_node_then_floating_endnote.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_parallel_hnote_mixed_case.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_vmerge_rnote_after_note.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_cross_family_terminator_control.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_rnote_case_order_control.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_tab_terminator_post_command.puml"
+  ],
+  "source_audit": {
+    "java_model": [
+      "PSystemCommandFactory.getCandidate asks each registered command to validate the current line. An OK_PARTIAL command receives successive physical lines through isMultilineCommandOk until that same command returns OK or NOT_OK, so the command owns its interior before later commands are considered.",
+      "CommandMultilines2 validates the first line with the command-specific starting regex and the last line with the command-specific END regex. Interior lines are not offered as sibling commands.",
+      "CommandFactoryNote accepts floating aliases matching [%pLN_.]+ and its END is ^[%s]*end[%s]?note$, so a dot is valid in an alias and one whitespace character, including a tab, is valid between end and note.",
+      "CommandFactoryNoteOnEntity has distinct ordinary and final-bracket commands. The ordinary command ends only with end-note syntax; the bracket command ends only with a closing brace.",
+      "FactorySequenceNoteCommand accepts optional ampersand parallel and slash vertical-merge prefixes before note, hnote, or rnote. Its END deliberately permits note, hnote, or rnote regardless of opener shape."
+    ],
+    "rust_model": [
+      "bf402b56 centralizes opener recognition in note_command_parts and span discovery in completed_multiline_note_payload, then adds independent class, deployment, and sequence buffering paths.",
+      "note_command_parts strips ampersand and slash prefixes, but SeqParser::try_note still begins its consumer regex at (h|r)?note. Dispatch therefore hides prefixed bodies while the sequence consumer rejects the opener and later parses body words as participants.",
+      "completed_multiline_note_payload uses is_note_family_terminator for every non-brace opener. That matches Java sequence semantics but is broader than Java CommandFactoryNote and CommandFactoryNoteOnEntity, where hnote/rnote endings remain ordinary payload.",
+      "is_ordinary_note_terminator accepts only endnote and end note after trimming. It does not implement Java's single-whitespace END regex, so a tab-terminated Java-valid block remains unterminated in Rust.",
+      "ClassParser's floating multiline regex restricts aliases to a single word even though Java accepts dotted aliases. The shared dispatch helper recognizes the command, but the selected class consumer drops it.",
+      "The deployment multiline floating regex accepts an optional color non-capturingly, NoteAccum has no color field, DeploymentNote has no color field, and render_floating_deployment_note always uses NOTE_FILL. The command is retained after f1378066, but its color semantics are discarded.",
+      "f1378066 changes floating deployment note source-line retention, layout membership, emission order, and rendering. It does not repair alias, terminator, sequence-prefix, or note-color grammar/model gaps."
+    ],
+    "fixture_and_constant_audit": [
+      "No shipping-code branch keyed to checker filenames, fixture labels, golden SVG bytes, note aliases used by the reviews, or corpus paths was found in bf402b56 or f1378066.",
+      "No new parity-affecting layout constant was introduced by bf402b56. The f1378066 source-line expression current_line.max(1) + 1 has an adjacent preprocessing provenance comment and is not keyed to a fixture; it is not implicated in the rejected cases.",
+      "The failures arise from grammar and model-shape omissions, not tuned coordinates or comparator behavior."
+    ]
+  },
+  "preserved_inputs": [
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_brace_payload_keywords.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_endnote_colored_indented.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_floating_mixed_case_colored.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_inline_before_multiline_note.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_multiple_note_blocks_then_class.puml",
+      "result": "fail_outside_parser_mechanism",
+      "detail": "Both outputs are CLASS and preserve both note payloads and the later class, but Java uses a 414x154 vertical layout while Rust uses a 612x70 horizontal layout. This is the account's explicitly excluded class SVEK placement failure for multiple floating notes, not a hidden parser success."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent after bf402b56 plus f1378066."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_hnote_body_keywords.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_note_on_arrow_keywords.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_rnote_right_keywords.puml",
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    }
+  ],
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_floating_dotted_alias_mixed_case.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_floating_dotted_alias_mixed_case.svg",
+      "java_valid": true,
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "mixed-case opener and terminator",
+        "dotted floating-note alias",
+        "color",
+        "body-leading control keyword",
+        "post-terminator class command"
+      ],
+      "result": "fail",
+      "classification": "direct parser/model failure",
+      "detail": "Java creates the dotted note quark beneath an Audit namespace cluster and the later class. Rust selects CLASS but drops the note because ClassParser restricts the alias to a single word."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_wrong_family_text_then_real_end.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_wrong_family_text_then_real_end.svg",
+      "java_valid": true,
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "ordinary class note",
+        "sequence-family terminator as literal body text",
+        "multiple component and deployment body keywords",
+        "later legal ordinary terminator",
+        "post-terminator class command"
+      ],
+      "result": "fail",
+      "classification": "direct command-boundary and dispatch failure",
+      "detail": "Java's ordinary note command treats end hnote and the following keywords as payload until end note. Rust's shared span finder closes at end hnote, exposes the payload to subtype scoring, and selects DESCRIPTION instead of CLASS."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_brace_mixed_case_post_command.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_brace_mixed_case_post_command.svg",
+      "java_valid": true,
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "mixed-case attached note",
+        "closing-brace terminator",
+        "body-leading control and database keywords",
+        "post-terminator declaration and relationship"
+      ],
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_deployment_node_then_floating_endnote.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_deployment_node_then_floating_endnote.svg",
+      "java_valid": true,
+      "java_diagram_type": "DESCRIPTION",
+      "axes": [
+        "node before floating note",
+        "mixed-case opener and compact terminator",
+        "colored note",
+        "two body keywords",
+        "post-terminator artifact and relationship"
+      ],
+      "result": "fail",
+      "classification": "direct parser/model failure with separate minor geometry residue",
+      "detail": "Rust retains and orders the note after f1378066, but discards its MistyRose color and renders the default note fill. A 0.01 vertical coordinate difference also remains, but the color mismatch alone rejects command construction parity."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_parallel_hnote_mixed_case.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_parallel_hnote_mixed_case.svg",
+      "java_valid": true,
+      "java_diagram_type": "SEQUENCE",
+      "axes": [
+        "parallel ampersand prefix",
+        "mixed-case hnote",
+        "body-leading component and database keywords",
+        "post-terminator reply",
+        "color"
+      ],
+      "result": "fail",
+      "classification": "direct parser command-consumer failure",
+      "detail": "Java renders the parallel hexagonal note. Rust dispatch recognizes the prefixed opener, but SeqParser rejects it; body words become extra participants and the note disappears."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_vmerge_rnote_after_note.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_vmerge_rnote_after_note.svg",
+      "java_valid": true,
+      "java_diagram_type": "SEQUENCE",
+      "axes": [
+        "slash vertical-merge prefix",
+        "rnote after an ordinary note",
+        "body-leading actor and node keywords",
+        "post-terminator reply",
+        "declaration order"
+      ],
+      "result": "fail",
+      "classification": "direct parser command-consumer failure",
+      "detail": "Java parses and vertically merges the rectangular note. Rust rejects the slash-prefixed opener, omits the note, and creates participants from its body."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_cross_family_terminator_control.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_cross_family_terminator_control.svg",
+      "java_valid": true,
+      "java_diagram_type": "SEQUENCE",
+      "axes": [
+        "hnote opener",
+        "rnote-family terminator",
+        "body-leading component keyword",
+        "post-terminator reply"
+      ],
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent; Java sequence commands intentionally permit a different note-family END."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_rnote_case_order_control.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_sequence_rnote_case_order_control.svg",
+      "java_valid": true,
+      "java_diagram_type": "SEQUENCE",
+      "axes": [
+        "mixed-case rnote and terminator",
+        "note before first message",
+        "body-leading boundary and control keywords",
+        "post-terminator message"
+      ],
+      "result": "pass",
+      "detail": "SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_tab_terminator_post_command.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-command-atomicity/checker_class_tab_terminator_post_command.svg",
+      "java_valid": true,
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "ordinary floating note",
+        "tab between end and note",
+        "body-leading control keyword",
+        "post-terminator class command",
+        "color"
+      ],
+      "result": "fail",
+      "classification": "direct terminator grammar failure",
+      "detail": "Java's [%s]? END regex accepts the tab and renders the note plus later class. Rust recognizes neither the completed span nor the parser terminator and emits only its minimal empty envelope."
+    }
+  ],
+  "findings": [
+    "The account's core causal claim is supported: Java gives an OK_PARTIAL command exclusive ownership of physical lines until that exact command's END regex accepts the block.",
+    "The implementation does not preserve that exact-command boundary. It replaces command-specific END regexes with a shared family predicate, which is correct for sequence notes but overbroad for ordinary class and attached notes.",
+    "Dispatch and consumer grammars are not one model. Prefixes are stripped for span discovery but rejected by SeqParser, dotted aliases are recognized as note commands but rejected by ClassParser, and Java-valid tab termination is accepted by neither Rust layer.",
+    "Deployment floating-note lifecycle is now present, but command construction remains lossy because the accepted color is not represented in NoteAccum or DeploymentNote.",
+    "No fixture-shaped shipping logic, golden-data read, filename conditional, or unexplained parity constant was found in the reviewed implementation.",
+    "The preserved multiple-floating-note class case still fails only in SVEK placement. It is retained and reported as an explicit out-of-scope renderer residue, not counted as a parser-mechanism failure.",
+    "Six fresh valid counterexamples directly reject the implementation across terminator specificity, whitespace grammar, alias grammar, sequence prefixes, and deployment note metadata."
+  ],
+  "summary": {
+    "preserved_valid_inputs": 14,
+    "preserved_comparator_passes": 13,
+    "preserved_out_of_scope_layout_failures": 1,
+    "fresh_valid_inputs": 9,
+    "fresh_java_successes": 9,
+    "fresh_comparator_passes": 3,
+    "fresh_comparator_failures": 6,
+    "fresh_direct_mechanism_failures": 6,
+    "all_valid_inputs": 23,
+    "all_comparator_passes": 16,
+    "all_comparator_failures": 7,
+    "cargo_or_rustc_invocations": 0
+  },
+  "verdict": "REJECTED",
+  "verdict_reason": "Rejected. Although every previously identified parser counterexample except the separately-accounted multiple-floating-note layout case now compares structurally, six fresh Java-valid inputs disprove exact command atomicity. Rust overgeneralizes ordinary-note END matching, omits Java's whitespace terminator grammar, splits dispatch recognition from consumer grammar for dotted aliases and sequence prefixes, and discards accepted deployment note color metadata."
+}

@@ -1,0 +1,9 @@
+@startuml
+node RuntimeFirst_843
+NoTe as DeployMemo_843 #MistyRose
+database remains note payload
+control remains note payload too
+ENDNOTE
+artifact TailArtifact_843
+RuntimeFirst_843 --> TailArtifact_843
+@enduml

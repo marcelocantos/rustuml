@@ -1,0 +1,6 @@
+@startuml
+NoTe as Audit.Memo_840 #AliceBlue
+control remains note payload
+EnDnOtE
+class AfterMemo_840
+@enduml
