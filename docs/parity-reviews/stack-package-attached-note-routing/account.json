@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "stack-package-attached-note-routing",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java:executeInternal",
+    "src/main/java/net/sourceforge/plantuml/dot/DotData.java:isDegeneratedWithFewEntities",
+    "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java:getNodeUid",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java:cluster special-point emission"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs:resolve_note_target and push_note",
+    "crates/rustuml-render/src/class.rs:notes-only shortcut",
+    "crates/rustuml-render/src/class.rs:attached-note edge construction",
+    "crates/rustuml-render/src/class.rs:relationship_layout_id and cluster endpoint creation"
+  ],
+  "invariant": "Java lowers every attached note to a synthetic leaf plus an ordinary Link. Degeneration is allowed only with zero groups and zero links. Bibliotekon maps any group endpoint to its cluster special point, and ClusterDotString emits that point whenever any SVEK edge, including a note link, touches the group. Semantic aliases remain metadata; Graphviz edges use concrete empty-leaf or cluster-special-point IDs.",
+  "causal_divergence": "Rust's parser resolves package aliases correctly, but the renderer's notes-only shortcut ignores packages and generated note links. Attached-note edges use semantic package aliases instead of relationship_layout_id, so LayoutGraph drops them when no node has that ID. Nonempty package clusters create special endpoints only for ordinary relationships, not attached notes. The retained note slots are consequently never painted because their solved edge is absent.",
+  "planned_change": "Restrict notes-only degeneration to the Java no-group/no-link shape; map attached-note package targets through relationship_layout_id for graph construction and solved-edge lookup; and create cluster endpoint nodes whenever either an ordinary relationship or attached note touches the package. Keep semantic aliases in SVG metadata and comments. Do not change parser target ownership or note-slot ordering.",
+  "perturbation_axes": [
+    "empty package leaf versus nonempty package cluster",
+    "all four note positions and LR versus TB direction",
+    "aliases differing from display labels",
+    "sibling relationships and external entities",
+    "scale versus dpi and trailing notes"
+  ],
+  "scope_boundary": "This mechanism owns class attached-note degeneration and semantic-to-layout endpoint routing for package targets. It does not alter package corner geometry, note typography, parser ownership, general edge routing, scaling, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "All four preserved stack-frontier rereview note failures pass diff_one --no-oracle",
+    "Tests cover empty and clustered package targets with aliases, directions, sibling links, and note positions",
+    "Fresh valid Java perturbations cover at least two independent axes",
+    "The renderer suite and no-oracle product ratchet remain green",
+    "An independent checker records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "matching stack labels, note text, scale, dpi, or known coordinates",
+    "making semantic aliases into duplicate layout nodes",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/rereview_empty_brace_stack_scale_note.puml",
+    "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/rereview_empty_brace_stack_dpi_siblings.puml",
+    "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/rereview_nonempty_stack_scale_note_children.puml",
+    "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/rereview_nonempty_stack_dpi_note_external.puml"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "multiline-note-body-dispatch-isolation",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/core/DiagramType.java:UML factory set",
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:factory ordering",
+    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:multiline accumulation",
+    "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java:opening and terminator validation",
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:floating multiline note grammar",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:command registration"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/class.rs:multiline note buffering",
+    "crates/rustuml-parser/src/parse/deployment.rs:DESCRIPTION keyword parsing"
+  ],
+  "invariant": "Java factory selection treats each completed multiline command as one syntactic unit. For `note as N ... end note`, interior lines are opaque display text and cannot influence diagram type. Sequence rejects that opener, Class accepts it before Description is tried, and real commands after the terminator remain ordinary dispatch evidence. An unterminated note does not hide arbitrary remaining source.",
+  "causal_divergence": "Rust independently scores every physical line. A note body beginning with `control` or `boundary` is counted as sequence/description syntax and can invalidate class viability, selecting Deployment even though the class parser already buffers the note body correctly. The deployment parser then interprets payload text as entities or produces an empty diagram.",
+  "planned_change": "Classify completed multiline note spans before subtype scoring. Score the opener normally but exclude body and terminator lines from every subtype heuristic. Recognize command grammar rather than body keywords, and hide a span only when a valid terminator exists so malformed-input behavior and top-level commands after `end note` remain observable.",
+  "perturbation_axes": [
+    "body-leading control, boundary, actor, node, state, and class-like keywords",
+    "plain text versus Creole/font markup",
+    "renamed payloads and changed line count/order",
+    "floating versus attached multiline notes",
+    "real top-level keyword after end note",
+    "terminated versus unterminated command"
+  ],
+  "scope_boundary": "This mechanism owns subtype-scoring isolation for completed multiline note bodies. It does not alter class note parsing/rendering, deployment entity grammar, general factory precedence, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "All preserved review-2 note-only dispatch failures render as CLASS and pass diff_one --no-oracle",
+    "Parser tests prove body keywords are opaque while post-terminator commands and malformed notes remain visible",
+    "Fresh valid Java perturbations cover at least two independent axes",
+    "Parser tests and the no-oracle product ratchet remain green",
+    "An independent checker records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "special-casing control, boundary, checker labels, or font markup",
+    "forcing all note-leading diagrams to CLASS",
+    "ignoring unterminated spans",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/svg-logical-monospace-serialization/review-2.json",
+    "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+    "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml"
+  ]
+}

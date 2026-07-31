@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-round-corner-propagation",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:getStyle and drawU",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:constructor and drawU",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java:drawFolder",
+    "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:packageStyle",
+    "src/main/java/net/sourceforge/plantuml/svek/PackageStyle.java:fromString"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:empty_package_round_corner",
+    "crates/rustuml-render/src/class.rs:layout_empty_packages",
+    "crates/rustuml-render/src/class.rs:emit_layout_empty_symbol_folder_shape"
+  ],
+  "invariant": "EntityImageEmptyPackage resolves classDiagram.package.title and stores its RoundCorner diameter in Fashion before ClusterDecoration selects the concrete painter. An unknown packageStyle such as `stack` falls back to PackageStyle.FOLDER in SkinParam, so the resulting USymbolFolder must consume the package-title diameter. USymbolFolder uses a polygon only when the diameter is zero; otherwise every body corner has radius diameter/2 and the tab shoulder uses radius 1.5 times that radius.",
+  "causal_divergence": "Rust now resolves and stores the correct package-title diameter in EmptyPackageLayout, but emit_layout_empty_symbol_folder_shape still hardcodes the default 2.5 and 3.75 radii. The preserved packageStyle checker therefore has the correct semantic fallback to a folder but paints the wrong Fashion geometry.",
+  "planned_change": "Pass EmptyPackageLayout.round_corner into the empty folder/package path equations, including Java's zero-diameter polygon branch and nonzero tab/body arcs. Preserve PackageStyle's supported-value set and unknown-value fallback; do not add `stack` as a supported packageStyle. Apply the same resolved package-title value to ordinary empty-package folder rendering where it shares EntityImageEmptyPackage ownership.",
+  "perturbation_axes": [
+    "unknown packageStyle fallback versus explicit folder/package symbol",
+    "zero versus odd and even nonzero package-title diameter",
+    "style before versus after package creation",
+    "nested versus root empty package",
+    "scale versus dpi and renamed labels"
+  ],
+  "scope_boundary": "This mechanism owns class EntityImageEmptyPackage folder/package corner propagation only. It does not alter supported packageStyle values, stack geometry, package dimensions, layout, dispatch, scaling, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "checker_class_packagestyle_even_dpi passes diff_one --no-oracle",
+    "Tests cover zero and nonzero folder/package path branches and creation-time selector precedence",
+    "Fresh valid Java perturbations cover at least two independent axes",
+    "The renderer suite and no-oracle product ratchet remain green",
+    "An independent checker records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "treating stack as a valid PackageStyle",
+    "matching checker labels, dpi 168, or known SVG coordinates",
+    "post-processing serialized paths",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+    "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.svg"
+  ]
+}
