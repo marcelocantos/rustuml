@@ -1,0 +1,6 @@
+@startuml
+node "Unknown Ordinary Source" as UnknownOrdinarySource
+node "Unknown Ordinary Target" as UnknownOrdinaryTarget
+UnknownOrdinarySource --> UnknownOrdinaryTarget : unknown ordinary route
+note on link #NotARealPlantColor : structurally ordinary unknown color
+@enduml

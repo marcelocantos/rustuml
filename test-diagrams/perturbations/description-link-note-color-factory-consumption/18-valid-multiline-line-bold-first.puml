@@ -1,0 +1,9 @@
+@startuml
+node "Bold First Source" as BoldFirstSource
+node "Bold First Target" as BoldFirstTarget
+BoldFirstSource --> BoldFirstTarget : bold first route
+note bottom on link #line.bold:Tomato
+  bold first dotted-name directive owns multiline
+  border color changes but stroke style remains solid
+endnote
+@enduml

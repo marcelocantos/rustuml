@@ -1,0 +1,6 @@
+@startuml
+node "Shadow Source" as ShadowSource
+node "Shadow Target" as ShadowTarget
+ShadowSource --> ShadowTarget : shadow route
+note top of link #back:White;line:SlateBlue;shadowing:false;line.dotted : shadow retained and dotted style inert
+@enduml

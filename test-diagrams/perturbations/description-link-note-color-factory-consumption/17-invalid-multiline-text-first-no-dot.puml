@@ -1,0 +1,8 @@
+@startuml
+node "Text First Source" as TextFirstSource
+node "Text First Target" as TextFirstTarget
+TextFirstSource --> TextFirstTarget : text first route
+note on link #text:RoyalBlue
+  text first directive has no dot
+endnote
+@enduml

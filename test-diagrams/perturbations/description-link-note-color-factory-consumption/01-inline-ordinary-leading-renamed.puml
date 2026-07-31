@@ -1,0 +1,6 @@
+@startuml
+node "Ingress Alpha" as IngressAlpha
+node "Archive Beta" as ArchiveBeta
+IngressAlpha --> ArchiveBeta : renamed route
+note left on link #LightGreen: ordinary leading color body
+@enduml

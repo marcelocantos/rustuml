@@ -1,0 +1,6 @@
+@startuml
+node "Compact Source" as CompactSource
+node "Compact Target" as CompactTarget
+CompactSource --> CompactTarget : compact route
+note on link #back:LightYellow: compact keyed boundary should reject
+@enduml

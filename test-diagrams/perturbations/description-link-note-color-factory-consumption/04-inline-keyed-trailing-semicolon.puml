@@ -1,0 +1,6 @@
+@startuml
+node "Semicolon Source" as SemicolonSource
+node "Semicolon Target" as SemicolonTarget
+SemicolonSource --> SemicolonTarget : semicolon route
+note top on link #back:Lavender;line:Purple;: semicolon boundary body
+@enduml
