@@ -45,6 +45,21 @@
       ],
       "lines": "103-165",
       "role": "Merges body and decoration dimensions and centres the body at (dimTotal.width - dimOriginal.width) / 2."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbol": "SvekResult.calculateDimension",
+      "lines": "125-136",
+      "role": "Measures the complete painted SVEK block through LimitFinder, normalises its minimum to 6, and adds 15 to the resulting MinMax dimension before page-decoration wrapping."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": [
+        "LimitFinder.drawRectangle",
+        "LimitFinder.drawEmpty"
+      ],
+      "lines": "150-178",
+      "role": "Owns the boundary convention in SvekResult's painted MinMax, including rectangle minima one pixel before their visible origin and complete UEmpty endpoints."
     }
   ],
   "rust_locations": [
@@ -68,9 +83,19 @@
     "test-diagrams/golden/edge-cases/edge_size_long_title.puml",
     "test-diagrams/golden/edge-cases/edge_unicode_chinese_title.puml"
   ],
-  "claimed_invariant": "For a one-leaf class diagram, page-decoration centring composes two independently owned Java dimensions: EntityImageDegenerated reports the intrinsic body plus exactly fourteen pixels, while each styled title, caption, header, or footer reports text, style insets, and TextBlockBordered's final one-pixel extent. DecorateEntityImage then centres the body from those complete dimensions. Changing labels, line count, alignment, or Unicode content changes measured text but not either ownership rule.",
-  "causal_divergence": "Rust already selects the degenerated lifecycle but feeds page-decoration layout a generic fifteen-pixel SVEK body addition. It simultaneously omits TextBlockBordered's final one-pixel width from every decoration. When a decoration is wider than the body, the centring numerator is therefore two pixels smaller than Java's: the decoration is one pixel too narrow and the body is one pixel too wide. Division by two places every body primitive exactly one pixel too far left in the observed title cluster.",
-  "planned_model_change": "Use EntityImageDegenerated's source-defined fourteen-pixel body addition when uses_degenerated_entity is true, retaining the existing generic SVEK addition for every other lifecycle. Add DECORATION_BORDER_EXTENT once to DecorationLayout::block_width after selecting the widest text line, matching the existing block_height model. Do not alter text metrics, coordinates, or fixture-specific branches. Measure the resulting outer canvas separately; any canvas model change requires a source-backed amendment committed before implementation.",
+  "claimed_invariant": "Page-decoration centring composes independently owned Java dimensions. EntityImageDegenerated reports the intrinsic body plus exactly fourteen pixels. SvekResult reports a LimitFinder MinMax plus fifteen; because Rust reconstructs a visible body span rather than that MinMax, the equivalent wrapped width is the visible span plus sixteen, including the omitted boundary pixel. Each styled title, caption, header, or footer reports text, style insets, and TextBlockBordered's final one-pixel extent. DecorateEntityImage then centres the body from those complete dimensions. Changing labels, line count, alignment, Unicode content, or SVEK topology changes measured spans but not these ownership rules.",
+  "causal_divergence": "Rust already selects the degenerated lifecycle but feeds page-decoration layout one common fifteen-pixel body addition. It simultaneously omits TextBlockBordered's final one-pixel width from every decoration. In the one-leaf lifecycle, the decoration is one pixel too narrow and the body is one pixel too wide relative to Java, placing every body primitive one pixel too far left. Correcting the decoration exposed the distinct SVEK representation: Rust's visible span omits one boundary owned by Java's LimitFinder MinMax, so its SVEK wrapped-body adapter must grow by one to preserve Java centring instead of moving every linked body by half a pixel.",
+  "planned_model_change": "Use EntityImageDegenerated's source-defined fourteen-pixel body addition when uses_degenerated_entity is true. Represent the Java SvekResult MinMax-plus-fifteen dimension as Rust's reconstructed visible span plus sixteen, retaining the missing LimitFinder boundary explicitly. Add DECORATION_BORDER_EXTENT once to DecorationLayout::block_width after selecting the widest text line, matching the existing block_height model. Do not alter text metrics, coordinates, or fixture-specific branches. Measure the resulting outer canvas separately; any canvas model change requires a source-backed amendment committed before implementation.",
+  "checked_derivations": [
+    {
+      "input": "test-diagrams/golden/class/class_title_basic.puml",
+      "derivation": "The frozen Java title has textLength 129.9785; title insets 10 + 10 and TextBlockBordered's final pixel give dimTotal 150.9785. The undecorated control places the widest entity at x=7 with visible width 41.6592, while the decorated Java output places it at x=53.6597. DecorateEntityImage therefore uses dimOriginal = 150.9785 - 2 * (53.6597 - 7) = 57.6591, equal within SVG precision to the visible 41.6592 span plus 16."
+    },
+    {
+      "input": "test-diagrams/golden/edge-cases/edge_meta_long_title.puml",
+      "derivation": "The frozen Java title has textLength 1140.4736; title insets and the bordered extent give dimTotal 1161.4736. The entity is painted at x=552.3843 from a 7px degenerated inset and has intrinsic width 56.7051. The implied dimOriginal is 1161.4736 - 2 * (552.3843 - 7) = 70.7042, equal within SVG precision to the intrinsic width plus EntityImageDegenerated's 14."
+    }
+  ],
   "perturbation_axes": [
     "renamed single class with different intrinsic widths",
     "short, long, and multiline titles",
@@ -81,7 +106,7 @@
     "hidden-title directive with a still-present title block",
     "default style versus changed padding and margin"
   ],
-  "scope_boundary": "This mechanism owns only horizontal dimension composition and body centring for page decorations around class bodies, with a lifecycle-specific body width for EntityImageDegenerated and the universal TextBlockBordered width extent. It does not own legend rendering, vertical header/footer baselines, glyph measurement, bidirectional text, SVEK routing, explicit document margins, outer SVG canvas dimensions, or comparator behavior.",
+  "scope_boundary": "This mechanism owns only horizontal dimension composition and body centring for page decorations around class bodies, with lifecycle-specific adapters for EntityImageDegenerated and SvekResult plus the universal TextBlockBordered width extent. It does not own legend rendering, vertical header/footer baselines, glyph measurement, bidirectional text, SVEK routing, explicit document margins, outer SVG canvas dimensions, or comparator behavior.",
   "acceptance": [
     "The repeated one-pixel body shift disappears across the long, multiline, hidden, and Unicode title cluster without fixture-name or label-text conditions.",
     "Undecorated one-leaf diagrams and decorated multi-entity SVEK diagrams do not regress.",
