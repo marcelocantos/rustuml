@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "mechanism": "svg-resource-first-paint-order",
+  "status": "account_committed_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "symbols": [
+        "DriverRectangleSvg#applyFillColor"
+      ],
+      "lines": "84-101",
+      "role": "Registers a gradient when background paint is selected, before the primitive is submitted to SvgGraphics."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#svgRectangle",
+        "SvgGraphics#manageShadow"
+      ],
+      "lines": "554-576, 1107-1125",
+      "role": "Registers the shared shadow filter when the first shadowed primitive is drawn, after its fill gradient was selected, and appends that filter at the current position in defs."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#createSvgGradient"
+      ],
+      "lines": "389-429",
+      "role": "Appends each unique gradient definition immediately at first paint request and assigns its suffix from the number of gradients already registered."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/filter_registry.rs",
+      "symbols": [
+        "finalize_painted_resources",
+        "resource_refs"
+      ],
+      "lines": "158-245, 290-305",
+      "role": "Correctly scans rendered shape tags and records generated resource ids in first-reference order, but then iterates the original eager definitions and uses the scan only as a membership filter."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "render_plantuml_svg"
+      ],
+      "lines": "5693-5701",
+      "role": "Eagerly places all selected class gradients before the shared shadow definition, which is intentionally an over-inventory that the finalizer must normalize to Java's lazy paint order."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_materia_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_materia_class.svg"
+  ],
+  "claimed_invariant": "Generated SVG gradients and shadow filters occupy one defs sequence ordered by the first drawing operation that requests each resource. Gradient suffixes are assigned among gradients in that same first-use order; the shadow retains its source-seeded fixed id. Eager renderer inventories may contain unused or differently ordered resources, but final output must retain only painted resources and emit them in first-reference order, including fill before filter when both first appear on the same serialized shape.",
+  "causal_divergence": "The materia class body first selects gradient 0, then its shadowed rectangle registers the filter, then the distinct header paint registers gradient 1. Java defs are therefore gradient0, filter, gradient1. Rust generates gradient0, gradient1, filter. finalize_painted_resources scans the body and records gradient0, filter, gradient1, but re-emits resources by original defs order, producing the sole structural divergence while all shapes, attributes, ids, and references already match.",
+  "planned_model_change": "Drive final definition emission from the existing first-reference vector rather than the eager resource vector. Resolve each referenced id back to its parsed resource, preserve filters' fixed ids, renumber gradients monotonically in first-use order, rewrite all body references, and discard unpainted entries. Strengthen the direct unit test with an eager order deliberately different from body order, same-tag fill/filter ordering, interleaved resource kinds, unused gradients, and gradient id compaction.",
+  "perturbation_axes": [
+    "eager definition order different from first paint order",
+    "fill gradient and shadow filter first referenced on the same shape",
+    "filter before versus after later gradients",
+    "unused resources interspersed with painted resources",
+    "multiple painted gradients requiring suffix compaction",
+    "different source seeds and document scales"
+  ],
+  "scope_boundary": "This mechanism owns ordering, retention, and id compaction of already generated SVG gradient/filter definitions. It does not alter paint selection, gradient colors or policies, shadow geometry, shape geometry, theme values, parser behavior, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "preproc_theme_materia_class matches structurally through render_svg without oracle input.",
+    "A direct fresh test proves emitted defs follow body first-reference order rather than eager input order and references are rewritten consistently.",
+    "Existing class, note, sequence, activity, and state resource tests remain green.",
+    "The renderer suite, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching materia, theme names, fixture labels, or specific generated ids",
+    "sorting resources by kind",
+    "hard-coding gradient-filter-gradient order",
+    "rewriting unrelated SVG nodes or theme declarations",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "Pending implementation and independent review.",
+    "review_status": "This account predates implementation and does not attest acceptance."
+  }
+}
