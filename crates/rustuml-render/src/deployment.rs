@@ -3139,11 +3139,47 @@ const NOTE_MARGIN_Y: f64 = 5.0;
 const NOTE_CONNECTOR_HALF: f64 = 4.0;
 const NOTE_GAP: f64 = 10.0;
 
-fn deployment_note_fill(note: &DeploymentNote) -> String {
+fn deployment_note_fill(note: &DeploymentNote, gradient_defs: Option<&str>) -> String {
     note.color
         .as_deref()
-        .map(crate::sequence::resolve_color)
+        .map(|color| crate::sequence::gradient_fill_or(color, gradient_defs))
         .unwrap_or_else(|| NOTE_FILL.to_string())
+}
+
+fn deployment_note_gradient_defs(diagram: &DeploymentDiagram) -> String {
+    let source = diagram.meta.source.as_deref().unwrap_or("");
+    let mut gradients: Vec<(String, String, char, String)> = Vec::new();
+    for note in &diagram.notes {
+        let Some(color) = note.color.as_deref() else {
+            continue;
+        };
+        let Some((raw1, raw2, policy)) = crate::sequence::split_gradient_colors(color) else {
+            continue;
+        };
+        let color1 = crate::sequence::resolve_color(raw1);
+        let color2 = crate::sequence::resolve_color(raw2);
+        if gradients
+            .iter()
+            .any(|(existing1, existing2, existing_policy, _)| {
+                existing1 == &color1 && existing2 == &color2 && *existing_policy == policy
+            })
+        {
+            continue;
+        }
+        let id = crate::filter_registry::gradient_id_for(source, gradients.len());
+        gradients.push((color1, color2, policy, id));
+    }
+
+    let mut defs = String::new();
+    for (color1, color2, policy, id) in gradients {
+        let (x1, x2, y1, y2) = crate::sequence::gradient_endpoints(policy);
+        write!(
+            defs,
+            r#"<linearGradient id="{id}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{color1}"/><stop offset="100%" stop-color="{color2}"/></linearGradient>"#,
+        )
+        .unwrap();
+    }
+    defs
 }
 
 /// Which edge of the note box the leader notch is spliced into, derived
@@ -3283,10 +3319,11 @@ fn render_attached_deployment_note(
     layout: &DeploymentNoteLayout,
     uid: &DeploymentNoteUid,
     leader: DeploymentNoteLeader<'_>,
-    body_margin_x: f64,
-    body_margin_y: f64,
+    body_margin: (f64, f64),
+    gradient_defs: Option<&str>,
 ) {
-    let fill = deployment_note_fill(note);
+    let (body_margin_x, body_margin_y) = body_margin;
+    let fill = deployment_note_fill(note, gradient_defs);
     let center = (
         layout.x + layout.width / 2.0,
         layout.y + layout.height / 2.0,
@@ -3445,8 +3482,9 @@ fn render_floating_deployment_note(
     note: &DeploymentNote,
     layout: &DeploymentNoteLayout,
     uid: &DeploymentNoteUid,
+    gradient_defs: Option<&str>,
 ) {
-    let fill = deployment_note_fill(note);
+    let fill = deployment_note_fill(note, gradient_defs);
     let x = layout.x;
     let y = layout.y;
     let right = x + layout.width;
@@ -4610,7 +4648,15 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
     };
 
-    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    let note_gradient_defs = deployment_note_gradient_defs(diagram);
+    let gradient_defs = (!note_gradient_defs.is_empty()).then_some(note_gradient_defs.as_str());
+    let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
+        total_w,
+        total_h,
+        "DESCRIPTION",
+        Some("#FFFFFF"),
+        &note_gradient_defs,
+    );
     emit_deployment_chrome_top(&mut svg, diagram, &chrome);
     if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Top {
         emit_deployment_legend(&mut svg, diagram, &chrome);
@@ -4679,11 +4725,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                         edge: Some(edge),
                         note_at_edge_start: Some(note_at_edge_start),
                     },
-                    body_margin_x,
-                    body_margin_y,
+                    (body_margin_x, body_margin_y),
+                    gradient_defs,
                 );
             } else {
-                render_floating_deployment_note(svg, note, layout, uid);
+                render_floating_deployment_note(svg, note, layout, uid, gradient_defs);
             }
             return;
         };
@@ -4714,8 +4760,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                 edge,
                 note_at_edge_start: None,
             },
-            body_margin_x,
-            body_margin_y,
+            (body_margin_x, body_margin_y),
+            gradient_defs,
         );
     };
 
@@ -8389,5 +8435,28 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
 
         assert!(svg.contains("<!--reverse link Right37 to Left31-->"));
         assert!(svg.contains(r#"id="Right37-backto-Left31""#));
+    }
+
+    #[test]
+    fn named_note_colors_reach_none_and_gradient_paint() {
+        let source = "@startuml\n\
+                      node Target\n\
+                      note \"transparent solid\" as TransparentSolid #transparent\n\
+                      note \"background solid\" as BackgroundSolid #background\n\
+                      note \"gradient solid\" as GradientSolid #Red/LightBlue\n\
+                      TransparentSolid --> Target\n\
+                      BackgroundSolid --> Target\n\
+                      GradientSolid --> Target\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.matches(r#"fill="none""#).count() >= 4, "{svg}");
+        assert_eq!(svg.matches("<linearGradient ").count(), 1, "{svg}");
+        assert!(svg.matches(r#"fill="url(#"#).count() >= 2, "{svg}");
     }
 }

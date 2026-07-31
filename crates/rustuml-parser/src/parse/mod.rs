@@ -62,12 +62,6 @@ implementation
 ";
 
 fn named_note_simple_color_is_resolvable(value: &str) -> bool {
-    if matches!(
-        value.to_ascii_lowercase().as_str(),
-        "transparent" | "background" | "automatic"
-    ) {
-        return true;
-    }
     if matches!(value.len(), 1 | 3 | 6 | 8)
         && value.chars().all(|character| character.is_ascii_hexdigit())
     {
@@ -76,6 +70,15 @@ fn named_note_simple_color_is_resolvable(value: &str) -> bool {
     PLANTUML_NAMED_COLORS
         .split_ascii_whitespace()
         .any(|name| name.eq_ignore_ascii_case(value))
+}
+
+fn named_note_whole_color_is_resolvable(value: &str) -> bool {
+    // `HColorSet.parseColor` handles these sentinels before delegating to
+    // `parseSimpleColor`; gradient endpoints bypass this branch.
+    matches!(
+        value.to_ascii_lowercase().as_str(),
+        "transparent" | "background" | "automatic"
+    ) || named_note_simple_color_is_resolvable(value)
 }
 
 fn named_note_color_is_valid(color: &str) -> bool {
@@ -93,7 +96,7 @@ fn named_note_color_is_valid(color: &str) -> bool {
         .filter(|(_, character)| matches!(character, '-' | '\\' | '|' | '/'))
         .collect::<Vec<_>>();
     match separators.as_slice() {
-        [] => value.len() >= 2 && is_word(value) && named_note_simple_color_is_resolvable(value),
+        [] => value.len() >= 2 && is_word(value) && named_note_whole_color_is_resolvable(value),
         [(index, separator)] => {
             let right_index = *index + separator.len_utf8();
             let left = &value[..*index];
@@ -1892,6 +1895,8 @@ mod tests {
             "#A-B",
             "#Red/LightBlue",
             "#transparent",
+            "#background",
+            "#automatic",
         ] {
             let inline = parse_named_note_inline(&format!(
                 "note \"inline payload\" as InlineLedger {color}"
@@ -1909,6 +1914,9 @@ mod tests {
             "#back:LightBlue;line.dashed:Red",
             "#Red-UnknownColor",
             "#Red-Blue-Green",
+            "#transparent/Red",
+            "#automatic-Blue",
+            "#Red|background",
         ] {
             assert!(
                 parse_named_note_inline(&format!(
