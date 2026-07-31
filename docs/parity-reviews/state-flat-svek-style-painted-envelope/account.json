@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-flat-svek-style-painted-envelope",
+  "created": "2026-07-31",
+  "status": "accounted_preimplementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "481bb05b86641b889cbe45d8882c432b528e360e",
+  "parent_account": "docs/parity-reviews/state-flat-svek-painted-envelope/account.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": [
+        "SvekResult#drawU",
+        "SvekResult#calculateDimension"
+      ],
+      "lines": "72-105, 130-136",
+      "role": "Draws the same resolved clusters, nodes, and edges through LimitFinder, translates the complete painter union to six pixels from its minima, and reports that painted span plus fifteen."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": [
+        "LimitFinder#drawRectangle",
+        "LimitFinder#drawEllipse",
+        "LimitFinder#drawDotPath",
+        "LimitFinder#drawUPolygon",
+        "LimitFinder#drawText",
+        "LimitFinder#drawEmpty"
+      ],
+      "role": "Defines primitive-specific painted frontiers independently of whether colors, fonts, and geometry came from a theme style, a legacy skinparam, or defaults."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram#getDefaultMargins"
+      ],
+      "role": "Adds the backward-compatible five-pixel right and bottom file margins after SVEK dimensioning."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#ensureVisible"
+      ],
+      "lines": "142-148",
+      "role": "Integerizes the final positive SVG dimensions once as `(int)(dimension + 1)`."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "flat_painted_bounds",
+        "has_complete_flat_painter_model",
+        "has_only_flat_label_skinparams",
+        "autonomous_state_style",
+        "state_pseudostate_style",
+        "svg_ensure_visible_dimension"
+      ],
+      "lines": "2350-2369, 2539-2724, 3546-3563, 6366-6521, 6831-6844",
+      "role": "Already resolves themed state and pseudostate images, sizes their labels, measures all flat primitives, and applies Java's export integerization, but activates that collector only when every raw skinparam belongs to a short transition-label allow-list."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_black_knight_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_hacker_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_metal_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_minty_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_silver_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_spacelab_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_superhero_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_united_state.puml"
+  ],
+  "claimed_invariant": "SvekResult's envelope is determined by the final emitted primitive graph, not by the syntax or provenance that selected each style. A flat state graph with modeled entity images, modeled transition labels and decorations, no notes, no document title, no composite clusters, and zero resolved shadows has a complete LimitFinder-equivalent union even when its colors, fonts, line widths, gradients, padding, and margins came from a large theme. Opaque versus transparent paint changes SVG attributes but not the geometry of a present primitive. Nonzero shadow is a separate painter extension and must remain excluded until its frontier is included. Theme name, declaration count, unrelated selectors, state labels, topology, and rank direction cannot change this ownership rule.",
+  "causal_divergence": "The existing flat_painted_bounds collector already reproduces Java's rectangle, ellipse, polygon, path, arrowhead, label-wrapper, and text frontiers and supplies one shared origin and dimension. Its activation gate nevertheless calls has_only_flat_label_skinparams, which rejects every full theme because themes contain many state, document, and unrelated-family declarations. The fallback then computes total_height from each node's unpainted layout box (`layout_y + height`) while separately computing but not selecting the painted maximum (`layout_y + height - 1`). In the eleven inspected theme-state inputs, all interior SVG primitives are structurally identical to Java, the terminal ellipse owns the vertical maximum, and Rust's root is exactly one logical unit too tall. Java's LimitFinder stops one pixel inside that ellipse before SvekResult adds its fixed dimension and file margins. The one-unit residue is therefore caused by provenance-shaped gate exclusion, not by the theme names or a canvas-height constant.",
+  "planned_model_change": "Replace raw skinparam allow-list activation with a painter-capability predicate. Continue requiring a flat graph with no title, notes, or composites. Resolve every ordinary state and pseudostate style using the same StateSkin and style cascade used for final emission; activate the existing flat_painted_bounds collector only when all resolved shadow extensions are zero. Reuse the collector's existing primitive union and svg_ensure_visible_dimension result without changing any coordinates, padding constants, theme tables, or comparator settings. Preserve the conservative fallback for nonzero shadows and any graph shape whose painter is not represented. Add focused tests using renamed states, branching topology, both rank directions, transparent and opaque document backgrounds, style-origin changes, and a shadowed rejection control.",
+  "perturbation_axes": [
+    "renamed short and long state and transition labels",
+    "linear versus branching and cyclic flat topology",
+    "top-to-bottom versus left-to-right direction",
+    "theme style versus legacy skinparam versus user style provenance",
+    "transparent versus opaque document background",
+    "ordinary state rectangles versus start/end ellipses, choices, histories, and bars",
+    "zero versus nonzero resolved state and pseudostate shadow"
+  ],
+  "scope_boundary": "This mechanism owns activation of the existing flat-state painted-envelope collector for style-rich but fully modeled, zero-shadow primitive graphs. It does not add shadow bounds, notes, titles, composites, document chrome, new state image types, Graphviz routing, ORTHO routing, theme-specific branches, or comparator changes.",
+  "acceptance": [
+    "The eleven valid themed state evidence inputs pass the frozen structural comparator through render_svg without oracle input.",
+    "Focused tests prove that activation follows resolved painter capability across renamed inputs and rejects nonzero state or pseudostate shadows.",
+    "Fresh valid held-outs spanning at least two independent perturbation axes match Java or remain preserved as explicit checker evidence when Java generation is unavailable.",
+    "The state, preprocessing, and full no-oracle ratchets do not regress any existing match.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "conditionals on theme names or fixture paths",
+    "subtracting one from themed canvas heights",
+    "broad activation that ignores nonzero shadows",
+    "raw declaration-count or skinparam-count thresholds",
+    "post-hoc SVG string surgery",
+    "comparator or eligibility changes"
+  ]
+}
