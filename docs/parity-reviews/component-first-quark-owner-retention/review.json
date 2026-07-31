@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-first-quark-owner-retention",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, headless Java PlantUML JAR, xmllint, and the supplied prebuilt RustUML CLI",
+    "independence": "Did not implement 2fe620ea, did not edit shipping code, and did not edit account.json. The review commit is on a dedicated branch rooted at the exact implementation commit."
+  },
+  "revisions": {
+    "account_commit": "d62028750349bc752e2bb39d7be0a144ef310cc8",
+    "implementation_commit": "2fe620ea5a0400a00a5afa7e10bc79dae2feb55c",
+    "implementation_tree": "f3c21a7a7c906d52dbc620a1aaa10ba787541422",
+    "checker_branch": "codex/t14-check-component-first-owner",
+    "checker_base": "2fe620ea5a0400a00a5afa7e10bc79dae2feb55c",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_tree": "92d7527bafd3d984f834135fb63da4b3924468a5"
+  },
+  "binary": {
+    "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "version": "rustuml 0.7.0",
+    "sha256_at_review_start": "d3ae6d183e3ad675a5ae772f5a598dcc018eff907afcdfa401b572d1d078baa4",
+    "size_at_review_start": 80469512,
+    "mtime_at_review_start": "2026-08-01T01:33:48+1000",
+    "source_revision_verification": {
+      "clean_head_at_review_start": "2fe620ea5a0400a00a5afa7e10bc79dae2feb55c",
+      "parser_source_sha256": "a3d24b5b223eb2d23fbec397b969f8cfb74efad7a69025746eeb0ec5ca382015",
+      "renderer_source_sha256": "7592d7982fb18e73eca51ccb8a095d02b1881794ee3112a30aeb475d7acf9ef5",
+      "limitation": "The CLI does not embed a Git revision. Provenance is the clean exact source checkout plus the binary hash, size, mtime, and output timestamps; it is not an embedded source-to-binary attestation."
+    },
+    "concurrent_overwrite": {
+      "observed_at": "2026-08-01T01:41:17+1000",
+      "replacement_sha256": "e7bc4357ec7b44760fd97737082d1ad4f2eeafa995edad10c4c7b896ae100fc0",
+      "replacement_size": 80607336,
+      "effect": "The eight scored Rust SVGs have mtimes 01:40:26-01:40:27 and therefore predate the overwrite. The later bare-endpoint auxiliary output has mtime 01:41:35, is preserved, and is excluded from the exact-revision verdict."
+    },
+    "mode": "-pipe -tsvg",
+    "cargo_or_rustc_run_by_checker": false
+  },
+  "java_oracle": {
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "mode": "-Djava.awt.headless=true -charset UTF-8 -tsvg -pipe"
+  },
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD && git rev-parse d6202875^{commit} && git rev-parse 2fe620ea^{commit}",
+    "git show --format=fuller --find-renames --find-copies 2fe620ea -- crates/rustuml-parser/src/parse/component.rs crates/rustuml-render/src/component.rs",
+    "shasum -a 256 target/debug/rustuml && stat -f '%N|size=%z|mtime=%Sm' -t '%Y-%m-%dT%H:%M:%S%z' target/debug/rustuml",
+    "git show 2fe620ea:crates/rustuml-parser/src/parse/component.rs | shasum -a 256",
+    "git show 2fe620ea:crates/rustuml-render/src/component.rs | shasum -a 256",
+    "inspect CommandCreateElementFull.executeArg and existsWithBadType3, CucaDiagram.reallyCreateLeaf and quarkInContextSafe, Entity.getParentContainer and leafs, and GraphvizImageBuilder.printGroup at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rg -n 'package_stack|components\\.push|interfaces\\.push|pkg\\.components\\.push|add_together_node|build_qualified_names|walk_pkg|add_package_clusters_to_layout' crates/rustuml-parser/src/parse/component.rs crates/rustuml-render/src/component.rs",
+    "git show 2fe620ea:crates/rustuml-parser/src/parse/component.rs | rg -n 'components\\.push|interfaces\\.push|pkg\\.components\\.push|add_together_node|let created'",
+    "git grep -n -E 'component-first-quark-owner-retention|checker_owner_|SharedHelix741|SharedRotor743|SharedGate751|SharedPortal757|SharedPanel761|FluxPort769|SharedSocket773|SharedPrism787|SharedSignal793' 2fe620ea -- crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "for f in test-diagrams/perturbations/component-first-quark-owner-retention/*.puml; do java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$f\" > \"${f%.puml}.svg\"; done",
+    "xmllint --noout test-diagrams/perturbations/component-first-quark-owner-retention/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string' test-diagrams/perturbations/component-first-quark-owner-retention -g '*.svg'",
+    "for f in test-diagrams/perturbations/component-first-quark-owner-retention/*.puml; do stem=${f##*/}; /private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -pipe -tsvg < \"$f\" > \"/private/tmp/component-first-quark-owner-retention-rust/${stem%.puml}.svg\"; done (executed while the directory contained the eight scored inputs)",
+    "for f in test-diagrams/perturbations/component-first-quark-owner-retention/*.puml; do /private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -pipe --yaml < \"$f\" | sed -n '1p'; done",
+    "xmllint --noout /private/tmp/component-first-quark-owner-retention-rust/*.svg",
+    "for each scored pair: extract and sort cluster/entity @data-qualified-name values and text nodes with xmllint; compare the Java and Rust sets",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -pipe --yaml < checker_owner_sibling_component_rename_tb.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -pipe --yaml < checker_owner_nested_interface_rename_lr.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -pipe --yaml < checker_owner_nested_first_together_rename_tb.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -pipe --yaml < checker_owner_bracket_cross_keyword_lr.puml",
+    "shasum -a 256 test-diagrams/perturbations/component-first-quark-owner-retention/*.puml test-diagrams/perturbations/component-first-quark-owner-retention/*.svg /private/tmp/component-first-quark-owner-retention-rust/*.svg",
+    "git diff --check d6202875 2fe620ea"
+  ],
+  "source_inspection": {
+    "java_model": [
+      "CucaDiagram.quarkInContextSafe returns firstWithName(full) when DESCRIPTION has no namespace separator, so a later compatible declaration resolves the already materialized quark instead of creating a sibling-owned quark.",
+      "CommandCreateElementFull rejects a group or incompatible LeafType/USymbol, creates only when quark.getData() is null, and then unconditionally calls entity.setDisplay(...), applies stereotype, URL, and colors to the reused entity.",
+      "CucaDiagram.reallyCreateLeaf assigns currentTogether only when the entity is first created. Entity.getParentContainer derives ownership from the immutable quark parent, and GraphvizImageBuilder consumes each group's direct quark leaves."
+    ],
+    "rust_owner_fix_supported": [
+      "All six explicit leaf declaration paths in the implementation diff compute created before inserting and gate both ComponentPackage.components and add_together_node on created.",
+      "The implicit connection-endpoint path already checks components, interfaces, packages, and note ids before creation, and gates package/together membership on its created flag.",
+      "build_qualified_names now uses HashMap::entry(...).or_insert_with(...), so a legacy duplicated membership cannot overwrite an earlier qualified path.",
+      "All eight exact fresh inputs produced the same Java and Rust qualified-name set. Rust YAML also records only the first package membership; the together probe records SharedPrism787 only in FirstBasin787's together group."
+    ],
+    "claim_disproven": [
+      "Rust uses created to gate construction of the whole Component or Interface value and performs no update path for a compatible reused leaf. Consequently its label, stereotypes, color, URL, and source line remain the first declaration's snapshot.",
+      "Java keeps the first quark owner but unconditionally mutates the reused Entity after resolution. Three exact held-outs therefore retain the correct owner yet disagree on visible display: Java emits Renamed Rotor 743, Renamed Portal 757, and Renamed Prism 787; Rust emits First Rotor 743, Initial Portal 757, and Initial Prism 787.",
+      "This falsifies the account's claimed invariant that later declarations may update display/style fields while ownership remains fixed. It is not an EMPTY_PACKAGE effect, coordinate tuning issue, or comparator artifact."
+    ],
+    "cross_kind_audit": [
+      "The valid semantic cross-kind form `interface [display] as id` is normalized into the Rust components inventory and retains its first owner in the bracket held-out.",
+      "Ordinary component and interface declarations still compute created against separate vectors. Java's existsWithBadType3 rejects an incompatible cross-kind reuse from its single quark namespace, whereas Rust can represent both inventories under one id. Because Java renders those inputs as errors, they were not admitted into the required valid-syntax perturbation corpus; the divergence remains declared residue."
+    ],
+    "anti_overfit_audit": [
+      "The implementation diff adds no numeric constants, thresholds, fixture labels, golden reads, SVG surgery, comparator changes, or baseline changes.",
+      "The exact-commit fixture-name search returned no matches in shipping crates, and git diff --check is clean."
+    ]
+  },
+  "comparison_method": {
+    "ownership_predicate": "Java and Rust SVG cluster/entity data-qualified-name sets must agree, and Rust --yaml must list the duplicate id in only the first package/together owner.",
+    "mutable_display_predicate": "Java and Rust SVG text-node sets must agree after a compatible redeclaration with a renamed display.",
+    "validity_predicate": "Every Java SVG is well-formed XML and contains none of the checked PlantUML syntax/error markers.",
+    "full_geometry": "Not used to rescue or reject the mechanism. The rejecting text differences are direct semantic output and require no geometry tolerance."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_bracket_cross_keyword_lr.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_bracket_cross_keyword_lr.svg",
+      "axes": ["sibling owners", "interface keyword with bracket component semantics", "later bracket redeclaration", "independent leaves", "left-to-right", "renamed owner labels"],
+      "exact_binary": true,
+      "outcome": "PASS for the claimed owner projection and text: SharedPanel761 remains VioletFrame761.SharedPanel761 on both sides."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_implicit_bracket_then_explicit_tb.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_implicit_bracket_then_explicit_tb.svg",
+      "axes": ["implicit bracket endpoints", "later explicit component", "sibling owners", "later independent leaf", "top-to-bottom", "renamed owner labels"],
+      "exact_binary": true,
+      "outcome": "PASS for the claimed owner projection and text: FluxPort769 remains EmeraldBay769.FluxPort769."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_first_together_rename_tb.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_first_together_rename_tb.svg",
+      "axes": ["sibling owners", "two together groups", "nested-first materialization", "later independent leaf", "renamed display", "top-to-bottom"],
+      "exact_binary": true,
+      "outcome": "REJECTING: ownership and together membership remain first-writer, but Java emits Renamed Prism 787 while Rust emits Initial Prism 787."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_interface_control_tb.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_interface_control_tb.svg",
+      "axes": ["nested first owner", "later sibling owner", "interface declaration", "direct link endpoint", "later independent leaf", "top-to-bottom"],
+      "exact_binary": true,
+      "outcome": "PASS for the claimed owner projection and text: SharedGate751 remains IndigoCampus751.QuartzCell751.SharedGate751."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_interface_rename_lr.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_interface_rename_lr.svg",
+      "axes": ["nested first owner", "later sibling owner", "interface declaration", "renamed display", "direct link endpoint", "left-to-right"],
+      "exact_binary": true,
+      "outcome": "REJECTING: SharedPortal757 keeps the nested first owner, but Java emits Renamed Portal 757 while Rust emits Initial Portal 757."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_root_first_lollipop_nested_later_lr.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_root_first_lollipop_nested_later_lr.svg",
+      "axes": ["root-first materialization", "later nested owner", "lollipop interface syntax", "independent nested leaf", "left-to-right", "renamed owner label"],
+      "exact_binary": true,
+      "outcome": "PASS for the claimed owner projection and text: SharedSocket773 remains root-owned."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_sibling_component_control_lr.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_sibling_component_control_lr.svg",
+      "axes": ["sibling owners", "component declaration", "same display redeclaration", "later independent leaf", "left-to-right", "renamed owner labels"],
+      "exact_binary": true,
+      "outcome": "PASS for the claimed owner projection and text: SharedHelix741 remains AzureForge741.SharedHelix741."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_sibling_component_rename_tb.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_sibling_component_rename_tb.svg",
+      "axes": ["sibling owners", "component declaration", "renamed display", "later independent leaf", "top-to-bottom", "renamed owner labels"],
+      "exact_binary": true,
+      "outcome": "REJECTING: SharedRotor743 keeps CobaltWorkshop743 as owner, but Java emits Renamed Rotor 743 while Rust emits First Rotor 743."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_implicit_bare_sibling_control_lr.puml",
+      "java_svg": "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_implicit_bare_sibling_control_lr.svg",
+      "axes": ["bare implicit endpoints", "sibling owners", "repeated endpoint", "later independent component", "mixed direction hints", "renamed owner labels"],
+      "exact_binary": false,
+      "outcome": "PRESERVED BUT UNSCORED: Java is valid and the replacement-binary output matches qualified names/text, but the supplied exact binary had been concurrently overwritten before this Rust output was generated."
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 9,
+    "valid_java_inputs": 9,
+    "exact_binary_inputs_scored": 8,
+    "exact_owner_projection_passed": 8,
+    "exact_text_projection_passed": 5,
+    "exact_rejecting_counterexamples": 3,
+    "preserved_unscored_inputs": 1
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "9d28e4c6fdacb7657600d983e0a556effb5dbe657f7c01d14719bc983035485e",
+    "sources": {
+      "checker_owner_bracket_cross_keyword_lr.puml": "934e59ee4acf7fded8e5a9cec980c7a57470b5cdf41991ced861c0f6c3e4e87d",
+      "checker_owner_implicit_bare_sibling_control_lr.puml": "831d146426062054272b473dfe530b57ef06697f5c80888d54a1b5433ffa0376",
+      "checker_owner_implicit_bracket_then_explicit_tb.puml": "67f7c70a3595a3c0af714eb305bc9026fb1056a4e8baa66a5398897db6df6e2d",
+      "checker_owner_nested_first_together_rename_tb.puml": "b124e32cd5b0f571434e02c9f299243bad1851f71c385f2fc7bc677995b2979a",
+      "checker_owner_nested_interface_control_tb.puml": "a08306ebdd4f8595ef659c916437fe32c3305c49697ba1b4cb58acc2bd3bf7b4",
+      "checker_owner_nested_interface_rename_lr.puml": "e9835b58846044a5ddb8edebddcb389a8215ec6ec7442cf5aa999f7455c0e530",
+      "checker_owner_root_first_lollipop_nested_later_lr.puml": "62c1272d8cd5db2dc5fcda4a501f1fde42f42655a96011830675c5ce312e31df",
+      "checker_owner_sibling_component_control_lr.puml": "6732e341678995106680ca4a472e03b46b4ae6d5822c426d8d73e29df7e6b8b4",
+      "checker_owner_sibling_component_rename_tb.puml": "4472b2964c3684c6dd1cf4ac5d7c122ec68416f600fac598d1e0ea3954e437c8"
+    },
+    "java_svgs": {
+      "checker_owner_bracket_cross_keyword_lr.svg": "1c267d91942c05a358879792d30cae61069692d9e14a811f4b61990f9a97752b",
+      "checker_owner_implicit_bare_sibling_control_lr.svg": "19d1cb6adae1eed5eb87c3ad12cc1e4311df02d0a6c560ebd097998c9db92632",
+      "checker_owner_implicit_bracket_then_explicit_tb.svg": "76554740317774f5a988c0cf03d07cddcbc8a4cadebedbd4ab974d0e03d52474",
+      "checker_owner_nested_first_together_rename_tb.svg": "ed3e953082fa2e14088543b313284c758607d28e15b98064d9b5493f82fca3a4",
+      "checker_owner_nested_interface_control_tb.svg": "f969c27b254069056ee8298ad7c51c59f9e077a1a1c4b96ce66cd716e6d0bf56",
+      "checker_owner_nested_interface_rename_lr.svg": "7df42a0991052a1004651e74ef9854f87dab8436d56b7803da5a3f9eb2816d19",
+      "checker_owner_root_first_lollipop_nested_later_lr.svg": "0fbbddd226893f27244e5016a01c963e9f6618f22eb3b9eec3dcde94ab2ae587",
+      "checker_owner_sibling_component_control_lr.svg": "7f6859716e6d0c5bc9ce0eafd65239be9be2bc37edb266e148463658591a5e4c",
+      "checker_owner_sibling_component_rename_tb.svg": "5844f2af19e256dc82ae52f9e858ad252f01a89a920dce187702e947f4b52974"
+    },
+    "rust_svgs": {
+      "checker_owner_bracket_cross_keyword_lr.svg": "7f6f0b8428d41bdec05cf00b4fcce66494881402717c0ba2aff0315a663a90b1",
+      "checker_owner_implicit_bare_sibling_control_lr.svg": "a3862a8af3b3f9eb0c3cbb287146b3c03660f5190e6c683aa19162dd60ba2369",
+      "checker_owner_implicit_bracket_then_explicit_tb.svg": "27fc8b4bd73dd2abb094de1d8f0699c3c27f99e6491fd5552f171f507ae04051",
+      "checker_owner_nested_first_together_rename_tb.svg": "89b6f29b26815ee9ca84ef6691e3a2a9c59d2066ade2312b2a7c2e7ebc02a1f1",
+      "checker_owner_nested_interface_control_tb.svg": "8acd1983544e99fbc631a2b110b4787ce42b563ba891b0bd1956e65e0215dde6",
+      "checker_owner_nested_interface_rename_lr.svg": "1cb6d120bea66db8e020e545219682fdbadf000ac2dd890db16496bd3e9a4de0",
+      "checker_owner_root_first_lollipop_nested_later_lr.svg": "9cb35433e4f9316d517b8d79a5a0cd21b31fd5275808e07a1f26f9952a8f7742",
+      "checker_owner_sibling_component_control_lr.svg": "cdc8d1e764ed43af9c277f73b37059f4e622efae11504033074d5a5441986d24",
+      "checker_owner_sibling_component_rename_tb.svg": "cf7542bb5e1b7d745881437785fa64e8a69fe8e0bb9e2df602c17ab4a3f2ba9c"
+    }
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Compatible redeclarations retain the first owner but lose Java's later display mutation.",
+      "evidence": "Three exact multi-axis inputs have matching qualified owners and different visible labels. Java unconditionally calls Entity.setDisplay after resolving the existing quark; Rust only constructs fields inside if created and has no reused-leaf update path."
+    },
+    {
+      "severity": "supported",
+      "summary": "The package, together, and qualified-name first-owner repair works on all exact held-outs.",
+      "evidence": "Eight of eight exact inputs match Java's qualified-name set, including nested, sibling, root-first, bracket, lollipop, implicit-endpoint, and together cases."
+    },
+    {
+      "severity": "residue",
+      "summary": "Incompatible component/interface duplicate handling is not unified in Rust.",
+      "evidence": "Rust declaration branches check separate inventories; Java rejects incompatible USymbol/LeafType reuse from one quark namespace. Such Java error outputs were deliberately excluded from the valid corpus."
+    },
+    {
+      "severity": "informational",
+      "summary": "No overfit indicators or unexplained parity constants were found in the implementation diff.",
+      "evidence": "The diff is a created-state ownership gate plus first-writer map insertion and tests; exact-commit searches found no held-out labels, golden reads, coordinate surgery, comparator changes, or numeric additions."
+    }
+  ],
+  "declared_residue": [
+    "The separately declared EMPTY_PACKAGE rendering role was not treated as a failure because it does not falsify first-owner retention.",
+    "Style, URL, stereotype, and color mutation on compatible redeclaration remain unverified beyond the source audit; display mutation already rejects the shared update model.",
+    "The bare implicit-endpoint auxiliary is preserved but unscored because a concurrent process replaced the supplied exact binary before its Rust render.",
+    "Full-layout geometry was not used as an acceptance escape hatch; the direct semantic text mismatch is sufficient to reject."
+  ],
+  "verdict": "REJECTED"
+}
