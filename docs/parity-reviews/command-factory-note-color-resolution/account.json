@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "mechanism": "command-factory-note-color-resolution",
-  "status": "accounted_before_code",
+  "status": "corrected_before_followup_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "d5c0ee1b8a30991a3c0bd6847f60ad0b48a091e6",
-  "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
+  "rust_revision": "47cfdb4b631b2655b78c892e19e7c8ac113f25b1",
+  "triggering_review": "docs/parity-reviews/command-factory-note-color-resolution/review.json",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
@@ -22,7 +22,7 @@
       "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
       "symbols": ["HColorSet.getColor", "HColorSet.parseColor", "HColorSet.parseSimpleColor"],
       "lines": "66-116,119-155",
-      "role": "Rejects unresolved names and malformed composites, while accepting registered names, supported hex arities and two-color gradients."
+      "role": "parseColor handles transparent/background as HColors.none and automatic as HColorAutomagic only before ordinary resolution. Gradient endpoints are split later and each goes through parseSimpleColor, so those sentinel words are invalid inside gradients."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
@@ -49,17 +49,31 @@
       "symbols": ["parse_deployment"],
       "lines": "560-940",
       "role": "Uses the same helper and therefore shares the over-acceptance and downstream synthetic-event effects."
+    },
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["component_gradients", "render_normal_component_note", "render_attached_component_note"],
+      "lines": "120-145,7434-7710",
+      "role": "The generated gradient inventory excludes note colors and both named-note painters hard-code NOTE_FILL, discarding the parser's resolved color token."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_note_fill", "render_no_oracle"],
+      "lines": "3142-3147,4590-4660",
+      "role": "The no-oracle note painter resolves only flat colors and has no generated gradient registry; transparent/background therefore fall through to ordinary color fallback instead of HColors.none."
     }
   ],
-  "claimed_invariant": "A named-note color is accepted only if the complete suffix passes both Java stages: ColorParser.exp1 recognizes the token and HColorSet.getColor resolves that same token. Inline and multiline commands in Component and Deployment share this rule. Valid registered names, supported hex forms and resolvable two-color gradients remain colors; one-character exp1 misses, unknown names and multi-channel composites that HColorSet cannot resolve do not create a named note.",
-  "causal_divergence": "Rust collapsed recognition and execution into a single permissive `#[^\\s]+` capture. That treats every hash suffix as a successful color, so malformed or unresolved commands create note identities, relations and UIDs that Java rejects before diagram construction.",
-  "planned_model_change": "Add a shared named-note color predicate beside named_note_decorations. Mirror ColorParser's applicable simple/gradient token shape, then resolve each simple color against HColorSet's hex arities, special values and case-insensitive ColorTrieNode name inventory. Reject the entire named-note command when the captured suffix fails either stage. Keep tags and stereotype ordering unchanged and exercise both command forms and consuming families.",
+  "claimed_invariant": "A named-note color is accepted only if the complete suffix passes both Java stages: ColorParser.exp1 recognizes the token and HColorSet.getColor resolves that same token. Inline and multiline commands in Component and Deployment share this rule. Registered names and supported hex forms are parseSimpleColor values and may form two-color gradients. Transparent/background resolve to HColors.none and automatic resolves to HColorAutomagic only as whole parseColor values; none is painted as SVG fill=none, while sentinel gradient endpoints are rejected. Every accepted ordinary or gradient HColor reaches the named-note body and fold paint.",
+  "causal_divergence": "The first Rust parser fix reused one predicate for both whole colors and gradient endpoints, admitting parseColor-only sentinels where Java calls parseSimpleColor. Downstream, Component hard-codes NOTE_FILL and Deployment sends sentinels through a generic flat resolver, so accepted color semantics are discarded: transparent/background become default fills and note gradients are absent from generated resource inventories.",
+  "planned_model_change": "Split whole-color resolution from parseSimpleColor endpoint resolution in the shared named-note parser. Whole colors retain transparent/background/automatic; gradient endpoints accept only registered names and supported hex forms. Carry accepted note colors through the existing generated gradient registries: include named-note colors in Component's inventory and add the same source-derived registry to Deployment. Resolve transparent and background to SVG none in the shared HColor paint helper, and pass each note's flat or gradient fill through every Component and Deployment named-note paint shape without changing geometry or identity.",
   "perturbation_axes": [
     "inline versus multiline command",
     "Component versus Deployment consumer",
     "registered mixed-case name versus unknown name",
     "three, six and eight digit hex versus one-character exp1 miss",
     "solid color versus gradient separator and endpoints",
+    "whole transparent/background versus the same words as gradient endpoints",
+    "flat none paint versus generated named-note gradient resource",
     "multi-channel composite recognized by ColorParser but rejected by CommandFactoryNote resolution",
     "invalid command before versus after declarations and relations"
   ],
@@ -67,6 +81,8 @@
     "The four preserved invalid color counterexamples no longer create named-note identities or relations and follow Java's rejection semantics.",
     "Fresh valid named, hex and gradient colors survive in both inline and multiline helpers with exact original tokens.",
     "Unknown names and malformed gradient endpoints reject the whole command rather than silently dropping only the color.",
+    "Whole #transparent and #background notes paint body and fold with fill=none in Component and Deployment.",
+    "Accepted named-note gradients register and reference the same source-derived resource mechanism as other painted gradients.",
     "Existing valid Component and Deployment named-note decoration tests remain green.",
     "An independent checker attacks grammar/resolution boundaries, family, command form, ordering and downstream identity effects."
   ],
@@ -79,6 +95,6 @@
   "declared_residue": [
     "General Colors multi-channel parsing for commands that construct a Colors object remains separate; CommandFactoryNote resolves its captured value as one HColor.",
     "Custom runtime color registration, if introduced, will require replacing the frozen ColorTrieNode inventory with a shared registry.",
-    "Rendering normalization of valid colors remains outside this parser command-acceptance mechanism."
+    "Whole #automatic remains accepted because Java parseColor returns HColorAutomagic; the reference revision crashes while rendering it, so no normal Java SVG exists to claim as paint parity."
   ]
 }
