@@ -204,6 +204,15 @@ pub struct ComponentNote {
     /// Qualified immediate package that owned the note when it was created.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
+    /// Dollar-prefixed tags from the shared named-note command.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
+    /// Chevron stereotype from the shared named-note command.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stereotype: Option<String>,
+    /// Explicit note background color, retained as a PlantUML token.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     /// Text content (may be multi-line with `\n`).
     pub text: String,
     /// The id of the element this note is attached to, if any.

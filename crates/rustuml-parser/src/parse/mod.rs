@@ -33,6 +33,81 @@ use crate::diagram::Diagram;
 use crate::diagram::class::PackageKind;
 use crate::preprocess;
 
+const NAMED_NOTE_CODE_PATTERN: &str = r"[\p{L}\p{N}_.]+";
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(super) struct NamedNoteCommand {
+    pub display: Option<String>,
+    pub code: String,
+    pub tags: Vec<String>,
+    pub stereotype: Option<String>,
+    pub color: Option<String>,
+}
+
+fn named_note_decorations(suffix: &str) -> Option<(Vec<String>, Option<String>, Option<String>)> {
+    static DECORATIONS: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(
+            r#"^\s*(?:(\$[^\s{}\"<>$]+(?:\s+\$[^\s{}\"<>$]+)*))?\s*(?:(<<.+?>>))?\s*(#[^\s]+)?\s*$"#,
+        )
+        .unwrap()
+    });
+    let captures = DECORATIONS.captures(suffix)?;
+    let tags = captures
+        .get(1)
+        .map(|tags| {
+            tags.as_str()
+                .split_whitespace()
+                .map(|tag| tag.trim_start_matches('$').to_string())
+                .collect()
+        })
+        .unwrap_or_default();
+    let stereotype = captures.get(2).map(|stereotype| {
+        stereotype
+            .as_str()
+            .trim_start_matches("<<")
+            .trim_end_matches(">>")
+            .to_string()
+    });
+    let color = captures.get(3).map(|color| color.as_str().to_string());
+    Some((tags, stereotype, color))
+}
+
+pub(super) fn parse_named_note_inline(line: &str) -> Option<NamedNoteCommand> {
+    static COMMAND: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(&format!(
+            r#"^(?i:note)\s+\"([^\"]+)\"\s+(?i:as)\s+({NAMED_NOTE_CODE_PATTERN})(.*)$"#
+        ))
+        .unwrap()
+    });
+    let captures = COMMAND.captures(line)?;
+    let (tags, stereotype, color) = named_note_decorations(captures.get(3)?.as_str())?;
+    Some(NamedNoteCommand {
+        display: Some(captures.get(1)?.as_str().replace("\\n", "\n")),
+        code: captures.get(2)?.as_str().to_string(),
+        tags,
+        stereotype,
+        color,
+    })
+}
+
+pub(super) fn parse_named_note_multiline(line: &str) -> Option<NamedNoteCommand> {
+    static COMMAND: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(&format!(
+            r"^(?i:note)\s+(?i:as)\s+({NAMED_NOTE_CODE_PATTERN})(.*)$"
+        ))
+        .unwrap()
+    });
+    let captures = COMMAND.captures(line)?;
+    let (tags, stereotype, color) = named_note_decorations(captures.get(2)?.as_str())?;
+    Some(NamedNoteCommand {
+        display: None,
+        code: captures.get(1)?.as_str().to_string(),
+        tags,
+        stereotype,
+        color,
+    })
+}
+
 /// Return the ordinary-key identity used by PlantUML's
 /// `SkinParam.cleanForKeySlow`.
 fn normalized_skinparam_spelling(key: &str) -> String {
@@ -1689,6 +1764,31 @@ pub fn parse_with_base(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn named_note_command_grammar_preserves_ordered_decorations() {
+        let inline = parse_named_note_inline(
+            r#"note "payload" as Métrique.Δelta_7 $audit $retained <<Ledger>> #MistyRose"#,
+        )
+        .unwrap();
+        assert_eq!(inline.display.as_deref(), Some("payload"));
+        assert_eq!(inline.code, "Métrique.Δelta_7");
+        assert_eq!(inline.tags, ["audit", "retained"]);
+        assert_eq!(inline.stereotype.as_deref(), Some("Ledger"));
+        assert_eq!(inline.color.as_deref(), Some("#MistyRose"));
+
+        let multiline = parse_named_note_multiline(
+            "note as Ledger.C464 $audit $retained <<Ledger>> #LightBlue",
+        )
+        .unwrap();
+        assert_eq!(multiline.display, None);
+        assert_eq!(multiline.code, "Ledger.C464");
+        assert_eq!(multiline.tags, inline.tags);
+        assert_eq!(multiline.stereotype, inline.stereotype);
+
+        assert!(parse_named_note_inline(r#"note "payload" as ValidPrefix-invalid"#).is_none());
+        assert!(parse_named_note_multiline("note as ValidCode #Red <<WrongOrder>>").is_none());
+    }
 
     #[test]
     fn detects_uml_type() {

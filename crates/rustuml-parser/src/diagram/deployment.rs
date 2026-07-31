@@ -42,6 +42,12 @@ pub struct DeploymentNote {
     /// Explicit note background color, retained as a PlantUML color token.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Dollar-prefixed tags from the shared named-note command.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
+    /// Chevron stereotype from the shared named-note command.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub stereotype: Option<String>,
     /// Immediate containing DESCRIPTION group, if any.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,

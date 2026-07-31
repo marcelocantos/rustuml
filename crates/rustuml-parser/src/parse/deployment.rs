@@ -413,6 +413,8 @@ struct NoteAccum {
     target: Option<String>,
     id: Option<String>,
     color: Option<String>,
+    tags: Vec<String>,
+    stereotype: Option<String>,
     owner: Option<String>,
     quark_order: usize,
     position: DeploymentNotePosition,
@@ -466,15 +468,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             .unwrap()
     });
 
-    // note "text" as ID  — floating note
-    static RE_NOTE_FLOATING: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*(#\S+)?\s*$"#).unwrap()
-    });
-
-    // note as ID [#color] — multiline floating note
-    static RE_NOTE_FLOATING_MULTI: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+([\w.]+)\s*(#\S+)?\s*$").unwrap());
-
     // note direction of target : text  (inline attached note)
     static RE_NOTE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
@@ -522,6 +515,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     target: accum.target,
                     text,
                     color: accum.color,
+                    tags: accum.tags,
+                    stereotype: accum.stereotype,
                     owner: accum.owner,
                     quark_order: accum.quark_order,
                     position: accum.position,
@@ -643,16 +638,16 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         // Floating note: note "text" as ID
-        if let Some(caps) = RE_NOTE_FLOATING.captures(trimmed) {
-            let text = caps[1].replace("\\n", "\n");
-            let id = caps[2].to_string();
+        if let Some(command) = super::parse_named_note_inline(trimmed) {
             let quark_order = next_quark_order;
             next_quark_order += 1;
             notes.push(DeploymentNote {
-                id: Some(id),
+                id: Some(command.code),
                 target: None,
-                text,
-                color: caps.get(3).map(|value| value.as_str().to_string()),
+                text: command.display.expect("inline named note has display text"),
+                color: command.color,
+                tags: command.tags,
+                stereotype: command.stereotype,
                 owner: stack.last().cloned(),
                 quark_order,
                 position: DeploymentNotePosition::Right,
@@ -661,13 +656,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             continue;
         }
 
-        if let Some(caps) = RE_NOTE_FLOATING_MULTI.captures(trimmed) {
+        if let Some(command) = super::parse_named_note_multiline(trimmed) {
             let quark_order = next_quark_order;
             next_quark_order += 1;
             note_accum = Some(NoteAccum {
-                id: Some(caps[1].to_string()),
+                id: Some(command.code),
                 target: None,
-                color: caps.get(2).map(|value| value.as_str().to_string()),
+                color: command.color,
+                tags: command.tags,
+                stereotype: command.stereotype,
                 owner: stack.last().cloned(),
                 quark_order,
                 position: DeploymentNotePosition::Right,
@@ -693,6 +690,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 target: Some(target),
                 text,
                 color: caps.get(3).map(|value| value.as_str().to_string()),
+                tags: Vec::new(),
+                stereotype: None,
                 owner: stack.last().cloned(),
                 quark_order,
                 position,
@@ -712,6 +711,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 id: None,
                 target: Some(target),
                 color: caps.get(3).map(|value| value.as_str().to_string()),
+                tags: Vec::new(),
+                stereotype: None,
                 owner: stack.last().cloned(),
                 quark_order,
                 position,
@@ -1151,8 +1152,8 @@ mod tests {
     fn explicit_note_colors_survive_every_deployment_command_form() {
         let d = parse(
             "node Server\n\
-             note \"inline floating\" as InlineFloat #AliceBlue\n\
-             note as MultiFloat #MistyRose\n\
+             note \"inline floating\" as Inline.Float $audit <<InlineLedger>> #AliceBlue\n\
+             note as Multi.Float $retained <<MetricLedger>> #MistyRose\n\
              multiline floating\n\
              endnote\n\
              note right of Server #LightGreen : inline attached\n\
@@ -1166,6 +1167,28 @@ mod tests {
         assert_eq!(d.notes[1].color.as_deref(), Some("#MistyRose"));
         assert_eq!(d.notes[2].color.as_deref(), Some("#LightGreen"));
         assert_eq!(d.notes[3].color.as_deref(), Some("#Wheat"));
+        assert_eq!(d.notes[0].id.as_deref(), Some("Inline.Float"));
+        assert_eq!(d.notes[1].id.as_deref(), Some("Multi.Float"));
+        assert_eq!(d.notes[0].tags, ["audit"]);
+        assert_eq!(d.notes[1].tags, ["retained"]);
+        assert_eq!(d.notes[0].stereotype.as_deref(), Some("InlineLedger"));
+        assert_eq!(d.notes[1].stereotype.as_deref(), Some("MetricLedger"));
+    }
+
+    #[test]
+    fn dotted_inline_named_note_is_reused_by_a_relation() {
+        let d = parse(
+            "note \"Dotted code note\" as memo.v1\n\
+             node \"Service A\" as ServiceA\n\
+             memo.v1 ..> ServiceA : audit route",
+        );
+
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].id.as_deref(), Some("memo.v1"));
+        assert!(!d.nodes.iter().any(|node| node.id == "memo_v1"));
+        assert_eq!(d.connections.len(), 1);
+        assert_eq!(d.connections[0].from, "memo.v1");
+        assert_eq!(d.connections[0].to, "ServiceA");
     }
 
     #[test]
