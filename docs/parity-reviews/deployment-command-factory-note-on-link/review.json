@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-command-factory-note-on-link",
+  "verdict": "REJECT",
+  "checked_at": "2026-08-01",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-2026-08-01",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not implement the reviewed change and was instructed to try to disprove the claimed Java/Rust equivalence."
+  },
+  "revisions": {
+    "rust": "ffc5fded2361cdd3d7f7ccd9c911c60cffd59490",
+    "account_commits": [
+      "a6c69beeae0eff8a87d76f1a6011c0787d173854",
+      "275bd390d175c45455d658a9ab7f9b2f316fc5b1"
+    ],
+    "implementation_commit": "ffc5fded2361cdd3d7f7ccd9c911c60cffd59490",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "/private/tmp/rustuml-deployment-link-notes/target/release/rustuml",
+    "rust_binary_sha256": "8e555b26f4dc17f882340283811f5148a0a3117de0e8c6c110c19492336c3d63",
+    "rust_binary_version": "rustuml 0.7.0"
+  },
+  "chronology": {
+    "initial_account_parent": "5d494292c14b853a75778aa9f3369c4d69ee6ba4",
+    "initial_account_commit": "a6c69beeae0eff8a87d76f1a6011c0787d173854",
+    "refined_account_commit": "275bd390d175c45455d658a9ab7f9b2f316fc5b1",
+    "implementation_parent": "275bd390d175c45455d658a9ab7f9b2f316fc5b1",
+    "account_preceded_implementation": true
+  },
+  "reviewed_sources": {
+    "rust": [
+      "crates/rustuml-parser/src/diagram/deployment.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-render/src/deployment.rs"
+    ],
+    "java": [
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+      "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "src/main/java/net/atmp/CucaDiagram.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "src/main/java/net/sourceforge/plantuml/utils/BlocLines.java"
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git status --short --branch",
+    "git log -n 3 --format='%H %P %s' -- docs/parity-reviews/deployment-command-factory-note-on-link/account.json",
+    "git show -s --format='%H%n%P%n%s' ffc5fded2361cdd3d7f7ccd9c911c60cffd59490",
+    "git diff 5d494292c14b853a75778aa9f3369c4d69ee6ba4 ffc5fded2361cdd3d7f7ccd9c911c60cffd59490 -- crates/rustuml-parser/src/diagram/deployment.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/mod.rs",
+    "git diff 5d494292c14b853a75778aa9f3369c4d69ee6ba4 ffc5fded2361cdd3d7f7ccd9c911c60cffd59490 -- crates/rustuml-render/src/deployment.rs",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-deployment-link-notes/target/release/rustuml",
+    "/private/tmp/rustuml-deployment-link-notes/target/release/rustuml --version",
+    "for each BASE.puml: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -pipe -tsvg < BASE.puml > BASE.java.svg 2> BASE.java.stderr",
+    "for each BASE.puml: /private/tmp/rustuml-deployment-link-notes/target/release/rustuml -pipe --no-oracle < BASE.puml > BASE.rust.svg 2> BASE.rust.stderr",
+    "xmllint --noout test-diagrams/perturbations/deployment-command-factory-note-on-link/*.java.svg and every nonempty *.rust.svg",
+    "xmllint --format BASE.java.svg and BASE.rust.svg followed by diff -u for the focused valid counterexamples",
+    "cmp -s BASE.java.svg BASE.rust.svg for all 13 Java-valid pairs",
+    "rg -n 'include_str!|test-diagrams|golden|superseded phrase|renamed compound|RenamedIngress|LINK_NOTE_PADDING|note on link' crates/rustuml-parser/src/diagram/deployment.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-render/src/deployment.rs"
+  ],
+  "cargo_or_rustc_run": false,
+  "artifact_convention": "For every BASE.puml, the preserved directory contains BASE.java.svg, BASE.java.stderr, BASE.rust.svg, and BASE.rust.stderr. Java error cases preserve Java's generated error SVG. Rust parser errors produced empty stdout, so the corresponding zero-byte BASE.rust.svg is the exact captured output and BASE.rust.stderr preserves the diagnostic.",
+  "verification": {
+    "sources": 18,
+    "java_valid_sources": 13,
+    "java_valid_mechanism_passes": 4,
+    "java_valid_mechanism_failures": 9,
+    "supplemental_java_error_sources": 5,
+    "supplemental_error_semantic_agreements": 5,
+    "raw_byte_exact_valid_pairs": 0,
+    "xml_validated_outputs": 31,
+    "cargo_or_rustc_invocations": 0
+  },
+  "exact_observations": {
+    "raw_byte_identity": "No Java-valid pair is raw-byte identical. Every pair differs at least in PlantUML processing instructions, source payload, and comments; the rejecting cases also differ in mechanism-owned subtype, display rows, layout, painted origin, or document bounds.",
+    "root_dimensions": [
+      "02 Java 463x205, Rust 463x205",
+      "03 Java 1124x88, Rust 1181x89",
+      "04 Java 317x280, Rust 323x280",
+      "05 Java 311x215, Rust 317x215",
+      "06 Java 463x218, Rust 468x218",
+      "07 Java 580x217, Rust 580x217",
+      "08 Java 558x391, Rust 558x391",
+      "09 Java 384x341, Rust 389x341",
+      "10 Java 776x87, Rust 771x92",
+      "17 Java 192x191, Rust 192x191",
+      "18 Java 249x195, Rust 254x195"
+    ],
+    "structural_summary": "Cases 02, 07, 08, and 17 preserve the mechanism-owned group count, link ownership, merge order, note text/color, topology, UID/source metadata, and root dimensions. Cases 01 and 11 select the wrong Rust diagram family. Case 03 collapses a two-row ordinary label into one literal row. Cases 04, 05, 06, 09, 10, and 18 expose bounds or origin drift tied to the compound note padding; case 04 additionally serializes the preserved blank row as empty text rather than Java's non-breaking-space display row."
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/01-inline-default-bottom-no-label.puml",
+      "java_valid": true,
+      "axes": ["default bottom position", "inline", "on link", "no ordinary label", "renamed node/database endpoints"],
+      "result": "FAIL",
+      "detail": "Java selects DESCRIPTION and renders deployment symbols. Rust selects STATE because the default-position note command contributes a stronger state score than the two deployment leaves; the Deployment link-note model is never reached."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/02-inline-left-label-simple-color.puml",
+      "java_valid": true,
+      "axes": ["left", "inline", "of link", "ordinary label", "simple named color", "renamed artifact/cloud endpoints"],
+      "result": "PASS_MECHANISM_STRUCTURE",
+      "detail": "Both outputs attach one LightCyan folded note before the ordinary label inside lnk4 with matching text, block geometry, ownership, source line, IDs, and root dimensions."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/03-inline-right-gradient-ltr-chain.puml",
+      "java_valid": true,
+      "axes": ["right", "inline", "on link", "AliceBlue/Gold gradient", "left-to-right chain", "two-row ordinary label"],
+      "result": "FAIL",
+      "detail": "The note and gradient survive, but Java expands the ordinary label's PlantUML \\n token into two text rows while Rust paints one literal backslash-n row. Rust measures width 188.373 instead of Java's row widths 42.6182 and 130.8696, moves the final node by 57 pixels, and expands the canvas from 1124x88 to 1181x89."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/04-multiline-top-indent-blank.puml",
+      "java_valid": true,
+      "axes": ["top", "multiline", "of link", "end note", "relative indentation", "interior blank line", "hex color", "ordinary label"],
+      "result": "FAIL",
+      "detail": "Relative indentation, line order, color, and merge order agree. Rust emits the blank row as textLength=0 where Java emits a non-breaking-space row with textLength=4.1133, and Rust's document width is 323 rather than Java's 317 because the edge bounds include invisible compound padding beyond the painted note."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/05-multiline-bottom-endnote-no-label.puml",
+      "java_valid": true,
+      "axes": ["bottom", "multiline", "on link", "compact endnote", "relative indentation", "no ordinary label", "explicit down direction"],
+      "result": "FAIL",
+      "detail": "Text, note path, edge route, IDs, and note-only ownership agree, but the identical painted note ends at x=296.84 while Rust reports width 317 and Java width 311. The extra six pixels come from Rust bounding the invisible outer merge padding rather than the painted child."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/06-replacement-same-link.puml",
+      "java_valid": true,
+      "axes": ["replacement", "top then right", "simple colors", "ordinary label", "renamed endpoints"],
+      "result": "FAIL",
+      "detail": "Both sides replace the superseded text and color without adding an entity or UID. The surviving right note is correct, but Rust retains five extra document-width pixels from the compound padding (468 versus Java 463)."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/07-eligible-link-skips-note-edge.puml",
+      "java_valid": true,
+      "axes": ["eligible-link selection", "named note endpoint link", "left", "ordinary label", "simple color"],
+      "result": "PASS_MECHANISM_STRUCTURE",
+      "detail": "Both sides skip the later MarkerM1987 note-edge link and attach the Lavender link note to the earlier ordinary lnk4. Entity/link counts, ownership, IDs, source metadata, text order, and root dimensions agree."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/08-nested-owner-direction-fanout.puml",
+      "java_valid": true,
+      "axes": ["nested ownership", "fanout", "right and down directions", "top", "ordinary label", "later node and link"],
+      "result": "PASS_MECHANISM_STRUCTURE",
+      "detail": "Both sides attach the note to the latest nested ordinary link, preserve one cluster and four entities, keep the later entity at ent0008 and later link at lnk9, and add no note entity or UID event."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/09-parallel-links-last-selection.puml",
+      "java_valid": true,
+      "axes": ["parallel topology", "latest ordinary link", "bottom", "simple color", "later declaration and link"],
+      "result": "FAIL",
+      "detail": "Selection, dashed edge ownership, note text/color, later IDs, and topology agree. Rust's root width is 389 rather than Java's 384 because the compound box contributes five invisible trailing pixels to painted bounds."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/10-mixed-case-concatenated-position.puml",
+      "java_valid": true,
+      "axes": ["case-insensitive grammar", "lefton concatenation", "left note", "explicit left edge direction", "simple color", "ordinary label"],
+      "result": "FAIL",
+      "detail": "The unusual Java-valid grammar and merge order agree. Bounds normalization does not: Java is 776x87 with the note at y=6, while Rust is 771x92 with all content shifted five pixels down and the note at y=11, exposing the same invisible-padding projection at the minimum painted frontier."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/11-inline-empty-text-boundary.puml",
+      "java_valid": true,
+      "axes": ["empty inline text", "default bottom", "ordinary label", "node-only endpoints"],
+      "result": "FAIL",
+      "detail": "Java accepts the empty inline note in DESCRIPTION. Rust again selects STATE because the default note-on-link score overrides the deployment leaves, so this cannot validate Deployment's empty-text model."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/12-error-no-prior-link.puml",
+      "java_valid": false,
+      "axes": ["no prior link", "inline", "right", "simple color"],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java reports No link defined and emits an error SVG; Rust terminates with no link defined for note on link and emits no SVG stdout. Exact error presentation is declared residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/13-error-only-note-edge.puml",
+      "java_valid": false,
+      "axes": ["only prior link touches a named note", "eligible-link selection", "bottom"],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Both implementations reject because there is no eligible ordinary prior link."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/14-error-invalid-color.puml",
+      "java_valid": false,
+      "axes": ["invalid simple color", "left", "inline"],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java reports No such color; Rust reports invalid note-on-link color before rendering."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/15-error-unterminated-multiline.puml",
+      "java_valid": false,
+      "axes": ["unterminated multiline", "top", "simple color"],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java emits a syntax-error SVG and Rust reports unterminated note on link with empty SVG stdout."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/16-error-empty-multiline.puml",
+      "java_valid": false,
+      "axes": ["empty multiline", "default bottom", "of link", "end note"],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java reports No note defined and Rust reports no note defined."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/17-blank-only-multiline-valid.puml",
+      "java_valid": true,
+      "axes": ["one blank body row", "multiline", "top", "compact endnote", "no ordinary label"],
+      "result": "PASS_MECHANISM_STRUCTURE",
+      "detail": "A single blank body row is Java-valid. Both sides emit the same empty folded-note path, dimensions, ownership, IDs, route, and 192x191 root dimensions."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-command-factory-note-on-link/18-inline-empty-description-control.puml",
+      "java_valid": true,
+      "axes": ["empty inline text", "right", "of link", "ordinary label", "forced DESCRIPTION leaves"],
+      "result": "FAIL",
+      "detail": "Both sides parse and paint the empty right note on the owning link, but Rust's root width is 254 versus Java's 249 because five non-painted padding pixels are included in edge bounds."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Default-position note-on-link commands can bypass the Deployment model entirely",
+      "java_mechanism": "DescriptionDiagramFactory registers CommandFactoryNoteOnLink for DESCRIPTION. The node/database inputs are consumed as DESCRIPTION elements and Java renders both fresh controls as data-diagram-type DESCRIPTION.",
+      "rust_mechanism": "detect_uml_subtype scores exactly 'note on link' and its spaced/colon suffixes +15 for STATE and +15 for USECASE, while each deployment leaf adds only +5. With two deployment leaves, STATE wins the score competition. Explicit-position forms do not enter that branch, explaining why the other Deployment probes reach the new parser.",
+      "impact": "The shipped --no-oracle path renders deployment elements as state boxes, changes labels and metadata, and never executes the implementation under review. This violates the claimed default-bottom command invariant on ordinary Java DESCRIPTION inputs.",
+      "evidence": [
+        "01-inline-default-bottom-no-label.puml",
+        "11-inline-empty-text-boundary.puml"
+      ]
+    },
+    {
+      "severity": "rejecting",
+      "title": "Compound sizing treats a PlantUML multiline ordinary label as one literal row",
+      "java_mechanism": "SvekEdge builds link.getLabel() as a Display text block before merging it with EntityImageNoteLink. The escaped newline in case 03 becomes separate 'persist' and 'with checksum 1801' rows, and the merged right-note block constrains Graphviz with that two-row label.",
+      "rust_mechanism": "The new deployment_link_note_label_size call receives one EdgeLabelSize computed by text_render::measure over the raw connection label, and render_no_oracle_edges emits one text element. It does not split or expand the Display newline token before measurement or paint.",
+      "impact": "The label is visibly wrong, the merged constraint is too wide and too short, the last node moves 57 pixels, and the root expands from 1124x88 to 1181x89. This is directly inside the account's ordinary-label-plus-note scope and its declared multiline-label perturbation axis.",
+      "evidence": [
+        "03-inline-right-gradient-ltr-chain.puml"
+      ]
+    },
+    {
+      "severity": "rejecting",
+      "title": "Painted bounds include five-pixel merge padding that Java does not paint",
+      "java_mechanism": "EntityImageNoteLink contributes its padded preferred size to SvekEdge's Graphviz center label, but LimitFinder observes the children actually painted by the merged text block. ComponentRoseNote draws the folded note inset inside that preferred block.",
+      "rust_mechanism": "deployment_link_note_blocks correctly adds LINK_NOTE_PADDING before painting the folded note, but deployment_edge_paint_bounds includes the full compound rectangle from the solved outer origin through compound.width/height. The unpainted five-pixel outer side is therefore promoted into the document frontier.",
+      "impact": "When the link-note block controls a frontier, Rust adds five or six canvas pixels or shifts the normalized painted origin. Cases 04, 05, 06, 09, and 18 are wider than Java; case 10 shifts all content down five pixels and changes both root dimensions. The note shapes and many internal coordinates otherwise match, isolating the divergence to bounds projection rather than Graphviz routing.",
+      "evidence": [
+        "04-multiline-top-indent-blank.puml",
+        "05-multiline-bottom-endnote-no-label.puml",
+        "06-replacement-same-link.puml",
+        "09-parallel-links-last-selection.puml",
+        "10-mixed-case-concatenated-position.puml",
+        "18-inline-empty-description-control.puml"
+      ]
+    },
+    {
+      "severity": "additional_exact_mismatch",
+      "title": "Interior blank display rows are not serialized like Java",
+      "detail": "In case 04 Java preserves the interior blank row as a non-breaking-space text element with textLength 4.1133. Rust emits an empty text node with textLength 0. Other rows and the note height agree because nonblank rows dominate dimensions, but exact display semantics do not."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The direct ownership, grammar, replacement, and eligible-link core generalizes on the sampled controls",
+      "detail": "Explicit left/right/top/bottom, on/of, case folding, Java's lefton concatenation, named/hex/gradient colors, endnote/end note, relative indentation, blank-only multiline, replacement, named-note-edge skipping, nested ownership, fanout/parallel topology, and later UID/source stability all worked where the subtype and bounds defects did not mask them. The five malformed/error probes also terminated semantically like Java."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "golden_or_fixture_reads_found": false,
+    "unexplained_numeric_constants_found": false,
+    "constant_assessment": "The only new parity-affecting production constant is LINK_NOTE_PADDING=5.0, adjacent to a Java EntityImageNoteLink/ComponentRoseNote provenance comment. The value is supported; its use in deployment_edge_paint_bounds is not Java-compatible.",
+    "branch_assessment": "The parser branches are general command grammar and ownership logic, not fixture keyed. The missing integration is a general factory-selection branch: detect_uml_subtype still treats default note-on-link as a state/usecase signal strong enough to defeat DESCRIPTION deployment leaves.",
+    "evidence": "No changed shipping-code branch names this mechanism, a perturbation label, endpoint text, corpus path, golden bytes, expected coordinate, or branch count. Test-only renamed constants and labels do not appear in production branches."
+  },
+  "residue_assessment": [
+    "Java error SVG artwork, Java/Rust diagnostic wording, and parser error line differences were not counted as failures, consistent with the declared residue.",
+    "Tiny pre-existing deployment shape rounding, comments, PlantUML processing instructions, and embedded source payload differences were not used to reject otherwise mechanism-congruent cases 02, 07, 08, and 17.",
+    "The rejection does not depend on broad deployment baseline drift: the bounds finding is isolated by identical note paths/text coordinates paired with only a five/six-pixel root frontier difference, and the multiline-label finding is isolated by Java's two text rows versus Rust's one literal row."
+  ],
+  "required_follow_up": "Do not accept this mechanism at ffc5fded. Integrate CommandFactoryNoteOnLink into Java-compatible DESCRIPTION factory selection so default-position forms reach Deployment; model ordinary link labels as Display rows before compound measurement and paint; and project bounds from the actually painted label/note children rather than the invisible outer merge rectangle. Add regressions for the preserved 01, 03, 04/05, 10, 11, and 18 counterexamples, then rerun an independent checker at the new exact binary revision.",
+  "verdict_reason": "REJECT. Thirteen fresh Java-valid held-outs covered all positions, inline/multiline forms, both terminators, relative indentation and blank rows, labels/no label, replacement, eligible-link skipping, nested ownership, directions, chain/fanout/parallel topology, renamed text, simple/hex/gradient colors, empty bodies, and later UID/source stability. Nine are failing valid counterexamples. Two default-position commands select Rust STATE instead of Java DESCRIPTION; one multiline ordinary label is collapsed into a literal row and materially changes layout; and six expose mechanism-owned painted-bound or origin drift from invisible note padding. Four controls validate the narrow ownership model and all five Java-error probes agree semantically, but those successes cannot establish the claimed end-to-end Deployment command-factory invariant."
+}

@@ -1,0 +1,7 @@
+@startuml
+node "Source Plum 1907" as SourceP1907
+node "Sink Lime 1913" as SinkL1913
+SourceP1907 --> SinkL1913 : replaceable route 1931
+note top on link #MistyRose : superseded phrase 1933
+note right of link #PaleGreen : surviving replacement 1949
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+artifact "Empty Parcel 2287" as EmptyP2287
+cloud "Empty Horizon 2293" as EmptyH2293
+EmptyP2287 --> EmptyH2293 : visible route 2297
+note right of link :
+@enduml

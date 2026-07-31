@@ -1,0 +1,6 @@
+@startuml
+node "Color Onyx 2207" as ColorO2207
+node "Color Ivory 2213" as ColorI2213
+ColorO2207 --> ColorI2213
+note left on link #DefinitelyNotAPlantColor : rejected pigment 2221
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Emitter Jade 1877" as EmitterJ1877
+artifact "Parcel Coral 1879" as ParcelC1879
+EmitterJ1877 -down-> ParcelC1879
+note bottom on link
+  bottom multiline row 1889
+    relative continuation 1901
+endnote
+@enduml

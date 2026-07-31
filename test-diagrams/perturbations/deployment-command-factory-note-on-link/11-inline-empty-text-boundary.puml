@@ -1,0 +1,6 @@
+@startuml
+node "Empty Cedar 2131" as EmptyC2131
+node "Empty Birch 2137" as EmptyB2137
+EmptyC2131 --> EmptyB2137 : empty inline route 2141
+note on link :
+@enduml

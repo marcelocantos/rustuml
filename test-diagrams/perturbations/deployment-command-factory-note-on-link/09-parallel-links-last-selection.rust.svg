@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="341px" preserveAspectRatio="none" style="width:389px;height:341px;background:#FFFFFF;" version="1.1" viewBox="0 0 389 341" width="389px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Alpha Fern 2053-->
+<g class="entity" data-qualified-name="AlphaF2053" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="20.54,16,30.54,6,173.4697,6,173.4697,42.4883,163.4697,52.4883,20.54,52.4883,20.54,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="163.4697" x2="173.4697" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="20.54" x2="163.4697" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="163.4697" x2="163.4697" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112.9297" x="35.54" y="39.5352">Alpha Fern 2053</text>
+</g>
+<!--entity Beta Iris 2063-->
+<g class="entity" data-qualified-name="BetaI2063" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="29.98,174.49,39.98,164.49,164.0152,164.49,164.0152,200.9783,154.0152,210.9783,29.98,210.9783,29.98,174.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="154.0152" x2="164.0152" y1="174.49" y2="164.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="29.98" x2="154.0152" y1="174.49" y2="174.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="154.0152" x2="154.0152" y1="174.49" y2="210.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94.0352" x="44.98" y="198.0252">Beta Iris 2063</text>
+</g>
+<!--entity Declared Later 2087-->
+<g class="entity" data-qualified-name="LaterD2087" data-source-line="7" id="ent0006">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="167.8057" x="13.1" y="287.98"/>
+<polygon fill="#F1F1F1" points="163.9057,292.98,163.9057,306.98,175.9057,306.98,175.9057,298.98,169.9057,292.98,163.9057,292.98" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="169.9057" x2="169.9057" y1="292.98" y2="298.98"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="175.9057" x2="169.9057" y1="298.98" y2="298.98"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="137.8057" x="23.1" y="314.5152">Declared Later 2087</text>
+</g>
+<!--link AlphaF2053 to BetaI2063-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk4">
+<path d="M45.76,52.99 C34.27,60.63 23.56,70.38 17,82.49 C6,102.81 6,114.16 17,134.49 C23.56,146.6 29.2737,153.0278 40.7637,160.6678" fill="none" id="AlphaF2053-to-BetaI2063" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="45.76,163.99,40.4803,155.6759,41.5964,161.2215,36.0507,162.3376,45.76,163.99" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="112.8296" x="18" y="113.5584">first parallel 2069</text>
+</g>
+<!--link AlphaF2053 to BetaI2063-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M118.27,52.92 C124.98,61.52 131.53,71.82 135,82.49 C142.15,104.47 142.15,112.51 135,134.49 C131.53,145.15 128.6709,150.7295 121.9609,159.3295" fill="none" id="AlphaF2053-to-BetaI2063-1" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="118.27,164.06,126.96,159.4249,121.3457,160.1179,120.6527,154.5037,118.27,164.06" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="132.2471" x="191.3815" y="96.0584">second parallel 2081</text>
+<path d="M145.36,104.8005 L145.36,129.8005 L369.36,129.8005 L369.36,114.8005 L359.36,104.8005 L145.36,104.8005" fill="#F5DEB3" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M359.36,104.8005 L359.36,114.8005 L369.36,114.8005 L359.36,104.8005" fill="#F5DEB3" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="203.29" x="151.36" y="122.3689">belongs to second parallel 2083</text>
+</g>
+<!--link BetaI2063 to LaterD2087-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="8" id="lnk7">
+<path d="M97,211.2 C97,233.4 97,260.97 97,281.84" fill="none" id="BetaI2063-to-LaterD2087" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="97,287.84,101,278.84,97,282.84,93,278.84,97,287.84" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102.9463" x="98" y="254.5484">later route 2089</text>
+</g>
+</g></svg>

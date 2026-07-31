@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+node "Alpha Fern 2053" as AlphaF2053
+node "Beta Iris 2063" as BetaI2063
+AlphaF2053 --> BetaI2063 : first parallel 2069
+AlphaF2053 ..> BetaI2063 : second parallel 2081
+note bottom of link #Wheat : belongs to second parallel 2083
+artifact "Declared Later 2087" as LaterD2087
+BetaI2063 --> LaterD2087 : later route 2089
+@enduml

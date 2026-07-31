@@ -1,0 +1,6 @@
+@startuml
+node "Case Nickel 2099" as CaseN2099
+node "Case Pearl 2111" as CaseP2111
+CaseN2099 -left-> CaseP2111 : mixed command route 2113
+NoTe LeFtOn LiNk #PeachPuff : concatenated position 2129
+@enduml
