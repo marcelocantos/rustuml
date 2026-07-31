@@ -1,120 +1,99 @@
 {
   "schema_version": 1,
   "mechanism": "description-owned-note-cluster-membership",
-  "status": "accounted_before_code",
+  "status": "corrected_before_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "be05a84e723a7384787bbef25052833d1c7ffb4e",
+  "rust_revision": "79803e8d0ce6eeb1fbbad4e700dd644d6653f4bc",
+  "correction": "The first account correctly described PlantUML's heterogeneous quark ownership but named Rust's DeploymentDiagram path. The preserved counterexamples dispatch through Diagram::Component and are rendered by component.rs. This correction was committed before any production change for the mechanism.",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
-      "symbols": [
-        "CommandFactoryNote.executeInternal"
-      ],
-      "lines": "142-164",
-      "role": "Resolves `note as ID` through the current quark context and creates a real LeafType.NOTE Entity, so the note has the same immediate parent-container relation as every other DESCRIPTION leaf."
+      "symbols": ["CommandFactoryNote.executeInternal"],
+      "lines": "141-163",
+      "role": "Resolves the explicit note code with quarkInContext(false, ...), rejects an existing quark payload, and creates a LeafType.NOTE entity under the current group."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
-      "symbols": [
-        "Entity.getParentContainer",
-        "Entity.leafs",
-        "Entity.groups",
-        "Entity.isEmpty"
-      ],
-      "lines": "639-663,673-680",
-      "role": "Derives heterogeneous immediate children from quarks: notes and ordinary leaves both appear in leafs(), groups are excluded, and any nonremoved note child makes a group nonempty."
+      "symbols": ["Entity.getParentContainer", "Entity.leafs", "Entity.groups", "Entity.isEmpty"],
+      "lines": "639-679",
+      "role": "Defines one heterogeneous immediate-child relation from quark children: notes and ordinary leaves are leafs(), groups are separate, and a surviving note makes its owner nonempty."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
-      "symbols": [
-        "GraphvizImageBuilder.printGroups",
-        "GraphvizImageBuilder.printGroup",
-        "GraphvizImageBuilder.getUnpackagedEntities"
-      ],
-      "lines": "398-433",
-      "role": "Opens a cluster for every nonempty group, emits that group's heterogeneous direct leaves into it, and emits only top-parent leaves through the root unpackaged stream."
+      "symbols": ["GraphvizImageBuilder.getUnpackagedEntities", "GraphvizImageBuilder.printGroups", "GraphvizImageBuilder.printGroup"],
+      "lines": "399-435",
+      "role": "Emits owner-local direct leaves inside the open cluster and emits only top-parent leaves through the unpackaged stream."
     },
     {
       "path": "src/main/java/net/atmp/CucaDiagram.java",
-      "symbols": [
-        "CucaDiagram.isStandalone",
-        "CucaDiagram.applySingleStrategy"
-      ],
-      "lines": "713-720,762-793",
-      "role": "Builds each owner's Magma candidates from g.leafs() and excludes any leaf incident to a link; a floating note belongs to its owner, while an attached note's hidden link makes it non-standalone."
+      "symbols": ["CucaDiagram.isStandalone", "CucaDiagram.applySingleStrategy"],
+      "lines": "713-718,762-789",
+      "role": "Computes Magma independently from each group's immediate leafs(); a floating note is eligible unless an explicit link touches it, while an attached note is excluded by its hidden note link."
     }
   ],
   "rust_locations": [
     {
-      "path": "crates/rustuml-parser/src/parse/deployment.rs",
-      "symbols": [
-        "floating and attached note construction",
-        "add_child"
-      ],
-      "lines": "610-690,815-852",
-      "role": "Correctly records DeploymentNote.owner from the current container, but only ordinary node declarations are inserted into DeploymentNode.children."
+      "path": "crates/rustuml-parser/src/diagram/component.rs",
+      "symbols": ["ComponentNote", "ComponentPackage"],
+      "lines": "128-181",
+      "role": "ComponentNote retains text, target and source location but drops the explicit note id and immediate package owner, while ComponentPackage inventories only ordinary component/interface ids."
     },
     {
-      "path": "crates/rustuml-render/src/deployment.rs",
-      "symbols": [
-        "render_no_oracle cluster_ids",
-        "deployment_svek_leaf_order",
-        "render_no_oracle cluster membership"
-      ],
-      "lines": "3928-4037,4056-4062,4117-4165",
-      "role": "The SVEK ordering plan can see note.owner, but the cluster inventory is derived only from nonempty node.children and only ordinary child nodes are registered with LayoutGraph clusters."
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["parse_component note branches", "package_stack"],
+      "lines": "207-245,316-333,590-693",
+      "role": "The parser knows the current package and sometimes records a note id transiently in known_note_ids, but neither fact survives in ComponentNote; multiline `note as ID` does not even retain ID in that transient set."
     },
     {
-      "path": "crates/rustuml-render/src/deployment.rs",
-      "symbols": [
-        "add_deployment_magma_constraints"
-      ],
-      "lines": "4870-4940",
-      "role": "Adds every targetless note to the root standalone set regardless of owner and never adds direct owned notes to a container's standalone set."
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["component_named_note_ids", "laid_out_note_indices", "add_package_clusters_to_layout"],
+      "lines": "872-935,1068-1091,4786-4837",
+      "role": "Named-note identity is guessed later from unknown link endpoints, unlinked named notes are omitted from layout, and package clusters admit only ComponentPackage.components."
     },
     {
-      "path": "crates/rustuml-render/src/deployment.rs",
-      "symbols": [
-        "deployment_cluster_frame",
-        "adjust_deployment_endpoint_labels",
-        "layout_deployment_rects"
-      ],
-      "lines": "5280-5360,5560-5620,5870-5940",
-      "role": "Recomputes the same node-children-only cluster predicate in geometry and position consumers, so fixing only initial LayoutGraph registration would leave downstream cluster/leaf indexing inconsistent."
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["add_component_single_strategy_to_layout", "no-oracle note emission"],
+      "lines": "4878-4986,3062-3174",
+      "role": "Magma inventories only components and interfaces; named floating notes are neither owner-local candidates nor rendered at their solved layout unless a later link allowed their id to be inferred."
     }
   ],
-  "claimed_invariant": "DESCRIPTION ownership is one heterogeneous immediate-child relation across ordinary leaves, named floating notes, attached-note entities, and child groups. A container is a SVEK cluster whenever it has any renderable immediate child. Every owned note is registered inside that cluster and excluded from the root stream. Magma is computed independently per owner from immediate unlinked leaves: a targetless floating note is eligible in its owner, while an attached note is not standalone because its hidden note link connects it to the target.",
-  "causal_divergence": "Rust already preserves DeploymentNote.owner, but all cluster predicates and memberships are derived from DeploymentNode.children, a node-only projection. A note-only container is therefore treated as an ordinary leaf, its note remains a root LayoutGraph node, and root Magma admits that owned targetless note. Containers with both nodes and notes become clusters, but the notes are still not added as cluster members or owner-local Magma candidates. The rejected held-outs expose all three consequences from the same lost heterogeneous relation.",
-  "planned_model_change": "Introduce one owner-aware DESCRIPTION membership projection used by every no-oracle layout and geometry consumer. Derive cluster IDs from ordinary children or any laid-out note whose owner is that node. Register direct owned note layout IDs with the corresponding LayoutGraph cluster. Build root and container Magma candidates by stable quark order from immediate targetless/unlinked ordinary leaves and floating notes, never by a global note append. Route cluster/leaf position iteration, frame construction, painting order, and qualified note names through the same projection so their inventories cannot drift. Preserve attached-note layout and hidden-link exclusion rather than treating all owned notes as standalone.",
+  "claimed_invariant": "For DESCRIPTION inputs dispatched as ComponentDiagram, an explicitly named floating note is a first-class leaf with durable id, immediate owner and declaration order. It is laid out exactly once, registered in that owner's cluster, qualified by that owner, excluded from the root stream, and considered only in that owner's standalone Magma set. Attached notes retain their owner for cluster membership but remain non-standalone because their hidden link touches both note and target.",
+  "causal_divergence": "Rust splits Java's quark-backed Entity relation into ComponentPackage.components plus a flat ComponentDiagram.notes vector. ComponentNote loses both id and owner, so component_named_note_ids can recover only a subset through later unknown endpoints. Consequently an unlinked named note receives no LayoutGraph node, cannot make a note-only owner nonempty, cannot be registered with a cluster, cannot receive an owner-qualified name, and never participates in owner-local Magma. These are downstream symptoms of one missing semantic leaf record rather than independent geometry defects.",
+  "planned_model_change": "Retain explicit note id and qualified immediate owner in ComponentNote at parse time, including multiline declarations. Build the SVEK leaf plan from owner-local components, interfaces and laid-out notes in declaration order, remapping solved slots back to the renderer's typed vectors. Register every owned laid-out note with its exact package cluster. Derive named-note identity directly from the AST, prefix its SVG qualified name with its owner, include only unlinked floating notes in the matching owner Magma, and paint a standalone named note at its solved layout. Do not solve this by moving SVG output after layout or by globally appending notes.",
   "perturbation_axes": [
-    "note-only containers versus containers with notes and ordinary leaves",
-    "targetless floating notes versus attached notes with hidden links",
-    "root notes versus one- and two-level owned notes",
-    "one, two, and three immediate standalone leaves across the Magma gate",
-    "note-before-node versus node-before-note quark order",
-    "linked ordinary controls versus unlinked controls",
+    "note-only owner versus owner with ordinary leaves",
+    "root versus one-level and two-level owners",
+    "floating named note versus attached note with hidden link",
+    "note before versus after ordinary leaves",
+    "two versus three owner-local standalone leaves across the Magma gate",
+    "explicit link to a named note versus no link",
     "left-to-right versus top-to-bottom direction",
-    "sibling containers plus mixed root leaves"
+    "renamed note, owner and leaf labels"
   ],
   "acceptance": [
-    "A valid note-only container renders as a cluster and its note is not emitted or solved as a root leaf.",
-    "Owned floating notes join only their owner's standalone Magma inventory; root and sibling owner inventories remain unchanged.",
+    "A valid note-only owner is a cluster and emits its named note once with an owner-qualified name.",
+    "Owned floating notes join only their owner's standalone Magma inventory; root and sibling inventories remain unchanged.",
     "Attached owned notes are cluster members but do not enter Magma because their hidden link makes them non-standalone.",
-    "The rejected root-owned-note leak and nested owned-note perturbations render without inventory drift and materially converge on Java.",
-    "Existing root-only emission-order controls and all parser/renderer unit tests remain green.",
-    "An independent checker attacks note-only, mixed, nested, linked, count-threshold, order, and direction cases at the exact implementation revision."
+    "Named notes remain addressable by later links without endpoint auto-creation or post-hoc identity inference.",
+    "Existing root attached-note, link-note and named-note behavior remains green.",
+    "An independent checker attacks ownership depth, attachment, links, order, Magma cardinality, direction and renamed labels at the exact implementation revision."
+  ],
+  "declared_residue": [
+    "A duplicate ordinary leaf being listed by more than one ComponentPackage is a separate first-created-quark ownership mechanism with its own pre-code account.",
+    "A genuinely empty package being muted to an EMPTY_PACKAGE leaf is a separate render-role mechanism; it is not evidence that a note-only package is empty."
   ],
   "forbidden_approaches": [
-    "adding note IDs to DeploymentNode.children while consumers still assume every child indexes DeploymentNode",
-    "filtering owned notes out of root painting without adding them to their owner cluster",
-    "coordinate translations or SVG reparenting after layout",
+    "inferring the note owner from coordinates or the nearest cluster",
+    "filtering owned notes out of root painting without registering them in their owner cluster",
     "treating every owned note as standalone and ignoring attached-note links",
-    "fixture aliases, source filenames, expected coordinates, comparator changes, or baseline changes"
+    "SVG string reparenting or coordinate translations after layout",
+    "fixture aliases, source filenames, expected coordinates, comparator changes or baseline changes"
   ],
   "evidence_inputs": [
-    "docs/parity-reviews/deployment-unconstrained-leaf-emission-order/review.json",
     "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_leaves_with_owned_note_leak_ltr.puml",
     "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_single_owned_note_ttb.puml",
-    "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.puml"
+    "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.puml"
   ]
 }

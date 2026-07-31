@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-first-quark-owner-retention",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "79803e8d0ce6eeb1fbbad4e700dd644d6653f4bc",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "symbols": ["CommandCreateElementFull.executeArg"],
+      "lines": "213-235",
+      "role": "Resolves a declaration through quarkInContext(false, code); if a compatible leaf already exists, it reuses that Entity instead of creating or moving a second leaf."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": ["Entity.getParentContainer", "Entity.leafs"],
+      "lines": "639-652",
+      "role": "Ownership comes from the quark parent fixed when the leaf was first materialized; owner leaf enumeration therefore cannot list one Entity under later sibling groups."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.printGroup"],
+      "lines": "425-435",
+      "role": "Consumes each group's quark-backed direct leaves without reconstructing or overwriting ownership."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["leaf container declaration", "component declaration", "interface declaration", "bracket declaration"],
+      "lines": "548-589,697-850",
+      "role": "Global component/interface vectors correctly deduplicate ids, but package_stack.last_mut().components is updated even when the declaration reused an existing leaf, so later owners also list the same id."
+    },
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["walk_pkg", "build_qualified_names", "add_package_clusters_to_layout"],
+      "lines": "314-321,611-623,4786-4837",
+      "role": "walk_pkg overwrites the id-to-qualified-name map on later sightings and cluster construction registers the same layout node in every listed package, turning parser duplication into later-owner reparenting."
+    }
+  ],
+  "claimed_invariant": "A compatible DESCRIPTION leaf id has exactly one immediate owner: the group active when its quark first acquired an Entity. Later declarations may update display/style fields where Java permits, but they never append that leaf to another owner or overwrite its qualified path.",
+  "causal_divergence": "Rust deduplicates the global leaf object but independently appends its id to every active ComponentPackage. The renderer then rebuilds ownership from those duplicated package lists and overwrites earlier qualified names, so a single layout node is registered with sibling clusters and appears under the last owner. The defect is a split identity/ownership model, not a traversal or coordinate problem.",
+  "planned_model_change": "Have every declaration branch report whether it first materialized a component or interface, and add package/together membership only on that transition. Make qualified-name projection first-writer-wins as a defensive invariant for deserialized or legacy ASTs. Add parser and renderer model tests proving that same-kind sibling and nested redeclarations retain the first owner and that a later childless group does not acquire the reused leaf.",
+  "perturbation_axes": [
+    "sibling versus nested would-be owners",
+    "component versus interface and bracket declarations",
+    "same label versus renamed display on redeclaration",
+    "later owner with and without independent leaves",
+    "root-first versus nested-first materialization",
+    "left-to-right versus top-to-bottom direction"
+  ],
+  "acceptance": [
+    "The global AST contains one leaf and exactly one package membership for every compatible duplicate declaration.",
+    "Qualified-name projection retains the first owner even when fed a legacy AST with duplicate package memberships.",
+    "Layout cluster registration cannot assign one leaf id to multiple sibling clusters.",
+    "Fresh valid sibling and nested duplicates emit the leaf under Java's first owner.",
+    "An independent checker searches all declaration branches for unconditional membership and attacks both direct and implicit leaf creation."
+  ],
+  "declared_residue": [
+    "Whether the now-childless later group paints as an EMPTY_PACKAGE leaf is a separate Java GraphvizImageBuilder render-role mutation and requires its own account.",
+    "Named-note ownership is covered by description-owned-note-cluster-membership and is not represented through ComponentPackage.components."
+  ],
+  "forbidden_approaches": [
+    "choosing an owner from final source order or coordinates",
+    "removing duplicate layout nodes without repairing parser ownership",
+    "last-writer-wins qualified names",
+    "fixture-specific aliases, branch counts, coordinates, comparator or baseline changes"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_control_ltr.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_note_owner_ltr.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_duplicate_leaf_note_owner_ttb.puml"
+  ]
+}
