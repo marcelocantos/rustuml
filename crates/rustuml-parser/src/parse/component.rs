@@ -160,6 +160,50 @@ fn parse_container_color(line: &str) -> Option<String> {
         .map(|part| part.trim_end_matches('{').to_string())
 }
 
+fn materialize_component(components: &mut Vec<Component>, candidate: Component) -> bool {
+    if let Some(existing) = components
+        .iter_mut()
+        .find(|component| component.id == candidate.id)
+    {
+        if existing.kind != candidate.kind {
+            return false;
+        }
+
+        // Java `CommandCreateElementFull.executeArg` gates only
+        // `reallyCreateLeaf` on first materialization. Compatible reuse then
+        // always replaces display and colors, while stereotype and URL are
+        // replaced only when supplied. Quark ownership and creation location
+        // remain those of the first materialization.
+        existing.label = candidate.label;
+        if !candidate.stereotypes.is_empty() {
+            existing.stereotypes = candidate.stereotypes;
+        }
+        existing.color = candidate.color;
+        if candidate.url.is_some() {
+            existing.url = candidate.url;
+        }
+        false
+    } else {
+        components.push(candidate);
+        true
+    }
+}
+
+fn materialize_interface(interfaces: &mut Vec<Interface>, candidate: Interface) -> bool {
+    if let Some(existing) = interfaces
+        .iter_mut()
+        .find(|interface| interface.id == candidate.id)
+    {
+        // The same Java command updates Display after resolving a compatible
+        // interface quark, without moving or recreating the entity.
+        existing.label = candidate.label;
+        false
+    } else {
+        interfaces.push(candidate);
+        true
+    }
+}
+
 fn parse_link_shape(arrow: &str) -> LinkShape {
     if arrow.contains("(0)-") {
         LinkShape::MiddleFullSocket
@@ -574,9 +618,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         "cloud" => ComponentElementKind::Cloud,
                         _ => ComponentElementKind::Component,
                     };
-                    let created = !components.iter().any(|c: &Component| c.id == id);
-                    if created {
-                        components.push(Component {
+                    let created = materialize_component(
+                        &mut components,
+                        Component {
                             id: id.clone(),
                             label,
                             stereotypes: parse_stereotypes(trimmed),
@@ -584,8 +628,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                             url: container_url,
                             source_line: current_line,
                             kind,
-                        });
-                    }
+                        },
+                    );
                     if created
                         && let Some(pkg) = package_stack.last_mut()
                         && !pkg.components.contains(&id)
@@ -739,9 +783,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 (id.clone(), id)
             };
 
-            let created = !components.iter().any(|c: &Component| c.id == id);
-            if created {
-                components.push(Component {
+            let created = materialize_component(
+                &mut components,
+                Component {
                     id: id.clone(),
                     label,
                     stereotypes: parse_stereotypes(trimmed),
@@ -749,8 +793,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     url: comp_url,
                     source_line: current_line,
                     kind: ComponentElementKind::Component,
-                });
-            }
+                },
+            );
             if created
                 && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
@@ -764,18 +808,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
 
         if let Some((id, label)) = parse_description_bracket_declaration(trimmed) {
-            let created = !components.iter().any(|c: &Component| c.id == id);
-            if created {
-                components.push(Component {
+            let created = materialize_component(
+                &mut components,
+                Component {
                     id: id.clone(),
                     label,
                     stereotypes: parse_stereotypes(trimmed),
-                    color: None,
-                    url: None,
+                    color: parse_container_color(trimmed),
+                    url: comp_url,
                     source_line: current_line,
                     kind: ComponentElementKind::Component,
-                });
-            }
+                },
+            );
             if created
                 && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
@@ -792,14 +836,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         if let Some(caps) = RE_IFACE_QUOTED_AS.captures(trimmed) {
             let label = caps[1].to_string();
             let id = caps[2].to_string();
-            let created = !interfaces.iter().any(|i: &Interface| i.id == id);
-            if created {
-                interfaces.push(Interface {
+            let created = materialize_interface(
+                &mut interfaces,
+                Interface {
                     id: id.clone(),
                     label,
                     source_line: current_line,
-                });
-            }
+                },
+            );
             if created
                 && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
@@ -817,18 +861,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             // PlantUML `CommandCreateElementFull.executeArg` selects
             // `USymbolComponent2` whenever either the code or display starts
             // with `[`. The `interface` keyword does not override that symbol.
-            let created = !components.iter().any(|c: &Component| c.id == id);
-            if created {
-                components.push(Component {
+            let created = materialize_component(
+                &mut components,
+                Component {
                     id: id.clone(),
                     label,
                     stereotypes: parse_stereotypes(trimmed),
                     color: parse_container_color(trimmed),
-                    url: None,
+                    url: comp_url,
                     source_line: current_line,
                     kind: ComponentElementKind::Component,
-                });
-            }
+                },
+            );
             if created
                 && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
@@ -842,14 +886,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         if let Some(caps) = RE_IFACE_BARE.captures(trimmed) {
             let name = caps[1].to_string();
-            let created = !interfaces.iter().any(|i: &Interface| i.id == name);
-            if created {
-                interfaces.push(Interface {
+            let created = materialize_interface(
+                &mut interfaces,
+                Interface {
                     id: name.clone(),
                     label: name.clone(),
                     source_line: current_line,
-                });
-            }
+                },
+            );
             if created
                 && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&name)
@@ -872,14 +916,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .get(3)
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_else(|| label.clone());
-            let created = !interfaces.iter().any(|i: &Interface| i.id == id);
-            if created {
-                interfaces.push(Interface {
+            let created = materialize_interface(
+                &mut interfaces,
+                Interface {
                     id: id.clone(),
                     label,
                     source_line: current_line,
-                });
-            }
+                },
+            );
             if created
                 && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
@@ -1676,6 +1720,43 @@ mod tests {
             ["SharedComponent", "SharedInterface"]
         );
         assert!(d.packages[1].components.is_empty());
+    }
+
+    #[test]
+    fn compatible_redeclarations_update_presentation_without_moving_the_leaf() {
+        let d = parse(
+            "node FirstOwner {\n\
+               component \"First Display\" as SharedLeaf <<initial>> #Red [[https://first.test]]\n\
+               interface \"First Port\" as SharedPort\n\
+             }\n\
+             node SecondOwner {\n\
+               component \"Second Display\" as SharedLeaf <<replacement>> [[https://second.test]]\n\
+               interface \"Second Port\" as SharedPort\n\
+             }\n\
+             component \"Final Display\" as SharedLeaf #Blue",
+        );
+
+        assert_eq!(d.components.len(), 1);
+        assert_eq!(d.interfaces.len(), 1);
+        let component = &d.components[0];
+        assert_eq!(component.label, "Final Display");
+        assert_eq!(component.stereotypes, ["replacement"]);
+        assert_eq!(component.color.as_deref(), Some("#Blue"));
+        assert_eq!(component.url.as_deref(), Some("https://second.test"));
+        assert_eq!(component.source_line, 2);
+        assert_eq!(component.kind, ComponentElementKind::Component);
+        assert_eq!(d.interfaces[0].label, "Second Port");
+        assert_eq!(d.interfaces[0].source_line, 3);
+        assert_eq!(d.packages[0].components, ["SharedLeaf", "SharedPort"]);
+        assert!(d.packages[1].components.is_empty());
+
+        let cleared = parse(
+            "component \"Colored First\" as ReusedLeaf <<retained>> #Green\n\
+             component \"Uncolored Final\" as ReusedLeaf",
+        );
+        assert_eq!(cleared.components[0].label, "Uncolored Final");
+        assert_eq!(cleared.components[0].stereotypes, ["retained"]);
+        assert_eq!(cleared.components[0].color, None);
     }
 
     #[test]
