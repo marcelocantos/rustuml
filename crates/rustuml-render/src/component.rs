@@ -619,7 +619,10 @@ fn walk_pkg(
         format!("{parent_path}.{}", pkg.name)
     };
     for cid in &pkg.components {
-        map.insert(cid.clone(), format!("{path}.{cid}"));
+        // `CommandCreateElementFull.executeArg` reuses the first quark-backed
+        // Entity, whose parent cannot change on a compatible redeclaration.
+        map.entry(cid.clone())
+            .or_insert_with(|| format!("{path}.{cid}"));
     }
     for child in &pkg.packages {
         walk_pkg(child, &path, map);
@@ -10341,5 +10344,29 @@ LateRelay3449 --> InlineRelay3457
         let svg = crate::render_svg(&diagram);
 
         assert!(svg.contains(">Renamed plain key 9857</text>"), "{svg}");
+    }
+
+    #[test]
+    fn qualified_name_projection_never_reparents_a_materialized_leaf() {
+        let input = "@startuml\n\
+                     node OuterAlpha {\n\
+                       component SharedLeaf\n\
+                     }\n\
+                     node OuterBeta {\n\
+                       component BetaLeaf\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(mut diagram) = diagram else {
+            panic!("expected component diagram");
+        };
+        // Simulate an older serialized AST carrying the parser's former
+        // duplicate membership. Java's quark parent remains first-writer-wins.
+        diagram.packages[1]
+            .components
+            .push("SharedLeaf".to_string());
+
+        let qualified = super::build_qualified_names(&diagram.packages);
+        assert_eq!(qualified["SharedLeaf"], "OuterAlpha.SharedLeaf");
     }
 }

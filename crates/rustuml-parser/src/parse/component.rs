@@ -564,7 +564,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         "cloud" => ComponentElementKind::Cloud,
                         _ => ComponentElementKind::Component,
                     };
-                    if !components.iter().any(|c: &Component| c.id == id) {
+                    let created = !components.iter().any(|c: &Component| c.id == id);
+                    if created {
                         components.push(Component {
                             id: id.clone(),
                             label,
@@ -575,12 +576,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                             kind,
                         });
                     }
-                    if let Some(pkg) = package_stack.last_mut()
+                    if created
+                        && let Some(pkg) = package_stack.last_mut()
                         && !pkg.components.contains(&id)
                     {
                         pkg.components.push(id.clone());
                     }
-                    add_together_node(&mut together, &block_stack, &id);
+                    if created {
+                        add_together_node(&mut together, &block_stack, &id);
+                    }
                     continue;
                 }
             }
@@ -708,7 +712,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 (id.clone(), id)
             };
 
-            if !components.iter().any(|c: &Component| c.id == id) {
+            let created = !components.iter().any(|c: &Component| c.id == id);
+            if created {
                 components.push(Component {
                     id: id.clone(),
                     label,
@@ -719,17 +724,21 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     kind: ComponentElementKind::Component,
                 });
             }
-            if let Some(pkg) = package_stack.last_mut()
+            if created
+                && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
                 pkg.components.push(id.clone());
             }
-            add_together_node(&mut together, &block_stack, &id);
+            if created {
+                add_together_node(&mut together, &block_stack, &id);
+            }
             continue;
         }
 
         if let Some((id, label)) = parse_description_bracket_declaration(trimmed) {
-            if !components.iter().any(|c: &Component| c.id == id) {
+            let created = !components.iter().any(|c: &Component| c.id == id);
+            if created {
                 components.push(Component {
                     id: id.clone(),
                     label,
@@ -740,12 +749,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     kind: ComponentElementKind::Component,
                 });
             }
-            if let Some(pkg) = package_stack.last_mut()
+            if created
+                && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
                 pkg.components.push(id.clone());
             }
-            add_together_node(&mut together, &block_stack, &id);
+            if created {
+                add_together_node(&mut together, &block_stack, &id);
+            }
             continue;
         }
 
@@ -753,19 +765,23 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         if let Some(caps) = RE_IFACE_QUOTED_AS.captures(trimmed) {
             let label = caps[1].to_string();
             let id = caps[2].to_string();
-            if !interfaces.iter().any(|i: &Interface| i.id == id) {
+            let created = !interfaces.iter().any(|i: &Interface| i.id == id);
+            if created {
                 interfaces.push(Interface {
                     id: id.clone(),
                     label,
                     source_line: current_line,
                 });
             }
-            if let Some(pkg) = package_stack.last_mut()
+            if created
+                && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
                 pkg.components.push(id.clone());
             }
-            add_together_node(&mut together, &block_stack, &id);
+            if created {
+                add_together_node(&mut together, &block_stack, &id);
+            }
             continue;
         }
         if let Some(caps) = RE_IFACE_BRACKET_AS.captures(trimmed) {
@@ -774,7 +790,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             // PlantUML `CommandCreateElementFull.executeArg` selects
             // `USymbolComponent2` whenever either the code or display starts
             // with `[`. The `interface` keyword does not override that symbol.
-            if !components.iter().any(|c: &Component| c.id == id) {
+            let created = !components.iter().any(|c: &Component| c.id == id);
+            if created {
                 components.push(Component {
                     id: id.clone(),
                     label,
@@ -785,29 +802,36 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     kind: ComponentElementKind::Component,
                 });
             }
-            if let Some(pkg) = package_stack.last_mut()
+            if created
+                && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
                 pkg.components.push(id.clone());
             }
-            add_together_node(&mut together, &block_stack, &id);
+            if created {
+                add_together_node(&mut together, &block_stack, &id);
+            }
             continue;
         }
         if let Some(caps) = RE_IFACE_BARE.captures(trimmed) {
             let name = caps[1].to_string();
-            if !interfaces.iter().any(|i: &Interface| i.id == name) {
+            let created = !interfaces.iter().any(|i: &Interface| i.id == name);
+            if created {
                 interfaces.push(Interface {
                     id: name.clone(),
                     label: name.clone(),
                     source_line: current_line,
                 });
             }
-            if let Some(pkg) = package_stack.last_mut()
+            if created
+                && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&name)
             {
                 pkg.components.push(name.clone());
             }
-            add_together_node(&mut together, &block_stack, &name);
+            if created {
+                add_together_node(&mut together, &block_stack, &name);
+            }
             continue;
         }
         // `() IFoo` / `() "Label" as ID` — lollipop interface shorthand.
@@ -821,19 +845,23 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .get(3)
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_else(|| label.clone());
-            if !interfaces.iter().any(|i: &Interface| i.id == id) {
+            let created = !interfaces.iter().any(|i: &Interface| i.id == id);
+            if created {
                 interfaces.push(Interface {
                     id: id.clone(),
                     label,
                     source_line: current_line,
                 });
             }
-            if let Some(pkg) = package_stack.last_mut()
+            if created
+                && let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
                 pkg.components.push(id.clone());
             }
-            add_together_node(&mut together, &block_stack, &id);
+            if created {
+                add_together_node(&mut together, &block_stack, &id);
+            }
             continue;
         }
 
@@ -1599,5 +1627,27 @@ mod tests {
         assert_eq!(d.components.len(), 2);
         assert_eq!(d.components[0].kind, ComponentElementKind::Actor);
         assert_eq!(d.components[1].kind, ComponentElementKind::Collections);
+    }
+
+    #[test]
+    fn compatible_redeclarations_keep_the_first_package_owner() {
+        let d = parse(
+            "node OuterAlpha {\n\
+               component SharedComponent\n\
+               interface SharedInterface\n\
+             }\n\
+             node OuterBeta {\n\
+               component SharedComponent\n\
+               interface SharedInterface\n\
+             }",
+        );
+
+        assert_eq!(d.components.len(), 1);
+        assert_eq!(d.interfaces.len(), 1);
+        assert_eq!(
+            d.packages[0].components,
+            ["SharedComponent", "SharedInterface"]
+        );
+        assert!(d.packages[1].components.is_empty());
     }
 }
