@@ -6652,7 +6652,6 @@ fn emit_layout_empty_package(
     let y = package.y;
     let right = package.x + package.width;
     let bottom = package.y + package.height;
-    let tab_join = x + title_w - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + tab_w;
     let line_y = y + PACKAGE_TAB_H;
     let linked = emit_package_link_open(
@@ -6661,49 +6660,19 @@ fn emit_layout_empty_package(
         package.url_tooltip.as_deref(),
         svg_link_target,
     );
-    write!(
+    emit_empty_folder_envelope(
         svg,
-        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        fmt4(x + 2.5),
-        fmt4(y),
-        fmt4(tab_join),
-        fmt4(y),
-        fmt4(tab_join + 2.5),
-        fmt4(y + 2.5),
-        fmt4(tab_right),
-        fmt4(line_y),
-        fmt4(right - 2.5),
-        fmt4(line_y),
-        fmt4(right),
-        fmt4(line_y + 2.5),
-        fmt4(right),
-        fmt4(bottom - 2.5),
-        fmt4(right - 2.5),
-        fmt4(bottom),
-        fmt4(x + 2.5),
-        fmt4(bottom),
-        fmt4(x),
-        fmt4(bottom - 2.5),
-        fmt4(x),
-        fmt4(y + 2.5),
-        fmt4(x + 2.5),
-        fmt4(y),
-        package.fill,
-        package.stroke,
-        BORDER_WIDTH,
-    )
-    .unwrap();
-    write!(
-        svg,
-        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        package.stroke,
-        BORDER_WIDTH,
-        fmt4(x),
-        fmt4(tab_right),
-        fmt4(line_y),
-        fmt4(line_y),
-    )
-    .unwrap();
+        x,
+        y,
+        right,
+        bottom,
+        title_w,
+        tab_right,
+        line_y,
+        package.round_corner,
+        &package.fill,
+        &package.stroke,
+    );
     text_render::emit_text(
         svg,
         &package.label,
@@ -6772,52 +6741,21 @@ fn emit_layout_empty_symbol_folder_shape(
         )
     };
     let title_width = title_content_width + 2.0 * PACKAGE_TITLE_MARGIN_X;
-    let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
     let line_y = y + title_content_height + 2.0 * PACKAGE_TITLE_MARGIN_X;
-    write!(
+    emit_empty_folder_envelope(
         svg,
-        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        fmt4(x + 2.5),
-        fmt4(y),
-        fmt4(tab_join),
-        fmt4(y),
-        fmt4(tab_join + 2.5),
-        fmt4(y + 2.5),
-        fmt4(tab_right),
-        fmt4(line_y),
-        fmt4(right - 2.5),
-        fmt4(line_y),
-        fmt4(right),
-        fmt4(line_y + 2.5),
-        fmt4(right),
-        fmt4(bottom - 2.5),
-        fmt4(right - 2.5),
-        fmt4(bottom),
-        fmt4(x + 2.5),
-        fmt4(bottom),
-        fmt4(x),
-        fmt4(bottom - 2.5),
-        fmt4(x),
-        fmt4(y + 2.5),
-        fmt4(x + 2.5),
-        fmt4(y),
-        package.fill,
-        package.stroke,
-        BORDER_WIDTH,
-    )
-    .unwrap();
-    write!(
-        svg,
-        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        package.stroke,
-        BORDER_WIDTH,
-        fmt4(x),
-        fmt4(tab_right),
-        fmt4(line_y),
-        fmt4(line_y),
-    )
-    .unwrap();
+        x,
+        y,
+        right,
+        bottom,
+        title_width,
+        tab_right,
+        line_y,
+        package.round_corner,
+        &package.fill,
+        &package.stroke,
+    );
     if show_title {
         text_render::emit_text(
             svg,
@@ -7424,6 +7362,106 @@ fn emit_component_mark(
         )
         .unwrap();
     }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_empty_folder_envelope(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    right: f64,
+    bottom: f64,
+    title_width: f64,
+    tab_right: f64,
+    line_y: f64,
+    round_corner: f64,
+    fill: &str,
+    stroke: &str,
+) {
+    // Java `USymbolFolder#drawFolder` uses a polygon only for a zero
+    // RoundCorner diameter. Otherwise body arcs use diameter/2 and the tab
+    // shoulder uses 1.5 times that radius.
+    if round_corner == 0.0 {
+        write!(
+            svg,
+            r#"<polygon fill="{}" points="{},{} {},{} {},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+            fill,
+            fmt4(x),
+            fmt4(y),
+            fmt4(x + title_width),
+            fmt4(y),
+            fmt4(tab_right),
+            fmt4(line_y),
+            fmt4(right),
+            fmt4(line_y),
+            fmt4(right),
+            fmt4(bottom),
+            fmt4(x),
+            fmt4(bottom),
+            fmt4(x),
+            fmt4(y),
+            stroke,
+            BORDER_WIDTH,
+        )
+        .unwrap();
+    } else {
+        let radius = round_corner / 2.0;
+        let tab_join = x + title_width - radius;
+        let shoulder_radius = radius * 1.5;
+        write!(
+            svg,
+            r#"<path d="M{},{} L{},{} A{},{} 0 0 1 {},{} L{},{} L{},{} A{},{} 0 0 1 {},{} L{},{} A{},{} 0 0 1 {},{} L{},{} A{},{} 0 0 1 {},{} L{},{} A{},{} 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(x + radius),
+            fmt4(y),
+            fmt4(tab_join),
+            fmt4(y),
+            fmt4(shoulder_radius),
+            fmt4(shoulder_radius),
+            fmt4(tab_join + radius),
+            fmt4(y + radius),
+            fmt4(tab_right),
+            fmt4(line_y),
+            fmt4(right - radius),
+            fmt4(line_y),
+            fmt4(radius),
+            fmt4(radius),
+            fmt4(right),
+            fmt4(line_y + radius),
+            fmt4(right),
+            fmt4(bottom - radius),
+            fmt4(radius),
+            fmt4(radius),
+            fmt4(right - radius),
+            fmt4(bottom),
+            fmt4(x + radius),
+            fmt4(bottom),
+            fmt4(radius),
+            fmt4(radius),
+            fmt4(x),
+            fmt4(bottom - radius),
+            fmt4(x),
+            fmt4(y + radius),
+            fmt4(radius),
+            fmt4(radius),
+            fmt4(x + radius),
+            fmt4(y),
+            fill,
+            stroke,
+            BORDER_WIDTH,
+        )
+        .unwrap();
+    }
+    write!(
+        svg,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        stroke,
+        BORDER_WIDTH,
+        fmt4(x),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(line_y),
+    )
+    .unwrap();
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -18341,12 +18379,30 @@ mod tests {
              @enduml",
         )
         .unwrap();
+        let package_svg = crate::render_svg(&package_style_stack);
+        assert!(package_svg.contains("A18,18 0 0 1"), "{package_svg}");
+        assert!(package_svg.contains("A12,12 0 0 1"), "{package_svg}");
         let rustuml_parser::diagram::Diagram::Class(package_style_stack) = package_style_stack
         else {
             panic!("expected class diagram");
         };
         assert_eq!(empty_package_round_corner(&package_style_stack), 24.0);
         assert_eq!(stack_cluster_round_corner(&package_style_stack), 5.0);
+
+        let zero = rustuml_parser::parse::parse(
+            "@startuml\n\
+             package ZeroFolder {\n}\n\
+             <style>\n\
+             classDiagram {\n\
+               package { title { RoundCorner 0 } }\n\
+             }\n\
+             </style>\n\
+             @enduml",
+        )
+        .unwrap();
+        let zero_svg = crate::render_svg(&zero);
+        assert!(zero_svg.contains("<polygon"), "{zero_svg}");
+        assert!(!zero_svg.contains(" A"), "{zero_svg}");
 
         let cluster = rustuml_parser::parse::parse(
             "@startuml\n\
