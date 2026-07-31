@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-single-link-note-opale",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "f30340313fee0d8d987b15a8f70ba584cb13365c",
+  "triggering_review": "docs/parity-reviews/deployment-owned-note-cluster-membership/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.isOpalisable", "GraphvizImageBuilder.onlyOneLink", "GraphvizImageBuilder.buildImage"],
+      "lines": "129-147,238-258,313-326",
+      "role": "Classifies a NOTE as Opale only outside strict UML when exactly one non-invisible link reaches a non-note leaf, gives that solved SvekEdge to EntityImageNote, and marks the ordinary edge unpainted."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": ["EntityImageNote.drawU", "EntityImageNote.getOpaleStrategy", "EntityImageNote.setOpaleLine"],
+      "lines": "198-263,298-324,349-353",
+      "role": "Chooses the edge endpoint nearest the note, selects the nearest note side, and embeds the solved edge tip into the note polygon."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["SvekEdge.drawU", "SvekEdge.setOpale"],
+      "lines": "823-829,1249-1256",
+      "role": "Suppresses the ordinary link SVG group while retaining the link as a layout and UID event."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["render_no_oracle", "render_floating_deployment_note", "render_attached_deployment_note", "render_no_oracle_edges"],
+      "lines": "4194-4664,3273-3478,6255-6435",
+      "role": "Named notes are always painted with the normal floating-note polygon and their sole explicit relation is always painted as a separate link group, although attached-note rendering already contains the shared Opale polygon construction."
+    },
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": ["state_note_is_opale"],
+      "lines": "1547-1551",
+      "role": "Existing shipped-path precedent preserves Java's late revocation when the solved path contains more than one cubic segment and disables Opale under strict UML."
+    }
+  ],
+  "claimed_invariant": "A laid-out Deployment named note is Opale exactly when strict UML is disabled, exactly one explicit connection is incident on it, the other endpoint is not a named note, and the solved edge is usable as one cubic segment. The connection remains in the layout and source-order UID model, but paints no ordinary link group. The note polygon uses the solved endpoint nearest its center, chooses the nearest side by Java's orthogonal-distance ordering, and embeds the opposite edge endpoint as its leader tip. All ineligible notes retain the ordinary folded polygon and visible edge.",
+  "causal_divergence": "Rust models explicit named-note relations after the identity fix, but its paint phase has no GraphvizImageBuilder-style relation cardinality classifier. It therefore treats every targetless named note as geometrically floating and every DeploymentConnection as independently paintable, losing the Java handoff from SvekEdge to EntityImageNote.",
+  "planned_model_change": "Derive Opale eligibility from the diagram relation graph and solved EdgePath, including strict-UML, single-incidence, non-note-peer, nonempty-path and one-cubic gates. Reuse the existing attached-note Opale path builder with a render-time note side inferred from the solved endpoint nearest the note rectangle. Suppress only the eligible connection's ordinary SVG group while retaining its layout edge and link UID allocation. Do not mutate DeploymentNote.target or position in the AST.",
+  "perturbation_axes": [
+    "note at source versus destination endpoint",
+    "top-to-bottom versus left-to-right layout",
+    "solid, dotted and directed shafts",
+    "one versus two incident links",
+    "note-to-node versus note-to-note relation",
+    "default versus strict UML style",
+    "root versus nested ownership",
+    "short one-cubic versus routed multi-cubic solved path"
+  ],
+  "acceptance": [
+    "Eligible named notes paint one entity polygon containing the solved leader tip and no ordinary link group.",
+    "Ineligible multi-link, note-to-note, strict-UML and multi-cubic cases paint normal notes and ordinary link groups.",
+    "Link UIDs and later entity UIDs remain unchanged whether the link is painted normally or absorbed.",
+    "The AST retains a targetless named note and an explicit DeploymentConnection.",
+    "An independent checker attacks endpoint side, layout direction, relation multiplicity, peer kind, strict style, ownership and routed path complexity."
+  ],
+  "forbidden_approaches": [
+    "keying Opale behavior to fixture labels, source lines or golden coordinates",
+    "mutating named notes into attached notes during parsing",
+    "dropping the explicit relation from layout or UID allocation",
+    "unconditionally hiding every edge incident on a note",
+    "post-hoc SVG string surgery"
+  ],
+  "declared_residue": [
+    "Exact Graphviz control-point and magnetic-border force arithmetic beyond the existing shared SVEK edge projection remains a layout-engine concern.",
+    "Sub-threshold cluster placement and unrelated note text/style differences remain separate mechanisms."
+  ]
+}
