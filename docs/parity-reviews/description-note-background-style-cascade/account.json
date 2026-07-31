@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-note-background-style-cascade",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "27ce0ddafda82e1d45f662f09d21f4b11535fa22",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": [
+        "CommandFactoryNote.executeInternal"
+      ],
+      "lines": "141-164",
+      "role": "Stores an explicit floating-note command color as the entity BACK override and leaves BACK unset when the command omits color."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": [
+        "CommandFactoryNoteOnEntity.executeInternal"
+      ],
+      "lines": "224-270",
+      "role": "Parses attached-note colors, applies note stereotype colors to missing channels, and stores the resulting Colors on the generated NOTE entity."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": [
+        "EntityImageNote.EntityImageNote"
+      ],
+      "lines": "97-108",
+      "role": "Resolves every NOTE through the merged note style; entity BACK wins when present, otherwise PName.BackGroundColor from the style supplies the fill."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/AbstractEntityImage.java",
+      "symbols": [
+        "AbstractEntityImage.getStyleName"
+      ],
+      "lines": "87-93",
+      "role": "Maps DESCRIPTION diagrams to the componentDiagram style family used by EntityImageNote."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "symbols": [
+        "FromSkinparamToStyle.convertNow"
+      ],
+      "lines": "118-126",
+      "role": "Migrates noteBackgroundColor to the note style's BackGroundColor property, so omitted-color notes inherit it through normal style resolution."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "floating and attached note parsers"
+      ],
+      "lines": "610-690",
+      "role": "Already preserves explicit colors for inline and multiline floating and attached note forms; parsing is no longer the divergence."
+    },
+    {
+      "path": "crates/rustuml-render/src/skinparam.rs",
+      "symbols": [
+        "apply_skinparams"
+      ],
+      "lines": "181-187",
+      "role": "Already maps noteBackgroundColor into the shared effective Theme.note.background used by other diagram families."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "deployment_note_fill",
+        "render_attached_deployment_note",
+        "render_floating_deployment_note"
+      ],
+      "lines": "3161-3175,3301-3455,3459-3520",
+      "role": "Uses an explicit note color when present but bypasses the effective theme and falls directly to a deployment-local #FEFFDD for omitted colors; both body and fold consume that wrong fallback."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "emit_note"
+      ],
+      "lines": "3191-3295",
+      "role": "The non-replay oracle painter also hardcodes the same fill for body and fold instead of consuming the resolved DESCRIPTION note style."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "selected_note_background_value"
+      ],
+      "lines": "15267-15279",
+      "role": "Demonstrates the existing shared precedence shape in another family: explicit note color first, noteBackgroundColor second."
+    }
+  ],
+  "claimed_invariant": "DESCRIPTION note background is a style-cascade result, not a deployment constant. Explicit command BACK wins. For attached notes, a stereotype-specific note BACK fills a missing explicit channel next. Otherwise the effective root.element.componentDiagram.note background applies, including noteBackgroundColor and note style blocks, with the built-in note style as the final default. Body and folded corner consume one resolved fill.",
+  "causal_divergence": "Rust's parser now retains explicit note colors and the top-level render pipeline already folds skinparams into Theme.note.background. Deployment painting ignores that effective theme: deployment_note_fill selects note.color and otherwise returns the local NOTE_FILL literal. Explicit-color held-outs therefore pass while every omitted-color style override falls back to #FEFFDD. The error is an unwired style-cascade handoff shared by floating and attached painters, not separate command grammar defects.",
+  "planned_model_change": "Create one DESCRIPTION note-background resolver that accepts the effective Theme and a DeploymentNote. Resolve explicit note.color first, then the effective note style background, whose default remains the source-provenanced built-in note color. Pass that resolved fill into both no-oracle note painters and the non-replay oracle note painter so body and fold cannot diverge. Preserve note geometry, ownership, layout, source order, and connector construction. Treat stereotype-specific attached-note color as a separate parser/style extension if the current AST cannot yet represent it, and keep a fresh failing perturbation rather than pretending generic style support covers it.",
+  "perturbation_axes": [
+    "floating versus attached notes",
+    "inline versus multiline commands",
+    "explicit color versus omitted color",
+    "named versus hexadecimal explicit colors",
+    "generic noteBackgroundColor versus note style block",
+    "stereotype-free versus stereotype-specific attached-note colors",
+    "root versus nested owner",
+    "body versus folded-corner fill consistency"
+  ],
+  "acceptance": [
+    "Omitted-color floating and attached DESCRIPTION notes consume the effective note background style in both inline and multiline forms.",
+    "Explicit named and hex command colors continue to override noteBackgroundColor.",
+    "Body and folded corner always use the same resolved fill.",
+    "Generic and block-form note style perturbations pass; unsupported stereotype residue, if any, stays preserved and declared.",
+    "Existing parser/renderer tests and no-oracle ratchets remain green.",
+    "An independent checker attacks command form, precedence, style syntax, stereotypes, ownership, and fold consistency at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "changing the deployment-local fallback literal to the held-out color",
+    "parsing skinparams again inside individual note painters",
+    "styling body and fold through separate branches",
+    "changing geometry, ownership, Magma, or connector coordinates for a color mismatch",
+    "fixture labels, expected colors keyed to text, comparator changes, or baseline changes"
+  ],
+  "constant_provenance": "The final default remains Java's merged built-in note style; the existing #FEFFDD value may remain only as the Theme.note default or a source-cited equivalent. NOTE_FOLD, margins, connector dimensions, and stroke widths are outside this mechanism and must not change without separate Java citations.",
+  "evidence_inputs": [
+    "docs/parity-reviews/deployment-note-background-color-retention/review.json",
+    "test-diagrams/perturbations/deployment-note-background-color-retention/attached_multiline_omitted_color_uses_style_default.puml",
+    "test-diagrams/perturbations/deployment-note-background-color-retention/floating_inline_omitted_color_uses_style_default.puml",
+    "test-diagrams/perturbations/deployment-note-background-color-retention/attached_inline_hex_color_wins_over_style.puml",
+    "test-diagrams/perturbations/deployment-note-background-color-retention/floating_multiline_named_color_wins_over_style.puml"
+  ]
+}
