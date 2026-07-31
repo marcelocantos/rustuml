@@ -1,0 +1,4 @@
+@startuml
+left to right    direction
+Zaffre -> Aspen : separator spacing relation
+@enduml

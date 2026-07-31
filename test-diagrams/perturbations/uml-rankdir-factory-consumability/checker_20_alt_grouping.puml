@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+Juniper -> Kestrel : inspect
+alt accepted
+  Kestrel --> Juniper : ok
+else declined
+  Kestrel --> Juniper : retry
+end
+@enduml

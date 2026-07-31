@@ -1,0 +1,7 @@
+@startuml
+participant Bramble
+participant Copper
+Bramble -> Copper : call one
+left to right direction
+Copper --> Bramble : call two
+@enduml

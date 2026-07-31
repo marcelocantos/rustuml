@@ -1,0 +1,7 @@
+@startuml
+loop three rounds
+  Larch -> Maple : tick
+  Maple --> Larch : tock
+end
+top to bottom direction
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+top to bottom direction
+QuartzAlpha -> QuartzBeta : weak bridge
+@enduml

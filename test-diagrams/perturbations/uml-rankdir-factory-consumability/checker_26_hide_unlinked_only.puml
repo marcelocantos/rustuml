@@ -1,0 +1,5 @@
+@startuml
+left to right direction
+hide unlinked
+Violet -> Wattle : visible pair
+@enduml

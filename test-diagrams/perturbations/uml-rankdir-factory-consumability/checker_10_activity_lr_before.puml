@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+start
+:Inspect parcel;
+if (sealed?) then (yes)
+  :Dispatch parcel;
+else (no)
+  :Reseal parcel;
+endif
+stop
+@enduml

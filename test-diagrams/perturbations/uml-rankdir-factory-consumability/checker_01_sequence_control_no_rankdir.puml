@@ -1,0 +1,8 @@
+@startuml
+participant Cedar as C
+participant Flint as F
+C -> F : baseline pulse
+activate F
+F --> C : baseline reply
+deactivate F
+@enduml

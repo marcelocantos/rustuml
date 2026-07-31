@@ -1,0 +1,13 @@
+@startuml
+participant Yew
+participant Zircon
+autonumber 20 2
+Yew -> Zircon : open
+activate Zircon
+group guarded exchange
+  Zircon --> Yew : acknowledge
+end
+newpage continuation
+top to bottom direction
+deactivate Zircon
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+' a comment before the command
+left to right direction
+/' a block comment containing
+participant Phantom
+top to bottom direction
+'/
+Tamarind -> Umber : comment-safe weak arrow
+@enduml

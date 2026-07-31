@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+Spruce -> Timber : first page relation
+newpage
+Timber -> Ulex : second page relation
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+' rank direction remains active after comments
+left to right direction
+/' participant Ghost
+Ghost -> Shade : hidden
+'/
+participant Silt
+participant Thistle
+Silt -> Thistle : visible
+@enduml

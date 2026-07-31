@@ -1,0 +1,8 @@
+@startuml
+node "Harbor Runtime" as Harbor {
+  artifact "Iris Binary" as Iris
+}
+database "Journal Reseau" as Journal
+Harbor --> Journal : commits
+top to bottom direction
+@enduml

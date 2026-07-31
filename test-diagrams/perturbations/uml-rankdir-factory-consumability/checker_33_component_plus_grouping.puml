@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+component "Jade Gateway" as JadeGateway
+component "Kelp Core" as KelpCore
+group sequence-only frame
+JadeGateway --> KelpCore : route
+end
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant Nickel
+participant Ochre
+Nickel -> Ochre : page one
+newpage second leaf
+left to right direction
+Ochre --> Nickel : page two
+@enduml

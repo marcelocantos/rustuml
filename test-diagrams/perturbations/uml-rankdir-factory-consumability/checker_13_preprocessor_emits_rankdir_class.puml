@@ -1,0 +1,9 @@
+@startuml
+!$horizontal = true
+!if $horizontal
+left to right direction
+!endif
+class VerdantSource
+class WillowTarget
+VerdantSource --> WillowTarget
+@enduml

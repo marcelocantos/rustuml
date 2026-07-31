@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+participant Pine
+create participant Quartz
+Pine -> Quartz : instantiate
+destroy Quartz
+@enduml

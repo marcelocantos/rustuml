@@ -1,0 +1,6 @@
+@startuml
+left  to  right direction
+participant Zinc
+participant Alder
+Zinc -> Alder : spacing probe
+@enduml

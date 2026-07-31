@@ -1,0 +1,489 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-rankdir-factory-consumability",
+  "verdict": "REJECT",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker; did not implement revision 634e816a48d4c080008b0c05a7dbc4efd5acd917"
+  },
+  "revisions": {
+    "rust_revision": "634e816a48d4c080008b0c05a7dbc4efd5acd917",
+    "implementation_parent": "0e6fbe0fc9438828cbe9411c0de4ca851435798b",
+    "account_baseline_rust_revision": "5d494292c14b853a75778aa9f3369c4d69ee6ba4",
+    "account_commit": "0e6fbe0fc9438828cbe9411c0de4ca851435798b",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binaries": {
+    "rust": {
+      "path": "/private/tmp/rustuml-uml-factory-consumability/target/release/rustuml",
+      "sha256": "57f859d549a6c642bdd1f16d8947a2206f71f13e99018216ef9706e16fda7860",
+      "mode": "--no-oracle"
+    },
+    "java": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "headless": true
+    }
+  },
+  "account": "docs/parity-reviews/uml-rankdir-factory-consumability/account.json",
+  "reviewed_rust": [
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-parser/src/parse/class.rs",
+    "crates/rustuml-parser/src/parse/component.rs",
+    "crates/rustuml-parser/src/parse/deployment.rs",
+    "crates/rustuml-parser/src/parse/state.rs"
+  ],
+  "reviewed_java": [
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "src/main/java/net/sourceforge/plantuml/command/CommandRankDir.java",
+    "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandGrouping.java",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandNewpage.java",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandNewpage.java",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+    "src/main/java/net/sourceforge/plantuml/statediagram/StateDiagramFactory.java",
+    "src/main/java/net/sourceforge/plantuml/activitydiagram/ActivityDiagramFactory.java"
+  ],
+  "commands": [
+    "git rev-parse HEAD; git rev-parse 634e816a48d4c080008b0c05a7dbc4efd5acd917^; git merge-base --is-ancestor 0e6fbe0fc9438828cbe9411c0de4ca851435798b 634e816a48d4c080008b0c05a7dbc4efd5acd917",
+    "shasum -a 256 target/release/rustuml",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<reviewed Java path>",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < <input>.puml > <input>.java.svg 2> <input>.java.stderr; record exit status in <input>.java.exit",
+    "/private/tmp/rustuml-uml-factory-consumability/target/release/rustuml --no-oracle -pipe -tsvg < <input>.puml > <input>.rust.svg 2> <input>.rust.stderr; record exit status in <input>.rust.exit",
+    "xmllint --noout test-diagrams/perturbations/uml-rankdir-factory-consumability/*.java.svg and every nonempty *.rust.svg",
+    "rg inspection of participant-lifeline/participant-head/message versus entity/link SVG classes to classify shipped diagram families",
+    "rg -n fixture|golden|checker_|uml-rankdir-factory-consumability|has_sequence_only_command|looks_like_sequence_only_factory_command|Unconsumable crates/rustuml-parser/src crates/rustuml-render/src",
+    "git diff 5d494292c14b853a75778aa9f3369c4d69ee6ba4..634e816a48d4c080008b0c05a7dbc4efd5acd917 -- crates/rustuml-parser/src/parse/mod.rs"
+  ],
+  "cargo_or_rustc_run": false,
+  "artifact_convention": "Every checker_NN source has same-stem .java.svg, .java.stderr, .java.exit, .rust.svg, .rust.stderr and .rust.exit artifacts. Java syntax errors retain both the error SVG and stderr. Rust errors retain stderr and a zero-byte SVG capture.",
+  "cases": [
+    {
+      "id": "checker_01",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_01_sequence_control_no_rankdir.puml",
+      "axes": ["no rankdir control", "participants", "messages", "activation"],
+      "java": "ACCEPT SEQUENCE",
+      "rust": "ACCEPT SEQUENCE",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_02",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_02_direction_only_lr.puml",
+      "axes": ["left-to-right", "direction only"],
+      "java": "ACCEPT graph-style empty diagram",
+      "rust": "ACCEPT graph-style empty diagram",
+      "result": "PASS acceptance and dispatch class"
+    },
+    {
+      "id": "checker_03",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_03_weak_arrow_tb.puml",
+      "axes": ["top-to-bottom", "weak ambiguous arrow"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_04",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_04_class_lr_before.puml",
+      "axes": ["class", "direction before", "three nodes", "two links"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_05",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_05_class_tb_after.puml",
+      "axes": ["class", "direction after", "interface", "inheritance"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_06",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_06_component_lr_order_count.puml",
+      "axes": ["component", "direction before", "changed count and order"],
+      "java": "ACCEPT DESCRIPTION/component",
+      "rust": "ACCEPT DESCRIPTION/component",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_07",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_07_deployment_tb_after_unicode.puml",
+      "axes": ["deployment", "direction after", "container", "artifact", "database"],
+      "java": "ACCEPT DESCRIPTION/deployment",
+      "rust": "ACCEPT DESCRIPTION/deployment",
+      "result": "PASS dispatch and acceptance"
+    },
+    {
+      "id": "checker_08",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_08_state_lr_before.puml",
+      "axes": ["state", "direction before", "pseudostates"],
+      "java": "ACCEPT STATE",
+      "rust": "ACCEPT STATE",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_09",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_09_state_tb_after_count.puml",
+      "axes": ["state", "direction after", "changed count"],
+      "java": "ACCEPT STATE",
+      "rust": "ACCEPT STATE",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_10",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_10_activity_lr_before.puml",
+      "axes": ["activity-shaped malformed control", "rankdir before"],
+      "java": "REJECT line 2, assumed CLASS",
+      "rust": "ACCEPT activity-shaped output",
+      "result": "OBSERVED but not used for the mechanism verdict because the frozen Java revision rejects this source before an Activity candidate succeeds"
+    },
+    {
+      "id": "checker_11",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_11_uppercase_direction_class.puml",
+      "axes": ["case variant", "explicit class evidence"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS dispatch; explicit class evidence masks Rust detector narrowing"
+    },
+    {
+      "id": "checker_12",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_12_comments_weak_arrow.puml",
+      "axes": ["line comment", "block comment", "hidden sequence tokens", "weak arrow"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_13",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_13_preprocessor_emits_rankdir_class.puml",
+      "axes": ["TIM conditional", "generated rankdir", "class"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS"
+    },
+    {
+      "id": "checker_14",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_14_note_body_direction_sequence.puml",
+      "axes": ["rankdir text inside note payload", "autonumber text inside payload", "sequence"],
+      "java": "ACCEPT SEQUENCE",
+      "rust": "ACCEPT SEQUENCE",
+      "result": "PASS; multiline payload does not affect factory viability"
+    },
+    {
+      "id": "checker_15",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_15_preprocessor_false_direction_sequence.puml",
+      "axes": ["TIM false-branch malformed control", "sequence"],
+      "java": "REJECT line 5, assumed CLASS",
+      "rust": "ACCEPT SEQUENCE",
+      "result": "OBSERVED preprocessor divergence; not used for the rankdir verdict"
+    },
+    {
+      "id": "checker_16",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_16_participant_before_direction.puml",
+      "axes": ["participant before rankdir", "messages on both sides"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid-control acceptance"
+    },
+    {
+      "id": "checker_17",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_17_direction_before_participant.puml",
+      "axes": ["rankdir before participant", "top-to-bottom"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid-control acceptance"
+    },
+    {
+      "id": "checker_18",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_18_activation_lifecycle.puml",
+      "axes": ["activate", "deactivate", "rankdir before"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid-control acceptance"
+    },
+    {
+      "id": "checker_19",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_19_autonumber_changed_order.puml",
+      "axes": ["autonumber start", "stop", "rankdir between messages"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid-control acceptance"
+    },
+    {
+      "id": "checker_20",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_20_alt_grouping.puml",
+      "axes": ["alt/else/end grouping", "rankdir before"],
+      "java": "REJECT at grouping command",
+      "rust": "ACCEPT CLASS and emits three graph links",
+      "result": "FAIL rejecting: Sequence-only grouping is laundered through Class"
+    },
+    {
+      "id": "checker_21",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_21_loop_grouping_direction_after.puml",
+      "axes": ["loop/end grouping", "rankdir after", "two messages"],
+      "java": "REJECT when Sequence reaches rankdir",
+      "rust": "ACCEPT CLASS and ignores grouping",
+      "result": "FAIL rejecting: command order does not rescue incomplete viability"
+    },
+    {
+      "id": "checker_22",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_22_newpage_with_participants.puml",
+      "axes": ["labeled newpage", "participants", "rankdir after first page"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS due to participant inventory coverage"
+    },
+    {
+      "id": "checker_23",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_23_create_destroy.puml",
+      "axes": ["create", "destroy", "participant", "rankdir before"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS due to participant inventory coverage; create/destroy remain unproven here"
+    },
+    {
+      "id": "checker_24",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_24_divider_delay_only.puml",
+      "axes": ["divider", "delay", "rankdir before", "no participant declaration"],
+      "java": "REJECT",
+      "rust": "ACCEPT CLASS and ignores divider/delay",
+      "result": "FAIL rejecting: omitted Sequence registrations"
+    },
+    {
+      "id": "checker_25",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_25_autonewpage_only.puml",
+      "axes": ["autonewpage", "rankdir after", "message"],
+      "java": "REJECT when Sequence reaches rankdir",
+      "rust": "ACCEPT CLASS and ignores autonewpage",
+      "result": "FAIL rejecting: omitted Sequence registration"
+    },
+    {
+      "id": "checker_26",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_26_hide_unlinked_only.puml",
+      "axes": ["hide unlinked", "rankdir before", "later-factory control"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS; this command is consumable by a later factory path"
+    },
+    {
+      "id": "checker_27",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_27_mixed_case_direction_participant.puml",
+      "axes": ["mixed-case rankdir", "participants", "message"],
+      "java": "REJECT after case-insensitive rankdir eliminates Sequence",
+      "rust": "ACCEPT SEQUENCE because subtype detection misses rankdir",
+      "result": "FAIL rejecting acceptance divergence"
+    },
+    {
+      "id": "checker_28",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_28_double_space_direction_participant.puml",
+      "axes": ["malformed internal rankdir spacing", "participants"],
+      "java": "REJECT malformed rankdir",
+      "rust": "ACCEPT SEQUENCE and ignores malformed line",
+      "result": "FAIL malformed-input acceptance control; not needed for valid-input verdict"
+    },
+    {
+      "id": "checker_29",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_29_mixed_case_tb_grouping.puml",
+      "axes": ["mixed-case top-to-bottom", "mixed-case grouping", "direction after"],
+      "java": "REJECT when Sequence reaches rankdir",
+      "rust": "ACCEPT SEQUENCE because both detector and parser ignore case-variant commands",
+      "result": "FAIL rejecting acceptance divergence"
+    },
+    {
+      "id": "checker_30",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_30_malformed_direction_typo.puml",
+      "axes": ["malformed direction word", "participants", "message"],
+      "java": "REJECT malformed command",
+      "rust": "ACCEPT SEQUENCE and ignores malformed line",
+      "result": "FAIL malformed-input acceptance control; not needed for valid-input verdict"
+    },
+    {
+      "id": "checker_31",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_31_component_plus_participant.puml",
+      "axes": ["component", "participant", "rankdir before"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid mixed-family acceptance"
+    },
+    {
+      "id": "checker_32",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_32_state_plus_participant.puml",
+      "axes": ["state", "participant", "rankdir before"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid mixed-family acceptance"
+    },
+    {
+      "id": "checker_33",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_33_component_plus_grouping.puml",
+      "axes": ["component", "group/end", "rankdir before"],
+      "java": "REJECT at group",
+      "rust": "ACCEPT COMPONENT and ignores group/end",
+      "result": "FAIL rejecting: Sequence grouping is laundered through Component"
+    },
+    {
+      "id": "checker_34",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_34_short_activation_syntax.puml",
+      "axes": ["short ++/-- activation", "rankdir before", "message"],
+      "java": "REJECT",
+      "rust": "ACCEPT CLASS and ignores short activation commands",
+      "result": "FAIL rejecting: CommandActivate2 registration is omitted"
+    },
+    {
+      "id": "checker_35",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_35_destroy_without_participant_keyword.puml",
+      "axes": ["destroy", "rankdir after", "message", "no participant declaration"],
+      "java": "REJECT when Sequence reaches rankdir",
+      "rust": "ACCEPT CLASS and ignores destroy",
+      "result": "FAIL rejecting: lifecycle command is omitted"
+    },
+    {
+      "id": "checker_36",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_36_newpage_weak_arrow.puml",
+      "axes": ["labeled newpage", "rankdir before", "weak arrows on two pages"],
+      "java": "REJECT labeled newpage in later Class candidate",
+      "rust": "ACCEPT CLASS and truncates at labeled newpage",
+      "result": "FAIL rejecting: labeled newpage is Sequence-only even though bare newpage is shared"
+    },
+    {
+      "id": "checker_37",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_37_comments_then_invalid_participant.puml",
+      "axes": ["line and block comments", "participants", "rankdir before"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid-control acceptance through comments"
+    },
+    {
+      "id": "checker_38",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_38_preprocessor_invalid_participant.puml",
+      "axes": ["TIM procedure emits rankdir", "participants"],
+      "java": "REJECT after expansion",
+      "rust": "REJECT no UML factory after expansion",
+      "result": "PASS invalid-control acceptance through preprocessing"
+    },
+    {
+      "id": "checker_39",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_39_case_direction_deployment.puml",
+      "axes": ["valid uppercase rankdir", "database", "queue", "shared arrow"],
+      "java": "ACCEPT DESCRIPTION with two entity groups and one link",
+      "rust": "ACCEPT SEQUENCE with two participant lifelines and one message",
+      "result": "FAIL rejecting valid divergent dispatch"
+    },
+    {
+      "id": "checker_40",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_40_combined_sequence_features.puml",
+      "axes": ["participants", "autonumber", "activation", "group", "newpage", "direction after"],
+      "java": "REJECT",
+      "rust": "REJECT no UML factory",
+      "result": "PASS invalid combined-feature acceptance due to covered strong commands"
+    },
+    {
+      "id": "checker_41",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_41_bare_newpage_shared_control.puml",
+      "axes": ["bare newpage", "rankdir before", "weak arrows"],
+      "java": "ACCEPT CLASS",
+      "rust": "ACCEPT CLASS",
+      "result": "PASS; isolates shared bare syntax from labeled Sequence-only syntax"
+    },
+    {
+      "id": "checker_42",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_42_mixed_case_direction_weak_arrow.puml",
+      "axes": ["valid mixed-case rankdir", "weak ambiguous arrow"],
+      "java": "ACCEPT CLASS with entity/link groups",
+      "rust": "ACCEPT SEQUENCE with lifelines/message",
+      "result": "FAIL rejecting valid divergent dispatch"
+    },
+    {
+      "id": "checker_43",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_43_mixed_case_tb_shared_declarations.puml",
+      "axes": ["valid mixed-case top-to-bottom", "direction after", "database", "queue"],
+      "java": "ACCEPT DESCRIPTION with entity/link groups",
+      "rust": "ACCEPT SEQUENCE with lifelines/message",
+      "result": "FAIL rejecting valid divergent dispatch"
+    },
+    {
+      "id": "checker_44",
+      "input": "test-diagrams/perturbations/uml-rankdir-factory-consumability/checker_44_extra_separator_space_weak_arrow.puml",
+      "axes": ["valid extra whitespace before direction keyword", "weak ambiguous arrow"],
+      "java": "ACCEPT CLASS with entity/link groups",
+      "rust": "ACCEPT SEQUENCE with lifelines/message",
+      "result": "FAIL rejecting valid divergent dispatch"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Valid case-insensitive rankdir commands leave Sequence viable in Rust",
+      "java_mechanism": "CommandRankDir is compiled through Pattern2.compileInternal with Pattern.CASE_INSENSITIVE. PSystemCommandFactory therefore consumes mixed-case rankdir in Class and Description but SequenceDiagramFactory cannot consume it, so PSystemBuilder proceeds to a later viable factory.",
+      "rust_mechanism": "detect_uml_subtype sets has_direction_directive only for two exact lowercase strings. The later class parser is case-insensitive, but that is too late when weak arrows or shared database/queue declarations give Sequence the winning score.",
+      "evidence": ["checker_39", "checker_42", "checker_43"],
+      "impact": "All three inputs are valid in Java and Rust, but Java emits graph entity/link groups while the shipped no-oracle Rust path emits participant lifelines and message groups. This directly violates the claimed factory-viability invariant."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Valid rankdir separator whitespace is narrower in Rust than Java",
+      "java_mechanism": "CommandRankDir uses RegexLeaf.spaceOneOrMore before the final direction keyword, so `left to right    direction` is valid and eliminates Sequence.",
+      "rust_mechanism": "The exact-string has_direction_directive test does not normalize runs of spaces. Rust leaves Sequence eligible and the weak arrow selects it.",
+      "evidence": ["checker_44"],
+      "impact": "A fresh valid whitespace perturbation dispatches CLASS in Java and SEQUENCE in Rust."
+    },
+    {
+      "severity": "rejecting",
+      "title": "The manually enumerated Sequence-only inventory omits registered commands",
+      "java_mechanism": "SequenceDiagramFactory registers CommandGrouping, CommandActivate2, CommandAutoNewpage, CommandDivider, CommandDelay, create/destroy lifecycle handling and labeled CommandNewpage forms. When rankdir eliminates Sequence, Class/Description candidates reject these unrecognized forms unless their own command grammar explicitly consumes the exact variant.",
+      "rust_mechanism": "looks_like_sequence_only_factory_command lists selected word prefixes but omits grouping, divider, delay, autonewpage, short ++/-- activation, create/destroy and labeled newpage. detect_uml_subtype then falls through to Class or Component; those parsers explicitly ignore unknown lines, and truncate_at_newpage accepts labeled newpage globally.",
+      "evidence": ["checker_20", "checker_21", "checker_24", "checker_25", "checker_33", "checker_34", "checker_35", "checker_36"],
+      "impact": "Java rejects each mixed grammar while the shipped Rust binary exits zero and emits graph SVG, violating the account acceptance requirement that no later permissive parser silently discard a Sequence-only command."
+    },
+    {
+      "severity": "rejecting",
+      "title": "The account's shared-newpage category collapses two different Java grammars",
+      "java_mechanism": "Class and Description CommandNewpage accept only bare `newpage`; Sequence CommandNewpage also accepts an optional label.",
+      "rust_mechanism": "The viability inventory excludes all newpage forms, while truncate_at_newpage treats both bare and labeled forms as valid non-Sequence page delimiters.",
+      "evidence": ["checker_36", "checker_41"],
+      "impact": "The bare control is accepted by both as CLASS, but the labeled variant is rejected by Java and accepted by Rust. Command viability must distinguish grammar variants, not only leading keywords."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The implemented exact-lowercase strong-command subset works for its covered forms",
+      "evidence": ["checker_16", "checker_17", "checker_18", "checker_19", "checker_22", "checker_31", "checker_32", "checker_37", "checker_38", "checker_40"],
+      "notes": "Java and Rust both reject these participant, activation, autonumber, mixed-family, comment and TIM-expanded controls. The success does not generalize to omitted registrations or Java-valid rankdir variants."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "Later UML factory controls remain viable for exact lowercase rankdir",
+      "evidence": ["checker_02", "checker_03", "checker_04", "checker_05", "checker_06", "checker_07", "checker_08", "checker_09", "checker_12", "checker_13", "checker_26", "checker_41"],
+      "notes": "Direction-only, weak Class, explicit Class, Component, Deployment, State, comments, TIM expansion, hide-unlinked and bare-newpage controls agree on acceptance and broad family."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_product_logic_found": false,
+    "golden_or_fixture_io_added": false,
+    "unexplained_new_numeric_constants_found": false,
+    "command_inventory_underfit_found": true,
+    "evidence": "The implementation commit changes only parse/mod.rs and adds no production fixture labels, golden reads or parity-affecting numeric constants. Trigger labels appear only in tests. The failure is structural under-modeling: a manually selected prefix list and exact-string rankdir predicate do not reproduce Java command grammar or complete candidate consumability."
+  },
+  "validation": {
+    "input_count": 44,
+    "java_accept_count": 19,
+    "java_reject_count": 25,
+    "rust_accept_count": 33,
+    "rust_reject_count": 11,
+    "valid_dispatch_divergence_count": 4,
+    "valid_dispatch_divergences": ["checker_39", "checker_42", "checker_43", "checker_44"],
+    "invalid_java_but_rust_accepted_count": 14,
+    "paired_xml": "PASS: all 44 Java SVG/error SVG captures and all 33 nonempty Rust SVG captures are XML-valid",
+    "stderr": "Java stderr records all 25 syntax errors. Rust stderr records all 11 parser errors; successful Rust runs have empty stderr.",
+    "binary_reverified_after_run": "SHA-256 remained 57f859d549a6c642bdd1f16d8947a2206f71f13e99018216ef9706e16fda7860",
+    "account_untouched": true,
+    "shipping_code_untouched": true
+  },
+  "required_follow_up": "Do not accept uml-rankdir-factory-consumability at revision 634e816a48d4c080008b0c05a7dbc4efd5acd917. Preserve this corpus. Model CommandRankDir with Java-compatible case and whitespace grammar, and replace or complete the selected Sequence-only prefix inventory with command-grammar viability that distinguishes variants such as bare versus labeled newpage. Re-run all 44 probes with a new independent checker."
+}

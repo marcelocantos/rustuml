@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+Raven -> Saffron : begin
+== phase boundary ==
+... deliberate pause ...
+Saffron --> Raven : resume
+@enduml

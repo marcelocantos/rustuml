@@ -1,0 +1,6 @@
+@startuml
+LEFT TO RIGHT DIRECTION
+class RiverGauge
+class StoneGauge
+RiverGauge --> StoneGauge : samples
+@enduml
