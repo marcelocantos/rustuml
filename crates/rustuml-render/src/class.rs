@@ -4467,6 +4467,11 @@ fn package_cluster_painted_min(diagram: &ClassDiagram, position: &ClusterPositio
         Some(PackageKind::Cloud) => package_cloud_frontier(diagram, position)
             .map(|frontier| (position.x + frontier.min_x, position.y + frontier.min_y))
             .unwrap_or((position.x, position.y)),
+        // `USymbolStack#drawQueue` paints a transparent inset `URectangle`
+        // before its outer path. Java `LimitFinder#drawRectangle` still
+        // records that rectangle from `(x - 1, y - 1)`: the x inset leaves
+        // the outer path as minX, while the rectangle owns minY.
+        Some(PackageKind::Stack) => (position.x, position.y - LIMIT_FINDER_RECTANGLE_INSET),
         _ => (position.x, position.y),
     }
 }
@@ -5354,10 +5359,26 @@ fn render_plantuml_svg(
         let x = cluster.x + MARGIN;
         let y = cluster.y + MARGIN;
         let cloud_frontier = package_cloud_frontier(diagram, cluster);
+        let stack_min_y = if diagram
+            .packages
+            .iter()
+            .enumerate()
+            .find(|(idx, _)| package_cluster_id(*idx) == cluster.id)
+            .is_some_and(|(_, package)| {
+                effective_package_kind(diagram, package) == PackageKind::Stack
+            }) {
+            -LIMIT_FINDER_RECTANGLE_INSET
+        } else {
+            0.0
+        };
         let (envelope_extra_x, envelope_extra_y) = package_cluster_envelope_extra(diagram, cluster);
         body_min_x = body_min_x.min(x + cloud_frontier.as_ref().map_or(0.0, |f| f.min_x));
         body_max_x = body_max_x.max(x + cluster.width + envelope_extra_x);
-        body_top = body_top.min(y + cloud_frontier.as_ref().map_or(0.0, |f| f.min_y));
+        body_top = body_top.min(
+            y + cloud_frontier
+                .as_ref()
+                .map_or(stack_min_y, |frontier| frontier.min_y),
+        );
         body_bottom = body_bottom.max(y + cluster.height + envelope_extra_y);
     }
     for &(_, node_idx, _) in &attached_notes {
@@ -18138,6 +18159,27 @@ mod tests {
         assert!(
             svg.contains(r#"style="stroke:none;stroke-width:1.75;""#),
             "the transparent layer must retain the scaled active stroke: {svg}"
+        );
+    }
+
+    #[test]
+    fn stack_transparent_inset_owns_limit_finder_min_y() {
+        let input = "@startuml\nstack FrontierStack {\n  class Payload\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let position = ClusterPosition {
+            id: package_cluster_id(0),
+            x: 23.0,
+            y: 41.0,
+            width: 180.0,
+            height: 120.0,
+        };
+
+        assert_eq!(
+            package_cluster_painted_min(&diagram, &position),
+            (23.0, 41.0 - LIMIT_FINDER_RECTANGLE_INSET)
         );
     }
 
