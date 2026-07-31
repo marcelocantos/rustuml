@@ -1,9 +1,14 @@
 {
   "schema_version": 1,
   "mechanism": "stack-transparent-inset-limitfinder-frontier",
-  "status": "rejected_review_preserved_remediation_accounted_before_fix",
+  "status": "remediation_green_pending_independent_rereview",
   "account_revision": "fe4f07b4",
   "implementation_revision": "743d463a",
+  "remediation_account_revisions": [
+    "f6b75dd3",
+    "0a055173"
+  ],
+  "remediation_revision": "27fe23f9",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:USymbolStack#drawQueue",
@@ -70,6 +75,18 @@
     {
       "command": "cargo test --test golden_no_oracle --release",
       "result": "passed at the ratcheted product baseline of 11174 / 11250"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.puml",
+      "result": "the rejected review's empty class-stack counterexample is now structurally equivalent"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle on all five fresh review inputs after remediation",
+      "result": "all five are structurally equivalent in the final combined stack state"
+    },
+    {
+      "command": "cargo test -p rustuml-render --lib",
+      "result": "823 passed, 0 failed in the final combined stack state"
     }
   ]
 }
