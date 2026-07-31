@@ -4,6 +4,7 @@
 //! TIM preprocessor — handles variables, defines, conditionals,
 //! includes, and comments before diagram-specific parsing.
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -1859,8 +1860,11 @@ impl PreprocessContext {
         if !self.is_active() {
             return Some(vec![String::new()]);
         }
-        if let Some(theme_src) = themes::get_theme_source(name_part) {
-            let body = themes::strip_front_matter(theme_src);
+        let theme_src = themes::get_theme_source(name_part)
+            .map(Cow::Borrowed)
+            .or_else(|| themes::get_compatibility_theme_source(name_part).map(Cow::Owned));
+        if let Some(theme_src) = theme_src {
+            let body = themes::strip_front_matter(theme_src.as_ref());
             if self.include_depth < MAX_INCLUDE_DEPTH {
                 self.theme_tail
                     .push(format!("skinparam __theme_body_start {name_part}"));

@@ -21,6 +21,106 @@
 //! `!procedure`s and the embedded `<style>` block work the same way they
 //! would in PlantUML's own pipeline.
 
+use std::fmt::Write;
+
+#[derive(Clone, Copy)]
+struct CompatibilityThemeProfile {
+    background: &'static str,
+    foreground: &'static str,
+    hyperlink: &'static str,
+    font: &'static str,
+    monospace_font: &'static str,
+    line_thickness: u8,
+    margin: u8,
+    circled_character_radius: u8,
+}
+
+impl CompatibilityThemeProfile {
+    fn source(self) -> String {
+        let mut source = String::new();
+        writeln!(
+            source,
+            "<style>\nroot {{\n\
+             BackgroundColor {}\n\
+             FontColor {}\n\
+             FontName {}\n\
+             HyperLinkColor {}\n\
+             LineColor {}\n\
+             LineThickness {}\n\
+             Margin {}\n\
+             }}\n</style>",
+            self.background,
+            self.foreground,
+            self.font,
+            self.hyperlink,
+            self.foreground,
+            self.line_thickness,
+            self.margin
+        )
+        .unwrap();
+        writeln!(
+            source,
+            "skinparam CircledCharacterRadius {}",
+            self.circled_character_radius
+        )
+        .unwrap();
+
+        for (key, value) in [
+            ("BackgroundColor", self.background),
+            ("DefaultFontName", self.font),
+            ("Shadowing", "false"),
+            ("CircledCharacterFontColor", self.foreground),
+            ("CircledCharacterFontName", self.monospace_font),
+            ("ClassBackgroundColor", self.background),
+            ("ClassBorderColor", self.foreground),
+            ("ClassFontColor", self.foreground),
+            ("ClassFontName", self.font),
+            ("ClassAttributeFontColor", self.foreground),
+            ("ClassAttributeFontName", self.font),
+            ("ClassStereotypeFontColor", self.foreground),
+            ("ClassStereotypeFontName", self.font),
+            ("StereotypeABackgroundColor", self.background),
+            ("StereotypeABorderColor", self.foreground),
+            ("StereotypeCBackgroundColor", self.background),
+            ("StereotypeCBorderColor", self.foreground),
+            ("StereotypeEBackgroundColor", self.background),
+            ("StereotypeEBorderColor", self.foreground),
+            ("StereotypeIBackgroundColor", self.background),
+            ("StereotypeIBorderColor", self.foreground),
+            ("StereotypeNBackgroundColor", self.background),
+            ("StereotypeNBorderColor", self.foreground),
+        ] {
+            writeln!(source, "skinparam {key} {value}").unwrap();
+        }
+        source
+    }
+}
+
+/// Build an independently encoded behavioral profile for a known theme whose
+/// upstream source cannot be bundled under RustUML's Apache-2.0 distribution.
+///
+/// These are semantic palette and metric facts, not copies of the upstream
+/// theme file. The generated declarations still flow through the ordinary
+/// theme preprocessor and style cascade.
+pub(super) fn get_compatibility_theme_source(name: &str) -> Option<String> {
+    // Java provenance: `puml-theme-plain.puml` lines 15-43, 65-72,
+    // 88-105, and 150-169 at PlantUML 71806a23780b04a5ccde2f8ceb5121edad5eb711.
+    let profile = match name {
+        "plain" => CompatibilityThemeProfile {
+            background: "white",
+            foreground: "black",
+            hyperlink: "blue",
+            font: "Verdana",
+            monospace_font: "Courier",
+            line_thickness: 1,
+            margin: 5,
+            circled_character_radius: 9,
+        },
+        _ => return None,
+    };
+    Some(profile.source())
+}
+
 /// Look up the embedded source for a theme by name.
 ///
 /// Returns `None` if the theme name is not bundled.
@@ -31,11 +131,13 @@ pub(super) fn get_theme_source(name: &str) -> Option<&'static str> {
         // licence (`sunlust`) or a blank/unspecified licence (`amiga`,
         // `blueprint`, `carbon-gray`, `crt-amber`, `crt-green`, `mimeograph`,
         // `mono`, `plain`) inherit PlantUML's GPL-3+ by default and are
-        // excluded to keep this distribution Apache-2.0 clean. Such names fall
-        // through to `None` and render unstyled, matching PlantUML's behaviour
-        // for an unknown theme. `_none_` is an intentionally empty file (no
-        // copyrightable content), kept as a baseline. Users who want an
-        // excluded theme can supply it from the PlantUML source tree.
+        // excluded to keep this distribution Apache-2.0 clean. Except for the
+        // independently encoded `plain` compatibility profile above, such
+        // names fall through to `None` and render unstyled, matching
+        // PlantUML's behaviour for an unknown theme. `_none_` is an
+        // intentionally empty file (no copyrightable content), kept as a
+        // baseline. Users who want another excluded theme can supply it from
+        // the PlantUML source tree.
         "_none_" => include_str!("../../themes/puml-theme-_none_.puml"),
         "aws-orange" => include_str!("../../themes/puml-theme-aws-orange.puml"),
         "black-knight" => include_str!("../../themes/puml-theme-black-knight.puml"),
@@ -255,6 +357,20 @@ mod tests {
     #[test]
     fn unknown_theme_returns_none() {
         assert!(get_theme_source("not-a-real-theme").is_none());
+        assert!(get_compatibility_theme_source("not-a-real-theme").is_none());
+    }
+
+    #[test]
+    fn plain_compatibility_profile_is_generated_without_bundling_upstream_source() {
+        assert!(get_theme_source("plain").is_none());
+        let source = get_compatibility_theme_source("plain").unwrap();
+
+        assert!(source.contains("BackgroundColor white"));
+        assert!(source.contains("LineColor black"));
+        assert!(source.contains("LineThickness 1"));
+        assert!(source.contains("Margin 5"));
+        assert!(source.contains("skinparam ClassFontName Verdana"));
+        assert!(source.contains("skinparam CircledCharacterRadius 9"));
     }
 
     #[test]

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "plain-theme-compatibility-profile",
-  "status": "investigating",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -116,5 +116,25 @@
     "fixture-label or topology-count branches",
     "post-hoc SVG string surgery",
     "comparator, eligibility, park-list, or golden changes"
-  ]
+  ],
+  "experimental_result": {
+    "account_revision": "3b058abe",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "edge_theme_plain becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,163/11,251 to 11,164/11,251, with edge-cases moving from 752/777 to 753/777 and every other family unchanged.",
+    "model_evidence": "A typed compatibility profile generates sparse root and class declarations and enters the existing relocated theme body at the !theme source epoch. The class renderer no longer inspects the theme name. Fresh renamed probes show that CSS and legacy skinparams before the directive are superseded by the theme, corresponding declarations after it win, the five-pixel margin follows the same order, and an unknown theme retains the ordinary unstyled defaults.",
+    "commands": [
+      "cargo test -p rustuml-parser --lib",
+      "cargo test -p rustuml-render --lib",
+      "cargo build -p rustuml-oracle --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_theme_plain.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo clippy -p rustuml-parser -p rustuml-render --all-targets -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java runtime are unavailable. This record does not self-attest acceptance."
+  }
 }

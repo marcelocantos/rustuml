@@ -3227,9 +3227,6 @@ impl ClassFontOverrides {
     }
 
     fn from_skinparams(params: &[rustuml_parser::diagram::SkinParam]) -> Self {
-        let plain_theme = params.iter().any(|sp| {
-            sp.key.eq_ignore_ascii_case("__theme") && sp.value.trim().eq_ignore_ascii_case("plain")
-        });
         let find = |names: &[&str]| -> Option<String> {
             params
                 .iter()
@@ -3280,13 +3277,7 @@ impl ClassFontOverrides {
             find(&["ClassAttributeFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
         let family = find(&["ClassAttributeFontName", "defaultFontName", "fontName"])
             .map(|v| canonical_class_font_family(&v))
-            .unwrap_or_else(|| {
-                if plain_theme {
-                    "Verdana".to_string()
-                } else {
-                    "sans-serif".to_string()
-                }
-            });
+            .unwrap_or_else(|| "sans-serif".to_string());
         let name_family = find(&["circledCharacterFontName"])
             .map(|v| canonical_class_font_family(&v))
             .or_else(|| find(&["ClassFontName"]).map(|v| canonical_class_font_family(&v)))
@@ -3329,8 +3320,7 @@ impl ClassFontOverrides {
             // CIRCLED_CHARACTER size 17.
             circled_font_size,
             circled_radius_override: find(&["circledCharacterRadius"])
-                .and_then(|v| v.trim().parse::<f64>().ok())
-                .or(if plain_theme { Some(9.0) } else { None }),
+                .and_then(|v| v.trim().parse::<f64>().ok()),
             header_background: find(&["classHeaderBackgroundColor"]),
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
@@ -3343,20 +3333,8 @@ impl ClassFontOverrides {
             root_line_color: find(&["__styleRootLineColor"]),
             root_font_color: find(&["__styleRootFontColor"]).or(default_font_color),
             root_background_color: find(&["backgroundColor"]),
-            stereotype_c_background: find(&["stereotypeCBackgroundColor"]).or_else(|| {
-                if plain_theme {
-                    Some("#FFFFFF".to_string())
-                } else {
-                    None
-                }
-            }),
-            stereotype_c_border: find(&["stereotypeCBorderColor"]).or_else(|| {
-                if plain_theme {
-                    Some("#000000".to_string())
-                } else {
-                    None
-                }
-            }),
+            stereotype_c_background: find(&["stereotypeCBackgroundColor"]),
+            stereotype_c_border: find(&["stereotypeCBorderColor"]),
             stereotype_a_background: find(&["stereotypeABackgroundColor"]),
             stereotype_a_border: find(&["stereotypeABorderColor"]),
             stereotype_i_background: find(&["stereotypeIBackgroundColor"]),
@@ -19074,17 +19052,94 @@ mod tests {
     }
 
     #[test]
-    fn plain_theme_uses_legacy_class_icon_and_font_defaults() {
+    fn plain_theme_profile_drives_class_style_icon_font_and_document_margin() {
         let input = "@startuml\n!theme plain\nclass Foo\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
 
+        assert!(svg.contains(r#"viewBox="0 0 78 69""#), "{svg}");
+        assert!(svg.contains(
+            r##"<rect fill="#FFFFFF" height="44" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:1;" width="53.04" x="12" y="12"/>"##
+        ), "{svg}");
         assert!(svg.contains(r##"font-family="Verdana""##), "{svg}");
         assert!(
             svg.contains(
                 r##"fill="#FFFFFF" rx="9" ry="9" style="stroke:#000000;stroke-width:1;""##
             ),
             "{svg}"
+        );
+    }
+
+    #[test]
+    fn plain_theme_profile_obeys_user_style_order_and_leaves_unknown_themes_unstyled() {
+        fn class_rect(svg: &str, name: &str) -> String {
+            svg.split_once(&format!("<!--class {name}-->"))
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0
+                .to_string()
+        }
+
+        let user_style = "<style>\n\
+            root { Margin 13 }\n\
+            element { class { BackgroundColor #123456 } }\n\
+            </style>\n";
+        let before = rustuml_parser::parse::parse(&format!(
+            "@startuml\n{user_style}!theme plain\nclass FreshBefore\n@enduml"
+        ))
+        .unwrap();
+        let after = rustuml_parser::parse::parse(&format!(
+            "@startuml\n!theme plain\n{user_style}class FreshAfter\n@enduml"
+        ))
+        .unwrap();
+        let unknown = rustuml_parser::parse::parse(
+            "@startuml\n!theme fresh-unknown-theme\nclass FreshUnknown\n@enduml",
+        )
+        .unwrap();
+        let legacy_before = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam ClassBorderColor #C62828\n\
+             !theme plain\n\
+             class FreshLegacyBefore\n\
+             @enduml",
+        )
+        .unwrap();
+        let legacy_after = rustuml_parser::parse::parse(
+            "@startuml\n\
+             !theme plain\n\
+             skinparam ClassBorderColor #C62828\n\
+             class FreshLegacyAfter\n\
+             @enduml",
+        )
+        .unwrap();
+
+        let before_rect = class_rect(&crate::render_svg(&before), "FreshBefore");
+        assert!(before_rect.contains(r##"fill="#FFFFFF""##), "{before_rect}");
+        assert!(before_rect.contains(r#"x="12""#), "{before_rect}");
+
+        let after_rect = class_rect(&crate::render_svg(&after), "FreshAfter");
+        assert!(after_rect.contains(r##"fill="#123456""##), "{after_rect}");
+        assert!(after_rect.contains(r#"x="20""#), "{after_rect}");
+
+        let unknown_rect = class_rect(&crate::render_svg(&unknown), "FreshUnknown");
+        assert!(
+            unknown_rect.contains(r##"fill="#F1F1F1""##),
+            "{unknown_rect}"
+        );
+        assert!(unknown_rect.contains(r#"x="7""#), "{unknown_rect}");
+
+        let legacy_before_rect =
+            class_rect(&crate::render_svg(&legacy_before), "FreshLegacyBefore");
+        assert!(
+            legacy_before_rect.contains(r#"stroke:#000000;stroke-width:1;"#),
+            "{legacy_before_rect}"
+        );
+        let legacy_after_rect = class_rect(&crate::render_svg(&legacy_after), "FreshLegacyAfter");
+        assert!(
+            legacy_after_rect.contains(r#"stroke:#C62828;stroke-width:1;"#),
+            "{legacy_after_rect}"
         );
     }
 
