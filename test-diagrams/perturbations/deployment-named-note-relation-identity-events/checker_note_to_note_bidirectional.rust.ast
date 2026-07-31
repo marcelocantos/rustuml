@@ -1,0 +1,83 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode \"Deployment anchor\" as Anchor\nnote \"Producer note\" as ProducerMemo\nnote \"Consumer note\" as ConsumerMemo\nProducerMemo <--> ConsumerMemo : exchange\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Anchor",
+                label: "Deployment anchor",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 1,
+                quark_order: 0,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "ProducerMemo",
+                to: "ConsumerMemo",
+                label: Some(
+                    "exchange",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: true,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 4,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "ProducerMemo",
+                ),
+                target: None,
+                text: "Producer note",
+                color: None,
+                owner: None,
+                quark_order: 1,
+                position: Right,
+                source_line: 2,
+            },
+            DeploymentNote {
+                id: Some(
+                    "ConsumerMemo",
+                ),
+                target: None,
+                text: "Consumer note",
+                color: None,
+                owner: None,
+                quark_order: 2,
+                position: Right,
+                source_line: 3,
+            },
+        ],
+    },
+)

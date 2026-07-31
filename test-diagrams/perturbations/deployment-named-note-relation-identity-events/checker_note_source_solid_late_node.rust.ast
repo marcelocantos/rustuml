@@ -1,0 +1,71 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnote \"Source note\" as SourceMemo\nnode \"Later server\" as LaterServer\nSourceMemo --> LaterServer : originates\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "LaterServer",
+                label: "Later server",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 2,
+                quark_order: 1,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "SourceMemo",
+                to: "LaterServer",
+                label: Some(
+                    "originates",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 3,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "SourceMemo",
+                ),
+                target: None,
+                text: "Source note",
+                color: None,
+                owner: None,
+                quark_order: 0,
+                position: Right,
+                source_line: 1,
+            },
+        ],
+    },
+)

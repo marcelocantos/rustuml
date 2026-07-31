@@ -1,0 +1,71 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnote as archive.v2\n  Multiline dotted source\nend note\ndatabase \"Archive target\" as ArchiveTarget\narchive.v2 --> ArchiveTarget : publishes\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "ArchiveTarget",
+                label: "Archive target",
+                kind: Database,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 4,
+                quark_order: 1,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "archive.v2",
+                to: "ArchiveTarget",
+                label: Some(
+                    "publishes",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 5,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "archive.v2",
+                ),
+                target: None,
+                text: "Multiline dotted source",
+                color: None,
+                owner: None,
+                quark_order: 0,
+                position: Right,
+                source_line: 2,
+            },
+        ],
+    },
+)

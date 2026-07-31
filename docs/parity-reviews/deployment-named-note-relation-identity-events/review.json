@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-named-note-relation-identity-events",
+  "verdict": "REJECTED",
+  "checker": {
+    "identity": "independent Codex adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop terminal"
+  },
+  "checked_at": "2026-08-01",
+  "revisions": {
+    "rust": "f30340313fee0d8d987b15a8f70ba584cb13365c",
+    "rust_account": "218a2f14",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rust_binary": "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml"
+  },
+  "scope": {
+    "account": "docs/parity-reviews/deployment-named-note-relation-identity-events/account.json",
+    "reviewed_rust": [
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-render/src/deployment.rs"
+    ],
+    "reviewed_java": [
+      "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java"
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD; git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < <input>.puml > <input>.java.svg 2> <input>.java.stderr",
+    "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml -pipe -tsvg < <input>.puml > <input>.rust.svg 2> <input>.rust.stderr",
+    "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml -pipe --ast < <input>.puml > <input>.rust.ast 2> <input>.ast.stderr",
+    "xmllint --noout test-diagrams/perturbations/deployment-named-note-relation-identity-events/*.java.svg test-diagrams/perturbations/deployment-named-note-relation-identity-events/*.rust.svg",
+    "rg -n \"include_str!|golden|fixture|checker_|memo\\.v1|Service Label|deployment-named-note\" crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-render/src/deployment.rs docs/parity-reviews/deployment-named-note-relation-identity-events"
+  ],
+  "cargo_or_rustc_run": false,
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_destination.puml",
+      "axes": ["inline dotted note code", "dashed directed relation", "note source", "named destination"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_destination.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_destination.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_destination.rust.ast",
+      "result": "FAIL: Java creates NOTE memo.v1 as ent0002 at source line 1, then ServiceA as ent0003. Rust parses no note, creates DeploymentNode memo_v1 from the relation at source line 3, and emits ServiceA as ent0002 then memo.v1 as ent0003."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_multiline_source.puml",
+      "axes": ["multiline dotted note code", "solid directed relation", "note source"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_multiline_source.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_multiline_source.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_dotted_code_multiline_source.rust.ast",
+      "result": "PASS for identity and UID inventory: archive.v2 is ent0002 and ArchiveTarget ent0003 in both. Java suppresses the sole link from metadata under its declared Opale rule."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_mixed_declaration_order_and_styles.puml",
+      "axes": ["note declared before nodes", "directed and reverse-directed shafts", "solid and dashed styles", "multiple relations"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_mixed_declaration_order_and_styles.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_mixed_declaration_order_and_styles.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_mixed_declaration_order_and_styles.rust.ast",
+      "result": "PASS: ent0002..ent0004 and lnk5..lnk6, endpoint order, and source lines 4 and 5 agree."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_nested_note_multi_relation.puml",
+      "axes": ["nested ownership", "left-to-right direction", "note source and destination", "multiple relations"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_nested_note_multi_relation.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_nested_note_multi_relation.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_nested_note_multi_relation.rust.ast",
+      "result": "PASS: Outer.Inner.RelayMemo occurs once as ent0004; lnk7 and lnk8 address the existing note in Java order."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_destination_reverse_arrow.puml",
+      "axes": ["note destination", "reverse-directed shaft"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_destination_reverse_arrow.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_destination_reverse_arrow.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_destination_reverse_arrow.rust.ast",
+      "result": "PASS for identity: Upstream and DestMemo retain ent0002 and ent0003. The lone-link render difference is declared Opale residue."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_source_solid_late_node.puml",
+      "axes": ["note source", "ordinary node declared after note", "solid directed shaft"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_source_solid_late_node.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_source_solid_late_node.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_source_solid_late_node.rust.ast",
+      "result": "PASS for identity: SourceMemo is ent0002 and LaterServer ent0003. The lone-link render difference is declared Opale residue."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_to_note_bidirectional.puml",
+      "axes": ["Deployment dispatch", "note-to-note link", "bidirectional shaft"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_to_note_bidirectional.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_to_note_bidirectional.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_note_to_note_bidirectional.rust.ast",
+      "result": "PASS: both render DESCRIPTION; Anchor, ProducerMemo and ConsumerMemo are ent0002..ent0004, and lnk5 has the same endpoints and source line 4."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_quoted_node_label_and_note.puml",
+      "axes": ["node alias", "quoted endpoint label", "note source", "right-directed shaft"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_quoted_node_label_and_note.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_quoted_node_label_and_note.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_quoted_node_label_and_note.rust.ast",
+      "result": "FAIL: Java's CommandLinkElement resolves the quoted endpoint through a distinct quark, yielding ServiceAlias ent0002, AliasMemo ent0003, and Service Label ent0004. Rust's resolve_id treats the quoted display label as the existing ServiceAlias, leaves only two entities, and changes the relation endpoint inventory."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_root_and_nested_note_relation.puml",
+      "axes": ["root and nested notes", "cross-owner relation", "nested local relation"],
+      "java_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_root_and_nested_note_relation.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_root_and_nested_note_relation.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/deployment-named-note-relation-identity-events/checker_root_and_nested_note_relation.rust.ast",
+      "result": "PASS: RootMemo ent0002, Package.NestedMemo ent0004, Worker ent0005, lnk6 and lnk7 match Java inventory and order."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Inline dotted named-note ids bypass the heterogeneous note inventory",
+      "java_mechanism": "CommandFactoryNote accepts the valid inline `note \"text\" as memo.v1` declaration; CommandLinkElement then reuses the existing quark through getDummy.",
+      "rust_mechanism": "RE_NOTE_FLOATING at deployment.rs:469-472 only permits `\\w+`, whereas RE_NOTE_FLOATING_MULTI permits `[\\w.]+`. The inline declaration is skipped, then the changed resolver cannot find it and creates a normal DeploymentNode from the relation.",
+      "evidence": "checker_dotted_code_destination.puml and its Java SVG, Rust SVG, and Rust AST",
+      "impact": "This violates the claimed one-note/one-identity invariant, changes source order and entity UIDs, and produces a node-shaped replacement rather than the declared note. It is not an Opale visual residue."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Quoted endpoint labels do not follow Java quark resolution",
+      "java_mechanism": "CommandLinkElement cleanId/quarkInContext resolves `\"Service Label\"` as an independent endpoint code, so the link materializes Service Label separately from the node declared with alias ServiceAlias.",
+      "rust_mechanism": "resolve_connection_endpoint falls through to resolve_id, which matches DeploymentNode.label and rewrites `Service Label` to ServiceAlias before identity lookup.",
+      "evidence": "checker_quoted_node_label_and_note.puml and its Java SVG, Rust SVG, and Rust AST",
+      "impact": "The relation endpoint is silently changed and the Java third entity is absent. This is an endpoint-resolution failure on a valid named-note relation."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The mechanism handles the simple heterogeneous-identity cluster",
+      "evidence": "The seven passing probes cover multiline dotted ids, directed and reverse-directed shafts, both endpoint sides, nested ownership, declaration ordering, multiple links, and Deployment note-to-note links. XML validation passed for all 18 generated SVGs.",
+      "notes": "For exactly-one note-to-non-note cases, Java's GraphvizImageBuilder.isOpalisable/onlyOneLink moves the edge into EntityImageNote and suppresses normal link metadata. The account declares this rendering difference as separate residue; it was not used as a rejecting finding."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "unexplained_new_constants_found": false,
+    "evidence": "The implementation diff adds only namespace resolution, note SVEK ids, and entity-map registration. Searches found no fixture label, checker input, include_str!, or golden-data reference in the changed parser/renderer paths."
+  },
+  "required_follow_up": "Do not accept this mechanism. Port one coherent named-note code and endpoint grammar from the Java quark model, including inline dotted ids and quoted endpoint code semantics, then rerun this preserved corpus with a new independent checker."
+}

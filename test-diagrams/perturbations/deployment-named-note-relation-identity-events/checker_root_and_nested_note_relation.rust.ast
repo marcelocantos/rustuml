@@ -1,0 +1,113 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnote \"Root note\" as RootMemo\nfolder \"Package\" as Package {\n  note \"Nested note\" as NestedMemo\n  node \"Worker\" as Worker\n  RootMemo --> NestedMemo : enters package\n  NestedMemo --> Worker : local\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Package",
+                label: "Package",
+                kind: Folder,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [
+                    "Worker",
+                ],
+                source_line: 2,
+                quark_order: 1,
+            },
+            DeploymentNode {
+                id: "Worker",
+                label: "Worker",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 4,
+                quark_order: 3,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "RootMemo",
+                to: "NestedMemo",
+                label: Some(
+                    "enters package",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 5,
+            },
+            DeploymentConnection {
+                from: "NestedMemo",
+                to: "Worker",
+                label: Some(
+                    "local",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 6,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "RootMemo",
+                ),
+                target: None,
+                text: "Root note",
+                color: None,
+                owner: None,
+                quark_order: 0,
+                position: Right,
+                source_line: 1,
+            },
+            DeploymentNote {
+                id: Some(
+                    "NestedMemo",
+                ),
+                target: None,
+                text: "Nested note",
+                color: None,
+                owner: Some(
+                    "Package",
+                ),
+                quark_order: 2,
+                position: Right,
+                source_line: 3,
+            },
+        ],
+    },
+)

@@ -1,0 +1,9 @@
+@startuml
+note "Root note" as RootMemo
+folder "Package" as Package {
+  note "Nested note" as NestedMemo
+  node "Worker" as Worker
+  RootMemo --> NestedMemo : enters package
+  NestedMemo --> Worker : local
+}
+@enduml

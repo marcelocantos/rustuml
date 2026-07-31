@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="220px" preserveAspectRatio="none" style="width:183px;height:220px;background:#FFFFFF;" version="1.1" viewBox="0 0 183 220" width="183px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Package-->
+<g class="cluster" data-qualified-name="Package" data-source-line="2" id="ent0003">
+<path d="M8.5,6 L68.2959,6 A3.75,3.75 0 0 1 70.7959,8.5 L77.7959,28.4883 L133.5,28.4883 A2.5,2.5 0 0 1 136,30.9883 L136,203.3 A2.5,2.5 0 0 1 133.5,205.8 L8.5,205.8 A2.5,2.5 0 0 1 6,203.3 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="77.7959" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="58.7959" x="10" y="21.5352">Package</text>
+</g>
+<g class="entity" data-qualified-name="Package.NestedMemo" data-source-line="3" id="ent0004">
+<path d="M22.48,40.9995 L22.48,66.31 L119.5122,66.31 L119.5122,50.9995 L109.5122,40.9995 L22.48,40.9995" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M109.5122,40.9995 L109.5122,50.9995 L119.5122,50.9995 L109.5122,40.9995" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="76.0322" x="28.48" y="58.5678">Nested note</text>
+</g>
+<!--entity Worker-->
+<g class="entity" data-qualified-name="Package.Worker" data-source-line="4" id="ent0005">
+<polygon fill="#F1F1F1" points="26.99,153.3095,36.99,143.3095,115.0056,143.3095,115.0056,179.7978,105.0056,189.7978,26.99,189.7978,26.99,153.3095" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="105.0056" x2="115.0056" y1="153.3095" y2="143.3095"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="26.99" x2="105.0056" y1="153.3095" y2="153.3095"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="105.0056" x2="105.0056" y1="153.3095" y2="189.7978"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.0156" x="41.99" y="176.8446">Worker</text>
+</g>
+<g class="entity" data-qualified-name="RootMemo" data-source-line="1" id="ent0002">
+<path d="M29.84,-82.3105 L29.84,-57 L112.1647,-57 L112.1647,-72.3105 L102.1647,-82.3105 L29.84,-82.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M102.1647,-82.3105 L102.1647,-72.3105 L112.1647,-72.3105 L102.1647,-82.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="61.3247" x="35.84" y="-64.7422">Root note</text>
+</g>
+<!--link RootMemo to NestedMemo-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M71,-56.5805 C71,-33.3305 71,11.4195 71,34.6295" fill="none" id="RootMemo-to-NestedMemo" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="71,40.6295,75,31.6295,71,35.6295,67,31.6295,71,40.6295" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="95.6211" x="72" y="-13.4322">enters package</text>
+</g>
+<!--link NestedMemo to Worker-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M71,66.5195 C71,84.7395 71,113.9095 71,137.0495" fill="none" id="NestedMemo-to-Worker" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="71,143.0495,75,134.0495,71,138.0495,67,134.0495,71,143.0495" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="29.3389" x="72" y="109.8778">local</text>
+</g>
+</g></svg>

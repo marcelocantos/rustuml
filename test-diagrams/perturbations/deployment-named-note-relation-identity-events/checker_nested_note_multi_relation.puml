@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+folder "Outer" as Outer {
+  folder "Inner" as Inner {
+    note "Nested relay" as RelayMemo
+    node "First service" as First
+    node "Second service" as Second
+    RelayMemo --> First : primary
+    Second <.. RelayMemo : feedback
+  }
+}
+@enduml
