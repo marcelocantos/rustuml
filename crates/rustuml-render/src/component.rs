@@ -421,6 +421,7 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
         NamedNote {
             index: usize,
             id: String,
+            qualified_name: String,
         },
         RemovedAttachedNote,
         Link {
@@ -490,12 +491,18 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
             events.push((note.source_line, ordinal, Event::AttachedNote(index)));
             ordinal += 1;
         } else if let Some(id) = named_note_ids.get(&index) {
+            let qualified_name = note
+                .owner
+                .as_deref()
+                .map(|owner| format!("{owner}.{id}"))
+                .unwrap_or_else(|| id.clone());
             events.push((
                 note.source_line,
                 ordinal,
                 Event::NamedNote {
                     index,
                     id: id.clone(),
+                    qualified_name,
                 },
             ));
             ordinal += 1;
@@ -562,15 +569,20 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                 );
                 next_uid += 1;
             }
-            Event::NamedNote { index, id } => {
+            Event::NamedNote {
+                index,
+                id,
+                qualified_name,
+            } => {
                 // `CommandFactoryNote.executeArg` creates the explicitly
                 // named note entity directly; its link consumes the next UID.
                 let entity_id = format!("ent{next_uid:04}");
                 entity_ids.insert(id.clone(), entity_id.clone());
+                entity_ids.insert(qualified_name.clone(), entity_id.clone());
                 note_ids.insert(
                     index,
                     NoOracleNoteUid {
-                        qualified_name: id,
+                        qualified_name,
                         entity_id,
                         link_id: 0,
                     },
@@ -887,15 +899,24 @@ fn component_named_note_ids(
                 .interfaces
                 .iter()
                 .any(|interface| interface.id == id)
+            || diagram
+                .notes
+                .iter()
+                .any(|note| note.id.as_deref() == Some(id))
             || qualified_components.contains_key(id)
             || package_names.contains_key(id)
     };
 
     let mut pending_notes = Vec::new();
-    let mut assigned = std::collections::HashMap::new();
+    let mut assigned = diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(index, note)| note.id.clone().map(|id| (index, id)))
+        .collect::<std::collections::HashMap<_, _>>();
     let mut events = Vec::new();
     for (index, note) in diagram.notes.iter().enumerate() {
-        if note.target.is_none() && note.connection.is_none() {
+        if note.id.is_none() && note.target.is_none() && note.connection.is_none() {
             events.push((note.source_line, 0_u8, index, None));
         }
     }
@@ -1093,6 +1114,134 @@ fn laid_out_note_indices(
                 .map(|_| index)
         })
         .collect()
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum ComponentSvekLeaf {
+    Component(usize),
+    Interface(usize),
+    Note(usize),
+}
+
+fn component_svek_leaf_order(
+    diagram: &ComponentDiagram,
+    qualified_names: &std::collections::HashMap<String, String>,
+    laid_out_note_indices: &[usize],
+) -> Vec<ComponentSvekLeaf> {
+    fn owner_of<'a>(
+        id: &str,
+        qualified_names: &'a std::collections::HashMap<String, String>,
+    ) -> Option<&'a str> {
+        qualified_names
+            .get(id)
+            .and_then(|qualified| qualified.rsplit_once('.').map(|(owner, _)| owner))
+    }
+
+    fn collect_owner(
+        diagram: &ComponentDiagram,
+        qualified_names: &std::collections::HashMap<String, String>,
+        laid_out_notes: &std::collections::HashSet<usize>,
+        owner: Option<&str>,
+        result: &mut Vec<ComponentSvekLeaf>,
+    ) {
+        let mut direct = diagram
+            .components
+            .iter()
+            .enumerate()
+            .filter(|(_, component)| owner_of(&component.id, qualified_names) == owner)
+            .map(|(index, component)| {
+                (
+                    component.source_line,
+                    0_u8,
+                    index,
+                    ComponentSvekLeaf::Component(index),
+                )
+            })
+            .chain(
+                diagram
+                    .interfaces
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, interface)| owner_of(&interface.id, qualified_names) == owner)
+                    .map(|(index, interface)| {
+                        (
+                            interface.source_line,
+                            1_u8,
+                            index,
+                            ComponentSvekLeaf::Interface(index),
+                        )
+                    }),
+            )
+            .chain(
+                diagram
+                    .notes
+                    .iter()
+                    .enumerate()
+                    .filter(|(index, note)| {
+                        laid_out_notes.contains(index) && note.owner.as_deref() == owner
+                    })
+                    .map(|(index, note)| {
+                        (
+                            note.source_line,
+                            2_u8,
+                            index,
+                            ComponentSvekLeaf::Note(index),
+                        )
+                    }),
+            )
+            .collect::<Vec<_>>();
+        direct.sort_by_key(|&(source_line, kind, index, _)| (source_line, kind, index));
+        result.extend(direct.into_iter().map(|(_, _, _, leaf)| leaf));
+    }
+
+    fn collect_package(
+        package: &ComponentPackage,
+        parent: &str,
+        diagram: &ComponentDiagram,
+        qualified_names: &std::collections::HashMap<String, String>,
+        laid_out_notes: &std::collections::HashSet<usize>,
+        result: &mut Vec<ComponentSvekLeaf>,
+    ) {
+        let qname = if parent.is_empty() {
+            package.name.clone()
+        } else {
+            format!("{parent}.{}", package.name)
+        };
+        collect_owner(
+            diagram,
+            qualified_names,
+            laid_out_notes,
+            Some(&qname),
+            result,
+        );
+        for child in &package.packages {
+            collect_package(
+                child,
+                &qname,
+                diagram,
+                qualified_names,
+                laid_out_notes,
+                result,
+            );
+        }
+    }
+
+    let laid_out_notes = laid_out_note_indices.iter().copied().collect();
+    let mut result = Vec::with_capacity(
+        diagram.components.len() + diagram.interfaces.len() + laid_out_note_indices.len(),
+    );
+    for package in &diagram.packages {
+        collect_package(
+            package,
+            "",
+            diagram,
+            qualified_names,
+            &laid_out_notes,
+            &mut result,
+        );
+    }
+    collect_owner(diagram, qualified_names, &laid_out_notes, None, &mut result);
+    result
 }
 
 fn component_group_endpoint_nodes(
@@ -1713,10 +1862,18 @@ pub fn render_with_oracle(
     let (component_node_sep, short_label_compat) =
         component_no_oracle_spacing(diagram, &component_link_styles);
 
+    let mut component_layout_slots = vec![None; diagram.components.len()];
+    let mut interface_layout_slots = vec![None; diagram.interfaces.len()];
+    let mut note_layout_slots = vec![None; diagram.notes.len()];
+    let mut next_layout_slot = 0usize;
+
     // Try Sugiyama layout (skip when oracle is available).
-    let layout_result = if use_oracle {
+    let mut layout_result = if use_oracle {
         None
-    } else if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
+    } else if !diagram.components.is_empty()
+        || !diagram.interfaces.is_empty()
+        || !laid_out_note_indices.is_empty()
+    {
         // Java provenance: `AbstractEntityDiagram.getRankdir()` carries
         // `left to right direction` into SVEK's DOT `rankdir`.
         let layout_direction = match diagram.direction {
@@ -1729,40 +1886,59 @@ pub fn render_with_oracle(
                 GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
             )
             .with_plantuml_svek_node_order();
-        for (component, dim) in diagram.components.iter().zip(&comp_dims) {
-            layout.add_node(&component.id, &component.label, dim.width, dim.height);
-        }
-        for interface in &diagram.interfaces {
-            if component_interface_uses_class_box(diagram, interface) {
-                let dim = component_interface_class_dim(interface);
-                layout.add_node(&interface.id, &interface.label, dim.width, dim.height);
-            } else if let Some((shield_x, shield_y)) =
-                component_interface_shield(diagram, interface)
-            {
-                layout.add_svek_shielded_node(
-                    &interface.id,
-                    IFACE_NODE_SIZE,
-                    IFACE_NODE_SIZE,
-                    shield_x,
-                    shield_y,
-                );
-            } else {
-                layout.add_node(
-                    &interface.id,
-                    &interface.label,
-                    IFACE_NODE_SIZE,
-                    IFACE_NODE_SIZE,
-                );
+        for leaf in component_svek_leaf_order(diagram, &qualified_names, &laid_out_note_indices) {
+            match leaf {
+                ComponentSvekLeaf::Component(index) => {
+                    let component = &diagram.components[index];
+                    let dim = &comp_dims[index];
+                    assert!(
+                        layout.add_node(&component.id, &component.label, dim.width, dim.height),
+                        "DESCRIPTION SVEK plan contains duplicate component {}",
+                        component.id
+                    );
+                    component_layout_slots[index] = Some(next_layout_slot);
+                }
+                ComponentSvekLeaf::Interface(index) => {
+                    let interface = &diagram.interfaces[index];
+                    let added = if component_interface_uses_class_box(diagram, interface) {
+                        let dim = component_interface_class_dim(interface);
+                        layout.add_node(&interface.id, &interface.label, dim.width, dim.height)
+                    } else if let Some((shield_x, shield_y)) =
+                        component_interface_shield(diagram, interface)
+                    {
+                        layout.add_svek_shielded_node(
+                            &interface.id,
+                            IFACE_NODE_SIZE,
+                            IFACE_NODE_SIZE,
+                            shield_x,
+                            shield_y,
+                        )
+                    } else {
+                        layout.add_node(
+                            &interface.id,
+                            &interface.label,
+                            IFACE_NODE_SIZE,
+                            IFACE_NODE_SIZE,
+                        )
+                    };
+                    assert!(
+                        added,
+                        "DESCRIPTION SVEK plan contains duplicate interface {}",
+                        interface.id
+                    );
+                    interface_layout_slots[index] = Some(next_layout_slot);
+                }
+                ComponentSvekLeaf::Note(index) => {
+                    let dim = &note_dims[index];
+                    let note_id = component_note_layout_id(index, &named_note_ids);
+                    assert!(
+                        layout.add_node(&note_id, "", dim.width, dim.height),
+                        "DESCRIPTION SVEK plan contains duplicate note {note_id}"
+                    );
+                    note_layout_slots[index] = Some(next_layout_slot);
+                }
             }
-        }
-        for &note_index in &laid_out_note_indices {
-            let dim = &note_dims[note_index];
-            layout.add_node(
-                &component_note_layout_id(note_index, &named_note_ids),
-                "",
-                dim.width,
-                dim.height,
-            );
+            next_layout_slot += 1;
         }
         for (_, endpoint_id) in &group_endpoint_nodes {
             layout.add_svek_cluster_endpoint(endpoint_id);
@@ -1773,6 +1949,15 @@ pub fn render_with_oracle(
             "",
             &group_endpoint_node_map,
         );
+        for &note_index in &laid_out_note_indices {
+            let note = &diagram.notes[note_index];
+            if let Some(owner) = note.owner.as_deref() {
+                layout.add_cluster_node(
+                    owner,
+                    &component_note_layout_id(note_index, &named_note_ids),
+                );
+            }
+        }
         add_together_groups_to_layout(&mut layout, diagram);
         add_component_single_strategy_to_layout(&mut layout, diagram);
         for &note_index in &laid_out_note_indices {
@@ -1977,6 +2162,27 @@ pub fn render_with_oracle(
     } else {
         None
     };
+    if let Some(result) = layout_result.as_mut() {
+        let solved_positions = result.node_positions.clone();
+        result.node_positions = component_layout_slots
+            .iter()
+            .flatten()
+            .map(|&slot| solved_positions[slot])
+            .chain(
+                interface_layout_slots
+                    .iter()
+                    .flatten()
+                    .map(|&slot| solved_positions[slot]),
+            )
+            .chain(
+                laid_out_note_indices
+                    .iter()
+                    .filter_map(|&note_index| note_layout_slots[note_index])
+                    .map(|slot| solved_positions[slot]),
+            )
+            .chain(solved_positions.iter().skip(next_layout_slot).copied())
+            .collect();
+    }
 
     let n_comp = diagram.components.len();
 
@@ -3125,6 +3331,13 @@ pub fn render_with_oracle(
                     (position, Some(note_is_first)),
                     &mut svg,
                 );
+                continue;
+            }
+            if note.id.is_some()
+                && note.target.is_none()
+                && let (Some(layout), Some(uid)) = (layout, uid)
+            {
+                render_normal_component_note(note, layout, uid, &mut svg);
                 continue;
             }
             if let (Some(layout), Some(uid), Some(target)) = (layout, uid, note.target.as_deref()) {
@@ -4920,6 +5133,24 @@ fn add_component_single_strategy_to_layout(layout: &mut LayoutGraph, diagram: &C
             component_count + ordinal,
             interface.id.clone(),
         ));
+    }
+    let ordinary_leaf_count = component_count + diagram.interfaces.len();
+    let named_note_ids = component_named_note_ids(diagram);
+    for (ordinal, note) in diagram.notes.iter().enumerate() {
+        let Some(id) = note.id.as_deref() else {
+            continue;
+        };
+        if note.target.is_some() || note.connection.is_some() || linked.contains(id) {
+            continue;
+        }
+        groups
+            .entry(note.owner.clone().unwrap_or_default())
+            .or_default()
+            .push((
+                note.source_line,
+                ordinary_leaf_count + ordinal,
+                component_note_layout_id(ordinal, &named_note_ids),
+            ));
     }
 
     let mut magmas = Vec::new();
@@ -10368,5 +10599,63 @@ LateRelay3449 --> InlineRelay3457
 
         let qualified = super::build_qualified_names(&diagram.packages);
         assert_eq!(qualified["SharedLeaf"], "OuterAlpha.SharedLeaf");
+    }
+
+    #[test]
+    fn named_note_only_owner_is_a_cluster_with_one_qualified_leaf() {
+        let input = "@startuml\n\
+                     node RenamedEnvelope9911 {\n\
+                       note as RenamedLedger9917\n\
+                         retained owner payload 9923\n\
+                       end note\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"class="cluster" data-qualified-name="RenamedEnvelope9911""#),
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(
+                r#"class="entity" data-qualified-name="RenamedEnvelope9911.RenamedLedger9917""#
+            )
+            .count(),
+            1,
+            "{svg}"
+        );
+        assert!(svg.contains(">retained owner payload 9923</text>"), "{svg}");
+    }
+
+    #[test]
+    fn component_svek_leaf_plan_interleaves_owner_local_note_quarks() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     node \"Renamed Envelope 9931\" as RenamedEnvelope9931 {\n\
+                       note as FirstLedger9937\n\
+                         first payload\n\
+                       end note\n\
+                       component \"Later Runtime 9941\" as LaterRuntime9941\n\
+                     }\n\
+                     component RootProbe9949\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(diagram) = diagram else {
+            panic!("expected component diagram");
+        };
+        let qualified = super::build_qualified_names(&diagram.packages);
+        let named = super::component_named_note_ids(&diagram);
+        let package_names = super::build_package_qualified_names(&diagram.packages);
+        let notes = super::laid_out_note_indices(&diagram, &package_names, &named);
+
+        assert_eq!(
+            super::component_svek_leaf_order(&diagram, &qualified, &notes),
+            [
+                super::ComponentSvekLeaf::Note(0),
+                super::ComponentSvekLeaf::Component(0),
+                super::ComponentSvekLeaf::Component(1)
+            ]
+        );
     }
 }

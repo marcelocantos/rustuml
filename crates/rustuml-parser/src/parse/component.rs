@@ -237,6 +237,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut removed_stereotypes: Vec<String> = Vec::new();
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
+    let mut note_id: Option<String> = None;
+    let mut note_owner: Option<String> = None;
     let mut note_connection: Option<usize> = None;
     let mut note_position = ComponentNotePosition::Right;
     let mut note_source_line = 0;
@@ -282,6 +284,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Floating note: `note "text" as ID` or `note : text`
     static RE_NOTE_INLINE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
+    static RE_NOTE_MULTI: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"^note(?:\s+as\s+([\w.]+))?(?:\s+#[^\s]+)?\s*$").unwrap());
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
@@ -321,6 +325,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 let text = note_lines.join("\n").trim().to_string();
                 if !text.is_empty() {
                     notes.push(ComponentNote {
+                        id: note_id.take(),
+                        owner: note_owner.take(),
                         text,
                         target: note_target.take(),
                         connection: note_connection.take(),
@@ -328,6 +334,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         source_line: note_source_line,
                     });
                 }
+                note_id = None;
+                note_owner = None;
+                note_target = None;
+                note_connection = None;
                 note_lines.clear();
                 in_note = false;
             } else {
@@ -609,6 +619,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .filter(|t| !t.is_empty())
             {
                 notes.push(ComponentNote {
+                    id: None,
+                    owner: package_qualified_name(&package_stack),
                     text: inline_text,
                     target: Some(target),
                     connection: None,
@@ -617,6 +629,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 });
             } else {
                 note_target = Some(target);
+                note_id = None;
+                note_owner = package_qualified_name(&package_stack);
                 note_connection = None;
                 note_position = position;
                 // `CommandFactoryNoteOnEntity.createMultiLine` creates the
@@ -632,6 +646,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
             known_note_ids.insert(caps[2].to_string());
             notes.push(ComponentNote {
+                id: Some(caps[2].to_string()),
+                owner: package_qualified_name(&package_stack),
                 text: caps[1].to_string(),
                 target: None,
                 connection: None,
@@ -648,6 +664,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let text = rest.trim_start_matches([' ', ':']).trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote {
+                    id: None,
+                    owner: None,
                     text,
                     target: None,
                     connection: Some(connection),
@@ -657,6 +675,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             } else {
                 // Multi-line note on link.
                 note_target = None;
+                note_id = None;
+                note_owner = None;
                 note_connection = Some(connection);
                 note_position = ComponentNotePosition::Bottom;
                 // `CommandFactoryNoteOnLink.createMultiLine` creates its note
@@ -675,6 +695,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let text = rest.trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote {
+                    id: None,
+                    owner: package_qualified_name(&package_stack),
                     text,
                     target: None,
                     connection: None,
@@ -685,8 +707,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
         }
         // Multi-line floating note: `note as ID` or plain `note`
-        if trimmed.starts_with("note ") || trimmed == "note" {
+        if let Some(caps) = RE_NOTE_MULTI.captures(trimmed) {
             note_target = None;
+            note_id = caps.get(1).map(|id| id.as_str().to_string());
+            if let Some(id) = &note_id {
+                known_note_ids.insert(id.clone());
+            }
+            note_owner = package_qualified_name(&package_stack);
             note_connection = None;
             note_position = ComponentNotePosition::Right;
             note_source_line = current_line;
@@ -1649,5 +1676,23 @@ mod tests {
             ["SharedComponent", "SharedInterface"]
         );
         assert!(d.packages[1].components.is_empty());
+    }
+
+    #[test]
+    fn named_notes_retain_identity_and_qualified_owner() {
+        let d = parse(
+            "node OuterShell {\n\
+               node InnerShell {\n\
+                 note as OwnedLedger\n\
+                   retained payload\n\
+                 end note\n\
+               }\n\
+             }",
+        );
+
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].id.as_deref(), Some("OwnedLedger"));
+        assert_eq!(d.notes[0].owner.as_deref(), Some("OuterShell.InnerShell"));
+        assert_eq!(d.notes[0].target, None);
     }
 }

@@ -198,6 +198,12 @@ pub enum ComponentPackageKind {
 /// A note attached to a component or floating.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ComponentNote {
+    /// Explicit leaf identity from `note ... as ID`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Qualified immediate package that owned the note when it was created.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
     /// Text content (may be multi-line with `\n`).
     pub text: String,
     /// The id of the element this note is attached to, if any.
