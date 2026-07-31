@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+note "Cardinality memo" as CardinalityMemo
+node "Peer node" as CardinalityPeer
+CardinalityMemo "memo" -left-> "peer" CardinalityPeer : described transfer
+database "Created later" as LaterDatabase
+@enduml

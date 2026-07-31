@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node "Sending node" as Sender
+note "Destination-side memo" as DestinationMemo
+Sender ..> DestinationMemo
+queue "Created later" as LaterQueue
+@enduml

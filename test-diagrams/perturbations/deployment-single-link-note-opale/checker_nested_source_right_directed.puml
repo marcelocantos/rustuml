@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Application zone" as ApplicationZone {
+  note "Nested source" as NestedSourceMemo
+  component "Nested peer" as NestedPeer
+  NestedSourceMemo -right-> NestedPeer : nested route
+  queue "Nested later" as NestedLater
+}
+@enduml

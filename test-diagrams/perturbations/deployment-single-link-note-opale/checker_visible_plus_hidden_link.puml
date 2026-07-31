@@ -1,0 +1,8 @@
+@startuml
+note "Visible plus hidden" as HiddenControlMemo
+node "Visible peer" as VisiblePeer
+node "Hidden peer" as HiddenPeer
+HiddenControlMemo --> VisiblePeer
+HiddenControlMemo -[hidden]- HiddenPeer
+artifact "Created after links" as AfterHidden
+@enduml

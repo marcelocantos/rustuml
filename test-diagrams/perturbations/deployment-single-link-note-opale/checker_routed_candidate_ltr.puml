@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+note "Routed candidate" as RoutedMemo
+node "Target" as Target
+node "Upper entry" as UpperEntry
+node "Lower entry" as LowerEntry
+node "Upper middle" as UpperMiddle
+node "Lower middle" as LowerMiddle
+RoutedMemo --> Target
+UpperEntry --> UpperMiddle
+UpperMiddle --> Target
+LowerEntry --> LowerMiddle
+LowerMiddle --> Target
+artifact "Created later" as LaterArtifact
+@enduml
