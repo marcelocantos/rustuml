@@ -1,0 +1,11 @@
+@startuml
+package OuterAttachedC {
+  package InnerAttachedC {
+    component AttachedNestedC
+    note bottom of AttachedNestedC
+
+      attached second body record after blank
+    end note
+  }
+}
+@enduml

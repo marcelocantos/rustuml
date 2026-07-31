@@ -1,0 +1,6 @@
+@startuml
+component ColorContextB
+note as Multi.Color.LedgerB #LightBlue
+  multiline color boundary payload
+end note
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+package OuterCodeB {
+  package InnerCodeB {
+    note "inline dotted payload" as Ledger.C464
+  }
+}
+component RootWorkerB
+@enduml

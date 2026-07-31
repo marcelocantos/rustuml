@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="67px" preserveAspectRatio="none" style="width:380px;height:67px;background:#FFFFFF;" version="1.1" viewBox="0 0 380 67" width="380px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity BoundaryWorkerB-->
+<g class="entity" data-qualified-name="BoundaryWorkerB" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="159.6836" x="207.31" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="346.9936" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="344.9936" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="344.9936" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119.6836" x="222.31" y="40.5352">BoundaryWorkerB</text>
+</g>
+<g class="entity" data-qualified-name="Color.LedgerB" data-source-line="1" id="ent0002">
+<path d="M6,17.59 L6,42.9005 L172.2979,42.9005 L172.2979,27.59 L162.2979,17.59 L6,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M162.2979,17.59 L162.2979,27.59 L172.2979,27.59 L162.2979,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.2979" x="12" y="35.1584">inline modifier payload</text>
+</g>
+</g></svg>

@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+note "linked dotted payload" as Relation.LedgerB
+component RelationWorkerB
+Relation.LedgerB --> RelationWorkerB : later relation reference
+@enduml

@@ -1,0 +1,23 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component RootTargetA
+      note right of RootTargetA : root inline payload
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RootTargetA
+    label: RootTargetA
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - text: root inline payload
+    target: RootTargetA
+    position: Right
+    source_line: 2

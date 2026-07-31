@@ -1,0 +1,29 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as MultipleBodyC
+        first named body record
+        second named body record
+      end note
+      component LaterWorkerC
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: LaterWorkerC
+    label: LaterWorkerC
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: MultipleBodyC
+    text: |-
+      first named body record
+      second named body record
+    target: null
+    position: Right
+    source_line: 2

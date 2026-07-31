@@ -1,0 +1,6 @@
+@startuml
+package OuterUnicodeB {
+  component UnicodeContextB
+  note "unicode inline payload" as Métrique.Δelta_7
+}
+@enduml

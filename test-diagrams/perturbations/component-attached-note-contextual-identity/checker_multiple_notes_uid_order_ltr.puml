@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+component AlphaUidA
+note right of AlphaUidA : first attached payload
+component BetaUidA
+note bottom of BetaUidA
+  second attached payload
+end note
+AlphaUidA --> BetaUidA : explicit link between notes
+note left of AlphaUidA : third attached payload
+@enduml

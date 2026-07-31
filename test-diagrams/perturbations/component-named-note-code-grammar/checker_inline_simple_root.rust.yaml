@@ -1,0 +1,24 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      note "simple inline payload" as SimpleLedgerB
+      component RootWorkerB
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RootWorkerB
+    label: RootWorkerB
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: SimpleLedgerB
+    text: simple inline payload
+    target: null
+    position: Right
+    source_line: 1

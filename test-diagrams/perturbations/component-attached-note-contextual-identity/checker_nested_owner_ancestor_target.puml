@@ -1,0 +1,8 @@
+@startuml
+package OuterAncestorA {
+  component AncestorTargetA
+  package InnerAncestorA {
+    note bottom of AncestorTargetA : nested owner, ancestor target
+  }
+}
+@enduml

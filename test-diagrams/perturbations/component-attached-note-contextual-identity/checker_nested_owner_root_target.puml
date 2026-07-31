@@ -1,0 +1,8 @@
+@startuml
+component RootTargetA
+package OuterRootTargetA {
+  package InnerRootTargetA {
+    note right of RootTargetA : nested owner, root target
+  }
+}
+@enduml

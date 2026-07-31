@@ -1,0 +1,43 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterCodeB {
+        package InnerCodeB {
+          note "inline dotted payload" as Ledger.C464
+        }
+      }
+      component RootWorkerB
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RootWorkerB
+    label: RootWorkerB
+    stereotypes: []
+    source_line: 6
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterCodeB
+    label: OuterCodeB
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components: []
+    packages:
+    - name: InnerCodeB
+      label: InnerCodeB
+      stereotype: null
+      kind: Package
+      source_line: 2
+      components: []
+      packages: []
+  notes:
+  - id: Ledger.C464
+    owner: OuterCodeB.InnerCodeB
+    text: inline dotted payload
+    target: null
+    position: Right
+    source_line: 3

@@ -1,0 +1,63 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      left to right direction
+      component RootUidA
+      note right of RootUidA : root attached first
+      package "Outer alias display" as OuterAliasA {
+        package "Inner alias display" as InnerAliasA {
+          component NestedUidA
+          note top of NestedUidA
+            nested attached second
+          end note
+          note bottom of NestedUidA : nested attached third
+        }
+      }
+      @enduml
+  direction: LeftToRight
+  components:
+  - id: RootUidA
+    label: RootUidA
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: NestedUidA
+    label: NestedUidA
+    stereotypes: []
+    source_line: 6
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterAliasA
+    label: Outer alias display
+    stereotype: null
+    kind: Package
+    source_line: 4
+    components: []
+    packages:
+    - name: InnerAliasA
+      label: Inner alias display
+      stereotype: null
+      kind: Package
+      source_line: 5
+      components:
+      - NestedUidA
+      packages: []
+  notes:
+  - text: root attached first
+    target: RootUidA
+    position: Right
+    source_line: 3
+  - owner: OuterAliasA.InnerAliasA
+    text: nested attached second
+    target: NestedUidA
+    position: Top
+    source_line: 8
+  - owner: OuterAliasA.InnerAliasA
+    text: nested attached third
+    target: NestedUidA
+    position: Bottom
+    source_line: 10

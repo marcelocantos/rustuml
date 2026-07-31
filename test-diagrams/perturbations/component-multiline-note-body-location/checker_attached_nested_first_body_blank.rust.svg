@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="270px" preserveAspectRatio="none" style="width:377px;height:270px;background:#FFFFFF;" version="1.1" viewBox="0 0 377 270" width="377px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterAttachedC-->
+<g class="cluster" data-qualified-name="OuterAttachedC" data-source-line="1" id="ent0002">
+<path d="M8.5,6 L124.4463,6 A3.75,3.75 0 0 1 126.9463,8.5 L133.9463,28.4883 L359.5,28.4883 A2.5,2.5 0 0 1 362,30.9883 L362,253.2988 A2.5,2.5 0 0 1 359.5,255.7988 L8.5,255.7988 A2.5,2.5 0 0 1 6,253.2988 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="133.9463" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="114.9463" x="10" y="21.5352">OuterAttachedC</text>
+</g>
+<!--cluster InnerAttachedC-->
+<g class="cluster" data-qualified-name="OuterAttachedC.InnerAttachedC" data-source-line="2" id="ent0003">
+<path d="M32.5,49 L145.083,49 A3.75,3.75 0 0 1 147.583,51.5 L154.583,71.4883 L335.5,71.4883 A2.5,2.5 0 0 1 338,73.9883 L338,229.2988 A2.5,2.5 0 0 1 335.5,231.7988 L32.5,231.7988 A2.5,2.5 0 0 1 30,229.2988 L30,51.5 A2.5,2.5 0 0 1 32.5,49" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="30" x2="154.583" y1="71.4883" y2="71.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="111.583" x="34" y="64.5352">InnerAttachedC</text>
+</g>
+<!--entity AttachedNestedC-->
+<g class="entity" data-qualified-name="OuterAttachedC.InnerAttachedC.AttachedNestedC" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="157.1475" x="105.43" y="84"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="242.5775" y="89"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="240.5775" y="91"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="240.5775" y="95"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117.1475" x="120.43" y="117.5352">AttachedNestedC</text>
+</g>
+<g class="entity" data-qualified-name="OuterAttachedC.InnerAttachedC.GMN5" data-source-line="5" id="ent0006">
+<path d="M45.71,190.49 L45.71,215.8005 A0,0 0 0 0 45.71,215.8005 L322.292,215.8005 A0,0 0 0 0 322.292,215.8005 L322.292,200.49 L312.292,190.49 L188,190.49 L184,130.97 L180,190.49 L45.71,190.49 A0,0 0 0 0 45.71,190.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M312.292,190.49 L312.292,200.49 L322.292,200.49 L312.292,190.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="255.582" x="51.71" y="208.0584">attached second body record after blank</text>
+</g>
+</g></svg>

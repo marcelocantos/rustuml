@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="67px" preserveAspectRatio="none" style="width:165px;height:67px;background:#FFFFFF;" version="1.1" viewBox="0 0 165 67" width="165px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity StereoContextB-->
+<g class="entity" data-qualified-name="StereoContextB" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="144.5898" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="131.5898" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="129.5898" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="129.5898" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104.5898" x="22" y="40.5352">StereoContextB</text>
+</g>
+</g></svg>

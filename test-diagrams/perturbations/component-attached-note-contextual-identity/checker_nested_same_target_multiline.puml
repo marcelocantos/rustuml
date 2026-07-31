@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+package OuterA {
+  package InnerA {
+    component SameTargetA
+    note right of SameTargetA
+      nested same-target payload
+    end note
+  }
+}
+@enduml

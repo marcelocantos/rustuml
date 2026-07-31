@@ -1,0 +1,9 @@
+@startuml
+package OuterLocationC {
+  component NestedContextC
+  note as NestedLocationC
+
+    second body record after blank
+  end note
+}
+@enduml

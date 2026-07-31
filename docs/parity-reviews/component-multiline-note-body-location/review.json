@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-multiline-note-body-location",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop terminal",
+    "implemented_change": false
+  },
+  "revisions": {
+    "combined_rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "implementation_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "pre_code_account": "docs/parity-reviews/component-multiline-note-body-location/account.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "product_binary": {
+    "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "sha256": "f94f13376321676b8ac7b37665f4717060f82db1429594850fdc0daad22307d7",
+    "modes": ["--yaml", "-tsvg"],
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-check-note-followups rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > INPUT.java.svg",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml --yaml INPUT > INPUT.rust.yaml",
+    "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml -tsvg INPUT > INPUT.rust.svg",
+    "xmllint --noout INPUT.java.svg INPUT.rust.svg"
+  ],
+  "scope": "All nine fresh Java-valid inputs dispatch as Rust Component and have valid Java/Rust SVGs. Eight conventional command-order cases pass; the public !procedure expansion rejects the mechanism.",
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_root_first_body_nonempty.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_root_first_body_nonempty.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_root_first_body_nonempty.rust.svg",
+      "result": "PASS: named root note data-source-line is 2 on both sides."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_nested_first_body_blank.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_nested_first_body_blank.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_nested_first_body_blank.rust.svg",
+      "result": "PASS: the initially blank first body record gives data-source-line 4 on both sides."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_root_first_body_nonempty.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_root_first_body_nonempty.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_root_first_body_nonempty.rust.svg",
+      "result": "PASS: attached root note data-source-line is 3 and GMN/entity IDs agree."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_nested_first_body_blank.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_nested_first_body_blank.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_nested_first_body_blank.rust.svg",
+      "result": "PASS: nested attached note data-source-line is 5 and its owner-qualified GMN5 agrees."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_multiple_body_records.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_multiple_body_records.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_named_multiple_body_records.rust.svg",
+      "result": "PASS: the first of multiple named body records supplies data-source-line 2."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_multiple_body_records.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_multiple_body_records.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_attached_multiple_body_records.rust.svg",
+      "result": "PASS: the first of multiple attached body records supplies data-source-line 3."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_inline_source_line_control.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_inline_source_line_control.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_inline_source_line_control.rust.svg",
+      "result": "PASS: inline note remains at command data-source-line 2."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_note_body_order_before_later_leaf.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_note_body_order_before_later_leaf.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_note_body_order_before_later_leaf.rust.svg",
+      "result": "PASS: normal execution order and first-body provenance both yield ent0002, ent0003, ent0004."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-multiline-note-body-location/checker_preprocessor_procedure_body.puml",
+      "java_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_preprocessor_procedure_body.java.svg",
+      "rust_svg": "test-diagrams/perturbations/component-multiline-note-body-location/checker_preprocessor_procedure_body.rust.svg",
+      "result": "FAIL: both sides correctly give the procedure body note data-source-line 3, but Java executes the preceding source-line-6 component first (ProcedureWorkerC ent0002, ProcedureLocationC ent0003). Rust sorts events by provenance and reverses them (ProcedureLocationC ent0002, ProcedureWorkerC ent0003)."
+    }
+  ],
+  "implementation_audit": {
+    "java_provenance": "Both CommandFactoryNote and CommandFactoryNoteOnEntity remove the opener before obtaining BlocLines.getLocation(), while command execution and unique-sequence allocation remain in preprocessor-expanded execution order.",
+    "rust_provenance": "crates/rustuml-parser/src/parse/component.rs:346-354 and 402-407 correctly retain the first mapped body record. However crates/rustuml-render/src/component.rs:489-538 sorts all UID events by source_line, conflating metadata provenance with Java execution order.",
+    "anti_overfit": "The implementation has no fixture-shaped conditionals, golden reads, comparator/baseline changes, post-hoc SVG metadata rewrite, or new unexplained parity constants. The failure comes from a missing execution-order model exposed by a public TIM feature."
+  },
+  "findings": [
+    {
+      "severity": "P1",
+      "title": "Mapped body provenance must not reorder Java UID allocation",
+      "rust_location": "crates/rustuml-render/src/component.rs:489-538",
+      "java_location": "CommandFactoryNote.createMultiLine / CommandFactoryNoteOnEntity.createMultiLine and the observed !procedure execution order",
+      "evidence": "checker_preprocessor_procedure_body.puml",
+      "impact": "Valid public preprocessor input produces swapped entity IDs, violating the account's claimed source-ordered UID/emission behavior even though data-source-line itself is correct."
+    }
+  ],
+  "residue": [
+    "The unrelated multiline note-on-link path retains arithmetic current_line + 1 and was not scored because this account claims named and attached Component notes only."
+  ],
+  "conclusion": "REJECTED. First-body provenance is correct in ordinary inputs, including blank first body records, but the model must carry a separate execution ordinal before it can coexist with Java-compatible UID allocation through TIM expansion."
+}

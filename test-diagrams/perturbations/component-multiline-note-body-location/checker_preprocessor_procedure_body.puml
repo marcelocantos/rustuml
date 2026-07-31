@@ -1,0 +1,9 @@
+@startuml
+!procedure $emit_location_note()
+note as ProcedureLocationC
+  procedure body record
+end note
+!endprocedure
+component ProcedureWorkerC
+$emit_location_note()
+@enduml

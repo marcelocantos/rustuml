@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+package OuterDeferredA {
+  package InnerDeferredA {
+    note left of DeferredTargetA
+      note before its target
+    end note
+    component DeferredTargetA
+  }
+}
+@enduml

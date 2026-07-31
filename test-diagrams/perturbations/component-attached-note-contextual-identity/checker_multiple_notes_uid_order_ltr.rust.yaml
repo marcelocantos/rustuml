@@ -1,0 +1,58 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      left to right direction
+      component AlphaUidA
+      note right of AlphaUidA : first attached payload
+      component BetaUidA
+      note bottom of BetaUidA
+        second attached payload
+      end note
+      AlphaUidA --> BetaUidA : explicit link between notes
+      note left of AlphaUidA : third attached payload
+      @enduml
+  direction: LeftToRight
+  components:
+  - id: AlphaUidA
+    label: AlphaUidA
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: BetaUidA
+    label: BetaUidA
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections:
+  - from: AlphaUidA
+    to: BetaUidA
+    label: explicit link between notes
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 8
+  packages: []
+  notes:
+  - text: first attached payload
+    target: AlphaUidA
+    position: Right
+    source_line: 3
+  - text: second attached payload
+    target: BetaUidA
+    position: Bottom
+    source_line: 6
+  - text: third attached payload
+    target: AlphaUidA
+    position: Left
+    source_line: 9

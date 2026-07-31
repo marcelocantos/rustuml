@@ -1,0 +1,7 @@
+@startuml
+note as MultipleBodyC
+  first named body record
+  second named body record
+end note
+component LaterWorkerC
+@enduml

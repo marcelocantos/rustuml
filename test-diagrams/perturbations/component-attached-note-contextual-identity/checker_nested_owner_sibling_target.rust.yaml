@@ -1,0 +1,52 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterSiblingA {
+        package SiblingTargetScopeA {
+          component SiblingTargetA
+        }
+        package InnerOwnerScopeA {
+          note top of SiblingTargetA : nested owner, sibling target
+        }
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: SiblingTargetA
+    label: SiblingTargetA
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterSiblingA
+    label: OuterSiblingA
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components: []
+    packages:
+    - name: SiblingTargetScopeA
+      label: SiblingTargetScopeA
+      stereotype: null
+      kind: Package
+      source_line: 2
+      components:
+      - SiblingTargetA
+      packages: []
+    - name: InnerOwnerScopeA
+      label: InnerOwnerScopeA
+      stereotype: null
+      kind: Package
+      source_line: 5
+      components: []
+      packages: []
+  notes:
+  - owner: OuterSiblingA.InnerOwnerScopeA
+    text: nested owner, sibling target
+    target: SiblingTargetA
+    position: Top
+    source_line: 6

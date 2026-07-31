@@ -1,0 +1,4 @@
+@startuml
+note "inline modifier payload" as Color.LedgerB <<Audit>> #MistyRose
+component BoundaryWorkerB
+@enduml

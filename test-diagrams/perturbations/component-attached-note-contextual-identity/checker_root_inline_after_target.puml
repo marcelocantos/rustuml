@@ -1,0 +1,4 @@
+@startuml
+component RootTargetA
+note right of RootTargetA : root inline payload
+@enduml

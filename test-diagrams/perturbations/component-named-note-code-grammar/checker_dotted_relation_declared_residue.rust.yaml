@@ -1,0 +1,26 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      left to right direction
+      note "linked dotted payload" as Relation.LedgerB
+      component RelationWorkerB
+      Relation.LedgerB --> RelationWorkerB : later relation reference
+      @enduml
+  direction: LeftToRight
+  components:
+  - id: RelationWorkerB
+    label: RelationWorkerB
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: Relation.LedgerB
+    text: linked dotted payload
+    target: null
+    position: Right
+    source_line: 2

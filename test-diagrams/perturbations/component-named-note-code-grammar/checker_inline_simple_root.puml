@@ -1,0 +1,4 @@
+@startuml
+note "simple inline payload" as SimpleLedgerB
+component RootWorkerB
+@enduml

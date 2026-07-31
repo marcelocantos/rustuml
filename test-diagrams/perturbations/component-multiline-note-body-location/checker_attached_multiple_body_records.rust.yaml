@@ -1,0 +1,28 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component MultipleAttachedC
+      note left of MultipleAttachedC
+        first attached body record
+        second attached body record
+      end note
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: MultipleAttachedC
+    label: MultipleAttachedC
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - text: |-
+      first attached body record
+      second attached body record
+    target: MultipleAttachedC
+    position: Left
+    source_line: 3

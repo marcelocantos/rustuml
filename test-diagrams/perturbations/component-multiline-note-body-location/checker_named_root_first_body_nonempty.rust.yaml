@@ -1,0 +1,26 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as RootLocationC
+        first body record
+      end note
+      component RootWorkerC
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RootWorkerC
+    label: RootWorkerC
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: RootLocationC
+    text: first body record
+    target: null
+    position: Right
+    source_line: 2

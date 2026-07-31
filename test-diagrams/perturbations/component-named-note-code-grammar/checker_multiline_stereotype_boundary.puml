@@ -1,0 +1,6 @@
+@startuml
+component StereoContextB
+note as Stereo.LedgerB <<Audit>> #MistyRose
+  multiline stereotype boundary payload
+end note
+@enduml

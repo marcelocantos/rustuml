@@ -1,0 +1,46 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterAttachedC {
+        package InnerAttachedC {
+          component AttachedNestedC
+          note bottom of AttachedNestedC
+
+            attached second body record after blank
+          end note
+        }
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: AttachedNestedC
+    label: AttachedNestedC
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterAttachedC
+    label: OuterAttachedC
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components: []
+    packages:
+    - name: InnerAttachedC
+      label: InnerAttachedC
+      stereotype: null
+      kind: Package
+      source_line: 2
+      components:
+      - AttachedNestedC
+      packages: []
+  notes:
+  - owner: OuterAttachedC.InnerAttachedC
+    text: attached second body record after blank
+    target: AttachedNestedC
+    position: Bottom
+    source_line: 5

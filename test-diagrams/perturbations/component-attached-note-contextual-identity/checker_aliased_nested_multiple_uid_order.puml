@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+component RootUidA
+note right of RootUidA : root attached first
+package "Outer alias display" as OuterAliasA {
+  package "Inner alias display" as InnerAliasA {
+    component NestedUidA
+    note top of NestedUidA
+      nested attached second
+    end note
+    note bottom of NestedUidA : nested attached third
+  }
+}
+@enduml

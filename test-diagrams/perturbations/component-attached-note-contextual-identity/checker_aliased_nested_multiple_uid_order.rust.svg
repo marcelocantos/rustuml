@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="306px" preserveAspectRatio="none" style="width:666px;height:306px;background:#FFFFFF;" version="1.1" viewBox="0 0 666 306" width="666px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterAliasA-->
+<g class="cluster" data-qualified-name="OuterAliasA" data-source-line="4" id="ent0006">
+<path d="M8.5,6 L145.1387,6 A3.75,3.75 0 0 1 147.6387,8.5 L154.6387,28.4883 L649.169,28.4883 A2.5,2.5 0 0 1 651.669,30.9883 L651.669,167.5 A2.5,2.5 0 0 1 649.169,170 L8.5,170 A2.5,2.5 0 0 1 6,167.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="154.6387" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="135.6387" x="10" y="21.5352">Outer alias display</text>
+</g>
+<!--cluster InnerAliasA-->
+<g class="cluster" data-qualified-name="OuterAliasA.InnerAliasA" data-source-line="5" id="ent0007">
+<path d="M32.5,49 L165.7754,49 A3.75,3.75 0 0 1 168.2754,51.5 L175.2754,71.4883 L625.169,71.4883 A2.5,2.5 0 0 1 627.669,73.9883 L627.669,143.5 A2.5,2.5 0 0 1 625.169,146 L32.5,146 A2.5,2.5 0 0 1 30,143.5 L30,51.5 A2.5,2.5 0 0 1 32.5,49" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="30" x2="175.2754" y1="71.4883" y2="71.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="132.2754" x="34" y="64.5352">Inner alias display</text>
+</g>
+<!--entity NestedUidA-->
+<g class="entity" data-qualified-name="OuterAliasA.InnerAliasA.NestedUidA" data-source-line="6" id="ent0008">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.3447" x="276.45" y="83.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="375.7947" y="88.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="373.7947" y="90.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="373.7947" y="94.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.3447" x="291.45" y="117.2952">NestedUidA</text>
+</g>
+<!--entity RootUidA-->
+<g class="entity" data-qualified-name="RootUidA" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="103.5059" x="79.47" y="185.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="162.9759" y="190.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="160.9759" y="192.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="160.9759" y="196.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63.5059" x="94.47" y="219.2952">RootUidA</text>
+</g>
+<g class="entity" data-qualified-name="GMN3" data-source-line="3" id="ent0004">
+<path d="M63.74,267.34 L63.74,267.34 L131.22,232.55 L63.74,275.34 L63.74,292.6505 A0,0 0 0 0 63.74,292.6505 L198.6995,292.6505 A0,0 0 0 0 198.6995,292.6505 L198.6995,277.34 L188.6995,267.34 L63.74,267.34 A0,0 0 0 0 63.74,267.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M188.6995,267.34 L188.6995,277.34 L198.6995,277.34 L188.6995,267.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="113.9595" x="69.74" y="284.9084">root attached first</text>
+</g>
+<g class="entity" data-qualified-name="OuterAliasA.InnerAliasA.GMN9" data-source-line="8" id="ent0010">
+<path d="M46,94.34 L46,119.6505 A0,0 0 0 0 46,119.6505 L212.8,119.6505 L275.99,107 L220.8,119.6505 L216.4492,119.6505 A0,0 0 0 0 216.4492,119.6505 L216.4492,104.34 L206.4492,94.34 L46,94.34 A0,0 0 0 0 46,94.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M206.4492,94.34 L206.4492,104.34 L216.4492,104.34 L206.4492,94.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="149.4492" x="52" y="111.9084">nested attached second</text>
+</g>
+<g class="entity" data-qualified-name="OuterAliasA.InnerAliasA.GMN12" data-source-line="10" id="ent0013">
+<path d="M455.79,94.34 L455.79,119.6505 A0,0 0 0 0 455.79,119.6505 L611.665,119.6505 A0,0 0 0 0 611.665,119.6505 L611.665,104.34 L601.665,94.34 L463.79,94.34 L396.08,107 L455.79,94.34 L455.79,94.34 A0,0 0 0 0 455.79,94.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M601.665,94.34 L601.665,104.34 L611.665,104.34 L601.665,94.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="134.875" x="461.79" y="111.9084">nested attached third</text>
+</g>
+</g></svg>

@@ -1,0 +1,43 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterAncestorA {
+        component AncestorTargetA
+        package InnerAncestorA {
+          note bottom of AncestorTargetA : nested owner, ancestor target
+        }
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: AncestorTargetA
+    label: AncestorTargetA
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterAncestorA
+    label: OuterAncestorA
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - AncestorTargetA
+    packages:
+    - name: InnerAncestorA
+      label: InnerAncestorA
+      stereotype: null
+      kind: Package
+      source_line: 3
+      components: []
+      packages: []
+  notes:
+  - owner: OuterAncestorA.InnerAncestorA
+    text: nested owner, ancestor target
+    target: AncestorTargetA
+    position: Bottom
+    source_line: 4

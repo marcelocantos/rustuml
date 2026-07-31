@@ -1,0 +1,33 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterNestedTargetA {
+        component NestedTargetA
+      }
+      note left of NestedTargetA : root owner, nested target
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: NestedTargetA
+    label: NestedTargetA
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: OuterNestedTargetA
+    label: OuterNestedTargetA
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - NestedTargetA
+    packages: []
+  notes:
+  - text: root owner, nested target
+    target: NestedTargetA
+    position: Left
+    source_line: 4

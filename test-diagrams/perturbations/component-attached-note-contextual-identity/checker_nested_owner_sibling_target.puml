@@ -1,0 +1,10 @@
+@startuml
+package OuterSiblingA {
+  package SiblingTargetScopeA {
+    component SiblingTargetA
+  }
+  package InnerOwnerScopeA {
+    note top of SiblingTargetA : nested owner, sibling target
+  }
+}
+@enduml

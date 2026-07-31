@@ -1,0 +1,26 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component UnicodeContextB
+      note as Résumé.Δelta_9
+        unicode multiline payload
+      end note
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: UnicodeContextB
+    label: UnicodeContextB
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: Résumé.Δelta_9
+    text: unicode multiline payload
+    target: null
+    position: Right
+    source_line: 3
