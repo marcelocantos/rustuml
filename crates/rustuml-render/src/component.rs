@@ -3514,6 +3514,16 @@ pub fn render_with_oracle(
                 )
             })
             .collect();
+        let named_note_layout = |endpoint: &str| {
+            named_note_ids
+                .iter()
+                .find_map(|(note_index, note_id)| (note_id == endpoint).then_some(*note_index))
+                .and_then(|note_index| {
+                    note_layouts
+                        .iter()
+                        .find(|layout| layout.note_index == note_index)
+                })
+        };
         let mut next_link_counter = entity_counter;
         for (connection_index, conn) in diagram.connections.iter().enumerate() {
             let link_style = &component_link_styles[connection_index];
@@ -3594,6 +3604,11 @@ pub fn render_with_oracle(
                     .iter()
                     .find(|position| &position.id == qname)
             });
+            // `Bibliotekon` registers named notes in the same SvekNode map as
+            // every other description leaf. When Opale does not absorb the
+            // sole edge, ordinary SvekEdge painting resolves this rectangle.
+            let from_note = named_note_layout(logical_from);
+            let to_note = named_note_layout(logical_to);
 
             let (from_cx, from_cy, from_bottom) = if let Some((i, _)) = from_comp {
                 let (x, y) = positions[i];
@@ -3607,6 +3622,12 @@ pub fn render_with_oracle(
                     position.x + position.width / 2.0,
                     position.y + position.height / 2.0,
                     position.y + position.height,
+                )
+            } else if let Some(layout) = from_note {
+                (
+                    layout.x + layout.width / 2.0,
+                    layout.y + layout.height,
+                    layout.y + layout.height,
                 )
             } else {
                 continue;
@@ -3625,6 +3646,8 @@ pub fn render_with_oracle(
                     position.y + position.height / 2.0,
                     position.y,
                 )
+            } else if let Some(layout) = to_note {
+                (layout.x + layout.width / 2.0, layout.y, layout.y)
             } else {
                 continue;
             };
@@ -10737,5 +10760,54 @@ LateRelay3449 --> InlineRelay3457
         assert!(svg.matches(r#"fill="none""#).count() >= 4, "{svg}");
         assert_eq!(svg.matches("<linearGradient ").count(), 1, "{svg}");
         assert!(svg.matches(r#"fill="url(#"#).count() >= 2, "{svg}");
+    }
+
+    #[test]
+    fn multiply_linked_named_note_uses_ordinary_svek_edges() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     package Domain {\n\
+                       note \"ledger payload\" as Ledger.Deep\n\
+                       component A\n\
+                       component B\n\
+                       component C\n\
+                       Ledger.Deep --> A : first\n\
+                       B ..> Ledger.Deep : second\n\
+                       Ledger.Deep --> C : third\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 3, "{svg}");
+        for uid in ["lnk7", "lnk8", "lnk9"] {
+            assert!(svg.contains(&format!(r#"id="{uid}""#)), "{svg}");
+        }
+        assert!(svg.contains(r#"data-entity-1="ent0003""#), "{svg}");
+        assert!(svg.contains(r#"data-entity-2="ent0003""#), "{svg}");
+
+        let single = rustuml_parser::parse::parse(
+            "@startuml\nnote \"single\" as Single.Note\ncomponent Peer\nSingle.Note --> Peer\n@enduml",
+        )
+        .unwrap();
+        let single_svg = crate::render_svg(&single);
+        assert_eq!(
+            single_svg.matches(r#"<g class="link""#).count(),
+            0,
+            "{single_svg}"
+        );
+
+        let two_sided = rustuml_parser::parse::parse(
+            "@startuml\npackage Outer {\n  note \"payload\" as Ledger.C464\n  component A\n  component B\n  Ledger.C464 --> A\n  B <-- Ledger.C464\n}\n@enduml",
+        )
+        .unwrap();
+        let two_sided_svg = crate::render_svg(&two_sided);
+        assert_eq!(
+            two_sided_svg.matches(r#"<g class="link""#).count(),
+            2,
+            "{two_sided_svg}"
+        );
+        assert!(two_sided_svg.contains(r#"id="lnk6""#), "{two_sided_svg}");
+        assert!(two_sided_svg.contains(r#"id="lnk7""#), "{two_sided_svg}");
     }
 }
