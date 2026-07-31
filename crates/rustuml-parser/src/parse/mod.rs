@@ -499,6 +499,31 @@ fn detect_type(input: &str) -> &str {
 /// complete source. Explicit JSON and YAML starts bypass this competition via
 /// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
 /// `YamlDiagramFactory`.
+fn looks_like_sequence_only_factory_command(line: &str) -> bool {
+    // Java provenance: `SequenceDiagramFactory.initCommandsList` registers
+    // these commands, while the later Class and Description factories do not.
+    // Keep shared commands (messages, actor/database/queue declarations,
+    // notes, newpage and page decoration) out of this inventory.
+    let line = line.to_ascii_lowercase();
+    line == "participant"
+        || line.starts_with("participant ")
+        || line == "autonumber"
+        || line.starts_with("autonumber ")
+        || line == "activate"
+        || line.starts_with("activate ")
+        || line == "deactivate"
+        || line.starts_with("deactivate ")
+        || line == "autoactivate"
+        || line.starts_with("autoactivate ")
+        || line == "return"
+        || line.starts_with("return ")
+        || line == "box"
+        || line.starts_with("box ")
+        || line == "end box"
+        || line.starts_with("ref over ")
+        || matches!(line.as_str(), "footbox" | "hide footbox" | "show footbox")
+}
+
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
@@ -513,6 +538,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_class_association_line = false;
     let mut has_class_lollipop_command = false;
     let mut has_direction_directive = false;
+    let mut has_sequence_only_command = false;
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
     let mut has_component_bracket_interface_decl = false;
@@ -683,6 +709,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             "left to right direction" | "top to bottom direction"
         ) {
             has_direction_directive = true;
+        }
+        if !inside_class_leaf_body && looks_like_sequence_only_factory_command(trimmed) {
+            has_sequence_only_command = true;
         }
 
         // Use case — must check before sequence (both use "actor").
@@ -1252,6 +1281,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         return UmlSubtype::Class;
     }
 
+    // `SequenceDiagramFactory.initCommandsList` does not register
+    // `CommandRankDir`; Java discards that factory before trying Class and
+    // Description. A command exclusive to the discarded Sequence inventory
+    // cannot then be laundered through a permissive later Rust parser.
+    if has_direction_directive && has_sequence_only_command {
+        return UmlSubtype::Unconsumable;
+    }
+    let sequence_factory_viable = !has_direction_directive;
+
     let subtypes = [
         UmlSubtype::Sequence,
         UmlSubtype::Class,
@@ -1267,8 +1305,19 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
 
     // Find the highest-scoring subtype. On ties, prefer earlier entries
     // (Sequence is the default).
-    let max_score = scores.iter().copied().max().unwrap_or(0);
-    let max_idx = scores.iter().position(|&s| s == max_score).unwrap_or(0);
+    let max_score = scores
+        .iter()
+        .enumerate()
+        .filter(|(index, _)| *index != 0 || sequence_factory_viable)
+        .map(|(_, score)| *score)
+        .max()
+        .unwrap_or(0);
+    let max_idx = scores
+        .iter()
+        .enumerate()
+        .find(|(index, score)| (*index != 0 || sequence_factory_viable) && **score == max_score)
+        .map(|(index, _)| index)
+        .unwrap_or(1);
 
     subtypes[max_idx]
 }
@@ -1446,6 +1495,7 @@ fn looks_like_class_leaf_body_opener(line: &str) -> bool {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum UmlSubtype {
+    Unconsumable,
     Sequence,
     Class,
     Object,
@@ -1737,6 +1787,23 @@ pub fn parse_with_base(
 
     let mut diagram = match typ {
         "uml" => match uml_subtype.expect("uml subtype computed above") {
+            UmlSubtype::Unconsumable => {
+                let line = lines
+                    .iter()
+                    .position(|line| {
+                        matches!(
+                            source_text(line).trim(),
+                            "left to right direction" | "top to bottom direction"
+                        )
+                    })
+                    .map(|index| index + 1)
+                    .unwrap_or(1);
+                Err(ParseError {
+                    line,
+                    message: "no UML factory consumes rank direction with sequence-only commands"
+                        .to_string(),
+                })
+            }
             UmlSubtype::Sequence => {
                 let seq = sequence::parse_sequence(&lines)?;
                 Ok(Diagram::Sequence(seq))
@@ -2314,6 +2381,71 @@ mod tests {
                 .iter()
                 .any(|component| component.id == "Api7031" && component.label == "API Display 7031")
         );
+    }
+
+    #[test]
+    fn rank_direction_eliminates_sequence_for_shared_description_commands() {
+        for source in [
+            "@startuml\n\
+             left to right direction\n\
+             database \"Telemetry.v11 Réseau\"\n\
+             queue Sink.v13\n\
+             \"Telemetry.v11 Réseau\" -right-> Sink.v13 : transfer\n\
+             @enduml",
+            "@startuml\n\
+             database \"Ledger Plane\"\n\
+             \"Ledger Plane\" --> DeliveryQueue : transfer\n\
+             queue DeliveryQueue\n\
+             top to bottom direction\n\
+             @enduml",
+        ] {
+            let parsed = parse(source).unwrap();
+            let Diagram::Deployment(diagram) = parsed else {
+                panic!("rank direction must reject Sequence, got {parsed:?}");
+            };
+            assert_eq!(diagram.connections.len(), 1);
+            assert_eq!(diagram.nodes.len(), 2);
+        }
+
+        assert!(matches!(
+            parse("@startuml\ndatabase Store\nqueue Pipe\nStore -> Pipe : message\n@enduml")
+                .unwrap(),
+            Diagram::Sequence(_)
+        ));
+    }
+
+    #[test]
+    fn rank_direction_falls_through_to_class_for_zero_or_weak_graph_evidence() {
+        assert!(matches!(
+            parse("@startuml\nleft to right direction\n@enduml").unwrap(),
+            Diagram::Class(_)
+        ));
+        assert!(matches!(
+            parse("@startuml\ntop to bottom direction\nAlpha -> Beta : weak\n@enduml").unwrap(),
+            Diagram::Class(_)
+        ));
+    }
+
+    #[test]
+    fn rank_direction_cannot_launder_sequence_only_commands_into_later_factories() {
+        for command in [
+            "participant Sender",
+            "autonumber 10 5",
+            "activate Worker",
+            "return result",
+            "box Clients",
+            "ref over Sender : detail",
+            "hide footbox",
+        ] {
+            let source = format!(
+                "@startuml\nleft to right direction\n{command}\nSender -> Worker : request\n@enduml"
+            );
+            let error = parse(&source).unwrap_err();
+            assert_eq!(
+                error.message, "no UML factory consumes rank direction with sequence-only commands",
+                "{command}"
+            );
+        }
     }
 
     #[test]
