@@ -21390,7 +21390,7 @@ mod tests {
                 .split_once("</g>")
                 .unwrap()
                 .0;
-            let note_outline = link.find(r#"fill="#FEFFDD""#).unwrap();
+            let note_outline = link.find(r##"fill="#FEFFDD""##).unwrap();
             let note_text = link.find(&format!(">{payload}</text>")).unwrap();
             let label_text = link.find(&format!(">{label}</text>")).unwrap();
 
