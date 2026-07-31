@@ -1,0 +1,11 @@
+@startuml
+skinparam componentArrowFontColor DarkGreen
+component "Ingress Alpha 921" as Ingress921
+component "Archive Beta 923" as Archive923
+note as SourceMemo921 <<review_note>> #HoneyDew
+  Root multiline note.
+  It owns two ordinary outgoing relations.
+end note
+SourceMemo921 "author" --> "primary" Ingress921 : accepts batch
+SourceMemo921 ..> Archive923 : mirrors audit
+@enduml

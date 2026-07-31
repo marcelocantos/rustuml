@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="148px" preserveAspectRatio="none" style="width:917px;height:148px;background:#FFFFFF;" version="1.1" viewBox="0 0 917 148" width="917px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Producer931-->
+<g class="entity" data-qualified-name="Producer931" data-source-line="2" id="ent0002">
+<rect fill="#F0F8FF" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="179.5352" x="7" y="7"/>
+<rect fill="#F0F8FF" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="166.5352" y="12"/>
+<rect fill="#F0F8FF" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="164.5352" y="14"/>
+<rect fill="#F0F8FF" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="164.5352" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="139.5352" x="22" y="40.5352">Queue Producer 931</text>
+</g>
+<!--entity Worker933-->
+<g class="entity" data-qualified-name="Worker933" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.8906" x="20.82" y="88"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="152.7106" y="93"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="150.7106" y="95"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="150.7106" y="99"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.8906" x="35.82" y="121.5352">Worker Sink 933</text>
+</g>
+<!--entity Store937-->
+<g class="entity" data-qualified-name="Store937" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="141.4658" x="761.89" y="48"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="883.3558" y="53"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="881.3558" y="55"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="881.3558" y="59"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101.4658" x="776.89" y="81.5352">Cold Store 937</text>
+</g>
+<g class="entity" data-qualified-name="DestMemo931" data-source-line="5" id="ent0005">
+<path d="M340.54,58.59 L340.54,83.9005 L661.8984,83.9005 L661.8984,68.59 L651.8984,58.59 L340.54,58.59" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M651.8984,58.59 L651.8984,68.59 L661.8984,68.59 L651.8984,58.59" fill="#FFE4E1" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="300.3584" x="346.54" y="76.1584">destination memo with unicode body: Δ latency</text>
+</g>
+<!--link Producer931 to DestMemo931-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M186.58,39.29 C240.75,44.81 304.9509,51.3514 365.1709,57.4914" fill="none" id="Producer931-to-DestMemo931" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="371.14,58.1,362.5922,53.2077,366.1658,57.5928,361.7807,61.1665,371.14,58.1" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="87.1343" x="220.0352" y="38.9275">opens Δ-path</text>
+</g>
+<!--link Worker933 to DestMemo931-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M173.1,103.84 C213.8,99.83 264.92,94.78 310.54,90.25 C329.55,88.35 343.6697,86.9464 363.3897,84.9764" fill="none" id="Worker933-to-DestMemo931" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="369.36,84.38,360.007,81.2944,364.3848,84.877,360.8022,89.2548,369.36,84.38" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92.6313" x="217.5352" y="86.8125">dotted witness</text>
+</g>
+<!--link DestMemo931 to Store937-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8">
+<path d="M662.1,71.25 C697.01,71.25 726.22,71.25 755.43,71.25" fill="none" id="DestMemo931-to-Store937" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="761.43,71.25,752.43,67.25,756.43,71.25,752.43,75.25,761.43,71.25" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="38.8984" x="692.8936" y="67.8125">closes</text>
+</g>
+</g></svg>

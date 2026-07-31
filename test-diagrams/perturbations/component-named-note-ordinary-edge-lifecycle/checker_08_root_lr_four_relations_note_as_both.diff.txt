@@ -1,0 +1,28 @@
+source: checker_08_root_lr_four_relations_note_as_both.puml
+java_error: False
+rust_error: False
+java_entity_count: 4
+rust_entity_count: 4
+java_link_count: 4
+rust_link_count: 4
+java_entities:
+  ent0002 line=2 qname=Router981
+  ent0003 line=3 qname=Validator983
+  ent0004 line=4 qname=Emitter987
+  ent0005 line=5 qname=HubMemo981
+rust_entities:
+  ent0002 line=2 qname=Router981
+  ent0003 line=3 qname=Validator983
+  ent0004 line=4 qname=Emitter987
+  ent0005 line=5 qname=HubMemo981
+java_links:
+  lnk6 line=6 ent0005->ent0002 type=dependency comment=link HubMemo981 to Router981
+  lnk9 line=9 ent0002->ent0005 type=dependency comment=reverse link Router981 to HubMemo981
+  lnk7 line=7 ent0003->ent0005 type=dependency comment=link Validator983 to HubMemo981
+  lnk8 line=8 ent0005->ent0004 type=dependency comment=link HubMemo981 to Emitter987
+rust_links:
+  lnk6 line=6 ent0005->ent0002 type=dependency comment=link HubMemo981 to Router981
+  lnk7 line=7 ent0003->ent0005 type=dependency comment=link Validator983 to HubMemo981
+  lnk8 line=8 ent0005->ent0004 type=dependency comment=link HubMemo981 to Emitter987
+  lnk9 line=9 ent0002->ent0005 type=dependency comment=reverse link Router981 to HubMemo981
+verdict: PASS

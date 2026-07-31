@@ -1,0 +1,22 @@
+source: checker_02_root_tb_note_source_two_relations_labels.puml
+java_error: False
+rust_error: False
+java_entity_count: 3
+rust_entity_count: 3
+java_link_count: 2
+rust_link_count: 2
+java_entities:
+  ent0002 line=2 qname=Ingress921
+  ent0003 line=3 qname=Archive923
+  ent0004 line=5 qname=SourceMemo921
+rust_entities:
+  ent0002 line=2 qname=Ingress921
+  ent0003 line=3 qname=Archive923
+  ent0004 line=5 qname=SourceMemo921
+java_links:
+  lnk5 line=8 ent0004->ent0002 type=dependency comment=link SourceMemo921 to Ingress921
+  lnk6 line=9 ent0004->ent0003 type=dependency comment=link SourceMemo921 to Archive923
+rust_links:
+  lnk5 line=8 ent0004->ent0002 type=dependency comment=link SourceMemo921 to Ingress921
+  lnk6 line=9 ent0004->ent0003 type=dependency comment=link SourceMemo921 to Archive923
+verdict: PASS

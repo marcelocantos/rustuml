@@ -1,0 +1,16 @@
+source: checker_01_single_opale_control_root_tb.puml
+java_error: False
+rust_error: False
+java_entity_count: 2
+rust_entity_count: 2
+java_link_count: 0
+rust_link_count: 0
+java_entities:
+  ent0002 line=1 qname=SoloReceiver910
+  ent0003 line=2 qname=SoloMemo910
+rust_entities:
+  ent0002 line=1 qname=SoloReceiver910
+  ent0003 line=2 qname=SoloMemo910
+java_links:
+rust_links:
+verdict: PASS

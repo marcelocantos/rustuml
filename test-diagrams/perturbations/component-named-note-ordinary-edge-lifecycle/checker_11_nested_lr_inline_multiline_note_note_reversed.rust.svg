@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="195px" preserveAspectRatio="none" style="width:555px;height:195px;background:#FFFFFF;" version="1.1" viewBox="0 0 555 195" width="555px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster ReviewPackage1011-->
+<g class="cluster" data-qualified-name="ReviewPackage1011" data-source-line="2" id="ent0002">
+<path d="M8.5,6 L228.0107,6 A3.75,3.75 0 0 1 230.5107,8.5 L237.5107,28.4883 L537.7764,28.4883 A2.5,2.5 0 0 1 540.2764,30.9883 L540.2764,177.5 A2.5,2.5 0 0 1 537.7764,180 L8.5,180 A2.5,2.5 0 0 1 6,177.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="237.5107" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="218.5107" x="10" y="21.5352">Unicode Review Package 1011</text>
+</g>
+<!--entity Alpha1013-->
+<g class="entity" data-qualified-name="ReviewPackage1011.Alpha1013" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="130.9385" x="22" y="40.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="132.9385" y="45.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="130.9385" y="47.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="130.9385" y="51.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.9385" x="37" y="74.2952">Alpha Ω 1013</text>
+</g>
+<!--entity Beta1017-->
+<g class="entity" data-qualified-name="ReviewPackage1011.Beta1017" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148.042" x="332.09" y="40.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="460.132" y="45.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="458.132" y="47.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="458.132" y="51.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.042" x="347.09" y="74.2952">Beta ASCII 1017</text>
+</g>
+<g class="entity" data-qualified-name="ReviewPackage1011.InlineMemo1011" data-source-line="5" id="ent0005">
+<path d="M37.86,138.34 L37.86,163.6505 L137.0758,163.6505 L137.0758,148.34 L127.0758,138.34 L37.86,138.34" fill="#F0FFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M127.0758,138.34 L127.0758,148.34 L137.0758,148.34 L127.0758,138.34" fill="#F0FFFF" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="78.2158" x="43.86" y="155.9084">inline Ω note</text>
+</g>
+<g class="entity" data-qualified-name="ReviewPackage1011.MultiMemo1011" data-source-line="7" id="ent0006">
+<path d="M287.94,138.34 L287.94,163.6505 L524.2779,163.6505 L524.2779,148.34 L514.2779,138.34 L287.94,138.34" fill="#FFF8DC" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M514.2779,138.34 L514.2779,148.34 L524.2779,148.34 L514.2779,138.34" fill="#FFF8DC" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="215.3379" x="293.94" y="155.9084">multiline memo with accents: café</text>
+</g>
+<!--link MultiMemo1011 to Beta1017-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0004" data-link-type="dependency" data-source-line="10" id="lnk9">
+<path d="M406.11,138.16 C406.11,124.93 406.11,109.99 406.11,93.73" fill="none" id="MultiMemo1011-to-Beta1017" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="406.11,87.73,402.11,96.73,406.11,92.73,410.11,96.73,406.11,87.73" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="94.9927" x="347.6074" y="117.8628">beta consumes</text>
+</g>
+<!--link InlineMemo1011 to MultiMemo1011-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency" data-source-line="11" id="lnk10">
+<path d="M137.25,151 C177.24,151 229.51,151 281.5,151" fill="none" id="InlineMemo1011-to-MultiMemo1011" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="287.5,151,278.5,147,282.5,151,278.5,155,287.5,151" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="73.0615" x="183.9385" y="147.5684">note bridge</text>
+</g>
+</g></svg>

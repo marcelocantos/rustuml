@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package "Review Shell 941" as ReviewShell941 {
+  component "North Service 943" as North943
+  component "South Worker 947" as South947
+  note as SwitchMemo941 #LightBlue
+    nested multiline body
+    left-arrow reversal probe
+  end note
+  North943 <-left- SwitchMemo941 : reverse-to-note
+  SwitchMemo941 -left-> South947 : reverse-from-note
+  North943 --> South947 : component control
+}
+@enduml

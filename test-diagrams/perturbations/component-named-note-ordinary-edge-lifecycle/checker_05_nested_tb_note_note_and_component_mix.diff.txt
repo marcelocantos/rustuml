@@ -1,0 +1,24 @@
+source: checker_05_nested_tb_note_note_and_component_mix.puml
+java_error: False
+rust_error: False
+java_entity_count: 3
+rust_entity_count: 3
+java_link_count: 3
+rust_link_count: 3
+java_entities:
+  ent0003 line=2 qname=NestedLab951.Peer953
+  ent0004 line=3 qname=NestedLab951.AlphaMemo951
+  ent0005 line=5 qname=NestedLab951.BetaMemo951
+rust_entities:
+  ent0003 line=2 qname=NestedLab951.Peer953
+  ent0004 line=3 qname=NestedLab951.AlphaMemo951
+  ent0005 line=5 qname=NestedLab951.BetaMemo951
+java_links:
+  lnk6 line=7 ent0004->ent0005 type=dependency comment=link AlphaMemo951 to BetaMemo951
+  lnk7 line=8 ent0003->ent0004 type=dependency comment=link Peer953 to AlphaMemo951
+  lnk8 line=9 ent0005->ent0003 type=dependency comment=link BetaMemo951 to Peer953
+rust_links:
+  lnk6 line=7 ent0004->ent0005 type=dependency comment=link AlphaMemo951 to BetaMemo951
+  lnk7 line=8 ent0003->ent0004 type=dependency comment=link Peer953 to AlphaMemo951
+  lnk8 line=9 ent0005->ent0003 type=dependency comment=link BetaMemo951 to Peer953
+verdict: PASS

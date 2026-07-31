@@ -1,0 +1,5 @@
+@startuml
+component "Solo Receiver 910" as SoloReceiver910
+note "single visible relation should opalize" as SoloMemo910 #LightYellow
+SoloMemo910 --> SoloReceiver910 : consumed connector
+@enduml

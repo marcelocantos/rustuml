@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+component "Router 981" as Router981
+component "Validator 983" as Validator983
+component "Emitter 987" as Emitter987
+note "four relation hub" as HubMemo981 #PaleGreen
+HubMemo981 --> Router981 : source-one
+Validator983 --> HubMemo981 : destination-one
+HubMemo981 ..> Emitter987 : source-dotted
+Router981 <.. HubMemo981 : reversed-dotted
+@enduml

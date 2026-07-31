@@ -1,0 +1,8 @@
+@startuml
+component "Lower Collector 971" as Collector971
+component "Upper Gateway 973" as Gateway973
+note "up-arrow destination note" as UpMemo971 #Wheat
+Collector971 "tail-card" -up-> "head-card" UpMemo971 : climbs
+Gateway973 --> UpMemo971 : second incident
+UpMemo971 --> Collector971 : return path
+@enduml

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="308px" preserveAspectRatio="none" style="width:376px;height:308px;background:#FFFFFF;" version="1.1" viewBox="0 0 376 308" width="376px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster ReviewShell941-->
+<g class="cluster" data-qualified-name="ReviewShell941" data-source-line="2" id="ent0002">
+<path d="M151.9795,6 L275.418,6 A3.75,3.75 0 0 1 277.918,8.5 L284.918,28.4883 L358.5186,28.4883 A2.5,2.5 0 0 1 361.0186,30.9883 L361.0186,290.5 A2.5,2.5 0 0 1 358.5186,293 L151.9795,293 A2.5,2.5 0 0 1 149.4795,290.5 L149.4795,8.5 A2.5,2.5 0 0 1 151.9795,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="149.4795" x2="284.918" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="122.4385" x="153.4795" y="21.5352">Review Shell 941</text>
+</g>
+<!--entity North943-->
+<g class="entity" data-qualified-name="ReviewShell941.North943" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="161.3447" x="174.58" y="40.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="315.9247" y="45.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="313.9247" y="47.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="313.9247" y="51.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.3447" x="189.58" y="74.2952">North Service 943</text>
+</g>
+<!--entity South947-->
+<g class="entity" data-qualified-name="ReviewShell941.South947" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="162.1855" x="174.16" y="230.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="316.3455" y="235.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="314.3455" y="237.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="314.3455" y="241.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122.1855" x="189.16" y="264.2952">South Worker 947</text>
+</g>
+<g class="entity" data-qualified-name="ReviewShell941.SwitchMemo941" data-source-line="6" id="ent0005">
+<path d="M165.48,138.69 L165.48,179.3111 L345.0191,179.3111 L345.0191,148.69 L335.0191,138.69 L165.48,138.69" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M335.0191,138.69 L335.0191,148.69 L345.0191,148.69 L335.0191,138.69" fill="#ADD8E6" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="137.0015" x="171.48" y="156.2584">nested multiline body</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="158.5391" x="171.48" y="171.5689">left-arrow reversal probe</text>
+</g>
+<!--link North943 to South947-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="11" id="lnk10">
+<path d="M174.14,74.65 C127.32,85.42 72.07,107.05 42.86,150.5 C6,205.3 93.5908,231.1285 168.0708,243.4785" fill="none" id="North943-to-South947" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="173.99,244.46,165.7656,239.0416,169.0574,243.6421,164.4569,246.9339,173.99,244.46" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="119.939" x="13.4795" y="164.0684">component control</text>
+</g>
+</g></svg>

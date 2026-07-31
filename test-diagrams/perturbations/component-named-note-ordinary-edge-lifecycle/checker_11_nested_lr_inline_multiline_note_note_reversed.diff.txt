@@ -1,0 +1,27 @@
+source: checker_11_nested_lr_inline_multiline_note_note_reversed.puml
+java_error: False
+rust_error: False
+java_entity_count: 4
+rust_entity_count: 4
+java_link_count: 3
+rust_link_count: 2
+java_entities:
+  ent0003 line=3 qname=ReviewPackage1011.Alpha1013
+  ent0004 line=4 qname=ReviewPackage1011.Beta1017
+  ent0005 line=5 qname=ReviewPackage1011.InlineMemo1011
+  ent0006 line=7 qname=ReviewPackage1011.MultiMemo1011
+rust_entities:
+  ent0003 line=3 qname=ReviewPackage1011.Alpha1013
+  ent0004 line=4 qname=ReviewPackage1011.Beta1017
+  ent0005 line=5 qname=ReviewPackage1011.InlineMemo1011
+  ent0006 line=7 qname=ReviewPackage1011.MultiMemo1011
+java_links:
+  lnk8 line=9 ent0005->ent0003 type=dependency comment=link InlineMemo1011 to Alpha1013
+  lnk9 line=10 ent0006->ent0004 type=dependency comment=link MultiMemo1011 to Beta1017
+  lnk10 line=11 ent0005->ent0006 type=dependency comment=link InlineMemo1011 to MultiMemo1011
+rust_links:
+  lnk9 line=10 ent0006->ent0004 type=dependency comment=link MultiMemo1011 to Beta1017
+  lnk10 line=11 ent0005->ent0006 type=dependency comment=link InlineMemo1011 to MultiMemo1011
+verdict: FAIL
+missing_java_links_in_rust:
+  ('lnk8', '9', 'ent0005', 'ent0003')

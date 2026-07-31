@@ -1,0 +1,24 @@
+source: checker_06_root_lr_unicode_labels_declaration_order.puml
+java_error: False
+rust_error: False
+java_entity_count: 3
+rust_entity_count: 3
+java_link_count: 3
+rust_link_count: 3
+java_entities:
+  ent0002 line=2 qname=Receiver961
+  ent0003 line=3 qname=Relay963
+  ent0004 line=5 qname=UnicodeMemo961
+rust_entities:
+  ent0002 line=2 qname=Receiver961
+  ent0003 line=3 qname=Relay963
+  ent0004 line=5 qname=UnicodeMemo961
+java_links:
+  lnk5 line=8 ent0003->ent0004 type=dependency comment=link Relay963 to UnicodeMemo961
+  lnk6 line=9 ent0004->ent0002 type=dependency comment=link UnicodeMemo961 to Receiver961
+  lnk7 line=10 ent0003->ent0002 type=dependency comment=link Relay963 to Receiver961
+rust_links:
+  lnk5 line=8 ent0003->ent0004 type=dependency comment=link Relay963 to UnicodeMemo961
+  lnk6 line=9 ent0004->ent0002 type=dependency comment=link UnicodeMemo961 to Receiver961
+  lnk7 line=10 ent0003->ent0002 type=dependency comment=link Relay963 to Receiver961
+verdict: PASS
