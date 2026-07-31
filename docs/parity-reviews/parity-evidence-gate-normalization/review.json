@@ -2,349 +2,192 @@
   "schema_version": 1,
   "mechanism": "parity-evidence-gate-normalization",
   "reviewer": {
-    "identity": "Codex independent adversarial checker for parity-evidence-gate-normalization",
-    "role": "checker; did not implement the account or candidate",
+    "identity": "Codex fresh independent adversarial re-review",
+    "role": "independent checker; did not implement account 6eee27f3, implementation 4749c977, prior reject 3d94b525, or follow-up 51e06723",
     "model": "GPT-5 (Codex)",
-    "tool": "Codex desktop",
-    "maker_model": "GPT-5.5"
+    "tool": "Codex desktop"
   },
   "revisions": {
     "account_commit": "6eee27f34945ebd4240c81ebe1229f657bd00e62",
-    "rust_implementation_revision": "4749c977e9375eaa097d64c2facb4a0b384c3a86",
-    "rust_review_base": "4749c977e9375eaa097d64c2facb4a0b384c3a86",
+    "initial_implementation_commit": "4749c977e9375eaa097d64c2facb4a0b384c3a86",
+    "prior_reject_commit": "3d94b5251571ccdbdb1e9b9080defdba58bfba1e",
+    "followup_reviewed_commit": "51e06723f33ce773e3a6509221f38675c68116a7",
     "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
   },
   "commands": [
-    "git show 6eee27f3:docs/parity-reviews/parity-evidence-gate-normalization/account.json",
-    "git show --stat --oneline 4749c977e9375eaa097d64c2facb4a0b384c3a86",
-    "git diff 6eee27f34945ebd4240c81ebe1229f657bd00e62 4749c977e9375eaa097d64c2facb4a0b384c3a86 -- crates/rustuml-oracle/tests/harness_guards.rs crates/rustuml-oracle/tests/parity_perturbations.rs",
-    "cargo test -p rustuml-oracle --test harness_guards --test parity_perturbations",
-    "cargo test -p rustuml-oracle --test parity_perturbations",
-    "cargo run --quiet (from disposable /private/tmp/rustuml-gate-checker importing the exact candidate parity_evidence.rs)",
-    "git diff --name-only 6eee27f34945ebd4240c81ebe1229f657bd00e62 4749c977e9375eaa097d64c2facb4a0b384c3a86 -- crates/rustuml-oracle/src/compare.rs crates/rustuml-oracle/src/harness.rs crates/rustuml-oracle/tests/golden_pairs.rs crates/rustuml-oracle/tests/decimal_literal_baseline.txt test-diagrams/ulp_parked.txt test-diagrams/no_oracle_baseline.txt test-diagrams/error_golden_baseline.txt",
-    "git rev-parse HEAD (in /Users/marcelo/work/github.com/plantuml/plantuml)",
-    "rg -n class SourceStringReader|PSystemError|generateImage|outputImage|hasError|error src/main/java/net/sourceforge/plantuml/SourceStringReader.java src/main/java/net/sourceforge/plantuml/error/PSystemError.java"
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "sed -n '1,520p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "git -C /private/tmp/rustuml-t14-gate-normalization rev-parse HEAD",
+    "git -C /private/tmp/rustuml-t14-gate-normalization log --oneline --decorate -12",
+    "git -C /private/tmp/rustuml-t14-gate-normalization show --stat --oneline --summary 4749c977",
+    "git -C /private/tmp/rustuml-t14-gate-normalization show --stat --oneline --summary 51e06723",
+    "sed -n '1,320p' docs/parity-reviews/parity-evidence-gate-normalization/review.json",
+    "rg -n 'account|review|checker|identity|independ|revision|alias|canonical|symlink|hardlink|same-stem|golden|reuse|pending|rejected|verdict|axis|axes|contradict|path|submodule|worktree' crates/rustuml-oracle/tests/parity_evidence.rs",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-svg-qname/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-svg-qname/target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711^{commit}",
+    "git -C /private/tmp/rustuml-t14-gate-normalization cat-file -e 6eee27f34945ebd4240c81ebe1229f657bd00e62^{commit}",
+    "git -C /private/tmp/rustuml-t14-gate-normalization cat-file -e 4749c977e9375eaa097d64c2facb4a0b384c3a86^{commit}",
+    "git -C /private/tmp/rustuml-t14-gate-normalization cat-file -e 51e06723f33ce773e3a6509221f38675c68116a7^{commit}",
+    "git -C /private/tmp/rustuml-t14-gate-normalization merge-base --is-ancestor 6eee27f34945ebd4240c81ebe1229f657bd00e62 4749c977e9375eaa097d64c2facb4a0b384c3a86",
+    "git -C /private/tmp/rustuml-t14-gate-normalization merge-base --is-ancestor 4749c977e9375eaa097d64c2facb4a0b384c3a86 51e06723f33ce773e3a6509221f38675c68116a7",
+    "cp -p docs/parity-reviews/parity-evidence-gate-normalization/review.json docs/parity-reviews/parity-evidence-gate-normalization/review-rejected-3d94b525.json",
+    "shasum -a 256 docs/parity-reviews/parity-evidence-gate-normalization/review.json docs/parity-reviews/parity-evidence-gate-normalization/review-rejected-3d94b525.json"
   ],
+  "archive_preservation": {
+    "prior_reject_commit": "3d94b5251571ccdbdb1e9b9080defdba58bfba1e",
+    "archived_path": "docs/parity-reviews/parity-evidence-gate-normalization/review-rejected-3d94b525.json",
+    "sha256_before_replacement": "0813d882fd306ea9c83d684c93825ad614a7b606049e1e8b87cb8ca95bc62348",
+    "sha256_archived_copy": "0813d882fd306ea9c83d684c93825ad614a7b606049e1e8b87cb8ca95bc62348",
+    "assessment": "The prior checker REJECT is preserved byte-for-byte as a named noncanonical rejected archive. The follow-up gate treats noncanonical rejected review*.json files as archival and inert."
+  },
   "source_inspection": {
-    "java": "The checked PlantUML worktree is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711. SourceStringReader.outputImage exports the selected Diagram, and updateStatus classifies PSystemError/PSystemUnsupported as errors. The account's Java provenance is real, although the Rust gate recognizes Java error pages through the frozen SVG marker census rather than Java status objects.",
-    "rust": "Inspected the full parity_evidence.rs normalizer and selector, its unit tests, the harness_guards integration, and the parity_perturbations shipped-path comparison loop. The selector reports 177 accepted held-outs at the pinned revision. The renderer comparison catches divergences, but the metadata/path normalizer has multiple false-accept paths and the selected corpus currently has 26 divergences."
+    "account": "Account 6eee27f3 asks for a closed schema-version-1 normalization layer, latest-review acceptance only, at least two Java-success passing held-outs across two axes, preserved rejected/invalid controls, bidirectional decimal ratchet, and unchanged frozen surfaces.",
+    "initial_implementation": "Implementation 4749c977 created parity_evidence.rs and moved parity_perturbations from recursive source discovery to accepted-review-declared held-outs. Prior checker 3d94b525 rejected it with soundness counterexamples around inferred checker identity, fabricated/nested revisions, ambiguous aliases, blank axes, cross-mechanism evidence, non-same-stem SVGs, symlink escapes, open-ended review names, and 26 selected historical divergences.",
+    "followup": "Follow-up 51e06723 directly addresses most prior mutation classes in parity_evidence.rs: accepted reviews require exactly one explicit reviewer/checker object, explicit model/tool/independence, explicit Git-backed account and implementation revisions, committed-account equality, account-before-implementation order, conflict-closed result and path aliases, nonblank axes, mechanism-local canonical nonsymlink paths, same-stem Java SVGs, duplicate-golden rejection, and inert rejected archives.",
+    "java": "The local PlantUML oracle worktree is at 71806a23780b04a5ccde2f8ceb5121edad5eb711, and that revision exists as a commit. The Rust gate checks only that an accepted review's Java revision equals the account's Java revision; this review separately verified the local oracle commit.",
+    "frozen_surfaces": "The follow-up diff from 3d94b525 to 51e06723 changes only crates/rustuml-oracle/tests/parity_evidence.rs. It does not alter comparator slack, golden error markers, park lists, no-oracle baselines, or product renderer/parser code."
   },
-  "closed_schema_audit": {
-    "account_aliases": {
-      "invariant": ["invariant", "claimed_invariant"],
-      "planned_change": ["planned_change", "planned_model_change"],
-      "finding": "Field aliases are finite, but any account*.json filename is admitted and only literal account.json is directory-bound. Multiple or cross-directory legacy account records can therefore satisfy another directory's review by mechanism string."
+  "verification_results": {
+    "head": "51e06723f33ce773e3a6509221f38675c68116a7",
+    "revision_existence_and_order": "PASS: account, initial implementation, follow-up, and Java revisions exist; account precedes 4749c977 and 4749c977 precedes 51e06723.",
+    "focused_unit_suite": {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-svg-qname/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+      "result": "PASS: 19 passed, 0 failed"
     },
-    "reviewer_aliases": {
-      "containers": ["reviewer", "checker", "checker_identity", "identity"],
-      "identity": ["identity", "task_id", "agent"],
-      "model": ["model", "model_tool", "identity containing gpt-5 or codex"],
-      "tool": ["tool", "tools", "tooling", "model_tool", "helper fields", "revisions helper fields", "any tool-like command"],
-      "finding": "The three required attestation dimensions need not come from one reviewer object. Top-level identity=Codex checker plus commands=[cargo test] supplies identity, model, and tool without explicit model/tool metadata."
-    },
-    "evidence_aliases": [
-      "perturbations",
-      "generated_inputs",
-      "inputs",
-      "fresh_perturbations",
-      "fresh_inputs",
-      "fresh_held_outs",
-      "valid_heldouts"
-    ],
-    "source_aliases": ["source", "puml", "path", "input", "stem"],
-    "golden_aliases": ["golden", "java_svg", "oracle_svg", "java", "svg"],
-    "result_aliases": [
-      "result",
-      "semantic_result",
-      "metadata_result",
-      "comparison",
-      "outcome",
-      "observation",
-      "stdout",
-      "diff_one_status",
-      "diff_one_no_oracle",
-      "strict",
-      "diff_one",
-      "diff_one_no_oracle_status"
-    ],
-    "verdict_spellings": {
-      "accepted": ["accepted", "accept", "pass"],
-      "rejected": ["rejected", "reject"],
-      "finding": "Verdict matching is closed and arbitrary prefixes are rejected. Result aliases are not conflict-closed: a pass in one alias and explicit fail/diverge in another still selects the item because generic fail/diverge text is not disqualifying."
-    },
-    "revision_aliases": {
-      "finding": "Revision key names are finite, but the search recursively scans the entire review and accepts any 40 hexadecimal characters. It neither resolves the commit nor requires equality to the account, requested implementation, or Java revision; revisions embedded inside evidence satisfy attestation."
-    },
-    "path_selection": {
-      "finding": "Parent and absolute lexical escapes are rejected. Canonical containment, mechanism-directory containment, same-stem pairing, and alias consistency are not enforced. Symlinks, cross-mechanism files, one golden reused by multiple sources, and a hidden escaping secondary alias all pass."
-    },
-    "latest_selection": {
-      "finding": "Duplicate numeric sequences are rejected; latest rejected reviews correctly select nothing; later accepted reviews select again; pending accounts select nothing. Filename parsing is open-ended because review-<anything>-N.json maps to N and every other review-*.json falls back to sequence 1."
-    }
-  },
-  "mutation_matrix": [
-    {
-      "mutation": "canonical control",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "verdict = ACCEPT because evidence exists",
-      "record_gate": "REJECT; unsupported verdict",
-      "assessment": "expected; arbitrary verdict prefixes are closed"
-    },
-    {
-      "mutation": "remove every result field",
-      "record_gate": "REJECT; fewer than 2 positive sources and axes",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "result=pass plus outcome=fail: SVGs diverge",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: contradictory result aliases are accepted"
-    },
-    {
-      "mutation": "append numeric non-object item to accepted perturbations",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: malformed accepted evidence is silently ignored"
-    },
-    {
-      "mutation": "remove reviewer and use top-level identity=Codex checker plus commands=[cargo test]",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: explicit checker model/tool are absent"
-    },
-    {
-      "mutation": "rust revision all zeroes and Java revision all f characters",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: nonexistent arbitrary revisions satisfy exact-revision attestation"
-    },
-    {
-      "mutation": "remove top-level revisions and hide Rust/Java revisions inside separate evidence items",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: recursive revision search accepts unrelated nested values"
-    },
-    {
-      "mutation": "axes are empty string and one space",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: blank strings count as two distinct perturbation axes"
-    },
-    {
-      "mutation": "sole accepted review named review-attacker-99.json",
-      "record_gate": "ACCEPT; selected as sequence 99",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: review filename grammar is open-ended"
-    },
-    {
-      "mutation": "account-attacker.json and review.json live in unrelated directories but share mechanism=m",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: noncanonical account/review paths pair globally by claimed mechanism"
-    },
-    {
-      "mutation": "review.json plus review-1.json",
-      "record_gate": "REJECT; duplicate sequence 1",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "accepted review sequence 1 followed by rejected sequence 2",
-      "record_gate": "valid record set; 0 selected",
-      "assessment": "expected; rejected latest is non-accepting"
-    },
-    {
-      "mutation": "rejected sequence 1 followed by accepted sequence 2",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "accepted review without any account",
-      "record_gate": "REJECT; no normalized account",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "rejected review without any account",
-      "record_gate": "valid record set; 0 selected",
-      "assessment": "provenance gap: rejected checker evidence is accepted without its required pre-implementation account"
-    },
-    {
-      "mutation": "valid account with no review",
-      "record_gate": "valid pending record; 0 selected",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "accepted Java SVGs containing Syntax Error and [From string",
-      "record_gate": "REJECT; Java error/invalid-control SVG",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "source and golden contain parent-directory traversal",
-      "record_gate": "REJECT; paths leave perturbation tree",
-      "assessment": "expected"
-    },
-    {
-      "mutation": "mechanism m review points only to donor mechanism held-outs",
-      "record_gate": "ACCEPT; 2 donor sources selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: held-outs need not be under test-diagrams/perturbations/<mechanism>"
-    },
-    {
-      "mutation": "two distinct sources both point to case_a.svg",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: same-stem Java pairing is not enforced"
-    },
-    {
-      "mutation": "valid source alias plus secondary puml=../../outside.puml",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: first recognized alias hides conflicting unsafe aliases"
-    },
-    {
-      "mutation": "lexically valid source and SVG are symlinks to files outside perturbations",
-      "record_gate": "ACCEPT; 2 selected",
-      "assessment": "SOUNDNESS COUNTEREXAMPLE: canonical containment removed by the candidate"
-    },
-    {
-      "mutation": "run shipped-path comparison over all 177 selected historical held-outs",
-      "record_gate": "records normalize; parity_perturbations REJECTS with 26 divergences",
-      "assessment": "expected divergence detection, but candidate acceptance command is not green at the pinned revision"
-    }
-  ],
-  "targeted_test_results": {
-    "combined_command": {
-      "command": "cargo test -p rustuml-oracle --test harness_guards --test parity_perturbations",
-      "result": "FAIL before parity_perturbations runs because decimal_literal_ratchet reports both growth and decrease drift"
-    },
-    "parity_perturbations": {
-      "selected": 177,
-      "diverged": 26,
-      "result": "FAIL; every divergence is reported by the shipped no-oracle renderer comparison"
-    },
-    "harness_guard_subresults_before_failure": {
-      "passed": [
-        "parity_review_paths_reject_traversal",
-        "error_golden_census_is_frozen (1,199)",
-        "comparator_constants_frozen",
-        "no_golden_data_embedded_in_shipping_crates",
-        "parity_review_records_are_complete",
-        "verdict_normalizer_is_closed",
-        "missing-result and Java-error unit controls",
-        "rejected-latest and pending-account unit controls"
+    "real_record_gate": {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-svg-qname/target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture",
+      "result": "FAIL: 0 passed, 1 failed",
+      "representative_failures": [
+        "accepted review must explicitly name Rust implementation revision",
+        "accepted review must explicitly attest checker independence",
+        "accepted review must explicitly name account revision",
+        "accepted review must contain an explicit revisions object",
+        "every fresh_inputs entry must be an object",
+        "conflicting path aliases between base-directory-relative names and full perturbation paths",
+        "accepted latest review must declare at least two valid Java-success passing sources",
+        "accepted latest review must exercise at least two distinct axes",
+        "review has no single canonical directory-local account"
       ],
-      "failed": ["decimal_literal_ratchet"]
+      "affected_mechanism_examples": [
+        "class-attached-note-rankdir-position",
+        "class-magma-semantic-leaf-membership",
+        "class-note-opale-spline-eligibility",
+        "class-package-direct-standalone-layout",
+        "class-quoted-symbol-container-dispatch",
+        "deployment-hidden-link-lifecycle",
+        "description-link-note-color-factory-consumption",
+        "state-autonomous-dot-option-spacing",
+        "state-choice-polygon-serialization",
+        "tim-procedure-following-source-origins"
+      ]
     }
   },
-  "known_26_selected_historical_divergences": [
-    "test-diagrams/perturbations/command-factory-note-color-resolution/followup2/component_inline_alias_alpha_valid.puml",
-    "test-diagrams/perturbations/command-factory-note-color-resolution/followup2/component_multiline_gradient_dedup_valid.puml",
-    "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_aliased_nested_multiple_uid_order.puml",
-    "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_multiple_notes_uid_order_ltr.puml",
-    "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_root_target.puml",
-    "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_owner_nested_target.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_container_declared_after_destination_solid_ttb.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_frame_container_destination_dotted_ltr.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_destination_dotted_ltr.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_container_source_dotted_ltr.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_leaf_destination_solid_ltr.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_package_container_source_solid_ttb.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_populated_container_destination_dotted_ltr.puml",
-    "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_quoted_container_display_destination_solid_ltr.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/02-inline-keyed-tab-boundary.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/03-inline-keyed-nbsp-boundary.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/04-inline-keyed-trailing-semicolon.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/09-valid-multiline-line-dotted-first.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/10-valid-multiline-leading-ordinary-then-style.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/11-inline-retained-text-style-inert.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/12-inline-retained-text-only-control.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/13-inline-line-color-consumed-style-inert.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/16-valid-shadowing-and-line-dotted.puml",
-    "test-diagrams/perturbations/description-link-note-color-factory-consumption/18-valid-multiline-line-bold-first.puml",
-    "test-diagrams/perturbations/state-autonomous-dot-option-spacing/pseudostate_spacing_matrix.puml",
-    "test-diagrams/perturbations/state-choice-polygon-serialization/choice_fork_join_history_mesh.puml"
+  "adversarial_attacks": [
+    {
+      "attack": "identity and independence inference",
+      "result": "Unit-covered reject: removing the explicit reviewer object and relying on top-level identity/commands no longer selects evidence."
+    },
+    {
+      "attack": "fabricated Rust revisions and hidden nested revisions",
+      "result": "Unit-covered reject: accepted reviews require explicit revisions object fields, existing Git commits, committed-account equality, and account-before-implementation order."
+    },
+    {
+      "attack": "account equality drift",
+      "result": "Source-covered reject: validate_committed_account compares the current account object with account_commit:path."
+    },
+    {
+      "attack": "conflicting result aliases and malformed accepted evidence",
+      "result": "Unit-covered reject: pass plus fail/diverge aliases are contradictory, and non-object entries in latest accepted evidence are violations."
+    },
+    {
+      "attack": "blank and duplicate axes",
+      "result": "Unit-covered reject for blank axes. Duplicate axes collapse to one dimension, which is acceptable only if another nonblank axis is present."
+    },
+    {
+      "attack": "path traversal, absolute paths, cross-mechanism reuse, symlink escapes, golden reuse, and non-same-stem SVG spoofing",
+      "result": "Unit/source-covered reject: paths must be normal relative paths under test-diagrams/perturbations/<mechanism>, canonicalized within that mechanism directory, nonsymlink, same-stem, and unique per Java SVG."
+    },
+    {
+      "attack": "hardlink escape",
+      "result": "No positive bypass found. A hardlink under the mechanism directory has no escaping canonical path by POSIX path semantics, but it can alias bytes from elsewhere. The gate's same-stem and mechanism-local checks constrain review semantics, not inode provenance."
+    },
+    {
+      "attack": "open-ended review names",
+      "result": "Unit-covered reject: arbitrary review-attacker-99.json is archival only and cannot enter latest selection."
+    },
+    {
+      "attack": "rejected and pending acceptance",
+      "result": "Unit-covered reject/nonselect: latest rejected reviews and pending accounts select zero positive held-outs; rejected reviews still require a canonical account."
+    },
+    {
+      "attack": "worktree and submodule edge cases",
+      "result": "No product-surface weakening found in the follow-up diff. The golden submodule dirtiness does not affect this gate's code path except through other frozen guard tests not changed here."
+    },
+    {
+      "attack": "real accepted-record corpus under stricter latest accepted semantics",
+      "result": "BYPASS/REJECT CONDITION: the real corpus does not normalize. The branch cannot be accepted until historical accepted records are migrated, archived, or otherwise made deliberately non-accepting without weakening the selector."
+    },
+    {
+      "attack": "conflicting legacy reviewer containers",
+      "result": "Residual ambiguity: accepted reviews require exactly one reviewer/checker object, but the code does not reject additional conflicting checker_identity or identity objects. This did not cause the observed red gate, but it is still worth closing if the schema keeps those historical containers."
+    },
+    {
+      "attack": "conflicting account aliases",
+      "result": "Residual ambiguity: account invariant/planned-change aliases only require at least one nonempty field and are not conflict-closed. This is not a held-out selection bypass, but it can leave the causal account ambiguous."
+    }
   ],
-  "decimal_literal_ratchet": {
-    "baseline_changed_by_candidate": false,
-    "bidirectional": true,
-    "observed_growth": [
-      "crates/rustuml-render/src/class.rs: 383 -> 385",
-      "crates/rustuml-render/src/component.rs: 48 -> 50",
-      "crates/rustuml-render/src/deployment.rs: 43 -> 45",
-      "crates/rustuml-render/src/plantuml_metrics.rs: 1053 -> 1055",
-      "crates/rustuml-render/src/state.rs: 53 -> 58",
-      "crates/rustuml-render/src/text_render.rs: 409 -> 419"
-    ],
-    "observed_decrease": [
-      "crates/rustuml-render/src/sequence.rs: 112 -> 110"
-    ],
-    "finding": "The implementation is bidirectional and the frozen baseline was not updated. It correctly fails on both directions at the pinned revision."
-  },
-  "frozen_surface_audit": {
-    "changed": false,
-    "confirmed_unchanged": [
-      "GEOM_EPS comparator slack",
-      "golden_has_syntax_error marker set",
-      "frozen 1,199 error-golden census",
-      "test-diagrams/ulp_parked.txt",
-      "test-diagrams/no_oracle_baseline.txt",
-      "decimal_literal_baseline.txt",
-      "golden embedding allow-list and other guard allow-lists"
-    ],
-    "evidence": "The candidate changes only harness_guards.rs, parity_evidence.rs, and parity_perturbations.rs. A path-limited diff over comparator, error classifier, park list, baselines, and golden test returned no changed paths; the frozen comparator and 1,199-census tests passed."
-  },
   "findings": [
     {
       "severity": "critical",
-      "title": "Accepted attestation does not prove an independent checker or exact revisions",
-      "rust_locations": [
-        "crates/rustuml-oracle/tests/parity_evidence.rs:960",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:974",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:996",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:1076"
+      "title": "The follow-up gate is not landable because the real review corpus fails it",
+      "locations": [
+        "crates/rustuml-oracle/tests/harness_guards.rs:285",
+        "crates/rustuml-oracle/tests/parity_evidence.rs:1043",
+        "crates/rustuml-oracle/tests/parity_evidence.rs:1123",
+        "crates/rustuml-oracle/tests/parity_evidence.rs:443"
       ],
-      "evidence": "Weak reviewer metadata, nonexistent hashes, and revisions nested inside held-out entries all pass and select evidence."
-    },
-    {
-      "severity": "critical",
-      "title": "Path selection can reuse unrelated evidence and escape through symlinks",
-      "rust_locations": [
-        "crates/rustuml-oracle/tests/parity_evidence.rs:316",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:396",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:545",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:572",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:1213"
-      ],
-      "evidence": "Cross-mechanism sources, non-same-stem goldens, hidden conflicting aliases, and symlink escapes all pass. The candidate deleted the previous canonicalize-and-containment check."
-    },
-    {
-      "severity": "critical",
-      "title": "Malformed and contradictory held-out semantics can satisfy acceptance",
-      "rust_locations": [
-        "crates/rustuml-oracle/tests/parity_evidence.rs:287",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:365",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:445",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:508"
-      ],
-      "evidence": "Non-object entries are ignored, blank axes count as distinct, and pass plus fail/diverge aliases remain positive."
+      "evidence": "The focused real-record command fails parity_review_records_are_complete at 51e06723 with accepted historical records missing explicit implementation/account/Java revisions, checker independence/tool metadata, object-shaped fresh_inputs, conflict-free evidence aliases, or canonical accounts.",
+      "impact": "Acceptance criterion 'Historical accepted, rejected, and pending records normalize without changing their authored verdicts' is false. The branch would make the standing evidence gate red before it can protect parity work."
     },
     {
       "severity": "high",
-      "title": "Account and review filename/path normalization is not closed",
-      "rust_locations": [
-        "crates/rustuml-oracle/tests/parity_evidence.rs:119",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:126",
-        "crates/rustuml-oracle/tests/parity_evidence.rs:647"
+      "title": "The stricter model exposes historical evidence debt but does not provide a migration boundary",
+      "locations": [
+        "crates/rustuml-oracle/tests/parity_evidence.rs:168",
+        "crates/rustuml-oracle/tests/parity_evidence.rs:306"
       ],
-      "evidence": "Arbitrary account*.json and review-*.json names are admitted; noncanonical records pair across directories by claimed mechanism."
+      "evidence": "Latest accepted records are now judged by the new schema immediately. Many old accepted reviews are neither rejected archives nor upgraded canonical accepted reviews, so the selector clears all accepted held-outs on violations.",
+      "impact": "This is the right failure direction, but it needs an explicit migration strategy before integration: either upgrade records with real revisions and clean aliases, or preserve them as named rejected/pending archives so they do not claim acceptance."
     },
     {
-      "severity": "critical",
-      "title": "The pinned required gate commands are red",
-      "rust_locations": [
-        "crates/rustuml-oracle/tests/harness_guards.rs:201",
-        "crates/rustuml-oracle/tests/parity_perturbations.rs:20"
+      "severity": "medium",
+      "title": "Accepted reviewer metadata is not fully conflict-closed across legacy containers",
+      "locations": [
+        "crates/rustuml-oracle/tests/parity_evidence.rs:1067",
+        "crates/rustuml-oracle/tests/parity_evidence.rs:1332"
       ],
-      "evidence": "The combined command fails the decimal ratchet, and the direct perturbation command reports 26 of 177 selected historical held-outs diverging from Java."
+      "evidence": "validate_explicit_checker counts only reviewer/checker objects, while reviewer_objects also recognizes checker_identity and identity for historical markers. A canonical reviewer can coexist with conflicting legacy identity objects without a violation.",
+      "impact": "This is not the current red failure and does not by itself select bad evidence, but it leaves reviewer identity ambiguous in exactly the area this gate is meant to make unambiguous."
+    },
+    {
+      "severity": "medium",
+      "title": "Account narrative aliases are accepted by presence rather than consensus",
+      "locations": [
+        "crates/rustuml-oracle/tests/parity_evidence.rs:235",
+        "crates/rustuml-oracle/tests/parity_evidence.rs:884"
+      ],
+      "evidence": "invariant/claimed_invariant and planned_change/planned_model_change are accepted if any alias is nonempty; conflicting simultaneous aliases are not rejected.",
+      "impact": "This does not bypass held-out selection, but it can muddy the durable causal account the gate is supposed to preserve."
     }
   ],
   "residue": [
-    "The review did not alter the candidate to determine whether a hardened compatibility schema can still normalize every historical record.",
-    "The frozen Java-error classifier is marker-based; this review tested representative frozen markers and the 1,199 census, not every possible future PSystemError rendering.",
-    "Passing historical held-outs were inferred from the complete 177-case comparison's 26-item failure set; no comparator slack or selected artifact was changed."
+    "I did not edit product code or weaken selectors.",
+    "I did not run the full parity_perturbations product comparison because the stricter real-record gate already fails before held-outs can be selected cleanly. Prior 3d94b525's 26 divergence list remains preserved in review-rejected-3d94b525.json.",
+    "The gate itself does not verify Java commit existence in the external PlantUML repository; this review verified the configured Java revision manually.",
+    "No fresh accepted PlantUML perturbations are added for this review because the subject is the evidence gate, and the verdict is REJECT."
   ],
   "verdict": "REJECT",
-  "verdict_reason": "The shipped-path comparator correctly rejects divergent selected evidence and the verdict parser rejects arbitrary verdict prefixes, but the record gate can still accept fabricated reviewer/revision attestations, malformed or contradictory results, blank axes, open-ended record names, cross-mechanism/non-same-stem evidence, hidden conflicting aliases, and symlink path escapes. The pinned required test commands are also red. These are soundness counterexamples; the gate must be hardened rather than weakened."
+  "verdict_reason": "The follow-up closes most of the prior trust-boundary holes at the unit level, but it fails the repository's actual parity_review_records_are_complete gate at head 51e06723. A red standing gate cannot be accepted as the T14 evidence normalizer. The next maker pass should migrate or deliberately de-accept historical records under the stricter model, while preserving the prior REJECT archive and without weakening selector semantics."
 }
