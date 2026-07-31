@@ -1,0 +1,49 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node RootLinkSource
+      node RootLinkSink
+      RootLinkSource --> RootLinkSink : CHK_ROOT_LINK_EDGE_8244
+      node "Nested Note Scope" as NestedNoteScope {
+        note left on link #Lavender : CHK_ROOT_LINK_NESTED_NOTE_8244
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: RootLinkSource
+    label: RootLinkSource
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: RootLinkSink
+    label: RootLinkSink
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: NestedNoteScope
+    label: Nested Note Scope
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children: []
+    source_line: 4
+    quark_order: 2
+  connections:
+  - from: RootLinkSource
+    to: RootLinkSink
+    label: CHK_ROOT_LINK_EDGE_8244
+    note:
+      text: CHK_ROOT_LINK_NESTED_NOTE_8244
+      color: '#Lavender'
+      position: Left
+      source_line: 5
+    arrow_at_end: true
+    source_line: 3

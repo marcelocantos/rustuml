@@ -1,0 +1,54 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package "Outer Component Scope" as OuterComponentScope {
+        component "Nested Component" as NestedComponent
+        note as NestedComponentMemo #HoneyDew
+          CHK_NESTED_COMPONENT_NOTE_8209
+        endnote
+        NestedComponent --> NestedComponentMemo
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: NestedComponent
+    label: Nested Component
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: NestedComponent
+    to: NestedComponentMemo
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages:
+  - name: OuterComponentScope
+    label: Outer Component Scope
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - NestedComponent
+    packages: []
+  notes:
+  - id: NestedComponentMemo
+    owner: OuterComponentScope
+    color: '#HoneyDew'
+    text: CHK_NESTED_COMPONENT_NOTE_8209
+    target: null
+    position: Right
+    source_line: 4

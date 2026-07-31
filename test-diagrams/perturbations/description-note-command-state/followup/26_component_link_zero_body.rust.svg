@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="193px" preserveAspectRatio="none" style="width:174px;height:193px;background:#FFFFFF;" version="1.1" viewBox="0 0 174 193" width="174px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity CompZeroBodyA-->
+<g class="entity" data-qualified-name="CompZeroBodyA" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="153.1963" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="140.1963" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="138.1963" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="138.1963" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113.1963" x="22" y="40.5352">CompZeroBodyA</text>
+</g>
+<!--entity CompZeroBodyB-->
+<g class="entity" data-qualified-name="CompZeroBodyB" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.5898" x="7.8032" y="133.4883"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="139.3931" y="138.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="137.3931" y="140.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="137.3931" y="144.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.5898" x="22.8032" y="167.0235">CompZeroBodyB</text>
+</g>
+<!--link CompZeroBodyA to CompZeroBodyB-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M83.6,53.79 C83.6,76.35 83.6,104.86 83.6,127.36" fill="none" id="CompZeroBodyA-to-CompZeroBodyB" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="83.6,133.36,87.6,124.36,83.6,128.36,79.6,124.36,83.6,133.36" style="stroke:#181818;stroke-width:1;"/>
+<path d="M88.5981,88.4883 L88.5981,98.4883 L109.5981,98.4883 L109.5981,98.4883 L99.5981,88.4883 L88.5981,88.4883" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M99.5981,88.4883 L99.5981,98.4883 L109.5981,98.4883 L99.5981,88.4883" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+</g>
+</g></svg>

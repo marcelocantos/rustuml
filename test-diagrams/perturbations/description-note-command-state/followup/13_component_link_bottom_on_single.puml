@@ -1,0 +1,6 @@
+@startuml
+component CompBottomSource
+component CompBottomSink
+CompBottomSource --> CompBottomSink : CHK_COMP_BOTTOM_EDGE_8213
+note on link : CHK_COMP_BOTTOM_NOTE_8213
+@enduml

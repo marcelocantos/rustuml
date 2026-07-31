@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="212px" preserveAspectRatio="none" style="width:320px;height:212px;background:#FFFFFF;" version="1.1" viewBox="0 0 320 212" width="320px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity CompTopSource-->
+<g class="entity" data-qualified-name="CompTopSource" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.959" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="138.959" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="136.959" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="136.959" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.959" x="22" y="40.5352">CompTopSource</text>
+</g>
+<!--entity CompTopSink-->
+<g class="entity" data-qualified-name="CompTopSink" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="134.8896" x="15.5347" y="142"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="130.4243" y="147"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="128.4243" y="149"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="128.4243" y="153"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94.8896" x="30.5347" y="175.5352">CompTopSink</text>
+</g>
+<!--entity endn-->
+<g class="entity" data-qualified-name="endn" data-source-line="8" id="ent0005">
+<ellipse cx="289.98" cy="30.24" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="33.9883" x="272.9859" y="60.7752">endn</text>
+</g>
+<!--entity te-->
+<g class="entity" data-qualified-name="te" data-source-line="8" id="ent0006">
+<ellipse cx="289.98" cy="165.24" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="13.0361" x="283.4619" y="195.7752">te</text>
+</g>
+<!--link CompTopSource to CompTopSink-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M81.54,53.8242 C80.93,64.5442 80.28,77.5542 79.98,89.2442 C79.52,106.8342 80.0097,120.7356 80.9297,135.6156" fill="none" id="CompTopSource-to-CompTopSink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="81.3,141.6042,84.737,132.3745,80.9914,136.6137,76.7522,132.8681,81.3,141.6042" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="182.1206" x="80.9795" y="102.8125">CHK_COMP_TOP_EDGE_8216</text>
+</g>
+<!--link endn to te-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="association" data-source-line="8" id="lnk7">
+<path d="M289.98,39.1642 C289.98,62.8742 289.98,133.0942 289.98,156.5342" fill="none" id="endn-te" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

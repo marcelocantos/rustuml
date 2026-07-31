@@ -1,0 +1,39 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DeployLeftSource
+      node DeployLeftSink
+      DeployLeftSource --> DeployLeftSink : CHK_DEPLOY_LEFT_EDGE_8218
+      note left on link #MistyRose : CHK_DEPLOY_LEFT_NOTE_8218
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployLeftSource
+    label: DeployLeftSource
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DeployLeftSink
+    label: DeployLeftSink
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: DeployLeftSource
+    to: DeployLeftSink
+    label: CHK_DEPLOY_LEFT_EDGE_8218
+    note:
+      text: CHK_DEPLOY_LEFT_NOTE_8218
+      color: '#MistyRose'
+      position: Left
+      source_line: 4
+    arrow_at_end: true
+    source_line: 3

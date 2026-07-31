@@ -1,0 +1,26 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Tab Dedent Anchor\" as TabDedentAnchor\nnote as TabDedentMemo\n\t\tCHK_TAB_ALPHA_8206\n\t\n\t\tCHK_TAB_OMEGA_8206\nendnote\nTabDedentAnchor --> TabDedentMemo\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: TabDedentAnchor
+    label: Tab Dedent Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: TabDedentAnchor
+    to: TabDedentMemo
+    label: null
+    arrow_at_end: true
+    source_line: 7
+  notes:
+  - id: TabDedentMemo
+    text: "\tCHK_TAB_ALPHA_8206\n\n\tCHK_TAB_OMEGA_8206"
+    quark_order: 1
+    position: Right
+    source_line: 3

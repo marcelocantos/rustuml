@@ -1,0 +1,7 @@
+@startuml
+node DeployZeroBodyA
+node DeployZeroBodyB
+DeployZeroBodyA --> DeployZeroBodyB
+note on link
+endnote
+@enduml

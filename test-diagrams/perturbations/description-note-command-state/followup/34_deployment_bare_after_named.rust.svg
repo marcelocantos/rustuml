@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="152px" preserveAspectRatio="none" style="width:297px;height:152px;background:#FFFFFF;" version="1.1" viewBox="0 0 297 152" width="297px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity DeployBareAnchor-->
+<g class="entity" data-qualified-name="DeployBareAnchor" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="61.64,16,71.64,6,226.5462,6,226.5462,42.4883,216.5462,52.4883,61.64,52.4883,61.64,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="216.5462" x2="226.5462" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="61.64" x2="216.5462" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="216.5462" x2="216.5462" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="124.9063" x="76.64" y="39.5352">DeployBareAnchor</text>
+</g>
+<g class="entity" data-qualified-name="DeployBareMemo" data-source-line="3" id="ent0003">
+<path d="M6,112.49 L6,137.8005 A0,0 0 0 0 6,137.8005 L282.1948,137.8005 A0,0 0 0 0 282.1948,137.8005 L282.1948,122.49 L272.1948,112.49 L148.1,112.49 L144.1,52.97 L140.1,112.49 L6,112.49 A0,0 0 0 0 6,112.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M272.1948,112.49 L272.1948,122.49 L282.1948,122.49 L272.1948,112.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="255.1948" x="12" y="130.0584">CHK_DEPLOY_BARE_NAMED_BODY_8234</text>
+</g>
+</g></svg>

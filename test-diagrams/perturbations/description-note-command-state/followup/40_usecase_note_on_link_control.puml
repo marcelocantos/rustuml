@@ -1,0 +1,6 @@
+@startuml
+actor "Control Examiner" as UsecaseActor
+usecase "Control Review" as UsecaseReview
+UsecaseActor --> UsecaseReview : CHK_USECASE_EDGE_8240
+note on link : CHK_USECASE_LINK_NOTE_8240
+@enduml

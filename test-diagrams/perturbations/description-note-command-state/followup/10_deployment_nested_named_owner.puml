@@ -1,0 +1,9 @@
+@startuml
+node "Outer Deploy Scope" as OuterDeployScope {
+  node "Nested Deploy Node" as NestedDeployNode
+  note as NestedDeployMemo #Wheat
+    CHK_NESTED_DEPLOY_NOTE_8210
+  endnote
+  NestedDeployNode --> NestedDeployMemo
+}
+@enduml

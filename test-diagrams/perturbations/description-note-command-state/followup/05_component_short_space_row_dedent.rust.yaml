@@ -1,0 +1,38 @@
+type: Component
+diagram:
+  meta:
+    source: "@startuml\ncomponent \"Space Dedent Anchor\" as SpaceDedentAnchor\nnote as SpaceDedentMemo\n    CHK_SPACE_ALPHA_8205\n \n    CHK_SPACE_OMEGA_8205\nendnote\nSpaceDedentAnchor --> SpaceDedentMemo\n@enduml\n"
+  direction: TopToBottom
+  components:
+  - id: SpaceDedentAnchor
+    label: Space Dedent Anchor
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections:
+  - from: SpaceDedentAnchor
+    to: SpaceDedentMemo
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  packages: []
+  notes:
+  - id: SpaceDedentMemo
+    text: |-
+      CHK_SPACE_ALPHA_8205
+
+      CHK_SPACE_OMEGA_8205
+    target: null
+    position: Right
+    source_line: 3

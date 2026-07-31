@@ -1,0 +1,71 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component RegisteredChainA
+      component RegisteredChainB
+      note as RegisteredChainMemo #HoneyDew
+        CHK_REGISTERED_CHAIN_BODY_8245
+      endnote
+      RegisteredChainA --> RegisteredChainB : CHK_REGISTERED_CHAIN_EDGE_8245
+      note on link : CHK_REGISTERED_CHAIN_LINK_NOTE_8245
+      RegisteredChainMemo ..> RegisteredChainA
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RegisteredChainA
+    label: RegisteredChainA
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: RegisteredChainB
+    label: RegisteredChainB
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: RegisteredChainA
+    to: RegisteredChainB
+    label: CHK_REGISTERED_CHAIN_EDGE_8245
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  - from: RegisteredChainMemo
+    to: RegisteredChainA
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: true
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 8
+  packages: []
+  notes:
+  - id: RegisteredChainMemo
+    color: '#HoneyDew'
+    text: CHK_REGISTERED_CHAIN_BODY_8245
+    target: null
+    position: Right
+    source_line: 4
+  - text: CHK_REGISTERED_CHAIN_LINK_NOTE_8245
+    target: null
+    connection: 0
+    position: Bottom
+    source_line: 7

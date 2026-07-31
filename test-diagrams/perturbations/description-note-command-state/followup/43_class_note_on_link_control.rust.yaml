@@ -1,0 +1,45 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class ClassControlA
+      class ClassControlB
+      ClassControlA --> ClassControlB : CHK_CLASS_EDGE_8243
+      note top on link #LightYellow : CHK_CLASS_LINK_NOTE_8243
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity ClassControlA
+  - !Entity ClassControlB
+  - !Relationship 0
+  entities:
+  - id: ClassControlA
+    label: ClassControlA
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: ClassControlB
+    label: ClassControlB
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships:
+  - from: ClassControlA
+    to: ClassControlB
+    kind: Dependency
+    label: CHK_CLASS_EDGE_8243
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 3
+  packages: []
+  notes: []
+  hide_show: []

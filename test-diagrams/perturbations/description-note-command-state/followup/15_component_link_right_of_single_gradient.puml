@@ -1,0 +1,6 @@
+@startuml
+component CompRightSource
+component CompRightSink
+CompRightSource --> CompRightSink : CHK_COMP_RIGHT_EDGE_8215
+note right of link #Red/LightBlue : CHK_COMP_RIGHT_NOTE_8215
+@enduml

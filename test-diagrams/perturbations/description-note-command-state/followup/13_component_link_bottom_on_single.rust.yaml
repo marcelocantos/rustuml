@@ -1,0 +1,46 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component CompBottomSource
+      component CompBottomSink
+      CompBottomSource --> CompBottomSink : CHK_COMP_BOTTOM_EDGE_8213
+      note on link : CHK_COMP_BOTTOM_NOTE_8213
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CompBottomSource
+    label: CompBottomSource
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CompBottomSink
+    label: CompBottomSink
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: CompBottomSource
+    to: CompBottomSink
+    label: CHK_COMP_BOTTOM_EDGE_8213
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 3
+  packages: []
+  notes:
+  - text: CHK_COMP_BOTTOM_NOTE_8213
+    target: null
+    connection: 0
+    position: Bottom
+    source_line: 4

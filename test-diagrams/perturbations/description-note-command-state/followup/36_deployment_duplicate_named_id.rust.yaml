@@ -1,0 +1,37 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DuplicateDeployAnchor
+      note "CHK_DUPLICATE_DEPLOY_FIRST_8236" as DuplicateDeployMemo
+      note "CHK_DUPLICATE_DEPLOY_SECOND_8236" as DuplicateDeployMemo
+      DuplicateDeployAnchor --> DuplicateDeployMemo
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DuplicateDeployAnchor
+    label: DuplicateDeployAnchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: DuplicateDeployAnchor
+    to: DuplicateDeployMemo
+    label: null
+    arrow_at_end: true
+    source_line: 4
+  notes:
+  - id: DuplicateDeployMemo
+    text: CHK_DUPLICATE_DEPLOY_FIRST_8236
+    quark_order: 1
+    position: Right
+    source_line: 2
+  - id: DuplicateDeployMemo
+    text: CHK_DUPLICATE_DEPLOY_SECOND_8236
+    quark_order: 2
+    position: Right
+    source_line: 3

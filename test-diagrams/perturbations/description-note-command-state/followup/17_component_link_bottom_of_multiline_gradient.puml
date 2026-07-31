@@ -1,0 +1,10 @@
+@startuml
+component CompBottomOfSource
+component CompBottomOfSink
+CompBottomOfSource --> CompBottomOfSink : CHK_COMP_BOTTOM_OF_EDGE_8217
+note bottom of link #Green/LightBlue
+  CHK_COMP_BOTTOM_OF_NOTE_A_8217
+  CHK_COMP_BOTTOM_OF_NOTE_B_8217
+
+endnote
+@enduml

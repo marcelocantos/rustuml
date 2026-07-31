@@ -1,0 +1,6 @@
+@startuml
+component OrphanComponentMulti
+note left on link #LightYellow
+  CHK_ORPHAN_COMPONENT_MULTI_8223
+endnote
+@enduml

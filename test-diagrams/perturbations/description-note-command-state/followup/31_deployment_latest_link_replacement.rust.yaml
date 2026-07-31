@@ -1,0 +1,55 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DeployLatestA
+      node DeployLatestB
+      node DeployLatestC
+      DeployLatestA --> DeployLatestB : CHK_DEPLOY_FIRST_EDGE_8231
+      DeployLatestB --> DeployLatestC : CHK_DEPLOY_LATEST_EDGE_8231
+      note left on link #Wheat : CHK_DEPLOY_REPLACED_NOTE_8231
+      note right of link #LightBlue : CHK_DEPLOY_REPLACEMENT_NOTE_8231
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployLatestA
+    label: DeployLatestA
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DeployLatestB
+    label: DeployLatestB
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: DeployLatestC
+    label: DeployLatestC
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  connections:
+  - from: DeployLatestA
+    to: DeployLatestB
+    label: CHK_DEPLOY_FIRST_EDGE_8231
+    arrow_at_end: true
+    source_line: 4
+  - from: DeployLatestB
+    to: DeployLatestC
+    label: CHK_DEPLOY_LATEST_EDGE_8231
+    note:
+      text: CHK_DEPLOY_REPLACEMENT_NOTE_8231
+      color: '#LightBlue'
+      position: Right
+      source_line: 7
+    arrow_at_end: true
+    source_line: 5

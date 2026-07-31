@@ -1,0 +1,10 @@
+@startuml
+node "Deploy Rows Anchor" as DeployRowsAnchor
+note as DeployRowsMemo
+    CHK_DEPLOY_FIRST_8208
+
+      CHK_DEPLOY_DEEP_8208
+
+endnote
+DeployRowsAnchor --> DeployRowsMemo
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+node DeployTopSource
+node DeployTopSink
+DeployTopSource --> DeployTopSink : CHK_DEPLOY_TOP_EDGE_8220
+note top on link #LightYellow
+    CHK_DEPLOY_TOP_NOTE_A_8220
+
+      CHK_DEPLOY_TOP_NOTE_B_8220
+endnote
+@enduml

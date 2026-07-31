@@ -1,0 +1,15 @@
+rust_revision=cb48d9bcd8d9e3f585de679d616a64ec07cfb54f
+rust_binary=45f2e8792f66dc0ee9394c80dd873f0e5985e6ed42c7e16f0824ee7a73c80536  /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml
+java_revision=71806a23780b04a5ccde2f8ceb5121edad5eb711
+java_jar=c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45  /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar
+rustuml 0.7.0
+openjdk version "21.0.11" 2026-04-21
+OpenJDK Runtime Environment Homebrew (build 21.0.11)
+OpenJDK 64-Bit Server VM Homebrew (build 21.0.11, mixed mode, sharing)
+rsvg-convert version 2.62.3
+
+libraries used:
+  cairo 1.18.4
+  pango 1.58.0
+  harfbuzz 14.2.1
+  fontconfig 2.18.2

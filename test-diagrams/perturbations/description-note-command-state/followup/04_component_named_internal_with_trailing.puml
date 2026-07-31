@@ -1,0 +1,10 @@
+@startuml
+component "Trailing Anchor" as TrailingAnchor
+note as TrailingMemo
+    CHK_BODY_FIRST_8203
+
+      CHK_BODY_DEEP_8203
+
+endnote
+TrailingAnchor --> TrailingMemo
+@enduml

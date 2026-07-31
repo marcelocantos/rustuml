@@ -1,0 +1,6 @@
+@startuml
+class ClassControlA
+class ClassControlB
+ClassControlA --> ClassControlB : CHK_CLASS_EDGE_8243
+note top on link #LightYellow : CHK_CLASS_LINK_NOTE_8243
+@enduml

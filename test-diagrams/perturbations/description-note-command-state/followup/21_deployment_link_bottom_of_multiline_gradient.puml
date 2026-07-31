@@ -1,0 +1,10 @@
+@startuml
+node DeployBottomSource
+node DeployBottomSink
+DeployBottomSource --> DeployBottomSink : CHK_DEPLOY_BOTTOM_EDGE_8221
+note bottom of link #Green/LightBlue
+  CHK_DEPLOY_BOTTOM_NOTE_A_8221
+  CHK_DEPLOY_BOTTOM_NOTE_B_8221
+
+endnote
+@enduml

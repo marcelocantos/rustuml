@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="208px" preserveAspectRatio="none" style="width:554px;height:208px;background:#FFFFFF;" version="1.1" viewBox="0 0 554 208" width="554px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="gwxmfy11gwfg30" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FF0000"/><stop offset="100%" stop-color="#ADD8E6"/></linearGradient></defs><g><!--entity DeployRightSource-->
+<g class="entity" data-qualified-name="DeployRightSource" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,184.1396,6,184.1396,42.4883,174.1396,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="174.1396" x2="184.1396" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="174.1396" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="174.1396" x2="174.1396" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="128.1396" x="31" y="39.5352">DeployRightSource</text>
+</g>
+<!--entity DeployRightSink-->
+<g class="entity" data-qualified-name="DeployRightSink" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="24.53,147.49,34.53,137.49,175.6003,137.49,175.6003,173.9783,165.6003,183.9783,24.53,183.9783,24.53,147.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="165.6003" x2="175.6003" y1="147.49" y2="137.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="24.53" x2="165.6003" y1="147.49" y2="147.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="165.6003" x2="165.6003" y1="147.49" y2="183.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.0703" x="39.53" y="171.0252">DeployRightSink</text>
+</g>
+<!--link DeployRightSource to DeployRightSink-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M100.07,52.8 C100.07,76.42 100.07,107.31 100.07,131" fill="none" id="DeployRightSource-to-DeployRightSink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="100.07,137,104.07,128,100.07,132,96.07,128,100.07,137" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="207.3716" x="101.07" y="96.0584">CHK_DEPLOY_RIGHT_EDGE_8219</text>
+<g class="note" data-source-line="4"><path d="M309.4416,82.49 L309.4416,107.8005 L539.5588,107.8005 L539.5588,92.49 L529.5588,82.49 L309.4416,82.49" fill="url(#gwxmfy11gwfg30)" style="stroke:#181818;stroke-width:0.5;"/><path d="M529.5588,82.49 L529.5588,92.49 L539.5588,92.49 L529.5588,82.49" fill="url(#gwxmfy11gwfg30)" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="209.1172" x="315.4416" y="100.0584">CHK_DEPLOY_RIGHT_NOTE_8219</text>
+</g>
+</g>
+</g></svg>

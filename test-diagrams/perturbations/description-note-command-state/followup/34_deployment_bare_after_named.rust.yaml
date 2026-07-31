@@ -1,0 +1,34 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DeployBareAnchor
+      note as DeployBareMemo
+        CHK_DEPLOY_BARE_NAMED_BODY_8234
+      endnote
+      note : CHK_DEPLOY_BARE_INVALID_8234
+      DeployBareAnchor --> DeployBareMemo
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployBareAnchor
+    label: DeployBareAnchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: DeployBareAnchor
+    to: DeployBareMemo
+    label: null
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: DeployBareMemo
+    text: CHK_DEPLOY_BARE_NAMED_BODY_8234
+    quark_order: 1
+    position: Right
+    source_line: 3

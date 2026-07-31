@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="190px" preserveAspectRatio="none" style="width:285px;height:190px;background:#FFFFFF;" version="1.1" viewBox="0 0 285 190" width="285px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity CompLeftSource-->
+<g class="entity" data-qualified-name="CompLeftSource" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.3438" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="138.3438" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="136.3438" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="136.3438" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.3438" x="22" y="40.5352">CompLeftSource</text>
+</g>
+<!--entity CompLeftSink-->
+<g class="entity" data-qualified-name="CompLeftSink" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="134.2744" x="15.5347" y="130.4883"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="129.8091" y="135.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="127.8091" y="137.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="127.8091" y="141.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94.2744" x="30.5347" y="164.0235">CompLeftSink</text>
+</g>
+<!--link CompLeftSource to CompLeftSink-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M82.67,53.81 C82.67,75.64 82.67,102.51 82.67,124.29" fill="none" id="CompLeftSource-to-CompLeftSink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="82.67,130.29,86.67,121.29,82.67,125.29,78.67,121.29,82.67,130.29" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="185.7832" x="83.6719" y="97.0567">CHK_COMP_LEFT_EDGE_8214</text>
+</g>
+</g></svg>

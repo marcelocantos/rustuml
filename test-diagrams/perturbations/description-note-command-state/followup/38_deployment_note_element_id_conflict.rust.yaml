@@ -1,0 +1,25 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node ConflictDeployId
+      note "CHK_DEPLOY_ID_CONFLICT_8238" as ConflictDeployId
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: ConflictDeployId
+    label: ConflictDeployId
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections: []
+  notes:
+  - id: ConflictDeployId
+    text: CHK_DEPLOY_ID_CONFLICT_8238
+    quark_order: 1
+    position: Right
+    source_line: 2

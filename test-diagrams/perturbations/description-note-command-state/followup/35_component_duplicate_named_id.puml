@@ -1,0 +1,6 @@
+@startuml
+component DuplicateCompAnchor
+note "CHK_DUPLICATE_COMP_FIRST_8235" as DuplicateCompMemo
+note "CHK_DUPLICATE_COMP_SECOND_8235" as DuplicateCompMemo
+DuplicateCompAnchor --> DuplicateCompMemo
+@enduml

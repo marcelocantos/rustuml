@@ -1,0 +1,8 @@
+@startuml
+node DeployBlankBodyA
+node DeployBlankBodyB
+DeployBlankBodyA --> DeployBlankBodyB
+note on link
+
+endnote
+@enduml

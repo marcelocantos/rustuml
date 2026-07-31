@@ -1,0 +1,10 @@
+@startuml
+component CompTopSource
+component CompTopSink
+CompTopSource --> CompTopSink : CHK_COMP_TOP_EDGE_8216
+note top on link #LightYellow
+    CHK_COMP_TOP_NOTE_A_8216
+
+      CHK_COMP_TOP_NOTE_B_8216
+endnote
+@enduml

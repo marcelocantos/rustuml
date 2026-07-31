@@ -1,0 +1,6 @@
+@startuml
+actor "Control Sender" as ActorSender
+actor "Control Receiver" as ActorReceiver
+ActorSender -> ActorReceiver : CHK_ACTOR_SEQUENCE_EDGE_8242
+note on link : CHK_ACTOR_SEQUENCE_NOTE_8242
+@enduml

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="225px" preserveAspectRatio="none" style="width:347px;height:225px;background:#FFFFFF;" version="1.1" viewBox="0 0 347 225" width="347px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity CompBottomSource-->
+<g class="entity" data-qualified-name="CompBottomSource" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="174.4902" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="161.4902" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="159.4902" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="159.4902" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134.4902" x="22" y="40.5352">CompBottomSource</text>
+</g>
+<!--entity CompBottomSink-->
+<g class="entity" data-qualified-name="CompBottomSink" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="157.4209" x="15.5347" y="165.4883"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="152.9556" y="170.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="150.9556" y="172.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="150.9556" y="176.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117.4209" x="30.5347" y="199.0235">CompBottomSink</text>
+</g>
+<!--link CompBottomSource to CompBottomSink-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M94.25,53.67 C94.25,83.33 94.25,129.33 94.25,159.1" fill="none" id="CompBottomSource-to-CompBottomSink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="94.25,165.1,98.25,156.1,94.25,160.1,90.25,156.1,94.25,165.1" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="211.9292" x="110.6179" y="97.0567">CHK_COMP_BOTTOM_EDGE_8213</text>
+<path d="M99.2451,105.7989 L99.2451,130.7989 L333.2451,130.7989 L333.2451,115.7989 L323.2451,105.7989 L99.2451,105.7989" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M323.2451,105.7989 L323.2451,115.7989 L333.2451,115.7989 L323.2451,105.7989" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="213.6748" x="105.2451" y="123.3672">CHK_COMP_BOTTOM_NOTE_8213</text>
+</g>
+</g></svg>

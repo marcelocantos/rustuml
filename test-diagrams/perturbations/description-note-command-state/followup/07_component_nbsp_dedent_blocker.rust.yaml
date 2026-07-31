@@ -1,0 +1,45 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "NBSP Anchor" as NbspAnchor
+      note as NbspMemo
+       
+        CHK_NBSP_INDENT_8207
+      endnote
+      NbspAnchor --> NbspMemo
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: NbspAnchor
+    label: NBSP Anchor
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections:
+  - from: NbspAnchor
+    to: NbspMemo
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: NbspMemo
+    text: |2-
+
+      CHK_NBSP_INDENT_8207
+    target: null
+    position: Right
+    source_line: 3

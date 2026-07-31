@@ -1,0 +1,47 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Trailing Anchor" as TrailingAnchor
+      note as TrailingMemo
+          CHK_BODY_FIRST_8203
+
+            CHK_BODY_DEEP_8203
+      endnote
+      TrailingAnchor --> TrailingMemo
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: TrailingAnchor
+    label: Trailing Anchor
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections:
+  - from: TrailingAnchor
+    to: TrailingMemo
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  packages: []
+  notes:
+  - id: TrailingMemo
+    text: |-
+      CHK_BODY_FIRST_8203
+
+        CHK_BODY_DEEP_8203
+    target: null
+    position: Right
+    source_line: 3

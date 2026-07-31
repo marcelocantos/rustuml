@@ -1,0 +1,37 @@
+type: UseCase
+diagram:
+  meta:
+    source: |
+      @startuml
+      actor "Control Examiner" as UsecaseActor
+      usecase "Control Review" as UsecaseReview
+      UsecaseActor --> UsecaseReview : CHK_USECASE_EDGE_8240
+      note on link : CHK_USECASE_LINK_NOTE_8240
+      @enduml
+  direction: TopToBottom
+  actors:
+  - id: UsecaseActor
+    label: Control Examiner
+    stereotype: null
+    source_line: 1
+  use_cases:
+  - id: UsecaseReview
+    label: Control Review
+    explicit_id: true
+    stereotype: null
+    source_line: 2
+  connections:
+  - from: UsecaseActor
+    to: UsecaseReview
+    label: CHK_USECASE_EDGE_8240
+    stereotype: null
+    queue_len: 2
+    arrow: true
+    source_line: 3
+  packages: []
+  notes:
+  - text: CHK_USECASE_LINK_NOTE_8240
+    kind: !OnLink
+      connection: 0
+    position: Bottom
+    source_line: 4

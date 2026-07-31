@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-note-command-state",
+  "review_kind": "independent_adversarial_followup",
+  "verdict": "REJECT",
+  "checked_at": "2026-08-01",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-2026-08-01",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not author account commit 8b82af01fa2481d3330e00fb94082c87383e9f31 or implementation commit cb48d9bcd8d9e3f585de679d616a64ec07cfb54f and was explicitly instructed to try to disprove the mechanism."
+  },
+  "revisions": {
+    "rust": "cb48d9bcd8d9e3f585de679d616a64ec07cfb54f",
+    "rust_branch": "codex/t14-description-note-checker",
+    "account_commit": "8b82af01fa2481d3330e00fb94082c87383e9f31",
+    "implementation_commit": "cb48d9bcd8d9e3f585de679d616a64ec07cfb54f",
+    "implementation_parent": "8b82af01fa2481d3330e00fb94082c87383e9f31",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256_before": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_jar_sha256_after": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "/private/tmp/rustuml-note-terminal-followup2/target/release/rustuml",
+    "rust_binary_sha256_before": "45f2e8792f66dc0ee9394c80dd873f0e5985e6ed42c7e16f0824ee7a73c80536",
+    "rust_binary_sha256_after": "45f2e8792f66dc0ee9394c80dd873f0e5985e6ed42c7e16f0824ee7a73c80536",
+    "rust_binary_version": "rustuml 0.7.0"
+  },
+  "preserved_records": {
+    "account": "docs/parity-reviews/description-note-command-state/account.json",
+    "account_sha256_before": "d160cda8e23cee5202b1e0072630be534ebe83b8ff7a0977091f9cf953bb419e",
+    "account_sha256_after": "d160cda8e23cee5202b1e0072630be534ebe83b8ff7a0977091f9cf953bb419e",
+    "account_modified_by_checker": false,
+    "implementation_modified_by_checker": false
+  },
+  "reviewed_java": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["createMultiLine", "executeInternal"],
+      "assessment": "Completed named notes always create a leaf, including empty Display values. Existing quark data produces a command error before mutation."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/utils/BlocLines.java",
+      "symbols": ["removeEmptyColumns", "firstColumnRemovable", "toDisplay"],
+      "assessment": "Dedent removes one leading ASCII space or tab from every currently nonempty row per iteration. A whitespace-only row that becomes empty stops constraining deeper rows. Display row cardinality is preserved."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": ["initCommandsList"],
+      "assessment": "One ordered Description inventory registers named, attached, and link-note commands. Bare note-colon syntax is absent."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "symbols": ["getRegexConcatSingleLine", "getRegexConcatMultiLine", "executeInternal"],
+      "assessment": "The grammar supports on and of, all four positions, optional color, single-line empty text, and multiline bodies. Zero-row multiline bodies and commands with no eligible link reject."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["createSystem", "getCandidate", "isMultilineCommandOk"],
+      "assessment": "Every source command must be consumed successfully. A command error terminates that factory candidate, and multiline commands consume atomically through the terminator."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["createPSystem"],
+      "assessment": "Factories are tried in fixed order and the first complete successful parse wins."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": ["addNote"],
+      "assessment": "A second link-note command replaces the CucaNote already held by that Link."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["SvekEdge", "appendLine", "solveLine", "drawU"],
+      "assessment": "The CucaNote is merged with the ordinary link label by position, complete merged dimensions go to Graphviz, and the solved merged block is painted inside the document envelope."
+    }
+  ],
+  "reviewed_rust": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["normalize_multiline_note_body", "detect_uml_subtype"],
+      "assessment": "One-shot minimum indent differs from Java for ragged whitespace-only rows. Factory selection remains score-based and adds an unaccounted use-case score increment."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["parse_component"],
+      "assessment": "Component recognizes only lowercase default note-on-link syntax, silently continues when no link exists, accepts zero-row multiline link notes, stores repeated notes separately, and lacks of, position, and color grammar."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["parse_deployment", "NoteAccum"],
+      "assessment": "The new Deployment link-note state passes the requested forms, but unrecognized bare note commands fall through and return Ok. Duplicate note identities also enter the AST."
+    },
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["component_note_dim", "component_note_on_connection", "render_normal_component_note"],
+      "assessment": "String lines drop a final empty row. Connection-note lookup paints the first stored note, not Java's replacement. Duplicate note IDs reach a layout assertion."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_note_text_dim", "deployment_connection_center_label_dim", "render_deployment_link_note", "render_no_oracle_edges"],
+      "assessment": "The Deployment label-note merge passes fresh position and color controls without clipping. Named-note row splitting and duplicate-ID assertions remain divergent."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": ["parse_class"],
+      "assessment": "The Class control has the same narrowed default-only note-on-link grammar and drops a positioned and colored valid link note."
+    }
+  ],
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git show -s --format='%H%n%P%n%s' HEAD",
+    "git log --format='%H %s' --follow -- docs/parity-reviews/description-note-command-state/account.json",
+    "shasum -a 256 /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "nl -ba Java CommandFactoryNote.java, BlocLines.java, DescriptionDiagramFactory.java, CommandFactoryNoteOnLink.java, PSystemCommandFactory.java, PSystemBuilder.java, Link.java, and SvekEdge.java at the reviewed symbols",
+    "git show --format=fuller --no-ext-diff --no-renames HEAD -- crates",
+    "nl -ba Rust parse/mod.rs, parse/component.rs, parse/deployment.rs, parse/class.rs, render/component.rs, and render/deployment.rs at the reviewed symbols",
+    "test-diagrams/perturbations/description-note-command-state/followup/run_cases.sh",
+    "python3 test-diagrams/perturbations/description-note-command-state/followup/analyze.py > test-diagrams/perturbations/description-note-command-state/followup/analysis.json",
+    "magick selected Java and Rust PNG pairs into test-diagrams/perturbations/description-note-command-state/followup/audit-contact-sheet.png",
+    "rg -n 'description-note-command-state|CHK_|RowMemo|TabDedentMemo|CompLeftSource|DeployTopSource' shipping crates",
+    "rg -n 'include_str!|include_bytes!|test-diagrams/perturbations|test-diagrams/golden' shipping crates",
+    "git diff HEAD^ HEAD over changed shipping files, filtered to added numeric literals"
+  ],
+  "execution_constraints": {
+    "cargo_or_rustc_invocations": 0,
+    "shipping_code_modified": false,
+    "account_modified": false,
+    "frozen_binary_overwritten": false,
+    "frozen_binary_hash_preserved": true,
+    "java_jar_hash_preserved": true,
+    "no_oracle_product_path": true
+  },
+  "case_evidence": {
+    "root": "test-diagrams/perturbations/description-note-command-state/followup",
+    "runner": "test-diagrams/perturbations/description-note-command-state/followup/run_cases.sh",
+    "runner_sha256": "159bcba2867992f033068c1a7e964a1e9e81179b496c242f10ddd7b77e130a4f",
+    "analyzer": "test-diagrams/perturbations/description-note-command-state/followup/analyze.py",
+    "analyzer_sha256": "f66f7ec0dd2150bb468947bd6a06c0810258e3f8080642478ccf7a098f9258f2",
+    "analysis": "test-diagrams/perturbations/description-note-command-state/followup/analysis.json",
+    "analysis_sha256": "466ec75b7e2651bdae5d15590da17e4d9db20b6783c10e5c3c0796aa9677197f",
+    "source_set_sha256": "e86cf8a06bf6976b3e6cf929a81c2d88168b07b3509712820de8cf422fff75e3",
+    "source_count": 45,
+    "artifact_count_before_review_json": 716,
+    "missing_expected_artifacts": 0,
+    "artifact_convention": "Each source has same-stem Java SVG, stderr, and status; Rust SVG, stderr, status, YAML, YAML stderr, and YAML status; plus Java and Rust PNG raster, raster stderr, and raster status. Empty outputs and exit-101 panic statuses are preserved.",
+    "sources": [
+      "01_component_named_zero_rows.puml",
+      "02_component_named_one_blank_row.puml",
+      "03_component_named_internal_no_trailing.puml",
+      "04_component_named_internal_with_trailing.puml",
+      "05_component_short_space_row_dedent.puml",
+      "06_deployment_short_tab_row_dedent.puml",
+      "07_component_nbsp_dedent_blocker.puml",
+      "08_deployment_named_internal_trailing.puml",
+      "09_component_nested_named_owner.puml",
+      "10_deployment_nested_named_owner.puml",
+      "11_component_registered_note_chain.puml",
+      "12_deployment_registered_note_chain.puml",
+      "13_component_link_bottom_on_single.puml",
+      "14_component_link_left_on_single_color.puml",
+      "15_component_link_right_of_single_gradient.puml",
+      "16_component_link_top_on_multiline_color.puml",
+      "17_component_link_bottom_of_multiline_gradient.puml",
+      "18_deployment_link_left_on_single_color.puml",
+      "19_deployment_link_right_of_single_gradient.puml",
+      "20_deployment_link_top_on_multiline_color.puml",
+      "21_deployment_link_bottom_of_multiline_gradient.puml",
+      "22_component_no_link_single.puml",
+      "23_component_no_link_multiline.puml",
+      "24_deployment_no_link_single.puml",
+      "25_deployment_no_link_multiline.puml",
+      "26_component_link_zero_body.puml",
+      "27_component_link_one_blank_body.puml",
+      "28_deployment_link_zero_body.puml",
+      "29_deployment_link_one_blank_body.puml",
+      "30_component_latest_link_replacement.puml",
+      "31_deployment_latest_link_replacement.puml",
+      "32_component_bare_after_named.puml",
+      "33_component_bare_before_declaration.puml",
+      "34_deployment_bare_after_named.puml",
+      "35_component_duplicate_named_id.puml",
+      "36_deployment_duplicate_named_id.puml",
+      "37_component_note_element_id_conflict.puml",
+      "38_deployment_note_element_id_conflict.puml",
+      "39_state_note_on_link_control.puml",
+      "40_usecase_note_on_link_control.puml",
+      "41_actor_generalization_link_control.puml",
+      "42_actor_sequence_link_control.puml",
+      "43_class_note_on_link_control.puml",
+      "44_deployment_root_link_nested_note.puml",
+      "45_component_named_then_registered_link_note.puml"
+    ]
+  },
+  "verification": {
+    "sources": 45,
+    "java_valid": 31,
+    "java_invalid": 14,
+    "rust_valid": 36,
+    "valid_pair_case_level_agreements": 24,
+    "valid_pair_case_level_mismatches": 7,
+    "java_invalid_rust_successes": 5,
+    "graceful_invalid_reject_agreements": 5,
+    "rust_panics_on_java_invalid": 4,
+    "cross_case_row_or_dedent_mismatches": 2,
+    "machine_detected_mismatch_events": 19,
+    "verdict": "REJECT"
+  },
+  "coverage": [
+    {
+      "cases": "01-08",
+      "axes": "Zero and blank rows; internal and trailing rows; ragged spaces, tabs, and NBSP; Component and Deployment."
+    },
+    {
+      "cases": "09-12,44-45",
+      "axes": "Root and nested ownership; registered attached and link notes after named notes; root link followed by nested command."
+    },
+    {
+      "cases": "13-21",
+      "axes": "Single and multiline; on and of; all four positions; default, solid, and gradient colors; Component and Deployment."
+    },
+    {
+      "cases": "22-31",
+      "axes": "No link; zero and blank link-note bodies; multiple links; repeated latest-link notes and replacement."
+    },
+    {
+      "cases": "32-38",
+      "axes": "Bare note before and after declarations; duplicate note IDs; note and element identity collisions."
+    },
+    {
+      "cases": "39-43",
+      "axes": "State, explicit use case, actor generalization, actor message, and Class shared-dispatch controls."
+    }
+  ],
+  "rejecting_evidence": [
+    {
+      "cases": "14-17,43",
+      "kind": "valid_note_omission",
+      "detail": "Java paints every requested marker. Rust succeeds but omits positioned or colored Component and Class link notes."
+    },
+    {
+      "cases": "22,23,26",
+      "kind": "invalid_acceptance",
+      "detail": "Java reports No link defined for orphan Component commands and No note defined for the zero-row multiline command. Rust succeeds."
+    },
+    {
+      "cases": "11,30",
+      "kind": "wrong_link_eligibility_or_replacement",
+      "detail": "Java finds no eligible link after the named-note relation in case 11, while Rust attaches to its last stored connection. In case 30 Java paints only the replacement marker; Rust paints the superseded marker."
+    },
+    {
+      "cases": "03,04,06",
+      "kind": "row_loss_or_wrong_dedent",
+      "detail": "One trailing blank row increases Java note height by 15.4006 px and Rust by 0. The tab case places Java marker text at relative x=6.0 and Rust at x=38.9063; Rust YAML retains an extra tab."
+    },
+    {
+      "cases": "34",
+      "kind": "invalid_factory_acceptance",
+      "detail": "Java returns syntax error for a bare Deployment note; Rust ignores the line and succeeds."
+    },
+    {
+      "cases": "35-38",
+      "kind": "panic_instead_of_command_rejection",
+      "detail": "Java returns Note already created. Rust accepts malformed identities and aborts in rendering with status 101."
+    },
+    {
+      "cases": "42",
+      "kind": "wrong_factory_and_svg_clipping",
+      "detail": "Java selects DESCRIPTION and Rust selects SEQUENCE. Rust note text spans x=185.4353 through x=416.6677 while the viewBox ends at x=381."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "The split parsers do not implement Java's complete shared link-note inventory",
+      "detail": "Component and Class accept only the default note-on-link form. Deployment passes the complete new on/of, position, color, and multiline controls. Cases 14-17 and 43 prove valid notes disappear in the other families."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Component accepts invalid link-note ownership and paints stale replacement state",
+      "detail": "The parser continues when no last connection exists, lacks the multiline body requirement, appends repeated notes, and the renderer selects the first matching note. Cases 11, 22, 23, 26, and 30 expose each path."
+    },
+    {
+      "severity": "rejecting",
+      "title": "The row representation loses trailing rows and uses the wrong dedent algorithm",
+      "detail": "Static minimum indent is not BlocLines' iterative algorithm, and String lines discard a final empty row. Cases 03/04 and 06 produce visible geometry and alignment differences."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Malformed Description identities reach renderer assertions",
+      "detail": "Duplicate note IDs and note-versus-element collisions are accepted into both split ASTs, then panic at component.rs:1951 or deployment.rs:4406. Java rejects during command execution."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Factory selection can choose the wrong family and clip the note",
+      "detail": "Case 42 is DESCRIPTION in Java and SEQUENCE in Rust. The Rust note crosses the viewBox by 35.6677 px and produces dark boundary pixels."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Deployment still accepts an unregistered bare note",
+      "detail": "parse_deployment has no unmatched-command rejection at the bottom of its loop, so case 34 succeeds where Java returns syntax error."
+    },
+    {
+      "severity": "governance",
+      "title": "The implementation adds an unaccounted numeric factory heuristic",
+      "detail": "The commit adds scores[6] += 10 for use-case generalization. The comment names Java command registration, but neither Java nor account.json supplies this numeric score or planned branch."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "Deployment link-note merging passes the requested position and color matrix",
+      "detail": "Cases 18-21 cover all positions, on/of, single/multiline, solid/gradient colors, blank rows, and ordinary edge labels. All markers render without boundary clipping."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "Several command-state repairs survive fresh controls",
+      "detail": "Named zero and blank notes remain entities; nested owners work; Deployment no-link and zero-row forms reject; Deployment replacement uses the latest link; both Component declaration orders reject bare notes; state, use-case, and actor-generalization controls agree; case 45 validates a named Component note followed by a registered link note."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "golden_or_perturbation_reads_found": false,
+    "post_hoc_svg_surgery_found": false,
+    "per_branch_count_ladder_found": false,
+    "unexplained_numeric_constants_found": true,
+    "detail": "No shipping source contains the mechanism name, CHK markers, held-out labels, perturbation paths, or golden SVG reads for this change. Existing embedded assets are fonts, themes, welcome assets, and pre-existing renderer self-source. The new use-case score increment of 10 lacks numeric Java provenance."
+  },
+  "visual_and_bounds_review": {
+    "rasterizer": "rsvg-convert 2.62.3",
+    "contact_sheet": "test-diagrams/perturbations/description-note-command-state/followup/audit-contact-sheet.png",
+    "boundary_scan": "Pillow inspected the outer two raster rows and columns for dark ink on every Java-valid and Rust-valid pair.",
+    "result": "Only case 42 has Rust boundary ink, and coordinate inspection proves its text exceeds the viewBox. Cases 04, 06, 14, and 30 visually confirm trailing-row loss, wrong tab dedent, omission, and stale replacement."
+  },
+  "residue_assessment": [
+    "Java and Rust error-page artwork and wording were not compared beyond acceptance and decisive diagnostics.",
+    "Pixel-identical geometry was not required. Checks covered acceptance, diagram type, visible marker multiplicity, note-relative offsets, metamorphic height deltas, and clipping.",
+    "The Java getLastLink declaration was not found textually in this checkout; case 11 records executable eligibility behavior without inventing an unavailable source detail.",
+    "No Cargo, rustc, harness_guards, or parity_perturbations command was run because the product binary was frozen and Cargo was explicitly prohibited."
+  ],
+  "verdict_reason": "REJECT. The frozen implementation fails 19 machine-detected mismatch events across fresh axes: valid positioned and colored Component and Class notes disappear; Component accepts orphan and zero-row link notes; latest-link eligibility and replacement differ; trailing rows and ragged-tab dedent are wrong; Deployment accepts a bare note; four malformed identity cases panic; and actor-message dispatch selects SEQUENCE instead of DESCRIPTION and clips the note. Positive Deployment and dispatch controls show specific counterexamples rather than harness noise. The frozen binary and Java JAR hashes remained unchanged."
+}

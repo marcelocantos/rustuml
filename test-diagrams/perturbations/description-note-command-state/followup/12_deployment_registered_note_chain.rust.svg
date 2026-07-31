@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="225px" preserveAspectRatio="none" style="width:753px;height:225px;background:#FFFFFF;" version="1.1" viewBox="0 0 753 225" width="753px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Registered Source-->
+<g class="entity" data-qualified-name="RegisteredSource" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="226.75,16,236.75,6,388.6484,6,388.6484,42.4883,378.6484,52.4883,226.75,52.4883,226.75,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="378.6484" x2="388.6484" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="226.75" x2="378.6484" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="378.6484" x2="378.6484" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.8984" x="241.75" y="39.5352">Registered Source</text>
+</g>
+<!--entity Registered Sink-->
+<g class="entity" data-qualified-name="RegisteredSink" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="377.29,164.49,387.29,154.49,522.1191,154.49,522.1191,190.9783,512.1191,200.9783,377.29,200.9783,377.29,164.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="512.1191" x2="522.1191" y1="164.49" y2="154.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="377.29" x2="512.1191" y1="164.49" y2="164.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="512.1191" x2="512.1191" y1="164.49" y2="200.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104.8291" x="392.29" y="188.0252">Registered Sink</text>
+</g>
+<g class="entity" data-qualified-name="DeployRegisteredMemo" data-source-line="3" id="ent0004">
+<path d="M442.89,16.59 L442.89,41.9005 L738.515,41.9005 L738.515,26.59 L728.515,16.59 L442.89,16.59" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M728.515,16.59 L728.515,26.59 L738.515,26.59 L728.515,16.59" fill="#ADD8E6" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="274.625" x="448.89" y="34.1584">CHK_DEPLOY_FLOATING_REGISTERED_8212</text>
+</g>
+<g class="entity" data-qualified-name="GMN6" data-source-line="6" id="ent0007">
+<path d="M6,165.08 L6,190.3905 A0,0 0 0 0 6,190.3905 L307.4014,190.3905 A0,0 0 0 0 307.4014,190.3905 L307.4014,183.08 L376.8,177.73 L307.4014,175.08 L307.4014,175.08 L297.4014,165.08 L6,165.08 A0,0 0 0 0 6,165.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M297.4014,165.08 L297.4014,175.08 L307.4014,175.08 L297.4014,165.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="280.4014" x="12" y="182.6484">CHK_DEPLOY_ATTACHED_REGISTERED_8212</text>
+</g>
+<!--link RegisteredSource to RegisteredSink-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M298.55,52.59 C291.73,73.18 285.9,103.61 300.7,124.49 C318.22,149.2 342.5481,160.8999 371.1681,167.8199" fill="none" id="RegisteredSource-to-RegisteredSink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="377,169.23,369.1921,163.2269,372.14,168.0549,367.312,171.0028,377,169.23" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="205.5942" x="301.7" y="96.0584">CHK_DEPLOY_EDGE_LABEL_8212</text>
+<g class="note" data-source-line="5"><path d="M300.7,99.8005 L300.7,125.1111 L561.159,125.1111 L561.159,109.8005 L551.159,99.8005 L300.7,99.8005" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M551.159,99.8005 L551.159,109.8005 L561.159,109.8005 L551.159,99.8005" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="239.459" x="306.7" y="117.3689">CHK_DEPLOY_LINK_REGISTERED_8212</text>
+</g>
+</g>
+<!--link DeployRegisteredMemo to RegisteredSink-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk9">
+<path d="M591.14,42.14 C591.24,61.59 588.67,100.45 568.7,124.49 C556.66,138.98 545.2984,147.1331 528.0584,154.8331" fill="none" id="DeployRegisteredMemo-to-RegisteredSink" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="522.58,157.28,532.4288,157.262,527.1453,155.241,529.1664,149.9575,522.58,157.28" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>
