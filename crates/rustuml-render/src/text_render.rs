@@ -366,6 +366,57 @@ pub(crate) fn label_limit_finder_height_with_family(
     first_baseline + max_baseline_offset + 1.5
 }
 
+/// Minimum painted y relative to the baseline passed to
+/// [`emit_text_no_mono`].
+///
+/// Java `LimitFinder.drawText` measures each emitted `UText` from its
+/// baseline minus that run's resolved font height. Link labels suppress
+/// monospace markup and preserve literal underscores, so this deliberately
+/// follows the same segment parsing and baseline offsets as
+/// [`emit_text_no_mono`] with `TextBase::skip_underline` enabled.
+pub(crate) fn label_painted_top_from_baseline_no_mono_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> f64 {
+    let content = normalize_tab_escapes(content);
+    let mut segments = creole::parse_segments_no_underline(&content);
+    for segment in &mut segments {
+        segment.style.monospace = false;
+    }
+    let Some(first) = segments.first() else {
+        return -family_text_height(font_size, metric_family(font_family));
+    };
+
+    let first_size = first.style.size.map(f64::from).unwrap_or(font_size);
+    let line_bottom_drop = clamp_drop(
+        first_size,
+        segment_metric_family_for_family(first, font_family),
+    );
+    segments
+        .iter()
+        .map(|segment| {
+            let nominal_size = segment.style.size.map(f64::from).unwrap_or(font_size);
+            let family = segment_metric_family_for_family(segment, font_family);
+            let line_descent_diff = line_bottom_drop - clamp_drop(nominal_size, family);
+            let (painted_size, baseline_offset) = match segment.style.baseline_shift {
+                Some("sub") => {
+                    let reduced = (nominal_size - 3.0).max(2.0);
+                    let descent_correction = pm::descent(nominal_size) - pm::descent(reduced);
+                    (reduced, 3.0 + descent_correction + line_descent_diff)
+                }
+                Some("super") => {
+                    let reduced = (nominal_size - 3.0).max(2.0);
+                    let descent_correction = pm::descent(nominal_size) - pm::descent(reduced);
+                    (reduced, -6.0 + descent_correction + line_descent_diff)
+                }
+                _ => (nominal_size, line_descent_diff),
+            };
+            baseline_offset - family_text_height(painted_size, family)
+        })
+        .fold(f64::INFINITY, f64::min)
+}
+
 pub(crate) fn text_height_for_family(font_size: f64, font_family: &str) -> f64 {
     family_text_height(font_size, metric_family(font_family))
 }
