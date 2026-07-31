@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package "Nested First 8441" as NestedFirst8443 {
+  package "Nested Inner 8445" as NestedInner8447 {
+    component "Nested Initial 8449" as NestedShared8451 <<retained>> [[https://first.example/nested]] #Green
+  }
+}
+package "Nested Other 8453" as NestedOther8455 {
+  component "Nested Final 8457" as NestedShared8451
+  component NestedOtherProbe8459
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+together {
+  component "Together Initial 8461" as TogetherShared8463 <<initial>> [[https://first.example/together]] #Tan
+  component TogetherPeer8465
+}
+component "Together Final 8467" as TogetherShared8463 <<final>> [[https://final.example/together]] #Thistle
+@enduml

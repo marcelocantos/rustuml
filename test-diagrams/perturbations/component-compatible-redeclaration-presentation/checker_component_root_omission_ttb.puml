@@ -1,0 +1,4 @@
+@startuml
+component "Initial Ledger 8401" as SharedLedger8403 <<initial>> [[https://first.example/ledger]] #Pink
+component SharedLedger8403
+@enduml

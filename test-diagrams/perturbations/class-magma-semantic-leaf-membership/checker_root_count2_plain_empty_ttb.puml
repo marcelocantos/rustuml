@@ -1,0 +1,6 @@
+@startuml
+class AtlasLeaf8201
+note "atlas floating memo" as AtlasMemo8203
+package "Vacant Plain 8205" as VacantPlain8205 {
+}
+@enduml

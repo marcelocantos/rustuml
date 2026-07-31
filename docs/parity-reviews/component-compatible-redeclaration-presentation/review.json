@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-compatible-redeclaration-presentation",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "identity": "independent adversarial checker; did not implement the mechanism",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, exact supplied RustUML shipping binary, Java PlantUML JAR, xmllint, and inline XML strict/semantic comparators"
+  },
+  "verdict": "REJECTED",
+  "revisions": {
+    "rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commit": "98317affe2474159d7add35bd57a064609606db7",
+    "implementation_commit": "4f4ba3d4fe768b4fab72991e2f137728d357648e",
+    "implementation_is_ancestor_of_review_revision": true
+  },
+  "artifact_hashes": {
+    "rust_shipping_binary": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+      "sha256": "f94f13376321676b8ac7b37665f4717060f82db1429594850fdc0daad22307d7"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account_json_sha256": "48b32ec860c7da979ab2d1464c96c4ac084a093b7e39cc0319467c158e994706"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git merge-base --is-ancestor 4f4ba3d4fe768b4fab72991e2f137728d357648e ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "git show --format=fuller --find-renames 4f4ba3d4",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+    "shasum -a 256 target/debug/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/component-compatible-redeclaration-presentation/account.json",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/component-compatible-redeclaration-presentation/*.puml",
+    "for f in test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_*.puml test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_*.puml; do target/debug/rustuml -tsvg \"$f\" > \"/private/tmp/t14-adversarial-rust/component-compatible-redeclaration-presentation/${f:t:r}.svg\"; done",
+    "target/debug/rustuml -tsvg test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_incompatible_component_node_residue.puml",
+    "target/debug/rustuml -tsvg test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_incompatible_component_interface_residue.puml",
+    "xmllint --noout test-diagrams/perturbations/component-compatible-redeclaration-presentation/*.svg",
+    "rg -l -i 'syntax error|error line|an error has occured|\\[From ' test-diagrams/perturbations/component-compatible-redeclaration-presentation -g '*.svg'",
+    "python3 -c '<inline strict XML comparator: positional structure and text exact; GEOM_EPS=0.02; root dimensions within 1px>'",
+    "python3 -c '<inline semantic inventory comparator: sorted data-qualified-name, data-source-line, descendant text, hrefs, and fills>'",
+    "rg -n 'SharedLedger8403|CopperShared8427|ImplicitPort8575|component-compatible-redeclaration-presentation|checker_component_' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "shasum -a 256 test-diagrams/perturbations/component-compatible-redeclaration-presentation/*"
+  ],
+  "comparison_method": {
+    "rust_generation": "Every valid-source Rust SVG was produced by the exact hash-identified target/debug/rustuml binary and kept outside the repository.",
+    "java_generation": "Every checked-in same-stem SVG was generated headlessly by the pinned JAR. All acceptance inputs are well-formed non-error pages; only the two explicitly named incompatible-kind residue probes are Java error pages.",
+    "strict_comparison": "Positional element/tag/depth/text and non-geometry attributes are exact; numeric geometry skeletons are exact with at most 0.02 SVG px deviation; only root outer dimensions tolerate 1 px.",
+    "semantic_comparison": "Entity inventories are sorted by data-qualified-name and compare qualified identity, creation source line, visible text, URLs, and represented fills independently of unrelated document order and interface-center geometry.",
+    "excluded_diagnostic": "target/debug/examples/diff_one was found to contain a stale linked renderer and was excluded from every verdict."
+  },
+  "model_audit": {
+    "java": [
+      "CommandCreateElementFull resolves the quark, rejects incompatible leaf type or USymbol, creates only absent data, then always replaces display and colors; stereotype and URL change only when supplied.",
+      "CommandLinkElement accepts ()-prefixed endpoint codes. getDummy creates such an absent endpoint as LeafType.DESCRIPTION with USymbols.INTERFACE in the current quark context, so a later interface declaration is a compatible redeclaration that must retain that first owner and creation line.",
+      "A bare absent relationship endpoint is STILL_UNKNOWN rather than an Interface and is therefore not valid evidence for compatible Interface reuse; the decisive held-out uses Java's explicit () endpoint form instead."
+    ],
+    "rust": [
+      "materialize_component correctly preserves identity, owner, together membership, kind, and source_line while replacing label and color and conditionally replacing stereotype and URL.",
+      "materialize_interface correctly replaces the label for an interface already represented in the interfaces inventory.",
+      "RE_DESCRIPTION_CONN cannot parse ()-prefixed relationship endpoints. The valid implicit-first Interface relation is ignored, so no first interface, peer, or relation is created; the later explicit declaration is incorrectly materialized in the second owner with the later source line.",
+      "The fresh-label and mechanism-path scan found no production references to checker inputs or perturbation paths. The implementation diff introduced no numeric layout constant."
+    ]
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_root_omission_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_root_omission_ttb.svg",
+      "axes": ["Component", "root", "defaulted final label", "stereotype omitted", "color cleared", "URL omitted and retained", "TTB", "creation line"],
+      "result": "pass: strict structural match"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_root_replacement_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_root_replacement_ltr.svg",
+      "axes": ["Component", "root", "three supplied labels", "stereotype replacement", "color replacement", "URL replacement", "LTR", "creation line"],
+      "result": "pass: strict structural match"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_sibling_first_owner_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_sibling_first_owner_ttb.svg",
+      "axes": ["Component", "sibling packages", "first owner", "label/style/URL replacement", "TTB"],
+      "result": "pass: strict structural match and first qualified owner retained"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_nested_omission_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_nested_omission_ltr.svg",
+      "axes": ["Component", "nested first owner", "sibling redeclaration", "stereotype retained", "color cleared", "URL retained", "LTR"],
+      "result": "semantic pass: identity, first owner, creation line, text, URL, stereotype, and fill match; strict SVG differs only because Java emits the first-created reused leaf before the later sibling probe while Rust traverses the sibling package first"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_together_first_owner_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_together_first_owner_ttb.svg",
+      "axes": ["Component", "together-first materialization", "outside redeclaration", "label/style/URL replacement", "TTB"],
+      "result": "pass: strict structural match; Together membership remains first-writer-owned"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_implicit_first_nested_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_implicit_first_nested_ltr.svg",
+      "axes": ["Component", "bracketed relationship endpoint materialization", "nested first owner", "later supplied presentation", "LTR"],
+      "result": "pass: strict structural match; first endpoint owner and relation creation line retained"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_bracket_redeclaration_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_bracket_redeclaration_ttb.svg",
+      "axes": ["Component", "bracket-first compatible form", "later component keyword", "style and URL replacement", "TTB"],
+      "result": "pass: strict structural match"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_reverse_bracket_redeclaration_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_component_reverse_bracket_redeclaration_ltr.svg",
+      "axes": ["Component", "component-first", "reverse code-as-bracket display", "omitted style clears/retains by field", "LTR"],
+      "result": "pass: strict structural match"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_label_defaulting_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_label_defaulting_ltr.svg",
+      "axes": ["Interface", "root", "explicit first label", "defaulted final label", "LTR", "creation line"],
+      "result": "pass: strict structural match"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_root_forms_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_root_forms_ttb.svg",
+      "axes": ["Interface", "root", "keyword versus lollipop declaration", "label replacement", "TTB", "creation line"],
+      "result": "semantic pass: identity, source line, and final label match; strict SVG has an independent 2px interface-center geometry difference"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_sibling_first_owner_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_sibling_first_owner_ltr.svg",
+      "axes": ["Interface", "sibling packages", "first owner", "label replacement", "LTR"],
+      "result": "semantic pass: first qualified owner, source line, and final label match; strict SVG has the same independent interface geometry difference"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_nested_first_owner_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_nested_first_owner_ttb.svg",
+      "axes": ["Interface", "nested first owner", "root redeclaration", "keyword/lollipop forms", "TTB"],
+      "result": "semantic pass: first qualified owner, source line, and final label match; strict SVG differs only in independent interface/cluster geometry"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_together_first_owner_ltr.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_together_first_owner_ltr.svg",
+      "axes": ["Interface", "Together", "outside redeclaration", "label replacement", "LTR"],
+      "result": "semantic pass: identity, source line, final label, and companion inventory match; strict SVG has the independent interface geometry difference"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_implicit_first_nested_ttb.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_interface_implicit_first_nested_ttb.svg",
+      "axes": ["Interface", "valid () relationship endpoints", "implicit-first materialization", "nested first owner", "later explicit redeclaration", "TTB", "creation line", "relation persistence"],
+      "result": "FAIL and verdict-driving: Java emits ImplicitPortFirst8573.ImplicitPort8575 at source line 3 plus ImplicitPortPeer8577 and their relation; Rust omits the relation and peer and emits ImplicitPortSecond8581.ImplicitPort8575 at source line 7"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_incompatible_component_interface_residue.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_incompatible_component_interface_residue.svg",
+      "axes": ["declared incompatible-kind residue", "Component then Interface same id"],
+      "result": "non-acceptance evidence: Java error page; Rust exits 101 with duplicate-interface SVEK-plan panic"
+    },
+    {
+      "source": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_incompatible_component_node_residue.puml",
+      "golden": "test-diagrams/perturbations/component-compatible-redeclaration-presentation/checker_incompatible_component_node_residue.svg",
+      "axes": ["declared incompatible-kind residue", "Component then Node same id"],
+      "result": "non-acceptance evidence: Java error page; Rust exits 0 and silently retains the first Component presentation"
+    }
+  ],
+  "artifact_manifest": {
+    "checker_component_root_omission_ttb.puml": "6e20b8a988a52d3d3b05a0011f208caec377f4704ae4aab55deda31203f1dae2",
+    "checker_component_root_omission_ttb.svg": "770a1df86984fd10ade4109516e19c2ebf1bcc5f21299a645211df5c860113e2",
+    "checker_component_root_replacement_ltr.puml": "4cd8edc5ff302726e8aff36dfba97ce420e11308fa2a47615283bdb8b6a4095b",
+    "checker_component_root_replacement_ltr.svg": "39ed25bbb8de56e45a8d906d0d25538149010c55909004168645527c89c52f75",
+    "checker_component_sibling_first_owner_ttb.puml": "45f70e8b7d3eade7e3f8df0a29834f77451f2f19e06803a2646eea5b74afee86",
+    "checker_component_sibling_first_owner_ttb.svg": "01f131f3b7134a0a4df7f6be715b67d343ba1f52cdd3bb24b6f3ac950db36b81",
+    "checker_component_nested_omission_ltr.puml": "eb3bc50aaeb63b77fe5e1e44ec13fdbf0e29bf3e9cb3c2a0a505bb9856ac65de",
+    "checker_component_nested_omission_ltr.svg": "3dd00df44f4abca85ad14df6101cf797e444bb73adf15c6bf3dbc4a6e05cfa6e",
+    "checker_component_together_first_owner_ttb.puml": "1b1e02b37012119d618d3bca4ad7a3d51d69948d86e77ebbcfe2d3153ab20ef7",
+    "checker_component_together_first_owner_ttb.svg": "1f985cd8376ecd35ad6180d209caad19eee038b791b4e79db72027d54b9d5578",
+    "checker_component_implicit_first_nested_ltr.puml": "e6d150e0893198d6e5b166eca4b2e2f3900244bf895d7bc67177634ce45c3325",
+    "checker_component_implicit_first_nested_ltr.svg": "9977a8fd03f75c7a4e535e7d624785e93e5ca3ceca18687ee6a018eefeb836b5",
+    "checker_component_bracket_redeclaration_ttb.puml": "5fc78d5ba3f1fbd17bee7ddcdf169ebdb1f0a3c7516fd008941c7e2f211f9d5a",
+    "checker_component_bracket_redeclaration_ttb.svg": "d10e74dab0e76c5e271704601c32d315ee5acd6c0481064a775c6a6b9fc50ff8",
+    "checker_component_reverse_bracket_redeclaration_ltr.puml": "4507d38b8c904d87510861d7b8d0243f0306b1c657ea5766333fd3c12254feab",
+    "checker_component_reverse_bracket_redeclaration_ltr.svg": "74bee4de16dcb56567326495d585b03fa3912802348555509488e04594d53ce4",
+    "checker_interface_label_defaulting_ltr.puml": "6893bc9a1194f85e65e6c86257fbd263145aa0dea196dd386335059bb5a61db0",
+    "checker_interface_label_defaulting_ltr.svg": "5fc9d92e83b83d8ec46d88926219558c1893ba0bb99dd61745ee678ae9574521",
+    "checker_interface_root_forms_ttb.puml": "b3f5f771953cdc4b9341a83f7803f56ffde482be06a5b4f10fd16034e127d655",
+    "checker_interface_root_forms_ttb.svg": "adf1f0b150b97c95d881bc4e00bde22d88209a7166284129de9d09ae9a48178c",
+    "checker_interface_sibling_first_owner_ltr.puml": "0f26c43e8e7737b7305e68299e9e4c760674c857696a30a93353686207fd20cf",
+    "checker_interface_sibling_first_owner_ltr.svg": "2617aea1eaf027f11b9e317e75afd68dfdb1232286d33dd5a458941be772cf7e",
+    "checker_interface_nested_first_owner_ttb.puml": "234648fefd64a8cbcf4645af01b90a817aab7b8adb57a6a3f1d343d0a967a952",
+    "checker_interface_nested_first_owner_ttb.svg": "c4277141e81daabc92fad21ea5911b902aa066ddc09bd5892d4d5682cca3f2ab",
+    "checker_interface_together_first_owner_ltr.puml": "deb9c4f2601e973d1705a51c8a398162dae8a4909df43441c02eddf6f4d8671b",
+    "checker_interface_together_first_owner_ltr.svg": "b2390d37d957a342105ffa801453d0ae3d2b31a216b9f29bd064d38e0b4b2857",
+    "checker_interface_implicit_first_nested_ttb.puml": "0f4a9a489ffccd3638653975b478141c0dbdf15a85a2d8dcd7cc6e586baa1705",
+    "checker_interface_implicit_first_nested_ttb.svg": "5afee6faab0a5f91fd13d3a6e6b0545e961c0c95be12352b6c9f58b222fe2ddb",
+    "checker_incompatible_component_interface_residue.puml": "8595c5e2cb4f5db54d17d612feb12af16974c5a128ec7ccc6b740cbcf2c627ea",
+    "checker_incompatible_component_interface_residue.svg": "092a6486287a1e21e75cea98199f2927202735ee7268e0a918945a9cfaa8217a",
+    "checker_incompatible_component_node_residue.puml": "0a66b0c40a8c738bffb08f2fab9fc8a7eaaf97ec28d62cd8325ff7e0c41f113f",
+    "checker_incompatible_component_node_residue.svg": "eaa57210cadff26c15f8fd424cc270f777d8483a64e724de6a74d6b18c764d76"
+  },
+  "findings": [
+    "Component presentation mutation itself is strong: supplied/defaulted labels, stereotype omission/replacement, color clearing/replacement, URL omission/replacement, root/sibling/nested/Together ownership, bracket forms, and bracketed implicit-first Component endpoints all match Java semantically; most match strictly.",
+    "Explicit Interface redeclarations also preserve first identity, owner, source line, and final label across root, nested, sibling, Together, lollipop, keyword, and defaulted-label forms. Their remaining small geometry differences are outside this presentation mechanism.",
+    "The valid Component-dispatched implicit-first Interface held-out disproves the account's acceptance surface. Java CommandLinkElement recognizes () endpoints and materializes both interfaces and the relation at source line 3 in the first package. Rust RE_DESCRIPTION_CONN does not recognize that endpoint form, so the relation and peer disappear and the later declaration acquires the second package and source line 7.",
+    "That counterexample is not incompatible-kind residue: Java creates USymbols.INTERFACE and the later interface declaration is compatible and renders a non-error SVG. It is therefore verdict-driving for this mechanism's explicit implicit-first axis.",
+    "The incompatible-kind probes remain non-acceptance evidence exactly as requested. They confirm the declared residue is real and severe, but neither Java error page was used to reject the compatible mechanism.",
+    "No fixture-shaped implementation or new unexplained constant was found. The rejection is a missing Java grammar/materialization path, not an overfit signature."
+  ]
+}

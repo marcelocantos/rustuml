@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+component InterfaceDispatchAnchor8519
+package "Port First Owner 8521" as PortFirst8523 {
+  interface "Port Initial 8525" as SharedPort8527
+}
+package "Port Second Owner 8529" as PortSecond8531 {
+  interface "Port Final 8533" as SharedPort8527
+  component PortSecondProbe8535
+}
+@enduml

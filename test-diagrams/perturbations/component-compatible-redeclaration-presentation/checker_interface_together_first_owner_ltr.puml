@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+component InterfaceDispatchAnchor8559
+together {
+  interface "Together Port Initial 8561" as TogetherPort8563
+  interface TogetherPortPeer8565
+}
+() "Together Port Final 8567" as TogetherPort8563
+@enduml

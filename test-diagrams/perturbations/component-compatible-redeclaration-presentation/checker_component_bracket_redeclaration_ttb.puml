@@ -1,0 +1,4 @@
+@startuml
+[Bracket Initial 8491] as BracketShared8493
+component "Bracket Final 8495" as BracketShared8493 <<final>> [[https://final.example/bracket]] #Lavender
+@enduml

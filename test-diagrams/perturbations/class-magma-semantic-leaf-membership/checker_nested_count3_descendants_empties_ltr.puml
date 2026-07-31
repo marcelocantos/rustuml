@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+package "Harbor Owner 8261" as HarborOwner8261 {
+  class HarborAlpha8263
+  package "Harbor Plain Empty 8265" as HarborPlainEmpty8265 {
+  }
+  note "harbor memo" as HarborMemo8267
+  package "Harbor Inner 8269" as HarborInner8269 {
+    class HarborDescendantA8271
+    class HarborDescendantB8273
+    class HarborDescendantC8275
+  }
+  package "Harbor Frame Empty 8277" as HarborFrameEmpty8277 <<frame>> {
+  }
+  class HarborBeta8279
+}
+class HarborRootAnchor8281
+@enduml

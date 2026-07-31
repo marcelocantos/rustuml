@@ -1,0 +1,4 @@
+@startuml
+component "Residue Component 8591" as ResidueShared8593
+interface "Residue Interface 8595" as ResidueShared8593
+@enduml

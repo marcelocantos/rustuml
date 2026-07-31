@@ -1,0 +1,4 @@
+@startuml
+component "Residue Component 8601" as ResidueKind8603
+node "Residue Node 8605" as ResidueKind8603
+@enduml

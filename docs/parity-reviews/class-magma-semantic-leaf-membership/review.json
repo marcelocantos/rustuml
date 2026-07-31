@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-magma-semantic-leaf-membership",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "identity": "independent adversarial checker; did not implement the mechanism",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, exact supplied RustUML shipping binary, Java PlantUML JAR, xmllint, and an inline XML structural comparator"
+  },
+  "verdict": "ACCEPTED",
+  "revisions": {
+    "rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commit": "27ce0ddafda82e1d45f662f09d21f4b11535fa22",
+    "implementation_commit": "03eb672a5c186c99fc0464cd2af1954af2944861",
+    "implementation_is_ancestor_of_review_revision": true
+  },
+  "artifact_hashes": {
+    "rust_shipping_binary": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+      "sha256": "f94f13376321676b8ac7b37665f4717060f82db1429594850fdc0daad22307d7"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account_json_sha256": "14b731ecc7bdf7a077197f5e84f3da7602a61e154a54b97f0894e8d7118c2751"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git merge-base --is-ancestor 03eb672a5c186c99fc0464cd2af1954af2944861 ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+    "git show --format=fuller --find-renames 03eb672a -- crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/atmp/CucaDiagram.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "shasum -a 256 target/debug/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-magma-semantic-leaf-membership/account.json",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-magma-semantic-leaf-membership/*.puml",
+    "for f in test-diagrams/perturbations/class-magma-semantic-leaf-membership/*.puml; do target/debug/rustuml -tsvg \"$f\" > \"/private/tmp/t14-adversarial-rust/class-magma-semantic-leaf-membership/${f:t:r}.svg\"; done",
+    "xmllint --noout test-diagrams/perturbations/class-magma-semantic-leaf-membership/*.svg",
+    "rg -l -i 'syntax error|error line|an error has occured|\\[From ' test-diagrams/perturbations/class-magma-semantic-leaf-membership -g '*.svg'",
+    "python3 -c '<inline strict XML comparator: element order, tag, depth, text, and non-geometry attributes exact; geometry token skeleton exact and values within GEOM_EPS=0.02; root dimensions within 1px>'",
+    "rg -n 'AtlasLeaf8201|ForgeMemo8211|HarborOwner8261|class-magma-semantic-leaf-membership|checker_root_count' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "shasum -a 256 test-diagrams/perturbations/class-magma-semantic-leaf-membership/*"
+  ],
+  "comparison_method": {
+    "rust_generation": "Every Rust SVG was produced by the exact hash-identified target/debug/rustuml binary. Rust SVGs were kept outside the repository under /private/tmp/t14-adversarial-rust.",
+    "java_generation": "Every checked-in same-stem SVG was generated headlessly by the pinned PlantUML JAR and validated as well-formed XML and a non-error page.",
+    "comparison": "The inline comparator mirrors the shipped strict SVG gate for the relevant surface: positional element/tag/depth/text and non-geometry attributes are exact; numeric geometry skeletons are exact and corresponding values tolerate at most 0.02 SVG px; only root outer dimensions tolerate 1 px.",
+    "excluded_diagnostic": "target/debug/examples/diff_one was observed to contain a stale linked renderer and was not used for any verdict. Its --print-rust output differed from the exact shipping binary, so all reported results come from the hash-identified shipping output instead."
+  },
+  "model_audit": {
+    "java": [
+      "CucaDiagram.applySingleStrategy iterates each group and root's immediate Entity.leafs(), excludes every link-incident entity through isStandalone, and applies the existing three-member gate before constructing Magma.",
+      "Entity.leafs() includes only immediate children whose materialized data is not a group. Empty packages are still groups at this stage; later SVEK empty-package conversion cannot retroactively add them to Magma.",
+      "Named standalone notes are ordinary semantic leaves. Attached notes and their targets are link-incident and therefore excluded; descendants belong to their own immediate owner rather than the ancestor's Magma."
+    ],
+    "rust": [
+      "single_strategy_members projects ordinary entities and unattached aliased notes into owner buckets, filters link-incident IDs, and explicitly continues over every SvekNodeEmission::EmptyPackage.",
+      "The implementation preserves empty-package SVEK emission and changes no threshold, SquareMaker branch formula, layout constant, SVG coordinate, fixture-specific predicate, or comparator input.",
+      "The fresh-label and mechanism-path scan found no production references to checker inputs, perturbation paths, or their identifiers. The implementation diff introduced no numeric constant."
+    ]
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count2_plain_empty_ttb.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count2_plain_empty_ttb.svg",
+      "axes": ["root owner", "semantic count 2", "class plus named note", "plain empty package", "TTB", "three-member gate control"],
+      "result": "pass: strict structural match from the exact shipping binary"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count3_symbol_empty_ltr.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count3_symbol_empty_ltr.svg",
+      "axes": ["root owner", "semantic count 3", "two classes plus named note", "explicit folder empty package", "LTR", "declaration interleave"],
+      "result": "pass: strict structural match from the exact shipping binary"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count4_two_empties_ttb.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count4_two_empties_ttb.svg",
+      "axes": ["root owner", "semantic count 4", "classes and named notes", "plain and explicit cloud empty packages", "TTB", "declaration interleave"],
+      "result": "pass: strict structural match from the exact shipping binary"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count5_linked_attached_empty_ttb.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_root_count5_linked_attached_empty_ttb.svg",
+      "axes": ["root owner", "semantic count 5", "classes and named notes", "explicit node empty package", "linked leaves", "attached note and target", "TTB"],
+      "result": "pass: strict structural match; linked and attached entities remain excluded"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_nested_count3_descendants_empties_ltr.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_nested_count3_descendants_empties_ltr.svg",
+      "axes": ["nested owner", "semantic count 3", "ordinary class and named note mix", "plain and explicit frame empty packages", "descendants", "LTR"],
+      "result": "pass: strict structural match; descendants stay in the inner owner"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_nested_count4_linked_attached_empty_ttb.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_nested_count4_linked_attached_empty_ttb.svg",
+      "axes": ["nested owner", "semantic count 4", "explicit database empty package", "linked leaf", "attached note and target", "TTB"],
+      "result": "pass: strict structural match; independent exclusions survive nested ownership"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_empty_package_emission_persistence_ltr.puml",
+      "golden": "test-diagrams/perturbations/class-magma-semantic-leaf-membership/checker_empty_package_emission_persistence_ltr.svg",
+      "axes": ["root and nested empty packages", "plain package", "folder", "cloud", "node", "frame", "LTR", "emission persistence"],
+      "result": "pass: strict structural match; all empty package labels and symbol bodies remain painted"
+    }
+  ],
+  "artifact_manifest": {
+    "checker_root_count2_plain_empty_ttb.puml": "32665a9c2ef527e48132a7ccd5cf6cd3074f8363999a98b1ccfd53a48884cd8f",
+    "checker_root_count2_plain_empty_ttb.svg": "633d1665e103d54d90fa12953ef55eac467e5a81117cd0a67baccc809089a481",
+    "checker_root_count3_symbol_empty_ltr.puml": "dbba19e638da3dd239f6aff1dd83fcefe195a99a84a93aa040a262b5143071f5",
+    "checker_root_count3_symbol_empty_ltr.svg": "8e44cb2674590768957a08f7119a8cbbe9607417a4cf577836d5175aae71e247",
+    "checker_root_count4_two_empties_ttb.puml": "ac6112e7c7a152b0906b0c5cc2779586d4e123438ed60b34496badd156c6acd1",
+    "checker_root_count4_two_empties_ttb.svg": "e03d763d2e78d73cb4f3fc759dbecde1cfcb9d01b8fcf0e60b790e5af88148ab",
+    "checker_root_count5_linked_attached_empty_ttb.puml": "ca596826d5c6d8af669f2bc7b7a4130f604737a6c8b6ce5678a63d26f1efb205",
+    "checker_root_count5_linked_attached_empty_ttb.svg": "85fe9be4ebc6f351fc18bbd27d54df7fae7adc6c633e89f15f2880109fb85203",
+    "checker_nested_count3_descendants_empties_ltr.puml": "0cf5cb14a331db7ce8b142d526064b01748e1416e728fecbf71d52e727453a2a",
+    "checker_nested_count3_descendants_empties_ltr.svg": "6dd07a627a087fcda61ae1a6595a4b340a4c1db80d3e2d4c6be5cb0413abee17",
+    "checker_nested_count4_linked_attached_empty_ttb.puml": "002438947759263c363ad4b13f7aab1849064cfb2bf444692d4b6b8cb0cf64b9",
+    "checker_nested_count4_linked_attached_empty_ttb.svg": "82e3332e9e97bc708f6a960d719990cd1c1e039b3fbb24b9b3e86dd8f8715178",
+    "checker_empty_package_emission_persistence_ltr.puml": "6fef7ef8033749a8268e918363429395e51f06d46093c2e77bb40a36be9a59af",
+    "checker_empty_package_emission_persistence_ltr.svg": "f77beb77688cfe73c5174dc75836bebe1bc2eb5870924b7277349200dd5a1ca3"
+  },
+  "findings": [
+    "All seven fresh valid Java inputs are well-formed, non-error pages and all seven exact shipping-binary SVGs are strict structural matches under the repository's geometry tolerance.",
+    "Counts 2, 3, 4, and 5 all match with ordinary classes and standalone named notes, so the three-member boundary and larger SquareMaker sets did not regress.",
+    "Plain and explicit-symbol empty packages remain visible at root and nested ownership while never perturbing the Java-compatible semantic Magma result.",
+    "Linked leaves, attached notes and their targets, and descendant leaves remain excluded for their independent Java reasons in both LTR and TTB cases.",
+    "No counterexample disproved the account, and the source audit found no fixture-shaped implementation or unexplained parity-affecting constant."
+  ]
+}

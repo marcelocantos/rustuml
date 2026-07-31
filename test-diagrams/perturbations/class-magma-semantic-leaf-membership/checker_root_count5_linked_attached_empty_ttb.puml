@@ -1,0 +1,16 @@
+@startuml
+class QuartzAlpha8241
+note "quartz first memo" as QuartzMemo8243
+class QuartzBeta8245
+package "Vacant Node 8247" as VacantNode8247 <<node>> {
+}
+note "quartz second memo" as QuartzMemo8249
+class QuartzGamma8251
+
+class LinkedQuartz8253
+class LinkedOutside8255
+LinkedQuartz8253 --> LinkedOutside8255
+
+class AnnotatedQuartz8257
+note right of AnnotatedQuartz8257 : attached exclusion
+@enduml

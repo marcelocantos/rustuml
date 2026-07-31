@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+note "forge memo" as ForgeMemo8211
+package "Vacant Folder 8213" as VacantFolder8213 <<folder>> {
+}
+class ForgeAlpha8215
+class ForgeBeta8217
+@enduml

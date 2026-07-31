@@ -1,0 +1,5 @@
+@startuml
+left to right direction
+component "Reverse Initial 8501" as ReverseShared8503 <<initial>> [[https://first.example/reverse]] #MistyRose
+ReverseShared8503 as [Reverse Final 8505]
+@enduml

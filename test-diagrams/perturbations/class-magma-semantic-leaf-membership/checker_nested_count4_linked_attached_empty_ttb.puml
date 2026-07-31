@@ -1,0 +1,16 @@
+@startuml
+package "Orbit Owner 8291" as OrbitOwner8291 {
+  note "orbit memo" as OrbitMemo8293
+  class OrbitAlpha8295
+  package "Orbit Database Empty 8297" as OrbitDatabaseEmpty8297 <<database>> {
+  }
+  class OrbitBeta8299
+  class OrbitGamma8301
+
+  class OrbitLinked8303
+  class OrbitAttached8305
+  note left of OrbitAttached8305 : nested attached exclusion
+}
+class OrbitOutside8307
+OrbitLinked8303 --> OrbitOutside8307
+@enduml

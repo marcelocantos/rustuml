@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+package "Visible Plain Empty 8311" as VisiblePlainEmpty8311 {
+}
+package "Visible Folder Empty 8313" as VisibleFolderEmpty8313 <<folder>> {
+}
+package "Visible Cloud Empty 8315" as VisibleCloudEmpty8315 <<cloud>> {
+}
+package "Visible Node Empty 8317" as VisibleNodeEmpty8317 <<node>> {
+}
+package "Visible Outer 8319" as VisibleOuter8319 {
+  package "Visible Nested Frame Empty 8321" as VisibleNestedFrameEmpty8321 <<frame>> {
+  }
+}
+class EmissionAnchor8323
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+class CedarAlpha8221
+package "Vacant Cloud 8223" as VacantCloud8223 <<cloud>> {
+}
+note "cedar first memo" as CedarMemo8225
+package "Vacant Plain 8227" as VacantPlain8227 {
+}
+class CedarBeta8229
+note "cedar second memo" as CedarMemo8231
+@enduml

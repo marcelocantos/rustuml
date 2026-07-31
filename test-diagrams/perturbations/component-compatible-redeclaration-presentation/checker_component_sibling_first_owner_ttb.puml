@@ -1,0 +1,9 @@
+@startuml
+package "Copper First Owner 8421" as CopperFirst8423 {
+  component "Copper Initial 8425" as CopperShared8427 <<first>> [[https://first.example/copper]] #Gold
+}
+package "Copper Second Owner 8429" as CopperSecond8431 {
+  component "Copper Final 8433" as CopperShared8427 <<second>> [[https://second.example/copper]] #Silver
+  component CopperSecondProbe8435
+}
+@enduml

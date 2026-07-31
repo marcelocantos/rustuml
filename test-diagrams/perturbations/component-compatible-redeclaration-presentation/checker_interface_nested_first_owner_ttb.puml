@@ -1,0 +1,9 @@
+@startuml
+component InterfaceDispatchAnchor8539
+package "Interface Outer 8541" as InterfaceOuter8543 {
+  package "Interface Inner 8545" as InterfaceInner8547 {
+    () "Nested Port Initial 8549" as NestedPort8551
+  }
+}
+interface "Nested Port Final 8553" as NestedPort8551
+@enduml

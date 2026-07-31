@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+component "Initial Beacon 8411" as SharedBeacon8413 <<initial>> [[https://first.example/beacon]] #Pink
+component "Middle Beacon 8415" as SharedBeacon8413 <<middle>> [[https://middle.example/beacon]] #PaleGreen
+component "Final Beacon 8417" as SharedBeacon8413 <<final>> [[https://final.example/beacon]] #LightBlue
+@enduml
