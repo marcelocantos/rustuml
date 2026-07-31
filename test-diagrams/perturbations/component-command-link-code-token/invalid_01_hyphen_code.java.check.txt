@@ -1,0 +1,2 @@
+Some diagram description contains errors
+EXIT=200

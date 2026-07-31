@@ -1,0 +1,49 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ncomponent Anchor\nnote \"bad combining\" as Cafe\u{301}.Note\nCafe\u{301}.Note --> Anchor\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        components: [
+            Component {
+                id: "Anchor",
+                label: "Anchor",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 1,
+                kind: Component,
+            },
+        ],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [],
+        connections: [],
+        removed_connections: [],
+        packages: [],
+        together: [],
+        notes: [],
+        removed_notes: [],
+    },
+)
+
+PASS

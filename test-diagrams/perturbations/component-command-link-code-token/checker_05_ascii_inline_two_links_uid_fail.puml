@@ -1,0 +1,9 @@
+@startuml
+package Outer {
+  note "payload" as Ledger.C464
+  component A
+  component B
+  Ledger.C464 --> A
+  B <-- Ledger.C464
+}
+@enduml

@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-command-link-code-token",
+  "verdict": "REJECTED",
+  "checker": {
+    "identity": "independent adversarial checker; did not implement the mechanism",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop terminal"
+  },
+  "checked_at": "2026-07-31",
+  "revisions": {
+    "rust_revision": "91808a234702c251be4246d33a1d440fbcb4541b",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rust_binary": "/private/tmp/rustuml-component-note-endpoints/target/release/rustuml",
+    "account": "docs/parity-reviews/component-command-link-code-token/account.json"
+  },
+  "artifact_hashes": {
+    "rust_binary_sha256": "5489a391dde9377669a9ebed6bb77811d5a77e346dcf612edb57bb0734ca03d2",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_json_sha256": "196d34fbf937c5cb9671242802286cd9de1c57b3d5c3cac1e2b043d3aec18443"
+  },
+  "no_cargo_or_rustc": true,
+  "scope": {
+    "reviewed_rust": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/component.rs",
+      "crates/rustuml-render/src/component.rs"
+    ],
+    "reviewed_java": [
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagram.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+      "src/main/java/net/sourceforge/plantuml/sdot/CucaDiagramFileMakerSmetana.java"
+    ],
+    "artifacts_dir": "test-diagrams/perturbations/component-command-link-code-token"
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-check-component-note-endpoints rev-parse HEAD",
+    "sed -n on docs/parity-reviews/component-command-link-code-token/account.json plus the listed Java/Rust source files",
+    "rg -n on CommandLinkElement, CommandFactoryNote, RE_DESCRIPTION_CONN, NAMED_NOTE_CODE_PATTERN, component_opalized_floating_note, and fresh probe labels in production src",
+    "for f in test-diagrams/perturbations/component-command-link-code-token/checker_*.puml; do java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$f\" > \"${f%.puml}.java.svg\"; done",
+    "for f in test-diagrams/perturbations/component-command-link-code-token/checker_*.puml; do /private/tmp/rustuml-component-note-endpoints/target/release/rustuml --no-oracle -pipe -tsvg < \"$f\" > \"${f%.puml}.rust.svg\"; done",
+    "for f in checker_05_ascii_inline_two_links_uid_fail.puml checker_06_unicode_multiline_two_links_uid_fail_ltr.puml; do /private/tmp/rustuml-component-note-endpoints/target/release/rustuml --no-oracle -pipe --ast < \"$f\" > \"${f%.puml}.rust.ast\"; done",
+    "xmllint --noout test-diagrams/perturbations/component-command-link-code-token/*.java.svg test-diagrams/perturbations/component-command-link-code-token/*.rust.svg",
+    "python3 ElementTree inventory extraction of ordered entity/cluster qualified names, ordered link ids and endpoint entity ids, and visible text from every Java/Rust SVG pair",
+    "for f in test-diagrams/perturbations/component-command-link-code-token/invalid_*.puml; do java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly \"$f\" > \"${f%.puml}.java.check.txt\" 2>&1; done",
+    "for f in test-diagrams/perturbations/component-command-link-code-token/invalid_*.puml; do /private/tmp/rustuml-component-note-endpoints/target/release/rustuml --no-oracle -pipe --ast < \"$f\" > \"${f%.puml}.rust.check.txt\" 2>&1; done",
+    "shasum -a 256 /private/tmp/rustuml-component-note-endpoints/target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/component-command-link-code-token/account.json"
+  ],
+  "validation": {
+    "xml": "PASS for all 14 valid Java/Rust SVGs",
+    "valid_held_out_count": 7,
+    "invalid_probe_count": 3,
+    "capture_number_drift_found": false,
+    "capture_number_evidence": "checker_01 rust AST retains from_mult=\"1\" and label=\"sync\" after the RE_DESCRIPTION_CONN rewrite; NAMED_NOTE_CODE_PATTERN contributes no capturing groups.",
+    "fresh_probe_labels_in_production_src": false
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_01_ascii_inline_source_bracket_label.puml",
+      "valid": true,
+      "axes": [
+        "ASCII dotted code",
+        "inline named note",
+        "source endpoint",
+        "bracket target",
+        "multiplicity and label",
+        "root ownership"
+      ],
+      "result": "PASS: Java and Rust both emit Sink ent0002 and Ledger.C464 ent0003 with no standalone link group because the sole note relation is opalized into the note outline. Rust AST retains the multiplicity and label captures."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_02_unicode_multiline_destination_quoted_ltr.puml",
+      "valid": true,
+      "axes": [
+        "Unicode dotted code",
+        "multiline named note",
+        "destination endpoint",
+        "quoted component endpoint",
+        "nested package ownership",
+        "left-to-right direction"
+      ],
+      "result": "PASS on the core relation model: both sides emit one Outer note and one Outer.Quoted Anchor component, with the sole note relation opalized into the note outline. Java folds the note qualified name to Outer.M.mo..elta_7 while Rust emits Outer.Mémo.Δelta_7, matching the account's declared Unicode SVG-metadata residue."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_03_ascii_undeclared_dotted_interface_control.puml",
+      "valid": true,
+      "axes": [
+        "ASCII dotted undeclared ordinary endpoint",
+        "synthetic interface control",
+        "relation UID inventory"
+      ],
+      "result": "PASS: Java and Rust both synthesize Undeclared.api as ent0003 and emit dependency lnk4 to Anchor ent0002."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_04_unicode_undeclared_dotted_interface_control.puml",
+      "valid": true,
+      "axes": [
+        "Unicode dotted undeclared ordinary endpoint",
+        "synthetic interface control",
+        "relation UID inventory"
+      ],
+      "result": "PASS on the core relation model: Java and Rust both synthesize one interface and emit dependency lnk4 to Anchor. Java folds the interface qualified name to M.trique..elta_7 while Rust emits Métrique.Δelta_7, again matching the declared Unicode SVG-metadata residue."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_05_ascii_inline_two_links_uid_fail.puml",
+      "valid": true,
+      "axes": [
+        "ASCII dotted code",
+        "inline named note",
+        "both endpoint sides",
+        "nested package ownership",
+        "relation count and order",
+        "SVG UID inventory"
+      ],
+      "result": "FAIL and verdict-driving: Java emits Outer.Ledger.C464 ent0003, Outer.A ent0004, Outer.B ent0005, plus dependency links lnk6 (note->A) and lnk7 (B->note). Rust emits the same entities but zero link groups. The paired rust AST still contains both parsed connections, proving the shipped-path loss happens after parsing."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_06_unicode_multiline_two_links_uid_fail_ltr.puml",
+      "valid": true,
+      "axes": [
+        "Unicode dotted code",
+        "multiline named note",
+        "both endpoint sides",
+        "nested package ownership",
+        "left-to-right direction",
+        "relation count and order",
+        "SVG UID inventory"
+      ],
+      "result": "FAIL and verdict-driving: Java emits Outer.M.mo..elta_7 ent0003, Outer.A ent0004, Outer.B ent0005, plus dependency links lnk6 and lnk8. Rust emits the same three entity ids but zero link groups. The paired rust AST still contains both parsed connections."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/checker_07_ascii_nested_declaration_order_target_side.puml",
+      "valid": true,
+      "axes": [
+        "ASCII dotted code",
+        "inline named note",
+        "target endpoint",
+        "nested package ownership",
+        "component declaration before note",
+        "bracket endpoint"
+      ],
+      "result": "PASS: Java and Rust both emit Outer, Outer.Anchor Display, and Outer.Ledger.C464 with matching entity ids and no standalone link group because the sole note relation is opalized."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/invalid_01_hyphen_code.puml",
+      "valid": false,
+      "axes": [
+        "hyphen token boundary"
+      ],
+      "result": "Java rejects the diagram with exit 200. Rust accepts the file structurally but silently drops the named note and relation, leaving only component Anchor in the AST."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/invalid_02_combining_mark_code.puml",
+      "valid": false,
+      "axes": [
+        "combining-mark token boundary"
+      ],
+      "result": "Java rejects the decomposed code Cafe + U+0301 + .Note with exit 200. Rust again accepts the file structurally but silently drops the named note and relation."
+    },
+    {
+      "path": "test-diagrams/perturbations/component-command-link-code-token/invalid_03_punctuation_code.puml",
+      "valid": false,
+      "axes": [
+        "punctuation token boundary"
+      ],
+      "result": "Java rejects the diagram with exit 200. Rust silently drops the named note and relation, leaving only component Anchor in the AST."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Multiple valid relations touching one named note disappear from the shipped Rust SVG",
+      "java_mechanism": "Java opalizes a note only when exactly one visible relation touches it. `CucaDiagramFileMakerSmetana.isOpalisable` returns false once more than one link reaches the note, so the note stays a normal entity and the separate link groups remain visible.",
+      "rust_mechanism": "Rust mirrors the single-link opale test in `component_opalized_floating_note`, but when that function returns false the ordinary connection renderer still resolves endpoints only through components, interfaces, and packages. Named-note endpoints never resolve there, so every extra valid note relation falls through `continue` and no `<g class=\"link\">` is emitted.",
+      "evidence": [
+        "test-diagrams/perturbations/component-command-link-code-token/checker_05_ascii_inline_two_links_uid_fail.java.svg",
+        "test-diagrams/perturbations/component-command-link-code-token/checker_05_ascii_inline_two_links_uid_fail.rust.svg",
+        "test-diagrams/perturbations/component-command-link-code-token/checker_05_ascii_inline_two_links_uid_fail.rust.ast",
+        "test-diagrams/perturbations/component-command-link-code-token/checker_06_unicode_multiline_two_links_uid_fail_ltr.java.svg",
+        "test-diagrams/perturbations/component-command-link-code-token/checker_06_unicode_multiline_two_links_uid_fail_ltr.rust.svg",
+        "test-diagrams/perturbations/component-command-link-code-token/checker_06_unicode_multiline_two_links_uid_fail_ltr.rust.ast"
+      ],
+      "impact": "This disproves the account on fresh valid inputs spanning ASCII and Unicode code tokens, inline and multiline notes, both endpoint sides, nested ownership, and left-to-right direction. The parser fix is not enough for the shipped no-oracle path."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The shared bare-code parser rewrite itself generalizes on the single-link matrix",
+      "evidence": [
+        "checker_01_ascii_inline_source_bracket_label",
+        "checker_03_ascii_undeclared_dotted_interface_control",
+        "checker_07_ascii_nested_declaration_order_target_side"
+      ],
+      "notes": "These controls preserve the named-note or ordinary-endpoint model exactly enough to match entity ids and link inventories, and checker_01 shows the capture map still preserves multiplicity and label."
+    },
+    {
+      "severity": "declared_residue",
+      "title": "Unicode qualified-name folding still differs in shipped SVG metadata",
+      "evidence": [
+        "checker_02_unicode_multiline_destination_quoted_ltr",
+        "checker_04_unicode_undeclared_dotted_interface_control",
+        "checker_06_unicode_multiline_two_links_uid_fail_ltr"
+      ],
+      "notes": "Java folds non-ASCII codepoints to dots in `data-qualified-name`; Rust emits raw Unicode. The account explicitly declares this as separate residue, so it is recorded but not used to reject."
+    },
+    {
+      "severity": "non_held_out",
+      "title": "Invalid boundary tokens are rejected by Java but silently ignored by Rust",
+      "evidence": [
+        "invalid_01_hyphen_code.java.check.txt",
+        "invalid_02_combining_mark_code.java.check.txt",
+        "invalid_03_punctuation_code.java.check.txt",
+        "invalid_01_hyphen_code.rust.check.txt",
+        "invalid_02_combining_mark_code.rust.check.txt",
+        "invalid_03_punctuation_code.rust.check.txt"
+      ],
+      "notes": "These probes do not count as held-outs, but they show the Rust parser currently treats invalid note-code lines as no-ops rather than matching Java's error behavior."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "unexplained_new_constants_found": false,
+    "golden_or_fixture_io_found": false,
+    "fresh_probe_label_hits_in_production_src": false,
+    "notes": "Fresh labels such as Quoted Anchor, Anchor Display, retour, and late-note do not appear in production src. Existing Ledger/Métrique strings appear only in parser tests and prior review/account documents, not in shipping conditionals."
+  },
+  "required_follow_up": "Do not accept component-command-link-code-token yet. Preserve this corpus. Extend the no-oracle component renderer so non-opalized named-note endpoints resolve to note entities when more than one visible relation touches the note, then rerun this exact corpus with a new independent checker. Keep the Unicode SVG-name folding issue tracked separately as the account already declares."
+}

@@ -1,0 +1,5 @@
+@startuml
+component Anchor
+note "bad punctuation" as Memo!1
+Memo!1 --> Anchor
+@enduml

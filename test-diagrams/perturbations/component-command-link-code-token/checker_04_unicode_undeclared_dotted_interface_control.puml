@@ -1,0 +1,4 @@
+@startuml
+component Anchor
+Métrique.Δelta_7 ..> Anchor
+@enduml

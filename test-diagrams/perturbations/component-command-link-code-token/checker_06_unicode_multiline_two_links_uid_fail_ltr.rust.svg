@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="179px" preserveAspectRatio="none" style="width:232px;height:179px;background:#FFFFFF;" version="1.1" viewBox="0 0 232 179" width="232px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Outer-->
+<g class="cluster" data-qualified-name="Outer" data-source-line="2" id="ent0002">
+<path d="M8.5,6 L50.4609,6 A3.75,3.75 0 0 1 52.9609,8.5 L59.9609,28.4883 L215.417,28.4883 A2.5,2.5 0 0 1 217.917,30.9883 L217.917,161.5 A2.5,2.5 0 0 1 215.417,164 L8.5,164 A2.5,2.5 0 0 1 6,161.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="59.9609" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="40.9609" x="10" y="21.5352">Outer</text>
+</g>
+<!--entity A-->
+<g class="entity" data-qualified-name="Outer.A" data-source-line="6" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="49.6592" x="152.26" y="101.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="181.9192" y="106.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="179.9192" y="108.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="179.9192" y="112.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="9.6592" x="167.26" y="135.2952">A</text>
+</g>
+<!--entity B-->
+<g class="entity" data-qualified-name="Outer.B" data-source-line="7" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="48.0527" x="33.1" y="40.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="61.1527" y="45.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="59.1527" y="47.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="59.1527" y="51.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8.0527" x="48.1" y="74.2952">B</text>
+</g>
+<g class="entity" data-qualified-name="Outer.Mémo.Δelta_7" data-source-line="4" id="ent0003">
+<path d="M22,122.34 L22,147.6505 L92.2578,147.6505 L92.2578,132.34 L82.2578,122.34 L22,122.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M82.2578,122.34 L82.2578,132.34 L92.2578,132.34 L82.2578,122.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="49.2578" x="28" y="139.9084">payload</text>
+</g>
+</g></svg>

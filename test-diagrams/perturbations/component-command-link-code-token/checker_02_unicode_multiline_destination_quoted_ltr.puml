@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package Outer {
+  note as Mémo.Δelta_7
+    multiline payload
+  end note
+  component "Quoted Anchor"
+  "Quoted Anchor" <-left- Mémo.Δelta_7 : "retour"
+}
+@enduml
