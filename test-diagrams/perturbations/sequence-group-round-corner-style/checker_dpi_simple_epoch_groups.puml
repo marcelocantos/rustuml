@@ -1,0 +1,14 @@
+@startuml
+skinparam dpi 125
+skinparam roundcorner 0
+participant Alice
+participant Bob
+Alice -> Bob : square epoch
+group Square group
+  Bob -> Alice : square body
+end
+skinparam roundcorner 18
+group Rounded followup
+  Alice -> Bob : rounded body
+end
+@enduml

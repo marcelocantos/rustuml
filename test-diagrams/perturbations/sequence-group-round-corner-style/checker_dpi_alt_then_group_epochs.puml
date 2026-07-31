@@ -1,0 +1,14 @@
+@startuml
+skinparam dpi 125
+skinparam roundcorner 0
+Alice -> Bob : enter square epoch
+alt Square branch
+  Alice -> Bob : branch one
+else second branch
+  Bob -> Alice : branch two
+end
+skinparam roundcorner 18
+group Rounded follow-up [guard]
+  Alice -> Bob : follow-up body
+end
+@enduml

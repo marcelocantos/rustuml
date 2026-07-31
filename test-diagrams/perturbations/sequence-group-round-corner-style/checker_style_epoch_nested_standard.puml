@@ -1,0 +1,31 @@
+@startuml
+<style>
+sequenceDiagram {
+  group {
+    RoundCorner 13
+  }
+}
+</style>
+Alice -> Bob : establish rounded epoch
+group Outer thirteen
+  Bob -> Alice : outer body
+<style>
+sequenceDiagram {
+  group {
+    RoundCorner 0
+  }
+}
+</style>
+  alt branch one
+    Alice -> Bob : first branch
+  else branch two
+    Bob -> Alice : second branch
+  end
+  group Inner zero
+    Alice -> Bob : inner body
+  end
+end
+group Sibling zero
+  Bob -> Alice : sibling body
+end
+@enduml

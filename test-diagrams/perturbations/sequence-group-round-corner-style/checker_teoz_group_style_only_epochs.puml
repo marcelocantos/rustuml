@@ -1,0 +1,30 @@
+@startuml
+!pragma teoz true
+scale 1.375
+<style>
+sequenceDiagram {
+  group {
+    RoundCorner 15
+  }
+}
+</style>
+participant Alice
+participant Bob
+Alice -> Bob : kickoff
+group Outer fifteen
+  Bob -> Alice : outer body
+<style>
+sequenceDiagram {
+  group {
+    RoundCorner 0
+  }
+}
+</style>
+  group Inner zero
+    Alice -> Bob : inner body
+  end
+end
+group Tail zero
+  Bob -> Alice : tail body
+end
+@enduml

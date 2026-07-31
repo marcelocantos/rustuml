@@ -1,0 +1,20 @@
+@startuml
+!pragma teoz true
+scale 1.375
+skinparam roundcorner 9
+Alice -> Bob : kickoff
+group Outer nine
+  Alice -> Bob : inside outer
+  skinparam roundcorner 0
+  group Inner zero
+    Bob -> Alice : inner zero body
+  end
+  skinparam roundcorner 16
+  group Inner sixteen
+    Alice -> Bob : inner sixteen body
+  end
+end
+group Tail sixteen
+  Bob -> Alice : tail body
+end
+@enduml

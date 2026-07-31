@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-group-round-corner-style",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-sequence-group-round-corner-style-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit 5e40cda7, did not edit production Rust code, did not edit account.json, and treated every fresh valid counterexample as binding."
+  },
+  "rust_revision": "fe73d721dc9175f8d524f5cbebbc4482486e5277",
+  "rust_short_revision": "fe73d721",
+  "account_commit": "2c421f2e",
+  "implementation_commit": "5e40cda7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git -C /Users/marcelo/work/github.com/marcelocantos/rustuml rev-parse HEAD",
+    "git -C /private/tmp/rustuml-integrate-20260731a show 2c421f2e:docs/parity-reviews/sequence-group-round-corner-style/account.json",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --stat --oneline 5e40cda7 --",
+    "git -C /private/tmp/rustuml-integrate-20260731a show 5e40cda7 -- crates/rustuml-render/src/sequence.rs",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor 2c421f2e 5e40cda7",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor 5e40cda7 fe73d721dc9175f8d524f5cbebbc4482486e5277",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/Grouping.java",
+    "sed -n '1,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseGroupingHeader.java",
+    "sed -n '150,280p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/GroupingTile.java",
+    "env JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/checker_style_epoch_nested_standard.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_scale_nested_epochs.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_alt_then_group_epochs.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_simple_epoch_groups.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_group_style_only_epochs.puml",
+    "xmllint --noout /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/*.svg",
+    "rg -n -i \"syntax error|error line|plantuml.*error|an error has occured|\\[From string|No class |Your data does not sound like|does&#160;not&#160;sound\" /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style -g '*.svg'",
+    "./target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-group-round-corner-style/checker_style_epoch_nested_standard.puml",
+    "./target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_scale_nested_epochs.puml",
+    "./target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_alt_then_group_epochs.puml",
+    "./target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_simple_epoch_groups.puml",
+    "./target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_group_style_only_epochs.puml",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/docs/parity-reviews/sequence-group-round-corner-style/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/*.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/sequence-group-round-corner-style/*.svg"
+  ],
+  "no_cargo_or_rustc": true,
+  "artifact_hashes": {
+    "account_json_sha256": "bc84d398eb114383918f60a6ae77995b855b2b17362a5adac60a7aa44a367ab1",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_sha256": "e015c174b7930d95b4ddbb0a64aabc4644bffbcc36c3d2d7b805ff4c6ba00425",
+    "sources": {
+      "checker_dpi_alt_then_group_epochs.puml": "29148019aa77bb2c8983d7e4a01b258f4c8d4b14eb76d5279430ba2dc0cc6ee8",
+      "checker_dpi_simple_epoch_groups.puml": "89a484f55064298ddb28998c3b0fcb79d8e5ff3935c4babaf85f6a70bc048243",
+      "checker_style_epoch_nested_standard.puml": "3cb04d05e4bdfa40168158ff40becbf3eaf6cdbbf6bf75c357a95c1fa7b0f04d",
+      "checker_teoz_group_style_only_epochs.puml": "80be508fed40a5f533a58430e3656d5e930f648ba04f51b493ecccd7d8ca4401",
+      "checker_teoz_scale_nested_epochs.puml": "f63845890ea6ff16513fb3b24377ae1937ce6c7d617c343915baf44819b7d81a"
+    },
+    "java_svgs": {
+      "checker_dpi_alt_then_group_epochs.svg": "ef31b9154d169f0a8f96b8d532471f1cd88da87af2fb4de07ed46e8bf3d803c7",
+      "checker_dpi_simple_epoch_groups.svg": "6fea3317502dfe0775a2c47016488943515b5d1fc57f4b28d51dfb4527c34aa3",
+      "checker_style_epoch_nested_standard.svg": "79b35e2bc34d6d2c84a8eb948ef20599ace9ba4683ae05e196a2b021aeeddb02",
+      "checker_teoz_group_style_only_epochs.svg": "12179a598c892aaca5011b8039124e1ab49f63a794cc44b97ad77d6d6a8b00b6",
+      "checker_teoz_scale_nested_epochs.svg": "0a0a15251d3f12e5aeed0e8a690f2ce04ccd7a676405309b55615f0ae24a4e29"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_style_epoch_nested_standard.puml",
+      "golden": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_style_epoch_nested_standard.svg",
+      "axes": [
+        "standard sequence renderer",
+        "style-block source-order epoch flip from odd 13 to zero",
+        "nested topology with outer group, inner group, and alt/else"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_scale_nested_epochs.puml",
+      "golden": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_scale_nested_epochs.svg",
+      "axes": [
+        "teoz renderer",
+        "explicit fractional scale 1.375",
+        "skinparam source-order epochs 9 then 0 then 16",
+        "nested group topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_alt_then_group_epochs.puml",
+      "golden": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_alt_then_group_epochs.svg",
+      "axes": [
+        "standard sequence renderer",
+        "dpi 125",
+        "zero then even 18 source-order flip",
+        "alt/else followed by group"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_simple_epoch_groups.puml",
+      "golden": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_dpi_simple_epoch_groups.svg",
+      "axes": [
+        "standard sequence renderer",
+        "dpi 125",
+        "explicit participant declarations under zero before later even 18 flip",
+        "sibling group topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_group_style_only_epochs.puml",
+      "golden": "test-diagrams/perturbations/sequence-group-round-corner-style/checker_teoz_group_style_only_epochs.svg",
+      "axes": [
+        "teoz renderer",
+        "explicit fractional scale 1.375",
+        "group-only style-block epochs 15 then 0",
+        "outer plus nested plus sibling groups with participants held constant"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "Java provenance supports the claimed snapshot model for groups: Grouping captures merged root.element.sequenceDiagram.group and groupHeader styles in its constructor, ComponentRoseGroupingHeader reads RoundCorner from that captured style and converts it into both frame rounding and the tab-closing arc, and GroupingTile reads the same captured group style for Teoz background rounding.",
+    "Static inspection of 5e40cda7 found no obvious fixture-shaped branches, golden-data reads, coordinate-keyed SVG surgery, or new unexplained high-precision constants. The new logic is localized to per-GroupStart round-corner resolution and paint-path selection.",
+    "The fresh standard style-block perturbation passes no-oracle comparison. That supports the narrow non-Teoz account that later style epochs should not restyle an already-open outer group while still affecting later nested and sibling groups.",
+    "The fresh Teoz scale perturbation rejects the current head on the same temporal-style axis but outside the claimed group-only scope: participant heads declared under roundcorner 9 stay at scaled rx/ry 6.1875 in Java, while Rust repaints them with the later roundcorner 16 epoch at rx/ry 11. This is an unresolved style-snapshot leak adjacent to the claimed mechanism.",
+    "The fresh dpi simple perturbation rejects the current head for the same reason in the standard renderer. Participants explicitly declared under roundcorner 0 remain square in Java, but Rust retroactively rounds all four participant-head rects to scaled 11.7188 after the later roundcorner 18 declaration.",
+    "The fresh Teoz group-only style-block perturbation rejects the current head even with participant heads held constant. Java and Rust agree on the outer rounded radii themselves, but Rust emits wider Teoz group frames than Java for the outer, nested, and tail groups (for example expected widths 238.8472 and 178.3472 versus actual 259.4722 and 198.9722), so the direct Teoz group behavior is still not matched.",
+    "The fresh dpi alt-then-group perturbation is valid on the Java path and renders as a sequence diagram there, but Rust dispatches it as DESCRIPTION and diverges completely. This is preserved as an executable counterexample; it looks like a broader parser or auto-dispatch bug rather than a direct falsification of the round-corner geometry claim.",
+    "All preserved Java SVGs are well-formed XML and contain no PlantUML error markers. The verdict is therefore driven by fresh valid counterexamples on the shipped no-oracle path, not by self-attestation or by fixture reuse.",
+    "The source_line == 0 compatibility fallback remains unvalidated by any source-authored perturbation in this review. I found no way to force a normal parsed GroupStart onto that path without changing production code or fixtures."
+  ],
+  "verdict": "rejected"
+}
