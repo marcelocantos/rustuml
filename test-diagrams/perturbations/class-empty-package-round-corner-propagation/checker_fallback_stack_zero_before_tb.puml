@@ -1,0 +1,16 @@
+@startuml
+skinparam packageStyle stack
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 0
+    }
+  }
+}
+</style>
+
+package "Zero Shelf 9441" as ZeroShelf9441 {
+}
+@enduml

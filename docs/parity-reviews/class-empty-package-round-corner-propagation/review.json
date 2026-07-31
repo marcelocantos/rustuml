@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-round-corner-propagation",
+  "account": "docs/parity-reviews/class-empty-package-round-corner-propagation/account.json",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 1bf7053cf5e3c6f592fd69e757afe24a22b2ba5c, did not author account commit 3ff57540, and did not edit production source, baselines, or the account record."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-integration",
+    "rust_revision": "1bf7053cf5e3c6f592fd69e757afe24a22b2ba5c",
+    "implementation_commit": "1bf7053cf5e3c6f592fd69e757afe24a22b2ba5c",
+    "account_commits": [
+      "3ff57540"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "target/release/examples/diff_one",
+    "sha256": "c600c1accc671fc04fb2ebb73be4e486a4c9a5d06f1fb158b859f5cb2a39f105",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false,
+    "rebuilt": false
+  },
+  "oracle": {
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "generation_mode": "java -Djava.awt.headless=true -jar ... -tsvg <file>",
+    "fresh_java_svg_count": 4,
+    "fresh_java_syntax_error_count": 0
+  },
+  "commands": [
+    "git show 3ff57540:docs/parity-reviews/class-empty-package-round-corner-propagation/account.json",
+    "git show --stat --patch 1bf7053c -- crates/rustuml-render/src/class.rs",
+    "git show 1bf7053c:crates/rustuml-render/src/class.rs | sed -n '3978,4125p'",
+    "git show 1bf7053c:crates/rustuml-render/src/class.rs | sed -n '4358,4415p'",
+    "git show 1bf7053c:crates/rustuml-render/src/class.rs | sed -n '6548,6838p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | sed -n '780,805p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/PackageStyle.java",
+    "git diff --unified=0 1bf7053c^ 1bf7053c -- crates/rustuml-render/src/class.rs | rg -n \"checker_|test-diagrams|golden|include_str!|include_bytes!|read_to_string|replace\\(|contains\\(|927|168|24\\.0|5\\.0|3\\.75|2\\.5\"",
+    "git diff --check 1bf7053c^ 1bf7053c -- crates/rustuml-render/src/class.rs",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.puml test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_after_odd_nested_tb.puml test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_even_after_dpi_tb.puml test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_tb.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_after_odd_nested_tb.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_even_after_dpi_tb.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_tb.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.puml"
+  ],
+  "source_audit": {
+    "java_locations_checked": [
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:getStyle and drawU",
+      "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:constructor, guess, drawU, and getTextBlock",
+      "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java:drawFolder, getWTitle, getHTitle, and asBig",
+      "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:packageStyle",
+      "src/main/java/net/sourceforge/plantuml/svek/PackageStyle.java:fromString and toUSymbol"
+    ],
+    "rust_locations_checked": [
+      "crates/rustuml-render/src/class.rs:configured_package_kind",
+      "crates/rustuml-render/src/class.rs:empty_package_symbol_kind",
+      "crates/rustuml-render/src/class.rs:empty_package_round_corner",
+      "crates/rustuml-render/src/class.rs:layout_empty_packages",
+      "crates/rustuml-render/src/class.rs:emit_layout_empty_package",
+      "crates/rustuml-render/src/class.rs:emit_layout_empty_symbol_folder_shape",
+      "crates/rustuml-render/src/class.rs:emit_empty_folder_envelope",
+      "crates/rustuml-render/src/class.rs:stack_round_corner_style_drives_leaf_and_cluster_paths"
+    ],
+    "fixture_shape_scan": {
+      "status": "No production golden reads, fixture-name branches, account-specific string matches, or post-hoc SVG surgery were found in the audited implementation diff.",
+      "notes": [
+        "The production change removes hardcoded 2.5 and 3.75 arc radii and replaces them with one helper that takes the computed roundCorner.",
+        "The only new literal ratio in production is the adjacent-commented Java shoulder factor 1.5 from USymbolFolder.drawFolder.",
+        "The added contains() checks for arc signatures and polygon output live only in unit tests."
+      ]
+    }
+  },
+  "preserved_input": {
+    "path": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+    "java_svg": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.svg",
+    "axes": [
+      "unknown packageStyle stack fallback",
+      "nested empty package",
+      "even nonzero package-title roundCorner",
+      "dpi 168"
+    ],
+    "outcome": "pass"
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.svg",
+      "valid": true,
+      "axes": [
+        "unknown packageStyle stack fallback",
+        "zero package-title roundCorner",
+        "style before package creation",
+        "root empty package",
+        "left-to-right direction"
+      ],
+      "outcome": "fail: Java and Rust both render a zero-corner folder polygon, but Java positions the top-level empty package 10px farther right on a 20px wider canvas; Rust emits the same polygon width starting at x=6 instead of x=16."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_tb.svg",
+      "valid": true,
+      "axes": [
+        "unknown packageStyle stack fallback",
+        "zero package-title roundCorner",
+        "style before package creation",
+        "root empty package",
+        "top-to-bottom direction"
+      ],
+      "outcome": "fail: the same 10px left shift and 20px canvas shrink persist without left-to-right layout, so the divergence is tied to the zero-diameter empty-package path rather than the rank direction."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_after_odd_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_after_odd_nested_tb.svg",
+      "valid": true,
+      "axes": [
+        "unknown packageStyle stack fallback",
+        "odd nonzero package-title roundCorner",
+        "style after package creation",
+        "nested empty package",
+        "top-to-bottom direction"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_even_after_dpi_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_even_after_dpi_tb.svg",
+      "valid": true,
+      "axes": [
+        "unknown packageStyle stack fallback",
+        "even nonzero package-title roundCorner",
+        "style after package creation",
+        "root empty package",
+        "dpi 144"
+      ],
+      "outcome": "pass"
+    }
+  ],
+  "result_counts": {
+    "preserved_passed": 1,
+    "fresh_inputs_total": 4,
+    "fresh_valid_inputs": 4,
+    "fresh_valid_passed": 2,
+    "fresh_valid_failed": 2,
+    "fresh_java_syntax_errors": 0,
+    "oracle_errors": 0
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The zero-diameter empty-package folder branch is still wrong on fresh valid inputs.",
+      "evidence": "Both checker_fallback_stack_zero_before_lr and checker_fallback_stack_zero_before_tb fail structurally. Java renders the polygon at x=16 on a 175px-wide canvas, while Rust renders the same-width polygon at x=6 on a 155px-wide canvas. The failure reproduces with and without left-to-right layout, so the surviving defect is in the zero-corner top-level empty-package path rather than in the nonzero arc propagation or rank direction."
+    },
+    {
+      "severity": "supporting",
+      "summary": "Unknown packageStyle fallback and nonzero corner propagation are modeled correctly for the exercised held-outs.",
+      "evidence": "configured_package_kind still rejects unsupported values such as stack, empty_package_symbol_kind falls back to PackageKind::Package for ordinary empty packages, and the preserved checker plus the fresh odd/even nonzero held-outs all match Java exactly."
+    },
+    {
+      "severity": "supporting",
+      "summary": "Creation-order independence survived the fresh nonzero controls.",
+      "evidence": "Both checker_fallback_stack_after_odd_nested_tb and checker_fallback_stack_even_after_dpi_tb place the skinparam/style block after the package declaration and still match Java exactly, so the implementation is not snapshotting package-title roundCorner at creation time."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped logic or unexplained constants were found in the implementation diff.",
+      "evidence": "The audited production change factors the folder/package envelope into one helper, carries the computed roundCorner through that helper, and cites Java USymbolFolder for the 1.5 shoulder ratio. Searches across the diff found no test-diagram reads, golden data access, fixture labels, or coordinate-keyed string surgery."
+    }
+  ],
+  "verdict": "REJECTED",
+  "verdict_reason": "Fresh valid held-outs on the zero-corner branch still fail, so the mechanism cannot be accepted even though the preserved checker and the nonzero fallback cases pass."
+}

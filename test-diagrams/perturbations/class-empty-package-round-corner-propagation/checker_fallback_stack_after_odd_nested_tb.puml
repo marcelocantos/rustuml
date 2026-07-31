@@ -1,0 +1,19 @@
+@startuml
+package "Outer Crate 9421" as OuterCrate9421 {
+  package "Odd Shelf 9423" as OddShelf9423 {
+  }
+  class "Peer 9427" as Peer9427
+}
+
+skinparam packageStyle stack
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 17
+    }
+  }
+}
+</style>
+@enduml

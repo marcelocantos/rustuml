@@ -1,0 +1,17 @@
+@startuml
+package "Even Shelf 9431" as EvenShelf9431 {
+}
+
+skinparam dpi 144
+skinparam packageStyle stack
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 26
+    }
+  }
+}
+</style>
+@enduml
