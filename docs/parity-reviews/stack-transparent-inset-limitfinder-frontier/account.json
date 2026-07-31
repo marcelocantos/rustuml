@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "stack-transparent-inset-limitfinder-frontier",
-  "status": "implementation_green_pending_independent_review",
+  "status": "rejected_review_preserved_remediation_accounted_before_fix",
   "account_revision": "fe4f07b4",
   "implementation_revision": "743d463a",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
@@ -13,11 +13,12 @@
   "rust_locations": [
     "crates/rustuml-render/src/class.rs:package_cluster_painted_min",
     "crates/rustuml-render/src/class.rs:normalize_svek_package_envelope",
+    "crates/rustuml-render/src/class.rs:empty_package_painted_frontier",
     "crates/rustuml-render/src/class.rs:class body envelope accounting for painted clusters"
   ],
   "invariant": "USymbolStack paints a transparent inset URectangle and an outer UPath. LimitFinder measures the rectangle even though its color is none: its minimum is translated by (-1,-1), while its maximum is width-1,height-1 and remains inside the outer path. SvekResult therefore normalizes a stack cluster from minY one unit above the outer path, moves the complete solved body down by one unit, and expands the final unscaled vertical extent by one unit.",
-  "causal_divergence": "Rust package_cluster_painted_min falls through to the outer path origin for stack clusters, so normalize_svek_package_envelope omits the inset rectangle's one-unit minY frontier. The whole cluster and its children remain one base unit too high and the root canvas is one base unit too short; the checker exposes the same model error as 1.625px under scale 1.625 and 1.5px under dpi 144.",
-  "planned_change": "Model Stack's LimitFinder frontier directly in package_cluster_painted_min as minX unchanged and minY minus the existing LIMIT_FINDER_RECTANGLE_INSET. Include that same painted minimum in body-top accounting while retaining the outer path as the maximum. Do not derive any value from scaled checker coordinates; generic SVG scaling remains downstream.",
+  "causal_divergence": "Rust originally omitted the inset frontier from package_cluster_painted_min, leaving nonempty stack clusters one base unit too high and the root canvas one unit too short. Commit 743d463a fixed that path, but the independent review found the parallel empty-package path: empty_package_painted_frontier still falls through to minY zero. A brace-bearing empty class stack therefore retains the identical one-unit drift through a distinct render role.",
+  "planned_change": "Retain 743d463a's nonempty-cluster model and add the same Stack frontier to empty_package_painted_frontier: minX zero, minY minus the existing LIMIT_FINDER_RECTANGLE_INSET, and maxima still owned by the outer path at width and height. Do not derive any value from scaled checker coordinates; generic SVG scaling remains downstream.",
   "perturbation_axes": [
     "unscaled versus explicit fractional scale and dpi",
     "stack cluster versus empty stack leaf control",
@@ -26,7 +27,7 @@
     "renamed labels and changed relationship counts",
     "stack alone versus stack with a sibling symbol cluster"
   ],
-  "scope_boundary": "This mechanism owns only the stack cluster's LimitFinder minimum and resulting SVEK/body normalization. It does not alter corner geometry, stroke state, symbol dimensions, title/content margins, child Graphviz layout, generic SVG scaling, comparator behavior, baselines, or fixture eligibility.",
+  "scope_boundary": "This mechanism owns the transparent inset's LimitFinder minimum for both nonempty stack clusters and class-dispatch empty stack packages, plus resulting SVEK/body normalization. It does not alter corner geometry, DESCRIPTION dispatch, stroke state, symbol dimensions, title/content margins, child Graphviz layout, generic SVG scaling, comparator behavior, baselines, or fixture eligibility.",
   "acceptance": [
     "The preserved thick scaled and dpi stack-cluster inputs lose the uniform vertical-origin/root-height drift.",
     "A unit test derives the one-unit minimum from LIMIT_FINDER_RECTANGLE_INSET and shows the outer path still owns the maximum.",
@@ -34,6 +35,8 @@
     "The renderer suite and no-oracle ratchet remain green.",
     "An independent checker records an accepted verdict at the exact implementation revision."
   ],
+  "rejected_review": "docs/parity-reviews/stack-transparent-inset-limitfinder-frontier/review.json",
+  "remediation_input": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.puml",
   "forbidden_approaches": [
     "adding 1.625, 1.5, or any checker-derived scaled offset",
     "moving only stack SVG elements after layout",
