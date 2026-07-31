@@ -81,7 +81,7 @@
   ],
   "experimental_result": {
     "account_revision": "52a1153c",
-    "implementation_revision": "pending implementation commit",
+    "implementation_revision": "b3ac8d304d3091d7d648a5f202e16ba2f8103409",
     "accepted_result": "The Cerulean component output now emits and references the Java-compatible #59B6EC-#2FA4E7 vertical gradient; its structural diff is reduced to the separately recorded root-width mismatch. The shipped-path census remains 11,168/11,251 because that independent mismatch still rejects the pair, and every family count remains unchanged.",
     "model_evidence": "component_gradients inventories raw background declarations without choosing among them. Existing style resolution and inline BACK precedence select the actual paint, gradient_fill_or preserves the tuple as a resource reference, and finalize_painted_resources removes dead tuples and compacts ids by first paint. Fresh tests exercise all four policies, duplicate reuse across two entities, pure-CSS source snapshots, inline-over-style precedence, an unpainted document gradient, and an unpainted late component declaration. The full 811-test renderer suite and clippy are green.",
     "commands": [

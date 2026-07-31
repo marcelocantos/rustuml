@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-transparent-paint-token",
+  "status": "investigated_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "symbols": [
+        "EntityImageClass#drawInternal"
+      ],
+      "lines": "174-241",
+      "role": "Carries the resolved class body and header HColor values into rectangle painting without substituting an opaque fallback for an explicitly transparent paint."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "symbols": [
+        "DriverRectangleSvg#applyFillColor"
+      ],
+      "lines": "84-101",
+      "role": "Passes a non-gradient HColor's SVG value and TransparentFillBehavior to SvgGraphics."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColor.java",
+      "symbols": [
+        "HColor#toSvg"
+      ],
+      "lines": "75-80",
+      "role": "Serializes a transparent HColor as #00000000 rather than an opaque RGB color."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#setFillColor",
+        "SvgGraphics#fixColor"
+      ],
+      "lines": "516-539",
+      "role": "Normalizes #00000000 to the SVG paint token none under the default transparent-fill behavior."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "resolve_flat_or_gradient_start",
+        "render_entity_content"
+      ],
+      "lines": "3749-3753, 9340-9380",
+      "role": "Routes solid class, stereotype, header, and inline paints through resolve_color; that palette resolver does not model transparency and falls back to #FFFFFF for the token transparent."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "gradient_fill_or"
+      ],
+      "lines": "2057-2068",
+      "role": "Already implements the correct typed paint behavior for transparent, gradients, and solid colors: transparent becomes none, an unresolved gradient becomes its first stop, and ordinary colors use the palette resolver."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean-outline_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean-outline_class.svg"
+  ],
+  "claimed_invariant": "The PlantUML token transparent is an explicit paint value, not an unknown named color and not absence of a style. Wherever class body, header, stereotype, or inline paint resolution selects it, SVG rectangles use fill=\"none\" while retaining their independently resolved stroke. Solid colors and gradient tuples keep their existing behavior.",
+  "causal_divergence": "Cerulean Outline selects classBackgroundColor transparent and a distinct gradient header. Java paints both class bodies with fill=\"none\" and repaints their headers with the gradient. Rust generates and references the header gradient correctly, but resolve_flat_or_gradient_start delegates transparent to resolve_color, whose unknown-color fallback is #FFFFFF. Geometry, strokes, header resources, and text already agree.",
+  "planned_model_change": "Make the class flat-or-gradient paint helper delegate to the renderer's existing gradient_fill_or(value, None), preserving its transparent token branch and current gradient-first-stop fallback. Add fresh renamed tests for transparent class body with a solid header, transparent header over a solid body, inline transparent override, transparent stereotype background, and neighboring solid/gradient controls.",
+  "perturbation_axes": [
+    "body versus header paint channel",
+    "legacy skinparam versus style versus inline color",
+    "transparent versus solid versus gradient paint",
+    "stereotype-selected versus ordinary class",
+    "empty and multi-compartment classes with renamed labels"
+  ],
+  "scope_boundary": "This mechanism owns conversion of already selected class paint values into SVG fill tokens. It does not alter style precedence, gradient generation, class geometry, borders, header dimensions, theme parsing, global background behavior, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "Cerulean Outline class bodies use fill=\"none\" and the pair becomes structurally equivalent through render_svg without oracle input.",
+    "Fresh renamed tests prove transparent body/header/inline/stereotype channels while solid and gradient controls remain unchanged.",
+    "Existing class gradient and style-source-order tests remain green.",
+    "The renderer suite, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching Cerulean Outline, theme names, fixture labels, or specific colors",
+    "treating every unknown named color as transparent",
+    "removing the body rectangle instead of selecting fill none",
+    "changing header gradient, geometry, or stroke behavior",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "pending",
+    "model_evidence": "pending",
+    "commands": [],
+    "review_status": "Implementation and independent review pending."
+  }
+}
