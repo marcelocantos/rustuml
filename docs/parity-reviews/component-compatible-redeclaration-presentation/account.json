@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-compatible-redeclaration-presentation",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "a4d48bed4274173494b5d2b7252cb8434ef7d157",
+  "dispatch_scope": "Valid DESCRIPTION sources confirmed to select Diagram::Component and to redeclare an existing leaf with the same Java LeafType and USymbol. Incompatible cross-kind reuse and Java error-page parity are separate mechanisms.",
+  "triggering_review": "docs/parity-reviews/component-first-quark-owner-retention/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "symbols": [
+        "CommandCreateElementFull.executeArg",
+        "CommandCreateElementFull.existsWithBadType3"
+      ],
+      "lines": "141-268",
+      "role": "Resolves the existing quark, rejects incompatible leaf type or USymbol, creates only when data is absent, then mutates the compatible entity presentation. Display and colors are replaced on every declaration; stereotype and URL are replaced only when supplied."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": [
+        "Entity.setDisplay",
+        "Entity.setStereotype",
+        "Entity.setColors",
+        "Entity.addUrl",
+        "Entity.getParentContainer"
+      ],
+      "lines": "245-278,639-646",
+      "role": "Stores mutable presentation separately from immutable quark ownership; addUrl replaces the entity URL rather than accumulating an independently rendered identity."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.quarkInContextSafe",
+        "CucaDiagram.reallyCreateLeaf"
+      ],
+      "role": "Reuses the first materialized quark and assigns its parent and creation metadata only during initial creation."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": [
+        "leaf container declaration",
+        "RE_COMP declaration",
+        "parse_description_bracket_declaration",
+        "RE_IFACE_QUOTED_AS",
+        "RE_IFACE_BRACKET_AS",
+        "RE_IFACE_BARE",
+        "RE_IFACE_PAREN"
+      ],
+      "lines": "565-602,726-895",
+      "role": "Each compatible declaration currently constructs the entire Component or Interface only when its id is new. Reused leaves receive no presentation update."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/component.rs",
+      "symbols": [
+        "Component",
+        "Interface"
+      ],
+      "lines": "84-111",
+      "role": "Separates immutable identity/kind/creation line from the represented mutable presentation fields label, stereotypes, color, and URL."
+    }
+  ],
+  "claimed_invariant": "A valid compatible redeclaration resolves the already materialized Component or Interface and never changes its first owner, together membership, id, kind, or source_line. It always replaces the visible label. For Component fields represented by Rust, it replaces stereotypes only when a nonempty stereotype is supplied, replaces color on every compatible declaration including clearing a prior explicit color, and replaces URL only when a URL is supplied. Interface redeclarations replace their label while retaining identity and creation metadata.",
+  "causal_divergence": "The first-owner repair correctly gates construction and ownership on the created flag, but the same flag also gates all presentation assignment. Java gates only reallyCreateLeaf on first creation and performs compatible presentation mutation afterward. Rust therefore freezes the first display and represented style snapshot even though it now retains the correct owner.",
+  "planned_model_change": "Centralize compatible Component and Interface materialization in parser helpers that return whether the leaf was newly created. On compatible reuse, mutate only Java's represented presentation fields using the source-derived replacement rules while preserving first owner, together membership, id, kind, and source_line. Keep package/together insertion conditional on the helper's created result. Do not silently convert incompatible kinds or unify error handling in this change.",
+  "perturbation_axes": [
+    "component versus interface syntax",
+    "root, sibling-package and nested-package first ownership",
+    "same label versus renamed display",
+    "stereotype supplied, omitted and replaced",
+    "color supplied, omitted to clear and replaced",
+    "URL supplied, omitted and replaced",
+    "together membership versus ordinary package membership",
+    "left-to-right versus top-to-bottom direction",
+    "explicit declaration after implicit endpoint materialization"
+  ],
+  "acceptance": [
+    "All fresh Java evidence inputs are valid non-error pages and dispatch as Diagram::Component.",
+    "Compatible redeclarations match Java's final visible label and represented stereotype, color, and URL behavior while retaining the first qualified owner.",
+    "The original first-owner and together perturbations continue to retain exactly one owner.",
+    "Creation source_line and symbol kind remain those of the first materialization.",
+    "An independent checker attacks omission and replacement cases for every represented mutable field and searches for incompatible-kind leakage."
+  ],
+  "forbidden_approaches": [
+    "moving a reused leaf to the current package or together group",
+    "updating source_line or symbol kind on compatible reuse",
+    "keying mutation to fixture labels or package names",
+    "treating incompatible Component and Interface inventories as compatible",
+    "SVG text replacement, golden reads, coordinate surgery, comparator or baseline changes"
+  ],
+  "declared_residue": [
+    "Incompatible same-id leaf type or USymbol reuse still needs Java error semantics and a separate account.",
+    "Tags and line-color channels are not represented by Component AST fields and are outside this mechanism.",
+    "Java multiline declaration commands are outside the single-line declaration paths listed here."
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_sibling_component_rename_tb.puml",
+    "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_interface_rename_lr.puml",
+    "test-diagrams/perturbations/component-first-quark-owner-retention/checker_owner_nested_first_together_rename_tb.puml"
+  ]
+}
