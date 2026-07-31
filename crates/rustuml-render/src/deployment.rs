@@ -3937,6 +3937,7 @@ fn deployment_svek_leaf_order(
         cluster_ids: &HashSet<&str>,
         laid_out_notes: &HashSet<usize>,
         owner: Option<&str>,
+        recurse_children: bool,
         result: &mut Vec<DeploymentSvekLeaf>,
     ) {
         let mut direct = diagram
@@ -3980,6 +3981,9 @@ fn deployment_svek_leaf_order(
         });
         result.extend(direct.into_iter().map(|(_, _, _, _, leaf)| leaf));
 
+        if !recurse_children {
+            return;
+        }
         let mut children = diagram
             .nodes
             .iter()
@@ -3996,6 +4000,7 @@ fn deployment_svek_leaf_order(
                 cluster_ids,
                 laid_out_notes,
                 Some(&child.id),
+                true,
                 result,
             );
         }
@@ -4016,6 +4021,7 @@ fn deployment_svek_leaf_order(
             cluster_ids,
             &laid_out_notes,
             Some(&root.id),
+            true,
             &mut result,
         );
     }
@@ -4025,6 +4031,7 @@ fn deployment_svek_leaf_order(
         cluster_ids,
         &laid_out_notes,
         None,
+        false,
         &mut result,
     );
     result
@@ -4083,17 +4090,20 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             DeploymentSvekLeaf::Node(node_index) => {
                 let node = &diagram.nodes[node_index];
                 let (width, height) = deployment_layout_node_size(node.kind, &dims[node_index]);
-                layout.add_node(&node.id, &node.label, width, height);
+                assert!(
+                    layout.add_node(&node.id, &node.label, width, height),
+                    "DESCRIPTION SVEK plan contains duplicate node {}",
+                    node.id
+                );
                 entity_layout_slots[node_index] = Some(next_layout_slot);
                 next_layout_slot += 1;
             }
             DeploymentSvekLeaf::Note(note_index) => {
                 let dim = note_dims[note_index];
-                layout.add_node(
-                    &deployment_note_layout_id(note_index),
-                    "",
-                    dim.width,
-                    dim.height,
+                let note_id = deployment_note_layout_id(note_index);
+                assert!(
+                    layout.add_node(&note_id, "", dim.width, dim.height),
+                    "DESCRIPTION SVEK plan contains duplicate note {note_id}"
                 );
                 note_layout_slots[note_index] = Some(next_layout_slot);
                 next_layout_slot += 1;
@@ -7557,7 +7567,12 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
                 panic!("expected deployment diagram");
             };
             let parent_of = deployment_parent_map(&diagram);
-            let cluster_ids = HashSet::new();
+            let cluster_ids = diagram
+                .nodes
+                .iter()
+                .filter(|node| !node.children.is_empty())
+                .map(|node| node.id.as_str())
+                .collect();
             let notes = laid_out_deployment_note_indices(&diagram);
             deployment_svek_leaf_order(&diagram, &parent_of, &cluster_ids, &notes)
         }
@@ -7586,6 +7601,30 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert_eq!(
             node_first,
             [DeploymentSvekLeaf::Node(0), DeploymentSvekLeaf::Note(0)]
+        );
+
+        let nested_then_root = leaf_order(
+            "@startuml\n\
+             node OuterBoundary {\n\
+               note as InnerLedger\n\
+                 inner payload\n\
+               endnote\n\
+               node InnerRuntime\n\
+             }\n\
+             note as RootLedger\n\
+               root payload\n\
+             endnote\n\
+             node RootRuntime\n\
+             @enduml",
+        );
+        assert_eq!(
+            nested_then_root,
+            [
+                DeploymentSvekLeaf::Note(0),
+                DeploymentSvekLeaf::Node(1),
+                DeploymentSvekLeaf::Note(1),
+                DeploymentSvekLeaf::Node(2),
+            ]
         );
     }
 
