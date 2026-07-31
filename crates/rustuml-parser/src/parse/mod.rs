@@ -736,7 +736,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_interface_decl = false;
     let mut has_component_bracket_interface_decl = false;
     let mut has_component_leaf_keyword = false;
-    let mut has_quoted_deployment_container = false;
+    let mut has_complete_deployment_container = false;
     let mut has_component_package_container = false;
     let mut has_top_level_component_leaf = false;
     let mut has_description_only_leaf = false;
@@ -989,6 +989,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // type; when only actor lines appear alongside arrows, the diagram is
         // almost certainly a sequence diagram, not a deployment diagram.
         {
+            has_complete_deployment_container |=
+                deployment::looks_like_deployment_container_command(trimmed);
             let kw_end = trimmed
                 .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
                 .unwrap_or(trimmed.len());
@@ -1051,7 +1053,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 scores[7] += 20;
             }
             if is_quoted_container {
-                has_quoted_deployment_container = true;
                 if !is_deploy_exclusive_container {
                     quoted_shared_deployment_containers += 1;
                 }
@@ -1401,7 +1402,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
     }
 
-    if has_quoted_deployment_container
+    // A complete CommandPackageWithUSymbol declaration is DESCRIPTION factory
+    // evidence whether its canonical code is quoted, dotted, hyphenated, or
+    // slash-separated. The earlier Class factory still wins while viable.
+    if has_complete_deployment_container
         && !class_factory_viable
         && !has_component_package_container
         && !has_top_level_component_leaf
@@ -1418,7 +1422,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
     }
 
-    if has_quoted_deployment_container
+    if has_complete_deployment_container
         && !class_factory_viable
         && (has_component_package_container || has_top_level_component_leaf)
     {
@@ -2525,6 +2529,110 @@ mod tests {
         let input =
             "@startuml\nnode \"Fresh Runtime Host\" as Host {\nartifact FreshBinary\n}\n@enduml";
         assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn broad_container_codes_reach_description_factory_with_exact_identity() {
+        let sources = [
+            (
+                "@startuml\n\
+                 folder \"Customer Plane\" as customer-west {\n\
+                   node Api_41\n\
+                 }\n\
+                 database Sink_43\n\
+                 Api_41 --> Sink_43\n\
+                 @enduml",
+                "customer-west",
+            ),
+            (
+                "@startuml\n\
+                 cloud sector/prod {\n\
+                   artifact Relay_47\n\
+                 }\n\
+                 queue Front_53\n\
+                 Relay_47 --> Front_53 : transfer\n\
+                 note on link: renamed route\n\
+                 @enduml",
+                "sector/prod",
+            ),
+        ];
+
+        for (source, owner_id) in sources {
+            let parsed = parse(source).unwrap();
+            let Diagram::Deployment(diagram) = parsed else {
+                panic!("complete DESCRIPTION container selected {parsed:?}");
+            };
+            assert!(
+                diagram
+                    .nodes
+                    .iter()
+                    .any(|node| node.id == owner_id && node.declared_container)
+            );
+        }
+    }
+
+    #[test]
+    fn rejected_qname_counterexamples_keep_container_identity_during_dispatch() {
+        let sources = [
+            (
+                "@startuml\n\
+                 left to right direction\n\
+                 folder \"Tenant Display\" as tenant-a {\n\
+                   node \"Visible/API\" as api.one\n\
+                   note \"owner note\" as note.one\n\
+                 }\n\
+                 database sink.one as \"Sink/One\"\n\
+                 api.one --> sink.one : calls\n\
+                 note.one .. api.one\n\
+                 @enduml",
+                "tenant-a",
+            ),
+            (
+                "@startuml\n\
+                 cloud zone/prod {\n\
+                   artifact \"Relay:East\"\n\
+                 }\n\
+                 queue \"Front Door\" as front.door\n\
+                 \"Relay:East\" --> front.door : transfer\n\
+                 note on link: path metadata\n\
+                 @enduml",
+                "zone/prod",
+            ),
+        ];
+
+        for (source, owner_id) in sources {
+            let Diagram::Deployment(diagram) = parse(source).unwrap() else {
+                panic!("checker counterexample must select Deployment");
+            };
+            assert!(
+                diagram
+                    .nodes
+                    .iter()
+                    .any(|node| node.id == owner_id && node.declared_container)
+            );
+        }
+    }
+
+    #[test]
+    fn broad_container_dispatch_survives_deeper_renamed_topology() {
+        let input = "@startuml\n\
+                     cloud region-east/live {\n\
+                       folder \"Compute Pool\" as compute-v3 {\n\
+                         artifact Worker_59\n\
+                       }\n\
+                       database Ledger_61\n\
+                     }\n\
+                     Worker_59 --> Ledger_61\n\
+                     @enduml";
+        let Diagram::Deployment(diagram) = parse(input).unwrap() else {
+            panic!("nested broad-code containers must select Deployment");
+        };
+        let root = diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == "region-east/live")
+            .unwrap();
+        assert_eq!(root.children, ["compute-v3", "Ledger_61"]);
     }
 
     #[test]

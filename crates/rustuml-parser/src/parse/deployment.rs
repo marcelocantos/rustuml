@@ -37,6 +37,23 @@ pub const DEPLOYMENT_KEYWORDS: &[&str] = &[
     "stack",
 ];
 
+const DEPLOYMENT_CONTAINER_KEYWORDS: &[&str] = &[
+    "node",
+    "artifact",
+    "cloud",
+    "database",
+    "storage",
+    "frame",
+    "folder",
+    "queue",
+    "component",
+    "rectangle",
+    "card",
+    "file",
+    "package",
+    "stack",
+];
+
 /// Convert a quoted label like "Application Server" to a stable ID:
 /// replace whitespace/dots/hyphens with underscores, strip remaining
 /// non-alphanumeric-underscore characters.
@@ -651,6 +668,142 @@ struct LinkNoteAccum {
     lines: Vec<String>,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+struct DeploymentNodeCommand {
+    keyword: String,
+    id: String,
+    label: String,
+    stereotype: Option<String>,
+    color: Option<String>,
+    declared_container: bool,
+}
+
+fn node_command_from_captures(
+    captures: regex::Captures<'_>,
+    declared_container: bool,
+) -> Option<DeploymentNodeCommand> {
+    let keyword = captures.name("keyword")?.as_str().to_ascii_lowercase();
+    let accepted_keywords = if declared_container {
+        DEPLOYMENT_CONTAINER_KEYWORDS
+    } else {
+        DEPLOYMENT_KEYWORDS
+    };
+    if !accepted_keywords.contains(&keyword.as_str()) {
+        return None;
+    }
+
+    let raw_code = captures.name("code")?.as_str();
+    let id = raw_code.trim_matches('"').to_string();
+    let label = captures
+        .name("display")
+        .map(|value| process_label(value.as_str()))
+        .unwrap_or_else(|| process_label(id.as_str()));
+    let stereotype = captures
+        .name("pre_stereotype")
+        .or_else(|| captures.name("stereotype"))
+        .map(|value| value.as_str().trim().to_string());
+    let color = captures
+        .name("color")
+        .map(|value| value.as_str().to_string());
+
+    Some(DeploymentNodeCommand {
+        keyword,
+        id,
+        label,
+        stereotype,
+        color,
+        declared_container,
+    })
+}
+
+fn parse_deployment_node_command(line: &str) -> Option<DeploymentNodeCommand> {
+    // Java `CommandPackageWithUSymbol` gives braced containers a broader code
+    // grammar than `CommandCreateElementFull` gives leaves. Both commands are
+    // anchored through the end of the line, including metadata and `{`.
+    static CONTAINER_DISPLAY_CODE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+"(?P<display>[^"]+)"(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+(?P<code>[^#\s{}"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_CODE_DISPLAY: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[^#\s{}"]+)(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+"(?P<display>[^"]+)"(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_DISPLAY_CODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<display>[^#\s{}"]+)(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+(?P<code>[^#\s{}"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>"[^"]+")(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_BARE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[^#\s{}"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_CODE_DISPLAY: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_.]+)\s+(?i:as)\s+"(?P<display>[^"]+)"(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_DISPLAY_CODE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+"(?P<display>[^"]+)"\s+(?i:as)\s+(?P<code>[\p{L}\p{N}_.]+)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>"[^"]+")(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_BARE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_][\p{L}\p{N}_.]*)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+
+    let declared_container = line.trim_end().ends_with('{');
+    let patterns: &[&LazyLock<Regex>] = if declared_container {
+        &[
+            &CONTAINER_DISPLAY_CODE,
+            &CONTAINER_CODE_DISPLAY,
+            &CONTAINER_DISPLAY_CODE_BARE,
+            &CONTAINER_QUOTED,
+            &CONTAINER_BARE,
+        ]
+    } else {
+        &[
+            &LEAF_CODE_DISPLAY,
+            &LEAF_DISPLAY_CODE,
+            &LEAF_QUOTED,
+            &LEAF_BARE,
+        ]
+    };
+
+    patterns.iter().find_map(|pattern| {
+        pattern
+            .captures(line)
+            .and_then(|captures| node_command_from_captures(captures, declared_container))
+    })
+}
+
+pub(super) fn looks_like_deployment_container_command(line: &str) -> bool {
+    parse_deployment_node_command(line).is_some_and(|command| command.declared_container)
+}
+
 fn deployment_link_note_text(lines: &[String]) -> String {
     // Java `CommandFactoryNoteOnLink.createMultiLine` calls
     // `BlocLines.removeEmptyColumns`: remove only the leading columns shared
@@ -696,24 +849,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     let mut skinparam_block_prefix: Option<String> = None;
 
     let keyword_set: HashSet<&str> = DEPLOYMENT_KEYWORDS.iter().copied().collect();
-
-    // keyword id [as "label"] [<<stereo>>] [#color] [{]
-    static RE_NODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(
-            r#"^(\w+)\s+(\w[\w.]*)(?:\s+(?i:as)\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
-        )
-        .unwrap()
-    });
-
-    // keyword "label" [as id] [<<stereo>>] [#color] [{]
-    // PlantUML `CommandCreateElementFull.java:124-126` permits letters,
-    // numbers, underscores, and dots in an unquoted CODE.
-    static RE_NODE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(
-            r#"^(\w+)\s+"([^"]+)"(?:\s+(?i:as)\s+([\p{L}\p{N}_.]+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
-        )
-        .unwrap()
-    });
 
     // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
     static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
@@ -1108,82 +1243,26 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 continue;
             }
 
-            // Try bare form first: keyword id [as "label"]
-            if let Some(caps) = RE_NODE_BARE.captures(trimmed) {
-                // Pattern2.compileInternal applies CASE_INSENSITIVE to
-                // CommandCreateElementFull and CommandPackageWithUSymbol.
-                let keyword = caps[1].to_ascii_lowercase();
-                if keyword_set.contains(keyword.as_str()) {
-                    let raw_id = caps[2].to_string();
-                    let label = caps
-                        .get(3)
-                        .map(|m| m.as_str().to_string())
-                        .unwrap_or_else(|| raw_id.clone());
-                    let id = raw_id;
-                    let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
-                    let color = caps.get(5).map(|m| m.as_str().to_string());
-                    let kind = kind_from_keyword(&keyword);
-                    let declared_container = trimmed.contains('{');
-
-                    let created = push_node(
-                        &mut nodes,
-                        &mut next_quark_order,
-                        id.clone(),
-                        label,
-                        kind,
-                        stereotype,
-                        color,
-                        declared_container,
-                        current_line,
-                    );
-                    if created && let Some(parent_id) = stack.last().cloned() {
-                        add_child(&mut nodes, &parent_id, &id);
-                    }
-                    if trimmed.contains('{') {
-                        stack.push(id);
-                    }
-                    continue;
+            if let Some(command) = parse_deployment_node_command(trimmed) {
+                let kind = kind_from_keyword(&command.keyword);
+                let created = push_node(
+                    &mut nodes,
+                    &mut next_quark_order,
+                    command.id.clone(),
+                    command.label,
+                    kind,
+                    command.stereotype,
+                    command.color,
+                    command.declared_container,
+                    current_line,
+                );
+                if created && let Some(parent_id) = stack.last().cloned() {
+                    add_child(&mut nodes, &parent_id, &command.id);
                 }
-            }
-
-            // Try quoted form: keyword "label" [as id]
-            if let Some(caps) = RE_NODE_QUOTED.captures(trimmed) {
-                let keyword = caps[1].to_ascii_lowercase();
-                if keyword_set.contains(keyword.as_str()) {
-                    // Process `\n` escape sequences in quoted labels.
-                    let raw_label = caps[2].to_string();
-                    let label = process_label(&raw_label);
-                    let id = caps
-                        .get(3)
-                        .map(|m| m.as_str().to_string())
-                        // `CommandCreateElementFull` treats quoted CODE1 as
-                        // the quark code and applies newline expansion only to
-                        // the later Display value.
-                        .unwrap_or(raw_label);
-                    let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
-                    let color = caps.get(5).map(|m| m.as_str().to_string());
-                    let kind = kind_from_keyword(&keyword);
-                    let declared_container = trimmed.contains('{');
-
-                    let created = push_node(
-                        &mut nodes,
-                        &mut next_quark_order,
-                        id.clone(),
-                        label,
-                        kind,
-                        stereotype,
-                        color,
-                        declared_container,
-                        current_line,
-                    );
-                    if created && let Some(parent_id) = stack.last().cloned() {
-                        add_child(&mut nodes, &parent_id, &id);
-                    }
-                    if trimmed.contains('{') {
-                        stack.push(id);
-                    }
-                    continue;
+                if command.declared_container {
+                    stack.push(command.id);
                 }
+                continue;
             }
         }
 
@@ -1362,6 +1441,71 @@ mod tests {
         assert_eq!(d.nodes[1].label, "Visible Store");
         assert_eq!(d.nodes[2].id, "Line\\nBreak: Ω");
         assert_eq!(d.nodes[2].label, "Line\nBreak: Ω");
+    }
+
+    #[test]
+    fn container_commands_preserve_broad_java_quark_codes() {
+        let d = parse(
+            "folder \"Tenant Display\" as tenant-a {\n\
+               node api.one\n\
+             }\n\
+             cloud zone/prod {\n\
+               artifact RelayEast\n\
+             }\n\
+             frame perimeter/v4 as \"Visible Perimeter\" {\n\
+               queue Inbox_4\n\
+             }",
+        );
+
+        let expected = [
+            ("tenant-a", "Tenant Display"),
+            ("zone/prod", "zone/prod"),
+            ("perimeter/v4", "Visible Perimeter"),
+        ];
+        for (id, label) in expected {
+            let node = d
+                .nodes
+                .iter()
+                .find(|node| node.id == id)
+                .unwrap_or_else(|| panic!("missing {id}; parsed nodes: {:?}", d.nodes));
+            assert_eq!(node.label, label);
+            assert!(node.declared_container);
+        }
+    }
+
+    #[test]
+    fn renamed_nested_container_topology_uses_canonical_owner_ids() {
+        let d = parse(
+            "cloud region-west/prod {\n\
+               folder \"Worker Pool\" as workers-v2 {\n\
+                 artifact Agent_7\n\
+               }\n\
+               database Audit_9\n\
+             }",
+        );
+
+        let region = d
+            .nodes
+            .iter()
+            .find(|node| node.id == "region-west/prod")
+            .unwrap();
+        assert_eq!(region.children, ["workers-v2", "Audit_9"]);
+        let workers = d.nodes.iter().find(|node| node.id == "workers-v2").unwrap();
+        assert_eq!(workers.children, ["Agent_7"]);
+    }
+
+    #[test]
+    fn node_commands_must_consume_the_complete_source_line() {
+        for source in [
+            "folder \"Tenant Display\" as tenant-a trailing {",
+            "cloud zone/prod unexpected {",
+            "artifact ValidLeaf unexpected",
+        ] {
+            assert!(
+                parse_deployment_node_command(source).is_none(),
+                "partially accepted {source:?}"
+            );
+        }
     }
 
     #[test]
