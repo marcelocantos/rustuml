@@ -732,13 +732,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_class_lollipop_command = false;
     let mut has_direction_directive = false;
     let mut has_sequence_only_command = false;
+    let mut has_explicit_usecase_command = false;
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
     let mut has_component_bracket_interface_decl = false;
     let mut has_component_description_command = false;
     let mut has_component_symbol_container = false;
     let mut has_component_leaf_keyword = false;
-    let mut has_complete_deployment_container = false;
+    let mut has_quoted_deployment_container = false;
+    let mut has_broad_deployment_container_identity = false;
     let mut has_component_package_container = false;
     let mut has_top_level_component_leaf = false;
     let mut has_description_only_leaf = false;
@@ -913,14 +915,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Use case — must check before sequence (both use "actor").
         if trimmed.starts_with("usecase ") {
             scores[6] += 10;
+            has_explicit_usecase_command = true;
         }
         // :Actor: shorthand (but not activity :action; lines).
         if trimmed.starts_with(':') && trimmed.ends_with(':') && !trimmed.ends_with(';') {
             scores[6] += 5;
+            has_explicit_usecase_command = true;
         }
         // (UseCase) shorthand on its own line.
         if trimmed.starts_with('(') && trimmed.ends_with(')') {
             scores[6] += 5;
+            has_explicit_usecase_command = true;
         }
         // State.
         //
@@ -992,8 +997,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // type; when only actor lines appear alongside arrows, the diagram is
         // almost certainly a sequence diagram, not a deployment diagram.
         {
-            has_complete_deployment_container |=
-                deployment::looks_like_deployment_container_command(trimmed);
+            has_broad_deployment_container_identity |=
+                deployment::deployment_container_has_broad_identity(trimmed);
             let kw_end = trimmed
                 .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
                 .unwrap_or(trimmed.len());
@@ -1056,6 +1061,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 scores[7] += 20;
             }
             if is_quoted_container {
+                has_quoted_deployment_container = true;
                 if !is_deploy_exclusive_container {
                     quoted_shared_deployment_containers += 1;
                 }
@@ -1415,14 +1421,19 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         || has_component_symbol_container
         || has_component_description_command
         || has_component_bracket_interface_decl;
+    let has_deployment_container_evidence =
+        has_quoted_deployment_container || has_broad_deployment_container_identity;
 
-    // A complete CommandPackageWithUSymbol declaration is DESCRIPTION factory
-    // evidence whether its canonical code is quoted, dotted, hyphenated, or
-    // slash-separated. The earlier Class factory still wins while viable, and
-    // an unconsumable expanded Archimate command rejects Description entirely.
-    if has_complete_deployment_container
+    // Quoted shared containers retain PlantUML's established DESCRIPTION
+    // signal; the complete command parser adds only identities outside the
+    // ordinary leaf-code alphabet. Shared simple containers remain neutral so
+    // their owned commands select Component or UseCase. The earlier Class
+    // factory still wins while viable, and an expanded Archimate command
+    // rejects Description entirely.
+    if has_deployment_container_evidence
         && !class_factory_viable
         && !component_backed_description_source
+        && !has_explicit_usecase_command
         && scores[9] == 0
     {
         let other_max = scores
@@ -1437,9 +1448,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
     }
 
-    if has_complete_deployment_container
+    if has_deployment_container_evidence
         && !class_factory_viable
         && component_backed_description_source
+        && !has_explicit_usecase_command
         && scores[9] == 0
     {
         let other_max = scores
@@ -2490,6 +2502,39 @@ mod tests {
                         }\n\
                         @enduml";
         assert!(matches!(parse(archimate).unwrap(), Diagram::Archimate(_)));
+    }
+
+    #[test]
+    fn broad_container_identity_defers_to_explicit_usecase_ownership() {
+        for input in [
+            "@startuml\n\
+             actor Reviewer9911\n\
+             rectangle \"Review Boundary\" as review-west {\n\
+               usecase \"Inspect result\" as Inspect9917\n\
+             }\n\
+             Reviewer9911 --> Inspect9917\n\
+             @enduml",
+            "@startuml\n\
+             package review/live {\n\
+               usecase \"Publish result\" as Publish9923\n\
+             }\n\
+             @enduml",
+        ] {
+            assert!(matches!(parse(input).unwrap(), Diagram::UseCase(_)));
+        }
+    }
+
+    #[test]
+    fn ordinary_shared_containers_defer_to_nested_component_ownership() {
+        let input = "@startuml\n\
+                     node OuterAlpha9931 {\n\
+                       component SharedLeaf9937\n\
+                     }\n\
+                     node OuterBeta9941 {\n\
+                       component BetaLeaf9949\n\
+                     }\n\
+                     @enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Component(_)));
     }
 
     #[test]

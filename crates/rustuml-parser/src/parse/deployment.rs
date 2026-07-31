@@ -800,8 +800,14 @@ fn parse_deployment_node_command(line: &str) -> Option<DeploymentNodeCommand> {
     })
 }
 
-pub(super) fn looks_like_deployment_container_command(line: &str) -> bool {
-    parse_deployment_node_command(line).is_some_and(|command| command.declared_container)
+pub(super) fn deployment_container_has_broad_identity(line: &str) -> bool {
+    parse_deployment_node_command(line).is_some_and(|command| {
+        command.declared_container
+            && command
+                .id
+                .chars()
+                .any(|ch| !ch.is_alphanumeric() && ch != '_' && ch != '.')
+    })
 }
 
 fn deployment_link_note_text(lines: &[String]) -> String {
