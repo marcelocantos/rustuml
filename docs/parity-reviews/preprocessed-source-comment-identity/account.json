@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "mechanism": "preprocessed-source-comment-identity",
+  "status": "accounted_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/tim/TContext.java",
+      "symbols": [
+        "TContext#buildCodeIterator"
+      ],
+      "lines": "326-341",
+      "role": "Builds the TIM output iterator with long-comment, short-comment, and inline-comment filters before plain lines enter the preprocessed result."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorShortComment.java",
+      "symbols": [
+        "CodeIteratorShortComment#peek"
+      ],
+      "lines": "53-66",
+      "role": "Consumes COMMENT_SIMPLE lines instead of returning them to the preprocessed result."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/UmlSource.java",
+      "symbols": [
+        "UmlSource#getPlainString",
+        "UmlSource#seed"
+      ],
+      "lines": "173-192",
+      "role": "Hashes only lines surviving TIM into the deterministic SVG resource seed."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/preprocess/mod.rs",
+      "symbols": [
+        "preprocess_full_inner",
+        "expanded_theme_seed_source"
+      ],
+      "lines": "95-175",
+      "role": "Uses normal preprocessing for parser lines, but reconstructs theme seed source directly from raw input and theme expansions, reintroducing user comment lines that TIM removed."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.svg"
+  ],
+  "claimed_invariant": "Deterministic SVG resource IDs are seeded from PlantUML's post-TIM UmlSource. Full-line quote comments and long comments are absent, inline quote comments are removed while preserving the preceding plain text, and ordinary blank lines retain their existing identity. Theme expansion does not bypass those comment semantics.",
+  "causal_divergence": "The complex Cerulean override fixture already agrees in geometry, colors, gradients, and paint order. Java assigns gradient prefix 5uh6twufn3b0 while Rust assigns 1u17r8kq8jkal because expanded_theme_seed_source copies the raw line `' Override specific theme settings` into the seed source. Applying Java's short-comment removal to that line alone yields the exact expected prefix 5uh6twufn3b0. The normal non-theme identity path already routes through PreprocessContext and does not have this defect.",
+  "planned_model_change": "Make theme seed reconstruction apply the same comment-state transformation used by TIM before appending non-theme user lines: omit full-line quote and long-comment lines, strip inline comments, and preserve all other source lines and existing initial-empty-line behavior. Keep theme expansion lines at the original !theme position. Add seed-level tests over full-line, multi-line, and inline comments, including quoted apostrophes, renamed entities, and comments before and after a theme.",
+  "perturbation_axes": [
+    "full-line versus long versus inline quote comments",
+    "comment before versus after theme expansion",
+    "comment-only changes versus renamed entities and changed topology",
+    "apostrophes inside quoted text versus actual inline comments",
+    "ordinary blank lines adjacent to removed comments"
+  ],
+  "scope_boundary": "This mechanism owns comment semantics only in the post-TIM source identity used for deterministic SVG resource IDs. It does not alter parser line-number placeholders, theme contents, gradient tuple generation, resource ordering, geometry, layout, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "preproc_complex_theme_override uses PlantUML's expected gradient IDs and becomes structurally equivalent through render_svg without oracle input.",
+    "Fresh seed tests prove full-line, long, and inline comment behavior without changing ordinary blank-line identity.",
+    "Quoted apostrophes and EBNF terminal syntax are not misclassified as comments.",
+    "Existing source-identity and theme-expansion seed tests remain green.",
+    "The parser and renderer suites, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching the Cerulean theme, fixture labels, expected hash, or generated gradient IDs",
+    "post-hoc SVG ID rewriting",
+    "removing ordinary blank lines or changing source line metadata",
+    "changing the global seed algorithm or resource ordering",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "pending",
+    "model_evidence": "Removing only the Java-classified full-line comment from Rust's 7,465-byte reconstructed theme source changes the source seed from 1u17r8kq8jkal to the exact golden prefix 5uh6twufn3b0; no SVG paint or geometry change is involved.",
+    "commands": [
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml"
+    ],
+    "review_status": "Account recorded before implementation. Independent checker capacity is currently unavailable; this record does not self-attest acceptance."
+  }
+}
