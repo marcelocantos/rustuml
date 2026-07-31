@@ -133,6 +133,113 @@ pub fn gradient_id_for_prefix(seed_prefix: &str, index: usize) -> String {
     format!("g{seed_prefix}{index}")
 }
 
+/// The identity Java `SvgGraphics#createSvgGradient` uses to deduplicate a
+/// legacy two-stop gradient.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct GradientKey {
+    color1: String,
+    color2: String,
+    policy: char,
+}
+
+impl GradientKey {
+    pub fn new(color1: String, color2: String, policy: char) -> Self {
+        Self {
+            color1,
+            color2,
+            policy,
+        }
+    }
+
+    pub fn color1(&self) -> &str {
+        &self.color1
+    }
+
+    pub fn color2(&self) -> &str {
+        &self.color2
+    }
+
+    pub fn policy(&self) -> char {
+        self.policy
+    }
+}
+
+/// Java's endpoint projection for `HColorGradient#getPolicy`.
+pub(crate) fn gradient_endpoints(
+    policy: char,
+) -> (&'static str, &'static str, &'static str, &'static str) {
+    match policy {
+        '|' => ("0%", "100%", "50%", "50%"),
+        '\\' => ("0%", "100%", "100%", "0%"),
+        '-' => ("50%", "50%", "0%", "100%"),
+        _ => ("0%", "100%", "0%", "100%"),
+    }
+}
+
+/// Lazily assigns source-seeded ids to unique gradients in first-use order.
+///
+/// Java provenance: `SvgGraphics#createSvgGradient` keys its map by the two
+/// resolved endpoint colors and policy, and appends `gradients.size()` to the
+/// source-derived `gradientId` only on the first lookup of each key.
+#[derive(Debug)]
+pub struct GradientRegistry {
+    seed_prefix: String,
+    entries: Vec<(GradientKey, String)>,
+}
+
+impl GradientRegistry {
+    pub fn for_source(source: &str) -> Self {
+        Self::for_seed_prefix(id_seed_prefix_for_source(source))
+    }
+
+    pub fn for_seed_prefix(seed_prefix: impl Into<String>) -> Self {
+        Self {
+            seed_prefix: seed_prefix.into(),
+            entries: Vec::new(),
+        }
+    }
+
+    pub fn id_for(&mut self, key: GradientKey) -> String {
+        if let Some((_, id)) = self.entries.iter().find(|(existing, _)| existing == &key) {
+            return id.clone();
+        }
+        let id = gradient_id_for_prefix(&self.seed_prefix, self.entries.len());
+        self.entries.push((key, id.clone()));
+        id
+    }
+
+    pub fn id_for_key(&self, key: &GradientKey) -> Option<&str> {
+        self.entries
+            .iter()
+            .find(|(existing, _)| existing == key)
+            .map(|(_, id)| id.as_str())
+    }
+
+    pub fn len(&self) -> usize {
+        self.entries.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.entries.is_empty()
+    }
+
+    /// Emit the `<linearGradient>` children in registration order.
+    pub fn render_defs_content(&self) -> String {
+        let mut defs = String::new();
+        use std::fmt::Write;
+        for (key, id) in &self.entries {
+            let (x1, x2, y1, y2) = gradient_endpoints(key.policy);
+            write!(
+                defs,
+                r#"<linearGradient id="{id}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
+                key.color1, key.color2,
+            )
+            .unwrap();
+        }
+        defs
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum SvgResourceKind {
     Filter,

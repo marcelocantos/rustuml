@@ -2108,14 +2108,7 @@ fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
 pub(crate) fn gradient_endpoints(
     policy: char,
 ) -> (&'static str, &'static str, &'static str, &'static str) {
-    // Java provenance: `SvgGraphics.createSvgGradient` maps
-    // `HColorGradient.getPolicy()` to these endpoint pairs.
-    match policy {
-        '|' => ("0%", "100%", "50%", "50%"),
-        '\\' => ("0%", "100%", "100%", "0%"),
-        '-' => ("50%", "50%", "0%", "100%"),
-        _ => ("0%", "100%", "0%", "100%"),
-    }
+    crate::filter_registry::gradient_endpoints(policy)
 }
 
 fn resolve_gradient_id(defs: &str, c1: &str, c2: &str, policy: char) -> Option<String> {
@@ -2181,12 +2174,14 @@ pub(crate) fn gradient_fill_or(val: &str, gradient_defs: Option<&str>) -> String
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
-struct SequenceGradient {
-    color1: String,
-    color2: String,
-    policy: char,
-    id: String,
+pub(crate) fn gradient_fill_for_key(
+    key: &crate::filter_registry::GradientKey,
+    gradient_defs: Option<&str>,
+) -> String {
+    gradient_defs
+        .and_then(|defs| resolve_gradient_id(defs, key.color1(), key.color2(), key.policy()))
+        .map(|id| format!("url(#{id})"))
+        .unwrap_or_else(|| key.color1().to_string())
 }
 
 fn sequence_gradient_key(key: &str) -> bool {
@@ -2217,9 +2212,9 @@ fn sequence_gradient_key(key: &str) -> bool {
     )
 }
 
-fn sequence_gradients(diagram: &SequenceDiagram) -> Vec<SequenceGradient> {
+fn sequence_gradients(diagram: &SequenceDiagram) -> crate::filter_registry::GradientRegistry {
     let source = diagram.meta.source.as_deref().unwrap_or("");
-    let mut gradients: Vec<SequenceGradient> = Vec::new();
+    let mut gradients = crate::filter_registry::GradientRegistry::for_source(source);
     for skinparam in &diagram.meta.skinparams {
         let key = skinparam.key.to_ascii_lowercase();
         if !sequence_gradient_key(&key) {
@@ -2230,33 +2225,11 @@ fn sequence_gradients(diagram: &SequenceDiagram) -> Vec<SequenceGradient> {
         };
         let color1 = resolve_color(raw1);
         let color2 = resolve_color(raw2);
-        if gradients.iter().any(|gradient| {
-            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
-        }) {
-            continue;
-        }
-        gradients.push(SequenceGradient {
-            color1,
-            color2,
-            policy,
-            id: crate::filter_registry::gradient_id_for(source, gradients.len()),
-        });
+        gradients.id_for(crate::filter_registry::GradientKey::new(
+            color1, color2, policy,
+        ));
     }
     gradients
-}
-
-fn sequence_gradient_defs(gradients: &[SequenceGradient]) -> String {
-    let mut defs = String::new();
-    for gradient in gradients {
-        let (x1, x2, y1, y2) = gradient_endpoints(gradient.policy);
-        write!(
-            defs,
-            r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
-            gradient.id, gradient.color1, gradient.color2,
-        )
-        .unwrap();
-    }
-    defs
 }
 
 /// Font size of a named participant box title (bold).
@@ -6067,8 +6040,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // declaration order while deduplicating the same colour/policy tuple.
     let generated_gradients = oracle.is_none().then(|| sequence_gradients(diagram));
     let generated_gradient_defs = generated_gradients
-        .as_deref()
-        .map(sequence_gradient_defs)
+        .as_ref()
+        .map(crate::filter_registry::GradientRegistry::render_defs_content)
         .filter(|defs| !defs.is_empty());
     let gradient_defs = oracle
         .map(|o| o.defs_inner_xml.as_str())
@@ -13886,7 +13859,7 @@ mod tests {
 
         let gradients = sequence_gradients(&diagram);
         assert_eq!(gradients.len(), 2);
-        let defs = sequence_gradient_defs(&gradients);
+        let defs = gradients.render_defs_content();
         let gradient0 = crate::filter_registry::gradient_id_for(source, 0);
         let gradient1 = crate::filter_registry::gradient_id_for(source, 1);
         assert!(defs.contains(&format!(

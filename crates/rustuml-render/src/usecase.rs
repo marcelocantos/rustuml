@@ -16,6 +16,7 @@ use rustuml_layout::graph::{
 use rustuml_parser::diagram::usecase::*;
 use rustuml_parser::diagram::{DiagramMeta, style::StyleScheme};
 
+use crate::filter_registry::{GradientKey, GradientRegistry};
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
@@ -124,6 +125,64 @@ fn resolve_fill(raw: &str) -> String {
     }
 }
 
+/// A resolved Description background keeps gradients typed until the shape
+/// that owns the paint is ordered. This mirrors Java's `HColor`/
+/// `HColorGradient` distinction instead of flattening a gradient during style
+/// resolution.
+#[derive(Clone, Debug, PartialEq, Eq)]
+enum DescriptionPaint {
+    NoPaint,
+    Solid(String),
+    Gradient(GradientKey),
+}
+
+impl DescriptionPaint {
+    fn parse(raw: &str) -> Self {
+        let whole = raw.trim().strip_prefix('#').unwrap_or(raw.trim());
+        if matches!(
+            whole.to_ascii_lowercase().as_str(),
+            "transparent" | "background"
+        ) {
+            return Self::NoPaint;
+        }
+        if let Some((color1, color2, policy)) = crate::sequence::split_gradient_colors(raw) {
+            return Self::Gradient(GradientKey::new(
+                crate::sequence::resolve_color_rgb(color1),
+                crate::sequence::resolve_color_rgb(color2),
+                policy,
+            ));
+        }
+        Self::Solid(crate::sequence::resolve_color(raw))
+    }
+
+    fn gradient(&self) -> Option<&GradientKey> {
+        match self {
+            Self::Gradient(key) => Some(key),
+            Self::NoPaint | Self::Solid(_) => None,
+        }
+    }
+
+    fn svg_fill(&self, registry: Option<&GradientRegistry>, captured_defs: Option<&str>) -> String {
+        match self {
+            Self::NoPaint => "none".to_string(),
+            Self::Solid(color) => color.clone(),
+            Self::Gradient(key) => registry
+                .and_then(|registry| registry.id_for_key(key))
+                .map(|id| format!("url(#{id})"))
+                .unwrap_or_else(|| crate::sequence::gradient_fill_for_key(key, captured_defs)),
+        }
+    }
+
+    #[cfg(test)]
+    fn flat_control(&self) -> Option<&str> {
+        match self {
+            Self::Solid(color) => Some(color),
+            Self::NoPaint => Some("none"),
+            Self::Gradient(_) => None,
+        }
+    }
+}
+
 fn skin_value<'a>(
     skinparams: &'a [rustuml_parser::diagram::SkinParam],
     keys: &[&str],
@@ -145,9 +204,8 @@ fn skin_color(skinparams: &[rustuml_parser::diagram::SkinParam], key: &str) -> O
 fn skin_fill(
     skinparams: &[rustuml_parser::diagram::SkinParam],
     key: &str,
-    gradient_defs: Option<&str>,
-) -> Option<String> {
-    skin_value(skinparams, &[key]).map(|v| crate::sequence::gradient_fill_or(v, gradient_defs))
+) -> Option<DescriptionPaint> {
+    skin_value(skinparams, &[key]).map(DescriptionPaint::parse)
 }
 
 fn skin_font_size(
@@ -194,14 +252,14 @@ fn canonical_usecase_font_family(value: &str) -> String {
 /// existing PlantUML defaults instead of inheriting RustUML's UI theme.
 #[derive(Clone)]
 struct SkinColors {
-    actor_fill: Option<String>,
+    actor_fill: Option<DescriptionPaint>,
     actor_border: Option<String>,
     actor_border_thickness: String,
     actor_font_color: String,
     actor_font_family: String,
     actor_font_size: u32,
     actor_stereo_font_color: String,
-    uc_fill: Option<String>,
+    uc_fill: Option<DescriptionPaint>,
     uc_border: Option<String>,
     uc_border_thickness: String,
     uc_font_color: String,
@@ -219,11 +277,10 @@ struct SkinColors {
     canvas_background: Option<String>,
     canvas_rect: Option<String>,
     document_margin: StyleBoxSides,
-    gradient_defs: Option<String>,
 }
 
 impl SkinColors {
-    fn from_meta(meta: &DiagramMeta, gradient_defs: Option<&str>) -> Self {
+    fn from_meta(meta: &DiagramMeta, _gradient_defs: Option<&str>) -> Self {
         let skinparams = &meta.skinparams;
         let default_font_family = skin_value(skinparams, &["defaultFontName", "fontName"])
             .map(canonical_usecase_font_family)
@@ -261,7 +318,7 @@ impl SkinColors {
             .filter(|c| *c != "#FFFFFF")
             .cloned();
         let mut skin = SkinColors {
-            actor_fill: skin_fill(skinparams, "actorBackgroundColor", gradient_defs),
+            actor_fill: skin_fill(skinparams, "actorBackgroundColor"),
             actor_border: skin_color(skinparams, "actorBorderColor")
                 .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
             actor_border_thickness: skin_thickness(
@@ -282,7 +339,7 @@ impl SkinColors {
             ),
             actor_stereo_font_color: skin_color(skinparams, "actorStereotypeFontColor")
                 .unwrap_or(actor_font_color),
-            uc_fill: skin_fill(skinparams, "usecaseBackgroundColor", gradient_defs),
+            uc_fill: skin_fill(skinparams, "usecaseBackgroundColor"),
             uc_border: skin_color(skinparams, "usecaseBorderColor")
                 .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
             uc_border_thickness: skin_thickness(
@@ -318,7 +375,6 @@ impl SkinColors {
             canvas_background,
             canvas_rect,
             document_margin: DEFAULT_DOCUMENT_MARGIN,
-            gradient_defs: gradient_defs.map(str::to_string),
         };
 
         let cascade = StyleCascade::new(&meta.style_program);
@@ -375,10 +431,7 @@ impl SkinColors {
             actor.source_line,
         );
         if let Some(value) = style.property("backgroundColor") {
-            result.actor_fill = Some(crate::sequence::gradient_fill_or(
-                value,
-                self.gradient_defs.as_deref(),
-            ));
+            result.actor_fill = Some(DescriptionPaint::parse(value));
         }
         if let Some(value) = style.property("lineColor") {
             result.actor_border = Some(crate::sequence::resolve_color(value));
@@ -440,10 +493,7 @@ impl SkinColors {
             use_case.source_line,
         );
         if let Some(value) = style.property("backgroundColor") {
-            result.uc_fill = Some(crate::sequence::gradient_fill_or(
-                value,
-                self.gradient_defs.as_deref(),
-            ));
+            result.uc_fill = Some(DescriptionPaint::parse(value));
         }
         if let Some(value) = style.property("lineColor") {
             result.uc_border = Some(crate::sequence::resolve_color(value));
@@ -663,6 +713,112 @@ fn usecase_chrome_layout(
     }
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum DescriptionEntityRef {
+    Actor(usize),
+    UseCase(usize),
+}
+
+#[derive(Debug, Default, PartialEq, Eq)]
+struct DescriptionEntityOrder {
+    members: Vec<DescriptionEntityRef>,
+    top_level: Vec<DescriptionEntityRef>,
+}
+
+fn entity_source_line(diagram: &UseCaseDiagram, entity: DescriptionEntityRef) -> usize {
+    match entity {
+        DescriptionEntityRef::Actor(index) => diagram.actors[index].source_line,
+        DescriptionEntityRef::UseCase(index) => diagram.use_cases[index].source_line,
+    }
+}
+
+/// Match SVEK's Description paint order: every cluster is emitted first,
+/// followed by all cluster members in global source order, then top-level
+/// entities in source order. Notes and links do not consume this mechanism's
+/// gradient registry and therefore do not alter its indices.
+fn description_entity_order(diagram: &UseCaseDiagram) -> DescriptionEntityOrder {
+    let member_ids: HashSet<&str> = diagram
+        .packages
+        .iter()
+        .flat_map(|package| package.elements.iter().map(String::as_str))
+        .collect();
+    let mut order = DescriptionEntityOrder::default();
+    for (index, actor) in diagram.actors.iter().enumerate() {
+        let target = if member_ids.contains(actor.id.as_str()) {
+            &mut order.members
+        } else {
+            &mut order.top_level
+        };
+        target.push(DescriptionEntityRef::Actor(index));
+    }
+    for (index, use_case) in diagram.use_cases.iter().enumerate() {
+        let target = if member_ids.contains(use_case.id.as_str()) {
+            &mut order.members
+        } else {
+            &mut order.top_level
+        };
+        target.push(DescriptionEntityRef::UseCase(index));
+    }
+    order
+        .members
+        .sort_by_key(|entity| entity_source_line(diagram, *entity));
+    order
+        .top_level
+        .sort_by_key(|entity| entity_source_line(diagram, *entity));
+    order
+}
+
+fn actor_paint(actor: &Actor, skin: &SkinColors) -> DescriptionPaint {
+    actor
+        .color
+        .as_deref()
+        .map(DescriptionPaint::parse)
+        .or_else(|| skin.actor_fill.clone())
+        .unwrap_or_else(|| DescriptionPaint::Solid(ENTITY_FILL.to_string()))
+}
+
+fn use_case_paint(use_case: &UseCase, skin: &SkinColors) -> DescriptionPaint {
+    use_case
+        .color
+        .as_deref()
+        .map(DescriptionPaint::parse)
+        .or_else(|| skin.uc_fill.clone())
+        .unwrap_or_else(|| DescriptionPaint::Solid(ENTITY_FILL.to_string()))
+}
+
+fn description_gradient_seed_prefix(meta: &DiagramMeta) -> String {
+    skin_value(&meta.skinparams, &["__svgIdSeed"])
+        .filter(|prefix| !prefix.is_empty())
+        .map(str::to_string)
+        .unwrap_or_else(|| {
+            crate::filter_registry::id_seed_prefix_for_source(meta.source.as_deref().unwrap_or(""))
+        })
+}
+
+fn description_gradient_registry(
+    diagram: &UseCaseDiagram,
+    actor_styles: &[SkinColors],
+    use_case_styles: &[SkinColors],
+    order: &DescriptionEntityOrder,
+) -> GradientRegistry {
+    let mut registry =
+        GradientRegistry::for_seed_prefix(description_gradient_seed_prefix(&diagram.meta));
+    for entity in order.members.iter().chain(&order.top_level) {
+        let paint = match *entity {
+            DescriptionEntityRef::Actor(index) => {
+                actor_paint(&diagram.actors[index], &actor_styles[index])
+            }
+            DescriptionEntityRef::UseCase(index) => {
+                use_case_paint(&diagram.use_cases[index], &use_case_styles[index])
+            }
+        };
+        if let Some(key) = paint.gradient() {
+            registry.id_for(key.clone());
+        }
+    }
+    registry
+}
+
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
@@ -683,10 +839,10 @@ pub fn render_with_oracle(
         return wrap_oracle_envelope(orc, body, "DESCRIPTION");
     }
 
-    let gradient_defs = oracle
+    let captured_gradient_defs = oracle
         .map(|o| o.defs_inner_xml.as_str())
         .filter(|d| !d.is_empty());
-    let skin = SkinColors::from_meta(&diagram.meta, gradient_defs);
+    let skin = SkinColors::from_meta(&diagram.meta, captured_gradient_defs);
     if diagram.actors.is_empty()
         && diagram.use_cases.is_empty()
         && diagram.packages.is_empty()
@@ -720,6 +876,33 @@ pub fn render_with_oracle(
         .use_cases
         .iter()
         .map(|use_case| skin.for_use_case(&diagram.meta, use_case))
+        .collect();
+    let entity_order = description_entity_order(diagram);
+    let generated_gradient_registry = oracle.is_none().then(|| {
+        description_gradient_registry(diagram, &actor_styles, &use_case_styles, &entity_order)
+    });
+    let generated_gradient_defs = generated_gradient_registry
+        .as_ref()
+        .map(GradientRegistry::render_defs_content)
+        .filter(|defs| !defs.is_empty());
+    let gradient_defs = captured_gradient_defs.or(generated_gradient_defs.as_deref());
+    let actor_fills: Vec<String> = diagram
+        .actors
+        .iter()
+        .zip(&actor_styles)
+        .map(|(actor, style)| {
+            actor_paint(actor, style)
+                .svg_fill(generated_gradient_registry.as_ref(), captured_gradient_defs)
+        })
+        .collect();
+    let use_case_fills: Vec<String> = diagram
+        .use_cases
+        .iter()
+        .zip(&use_case_styles)
+        .map(|(use_case, style)| {
+            use_case_paint(use_case, style)
+                .svg_fill(generated_gradient_registry.as_ref(), captured_gradient_defs)
+        })
         .collect();
     let connection_styles: Vec<SkinColors> = diagram
         .connections
@@ -802,16 +985,6 @@ pub fn render_with_oracle(
     render_header(&mut svg, diagram, &chrome);
     render_title(&mut svg, diagram, &chrome);
 
-    // PlantUML renders each cluster group followed immediately by its member
-    // entities (in source-line order), then the top-level (non-member)
-    // entities. Track which entity ids belong to a package so we can emit the
-    // members under their cluster and skip them in the top-level pass.
-    let member_ids: std::collections::HashSet<&str> = diagram
-        .packages
-        .iter()
-        .flat_map(|p| p.elements.iter().map(String::as_str))
-        .collect();
-
     // Helper closures can't borrow svg mutably twice, so emit inline.
     let render_actor_i = |svg: &mut SvgBuilder, i: usize| {
         let (cx, cy) = positions.actors[i];
@@ -824,6 +997,7 @@ pub fn render_with_oracle(
             oracle,
             &id_map,
             &actor_styles[i],
+            &actor_fills[i],
         );
     };
     let render_uc_i = |svg: &mut SvgBuilder, i: usize| {
@@ -838,6 +1012,7 @@ pub fn render_with_oracle(
             oracle,
             &id_map,
             &use_case_styles[i],
+            &use_case_fills[i],
         );
     };
 
@@ -847,23 +1022,10 @@ pub fn render_with_oracle(
     for pkg in &diagram.packages {
         render_package_group(&mut svg, pkg, oracle, &positions.cluster_positions, &id_map);
     }
-    let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
-    for (i, a) in diagram.actors.iter().enumerate() {
-        if member_ids.contains(a.id.as_str()) {
-            members.push((a.source_line, true, i));
-        }
-    }
-    for (i, u) in diagram.use_cases.iter().enumerate() {
-        if member_ids.contains(u.id.as_str()) {
-            members.push((u.source_line, false, i));
-        }
-    }
-    members.sort_by_key(|m| m.0);
-    for (_, is_actor, i) in members {
-        if is_actor {
-            render_actor_i(&mut svg, i);
-        } else {
-            render_uc_i(&mut svg, i);
+    for entity in &entity_order.members {
+        match *entity {
+            DescriptionEntityRef::Actor(index) => render_actor_i(&mut svg, index),
+            DescriptionEntityRef::UseCase(index) => render_uc_i(&mut svg, index),
         }
     }
 
@@ -901,14 +1063,14 @@ pub fn render_with_oracle(
     // Top-level (non-member) entities and notes, interleaved by source line.
     // Kind: 0 = actor, 1 = use case, 2 = note.
     let mut top: Vec<(usize, u8, usize)> = Vec::new();
-    for (i, a) in diagram.actors.iter().enumerate() {
-        if !member_ids.contains(a.id.as_str()) {
-            top.push((a.source_line, 0, i));
-        }
-    }
-    for (i, u) in diagram.use_cases.iter().enumerate() {
-        if !member_ids.contains(u.id.as_str()) {
-            top.push((u.source_line, 1, i));
+    for entity in &entity_order.top_level {
+        match *entity {
+            DescriptionEntityRef::Actor(index) => {
+                top.push((diagram.actors[index].source_line, 0, index));
+            }
+            DescriptionEntityRef::UseCase(index) => {
+                top.push((diagram.use_cases[index].source_line, 1, index));
+            }
         }
     }
     for (i, n) in top_notes.iter().enumerate() {
@@ -2871,6 +3033,7 @@ fn render_actor(
     oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
     skin: &SkinColors,
+    fill: &str,
 ) {
     // Prefer the oracle-captured entity id (PlantUML's real counter allocation,
     // which notes and other synthetic entities perturb), falling back to the
@@ -2898,13 +3061,6 @@ fn render_actor(
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{display}"{src_attr} id="{ent_id}">"#,
     ));
-    // Per-element `#color` overrides skinparam; both override the default.
-    let fill = actor
-        .color
-        .as_deref()
-        .map(resolve_fill)
-        .or_else(|| skin.actor_fill.clone())
-        .unwrap_or_else(|| ENTITY_FILL.to_string());
     let stroke = skin.actor_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
         r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
@@ -3010,6 +3166,7 @@ fn render_use_case(
     oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
     skin: &SkinColors,
+    fill: &str,
 ) {
     let qualified = qualified_name(&uc.id, diagram);
     // Prefer the oracle-captured entity id (PlantUML's real counter allocation),
@@ -3043,16 +3200,6 @@ fn render_use_case(
     } else {
         (dim.rx, dim.ry)
     };
-    // `Colors` is applied after `EntityImageDescription` resolves its
-    // stereotype-qualified style, so an inline entity color remains the final
-    // fill override. Legacy stereotype skinparams already participate in that
-    // resolved style through `FromSkinparamToStyle`.
-    let fill = uc
-        .color
-        .as_deref()
-        .map(resolve_fill)
-        .or_else(|| skin.uc_fill.clone())
-        .unwrap_or_else(|| ENTITY_FILL.to_string());
     let stroke = skin.uc_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
         r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
@@ -4257,6 +4404,147 @@ mod tests {
     }
 
     #[test]
+    fn description_gradients_follow_member_then_top_level_paint_order() {
+        let input = r##"@startuml
+skinparam actorBackgroundColor #102030|#405060
+skinparam usecaseBackgroundColor #A0B0C0-#D0E0F0
+actor "Top Level Reviewer" as Reviewer
+rectangle "Nested Boundary" {
+  usecase "Member Approval" as Approval
+}
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let source = diagram.meta().source.as_deref().unwrap();
+        let use_case_id = crate::filter_registry::gradient_id_for(source, 0);
+        let actor_id = crate::filter_registry::gradient_id_for(source, 1);
+        let svg = crate::render_svg(&diagram);
+
+        let use_case_def = format!(
+            r##"<linearGradient id="{use_case_id}" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#A0B0C0"/><stop offset="100%" stop-color="#D0E0F0"/></linearGradient>"##
+        );
+        let actor_def = format!(
+            r##"<linearGradient id="{actor_id}" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#102030"/><stop offset="100%" stop-color="#405060"/></linearGradient>"##
+        );
+        let use_case_pos = svg
+            .find(&use_case_def)
+            .expect("member use-case gradient def");
+        let actor_pos = svg.find(&actor_def).expect("top-level actor gradient def");
+        assert!(use_case_pos < actor_pos, "{svg}");
+        assert!(svg.contains(&format!(r##"fill="url(#{use_case_id})""##)));
+        assert!(svg.contains(&format!(r##"fill="url(#{actor_id})""##)));
+    }
+
+    #[test]
+    fn description_gradient_registry_deduplicates_typed_keys_across_renames_and_counts() {
+        for (actor_label, use_case_count) in [
+            ("Renamed Intake Owner", 1usize),
+            ("Independent Audit Dispatcher", 4usize),
+        ] {
+            let mut input = format!(
+                "@startuml\n\
+                 skinparam actorBackgroundColor #00FFFF/#FFC0CB\n\
+                 skinparam usecaseBackgroundColor #00FFFF/#FFC0CB\n\
+                 actor \"{actor_label}\" as Owner\n"
+            );
+            for index in 0..use_case_count {
+                input.push_str(&format!(
+                    "usecase \"Fresh Queue {index}\" as Queue{index}\n"
+                ));
+            }
+            input.push_str("@enduml\n");
+
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let source = diagram.meta().source.as_deref().unwrap();
+            let gradient_id = crate::filter_registry::gradient_id_for(source, 0);
+            let svg = crate::render_svg(&diagram);
+            assert_eq!(svg.matches("<linearGradient ").count(), 1, "{svg}");
+            assert_eq!(
+                svg.matches(&format!(r##"fill="url(#{gradient_id})""##))
+                    .count(),
+                use_case_count + 1,
+                "{svg}"
+            );
+            assert!(svg.contains(r##"x1="0%" x2="100%" y1="0%" y2="100%""##));
+        }
+    }
+
+    #[test]
+    fn description_gradient_seed_prefers_parser_carried_prefix_then_source_fallback() {
+        let input = r##"@startuml
+skinparam usecaseBackgroundColor #123456\#ABCDEF
+usecase "Source Seed Control" as Probe
+@enduml"##;
+        let fallback = rustuml_parser::parse::parse(input).unwrap();
+        let fallback_source = fallback.meta().source.as_deref().unwrap();
+        let fallback_id = crate::filter_registry::gradient_id_for(fallback_source, 0);
+        let fallback_svg = crate::render_svg(&fallback);
+        assert!(fallback_svg.contains(&format!(r##"id="{fallback_id}""##)));
+
+        let mut carried = rustuml_parser::parse::parse(input).unwrap();
+        carried
+            .meta_mut()
+            .skinparams
+            .push(rustuml_parser::diagram::SkinParam {
+                key: "__svgIdSeed".to_string(),
+                value: "carriedseed".to_string(),
+            });
+        let carried_svg = crate::render_svg(&carried);
+        assert!(
+            carried_svg.contains(r##"id="gcarriedseed0""##),
+            "{carried_svg}"
+        );
+        assert!(
+            carried_svg.contains(r##"fill="url(#gcarriedseed0)""##),
+            "{carried_svg}"
+        );
+    }
+
+    #[test]
+    fn description_inline_flat_override_does_not_allocate_hidden_style_gradient() {
+        let input = r##"@startuml
+skinparam actorBackgroundColor #112233/#445566
+actor "Inline Flat Override" as Flat #red
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(!svg.contains("<linearGradient "), "{svg}");
+        assert!(svg.contains(r##"fill="#FF0000" rx="8" ry="8""##), "{svg}");
+    }
+
+    #[test]
+    fn description_flat_transparent_and_default_controls_remain_gradient_free() {
+        let transparent_input = r##"@startuml
+skinparam actorBackgroundColor transparent
+skinparam usecaseBackgroundColor #ABCDEF
+actor "Transparent Control" as Clear
+usecase "Flat Use Case" as Probe
+@enduml"##;
+        let transparent = rustuml_parser::parse::parse(transparent_input).unwrap();
+        let transparent_svg = crate::render_svg(&transparent);
+        assert!(
+            !transparent_svg.contains("<linearGradient "),
+            "{transparent_svg}"
+        );
+        assert!(
+            transparent_svg.contains(r##"fill="none" rx="8" ry="8""##),
+            "{transparent_svg}"
+        );
+        assert!(
+            transparent_svg.contains(r##"fill="#ABCDEF""##),
+            "{transparent_svg}"
+        );
+
+        let plain = rustuml_parser::parse::parse(
+            "@startuml\nactor \"Default Actor\" as Default\nusecase \"Default Use Case\" as Probe\n@enduml",
+        )
+        .unwrap();
+        let plain_svg = crate::render_svg(&plain);
+        assert!(!plain_svg.contains("<linearGradient "), "{plain_svg}");
+        assert_eq!(plain_svg.matches(r##"fill="#F1F1F1""##).count(), 2);
+    }
+
+    #[test]
     fn no_oracle_usecase_routes_renamed_actor_link() {
         let input = "@startuml\nactor \"Reader\" as R\nusecase \"Browse Catalog\" as Browse\nR --> Browse\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -5319,10 +5607,21 @@ Middle --> Late : late route
 
         // Java `Entity#getCurrentStyleBuilder` preserves pure-CSS creation
         // snapshots; `Link#getStyleBuilder` does the same independently.
-        assert_eq!(early.uc_fill.as_deref(), Some("#E0F7FA"));
+        assert_eq!(
+            early
+                .uc_fill
+                .as_ref()
+                .and_then(super::DescriptionPaint::flat_control),
+            Some("#E0F7FA")
+        );
         assert_eq!(early.uc_border.as_deref(), Some("#00838F"));
         assert_eq!(early.uc_font_color, "#006064");
-        assert_eq!(late.uc_fill.as_deref(), Some("#FCE4EC"));
+        assert_eq!(
+            late.uc_fill
+                .as_ref()
+                .and_then(super::DescriptionPaint::flat_control),
+            Some("#FCE4EC")
+        );
         assert_eq!(late.uc_border.as_deref(), Some("#C2185B"));
         assert_eq!(late.uc_font_color, "#880E4F");
         assert_eq!(early_link.arrow_color, "#AD1457");
@@ -5378,8 +5677,19 @@ Late --> Early : after legacy
 
         // Java `Entity#getCurrentStyleBuilder` has the compatibility refresh;
         // `Link#getStyleBuilder` always keeps the captured builder.
-        assert_eq!(early.uc_fill.as_deref(), Some("#FCE4EC"));
-        assert_eq!(late.uc_fill.as_deref(), Some("#FCE4EC"));
+        assert_eq!(
+            early
+                .uc_fill
+                .as_ref()
+                .and_then(super::DescriptionPaint::flat_control),
+            Some("#FCE4EC")
+        );
+        assert_eq!(
+            late.uc_fill
+                .as_ref()
+                .and_then(super::DescriptionPaint::flat_control),
+            Some("#FCE4EC")
+        );
         assert_eq!(before.arrow_color, super::STROKE);
         assert_eq!(after.arrow_color, "#1565C0");
     }
@@ -5418,10 +5728,22 @@ External --> Review
 
         // Java `StyleSignatureBasic#clean` makes dots and underscores the same
         // stereotype identity before `withTOBECHANGED` merges the style.
-        assert_eq!(actor.actor_fill.as_deref(), Some("#FFF3E0"));
+        assert_eq!(
+            actor
+                .actor_fill
+                .as_ref()
+                .and_then(super::DescriptionPaint::flat_control),
+            Some("#FFF3E0")
+        );
         assert_eq!(actor.actor_border.as_deref(), Some("#E65100"));
         assert_eq!(actor.actor_font_color, "#BF360C");
-        assert_eq!(use_case.uc_fill.as_deref(), Some("#DCEDC8"));
+        assert_eq!(
+            use_case
+                .uc_fill
+                .as_ref()
+                .and_then(super::DescriptionPaint::flat_control),
+            Some("#DCEDC8")
+        );
         assert_eq!(use_case.uc_border.as_deref(), Some("#558B2F"));
         assert_eq!(use_case.uc_font_color, "#33691E");
         assert_eq!(use_case.uc_stereo_font_color, "#33691E");
