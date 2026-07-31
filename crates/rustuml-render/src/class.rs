@@ -2916,7 +2916,7 @@ fn render_with_oracle_uid_origin(
 /// Each container's immediate leaves that have no links are joined by
 /// invisible rows and columns. The links are layout inputs only: dot still
 /// chooses every coordinate and route.
-fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
+fn single_strategy_members(diagram: &ClassDiagram) -> (Vec<String>, Vec<Vec<String>>) {
     let mut linked = HashSet::<String>::new();
     for relationship in &diagram.relationships {
         linked.insert(relationship_layout_id(diagram, &relationship.from).into_owned());
@@ -2935,10 +2935,11 @@ fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
         linked.insert(relationship_layout_id(diagram, target).into_owned());
     }
 
-    // Java `CucaDiagram.applySingleStrategy` passes every immediate unlinked
-    // `Entity` leaf from `Entity.leafs()` to `Magma`, including floating notes
-    // and empty-package leaves. Reuse SVEK's creation-order inventory so the
-    // strategy sees the same leaf universe as node emission.
+    // Java `CucaDiagram.applySingleStrategy` reads immediate semantic leaves
+    // from `Entity.leafs()` before `GraphvizImageBuilder.printGroups` converts
+    // empty package groups into paintable EMPTY_PACKAGE SVEK nodes. The SVEK
+    // stream supplies quark order here, but its empty-package renderer role is
+    // deliberately not semantic Magma membership.
     let package_render = package_render_model(diagram);
     let note_owners = note_owner_packages(diagram, &package_render.innermost_pkg);
     let mut root = Vec::<String>::new();
@@ -2955,12 +2956,7 @@ fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
             {
                 (note_owners[note_idx], floating_note_layout_id(note_idx))
             }
-            SvekNodeEmission::EmptyPackage(package_idx) => {
-                let owner = package_render.parent_pkg[package_idx]
-                    .filter(|parent| package_render.roles[*parent] == PackageRenderRole::Cluster);
-                (owner, empty_package_layout_id(package_idx))
-            }
-            SvekNodeEmission::Note(_) => continue,
+            SvekNodeEmission::Note(_) | SvekNodeEmission::EmptyPackage(_) => continue,
         };
         if linked.contains(&layout_id) {
             continue;
@@ -2970,6 +2966,12 @@ fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
             None => root.push(layout_id),
         }
     }
+
+    (root, packages)
+}
+
+fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
+    let (root, packages) = single_strategy_members(diagram);
 
     add_square_invisible_links(layout, &root);
 
@@ -19162,6 +19164,56 @@ mod tests {
         assert_eq!(first_note_y, second_note_y, "{svg}");
         assert!(class_y > first_note_y, "{svg}");
         assert!(svg.contains(r#"viewBox="0 0 474 154""#), "{svg}");
+    }
+
+    #[test]
+    fn semantic_magma_members_exclude_paintable_empty_packages() {
+        let input = "@startuml\n\
+                     package RootEmpty {\n\
+                     }\n\
+                     class RootAlpha\n\
+                     class RootBeta\n\
+                     package OwnerBox {\n\
+                       class InnerAlpha\n\
+                       note as InnerLedger\n\
+                         payload\n\
+                       end note\n\
+                       package InnerEmpty {\n\
+                       }\n\
+                       class InnerBeta\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+
+        let emissions = svek_node_emission_order(&diagram);
+        assert_eq!(
+            emissions
+                .iter()
+                .filter(|emission| matches!(emission, SvekNodeEmission::EmptyPackage(_)))
+                .count(),
+            2
+        );
+
+        let (root, packages) = single_strategy_members(&diagram);
+        assert_eq!(root, ["RootAlpha", "RootBeta"]);
+        let owner_index = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "OwnerBox")
+            .unwrap();
+        assert_eq!(
+            packages[owner_index],
+            [
+                "OwnerBox.InnerAlpha".to_string(),
+                floating_note_layout_id(0),
+                "OwnerBox.InnerBeta".to_string(),
+            ]
+        );
+        assert!(root.iter().all(|id| !id.contains("Empty")));
+        assert!(packages.iter().flatten().all(|id| !id.contains("Empty")));
     }
 
     #[test]
