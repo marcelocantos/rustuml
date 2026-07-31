@@ -3543,21 +3543,21 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
     })
 }
 
-fn has_only_flat_label_skinparams(diagram: &StateDiagram) -> bool {
-    diagram.meta.skinparams.iter().all(|skinparam| {
-        let key = rustuml_parser::parse::canonical_skinparam_key(&skinparam.key);
-        matches!(
-            key.as_str(),
-            "arrowfontcolor"
-                | "arrowfontsize"
-                | "defaultfontsize"
-                | "arrowfontname"
-                | "defaultfontname"
-                | "arrowfontstyle"
-                | "statemessagealignment"
-                | "defaulttextalignment"
-        )
-    })
+fn flat_painted_envelope_has_no_shadow_extensions(
+    diagram: &StateDiagram,
+    skin: &StateSkin,
+) -> bool {
+    // Java SvekResult measures the resolved painters, regardless of whether
+    // their style came from defaults, a theme, CSS, or legacy skinparams.
+    // The flat collector owns every current primitive except shadow filters,
+    // so activation follows that unresolved painter capability rather than a
+    // source-key allow-list.
+    autonomous_state_style(diagram, skin, None).shadow <= 0.0
+        && diagram
+            .states
+            .iter()
+            .all(|state| autonomous_state_style(diagram, skin, Some(state)).shadow <= 0.0)
+        && !state_pseudostates_have_shadow(diagram)
 }
 
 fn supports_autonomous_state_image(state: &State) -> bool {
@@ -6365,9 +6365,9 @@ pub fn render_with_oracle(
     };
 
     let has_complete_flat_painter_model = diagram.meta.title.is_none()
-        && has_only_flat_label_skinparams(diagram)
         && diagram.notes.is_empty()
-        && diagram.states.iter().all(|state| !state.composite);
+        && diagram.states.iter().all(|state| !state.composite)
+        && flat_painted_envelope_has_no_shadow_extensions(diagram, &skin);
     let flat_painted_bounds = layout_result.as_ref().and_then(|result| {
         if !has_complete_flat_painter_model {
             return None;
@@ -12535,37 +12535,37 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn flat_painted_envelope_accepts_only_modeled_label_skinparams() {
-        let accepted = rustuml_parser::parse::parse(
+    fn flat_painted_envelope_activation_follows_resolved_shadow_capability() {
+        let themed = rustuml_parser::parse::parse(
             "@startuml\n\
+             !theme aws-orange\n\
              left to right direction\n\
-             skinparam StateArrowFontName Courier New\n\
-             skinparam StateArrowFontSize 12\n\
-             skinparam StateArrowFontStyle bold\n\
-             skinparam StateArrowFontColor #123456\n\
-             skinparam StateMessageAlignment right\n\
              state \"Renamed Alpha\" as Alpha\n\
              state \"Renamed Beta\" as Beta\n\
              Alpha --> Beta : first row\\nsecond row\n\
              @enduml",
         )
         .unwrap();
-        let rustuml_parser::diagram::Diagram::State(accepted) = accepted else {
+        let rustuml_parser::diagram::Diagram::State(themed) = themed else {
             panic!("expected state diagram");
         };
-        assert!(has_only_flat_label_skinparams(&accepted));
+        let themed_skin = StateSkin::from_diagram(&themed);
+        assert!(flat_painted_envelope_has_no_shadow_extensions(
+            &themed,
+            &themed_skin
+        ));
 
-        for unsupported in [
+        for shadow in [
             "skinparam StateShadowing 4",
-            "skinparam Padding 3",
-            "skinparam NodeSep 70",
-            "skinparam UnknownStatePainter value",
+            "<style>\nstateDiagram { state { Shadowing 2 } }\n</style>",
+            "<style>\nstateDiagram { circle { start { Shadowing 3 } } }\n</style>",
         ] {
             let parsed = rustuml_parser::parse::parse(&format!(
                 "@startuml\n\
-                 {unsupported}\n\
+                 {shadow}\n\
                  state \"Renamed Alpha\" as Alpha\n\
                  state \"Renamed Beta\" as Beta\n\
+                 [*] --> Alpha\n\
                  Alpha --> Beta : held out label\n\
                  @enduml"
             ))
@@ -12573,9 +12573,10 @@ CobaltDecision --> [*]
             let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
                 panic!("expected state diagram");
             };
+            let skin = StateSkin::from_diagram(&diagram);
             assert!(
-                !has_only_flat_label_skinparams(&diagram),
-                "{unsupported} must remain on the conservative fallback"
+                !flat_painted_envelope_has_no_shadow_extensions(&diagram, &skin),
+                "{shadow} must remain on the conservative fallback"
             );
         }
     }

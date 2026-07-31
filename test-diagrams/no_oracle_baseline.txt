@@ -23,14 +23,14 @@ mindmap 157 157
 multi-diagram 53 53
 nwdiag 89 89
 object 155 155
-preprocessing 274 307
+preprocessing 285 307
 regex 45 45
 rendering 86 98
 salt 103 103
 sequence 1411 1411
 skinparam 404 410
 sprites 49 49
-state 887 901
+state 888 901
 timing 141 141
 type-detection 42 42
 usecase 315 315
