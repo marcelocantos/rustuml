@@ -186,25 +186,28 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
 /// lines that appear later in TIM output remain part of `UmlSource` and must
 /// still participate in deterministic SVG resource hashes.
 fn source_identity_input_lines(input: &str) -> Vec<&str> {
-    let mut result = Vec::new();
-    let mut in_block = false;
-    let mut skip_initial_empty_lines = false;
+    let lines: Vec<_> = input.lines().collect();
+    let (empty_start, empty_end) = initial_diagram_empty_span(&lines);
+    lines
+        .into_iter()
+        .enumerate()
+        .filter_map(|(index, line)| (!(empty_start..empty_end).contains(&index)).then_some(line))
+        .collect()
+}
 
-    for line in input.lines() {
-        let trimmed = line.trim_start();
-        if !in_block && trimmed.starts_with("@start") {
-            in_block = true;
-            skip_initial_empty_lines = true;
-            result.push(line);
-        } else if skip_initial_empty_lines && trimmed.is_empty() {
-            continue;
-        } else {
-            skip_initial_empty_lines = false;
-            result.push(line);
-        }
+fn initial_diagram_empty_span(lines: &[&str]) -> (usize, usize) {
+    let Some(start) = lines
+        .iter()
+        .position(|line| line.trim_start().starts_with("@start"))
+    else {
+        return (0, 0);
+    };
+    let empty_start = start + 1;
+    let mut empty_end = empty_start;
+    while empty_end < lines.len() && lines[empty_end].trim().is_empty() {
+        empty_end += 1;
     }
-
-    result
+    (empty_start, empty_end)
 }
 
 fn svg_id_seed_prefix(source: &str) -> String {
@@ -528,6 +531,11 @@ struct PreprocessContext {
     return_signal: Option<Value>,
     /// 1-based line currently being processed within the active input chunk.
     current_source_line: usize,
+    /// Raw empty lines omitted immediately after the top-level start tag.
+    ///
+    /// Java's effective `UmlSource` excludes this prefix from command
+    /// locations, while later empty lines remain in the location domain.
+    initial_diagram_empty_lines: usize,
     /// Wall-clock snapshot captured once at render start. Drives `%date()`
     /// so all calls within a single render see the same instant and zone.
     /// Defaults to system time + local timezone; both overridable via
@@ -646,6 +654,7 @@ impl PreprocessContext {
             local_vars: Vec::new(),
             return_signal: None,
             current_source_line: 0,
+            initial_diagram_empty_lines: 0,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
             theme_seed_expansions: Vec::new(),
@@ -685,7 +694,8 @@ impl PreprocessContext {
 
     fn current_diagram_source_line(&self) -> usize {
         if self.include_depth == 0 && self.in_diagram_block && self.seen_start_tag {
-            self.current_source_line.saturating_sub(1)
+            self.current_source_line
+                .saturating_sub(1 + self.initial_diagram_empty_lines)
         } else {
             self.current_source_line
         }
@@ -763,7 +773,27 @@ impl PreprocessContext {
 
     fn process(&mut self, input: &str) -> Vec<String> {
         let lines: Vec<&str> = input.lines().collect();
-        self.process_lines(&lines)
+        if self.include_depth != 0 {
+            return self.process_lines(&lines);
+        }
+
+        let (empty_start, empty_end) = initial_diagram_empty_span(&lines);
+        let saved_source_line = self.current_source_line;
+        let saved_initial_empty_lines = self.initial_diagram_empty_lines;
+        self.initial_diagram_empty_lines = empty_end - empty_start;
+
+        let mut output = Vec::new();
+        for (index, line) in lines.into_iter().enumerate() {
+            if (empty_start..empty_end).contains(&index) {
+                continue;
+            }
+            self.current_source_line = index + 1;
+            self.process_one_line(line, &mut output);
+        }
+
+        self.current_source_line = saved_source_line;
+        self.initial_diagram_empty_lines = saved_initial_empty_lines;
+        output
     }
 
     fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
@@ -4017,6 +4047,66 @@ $record(SaffronArchive)\n\
                 "@enduml\n",
             ),
         );
+    }
+
+    #[test]
+    fn parser_source_origins_drop_only_the_initial_empty_run() {
+        fn located_content(input: &str) -> Vec<(usize, String)> {
+            preprocess_full_for_parse(input, None)
+                .lines
+                .iter()
+                .enumerate()
+                .filter_map(|(index, line)| {
+                    let (source_line, text) =
+                        split_source_line_marker(line).unwrap_or((index + 1, line));
+                    (!text.trim().is_empty()).then(|| (source_line, text.to_string()))
+                })
+                .collect()
+        }
+
+        let several_initial = concat!(
+            "@startuml\n",
+            "\n",
+            " \t \n",
+            "\t\n",
+            "class QuartzLedger\n",
+            "\n",
+            "\n",
+            "class SaffronArchive\n",
+            "\n",
+            "QuartzLedger --> SaffronArchive\n",
+            "@enduml\n",
+        );
+        let one_initial = concat!(
+            "@startuml\n",
+            "\t\n",
+            "class QuartzLedger\n",
+            "\n",
+            "\n",
+            "class SaffronArchive\n",
+            "\n",
+            "QuartzLedger --> SaffronArchive\n",
+            "@enduml\n",
+        );
+        let no_initial = concat!(
+            "@startuml\n",
+            "class QuartzLedger\n",
+            "\n",
+            "\n",
+            "class SaffronArchive\n",
+            "\n",
+            "QuartzLedger --> SaffronArchive\n",
+            "@enduml\n",
+        );
+        let expected = vec![
+            (1, "class QuartzLedger".to_string()),
+            (4, "class SaffronArchive".to_string()),
+            (6, "QuartzLedger --> SaffronArchive".to_string()),
+        ];
+
+        assert_eq!(located_content(several_initial), expected);
+        assert_eq!(located_content(one_initial), expected);
+        assert_eq!(located_content(no_initial), expected);
     }
 
     // New tests for added features.
