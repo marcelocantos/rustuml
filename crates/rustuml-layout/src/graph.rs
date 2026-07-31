@@ -996,6 +996,7 @@ impl LayoutGraph {
         let height_key = CString::new("height").unwrap();
         let shape_key = CString::new("shape").unwrap();
         let label_key = CString::new("label").unwrap();
+        let xlabel_key = CString::new("xlabel").unwrap();
         let fixedsize_key = CString::new("fixedsize").unwrap();
         let margin_key = CString::new("margin").unwrap();
         let text_span_dimensions_key = CString::new("rustuml_text_span_dimensions").unwrap();
@@ -1335,8 +1336,13 @@ impl LayoutGraph {
                             empty.as_ptr(),
                         );
                     }
+                    let center_label_key = if self.spline_routing == SplineRouting::Ortho {
+                        &xlabel_key
+                    } else {
+                        &label_key
+                    };
                     for (edge_label_key, color, size) in [
-                        (&label_key, "#000001", edge_spec.label_size),
+                        (center_label_key, "#000001", edge_spec.label_size),
                         (&taillabel_key, "#000002", edge_spec.tail_label_size),
                         (&headlabel_key, "#000003", edge_spec.head_label_size),
                     ] {
@@ -1619,7 +1625,14 @@ impl LayoutGraph {
                         start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
                         has_end_arrow: eflag != 0,
                         end_point: if eflag != 0 { Some((ep_x, ep_y)) } else { None },
-                        label: edge_label_position(e, 0),
+                        label: edge_label_position(
+                            e,
+                            if self.spline_routing == SplineRouting::Ortho {
+                                3
+                            } else {
+                                0
+                            },
+                        ),
                         tail_label: edge_label_position(e, 1),
                         head_label: edge_label_position(e, 2),
                     });
@@ -2674,6 +2687,31 @@ mod tests {
         let label = result.edge_paths[0].label.unwrap();
         assert_eq!(label.width, 25.0);
         assert_eq!(label.height, 15.0);
+    }
+
+    #[test]
+    fn ortho_center_labels_return_solved_external_boxes() {
+        let mut graph =
+            LayoutGraph::new(Direction::LeftToRight).with_spline_routing(SplineRouting::Ortho);
+        graph.add_node("fresh_source_811", "", 57.0, 43.0);
+        graph.add_node("fresh_target_823", "", 63.0, 47.0);
+        graph.add_edge_with_label_sizes(
+            "fresh_source_811",
+            "fresh_target_823",
+            Some(EdgeLabelSize {
+                width: 41.9,
+                height: 19.9,
+            }),
+            None,
+            None,
+        );
+
+        let result = graph.layout_full_no_timeout();
+        let label = result.edge_paths[0]
+            .label
+            .expect("Graphviz should solve the external center label");
+        assert_eq!(label.width, 41.0);
+        assert_eq!(label.height, 19.0);
     }
 
     #[test]
