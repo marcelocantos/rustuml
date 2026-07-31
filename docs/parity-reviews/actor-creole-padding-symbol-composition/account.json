@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "mechanism": "actor-creole-padding-symbol-composition",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "6e10066f0519cee2d7166a2c62451bd635829c7d",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java:GeneralImageBuilder#createEntityImageBlockInternal",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:EntityImageDescription constructor",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyFactory.java:BodyFactory#create3",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhanced2.java:BodyEnhanced2#getTextBlock and getMarginX",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:Display#getCreole",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:SheetBlock1#calculateDimensionSlow and drawU",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java:USymbolSimpleAbstract#asSmall",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolActor.java:USymbolActor#getDrawing"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/usecase.rs:SkinColors::from_meta",
+    "crates/rustuml-render/src/usecase.rs:actor_dim",
+    "crates/rustuml-render/src/usecase.rs:layout_usecase_positions",
+    "crates/rustuml-render/src/usecase.rs:render_actor"
+  ],
+  "claimed_invariant": "A Description-diagram actor is composed by USymbolSimpleAbstract from three natural TextBlocks: stereotype, stickman, and label. EntityImageDescription creates the label through BodyEnhanced2 and Display#getCreole, so SheetBlock1 adds the current global `skinparam Padding` to all four sides and translates the painted label atoms by left/top padding. USymbolSimpleAbstract includes that padded label width and height in the actor's Graphviz node dimensions, centers the padded block beneath the stickman, and paints text at the block's translated origin. Padding therefore changes node width, node height, label baseline, incident-edge attachment, and downstream rank placement through one composition; it does not resize the stickman primitive.",
+  "causal_divergence": "After the separate use-case ellipse account ports padding for oval text blocks, the themed use-case radii match Java exactly but the actor label remains five unscaled pixels too high and its node remains ten pixels too short under `skinparam Padding 5`. Rust actor_dim measures only glyph width/height and render_actor paints the baseline directly below the stickman, omitting SheetBlock1's padded natural block and paint translation. The resulting actor node dimensions alter Graphviz edge attachment and move the use-case rank upward; route and canvas differences are downstream symptoms.",
+  "planned_model_change": "Reuse the resolved global Creole padding as an explicit actor-label TextBlock property. Add left/right padding to the actor label's natural width and top/bottom padding to its natural height for Graphviz dimensions and painted-envelope calculations. Center that padded block beneath the unchanged stickman, then offset the emitted text by its left/top padding so natural dimensions and painting share one composition. Apply the same independent-block rule to actor stereotype text where present. Preserve font metrics, stickman geometry, stroke ownership, and layout-engine inputs other than the corrected actor node dimensions.",
+  "perturbation_axes": [
+    "global Padding 0, 3, 5, and 11",
+    "short label narrower than stickman versus long label wider than stickman",
+    "sans-serif versus Verdana and Arial",
+    "plain actor versus visible stereotype",
+    "top-to-bottom versus left-to-right direction",
+    "one actor versus fanout to multiple renamed use cases"
+  ],
+  "scope_boundary": "This mechanism owns global Creole padding in Description-diagram actor label/stereotype natural dimensions, text placement, and the resulting node envelope. It does not own use-case ellipse fitting, stickman geometry, Graphviz rank spacing, route synthesis, style colors, comparator behavior, baselines, skips, or fixture eligibility.",
+  "acceptance": [
+    "Fresh actor-only and actor-plus-use-case inputs prove multiple padding values alter node dimensions and label baselines through the same padded block.",
+    "Padding-zero and unthemed controls retain their existing exact output.",
+    "The themed UseCase cluster loses its actor/rank/route residue without changing the already-exact oval radii.",
+    "An independent checker audits the Java and Rust composition, generates held-outs over at least two axes, and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "adding a fixed five- or ten-pixel correction to themed actor coordinates",
+    "special-casing theme names, labels, expected SVG dimensions, or branch counts",
+    "changing route geometry, comparator tolerance, baselines, skips, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_minty_usecase.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_superhero_usecase.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_united_usecase.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_usecase.puml",
+    "test-diagrams/golden/type-detection/noheader_usecase.puml"
+  ]
+}
