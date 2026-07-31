@@ -4864,13 +4864,7 @@ mod tests {
     #[test]
     fn multiline_link_note_dedents_and_defaults_to_bottom() {
         let d = parse(
-            "class FreshLeft\n\
-             class FreshRight\n\
-             FreshLeft --> FreshRight\n\
-             note on link\n\
-                 first row  \n\
-                   nested row\n\
-             end note",
+            "class FreshLeft\nclass FreshRight\nFreshLeft --> FreshRight\nnote on link\n    first row  \n      nested row\nend note",
         );
 
         assert!(d.notes.is_empty());
