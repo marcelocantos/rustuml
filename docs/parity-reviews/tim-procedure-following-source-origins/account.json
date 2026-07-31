@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "tim-procedure-following-source-origins",
-  "status": "accounted_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -76,13 +76,25 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "385977e38193bf6ca0a2649a33b82f6dabd6c6ff",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "pending",
-    "model_evidence": "The strict diff is confined to the final two links' data-source-line/codeLine values (expected 27/28, actual 57/58) plus tolerated subpixel path coordinates; all graph identity, paint, and topology already agree.",
+    "accepted_result": "preproc_complex_crud_generator becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,170/11,251 to 11,171/11,251, with preprocessing moving from 288/307 to 289/307 and every other family unchanged.",
+    "model_evidence": "After a top-level procedure emits body-owned lines, later caller-owned content now receives explicit source markers instead of inheriting flattened vector positions. A fresh renamed perturbation combines one-line and multiline procedure bodies, repeated calls, a following comment, and a later relationship; generated classes retain their distinct definition lines and the relationship retains its caller-file line. The full parser suite exposed and now preserves the separate preamble-backed domain: preproc_05_procedure_header remains structurally equivalent with its ordinary message on source line 8, while the first-line @start CRUD links use 27 and 28.",
     "commands": [
-      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_complex_crud_generator.puml"
+      "cargo test -p rustuml-parser --lib parser_preprocessing_keeps_caller_origins_after_mixed_procedure_expansions -- --nocapture",
+      "cargo test -p rustuml-parser --lib parse_block_sequence_with_preamble_meta_procedure_stays_sequence -- --nocapture",
+      "cargo build --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_complex_crud_generator.puml",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/multi-diagram/preproc_05_procedure_header.puml",
+      "cargo test -p rustuml-parser --lib",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-parser -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test harness_guards frozen -- --nocapture",
+      "cargo test --test harness_guards no_golden_data_embedded_in_shipping_crates -- --nocapture",
+      "cargo test --test harness_guards parity_review_paths_reject_traversal -- --nocapture"
     ],
-    "review_status": "Account recorded before implementation. Independent checker capacity is currently unavailable; this record does not self-attest acceptance."
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local arm64 Java runtime are unavailable. This record does not self-attest acceptance."
   }
 }

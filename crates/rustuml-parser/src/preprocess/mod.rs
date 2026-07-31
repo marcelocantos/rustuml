@@ -578,6 +578,12 @@ struct PreprocessContext {
     /// Java's effective `UmlSource` excludes this prefix from command
     /// locations, while later empty lines remain in the location domain.
     initial_diagram_empty_lines: usize,
+    /// Source position of the active top-level `@start...` marker.
+    ///
+    /// A first-line marker uses PlantUML's block-local zero-based positions.
+    /// Extracted blocks with shared preamble definitions retain the absolute
+    /// location domain already carried by their top-level StringLocated lines.
+    top_level_start_source_line: Option<usize>,
     /// Wall-clock snapshot captured once at render start. Drives `%date()`
     /// so all calls within a single render see the same instant and zone.
     /// Defaults to system time + local timezone; both overridable via
@@ -697,6 +703,7 @@ impl PreprocessContext {
             return_signal: None,
             current_source_line: 0,
             initial_diagram_empty_lines: 0,
+            top_level_start_source_line: None,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
             theme_seed_expansions: Vec::new(),
@@ -736,8 +743,15 @@ impl PreprocessContext {
 
     fn current_diagram_source_line(&self) -> usize {
         if self.include_depth == 0 && self.in_diagram_block && self.seen_start_tag {
-            self.current_source_line
-                .saturating_sub(1 + self.initial_diagram_empty_lines)
+            if self
+                .top_level_start_source_line
+                .is_some_and(|line| line > 1)
+            {
+                self.current_source_line
+            } else {
+                self.current_source_line
+                    .saturating_sub(1 + self.initial_diagram_empty_lines)
+            }
         } else {
             self.current_source_line
         }
@@ -919,6 +933,7 @@ impl PreprocessContext {
                 if !self.seen_start_tag {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
+                    self.top_level_start_source_line = Some(self.current_source_line);
                     self.in_ebnf_block = trimmed.starts_with("@startebnf");
                     if self.source_identity_mode {
                         output.push(line_no_comment);
@@ -1561,6 +1576,7 @@ impl PreprocessContext {
                 generated.push_str(trailing);
             }
             let returned_value = ret.is_some();
+            let emitted_lines = !lines.is_empty();
             if lines.is_empty() {
                 // If the function produced no output lines but returned a value,
                 // emit the return value as an output line (e.g. note body calls).
@@ -1585,6 +1601,12 @@ impl PreprocessContext {
             {
                 while output.len() < self.current_source_line {
                     output.push(String::new());
+                }
+                if emitted_lines {
+                    // Java keeps every top-level StringLocated origin after a
+                    // procedure appends definition-owned body lines. Flattened
+                    // vector positions are no longer a valid source identity.
+                    self.mark_source_lines = true;
                 }
             }
 
@@ -4004,6 +4026,43 @@ $record(SaffronArchive)\n\
                 (2, "class SaffronArchive {"),
             ]
         );
+    }
+
+    #[test]
+    fn parser_preprocessing_keeps_caller_origins_after_mixed_procedure_expansions() {
+        let input = r#"@startuml
+!procedure $leaf($name)
+class $name
+!endprocedure
+!procedure $record($name)
+class $name {
+  +marker: String
+}
+!endprocedure
+$leaf(NorthwindLedger)
+$record(SaffronArchive)
+' an ignored caller-file comment
+NorthwindLedger --> SaffronArchive
+@enduml"#;
+
+        let lines = preprocess_full_for_parse(input, None).lines;
+        let source_index = |needle: &str| {
+            input
+                .lines()
+                .position(|line| line == needle)
+                .expect("fresh perturbation line exists")
+        };
+
+        let located: Vec<_> = lines
+            .iter()
+            .filter_map(|line| split_source_line_marker(line))
+            .collect();
+        assert!(located.contains(&(source_index("class $name"), "class NorthwindLedger")));
+        assert!(located.contains(&(source_index("class $name {"), "class SaffronArchive {")));
+        assert!(located.contains(&(
+            source_index("NorthwindLedger --> SaffronArchive"),
+            "NorthwindLedger --> SaffronArchive"
+        )));
     }
 
     #[test]
