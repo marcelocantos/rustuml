@@ -532,6 +532,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_note_on_link_command = false;
     let mut has_explicit_state_evidence = false;
     let mut has_explicit_usecase_evidence = false;
+    let mut has_explicit_component_evidence = false;
     let mut object_containers_all_ordinary = true;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
@@ -851,6 +852,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // beats multiple `interface` lines that would otherwise score for class.
         if leading_keyword == "component" && trimmed["component".len()..].starts_with(' ') {
             scores[5] += 15;
+            has_explicit_component_evidence = true;
             if !trimmed.contains('{') && top_level {
                 has_top_level_component_leaf = true;
             }
@@ -863,6 +865,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.starts_with("[[")
         {
             scores[5] += 10;
+            has_explicit_component_evidence = true;
         }
         // `[Bracket]` appearing anywhere in a line (connection or standalone component
         // reference), e.g. `[Foo] - IFoo` or `IFoo - [Bar]`.
@@ -901,6 +904,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.starts_with("autonumber")
         {
             scores[5] += 5;
+            // Bracket references are Component syntax, but brackets inside a
+            // shared note command are display text, not factory evidence.
+            if !trimmed.to_ascii_lowercase().starts_with("note ") {
+                has_explicit_component_evidence = true;
+            }
         }
         // `autonumber` (with or without start/step/format) is sequence-only.
         if trimmed == "autonumber" || trimmed.starts_with("autonumber ") {
@@ -912,6 +920,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // higher component-per-line weight causes component to win.
         if trimmed.starts_with("interface ") {
             scores[5] += 10; // component
+            has_explicit_component_evidence = true;
         }
         // `note right/left/top/bottom of <id>` — valid in sequence, class, component,
         // and deployment diagrams. Score all four equally so that other keywords
@@ -1214,7 +1223,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // syntax establishes a different viable family.
     if has_note_on_link_command
         && scores[7] > 0
-        && scores[5] == 0
+        && !has_explicit_component_evidence
         && !has_explicit_state_evidence
         && !has_explicit_usecase_evidence
     {
@@ -2106,6 +2115,15 @@ mod tests {
             )),
             UmlSubtype::Deployment
         );
+        for position in ["top", "right", "bottom", "left"] {
+            assert_eq!(
+                detect_uml_subtype(&lines(&format!(
+                    "node FreshIngress\ndatabase FreshArchive\nFreshIngress --> FreshArchive\nnote {position} of link : retained"
+                ))),
+                UmlSubtype::Deployment,
+                "explicit shared note position {position} is not Component evidence"
+            );
+        }
         assert_eq!(
             detect_uml_subtype(&lines("Alpha --> Beta\nnote on link : transition memo")),
             UmlSubtype::State

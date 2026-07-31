@@ -4583,6 +4583,12 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     for conn in &diagram.connections {
         let (layout_from, layout_to, reversed) =
             deployment_connection_layout_with_endpoints(conn, &cluster_endpoint_nodes);
+        if reversed {
+            // Java `CommandLinkElement.executeArg` preserves LEFT/UP as an
+            // inverted Link after swapping endpoints. `Cluster` then emits
+            // that link's start before ordinary SVEK nodes.
+            layout.add_plantuml_svek_inverted_start(layout_from);
+        }
         // `SvekEdge.getLabelText` expands Display row controls before
         // `appendLine` wraps the complete block in one-pixel margins.
         let ordinary_label_size = conn
@@ -6818,7 +6824,10 @@ fn render_no_oracle_edges(
                     svg,
                     row,
                     row_x,
-                    row_y + text_render::label_ascent(row, 13.0),
+                    // Java provenance: Display's TextBlockSimple uses the
+                    // StringBounder font ascent for every row; glyph contents
+                    // do not move the baseline within a line box.
+                    row_y + pm::ascent(13.0),
                     13.0,
                     false,
                     false,
