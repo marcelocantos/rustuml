@@ -1,0 +1,6 @@
+@startuml
+node "Line Color Source" as LineColorSource
+node "Line Color Target" as LineColorTarget
+LineColorSource --> LineColorTarget : line color route
+note bottom on link #back:MintCream;line.bold:Orange;text:Purple : line color consumed but bold/text inert
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Dotted First Source" as DottedFirstSource
+node "Dotted First Target" as DottedFirstTarget
+DottedFirstSource --> DottedFirstTarget : dotted first route
+note on link #line.dotted:DarkGreen
+  dotted first directive owns multiline
+  retained style should not dash the border
+endnote
+@enduml

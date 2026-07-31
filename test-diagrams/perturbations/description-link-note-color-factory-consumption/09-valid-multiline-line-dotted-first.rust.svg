@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="250px" preserveAspectRatio="none" style="width:403px;height:250px;background:#FFFFFF;" version="1.1" viewBox="0 0 403 250" width="403px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Dotted First Source-->
+<g class="entity" data-qualified-name="DottedFirstSource" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,186.2109,6,186.2109,42.4883,176.2109,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="176.2109" x2="186.2109" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="176.2109" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="176.2109" x2="176.2109" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="130.2109" x="31" y="39.5352">Dotted First Source</text>
+</g>
+<!--entity Dotted First Target-->
+<g class="entity" data-qualified-name="DottedFirstTarget" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="16.72,189.49,26.72,179.49,185.4817,179.49,185.4817,215.9783,175.4817,225.9783,16.72,225.9783,16.72,189.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="175.4817" x2="185.4817" y1="189.49" y2="179.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16.72" x2="175.4817" y1="189.49" y2="189.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="175.4817" x2="175.4817" y1="189.49" y2="225.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="128.7617" x="31.72" y="213.0252">Dotted First Target</text>
+</g>
+<!--link DottedFirstSource to DottedFirstTarget-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M101.11,52.66 C101.11,85.44 101.11,140.1 101.11,173.03" fill="none" id="DottedFirstSource-to-DottedFirstTarget" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="101.11,179.03,105.11,170.03,101.11,174.03,97.11,170.03,101.11,179.03" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108.3672" x="193.3659" y="96.0584">dotted first route</text>
+<path d="M106.11,104.8005 L106.11,144.8005 L388.11,144.8005 L388.11,114.8005 L378.11,104.8005 L106.11,104.8005" fill="#FEFFDD" style="stroke:#006400;stroke-width:0.5;"/>
+<path d="M378.11,104.8005 L378.11,114.8005 L388.11,114.8005 L378.11,104.8005" fill="#FEFFDD" style="stroke:#006400;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="224.9736" x="112.11" y="122.3689">dotted first directive owns multiline</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="261.8789" x="112.11" y="137.6795">retained style should not dash the border</text>
+</g>
+</g></svg>

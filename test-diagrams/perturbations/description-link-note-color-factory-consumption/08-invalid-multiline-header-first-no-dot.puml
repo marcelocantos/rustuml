@@ -1,0 +1,8 @@
+@startuml
+node "Header First Source" as HeaderFirstSource
+node "Header First Target" as HeaderFirstTarget
+HeaderFirstSource --> HeaderFirstTarget : header first route
+note on link #header:Gold
+  header directive has no dot
+endnote
+@enduml
