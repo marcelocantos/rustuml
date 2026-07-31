@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+note "root reverse arrow memo ac" as RootArrowMemoAC
+database "Root Sink AC" as RootSinkAC
+RootSinkAC --> RootArrowMemoAC
+control "Root Free AC" as RootFreeAC
+@enduml

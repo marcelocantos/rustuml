@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+control "Shared Probe Z" as SharedProbeZ
+node "Empty Duplicate Shell Z" as EmptyDuplicateShellZ {
+  control SharedProbeZ
+}
+node "Note Shell Z" as NoteShellZ {
+  note as OwnedMemoZ
+    owned memo z
+  end note
+}
+database "Root Tail Z" as RootTailZ
+@enduml

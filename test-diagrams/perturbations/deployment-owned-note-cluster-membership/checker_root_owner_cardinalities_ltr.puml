@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+note "root memo y" as RootMemoY
+control "Root Gate Y" as RootGateY
+file "Root File Y" as RootFileY
+node "Owned Pair Y" as OwnedPairY {
+  note "owned memo y" as OwnedMemoY
+  database "Owned Store Y" as OwnedStoreY
+}
+@enduml

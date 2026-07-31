@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+folder "Arrow Owner W" as ArrowOwnerW {
+  note "arrow relation memo w" as ArrowMemoW
+  database "Arrow Sink W" as ArrowSinkW
+  ArrowMemoW --> ArrowSinkW
+  actor "Free Observer W" as FreeObserverW
+}
+@enduml

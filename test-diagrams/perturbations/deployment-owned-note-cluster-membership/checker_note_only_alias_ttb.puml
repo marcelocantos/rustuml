@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+node "Amber Vault" as AmberVaultQ {
+  note "retention ledger q" as RetentionMemoQ
+}
+file "Outside Probe Q" as OutsideProbeQ
+@enduml

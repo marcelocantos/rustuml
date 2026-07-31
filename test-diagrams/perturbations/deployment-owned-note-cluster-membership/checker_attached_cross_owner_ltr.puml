@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+database "Remote Target U" as RemoteTargetU
+frame "Attachment Owner U" as AttachmentOwnerU {
+  note left of RemoteTargetU
+    generated cross-owner memo u
+  end note
+}
+database "Root Companion U" as RootCompanionU
+@enduml

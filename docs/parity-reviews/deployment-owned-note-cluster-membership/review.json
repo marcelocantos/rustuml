@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-owned-note-cluster-membership",
+  "review_date": "2026-08-01",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5 Codex; the backend point release is not exposed to the checker",
+    "tool": "Codex desktop using exec_command, apply_patch, XML parsing, and the exact supplied Rust binary",
+    "role": "checker-only; did not implement fe78c98af6388d6713885d55a4a071dbab1e3b50"
+  },
+  "revisions": {
+    "implementation_commit_under_review": "fe78c98af6388d6713885d55a4a071dbab1e3b50",
+    "account_commit": "0e0aff0e8bc6961c6a41c678ea00c22440a17e29",
+    "account_is_ancestor_of_implementation": true,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "review_worktree_head_at_final_evidence": "4f4ba3d4fe768b4fab72991e2f137728d357648e",
+    "exact_source_access": "The reviewed deployment parser and renderer were read with git show at fe78c98a. git diff fe78c98a..review_worktree_head was empty for crates/rustuml-parser/src/parse/deployment.rs and crates/rustuml-render/src/deployment.rs.",
+    "concurrent_worktree_exclusion": "An unrelated concurrent modification to crates/rustuml-render/src/class.rs was present and was neither inspected for this verdict nor staged by this checker.",
+    "rust_binary": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "rust_binary_sha256": "0ef6e779de1118dc1ea83a61106b24f9820ba17ecdcfe7e0d53a6b9f0a4cfc24",
+    "rust_binary_revision_basis": "Used as the exact fe78c98a shipping binary supplied in the checker assignment; no rebuild was performed.",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_json_sha256": "e4b758cba44b619d7f4657dd2c72b6e555878eb97c304ffe0649a75d0a64e0d1",
+    "cargo_was_run": false,
+    "rustc_was_run": false,
+    "shipping_code_edited_by_checker": false,
+    "account_edited": false,
+    "baselines_or_comparator_edited": false
+  },
+  "commands": [
+    {
+      "cmd": "git show fe78c98af6388d6713885d55a4a071dbab1e3b50:docs/parity-reviews/deployment-owned-note-cluster-membership/account.json",
+      "result": "causal account inspected"
+    },
+    {
+      "cmd": "git diff e3829ed039f1367310f9520239dfbf6d9cada403 fe78c98af6388d6713885d55a4a071dbab1e3b50 -- crates/rustuml-render/src/deployment.rs",
+      "result": "full implementation diff inspected"
+    },
+    {
+      "cmd": "git show fe78c98af6388d6713885d55a4a071dbab1e3b50:crates/rustuml-render/src/deployment.rs | nl -ba | sed -n '<reviewed ranges>'",
+      "result": "cluster projection, SVEK solve order, paint order, note registration, Magma, frames, rectangle recovery, and UID paths inspected"
+    },
+    {
+      "cmd": "git show fe78c98af6388d6713885d55a4a071dbab1e3b50:crates/rustuml-parser/src/parse/deployment.rs | nl -ba | sed -n '560,980p'",
+      "result": "floating notes, attached notes, dotted note links, general connection parsing, and unknown-endpoint creation inspected"
+    },
+    {
+      "cmd": "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<cited Java source>",
+      "result": "CommandFactoryNote, CommandFactoryNoteOnEntity, Entity, GraphvizImageBuilder, CucaDiagram, DescriptionDiagramFactory, and descdiagram/command/CommandLinkElement inspected"
+    },
+    {
+      "cmd": "for f in test-diagrams/perturbations/deployment-owned-note-cluster-membership/*.puml; do target/debug/rustuml --ast \"$f\"; done",
+      "result": "13/13 began with Diagram::Deployment"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/deployment-owned-note-cluster-membership/*.puml",
+      "result": "same-stem Java SVGs generated for all 13 fresh inputs"
+    },
+    {
+      "cmd": "find test-diagrams/perturbations/deployment-owned-note-cluster-membership -name '*.svg' -print0 | xargs -0 xmllint --noout",
+      "result": "13/13 Java SVGs are well-formed XML"
+    },
+    {
+      "cmd": "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/deployment-owned-note-cluster-membership -g '*.svg'",
+      "result": "no Java error-page markers"
+    },
+    {
+      "cmd": "for f in test-diagrams/perturbations/deployment-owned-note-cluster-membership/*.puml; do target/debug/rustuml -tsvg \"$f\" > /private/tmp/t14-deployment-check-rust/<stem>.svg; done",
+      "result": "13/13 Rust renders completed successfully with the exact supplied binary"
+    },
+    {
+      "cmd": "Python xml.etree extraction of ordered g[class in {cluster,entity}] data-qualified-name/id inventories from paired SVGs",
+      "result": "ordered qualified-name inventories matched in 11/13; ordered qualified-name plus UID inventories matched in 10/13"
+    },
+    {
+      "cmd": "Python xml.etree extraction of entity text anchors followed by pairwise relative-position comparison",
+      "result": "owner-internal geometry matched up to translation for note-only, nested GMN, and Magma 3/4 controls; linked-note and two-member controls exposed the geometry differences recorded below"
+    },
+    {
+      "cmd": "cmp -s <Java SVG> <Rust SVG> for every pair",
+      "result": "0/13 were byte-identical; the verdict is based on named inventory and model failures, not generic byte inequality"
+    },
+    {
+      "cmd": "git grep at fe78c98a for the mechanism name, all checker labels, include_str!, and test-diagrams/golden in the deployment parser, deployment renderer, and CLI",
+      "result": "no fixture-shaped logic or golden reads found"
+    },
+    {
+      "cmd": "shasum -a 256 account.json target/debug/rustuml plantuml-1.2026.3beta6.jar *.puml *.svg",
+      "result": "hashes recorded in this review"
+    }
+  ],
+  "source_audit": {
+    "java_model": [
+      "CommandFactoryNote.executeInternal resolves the named note with quarkInContext and creates a note leaf in the current owner.",
+      "CommandFactoryNoteOnEntity.executeInternal creates generated GMN notes through the current quark context and adds a hidden note-to-target link.",
+      "Entity.leafs and Entity.isEmpty enumerate quark-backed heterogeneous children, so any surviving note makes its immediate owner nonempty.",
+      "GraphvizImageBuilder prints owner-local direct leaves before nested groups and prints unpackaged root leaves afterward.",
+      "CucaDiagram.applySingleStrategy forms Magma only from immediate standalone leaves and skips sets smaller than three.",
+      "DescriptionDiagram CommandLinkElement.getDummy calls quarkInContext and returns existing quark data before creating a dummy leaf. A named note used as either link endpoint therefore remains the same note entity."
+    ],
+    "rust_model": [
+      "deployment_cluster_ids correctly admits owners of all laid-out notes, and fe78c98a threads that set through graph registration, traversal, frames, endpoint adjustment, rectangle recovery, and paint.",
+      "deployment_svek_leaf_order and deployment_svek_paint_order combine direct ordinary leaves and notes by quark_order; the fresh note-only, nested, sibling, generated-GMN, and Magma controls demonstrate broad generalization.",
+      "add_deployment_magma_constraints correctly excludes attached notes and ordinary connection endpoints in the represented AST, and its three/four-member owner-local squares match Java internally up to whole-diagram translation.",
+      "The parser does not maintain one heterogeneous identity lookup for explicit note relations. Its dotted special case mutates the note into target state and discards the source-line link event, while its general connection path checks only DeploymentNode and auto-creates an ordinary node for a known DeploymentNote ID.",
+      "The UID model then treats the dotted relation as a hidden attached-note link at note creation time, shifting later entity UIDs relative to Java's source-order link event."
+    ],
+    "overfit_and_constant_audit": [
+      "No checker filename, mechanism name, distinctive label, golden path, or fixture-loading code occurs in the reviewed shipping paths.",
+      "The fe78c98a diff adds no parity-affecting coordinate constant. Its 0/1 tuple tags are deterministic sort tie-breakers and the Magma threshold of three is adjacent to the Java applySingleStrategy citation.",
+      "No evidence of per-fixture branches, coordinate surgery, or comparator manipulation was found. Rejection is for an incomplete underlying identity/event model, not overfitting."
+    ]
+  },
+  "summary_metrics": {
+    "fresh_inputs": 13,
+    "deployment_dispatch": "13/13",
+    "valid_java_svgs": "13/13",
+    "ordered_qualified_name_inventory_match": "11/13",
+    "ordered_qualified_name_and_uid_inventory_match": "10/13",
+    "byte_identical": "0/13",
+    "decisive_counterexamples": 3
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_attached_cross_owner_ltr.puml",
+      "source_sha256": "3c760e795ead22d6d897992eb7a33d477df161b9f419fafee3588a7732d838ac",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_attached_cross_owner_ltr.svg",
+      "java_svg_sha256": "a0827c61a133a3095d497aad486fa35573a4ab90a8e30b32f750172c10e7db87",
+      "axes": ["attached generated note", "cross-owner target", "note-only aliased owner", "left-to-right", "mixed root leaf"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS",
+      "evidence": "Java and Rust have identical ordered cluster/entity qualified names and UIDs, including AttachmentOwnerU.GMN4; all common entity pairwise relative positions match."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_empty_deduplicated_control_ttb.puml",
+      "source_sha256": "d2c19dfb7502ec5e222aa983978ef1003578791c75e5ba66ad4945e3283297b7",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_empty_deduplicated_control_ttb.svg",
+      "java_svg_sha256": "2e404881f2697381f518c8423a5298c2ac119620e97802ff8166a5fe6997abfb",
+      "axes": ["empty deduplicated group", "note-only sibling owner", "top-to-bottom", "root/group mix", "renamed identities"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS_WITH_LAYOUT_RESIDUE",
+      "evidence": "Ordered qualified names and UIDs match exactly; NoteShellZ remains a cluster with one owned note. Root-level relative placement differs, outside the owner membership inventory."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_generated_gmn_nested_ttb.puml",
+      "source_sha256": "908deb152bf89298ba3b2a3010eaf9db11c2bc28cfc99ef0a6494efb930c24d2",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_generated_gmn_nested_ttb.svg",
+      "java_svg_sha256": "56db00ff732b40d649882dac59676263a7955c6625d76e27eec3e5f593994055",
+      "axes": ["two-level ownership", "two attached notes", "generated GMN identity", "right and bottom positions", "top-to-bottom"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS_WITH_LAYOUT_RESIDUE",
+      "evidence": "Java and Rust exactly agree on OuterHostAA.InnerHostAA.GMN5 and GMN8 identities, UIDs, order, and owner-internal relative geometry. The root actor is placed on the opposite side of the nested cluster."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_mixed_siblings_four_ltr.puml",
+      "source_sha256": "8de4fc092c52fc00e48498f73c31c1ecab239badb13591686f2412c13a49511c",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_mixed_siblings_four_ltr.svg",
+      "java_svg_sha256": "b6935d2a26623047b0aba2fffd5e438d96f9fb942e973d224bec87be0e2bed12",
+      "axes": ["sibling owners", "note-only versus mixed owner", "four direct leaves", "explicit ordinary link", "left-to-right"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS_WITH_LAYOUT_RESIDUE",
+      "evidence": "Ordered qualified names and UIDs match. Java and Rust disagree on the vertical relation of RightFirstAB versus linked RightStoreAB/RightAgentAB, despite identical paint order."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_named_arrow_link_ltr.puml",
+      "source_sha256": "0fb29b3e61c9513bd4cff113a4e15b76eb84915081b9c67337948c6fa03ca569",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_named_arrow_link_ltr.svg",
+      "java_svg_sha256": "58f8caa880192518b53b618b511a7fd0830e1fe36083dc03cc5032b96a30c069",
+      "axes": ["owner-qualified named note", "directed explicit relation", "mixed owner", "left-to-right", "renamed alias"],
+      "dispatch": "Deployment",
+      "result": "FAIL",
+      "evidence": "Java emits ArrowOwnerW.ArrowMemoW once. Rust emits that note plus a spurious root ArrowMemoW ordinary entity, shifts FreeObserverW from ent0006 to ent0007, and lays out the note as a separate unlinked note above the generated duplicate relation endpoint."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_named_dotted_link_ttb.puml",
+      "source_sha256": "04d31656cee0144de1de1a2d1ccdd1bb21725173ce3b055f02eb7c5a65e2dfd4",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_named_dotted_link_ttb.svg",
+      "java_svg_sha256": "5af17a9bc10f02ac90effec147545a7f4277fce473c37583a32e2f1bf8993157",
+      "axes": ["owner-qualified named note", "dotted explicit relation", "linked and unlinked siblings", "top-to-bottom", "note-before-node order"],
+      "dispatch": "Deployment",
+      "result": "FAIL",
+      "evidence": "Qualified names and paint order match, but Rust changes WorkerV from Java ent0004 to ent0005 by consuming a hidden-link UID at note creation, and reverses the horizontal relation of the linked note/worker pair versus FreeRecordV."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_note_only_alias_ttb.puml",
+      "source_sha256": "ccaa16fd2f4aa245d6b71902c67a4e0871bad56778a37e8198a13b8b307c14ef",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_note_only_alias_ttb.svg",
+      "java_svg_sha256": "3f62c53f2151f2bbace2f877fb48c81002f3b73f5c6045f44ca8bdde3e3007e3",
+      "axes": ["note-only owner", "named floating note", "owner alias", "top-to-bottom", "root leaf"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS",
+      "evidence": "AmberVaultQ is a cluster and RetentionMemoQ is emitted exactly once as AmberVaultQ.RetentionMemoQ with matching UID and relative placement."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_owner_magma_four_ttb.puml",
+      "source_sha256": "5bbcc0350b886a002ac929218d5a81963e262dfbd0edbbcd74df3d9fe6a955f3",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_owner_magma_four_ttb.svg",
+      "java_svg_sha256": "cbe86c94db00929dae76a28be30b63a0a957812719720ec0370424e08437517c",
+      "axes": ["four-member owner Magma", "two named notes", "interleaved quark order", "top-to-bottom", "root leaf"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS_WITH_LAYOUT_RESIDUE",
+      "evidence": "The owner-local 2x2 relative geometry, ordered qualified names, and UIDs match exactly up to translation; Java and Rust place the unrelated root marker on opposite sides."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_owner_magma_three_ltr.puml",
+      "source_sha256": "d9cf2dec6afbb66def153db66e942c7dfcb8134c6abdc53d2f0c2303ee007884",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_owner_magma_three_ltr.svg",
+      "java_svg_sha256": "487255f3c767d6a1928e34e1d86e23633e872cf3d70a8a1e77fad1d1f19ad340",
+      "axes": ["three-member owner Magma", "note-first order", "mixed symbols", "left-to-right", "root leaf"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS_WITH_LAYOUT_RESIDUE",
+      "evidence": "The owner-local three-member relative geometry, ordered qualified names, and UIDs match exactly up to translation; the unrelated root watcher appears above Java's cluster and below Rust's."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_root_named_reverse_arrow_ttb.puml",
+      "source_sha256": "e2bee837284e8fb1344339f96cb2e229900110a9140fc3ef45bff3fbd94829d7",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_root_named_reverse_arrow_ttb.svg",
+      "java_svg_sha256": "9a11b1f00a0eecfbbc640529d6a93a64c9b9b439a68cf97bd4fe39ef4010e539",
+      "axes": ["root named note", "reverse directed relation", "top-to-bottom", "three root leaves", "note-before-target"],
+      "dispatch": "Deployment",
+      "result": "FAIL",
+      "evidence": "Java emits one RootArrowMemoAC note at ent0002. Rust emits the note at ent0002 and a second ordinary entity with the identical data-qualified-name RootArrowMemoAC at ent0004, then shifts RootFreeAC from ent0005 to ent0006."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_root_owner_cardinalities_ltr.puml",
+      "source_sha256": "104ea13ea9a2b6f4570679fbe9397b2f1f8bbc41a44e1c73afac5cd2eb9a4e09",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_root_owner_cardinalities_ltr.svg",
+      "java_svg_sha256": "13c35f8217d4aedbedc61593737d5994bc4a7173c9cc48588080cb8c2689b2c0",
+      "axes": ["root Magma cardinality three", "owner cardinality two", "root and owned notes", "left-to-right", "note-before-node"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS_WITH_LAYOUT_RESIDUE",
+      "evidence": "Ordered qualified names and UIDs match. The root three-member square matches, but Java places the two-member owned note below its store while Rust places it above."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_sibling_owners_links_ttb.puml",
+      "source_sha256": "9b5af6c6639bbf79d7e4cad22489d2f5b1516c6fd4b0c12b687ebfa5425463b0",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_sibling_owners_links_ttb.svg",
+      "java_svg_sha256": "15cffba461ae7962c9b7d5b4bcaf13256fa9fc1e0b8075668af6d840e1eab08d",
+      "axes": ["sibling owners", "note-only versus mixed", "ordinary link", "top-to-bottom", "renamed aliases"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS",
+      "evidence": "Ordered qualified names, UIDs, and all common entity pairwise relative positions match."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_two_level_note_only_ltr.puml",
+      "source_sha256": "9cbacc79fc8583e057891080bf2132bf15e6317169935ec01e37a0b3d1fbbbc4",
+      "java_svg": "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_two_level_note_only_ltr.svg",
+      "java_svg_sha256": "a2c234c02ac7263c7db8953c4212c419e601e589ce67202dd60c293ecce7c4ba",
+      "axes": ["two-level ownership", "note-only inner owner", "mixed outer owner", "left-to-right", "root leaf"],
+      "dispatch": "Deployment",
+      "result": "MECHANISM_PASS",
+      "evidence": "OuterRelayR.InnerArchiveR remains a cluster, InnerMemoR has the full two-level qualified name, and ordered UIDs plus all common pairwise relative positions match."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "REJECTING",
+      "title": "General explicit links duplicate known note identities as ordinary root nodes",
+      "java_provenance": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java:216-224,250-291 resolves existing quark data before dummy creation.",
+      "rust_provenance": "crates/rustuml-parser/src/parse/deployment.rs:862-910 resolves only DeploymentNode and auto-creates every unknown endpoint as DeploymentNodeKind::Node without owner membership.",
+      "counterexamples": ["checker_named_arrow_link_ltr.puml", "checker_root_named_reverse_arrow_ttb.puml"],
+      "impact": "The claimed heterogeneous immediate-child projection is incomplete before rendering begins. Rust can paint one named note twice under two identities/owners, including two root entities with the same data-qualified-name. This directly falsifies exact-once identity and inventory claims."
+    },
+    {
+      "severity": "REJECTING",
+      "title": "The dotted-note shortcut erases the explicit link event and shifts identity/order",
+      "java_provenance": "DescriptionDiagramFactory registers CommandLinkElement before note-on-entity commands, and CommandLinkElement links the existing named note at the relation source line.",
+      "rust_provenance": "crates/rustuml-parser/src/parse/deployment.rs:703-723 mutates DeploymentNote.target and discards the connection; crates/rustuml-render/src/deployment.rs:6190-6219 consumes a hidden-link UID while processing the earlier note item.",
+      "counterexamples": ["checker_named_dotted_link_ttb.puml"],
+      "impact": "WorkerV becomes ent0005 instead of Java ent0004, and the linked pair is placed on the opposite side of the unlinked sibling. The account's renderer-only model cannot preserve Java's source-order entity/link event stream."
+    },
+    {
+      "severity": "NON_REJECTING_RESIDUE",
+      "title": "Several controls retain correct ownership inventories but differ in root or sub-threshold layout placement",
+      "counterexamples": [
+        "checker_empty_deduplicated_control_ttb.puml",
+        "checker_generated_gmn_nested_ttb.puml",
+        "checker_mixed_siblings_four_ltr.puml",
+        "checker_owner_magma_four_ttb.puml",
+        "checker_owner_magma_three_ltr.puml",
+        "checker_root_owner_cardinalities_ltr.puml"
+      ],
+      "impact": "These differences do not erase or reparent notes, and owner-local Magma 3/4 geometry matches. They remain useful executable evidence for later root-stream and non-Magma layout mechanisms."
+    }
+  ],
+  "verdict_reason": "REJECTED. fe78c98a substantially repairs note-only clusters, owner-qualified names, generated GMN identity, and owner-local Magma, and no overfit was found. It does not establish the claimed single heterogeneous identity/event model for targetless named notes linked by explicit relations. Two directed-link inputs create duplicate ordinary nodes for existing notes, and the dotted-link path erases Java's source-line link event and shifts downstream identities. A valid failing counterexample rejects the mechanism under T14 rules 9 and 10; this review preserves three."
+}

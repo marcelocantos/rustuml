@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Three Cell S" as ThreeCellS {
+  note "first standalone s" as FirstMemoS
+  control "Middle Valve S" as MiddleValveS
+  file "Last Record S" as LastRecordS
+}
+actor "Root Watcher S" as RootWatcherS
+@enduml

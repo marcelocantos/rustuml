@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+node "North Owner X" as NorthOwnerX {
+  note "north only memo x" as NorthMemoX
+}
+node "South Owner X" as SouthOwnerX {
+  artifact "South Parcel X" as SouthParcelX
+  note "south floating memo x" as SouthMemoX
+  queue "South Queue X" as SouthQueueX
+}
+SouthParcelX --> SouthQueueX
+@enduml

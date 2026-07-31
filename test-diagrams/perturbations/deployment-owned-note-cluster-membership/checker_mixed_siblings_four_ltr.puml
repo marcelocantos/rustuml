@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+node "Left Sibling AB" as LeftSiblingAB {
+  note "left note only ab" as LeftMemoAB
+}
+folder "Right Sibling AB" as RightSiblingAB {
+  note "right first ab" as RightFirstAB
+  storage "right store ab" as RightStoreAB
+  note "right third ab" as RightThirdAB
+  agent "right agent ab" as RightAgentAB
+}
+RightStoreAB --> RightAgentAB
+@enduml

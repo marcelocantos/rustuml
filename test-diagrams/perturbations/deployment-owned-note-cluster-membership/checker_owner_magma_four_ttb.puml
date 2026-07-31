@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+folder "Four Cell T" as FourCellT {
+  artifact "First Parcel T" as FirstParcelT
+  note as SecondMemoT
+    second standalone t
+  endnote
+  queue "Third Queue T" as ThirdQueueT
+  note "fourth standalone t" as FourthMemoT
+}
+rectangle "Root Marker T" as RootMarkerT
+@enduml

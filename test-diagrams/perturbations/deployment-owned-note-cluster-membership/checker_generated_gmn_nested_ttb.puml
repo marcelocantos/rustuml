@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+node "Outer Host AA" as OuterHostAA {
+  frame "Inner Host AA" as InnerHostAA {
+    component "Service AA" as ServiceAA
+    note right of ServiceAA : first generated memo aa
+    note bottom of ServiceAA
+      second generated memo aa
+    end note
+  }
+}
+actor "Root Actor AA" as RootActorAA
+@enduml

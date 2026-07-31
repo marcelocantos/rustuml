@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+node "Outer Relay R" as OuterRelayR {
+  component "Outer Port R" as OuterPortR
+  frame "Inner Archive R" as InnerArchiveR {
+    note as InnerMemoR
+      nested archive record r
+    end note
+  }
+}
+database "Root Audit R" as RootAuditR
+@enduml

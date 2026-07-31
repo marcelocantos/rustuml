@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+node "Dotted Owner V" as DottedOwnerV {
+  note "dotted relation memo v" as DottedMemoV
+  component "Worker V" as WorkerV
+  DottedMemoV .. WorkerV
+  file "Free Record V" as FreeRecordV
+}
+@enduml
