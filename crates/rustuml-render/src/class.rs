@@ -21369,7 +21369,7 @@ mod tests {
         let payload = svg.split_once(">styled payload</text>").unwrap().0;
         let text = payload.rsplit_once("<text ").unwrap().1;
         assert!(text.contains(r#"font-family="Arial""#));
-        assert!(text.contains(r#"fill="#2468AC""#));
+        assert!(text.contains(r##"fill="#2468AC""##));
     }
 
     #[test]
