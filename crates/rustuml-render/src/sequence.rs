@@ -404,6 +404,33 @@ fn single_note_visible_raw_width(
     max_text_w + raw_margin + 2.0 * note_global_padding
 }
 
+fn note_component_preferred_width(
+    max_text_w: f64,
+    shape: NoteShape,
+    note_global_padding: f64,
+    sequence_shadowing: bool,
+) -> f64 {
+    // Java `ComponentRoseNote{,Hexagonal,Box}.getPreferredWidth`: merged
+    // `NotesBoxes.ensureConstraints` consumes the component's raw preferred
+    // width, not the narrower painted outline. Hexagonal and box notes use
+    // fixed 5px component padding; only the folded note consumes style padding
+    // and includes its symbol shadow in the preferred width.
+    match shape {
+        NoteShape::Note => {
+            max_text_w
+                + ROSE_NOTE_COMPONENT_PREF_EXTRA
+                + 2.0 * note_global_padding
+                + if sequence_shadowing {
+                    SHADOW_LIVING_WIDTH_EXTRA
+                } else {
+                    0.0
+                }
+        }
+        NoteShape::Hexagonal => max_text_w + 34.0,
+        NoteShape::Rectangular => max_text_w + 18.0,
+    }
+}
+
 fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
     let width = note_content_width_raw(max_text_w, shape);
     if align == MessageAlign::Center && shape == NoteShape::Note {
@@ -6890,12 +6917,99 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
+    let mut merged_note_min_participant_center_x = vec![0.0_f64; n];
 
     // Multi-span constraints (left, right_exclusive, needed_total_width).
     // Applied as a post-pass: only widen pairs in span if cumulative existing
     // width is insufficient. Matches PlantUML's behavior where spanning
     // messages don't force intermediate pairs to widen if already covered.
     let mut multi_span_constraints: Vec<(usize, usize, f64)> = Vec::new();
+
+    // Java `SequenceDiagram.addNote` replaces a Note followed by `/note` with
+    // one `Notes` event. `DrawableSetInitializer.prepareNotes` then delegates
+    // to `NotesBoxes.ensureConstraints`, which reserves half of every member's
+    // raw component width on both participant sides and pairwise space between
+    // members on distinct participants. Keep the parser's flat event stream,
+    // but recover those aggregate boundaries before solving participant x.
+    let mut merged_group_start = 0;
+    while merged_group_start + 1 < diagram.events.len() {
+        let starts_group = matches!(diagram.events.get(merged_group_start), Some(Event::Note(_)))
+            && matches!(
+                diagram.events.get(merged_group_start + 1),
+                Some(Event::Note(note)) if note.merge_with_previous
+            );
+        if !starts_group {
+            merged_group_start += 1;
+            continue;
+        }
+
+        let mut merged_group_end = merged_group_start + 2;
+        while matches!(
+            diagram.events.get(merged_group_end),
+            Some(Event::Note(note)) if note.merge_with_previous
+        ) {
+            merged_group_end += 1;
+        }
+
+        let mut members = Vec::new();
+        for event in &diagram.events[merged_group_start..merged_group_end] {
+            let Event::Note(note) = event else {
+                unreachable!("merged note groups contain only note events");
+            };
+            let Some(first) = note
+                .participants
+                .first()
+                .and_then(|id| id_to_idx.get(id.as_str()))
+                .copied()
+            else {
+                continue;
+            };
+            let last = note
+                .participants
+                .last()
+                .and_then(|id| id_to_idx.get(id.as_str()))
+                .copied()
+                .unwrap_or(first);
+            let max_text_w =
+                note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
+            let preferred_width = note_component_preferred_width(
+                max_text_w,
+                note.shape,
+                note_global_padding,
+                sequence_shadowing,
+            );
+            let half_width = preferred_width / 2.0;
+
+            if first == 0 {
+                merged_note_min_participant_center_x[first] =
+                    merged_note_min_participant_center_x[first].max(half_width);
+            } else {
+                pair_max_label_width[first - 1] = pair_max_label_width[first - 1].max(half_width);
+            }
+            if last + 1 < n {
+                pair_max_label_width[last] = pair_max_label_width[last].max(half_width);
+            }
+            members.push((first, last, preferred_width));
+        }
+
+        for (member_idx, &(_, left_last, left_width)) in members.iter().enumerate() {
+            for &(right_first, _, right_width) in members.iter().skip(member_idx + 1) {
+                if left_last == right_first {
+                    continue;
+                }
+                let lo = left_last.min(right_first);
+                let hi = left_last.max(right_first);
+                let needed = (left_width + right_width) / 2.0;
+                if hi == lo + 1 {
+                    pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                } else {
+                    multi_span_constraints.push((lo, hi, needed));
+                }
+            }
+        }
+
+        merged_group_start = merged_group_end;
+    }
 
     // Track maximum right extent of self-messages (for SVG width calculation).
     let mut max_self_msg_right: f64 = 0.0;
@@ -7314,7 +7428,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Minimum absolute centre imposed by left-border messages. PlantUML's
     // ConstraintSet includes the synthetic first border as a normal endpoint,
     // so a boundary arrow can constrain any participant, not only index zero.
-    let mut min_participant_center_x = vec![0.0_f64; n];
+    let mut min_participant_center_x = merged_note_min_participant_center_x;
     let mut min_scan_auto = AutoState::default();
     for event in &diagram.events {
         if let Event::Autonumber(command) = event {
@@ -8304,6 +8418,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let note_event_y = note_top + note_y_extra + metrics.total_height;
                         event_y_positions.push(note_event_y);
                         // Do not advance y or increment msg_count.
+                    } else if note.merge_with_previous
+                        && idx > 0
+                        && let Event::Note(previous) = &diagram.events[idx - 1]
+                        && let Some(previous_event_y) = event_y_positions.last().copied()
+                    {
+                        let previous_metrics = note_text_metrics_with_family(
+                            &previous.text,
+                            note_font_size_f,
+                            &note_font_family,
+                        );
+                        let previous_y_extra = match previous.shape {
+                            NoteShape::Note => 7.0,
+                            NoteShape::Hexagonal | NoteShape::Rectangular => 5.0,
+                        };
+                        let shared_top =
+                            previous_event_y - previous_y_extra - previous_metrics.total_height;
+                        let note_event_y = shared_top + note_y_extra + metrics.total_height;
+                        event_y_positions.push(note_event_y);
+                        y = y.max(note_event_y + shadow_vertical_pad);
                     } else {
                         // Standalone note: consumes vertical space. The note top is
                         // positioned relative to the current y cursor. After the
@@ -13716,6 +13849,50 @@ mod tests {
         assert!(svg.contains("Alice"));
         assert!(svg.contains("hello"));
         assert!(svg.contains("hi"));
+    }
+
+    #[test]
+    fn merged_notes_install_raw_component_width_constraint() {
+        let input = concat!(
+            "@startuml\n",
+            "participant Left\n",
+            "participant Right\n",
+            "Left -> Right : x\n",
+            "note right of Right\n",
+            "short folded note\n",
+            "end note\n",
+            "/rnote right of Right\n",
+            "this renamed rectangular note is deliberately much wider\n",
+            "end rnote\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let participant_center = |part_id: &str| {
+            let group_start = svg
+                .find(&format!(r#"id="{part_id}-head""#))
+                .expect("participant head group");
+            let rect_start = svg[group_start..].find("<rect ").unwrap() + group_start;
+            let rect_end = svg[rect_start..].find("/>").unwrap() + rect_start + 2;
+            let rect = &svg[rect_start..rect_end];
+            let x_needle = " x=\"";
+            let x_start = rect.find(x_needle).unwrap() + x_needle.len();
+            let x_end = rect[x_start..].find('"').unwrap() + x_start;
+            let x: f64 = rect[x_start..x_end].parse().unwrap();
+            let width: f64 = attr_value(rect, "width").unwrap().parse().unwrap();
+            x + width / 2.0
+        };
+
+        let max_text_w = note_max_line_width_with_family(
+            "this renamed rectangular note is deliberately much wider",
+            MSG_FONT_SIZE,
+            "sans-serif",
+        );
+        let required_gap =
+            note_component_preferred_width(max_text_w, NoteShape::Rectangular, 0.0, false) / 2.0;
+        let actual_gap = participant_center("part2") - participant_center("part1");
+        assert!((actual_gap - required_gap).abs() < 0.001, "{actual_gap}");
     }
 
     #[test]

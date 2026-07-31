@@ -215,6 +215,12 @@ pub struct Note {
     /// message's arrow band rather than consuming their own vertical row.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub on_message: bool,
+    /// The command used the sequence parallel-event prefix.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub parallel: bool,
+    /// The command used vertical merge and followed another note event.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub merge_with_previous: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

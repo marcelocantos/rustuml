@@ -99,7 +99,22 @@ struct NoteBuffer {
     shape: NoteShape,
     color: Option<String>,
     on_message: bool,
+    parallel: bool,
+    merge_with_previous: bool,
     source_line: usize,
+}
+
+fn sequence_note_prefix(line: &str) -> (bool, bool, &str) {
+    let mut command = line.trim_start();
+    let parallel = command.starts_with('&');
+    if parallel {
+        command = command[1..].trim_start();
+    }
+    let try_merge = command.starts_with('/');
+    if try_merge {
+        command = command[1..].trim_start();
+    }
+    (parallel, try_merge, command)
 }
 
 struct RefBuffer {
@@ -212,6 +227,8 @@ impl SeqParser {
                     shape: buf.shape,
                     color: buf.color,
                     on_message: buf.on_message,
+                    parallel: buf.parallel,
+                    merge_with_previous: buf.merge_with_previous,
                     source_line: buf.source_line,
                 }));
             } else if let Some(buf) = &mut self.note_buffer {
@@ -489,6 +506,8 @@ impl SeqParser {
     }
 
     fn try_note(&mut self, line: &str) -> bool {
+        let (parallel, try_merge, line) = sequence_note_prefix(line);
+        let merge_with_previous = try_merge && matches!(self.events.last(), Some(Event::Note(_)));
         // `note : text` — Java PlantUML creates a participant named "note" with
         // a note box above/beside it showing the text.  We declare the "note"
         // participant and emit a Note event.
@@ -502,6 +521,8 @@ impl SeqParser {
                     shape: NoteShape::Note,
                     color: None,
                     on_message: false,
+                    parallel,
+                    merge_with_previous,
                     source_line: self.current_line,
                 }));
             }
@@ -536,6 +557,8 @@ impl SeqParser {
                     shape: NoteShape::Note,
                     color,
                     on_message: false,
+                    parallel,
+                    merge_with_previous,
                     source_line: self.current_line,
                 });
             } else {
@@ -546,6 +569,8 @@ impl SeqParser {
                     shape: NoteShape::Note,
                     color,
                     on_message: false,
+                    parallel,
+                    merge_with_previous,
                     source_line: self.current_line,
                 }));
             }
@@ -611,6 +636,8 @@ impl SeqParser {
                     shape,
                     color,
                     on_message,
+                    parallel,
+                    merge_with_previous,
                     source_line: self.current_line,
                 }));
             } else {
@@ -622,6 +649,8 @@ impl SeqParser {
                     shape,
                     color,
                     on_message,
+                    parallel,
+                    merge_with_previous,
                     source_line: self.current_line,
                 });
             }
@@ -1905,6 +1934,51 @@ mod tests {
         assert_eq!(notes[1].shape, NoteShape::Rectangular);
         assert_eq!(notes[1].text, "actor body text");
         assert!(matches!(d.events.last(), Some(Event::Message(_))));
+    }
+
+    #[test]
+    fn sequence_note_prefixes_survive_into_event_semantics() {
+        let d = parse(
+            "participant Alice\n\
+             participant Bob\n\
+             Alice -> Bob : request\n\
+             & HNoTe over Bob\n\
+             parallel payload\n\
+             end hnote\n\
+             /rnote right of Bob\n\
+             merged payload\n\
+             end rnote\n\
+             & /note over Alice, Bob\n\
+             combined payload\n\
+             endnote",
+        );
+        let notes = d
+            .events
+            .iter()
+            .filter_map(|event| match event {
+                Event::Note(note) => Some(note),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(notes.len(), 3);
+        assert!(notes[0].parallel);
+        assert!(!notes[0].merge_with_previous);
+        assert!(!notes[1].parallel);
+        assert!(notes[1].merge_with_previous);
+        assert!(notes[2].parallel);
+        assert!(notes[2].merge_with_previous);
+
+        let no_predecessor_note = parse(
+            "participant Alice\n\
+             /rnote right of Alice\n\
+             ordinary row\n\
+             end rnote",
+        );
+        let Event::Note(note) = &no_predecessor_note.events[0] else {
+            panic!("expected note");
+        };
+        assert!(!note.merge_with_previous);
     }
 
     #[test]

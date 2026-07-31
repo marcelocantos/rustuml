@@ -644,6 +644,8 @@ mod tests {
                     shape: NoteShape::Note,
                     color: None,
                     on_message: false,
+                    parallel: false,
+                    merge_with_previous: false,
                     source_line: 0,
                 }),
             ],
