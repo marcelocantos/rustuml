@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-rankdir-factory-consumability",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "5d494292c14b853a75778aa9f3369c4d69ee6ba4",
+  "triggering_review": "docs/parity-reviews/deployment-link-endpoint-display-independence/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["PSystemBuilder.PSystemBuilder", "PSystemBuilder.createPSystem"],
+      "lines": "125-154,203-267",
+      "role": "Tries SequenceDiagramFactory, ClassDiagramFactory, ActivityDiagramFactory, DescriptionDiagramFactory and later UML factories in order, accepting the first factory that consumes the complete source without producing PSystemError."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.getCandidate"],
+      "lines": "75-180",
+      "role": "A command factory remains a candidate only while every input command is recognized and executes successfully; an unconsumed direction line rejects that factory rather than contributing a weaker score."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+      "symbols": ["SequenceDiagramFactory.initCommandsList"],
+      "lines": "99-165",
+      "role": "Registers sequence participants, arrows, notes and common commands, but does not register CommandRankDir."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbols": ["ClassDiagramFactory.initCommandsList"],
+      "lines": "101-151",
+      "role": "Registers CommandRankDir. Mixed DESCRIPTION leaves such as database or queue still reject this earlier candidate unless allowmixing has enabled their creation."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": ["DescriptionDiagramFactory.initCommandsList"],
+      "lines": "86-154",
+      "role": "Registers CommandRankDir together with DESCRIPTION declarations and links, so shared sequence/deployment words remain consumable here after Sequence and an ineligible Class candidate have failed."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "lines": "502-1275",
+      "role": "Scores sequence and graph-shaped signals, but currently treats a direction directive as a Class tiebreak only when every non-Sequence family has score zero. Shared database/queue declarations therefore leave Sequence's score eligible even though Java rejected that factory."
+    }
+  ],
+  "claimed_invariant": "For an @startuml source containing `left to right direction` or `top to bottom direction`, SequenceDiagramFactory is not a viable Java candidate because its command inventory has no CommandRankDir. Sequence-only lexical evidence must therefore be excluded from final subtype selection. Remaining viable families are compared using their existing semantic evidence and Java-compatible tie order: a bare direction or direction plus weak ordinary arrow reaches Class, shared DESCRIPTION declarations and links reach the Rust DESCRIPTION subtype that consumes them, and commands not consumable by either continue to later factories.",
+  "causal_divergence": "Rust treated subtype selection as unrestricted score maximization. Its narrow direction correction only raised Class when all graph-family scores were zero, so shared `database` and `queue` declarations gave Sequence ten points, their arrow gave it another point, and Deployment's ten points lost. Java never compares those strengths: the rank-direction command has already eliminated Sequence before declarations and arrows are considered by later factories.",
+  "planned_model_change": "Track Sequence factory viability separately from lexical scores. A recognized rank-direction command marks Sequence nonviable. At final selection, choose the highest-scoring viable subtype, preserving the existing subtype order for ties; do not add Deployment points, inspect labels, or key behavior to Unicode. Retain the existing graph-style Class correction for weak arrows, and make a direction-only source fall through to the first remaining zero-score subtype rather than the eliminated Sequence candidate.",
+  "perturbation_axes": [
+    "left-to-right versus top-to-bottom direction",
+    "direction before versus after declarations and links",
+    "ASCII versus Unicode and quoted versus aliased labels",
+    "database, queue and other shared Sequence/DESCRIPTION declaration kinds",
+    "one versus multiple declarations and links",
+    "ordinary arrows versus explicit horizontal or vertical link directions",
+    "direction-only and weak bare-link Class controls",
+    "sequence-specific commands such as autonumber or return combined with rank direction as Java-invalid controls",
+    "state or activity commands combined with rank direction to prove later-factory continuation"
+  ],
+  "acceptance": [
+    "The preserved checker_06 source selects Deployment/DESCRIPTION on the no-oracle path and retains its entities and relation.",
+    "Fresh shared-keyword sources with either direction and varied declaration order select the same Java family without relying on label spelling.",
+    "A direction-only source and a direction plus weak ordinary arrow do not select Sequence.",
+    "Sequence-specific content plus a rank-direction command is not made valid by forcing Deployment; Rust follows the first remaining family that can consume the complete source or returns a parser error.",
+    "Unrelated sources without a rank-direction command retain their existing subtype selection.",
+    "An independent checker attacks command order, shared keywords, later-factory continuation and invalid mixed grammars."
+  ],
+  "forbidden_approaches": [
+    "adding arbitrary Deployment score to offset Sequence",
+    "special-casing Unicode, checker labels or the database-plus-queue fixture shape",
+    "using rendered SVG differences as the subtype classifier",
+    "forcing every source containing a direction command to Deployment or Class",
+    "changing the command parsers to accept syntax solely to make the selected family succeed"
+  ],
+  "declared_residue": [
+    "This correction models the proven CommandRankDir exclusion for Sequence; full command-inventory viability for every UML factory remains broader work.",
+    "Rust splits Java DescriptionDiagramFactory into Component, UseCase and Deployment models, so selection among those Rust subtypes continues to use existing semantic evidence.",
+    "Unicode UGroup metadata serialization and repeated left-to-right unresolved-edge paint suppression are separate mechanisms from factory consumability."
+  ]
+}
