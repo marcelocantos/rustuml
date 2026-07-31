@@ -1,0 +1,10 @@
+@startuml
+skinparam dpi 100
+
+class Source
+class Bridge
+class "Tail O'Brien Archive" as Tail
+
+Source --> Bridge
+Bridge --> Tail
+@enduml

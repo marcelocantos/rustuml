@@ -1,0 +1,13 @@
+@startuml
+scale 1.75
+
+package "Ops O'Brien Domain" as Ops {
+  class "Dispatch O'Brien" as Dispatch
+  class Mirror
+}
+
+class Sink
+
+Dispatch --> Mirror : sync
+Mirror --> Sink : drains
+@enduml

@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "mechanism": "xml-comment-safe-document-scaling",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-xml-comment-safe-document-scaling-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit faa256fa99c254764ba7075dd4a2a0dc1df6cc56, did not edit production source, and did not edit account.json."
+  },
+  "rust_revision": "7527ab79e40cc80bfe678563ab544e28ac37324e",
+  "rust_short_revision": "7527ab79",
+  "account_commit": "9815098db073d56555286182405c44a9de4e393a",
+  "implementation_commit": "faa256fa99c254764ba7075dd4a2a0dc1df6cc56",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 9815098db073d56555286182405c44a9de4e393a:docs/parity-reviews/xml-comment-safe-document-scaling/account.json",
+    "git show faa256fa99c254764ba7075dd4a2a0dc1df6cc56 -- crates/rustuml-render/src/scale.rs",
+    "git merge-base --is-ancestor 9815098db073d56555286182405c44a9de4e393a faa256fa99c254764ba7075dd4a2a0dc1df6cc56",
+    "git merge-base --is-ancestor faa256fa99c254764ba7075dd4a2a0dc1df6cc56 7527ab79e40cc80bfe678563ab544e28ac37324e",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/UGraphicSvg.java",
+    "rg -n \"render_svg_with_theme|scale_svg_numbers|scale_path_d|scale_numbers_in\" crates/rustuml-render/src/lib.rs crates/rustuml-render/src/scale.rs",
+    "env JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_middle_apos_legacy_comment.puml test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.puml test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_tail_apos_control.puml test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_no_apos_control.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_middle_apos_legacy_comment.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_tail_apos_control.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_no_apos_control.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_middle_apos_legacy_comment.puml > /tmp/xmlsafe_pass_rust.svg",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.puml > /tmp/xmlsafe_fail_rust.svg",
+    "rg -o \"<\\?xml[^?]*\\?>|<!DOCTYPE[^>]*>|<!--[^>]*-->\" /tmp/xmlsafe_pass_rust.svg test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_middle_apos_legacy_comment.svg",
+    "rg -o \"<\\?xml[^?]*\\?>|<!DOCTYPE[^>]*>|<!--[^>]*-->\" /tmp/xmlsafe_fail_rust.svg test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.svg",
+    "xmllint --noout test-diagrams/perturbations/xml-comment-safe-document-scaling/*.svg",
+    "rg -n -i \"syntax error|error line|plantuml.*error|class=\\\"message\\\"|an error has occured|\\[From string|No class \" test-diagrams/perturbations/xml-comment-safe-document-scaling -g '*.svg'",
+    "shasum -a 256 docs/parity-reviews/xml-comment-safe-document-scaling/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one test-diagrams/perturbations/xml-comment-safe-document-scaling/*.puml test-diagrams/perturbations/xml-comment-safe-document-scaling/*.svg"
+  ],
+  "no_cargo_or_rustc": true,
+  "artifact_hashes": {
+    "account_json_sha256": "de463a02d246cdb95eb5bb1847988a6b9a90e6468a7e9756f00ee856a913dd20",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_sha256": "3583e8a34742a5cfd6632b869cb406015e8bb5c20fb2c2f7750eb835bce20cfe",
+    "sources": {
+      "checker_dpi_middle_apos_legacy_comment.puml": "57907716c74ee00c08a9e0cb58939194f15efafa29a828b3f801e292e58a89b6",
+      "checker_dpi_tail_apos_control.puml": "c6b761344cbe52c23dce36eaca7ce3bcbc8a0d66423ec213ec22f809da2e60dd",
+      "checker_scale_cluster_head_apos.puml": "b95f4ce71277ffa54034f47d0ef8be28abfe2f3c2b3267b9a32c03c4a4c7d875",
+      "checker_scale_cluster_no_apos_control.puml": "10e82ed7bc9c57becb84e89bb7d01ee0e460cb62e1dbca5ea6d1cd72a6bb6980"
+    },
+    "java_svgs": {
+      "checker_dpi_middle_apos_legacy_comment.svg": "8e27eb13e0156278bf67e7e0e5cdc63cabfb219afc215c7a6ee49f798d2a9fba",
+      "checker_dpi_tail_apos_control.svg": "80a4d8fba443b39a74bd6ff4ea90bf0ccaee5e3a80b67c60bc7b9c338d944635",
+      "checker_scale_cluster_head_apos.svg": "6f6f12ad453622c7b75480c61cb0ce9d4f4f65446fc1337c6e722067d8b8b083",
+      "checker_scale_cluster_no_apos_control.svg": "98de96b9de93296855220d6175cc574659dc84a69df647fc72f3a6b27e0adb8f"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_middle_apos_legacy_comment.puml",
+      "golden": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_middle_apos_legacy_comment.svg",
+      "axes": [
+        "apostrophized class label in the middle of a three-entity topology",
+        "skinparam dpi 125",
+        "invalid legacy classBorderColor token followed by a trailing apostrophe comment"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_tail_apos_control.puml",
+      "golden": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_dpi_tail_apos_control.svg",
+      "axes": [
+        "apostrophized tail entity with no legacy skinparam noise",
+        "skinparam dpi 100",
+        "apostrophe-bearing entity last in the painted document"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.puml",
+      "golden": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_head_apos.svg",
+      "axes": [
+        "explicit scale 1.75",
+        "apostrophized class label inside a package",
+        "package cluster plus outbound topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_no_apos_control.puml",
+      "golden": "test-diagrams/perturbations/xml-comment-safe-document-scaling/checker_scale_cluster_no_apos_control.svg",
+      "axes": [
+        "explicit scale 1.75",
+        "same package topology with apostrophes removed",
+        "control for apostrophe independence"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The causal account is structurally plausible and its claimed ancestry is real: account commit 9815098d is an ancestor of implementation commit faa256fa, and that implementation is an ancestor of the replayed head 7527ab79. Static inspection found no fixture-shaped label checks, golden-data reads, coordinate-keyed SVG surgery, comparator changes, or new unexplained constants in the reviewed change.",
+    "Java's relevant path matches the account: TextBlockExporter12026 computes one document-wide scale factor from dpi and explicit scale, and UGraphicSvg writes the already-scaled geometry. There is no Java lexer that scans comment text to decide whether later SVG primitives should be scaled.",
+    "The apostrophe-bearing dpi held-outs pass through the no-oracle product path. That supports the narrow claim that xml-comment-safe tag boundary handling prevents an apostrophe in a non-element span from swallowing later geometry and leaving it unscaled.",
+    "The mechanism still cannot be accepted because fresh explicit-scale held-outs fail in a way the account does not close. Both checker_scale_cluster_head_apos and its no-apostrophe control diverge on the same package outline path: Rust rewrites arc flags like `A6.5625,6.5625 0 0 1 ...` to `A6.5625,6.5625 0 0 1.75 ...`, which means scale_path_d currently multiplies SVG elliptical-arc flags along with coordinates.",
+    "Because the failure reproduces after removing every apostrophe from the same topology, it is not evidence against the comment-boundary claim itself; it is independent residue in the broader explicit-scale model. Per the T14 review rule, that still forces a rejected verdict for this latest checker record.",
+    "Raw SVG inspection shows the reviewed change does preserve the apostrophe-bearing Rust comments themselves rather than swallowing them into a giant unscaled span. However, Rust class comments are not byte-identical to Java's current outputs even on passing cases: Rust emits display-label comments such as `<!--class O'Brien Relay-->`, while Java emits alias-based comments such as `<!--class Relay-->`. That residue predates this checker change and means the account's byte-preservation language should not be read as present-day Java byte parity on actual class comments."
+  ],
+  "verdict": "rejected"
+}

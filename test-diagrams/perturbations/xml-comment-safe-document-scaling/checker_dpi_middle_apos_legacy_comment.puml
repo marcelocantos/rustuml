@@ -1,0 +1,14 @@
+@startuml
+skinparam dpi 125
+skinparam classBorderColor #224466oops ' legacy malformed color should not affect scaling
+
+class "Source Ledger" as Source
+class "O'Brien Relay" as Relay {
+  +entry_id: String
+  +forward()
+}
+class "Archive Sink" as Sink
+
+Source --> Relay : ingest
+Relay --> Sink : persist
+@enduml
