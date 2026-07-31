@@ -13,6 +13,8 @@
   "verdict": "ACCEPT",
   "verdict_basis": "I tried to break the command-specific end-note policy with fresh valid wrong-family, tab-separated, compact, and spaced ordinary note terminators across CLASS and DESCRIPTION inputs. The decisive ownership probes all pass at Rust revision 082981d14ae7cc1e177c9437f38da296f44b4031: wrong-family end hnote/end rnote remain payload, a literal tab between end and note closes the block, and later declarations remain visible. Two DESCRIPTION attached-note controls still fail, but the same width-and-text-position drift reproduces with both spaced and compact ordinary terminators, so it does not falsify the end-grammar mechanism under review.",
   "revisions": {
+    "account_commit": "04e70e40dad8f344aedebba317eedfb8b259f3fc",
+    "implementation_commit": "15980239c9971d79752cc3914b844f7376d167c2",
     "rust_revision": "082981d14ae7cc1e177c9437f38da296f44b4031",
     "implementation_commits": [
       "bf402b565d6cdc8ca9ebf4e5b2b56cbdb8005d96",

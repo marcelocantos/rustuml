@@ -5,11 +5,14 @@
   "checker": {
     "identity": "Codex desktop independent adversarial checker",
     "model": "GPT-5 Codex",
-    "role": "Checker did not implement the mechanism and did not edit shipping code or account"
+    "role": "Checker did not implement the mechanism and did not edit shipping code or account",
+    "tool": "Codex desktop"
   },
   "verdict": "ACCEPT",
   "verdict_basis": "I tried to break the claimed raw-mode invariant with fresh held-out sequence, class-member, and class-note inputs covering implicit and explicit URLs, escaped-newline bytes inside and outside raw URL blocks, and multiple linked and unlinked runs. Every clean in-scope URL tokenization probe passed at Rust revision b9b5e3805458481c8e595247a18229c511aa52c3. The remaining failures sit on separate math or mixed note-layout surfaces and are reproducible without any raw escaped newline inside the raw block, so they do not reject this mechanism.",
   "revisions": {
+    "account_commit": "b93fbb83e7b34f5f2be228824de415332d476a15",
+    "implementation_commit": "b9b5e3805458481c8e595247a18229c511aa52c3",
     "rust_revision": "b9b5e3805458481c8e595247a18229c511aa52c3",
     "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
     "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
@@ -54,6 +57,7 @@
     "The account file was only read, not modified.",
     "All fresh evidence was written under test-diagrams/perturbations/display-raw-newline-tokenization/ in the isolated checker worktree."
   ],
+  "evidence_directory": "test-diagrams/perturbations/display-raw-newline-tokenization",
   "inputs": [
     {
       "stem": "seq_implicit_url_outside_split_multirun",

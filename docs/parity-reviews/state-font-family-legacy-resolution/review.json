@@ -6,12 +6,18 @@
     "identity": "independent adversarial checker",
     "model": "GPT-5 Codex / Codex desktop",
     "tool": "Codex desktop, Java PlantUML JAR, and prebuilt diff_one helper",
+    "independence": "independent adversarial checker",
     "workspace": "/private/tmp/rustuml-check-state-font-family-legacy-resolution",
     "shipping_rust_edited": false,
     "cargo_or_rustc_invoked": false
   },
   "requested_revisions": {
     "rust_revision": "976f8bf7780f6846dc0b9a76b0728f6a67f4ee29",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "revisions": {
+    "account_commit": "0e1e7a90214f2604a68da2155ee309ca8aa5ba47",
+    "implementation_commit": "976f8bf7780f6846dc0b9a76b0728f6a67f4ee29",
     "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
   },
   "account": {

@@ -12,13 +12,19 @@
     "independence": "Did not implement commit bf4b9c0a, did not edit shipping source or baselines, and only added held-out evidence plus this review record in an isolated checker worktree."
   },
   "revisions": {
-    "account_commit": "85513d6415b4db1feeb8adfb186dcbec6e38ce63",
+    "account_commit": "85513d6429cf7dfe88e554b31737bd37e79ac704",
+    "implementation_commit": "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d",
     "checker_worktree_branch": "codex/checker-class-attached-note-rankdir-position-511a5e78",
     "checker_worktree_path": "/private/tmp/rustuml-review-rankdir-position-511a5e78",
     "rust_revision_checked": "511a5e786faa91f89477eeba636732b7f4d7abff",
     "rust_tree_checked": "6758555b5ca1ccd25d1a5a1960e2da14aa86b2fb",
     "current_clean_evidence_tip": "511a5e786faa91f89477eeba636732b7f4d7abff",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
     "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "legacy_normalization": {
+    "replaced_account_commit": "85513d6415b4db1feeb8adfb186dcbec6e38ce63",
+    "reason": "The canonical account commit is the Git revision whose account.json bytes match the current canonical account; the prior value is retained as the original record claim."
   },
   "comparator": {
     "binary": "/tmp/rustuml-diff-one-bf4b9c0a",
