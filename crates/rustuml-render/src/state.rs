@@ -8053,20 +8053,15 @@ pub fn render_with_oracle(
     // Named floating notes (`as FN1`) were already emitted up front, keyed by
     // their alias rather than a `GMN*` name — skip them here so the 1:1 GMN
     // pairing stays aligned with the remaining (anchored / anonymous) notes.
-    for (note_idx, note) in diagram
-        .notes
-        .iter()
-        .filter(|n| {
-            !matches!(
-                &n.kind,
-                // Named floating notes are pass-one entities; `note on link`
-                // shapes are emitted inside their owning link group. Neither
-                // has a standalone `GMN*` entity.
-                StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink { .. }
-            )
-        })
-        .enumerate()
-    {
+    for (note_idx, note) in diagram.notes.iter().enumerate().filter(|(_, n)| {
+        !matches!(
+            &n.kind,
+            // Named floating notes are pass-one entities; `note on link`
+            // shapes are emitted inside their owning link group. Neither
+            // has a standalone `GMN*` entity.
+            StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink { .. }
+        )
+    }) {
         if let Some((gmn_name, rect)) = oracle_gmns.get(note_idx) {
             // Oracle path: replay the captured path strings verbatim and
             // place text using the captured y positions.
@@ -12058,6 +12053,68 @@ CobaltDecision --> [*]
         assert!(!state_note_is_opale(Some(&two_cubics), false));
         assert!(!state_note_is_opale(Some(&one_cubic), true));
         assert!(!state_note_is_opale(None, false));
+    }
+
+    #[test]
+    fn mixed_note_painters_preserve_original_attached_note_identity() {
+        let input = concat!(
+            "@startuml\n",
+            "note \"Floating audit\" as FloatingAudit\n",
+            "[*] --> RenamedAlpha\n",
+            "note left of RenamedAlpha : attached before link note\n",
+            "RenamedAlpha --> RenamedBeta : routed transition\n",
+            "note on link\n",
+            "  transition audit\n",
+            "end note\n",
+            "note right of RenamedBeta\n",
+            "  attached after both other kinds\n",
+            "  second renamed row\n",
+            "end note\n",
+            "RenamedBeta --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(state_diagram) = &diagram else {
+            panic!("expected state diagram");
+        };
+        assert_eq!(state_diagram.notes.len(), 4);
+
+        let state_ids = vec![
+            "FloatingAudit".to_string(),
+            "__start__".to_string(),
+            "RenamedAlpha".to_string(),
+            "RenamedBeta".to_string(),
+            "__end__".to_string(),
+        ];
+        let allocated = allocate_state_svg_ids(state_diagram, &state_ids);
+        assert!(allocated.note_ids[0].is_none());
+        assert_eq!(
+            allocated.note_ids[1].as_ref().unwrap().qualified_name,
+            "GMN2"
+        );
+        assert!(allocated.note_ids[2].is_none());
+        assert_eq!(
+            allocated.note_ids[3].as_ref().unwrap().qualified_name,
+            "GMN5"
+        );
+
+        let svg = crate::render_svg(&diagram);
+        for name in ["GMN2", "GMN5"] {
+            assert!(
+                svg.contains(&format!(r#"data-qualified-name="{name}""#)),
+                "{name} missing from {svg}"
+            );
+        }
+        assert!(!svg.contains("data-qualified-name=\"GMN00"), "{svg}");
+        for text in [
+            "Floating audit",
+            "attached before link note",
+            "transition audit",
+            "attached after both other kinds",
+            "second renamed row",
+        ] {
+            assert!(svg.contains(text), "{text} missing from {svg}");
+        }
     }
 
     #[test]

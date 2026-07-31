@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "state-note-original-index-identity",
   "created": "2026-07-31",
-  "status": "planned",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "2040e57c",
   "java_locations": [
@@ -57,6 +57,21 @@
     "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
     "An independent checker records a verdict and held-out Java/Rust evidence at the exact implementation revision."
   ],
+  "experimental_result": {
+    "implementation_revision": "this implementation commit",
+    "result": "Preserving original StateNote indices makes state_multiple_notes and state_mixed_all_features structurally equivalent. Their existing routed positions, GMN/entity IDs, note stroke ownership, and multiline baselines activate without further adjustment.",
+    "headline_effect": "No-oracle product parity increases from 11157/11251 to 11159/11251; state increases from 891/901 to 893/901.",
+    "fresh_evidence": "mixed_note_painters_preserve_original_attached_note_identity interleaves a named floating note, attached note, note-on-link, and multiline attached note, then verifies the sparse original indices map to GMN2 and GMN5 rather than compressed fallback IDs.",
+    "verification": [
+      "cargo test -p rustuml-render --lib: 799 passed",
+      "cargo clippy -p rustuml-render --lib -- -D warnings: passed",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release: passed and ratchet updated",
+      "diff_one --no-oracle state_multiple_notes.puml: structurally equivalent",
+      "diff_one --no-oracle state_mixed_all_features.puml: structurally equivalent",
+      "four frozen mechanical harness guards: passed"
+    ],
+    "independent_review": "Pending at the implementation revision; checker capacity was unavailable before this commit."
+  },
   "forbidden_approaches": [
     "fixture-name or note-text conditions",
     "special cases for index 1 or 2",
