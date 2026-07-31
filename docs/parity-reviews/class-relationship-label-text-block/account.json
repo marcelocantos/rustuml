@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-relationship-label-text-block",
+  "status": "account_committed_before_implementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:GraphvizImageBuilder#buildImage",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:SvekEdge constructor and SvekEdge#appendTable",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:Display#getCreole",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:SheetBlock1#calculateDimensionSlow and SheetBlock1#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:relationship_center_layout",
+    "crates/rustuml-render/src/class.rs:relationship_arrow_font",
+    "crates/rustuml-render/src/class.rs:render_no_oracle_relationship"
+  ],
+  "invariant": "A class relationship's center-label box and its painted label are two uses of the same Java text-block composition. SvekEdge resolves root.element.classDiagram.arrow, Display creates the Creole block with the final SkinParam global padding on all four sides, SvekEdge applies its relationship margin and optional magic-arrow or link-note composition, and appendTable integer-truncates only the completed dimensions sent to Graphviz. Painting uses the corresponding inner offsets from that same composed block.",
+  "causal_divergence": "Rust relationship_center_layout measures every center label with a hardcoded sans-serif 13px font and adds only the relationship's outer margin. It neither uses relationship_arrow_font nor applies the final global skinparam Padding, even though rendering already resolves the arrow font. For the Cerulean clean control label 'edge  label', Java measures Verdana 12 at 66.1055 by 14.5840 and sends floor(text + 2*padding(5) + 2*margin(1)) = 78 by 26 to Graphviz. Rust sends 71 by 17. The missing 7px width and 9px height exactly equal the unscaled canvas-width, canvas-height, second-rank, and target-y divergences. Rank separation and final canvas arithmetic are downstream symptoms, not causes.",
+  "planned_change": "Make relationship_center_layout derive label metrics from relationship_arrow_font and the final global skinparam Padding. Add padding on all four sides before the relationship margin and preserve Java's existing composition order for visibility modifiers, self-link margins, magic arrows, and link notes. Offset painted center-label text by the same global padding, keep magic-arrow positioning tied to the composed inner block, and leave integer truncation at the Graphviz fixed-table boundary. Do not alter ranksep, solved coordinates, or final canvas constants.",
+  "perturbation_axes": [
+    "global skinparam Padding 0, 5, and 13, including declaration after the relationship",
+    "arrow font family and arrow font size varied independently",
+    "short, long, multiline, and Creole-formatted relationship labels",
+    "top-to-bottom versus left-to-right graph direction",
+    "ordinary relationships versus self-links",
+    "plain labels versus magic-arrow and visibility-prefixed labels",
+    "labels with and without link notes",
+    "unlabelled and cardinality-only control relationships"
+  ],
+  "scope_boundary": "This mechanism owns class relationship center-label text-block dimensions and their corresponding paint offsets. It does not own endpoint cardinality blocks, rank separation, route synthesis, class entity dimensions, document scaling, comparator behavior, fixture eligibility, or canvas constants.",
+  "acceptance": [
+    "The preserved valid triple-comment heldout and its token-free clean control lose the same 7px by 9px base-resolution relationship-label-box divergence through the no-oracle path.",
+    "Fresh Java-generated perturbations exercise at least two independent padding, font, topology, direction, and composition axes.",
+    "Graphviz receives integer-truncated dimensions only after arrow-font measurement, global padding, relationship margin, optional magic arrow, and optional link-note composition.",
+    "The painted label and magic arrow use offsets derived from the same composed block supplied to layout.",
+    "No-label and cardinality-only controls preserve their existing geometry.",
+    "An independent checker audits this account and implementation at exact revisions and preserves every passing or failing perturbation."
+  ],
+  "forbidden_approaches": [
+    "changing ranksep, fixture-specific coordinates, or final canvas dimensions to absorb the label-box error",
+    "special-casing Cerulean, the triggering labels, branch counts, or golden filenames",
+    "using the expected SVG or oracle layout in the shipped path",
+    "changing comparator tolerance, baselines, skip markers, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+    "/private/tmp/t14-triple-clean.puml"
+  ]
+}
