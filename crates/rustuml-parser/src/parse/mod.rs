@@ -735,6 +735,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
     let mut has_component_bracket_interface_decl = false;
+    let mut has_component_description_command = false;
+    let mut has_component_symbol_container = false;
     let mut has_component_leaf_keyword = false;
     let mut has_complete_deployment_container = false;
     let mut has_component_package_container = false;
@@ -843,6 +845,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         if !inside_class_leaf_body && component::looks_like_description_bracket_command(trimmed) {
             class_factory_rejected_by_mixed_leaf = true;
+            has_component_description_command = true;
         }
         let looks_like_sequence_message = sequence::looks_like_message(trimmed);
         let looks_like_sequence_participant = !trimmed.ends_with('{')
@@ -1062,7 +1065,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // beats multiple `interface` lines that would otherwise score for class.
         if leading_keyword == "component" && trimmed["component".len()..].starts_with(' ') {
             scores[5] += 15;
-            if !trimmed.contains('{') && top_level {
+            if trimmed.contains('{') {
+                has_component_symbol_container = true;
+            } else if top_level {
                 has_top_level_component_leaf = true;
             }
         }
@@ -1402,13 +1407,23 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
     }
 
+    // Rust splits Java's DescriptionDiagramFactory into Component and
+    // Deployment models. Preserve that command precedence before using a
+    // complete container declaration as Deployment evidence.
+    let component_backed_description_source = has_component_package_container
+        || has_top_level_component_leaf
+        || has_component_symbol_container
+        || has_component_description_command
+        || has_component_bracket_interface_decl;
+
     // A complete CommandPackageWithUSymbol declaration is DESCRIPTION factory
     // evidence whether its canonical code is quoted, dotted, hyphenated, or
-    // slash-separated. The earlier Class factory still wins while viable.
+    // slash-separated. The earlier Class factory still wins while viable, and
+    // an unconsumable expanded Archimate command rejects Description entirely.
     if has_complete_deployment_container
         && !class_factory_viable
-        && !has_component_package_container
-        && !has_top_level_component_leaf
+        && !component_backed_description_source
+        && scores[9] == 0
     {
         let other_max = scores
             .iter()
@@ -1424,7 +1439,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
 
     if has_complete_deployment_container
         && !class_factory_viable
-        && (has_component_package_container || has_top_level_component_leaf)
+        && component_backed_description_source
+        && scores[9] == 0
     {
         let other_max = scores
             .iter()
@@ -2455,6 +2471,25 @@ mod tests {
                      }\n\
                      @enduml";
         assert!(matches!(parse(input).unwrap(), Diagram::Archimate(_)));
+    }
+
+    #[test]
+    fn broad_container_identity_does_not_override_factory_command_ownership() {
+        let component = "@startuml\n\
+                         folder \"Interface Shell\" as shell-west {\n\
+                           [Renamed Portal 9791] as Portal9791\n\
+                         }\n\
+                         @enduml";
+        assert!(matches!(parse(component).unwrap(), Diagram::Component(_)));
+
+        let archimate = "@startuml\n\
+                        rectangle \"Business Mesh\" as business/live {\n\
+                          archimate_element Business Actor buyer \"Buyer\"\n\
+                          archimate_element Business Process ordering \"Ordering\"\n\
+                          archimate_rel Serving ordering buyer \"serves\"\n\
+                        }\n\
+                        @enduml";
+        assert!(matches!(parse(archimate).unwrap(), Diagram::Archimate(_)));
     }
 
     #[test]
