@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "mechanism": "multiline-note-command-atomicity",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:getCandidate and isMultilineCommandOk",
+    "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java:isValid",
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:multiLine and END",
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java:getRegexConcatMultiLine, END, and END_WITH_BRACKET",
+    "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java:getRegexConcatMultiLine and END",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/NoteStyle.java:getNoteStyle"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:completed_multiline_note_payload and detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/class.rs:ClassParser::parse_line and try_note",
+    "crates/rustuml-parser/src/parse/deployment.rs:parse_deployment note_accum and note command regexes",
+    "crates/rustuml-parser/src/parse/sequence.rs:SeqParser::parse_line and try_note"
+  ],
+  "invariant": "Java's command candidate owns a complete multiline note as one syntactic unit before later commands are considered. Command regexes are case-insensitive. Floating entity notes use note-as plus end-note; attached entity notes additionally admit a final-bracket form; sequence note, hnote, and rnote openers retain their shape and may close with the note-family END regex. Interior lines are display payload, never sibling commands, while commands after the legal terminator remain visible.",
+  "causal_divergence": "Rust has four partial note grammars. Dispatch hides only ordinary note blocks ending in the spaced end-note form. The class parser matches lowercase ordinary openers and has no final-bracket buffer state. The deployment parser has a buffer only for attached notes, so a Java-valid floating note-as block is ignored and its body becomes DESCRIPTION entities. The sequence parser recognizes hnote/rnote openers but closes its buffer only for ordinary end-note, so those complete commands disappear. These are manifestations of a missing command-boundary model, not independent keyword-score constants.",
+  "planned_change": "Introduce shared parser-level note keyword and terminator classification, then make dispatch and the class, deployment, and sequence consumers use it. Completed-span discovery will recognize ordinary, hnote, and rnote families, case-insensitive end-note variants, and the attached final-bracket form without hiding unterminated source. Class parsing will retain the chosen terminator while buffering and match opener grammar case-insensitively. Deployment will create and buffer floating note-as commands instead of exposing their payload as nodes. Sequence will retain the opener's shape and accept Java's complete note-family terminator set. No output coordinates or comparator behavior change in this mechanism.",
+  "perturbation_axes": [
+    "ordinary note versus hnote versus rnote",
+    "floating note-as versus attached note versus message note",
+    "end-note terminator versus final closing bracket",
+    "mixed-case opener and terminator",
+    "body-leading DESCRIPTION and component keywords",
+    "post-terminator class, deployment, and sequence commands",
+    "renamed targets, aliases, colors, and changed body line counts"
+  ],
+  "scope_boundary": "This mechanism owns command boundary recognition and construction of the corresponding parser note model. It does not own class SVEK placement of multiple already-parsed floating notes, note paint geometry, link routing, comparator tolerance, baselines, or fixture eligibility.",
+  "acceptance": [
+    "The preserved note-only dispatch cases and the fresh bracketed, mixed-case, DESCRIPTION, hnote, and rnote counterexamples parse to the Java-selected subtype and retain every note body as note payload",
+    "Parser tests exercise at least two independent grammar axes per affected consumer and prove post-terminator commands remain visible",
+    "Unterminated inputs do not hide arbitrary trailing source",
+    "All parser unit tests and relevant diff_one --no-oracle perturbations pass except separately-accounted renderer divergences",
+    "An independent checker generates fresh valid held-outs and records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "special-casing payload words, fixture aliases, or checker filenames",
+    "forcing every note-leading source to one subtype",
+    "treating all closing braces as note terminators",
+    "silently discarding unsupported note forms",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-body-dispatch-isolation/review.json",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_brace_payload_keywords.puml",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_floating_mixed_case_colored.puml",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_hnote_body_keywords.puml",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_rnote_right_keywords.puml"
+  ]
+}
