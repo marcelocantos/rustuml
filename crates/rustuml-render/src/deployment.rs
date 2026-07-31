@@ -175,6 +175,16 @@ const INTERFACE_PORT_START_INSET: f64 = 0.05;
 const INTERFACE_TABLE_CONTROL_INSET: f64 = 0.99;
 const INTERFACE_LABEL_CONTROL_GAP: f64 = 0.76;
 const INTERFACE_TARGET_ENDPOINT_DELTA: f64 = 0.11;
+// Java provenance: `DotStringFactory.getMinNodeSep/getMinRankSep` and
+// `getHorizontalDzeta/getVerticalDzeta` bound dynamic edge footprints by
+// these pixel minima after dividing the maximum by ten.
+const SVEK_MIN_NODE_SEP: f64 = 35.0;
+const SVEK_MIN_RANK_SEP: f64 = 60.0;
+const SVEK_DZETA_DIVISOR: f64 = 10.0;
+// Java provenance: `LinkDecor.NONE` and `LinkDecor.ARROW` margins consumed by
+// `SvekEdge.getDecorDzeta`.
+const LINK_DECOR_NONE_MARGIN: f64 = 2.0;
+const LINK_DECOR_ARROW_MARGIN: f64 = 10.0;
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 // ---------------------------------------------------------------------------
@@ -3905,6 +3915,63 @@ fn deployment_link_note_label_size(
     }
 }
 
+fn deployment_svek_spacing(diagram: &DeploymentDiagram) -> (f64, f64) {
+    let mut horizontal_dzeta = 0.0_f64;
+    let mut vertical_dzeta = 0.0_f64;
+    for connection in &diagram.connections {
+        let center = if let Some(note) = connection.note.as_ref() {
+            Some(deployment_link_note_label_size(
+                note,
+                deployment_link_note_dim(note),
+                connection
+                    .label
+                    .as_deref()
+                    .map(|label| deployment_center_label_size(label, false)),
+            ))
+        } else {
+            connection
+                .label
+                .as_deref()
+                .map(|label| deployment_center_label_size(label, false))
+        };
+        let endpoint_size = |label: Option<&str>| {
+            label.map(|label| EdgeLabelSize {
+                width: text_render::measure(label, 13.0, false),
+                height: text_render::label_height(label, 13.0),
+            })
+        };
+        let tail = endpoint_size(connection.tail_label.as_deref());
+        let head = endpoint_size(connection.head_label.as_deref());
+        let decoration = if connection.arrow_at_start {
+            LINK_DECOR_ARROW_MARGIN
+        } else {
+            LINK_DECOR_NONE_MARGIN
+        } + if connection.arrow_at_end {
+            LINK_DECOR_ARROW_MARGIN
+        } else {
+            LINK_DECOR_NONE_MARGIN
+        };
+
+        if connection.length == 1 {
+            let footprint = center.map_or(0.0, |size| size.width)
+                + tail.map_or(0.0, |size| size.width)
+                + head.map_or(0.0, |size| size.width)
+                + decoration;
+            horizontal_dzeta = horizontal_dzeta.max(footprint);
+        } else {
+            let footprint = center.map_or(0.0, |size| size.height)
+                + tail.map_or(0.0, |size| size.height)
+                + head.map_or(0.0, |size| size.height)
+                + decoration;
+            vertical_dzeta = vertical_dzeta.max(footprint);
+        }
+    }
+    (
+        SVEK_MIN_NODE_SEP.max(horizontal_dzeta / SVEK_DZETA_DIVISOR),
+        SVEK_MIN_RANK_SEP.max(vertical_dzeta / SVEK_DZETA_DIVISOR),
+    )
+}
+
 fn deployment_link_note_blocks(
     x: f64,
     y: f64,
@@ -4450,8 +4517,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         DeploymentLayoutDirection::TopToBottom => Direction::TopToBottom,
         DeploymentLayoutDirection::LeftToRight => Direction::LeftToRight,
     };
+    let (node_sep, rank_sep) = deployment_svek_spacing(diagram);
     let mut layout = LayoutGraph::new(layout_direction)
-        .with_plantuml_svek_spacing()
+        .with_spacing_pixels(node_sep, rank_sep)
         .with_plantuml_svek_node_order();
     let mut entity_layout_slots = vec![None; diagram.nodes.len()];
     let mut note_layout_slots = vec![None; diagram.notes.len()];
@@ -8653,6 +8721,41 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             deployment_link_note_blocks(100.0, 200.0, &note, dim, None),
             (None, (105.0, 205.0))
         );
+    }
+
+    #[test]
+    fn deployment_svek_spacing_includes_compound_link_labels_and_decorations() {
+        let source = "@startuml\n\
+            node RenamedIngress271\n\
+            node RenamedArchive277\n\
+            RenamedIngress271 -left-> RenamedArchive277 : changed route label 281\n\
+            note left on link : changed link note payload with independent topology axis 283\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let connection = &diagram.connections[0];
+        assert_eq!(connection.length, 1);
+        let note = connection.note.as_ref().unwrap();
+        let compound = deployment_link_note_label_size(
+            note,
+            deployment_link_note_dim(note),
+            connection
+                .label
+                .as_deref()
+                .map(|label| deployment_center_label_size(label, false)),
+        );
+        let (node_sep, rank_sep) = deployment_svek_spacing(&diagram);
+        assert_eq!(
+            node_sep,
+            SVEK_MIN_NODE_SEP.max(
+                (compound.width + LINK_DECOR_ARROW_MARGIN + LINK_DECOR_NONE_MARGIN)
+                    / SVEK_DZETA_DIVISOR,
+            )
+        );
+        assert_eq!(rank_sep, SVEK_MIN_RANK_SEP);
+        assert!(node_sep > SVEK_MIN_NODE_SEP);
     }
 
     #[test]
