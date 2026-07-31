@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-svek-transition-order",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+      "symbols": [
+        "CucaDiagramFileMakerSvek#getOrderedLinks",
+        "CucaDiagramFileMakerSvek#addLinkNew"
+      ],
+      "lines": "73-74, 89-112",
+      "role": "Groups every later link immediately after the existing contiguous block with the same undirected endpoint pair, then passes that order into DotData before Graphviz construction."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": [
+        "Link#sameConnections"
+      ],
+      "lines": "462-469",
+      "role": "Defines connection identity as an unordered pair of the two endpoint entities."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder#buildImage"
+      ],
+      "lines": "224-260",
+      "role": "Creates SvekEdge objects in DotData's already-grouped link order and appends them to Bibliotekon."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": [
+        "SvekResult#drawU"
+      ],
+      "lines": "97-102",
+      "role": "Paints Bibliotekon's SvekEdge list in the same order used to construct the solved graph."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "plantuml_svek_transition_order",
+        "build_state_group_outcome",
+        "build_autonomous_composite",
+        "layout_autonomous_scope",
+        "emit_autonomous_scope_links"
+      ],
+      "lines": "3803-3840, 4034-4105, 4505-4522, 5063-5102",
+      "role": "Already implements and validates Java's grouping for flat state layout and paint, but passes source-ordered transition subsets into autonomous inner and outer composite scopes."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/state/state_game_character.puml"
+  ],
+  "claimed_invariant": "The SVEK link stream is globally stabilized by unordered endpoint-pair grouping before graph construction. A later reverse or parallel link is inserted after the complete existing block for that pair, while the first appearance of each pair retains its relative position. State simplification may replace autarkic composite groups with entity images, but it does not create a separate ordering rule: every resulting inner region and outer root SVEK graph consumes the corresponding projection of the same grouped link stream. Layout edge identity, paint order, SVG UID ownership, and label order must all follow that projected order.",
+  "causal_divergence": "Rust's plantuml_svek_transition_order exactly models getOrderedLinks/addLinkNew and the existing six-state fresh test proves the flat renderer uses it. build_state_group_outcome and build_autonomous_composite, however, filter diagram.transitions directly into source-ordered vectors and pass those vectors to layout_autonomous_scope. emit_autonomous_scope_links later paints the stored vectors unchanged. In state_game_character, Java therefore groups each outer reverse transition beside its forward endpoint pair, while Rust paints all forward transitions first and the reverse transitions at their original later source lines. The compared paths, labels, entity IDs, and link IDs already exist with Java-equivalent values but appear at different document positions beginning with Moving-to-Idle. The defect is the bypassed shared ordering stage, not geometry or fixture-specific transition names.",
+  "planned_model_change": "After each autonomous scope filters the global transition stream by ownership, pass that subset through plantuml_svek_transition_order before collecting nodes or constructing LayoutGraph. Store and paint the resulting order unchanged. Apply the same operation to ordinary inner regions, regions containing live clusters, and the root outer scope. Add a fresh autarkic-composite perturbation with renamed states, noncontiguous reverse pairs, unrelated endpoint pairs, and changed declaration order; assert both the computed scope order and rendered label order. Preserve parser source lines and UID allocation, which remain indexed by original transition identity.",
+  "perturbation_axes": [
+    "forward versus reverse links sharing one endpoint pair",
+    "parallel versus unrelated endpoint pairs",
+    "inner composite region versus root scope containing an autonomous composite image",
+    "renamed state and composite labels",
+    "source-separated reverse links and changed declaration order",
+    "three versus six outer state entities"
+  ],
+  "scope_boundary": "This mechanism owns transition ordering supplied to autonomous state SVEK scopes. It does not alter endpoint identity, UID allocation, source lines, edge geometry, labels, state simplification, composite dimensions, comparator behavior, or any non-state renderer.",
+  "acceptance": [
+    "state_game_character matches structurally through render_svg without oracle input.",
+    "A fresh valid composite perturbation proves endpoint-pair grouping in both stored autonomous scope order and rendered SVG label order.",
+    "The state and full no-oracle ratchets do not regress any existing match.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "sorting by fixture labels or source-line constants",
+    "reordering only the serialized SVG after layout",
+    "using geometry or coordinates to infer transition order",
+    "renumbering transition identities after sorting",
+    "post-hoc SVG string surgery",
+    "comparator or eligibility changes"
+  ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "review_status": "Independent adversarial review and Java-generated held-outs remain pending. This account is a pre-implementation causal claim and does not self-attest acceptance."
+  }
+}
