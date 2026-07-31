@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-gradient-paint",
+  "status": "account_committed_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": [
+        "EntityImageNote#EntityImageNote"
+      ],
+      "lines": "96-114",
+      "role": "Selects an explicit note BACK color before the merged note style and retains the resulting HColor, including HColorGradient, as noteBackgroundColor."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPathSvg.java",
+      "symbols": [
+        "DriverPathSvg#draw"
+      ],
+      "lines": "55-78",
+      "role": "Routes note outline paths through DriverRectangleSvg fill selection rather than flattening their background paint."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "symbols": [
+        "DriverRectangleSvg#applyFillColor"
+      ],
+      "lines": "84-101",
+      "role": "Recognizes HColorGradient, asks SvgGraphics for the shared tuple-interned resource id, and paints the path with url(#id)."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#createSvgGradient"
+      ],
+      "lines": "389-429",
+      "role": "Shares one source-seeded gradient registry across class and note shapes in first-paint order."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "ResolvedNoteStyle::for_note"
+      ],
+      "lines": "14936-14983",
+      "role": "Accepts only note background values lacking slash or pipe and therefore drops a valid note gradient to the historical solid default."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "class_gradients"
+      ],
+      "lines": "3659-3692",
+      "role": "Inventories selected class entity gradients but omits note nodes from the same SVEK emission stream and shared SVG resource namespace."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "render_floating_note_entity",
+        "render_attached_note",
+        "render_relationship_note",
+        "render_single_named_note"
+      ],
+      "lines": "15204-15413, 15830-16023",
+      "role": "All ordinary note path painters consume ResolvedNoteStyle.background, so one typed paint-selection fix can cover folded body and corner paths across note topologies."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/skinparam/skin_note_bg_gradient.puml",
+    "test-diagrams/golden/skinparam/skin_note_bg_gradient.svg"
+  ],
+  "claimed_invariant": "A class-diagram note background is a typed paint selected from explicit note BACK color before merged note style. Gradient paint remains a color1/color2/policy tuple through folded-path emission. Notes and classes register into one source-seeded SVG gradient namespace in SVEK node paint order; identical tuples reuse an id even across shape kinds, while differing policies remain distinct.",
+  "causal_divergence": "The frozen source selects #FFFACD/#FFFFFF through noteBackgroundColor for two floating notes. Java preserves that HColorGradient, interns one resource on the first note path, and both folded paths of both notes reference it. Rust's ResolvedNoteStyle::for_note rejects slash or pipe values as non-solid, substitutes #FEFFDD, and class_gradients never sees note paint. The three missing elements are exactly one linearGradient and its two stops; the ordinary no-oracle SVEK note geometry and text already match.",
+  "planned_model_change": "Rename and extend the class gradient inventory to traverse the complete SVEK node emission order. Select raw note background paint with explicit note color precedence, register gradient tuples alongside class paints, and resolve ResolvedNoteStyle.background to the shared generated id without changing solid-color normalization. Ensure the degenerate single-note envelope also emits its selected definitions. Add fresh renamed tests for all policies, duplicate note reuse, inline-over-skinparam precedence, mixed note/class tuple reuse, and floating versus attached versus single-note topology.",
+  "perturbation_axes": [
+    "floating, attached, relationship-owned, and degenerate single named notes",
+    "all four gradient policies |, backslash, -, and /",
+    "explicit inline note color versus noteBackgroundColor style",
+    "duplicate tuple reuse across two notes",
+    "duplicate tuple reuse across a class and a note",
+    "renamed labels, changed note counts, and mixed SVEK emission order"
+  ],
+  "scope_boundary": "This mechanism owns typed class-diagram note background selection and registration in the existing SVG gradient resource model. It does not alter note geometry, text metrics, border paint, note parsing, non-class diagram families, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "skin_note_bg_gradient matches structurally through render_svg without oracle input.",
+    "Fresh renamed tests prove policy identity, tuple reuse, inline precedence, and mixed note/class resource order.",
+    "Single, floating, and attached note paths consume the same typed background model.",
+    "Existing class gradient and note geometry tests remain green.",
+    "The renderer suite, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching N1, N2, skin_note_bg_gradient, or a fixed note count",
+    "embedding expected gradient ids or frozen SVG fragments",
+    "post-hoc replacement of #FEFFDD in rendered output",
+    "assigning a note-only gradient namespace separate from SvgGraphics",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "Pending implementation and independent review.",
+    "review_status": "This account predates implementation and does not attest acceptance."
+  }
+}
