@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-decoration-vertical-stack",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "4c02c93e",
   "java_locations": [
@@ -87,6 +87,31 @@
       "derivation": "The one-leaf visible body bottom is 67.7773 and the Java footer baseline is 84.4453. Their 16.668 difference decomposes into EntityImageDegenerated's 7px bottom slack plus the 9.668 first-line baseline. Rust's SVEK-derived 18.668 gap is exactly 2px too large."
     }
   ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "observed_result": "The shipped no-oracle census rises from 11,143/11,251 to 11,145/11,251, with edge-cases improving from 742/777 to 744/777 and every other family unchanged. edge_meta_header_and_footer and edge_size_long_header_footer become structurally equivalent. Existing single-line left header, multiline title, caption, title-plus-header/footer, and header/footer SVEK controls remain structurally equivalent.",
+    "model_evidence": "DecorationLayout now advances rows from each line's resolved-font label height, the same quantity already used to size its bordered block. Footer placement selects only the pre-existing Java body lifecycle and composes the source-defined invisible bottom slack with the existing first-line ribbon baseline. A fresh test uses three renamed header and footer rows plus independent one-leaf and linked body topologies. No fixture names, label text, observed coordinate deltas, comparator values, or corpus inventory enter shipping code.",
+    "commands": [
+      "cargo test -p rustuml-render decoration_vertical_stack_uses_font_rows_and_body_lifecycle --lib",
+      "cargo build --release --example diff_one -p rustuml-oracle",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_header_and_footer.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_size_long_header_footer.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_render_left_header.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_meta_multiline_title.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_title_basic.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_caption.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_decoration_thf.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_decoration_hf.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --lib -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates -- --exact",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal -- --exact"
+    ],
+    "review_status": "Independent adversarial review and checker-authored Java held-outs remain pending because reviewer task capacity and the local Java oracle are unavailable. This record does not self-attest acceptance."
+  },
   "perturbation_axes": [
     "one through four header and footer lines",
     "10px header/footer versus 14px title/caption fonts",

@@ -316,15 +316,16 @@ const DECORATION_CAPTION_INSET: f64 = 1.0;
 const DECORATION_HEADER_BASELINE_Y: f64 = 9.668;
 /// Title glyph baseline sits this far above the body's top edge.
 const DECORATION_TITLE_GAP_ABOVE_BODY: f64 = 20.9531;
-/// Footer glyph baseline sits this far below the body's bottom edge.
-const DECORATION_FOOTER_GAP_BELOW_BODY: f64 = 18.668;
+/// `EntityImageDegenerated` retains its 7px inset below the intrinsic image.
+const DEGENERATED_DECORATION_BOTTOM_SLACK: f64 = 7.0;
+/// `SvekResult` normalises its minimum to 6px and adds 15px to the MinMax,
+/// retaining 9px below the painted maximum.
+const SVEK_DECORATION_BOTTOM_SLACK: f64 = 9.0;
 /// Caption glyph baseline sits this far below the body's bottom edge.
 const DECORATION_CAPTION_GAP_BELOW_BODY: f64 = 23.5352;
 /// `TextBlockBordered.calculateDimension` adds one pixel to both dimensions,
 /// even when the decoration border is transparent.
 const DECORATION_BORDER_EXTENT: f64 = 1.0;
-/// Baseline-to-baseline spacing for multi-line page decorations.
-const DECORATION_LINE_HEIGHT: f64 = MEMBER_LINE_HEIGHT;
 const GRID_MARGIN: f64 = 30.0;
 #[allow(dead_code)]
 const CLASS_MIN_WIDTH: f64 = 120.0;
@@ -6248,7 +6249,13 @@ fn render_plantuml_svg(
         body_bottom + DECORATION_CAPTION_GAP_BELOW_BODY,
         oracle_decoration_texts("caption"),
     );
-    let footer_y = body_bottom + DECORATION_FOOTER_GAP_BELOW_BODY + layout.caption_h;
+    let footer_bottom_slack = if uses_degenerated_entity {
+        DEGENERATED_DECORATION_BOTTOM_SLACK
+    } else {
+        SVEK_DECORATION_BOTTOM_SLACK
+    };
+    let footer_y =
+        body_bottom + footer_bottom_slack + DECORATION_HEADER_BASELINE_Y + layout.caption_h;
     layout.emit(
         &mut svg,
         "footer",
@@ -8813,12 +8820,16 @@ impl DecorationLayout {
             r#"<g class="{class_name}" data-source-line="{source_line}">"#
         )
         .unwrap();
-        let line_count = text.lines().count();
-        let base_y = if class_name == "title" && line_count > 1 {
-            y - (line_count - 1) as f64 * DECORATION_LINE_HEIGHT
+        let line_heights = text
+            .lines()
+            .map(|line| text_render::label_height(line, st.font_size as f64))
+            .collect::<Vec<_>>();
+        let base_y = if class_name == "title" && line_heights.len() > 1 {
+            y - line_heights[..line_heights.len() - 1].iter().sum::<f64>()
         } else {
             y
         };
+        let mut line_y = base_y;
         for (idx, line_text) in text.lines().enumerate() {
             let block_w = Self::block_width(class_name, line_text);
             // Aligned block left edge over the shared total width, then the
@@ -8829,7 +8840,7 @@ impl DecorationLayout {
                 (self.dim_total_w - block_w) / 2.0
             };
             let computed_x = block_x + st.inset;
-            let computed_y = base_y + idx as f64 * DECORATION_LINE_HEIGHT;
+            let computed_y = line_y;
             let oracle_text = oracle_texts
                 .and_then(|texts| texts.get(idx))
                 .filter(|t| t.text == line_text);
@@ -8850,6 +8861,7 @@ impl DecorationLayout {
                     skip_underline: false,
                 },
             );
+            line_y += line_heights[idx];
         }
         svg.push_str("</g>");
     }
@@ -21625,6 +21637,92 @@ mod tests {
         let svek_center = (bordered_width - (body_span + BODY_DECORATION_MARGIN)) / 2.0;
         let previous_svek_center = (unbordered_width - (body_span + previous_body_margin)) / 2.0;
         assert_eq!(svek_center, previous_svek_center);
+    }
+
+    #[test]
+    fn decoration_vertical_stack_uses_font_rows_and_body_lifecycle() {
+        let degenerated = rustuml_parser::parse::parse(
+            "@startuml\n\
+             header\n\
+             Fresh header alpha\n\
+             Fresh header beta\n\
+             Fresh header gamma\n\
+             endheader\n\
+             footer\n\
+             Fresh footer alpha\n\
+             Fresh footer beta\n\
+             Fresh footer gamma\n\
+             endfooter\n\
+             class RenamedSoloLedger\n\
+             @enduml",
+        )
+        .unwrap();
+        let svek = rustuml_parser::parse::parse(
+            "@startuml\n\
+             footer Fresh linked footer\n\
+             class RenamedSourceLedger\n\
+             class RenamedTargetArchive\n\
+             RenamedSourceLedger --> RenamedTargetArchive\n\
+             @enduml",
+        )
+        .unwrap();
+        let degenerated_svg = crate::render_svg(&degenerated);
+        let svek_svg = crate::render_svg(&svek);
+        let assert_close = |actual: f64, expected: f64| {
+            assert!(
+                (actual - expected).abs() < 0.001,
+                "expected {expected}, got {actual}"
+            );
+        };
+
+        let text_y = |svg: &str, text: &str| {
+            let marker = format!(">{text}</text>");
+            let tag = svg
+                .split_once(&marker)
+                .unwrap()
+                .0
+                .rsplit_once("<text ")
+                .unwrap()
+                .1;
+            attr_value(tag, " y").unwrap().parse::<f64>().unwrap()
+        };
+        let entity_bottom = |svg: &str, name: &str| {
+            let marker = format!("<!--class {name}-->");
+            let rect = svg
+                .split_once(&marker)
+                .unwrap()
+                .1
+                .split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            attr_value(rect, " y").unwrap().parse::<f64>().unwrap()
+                + attr_value(rect, " height").unwrap().parse::<f64>().unwrap()
+        };
+
+        let ribbon_line_height = text_render::label_height("Fresh header alpha", 10.0);
+        assert_close(
+            text_y(&degenerated_svg, "Fresh header beta")
+                - text_y(&degenerated_svg, "Fresh header alpha"),
+            ribbon_line_height,
+        );
+        assert_close(
+            text_y(&degenerated_svg, "Fresh header gamma")
+                - text_y(&degenerated_svg, "Fresh header beta"),
+            ribbon_line_height,
+        );
+        assert_close(
+            text_y(&degenerated_svg, "Fresh footer alpha")
+                - entity_bottom(&degenerated_svg, "RenamedSoloLedger"),
+            DEGENERATED_DECORATION_BOTTOM_SLACK + DECORATION_HEADER_BASELINE_Y,
+        );
+        assert_close(
+            text_y(&svek_svg, "Fresh linked footer")
+                - entity_bottom(&svek_svg, "RenamedTargetArchive"),
+            SVEK_DECORATION_BOTTOM_SLACK + DECORATION_HEADER_BASELINE_Y,
+        );
     }
 
     #[test]
