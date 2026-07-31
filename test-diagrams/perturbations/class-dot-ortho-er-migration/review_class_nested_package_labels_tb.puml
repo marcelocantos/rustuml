@@ -1,0 +1,23 @@
+@startuml
+top to bottom direction
+skinparam linetype ORTHO
+hide empty members
+
+package OuterReview9201 {
+  class AlphaNode9203
+  package InnerReview9205 {
+    class GammaNode9207
+    class BetaNode9209
+  }
+  class DeltaNode9211
+}
+class RootProbe9213
+
+RootProbe9213 -- OuterReview9201 : package edge label
+GammaNode9207 "tail role" -- "head role" RootProbe9213 : nested center label
+AlphaNode9203 o-- DeltaNode9211 : aggregation route
+BetaNode9209 <|-- GammaNode9207
+note on link
+  nested note survives ortho
+end note
+@enduml

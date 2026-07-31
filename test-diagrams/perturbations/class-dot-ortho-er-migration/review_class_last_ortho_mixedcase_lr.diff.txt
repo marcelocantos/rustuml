@@ -1,0 +1,17 @@
+SVG structural differences:
+  [29] <path> attr mismatch:
+    expected: [("codeLine", "12"), ("d", "M496.7,58.48 C496.7,58.48 569.31,54.8 629.45,54.8"), ("fill", "none"), ("id", "ArchiveLeaf9137-backto-OutcomeLeaf9139"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "12"), ("d", "M496.7002,58.482 C496.7002,65.8049 496.7002,54.8 496.7002,54.8 C496.7002,54.8 569.3138,54.8 629.4469,54.8"), ("fill", "none"), ("id", "ArchiveLeaf9137-backto-OutcomeLeaf9139"), ("style", "stroke:#181818;stroke-width:1;")]
+  [33] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "128.5527"), ("x", "236.37"), ("y", "61.9684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "128.5527"), ("x", "166.789"), ("y", "40.3834")]
+  [38] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "111.1475"), ("x", "206.79"), ("y", "81.1684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "111.1475"), ("x", "259.7127"), ("y", "67.7423")]
+  [41] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "98.1094"), ("x", "394.96"), ("y", "20.0684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "98.1094"), ("x", "344.9605"), ("y", "20.0683")]
+  [44] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "66.2378"), ("x", "505.79"), ("y", "57.7684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "66.2378"), ("x", "546.5447"), ("y", "64.5208")]
+
