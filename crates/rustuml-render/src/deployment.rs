@@ -181,6 +181,10 @@ const INTERFACE_TARGET_ENDPOINT_DELTA: f64 = 0.11;
 const SVEK_MIN_NODE_SEP: f64 = 35.0;
 const SVEK_MIN_RANK_SEP: f64 = 60.0;
 const SVEK_DZETA_DIVISOR: f64 = 10.0;
+// Java provenance: `LimitFinder.drawText` at
+// 71806a23780b04a5ccde2f8ceb5121edad5eb711 raises the text top by
+// `height - 1.5` and retains the baseline-side frontier at `baseline + 1.5`.
+const LIMIT_FINDER_TEXT_ADJUST: f64 = 1.5;
 // Java provenance: `LinkDecor.NONE` and `LinkDecor.ARROW` margins consumed by
 // `SvekEdge.getDecorDzeta`.
 const LINK_DECOR_NONE_MARGIN: f64 = 2.0;
@@ -3868,15 +3872,21 @@ fn deployment_center_label_rows(label: &str) -> Vec<&str> {
     rustuml_parser::display::split_escaped_newlines(label)
 }
 
+fn deployment_center_label_display_row(row: &str) -> &str {
+    deployment_note_display_row(row)
+}
+
 fn deployment_center_label_size(label: &str, floor_height: bool) -> EdgeLabelSize {
     let rows = deployment_center_label_rows(label);
     let width = rows
         .iter()
+        .map(|row| deployment_center_label_display_row(row))
         .map(|row| text_render::measure(row, 13.0, false))
         .fold(0.0_f64, f64::max)
         + 2.0;
     let height = rows
         .iter()
+        .map(|row| deployment_center_label_display_row(row))
         .map(|row| text_render::label_height(row, 13.0))
         .sum::<f64>()
         + 2.0;
@@ -5778,6 +5788,29 @@ impl DeploymentPaintBounds {
     }
 }
 
+fn include_deployment_center_label_paint_bounds(
+    bounds: &mut DeploymentPaintBounds,
+    label: &str,
+    origin: (f64, f64),
+    label_size: EdgeLabelSize,
+) {
+    let mut row_y = origin.1 + 1.0;
+    for row in deployment_center_label_rows(label) {
+        let row = deployment_center_label_display_row(row);
+        let row_width = text_render::measure(row, 13.0, false);
+        let row_height = text_render::label_height(row, 13.0);
+        let row_x = origin.0 + 1.0 + (label_size.width - 2.0 - row_width) / 2.0;
+        let baseline = row_y + pm::ascent(13.0);
+        bounds.include_rect(
+            row_x,
+            baseline - row_height + LIMIT_FINDER_TEXT_ADJUST,
+            row_x + row_width,
+            baseline + LIMIT_FINDER_TEXT_ADJUST,
+        );
+        row_y += row_height;
+    }
+}
+
 fn deployment_body_y_frame(
     diagram: &DeploymentDiagram,
     dims: &[DeploymentNodeDim],
@@ -6123,13 +6156,10 @@ fn deployment_edge_paint_bounds(
                 note_origin.0 + note_dim.width.floor(),
                 note_origin.1 + note_dim.height.floor(),
             );
-            if let (Some(origin), Some(size)) = (label_origin, label_size) {
-                bounds.include_rect(
-                    origin.0,
-                    origin.1,
-                    origin.0 + size.width,
-                    origin.1 + size.height,
-                );
+            if let (Some(label_text), Some(origin), Some(size)) =
+                (conn.label.as_deref(), label_origin, label_size)
+            {
+                include_deployment_center_label_paint_bounds(&mut bounds, label_text, origin, size);
             }
         } else if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
             // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
@@ -6138,7 +6168,7 @@ fn deployment_edge_paint_bounds(
             let x = (label.x * 100.0).round() / 100.0;
             let y = (label.y * 100.0).round() / 100.0;
             let size = deployment_center_label_size(label_text, false);
-            bounds.include_rect(x, y, x + size.width, y + size.height);
+            include_deployment_center_label_paint_bounds(&mut bounds, label_text, (x, y), size);
         }
         let (tail_text, head_text) = if reversed {
             (conn.head_label.as_deref(), conn.tail_label.as_deref())
@@ -6891,6 +6921,7 @@ fn render_no_oracle_edges(
                 });
             let mut row_y = origin_y + 1.0;
             for row in deployment_center_label_rows(label) {
+                let row = deployment_center_label_display_row(row);
                 let row_width = text_render::measure(row, 13.0, false);
                 let row_x = origin_x + 1.0 + (label_size.width - 2.0 - row_width) / 2.0;
                 emit_text(
@@ -8760,9 +8791,10 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
 
     #[test]
     fn link_note_expands_display_rows_and_preserves_interior_blank_atoms() {
-        let label = "persist\\nwith checksum";
+        let label = "persist\\n\\nwith checksum";
         let rows = deployment_center_label_rows(label);
-        assert_eq!(rows, ["persist", "with checksum"]);
+        assert_eq!(rows, ["persist", "", "with checksum"]);
+        assert_eq!(deployment_center_label_display_row(rows[1]), "\u{00A0}");
         let size = deployment_center_label_size(label, false);
         assert_eq!(
             size.width,
@@ -8771,14 +8803,28 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert_eq!(
             size.height,
             text_render::label_height("persist", 13.0)
+                + text_render::label_height("\u{00A0}", 13.0)
                 + text_render::label_height("with checksum", 13.0)
                 + 2.0
         );
+        let mut bounds = DeploymentPaintBounds {
+            min_x: f64::INFINITY,
+            min_y: f64::INFINITY,
+            max_x: f64::NEG_INFINITY,
+            max_y: f64::NEG_INFINITY,
+        };
+        include_deployment_center_label_paint_bounds(&mut bounds, label, (10.0, 20.0), size);
+        assert_eq!(
+            bounds.min_y,
+            21.0 + pm::ascent(13.0) - text_render::label_height("persist", 13.0)
+                + LIMIT_FINDER_TEXT_ADJUST
+        );
+        assert!(bounds.min_y < 20.0);
 
         let source = "@startuml\n\
                       node FreshIngress\n\
                       database FreshArchive\n\
-                      FreshIngress --> FreshArchive : persist\\nwith checksum\n\
+                      FreshIngress --> FreshArchive : persist\\n\\nwith checksum\n\
                       note top on link\n\
                         first row\n\
                       \n\
