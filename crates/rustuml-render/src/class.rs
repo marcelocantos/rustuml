@@ -2350,7 +2350,15 @@ fn render_with_oracle_uid_origin(
         // Java `GraphvizImageBuilder.buildImage` takes its degenerate image
         // path only when the diagram has exactly one leaf. Multiple note
         // entities still flow through SVEK like ordinary graph nodes.
-        if diagram.notes.len() == 1 {
+        if diagram.notes.len() == 1
+            && diagram.notes[0].target.is_none()
+            && diagram.relationships.is_empty()
+            && !package_render
+                .roles
+                .iter()
+                .copied()
+                .any(PackageRenderRole::is_rendered)
+        {
             return render_notes_only(diagram, cs, oracle);
         }
         if diagram.notes.is_empty()
@@ -2569,21 +2577,26 @@ fn render_with_oracle_uid_origin(
         };
         let position = attached_note_layout_position(diagram.direction, position);
         let note_id = attached_note_layout_id(idx);
+        // Java lowers the note to an ordinary Link, then `Bibliotekon`
+        // resolves a package endpoint to its empty leaf or cluster special
+        // point. Keep the semantic alias only for metadata and IDs.
+        let target_layout = relationship_layout_id(diagram, target);
+        let target_layout_id = target_layout.as_ref();
         match position {
             NotePosition::Left => {
                 // Java `CommandFactoryNoteOnEntity` creates left/right notes as
                 // length-one links; `Bibliotekon.lines0` emits them before nodes.
-                layout.add_plantuml_svek_line0_edge(&note_id, target);
-                layout.add_same_rank(&note_id, target);
-                layout.add_edge_with_minlen(&note_id, target, None, 0);
+                layout.add_plantuml_svek_line0_edge(&note_id, target_layout_id);
+                layout.add_same_rank(&note_id, target_layout_id);
+                layout.add_edge_with_minlen(&note_id, target_layout_id, None, 0);
             }
             NotePosition::Right => {
-                layout.add_plantuml_svek_line0_edge(target, &note_id);
-                layout.add_same_rank(target, &note_id);
-                layout.add_edge_with_minlen(target, &note_id, None, 0);
+                layout.add_plantuml_svek_line0_edge(target_layout_id, &note_id);
+                layout.add_same_rank(target_layout_id, &note_id);
+                layout.add_edge_with_minlen(target_layout_id, &note_id, None, 0);
             }
-            NotePosition::Top => layout.add_edge(&note_id, target, None),
-            NotePosition::Bottom => layout.add_edge(target, &note_id, None),
+            NotePosition::Top => layout.add_edge(&note_id, target_layout_id, None),
+            NotePosition::Bottom => layout.add_edge(target_layout_id, &note_id, None),
         }
     }
     let attached_layout_slots = attached_layout_slots_by_note
@@ -2637,11 +2650,14 @@ fn render_with_oracle_uid_origin(
                     + stereotype_height,
             },
         );
-        if diagram
+        let touched_by_relationship = diagram
             .relationships
             .iter()
-            .any(|relationship| relationship.from == pkg.name || relationship.to == pkg.name)
-        {
+            .any(|relationship| relationship.from == pkg.name || relationship.to == pkg.name);
+        let touched_by_attached_note = diagram.notes.iter().any(|note| {
+            note.position.is_some() && note.target.as_deref() == Some(pkg.name.as_str())
+        });
+        if touched_by_relationship || touched_by_attached_note {
             let endpoint_id = package_cluster_endpoint_layout_id(idx);
             layout.add_svek_cluster_endpoint(&endpoint_id);
             layout.add_cluster_node(&package_cluster_id(idx), &endpoint_id);
@@ -12904,10 +12920,12 @@ fn render_non_opale_attached_note_links(
             continue;
         };
         let note_layout_id = attached_note_layout_id(note_idx);
+        let target_layout = relationship_layout_id(diagram, target);
+        let target_layout_id = target_layout.as_ref();
         let (edge_from, edge_to, from_name, to_name, entity_1, entity_2) = match position {
             NotePosition::Left | NotePosition::Top => (
                 note_layout_id.as_str(),
-                target,
+                target_layout_id,
                 format!("GMN{note_start}"),
                 relationship_endpoint_name(diagram, target).into_owned(),
                 format!("ent{:04}", note_start + 1),
@@ -12920,7 +12938,7 @@ fn render_non_opale_attached_note_links(
                 ),
             ),
             NotePosition::Right | NotePosition::Bottom => (
-                target,
+                target_layout_id,
                 note_layout_id.as_str(),
                 relationship_endpoint_name(diagram, target).into_owned(),
                 format!("GMN{note_start}"),
@@ -15833,9 +15851,15 @@ fn render_svek_note_emission(
                 return;
             };
             let note_layout_id = attached_note_layout_id(*note_idx);
+            let target_layout = relationship_layout_id(diagram, target);
+            let target_layout_id = target_layout.as_ref();
             let (edge_from, edge_to) = match position {
-                NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
-                NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
+                NotePosition::Left | NotePosition::Top => {
+                    (note_layout_id.as_str(), target_layout_id)
+                }
+                NotePosition::Right | NotePosition::Bottom => {
+                    (target_layout_id, note_layout_id.as_str())
+                }
             };
             let Some(edge) = edge_paths
                 .iter()
@@ -20582,6 +20606,49 @@ mod tests {
         let svg = render(&diagram, &Theme::default());
         assert!(svg.contains(&format!(r#"data-qualified-name="{attached_name}""#)));
         assert!(svg.contains(r#"data-qualified-name="FreshOwner4211.FreshMemo4231""#));
+    }
+
+    #[test]
+    fn attached_notes_route_package_targets_through_svek_layout_ids() {
+        for position in ["left", "right", "top", "bottom"] {
+            let input = format!(
+                "@startuml\n\
+                 stack \"Empty Shelf {position}\" as EmptyShelf {{\n}}\n\
+                 note {position} of EmptyShelf : empty package note\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+                panic!("expected class diagram");
+            };
+            let svg = render(&diagram, &Theme::default());
+
+            assert!(svg.contains("Empty Shelf"), "{position}: {svg}");
+            assert!(svg.contains("empty package note"), "{position}: {svg}");
+            assert!(
+                svg.contains("data-qualified-name=\"GMN"),
+                "{position}: {svg}"
+            );
+        }
+
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     stack \"Cluster Shelf\" as ClusterShelf {\n\
+                       class Payload\n\
+                     }\n\
+                     class External\n\
+                     note top of ClusterShelf : cluster package note\n\
+                     ClusterShelf --> External\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains("<!--cluster ClusterShelf-->"), "{svg}");
+        assert!(svg.contains("cluster package note"), "{svg}");
+        assert!(svg.contains("data-qualified-name=\"GMN"), "{svg}");
     }
 
     #[test]
