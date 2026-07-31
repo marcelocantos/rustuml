@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-command-factory-note-on-link",
+  "status": "accounted_before_code",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "5d494292c14b853a75778aa9f3369c4d69ee6ba4",
+  "triggering_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "symbols": [
+        "CommandFactoryNoteOnLink.getRegexConcatSingleLine",
+        "CommandFactoryNoteOnLink.getRegexConcatMultiLine",
+        "CommandFactoryNoteOnLink.createMultiLine",
+        "CommandFactoryNoteOnLink.createSingleLine",
+        "CommandFactoryNoteOnLink.executeInternal"
+      ],
+      "lines": "75-173",
+      "role": "Defines the case-insensitive single- and multiline grammar: optional right/left/top/bottom, on|of link, optional ColorParser.simpleColor(BACK), mandatory colon for inline text, and ^end[%s]?note$ for multiline termination. It resolves the last eligible link, defaults position to BOTTOM, reports No link defined when absent, and attaches one CucaNote to that link."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+      "symbols": [
+        "CommandMultilines2.isValid",
+        "CommandMultilines2.execute"
+      ],
+      "lines": "48-127",
+      "role": "Keeps a recognized opener partial until the registered end regex matches the final trimmed line; unterminated multiline commands are not executed as complete commands."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "symbols": [
+        "Pattern2.QUOTED_REPLACEMENTS",
+        "Pattern2.compileInternal"
+      ],
+      "lines": "49-60,108-135",
+      "role": "Expands %s to Java whitespace plus non-breaking space and compiles command and terminator regexes case-insensitively."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "symbols": [
+        "ColorParser.COLOR_REGEXP",
+        "ColorParser.COLORS_REGEXP",
+        "ColorParser.simpleColor",
+        "ColorParser.getColor"
+      ],
+      "lines": "41-80",
+      "role": "Owns the optional background-color token and resolves it through the diagram HColorSet before CucaNote construction."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": [
+        "Link.note",
+        "Link.Link",
+        "Link.getNote",
+        "Link.addNote"
+      ],
+      "lines": "65-82,123-143,328-339",
+      "role": "Allocates the link UID once in the Link constructor and stores exactly one CucaNote. addNote is assignment, so a later command on the same last link replaces the earlier note without changing the link UID or source location."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/CucaNote.java",
+      "symbols": [
+        "CucaNote.build",
+        "CucaNote.getDisplay",
+        "CucaNote.getColors",
+        "CucaNote.getPosition"
+      ],
+      "lines": "42-78",
+      "role": "Carries only display, position, colors, and strategy; it is link-owned data, not a quark-backed Entity with an independent UID or source record."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.getLastLink",
+        "CucaDiagram.getUniqueSequence"
+      ],
+      "lines": "732-740,808-817",
+      "role": "Selects the most recent link whose endpoints are not NOTE leaves. Note-on-link attachment itself consumes no unique-sequence value."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": [
+        "SvekEdge.SvekEdge",
+        "SvekEdge.appendLine",
+        "SvekEdge.solve",
+        "SvekEdge.drawU"
+      ],
+      "lines": "279-320,423-438,734-740,937-947",
+      "role": "Builds the ordinary center label, builds EntityImageNoteLink from Link.getNote, and merges the two blocks left/right or top/bottom before Graphviz receives one center-label table. The solved label block and note are painted inside the original link group."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "symbols": [
+        "EntityImageNoteLink.EntityImageNoteLink",
+        "EntityImageNoteLink.calculateDimensionSlow",
+        "EntityImageNoteLink.drawU"
+      ],
+      "lines": "57-89",
+      "role": "Uses the Rose NOTE component for the link-owned folded note and contributes its preferred dimensions to the compound center label without becoming a SVEK node."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": [
+        "DescriptionDiagramFactory.initCommandsList"
+      ],
+      "lines": "85-127",
+      "role": "Registers both CommandFactoryNoteOnLink forms for the shared DESCRIPTION factory used by Component and Deployment diagrams."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "parse_deployment",
+        "NoteAccum"
+      ],
+      "lines": "491-517,565-1011",
+      "role": "Consumes named and attached notes but has no note-on-link command branch. A Java-valid line falls through and parse_deployment returns success without retaining it."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": [
+        "DeploymentNote",
+        "DeploymentConnection"
+      ],
+      "lines": "31-72,126-154",
+      "role": "Models standalone or attached note entities and links separately, but DeploymentConnection has no link-owned note value."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "deployment_note_dim",
+        "render_floating_deployment_note",
+        "render_no_oracle",
+        "deployment_edge_paint_bounds",
+        "render_no_oracle_edges",
+        "build_deployment_no_oracle_uid_model"
+      ],
+      "lines": "3133-3183,3480-3538,3737-3780,4398-4443,5795-5864,6309-6403,6405-6581",
+      "role": "Already measures and paints Deployment note chrome and solves ordinary edge labels, but sends only connection.label to Graphviz and emits no link-owned note within the link group. UID reconstruction treats only nodes, standalone/attached notes, and links as source events."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": [
+        "parse_component"
+      ],
+      "lines": "734-769",
+      "role": "Provides the existing Rust parser analogue for associating inline or multiline note text with a preceding Component connection, including body source handling. Its currently narrower grammar and vector association are evidence, not the Deployment ownership model."
+    },
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": [
+        "component_link_note_label_size",
+        "component_link_note_blocks",
+        "render_component_link_note"
+      ],
+      "lines": "1024-1107,2085-2123,3867-3981,7541-7595",
+      "role": "Provides the existing Rust compound-label dimension, block-order, and folded-note paint mechanics that correspond to SvekEdge's TextBlock merges."
+    }
+  ],
+  "claimed_invariant": "In a Deployment DESCRIPTION diagram, each ordinary semantic link owns zero or one note-on-link value. The case-insensitive command accepts inline and complete multiline forms with optional right/left/top/bottom, on|of link, and optional resolvable background color; default position is bottom. It attaches to the most recent link whose endpoints are not note entities, replaces any note already on that link, and errors terminally when no eligible prior link exists. The note adds no node, quark, UID, source event, owner, or separate SVG group. SvekEdge merges note and ordinary link-label blocks according to position, gives Graphviz one compound center-label size before layout, and paints both within the owning link group while preserving the link's endpoints, source line, UID, route, and group metadata.",
+  "causal_divergence": "Rust Deployment has no representation or parser ownership for CommandFactoryNoteOnLink. Its permissive line loop silently ignores the registered Java command, so valid note text, color, position, replacement behavior, and the command's no-prior-link error disappear. Because the renderer only measures DeploymentConnection.label, layout never reserves the Java compound center-label block. Modeling the note as an ordinary DeploymentNote would introduce a false SVEK node, quark order, entity UID, source line, owner, route, and SVG entity group; post-layout painting would also miss the label constraint that causes Java's topology.",
+  "planned_model_change": "Add a compact DeploymentLinkNote value directly to DeploymentConnection. Parse the complete Java command grammar before attached-note and element dispatch, validate its optional color through the existing ColorParser-compatible resolver, select the latest connection that does not touch a named note identity, replace that connection's prior note, and buffer multiline bodies until Java's endnote/end note terminator. Return ParseError for an owned command with no eligible link, invalid color, empty multiline body, or missing terminator. Do not increment next_quark_order or alter the owning connection's source_line. In the Deployment renderer, port the ComponentRoseNote preferred-size padding and SvekEdge merge equations: combine the note and optional ordinary label into one EdgeLabelSize before layout, recover both child origins from the solved box, emit child blocks in Java merge order inside the link group, include the compound painted box in bounds, and include link-note colors in gradient resources. Keep Deployment-specific note chrome, edge routing, endpoint labels, source metadata, and UID reconstruction.",
+  "perturbation_axes": [
+    "inline versus multiline command and endnote versus end note terminator",
+    "on link versus of link and mixed command case",
+    "omitted position versus left, right, top, and bottom",
+    "link without ordinary label versus link with one- and multi-line ordinary labels",
+    "omitted color versus named and hexadecimal background colors",
+    "first note versus repeated replacement on the same link",
+    "ordinary prior link versus prior link touching a named note entity versus no prior link",
+    "root versus nested Deployment container ownership",
+    "top-to-bottom versus left-to-right layout and explicit left/right/up/down link direction",
+    "renamed endpoints, labels, and note text with changed lengths",
+    "single edge versus chain, fanout, and parallel-edge topology",
+    "note followed by later node and link declarations to expose UID/source drift"
+  ],
+  "scope_boundary": "This mechanism owns Deployment CommandFactoryNoteOnLink parsing, link-local AST storage, compound center-label constraints, note paint inside the edge group, and preservation of the owning link's UID/source semantics. It does not correct Component's narrower parser grammar, standalone or attached Deployment note semantics, edge routing algorithms, general color syntax outside this command, oracle-assisted SVG replay, comparator behavior, baselines, or held-out checker evidence.",
+  "acceptance": [
+    "Deployment parser tests cover inline and multiline forms, on|of, default and explicit positions, color, nested containers, ordinary labels, repeated replacement, renamed endpoints, changed topology, and terminal no-prior-link behavior.",
+    "The parser stores no DeploymentNote or quark for a link note, leaves connection source_line unchanged, and replaces rather than accumulates repeated notes.",
+    "Renderer tests prove both note-only and ordinary-label-plus-note center blocks constrain layout and paint the folded note/text inside the owning link group for representative horizontal and vertical merges.",
+    "Renderer tests prove a link note adds no entity group or UID event and leaves later entity/link IDs and data-source-line metadata unchanged.",
+    "Focused parser and renderer tests, full affected-crate tests, clippy with warnings denied, and cargo build --release -p rustuml pass.",
+    "An independent checker, not the maker, later generates held-out Java perturbations and authors review.json at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "special-casing the triggering review fixture, endpoint names, labels, note text, branch count, or expected coordinates",
+    "representing a link note as a standalone DeploymentNote, layout node, quark, generated entity, hidden helper edge, or independent SVG group",
+    "painting the note after layout without including its compound dimensions in the Graphviz center-label input",
+    "appending repeated notes instead of following Link.addNote replacement semantics",
+    "post-hoc SVG string insertion or coordinate surgery",
+    "reading golden SVGs or oracle output from shipping crates",
+    "changing comparator slack, eligibility, baselines, park lists, or guard allow-lists"
+  ],
+  "declared_residue": [
+    "Exact Java syntax-error SVG artwork, exit code, error wording, and selected error line remain outside parser acceptance and AST non-mutation.",
+    "The full ColorParser PART2 style-color language is not required by this mechanism's simple background-color acceptance unless source evidence or the independent checker establishes a Java-valid Deployment case beyond the shared resolvable simple/gradient tokens.",
+    "Component note-on-link grammar and replacement behavior remain a separate existing-family mechanism even when its compound geometry informs this port.",
+    "Handwritten note contours and theme-specific NOTE style overrides are not acceptance criteria unless the implementation changes those existing Deployment rendering paths.",
+    "Independent perturbation artifacts and review.json are intentionally absent from the maker commit."
+  ]
+}
