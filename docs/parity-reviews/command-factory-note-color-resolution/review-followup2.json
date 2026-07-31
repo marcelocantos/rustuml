@@ -12,6 +12,7 @@
   "revisions": {
     "rust_worktree": "/private/tmp/rustuml-note-color-followup2",
     "rust_revision": "6256529d1b53cbfb3ade2351ee15cfedaf21c531",
+    "account_commit": "499e0c0225138a5b8ef5a901dc220bd60475f834",
     "implementation_commit": "6256529d1b53cbfb3ade2351ee15cfedaf21c531",
     "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
     "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"

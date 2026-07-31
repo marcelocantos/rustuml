@@ -14,7 +14,10 @@
   },
   "revisions": {
     "rust_revision_checked": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
-    "account_revision_checked": "6ffe53bbd0b1fcae5eade40d41577af48f7555da"
+    "account_revision_checked": "6ffe53bbd0b1fcae5eade40d41577af48f7555da",
+    "account_commit": "6ffe53bbd0b1fcae5eade40d41577af48f7555da",
+    "implementation_commit": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
   },
   "artifacts": {
     "helper": {
@@ -95,11 +98,6 @@
     "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
     "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
     "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml"
-  ],
-  "fresh_inputs": [
-    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_cloud_database_before_entity_lr.puml",
-    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_node_entity_inline_upper_database_tb.puml",
-    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.puml"
   ],
   "fresh_perturbations": [
     {
