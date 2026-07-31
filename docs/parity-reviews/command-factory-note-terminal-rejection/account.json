@@ -1,16 +1,29 @@
 {
   "schema_version": 1,
   "mechanism": "command-factory-note-terminal-rejection",
-  "status": "accounted_before_code",
+  "status": "corrected_before_follow_up_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "379887352ec585e0e1d05dcaa48b88496f9b095f",
+  "rust_revision": "5211a6604e619c523ad13eb703237815804579de",
   "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
+  "rejecting_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review.json",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
       "symbols": ["CommandFactoryNote.singleLine", "CommandFactoryNote.multiLine", "CommandFactoryNote.createSingleLine", "CommandFactoryNote.createMultiLine"],
       "lines": "76-139",
-      "role": "Defines the complete inline and multiline named-note command forms; malformed codes or decoration order do not produce a note command result."
+      "role": "Defines the complete inline and multiline named-note command forms. The inline form uses `%g` for both delimiters and excludes every `%g` character from DISPLAY; malformed codes or decoration order do not produce a note command result."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "symbols": ["Pattern2.QUOTED_REPLACEMENTS", "Pattern2.transform"],
+      "lines": "51-60,112-125",
+      "role": "Expands `%g` to the four-character double-quote alphabet: ASCII quote, Unicode left double quote, Unicode right double quote, and Jaws.BLOCK_E1_INVISIBLE_QUOTE. The grammar does not require the two delimiters to be the same member."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/jaws/Jaws.java",
+      "symbols": ["Jaws.BLOCK_E1_INVISIBLE_QUOTE"],
+      "lines": "54-57",
+      "role": "Defines the fourth `%g` delimiter as private-use code point U+E121, used by Jaws preprocessing for invisible quotes."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
@@ -45,23 +58,24 @@
       "role": "Likewise falls through, allowing later relations to create synthetic Deployment nodes and consume UIDs."
     }
   ],
-  "claimed_invariant": "Once a source line has the unambiguous inline `note <quoted display> as` or multiline `note as` prefix owned by CommandFactoryNote, failure of its CODE, tags, stereotype or color suffix rejects the diagram candidate. Component and Deployment do not reinterpret that line or permit later relations to synthesize the intended note code. Valid attached notes, note-on-link commands and plain floating notes remain owned by their distinct factories.",
-  "causal_divergence": "Rust represented command non-match and command validation failure with the same None. Family parsers therefore treated malformed named-note lines as ignorable text and continued mutating the AST, violating Java's all-lines-consumed factory contract and changing entity/link UID order.",
-  "planned_model_change": "Add shared prefix predicates for the two CommandFactoryNote forms. Each family first accepts a valid shared parse; if the corresponding unambiguous prefix matched but parsing failed, return ParseError at that source line before processing later input. Keep the predicates narrow enough not to claim attached notes, note-on-link or plain note syntax. Add family-level error tests for invalid code punctuation, decoration order, unknown color and composite color, plus valid siblings.",
+  "claimed_invariant": "Once a source line has the unambiguous inline `note <quoted display> as` or multiline `note as` prefix owned by CommandFactoryNote, failure of its CODE, tags, stereotype or color suffix rejects the diagram candidate. For the inline form, each delimiter is independently any member of Java Pattern2 `%g`: ASCII double quote, Unicode left or right double quote, or U+E121. Every `%g` character terminates or delimits DISPLAY. Component and Deployment do not reinterpret that line or permit later relations to synthesize the intended note code. Attached-note commands remain owned by their distinct factories.",
+  "causal_divergence": "Rust represented command non-match and command validation failure with the same None. The first implementation added terminal ownership predicates but modeled the inline grammar with ASCII double quotes only because it omitted Pattern2 `%g` from the causal chain. Java-valid curly-quoted commands therefore still fell through and later relations synthesized ordinary endpoints. The sampled malformed ASCII commands now terminate correctly.",
+  "planned_model_change": "Define one shared `%g` delimiter model from Pattern2 and use it in both inline parsing and the inline ownership predicate. Accept any `%g` member independently at either boundary, exclude all `%g` members from DISPLAY, preserve the existing shared suffix validation, and keep the prefix narrow enough not to claim attached-note or note-on-link syntax. Add Component and Deployment family regressions for curly, mixed, and Jaws delimiters followed by relations to the note code. Deployment note-on-link consumption is a separate CommandFactoryNoteOnLink mechanism and is not part of this correction.",
   "perturbation_axes": [
     "inline versus multiline command",
     "Component versus Deployment family",
+    "ASCII versus curly versus mixed versus Jaws `%g` delimiters",
     "invalid code versus tag/stereotype/color order versus unresolved color",
     "root versus nested package context",
     "invalid command before versus after ordinary declarations",
     "later relation to the would-be code versus no later relation",
-    "valid attached, note-on-link and plain-note controls"
+    "valid attached-note controls and non-owned note-on-link prefixes"
   ],
   "acceptance": [
     "The preserved invalid punctuation, reordered-decoration, single-character-color and composite-color sources return parser errors before later endpoint creation.",
     "No invalid source creates a note, component, interface, deployment node, relation or UID event.",
     "Valid inline and multiline named notes in both families still parse with their complete decorations.",
-    "Attached notes, note-on-link and plain floating note commands remain unaffected.",
+    "Attached notes remain unaffected, while note-on-link lines remain outside this factory's ownership predicate.",
     "An independent checker attacks command prefix boundaries, family, nesting, error cause and later-line mutation."
   ],
   "forbidden_approaches": [
@@ -71,6 +85,8 @@
     "treating every line beginning with `note` as CommandFactoryNote-owned"
   ],
   "declared_residue": [
+    "Deployment's missing valid note-on-link behavior belongs to CommandFactoryNoteOnLink and requires a separate causal account, implementation and checker record.",
+    "Plain floating `note : ...` is not valid Java Description-diagram syntax and is not an acceptance control for this mechanism.",
     "Other malformed note factories outside the two named-note prefixes require their own command-ownership analysis.",
     "Top-level multi-factory subtype selection remains a separate consumability mechanism.",
     "Java error SVG artwork and diagnostic wording remain separate from parser acceptance and AST non-mutation."
