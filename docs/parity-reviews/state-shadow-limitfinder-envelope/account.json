@@ -92,6 +92,21 @@
   ],
   "experimental_result": {
     "implementation_revision": "pending implementation commit",
-    "review_status": "Independent adversarial review and Java-generated held-outs remain pending. This account is a pre-implementation causal claim and does not self-attest acceptance."
+    "accepted_result": "state_skinparam_shadowing becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,159/11,251 to 11,160/11,251, with state moving from 893/901 to 894/901 and every other family unchanged.",
+    "model_evidence": "The implementation resolves shadow per emitted node image and applies the Java primitive rule instead of a canvas constant. A focused fresh matrix varies legacy numeric state shadow, CSS state shadow, CSS start-circle shadow, renamed labels, branching topology, and a shadowed choice polygon whose LimitFinder extension must remain zero.",
+    "commands": [
+      "cargo test -p rustuml-render --lib flat_painted_envelope_models_primitive_specific_shadow_bounds",
+      "cargo build --release -p rustuml-oracle --example diff_one",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/state/state_skinparam_shadowing.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java oracle are unavailable. This record does not self-attest acceptance."
   }
 }

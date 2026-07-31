@@ -3621,21 +3621,48 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
     })
 }
 
-fn flat_painted_envelope_has_no_shadow_extensions(
+fn flat_state_node_shadow_extension(
     diagram: &StateDiagram,
     skin: &StateSkin,
-) -> bool {
-    // Java SvekResult measures the resolved painters, regardless of whether
-    // their style came from defaults, a theme, CSS, or legacy skinparams.
-    // The flat collector owns every current primitive except shadow filters,
-    // so activation follows that unresolved painter capability rather than a
-    // source-key allow-list.
-    autonomous_state_style(diagram, skin, None).shadow <= 0.0
-        && diagram
-            .states
-            .iter()
-            .all(|state| autonomous_state_style(diagram, skin, Some(state)).shadow <= 0.0)
-        && !state_pseudostates_have_shadow(diagram)
+    id: &str,
+    state: Option<&State>,
+    shape: StateLayoutShape,
+) -> f64 {
+    // Java `LimitFinder.drawRectangle` and `drawEllipse` extend the positive
+    // axes by twice the primitive's own deltaShadow. `drawUPolygon` ignores
+    // its shadow field, so a styled choice diamond deliberately contributes
+    // no shadow extension to SvekResult's painted envelope.
+    let shadow = if shape == StateLayoutShape::Diamond {
+        0.0
+    } else if id == "__start__" || id.starts_with("__start__:") {
+        state_pseudostate_style(diagram, StatePseudoImage::Start, None).shadow
+    } else if id == "__end__" || id.starts_with("__end__:") {
+        state_pseudostate_style(diagram, StatePseudoImage::End, None).shadow
+    } else if is_history_marker(id) {
+        state_pseudostate_style(diagram, StatePseudoImage::History, None).shadow
+    } else {
+        match state.map(|state| state.kind) {
+            Some(StateKind::Initial) => {
+                state_pseudostate_style(diagram, StatePseudoImage::Start, None).shadow
+            }
+            Some(StateKind::Final) => {
+                state_pseudostate_style(diagram, StatePseudoImage::End, None).shadow
+            }
+            Some(StateKind::History | StateKind::DeepHistory) => {
+                state_pseudostate_style(diagram, StatePseudoImage::History, None).shadow
+            }
+            Some(StateKind::Fork | StateKind::Join) => {
+                state_pseudostate_style(
+                    diagram,
+                    StatePseudoImage::Bar,
+                    state.and_then(|state| state.stereotype.as_deref()),
+                )
+                .shadow
+            }
+            _ => autonomous_state_style(diagram, skin, state).shadow,
+        }
+    };
+    shadow * 2.0
 }
 
 fn supports_autonomous_state_image(state: &State) -> bool {
@@ -6444,8 +6471,7 @@ pub fn render_with_oracle(
 
     let has_complete_flat_painter_model = diagram.meta.title.is_none()
         && diagram.notes.is_empty()
-        && diagram.states.iter().all(|state| !state.composite)
-        && flat_painted_envelope_has_no_shadow_extensions(diagram, &skin);
+        && diagram.states.iter().all(|state| !state.composite);
     let flat_painted_bounds = layout_result.as_ref().and_then(|result| {
         if !has_complete_flat_painter_model {
             return None;
@@ -6470,12 +6496,14 @@ pub fn render_with_oracle(
 
             let state = find_state(id);
             let (width, height, shape) = state_node_size(id, state);
+            let shadow_extension =
+                flat_state_node_shadow_extension(diagram, &skin, id, state, shape);
             match shape {
                 StateLayoutShape::Circle | StateLayoutShape::Port => {
                     bounds.include(x, y);
                     bounds.include(
-                        x + width - LIMIT_FINDER_PIXEL_ADJUST,
-                        y + height - LIMIT_FINDER_PIXEL_ADJUST,
+                        x + width - LIMIT_FINDER_PIXEL_ADJUST + shadow_extension,
+                        y + height - LIMIT_FINDER_PIXEL_ADJUST + shadow_extension,
                     );
                 }
                 StateLayoutShape::Diamond => {
@@ -6496,7 +6524,11 @@ pub fn render_with_oracle(
                         } else {
                             LIMIT_FINDER_PIXEL_ADJUST
                         };
-                    bounds.include(max_x, y + height - LIMIT_FINDER_PIXEL_ADJUST);
+                    let rectangle_max_x = x + width - LIMIT_FINDER_PIXEL_ADJUST + shadow_extension;
+                    bounds.include(
+                        max_x.max(rectangle_max_x),
+                        y + height - LIMIT_FINDER_PIXEL_ADJUST + shadow_extension,
+                    );
                 }
             }
         }
@@ -12720,7 +12752,7 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn flat_painted_envelope_activation_follows_resolved_shadow_capability() {
+    fn flat_painted_envelope_models_primitive_specific_shadow_bounds() {
         let themed = rustuml_parser::parse::parse(
             "@startuml\n\
              !theme aws-orange\n\
@@ -12735,23 +12767,61 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let themed_skin = StateSkin::from_diagram(&themed);
-        assert!(flat_painted_envelope_has_no_shadow_extensions(
-            &themed,
-            &themed_skin
-        ));
+        let alpha = themed
+            .states
+            .iter()
+            .find(|state| state.id == "Alpha")
+            .unwrap();
+        assert_eq!(
+            flat_state_node_shadow_extension(
+                &themed,
+                &themed_skin,
+                "Alpha",
+                Some(alpha),
+                StateLayoutShape::Box
+            ),
+            0.0
+        );
 
-        for shadow in [
-            "skinparam StateShadowing 4",
-            "<style>\nstateDiagram { state { Shadowing 2 } }\n</style>",
-            "<style>\nstateDiagram { circle { start { Shadowing 3 } } }\n</style>",
+        for (shadow, id, state_id, shape, expected_extension) in [
+            (
+                "skinparam StateShadowing 4",
+                "Alpha",
+                Some("Alpha"),
+                StateLayoutShape::Box,
+                8.0,
+            ),
+            (
+                "<style>\nstateDiagram { state { Shadowing 2 } }\n</style>",
+                "Beta",
+                Some("Beta"),
+                StateLayoutShape::Box,
+                4.0,
+            ),
+            (
+                "<style>\nstateDiagram { circle { start { Shadowing 3 } } }\n</style>",
+                "__start__",
+                None,
+                StateLayoutShape::Circle,
+                6.0,
+            ),
+            (
+                "<style>\nactivityDiagram { activity { diamond { Shadowing 5 } } }\n</style>",
+                "Decision",
+                Some("Decision"),
+                StateLayoutShape::Diamond,
+                0.0,
+            ),
         ] {
             let parsed = rustuml_parser::parse::parse(&format!(
                 "@startuml\n\
                  {shadow}\n\
                  state \"Renamed Alpha\" as Alpha\n\
                  state \"Renamed Beta\" as Beta\n\
+                 state Decision <<choice>>\n\
                  [*] --> Alpha\n\
-                 Alpha --> Beta : held out label\n\
+                 Alpha --> Decision : held out label\n\
+                 Decision --> Beta\n\
                  @enduml"
             ))
             .unwrap();
@@ -12759,9 +12829,12 @@ CobaltDecision --> [*]
                 panic!("expected state diagram");
             };
             let skin = StateSkin::from_diagram(&diagram);
-            assert!(
-                !flat_painted_envelope_has_no_shadow_extensions(&diagram, &skin),
-                "{shadow} must remain on the conservative fallback"
+            let state = state_id
+                .and_then(|state_id| diagram.states.iter().find(|state| state.id == state_id));
+            assert_eq!(
+                flat_state_node_shadow_extension(&diagram, &skin, id, state, shape),
+                expected_extension,
+                "{shadow}"
             );
         }
     }
