@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-document-background-token",
+  "created": "2026-07-31",
+  "status": "accounted_preimplementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "d3f55c68b2fc145e982f826a70c2d460d3ad8c31",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "symbols": [
+        "FromSkinparamToStyle static conversion table"
+      ],
+      "lines": "180",
+      "role": "Maps the legacy BackgroundColor skinparam to root.document BackGroundColor so theme skinparams and style declarations participate in one ordered style cascade."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/TitledDiagram.java",
+      "symbols": [
+        "TitledDiagram#calculateBackColor"
+      ],
+      "lines": "269-279",
+      "role": "Resolves root.document plus the diagram type and preserves a missing background as HColors.transparent rather than substituting white."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/UgDiagram.java",
+      "symbols": [
+        "UgDiagram#getExporter"
+      ],
+      "lines": "120-144",
+      "role": "Carries calculateBackColor through TextBlockUtils and the styled exporter without converting the transparent paint token into an opaque color."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java",
+      "symbols": [
+        "TextBlockExporter12026.Builder#styled"
+      ],
+      "lines": "460-472",
+      "role": "Passes the diagram background and document margin to the SVG exporter as distinct semantic values."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/style.rs",
+      "symbols": [
+        "convert_skinparam",
+        "legacy_mappings"
+      ],
+      "lines": "923-979, 1273",
+      "role": "Already maps BackgroundColor to document.backgroundColor and preserves the theme's transparent token in the ordered StyleProgram."
+    },
+    {
+      "path": "crates/rustuml-render/src/style_cascade.rs",
+      "symbols": [
+        "StyleCascade#resolve"
+      ],
+      "lines": "171-251",
+      "role": "Already selects the final matching root.document declaration by priority, epoch, and source order."
+    },
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "StateSkin::from_diagram",
+        "render_state"
+      ],
+      "lines": "2134-2236, 5990-6010, 6974-7015",
+      "role": "Resolves the selected document background through the generic named-color function before testing for transparency, changing transparent to its unknown-color fallback #FFFFFF and causing an opaque root plus an extra painted canvas pixel."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_black_knight_state.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_state.puml"
+  ],
+  "claimed_invariant": "The final root.document background is an optional paint, not merely an RGB color string. BackgroundColor declarations from theme skinparams, theme styles, user skinparams, and user styles share one ordered cascade. A final transparent token means no SVG root background and contributes no painted frontier; a final opaque color paints the root and, when non-white, the full-canvas rectangle. Diagram topology, labels, theme palette, declaration order, and explicit user overrides can change which declaration wins, but color normalization must not erase transparency before that semantic decision.",
+  "causal_divergence": "The parser and StyleCascade correctly retain and select each affected theme's final `skinparam BackgroundColor transparent`. StateSkin::from_diagram then maps document_style.backgroundColor through sequence::resolve_color. That helper deliberately treats unknown named colors as #FFFFFF, so the semantic token transparent becomes opaque white before render_state computes bg_is_transparent. Rust therefore emits `background:#FFFFFF;`; its painted root frontier also raises the exported height by exactly one SVG unit in the observed themed state cases. Java retains HColors.transparent through TitledDiagram.calculateBackColor and TextBlockExporter12026, so it emits neither the root background nor the extra painted extent. The repeated 1.0417px physical-height delta is a consequence of token erasure and SVG unit conversion, not a height constant to tune.",
+  "planned_model_change": "Keep StateSkin.document_background as the raw winning style token, matching the class and use-case renderers' semantic handling. Test transparent before calling resolve_color; resolve only opaque values. Preserve the existing StyleCascade order, document margin resolution, explicit non-white background rectangle, and default-white behavior when no declaration exists. Add focused tests with renamed states and multiple declaration orders, including transparent theme-style/skinparam values and an opaque user override. Do not special-case theme names or subtract one pixel from themed canvases.",
+  "perturbation_axes": [
+    "transparent versus named, short-hex, and full-hex opaque backgrounds",
+    "theme skinparam versus theme style versus user skinparam versus user style ownership",
+    "user override before and after the theme directive",
+    "renamed states and transition labels",
+    "linear versus branching topology",
+    "top-to-bottom versus left-to-right direction"
+  ],
+  "scope_boundary": "This mechanism owns root.document background token preservation in the autonomous state renderer and the resulting SVG root/canvas paint. It does not change state entity fills, theme preprocessing, style priority, document margins, Graphviz geometry, SVG coordinate formatting, other diagram families, or comparator tolerances.",
+  "acceptance": [
+    "The affected valid themed state inputs pass the frozen structural comparator through render_svg without oracle input.",
+    "Focused tests prove that transparent remains no paint across declaration orders while opaque overrides still paint the root and full-canvas rectangle.",
+    "Fresh valid held-outs spanning at least two independent perturbation axes match Java or remain preserved as explicit checker evidence when Java generation is unavailable.",
+    "The preprocessing-family and full no-oracle ratchets do not regress any existing match.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "subtracting 1 or 1.0417 from themed state heights",
+    "conditionals on theme names or fixture labels",
+    "changing generic color fallback behavior for unrelated callers",
+    "post-hoc SVG string surgery",
+    "changing comparator tolerances or eligibility"
+  ]
+}
