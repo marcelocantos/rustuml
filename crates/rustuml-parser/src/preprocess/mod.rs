@@ -195,31 +195,56 @@ fn post_tim_seed_line<'a>(
         return Some(Cow::Borrowed(line));
     }
 
-    let trimmed = line.trim();
     // Java provenance: TContext.buildCodeIterator runs long-, short-, then
     // inner-comment iterators before UmlSource.seed() hashes the result.
-    if *in_block_comment {
-        if trimmed.contains("'/") {
-            *in_block_comment = false;
-        }
-        return None;
-    }
-    if trimmed.starts_with("/'") {
-        if !trimmed.contains("'/") || trimmed.ends_with("/'") {
-            *in_block_comment = true;
+    tim_comment_line(line, in_block_comment)
+}
+
+static SPECIAL_INNER_COMMENT: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"/'''[-A-Za-z0-9_]*'''/").expect("valid special inner-comment regex")
+});
+
+/// Apply PlantUML's TIM comment iterators to one source line.
+///
+/// Java provenance: `TLineType#getFromLineInternal`,
+/// `CodeIteratorLongComment#peek`, `CodeIteratorShortComment#peek`, and
+/// `StringLocated#removeInnerComment`. Ordinary apostrophes after code are
+/// deliberately retained for the eventual diagram command to interpret.
+fn tim_comment_line<'a>(line: &'a str, in_long_comment: &mut bool) -> Option<Cow<'a, str>> {
+    let trimmed = line.trim();
+    if *in_long_comment {
+        if trimmed.ends_with("'/") {
+            *in_long_comment = false;
         }
         return None;
     }
     if trimmed.starts_with('\'') {
         return None;
     }
-
-    let uncommented = strip_inline_comment(line);
-    if uncommented.len() == line.len() {
-        Some(Cow::Borrowed(line))
-    } else {
-        Some(Cow::Owned(uncommented))
+    if trimmed.starts_with("/'") {
+        let Some(close) = line.find("'/") else {
+            *in_long_comment = true;
+            return None;
+        };
+        let suffix = &line[close + 2..];
+        if suffix.trim().is_empty() {
+            return None;
+        }
+        return Some(remove_special_inner_comments(suffix));
     }
+    if trimmed.ends_with("'/")
+        && let Some(open) = line.rfind("/'")
+    {
+        return Some(remove_special_inner_comments(&line[..open]));
+    }
+    if line.contains("/'''") && line.contains("'''/") {
+        return Some(remove_special_inner_comments(line));
+    }
+    Some(Cow::Borrowed(line))
+}
+
+fn remove_special_inner_comments(line: &str) -> Cow<'_, str> {
+    SPECIAL_INNER_COMMENT.replace_all(line, "")
 }
 
 /// Mirror the source reader that runs before Java's TIM expansion.
@@ -889,39 +914,16 @@ impl PreprocessContext {
             return;
         }
 
-        // Handle block comments. We emit empty placeholder lines for each
-        // comment line so downstream parsers preserve original source line
-        // numbers (PlantUML's `data-source-line` attribute matches the
-        // user's editor view).
-        if self.in_block_comment {
-            if trimmed.contains("'/") {
-                self.in_block_comment = false;
-            }
-            self.push_directive_placeholder(output);
-            return;
-        }
-        if trimmed.starts_with("/'") {
-            if !trimmed.contains("'/") || trimmed.ends_with("/'") {
-                self.in_block_comment = true;
-            }
-            self.push_directive_placeholder(output);
-            return;
-        }
-
-        // Skip single-line comments — but NOT inside EBNF blocks where
-        // single quotes delimit terminals. Emit a placeholder so source
-        // line numbers stay aligned downstream.
-        if !self.in_ebnf_block && trimmed.starts_with('\'') {
-            self.push_directive_placeholder(output);
-            return;
-        }
-
-        // Strip inline comments (single-quote comment syntax) — but NOT
-        // inside EBNF blocks.
+        // TIM removes only its classified comment forms. Preserve a blank
+        // placeholder when a whole line is consumed so downstream source-line
+        // metadata remains tied to the user's editor view.
         let line_no_comment = if self.in_ebnf_block {
-            line.to_string()
+            Cow::Borrowed(line)
+        } else if let Some(line) = tim_comment_line(line, &mut self.in_block_comment) {
+            line
         } else {
-            strip_inline_comment(line)
+            self.push_directive_placeholder(output);
+            return;
         };
         let trimmed = line_no_comment.trim();
 
@@ -936,14 +938,14 @@ impl PreprocessContext {
                     self.top_level_start_source_line = Some(self.current_source_line);
                     self.in_ebnf_block = trimmed.starts_with("@startebnf");
                     if self.source_identity_mode {
-                        output.push(line_no_comment);
+                        output.push(line_no_comment.into_owned());
                     }
                 }
                 return;
             }
             if trimmed.starts_with("@end") {
                 if self.source_identity_mode && self.in_diagram_block {
-                    output.push(line_no_comment);
+                    output.push(line_no_comment.into_owned());
                 }
                 self.in_diagram_block = false;
                 self.in_ebnf_block = false;
@@ -994,7 +996,7 @@ impl PreprocessContext {
             if trimmed == "!enddefinelong" {
                 self.collecting_definelong = None;
             } else if let Some(name) = self.collecting_definelong.clone() {
-                let buffered = self.current_buffered_line(line);
+                let buffered = self.current_buffered_line(&line_no_comment);
                 if let Some(dl) = self.definelong_macros.get_mut(&name) {
                     dl.body.push(buffered);
                 }
@@ -1012,7 +1014,7 @@ impl PreprocessContext {
                     });
                 }
             } else if let Some(name) = self.collecting_sub.clone() {
-                let line = line.to_string();
+                let line = line_no_comment.to_string();
                 self.subs.entry(name).or_default().push(line.clone());
                 self.collecting_sub_lines.push(line);
             }
@@ -3593,28 +3595,6 @@ fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
     (0, 0)
 }
 
-fn strip_inline_comment(line: &str) -> String {
-    let mut in_quotes = false;
-    let chars: Vec<char> = line.chars().collect();
-    let bytes: Vec<usize> = line
-        .char_indices()
-        .map(|(i, _)| i)
-        .chain(std::iter::once(line.len()))
-        .collect();
-    for (idx, &c) in chars.iter().enumerate() {
-        let byte_pos = bytes[idx];
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if c == '\'' && !in_quotes {
-            let preceded_by_space = idx == 0 || chars[idx - 1].is_whitespace();
-            if preceded_by_space {
-                return line[..byte_pos].to_string();
-            }
-        }
-    }
-    line.to_string()
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -3764,10 +3744,32 @@ now-undefined
     }
 
     #[test]
-    fn inline_comment() {
+    fn ordinary_apostrophe_after_code_survives_tim() {
         let input = "@startuml\nAlice -> Bob : hello ' with comment\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello "]);
+        assert_eq!(lines, vec!["Alice -> Bob : hello ' with comment"]);
+    }
+
+    #[test]
+    fn inner_comment_forms_preserve_only_java_tim_content() {
+        let input = concat!(
+            "@startuml\n",
+            "/' whole-line '/\n",
+            "/' prefix '/ class PrefixKept\n",
+            "class SuffixKept /' suffix '/\n",
+            "field /'''hidden-field'''/ visible\n",
+            "field /'''not space'''/ visible\n",
+            "@enduml\n",
+        );
+        assert_eq!(
+            pp(input),
+            vec![
+                " class PrefixKept",
+                "class SuffixKept ",
+                "field  visible",
+                "field /'''not space'''/ visible",
+            ]
+        );
     }
 
     #[test]
@@ -4548,14 +4550,14 @@ NorthwindLedger --> SaffronArchive
             "/' long comment after theme\n",
             "ignored identity text\n",
             "'/\n",
-            "class \"O'Brien\" as FreshLedger ' trailing comment\n",
+            "class \"O'Brien\" as FreshLedger\n",
             "@enduml\n",
         );
         let uncommented = concat!(
             "@startuml\n",
             "!theme cerulean\n",
             "\n",
-            "class \"O'Brien\" as FreshLedger \n",
+            "class \"O'Brien\" as FreshLedger\n",
             "@enduml\n",
         );
 
@@ -4570,7 +4572,26 @@ NorthwindLedger --> SaffronArchive
         assert!(commented.uml_source.contains("\"O'Brien\""));
         assert!(!commented.uml_source.contains("comment before theme"));
         assert!(!commented.uml_source.contains("ignored identity text"));
-        assert!(!commented.uml_source.contains("trailing comment"));
+    }
+
+    #[test]
+    fn theme_seed_identity_uses_exact_inner_comment_stream() {
+        let input = concat!(
+            "@startuml\n",
+            "!theme cerulean\n",
+            "/' prefix '/ class PrefixKept\n",
+            "class SuffixKept /' suffix '/\n",
+            "field /'''hidden-field'''/ visible\n",
+            "skinparam classBorderColor #224466 ' ordinary apostrophe\n",
+            "@enduml\n",
+        );
+        let output = preprocess_full(input, None);
+
+        assert!(output.uml_source.contains(" class PrefixKept"));
+        assert!(output.uml_source.contains("class SuffixKept "));
+        assert!(output.uml_source.contains("field  visible"));
+        assert!(!output.uml_source.contains("hidden-field"));
+        assert!(output.uml_source.contains("' ordinary apostrophe"));
     }
 
     #[test]
