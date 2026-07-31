@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-generic-round-corner-propagation",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java:roundCorner root conversion",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:styleTitle and Fashion construction",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java:drawArtifact",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:drawQueue"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/style.rs:legacy roundcorner mapping",
+    "crates/rustuml-render/src/deployment.rs:deployment_stack_round_corner",
+    "crates/rustuml-render/src/deployment.rs:OracleRenderContext and emit_entity",
+    "crates/rustuml-render/src/deployment.rs:deployment symbol shape emitters"
+  ],
+  "invariant": "Java converts generic `skinparam roundcorner N` into a root RoundCorner style. Every EntityImageDescription resolves its symbol-specific title signature with that root inheritance, stores the diameter in Fashion, and passes the same value to the concrete USymbol painter. Consequently a DESCRIPTION stack cluster and sibling rounded rectangle-based leaves such as artifact share the generic diameter unless a more specific declaration overrides it. Scaling happens only after these base coordinates are painted.",
+  "causal_divergence": "Rust hardcodes the 2.5 radius in several deployment leaf painters and the fresh checker observes the same default diameter on the stack cluster. Although the parser preserves the generic root declaration and raw skinparam, the resolved diameter is not consistently carried through the deployment render context to every Fashion-equivalent symbol painter. The result is a mixed document where Java applies diameter 17 to both stack and artifact while Rust keeps diameter 5.",
+  "planned_change": "Resolve the effective final RoundCorner diameter from the concrete componentDiagram symbol-title or group signature with inherited root compatibility, then carry that diameter through the deployment render context and shape dispatch. Parameterize the rounded rectangle-based artifact and default rectangle paths that Java paints through Fashion, and retain shape-specific paths that do not consume Fashion.RoundCorner. Specific componentDiagram stack.title or group.stack declarations continue to outrank generic root values. Do not derive any value from scaled SVG coordinates.",
+  "perturbation_axes": [
+    "generic root roundcorner versus symbol-specific override",
+    "stack cluster versus explicit stack leaf versus artifact control",
+    "zero versus odd and even nonzero diameters",
+    "style declaration before versus after entity construction",
+    "explicit scale versus dpi",
+    "renamed labels and changed child topology"
+  ],
+  "scope_boundary": "This mechanism owns DESCRIPTION/deployment propagation of resolved RoundCorner into Fashion-consuming symbol painters. It does not alter CLASS package selectors, stack path equations, dimensions, Graphviz layout, dispatch, generic SVG scaling, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "The preserved checker_description_cluster_odd_scale input passes diff_one --no-oracle for both stack and artifact corners.",
+    "Unit tests prove generic inheritance and symbol-specific override precedence across cluster and leaf consumers.",
+    "Fresh valid Java perturbations cover at least two symbol kinds and two independent style/topology axes.",
+    "The renderer suite and no-oracle product ratchet remain green.",
+    "An independent checker records an accepted verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "special-casing checker labels, scale 1.75, diameter 17, or known SVG coordinates",
+    "post-processing serialized rx, ry, or path strings",
+    "changing comparator tolerance, baselines, or fixture eligibility",
+    "folding CLASS empty-package selector repair into this mechanism"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.puml",
+    "test-diagrams/perturbations/stack-round-corner-geometry/checker_description_cluster_odd_scale.svg"
+  ]
+}
