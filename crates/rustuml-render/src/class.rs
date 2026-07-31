@@ -4338,6 +4338,20 @@ fn package_skinparam<'a>(
     None
 }
 
+fn stack_round_corner(diagram: &ClassDiagram) -> f64 {
+    // Java `Cluster#getStyle` and `EntityImageEmptyPackage#getStyle` resolve
+    // this concrete symbol signature, then `ClusterDecoration` passes the
+    // resulting RoundCorner diameter through `Fashion` to `USymbolStack`.
+    StyleCascade::new(&diagram.meta.style_program)
+        .resolve(
+            &StyleSignature::from_selectors(["root", "element", "classDiagram", "group", "stack"]),
+            StyleScheme::Regular,
+        )
+        .property("roundCorner")
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(PACKAGE_ROUND_CORNER)
+}
+
 fn package_qualified_name(
     diagram: &ClassDiagram,
     parent_pkg: &[Option<usize>],
@@ -6356,6 +6370,7 @@ struct LayoutPackageCluster {
     fill: String,
     stroke: String,
     stroke_width: String,
+    round_corner: f64,
     filter_attr: String,
     font_fill: String,
     url: Option<String>,
@@ -6430,6 +6445,7 @@ fn layout_package_clusters(
                 fill,
                 stroke,
                 stroke_width,
+                round_corner: stack_round_corner(diagram),
                 filter_attr: filter_attr.clone(),
                 font_fill,
                 url: pkg.url.clone(),
@@ -6475,6 +6491,7 @@ struct EmptyPackageLayout {
     stereotype_lines: Vec<String>,
     fill: String,
     stroke: String,
+    round_corner: f64,
     font_fill: String,
     url: Option<String>,
     url_tooltip: Option<String>,
@@ -6530,6 +6547,7 @@ fn layout_empty_packages(
                 stereotype_lines: visible_package_stereotype_lines(package),
                 fill,
                 stroke,
+                round_corner: stack_round_corner(diagram),
                 font_fill,
                 url: package.url.clone(),
                 url_tooltip: package.url_tooltip.clone(),
@@ -7227,6 +7245,7 @@ fn emit_layout_empty_symbol_stack(svg: &mut String, package: &EmptyPackageLayout
         "",
         &package.stroke,
         BORDER_WIDTH,
+        package.round_corner,
     );
     emit_layout_empty_symbol_text(
         svg,
@@ -7532,23 +7551,51 @@ fn emit_stack_envelope(
     filter_attr: &str,
     stroke: &str,
     stroke_width: &str,
+    round_corner: f64,
 ) {
     let right = x + width;
     let bottom = y + height;
-    let radius = PACKAGE_ROUND_CORNER / 2.0;
+    let radius = round_corner / 2.0;
+    let corner_attrs = if round_corner == 0.0 {
+        String::new()
+    } else {
+        format!(r#" rx="{}" ry="{}""#, fmt4(radius), fmt4(radius))
+    };
     write!(
         svg,
-        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:none;stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}" height="{}"{} style="stroke:none;stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
         fill,
         fmt4(height),
-        fmt4(radius),
-        fmt4(radius),
+        corner_attrs,
         stroke_width,
         fmt4(width - 2.0 * STACK_SIDE_INSET),
         fmt4(x + STACK_SIDE_INSET),
         fmt4(y),
     )
     .unwrap();
+    if round_corner == 0.0 {
+        write!(
+            svg,
+            r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="none"{} style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(x),
+            fmt4(y),
+            fmt4(x + STACK_SIDE_INSET),
+            fmt4(y),
+            fmt4(x + STACK_SIDE_INSET),
+            fmt4(bottom),
+            fmt4(right - STACK_SIDE_INSET),
+            fmt4(bottom),
+            fmt4(right - STACK_SIDE_INSET),
+            fmt4(y),
+            fmt4(right),
+            fmt4(y),
+            filter_attr,
+            stroke,
+            stroke_width,
+        )
+        .unwrap();
+        return;
+    }
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A{},{} 0 0 1 {},{} L{},{} A{},{} 0 0 0 {},{} L{},{} A{},{} 0 0 0 {},{} L{},{} A{},{} 0 0 1 {},{} L{},{}" fill="none"{} style="stroke:{};stroke-width:{};"/>"#,
@@ -7978,6 +8025,7 @@ fn emit_layout_stack_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         &cluster.filter_attr,
         &cluster.stroke,
         &cluster.stroke_width,
+        cluster.round_corner,
     );
     emit_layout_symbol_cluster_title_stack(
         svg,
@@ -17838,6 +17886,7 @@ mod tests {
             fill: "#F1F1F1".to_string(),
             stroke: "#181818".to_string(),
             stroke_width: "1".to_string(),
+            round_corner: PACKAGE_ROUND_CORNER,
             filter_attr: String::new(),
             font_fill: "#000000".to_string(),
             url: None,
@@ -18181,6 +18230,31 @@ mod tests {
             package_cluster_painted_min(&diagram, &position),
             (23.0, 41.0 - LIMIT_FINDER_RECTANGLE_INSET)
         );
+    }
+
+    #[test]
+    fn stack_round_corner_style_drives_leaf_and_cluster_paths() {
+        for body in [
+            "stack StyledStack {\n}",
+            "stack StyledStack {\n  class Payload\n}",
+            "stack \"Styled Stack\" as StyledStack",
+        ] {
+            let input = format!("@startuml\nskinparam roundcorner 33\n{body}\n@enduml");
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let svg = crate::render_svg(&diagram);
+
+            assert!(
+                svg.contains(r#"rx="16.5" ry="16.5" style="stroke:none;stroke-width:"#),
+                "{svg}"
+            );
+            assert!(svg.contains("A16.5,16.5 0 0 1"), "{svg}");
+        }
+
+        let input = "@startuml\nskinparam roundcorner 0\nstack SquareStack {\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(!svg.contains(" rx="), "{svg}");
+        assert!(!svg.contains(" A"), "{svg}");
     }
 
     #[test]

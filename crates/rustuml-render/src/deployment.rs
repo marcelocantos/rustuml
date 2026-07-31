@@ -15,6 +15,7 @@ use rustuml_layout::graph::{
     ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult,
 };
 use rustuml_parser::diagram::deployment::*;
+use rustuml_parser::diagram::style::StyleScheme;
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::handwritten::{
@@ -30,6 +31,7 @@ use crate::layout_oracle::{
 };
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
+use crate::style_cascade::{StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -367,6 +369,8 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         id_for_node: &id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
+        stack_leaf_round_corner: deployment_stack_round_corner(diagram, false),
+        stack_cluster_round_corner: deployment_stack_round_corner(diagram, true),
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
@@ -587,6 +591,22 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
     }
 }
 
+fn deployment_stack_round_corner(diagram: &DeploymentDiagram, cluster: bool) -> f64 {
+    // `DiagramType.DESCRIPTION#getStyleName` is `componentDiagram`.
+    // Java clusters resolve `group.stack`; explicit leaves resolve
+    // `stack.title`, then both pass the diameter to `USymbolStack`.
+    let signature = if cluster {
+        StyleSignature::from_selectors(["root", "element", "componentDiagram", "group", "stack"])
+    } else {
+        StyleSignature::from_selectors(["root", "element", "componentDiagram", "stack", "title"])
+    };
+    StyleCascade::new(&diagram.meta.style_program)
+        .resolve(&signature, StyleScheme::Regular)
+        .property("roundCorner")
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(RX_RY * 2.0)
+}
+
 fn emit_handwritten_warning(svg: &mut SvgBuilder, warning: &OracleHandwrittenWarning) {
     let mut buf = String::new();
     write!(
@@ -785,6 +805,8 @@ struct OracleRenderContext<'a> {
     id_for_node: &'a HashMap<String, String>,
     skin_fills: &'a HashMap<DeploymentNodeKind, String>,
     skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
+    stack_leaf_round_corner: f64,
+    stack_cluster_round_corner: f64,
     sprites: &'a HashMap<String, rustuml_parser::diagram::SpriteData>,
     sprite_cache: &'a crate::sprite::SpriteCache,
     handwritten: bool,
@@ -850,6 +872,7 @@ fn emit_clusters_dfs(
                         cluster_fill.as_deref(),
                         stroke,
                         &node.label,
+                        ctx.stack_cluster_round_corner,
                     );
                 }
                 if let (Some(&text_x), Some(&text_y)) =
@@ -870,6 +893,7 @@ fn emit_clusters_dfs(
                     cluster_fill.as_deref(),
                     stroke,
                     &node.label,
+                    ctx.stack_cluster_round_corner,
                 );
                 emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
             }
@@ -1007,6 +1031,7 @@ fn emit_entity(
                 &entity_fill,
                 stroke,
                 &node.label,
+                ctx.stack_leaf_round_corner,
             );
             if !emit_oracle_image_label_children(svg, rect) {
                 emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
@@ -1231,6 +1256,7 @@ fn emit_entity_shape(
     fill: &str,
     stroke: &str,
     label: &str,
+    stack_round_corner: f64,
 ) {
     use DeploymentNodeKind::*;
     match kind {
@@ -1242,7 +1268,7 @@ fn emit_entity_shape(
         Folder => emit_folder(svg, x, y, w, h, fill, stroke),
         File => emit_file(svg, x, y, w, h, fill, stroke),
         Package => emit_package(svg, x, y, w, h, fill, stroke, label),
-        Stack => emit_stack(svg, x, y, w, h, fill, stroke),
+        Stack => emit_stack(svg, x, y, w, h, fill, stroke, stack_round_corner),
         Storage => emit_storage(svg, x, y, w, h, fill, stroke),
         Database => emit_database(svg, x, y, w, h, fill, stroke, label),
         Queue => emit_queue(svg, x, y, w, h, fill, stroke),
@@ -1261,6 +1287,7 @@ fn emit_cluster_shape(
     fill: Option<&str>,
     stroke: &str,
     label: &str,
+    stack_round_corner: f64,
 ) {
     use DeploymentNodeKind::*;
     // Clusters default to no fill; a `#color` paints the cluster background.
@@ -1282,7 +1309,7 @@ fn emit_cluster_shape(
         Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
         Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
         Package => emit_package_cluster(svg, x, y, w, h, fill, label),
-        Stack => emit_stack_cluster(svg, x, y, w, h, fill),
+        Stack => emit_stack_cluster(svg, x, y, w, h, fill, stack_round_corner),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
@@ -1874,72 +1901,96 @@ fn emit_package_cluster(
 
 // ---- Stack ----------------------------------------------------------------
 
-fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
-    // `USymbolStack.drawQueue` treats `w` as the complete image width and
-    // insets its fill rectangle by the 15px border on each side.
-    let inner_x = x + 15.0;
-    let inner_w = w - 30.0;
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(inner_w),
-        x = fc(inner_x),
-        y = fc(y),
-    ));
-    let xl = x;
-    let xr = x + w;
-    let d = format!(
-        "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
-        xl = fc(xl),
-        xr = fc(xr),
-        x_s = fc(inner_x),
-        xw_s = fc(inner_x + inner_w),
-        y_s = fc(y),
-        yh_s = fc(y + h),
-        x_lp1 = fc(inner_x - 2.5),
-        x_lp2 = fc(inner_x + 2.5),
-        x_rm2 = fc(inner_x + inner_w - 2.5),
-        x_rp2 = fc(inner_x + inner_w + 2.5),
-        y_p1 = fc(y + 2.5),
-        y_pm1 = fc(y + h - 2.5),
-    );
-    svg.raw(&format!(
-        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
-    ));
+fn emit_stack(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    round_corner: f64,
+) {
+    emit_stack_shape(svg, x, y, w, h, fill, stroke, 0.5, round_corner);
 }
 
 /// Stack cluster: a fill-only inner rect (no stroke) plus the same bracket
 /// outline as the leaf stack, drawn with the cluster stroke width.
-fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
-    let stroke = "#181818";
+fn emit_stack_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    round_corner: f64,
+) {
+    emit_stack_shape(svg, x, y, w, h, fill, "#181818", 1.0, round_corner);
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_stack_shape(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+    round_corner: f64,
+) {
+    // `USymbolStack#drawQueue` uses the complete symbol width, a 15px inset,
+    // and an explicit straight-line branch for a zero corner diameter.
     let inner_x = x + 15.0;
     let inner_w = w - 30.0;
+    let radius = round_corner / 2.0;
+    let corner_attrs = if round_corner == 0.0 {
+        String::new()
+    } else {
+        format!(r#" rx="{}" ry="{}""#, fc(radius), fc(radius))
+    };
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}"{corner_attrs} style="stroke:none;stroke-width:{stroke_width};" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
+        stroke_width = fc(stroke_width),
         w = fc(inner_w),
         x = fc(inner_x),
         y = fc(y),
     ));
     let xl = x;
     let xr = x + w;
-    let d = format!(
-        "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
-        xl = fc(xl),
-        xr = fc(xr),
-        x_s = fc(inner_x),
-        xw_s = fc(inner_x + inner_w),
-        y_s = fc(y),
-        yh_s = fc(y + h),
-        x_lp1 = fc(inner_x - 2.5),
-        x_lp2 = fc(inner_x + 2.5),
-        x_rm2 = fc(inner_x + inner_w - 2.5),
-        x_rp2 = fc(inner_x + inner_w + 2.5),
-        y_p1 = fc(y + 2.5),
-        y_pm1 = fc(y + h - 2.5),
-    );
+    let d = if round_corner == 0.0 {
+        format!(
+            "M{xl},{y} L{inner_x},{y} L{inner_x},{bottom} L{inner_right},{bottom} L{inner_right},{y} L{xr},{y}",
+            xl = fc(xl),
+            xr = fc(xr),
+            inner_x = fc(inner_x),
+            inner_right = fc(inner_x + inner_w),
+            y = fc(y),
+            bottom = fc(y + h),
+        )
+    } else {
+        format!(
+            "M{xl},{y_s} L{x_lp1},{y_s} A{radius},{radius} 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A{radius},{radius} 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A{radius},{radius} 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A{radius},{radius} 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
+            xl = fc(xl),
+            xr = fc(xr),
+            x_s = fc(inner_x),
+            xw_s = fc(inner_x + inner_w),
+            y_s = fc(y),
+            yh_s = fc(y + h),
+            x_lp1 = fc(inner_x - radius),
+            x_lp2 = fc(inner_x + radius),
+            x_rm2 = fc(inner_x + inner_w - radius),
+            x_rp2 = fc(inner_x + inner_w + radius),
+            y_p1 = fc(y + radius),
+            y_pm1 = fc(y + h - radius),
+            radius = fc(radius),
+        )
+    };
     svg.raw(&format!(
-        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:{};"/>"#,
+        fc(stroke_width),
     ));
 }
 
@@ -3621,6 +3672,8 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
         id_for_node: &no_oracle_uids.entity_ids,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
+        stack_leaf_round_corner: deployment_stack_round_corner(diagram, false),
+        stack_cluster_round_corner: deployment_stack_round_corner(diagram, true),
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: false,
@@ -3972,6 +4025,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
+        stack_leaf_round_corner: deployment_stack_round_corner(diagram, false),
+        stack_cluster_round_corner: deployment_stack_round_corner(diagram, true),
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
