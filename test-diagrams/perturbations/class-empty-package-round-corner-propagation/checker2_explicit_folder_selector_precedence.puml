@@ -1,0 +1,19 @@
+@startuml
+folder "Silver Folio 9757" as SilverFolio9757 {
+}
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 29
+    }
+  }
+  folder {
+    title {
+      RoundCorner 0
+    }
+  }
+}
+</style>
+@enduml

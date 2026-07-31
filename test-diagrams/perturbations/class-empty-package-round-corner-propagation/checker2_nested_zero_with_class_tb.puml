@@ -1,0 +1,19 @@
+@startuml
+package "Copper Cabinet 9721" as CopperCabinet9721 {
+  package "Silent Drawer 9727" as SilentDrawer9727 {
+  }
+  class "Index Card 9729" as IndexCard9729
+}
+
+skinparam packageStyle folder
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 0
+    }
+  }
+}
+</style>
+@enduml

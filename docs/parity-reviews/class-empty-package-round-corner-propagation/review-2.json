@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-round-corner-propagation",
+  "account": "docs/parity-reviews/class-empty-package-round-corner-propagation/account.json",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commits 1bf7053cf5e3c6f592fd69e757afe24a22b2ba5c or 8fc856c535627ff09eee781364576d5d3e8c190b, did not author account commits 3ff57540f2fb39745eb92363bf3094ac8eec49b0 or 5c8841dff603fe439e98e2a3913122d0e1dcfef7, and did not edit production source, baselines, the account, or the prior review."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-integration",
+    "rust_revision_under_test": "8fc856c535627ff09eee781364576d5d3e8c190b",
+    "implementation_commits": [
+      "1bf7053cf5e3c6f592fd69e757afe24a22b2ba5c",
+      "8fc856c535627ff09eee781364576d5d3e8c190b"
+    ],
+    "account_commits": [
+      "3ff57540f2fb39745eb92363bf3094ac8eec49b0",
+      "5c8841dff603fe439e98e2a3913122d0e1dcfef7"
+    ],
+    "prior_rejected_review_commit": "d8c2c8602fda338a84ceb2692dc5d6bde47f9612",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "concurrent_worktree_note": "The shared worktree was at the exact Rust revision under test when checking began. Other independent checker commits advanced HEAD afterward; all source audits used git show on the exact listed revisions, and the prebuilt binary hash remained fixed."
+  },
+  "binary": {
+    "path": "target/release/examples/diff_one",
+    "sha256": "6d791f2796827eeb81215796e6170cc61721918d2eb28cb7d2fb64ab47afdd2c",
+    "mode": "--no-oracle",
+    "built_from_revision": "8fc856c535627ff09eee781364576d5d3e8c190b",
+    "cargo_or_rustc_run": false,
+    "rebuilt": false
+  },
+  "oracle": {
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "generation_mode": "java -Djava.awt.headless=true -jar ... -tsvg <file>",
+    "fresh_java_svg_count": 6,
+    "fresh_java_syntax_error_count": 0
+  },
+  "commands": [
+    "git show 3ff57540:docs/parity-reviews/class-empty-package-round-corner-propagation/account.json",
+    "git show 5c8841df:docs/parity-reviews/class-empty-package-round-corner-propagation/account.json",
+    "git show d8c2c860:docs/parity-reviews/class-empty-package-round-corner-propagation/review.json",
+    "git show --stat --patch 1bf7053c -- crates/rustuml-render/src/class.rs",
+    "git show --stat --patch 8fc856c5 -- crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "git diff --unified=0 1bf7053c^ 1bf7053c -- crates/rustuml-render/src/class.rs | rg -n \"checker_|test-diagrams|golden|include_str!|include_bytes!|read_to_string|contains\\(|replace\\(|942|943|24\\.0|17\\.0|26\\.0|1\\.5\"",
+    "git diff --unified=0 8fc856c5^ 8fc856c5 -- crates/rustuml-render/src/class.rs | rg -n \"checker_|test-diagrams|golden|include_str!|include_bytes!|read_to_string|contains\\(|replace\\(|941|944|175|155|16,6|10\\.0\"",
+    "git diff --check 1bf7053c^ 1bf7053c",
+    "git diff --check 8fc856c5^ 8fc856c5",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_tb.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_after_odd_nested_tb.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_even_after_dpi_tb.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_zero_scale_lr.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_nested_zero_with_class_tb.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_two_zero_packages_link_lr.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_odd_control_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_precedence.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_before.puml"
+  ],
+  "source_audit": {
+    "java_locations_checked": [
+      "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java:buildImage",
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:getStyle and drawU",
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:constructor",
+      "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:guess and getTextBlock",
+      "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java:drawFolder and asSmall",
+      "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:drawUPolygon"
+    ],
+    "rust_locations_checked": [
+      "crates/rustuml-render/src/class.rs:configured_package_kind",
+      "crates/rustuml-render/src/class.rs:automatic_package_kind",
+      "crates/rustuml-render/src/class.rs:empty_package_symbol_kind",
+      "crates/rustuml-render/src/class.rs:empty_package_round_corner",
+      "crates/rustuml-render/src/class.rs:empty_package_painted_frontier",
+      "crates/rustuml-render/src/class.rs:svek_layout_x_bias",
+      "crates/rustuml-render/src/class.rs:empty_package_frontier_minima",
+      "crates/rustuml-render/src/class.rs:layout_empty_packages",
+      "crates/rustuml-render/src/class.rs:emit_layout_empty_symbol_folder_shape"
+    ],
+    "causal_assessment": "The remediation correctly models LimitFinder's ten-pixel UPolygon overscan for symbol-less EntityImageEmptyPackage folders. The account and Rust comment overgeneralize the style owner, however. GeneralImageBuilder sends an EMPTY_PACKAGE with non-null USymbol to EntityImageDescription, not EntityImageEmptyPackage. EntityImageDescription resolves the symbol-specific signature classDiagram.folder.title and uses the entity's style-builder snapshot, while Rust resolves classDiagram.package.title globally for every empty folder/package leaf.",
+    "fixture_shape_scan": {
+      "status": "No shipping golden reads, fixture-label branches, coordinate-keyed SVG surgery, or unexplained production constants were found in either implementation diff.",
+      "notes": [
+        "The 1.5 shoulder ratio is adjacent-cited to USymbolFolder.drawFolder.",
+        "LIMIT_FINDER_POLYGON_OVERSCAN_X predates the remediation and is adjacent-cited to Java LimitFinder.drawUPolygon.",
+        "Commit 8fc856c5 adds one exact SVG coordinate assertion in a unit test. It is test-only and does not affect shipping behavior, but it exercises only the previously rejected symbol-less package branch and therefore did not expose the explicit-symbol branch."
+      ]
+    }
+  },
+  "preserved_inputs": [
+    {
+      "path": "test-diagrams/perturbations/stack-round-corner-geometry/checker_class_packagestyle_even_dpi.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_lr.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_zero_before_tb.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_after_odd_nested_tb.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker_fallback_stack_even_after_dpi_tb.puml",
+      "outcome": "pass"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_zero_scale_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_zero_scale_lr.svg",
+      "valid": true,
+      "axes": [
+        "explicit folder USymbol",
+        "package-title zero override after declaration",
+        "scale 1.3",
+        "left-to-right direction",
+        "renamed label"
+      ],
+      "outcome": "fail: Java routes the explicit USymbol through EntityImageDescription and keeps the default rounded folder path; Rust applies package-title RoundCorner 0, emits a polygon, shifts it by the polygon overscan, and widens the scaled canvas by 26 pixels."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_nested_zero_with_class_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_nested_zero_with_class_tb.svg",
+      "valid": true,
+      "axes": [
+        "symbol-less packageStyle folder",
+        "zero package-title corner",
+        "nested empty package",
+        "class sibling",
+        "style after declarations"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_two_zero_packages_link_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_two_zero_packages_link_lr.svg",
+      "valid": true,
+      "axes": [
+        "two symbol-less empty packages",
+        "zero package-title corner",
+        "directed relationship and label",
+        "different label widths",
+        "left-to-right direction"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_odd_control_scale.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_odd_control_scale.svg",
+      "valid": true,
+      "axes": [
+        "explicit folder USymbol",
+        "odd package-title RoundCorner 31 before declaration",
+        "scale 1.2",
+        "renamed label"
+      ],
+      "outcome": "fail: Java uses the explicit folder title style's default diameter 5, while Rust applies the package-title diameter 31; the path topology agrees but every arc radius differs."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_precedence.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_precedence.svg",
+      "valid": true,
+      "axes": [
+        "explicit folder USymbol",
+        "conflicting package-title 29 and folder-title zero selectors",
+        "style after declaration",
+        "renamed label"
+      ],
+      "outcome": "fail: Java's explicit-symbol entity retains its creation-time default folder-title diameter 5, whereas Rust reads the later global package-title diameter 29."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_before.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_before.svg",
+      "valid": true,
+      "axes": [
+        "explicit folder USymbol",
+        "conflicting package-title 29 and folder-title zero selectors",
+        "style before declaration",
+        "renamed label"
+      ],
+      "outcome": "fail: Java selects classDiagram.folder.title and emits the zero-corner polygon with LimitFinder overscan; Rust selects classDiagram.package.title and emits a diameter-29 rounded path."
+    }
+  ],
+  "result_counts": {
+    "preserved_inputs_total": 5,
+    "preserved_passed": 5,
+    "fresh_inputs_total": 6,
+    "fresh_valid_inputs": 6,
+    "fresh_valid_passed": 2,
+    "fresh_valid_failed": 4,
+    "fresh_java_syntax_errors": 0,
+    "oracle_errors": 0
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Explicit folder leaves use a different Java image and style signature than the account claims.",
+      "evidence": "GeneralImageBuilder routes EMPTY_PACKAGE entities with a non-null USymbol to EntityImageDescription. That class resolves classDiagram.folder.title for USymbols.FOLDER, while Rust empty_package_round_corner unconditionally resolves classDiagram.package.title. The before-declaration selector held-out makes Java emit a zero-corner polygon and Rust emit a diameter-29 path; the odd package-only control makes Java retain diameter 5 while Rust uses 31."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Explicit-symbol style creation timing is also collapsed into the global package model.",
+      "evidence": "When conflicting folder/package styles follow an explicit folder declaration, Java retains its creation-time default folder-title style while Rust resolves the later global package-title style. This contradicts the account's creation-order perturbation axis for its stated explicit-symbol scope."
+    },
+    {
+      "severity": "supporting",
+      "summary": "The zero-polygon frontier remediation works for the symbol-less EntityImageEmptyPackage branch.",
+      "evidence": "Both prior rejected zero cases now pass. Fresh nested and linked/multiple symbol-less zero-corner packages also match Java exactly, showing that the ten-pixel frontier correction generalizes across nesting and topology rather than matching one canvas."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped shipping logic or unexplained production constant was found.",
+      "evidence": "The audited production changes use semantic package-kind and corner predicates, reuse the Java-cited LimitFinder constant, and contain no golden reads, fixture labels, or serialized-coordinate rewrites. The rejection is a missing Java model branch, not evidence of fixture overfitting."
+    }
+  ],
+  "verdict": "REJECTED",
+  "verdict_reason": "Although commit 8fc856c5 repairs and generalizes the symbol-less zero-polygon frontier, four fresh valid explicit-folder held-outs disprove the account's broader style-propagation invariant. Acceptance requires modeling EntityImageDescription's symbol-specific style signature and creation-time style ownership, then independently rechecking both branches."
+}

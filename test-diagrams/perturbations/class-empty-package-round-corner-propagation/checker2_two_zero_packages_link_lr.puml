@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+skinparam packageStyle folder
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 0
+    }
+  }
+}
+</style>
+
+package "Amber Bin 9731" as AmberBin9731 {
+}
+package "Long Indigo Archive 9733" as IndigoArchive9733 {
+}
+
+AmberBin9731 --> IndigoArchive9733 : transfers
+@enduml

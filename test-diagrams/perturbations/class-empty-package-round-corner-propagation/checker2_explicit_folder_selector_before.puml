@@ -1,0 +1,19 @@
+@startuml
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 29
+    }
+  }
+  folder {
+    title {
+      RoundCorner 0
+    }
+  }
+}
+</style>
+
+folder "Golden Dossier 9761" as GoldenDossier9761 {
+}
+@enduml

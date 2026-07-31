@@ -1,0 +1,16 @@
+@startuml
+scale 1.2
+
+<style>
+classDiagram {
+  package {
+    title {
+      RoundCorner 31
+    }
+  }
+}
+</style>
+
+folder "Violet Register 9749" as VioletRegister9749 {
+}
+@enduml
