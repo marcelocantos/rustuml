@@ -5423,6 +5423,7 @@ fn render_plantuml_svg(
         let mut max_y = 0.0_f64;
         let mut generic_badge_max_x = f64::NEG_INFINITY;
         let mut latex_image_max_x = 0.0_f64;
+        let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
         for (i, (x, y)) in entity_positions.iter().enumerate() {
             let entity = &diagram.entities[i];
             let shadow_extra = entity_shadow_limit_extra(entity);
@@ -5524,6 +5525,11 @@ fn render_plantuml_svg(
             {
                 max_x = max_x.max(decor_max_x + MARGIN + layout_x_bias + body_dx);
             }
+        }
+        for points in &magic_arrow_polygons {
+            let (_, polygon_max_x, _, polygon_max_y) = limit_finder_polygon_bounds(points);
+            max_x = max_x.max(polygon_max_x + MARGIN + layout_x_bias);
+            max_y = max_y.max(polygon_max_y + MARGIN);
         }
         let relationship_note_indices = relationship_note_indices(diagram);
         for ((relationship, note_idx), edge_idx) in diagram
@@ -12856,23 +12862,7 @@ fn render_relationship_svg(
             cluster_rect(&edge_path.to),
         );
     }
-    let start_decoration_len = if decorates_from {
-        relationship_decoration_length(rel.kind)
-    } else {
-        0.0
-    };
-    let start_decoration_len = start_decoration_len.max(
-        rel.from_decor
-            .map(endpoint_decoration_length)
-            .unwrap_or(0.0),
-    );
-    let end_decoration_len = if decorates_to {
-        relationship_decoration_length(rel.kind)
-    } else {
-        0.0
-    };
-    let end_decoration_len =
-        end_decoration_len.max(rel.to_decor.map(endpoint_decoration_length).unwrap_or(0.0));
+    let (start_decoration_len, end_decoration_len) = relationship_retraction_lengths(rel);
     let path_points =
         shortened_endpoint_points(&edge_points, start_decoration_len, end_decoration_len);
 
@@ -13071,7 +13061,7 @@ fn render_relationship_svg(
                 .unwrap_or(0.0)
                 .max(LINK_ARROW_BLOCK_SIZE);
             let block_top = block_y + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
-            emit_link_arrow(svg, rel.label_arrow, &edge_points, block_x, block_top);
+            emit_link_arrow(svg, rel.label_arrow, &path_points, block_x, block_top);
         }
         if let Some(label) = rel.label.as_deref() {
             emit_label(
@@ -13205,6 +13195,30 @@ fn relationship_decoration_length(kind: RelationshipKind) -> f64 {
     }
 }
 
+fn relationship_retraction_lengths(rel: &Relationship) -> (f64, f64) {
+    // Java `SvekEdge#getExtremitySimplier` retracts the stored DotPath by the
+    // largest complete extremity attached to each original Graphviz contact.
+    let start = rel
+        .from_decor
+        .map(endpoint_decoration_length)
+        .unwrap_or(0.0)
+        .max(if relationship_decorates_from(rel) {
+            relationship_decoration_length(rel.kind)
+        } else {
+            0.0
+        });
+    let end = rel
+        .to_decor
+        .map(endpoint_decoration_length)
+        .unwrap_or(0.0)
+        .max(if relationship_decorates_to(rel) {
+            relationship_decoration_length(rel.kind)
+        } else {
+            0.0
+        });
+    (start, end)
+}
+
 fn endpoint_tangent(
     edge_points: &[(f64, f64)],
     at_start: bool,
@@ -13223,10 +13237,13 @@ fn endpoint_tangent(
     }
 }
 
-fn emit_link_arrow(svg: &mut String, arrow: LinkArrow, edge_points: &[(f64, f64)], x: f64, y: f64) {
-    let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {
-        return;
-    };
+fn link_arrow_polygon_points(
+    arrow: LinkArrow,
+    edge_points: &[(f64, f64)],
+    x: f64,
+    y: f64,
+) -> Option<[(f64, f64); 4]> {
+    let (&start, &end) = edge_points.first().zip(edge_points.last())?;
     let mut direction = unit_vector(start, end);
     if arrow == LinkArrow::Backward {
         direction = scale(direction, -1.0);
@@ -13246,6 +13263,13 @@ fn emit_link_arrow(svg: &mut String, arrow: LinkArrow, edge_points: &[(f64, f64)
     let tip = add(center, scale(direction, radius));
     let side_a = add(center, scale(rotated(beta), radius));
     let side_b = add(center, scale(rotated(-beta), radius));
+    Some([tip, side_a, side_b, tip])
+}
+
+fn emit_link_arrow(svg: &mut String, arrow: LinkArrow, edge_points: &[(f64, f64)], x: f64, y: f64) {
+    let Some([tip, side_a, side_b, _]) = link_arrow_polygon_points(arrow, edge_points, x, y) else {
+        return;
+    };
     write!(
         svg,
         r##"<polygon fill="#000000" points="{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1;"/>"##,
@@ -13893,6 +13917,7 @@ fn svek_layout_x_bias(
 ) -> f64 {
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
+    let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
             let icon = font.visibility_icon_geom();
@@ -13960,6 +13985,11 @@ fn svek_layout_x_bias(
                         .map(|(min_x, _)| min_x)
                 }),
         )
+        .chain(
+            magic_arrow_polygons
+                .iter()
+                .map(|points| limit_finder_polygon_bounds(points).0),
+        )
         .chain(visibility_polygon_min_x)
         .fold(
             if diagram.together.is_empty() {
@@ -13993,6 +14023,7 @@ fn svek_layout_y_bias(
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
+    let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
     let min_y = positions
         .iter()
         .enumerate()
@@ -14023,6 +14054,11 @@ fn svek_layout_y_bias(
                 .flatten()
                 .map(|label| label.y)
         }))
+        .chain(
+            magic_arrow_polygons
+                .iter()
+                .map(|points| limit_finder_polygon_bounds(points).2),
+        )
         .fold(f64::INFINITY, f64::min);
     if !min_y.is_finite() {
         return 0.0;
@@ -14033,6 +14069,64 @@ fn svek_layout_y_bias(
     } else {
         envelope_bias.max(0.0)
     }
+}
+
+fn class_magic_arrow_polygons(
+    diagram: &ClassDiagram,
+    edge_paths: &[EdgePath],
+) -> Vec<[(f64, f64); 4]> {
+    let note_indices = relationship_note_indices(diagram);
+    diagram
+        .relationships
+        .iter()
+        .zip(&note_indices)
+        .zip(relationship_edge_indices(diagram, edge_paths))
+        .filter_map(|((relationship, note_idx), edge_idx)| {
+            if relationship.label_arrow == LinkArrow::None {
+                return None;
+            }
+            let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
+            let position = edge.label?;
+            let note = note_idx.map(|idx| &diagram.notes[idx]);
+            let center =
+                relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
+            let label_x = position.x + (center.width - center.label_width) / 2.0;
+            let margin = relationship_label_margin(relationship);
+            let content_height = relationship
+                .label
+                .as_deref()
+                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+                .unwrap_or(0.0)
+                .max(LINK_ARROW_BLOCK_SIZE);
+            let block_top = position.y + margin + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
+            let (start_len, end_len) = relationship_retraction_lengths(relationship);
+            let path_points = shortened_endpoint_points(&edge.points, start_len, end_len);
+            link_arrow_polygon_points(relationship.label_arrow, &path_points, label_x, block_top)
+        })
+        .collect()
+}
+
+fn limit_finder_polygon_bounds(points: &[(f64, f64)]) -> (f64, f64, f64, f64) {
+    let (mut min_x, mut max_x, mut min_y, mut max_y) = (
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+    );
+    for &(x, y) in points {
+        min_x = min_x.min(x);
+        max_x = max_x.max(x);
+        min_y = min_y.min(y);
+        max_y = max_y.max(y);
+    }
+    // Java `LimitFinder#drawUPolygon` applies its horizontal painter overscan
+    // to the rotated triangle, but does not expand its vertical frontier.
+    (
+        min_x - LIMIT_FINDER_POLYGON_OVERSCAN_X,
+        max_x + LIMIT_FINDER_POLYGON_OVERSCAN_X,
+        min_y,
+        max_y,
+    )
 }
 
 fn empty_package_frontier_minima(
@@ -17155,6 +17249,82 @@ mod tests {
             relationship_layout_edge_indices(&diagram),
             [0, 2, 1, 4, 3, 5]
         );
+    }
+
+    #[test]
+    fn magic_arrow_frontier_uses_retracted_guide_and_polygon_overscan() {
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(
+            "@startuml\n\
+             class Alpha\n\
+             class Beta\n\
+             Alpha \"1\" --> \"*\" Beta : renamed label >\n\
+             @enduml",
+        )
+        .expect("class relationship parses") else {
+            panic!("expected class diagram");
+        };
+        let relationship = &diagram.relationships[0];
+        assert_eq!(relationship.label_arrow, LinkArrow::Direct);
+
+        let raw_points = vec![(20.0, 0.0), (10.0, 20.0), (5.0, 80.0), (30.0, 100.0)];
+        let edge = EdgePath {
+            edge_index: 0,
+            from: "Alpha".to_string(),
+            to: "Beta".to_string(),
+            points: raw_points.clone(),
+            bezier_count: 1,
+            has_start_arrow: false,
+            start_point: None,
+            has_end_arrow: false,
+            end_point: None,
+            label: Some(rustuml_layout::graph::EdgeLabelPosition {
+                x: 12.0,
+                y: 40.0,
+                width: 120.0,
+                height: 15.0,
+            }),
+            tail_label: None,
+            head_label: None,
+        };
+
+        let (start_len, end_len) = relationship_retraction_lengths(relationship);
+        assert_eq!((start_len, end_len), (0.0, ARROW_DECORATION_LENGTH));
+        let retracted = shortened_endpoint_points(&raw_points, start_len, end_len);
+        let center =
+            relationship_center_layout(&diagram, relationship, None, &diagram.meta.sprites)
+                .expect("center label layout");
+        let label_x = 12.0 + (center.width - center.label_width) / 2.0;
+        let content_height = relationship
+            .label
+            .as_deref()
+            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+            .unwrap_or(0.0)
+            .max(LINK_ARROW_BLOCK_SIZE);
+        let block_top = 40.0
+            + relationship_label_margin(relationship)
+            + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
+        let raw_polygon =
+            link_arrow_polygon_points(relationship.label_arrow, &raw_points, label_x, block_top)
+                .unwrap();
+        let expected_polygon =
+            link_arrow_polygon_points(relationship.label_arrow, &retracted, label_x, block_top)
+                .unwrap();
+
+        let polygons = class_magic_arrow_polygons(&diagram, &[edge]);
+        assert_eq!(polygons, [expected_polygon]);
+        assert_ne!(raw_polygon, expected_polygon);
+
+        let bounds = limit_finder_polygon_bounds(&expected_polygon);
+        let visible_min_x = expected_polygon
+            .iter()
+            .map(|point| point.0)
+            .fold(f64::INFINITY, f64::min);
+        let visible_min_y = expected_polygon
+            .iter()
+            .map(|point| point.1)
+            .fold(f64::INFINITY, f64::min);
+        assert_eq!(bounds.0, visible_min_x - LIMIT_FINDER_POLYGON_OVERSCAN_X);
+        assert_eq!(bounds.2, visible_min_y);
     }
 
     #[test]

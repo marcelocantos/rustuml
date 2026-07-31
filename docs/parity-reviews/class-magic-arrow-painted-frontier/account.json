@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-magic-arrow-painted-frontier",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "3f036b68c80c656f6c8f491a72ff8ebb30b6e5ee",
   "java_locations": [
@@ -63,6 +63,25 @@
   "claimed_invariant": "A class relationship label's magic arrow is part of the same center TextBlock that Graphviz positions, but its visible triangle and its painted envelope have distinct semantics. The triangle orientation follows SvekEdge's solved DotPath after endpoint decoration retraction, not the raw Graphviz contact path. Its 13px block is prepended before the label, and TextBlockArrow2 paints a 10px rotated UPolygon inside it. During SvekResult measurement, LimitFinder expands that polygon by ten horizontal pixels on each side. The expanded minimum and maximum participate in the same graph-wide translation and dimension as nodes, splines, endpoint labels, and other decorations. Label spelling, marker direction, relationship decoration, rank direction, and declaration order may change the solved guide angle and block position, but they do not change these ownership rules.",
   "causal_divergence": "Rust correctly reserves the magic-arrow block and paints a rotated triangle, but emit_link_arrow receives the unretracted edge_points rather than the emitted shortened path_points. More importantly, svek_layout_x_bias includes nodes, spline controls, label box origins, endpoint decorations, and visibility polygons but not the magic-arrow UPolygon or LimitFinder's fixed polygon overscan. In class_rel_label_navigability Java's visible triangle has minX 16, so LimitFinder owns the hidden measured minimum at x=6; the next visible spline minimum is x=6.7493. Rust instead normalizes that spline control to x=6, shifting every node, label, spline, and decoration about 0.7505px left. The uniform translation and the remaining triangle-angle delta are therefore two consequences of one omitted TextBlockArrow2 painter model, not coordinate-tuning opportunities.",
   "planned_model_change": "Derive one reusable magic-arrow polygon from the center layout, the arrow direction, and the same endpoint-retracted relationship path used for final shaft emission. Use those points for SVG emission. Add their LimitFinder frontier, including the Java ten-pixel horizontal polygon overscan, to both SVEK origin axes and final painted extents. Preserve Graphviz label positioning, the 13px block, the 10px triangle, existing decoration lengths, and raw endpoint contacts. Keep compound-clipped relationship-angle parity outside this mechanism unless a held-out demonstrates that the existing path projection is insufficient. Do not add the observed 0.7505px as a constant, alter label metrics, quantize all curved splines, or relax the comparator.",
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "class/class_rel_label_navigability passes the frozen strict comparator through render_svg without oracle input. The full shipped-path census rises from 11,115/11,251 to 11,116/11,251: class 1,963 to 1,964, with every other family unchanged. No observed golden coordinate, label spelling, comparator value, or fixture path enters shipping code.",
+    "model_evidence": "A focused renderer test uses renamed entities and label text, a synthetic curved path, endpoint multiplicities, and a target dependency arrow. It proves that endpoint retraction changes the guide triangle, the raw contact path remains separately available, and LimitFinder's polygon model adds ten pixels only to each horizontal frontier. The complete 791-test renderer suite and clippy remain green.",
+    "commands": [
+      "cargo test -p rustuml-render --lib magic_arrow_frontier_uses_retracted_guide_and_polygon_overscan",
+      "cargo build --release -p rustuml-oracle --example diff_one",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_rel_label_navigability.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Independent adversarial review and checker-authored Java held-outs remain pending because the reviewer task pool is unavailable and the local Java oracle aborts before rendering. This record does not self-attest acceptance."
+  },
   "perturbation_axes": [
     "leading backward marker versus trailing direct marker",
     "renamed short and long center labels",
