@@ -1,0 +1,6 @@
+@startuml
+node "Color Beth Source" as CBES
+node "Color Beth Target" as CBET
+CBES --> CBET
+note right of link #shadowing:false;back:Beige : shadowing false with back 26
+@enduml

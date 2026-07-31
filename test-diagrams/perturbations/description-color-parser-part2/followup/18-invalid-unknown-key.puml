@@ -1,0 +1,6 @@
+@startuml
+node "Color Sigma Source" as CSS
+node "Color Sigma Target" as CST
+CSS --> CST
+note top on link #border:Red : unknown directive key should reject 18
+@enduml

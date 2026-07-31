@@ -1,0 +1,6 @@
+@startuml
+node "Color Waw Source" as CWAS
+node "Color Waw Target" as CWAT
+CWAS --> CWAT
+note right on link #line:Orange;line.bold;line.dotted : dotted precedence without dashed 30
+@enduml

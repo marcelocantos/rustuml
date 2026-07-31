@@ -1,0 +1,6 @@
+@startuml
+node "Color Pi Source" as CPS
+node "Color Pi Target" as CPT
+CPS --> CPT
+note left on link #line.dashed: compact style boundary should reject 16
+@enduml

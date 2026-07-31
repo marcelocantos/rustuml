@@ -1,0 +1,8 @@
+@startuml
+node "Color He Source" as CHES
+database "Color He Target" as CHET
+CHES --> CHET
+note bottom on link #header:Gold
+  header only multiline 29
+endnote
+@enduml

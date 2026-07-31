@@ -1,0 +1,6 @@
+@startuml
+node "Color Daleth Source" as CDAS
+artifact "Color Daleth Target" as CDAT
+CDAS --> CDAT
+note top on link #text:DarkBlue : text only channel 28
+@enduml

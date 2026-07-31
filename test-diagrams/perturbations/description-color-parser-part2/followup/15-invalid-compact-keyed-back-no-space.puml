@@ -1,0 +1,6 @@
+@startuml
+node "Color Omicron Source" as COS
+node "Color Omicron Target" as COT
+COS --> COT
+note right on link #back:Red: compact keyed boundary should reject 15
+@enduml

@@ -1,0 +1,8 @@
+SVG structural differences:
+  [18] <path> attr mismatch:
+    expected: [("d", "M101.77,87.49 L101.77,112.49 L361.77,112.49 L361.77,97.49 L351.77,87.49 L101.77,87.49"), ("fill", "#FEFFDD"), ("style", "stroke:#FFA500;stroke-width:0.5;")]
+    actual:   [("d", "M101.77,87.49 L101.77,112.49 L361.77,112.49 L361.77,97.49 L351.77,87.49 L101.77,87.49"), ("fill", "#FEFFDD"), ("style", "stroke:#FFA500;stroke-width:1;stroke-dasharray:1,3;")]
+  [19] <path> attr mismatch:
+    expected: [("d", "M351.77,87.49 L351.77,97.49 L361.77,97.49 L351.77,87.49"), ("fill", "#FEFFDD"), ("style", "stroke:#FFA500;stroke-width:0.5;")]
+    actual:   [("d", "M351.77,87.49 L351.77,97.49 L361.77,97.49 L351.77,87.49"), ("fill", "#FEFFDD"), ("style", "stroke:#FFA500;stroke-width:1;stroke-dasharray:1,3;")]
+

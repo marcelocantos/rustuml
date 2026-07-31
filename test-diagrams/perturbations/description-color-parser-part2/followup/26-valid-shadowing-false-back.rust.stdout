@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="218px" preserveAspectRatio="none" style="width:323px;height:218px;background:#FFFFFF;" version="1.1" viewBox="0 0 323 218" width="323px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Color Beth Source-->
+<g class="entity" data-qualified-name="CBES" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,176.8252,6,176.8252,42.4883,166.8252,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.8252" x2="176.8252" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="166.8252" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.8252" x2="166.8252" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120.8252" x="31" y="39.5352">Color Beth Source</text>
+</g>
+<!--entity Color Beth Target-->
+<g class="entity" data-qualified-name="CBET" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="16.72,157.49,26.72,147.49,176.096,147.49,176.096,183.9783,166.096,193.9783,16.72,193.9783,16.72,157.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.096" x2="176.096" y1="157.49" y2="147.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16.72" x2="166.096" y1="157.49" y2="157.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.096" x2="166.096" y1="157.49" y2="193.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119.376" x="31.72" y="181.0252">Color Beth Target</text>
+</g>
+<!--link CBES to CBET-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M96.41,52.97 C96.41,78.9 96.41,115.09 96.41,141.02" fill="none" id="CBES-to-CBET" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="96.41,147.02,100.41,138.02,96.41,142.02,92.41,138.02,96.41,147.02" style="stroke:#181818;stroke-width:1;"/>
+<path d="M101.41,87.49 L101.41,112.49 L308.41,112.49 L308.41,97.49 L298.41,87.49 L101.41,87.49" fill="#F5F5DC" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M298.41,87.49 L298.41,97.49 L308.41,97.49 L298.41,87.49" fill="#F5F5DC" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="186.7925" x="107.41" y="105.0584">shadowing false with back 26</text>
+</g>
+</g></svg>

@@ -1,0 +1,8 @@
+@startuml
+frame "Color Epsilon Frame" as CEF {
+  node "Color Epsilon Source" as CES
+}
+cloud "Color Epsilon Cloud" as CEC
+CES --> CEC
+note left on link #back:FF0000;line:00FF00;text:0000FF : keyed channels inline 05
+@enduml

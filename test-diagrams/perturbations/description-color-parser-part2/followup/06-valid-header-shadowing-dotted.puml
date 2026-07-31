@@ -1,0 +1,6 @@
+@startuml
+node "Color Zeta Source" as CZS
+storage "Color Zeta Store" as CZZ
+CZS --> CZZ
+note right of link #header:Gold;shadowing:false;line.dotted : header shadowing dotted 06
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+node "Color Nu Source" as CNS
+cloud "Color Nu Target" as CNT
+CNS --> CNT
+note top of link #Aqua;line.bold : top of link renamed topology 13
+@enduml

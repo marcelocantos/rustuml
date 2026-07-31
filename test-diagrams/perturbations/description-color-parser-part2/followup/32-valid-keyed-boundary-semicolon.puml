@@ -1,0 +1,6 @@
+@startuml
+node "Color Heth Source" as CHHS
+node "Color Heth Target" as CHHT
+CHHS --> CHHT
+note top on link #back:Red;: keyed boundary with semicolon 32
+@enduml

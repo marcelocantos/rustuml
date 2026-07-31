@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="200px" preserveAspectRatio="none" style="width:278px;height:200px;background:#FFFFFF;" version="1.1" viewBox="0 0 278 200" width="278px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Color Iota Source-->
+<g class="entity" data-qualified-name="CIS" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,172.6484,6,172.6484,42.4883,162.6484,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="162.6484" x2="172.6484" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="162.6484" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="162.6484" x2="162.6484" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116.6484" x="31" y="39.5352">Color Iota Source</text>
+</g>
+<!--entity Color Iota Artifact-->
+<g class="entity" data-qualified-name="CIA" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.0781" x="18.79" y="147.49"/>
+<polygon fill="#F1F1F1" points="152.8681,152.49,152.8681,166.49,164.8681,166.49,164.8681,158.49,158.8681,152.49,152.8681,152.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="158.8681" x2="158.8681" y1="152.49" y2="158.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="164.8681" x2="158.8681" y1="158.49" y2="158.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.0781" x="28.79" y="174.0252">Color Iota Artifact</text>
+</g>
+<!--link CIS to CIA-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M94.32,52.7 C94.32,79.1 94.32,116.46 94.32,141.26" fill="none" id="CIS-to-CIA" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="94.32,147.26,98.32,138.26,94.32,142.26,90.32,138.26,94.32,147.26" style="stroke:#181818;stroke-width:1;"/>
+<path d="M99.32,87.49 L99.32,112.49 L263.32,112.49 L263.32,97.49 L253.32,87.49 L99.32,87.49" fill="#F5FFFA" style="stroke:#000080;stroke-width:2;"/>
+<path d="M253.32,87.49 L253.32,97.49 L263.32,97.49 L253.32,87.49" fill="#F5FFFA" style="stroke:#000080;stroke-width:2;"/>
+<text fill="#800000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="143.438" x="105.32" y="105.0584">bold multiline body 09</text>
+</g>
+</g></svg>

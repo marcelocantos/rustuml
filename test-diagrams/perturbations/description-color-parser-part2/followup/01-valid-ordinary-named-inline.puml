@@ -1,0 +1,6 @@
+@startuml
+node "Color Alpha Source" as CAS
+database "Color Alpha Target" as CAT
+CAS --> CAT : alpha hop
+note right on link #PaleGreen : ordinary named inline 01
+@enduml
