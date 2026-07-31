@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-center-label-horizontal-painted-frontier",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "36f3c1889b7086be7b86fe0e255767bfc626939b",
+  "triggering_review": "docs/parity-reviews/class-dot-ortho-er-migration/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["appendDotString", "appendTable", "solveLine", "drawU"],
+      "lines": "423-459,497-515,734-758,944-947",
+      "role": "Serializes the integer fixed-size center block as xlabel under ORTHO, recovers its solved origin, then paints the natural labelText at that origin rather than painting the placeholder table."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["calculateDimension"],
+      "lines": "125-135",
+      "role": "Measures the solved graph by drawing its actual primitives through LimitFinder and translates the painted minimum to (6, 6)."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": ["draw", "drawUPath", "drawText"],
+      "lines": "101-141,155-158,203-211",
+      "role": "Adds visible path and text bounds to MinMax; no Graphviz placeholder rectangle is drawn or measured."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "symbols": ["getPreferredWidth", "drawInternalU"],
+      "lines": "77-85,99-131",
+      "role": "Includes horizontal padding in the preferred size sent to Graphviz, while the folded note path begins at the component-local painted origin inside that preferred block."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["svek_layout_x_bias"],
+      "lines": "14263-14382",
+      "role": "Currently includes every solved edge.label.x directly in the horizontal normalization minimum, including invisible fixed xlabel placeholder area."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["svek_layout_y_bias", "relationship_center_painted_min_y"],
+      "lines": "14384-14513",
+      "role": "Already maps relationship-owned center placeholders to actual painted vertical minima and excludes mapped placeholders from the generic minimum."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["relationship_center_layout", "render_relationship_svg"],
+      "lines": "14599-14785,15962-16134",
+      "role": "Owns the same natural label and folded-note translations used for visible SVG painting, from which the horizontal painted minimum can be derived."
+    }
+  ],
+  "claimed_invariant": "Class SVEK document-origin normalization uses the leftmost painted relationship-center primitive, not the left edge of Graphviz's fixed center-label placeholder. Ordinary relationship text contributes its emitted text origin. A folded link note contributes its translated visible note-path origin. The solved xlabel origin remains the anchor for those natural children, but unpainted preferred-size padding does not define the document minimum.",
+  "causal_divergence": "After the ORTHO implementation began passing center blocks through Graphviz xlabel, a nested-package held-out exposed a uniform 5px right shift and 5px wider canvas. Its link-note xlabel placeholder is the leftmost solved object, but ComponentRoseNote's first visible path starts five pixels inside that preferred block. Java normalizes from the visible path through LimitFinder; Rust normalizes from edge.label.x, so it retains the five pixels of invisible leading placeholder area and moves every node, cluster, route, and label together.",
+  "planned_model_change": "Make svek_layout_x_bias relationship-aware in the same way as svek_layout_y_bias: map solved relationship center labels to a horizontal painted-frontier helper derived from RelationshipCenterLayout and the emitted label/note geometry, exclude those mapped placeholders from the generic edge.label minimum, and retain solved placeholder minima only for unmatched layout edges. Do not add coordinate constants or alter Graphviz routing, table dimensions, label solving, path serialization, or comparator behavior.",
+  "perturbation_axes": [
+    "top-to-bottom versus left-to-right direction",
+    "ordinary-label-only, note-only, and combined label-plus-note center blocks",
+    "note-dominant versus label-dominant widths",
+    "nested packages versus unclustered classes",
+    "forward versus reversed relationships",
+    "renamed labels with different natural widths"
+  ],
+  "scope_boundary": "This mechanism owns only the horizontal painted minimum used by Class SVEK document-origin normalization. It does not own Graphviz ORTHO route serialization, endpoint-label placement, vertical normalization, parser syntax, cluster geometry, canvas right/bottom extent, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved nested-package ORTHO perturbation loses the uniform 5px horizontal shift without fixture-keyed logic.",
+    "Previously exact default-position center-label and link-note perturbations remain exact.",
+    "A unit test derives note and ordinary-label horizontal painted minima from natural center-block geometry rather than expected fixture coordinates.",
+    "Focused layout/renderer tests and the full no-oracle suite show no regressions.",
+    "A separate checker creates fresh valid inputs spanning direction, nesting, and center-block composition and records exact revisions, commands, findings, and verdict."
+  ],
+  "forbidden_approaches": [
+    "adding a 5px offset unconditionally or under ORTHO/package/link-note conditions",
+    "matching fixture names, labels, source lines, topology counts, or golden paths",
+    "post-hoc SVG coordinate surgery",
+    "changing Graphviz xlabel dimensions to compensate for painted normalization",
+    "changing comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
