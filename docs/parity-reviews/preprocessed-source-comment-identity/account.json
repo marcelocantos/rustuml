@@ -73,7 +73,7 @@
   ],
   "experimental_result": {
     "account_revision": "722bc94d9b84902de021a9a4d9f9782ce701137f",
-    "implementation_revision": "pending implementation commit",
+    "implementation_revision": "c3665f97d77615f51a23535bc46fddf87b5e5ec6",
     "accepted_result": "preproc_complex_theme_override becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,169/11,251 to 11,170/11,251, with preprocessing moving from 287/307 to 288/307 and every other family unchanged.",
     "model_evidence": "Removing only the Java-classified full-line comment from Rust's 7,465-byte reconstructed theme source changes the source seed from 1u17r8kq8jkal to the exact golden prefix 5uh6twufn3b0; no SVG paint or geometry change is involved. The implementation now applies Java's long-, short-, and inline-comment identity semantics while reconstructing a theme-expanded source. A fresh paired test proves that comments before and after a theme, a long comment, and an inline comment do not affect identity, while an apostrophe inside a quoted renamed label and an ordinary blank line survive.",
     "commands": [
