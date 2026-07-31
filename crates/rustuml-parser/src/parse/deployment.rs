@@ -96,6 +96,7 @@ fn kind_from_keyword(keyword: &str) -> DeploymentNodeKind {
 #[allow(clippy::too_many_arguments)]
 fn push_node(
     nodes: &mut Vec<DeploymentNode>,
+    next_quark_order: &mut usize,
     id: String,
     label: String,
     kind: DeploymentNodeKind,
@@ -105,6 +106,8 @@ fn push_node(
     source_line: usize,
 ) -> bool {
     if !nodes.iter().any(|n| n.id == id) {
+        let quark_order = *next_quark_order;
+        *next_quark_order += 1;
         nodes.push(DeploymentNode {
             id,
             label,
@@ -114,6 +117,7 @@ fn push_node(
             declared_container,
             children: Vec::new(),
             source_line,
+            quark_order,
         });
         return true;
     }
@@ -385,6 +389,8 @@ struct NoteAccum {
     target: Option<String>,
     id: Option<String>,
     color: Option<String>,
+    owner: Option<String>,
+    quark_order: usize,
     position: DeploymentNotePosition,
     source_line: usize,
     lines: Vec<String>,
@@ -396,6 +402,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     let mut notes = Vec::new();
     let mut meta = DiagramMeta::default();
     let mut direction = DeploymentLayoutDirection::TopToBottom;
+    let mut next_quark_order = 0usize;
 
     // Stack of node IDs for tracking nesting depth.
     let mut stack: Vec<String> = Vec::new();
@@ -495,6 +502,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     target: accum.target,
                     text,
                     color: accum.color,
+                    owner: accum.owner,
+                    quark_order: accum.quark_order,
                     position: accum.position,
                     source_line: accum.source_line,
                 });
@@ -598,6 +607,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let color = caps.get(4).map(|m| m.as_str().to_string());
             let created = push_node(
                 &mut nodes,
+                &mut next_quark_order,
                 id.clone(),
                 label,
                 DeploymentNodeKind::Component,
@@ -616,11 +626,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         if let Some(caps) = RE_NOTE_FLOATING.captures(trimmed) {
             let text = caps[1].replace("\\n", "\n");
             let id = caps[2].to_string();
+            let quark_order = next_quark_order;
+            next_quark_order += 1;
             notes.push(DeploymentNote {
                 id: Some(id),
                 target: None,
                 text,
                 color: caps.get(3).map(|value| value.as_str().to_string()),
+                owner: stack.last().cloned(),
+                quark_order,
                 position: DeploymentNotePosition::Right,
                 source_line: current_line,
             });
@@ -628,10 +642,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         if let Some(caps) = RE_NOTE_FLOATING_MULTI.captures(trimmed) {
+            let quark_order = next_quark_order;
+            next_quark_order += 1;
             note_accum = Some(NoteAccum {
                 id: Some(caps[1].to_string()),
                 target: None,
                 color: caps.get(2).map(|value| value.as_str().to_string()),
+                owner: stack.last().cloned(),
+                quark_order,
                 position: DeploymentNotePosition::Right,
                 // Preprocessing strips the `@startuml` line before the first
                 // content record; the multiline command's Java location is
@@ -648,11 +666,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
             let text = caps[4].trim().to_string();
+            let quark_order = next_quark_order;
+            next_quark_order += 1;
             notes.push(DeploymentNote {
                 id: None,
                 target: Some(target),
                 text,
                 color: caps.get(3).map(|value| value.as_str().to_string()),
+                owner: stack.last().cloned(),
+                quark_order,
                 position,
                 source_line: current_line,
             });
@@ -664,10 +686,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let position = deployment_note_position(&caps[1].to_ascii_lowercase());
             let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
+            let quark_order = next_quark_order;
+            next_quark_order += 1;
             note_accum = Some(NoteAccum {
                 id: None,
                 target: Some(target),
                 color: caps.get(3).map(|value| value.as_str().to_string()),
+                owner: stack.last().cloned(),
+                quark_order,
                 position,
                 source_line: current_line + 1,
                 lines: Vec::new(),
@@ -727,6 +753,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
                 for (id, lbl) in [(&from, &raw_from), (&to, &raw_to)] {
                     if !nodes.iter().any(|n| n.id == *id) {
+                        let quark_order = next_quark_order;
+                        next_quark_order += 1;
                         nodes.push(DeploymentNode {
                             id: id.clone(),
                             label: lbl.clone(),
@@ -736,6 +764,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             declared_container: false,
                             children: Vec::new(),
                             source_line: current_line,
+                            quark_order,
                         });
                     }
                 }
@@ -774,6 +803,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
                     let created = push_node(
                         &mut nodes,
+                        &mut next_quark_order,
                         id.clone(),
                         label,
                         kind,
@@ -809,6 +839,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
                     let created = push_node(
                         &mut nodes,
+                        &mut next_quark_order,
                         id.clone(),
                         label,
                         kind,
@@ -848,6 +879,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             // Auto-create nodes for any unknown IDs in connections.
             for (id, lbl) in [(&from, &raw_from), (&to, &raw_to)] {
                 if !nodes.iter().any(|n| n.id == *id) {
+                    let quark_order = next_quark_order;
+                    next_quark_order += 1;
                     nodes.push(DeploymentNode {
                         id: id.clone(),
                         label: lbl.clone(),
@@ -857,6 +890,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         declared_container: false,
                         children: Vec::new(),
                         source_line: current_line,
+                        quark_order,
                     });
                 }
             }
@@ -1129,6 +1163,31 @@ mod tests {
         assert_eq!(d.notes[1].color.as_deref(), Some("#MistyRose"));
         assert_eq!(d.notes[2].color.as_deref(), Some("#LightGreen"));
         assert_eq!(d.notes[3].color.as_deref(), Some("#Wheat"));
+    }
+
+    #[test]
+    fn description_leaves_retain_cross_kind_quark_order_and_owner() {
+        let d = parse(
+            "node Outer {\n\
+               note as FirstLedger\n\
+                 payload\n\
+               endnote\n\
+               artifact LaterRuntime\n\
+             }\n\
+             file RootLeaf",
+        );
+
+        let outer = d.nodes.iter().find(|node| node.id == "Outer").unwrap();
+        let nested = d
+            .nodes
+            .iter()
+            .find(|node| node.id == "LaterRuntime")
+            .unwrap();
+        let root = d.nodes.iter().find(|node| node.id == "RootLeaf").unwrap();
+        assert!(outer.quark_order < d.notes[0].quark_order);
+        assert!(d.notes[0].quark_order < nested.quark_order);
+        assert!(nested.quark_order < root.quark_order);
+        assert_eq!(d.notes[0].owner.as_deref(), Some("Outer"));
     }
 
     #[test]

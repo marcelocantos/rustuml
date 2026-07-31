@@ -42,6 +42,12 @@ pub struct DeploymentNote {
     /// Explicit note background color, retained as a PlantUML color token.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Immediate containing DESCRIPTION group, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// Stable ordinal assigned when the note's quark is first registered.
+    #[serde(default)]
+    pub quark_order: usize,
     /// Requested side of an attached note.
     #[serde(default)]
     pub position: DeploymentNotePosition,
@@ -78,6 +84,9 @@ pub struct DeploymentNode {
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+    /// Stable ordinal assigned when this identifier's quark is first registered.
+    #[serde(default)]
+    pub quark_order: usize,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]

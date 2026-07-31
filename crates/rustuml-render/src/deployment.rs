@@ -3919,6 +3919,117 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
     svg.finalize_plantuml()
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum DeploymentSvekLeaf {
+    Node(usize),
+    Note(usize),
+}
+
+fn deployment_svek_leaf_order(
+    diagram: &DeploymentDiagram,
+    parent_of: &HashMap<String, String>,
+    cluster_ids: &HashSet<&str>,
+    laid_out_note_indices: &[usize],
+) -> Vec<DeploymentSvekLeaf> {
+    fn collect_owner(
+        diagram: &DeploymentDiagram,
+        parent_of: &HashMap<String, String>,
+        cluster_ids: &HashSet<&str>,
+        laid_out_notes: &HashSet<usize>,
+        owner: Option<&str>,
+        result: &mut Vec<DeploymentSvekLeaf>,
+    ) {
+        let mut direct = diagram
+            .nodes
+            .iter()
+            .enumerate()
+            .filter(|(_, node)| {
+                !cluster_ids.contains(node.id.as_str())
+                    && parent_of.get(&node.id).map(String::as_str) == owner
+            })
+            .map(|(index, node)| {
+                (
+                    node.quark_order,
+                    node.source_line,
+                    0_u8,
+                    index,
+                    DeploymentSvekLeaf::Node(index),
+                )
+            })
+            .chain(
+                diagram
+                    .notes
+                    .iter()
+                    .enumerate()
+                    .filter(|(index, note)| {
+                        laid_out_notes.contains(index) && note.owner.as_deref() == owner
+                    })
+                    .map(|(index, note)| {
+                        (
+                            note.quark_order,
+                            note.source_line,
+                            1_u8,
+                            index,
+                            DeploymentSvekLeaf::Note(index),
+                        )
+                    }),
+            )
+            .collect::<Vec<_>>();
+        direct.sort_by_key(|&(quark_order, source_line, kind, index, _)| {
+            (quark_order, source_line, kind, index)
+        });
+        result.extend(direct.into_iter().map(|(_, _, _, _, leaf)| leaf));
+
+        let mut children = diagram
+            .nodes
+            .iter()
+            .filter(|node| {
+                cluster_ids.contains(node.id.as_str())
+                    && parent_of.get(&node.id).map(String::as_str) == owner
+            })
+            .collect::<Vec<_>>();
+        children.sort_by_key(|node| (node.quark_order, node.source_line));
+        for child in children {
+            collect_owner(
+                diagram,
+                parent_of,
+                cluster_ids,
+                laid_out_notes,
+                Some(&child.id),
+                result,
+            );
+        }
+    }
+
+    let laid_out_notes = laid_out_note_indices.iter().copied().collect();
+    let mut result = Vec::with_capacity(diagram.nodes.len() + laid_out_note_indices.len());
+    let mut roots = diagram
+        .nodes
+        .iter()
+        .filter(|node| cluster_ids.contains(node.id.as_str()) && !parent_of.contains_key(&node.id))
+        .collect::<Vec<_>>();
+    roots.sort_by_key(|node| (node.quark_order, node.source_line));
+    for root in roots {
+        collect_owner(
+            diagram,
+            parent_of,
+            cluster_ids,
+            &laid_out_notes,
+            Some(&root.id),
+            &mut result,
+        );
+    }
+    collect_owner(
+        diagram,
+        parent_of,
+        cluster_ids,
+        &laid_out_notes,
+        None,
+        &mut result,
+    );
+    result
+}
+
 fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // Java path: CucaDiagramFileMakerSvek builds a Bibliotekon of measured
     // SvekNodes, DotStringFactory serialises those node boxes to dot, then
@@ -3962,20 +4073,32 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let mut layout = LayoutGraph::new(layout_direction)
         .with_plantuml_svek_spacing()
         .with_plantuml_svek_node_order();
-    for (node, dim) in diagram.nodes.iter().zip(&dims) {
-        if !cluster_ids.contains(node.id.as_str()) {
-            let (width, height) = deployment_layout_node_size(node.kind, dim);
-            layout.add_node(&node.id, &node.label, width, height);
+    let mut entity_layout_slots = vec![None; diagram.nodes.len()];
+    let mut note_layout_slots = vec![None; diagram.notes.len()];
+    let mut next_layout_slot = 0usize;
+    for leaf in
+        deployment_svek_leaf_order(diagram, &parent_of, &cluster_ids, &laid_out_note_indices)
+    {
+        match leaf {
+            DeploymentSvekLeaf::Node(node_index) => {
+                let node = &diagram.nodes[node_index];
+                let (width, height) = deployment_layout_node_size(node.kind, &dims[node_index]);
+                layout.add_node(&node.id, &node.label, width, height);
+                entity_layout_slots[node_index] = Some(next_layout_slot);
+                next_layout_slot += 1;
+            }
+            DeploymentSvekLeaf::Note(note_index) => {
+                let dim = note_dims[note_index];
+                layout.add_node(
+                    &deployment_note_layout_id(note_index),
+                    "",
+                    dim.width,
+                    dim.height,
+                );
+                note_layout_slots[note_index] = Some(next_layout_slot);
+                next_layout_slot += 1;
+            }
         }
-    }
-    for &note_index in &laid_out_note_indices {
-        let dim = note_dims[note_index];
-        layout.add_node(
-            &deployment_note_layout_id(note_index),
-            "",
-            dim.width,
-            dim.height,
-        );
     }
     for endpoint_id in cluster_endpoint_nodes.values() {
         layout.add_svek_cluster_endpoint(endpoint_id);
@@ -4107,6 +4230,21 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     }
 
     let mut result = layout.layout_full(LAYOUT_TIMEOUT);
+    if let Some(result) = result.as_mut() {
+        let solved_positions = result.node_positions.clone();
+        result.node_positions = entity_layout_slots
+            .iter()
+            .flatten()
+            .map(|&slot| solved_positions[slot])
+            .chain(
+                laid_out_note_indices
+                    .iter()
+                    .filter_map(|&note_index| note_layout_slots[note_index])
+                    .map(|slot| solved_positions[slot]),
+            )
+            .chain(solved_positions.iter().skip(next_layout_slot).copied())
+            .collect();
+    }
     if let Some(result) = result.as_mut() {
         adjust_deployment_endpoint_labels(diagram, &dims, result);
     }
@@ -7409,6 +7547,46 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(note_start < node_start, "{svg}");
         assert!(svg[note_start..node_start].contains("control body remains display text"));
         assert!(!svg[note_start..node_start].contains(" L0,0 "), "{svg}");
+    }
+
+    #[test]
+    fn deployment_svek_leaf_order_follows_cross_kind_quark_registration() {
+        fn leaf_order(source: &str) -> Vec<DeploymentSvekLeaf> {
+            let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+            let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+                panic!("expected deployment diagram");
+            };
+            let parent_of = deployment_parent_map(&diagram);
+            let cluster_ids = HashSet::new();
+            let notes = laid_out_deployment_note_indices(&diagram);
+            deployment_svek_leaf_order(&diagram, &parent_of, &cluster_ids, &notes)
+        }
+
+        let note_first = leaf_order(
+            "@startuml\n\
+             note as FirstLedger\n\
+               payload\n\
+             endnote\n\
+             node LaterRuntime\n\
+             @enduml",
+        );
+        assert_eq!(
+            note_first,
+            [DeploymentSvekLeaf::Note(0), DeploymentSvekLeaf::Node(0)]
+        );
+
+        let node_first = leaf_order(
+            "@startuml\n\
+             node FirstRuntime\n\
+             note as LaterLedger\n\
+               payload\n\
+             endnote\n\
+             @enduml",
+        );
+        assert_eq!(
+            node_first,
+            [DeploymentSvekLeaf::Node(0), DeploymentSvekLeaf::Note(0)]
+        );
     }
 
     #[test]
