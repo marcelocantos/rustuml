@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-standalone-leaf-magma-ordering",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/AbstractEntityDiagram.java:applySingleStrategy",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java:constructor and putInSquare",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java:putInSquare and computeBranch",
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:printGroups, getUnpackagedEntities, and printEntities",
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:executeInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:svek_node_emission_order",
+    "crates/rustuml-render/src/class.rs:add_single_strategy_links and add_square_invisible_links",
+    "crates/rustuml-render/src/class.rs:note_owner_packages and package_render_model",
+    "crates/rustuml-render/src/class.rs:relationship_layout_id",
+    "crates/rustuml-render/src/class.rs:render_plantuml_svg floating note emission"
+  ],
+  "invariant": "Before SVEK, Java applySingleStrategy partitions every immediate unlinked Entity leaf by parent container in entity creation order. The stream is not class-only: named floating notes and rendered empty-package leaves participate beside ordinary classes. SquareMaker uses ceil(sqrt(n)); for two leaves it creates an invisible left-right LinkArg.noDisplay(1), while later row heads use top-down noDisplay(2). Linked leaves, including note endpoints and attached-note targets, are excluded.",
+  "causal_divergence": "Rust's class add_single_strategy_links projects each container to ClassDiagram.entities only, omitting floating note and empty-package SVEK nodes even though svek_node_emission_order already models their unified creation stream. It also returns for fewer than three entities. Two floating notes followed by a class therefore receive no Java Magma constraints and dot places all three on one row instead of placing the two notes on the first row and the class at the next row head.",
+  "planned_change": "Build each container's standalone list from svek_node_emission_order, mapping ordinary entities, floating notes, and rendered empty-package leaves to their actual layout IDs and immediate owners. Compute linked layout IDs from ordinary relationships and attached-note links, preserve creation order, and apply invisible SquareMaker links for every list of two or more leaves with Java's minlen 0 row and minlen 1 column transitions. Keep attached notes and hidden package roles out of the standalone stream.",
+  "perturbation_axes": [
+    "two, three, four, and five standalone leaves",
+    "floating note before versus after ordinary class leaves",
+    "mixed floating notes, classes, and empty packages",
+    "root versus nested package ownership",
+    "top-to-bottom versus left-to-right direction",
+    "unlinked leaves versus relationship and attached-note controls",
+    "renamed aliases and changed note body widths"
+  ],
+  "scope_boundary": "This mechanism owns class-family standalone leaf membership and invisible Magma ordering. It does not own note box paint, parser command boundaries, explicit folder style selection, visible relationship routing, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "The preserved two-floating-notes-then-class counterexample passes diff_one --no-oracle",
+    "Fresh valid held-outs cover leaf-kind membership and standalone-count or owner axes",
+    "Linked and attached-note controls do not acquire standalone constraints",
+    "Class renderer unit tests and no-oracle product ratchets remain green",
+    "An independent checker records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "special-casing note counts, fixture aliases, or expected coordinates",
+    "post-hoc translation of solved note or class positions",
+    "including hidden packages or linked leaves in Magma",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-body-dispatch-isolation/review.json",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_multiple_note_blocks_then_class.puml"
+  ]
+}
