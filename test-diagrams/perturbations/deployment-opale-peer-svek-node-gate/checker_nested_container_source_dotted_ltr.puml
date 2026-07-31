@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+node "Outer enclosure" as OuterShelf {
+  node "Inner enclosure" as InnerShelf {
+    component "resident service" as ResidentService
+  }
+}
+note "Nested peer observation" as NestedMemo
+NestedMemo ..> InnerShelf
+queue "After nested peer" as AfterNested
+@enduml

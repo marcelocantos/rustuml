@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="137px" preserveAspectRatio="none" style="width:418px;height:137px;background:#FFFFFF;" version="1.1" viewBox="0 0 418 137" width="418px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster DeferredShelf-->
+<g class="cluster" data-qualified-name="DeferredShelf" data-source-line="2" id="ent0003">
+<polygon fill="none" points="6,16,16,6,221,6,221,102.49,211,112.49,6,112.49,6,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="211" x2="221" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="6" x2="211" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="211" x2="211" y1="16" y2="112.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="99.2715" x="63.8643" y="32.5352">DeferredShelf</text>
+</g>
+<!--entity deferred resident-->
+<g class="entity" data-qualified-name="DeferredShelf.DeferredResident" data-source-line="4" id="ent0005">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="147.3047" x="30.35" y="49"/>
+<polygon fill="#F1F1F1" points="160.6547,54,160.6547,68,172.6547,68,172.6547,60,166.6547,54,160.6547,54" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.6547" x2="166.6547" y1="54" y2="60"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="172.6547" x2="166.6547" y1="60" y2="60"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117.3047" x="40.35" y="75.5352">deferred resident</text>
+</g>
+<g class="entity" data-qualified-name="ForwardMemo" data-source-line="1" id="ent0002">
+<path d="M117.1,148.49 L117.1,173.8005 L308.8964,173.8005 L308.8964,158.49 L298.8964,148.49 L117.1,148.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M298.8964,148.49 L298.8964,158.49 L308.8964,158.49 L298.8964,148.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="170.7964" x="123.1" y="166.0584">Forward group observation</text>
+</g>
+<!--entity After forward peer-->
+<g class="entity" data-qualified-name="AfterForward" data-source-line="6" id="ent0006">
+<path d="M248.45,53 L248.45,84.4883 A2.5,2.5 0 0 0 250.95,86.9883 L391.0545,86.9883 A2.5,2.5 0 0 0 393.5545,84.4883 L393.5545,60.5 L383.5545,50.5 L250.95,50.5 A2.5,2.5 0 0 0 248.45,53" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M383.5545,50.5 L383.5545,58 A2.5,2.5 0 0 0 386.0545,60.5 L393.5545,60.5" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="125.1045" x="258.45" y="74.0352">After forward peer</text>
+</g>
+<!--link DeferredShelf to ForwardMemo-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="2" id="lnk4">
+<path d="M213,112.6597 C213,112.9269 213,113.1942 213,113.4616 C213,117.7394 213,122.035 213,126.195 C213,134.515 213,136.2925 213,142.3" fill="none" id="DeferredShelf-to-ForwardMemo" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="213,148.3,217,139.3,213,143.3,209,139.3,213,148.3" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

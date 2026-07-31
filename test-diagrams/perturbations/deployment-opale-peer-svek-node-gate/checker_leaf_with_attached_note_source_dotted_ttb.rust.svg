@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="177px" preserveAspectRatio="none" style="width:388px;height:177px;background:#FFFFFF;" version="1.1" viewBox="0 0 388 177" width="388px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Annotated leaf-->
+<g class="entity" data-qualified-name="AnnotatedLeaf" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="17.32,116.49,27.32,106.49,156.9264,106.49,156.9264,142.9783,146.9264,152.9783,17.32,152.9783,17.32,116.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="146.9264" x2="156.9264" y1="116.49" y2="106.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="17.32" x2="146.9264" y1="116.49" y2="116.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="146.9264" x2="146.9264" y1="116.49" y2="152.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99.6064" x="32.32" y="140.0252">Annotated leaf</text>
+</g>
+<g class="entity" data-qualified-name="GMN3" data-source-line="3" id="ent0004">
+<path d="M191.44,117.08 L191.44,125.73 L157.35,129.73 L191.44,133.73 L191.44,142.3905 A0,0 0 0 0 191.44,142.3905 L338.8028,142.3905 A0,0 0 0 0 338.8028,142.3905 L338.8028,127.08 L328.8028,117.08 L191.44,117.08 A0,0 0 0 0 191.44,117.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M328.8028,117.08 L328.8028,127.08 L338.8028,127.08 L328.8028,117.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="126.3628" x="197.44" y="134.6484">attached annotation</text>
+</g>
+<g class="entity" data-qualified-name="AnnotatedMemo" data-source-line="5" id="ent0006">
+<path d="M6,14.09 L6,39.4005 A0,0 0 0 0 6,39.4005 L83.12,39.4005 L87.12,106.06 L91.12,39.4005 L168.2417,39.4005 A0,0 0 0 0 168.2417,39.4005 L168.2417,24.09 L158.2417,14.09 L6,14.09 A0,0 0 0 0 6,14.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M158.2417,14.09 L158.2417,24.09 L168.2417,24.09 L158.2417,14.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="141.2417" x="12" y="31.6584">Annotated leaf control</text>
+</g>
+<!--entity After annotated leaf-->
+<g class="entity" data-qualified-name="AfterAnnotated" data-source-line="7" id="ent0008">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="165.6797" x="203.28" y="7"/>
+<polygon fill="#F1F1F1" points="351.9597,12,351.9597,26,363.9597,26,363.9597,18,357.9597,12,351.9597,12" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="357.9597" x2="357.9597" y1="12" y2="18"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="363.9597" x2="357.9597" y1="18" y2="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="135.6797" x="213.28" y="33.5352">After annotated leaf</text>
+</g>
+</g></svg>

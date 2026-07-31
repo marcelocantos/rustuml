@@ -1,0 +1,9 @@
+@startuml
+node "Annotated leaf" as AnnotatedLeaf
+note right of AnnotatedLeaf
+  attached annotation
+end note
+note "Annotated leaf control" as AnnotatedMemo
+AnnotatedMemo ..> AnnotatedLeaf
+artifact "After annotated leaf" as AfterAnnotated
+@enduml

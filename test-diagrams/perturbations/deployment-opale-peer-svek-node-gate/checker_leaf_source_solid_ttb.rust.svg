@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="177px" preserveAspectRatio="none" style="width:345px;height:177px;background:#FFFFFF;" version="1.1" viewBox="0 0 345 177" width="345px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Leaf peer-->
+<g class="entity" data-qualified-name="LeafPeer" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="25.59,116.49,35.59,106.49,128.3029,106.49,128.3029,142.9783,118.3029,152.9783,25.59,152.9783,25.59,116.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="118.3029" x2="128.3029" y1="116.49" y2="106.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="25.59" x2="118.3029" y1="116.49" y2="116.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="118.3029" x2="118.3029" y1="116.49" y2="152.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.7129" x="40.59" y="140.0252">Leaf peer</text>
+</g>
+<g class="entity" data-qualified-name="LeafSourceMemo" data-source-line="2" id="ent0003">
+<path d="M6,14.09 L6,39.4005 A0,0 0 0 0 6,39.4005 L72.95,39.4005 L76.95,106.06 L80.95,39.4005 L147.8975,39.4005 A0,0 0 0 0 147.8975,39.4005 L147.8975,24.09 L137.8975,14.09 L6,14.09 A0,0 0 0 0 6,14.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M137.8975,14.09 L137.8975,24.09 L147.8975,24.09 L137.8975,14.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="120.8975" x="12" y="31.6584">Leaf source control</text>
+</g>
+<!--entity After leaf source-->
+<g class="entity" data-qualified-name="AfterLeafSource" data-source-line="4" id="ent0005">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="142.2803" x="182.81" y="7"/>
+<polygon fill="#F1F1F1" points="308.0903,12,308.0903,26,320.0903,26,320.0903,18,314.0903,12,308.0903,12" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="314.0903" x2="314.0903" y1="12" y2="18"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="320.0903" x2="314.0903" y1="18" y2="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112.2803" x="192.81" y="33.5352">After leaf source</text>
+</g>
+</g></svg>

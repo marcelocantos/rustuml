@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node "Leaf destination peer" as LeafDestination
+note "Leaf destination control" as LeafDestinationMemo
+LeafDestination ..> LeafDestinationMemo
+database "After leaf destination" as AfterLeafDestination
+@enduml

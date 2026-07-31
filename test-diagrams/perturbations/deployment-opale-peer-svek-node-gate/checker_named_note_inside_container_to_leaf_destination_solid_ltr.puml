@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Note enclosure" as NoteShelf {
+  note "Contained named observation" as ContainedMemo
+}
+node "External leaf" as ExternalLeaf
+ExternalLeaf --> ContainedMemo
+database "After contained note" as AfterContained
+@enduml

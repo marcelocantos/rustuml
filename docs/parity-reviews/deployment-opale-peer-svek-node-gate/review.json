@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-opale-peer-svek-node-gate",
+  "verdict": "ACCEPTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model_tool": "GPT-5 / Codex desktop",
+    "role": "Did not author the account or implementation; attempted to disprove the peer SvekNode gate with fresh valid Deployment inputs."
+  },
+  "revisions": {
+    "rust_account_commit": "7fa5984cbf7b6da5c35784456cf33b3dda8233fc",
+    "rust_implementation_commit": "4a9bccfd78b36af225e6a194587535e9a744c939",
+    "java_oracle_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "frozen_rust_binary": "/private/tmp/rustuml-opale-group-peer/target/debug/rustuml",
+    "frozen_rust_binary_sha256": "2e742d5b6063e2a1880220dd775db70e2078007febb2afb2cb7b7ef5e530afec",
+    "binary_version": "rustuml 0.7.0"
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-check-opale-group-peer rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-opale-peer-svek-node-gate",
+    "for f in test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/*.puml; do n=${f:t:r}; /private/tmp/rustuml-opale-group-peer/target/debug/rustuml -pipe -tsvg < \"$f\" > \"test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/${n}.rust.svg\" || exit 1; done",
+    "for f in test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/*.svg test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/*.rust.svg; do xmllint --noout \"$f\" || exit 1; done",
+    "python3 ElementTree semantic scanner over every Java/Rust pair: compare ordered entity qualified-name/UID pairs, ordered cluster qualified-name/UID pairs, ordered link UID/endpoints, and named-note path counts plus SVG command signatures",
+    "rg -l 'Syntax Error|syntax error|Error line|An error has occured' test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/*.svg test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/*.rust.svg",
+    "git -C /private/tmp/rustuml-check-opale-group-peer diff --check 7fa5984c..4a9bccfd",
+    "git -C /private/tmp/rustuml-check-opale-group-peer diff --unified=0 7fa5984c..4a9bccfd -- crates/rustuml-render/src/deployment.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})' && exit 1 || exit 0",
+    "git -C /private/tmp/rustuml-check-opale-group-peer grep -n -E 'Empty enclosure|Populated enclosure|Outer enclosure|Deferred enclosure|Leaf peer|Observation enclosure|Review enclosure' 4a9bccfd -- crates || true"
+  ],
+  "source_inspection": {
+    "java": [
+      "GraphvizImageBuilder.isOpalisable at src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:133-147 requires non-strict UML, a NOTE, one visible incident link, and a non-note peer.",
+      "GraphvizImageBuilder.buildImage at :245-258 performs the decisive peer type gate: it calls Bibliotekon.getNode on the peer and sets the edge Opale only when that lookup is non-null.",
+      "Bibliotekon.getNode at src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java:120-122 reads nodeMap only; :124-137 handles groups separately through Cluster.getSpecialPointId, proving a cluster routing point is not a SvekNode."
+    ],
+    "rust": [
+      "render_no_oracle derives cluster_ids before building synthetic cluster_endpoint_nodes at crates/rustuml-render/src/deployment.rs:4209-4223.",
+      "deployment_note_opale_connection at :6602-6649 now rejects a peer in cluster_ids before accepting the route. The proxy remains available to deployment_connection_edge, so layout and ordinary edge painting continue.",
+      "The classifier remains identity-based: it does not contain fixture labels, SVG text rewriting, golden reads, or new numeric tuning."
+    ]
+  },
+  "verification": {
+    "validity": "All 14 Java and Rust SVGs are XML-valid. The syntax-error scan had no matches.",
+    "semantic_scanner": "All 14 Java/Rust pairs matched on entity and cluster inventories, entity/link UID progression, ordinary-link presence and endpoints, and named-note outline topology. A normal note has the two folded-path signatures ML...L; an Opale note has the expected arc-bearing outline signature. This directly checks the mechanism's paint/event boundary without requiring byte-identical geometry.",
+    "cargo_or_rustc": "Not run. The supplied frozen executable was the no-oracle product path used for every Rust render."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_container_declared_after_destination_solid_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_container_declared_after_destination_solid_ttb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_container_declared_after_destination_solid_ttb.rust.svg",
+      "axes": ["container declared after relation", "note destination", "solid", "top-to-bottom", "later UID"],
+      "observed": "Both retain lnk4 from the cluster to ForwardMemo, a normal folded note, and AfterForward ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_empty_container_source_solid_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_empty_container_source_solid_ttb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_empty_container_source_solid_ttb.rust.svg",
+      "axes": ["syntactically empty enclosure", "note source", "solid", "top-to-bottom", "later UID"],
+      "observed": "Both implementations normalize this empty node block to a leaf, so both legitimately use Opale and assign AfterEmpty ent0005. It is an empty-container syntax control, not evidence that Java creates a Cluster for an empty block.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_frame_container_destination_dotted_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_frame_container_destination_dotted_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_frame_container_destination_dotted_ltr.rust.svg",
+      "axes": ["frame container", "note destination", "dotted", "left-to-right", "later UID"],
+      "observed": "Both retain lnk5, draw FrameMemo as a normal folded note, and assign AfterFrame ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_destination_dotted_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_destination_dotted_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_destination_dotted_ltr.rust.svg",
+      "axes": ["leaf peer", "note destination", "dotted", "left-to-right", "later UID"],
+      "observed": "Both absorb the only link, use the Opale outline, and assign AfterLeafDestination ent0005.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_source_solid_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_source_solid_ttb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_source_solid_ttb.rust.svg",
+      "axes": ["leaf peer", "note source", "solid", "top-to-bottom", "later UID"],
+      "observed": "Both absorb the only link, use the Opale outline, and assign AfterLeafSource ent0005.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_with_attached_note_source_dotted_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_with_attached_note_source_dotted_ttb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_leaf_with_attached_note_source_dotted_ttb.rust.svg",
+      "axes": ["leaf peer with attached note", "note source", "dotted", "top-to-bottom", "later UID"],
+      "observed": "The attached note does not turn the leaf into a cluster in either model; both retain the Opale result and AfterAnnotated ent0008.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_inside_container_to_leaf_destination_solid_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_inside_container_to_leaf_destination_solid_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_inside_container_to_leaf_destination_solid_ltr.rust.svg",
+      "axes": ["note owned by container", "leaf peer", "note destination", "solid", "left-to-right"],
+      "observed": "Both retain NoteShelf as a cluster while the contained note still absorbs its sole leaf relation; AfterContained is ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_destination_dotted_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_destination_dotted_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_destination_dotted_ltr.rust.svg",
+      "axes": ["container populated only by named note", "note destination", "dotted", "left-to-right", "later UID"],
+      "observed": "Both retain the ordinary cluster-to-note link and normal ReviewMemo outline; AfterReview is ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_source_solid_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_source_solid_ttb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_named_note_only_container_source_solid_ttb.rust.svg",
+      "axes": ["container populated only by named note", "note source", "solid", "top-to-bottom", "later UID"],
+      "observed": "Both retain lnk4 to ObservationShelf, preserve a normal ExternalMemo, and assign AfterObservation ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_container_source_dotted_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_container_source_dotted_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_container_source_dotted_ltr.rust.svg",
+      "axes": ["nested container peer", "note source", "dotted", "left-to-right", "later UID"],
+      "observed": "Both retain outer and inner clusters, lnk6 to InnerShelf, a normal NestedMemo, and AfterNested ent0007.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_leaf_destination_solid_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_leaf_destination_solid_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_nested_leaf_destination_solid_ltr.rust.svg",
+      "axes": ["nested leaf peer", "note destination", "solid", "left-to-right", "later UID"],
+      "observed": "Both retain LeafHolder as a cluster but correctly identify NestedLeaf as a SvekNode leaf; the link is absorbed and AfterNestedLeaf is ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_package_container_source_solid_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_package_container_source_solid_ttb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_package_container_source_solid_ttb.rust.svg",
+      "axes": ["package container", "note source", "solid", "top-to-bottom", "later UID"],
+      "observed": "Both retain lnk5 to PackageShelf, preserve a normal PackageMemo, and assign AfterPackage ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_populated_container_destination_dotted_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_populated_container_destination_dotted_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_populated_container_destination_dotted_ltr.rust.svg",
+      "axes": ["populated node container", "note destination", "dotted", "left-to-right", "later UID"],
+      "observed": "Both retain lnk5 from PopulatedShelf, preserve a normal PopulatedMemo, and assign AfterPopulated ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_quoted_container_display_destination_solid_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_quoted_container_display_destination_solid_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-opale-peer-svek-node-gate/checker_quoted_container_display_destination_solid_ltr.rust.svg",
+      "axes": ["quoted display-name endpoint", "left-to-right", "note destination", "later UID"],
+      "observed": "Both parsers treat the quoted display text as a separate leaf rather than the DisplayShelf alias. Both consequently use Opale and create the same Display enclosure entity and AfterQuoted ent0007.",
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "informational",
+      "summary": "The claimed Java/Rust model boundary survived the adversarial matrix.",
+      "evidence": "Every populated or note-owned container peer stayed an ordinary relation despite routing through a cluster proxy. Every leaf peer, including a nested leaf and a leaf with an attached note, remained Opale eligible. No test lost an event or changed subsequent UIDs."
+    },
+    {
+      "severity": "informational",
+      "summary": "Empty block and quoted-display syntax do not refute the classifier.",
+      "evidence": "PlantUML normalizes an empty node block to a leaf and treats a quoted display string as a new leaf. Rust makes the same semantic choices, so neither is evidence of a missing cluster gate."
+    },
+    {
+      "severity": "informational",
+      "summary": "No overfitting indicator was found in the implementation diff.",
+      "evidence": "The diff contains one Java-cited identity branch, no fixture labels, no golden reads, no output surgery, and no newly tuned numeric constant."
+    }
+  ],
+  "declared_residue": [
+    "Hidden/norank/style-decorated relation retention remains the separately declared CommandLinkElement grammar mechanism.",
+    "Generic compound-edge geometry remains outside this gate once ordinary-link/event semantics are correct."
+  ]
+}

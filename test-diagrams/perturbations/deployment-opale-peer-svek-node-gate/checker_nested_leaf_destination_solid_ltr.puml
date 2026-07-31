@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Leaf holder" as LeafHolder {
+  artifact "Nested leaf peer" as NestedLeaf
+}
+note "Nested leaf control" as NestedLeafMemo
+NestedLeaf --> NestedLeafMemo
+queue "After nested leaf" as AfterNestedLeaf
+@enduml
