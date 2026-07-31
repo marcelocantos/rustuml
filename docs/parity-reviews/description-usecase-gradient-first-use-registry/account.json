@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-usecase-gradient-first-use-registry",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "dcecf006426ce609fb8f7504f20431bc096f2553",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:EntityImageDescription constructor",
+    "src/main/java/net/sourceforge/plantuml/klimt/color/HColorGradient.java:HColorGradient",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java:DriverRectangleSvg#applyFillColor",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverEllipseSvg.java:DriverEllipseSvg#draw",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:SvgGraphics#createSvgGradient",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:SvgGraphics#getSeed"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs:svg_id_seed_prefix",
+    "crates/rustuml-render/src/usecase.rs:SkinColors::from_meta",
+    "crates/rustuml-render/src/usecase.rs:SkinColors::for_actor",
+    "crates/rustuml-render/src/usecase.rs:SkinColors::for_use_case",
+    "crates/rustuml-render/src/usecase.rs:render_with_oracle",
+    "crates/rustuml-render/src/sequence.rs:sequence_gradients",
+    "crates/rustuml-render/src/sequence.rs:sequence_gradient_defs",
+    "crates/rustuml-render/src/filter_registry.rs:gradient_id_for_prefix"
+  ],
+  "claimed_invariant": "Description-diagram actor and use-case background styles are parsed as HColorGradient values. When DriverEllipseSvg paints the first shape using a gradient, DriverRectangleSvg.applyFillColor asks SvgGraphics#createSvgGradient for a definition. SvgGraphics keys definitions by resolved color1, color2, and policy, deduplicates equal keys, assigns IDs as 'g' plus the UML-source seed plus a zero-based first-use index, emits policy-specific endpoints, and stores the definition under <defs> before the body. Actor and use-case shapes that share the same gradient therefore reference one source-seeded definition even when several entities use it.",
+  "causal_divergence": "Rust already computes the Java-compatible source seed during preprocessing and already has a generative first-use gradient model for Sequence diagrams. The no-oracle UseCase renderer does not use either capability: it takes gradient definitions only from OracleLayout, passes None to gradient_fill_or, and deliberately collapses every HColorGradient to its first flat color. Cerulean therefore has otherwise-correct actor/use-case geometry and styles but lacks the three definition nodes and emits #59B6EC instead of url(#g1k3twfgxk2yb30).",
+  "planned_model_change": "Add a no-oracle UseCase gradient registry driven by the actual Description paint order. Resolve each actor/use-case background to a typed color-or-gradient key, register gradients lazily in first painted-shape order, deduplicate by resolved color pair and policy, and derive IDs from the parser-carried __svgIdSeed prefix with the ordinary source-hash fallback. Serialize definitions with SvgGraphics endpoint and attribute ordering, then feed the same registry-owned URL fills to actor/use-case emission. Oracle mode continues to consume captured definitions only as a regression net. Prefer extracting the existing Sequence registry logic into a shared renderer model when that reduces duplication without changing Sequence behavior.",
+  "perturbation_axes": [
+    "one shared gradient versus two distinct gradients and repeated reuse",
+    "vertical, horizontal, and diagonal gradient policies",
+    "actor first versus use-case first paint order",
+    "top-level entities versus package-owned entities",
+    "theme-expanded source seed versus plain source-hash fallback",
+    "renamed labels and changed entity counts"
+  ],
+  "scope_boundary": "This mechanism owns generative SVG gradient identity, deduplication, definition serialization, and fill references for no-oracle UseCase/Description actor and use-case backgrounds. It does not own padding, ellipse fitting, actor geometry, Graphviz layout, typography, non-gradient colors, shadows, comparator tolerance, baselines, skips, or fixture eligibility.",
+  "acceptance": [
+    "The valid Cerulean UseCase golden is structurally equivalent through the no-oracle path without changing geometry or text metrics.",
+    "Fresh valid inputs prove first-use ordering, deduplication, at least two gradient policies, source-derived IDs, renamed labels, and changed entity counts.",
+    "Flat-color, transparent, and no-gradient controls retain their existing output.",
+    "An independent checker audits the Java and Rust registry data flow, generates held-outs over at least two axes, and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "copying gradient definitions or IDs from golden SVGs",
+    "special-casing theme names, source labels, expected SVG dimensions, or known gradient literals",
+    "using declaration order when it differs from actual shape paint order",
+    "changing comparator tolerance, baselines, skips, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_usecase.puml",
+    "fresh valid gradients with changed policies, entity order, labels, and counts"
+  ]
+}
