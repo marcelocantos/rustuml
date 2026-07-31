@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-center-label-painted-frontier",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-class-painted-frontier-2026-08-01",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, frozen rustuml CLI, and frozen target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement bd83ccd8aadacd36abfcab05339e11bbb21c1804 or babd0f4f6a1e67a1d4d439c05e44cc9597ae5452; did not edit production source, accounts, baselines, allow-lists, comparator settings, or the prior link-note review.json."
+  },
+  "account_commit": "bd83ccd8aadacd36abfcab05339e11bbb21c1804",
+  "implementation_commit": "babd0f4f6a1e67a1d4d439c05e44cc9597ae5452",
+  "evaluated_rust_revision": "babd0f4f6a1e67a1d4d439c05e44cc9597ae5452",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_branch": "codex/t14-class-painted-frontier-checker",
+  "checker_workspace": "/private/tmp/rustuml-class-painted-frontier-checker",
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_worktree_status": "At requested revision 71806a23780b04a5ccde2f8ceb5121edad5eb711. Dirty unrelated Java-repo files were observed and not edited: CLAUDE.md, svek.dot, svek.svg."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "/private/tmp/rustuml-class-link-notes/target/release/rustuml",
+      "sha256": "9aef6bcfe9c2d302e267baec1bad911db8a8360b00ec0e761d698ef77e3f9f13"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-class-link-notes/target/release/examples/diff_one",
+      "sha256": "6b03179bb5678df71bdba2fad6d0d23041f7d0796bdc6146e0e7139bef0bce31",
+      "mode": "--no-oracle"
+    }
+  },
+  "no_cargo_or_rustc": true,
+  "maker_precheck_evidence": {
+    "not_rerun_by_checker": "The user explicitly forbade Cargo, rustc, build, fmt, and clippy commands. This checker therefore did not rebuild or rerun the maker's Cargo evidence.",
+    "observed_commit_claims": [
+      "babd0f4f6a1e67a1d4d439c05e44cc9597ae5452 states that it implements bd83ccd8 by deriving SVEK center-label vertical minimum from emitted text runs and visible note geometry instead of the invisible Graphviz placeholder box.",
+      "The task supplied frozen shipped-path binary hashes; both hashes were verified before use."
+    ]
+  },
+  "commands": [
+    "sed -n '1,260p' AGENTS.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "sed -n '1,520p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md and doctrine.md",
+    "mcp__bullseye.bullseye_frontier({\"cwd\":\"/private/tmp/rustuml-class-painted-frontier-checker\"})",
+    "mcp__bullseye.bullseye_convergence({\"cwd\":\"/private/tmp/rustuml-class-painted-frontier-checker\",\"skip_invariants\":true})",
+    "git rev-parse HEAD && git branch --show-current && git status --short",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD && git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short --branch",
+    "shasum -a 256 /private/tmp/rustuml-class-link-notes/target/release/rustuml /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one",
+    "nl -ba Java SvekEdge.java SvekResult.java LimitFinder.java ComponentRoseNote.java EntityImageNoteLink.java TextBlockVertical.java CommandFactoryNoteOnLink.java at the cited ranges",
+    "git diff --unified=80 babd0f4f^ babd0f4f -- crates/rustuml-render/src/class.rs crates/rustuml-render/src/text_render.rs",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14380,14570p;14625,14800p'",
+    "nl -ba crates/rustuml-render/src/text_render.rs | sed -n '220,430p;1640,1725p'",
+    "rg -n 'edge_class_note_on_link|0\\.2422|0\\.367|0\\.734|checker_|class-link-note|class-svek-center-label-painted-frontier|include_str!|include_bytes!|test-diagrams|golden|replace\\(|replacen\\(' crates/rustuml-render/src/class.rs crates/rustuml-render/src/text_render.rs crates/rustuml-layout/src/graph.rs crates/rustuml-parser/src crates/rustuml/src/main.rs crates/rustuml-oracle/tests",
+    "rg -n 'note (top|bottom|left|right) on link|note on link|NoteLinkStrategy|Position.TOP|Position.BOTTOM' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml -g '*.java'",
+    "rg -n 'note on link|note top on link|note bottom on link' crates/rustuml-parser/src/parse/class.rs",
+    "for puml in test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.puml test-diagrams/perturbations/class-svek-center-label-painted-frontier/*.puml; do JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$puml\" ...; done",
+    "for puml in test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.puml test-diagrams/perturbations/class-svek-center-label-painted-frontier/*.puml; do /private/tmp/rustuml-class-link-notes/target/release/rustuml -tsvg \"$puml\" ...; /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one --no-oracle \"$puml\" ...; done",
+    "rg -n 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|No link defined|Parsing syntax error|Assumed diagram type' test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.svg test-diagrams/perturbations/class-svek-center-label-painted-frontier/*.svg",
+    "xmllint --noout test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.svg test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.rust.svg test-diagrams/perturbations/class-svek-center-label-painted-frontier/*.svg test-diagrams/perturbations/class-svek-center-label-painted-frontier/*.rust.svg",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-class-link-notes/target/release/rustuml /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one docs/parity-reviews/class-link-note-component-preferred-dimensions/account.json docs/parity-reviews/class-svek-center-label-painted-frontier/account.json test-diagrams/perturbations/class-link-note-component-preferred-dimensions/* test-diagrams/perturbations/class-svek-center-label-painted-frontier/*"
+  ],
+  "source_trace": {
+    "java": [
+      "SvekResult.java:130-135 uses TextBlockUtils.getMinMax and then moveDelta(6 - minY), so the document origin follows painted primitives rather than Graphviz placeholder rectangles.",
+      "LimitFinder.java:203-211 measures UText from baseline - text height + 1.5 through baseline + 1.5.",
+      "LimitFinder.java:101-115 dispatches UPath, UPolygon, URectangle, and UText as actual painted primitives.",
+      "SvekEdge.java:433-437 and 497-500 send integer fixed table dimensions to Graphviz, while SvekEdge.java:944-947 paints labelText separately at the solved position.",
+      "ComponentRoseNote.java:77-85 preferred dimensions include padding; ComponentRoseNote.java:113-120 paints the folded note polygon from component-local primitive coordinates.",
+      "CommandFactoryNoteOnLink.java:75-102 and 155-172 accept optional right/left/top/bottom link-note positions."
+    ],
+    "rust": [
+      "class.rs:14387-14512 computes center_label_minima with relationship_center_painted_min_y and excludes mapped center edge placeholders from generic edge.label minima.",
+      "class.rs:14515-14540 still contributes magic-arrow polygon minima separately.",
+      "class.rs:14675-14785 supplies the natural center layout and note component geometry used by both rendering and painted-frontier calculation.",
+      "text_render.rs:377-418 computes a no-monospace painted top for emitted text segments, including mixed size and sub/sup baseline shifts."
+    ],
+    "fixture_shape_review": "Static searches found no production references to checker stems, perturbation paths, the observed 0.2422px or 5px drifts, golden reads from shipping code, include_str/include_bytes of test diagrams, or SVG coordinate surgery. The passing former-drift probes and failing fresh styled/positioned probes are behavior-shaped."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_01_lr_reversed_combined_multiline.puml",
+      "golden": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_01_lr_reversed_combined_multiline.svg",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_01_lr_reversed_combined_multiline.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_01_lr_reversed_combined_multiline.diff.txt",
+      "axes": ["fresh held-out", "left-to-right direction", "reversed relationship", "combined label plus note", "multiline note", "fractional note row widths"],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. This independently repeats the formerly failing drift shape with renamed endpoints and strings."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_02_lr_note_only_bottom_multiline.puml",
+      "golden": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_02_lr_note_only_bottom_multiline.svg",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_02_lr_note_only_bottom_multiline.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_02_lr_note_only_bottom_multiline.diff.txt",
+      "axes": ["fresh held-out", "left-to-right direction", "note-only center block", "default bottom note position", "multiline note", "fractional note row widths"],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. This covers the claimed note-only leading-padding frontier that previously caused a 5px global shift."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_03_tb_label_only_styled_mixed_font.puml",
+      "golden": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_03_tb_label_only_styled_mixed_font.svg",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_03_tb_label_only_styled_mixed_font.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_03_tb_label_only_styled_mixed_font.diff.txt",
+      "axes": ["fresh held-out", "top-to-bottom direction", "label-only center block", "mixed font size", "subscript", "superscript", "styled Creole label"],
+      "result": "fail",
+      "diff_exit": 1,
+      "finding": "Java-valid held-out fails. Every emitted relationship-label text segment has matching textLength but Rust places the mixed-size/sub/sup baselines 3px lower than Java. This directly challenges the painted-frontier account's assumption that the new text baseline model follows styled labels."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_04_lr_combined_top_note.puml",
+      "golden": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_04_lr_combined_top_note.svg",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_04_lr_combined_top_note.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_04_lr_combined_top_note.diff.txt",
+      "axes": ["fresh held-out", "left-to-right direction", "combined label plus note", "explicit top link note", "multiline note", "changed names"],
+      "result": "fail",
+      "diff_exit": 1,
+      "finding": "Java-valid held-out fails. Java renders the top note above the relationship label and shifts the class row down; Rust renders only the ordinary relationship label and omits the note because the parser recognizes bare 'note on link' but not Java's optional top/bottom position syntax."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_05_tb_explicit_bottom_combined.puml",
+      "golden": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_05_tb_explicit_bottom_combined.svg",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_05_tb_explicit_bottom_combined.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/painted_05_tb_explicit_bottom_combined.diff.txt",
+      "axes": ["fresh held-out", "top-to-bottom direction", "combined label plus note", "explicit bottom link note", "forward link", "changed names"],
+      "result": "fail",
+      "diff_exit": 1,
+      "finding": "Java-valid held-out fails. Java renders the explicit bottom link note and widens/moves the center block; Rust omits the note and centers only the ordinary label, again exposing missing Java-compatible top/bottom link-note syntax before painted-frontier calculation can apply."
+    }
+  ],
+  "artifact_hashes": {
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_json_sha256": "f19e0a0aca39f5a42640a3d5e60b106d42fd2cd5e0946a5245c5f08ffd62eec6",
+    "failing_sources_sha256": {
+      "painted_03_tb_label_only_styled_mixed_font.puml": "24edfaa9cb83523ca95d411a612eb5991101bbc0e45509733b3a576c85824cad",
+      "painted_04_lr_combined_top_note.puml": "2177138d850a24ec2a1dfd86996e692ce34049bce59b5895016198a67d1da717",
+      "painted_05_tb_explicit_bottom_combined.puml": "7ce5325297894e3f75cf15fec06a50624dbf413fe17122aec05288a4d20a2953"
+    },
+    "failing_java_svgs_sha256": {
+      "painted_03_tb_label_only_styled_mixed_font.svg": "f13e489292b9418ec9b3c18e4ea17fda675bbb4f6212ea499819c5eb633d62c3",
+      "painted_04_lr_combined_top_note.svg": "67cdd0188aa30d5c69b239ec3f34085a8d4658574a9d86b1455817cd00b05115",
+      "painted_05_tb_explicit_bottom_combined.svg": "5a9b25d828cf699fdb08d5dd4ea4f5ab0fb79c60c376061a679b0fe6d0c51e36"
+    },
+    "failing_diffs_sha256": {
+      "painted_03_tb_label_only_styled_mixed_font.diff.txt": "3d334b97c0a0ebaf17eb0386862c5af0feb7bff6de94a1e40c1e9a7b8b770a40",
+      "painted_04_lr_combined_top_note.diff.txt": "9d06e282fcab5e91082220207398163edc585398ae31da6959ddf1dcf22e75f5",
+      "painted_05_tb_explicit_bottom_combined.diff.txt": "a2920178c55322683f154d1c278b0228afcb4b92b5980124829e7a40a76df338"
+    }
+  },
+  "findings": [
+    "The painted-frontier account was committed before the implementation: bd83ccd8aadacd36abfcab05339e11bbb21c1804 precedes babd0f4f6a1e67a1d4d439c05e44cc9597ae5452.",
+    "The Java causal trace supports the central invisible-placeholder claim. SvekResult remeasures painted primitives through LimitFinder, while SvekEdge uses Graphviz's fixed table only to recover a solved label origin and then paints the natural labelText separately.",
+    "The Rust implementation is mechanism-shaped for default-position labels and notes: mapped center edge placeholders are excluded from y-bias minima, and relationship_center_painted_min_y derives minima from emitted text and visible note paths. Static search did not find fixture-shaped offsets or golden reads in the touched production paths.",
+    "The formerly rejected left-to-right combined label-plus-note drift shape now passes when regenerated under painted_01, and a fresh note-only left-to-right bottom control also passes, supporting the claimed fixes for the 0.2422px and 5px drifts.",
+    "A fresh styled label-only counterexample fails: mixed-size/sub/sup relationship-label text is 3px too low in Rust despite matching textLength values. This is directly in the painted text frontier domain.",
+    "Fresh explicit top and bottom link-note counterexamples fail. Java accepts optional link-note position syntax and paints those notes; Rust's class parser only recognizes bare 'note on link', so the shipped path omits the notes before layout/frontier logic can match Java.",
+    "Because three fresh Java-valid perturbations failed, this independent checker rejects the painted-frontier mechanism. All sources, Java SVGs, Rust SVGs, and diff outputs are preserved."
+  ],
+  "verdict": "rejected",
+  "verdict_reason": "REJECT. The implementation fixes the known default-position LR drift and note-only 5px drift, but it does not survive fresh styled-label and explicit top/bottom link-note perturbations. Under the user's held-out rule, these Java-valid counterexamples force rejection."
+}

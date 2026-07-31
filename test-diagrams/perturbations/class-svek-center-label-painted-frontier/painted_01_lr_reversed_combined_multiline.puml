@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class PaintedFrontierWest3001
+class PaintedFrontierEast3011
+PaintedFrontierWest3001 <-- PaintedFrontierEast3011 : changed center label iiww 3017
+note on link
+  painted first row lIl 3023
+  painted wider Wwm 3029
+end note
+@enduml
