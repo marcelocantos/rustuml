@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-command-link-code-token",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "a79a8203b1a32bed4ddbed724a818786d0b692fe",
+  "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+      "symbols": ["CommandLinkElement.getGroup", "CommandLinkElement.executeArg", "CommandLinkElement.getDummy"],
+      "lines": "180-195,198-240,248-269",
+      "role": "Uses the same letters, numbers, underscore and dot endpoint token for both sides, cleans it, and resolves or creates the corresponding contextual quark."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.getRegexConcat", "CommandFactoryNote.executeArg"],
+      "lines": "73-128,151-188",
+      "role": "Creates a named-note quark from a CODE token that admits the same dotted and Unicode identity alphabet."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagram.java",
+      "symbols": ["DescriptionDiagram.cleanId"],
+      "lines": "57-67",
+      "role": "Normalizes endpoint spelling before contextual quark reuse without converting dots into display text."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["NAMED_NOTE_CODE_PATTERN", "parse_named_note_inline", "parse_named_note_multiline"],
+      "lines": "36-109",
+      "role": "Already admits letters, numbers, underscores and dots for named-note identity."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["RE_DESCRIPTION_CONN", "parse_component"],
+      "lines": "41-50,986-1134",
+      "role": "Restricts bare relation endpoints to `\\w+`, so a code accepted by the note command cannot be consumed by the later relation command."
+    }
+  ],
+  "claimed_invariant": "Component/Description relation endpoints and named-note codes share one bare identity token: one or more Unicode letters, Unicode numbers, underscores or dots. A later CommandLinkElement relation reuses the exact named-note quark on either endpoint side and in the current package context; it does not create a component or interface for that code. The same endpoint grammar remains available for ordinary declared and undeclared description leaves.",
+  "causal_divergence": "Rust independently encoded the two command grammars. The shared named-note parser was widened to Java's CODE alphabet, but RE_DESCRIPTION_CONN retained its older `\\w+` alternatives. Dotted note relations therefore fail recognition before known_note_ids can prevent synthetic endpoint creation or preserve relation UID order.",
+  "planned_model_change": "Construct both bare endpoint alternatives in RE_DESCRIPTION_CONN from the same NAMED_NOTE_CODE_PATTERN constant used by named-note commands. Preserve bracketed and quoted endpoint alternatives and all existing capture positions. Add parser evidence that dotted and Unicode named notes are reused on both sides and that a same-token undeclared endpoint still follows ordinary CommandLinkElement materialization semantics.",
+  "perturbation_axes": [
+    "inline versus multiline named note",
+    "source versus destination relation endpoint",
+    "root versus nested package ownership",
+    "ASCII dotted versus Unicode dotted code",
+    "declared note reuse versus undeclared endpoint materialization",
+    "top-to-bottom versus explicit horizontal direction",
+    "declaration and relation source order"
+  ],
+  "acceptance": [
+    "The five preserved valid Component counterexamples in command-factory-note-grammar retain their named-note relation events without synthetic leaves.",
+    "Fresh dotted and Unicode note codes work on either relation side and preserve package-qualified note ownership.",
+    "Undeclared dotted endpoints remain valid ordinary CommandLinkElement identities rather than becoming note-specific exceptions.",
+    "Existing bracketed, quoted and plain ASCII Component relation tests remain green.",
+    "An independent checker attacks token alphabet, endpoint side, ownership, direction and undeclared controls."
+  ],
+  "forbidden_approaches": [
+    "special-casing known note IDs after a failed relation regex",
+    "rewriting dots or Unicode to fixture-specific ASCII aliases",
+    "creating a second note-only relation parser",
+    "keying behavior to Component.Memo_7, SimpleMemo or reviewed labels"
+  ],
+  "declared_residue": [
+    "Parenthesis, interface-eye, colon-delimited and other CommandLinkElement endpoint syntaxes outside the letters/numbers/underscore/dot token remain separate parser mechanisms.",
+    "Java UGroup SVG metadata sanitization of Unicode identity is a separate serialization mechanism recorded by the endpoint checker.",
+    "Generic Component layout and edge-coordinate differences are outside this parser identity mechanism."
+  ]
+}
