@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "mechanism": "usecase-creole-padding-ellipse-aspect",
+  "status": "account_committed_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "48cf3933d1bbdef87a0757c3e1ffdf1da8012dcb",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java:GeneralImageBuilder#createEntityImageBlockInternal",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:EntityImageDescription constructor",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyFactory.java:BodyFactory#create3",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhanced2.java:BodyEnhanced2#getTextBlock and getMarginX",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:Display#getCreole",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:SheetBlock1#calculateDimensionSlow and drawU",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolUsecase.java:USymbolUsecase#asSmall",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockInEllipse.java:TextBlockInEllipse constructor and drawU",
+    "src/main/java/net/sourceforge/plantuml/svek/image/Footprint.java:Footprint.MyUGraphic#drawText"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/usecase.rs:SkinColors::from_meta",
+    "crates/rustuml-render/src/usecase.rs:use_case_dim",
+    "crates/rustuml-render/src/usecase.rs:use_case_ellipse_radii",
+    "crates/rustuml-render/src/usecase.rs:render_use_case"
+  ],
+  "claimed_invariant": "A Description-diagram use case is rendered through EntityImageDescription and USymbolUsecase, whose label is a BodyEnhanced2 Creole block. Display#getCreole passes the current global `skinparam Padding` to SheetBlock1. SheetBlock1 adds twice that padding to both natural width and natural height and translates painted atoms by the left/top padding. TextBlockInEllipse computes alpha from the padded natural dimensions, while Footprint records the translated AWT glyph rectangles; the same padded block is translated into the fitted ellipse for painting. BodyEnhanced2 contributes no additional horizontal margin. With Padding 0 the layer is inert; with Padding 5 a one-line Verdana label's aspect ratio changes from glyph-height/glyph-width to `(glyph-height + 10)/(glyph-width + 10)`.",
+  "causal_divergence": "Rust use_case_dim computes both block dimensions and footprint positions from unpadded glyph metrics. It resolves themed font family, size, color, and stroke correctly, but never carries global skinparam Padding into the Creole block model. Themes such as minty, superhero, united, and cerulean set `skinparam Padding 5`; Java therefore produces narrower, taller use-case ovals while Rust produces wider, flatter ones with identical emitted textLength. Actor and route differences are downstream consequences of the wrong use-case node dimensions. The exact unthemed control already passes because its effective padding for this path is zero.",
+  "planned_model_change": "Resolve the current global skinparam Padding as a four-sided Creole text-block property for use cases. Add left/right padding to the natural block width and top/bottom padding to natural block height before computing TextBlockInEllipse alpha. Translate every footprint atom and decorated-compartment bound by the corresponding left/top padding, and derive the final text origin from that same padded composition so dimensions and painting remain one model. Preserve BodyEnhanced2's zero outer margin, stereotype merge order, mixed-Creole atom metrics, and the existing six-pixel ellipse expansion. Do not tune ellipse radii or graph spacing directly.",
+  "perturbation_axes": [
+    "global Padding 0, 3, 5, and 11",
+    "short versus long labels and renamed glyph-width controls",
+    "sans-serif versus Verdana and Arial",
+    "single-line versus multiline use-case descriptions",
+    "plain label versus stereotype and mixed Creole runs",
+    "top-to-bottom versus left-to-right topology"
+  ],
+  "scope_boundary": "This mechanism owns global Creole padding in Description-diagram use-case natural dimensions, footprint translation, and text placement. It does not own actor dimensions, Graphviz spacing, route synthesis, style colors, line thickness, handwritten primitives, comparator behavior, baselines, skips, or fixture eligibility.",
+  "acceptance": [
+    "The four valid themed UseCase goldens converge through the no-oracle path without changing their text metrics or style colors.",
+    "Fresh valid inputs prove multiple padding values change alpha from padded natural dimensions and keep painting aligned to the same block.",
+    "Padding-zero and unthemed controls retain their existing exact output.",
+    "An independent checker audits the Java and Rust composition, generates held-outs over at least two axes, and records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "fitting radii or node coordinates to the four themed fixtures",
+    "special-casing theme names, labels, expected SVG dimensions, or branch counts",
+    "changing route geometry, comparator tolerance, baselines, skips, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_minty_usecase.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_superhero_usecase.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_united_usecase.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_usecase.puml",
+    "test-diagrams/golden/type-detection/noheader_usecase.puml"
+  ]
+}
