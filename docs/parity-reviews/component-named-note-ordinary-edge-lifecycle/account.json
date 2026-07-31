@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-named-note-ordinary-edge-lifecycle",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "7366619c3595e16a2a5525d61d12494260a19950",
+  "triggering_review": "docs/parity-reviews/component-command-link-code-token/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.isOpalisable", "GraphvizImageBuilder.onlyOneLink", "GraphvizImageBuilder.buildImage"],
+      "lines": "133-151,238-259,313-326",
+      "role": "Every note is first registered as an ordinary SvekNode. Exactly one non-invisible relation to a non-note peer may be transferred to EntityImageNote as an Opale line; two or more incident relations leave every SvekEdge ordinary."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": ["Bibliotekon.createNode", "Bibliotekon.addLine", "Bibliotekon.getNode"],
+      "lines": "133-168,219-236,300-318",
+      "role": "Owns one shared node registry for description leaves, including named notes, and one source-ordered edge registry; ordinary SvekEdge endpoints resolve through that shared identity model."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["SvekEdge.solveLine", "SvekEdge.drawU"],
+      "lines": "611-755,824-981",
+      "role": "A non-Opale solved edge paints its path, decorations, labels and metadata regardless of whether either endpoint leaf is a note."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["component_svek_leaf_order", "component_opalized_floating_note", "render_no_oracle"],
+      "lines": "897-1028,1862-2110,3290-3900",
+      "role": "The layout phase already adds named notes as ordinary nodes and all ComponentConnection values as edges, and the Opale classifier correctly requires exactly one incident relation."
+    },
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": ["render_no_oracle ordinary connection loop"],
+      "lines": "3518-3720",
+      "role": "After Opale exclusion, final paint resolves endpoint geometry only from components, interfaces and packages. A named-note endpoint reaches the fallback continue even though its solved EdgePath and UID exist."
+    }
+  ],
+  "claimed_invariant": "A Component named note is one ordinary SVEK leaf. If exactly one visible relation connects it to a non-note leaf and strict UML is disabled, that relation may be absorbed into the note's Opale outline and has no independent SVG link group. Otherwise every incident relation remains a solved, source-ordered SvekEdge: note endpoints resolve to the laid-out note rectangle, metadata references the note entity UID, and paths, arrowheads, labels and relation UIDs paint through the same generic connection path as component, interface and group endpoints.",
+  "causal_divergence": "Rust's layout and UID models already retain the complete relation graph, but final no-oracle painting reconstructs endpoint geometry through three type-specific searches and omits named notes. When the correct Opale classifier returns false for a multiply linked note, both endpoint searches miss and the loop continues before opening a link group. This converts valid solved edges into paint-time no-ops without changing the AST.",
+  "planned_model_change": "Extend the ordinary Component connection endpoint model with named-note leaves. Resolve an endpoint code through component_named_note_ids to its ComponentNoteLayout and NoOracleNoteUid, derive the same center/top/bottom geometry used for other rectangular leaves, and reuse the existing solved EdgePath, decoration, label, metadata and UID paint path. Keep component_opalized_floating_note as the sole suppression gate; do not special-case link counts or reviewed note labels.",
+  "perturbation_axes": [
+    "one incident relation versus two, three and four relations",
+    "note as source, destination and both",
+    "inline versus multiline named note",
+    "root versus nested package ownership",
+    "top-to-bottom versus left-to-right direction",
+    "forward versus reversed left/up relation construction",
+    "center and endpoint labels plus dashed/solid decoration",
+    "ASCII versus Unicode and dotted note codes",
+    "declaration order before and after ordinary peers"
+  ],
+  "acceptance": [
+    "The two preserved rejecting held-outs emit Java's two ordinary link groups with the expected source-order lnk IDs while retaining the named-note entity UID.",
+    "Fresh valid notes with three or more mixed-direction relations paint every non-Opale edge without fixture-specific branches.",
+    "Single-link named notes remain Opale-absorbed and do not gain a standalone link group.",
+    "Paths, labels, decorations and data-entity metadata reuse the generic solved-edge renderer for note endpoints.",
+    "An independent checker attacks relation count, endpoint side, ownership, direction, decoration, labels, identity and declaration order."
+  ],
+  "forbidden_approaches": [
+    "special-casing exactly two relations or the Ledger/Memo fixture codes",
+    "drawing synthetic straight note links instead of consuming the solved EdgePath",
+    "changing parser relation counts or forcing multiply linked notes into Opale",
+    "allocating new note or link UIDs during rendering"
+  ],
+  "declared_residue": [
+    "SVG UGroup metadata sanitization for non-ASCII qualified names is a separate cross-family serialization mechanism.",
+    "Invalid named-note command ownership and terminal errors are covered by command-factory-note-terminal-rejection, not this valid edge lifecycle."
+  ]
+}
