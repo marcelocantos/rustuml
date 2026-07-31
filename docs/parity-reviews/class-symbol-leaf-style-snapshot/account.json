@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-leaf-style-snapshot",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "55c26983",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:152-158",
+    "src/main/java/net/atmp/CucaDiagram.java:348-360 and 907-916",
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:408-420",
+    "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java:198-205",
+    "src/main/java/net/sourceforge/plantuml/abel/Entity.java:747-763",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:108-175 and 211-217",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:85-108 and 142-160",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbols.java:79 and 86",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java:81-123 and 151-188",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:160-168",
+    "src/main/java/net/sourceforge/plantuml/TitledDiagram.java:145-151",
+    "src/main/java/net/sourceforge/plantuml/command/CommandSkinParam.java:70-75",
+    "src/main/java/net/sourceforge/plantuml/command/CommandSkinParamJaws.java:78-83",
+    "src/main/java/net/sourceforge/plantuml/command/CommandSkinParamMultilines.java:73-78"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs:Package at 460-495",
+    "crates/rustuml-render/src/style_cascade.rs:StyleCascade::new and resolve_entity_at_source_line at 157-223",
+    "crates/rustuml-render/src/class.rs:PackageRenderRole and package_render_model at 3894-3982",
+    "crates/rustuml-render/src/class.rs:automatic_package_kind and visible_package_stereotype_lines at 3984-4010",
+    "crates/rustuml-render/src/class.rs:configured_package_kind, effective_package_kind, and package_paint_kind at 4012-4100",
+    "crates/rustuml-render/src/class.rs:empty_package_symbol_kind at 4125-4139",
+    "crates/rustuml-render/src/class.rs:empty_package_intrinsic_dims at 4223-4235",
+    "crates/rustuml-render/src/class.rs:empty_package_painted_frontier at 4245-4298",
+    "crates/rustuml-render/src/class.rs:empty_package_round_corner at 4410-4429",
+    "crates/rustuml-render/src/class.rs:layout_empty_packages at 6580-6637",
+    "crates/rustuml-render/src/class.rs:empty_package_frontier_minima at 14486-14525"
+  ],
+  "invariant": "Java creates a package group with the then-current immutable StyleBuilder and stores any explicit USymbol on that same Entity. GraphvizImageBuilder may later mutate an empty group to LeafType.EMPTY_PACKAGE, but it does not replace the Entity or discard its USymbol. GeneralImageBuilder therefore has two distinct leaf-image models: a non-null USymbol selects EntityImageDescription, while a symbol-less empty package selects EntityImageEmptyPackage. EntityImageDescription preserves the explicit symbol identity, builds root.element.classDiagram.<symbol>.title signatures, merges them through Entity.getCurrentStyleBuilder, and materializes fill, line, stroke, typography, shadow, round corner, and diagonal corner into one Fashion consumed by that USymbol's painter. Thus explicit folder resolves folder.title and explicit package resolves package.title without being remapped by final packageStyle. EntityImageEmptyPackage instead resolves final root.element.classDiagram.package.title from SkinParam and separately lets final packageStyle choose its ClusterDecoration painter. For either image, the concrete primitive selected from the resolved Fashion also determines LimitFinder behavior; for example, USymbolFolder's zero-corner polygon and nonzero-corner path have different frontiers.",
+  "causal_divergence": "Rust revision 55c26983 already distinguishes PackageRenderRole::SymbolLeaf from EmptyLeaf and retains package kind, symbol_from_keyword, stereotypes, and source_line. It discards that distinction during style and geometry resolution. layout_empty_packages derives paint from package_paint_kind and final skinparams, empty_package_round_corner(diagram) always resolves final classDiagram.package.title, and both empty_package_painted_frontier and empty_package_frontier_minima repeat that global corner predicate. empty_package_symbol_kind and empty_package_intrinsic_dims also remap an explicit Package symbol through final packageStyle. Consequently explicit folder/package leaves are rendered as though they were EntityImageEmptyPackage: later package styles can replace their symbol-owned creation snapshot, folder.title is ignored, and paint can select a different primitive than the frontier model assumes.",
+  "planned_change": "Introduce one role-aware leaf-image style resolver. Its SymbolLeaf branch returns a SymbolLeafStyle/Fashion value containing the preserved explicit USymbol identity, symbol-specific title and stereotype signatures, resolved paint/stroke/font/shadow/corner properties, concrete painter primitive, and derived painted frontier. Resolve that value with StyleCascade::resolve_entity_at_source_line using Package.source_line and the actual entity stereotypes, excluding an ordinary package stereotype when that capture was consumed as the USymbol selector. Feed the same resolved value to intrinsic dimensions, SVG paint, and frontier/minimum calculations so primitive choice cannot drift between phases. Keep a distinct EmptyLeaf branch matching EntityImageEmptyPackage: final package.title style and final packageStyle remain authoritative for symbol-less empty packages. Record whether any skinparam command occurred so resolve_entity_at_source_line can reproduce Java's compatibility refresh exactly rather than inferring it only from generated style declarations.",
+  "skinparam_used_caveat": "Java Entity.getCurrentStyleBuilder returns the creation-time builder only when TitledDiagram.isSkinParamUsed is false; CommandSkinParam, CommandSkinParamJaws, and CommandSkinParamMultilines set that flag for any accepted skinparam command, after which entities resolve against the final SkinParam builder. Rust StyleCascade::new currently sets legacy_skinparam_used only when StyleProgram contains a UserSkinParam or ThemeSkinParam declaration. A skinparam command that emits no style declaration can therefore be invisible to the Rust compatibility decision. The implementation must add parser-owned skinparam-use provenance or prove with held-outs that every accepted command is represented; silently treating source_line as unconditional creation-time ownership is incorrect.",
+  "perturbation_axes": [
+    "folder.title and package.title declarations before versus after leaf creation",
+    "explicit folder USymbol versus explicit package USymbol versus symbol-less empty package",
+    "conflicting symbol-specific and package-title selectors",
+    "zero versus odd and even nonzero round corners",
+    "polygon frontier overscan versus rounded-path frontier",
+    "root versus nested package ownership",
+    "unlinked leaves versus links between leaves and links crossing a containing package",
+    "top-to-bottom versus left-to-right direction",
+    "default scale versus non-unit scale and changed dpi",
+    "renamed labels and changed title widths",
+    "pure CSS snapshots versus an unrelated late skinparam command followed by late CSS",
+    "ordinary package stereotype consumed as a symbol selector versus a real entity stereotype"
+  ],
+  "scope_boundary": "This mechanism owns style ownership and Fashion propagation for class-family empty explicit-USymbol leaves, with folder/package as the acceptance surface, plus preservation of the separate symbol-less EntityImageEmptyPackage branch. It does not change non-empty cluster styling or envelopes, package parsing grammar, Description-family parser unification, Magma ordering, visible link routing, symbol-specific geometry equations unrelated to resolved style, comparator behavior, baselines, park lists, syntax-error markers, or fixture eligibility. Other explicit symbols may reuse the shared SymbolLeafStyle resolver, but new geometry behavior for those symbols requires its own causal account and evidence.",
+  "acceptance": [
+    "The four fresh valid explicit-folder failures in the predecessor review pass diff_one --no-oracle without regressing its two fresh and five preserved symbol-less controls",
+    "Fresh explicit-package held-outs prove that final packageStyle does not replace the retained PACKAGE USymbol and that package.title still obeys Entity style-builder ownership",
+    "Fresh symbol-less empty-package held-outs prove that final package.title and final packageStyle behavior remain unchanged",
+    "Before/after CSS held-outs prove creation-time snapshots, while unrelated accepted skinparam commands prove Java's final-builder compatibility refresh",
+    "Zero-corner cases prove that paint and frontier both select the polygon branch; nonzero controls prove that neither applies polygon overscan",
+    "Fresh valid perturbations cover at least two independent axes among nesting, linking, direction, scaling, dpi, label width, and stereotype handling",
+    "Unit tests exercise the shared resolved-style value through dimensions, paint, and frontier rather than asserting an isolated helper",
+    "The class renderer suite, harness guards, perturbation test, and no-oracle product ratchets remain green",
+    "An independent checker that did not implement the change records an accepted verdict against the exact implementation and Java revisions"
+  ],
+  "forbidden_approaches": [
+    "tuning corner values, dimensions, offsets, or frontier padding toward observed SVG coordinates",
+    "matching fixture names, labels, aliases, source-line numbers, branch counts, directions, scales, or dpi values",
+    "routing every empty package leaf through final classDiagram.package.title",
+    "remapping an explicit folder or package USymbol through final packageStyle",
+    "snapshotting resolved numeric style values in the parser instead of preserving style ownership and source provenance",
+    "computing paint and frontier from separate symbol/corner decisions",
+    "post-processing serialized SVG paths, polygons, dimensions, or translations",
+    "changing comparator tolerance, baselines, park lists, syntax-error markers, guard allow-lists, or fixture eligibility"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-empty-package-round-corner-propagation/review-2.json",
+    "review_commit": "8555c7f2",
+    "rust_revision_under_test": "8fc856c535627ff09eee781364576d5d3e8c190b",
+    "finding": "The zero-polygon frontier remediation generalized for symbol-less EntityImageEmptyPackage leaves, but four fresh valid explicit-folder inputs disproved the assumption that every empty folder/package leaf owns final package.title style."
+  },
+  "evidence_inputs": [
+    "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_zero_scale_lr.puml",
+    "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_odd_control_scale.puml",
+    "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_precedence.puml",
+    "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_explicit_folder_selector_before.puml",
+    "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_nested_zero_with_class_tb.puml",
+    "test-diagrams/perturbations/class-empty-package-round-corner-propagation/checker2_two_zero_packages_link_lr.puml"
+  ]
+}
