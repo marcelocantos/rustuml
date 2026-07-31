@@ -245,7 +245,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // (nodes and connections interleaved as they appear in the .puml).
     let mut counter = 2usize;
     let mut id_for_node: HashMap<String, String> = HashMap::new();
-    let mut own_qname_for_id: HashMap<String, String> = HashMap::new();
     let mut link_id_for_conn: HashMap<usize, String> = HashMap::new();
 
     // Identify roots (nodes not listed as children of any other node).
@@ -273,9 +272,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         m
     };
     let qname_for_id = deployment_qnames(diagram, &parent_of);
-    for n in &diagram.nodes {
-        own_qname_for_id.insert(n.id.clone(), own_qname(n));
-    }
 
     // Merge nodes and connections by source_line; assign IDs sequentially.
     // Both kinds use the same counter, so a connection at line 6 gets the
@@ -441,7 +437,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             conn,
             oracle,
             &id_for_node,
-            &own_qname_for_id,
             &link_id,
             ctx.handwritten,
         );
@@ -789,11 +784,6 @@ fn skin_border_colors(
         }
     }
     map
-}
-
-/// Project a node's canonical quark code for SVG edge metadata.
-fn own_qname(node: &DeploymentNode) -> String {
-    translate_qualified_name(&node.id)
 }
 
 struct OracleRenderContext<'a> {
@@ -3306,6 +3296,7 @@ fn render_attached_deployment_note(
     uid: &DeploymentNoteUid,
     leader: DeploymentNoteLeader<'_>,
     body_margin: (f64, f64),
+    svg_y_axis: f64,
     gradient_defs: Option<&str>,
 ) {
     let (body_margin_x, body_margin_y) = body_margin;
@@ -3333,6 +3324,7 @@ fn render_attached_deployment_note(
                 &path.points,
                 body_margin_x,
                 body_margin_y,
+                Some(svg_y_axis),
                 None,
                 None,
                 EdgeTrim::None,
@@ -3626,33 +3618,22 @@ fn render_connection(
     conn: &DeploymentConnection,
     oracle: &OracleLayout,
     id_for_node: &HashMap<String, String>,
-    own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
     handwritten: bool,
 ) {
-    // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
-    // itself contain '.' (label-derived), so we can't recover it by splitting
-    // the full qualified path on '.'.
-    let from_qname = own_qname_for_id
-        .get(&conn.from)
-        .cloned()
-        .unwrap_or_else(|| conn.from.clone());
-    let to_qname = own_qname_for_id
-        .get(&conn.to)
-        .cloned()
-        .unwrap_or_else(|| conn.to.clone());
+    // Link path IDs use each endpoint's raw Entity.getName. UGroup.fix applies
+    // to qualified-name metadata, not to Link.idCommentForSvg.
+    let from_name = &conn.from;
+    let to_name = &conn.to;
     // PlantUML emits the path id as `{leftQname}-{kind}-{rightQname}` where
     // {kind} is `to`, `backto`, or empty (associations). Layout direction
     // can reverse the wire order (e.g. `A -left-> B` ⇒ `B-backto-A`), so we
     // probe both orderings.
     let candidates = [
-        format!("{from_qname}-to-{to_qname}"),
-        format!("{}-to-{}", conn.from, conn.to),
-        format!("{to_qname}-backto-{from_qname}"),
-        format!("{}-backto-{}", conn.to, conn.from),
-        format!("{from_qname}-{to_qname}"),
-        format!("{}-{}", conn.from, conn.to),
-        format!("{from_qname}-backto-{to_qname}"),
+        format!("{from_name}-to-{to_name}"),
+        format!("{to_name}-backto-{from_name}"),
+        format!("{from_name}-{to_name}"),
+        format!("{from_name}-backto-{to_name}"),
     ];
     let source_line = (conn.source_line > 0).then(|| conn.source_line.to_string());
     let oracle_edge = find_oracle_connection_edge(oracle, &candidates, source_line.as_deref());
@@ -3684,9 +3665,9 @@ fn render_connection(
         .map(|e| e.id.contains("-backto-"))
         .unwrap_or(false);
     let (comment_from, comment_to) = if is_reverse {
-        (&to_qname, &from_qname)
+        (to_name, from_name)
     } else {
-        (&from_qname, &to_qname)
+        (from_name, to_name)
     };
     let prefix = if is_reverse { "reverse link" } else { "link" };
     svg.raw(&format!("<!--{prefix} {comment_from} to {comment_to}-->"));
@@ -3917,6 +3898,46 @@ fn deployment_link_note_blocks(
             note_origin.1 + LINK_NOTE_PADDING,
         ),
     )
+}
+
+fn deployment_link_note_painted_bounds(
+    x: f64,
+    y: f64,
+    note: &DeploymentLinkNote,
+    label_text: Option<&str>,
+) -> DeploymentPaintBounds {
+    let note_dim = deployment_link_note_dim(note);
+    let label_size = label_text.map(|label| EdgeLabelSize {
+        width: text_render::measure(label, 13.0, false) + 2.0,
+        height: text_render::label_height(label, 13.0) + 2.0,
+    });
+    let (label_origin, note_origin) = deployment_link_note_blocks(x, y, note, note_dim, label_size);
+    let mut bounds = DeploymentPaintBounds {
+        min_x: f64::INFINITY,
+        min_y: f64::INFINITY,
+        max_x: f64::NEG_INFINITY,
+        max_y: f64::NEG_INFINITY,
+    };
+
+    // Graphviz positions the padded fixed-size table, but Java's LimitFinder
+    // sees only EntityImageNoteLink's painted component inside that table.
+    bounds.include_rect(
+        note_origin.0,
+        note_origin.1,
+        note_origin.0 + note_dim.width.floor(),
+        note_origin.1 + note_dim.height.floor(),
+    );
+    if let (Some(label), Some((label_x, label_y))) = (label_text, label_origin) {
+        let text_x = label_x + 1.0;
+        let text_y = label_y + 1.0;
+        bounds.include_rect(
+            text_x,
+            text_y,
+            text_x + text_render::measure(label, 13.0, false),
+            text_y + text_render::label_height(label, 13.0),
+        );
+    }
+    bounds
 }
 
 fn laid_out_deployment_note_indices(diagram: &DeploymentDiagram) -> Vec<usize> {
@@ -4862,6 +4883,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                             layout,
                             body_margin_x,
                             body_margin_y,
+                            result.svg_y_origin,
                             cluster_rects.get(logical_from),
                             cluster_rects.get(logical_to),
                         )?;
@@ -4879,6 +4901,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                         note_at_edge_start: Some(note_at_edge_start),
                     },
                     (body_margin_x, body_margin_y),
+                    result.svg_y_origin,
                     gradient_defs,
                 );
             } else {
@@ -4914,6 +4937,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                 note_at_edge_start: None,
             },
             (body_margin_x, body_margin_y),
+            result.svg_y_origin,
             gradient_defs,
         );
     };
@@ -4944,6 +4968,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             id_for_node,
             &no_oracle_uids.link_ids,
             &result.edge_paths,
+            result.svg_y_origin,
             body_margin_x,
             body_margin_y,
             &cluster_endpoint_nodes,
@@ -5946,6 +5971,11 @@ fn deployment_body_x_frame(
     })
 }
 
+fn serialized_deployment_svg_y(screen_y: f64, svg_y_axis: f64) -> f64 {
+    let quantize = |value: f64| (value * 100.0).round() / 100.0;
+    quantize(svg_y_axis) - quantize(svg_y_axis - screen_y)
+}
+
 fn deployment_edge_paint_bounds(
     diagram: &DeploymentDiagram,
     result: &LayoutResult,
@@ -5977,25 +6007,20 @@ fn deployment_edge_paint_bounds(
         // `UHidden`; hidden affects only the later SVG driver.
         for &(x, y) in &edge.points {
             let x = (x * 100.0).round() / 100.0;
-            let y = (y * 100.0).round() / 100.0;
+            let y = serialized_deployment_svg_y(y, result.svg_y_origin);
             bounds.include_rect(x, y, x, y);
         }
         if let (Some(note), Some(label)) = (conn.note.as_ref(), edge.label) {
             let x = (label.x * 100.0).round() / 100.0;
-            let y = (label.y * 100.0).round() / 100.0;
-            let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-                width: text_render::measure(label, 13.0, false) + 2.0,
-                height: text_render::label_height(label, 13.0) + 2.0,
-            });
-            let compound =
-                deployment_link_note_label_size(note, deployment_link_note_dim(note), label_size);
-            bounds.include_rect(x, y, x + compound.width, y + compound.height);
+            let y = serialized_deployment_svg_y(label.y, result.svg_y_origin);
+            let painted = deployment_link_note_painted_bounds(x, y, note, conn.label.as_deref());
+            bounds.include_rect(painted.min_x, painted.min_y, painted.max_x, painted.max_y);
         } else if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
             // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
             // Graphviz solves their origin from an integer-truncated placeholder,
             // then `LimitFinder` sees the original renderer width when drawing.
             let x = (label.x * 100.0).round() / 100.0;
-            let y = (label.y * 100.0).round() / 100.0;
+            let y = serialized_deployment_svg_y(label.y, result.svg_y_origin);
             bounds.include_rect(
                 x,
                 y,
@@ -6032,6 +6057,7 @@ fn adjust_deployment_endpoint_labels(
     dims: &[DeploymentNodeDim],
     result: &mut LayoutResult,
 ) {
+    let svg_y_axis = result.svg_y_origin;
     let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
     let cluster_ids = deployment_cluster_ids(diagram, &laid_out_note_indices);
     let mut positions = Vec::new();
@@ -6142,7 +6168,9 @@ fn adjust_deployment_endpoint_labels(
             let height = text_render::label_height(text, 13.0);
             let mut moving = LayoutRect {
                 x: (position.x * 100.0).round() / 100.0,
-                y: (position.y * 100.0).round() / 100.0,
+                // `manageCollision` receives this origin after Graphviz's SVG
+                // serialization and `YDelta`; its movement is screen-space.
+                y: serialized_deployment_svg_y(position.y, svg_y_axis),
                 width,
                 height,
             };
@@ -6574,6 +6602,7 @@ fn render_no_oracle_edges(
     id_for_node: &HashMap<String, String>,
     link_ids: &[String],
     edge_paths: &[EdgePath],
+    svg_y_axis: f64,
     body_margin_x: f64,
     body_margin_y: f64,
     cluster_endpoint_nodes: &HashMap<String, String>,
@@ -6639,6 +6668,7 @@ fn render_no_oracle_edges(
             &edge.points,
             body_margin_x,
             body_margin_y,
+            Some(svg_y_axis),
             tail_cluster,
             head_cluster,
             EdgeTrim::None,
@@ -6647,6 +6677,7 @@ fn render_no_oracle_edges(
             &edge.points,
             body_margin_x,
             body_margin_y,
+            Some(svg_y_axis),
             tail_cluster,
             head_cluster,
             match (raw_start_arrow, raw_end_arrow) {
@@ -6714,7 +6745,7 @@ fn render_no_oracle_edges(
             let note_dim = deployment_link_note_dim(note);
             let solved_origin = (
                 (position.x * 100.0).round() / 100.0 + body_margin_x,
-                (position.y * 100.0).round() / 100.0 + body_margin_y,
+                serialized_deployment_svg_y(position.y, svg_y_axis) + body_margin_y,
             );
             let (label_origin, note_origin) = deployment_link_note_blocks(
                 solved_origin.0,
@@ -6739,7 +6770,7 @@ fn render_no_oracle_edges(
                 .map(|position| {
                     let solved_origin = (
                         (position.x * 100.0).round() / 100.0 + body_margin_x,
-                        (position.y * 100.0).round() / 100.0 + body_margin_y,
+                        serialized_deployment_svg_y(position.y, svg_y_axis) + body_margin_y,
                     );
                     let label_origin = link_note_layout
                         .and_then(|(_, _, label_origin, _)| label_origin)
@@ -6808,13 +6839,13 @@ fn deployment_connection_path_base_id(
         .nodes
         .iter()
         .find(|node| node.id == conn.from)
-        .map(own_qname)
+        .map(|node| node.id.clone())
         .unwrap_or_else(|| conn.from.clone());
     let to_name = diagram
         .nodes
         .iter()
         .find(|node| node.id == conn.to)
-        .map(own_qname)
+        .map(|node| node.id.clone())
         .unwrap_or_else(|| conn.to.clone());
     if conn.arrow_at_start == conn.arrow_at_end {
         format!("{from_name}-{to_name}")
@@ -6930,6 +6961,7 @@ fn deployment_opale_note_geometry(
     layout: &DeploymentNoteLayout,
     body_margin_x: f64,
     body_margin_y: f64,
+    svg_y_axis: f64,
     tail_cluster: Option<&LayoutRect>,
     head_cluster: Option<&LayoutRect>,
 ) -> Option<(DeploymentNotePosition, bool)> {
@@ -6937,6 +6969,7 @@ fn deployment_opale_note_geometry(
         &edge.points,
         body_margin_x,
         body_margin_y,
+        Some(svg_y_axis),
         tail_cluster,
         head_cluster,
         EdgeTrim::None,
@@ -6985,6 +7018,7 @@ fn deployment_svek_edge_points(
     points: &[(f64, f64)],
     body_margin_x: f64,
     body_margin_y: f64,
+    svg_y_axis: Option<f64>,
     tail_cluster: Option<&LayoutRect>,
     head_cluster: Option<&LayoutRect>,
     trim: EdgeTrim,
@@ -6995,7 +7029,16 @@ fn deployment_svek_edge_points(
     let quantize = |value: f64| (value * 100.0).round() / 100.0;
     let mut points: Vec<(f64, f64)> = points
         .iter()
-        .map(|(x, y)| (quantize(*x) + body_margin_x, quantize(*y) + body_margin_y))
+        .map(|(x, y)| {
+            // Graphviz serializes its mathematical Y coordinate before the
+            // SVG group transform inverts the axis. `LayoutResult` stores
+            // screen coordinates, so recover that mathematical coordinate
+            // and apply the serialized axis afterward.
+            let serialized_y = svg_y_axis
+                .map(|axis| serialized_deployment_svg_y(*y, axis))
+                .unwrap_or_else(|| quantize(*y));
+            (quantize(*x) + body_margin_x, serialized_y + body_margin_y)
+        })
         .collect();
     points = simulate_deployment_compound(points, tail_cluster, head_cluster);
     if points.len() >= 2 && matches!(trim, EdgeTrim::Start | EdgeTrim::Both) {
@@ -8369,6 +8412,26 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     }
 
     #[test]
+    fn link_path_identity_stays_raw_while_group_identity_is_projected() {
+        let source = "@startuml\n\
+                      component \"Ingress: Canary\"\n\
+                      component \"Archive Sink\" as sink.v2\n\
+                      \"Ingress: Canary\" --> sink.v2\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let qnames = deployment_qnames(&diagram, &deployment_parent_map(&diagram));
+        assert_eq!(qnames["Ingress: Canary"], "Ingress. Canary");
+        assert_eq!(
+            deployment_connection_path_base_id(&diagram, &diagram.connections[0], false),
+            "Ingress: Canary-to-sink.v2"
+        );
+    }
+
+    #[test]
     fn named_note_relation_reuses_one_owner_qualified_svek_leaf() {
         let source = "@startuml\n\
                       left to right direction\n\
@@ -8664,6 +8727,26 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     }
 
     #[test]
+    fn link_note_painted_bounds_exclude_fixed_table_padding() {
+        let note = DeploymentLinkNote {
+            text: "path metadata".to_string(),
+            colors: rustuml_parser::diagram::style::PlantUmlColors::default(),
+            position: DeploymentNotePosition::Bottom,
+        };
+        let note_dim = deployment_link_note_dim(&note);
+        let label_size = EdgeLabelSize {
+            width: text_render::measure("transfer", 13.0, false) + 2.0,
+            height: text_render::label_height("transfer", 13.0) + 2.0,
+        };
+        let placeholder = deployment_link_note_label_size(&note, note_dim, Some(label_size));
+        let painted = deployment_link_note_painted_bounds(0.0, 0.0, &note, Some("transfer"));
+
+        assert_eq!(painted.min_x, LINK_NOTE_PADDING);
+        assert_eq!(painted.max_x, LINK_NOTE_PADDING + note_dim.width.floor());
+        assert!(painted.max_x < placeholder.width);
+    }
+
+    #[test]
     fn multiline_link_note_and_label_share_the_owning_link_group() {
         let source = "@startuml\n\
             node \"Renamed Ingress 881\" as Ingress881\n\
@@ -8816,6 +8899,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             BODY_MARGIN_Y,
             None,
             None,
+            None,
             EdgeTrim::End,
         );
 
@@ -8828,6 +8912,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             &raw,
             BODY_FALLBACK_MARGIN_X,
             BODY_MARGIN_Y,
+            None,
             None,
             None,
             EdgeTrim::None,
@@ -8844,6 +8929,29 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     }
 
     #[test]
+    fn deployment_svek_y_serializes_before_axis_inversion() {
+        let screen_y = 20.0 + 4.0 / 1_000.0;
+        let svg_y_axis = 100.0 + 6.0 / 1_000.0;
+        let serialized = serialized_deployment_svg_y(screen_y, svg_y_axis);
+        let directly_rounded = (screen_y * 100.0).round() / 100.0;
+        let tolerance = 1.0 / 1_000_000.0;
+
+        assert!((serialized - 20.01).abs() < tolerance);
+        assert!((directly_rounded - 20.0).abs() < tolerance);
+        let points = deployment_svek_edge_points(
+            &[(11.0 + 234.0 / 1_000.0, screen_y)],
+            0.0,
+            0.0,
+            Some(svg_y_axis),
+            None,
+            None,
+            EdgeTrim::None,
+        );
+        assert!((points[0].0 - 11.23).abs() < tolerance);
+        assert!((points[0].1 - 20.01).abs() < tolerance);
+    }
+
+    #[test]
     fn deployment_svek_start_decoration_discards_a_short_leading_cubic() {
         let raw = vec![
             (0.0, 0.0),
@@ -8855,7 +8963,8 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             (8.0, 0.0),
         ];
 
-        let painted = deployment_svek_edge_points(&raw, 0.0, 0.0, None, None, EdgeTrim::Start);
+        let painted =
+            deployment_svek_edge_points(&raw, 0.0, 0.0, None, None, None, EdgeTrim::Start);
 
         assert_eq!(
             painted,
