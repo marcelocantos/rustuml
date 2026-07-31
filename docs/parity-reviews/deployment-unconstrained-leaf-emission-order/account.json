@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-unconstrained-leaf-emission-order",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "55c26983cc45b8761d1b9512378143383eefb6fa",
+  "observed_failure": {
+    "input": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ltr.puml",
+    "java": "The named floating note is created and painted before the ordinary node, but the unconstrained LR solve places RuntimeNode201 above BeforeLedger201.",
+    "rust": "After the size-below-three Magma gate was restored, the no-oracle solve still places BeforeLedger201 above RuntimeNode201.",
+    "control": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ltr.puml passes because Rust's ordinary-node-then-note layout registration accidentally matches Java's node-then-note SVEK declaration order for that source permutation."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Plasma.java",
+      "symbols": [
+        "Plasma.register",
+        "Plasma.quarks"
+      ],
+      "lines": "56-64,92-94",
+      "role": "Retains quarks in first-registration order. This order is created by identifier resolution and can precede entity construction when a link or other command first mentions an alias."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "symbols": [
+        "Quark.Quark",
+        "Quark.getDirectChild",
+        "Quark.getChildren"
+      ],
+      "lines": "50-65,134-154",
+      "role": "Registers every quark at first creation and keeps each parent's immediate children in a LinkedHashMap; immediate leaf order is therefore first quark insertion, not leaf kind and not necessarily declaration source line."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.quarkInContextSafe",
+        "CucaDiagram.reallyCreateLeaf",
+        "CucaDiagram.leafs",
+        "CucaDiagram.applySingleStrategy"
+      ],
+      "lines": "219-243,245-287,762-793,919-952",
+      "role": "Resolves or creates quarks before leaf construction, enumerates leaves through Plasma quark order, and deliberately creates no Magma for an immediate standalone set smaller than three."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": [
+        "CommandFactoryNote.executeInternal"
+      ],
+      "lines": "134-164",
+      "role": "Creates `note as ID` as a real LeafType.NOTE Entity through the same quark and reallyCreateLeaf lifecycle as ordinary DESCRIPTION leaves."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "symbols": [
+        "CommandCreateElementFull.executeArg"
+      ],
+      "lines": "181-233",
+      "role": "Resolves the ordinary element quark and creates the DESCRIPTION Entity; it does not place ordinary nodes in a leaf-kind-specific collection."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": [
+        "Entity.Entity",
+        "Entity.leafs"
+      ],
+      "lines": "162-185,645-653",
+      "role": "Assigns an `ent` UID when the Entity is constructed and separately enumerates immediate child leaves through the parent's insertion-ordered quarks. Entity UID order and quark order are related but are not the same abstraction."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMaker.java",
+      "symbols": [
+        "CucaDiagramFileMaker.CucaDiagramFileMaker"
+      ],
+      "lines": "49-58",
+      "role": "Constructs the root Cluster before SVEK nodes. The root consumes four ColorSequence values, which makes the first two root-only SvekNodes in the failing fixture `sh0006` and `sh0007`."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder.buildImage",
+        "GraphvizImageBuilder.printEntity",
+        "GraphvizImageBuilder.getUnpackagedEntities",
+        "GraphvizImageBuilder.printGroups",
+        "GraphvizImageBuilder.printGroup"
+      ],
+      "lines": "208-229,348-430",
+      "role": "Creates group-contained SvekNodes first, recursively, then root unpackaged leaves. Within each immediate owner it preserves the Entity/quark stream and never partitions NOTE from DESCRIPTION."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": [
+        "Bibliotekon.nodeMap",
+        "Bibliotekon.createNode",
+        "Bibliotekon.allNodes"
+      ],
+      "lines": "50-74,153-155",
+      "role": "Keeps SvekNodes in a LinkedHashMap in GraphvizImageBuilder creation order; this order later controls final image painting."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekNode.java",
+      "symbols": [
+        "SvekNode.SvekNode",
+        "SvekNode.appendShape"
+      ],
+      "lines": "103-111,132-159",
+      "role": "Assigns the independent `shNNNN` UID from ColorSequence and serializes a fixed-size Graphviz node declaration."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "symbols": [
+        "Cluster.addNode",
+        "Cluster.getNodesOrderedTop",
+        "Cluster.getNodesOrderedWithoutTop",
+        "Cluster.printCluster2"
+      ],
+      "lines": "178-184,195-239,503-560",
+      "role": "Keeps each cluster's SvekNodes in insertion order. With no inverted links, printCluster2 emits ordinary node declarations in that order; inverted starts and line-zero edges are separate preemption layers."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": [
+        "DotStringFactory.createDotString"
+      ],
+      "lines": "150-200",
+      "role": "Sets rankdir=LR, emits inverted starts and length-one edges before Cluster.printCluster2, and then emits remaining edges. In the two unlinked fixtures there are no preempting edges, so root Cluster insertion order is the exact DOT declaration order."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": [
+        "SvekResult.drawU"
+      ],
+      "lines": "70-101",
+      "role": "Paints solved SvekNodes in Bibliotekon order. Paint/XML order therefore remains distinct from the vertical order selected by Graphviz."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "render_no_oracle"
+      ],
+      "lines": "3921-3970",
+      "role": "Registers every ordinary deployment node in LayoutGraph first and every laid-out note in a second pass. This type partition is the layout creation stream even when source order is the opposite."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "add_deployment_magma_constraints"
+      ],
+      "lines": "4714-4781",
+      "role": "Builds a source-line-sorted standalone member list, but returns for fewer than three members. Consequently that sorted list has no effect on either two-member fixture after 550ae69e."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "build_deployment_no_oracle_uid_model"
+      ],
+      "lines": "5848-5925",
+      "role": "Separately merges nodes, notes, and links by source line to reproduce visible `ent` and `lnk` IDs. Correct UID output here does not establish correct SVEK/DOT node creation order."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "render_no_oracle root entity emission"
+      ],
+      "lines": "4273-4368",
+      "role": "Separately source-sorts root node and note painting when there are no clusters. This can reproduce Java's final XML order while the earlier LayoutGraph registration remains wrong."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": [
+        "LayoutGraph.with_plantuml_svek_node_order",
+        "LayoutGraph.graphviz_node_creation_order",
+        "LayoutGraph.layout_full_no_timeout"
+      ],
+      "lines": "212-217,965-973,1279-1289,1433-1436,1703-1795",
+      "role": "Preserves the caller's registered root-node order when no SVEK clusters, inverted starts, or line-zero endpoints intervene. The wrapper therefore faithfully exposes the deployment renderer's node-then-note partition to Graphviz."
+    }
+  ],
+  "ordering_proof": [
+    "Quark order: in the failing direct-declaration fixture, CommandFactoryNote first registers BeforeLedger201 and CommandCreateElementFull later registers RuntimeNode201. Plasma and the root Quark retain that order. This is first identifier registration, not a general synonym for source declaration order.",
+    "Entity UID order: reallyCreateLeaf constructs the note before the node. The checked-in Java SVG records BeforeLedger201 as ent0002 and RuntimeNode201 as ent0003. These visible IDs prove construction order but do not themselves drive Graphviz placement.",
+    "SVEK UID and Bibliotekon order: the root Cluster consumes ColorSequence values 2 through 5; GraphvizImageBuilder then creates the note as sh0006 and the node as sh0007 and inserts them into the root Cluster and Bibliotekon in that order.",
+    "DOT declaration order: there are no groups, links, inverted starts, together blocks, or line-zero endpoint declarations. DotStringFactory therefore reaches root.printCluster2 directly, whose nodesOrderedWithoutTop is the root Cluster list [sh0006 note, sh0007 node].",
+    "Solved placement: Java's checked-in SVG places ent0003 RuntimeNode201 at y=6..52.4883 and ent0002 BeforeLedger201 at y=87.59..112.9005. Thus this unconstrained two-node LR solve places the later SVEK declaration above the earlier one. In the reversed control, Java places the later-declared ent0003 note at y=6..31.3105 and ent0002 node at y=66.41..112.8983.",
+    "Paint order: SvekResult iterates Bibliotekon.allNodes, so the failing Java SVG still serializes the earlier note entity before the later node entity even though the node is geometrically above it. Layout order and SVG child order are not interchangeable.",
+    "Rust order: visible UID allocation and root SVG painting are source-line merged, but LayoutGraph registration is [all ordinary nodes, then all notes]. With no Magma edge at size two, the graph wrapper preserves that registration. The note-before-node input is therefore sent to Graphviz as [node, note], while the node-before-note control happens to require that same order."
+  ],
+  "claimed_invariant": "Java models named floating notes and ordinary DESCRIPTION elements as leaves in one quark-backed entity graph. For an immediate owner, their relative leaf order comes from first quark insertion, while Entity UIDs come from later entity construction. GraphvizImageBuilder then derives a Bibliotekon/SvekNode creation stream by traversing groups before root unpackaged entities, and DotStringFactory derives the actual Graphviz declaration stream from each Cluster, with explicit inverted-start, line-zero-edge, together, and child-cluster ordering rules. When an immediate standalone set has fewer than three leaves, applySingleStrategy adds no Magma constraints, so placement must emerge from the exact Java DOT declaration stream. No leaf-kind partition or coordinate rule may replace that stream.",
+  "causal_divergence": "Rust retains ordinary deployment elements and notes in separate vectors and feeds LayoutGraph in two type-segregated passes: every ordinary node, then every note. The source-line merge in the UID model, the source-line merge in root SVG painting, and the source-line-sorted Magma member list are different layers; after the restored size-below-three gate, none changes the two-member Graphviz node creation order. For note-before-node LR, Java declares [note sh0006, node sh0007] and Graphviz places the later node above; Rust declares [node, note] and places the later note above. The reversed source case passes only because Java and Rust both happen to declare [node, note]. The failure is therefore an absent unified SVEK leaf-emission model, not a spacing, note-size, Magma, UID, or paint-order defect.",
+  "planned_model_change": "Introduce a Java-shaped DESCRIPTION leaf-order model rather than sorting renderer vectors ad hoc. Record a stable first-quark ordinal when an identifier is first resolved, including link-created unknown leaves, separately from entity-construction/UID order and source line. Build a SVEK plan that (1) enumerates each owner's immediate leaves across ordinary elements, floating notes, and other DESCRIPTION leaf kinds by quark ordinal; (2) derives Bibliotekon/SvekNode creation order through GraphvizImageBuilder's groups-first traversal; (3) derives Graphviz node declaration order through DotStringFactory/Cluster ordering, including existing inverted-start and line-zero endpoint preemption; and (4) derives paint order from Bibliotekon order. Feed LayoutGraph nodes using the plan's DOT declaration order instead of ordinary-nodes-then-notes, while retaining the independent UID and paint streams. For the current root-only no-link case this means registering note then node when that is the first-quark order. Keep the size-below-three Magma gate unchanged and let the vendored Graphviz engine determine coordinates; do not encode a `later node goes above` rule.",
+  "perturbation_axes": [
+    "floating note before ordinary leaf versus ordinary leaf before floating note",
+    "left-to-right versus top-to-bottom direction",
+    "one, two, and three immediate standalone leaves across the Magma threshold",
+    "first direct declaration versus alias first introduced by a link before its explicit declaration",
+    "root leaves versus immediate leaves inside one and two nested containers",
+    "floating note, interface, component, node, database, and file leaf-kind permutations",
+    "renamed aliases and changed note/node dimensions with unchanged quark order",
+    "unconstrained leaves versus inverted-link and length-one-edge controls that preempt ordinary DOT declarations",
+    "ordinary leaves versus together membership controls"
+  ],
+  "scope_boundary": "This mechanism owns cross-kind immediate-leaf ordering from identifier registration through SvekNode creation, Graphviz declaration, and final paint ordering for the DESCRIPTION/deployment no-oracle path. It does not own the already-correct size-below-three Magma threshold, note box geometry, attached-note Opale routing, symbol-specific geometry, cluster painted envelopes, magnetic borders, parser command atomicity, comparator behavior, baselines, fixture eligibility, or error-golden classification.",
+  "acceptance": [
+    "Both two-member LR declaration permutations pass diff_one --no-oracle: note-before-node places the ordinary node above, while node-before-note places the note above, without coordinate-specific code.",
+    "The corresponding top-to-bottom controls remain green and no size-two Magma edge is reintroduced.",
+    "Fresh three-member controls still use Java's Magma/SquareMaker path and preserve its edge-created endpoint order.",
+    "A link-before-declaration held-out proves that first-quark order, entity UID order, source line, DOT declaration order, and SVG paint order remain distinct where Java makes them distinct.",
+    "Root and nested-container held-outs preserve GraphvizImageBuilder's groups-first SvekNode creation and DotStringFactory's root-before-child DOT serialization.",
+    "Visible `ent`/`lnk` IDs and Java-order SVG entity painting remain unchanged while solved positions converge.",
+    "No-oracle product ratchets and focused layout tests are green, and an independent checker records an accepted verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "sorting nodes by leaf kind or forcing notes above or below ordinary nodes",
+    "post-hoc swapping, translating, or rewriting solved coordinates or SVG groups",
+    "using source_line as the sole order key when Java uses first quark registration or groups-first SvekNode traversal",
+    "using visible ent UID order as a proxy for sh UID, DOT declaration, or paint order",
+    "reintroducing a two-member Magma edge to force the expected orientation",
+    "special-casing fixture aliases, labels, dimensions, direction/count combinations, or expected coordinates",
+    "changing note dimensions, Graphviz spacing, comparator tolerance, baselines, corpus membership, syntax-error markers, or the park list"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/deployment-floating-note-svek-lifecycle/review.json",
+    "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ltr.puml",
+    "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ltr.svg",
+    "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ltr.puml",
+    "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ltr.svg",
+    "commit 550ae69e0d5a766ea77ff1818b8a962bf900710b (restored the Java size-below-three Magma gate)"
+  ]
+}
