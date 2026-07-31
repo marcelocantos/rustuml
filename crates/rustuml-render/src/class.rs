@@ -14324,68 +14324,64 @@ fn svek_layout_x_bias(
                 .fold(f64::INFINITY, f64::min)
         })
         .filter(|min_x| min_x.is_finite());
-    let min_x = positions
-        .iter()
-        .enumerate()
-        .map(|(idx, position)| {
-            position.x
-                - if idx < diagram.entities.len() {
-                    LIMIT_FINDER_RECTANGLE_INSET
-                } else {
-                    0.0
-                }
-        })
-        .chain(
-            cluster_positions
-                .iter()
-                .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
-                .map(|position| position.x),
-        )
-        .chain(empty_symbol_minima.iter().map(|&(x, _)| x))
-        .chain(
-            edge_paths
-                .iter()
-                .flat_map(|edge| edge.points.iter().map(|point| point.0)),
-        )
-        .chain(center_label_minima)
-        .chain(
-            edge_paths
-                .iter()
-                .enumerate()
-                .filter(|(idx, _)| !mapped_center_edges.contains(idx))
-                .filter_map(|(_, edge)| edge.label.map(|label| label.x)),
-        )
-        .chain(edge_paths.iter().flat_map(|edge| {
-            [edge.tail_label, edge.head_label]
-                .into_iter()
-                .flatten()
-                .map(|label| label.x)
-        }))
-        .chain(
-            diagram
-                .relationships
-                .iter()
-                .zip(relationship_edge_indices(diagram, edge_paths))
-                .filter_map(|(relationship, edge_idx)| {
-                    let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
-                    relationship_endpoint_decor_x_bounds(relationship, &edge.points)
-                        .map(|(min_x, _)| min_x)
-                }),
-        )
-        .chain(
-            magic_arrow_polygons
-                .iter()
-                .map(|points| limit_finder_polygon_bounds(points).0),
-        )
-        .chain(visibility_polygon_min_x)
-        .fold(
-            if diagram.together.is_empty() {
-                0.0
-            } else {
-                f64::INFINITY
-            },
-            f64::min,
-        );
+    let Some(min_x) = painted_coordinate_minimum(
+        positions
+            .iter()
+            .enumerate()
+            .map(|(idx, position)| {
+                position.x
+                    - if idx < diagram.entities.len() {
+                        LIMIT_FINDER_RECTANGLE_INSET
+                    } else {
+                        0.0
+                    }
+            })
+            .chain(
+                cluster_positions
+                    .iter()
+                    .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
+                    .map(|position| position.x),
+            )
+            .chain(empty_symbol_minima.iter().map(|&(x, _)| x))
+            .chain(
+                edge_paths
+                    .iter()
+                    .flat_map(|edge| edge.points.iter().map(|point| point.0)),
+            )
+            .chain(center_label_minima)
+            .chain(
+                edge_paths
+                    .iter()
+                    .enumerate()
+                    .filter(|(idx, _)| !mapped_center_edges.contains(idx))
+                    .filter_map(|(_, edge)| edge.label.map(|label| label.x)),
+            )
+            .chain(edge_paths.iter().flat_map(|edge| {
+                [edge.tail_label, edge.head_label]
+                    .into_iter()
+                    .flatten()
+                    .map(|label| label.x)
+            }))
+            .chain(
+                diagram
+                    .relationships
+                    .iter()
+                    .zip(relationship_edge_indices(diagram, edge_paths))
+                    .filter_map(|(relationship, edge_idx)| {
+                        let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
+                        relationship_endpoint_decor_x_bounds(relationship, &edge.points)
+                            .map(|(min_x, _)| min_x)
+                    }),
+            )
+            .chain(
+                magic_arrow_polygons
+                    .iter()
+                    .map(|points| limit_finder_polygon_bounds(points).0),
+            )
+            .chain(visibility_polygon_min_x),
+    ) else {
+        return 0.0;
+    };
     let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_x - MARGIN;
     if cluster_positions.is_empty() {
         envelope_bias
@@ -14395,6 +14391,11 @@ fn svek_layout_x_bias(
         // second time merely because an enclosed class rectangle starts later.
         envelope_bias.max(0.0)
     }
+}
+
+fn painted_coordinate_minimum(values: impl Iterator<Item = f64>) -> Option<f64> {
+    let minimum = values.fold(f64::INFINITY, f64::min);
+    minimum.is_finite().then_some(minimum)
 }
 
 /// The horizontal frontier Java obtains by painting a relationship's natural
@@ -15231,6 +15232,7 @@ struct ResolvedNoteStyle {
     bold: bool,
     italic: bool,
     alignment: NoteTextAlignment,
+    sheet_padding: f64,
 }
 
 #[derive(Clone, Copy)]
@@ -15238,6 +15240,17 @@ enum NoteTextAlignment {
     Left,
     Center,
     Right,
+}
+
+fn class_note_sheet_padding(diagram: &ClassDiagram) -> f64 {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .filter(|skinparam| skinparam.key.eq_ignore_ascii_case("padding"))
+        .filter_map(|skinparam| skinparam.value.trim().parse::<f64>().ok())
+        .next_back()
+        .unwrap_or(0.0)
 }
 
 impl ResolvedNoteStyle {
@@ -15295,6 +15308,7 @@ impl ResolvedNoteStyle {
             bold: font_style.contains("bold"),
             italic: font_style.contains("italic"),
             alignment,
+            sheet_padding: class_note_sheet_padding(diagram),
         }
     }
 
@@ -15361,6 +15375,7 @@ impl ResolvedNoteStyle {
             bold: font_style.contains("bold"),
             italic: font_style.contains("italic"),
             alignment,
+            sheet_padding: class_note_sheet_padding(diagram),
         }
     }
 
@@ -17138,8 +17153,8 @@ fn note_box_dims(
     let style = ResolvedNoteStyle::for_note(diagram, note);
     let (body_width, body_height) = note_body_dimensions(&note.lines, sprites, &style);
     (
-        body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
-        body_height + NOTE_PAD_Y * 2.0,
+        body_width + style.sheet_padding * 2.0 + NOTE_PAD_X + NOTE_PAD_RIGHT,
+        body_height + style.sheet_padding * 2.0 + NOTE_PAD_Y * 2.0,
     )
 }
 
@@ -17152,8 +17167,8 @@ fn relationship_note_box_dims(
     let style = ResolvedNoteStyle::for_link_note(diagram, relationship, note);
     let (body_width, body_height) = note_body_dimensions(&note.lines, sprites, &style);
     (
-        body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
-        body_height + NOTE_PAD_Y * 2.0,
+        body_width + style.sheet_padding * 2.0 + NOTE_PAD_X + NOTE_PAD_RIGHT,
+        body_height + style.sheet_padding * 2.0 + NOTE_PAD_Y * 2.0,
     )
 }
 
@@ -17371,6 +17386,9 @@ fn emit_note_body(
     sprites: &HashMap<String, SpriteData>,
     style: &ResolvedNoteStyle,
 ) {
+    let x = x + style.sheet_padding;
+    let y = y + style.sheet_padding;
+    let width = width - style.sheet_padding * 2.0;
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(lines) {
         if let Some(code) = note_code_lines(&block.lines) {
@@ -18091,6 +18109,19 @@ mod tests {
             relationship_center_painted_min_x(&label_only, label_relationship, None, position_x,),
             Some(position_x + label_layout.label_text_offset_x)
         );
+    }
+
+    #[test]
+    fn painted_coordinate_minimum_does_not_seed_the_origin() {
+        assert_eq!(
+            painted_coordinate_minimum([5.0, 17.0, 9.0].into_iter()),
+            Some(5.0)
+        );
+        assert_eq!(
+            painted_coordinate_minimum([8.0, -3.5, 12.0].into_iter()),
+            Some(-3.5)
+        );
+        assert_eq!(painted_coordinate_minimum(std::iter::empty()), None);
     }
 
     #[test]
@@ -21315,6 +21346,40 @@ mod tests {
             natural_label_x - old_label_x,
             (natural_width - natural_width.floor()) / 2.0
         );
+    }
+
+    #[test]
+    fn class_note_sheet_padding_wraps_plain_and_structured_bodies() {
+        let dimensions = |padding: f64, body: &str| {
+            let input = format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 class PaddingSource7411\n\
+                 class PaddingTarget7417\n\
+                 PaddingSource7411 -- PaddingTarget7417\n\
+                 note on link\n\
+                 {body}\n\
+                 end note\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+                panic!("expected class diagram");
+            };
+            let relationship = &diagram.relationships[0];
+            let note = relationship.link_note.as_ref().unwrap();
+            relationship_note_box_dims(&diagram, relationship, note, &diagram.meta.sprites)
+        };
+
+        for body in [
+            "renamed plain sheet content",
+            "|= renamed key |= renamed value |",
+        ] {
+            let unpadded = dimensions(0.0, body);
+            let padded = dimensions(3.0, body);
+            assert_eq!(padded.0 - unpadded.0, 6.0);
+            assert_eq!(padded.1 - unpadded.1, 6.0);
+        }
     }
 
     #[test]
