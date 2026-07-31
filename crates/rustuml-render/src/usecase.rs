@@ -5313,7 +5313,9 @@ External --> Review
             format!(
                 "@startuml\n\
                  skinparam Padding {padding}\n\
-                 usecase RenamedHeldOutApprovalSurface <<audit-axis>>\n\
+                 actor \"Held Out Auditor\" as Auditor\n\
+                 usecase \"Renamed Held Out Approval Surface\" as Probe <<audit-axis>>\n\
+                 Auditor --> Probe\n\
                  @enduml"
             )
         };
@@ -5375,6 +5377,9 @@ External --> Review
                  ____\n\
                  Final detail\n\
                  \"\n\
+                 actor \"Held Out Reviewer\" as Reviewer\n\
+                 usecase \"Dispatch Guard\" as Guard\n\
+                 Reviewer --> FreshFlow\n\
                  @enduml"
             )
         };
