@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "preprocessed-source-comment-identity",
-  "status": "second_correction_account_pending_commit",
+  "status": "second_corrected_implementation_awaiting_review_3",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/tim/TContext.java:TContext#buildCodeIterator",
@@ -135,6 +135,8 @@
     "required_correction": "Replace the first implementation's broad inline-apostrophe heuristic with the exact Java TIM iterator and StringLocated.removeInnerComment model before requesting a new checker verdict."
   },
   "second_correction_account": {
+    "account_revision": "109b74ba",
+    "implementation_revision": "be4f0c2f",
     "checker_revision": "7ce59a42",
     "review_record": "docs/parity-reviews/preprocessed-source-comment-identity/review-2.json",
     "causal_divergence": "The corrected tim_comment_line still tests trimmed.starts_with(\"/'\") before recognizing Java's whole-line COMMENT_SIMPLE form. For a line that starts with /' and whose final non-whitespace token is '/, but which contains an earlier closing token and another opening token inside, Rust treats the first closing token as a prefix-inner-comment boundary and returns the remaining suffix as live code. Java TLineType.getFromLineInternal applies ^\\s*/'.*'/\\s*$ greedily to the complete line, CodeIteratorShortComment consumes that COMMENT_SIMPLE line, and CodeIteratorInnerComment never sees it. The review-2 counterexamples therefore materialize GhostAlpha, HiddenReview2, and PhantomReview2 only in Rust, shifting source identity and resource seeds.",
@@ -158,6 +160,16 @@
       "Unit tests distinguish whole-line precedence from valid prefix and suffix retention with repeated delimiter pairs.",
       "Parser output and expanded-theme seed identity use the same classification result.",
       "A fresh independent review-3 creates new valid Java perturbations and records an accepted verdict before this mechanism is accepted."
+    ],
+    "implementation_evidence": "tim_comment_line now applies Java's greedy whole-line COMMENT_SIMPLE classification before prefix and suffix inner-comment retention. The complete rustuml-parser library suite passes (615/615), including a repeated-delimiter regression that checks both parser lines and UmlSource identity. All six preserved review-1 and review-2 perturbations are byte-identical to their Java SVGs through the shipped no-oracle path.",
+    "commands": [
+      "cargo test -p rustuml-parser --lib",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_theme_matrix.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_source_order_matrix.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/whole_line_comment_precedence_special_payload_matrix.puml"
     ]
   }
 }
