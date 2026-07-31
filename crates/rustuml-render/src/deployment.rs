@@ -4385,20 +4385,23 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                 endpoint_label_size(conn.head_label.as_deref()),
             )
         };
+        let minlen = match conn.direction {
+            Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
+            // `CommandLinkElement` stores the shaft's character count in
+            // `LinkArg`; `SvekEdge.appendLine` emits length - 1.
+            Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) | None => {
+                Some(conn.length.saturating_sub(1))
+            }
+        };
+        // `WithLinkType.goHidden` marks only the later paint operation hidden;
+        // Java still serializes and solves the edge as an ordinary SVEK edge.
         layout.add_edge_with_label_sizes_and_minlen(
             layout_from,
             layout_to,
             label_size,
             tail_label_size,
             head_label_size,
-            match conn.direction {
-                Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
-                // `CommandLinkElement` stores the shaft's character count
-                // in `LinkArg`; `SvekEdge.appendLine` emits length - 1.
-                Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) | None => {
-                    Some(conn.length.saturating_sub(1))
-                }
-            },
+            minlen,
         );
     }
 
@@ -5704,6 +5707,9 @@ fn deployment_body_x_frame(
     // solved cubic control point, including routes that bend beyond all
     // entity rectangles.
     for (conn_index, conn) in diagram.connections.iter().enumerate() {
+        if conn.hidden {
+            continue;
+        }
         let (layout_from, layout_to, _) = deployment_connection_layout(conn);
         let matching_index = diagram.connections[..conn_index]
             .iter()
@@ -5750,6 +5756,9 @@ fn deployment_edge_label_x_bounds(
     let mut painted_min_x = f64::INFINITY;
     let mut painted_max_x = f64::NEG_INFINITY;
     for (conn_index, conn) in diagram.connections.iter().enumerate() {
+        if conn.hidden {
+            continue;
+        }
         let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
         let matching_index = diagram.connections[..conn_index]
             .iter()
@@ -5889,6 +5898,9 @@ fn adjust_deployment_endpoint_labels(
     };
 
     for conn in &diagram.connections {
+        if conn.hidden {
+            continue;
+        }
         let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
         let Some(edge) = result
             .edge_paths
@@ -6352,6 +6364,9 @@ fn render_no_oracle_edges(
     handwritten: bool,
 ) {
     for (i, conn) in diagram.connections.iter().enumerate() {
+        if conn.hidden {
+            continue;
+        }
         // Java `SvekEdge.drawU` returns before opening the link group after
         // GraphvizImageBuilder hands an eligible edge to EntityImageNote.
         if opale_connection_indices.contains(&i) {
@@ -6617,6 +6632,8 @@ fn deployment_note_opale_connection<'a>(
         .connections
         .iter()
         .enumerate()
+        // Bracket-hidden links are not `Link.isInvis()` in Java. They count in
+        // `GraphvizImageBuilder.onlyOneLink` and are hidden only by SvekResult.
         .filter(|(_, connection)| connection.from == note_id || connection.to == note_id);
     let (connection_index, connection) = incident.next()?;
     if incident.next().is_some() {
@@ -8145,6 +8162,34 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             svg.contains(
                 r#"data-qualified-name="LaterArtifact" data-source-line="6" id="ent0006""#
             ),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn hidden_relation_changes_layout_and_uid_without_painting() {
+        let source = "@startuml\n\
+                      note \"Visible plus hidden\" as HiddenControlMemo\n\
+                      node \"Visible peer\" as VisiblePeer\n\
+                      node \"Hidden peer\" as HiddenPeer\n\
+                      HiddenControlMemo --> VisiblePeer\n\
+                      HiddenControlMemo -[hidden]- HiddenPeer\n\
+                      artifact \"Created after links\" as AfterHidden\n\
+                      @enduml";
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) =
+            rustuml_parser::parse::parse_auto_with_base(source, None).unwrap()
+        else {
+            panic!("expected deployment diagram");
+        };
+        assert_eq!(diagram.connections.len(), 2);
+        assert!(diagram.connections[1].hidden);
+
+        let svg = render(&diagram, &Theme::default());
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 1, "{svg}");
+        assert!(svg.contains(r#"id="lnk5""#), "{svg}");
+        assert!(!svg.contains(r#"id="lnk6""#), "{svg}");
+        assert!(
+            svg.contains(r#"data-qualified-name="AfterHidden" data-source-line="6" id="ent0007""#),
             "{svg}"
         );
     }

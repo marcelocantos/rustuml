@@ -140,6 +140,9 @@ pub struct DeploymentConnection {
     pub direction: Option<DeploymentLinkDirection>,
     #[serde(default, skip_serializing_if = "DeploymentLinkStyle::is_solid")]
     pub style: DeploymentLinkStyle,
+    /// Paint-hidden link style: retained for solving and UID order, not painted.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub hidden: bool,
     #[serde(
         default = "default_deployment_link_length",
         skip_serializing_if = "deployment_link_length_is_default"
