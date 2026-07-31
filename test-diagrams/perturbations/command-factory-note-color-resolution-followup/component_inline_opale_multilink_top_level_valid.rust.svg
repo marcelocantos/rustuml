@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="151px" preserveAspectRatio="none" style="width:440px;height:151px;background:#FFFFFF;" version="1.1" viewBox="0 0 440 151" width="440px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="geyku12dth12c0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FF0000"/><stop offset="100%" stop-color="#0000FF"/></linearGradient></defs><g><!--entity TopAlpha-->
+<g class="entity" data-qualified-name="TopAlpha" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="149.4707" x="51.69" y="91.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="181.1607" y="96.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="179.1607" y="98.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="179.1607" y="102.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109.4707" x="66.69" y="124.8452">Top Alpha 7390</text>
+</g>
+<!--entity TopBeta-->
+<g class="entity" data-qualified-name="TopBeta" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="139.3535" x="259.75" y="91.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="379.1035" y="96.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="377.1035" y="98.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="377.1035" y="102.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99.3535" x="274.75" y="124.8452">Top Beta 7391</text>
+</g>
+<g class="entity" data-qualified-name="SingleGradient" data-source-line="3" id="ent0004">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L100.59,31.3105 L120.42,91.01 L108.59,31.3105 L196.8442,31.3105 A0,0 0 0 0 196.8442,31.3105 L196.8442,16 L186.8442,6 L6,6 A0,0 0 0 0 6,6" fill="url(#geyku12dth12c0)" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M186.8442,6 L186.8442,16 L196.8442,16 L186.8442,6" fill="url(#geyku12dth12c0)" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="169.8442" x="12" y="23.5684">single gradient opale 7392</text>
+</g>
+<g class="entity" data-qualified-name="MultiNamed" data-source-line="5" id="ent0006">
+<path d="M232.32,6 L232.32,31.3105 L426.5348,31.3105 L426.5348,16 L416.5348,6 L232.32,6" fill="#FFD700" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M416.5348,6 L416.5348,16 L426.5348,16 L416.5348,6" fill="#FFD700" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="173.2148" x="238.32" y="23.5684">ordinary multi named 7393</text>
+</g>
+</g></svg>

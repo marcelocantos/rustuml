@@ -1,0 +1,8 @@
+@startuml
+node "Before Automatic 7360" as BeforeAutomatic
+note as MutatedAutomatic #AuToMaTiC-Blue
+  invalid automatic endpoint 7361
+end note
+node "After Automatic 7362" as AfterAutomatic
+MutatedAutomatic --> AfterAutomatic
+@enduml

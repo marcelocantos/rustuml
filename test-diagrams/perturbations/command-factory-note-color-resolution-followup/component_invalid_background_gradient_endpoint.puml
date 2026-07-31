@@ -1,0 +1,6 @@
+@startuml
+component "Before Background 7350" as BeforeBackground
+note "invalid background endpoint 7351" as MutatedBackground #Blue\BaCkGrOuNd
+component "After Background 7352" as AfterBackground
+MutatedBackground --> AfterBackground
+@enduml

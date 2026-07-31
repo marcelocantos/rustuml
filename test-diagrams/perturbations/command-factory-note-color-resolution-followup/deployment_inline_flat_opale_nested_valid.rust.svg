@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="215px" preserveAspectRatio="none" style="width:1102px;height:215px;background:#FFFFFF;" version="1.1" viewBox="0 0 1102 215" width="1102px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Copper Enclave 7320-->
+<g class="cluster" data-qualified-name="CopperEnclave" data-source-line="1" id="ent0002">
+<polygon fill="none" points="230.2084,16,240.2084,6,1077.2084,6,1077.2084,180.3,1067.2084,190.3,230.2084,190.3,230.2084,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="1067.2084" x2="1077.2084" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="230.2084" x2="1067.2084" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="1067.2084" x2="1067.2084" y1="16" y2="190.3"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="152.5508" x="573.433" y="32.5352">Copper Enclave 7320</text>
+</g>
+<g class="entity" data-qualified-name="CopperEnclave.PaletteSingle" data-source-line="2" id="ent0003">
+<path d="M245.8,46 L245.8,71.3105 A0,0 0 0 0 245.8,71.3105 L358.68,71.3105 L515.38,134.35 L366.68,71.3105 L420.6164,71.3105 A0,0 0 0 0 420.6164,71.3105 L420.6164,56 L410.6164,46 L245.8,46 A0,0 0 0 0 245.8,46" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M410.6164,46 L410.6164,56 L420.6164,56 L410.6164,46" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="153.8164" x="251.8" y="63.5684">palette case single 7321</text>
+</g>
+<!--entity Late Runtime 7322-->
+<g class="entity" data-qualified-name="CopperEnclave.LateRuntime" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="158.8848" x="482.77" y="134.81"/>
+<polygon fill="#F1F1F1" points="624.6548,139.81,624.6548,153.81,636.6548,153.81,636.6548,145.81,630.6548,139.81,624.6548,139.81" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="630.6548" x2="630.6548" y1="139.81" y2="145.81"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="636.6548" x2="630.6548" y1="145.81" y2="145.81"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="128.8848" x="492.77" y="161.3452">Late Runtime 7322</text>
+</g>
+<g class="entity" data-qualified-name="CopperEnclave.HexMulti" data-source-line="6" id="ent0006">
+<path d="M703.98,46 L703.98,71.3105 L860.4326,71.3105 L860.4326,56 L850.4326,46 L703.98,46" fill="#4455667F" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M850.4326,46 L850.4326,56 L860.4326,56 L850.4326,46" fill="#4455667F" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="135.4526" x="709.98" y="63.5684">hex alpha multi 7323</text>
+</g>
+<!--entity Late Archive 7324-->
+<g class="entity" data-qualified-name="CopperEnclave.LateArchive" data-source-line="7" id="ent0007">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="152.8418" x="803.79" y="134.81"/>
+<polygon fill="#F1F1F1" points="939.6318,139.81,939.6318,153.81,951.6318,153.81,951.6318,145.81,945.6318,139.81,939.6318,139.81" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="945.6318" x2="945.6318" y1="139.81" y2="145.81"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="951.6318" x2="945.6318" y1="145.81" y2="145.81"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122.8418" x="813.79" y="161.3452">Late Archive 7324</text>
+</g>
+<g class="entity" data-qualified-name="CopperEnclave.CssSingle" data-source-line="11" id="ent0010">
+<path d="M894.96,46 L894.96,71.3105 A0,0 0 0 0 894.96,71.3105 L961.8,71.3105 L899.97,134.62 L969.8,71.3105 L1061.461,71.3105 A0,0 0 0 0 1061.461,71.3105 L1061.461,56 L1051.461,46 L894.96,46 A0,0 0 0 0 894.96,46" fill="#9370D8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M1051.461,46 L1051.461,56 L1061.461,56 L1051.461,46" fill="#9370D8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.501" x="900.96" y="63.5684">css named single 7325</text>
+</g>
+<g class="entity" data-qualified-name="CopperEnclave.TransparentSingle" data-source-line="14" id="ent0012">
+<path d="M455.33,46 L455.33,71.3105 A0,0 0 0 0 455.33,71.3105 L558.21,71.3105 L562.21,134.62 L566.21,71.3105 L669.0893,71.3105 A0,0 0 0 0 669.0893,71.3105 L669.0893,56 L659.0893,46 L455.33,46 A0,0 0 0 0 455.33,46" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M659.0893,46 L659.0893,56 L669.0893,56 L659.0893,46" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="192.7593" x="461.33" y="63.5684">whole transparent single 7326</text>
+</g>
+<g class="entity" data-qualified-name="BackgroundSingle" data-source-line="17" id="ent0014">
+<path d="M-5.89,46 L-5.89,71.3105 A0,0 0 0 0 -5.89,71.3105 L98.21,71.3105 L102.21,131.01 L106.21,71.3105 L210.3068,71.3105 A0,0 0 0 0 210.3068,71.3105 L210.3068,56 L200.3068,46 L-5.89,46 A0,0 0 0 0 -5.89,46" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M200.3068,46 L200.3068,56 L210.3068,56 L200.3068,46" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="195.1968" x="0.11" y="63.5684">whole background single 7327</text>
+</g>
+<!--entity Outside Node 7328-->
+<g class="entity" data-qualified-name="OutsideNode" data-source-line="18" id="ent0015">
+<polygon fill="#F1F1F1" points="16,141.31,26,131.31,188.4189,131.31,188.4189,167.7983,178.4189,177.7983,16,177.7983,16,141.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="178.4189" x2="188.4189" y1="141.31" y2="131.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="178.4189" y1="141.31" y2="141.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="178.4189" x2="178.4189" y1="141.31" y2="177.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="132.4189" x="31" y="164.8452">Outside Node 7328</text>
+</g>
+<!--link HexMulti to LateRuntime-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8">
+<path d="M753.9,71.74 C716.76,87.59 656.6889,113.2359 612.7089,131.9959" fill="none" id="HexMulti-to-LateRuntime" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="607.19,134.35,617.0377,134.4981,611.7891,132.3882,613.8989,127.1396,607.19,134.35" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link HexMulti to LateArchive-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0007" data-link-type="dependency" data-source-line="9" id="lnk9">
+<path d="M794.62,71.55 C811.2,87.44 836.4469,111.6298 856.1169,130.4698" fill="none" id="HexMulti-to-LateArchive" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="860.45,134.62,856.7172,125.5059,856.8391,131.1615,851.1836,131.2834,860.45,134.62" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

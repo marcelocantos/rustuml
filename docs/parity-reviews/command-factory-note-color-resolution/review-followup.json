@@ -1,0 +1,447 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-color-resolution",
+  "reviewed_at": "2026-08-01",
+  "verdict": "REJECT",
+  "checker": {
+    "identity": "Codex GPT-5, independent adversarial follow-up checker",
+    "tool": "Codex desktop exec_command/apply_patch",
+    "role": "Adversarial checker; did not implement the audited change, did not modify implementation code, did not run Cargo, and did not rebuild Rust"
+  },
+  "revisions": {
+    "rust_worktree": "/private/tmp/rustuml-check-note-color-followup",
+    "checker_branch": "codex/review-note-color-followup",
+    "corrected_account_commit": "ea1e8e8d26ab243ca4574c36e4a47091bb264a61",
+    "prior_rejection_commit": "47cfdb4b631b2655b78c892e19e7c8ac113f25b1",
+    "implementation_commit": "d7abcda78d1ef882231e7e3fe34d310bee75e7fb",
+    "audited_rust_revision": "d7abcda78d1ef882231e7e3fe34d310bee75e7fb",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "prior_review": {
+    "path": "docs/parity-reviews/command-factory-note-color-resolution/review.json",
+    "commit": "47cfdb4b631b2655b78c892e19e7c8ac113f25b1",
+    "verdict": "REJECT",
+    "preserved_unchanged": true,
+    "summary": "The first checker rejected special sentinel gradient endpoints and missing transparent/background paint propagation. The corrected account split whole-color and endpoint resolution and required none/gradient paint propagation."
+  },
+  "rust_binary": {
+    "path": "/private/tmp/rustuml-note-color-sentinels/target/release/rustuml",
+    "sha256": "f133cb07d6a8a6c91d14ef1dfe350061cc4941644f8edee42ea091d105179735",
+    "rebuilt": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "evidence_manifest": {
+    "path": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/SHA256SUMS",
+    "sha256": "577c3fb878c5d2836288372b7b1cfe5f98e299121b0026e50da2067b8d97ad1c",
+    "scope": "Every preserved puml, Java/Rust SVG, stderr, status, and Rust AST output present before this review record was written"
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-check-note-color-followup rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-note-color-sentinels/target/release/rustuml",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "cat AGENTS.md",
+    "cat docs/parity-reviews/command-factory-note-color-resolution/account.json",
+    "cat docs/parity-reviews/command-factory-note-color-resolution/review.json",
+    "git show --format=fuller --no-ext-diff d7abcda78d1ef882231e7e3fe34d310bee75e7fb -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/component.rs crates/rustuml-render/src/deployment.rs crates/rustuml-render/src/sequence.rs",
+    "rg -n -C 12 'COLOR_REGEXP|COLORS_REGEXP|IRegex exp1|HColor getColor|HColor parseColor|parseSimpleColor|CommandExecutionResult executeInternal|ColorParser.simpleColor' src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "rg -n 'class HColorGradient|HColorGradient|linearGradient|gradientPolicy|gradient.*id|<stop|stop-color' src/main/java/net/sourceforge/plantuml/klimt src/main/java/net/sourceforge/plantuml/svg",
+    "rg -n -C 10 'fill-opacity|stroke-opacity|substring\\(7|length\\(\\) == 9|formatOpacity' src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "rg -n -C 14 'opale|Opale|render_attached_deployment_note|render_floating_deployment_note|note_link|only.*link' crates/rustuml-render/src/deployment.rs",
+    "rg -n -C 14 'isOpalisable|opale|Opale|note.*connection|incident|render_normal_component_note|render_attached_component_note' crates/rustuml-render/src/component.rs",
+    "ruby -e '<compare Java ColorTrieNode registrations to Rust PLANTUML_NAMED_COLORS>'",
+    "for input in test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.puml; do java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > STEM.java.svg 2> STEM.java.stderr; record status; done",
+    "for input in test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.puml; do /private/tmp/rustuml-note-color-sentinels/target/release/rustuml -pipe -tsvg < INPUT > STEM.rust.svg 2> STEM.rust.stderr; record status; done",
+    "for input in test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.puml; do /private/tmp/rustuml-note-color-sentinels/target/release/rustuml --ast INPUT > STEM.rust.ast 2> STEM.rust.ast.stderr; record status; done",
+    "ruby -rrexml/document -e '<extract named-note fills, opacity, gradient vectors/stops, references, and link-group counts from paired SVGs>' VALID_JAVA_AND_RUST_SVGS",
+    "wc -c test-diagrams/perturbations/command-factory-note-color-resolution-followup/*invalid*.rust.svg test-diagrams/perturbations/command-factory-note-color-resolution-followup/*invalid*.rust.ast",
+    "rg -n 'include_(str|bytes)!|test-diagrams|golden|PaletteSingle|HexMulti|SlashAlias|HorizontalAlpha|ChromaticVoid|Mutated(Transparent|Background|Automatic|Unknown|Composite)' crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-render/src/component.rs crates/rustuml-render/src/deployment.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/filter_registry.rs",
+    "xmllint --noout component_inline*.svg component_multiline*.svg deployment_inline*.svg deployment_multiline*.svg",
+    "shasum -a 256 test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.puml test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.svg test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.status test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.stderr test-diagrams/perturbations/command-factory-note-color-resolution-followup/*.ast > test-diagrams/perturbations/command-factory-note-color-resolution-followup/SHA256SUMS"
+  ],
+  "source_inspection": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+        "lines": "44-47,71-91",
+        "finding": "CommandFactoryNote's optional color slot recognizes the COLOR_REGEXP/COLORS_REGEXP grammar. Recognition is only stage one; it does not prove HColor resolution."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+        "lines": "76-106,141-163",
+        "finding": "Inline and multiline named notes share ColorParser.exp1 and HColorSet.getColor. executeInternal creates the leaf before getColor can throw, so Java may transiently mutate the rejected diagram internally, but no successful diagram or normal SVG survives the command failure."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+        "lines": "66-116,119-155",
+        "finding": "Whole transparent/background resolve to HColors.none and whole automatic to HColorAutomagic. Gradient endpoints use parseSimpleColor, so sentinels are invalid there. One-, three-, six-, and eight-digit hex and the ColorTrieNode names are accepted simple colors."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
+        "lines": "49-210,225-245",
+        "finding": "The frozen inventory has 154 case-insensitive names, including seven ArchiMate aliases with non-white values. A machine extraction found the Rust parser inventory has exactly the same 154 names with no missing or extra entries."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColor.java",
+        "lines": "70-80",
+        "finding": "toRGB serializes RGB only, while toSvg can preserve alpha for ordinary paint."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+        "lines": "387-430,891-899",
+        "finding": "createSvgGradient deduplicates by resolved color1/color2/policy, assigns IDs in first-paint order, maps the four policy vectors, and emits RGB stop-color strings. Ordinary eight-digit fills are serialized as RGB plus fill-opacity."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+        "lines": "133-147,239-260,313-326",
+        "finding": "A NOTE is Opale only with exactly one non-invisible incident link to a non-note SvekNode; two ordinary links remain separate painted link groups."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+        "lines": "84-112,194-289",
+        "finding": "The resolved entity BACK color feeds both Opale and normal note body/fold paint paths."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/parse/mod.rs",
+        "lines": "38-139",
+        "finding": "The follow-up correctly separates whole-color sentinels from simple gradient endpoints. Its 154-name validation inventory exactly matches ColorTrieNode, and invalid decoration resolution returns None before either family pushes a note."
+      },
+      {
+        "path": "crates/rustuml-render/src/sequence.rs",
+        "lines": "28-230,2033-2134",
+        "finding": "resolve_color has the CSS names but omits business/application/motivation/strategy/technology/physical/implementation, falling back to #FFFFFF. It preserves partial alpha as #RRGGBBAA. Both component and deployment gradient registries use this resolver for stops."
+      },
+      {
+        "path": "crates/rustuml-render/src/component.rs",
+        "lines": "100-171,3287-3400,3548-3645,7449-7790",
+        "finding": "All named-note body/fold painters now call component_note_fill. However, after the sole-link Opale check, ordinary connection painting can resolve only component, interface, or package endpoints; a named-note endpoint reaches the final else/continue and both links of a multi-link note disappear."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "lines": "3142-3190,3316-3530,4648-4765,6670-6720",
+        "finding": "Deployment routes named-note fills through gradient_fill_or in attached and normal paths and correctly distinguishes one-link Opale from multi-link ordinary paint in the tested topology."
+      },
+      {
+        "path": "crates/rustuml-render/src/filter_registry.rs",
+        "lines": "122-134,149-239",
+        "finding": "The shared finalizer compacts generated resources by first body reference and renumbers gradients in first-paint order; paired outputs confirm this behavior for the fresh duplicate matrices."
+      }
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in the audited production paths. Fresh labels 7300-7393 and the held-out identities do not occur in shipping source.",
+    "golden_reads": "No new include_str!/include_bytes!, test-diagrams reads, embedded SVG, or coordinate-keyed output surgery appears in d7abcda7. Existing unrelated golden-oriented comments were not introduced by this mechanism.",
+    "unexplained_constants": "d7abcda7 adds no parity-affecting numeric layout constants. The sentinel branch cites HColorSet, policy vectors cite SvgGraphics, the 154-name parser inventory exactly matches ColorTrieNode, and deployment's explicit #FFFFFF preserves the prior new_plantuml constructor default.",
+    "branch_audit": "The new whole-vs-endpoint parser branch is source-shaped and passed all invalid probes. The paint branch is model-incomplete because the parser inventory and paint resolver are not the same domain."
+  },
+  "valid_heldouts": [
+    {
+      "stem": "component_inline_flat_opale_nested_valid",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_flat_opale_nested_valid.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_flat_opale_nested_valid.svg",
+      "java_raw_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_flat_opale_nested_valid.java.svg",
+      "rust_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_flat_opale_nested_valid.rust.svg",
+      "sha256": {
+        "puml": "ccc60e19375fd9350f588e2a40de0eaf52d28ffbcc1d2cf5dc6200326cf3b7c9",
+        "java_svg": "0ed7aab3f7cfe9da28540e6518668c430dd7cd55b2d91aea2e40099502d03b62",
+        "rust_svg": "8339d03770ab2f2fe1e4c3d03aa4746c665fd13e7682e8b76098a473155ce2be"
+      },
+      "axes": [
+        "Component",
+        "inline",
+        "mixed-case command and colors",
+        "nested owner",
+        "declaration before peer",
+        "flat ArchiMate and CSS names",
+        "eight-digit flat hex",
+        "whole transparent/background",
+        "single-link Opale",
+        "ordinary multi-link"
+      ],
+      "statuses": {
+        "java": 0,
+        "rust_render": 0,
+        "rust_ast": 0
+      },
+      "result": "fail",
+      "evidence": "Java paints PaletteSingle #FFFFCC; Rust paints #FFFFFF. Java serializes HexMulti as #1A2B3C with fill-opacity 0.26667; Rust emits #1A2B3C44. Java emits two ordinary HexMulti link groups; Rust emits zero. CSS Gold-like color and whole none values reach both note paths correctly."
+    },
+    {
+      "stem": "component_inline_opale_multilink_top_level_valid",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_opale_multilink_top_level_valid.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_opale_multilink_top_level_valid.svg",
+      "java_raw_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_opale_multilink_top_level_valid.java.svg",
+      "rust_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_inline_opale_multilink_top_level_valid.rust.svg",
+      "sha256": {
+        "puml": "aef6a9d8d5f4eb947c5eb378fc77443bdd4fd07806bf105a3f814bca2e398e88",
+        "java_svg": "66f5a2e674ac04f25758f96fda9e43aa49886fb87659a5ba647f138362e68892",
+        "rust_svg": "ee64787233c3c1d65327cfaa49dc2a25084e0b647fded690047aafb2bffcb10d"
+      },
+      "axes": [
+        "Component",
+        "inline",
+        "top-level owner control",
+        "gradient single-link Opale",
+        "flat named ordinary multi-link"
+      ],
+      "statuses": {
+        "java": 0,
+        "rust_render": 0,
+        "rust_ast": 0
+      },
+      "result": "fail",
+      "evidence": "Both outputs paint the gradient Opale note and Gold ordinary note with the intended fills, but Java emits the ordinary note's two link groups while Rust emits none. This isolates the link omission from nested ownership."
+    },
+    {
+      "stem": "component_multiline_gradient_matrix_valid",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_multiline_gradient_matrix_valid.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_multiline_gradient_matrix_valid.svg",
+      "java_raw_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_multiline_gradient_matrix_valid.java.svg",
+      "rust_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_multiline_gradient_matrix_valid.rust.svg",
+      "sha256": {
+        "puml": "103df4fce7f6ffeb89a05db2ab0caaf34ee00c115ce741af7b60c03ac4cafd6a",
+        "java_svg": "7d308324e1880ba86d0c6ccd40ca8019f4cc149af038519123180030566913c8",
+        "rust_svg": "221c45ce93494a89acbafa5f3626be07e375fe00d39d482c2d31a5afd058fad3"
+      },
+      "axes": [
+        "Component",
+        "multiline",
+        "nested owner",
+        "all four gradient policies",
+        "named and hex endpoints",
+        "eight-digit endpoints",
+        "case variants",
+        "duplicate gradient",
+        "resource first-paint order",
+        "single and multiple links"
+      ],
+      "statuses": {
+        "java": 0,
+        "rust_render": 0,
+        "rust_ast": 0
+      },
+      "result": "fail",
+      "evidence": "Both outputs have four resources for five notes, reuse gradient 0 for the duplicate, assign identical IDs in first-paint order, and match every policy vector. Java's alias gradient is #C9FFC9/#97FF97 while Rust is #FFFFFF/#FFFFFF; Java's alpha gradient is #112233/#AABBCC while Rust is #11223344/#AABBCCDD."
+    },
+    {
+      "stem": "deployment_inline_flat_opale_nested_valid",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_inline_flat_opale_nested_valid.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_inline_flat_opale_nested_valid.svg",
+      "java_raw_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_inline_flat_opale_nested_valid.java.svg",
+      "rust_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_inline_flat_opale_nested_valid.rust.svg",
+      "sha256": {
+        "puml": "2b9b19c146753890aac56b6a16510b5a1e6085774d1477cab43f846d3cc0f1ec",
+        "java_svg": "e9a81d5fdd28f68503f8cc87afa8b76b9e1c17d7f93c548b6445f74d95e427c5",
+        "rust_svg": "f9c14d92447b43ad6c0091fe04a865494730bcd994712bd20f963f459a9d8d03"
+      },
+      "axes": [
+        "Deployment",
+        "inline",
+        "mixed-case command and colors",
+        "nested owner",
+        "declaration before peer",
+        "flat ArchiMate and CSS names",
+        "eight-digit flat hex",
+        "whole transparent/background",
+        "single-link Opale",
+        "ordinary multi-link"
+      ],
+      "statuses": {
+        "java": 0,
+        "rust_render": 0,
+        "rust_ast": 0
+      },
+      "result": "fail",
+      "evidence": "Java paints PaletteSingle #C2F0FF; Rust paints #FFFFFF. Java serializes HexMulti as #445566 with fill-opacity 0.49804; Rust emits #4455667F. Both emit the two ordinary multi-link groups, and CSS named plus transparent/background paint correctly."
+    },
+    {
+      "stem": "deployment_multiline_gradient_matrix_valid",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_multiline_gradient_matrix_valid.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_multiline_gradient_matrix_valid.svg",
+      "java_raw_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_multiline_gradient_matrix_valid.java.svg",
+      "rust_output": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_multiline_gradient_matrix_valid.rust.svg",
+      "sha256": {
+        "puml": "7be1ebc1f418f2dcebf026d96684ed656e89ba6cbe5a64da00da7b8f2c80d0a3",
+        "java_svg": "3d4b84eb3dbe790c3a5763af76ba4773ae387553e19b2e12e7e64951664a535a",
+        "rust_svg": "11ffe3b437b579ab66309a440ba8d303c8fe0c16768644857f11ce13f1c29161"
+      },
+      "axes": [
+        "Deployment",
+        "multiline",
+        "two-level nested owner",
+        "all four gradient policies",
+        "named and hex endpoints",
+        "eight-digit endpoints",
+        "case variants",
+        "duplicate gradient",
+        "resource first-paint order",
+        "single and multiple links"
+      ],
+      "statuses": {
+        "java": 0,
+        "rust_render": 0,
+        "rust_ast": 0
+      },
+      "result": "fail",
+      "evidence": "Both outputs have four resources for five notes, reuse gradient 0 for the duplicate, assign identical IDs in first-paint order, and match every policy vector. Java's alias gradient is #CCCCFF/#F8E7C0 while Rust is #FFFFFF/#FFFFFF; Java's alpha gradient is #A1B2C3/#102030 while Rust is #A1B2C3D4/#10203040."
+    }
+  ],
+  "invalid_probes_not_counted_as_valid_heldouts": [
+    {
+      "stem": "component_invalid_transparent_gradient_endpoint",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_invalid_transparent_gradient_endpoint.puml",
+      "sha256": {
+        "puml": "bd704f8d3224d14ce0269756e85945bf6da426f332bbe48d0cf80aa2108f491e",
+        "java_svg": "5240585afca3f9cd1cb6c852a84c4db6c5af2779dcd51dcfeb6f2b87fc2efe1a",
+        "rust_svg": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "axes": ["Component", "inline", "transparent first gradient endpoint", "declarations after invalid command"],
+      "statuses": {"java": 200, "rust_render": 1, "rust_ast": 1},
+      "rust_ast_bytes": 0,
+      "result": "pass",
+      "evidence": "Java reports No such color; Rust reports invalid named note command and emits neither SVG nor AST."
+    },
+    {
+      "stem": "component_invalid_background_gradient_endpoint",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_invalid_background_gradient_endpoint.puml",
+      "sha256": {
+        "puml": "de43c4ba1873934e92e7797cdd8d062cdd3f71dd5c9d495670e52dfbf130246b",
+        "java_svg": "4738dcbcaf8a740c6e8577d6ae34d8cab6c035f9b8f16ac8a133b7e8af0d09be",
+        "rust_svg": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "axes": ["Component", "inline", "background second gradient endpoint", "declarations after invalid command"],
+      "statuses": {"java": 200, "rust_render": 1, "rust_ast": 1},
+      "rust_ast_bytes": 0,
+      "result": "pass",
+      "evidence": "Java reports No such color; Rust reports invalid named note command and emits neither SVG nor AST."
+    },
+    {
+      "stem": "deployment_invalid_automatic_gradient_endpoint",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_invalid_automatic_gradient_endpoint.puml",
+      "sha256": {
+        "puml": "5dc1d897d5c09a79c9f7e012c022a478785c100c04f2abcbf592d50b250ea40f",
+        "java_svg": "6c7ad0c5bd68365923257856ccc4f9a2c8d0d551ee37a783432e92a078fe74c9",
+        "rust_svg": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "axes": ["Deployment", "multiline", "automatic first gradient endpoint", "declarations after invalid command"],
+      "statuses": {"java": 200, "rust_render": 1, "rust_ast": 1},
+      "rust_ast_bytes": 0,
+      "result": "pass",
+      "evidence": "Java reports No such color; Rust reports invalid named note command and emits neither SVG nor AST."
+    },
+    {
+      "stem": "component_invalid_unknown_color",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/component_invalid_unknown_color.puml",
+      "sha256": {
+        "puml": "56bfc7fbdb18c75f13898fb5f5cf1fc1ec386e0d686535ba44ddcba58579e715",
+        "java_svg": "df56f0b0d4268efded5831527461c2543afc6e74a88b28fe9ff0168c912d532a",
+        "rust_svg": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "axes": ["Component", "inline", "unknown named color", "declarations after invalid command"],
+      "statuses": {"java": 200, "rust_render": 1, "rust_ast": 1},
+      "rust_ast_bytes": 0,
+      "result": "pass",
+      "evidence": "Java reports No such color; Rust reports invalid named note command and emits neither SVG nor AST."
+    },
+    {
+      "stem": "deployment_invalid_composite_color",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution-followup/deployment_invalid_composite_color.puml",
+      "sha256": {
+        "puml": "1b9eb0126b7a14b1a02082bd299a557be47a705ca217bb7e4869ac510cb0634d",
+        "java_svg": "511fae33f4562a8e199561c33256d1d116878094d879ffee54c4869032ea73fc",
+        "rust_svg": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "axes": ["Deployment", "multiline", "ColorParser part2 composite", "declarations after invalid command"],
+      "statuses": {"java": 200, "rust_render": 1, "rust_ast": 1},
+      "rust_ast_bytes": 0,
+      "result": "pass",
+      "evidence": "Java recognizes the ColorParser shape then reports No such color; Rust rejects before note insertion and emits neither SVG nor AST."
+    }
+  ],
+  "ast_mutation_assessment": {
+    "rust_observable": "All five invalid probes exit 1 in both render and --ast modes, produce zero-byte Rust SVG and AST outputs, and fail in named_note_decorations before Component or Deployment pushes a note. No invalid note identity, relation, later declaration, or partial AST survives.",
+    "java_internal_nuance": "CommandFactoryNote.executeInternal calls reallyCreateLeaf before HColorSet.getColor. Therefore a transient Java leaf can exist inside the diagram that is immediately rejected by NoSuchColorException. The externally observable invariant is terminal rejection with no successful diagram, not mutation-free execution inside Java."
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "rejecting",
+      "summary": "The parser accepts PlantUML's seven ArchiMate aliases, but both Rust paint paths resolve them to white.",
+      "evidence": [
+        "ColorTrieNode maps BUSINESS to #FFFFCC, APPLICATION to #C2F0FF, MOTIVATION to #CCCCFF, STRATEGY to #F8E7C0, TECHNOLOGY to #C9FFC9, PHYSICAL to #97FF97, and IMPLEMENTATION to #FFE0E0.",
+        "PLANTUML_NAMED_COLORS accepts all seven, while sequence::resolve_color has no corresponding match arms and falls back to #FFFFFF.",
+        "Fresh flat and gradient Component/Deployment SVGs show the expected Java alias colors and #FFFFFF Rust paints."
+      ]
+    },
+    {
+      "id": "F2",
+      "severity": "rejecting",
+      "summary": "Eight-digit named-note paint does not follow Java's SVG normalization, and gradient alpha changes observable stop semantics.",
+      "evidence": [
+        "Java ordinary note paths emit RGB plus fill-opacity; Rust emits CSS #RRGGBBAA without fill-opacity.",
+        "Java HColorGradient creation uses HColor.toRGB for endpoints, so #11223344|AABBCCDD becomes #112233/#AABBCC. Rust emits #11223344/#AABBCCDD stops.",
+        "The same failure reproduces in Component and Deployment with different policies and endpoint values."
+      ]
+    },
+    {
+      "id": "F3",
+      "severity": "rejecting",
+      "summary": "Component ordinary multi-link named notes lose all separate links after the Opale gate.",
+      "evidence": [
+        "Java emits two link groups for HexMulti in the nested input and two for MultiNamed in the top-level control; Rust emits zero in both.",
+        "component_opalized_floating_note correctly declines Opale when two links exist, but the following endpoint-position branches recognize only components, interfaces, and packages. A note endpoint reaches continue.",
+        "Deployment emits both ordinary multi-link groups, isolating the failure to Component."
+      ]
+    },
+    {
+      "id": "F4",
+      "severity": "non_rejecting",
+      "summary": "The corrected whole-color versus gradient-endpoint parser boundary is supported by the fresh invalid probes.",
+      "evidence": [
+        "transparent, background, and automatic gradient endpoints, an unknown name, and a ColorParser composite all reject terminally in Rust with zero AST bytes.",
+        "Whole transparent/background remain valid and paint as none in both families."
+      ]
+    },
+    {
+      "id": "F5",
+      "severity": "non_rejecting",
+      "summary": "Gradient policies, duplicate resource reuse, first-paint ordering, and body/fold references match Java when endpoint colors are representable by the Rust resolver.",
+      "evidence": [
+        "Both gradient matrices produce four resources for five notes, reuse resource 0 for the duplicate tuple, match source-seeded IDs, and match all four endpoint vectors.",
+        "Both body and fold paths reference the selected resource in Component and Deployment."
+      ]
+    },
+    {
+      "id": "F6",
+      "severity": "non_rejecting",
+      "summary": "No fixture-shaped logic, unexplained new layout constant, golden read, or coordinate-keyed output surgery was found in d7abcda7.",
+      "evidence": [
+        "The new branches are keyed to color grammar, note color presence, and generated resource tuples.",
+        "Fresh labels do not occur in shipping source; only the implementation's generic unit-test labels occur under test modules."
+      ]
+    }
+  ],
+  "accepted_automatic_residue": [
+    "Whole #automatic remains accepted by HColorSet.parseColor, but Java revision 71806a2 crashes while painting HColorAutomagic. It is accepted as declared residue and was not counted as a valid paint held-out. #automatic inside a gradient is not residue; it is invalid and was tested.",
+    "Java invalid-command error pages say Assumed diagram type: component for deployment-shaped probes. This is error-renderer metadata and not a family-dispatch finding.",
+    "Rust reports invalid named-note commands at preprocessed line 2 while Java reports the raw command/end-note line. Both are terminal; the line-number presentation difference is outside this color-resolution verdict.",
+    "Unrelated no-oracle layout coordinates, text metrics, canvas extents, and XML attribute order were not used as rejection evidence. No color/resource/link-presence mismatch listed in F1-F3 is accepted as automatic residue."
+  ],
+  "summary": {
+    "valid_inputs": 5,
+    "valid_passes": 0,
+    "valid_failures": 5,
+    "invalid_probes": 5,
+    "invalid_boundary_matches": 5,
+    "java_syntax_or_color_errors_in_valid_inputs": 0,
+    "cargo_or_rustc_run": false,
+    "rust_rebuilt": false
+  },
+  "conclusion": "The follow-up fixes the first review's sentinel endpoint and none-paint defects, but the claimed complete color-to-paint model is still false. Accepted ArchiMate aliases become white, eight-digit paints do not follow Java's ordinary or gradient SVG conversion, and Component multi-link named notes lose their ordinary links. Verdict: REJECT."
+}

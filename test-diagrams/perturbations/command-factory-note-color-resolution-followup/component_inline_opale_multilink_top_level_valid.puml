@@ -1,0 +1,9 @@
+@startuml
+component "Top Alpha 7390" as TopAlpha
+component "Top Beta 7391" as TopBeta
+note "single gradient opale 7392" as SingleGradient #Red-Blue
+SingleGradient --> TopAlpha
+note "ordinary multi named 7393" as MultiNamed #Gold
+MultiNamed --> TopAlpha
+MultiNamed --> TopBeta
+@enduml

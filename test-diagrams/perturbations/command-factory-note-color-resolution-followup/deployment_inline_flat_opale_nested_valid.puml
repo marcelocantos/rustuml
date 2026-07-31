@@ -1,0 +1,21 @@
+@startuml
+node "Copper Enclave 7320" as CopperEnclave {
+  NoTe "palette case single 7321" As PaletteSingle #aPpLiCaTiOn
+  artifact "Late Runtime 7322" as LateRuntime
+  PaletteSingle --> LateRuntime
+
+  note "hex alpha multi 7323" as HexMulti #4455667f
+  artifact "Late Archive 7324" as LateArchive
+  HexMulti --> LateRuntime
+  HexMulti --> LateArchive
+
+  note "css named single 7325" as CssSingle #mEdIuMpUrPlE
+  CssSingle --> LateArchive
+
+  note "whole transparent single 7326" as TransparentSingle #tRaNsPaReNt
+  TransparentSingle --> LateRuntime
+}
+NoTe "whole background single 7327" As BackgroundSingle #bAcKgRoUnD
+node "Outside Node 7328" as OutsideNode
+BackgroundSingle --> OutsideNode
+@enduml

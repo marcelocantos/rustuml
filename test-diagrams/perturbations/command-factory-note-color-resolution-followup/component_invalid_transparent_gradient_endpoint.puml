@@ -1,0 +1,6 @@
+@startuml
+component "Before Transparent 7340" as BeforeTransparent
+note "invalid transparent endpoint 7341" as MutatedTransparent #TrAnSpArEnT/Red
+component "After Transparent 7342" as AfterTransparent
+MutatedTransparent --> AfterTransparent
+@enduml

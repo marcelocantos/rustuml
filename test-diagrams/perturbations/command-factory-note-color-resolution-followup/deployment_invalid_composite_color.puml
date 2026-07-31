@@ -1,0 +1,8 @@
+@startuml
+node "Before Composite 7380" as BeforeComposite
+note as MutatedComposite #back:LightBlue;line.dashed:Red
+  invalid composite 7381
+end note
+node "After Composite 7382" as AfterComposite
+MutatedComposite --> AfterComposite
+@enduml

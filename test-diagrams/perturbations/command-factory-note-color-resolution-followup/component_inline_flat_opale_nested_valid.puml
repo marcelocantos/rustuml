@@ -1,0 +1,21 @@
+@startuml
+package "Verdant Quay 7300" as VerdantQuay {
+  NoTe "palette case single 7301" As PaletteSingle #BuSiNeSs
+  component "Late Alpha 7302" as LateAlpha
+  PaletteSingle --> LateAlpha
+
+  note "hex alpha multi 7303" as HexMulti #1a2B3c44
+  component "Late Beta 7304" as LateBeta
+  HexMulti --> LateAlpha
+  HexMulti --> LateBeta
+
+  note "css named single 7305" as CssSingle #gOlDeNrOd
+  CssSingle --> LateBeta
+
+  note "whole transparent single 7306" as TransparentSingle #TrAnSpArEnT
+  TransparentSingle --> LateBeta
+}
+NoTe "whole background single 7307" As BackgroundSingle #BaCkGrOuNd
+component "Outside 7308" as Outside
+BackgroundSingle --> Outside
+@enduml
