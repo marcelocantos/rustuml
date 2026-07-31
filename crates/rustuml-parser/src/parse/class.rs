@@ -195,12 +195,16 @@ impl ClassParser {
     }
 
     fn push_note(&mut self, mut note: Note) {
+        let mut alias_owner = None;
         if let Some(alias) = note.alias.as_deref() {
             // `CommandFactoryNote` uses `quarkInContext(false, alias)`: the
             // note is real data on a current-package quark, not a side table
             // entry repaired after relationship parsing.
             let path = self.resolve_quark_path(alias, QuarkLookup::CurrentContext);
             let id = self.path_id(&path);
+            if path.len() > 1 {
+                alias_owner = Some(self.path_id(&path[..path.len() - 1]));
+            }
             self.register_quark_path(&path);
             self.note_by_path.insert(path, self.notes.len());
             note.id = Some(id);
@@ -214,10 +218,11 @@ impl ClassParser {
         };
         self.uid_events.push(ClassUidEvent::Note {
             index: self.notes.len(),
-            owner_package: self
-                .package_stack
-                .last()
-                .map(|&index| self.packages[index].name.clone()),
+            owner_package: alias_owner.or_else(|| {
+                self.package_stack
+                    .last()
+                    .map(|&index| self.packages[index].name.clone())
+            }),
         });
         self.notes.push(note);
     }
@@ -4682,11 +4687,25 @@ mod tests {
         let multiline = parse(
             "NoTe as Audit.审计_42 #LightGreen\n\
              payload line\n\
-             EnD NoTe",
+             EnD NoTe\n\
+             class AfterAudit",
         );
         assert_eq!(multiline.notes.len(), 1);
         assert_eq!(multiline.notes[0].alias.as_deref(), Some("Audit.审计_42"));
         assert_eq!(multiline.notes[0].id.as_deref(), Some("Audit.审计_42"));
+        assert!(
+            multiline
+                .packages
+                .iter()
+                .any(|package| package.name == "Audit")
+        );
+        assert!(multiline.uid_events.iter().any(|event| matches!(
+            event,
+            ClassUidEvent::Note {
+                index: 0,
+                owner_package: Some(owner),
+            } if owner == "Audit"
+        )));
 
         let inline = parse(r#"note "inline payload" as Audit.Inline_43"#);
         assert_eq!(inline.notes.len(), 1);

@@ -3925,6 +3925,14 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
     for parent in parent_pkg.iter().flatten().copied() {
         has_direct_package[parent] = true;
     }
+    let mut has_direct_note = vec![false; diagram.packages.len()];
+    for package_idx in note_owner_packages(diagram, &innermost_pkg)
+        .iter()
+        .flatten()
+        .copied()
+    {
+        has_direct_note[package_idx] = true;
+    }
 
     let roles = diagram
         .packages
@@ -3955,7 +3963,7 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
             );
             if !supports_package_rendering {
                 PackageRenderRole::Hidden
-            } else if has_direct_entity[idx] || has_direct_package[idx] {
+            } else if has_direct_entity[idx] || has_direct_package[idx] || has_direct_note[idx] {
                 // Java `Entity#isEmpty` examines direct quark children. A
                 // direct leaf or group child therefore makes this a cluster.
                 PackageRenderRole::Cluster
