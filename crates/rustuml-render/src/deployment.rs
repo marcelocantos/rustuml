@@ -4583,6 +4583,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     for conn in &diagram.connections {
         let (layout_from, layout_to, reversed) =
             deployment_connection_layout_with_endpoints(conn, &cluster_endpoint_nodes);
+        if conn.length == 1 {
+            // Java `Bibliotekon.addLine` serializes every length-one edge in
+            // `lines0`, between promoted inverted starts and ordinary nodes.
+            layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
+        }
         if reversed {
             // Java `CommandLinkElement.executeArg` preserves LEFT/UP as an
             // inverted Link after swapping endpoints. `Cluster` then emits
