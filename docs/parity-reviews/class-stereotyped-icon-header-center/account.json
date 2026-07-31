@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-stereotyped-icon-header-center",
+  "created": "2026-07-31",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "ee9594df",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClassHeader.java",
+      "symbol": "EntityImageClassHeader constructor",
+      "lines": "145-155",
+      "role": "Wraps the circled character in its fixed margins and passes it with the stereotype and name blocks to HeaderLayout."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/HeaderLayout.java",
+      "symbols": [
+        "HeaderLayout.getDimension",
+        "HeaderLayout.drawU"
+      ],
+      "lines": "68-78,81-109",
+      "role": "Measures the complete header from circle, stereotype, name, and generic blocks, then vertically centers the complete circled-character block with yCircle = (height - circleDim.height) / 2."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/CircledCharacter.java",
+      "symbol": "CircledCharacter.drawU",
+      "lines": "62-74",
+      "role": "Draws the ellipse and centered glyph symmetrically inside the raw circled-character dimension."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "ICON_CY_WITH_STEREO",
+        "class_header_height",
+        "render_entity_content icon_cy"
+      ],
+      "lines": "180-185,1678-1717,9679-9705",
+      "role": "Already measures the Java-shaped header but bypasses that measurement for stereotyped entities and instead places every icon from the truncated literal 20.3105."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_spot_letter_G.puml",
+    "test-diagrams/golden/class/class_spot_letter_U.puml"
+  ],
+  "claimed_invariant": "HeaderLayout vertically centers the complete circled-character block inside the complete measured class header. Because the raw CircledCharacter ellipse is centered within its symmetric wrapped block, the emitted ellipse and glyph center is entity_y + header_height / 2. The same ownership applies whether the header height is driven by one or many stereotype rows, a multiline name, font changes, padding, or the circle itself.",
+  "causal_divergence": "Rust computes the full class header height but ignores it when dim.has_stereotypes, using the corpus-derived literal 20.3105 instead. For the default one-stereotype header, Java's measured height is 40.62109375 and its center is 20.310546875. The truncated Rust center formats identically for the ellipse but moves enough glyph outline coordinates across four-place rounding boundaries to leave the G and U path residuals.",
+  "planned_model_change": "Remove the stereotyped-only icon center literal and always center a visible circled-character block from class_header_height, using entity_y + measured_header_height / 2. Preserve oracle overrides and the existing no-stereotype formula's equivalent result. Do not add per-character, label, or fixture conditions.",
+  "checked_derivations": [
+    {
+      "input": "test-diagrams/golden/class/class_spot_letter_G.puml",
+      "derivation": "The expected and Rust ellipse both format cy=27.3105 at entity_y=7, while only glyph y coordinates near four-place boundaries differ. Java HeaderLayout's one-stereotype header height is the measured stereotype, name, and 10px envelope; centering it yields an internal center with more precision than the emitted ellipse attribute exposes."
+    },
+    {
+      "input": "test-diagrams/golden/class/class_spot_letter_U.puml",
+      "derivation": "Every x coordinate and the complete command topology agree, while affected y coordinates are consistently one final decimal below Java. The same measured header center drives U independently of its outline, so a header-composition fix explains both letters without glyph-specific data."
+    }
+  ],
+  "perturbation_axes": [
+    "one through three visible stereotype rows",
+    "short, long, and multiline class names",
+    "default and changed class/circled-character font sizes",
+    "custom G, U, W, and lowercase spot characters",
+    "one-leaf and linked SVEK body lifecycles"
+  ],
+  "scope_boundary": "This mechanism owns vertical centering of class circled-character blocks inside measured stereotyped headers. It does not own glyph outlines, UnusedSpace centers, horizontal header placement, SVEK entity positions, stereotype parsing or colors, comparator tolerance, or corpus eligibility.",
+  "acceptance": [
+    "Both evidence inputs become structurally equivalent without oracle data.",
+    "Existing default and custom spot controls without visible stereotype text do not regress.",
+    "Fresh renamed inputs cover changed stereotype count and multiline header height.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "per-character paths or offsets",
+    "retuning ICON_CY_WITH_STEREO to another observed literal",
+    "fixture-name or stereotype-label conditions",
+    "post-hoc path string edits",
+    "comparator epsilon changes"
+  ]
+}
