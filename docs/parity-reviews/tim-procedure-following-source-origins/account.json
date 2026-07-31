@@ -77,7 +77,7 @@
   ],
   "experimental_result": {
     "account_revision": "385977e38193bf6ca0a2649a33b82f6dabd6c6ff",
-    "implementation_revision": "pending implementation commit",
+    "implementation_revision": "a49d74243b77d691e78bd8df246cf28c78ec4b95",
     "accepted_result": "preproc_complex_crud_generator becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,170/11,251 to 11,171/11,251, with preprocessing moving from 288/307 to 289/307 and every other family unchanged.",
     "model_evidence": "After a top-level procedure emits body-owned lines, later caller-owned content now receives explicit source markers instead of inheriting flattened vector positions. A fresh renamed perturbation combines one-line and multiline procedure bodies, repeated calls, a following comment, and a later relationship; generated classes retain their distinct definition lines and the relationship retains its caller-file line. The full parser suite exposed and now preserves the separate preamble-backed domain: preproc_05_procedure_header remains structurally equivalent with its ordinary message on source line 8, while the first-line @start CRUD links use 27 and 28.",
     "commands": [
