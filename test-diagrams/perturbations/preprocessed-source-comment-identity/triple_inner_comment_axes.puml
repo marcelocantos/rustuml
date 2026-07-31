@@ -1,0 +1,8 @@
+@startuml
+!theme cerulean
+class Source {
+  field /'''hidden-field'''/ visible
+}
+class Target
+Source --> Target : edge /'''hidden-edge'''/ label
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+' checker: comment before theme must not affect source identity
+!theme cerulean
+
+/' checker: long comment after theme must not affect source identity
+ignored seed text
+'/
+
+skinparam classBorderColor #224466 ' trailing quote comment
+class "O'Brien Ledger" as Ledger {
+  +postedAt: String
+}
+class AuditTrail
+class Counterparty
+Ledger --> AuditTrail : records
+Counterparty --> Ledger : pays
+' checker: terminal full-line comment
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!theme cerulean
+class Anchor
+/' checker prefix comment '/ class PrefixKept
+class SuffixKept /' checker suffix comment '/
+Anchor --> PrefixKept
+SuffixKept --> Anchor
+@enduml

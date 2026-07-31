@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "mechanism": "preprocessed-source-comment-identity",
+  "checker": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "implemented_mechanism": false,
+    "date": "2026-07-31",
+    "mode": "adversarial maker-checker review",
+    "workspace": "/private/tmp/rustuml-integrate-20260731a"
+  },
+  "revisions": {
+    "rust_review_revision": "d04b7ec69d7f86aeafbc9202da3c41ef7569ddac",
+    "account_revision": "722bc94d9b84902de021a9a4d9f9782ce701137f",
+    "implementation_revision": "c3665f97d77615f51a23535bc46fddf87b5e5ec6",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "comparator": "target/release/examples/diff_one",
+    "comparator_sha256": "4c4f3b22a48acf655c3fb7aeb998923a853bd46ce7be6321bce5e0a0b77b8322"
+  },
+  "documents_read": [
+    "AGENTS.md parity rules",
+    "docs/parity-reviews/preprocessed-source-comment-identity/account.json",
+    "git show c3665f97 -- crates/rustuml-parser/src/preprocess/mod.rs docs/parity-reviews/preprocessed-source-comment-identity/account.json test-diagrams/no_oracle_baseline.txt",
+    "crates/rustuml-parser/src/preprocess/mod.rs:95-230",
+    "crates/rustuml-parser/src/preprocess/mod.rs:3580-3625",
+    "src/main/java/net/sourceforge/plantuml/tim/TContext.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorLongComment.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorShortComment.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorInnerComment.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/text/StringLocated.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/text/TLineType.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/core/UmlSource.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  ],
+  "source_inspection": {
+    "java": [
+      "TContext#buildCodeIterator wraps the TIM body with CodeIteratorLongComment, CodeIteratorShortComment, and CodeIteratorInnerComment before plain lines are added to the result stream later hashed by UmlSource#seed.",
+      "TLineType marks full-line quote comments and whole-line /' ... '/ comments as COMMENT_SIMPLE; it marks long comments only when a /' line has no closing '/ token.",
+      "CodeIteratorLongComment consumes COMMENT_LONG_START through the line whose trimmed text ends with '/.",
+      "StringLocated#removeInnerComment preserves code after a prefix /' ... '/ inner comment, preserves code before a suffix /' ... '/ inner comment, and removes only /'''[-\\w]*'''/ payloads for triple inner comments.",
+      "No Java source path inspected supports the broad claim that every ordinary trailing apostrophe comment is removed before UmlSource#seed; the shipped behavior is command/parser dependent."
+    ],
+    "rust": [
+      "expanded_theme_seed_source reconstructs theme-expanded source and sends non-theme user lines through post_tim_seed_line.",
+      "post_tim_seed_line drops any line whose trimmed text starts with /', including Java-valid prefix inner comments that have code after the closing '/ token.",
+      "strip_inline_comment removes an ordinary apostrophe preceded by whitespace outside double quotes; this is broader than the Java TIM inner-comment iterator and changes some valid command semantics.",
+      "post_tim_seed_line and strip_inline_comment do not remove Java's /'''[-\\w]*'''/ inner-comment form, so hidden-field and hidden-edge payloads remain visible and remain in the seed."
+    ],
+    "fixture_shape_search": "rg found no held-out stems, Java gradient prefixes, or mechanism-specific fixture labels in shipping crates. The rejection is model divergence rather than obvious fixture-shaped logic."
+  },
+  "commands": [
+    "git status --short --branch",
+    "git show --stat --oneline --decorate c3665f97",
+    "git show c3665f97 -- crates/rustuml-parser/src/preprocess/mod.rs docs/parity-reviews/preprocessed-source-comment-identity/account.json test-diagrams/no_oracle_baseline.txt",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TContext.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorLongComment.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorShortComment.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorInnerComment.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/text/StringLocated.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+    "xmllint --noout test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.svg test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string' test-diagrams/perturbations/preprocessed-source-comment-identity -g '*.svg'",
+    "ruby -rdigest -e 'verify fresh source hashes are unique against all golden sources, existing perturbations, and one another'",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml > test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.diff.txt 2>&1",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml > test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.diff.txt 2>&1",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml > test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.diff.txt 2>&1",
+    "cargo test -p rustuml-parser --lib theme_seed_identity_uses_post_tim_comment_stream -- --nocapture",
+    "rg -n 'preprocessed-source-comment-identity|quote_comment_axes|prefix_suffix_inner_comment_axes|triple_inner_comment_axes|g4j5v012epywl|gzno0u9swfn9h|g1t6lu6pqivr3p' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math docs test-diagrams/no_oracle_baseline.txt"
+  ],
+  "constraints_observed": {
+    "local_java_oracle_available": true,
+    "java_syntax_errors": 0,
+    "ran_cargo": true,
+    "edited_shipping_code": false,
+    "edited_account": false,
+    "review_only_changes": true
+  },
+  "perturbation_directory": "test-diagrams/perturbations/preprocessed-source-comment-identity",
+  "perturbations": [
+    {
+      "stem": "quote_comment_axes",
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg",
+      "diff": "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.diff.txt",
+      "axes": [
+        "full-line quote comment before theme",
+        "long comment after theme",
+        "ordinary trailing apostrophe after skinparam",
+        "quoted apostrophe in display label",
+        "renamed labels and two-edge topology"
+      ],
+      "result": "fail",
+      "evidence": "Java keeps the Cerulean class border behavior and gradient prefix g4j5v012epywl; Rust strips the trailing skinparam apostrophe comment, applies #224466, emits gradient prefix g436gvpyc7gxq, and shifts geometry. This disproves the account's broad inline quote-comment invariant."
+    },
+    {
+      "stem": "prefix_suffix_inner_comment_axes",
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.svg",
+      "diff": "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.diff.txt",
+      "axes": [
+        "prefix /' ... '/ inner comment with code after the closing token",
+        "suffix /' ... '/ inner comment with code before the opening token",
+        "source-order-sensitive entity ids",
+        "two-edge topology"
+      ],
+      "result": "fail",
+      "evidence": "Java emits PrefixKept from the prefix-comment line at data-source-line 3 and SuffixKept at line 4. Rust emits different gradient ids and swaps entity metadata/order, showing that the prefix/suffix inner-comment model is not Java-compatible."
+    },
+    {
+      "stem": "triple_inner_comment_axes",
+      "source": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml",
+      "golden": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.svg",
+      "diff": "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.diff.txt",
+      "axes": [
+        "Java /'''[-\\w]*'''/ inner-comment payload",
+        "class member text",
+        "edge label text",
+        "theme resource seed"
+      ],
+      "result": "fail",
+      "evidence": "Java removes hidden-field and hidden-edge from visible text and source identity, emitting gradient prefix g1t6lu6pqivr3p. Rust leaves both payloads visible, widens the diagram, and emits gradient prefix g1cjsdqxzi34i."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "finding": "The account's inline-comment invariant is overbroad. Java's inspected TIM iterators do not implement Rust's whitespace-preceded trailing-apostrophe stripping. The quote_comment_axes held-out is valid Java and shows a skinparam line whose trailing apostrophe text is not a harmless identity-only comment in Java, while Rust strips it and changes shipped rendering."
+    },
+    {
+      "severity": "rejecting",
+      "finding": "The implementation does not model StringLocated#removeInnerComment prefix/suffix behavior. A Java-valid line beginning with /' ... '/ and continuing with real code survives in Java, but Rust's post_tim_seed_line treats any trimmed /' prefix as a removable comment line."
+    },
+    {
+      "severity": "rejecting",
+      "finding": "The implementation omits Java's /'''[-\\w]*'''/ special inner-comment removal. Valid hidden payloads in member and edge labels remain visible in Rust and change both geometry and deterministic resource ids."
+    }
+  ],
+  "summary": {
+    "valid_inputs": 3,
+    "java_syntax_errors": 0,
+    "passes": 0,
+    "failures": 3,
+    "implementation_unit_test": "pass",
+    "held_out_uniqueness": "pass"
+  },
+  "verdict": "REJECT",
+  "verdict_reason": "Three fresh, unique, Java-valid perturbations over independent comment axes fail the prescribed no-oracle comparator. Per T14 held-out perturbation rules, the mechanism is rejected and the counterexamples remain preserved."
+}
