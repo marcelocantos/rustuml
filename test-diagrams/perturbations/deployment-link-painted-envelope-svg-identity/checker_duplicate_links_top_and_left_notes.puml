@@ -1,0 +1,10 @@
+@startuml
+cloud "Edge/Proxy"
+node "Core:API"
+"Edge/Proxy" --> "Core:API" : primary channel
+note top on link #LightYellow
+  first duplicate note
+end note
+"Edge/Proxy" ..> "Core:API" : audit channel
+note left on link #Lavender : second duplicate note
+@enduml

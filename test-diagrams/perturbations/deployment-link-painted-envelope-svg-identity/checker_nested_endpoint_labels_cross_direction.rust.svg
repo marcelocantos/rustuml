@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="271px" preserveAspectRatio="none" style="width:522px;height:271px;background:#FFFFFF;" version="1.1" viewBox="0 0 522 271" width="522px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Frame/One-->
+<g class="cluster" data-qualified-name="frame-one" data-source-line="1" id="ent0002">
+<rect fill="none" height="250.98" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="266" x="237.0459" y="7"/>
+<path d="M328.2979,7 L328.2979,16.4883 L318.2979,26.4883 L237.0459,26.4883" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="81.252" x="240.0459" y="21.5352">Frame/One</text>
+</g>
+<!--entity Ingress:North-->
+<g class="entity" data-qualified-name="frame-one.Ingress.North" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="132.2783" x="252.91" y="42"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="365.1883" y="47"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="363.1883" y="49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="363.1883" y="53"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92.2783" x="267.91" y="75.5352">Ingress:North</text>
+</g>
+<!--entity Store-South-->
+<g class="entity" data-qualified-name="frame-one.store.south" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="101.7578" x="253.17" y="205.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81.7578" x="263.17" y="229.0252">Store-South</text>
+</g>
+<!--entity Outside:Peer-->
+<g class="entity" data-qualified-name="Outside.Peer" data-source-line="5" id="ent0005">
+<polygon fill="#F1F1F1" points="16,210.49,26,200.49,142.0918,200.49,142.0918,236.9783,132.0918,246.9783,16,246.9783,16,210.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="132.0918" x2="142.0918" y1="210.49" y2="200.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="132.0918" y1="210.49" y2="210.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="132.0918" x2="132.0918" y1="210.49" y2="246.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86.0918" x="31" y="234.0252">Outside:Peer</text>
+</g>
+<!--link Ingress:North to store.south-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M316.9,88.67 C313.88,120.11 309.0307,170.6572 306.3007,199.2272" fill="none" id="Ingress:North-to-store.south" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="305.73,205.2,310.568,196.6213,306.2056,200.2227,302.6042,195.8603,305.73,205.2" style="stroke:#181818;stroke-width:1;"/>
+<path d="M318.77,123.49 L318.77,148.49 L507.77,148.49 L507.77,133.49 L497.77,123.49 L318.77,123.49" fill="#F0FFF0" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M497.77,123.49 L497.77,133.49 L507.77,133.49 L497.77,123.49" fill="#F0FFF0" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="168.4604" x="324.77" y="141.0584">owned endpoint label note</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="95.0054" x="365.9975" y="167.3689">owned transfer</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="36.0483" x="275.743" y="109.2029">tail-A</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="44.9668" x="255.6554" y="194.843">head/B</text>
+</g>
+<!--link store.south to Outside:Peer-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency" data-source-line="8" id="lnk7">
+<path d="M252.96,223.74 C220.15,223.74 183.28,223.74 148.32,223.74" fill="none" id="store.south-to-Outside:Peer" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="142.32,223.74,151.32,227.74,147.32,223.74,151.32,219.74,142.32,223.74" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="75.9624" x="160.13" y="217.3084">cross owner</text>
+</g>
+</g></svg>

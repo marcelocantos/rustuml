@@ -1,0 +1,6 @@
+@startuml
+node "Collector:West"
+artifact "Vault/Cold"
+"Collector:West" "egress:1" -left-> "ingress/2" "Vault/Cold" : reverse checkpoint
+note bottom on link #MintCream : endpoint label note
+@enduml

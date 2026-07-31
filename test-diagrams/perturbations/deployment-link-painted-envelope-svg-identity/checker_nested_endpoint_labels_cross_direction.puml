@@ -1,0 +1,10 @@
+@startuml
+frame "Frame/One" as frame-one {
+  component "Ingress:North"
+  storage "Store-South" as store.south
+}
+node "Outside:Peer"
+"Ingress:North" "tail-A" -down-> "head/B" store.south : owned transfer
+note top on link #HoneyDew : owned endpoint label note
+store.south -right-> "Outside:Peer" : cross owner
+@enduml

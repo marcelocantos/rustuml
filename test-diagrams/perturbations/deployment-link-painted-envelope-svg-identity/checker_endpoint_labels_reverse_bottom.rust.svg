@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="108px" preserveAspectRatio="none" style="width:460px;height:108px;background:#FFFFFF;" version="1.1" viewBox="0 0 460 108" width="460px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Collector:West-->
+<g class="entity" data-qualified-name="Collector.West" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="297.92,46.75,307.92,36.75,435.4141,36.75,435.4141,73.2383,425.4141,83.2383,297.92,83.2383,297.92,46.75" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="425.4141" x2="435.4141" y1="46.75" y2="36.75"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="297.92" x2="425.4141" y1="46.75" y2="46.75"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="425.4141" x2="425.4141" y1="46.75" y2="83.2383"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.4941" x="312.92" y="70.2852">Collector:West</text>
+</g>
+<!--entity Vault/Cold-->
+<g class="entity" data-qualified-name="Vault.Cold" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="103.3428" x="7" y="40.25"/>
+<polygon fill="#F1F1F1" points="93.3428,45.25,93.3428,59.25,105.3428,59.25,105.3428,51.25,99.3428,45.25,93.3428,45.25" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="99.3428" x2="99.3428" y1="45.25" y2="51.25"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="105.3428" x2="99.3428" y1="51.25" y2="51.25"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73.3428" x="17" y="66.7852">Vault/Cold</text>
+</g>
+<!--reverse link Vault/Cold to Collector:West-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="3" id="lnk5">
+<path d="M116.57,60 C167.92,60 240.82,60 297.48,60" fill="none" id="Vault/Cold-backto-Collector:West" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="110.57,60,119.57,64,115.57,60,119.57,56,110.57,60" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="118.917" x="145.0978" y="18.5684">reverse checkpoint</text>
+<path d="M132.63,27.3105 L132.63,52.3105 L275.63,52.3105 L275.63,37.3105 L265.63,27.3105 L132.63,27.3105" fill="#F5FFFA" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M265.63,27.3105 L265.63,37.3105 L275.63,37.3105 L265.63,27.3105" fill="#F5FFFA" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="122.8525" x="138.63" y="44.8789">endpoint label note</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60.7852" x="118.4134" y="73.2986">ingress/2</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53.498" x="236.2783" y="73.2267">egress:1</text>
+</g>
+</g></svg>

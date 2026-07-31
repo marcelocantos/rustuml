@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="214px" preserveAspectRatio="none" style="width:378px;height:214px;background:#FFFFFF;" version="1.1" viewBox="0 0 378 214" width="378px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Ops Zone-->
+<g class="cluster" data-qualified-name="ops-zone-a" data-source-line="2" id="ent0002">
+<path d="M8.5,6 L78.1943,6 A3.75,3.75 0 0 1 80.6943,8.5 L87.6943,28.4883 L160.46,28.4883 A2.5,2.5 0 0 1 162.96,30.9883 L162.96,196.5 A2.5,2.5 0 0 1 160.46,199 L8.5,199 A2.5,2.5 0 0 1 6,196.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="87.6943" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="68.6943" x="10" y="21.5352">Ops Zone</text>
+</g>
+<!--entity Relay:Blue/1-->
+<g class="entity" data-qualified-name="ops-zone-a.Relay.Blue.1" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="22,146.76,32,136.76,146.957,136.76,146.957,173.2483,136.957,183.2483,22,183.2483,22,146.76" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="136.957" x2="146.957" y1="146.76" y2="136.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="22" x2="136.957" y1="146.76" y2="146.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="136.957" x2="136.957" y1="146.76" y2="183.2483"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84.957" x="37" y="170.2952">Relay:Blue/1</text>
+</g>
+<!--entity Front Door-->
+<g class="entity" data-qualified-name="ops-zone-a.front.door" data-source-line="4" id="ent0004">
+<path d="M42.68,40.76 L126.2825,40.76 C131.2825,40.76 131.2825,54.0041 131.2825,54.0041 C131.2825,54.0041 131.2825,67.2483 126.2825,67.2483 L42.68,67.2483 C37.68,67.2483 37.68,54.0041 37.68,54.0041 C37.68,54.0041 37.68,40.76 42.68,40.76" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M126.2825,40.76 C121.2825,40.76 121.2825,54.0041 121.2825,54.0041 C121.2825,67.2483 126.2825,67.2483 126.2825,67.2483" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73.6025" x="42.68" y="59.2952">Front Door</text>
+</g>
+<!--entity Audit.Sink-->
+<g class="entity" data-qualified-name="audit.sink" data-source-line="8" id="ent0006">
+<path d="M263.96,41.26 C263.96,31.26 308.625,31.26 308.625,31.26 C308.625,31.26 353.2901,31.26 353.2901,41.26 L353.2901,66.7483 C353.2901,76.7483 308.625,76.7483 308.625,76.7483 C308.625,76.7483 263.96,76.7483 263.96,66.7483 L263.96,41.26" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M263.96,41.26 C263.96,51.26 308.625,51.26 308.625,51.26 C308.625,51.26 353.2901,51.26 353.2901,41.26" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69.3301" x="273.96" y="68.7952">Audit.Sink</text>
+</g>
+<!--link Relay:Blue/1 to front.door-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M84.48,136.48 C84.48,115.37 84.48,91.13 84.48,73.73" fill="none" id="Relay:Blue/1-to-front.door" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="84.48,67.73,80.48,76.73,84.48,72.73,88.48,76.73,84.48,67.73" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60.5503" x="-17.02" y="107.0684">sync path</text>
+<path d="M49.5303,89.5 L49.5303,114.5 L140.5303,114.5 L140.5303,99.5 L130.5303,89.5 L49.5303,89.5" fill="#F0F8FF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M130.5303,89.5 L130.5303,99.5 L140.5303,99.5 L130.5303,89.5" fill="#F0F8FF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70.8398" x="55.5303" y="107.0684">raw id note</text>
+</g>
+<!--link front.door to audit.sink-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0006" data-link-type="dependency" data-source-line="9" id="lnk7">
+<path d="M131.78,54 C170.56,54 219.54,54 257.65,54" fill="none" id="front.door-to-audit.sink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="263.65,54,254.65,50,258.65,54,254.65,58,263.65,54" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53.3584" x="179.96" y="50.5684">spillover</text>
+</g>
+</g></svg>

@@ -1,0 +1,74 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "214px"), ("preserveAspectRatio", "none"), ("style", "width:402px;height:214px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 402 214"), ("width", "402px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "214px"), ("preserveAspectRatio", "none"), ("style", "width:378px;height:214px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 378 214"), ("width", "378px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M32.52,6 L102.2143,6 A3.75,3.75 0 0 1 104.7143,8.5 L111.7143,28.4883 L184.48,28.4883 A2.5,2.5 0 0 1 186.98,30.9883 L186.98,196.5 A2.5,2.5 0 0 1 184.48,199 L32.52,199 A2.5,2.5 0 0 1 30.02,196.5 L30.02,8.5 A2.5,2.5 0 0 1 32.52,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,6 L78.1943,6 A3.75,3.75 0 0 1 80.6943,8.5 L87.6943,28.4883 L160.46,28.4883 A2.5,2.5 0 0 1 162.96,30.9883 L162.96,196.5 A2.5,2.5 0 0 1 160.46,199 L8.5,199 A2.5,2.5 0 0 1 6,196.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "30.02"), ("x2", "111.7143"), ("y1", "28.4883"), ("y2", "28.4883")]
+    actual:   [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "6"), ("x2", "87.6943"), ("y1", "28.4883"), ("y2", "28.4883")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "68.6943"), ("x", "34.02"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "68.6943"), ("x", "10"), ("y", "21.5352")]
+  [8] <polygon> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("points", "46.02,146.76,56.02,136.76,170.977,136.76,170.977,173.2483,160.977,183.2483,46.02,183.2483,46.02,146.76"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("fill", "#F1F1F1"), ("points", "22,146.76,32,136.76,146.957,136.76,146.957,173.2483,136.957,183.2483,22,183.2483,22,146.76"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "160.977"), ("x2", "170.977"), ("y1", "146.76"), ("y2", "136.76")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "136.957"), ("x2", "146.957"), ("y1", "146.76"), ("y2", "136.76")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "46.02"), ("x2", "160.977"), ("y1", "146.76"), ("y2", "146.76")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "22"), ("x2", "136.957"), ("y1", "146.76"), ("y2", "146.76")]
+  [11] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "160.977"), ("x2", "160.977"), ("y1", "146.76"), ("y2", "183.2483")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "136.957"), ("x2", "136.957"), ("y1", "146.76"), ("y2", "183.2483")]
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "84.957"), ("x", "61.02"), ("y", "170.2952")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "84.957"), ("x", "37"), ("y", "170.2952")]
+  [14] <path> attr mismatch:
+    expected: [("d", "M66.7,40.76 L150.3025,40.76 C155.3025,40.76 155.3025,54.0041 155.3025,54.0041 C155.3025,54.0041 155.3025,67.2483 150.3025,67.2483 L66.7,67.2483 C61.7,67.2483 61.7,54.0041 61.7,54.0041 C61.7,54.0041 61.7,40.76 66.7,40.76"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M42.68,40.76 L126.2825,40.76 C131.2825,40.76 131.2825,54.0041 131.2825,54.0041 C131.2825,54.0041 131.2825,67.2483 126.2825,67.2483 L42.68,67.2483 C37.68,67.2483 37.68,54.0041 37.68,54.0041 C37.68,54.0041 37.68,40.76 42.68,40.76"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [15] <path> attr mismatch:
+    expected: [("d", "M150.3025,40.76 C145.3025,40.76 145.3025,54.0041 145.3025,54.0041 C145.3025,67.2483 150.3025,67.2483 150.3025,67.2483"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M126.2825,40.76 C121.2825,40.76 121.2825,54.0041 121.2825,54.0041 C121.2825,67.2483 126.2825,67.2483 126.2825,67.2483"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "73.6025"), ("x", "66.7"), ("y", "59.2952")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "73.6025"), ("x", "42.68"), ("y", "59.2952")]
+  [18] <path> attr mismatch:
+    expected: [("d", "M287.98,41.26 C287.98,31.26 332.645,31.26 332.645,31.26 C332.645,31.26 377.3101,31.26 377.3101,41.26 L377.3101,66.7483 C377.3101,76.7483 332.645,76.7483 332.645,76.7483 C332.645,76.7483 287.98,76.7483 287.98,66.7483 L287.98,41.26"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M263.96,41.26 C263.96,31.26 308.625,31.26 308.625,31.26 C308.625,31.26 353.2901,31.26 353.2901,41.26 L353.2901,66.7483 C353.2901,76.7483 308.625,76.7483 308.625,76.7483 C308.625,76.7483 263.96,76.7483 263.96,66.7483 L263.96,41.26"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [19] <path> attr mismatch:
+    expected: [("d", "M287.98,41.26 C287.98,51.26 332.645,51.26 332.645,51.26 C332.645,51.26 377.3101,51.26 377.3101,41.26"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M263.96,41.26 C263.96,51.26 308.625,51.26 308.625,51.26 C308.625,51.26 353.2901,51.26 353.2901,41.26"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [20] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "69.3301"), ("x", "297.98"), ("y", "68.7952")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "69.3301"), ("x", "273.96"), ("y", "68.7952")]
+  [22] <path> attr mismatch:
+    expected: [("d", "M108.5,136.48 C108.5,115.37 108.5,91.13 108.5,73.73"), ("fill", "none"), ("id", "Relay:Blue/1-to-front.door"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M84.48,136.48 C84.48,115.37 84.48,91.13 84.48,73.73"), ("fill", "none"), ("id", "Relay:Blue/1-to-front.door"), ("style", "stroke:#181818;stroke-width:1;")]
+  [23] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "108.5,67.73,104.5,76.73,108.5,72.73,112.5,76.73,108.5,67.73"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "84.48,67.73,80.48,76.73,84.48,72.73,88.48,76.73,84.48,67.73"), ("style", "stroke:#181818;stroke-width:1;")]
+  [24] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "60.5503"), ("x", "7"), ("y", "107.0684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "60.5503"), ("x", "-17.02"), ("y", "107.0684")]
+  [25] <path> attr mismatch:
+    expected: [("d", "M73.5503,89.5 L73.5503,114.5 L164.5503,114.5 L164.5503,99.5 L154.5503,89.5 L73.5503,89.5"), ("fill", "#F0F8FF"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M49.5303,89.5 L49.5303,114.5 L140.5303,114.5 L140.5303,99.5 L130.5303,89.5 L49.5303,89.5"), ("fill", "#F0F8FF"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [26] <path> attr mismatch:
+    expected: [("d", "M154.5503,89.5 L154.5503,99.5 L164.5503,99.5 L154.5503,89.5"), ("fill", "#F0F8FF"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M130.5303,89.5 L130.5303,99.5 L140.5303,99.5 L130.5303,89.5"), ("fill", "#F0F8FF"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [27] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "70.8398"), ("x", "79.5503"), ("y", "107.0684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "70.8398"), ("x", "55.5303"), ("y", "107.0684")]
+  [29] <path> attr mismatch:
+    expected: [("d", "M155.8,54 C194.58,54 243.56,54 281.67,54"), ("fill", "none"), ("id", "front.door-to-audit.sink"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M131.78,54 C170.56,54 219.54,54 257.65,54"), ("fill", "none"), ("id", "front.door-to-audit.sink"), ("style", "stroke:#181818;stroke-width:1;")]
+  [30] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "287.67,54,278.67,50,282.67,54,278.67,58,287.67,54"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "263.65,54,254.65,50,258.65,54,254.65,58,263.65,54"), ("style", "stroke:#181818;stroke-width:1;")]
+  [31] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "53.3584"), ("x", "203.98"), ("y", "50.5684")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "53.3584"), ("x", "179.96"), ("y", "50.5684")]
+

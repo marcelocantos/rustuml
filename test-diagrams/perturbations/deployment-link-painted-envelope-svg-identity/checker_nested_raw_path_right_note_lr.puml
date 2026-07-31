@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+folder "Ops Zone" as ops-zone-a {
+  node "Relay:Blue/1"
+  queue "Front Door" as front.door
+  "Relay:Blue/1" -right-> front.door : sync path
+  note right on link #AliceBlue : raw id note
+}
+database "Audit.Sink" as audit.sink
+front.door -down-> audit.sink : spillover
+@enduml

@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-painted-envelope-svg-identity",
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop exec_command/apply_patch with frozen rustuml and diff_one binaries",
+    "date": "2026-08-01",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "652ba031",
+    "maker_commits": [
+      "169a6488fb39997b5a387f701fcd9cd6c1da0396",
+      "1f14e4b47d1d6c962a9a0fc356ac9641c1410c87"
+    ],
+    "rust_commit": "1f14e4b47d1d6c962a9a0fc356ac9641c1410c87",
+    "rust_branch": "codex/t14-deployment-svg-qname",
+    "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "frozen_rustuml": "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/rustuml",
+    "frozen_diff_one": "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/examples/diff_one",
+    "sha256": {
+      "target/release/rustuml": "0e80d4e8d9e3938de1208c8791942b8993fe955d869fd5997f56ea6142cb09c0",
+      "target/release/examples/diff_one": "40f77a73048c8be6bea86b402560c0528db8a629ba2d72e72a4ecb572726ac39",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "docs/parity-reviews/deployment-svg-qualified-name-projection/review.json": "0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757",
+      "docs/parity-reviews/deployment-link-painted-envelope-svg-identity/account.json": "c9a5ee1744f3b4be2245a518f1a113fa42ed10bb442e9ac0810dbea0cdf4fd41"
+    }
+  },
+  "predecessors": {
+    "preserved_prior_canonical_reject": "docs/parity-reviews/deployment-svg-qualified-name-projection/review.json",
+    "preserved_prior_canonical_reject_sha256": "0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757",
+    "replacement_needed": false,
+    "reason": "This is the first canonical review for deployment-link-painted-envelope-svg-identity. The prior qualified-name review remains a predecessor REJECT and is not overwritten."
+  },
+  "source_inspection": {
+    "java_locations": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:57-89",
+        "finding": "Quark qualified names are canonical quark codes joined through Plasma's separator, before UGroup metadata projection."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java:89-145,320-380",
+        "finding": "Entity owns a Quark and exposes model identity separately from display and graphical image state."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java:57-72",
+        "finding": "UGroup.put applies fix(), replacing every character outside ASCII word characters, space, and hyphen with '.', so data-qualified-name and data-entity metadata are projected."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java:106-121,173",
+        "finding": "Link.idCommentForSvg builds path ids directly from Entity.getName() with -to-, -backto-, or a bare hyphen. This raw path identity is distinct from UGroup metadata projection."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvgResult.java:50-61,141-153",
+        "finding": "SvekEdge consumes already serialized Graphviz SVG path text through SvgResult before it creates DotPath geometry."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/YDelta.java:40-58",
+        "finding": "SvgResult applies YDelta after Graphviz SVG coordinates have been serialized."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:72-110",
+        "finding": "LimitFinder measures primitives actually drawn through UGraphic, not the full Graphviz placeholder table envelope."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java:57-83",
+        "finding": "Link notes calculate and draw the note component's preferred painted size."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:70-155",
+        "finding": "SvekResult draws clusters, nodes, then SvekEdges and calculates the final diagram dimension with TextBlockUtils.getMinMax over those painted primitives."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:270-319,426-461,728-755,837-949",
+        "finding": "SvekEdge merges center labels with link notes, exports fixed-size label placeholders to Graphviz, reads note/endpoint label positions from colored Graphviz output, emits raw link metadata, draws the path before link-note text, and draws endpoint labels after the edge body."
+      }
+    ],
+    "rust_locations": [
+      {
+        "path": "crates/rustuml-render/src/deployment.rs:3903-3940",
+        "finding": "deployment_link_note_painted_bounds excludes placeholder padding but still approximates the painted note and center-label bounds with floor() and +1px offsets. Fresh right-note and endpoint-label inputs show this is not sufficient as a general LimitFinder model."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs:5974-6029",
+        "finding": "serialized_deployment_svg_y matches the account's pre-inversion rounding model, and edge bounds now use it for path and label origins."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs:6055-6178",
+        "finding": "Endpoint-label collision adjustment runs in screen-space after the new Y serialization transform, but fresh endpoint-label perturbations still diverge in vertical offset and cross-owner layout."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs:6638-6782",
+        "finding": "No-oracle edge serialization uses raw path ids, duplicate suffixes, serialized Y for paths and note/label origins, and draws link notes around center labels."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs:6834-6857",
+        "finding": "deployment_connection_path_base_id now uses raw node ids; fresh outputs preserve ids such as Relay:Blue/1-to-front.door, Vault/Cold-backto-Collector:West, and Ingress:North-to-store.south."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs:7017-7045",
+        "finding": "deployment_svek_edge_points recovers mathematical Y from the stored screen coordinate and serializes before applying the SVG axis."
+      }
+    ],
+    "fixture_shaped_logic": "No production branch keyed to the old checker filenames, Kubernetes fixture, old probe labels, canvas widths, or 0.01 coordinate deltas was found in the inspected maker diff. The old-probe strings `path metadata` and `transfer` appear in a unit test for painted bounds, not in shipping logic; this weakens the evidence shape but is not itself a production fixture path.",
+    "unexplained_constants": "No direct six-pixel or 0.01 correction was added. The painted-bounds helper does rely on floor() and +1px text offsets; those are plausible from Java text-block margins but are not sufficient provenance for acceptance because fresh valid perturbations fail."
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-t14-deployment-svg-qname rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show --color=never --find-renames 169a6488",
+    "git show --color=never --find-renames 1f14e4b4",
+    "sed -n '1,240p' docs/parity-reviews/deployment-svg-qualified-name-projection/account.json",
+    "sed -n '1,260p' docs/parity-reviews/deployment-svg-qualified-name-projection/review.json",
+    "sed -n '1,260p' docs/parity-reviews/deployment-link-painted-envelope-svg-identity/account.json",
+    "rg -n \"class Quark|class Entity|interface Entity|data-qualified-name|getQualifiedName|qualified\" src/main/java/net/sourceforge/plantuml/plasma src/main/java/net/sourceforge/plantuml/abel src/main/java/net/atmp",
+    "rg -n \"idCommentForSvg|getName\\(|getUid|startUrl|endpoint|label|collision|moveSvek|control|SvgResult|YDelta\" src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java src/main/java/net/sourceforge/plantuml/abel/Link.java",
+    "rg -n \"class SvgResult|class YDelta|interface YDelta|YDelta|LimitFinder|calculateDimension|ensureVisible|extend|manageY\" src/main/java/net/sourceforge/plantuml/svek src/main/java/net/sourceforge/plantuml/klimt",
+    "rg -n \"StringBounder|LimitFinder|EntityImageNoteLink|calculateDimension|drawU|UGraphic|note\" src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '3900,3945p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '5970,6030p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '6055,6178p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '6638,6782p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '6834,7045p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.puml test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.puml test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.puml test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.diff.txt 2>&1",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.diff.txt 2>&1",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.diff.txt 2>&1",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.diff.txt 2>&1",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.rust.svg 2> test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.rust.stderr",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.rust.svg 2> test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.rust.stderr",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.rust.svg 2> test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.rust.stderr",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.puml > test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.rust.svg 2> test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.rust.stderr",
+    "shasum -a 256 target/release/rustuml target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/deployment-svg-qualified-name-projection/review.json docs/parity-reviews/deployment-link-painted-envelope-svg-identity/account.json"
+  ],
+  "inputs": [
+    {
+      "name": "checker_nested_raw_path_right_note_lr",
+      "puml": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.rust.svg",
+      "rust_stderr": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.rust.stderr",
+      "diff": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_raw_path_right_note_lr.diff.txt",
+      "axes": [
+        "nested container alias with hyphen",
+        "raw endpoint id containing colon and slash",
+        "right-position link note plus center label",
+        "second directed link leaving the container"
+      ],
+      "result": "FAIL",
+      "summary": "Raw path ids and projected data-qualified-name values are correct, but Rust renders a 378px canvas versus Java's 402px and shifts the cluster, nodes, note, label, and paths 24.02px left. This disproves the painted-bounds generalization for a nearby valid right-note/nested-owner case."
+    },
+    {
+      "name": "checker_endpoint_labels_reverse_bottom",
+      "puml": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.rust.svg",
+      "rust_stderr": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.rust.stderr",
+      "diff": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_endpoint_labels_reverse_bottom.diff.txt",
+      "axes": [
+        "raw endpoint ids containing colon and slash",
+        "reverse left-directed relation",
+        "tail and head endpoint labels",
+        "bottom-position link note plus center label"
+      ],
+      "result": "FAIL",
+      "summary": "Rust preserves the raw reverse path id Vault/Cold-backto-Collector:West, but every entity, path, link note, center label, and endpoint label is about 1.2422px above Java. This is directly inside the claimed mathematical-Y and endpoint-label serialization/collision boundary."
+    },
+    {
+      "name": "checker_duplicate_links_top_and_left_notes",
+      "puml": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.rust.svg",
+      "rust_stderr": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.rust.stderr",
+      "diff": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_duplicate_links_top_and_left_notes.diff.txt",
+      "axes": [
+        "duplicate relations between raw slash/colon endpoints",
+        "top multiline link note",
+        "left inline link note",
+        "solid plus dotted topology"
+      ],
+      "result": "PASS",
+      "summary": "diff_one reports structural equivalence. This supports raw path identity and duplicate suffix handling for this specific topology."
+    },
+    {
+      "name": "checker_nested_endpoint_labels_cross_direction",
+      "puml": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.rust.svg",
+      "rust_stderr": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.rust.stderr",
+      "diff": "test-diagrams/perturbations/deployment-link-painted-envelope-svg-identity/checker_nested_endpoint_labels_cross_direction.diff.txt",
+      "axes": [
+        "nested container alias with slash display and hyphen code",
+        "raw colon endpoint plus dotted child alias",
+        "down-directed relation with tail/head endpoint labels",
+        "top link note and cross-owner right-directed follow-up"
+      ],
+      "result": "FAIL",
+      "summary": "Rust preserves raw ids but solves the cluster on the opposite side and expands width to 522px versus Java's 440px. Endpoint labels and the link note follow the wrong solved geometry, so endpoint-label topology/direction does not survive the claimed model."
+    }
+  ],
+  "diff_one": {
+    "checker_nested_raw_path_right_note_lr": {
+      "exit_code": 1,
+      "summary": "Canvas width 402 expected versus 378 actual; path ids correct; geometry shifted left."
+    },
+    "checker_endpoint_labels_reverse_bottom": {
+      "exit_code": 1,
+      "summary": "Raw reverse path id correct; y coordinates differ by about 1.2422px across entities, edge, link note, and endpoint labels."
+    },
+    "checker_duplicate_links_top_and_left_notes": {
+      "exit_code": 0,
+      "summary": "SVGs are structurally equivalent."
+    },
+    "checker_nested_endpoint_labels_cross_direction": {
+      "exit_code": 1,
+      "summary": "Canvas width 440 expected versus 522 actual; cluster and linked endpoints are horizontally reordered."
+    }
+  },
+  "verdict": "REJECT",
+  "reason": "The maker commits fix the specific raw path-id channel for the old probes, and I did not find production fixture-keyed SVG surgery. However, three fresh valid Deployment perturbations fail under the frozen no-oracle diff. The failures exercise the same claimed mechanism surface: link-note painted bounds inside nested ownership, pre-inversion Y serialization combined with endpoint labels, and endpoint-label topology/direction around nested/cross-owner links. Under the T14 held-out perturbation rule, any failing valid counterexample rejects the mechanism and must remain preserved."
+}
