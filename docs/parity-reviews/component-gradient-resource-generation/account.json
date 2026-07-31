@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-gradient-resource-generation",
+  "status": "investigated_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+      "symbols": [
+        "EntityImageDescription#EntityImageDescription"
+      ],
+      "lines": "150-181",
+      "role": "Resolves the concrete component symbol style at the entity's style-builder snapshot, lets an entity BACK color override that style, and preserves the resulting HColor in Fashion."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "symbols": [
+        "DriverRectangleSvg#applyFillColor"
+      ],
+      "lines": "84-101",
+      "role": "Detects HColorGradient at rectangle paint time, asks SvgGraphics for its interned resource id, and paints the rectangle with url(#id)."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#createSvgGradient"
+      ],
+      "lines": "389-429",
+      "role": "Interns gradients by ordered color1/color2/policy tuple, assigns source-seeded ids in first-paint order, emits policy-specific endpoints, and reuses duplicates."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": [
+        "apply_component_entity_style",
+        "render_plantuml_svg"
+      ],
+      "lines": "129-150, 1190-1192, 1261-1263, 1333-1335, 1419-1527, 2234-2255",
+      "role": "Resolves component style snapshots and entity overrides correctly, but obtains gradient definitions only from OracleLayout; gradient_fill_or therefore flattens every no-oracle component gradient to its first color."
+    },
+    {
+      "path": "crates/rustuml-render/src/filter_registry.rs",
+      "symbols": [
+        "finalize_painted_resources"
+      ],
+      "lines": "158-245",
+      "role": "Already removes unpainted generated resources, orders retained resources by first body reference, compacts gradient suffixes, and rewrites references, allowing a conservative declaration inventory without fixture-shaped ordering logic."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.svg"
+  ],
+  "claimed_invariant": "Every selected component rectangle gradient remains a typed ordered (color1, color2, policy) paint through style resolution. The SVG backend interns equal tuples, emits policy endpoints, assigns ids in first-paint order across generated resources, and references the resulting id from each painted rectangle. Solid and transparent paints remain unchanged, and unselected declarations never survive into final defs.",
+  "causal_divergence": "The Cerulean component theme selects #59B6EC-#2FA4E7 for both component entities. Java emits one vertical gradient and both body rectangles reference it. Rust's parser and style cascade retain the same raw value, but render_plantuml_svg supplies no defs on the no-oracle path; gradient_fill_or therefore resolves only #59B6EC. The remaining geometry mismatch belongs to the separately recorded component-document-margin-envelope mechanism.",
+  "planned_model_change": "Build a no-oracle component gradient inventory from raw skinparam values, style declarations, and entity inline colors before style resolution. Intern normalized color/policy tuples with source-seeded ids, emit matching linearGradient definitions, and pass those defs through the existing gradient_fill_or calls. Let finalize_painted_resources discard unselected declarations and impose Java's first-paint order. Add direct fresh tests for all four policies, duplicate reuse, inline-over-style selection, style snapshots, irrelevant gradient declarations, and source-seed variation.",
+  "perturbation_axes": [
+    "vertical, horizontal, rising-diagonal, and falling-diagonal policies",
+    "duplicate tuple reuse versus distinct tuples",
+    "theme/style versus legacy skinparam versus inline entity color",
+    "early and late style snapshots",
+    "irrelevant unselected gradient declarations",
+    "renamed labels, changed declaration order, and different source seeds"
+  ],
+  "scope_boundary": "This mechanism owns generated SVG gradient resources and fill references for component-diagram entity rectangles. It does not alter component geometry, document margins, SVEK routing, text metrics, non-component use-case rendering, theme parsing, global scaling, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "Cerulean component output contains the same gradient tuple, endpoints, source-seeded id, and body references as Java through render_svg without oracle input; its independent margin mismatch remains visible.",
+    "Fresh renamed tests prove all policies, duplicate reuse, inline precedence, snapshot selection, and removal of unpainted inventory entries.",
+    "Non-gradient component outputs remain unchanged.",
+    "The renderer suite, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching Cerulean, theme names, fixture labels, or generated ids",
+    "flattening gradients to either stop color",
+    "emitting every inventoried declaration into final defs",
+    "hard-coding gradient suffixes or declaration order",
+    "changing component geometry or document margins in this mechanism",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "pending",
+    "model_evidence": "pending",
+    "commands": [],
+    "review_status": "Implementation and independent review pending."
+  }
+}
