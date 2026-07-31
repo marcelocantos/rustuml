@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-flat-svek-dot-option-spacing",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/AbstractEntityDiagram.java",
+      "symbols": [
+        "AbstractEntityDiagram#getDotStrings"
+      ],
+      "lines": "60-68",
+      "role": "Supplies the root state/class SVEK invocation with explicit nodesep and ranksep option slots."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": [
+        "DotStringFactory#createDotString"
+      ],
+      "lines": "112-145",
+      "role": "Computes the non-activity SVEK minima, independently replaces either axis with a nonzero skinparam value, converts pixels to inches, and substitutes those values into the root DOT options."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": [
+        "SkinParam#getNodesep",
+        "SkinParam#getRanksep",
+        "SkinParam#getAsInt",
+        "SkinParam#isDigits"
+      ],
+      "lines": "830-839, 1121-1127",
+      "role": "Defines the accepted nonempty decimal-digit grammar and zero-as-no-override behavior."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+      "symbols": [
+        "CucaDiagramFileMakerSvek#getTextBlock12026"
+      ],
+      "lines": "73-83",
+      "role": "Passes the same root diagram DOT option array to GraphvizImageBuilder whether state simplification produced composite images or the graph contains only flat states."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "autonomous_outer_spacing",
+        "build_autonomous_composite",
+        "render_with_oracle"
+      ],
+      "lines": "3546-3572, 4099-4110, 6407-6412",
+      "role": "Contains an independently reviewed Java-compatible spacing resolver and applies it to composite-bearing root SVEK graphs, but constructs flat root graphs with unconditional PlantUML defaults."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": [
+        "GraphSpacing::PLANTUML_SVEK_DEFAULTS",
+        "LayoutGraph#with_spacing",
+        "LayoutGraph#with_plantuml_svek_spacing"
+      ],
+      "lines": "140-158, 202-209",
+      "role": "Carries pixel spacing to vendored Graphviz and already supports either resolved values or defaults."
+    }
+  ],
+  "related_accepted_review": {
+    "mechanism": "state-autonomous-dot-option-spacing",
+    "account_commit": "3fa25fa6da493717046b8b522c663004ae1e51f0",
+    "implementation_commits": [
+      "94a718a5f70cf69c65fd8cd76795d4bb382e2cf9",
+      "63723c169abd2d9ffa4fb8999eeeae39164affe2"
+    ],
+    "review": "docs/parity-reviews/state-autonomous-dot-option-spacing/review-2.json",
+    "verdict": "accepted"
+  },
+  "evidence_inputs": [
+    "test-diagrams/golden/state/state_global_skinparam_ranksep.puml"
+  ],
+  "claimed_invariant": "Every root non-activity state SVEK build uses the diagram's DOT option slots. The latest independently resolved nonzero nodesep and ranksep skinparams replace the corresponding 35px and 60px minima; absent, zero, or nondigit values retain those minima. This root rule is independent of whether state simplification produced autonomous composite images. Only inner GroupMakerState builds omit the option slots and use native Graphviz defaults.",
+  "causal_divergence": "Rust's accepted autonomous_outer_spacing function already matches Java's value grammar, independent-axis replacement, and root-versus-inner boundary. build_autonomous_composite passes that result to the root layout. The ordinary flat no-oracle path instead calls with_plantuml_svek_spacing unconditionally, discarding valid root nodesep and ranksep declarations. For state_global_skinparam_ranksep, Java sends ranksep=50px and produces a 331px canvas; Rust sends the 60px default and produces 361px. The discrepancy follows three rank gaps of ten pixels each and is caused by the missing shared root option flow, not by a fixture-height constant.",
+  "planned_model_change": "Use the existing Java-compatible root spacing resolver when constructing the flat state LayoutGraph, leaving autonomous inner scopes unchanged. Keep transition identity, node sizes, routing, and painted-envelope normalization intact. Add fresh tests that vary valid ranksep and nodesep independently on renamed linear and branching flat graphs and prove larger accepted values enlarge the corresponding rank or sibling axis, while invalid and zero forms retain defaults through the already-reviewed grammar.",
+  "perturbation_axes": [
+    "ranksep versus nodesep",
+    "vertical linear topology versus horizontal or branching topology",
+    "valid nonzero integer versus zero and nondigit forms",
+    "renamed state and transition labels",
+    "two versus four rank gaps",
+    "flat root graph versus autonomous inner graph control"
+  ],
+  "scope_boundary": "This mechanism owns root spacing option propagation into the flat state LayoutGraph. It does not change the accepted spacing grammar, autonomous inner defaults, composite layout, painter bounds, routing algorithms, comparator behavior, or non-state families.",
+  "acceptance": [
+    "state_global_skinparam_ranksep matches structurally through render_svg without oracle input.",
+    "Fresh valid flat inputs prove independent nodesep and ranksep propagation across renamed topologies.",
+    "The state and full no-oracle ratchets do not regress any existing match.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "subtracting thirty pixels from the fixture canvas",
+    "special-casing ranksep 50 or the fixture labels",
+    "applying root overrides to autonomous inner scopes",
+    "changing spacing value grammar or defaults without new provenance",
+    "post-hoc SVG string surgery",
+    "comparator or eligibility changes"
+  ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "review_status": "Independent adversarial review and Java-generated held-outs remain pending. This account is a pre-implementation causal claim and does not self-attest acceptance."
+  }
+}
