@@ -352,7 +352,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut brace_depth = 0usize;
     let mut class_leaf_body_depth = None;
 
-    for line in lines {
+    let multiline_note_payload = completed_multiline_note_payload(lines);
+    for (line_index, line) in lines.iter().enumerate() {
+        // Java `PSystemCommandFactory` accumulates a complete multiline
+        // command before factory selection continues. `CommandMultilines2`
+        // validates the opener and terminator; note-body lines are display
+        // data and cannot become participant or DESCRIPTION commands.
+        if multiline_note_payload[line_index] {
+            continue;
+        }
         let trimmed = source_text(line).trim();
         // Normalize internal tabs to spaces so keyword detection works regardless
         // of whether the source uses spaces or tabs as separators.
@@ -1063,6 +1071,37 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     subtypes[max_idx]
 }
 
+fn completed_multiline_note_payload(lines: &[String]) -> Vec<bool> {
+    let mut payload = vec![false; lines.len()];
+    let mut line_index = 0;
+    while line_index < lines.len() {
+        let opener = source_text(&lines[line_index]).trim();
+        let is_note_opener = opener
+            .split_whitespace()
+            .next()
+            .is_some_and(|keyword| keyword.eq_ignore_ascii_case("note"));
+        let after_note = opener.get("note".len()..).unwrap_or_default().trim_start();
+        if !is_note_opener || opener.contains(':') || after_note.starts_with('"') {
+            line_index += 1;
+            continue;
+        }
+
+        let Some(terminator) = ((line_index + 1)..lines.len()).find(|&candidate| {
+            source_text(&lines[candidate])
+                .trim()
+                .eq_ignore_ascii_case("end note")
+        }) else {
+            // Only completed commands own their interior. An unterminated
+            // opener must not hide arbitrary later syntax from dispatch.
+            line_index += 1;
+            continue;
+        };
+        payload[(line_index + 1)..=terminator].fill(true);
+        line_index = terminator + 1;
+    }
+    payload
+}
+
 fn looks_like_bare_class_association(line: &str) -> bool {
     static RE: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
         regex::Regex::new(
@@ -1125,7 +1164,7 @@ fn looks_like_class_leaf_body_opener(line: &str) -> bool {
     ) || (first == "abstract" && words.next() == Some("class"))
 }
 
-#[derive(Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum UmlSubtype {
     Sequence,
     Class,
@@ -1563,6 +1602,52 @@ mod tests {
     #[test]
     fn detects_gantt_type() {
         assert_eq!(detect_type("@startgantt\nfoo\n@endgantt"), "gantt");
+    }
+
+    #[test]
+    fn multiline_note_bodies_are_opaque_to_uml_subtype_scoring() {
+        let lines = |source: &str| source.lines().map(str::to_string).collect::<Vec<_>>();
+
+        for body in [
+            "control queue hold",
+            "boundary transit edge",
+            "node payload text",
+            "state payload text",
+        ] {
+            let source = format!("note as DispatchMemo\n{body}\nend note");
+            assert_eq!(detect_uml_subtype(&lines(&source)), UmlSubtype::Class);
+        }
+
+        let attached = lines(
+            "class Ledger\n\
+             note right of Ledger\n\
+             control is display text\n\
+             boundary is display text too\n\
+             end note",
+        );
+        assert_eq!(detect_uml_subtype(&attached), UmlSubtype::Class);
+    }
+
+    #[test]
+    fn multiline_note_boundaries_leave_real_dispatch_syntax_visible() {
+        let lines = |source: &str| source.lines().map(str::to_string).collect::<Vec<_>>();
+
+        let post_terminator = lines(
+            "note as DispatchMemo\n\
+             control is display text\n\
+             end note\n\
+             node RuntimeNode",
+        );
+        assert_eq!(detect_uml_subtype(&post_terminator), UmlSubtype::Deployment);
+
+        let unterminated = lines("note as DispatchMemo\ncontrol RuntimeControl");
+        assert_eq!(detect_uml_subtype(&unterminated), UmlSubtype::Deployment);
+
+        let single_line = lines(
+            "note right of Ledger : control remains inline text\n\
+             node RuntimeNode",
+        );
+        assert_eq!(detect_uml_subtype(&single_line), UmlSubtype::Deployment);
     }
 
     #[test]
