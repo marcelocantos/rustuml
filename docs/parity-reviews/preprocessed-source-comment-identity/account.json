@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "preprocessed-source-comment-identity",
-  "status": "implemented_review_pending",
+  "status": "checker_rejected_model_correction_planned",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -45,20 +45,24 @@
     "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
     "test-diagrams/golden/preprocessing/preproc_complex_theme_override.svg"
   ],
-  "claimed_invariant": "Deterministic SVG resource IDs are seeded from PlantUML's post-TIM UmlSource. Full-line quote comments and long comments are absent, inline quote comments are removed while preserving the preceding plain text, and ordinary blank lines retain their existing identity. Theme expansion does not bypass those comment semantics.",
-  "causal_divergence": "The complex Cerulean override fixture already agrees in geometry, colors, gradients, and paint order. Java assigns gradient prefix 5uh6twufn3b0 while Rust assigns 1u17r8kq8jkal because expanded_theme_seed_source copies the raw line `' Override specific theme settings` into the seed source. Applying Java's short-comment removal to that line alone yields the exact expected prefix 5uh6twufn3b0. The normal non-theme identity path already routes through PreprocessContext and does not have this defect.",
-  "planned_model_change": "Make theme seed reconstruction apply the same comment-state transformation used by TIM before appending non-theme user lines: omit full-line quote and long-comment lines, strip inline comments, and preserve all other source lines and existing initial-empty-line behavior. Keep theme expansion lines at the original !theme position. Add seed-level tests over full-line, multi-line, and inline comments, including quoted apostrophes, renamed entities, and comments before and after a theme.",
+  "claimed_invariant": "Deterministic SVG resource IDs are seeded from PlantUML's post-TIM UmlSource. TLineType and the long/short comment iterators remove full-line quote comments, whole-line /' ... '/ comments, and multiline /' ... '/ blocks. CodeIteratorInnerComment then applies StringLocated.removeInnerComment: a prefix /' ... '/ preserves code after the first closing token, a suffix preserves code before the last opening token, and /'''[-\\w]*'''/ payloads are removed wherever they occur. An ordinary apostrophe after code is not a TIM comment and remains available to the diagram command parser; ordinary blank lines retain their identity. Theme expansion must not bypass those exact semantics.",
+  "causal_divergence": "The accepted golden symptom remains narrow: the complex Cerulean override fixture agrees in geometry, colors, gradients, and paint order, but expanded_theme_seed_source copied a Java-classified full-line quote comment into the resource seed. The first implementation corrected that symptom but generalized from Rust's pre-existing strip_inline_comment helper, which is not the Java TIM model. It removed every whitespace-preceded ordinary apostrophe, discarded valid prefix inner-comment lines that carry code after '/, and retained Java's special /'''[-\\w]*'''/ payloads. The independent checker demonstrated all three divergences on fresh valid inputs: the ordinary apostrophe changed whether a skinparam command was valid, the prefix form changed entity order/source metadata, and the special form remained visibly rendered. The normal preprocessing stream and theme seed reconstruction therefore need one shared, exact TIM comment transformation rather than separate heuristics.",
+  "planned_model_change": "Introduce one comment-stream transformation matching TLineType plus CodeIteratorLongComment, CodeIteratorShortComment, and StringLocated.removeInnerComment. Use it both in PreprocessContext's ordinary line stream and expanded_theme_seed_source. Remove the global whitespace-apostrophe stripping path so ordinary trailing apostrophes survive TIM exactly as Java does. Preserve source-line placeholders for fully consumed comment lines, preserve prefix/suffix code on their original source line, remove every Java-matching /'''[-\\w]*'''/ payload without fixture-specific branches, and keep EBNF terminal syntax untouched. Replace the overbroad unit assertion with independent cases for full-line, multiline, whole-line, prefix, suffix, special triple, ordinary apostrophe, quoted apostrophe, and adjacent blank lines.",
   "perturbation_axes": [
-    "full-line versus long versus inline quote comments",
+    "full-line quote versus whole-line and multiline /' comments",
+    "prefix versus suffix /' ... '/ code preservation",
+    "special /'''[-\\w]*'''/ payloads versus non-matching payloads",
+    "ordinary trailing apostrophes retained for command-level validation",
     "comment before versus after theme expansion",
     "comment-only changes versus renamed entities and changed topology",
     "apostrophes inside quoted text versus actual inline comments",
     "ordinary blank lines adjacent to removed comments"
   ],
-  "scope_boundary": "This mechanism owns comment semantics only in the post-TIM source identity used for deterministic SVG resource IDs. It does not alter parser line-number placeholders, theme contents, gradient tuple generation, resource ordering, geometry, layout, comparator behavior, golden data, or fixture eligibility.",
+  "scope_boundary": "This mechanism owns the shared post-TIM comment stream consumed both by parsing and UmlSource identity. It alters which text survives TIM, but does not decide whether a surviving ordinary apostrophe is valid for a particular diagram command. It does not alter theme contents, gradient tuple generation, resource ordering, layout, comparator behavior, golden data, or fixture eligibility.",
   "acceptance": [
     "preproc_complex_theme_override uses PlantUML's expected gradient IDs and becomes structurally equivalent through render_svg without oracle input.",
-    "Fresh seed tests prove full-line, long, and inline comment behavior without changing ordinary blank-line identity.",
+    "Fresh seed and parser tests prove full-line, long, whole-line, prefix, suffix, and special triple inner-comment behavior without changing ordinary blank-line identity.",
+    "Ordinary trailing apostrophes are retained by TIM; the checker skinparam input follows Java command-level behavior rather than being silently accepted after stripping.",
     "Quoted apostrophes and EBNF terminal syntax are not misclassified as comments.",
     "Existing source-identity and theme-expansion seed tests remain green.",
     "The parser and renderer suites, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
@@ -89,6 +93,16 @@
       "cargo test --test harness_guards no_golden_data_embedded_in_shipping_crates -- --nocapture",
       "cargo test --test harness_guards parity_review_paths_reject_traversal -- --nocapture"
     ],
-    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local arm64 Java runtime are unavailable. This record does not self-attest acceptance."
+    "review_status": "Rejected by independent review commit fbf5f08562a37f6b05882a7cd4e8c95b031d190a: all three fresh Java-valid held-outs failed. The accepted golden gain remains evidence for the full-line comment symptom only; it does not attest the broader first implementation."
+  },
+  "review_rejection": {
+    "review_revision": "fbf5f08562a37f6b05882a7cd4e8c95b031d190a",
+    "verdict": "REJECT",
+    "counterexamples": [
+      "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+      "test-diagrams/perturbations/preprocessed-source-comment-identity/prefix_suffix_inner_comment_axes.puml",
+      "test-diagrams/perturbations/preprocessed-source-comment-identity/triple_inner_comment_axes.puml"
+    ],
+    "required_correction": "Replace the first implementation's broad inline-apostrophe heuristic with the exact Java TIM iterator and StringLocated.removeInnerComment model before requesting a new checker verdict."
   }
 }
