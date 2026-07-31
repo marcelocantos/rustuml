@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-container-command-identity-dispatch",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:75-140",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:75-128,213-230",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:73-101",
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:129-136,229-250"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/deployment.rs:698-720,1049-1186",
+    "crates/rustuml-parser/src/parse/mod.rs:724-761,989-1049,1329-1438,1486-1514"
+  ],
+  "invariant": "A braced DESCRIPTION container is accepted and assigned identity by CommandPackageWithUSymbol, not by the leaf-only CommandCreateElementFull grammar. Its canonical quark code may contain any non-whitespace character except quote, hash, or braces; display-first aliases permit the same broad code alphabet. The command must consume the complete source line through the opening brace. Factory dispatch and model construction must recognize the same complete command, so a Java-valid DESCRIPTION container that invalidates the earlier Class factory reaches Description before State with its canonical code unchanged.",
+  "causal_divergence": "Rust uses the same two unanchored declaration regexes for leaves and containers. RE_NODE_QUOTED narrows a display-first alias to letters, numbers, underscore, and dot, so `folder \"Tenant Display\" as tenant-a {` succeeds only on the prefix and silently captures `tenant`. RE_NODE_BARE narrows a bare code to word characters and dots, so `cloud zone/prod {` is not modeled as a container at all. Detection separately scores only keyword shape and gives no strong signal for a complete unquoted DESCRIPTION container; after the Class candidate is rejected by its nested artifact leaf, State can outscore Deployment. The renderer therefore receives either a truncated owner identity or the wrong diagram model before qualified-name projection begins.",
+  "planned_change": "Introduce one parser-level representation of a complete deployment node declaration. Give braced containers a CommandPackageWithUSymbol-compatible, end-anchored grammar distinct from the existing leaf grammar, preserving canonical code and display direction for quoted display-first, code-first quoted-display, bare alias, quoted no-alias, and bare no-alias forms. Reuse that same complete-command recognizer in UML subtype detection so valid DESCRIPTION containers provide factory evidence from the grammar that will construct them. Reject partial captures rather than accepting a valid prefix. Keep leaf identity governed by CommandCreateElementFull's narrower code grammar.",
+  "perturbation_axes": [
+    "syntax family: quoted display-first container alias versus bare no-alias container code",
+    "canonical-code alphabet: hyphen, slash, dot, underscore, and renamed non-corpus identifiers",
+    "ownership topology: one nested leaf versus multiple nested leaves and an owned subcontainer",
+    "factory competition: DESCRIPTION-only nested leaf and link-note commands versus a minimal container-only source",
+    "alias direction: display-first code versus code-first quoted display"
+  ],
+  "predecessor_rejection": "docs/parity-reviews/deployment-svg-qualified-name-projection/review.json at ae1872d86f90bbb2004ef2a8b1fea1feb70c2bf7 preserves two checker-generated counterexamples that disprove the predecessor's parser assumptions.",
+  "acceptance": [
+    "Both preserved checker inputs parse as Deployment with exact Java canonical owner identities.",
+    "Focused parser tests cover both container syntax families plus renamed identities and changed nesting topology not present in the checker inputs.",
+    "Malformed trailing text cannot be silently accepted as a declaration prefix.",
+    "No golden reads, fixture labels, SVG surgery, coordinate branches, or tuned layout constants are introduced."
+  ],
+  "forbidden_approaches": [
+    "special-case tenant-a, zone/prod, or either checker fixture",
+    "widen CommandCreateElementFull leaf codes to the container grammar",
+    "repair truncated identities in the renderer",
+    "add dispatch score constants without tying the signal to the shared complete-command recognizer"
+  ],
+  "status": "planned"
+}
