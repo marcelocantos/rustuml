@@ -1,11 +1,12 @@
 {
   "schema_version": 1,
   "mechanism": "command-factory-note-terminal-rejection",
-  "status": "corrected_before_follow_up_code",
+  "status": "corrected_before_second_follow_up_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "5211a6604e619c523ad13eb703237815804579de",
+  "rust_revision": "c5a6884206a81b02adad9bbec44d1e22ffb14963",
   "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
   "rejecting_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review.json",
+  "rejecting_follow_up_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review-followup.json",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
@@ -58,9 +59,9 @@
       "role": "Likewise falls through, allowing later relations to create synthetic Deployment nodes and consume UIDs."
     }
   ],
-  "claimed_invariant": "Once a source line has the unambiguous inline `note <quoted display> as` or multiline `note as` prefix owned by CommandFactoryNote, failure of its CODE, tags, stereotype or color suffix rejects the diagram candidate. For the inline form, each delimiter is independently any member of Java Pattern2 `%g`: ASCII double quote, Unicode left or right double quote, or U+E121. Every `%g` character terminates or delimits DISPLAY. Component and Deployment do not reinterpret that line or permit later relations to synthesize the intended note code. Attached-note commands remain owned by their distinct factories.",
-  "causal_divergence": "Rust represented command non-match and command validation failure with the same None. The first implementation added terminal ownership predicates but modeled the inline grammar with ASCII double quotes only because it omitted Pattern2 `%g` from the causal chain. Java-valid curly-quoted commands therefore still fell through and later relations synthesized ordinary endpoints. The sampled malformed ASCII commands now terminate correctly.",
-  "planned_model_change": "Define one shared `%g` delimiter model from Pattern2 and use it in both inline parsing and the inline ownership predicate. Accept any `%g` member independently at either boundary, exclude all `%g` members from DISPLAY, preserve the existing shared suffix validation, and keep the prefix narrow enough not to claim attached-note or note-on-link syntax. Add Component and Deployment family regressions for curly, mixed, and Jaws delimiters followed by relations to the note code. Deployment note-on-link consumption is a separate CommandFactoryNoteOnLink mechanism and is not part of this correction.",
+  "claimed_invariant": "In Java's DESCRIPTION command inventory, `note` followed by whitespace and any Pattern2 `%g` delimiter uniquely enters CommandFactoryNote's inline command domain; no attached-note, note-on-link or other registered factory shares that opener. A fully valid command requires a non-empty DISPLAY containing no `%g`, then any `%g` closing delimiter, `as`, CODE and ordered decorations. Once the unique opener is present, failure anywhere in that remaining grammar rejects the diagram candidate. Component and Deployment do not reinterpret the line or permit later relations to synthesize the intended note code.",
+  "causal_divergence": "Rust originally collapsed command non-match and validation failure into None. The first terminal predicate modeled only ASCII quotes; the next correction modeled the full Pattern2 delimiter alphabet but still repeated the successful command shape through closing delimiter plus `as`. When an embedded `%g` terminates Java DISPLAY early and leaves intervening text, both Rust parse and ownership regexes fail. The family parser then ignores the uniquely owned malformed command and a later relation synthesizes an ordinary endpoint.",
+  "planned_model_change": "Keep the shared `%g` alphabet for successful parsing, but make terminal ownership follow Java's command-inventory boundary rather than duplicate the full success regex: case-insensitive `note`, required whitespace, then any `%g` opener. Once that prefix matches, any parse failure is terminal, including embedded delimiters, empty or missing closing delimiters, absent `as`, malformed CODE, and invalid decorations. Attached-note and note-on-link commands do not begin with `%g` and remain outside this predicate. Add Component and Deployment regressions where embedded delimiters are followed by relations to the would-be code. Deployment note-on-link consumption remains a separate CommandFactoryNoteOnLink mechanism.",
   "perturbation_axes": [
     "inline versus multiline command",
     "Component versus Deployment family",
