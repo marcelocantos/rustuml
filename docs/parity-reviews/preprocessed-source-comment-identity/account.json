@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "preprocessed-source-comment-identity",
-  "status": "accounted_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -72,13 +72,23 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "722bc94d9b84902de021a9a4d9f9782ce701137f",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "pending",
-    "model_evidence": "Removing only the Java-classified full-line comment from Rust's 7,465-byte reconstructed theme source changes the source seed from 1u17r8kq8jkal to the exact golden prefix 5uh6twufn3b0; no SVG paint or geometry change is involved.",
+    "accepted_result": "preproc_complex_theme_override becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,169/11,251 to 11,170/11,251, with preprocessing moving from 287/307 to 288/307 and every other family unchanged.",
+    "model_evidence": "Removing only the Java-classified full-line comment from Rust's 7,465-byte reconstructed theme source changes the source seed from 1u17r8kq8jkal to the exact golden prefix 5uh6twufn3b0; no SVG paint or geometry change is involved. The implementation now applies Java's long-, short-, and inline-comment identity semantics while reconstructing a theme-expanded source. A fresh paired test proves that comments before and after a theme, a long comment, and an inline comment do not affect identity, while an apostrophe inside a quoted renamed label and an ordinary blank line survive.",
     "commands": [
-      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml"
+      "cargo test -p rustuml-parser --lib theme_seed_identity_uses_post_tim_comment_stream -- --nocapture",
+      "cargo build --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+      "cargo test -p rustuml-parser --lib",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-parser -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test harness_guards frozen -- --nocapture",
+      "cargo test --test harness_guards no_golden_data_embedded_in_shipping_crates -- --nocapture",
+      "cargo test --test harness_guards parity_review_paths_reject_traversal -- --nocapture"
     ],
-    "review_status": "Account recorded before implementation. Independent checker capacity is currently unavailable; this record does not self-attest acceptance."
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local arm64 Java runtime are unavailable. This record does not self-attest acceptance."
   }
 }

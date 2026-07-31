@@ -144,6 +144,8 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
     let mut source = String::new();
     let mut in_block = false;
     let mut skip_initial_empty_lines = false;
+    let mut in_block_comment = false;
+    let mut preserve_quote_syntax = false;
     for (index, line) in input.lines().enumerate() {
         let source_line = index + 1;
         let trimmed = line.trim_start();
@@ -152,6 +154,7 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
                 continue;
             }
             in_block = true;
+            preserve_quote_syntax = trimmed.starts_with("@startebnf");
             skip_initial_empty_lines = true;
         } else if skip_initial_empty_lines && trimmed.is_empty() {
             continue;
@@ -169,8 +172,10 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
                 source.push_str(expanded);
                 source.push('\n');
             }
-        } else {
-            source.push_str(line);
+        } else if let Some(line) =
+            post_tim_seed_line(line, &mut in_block_comment, preserve_quote_syntax)
+        {
+            source.push_str(&line);
             source.push('\n');
         }
 
@@ -179,6 +184,42 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
         }
     }
     Some(source)
+}
+
+fn post_tim_seed_line<'a>(
+    line: &'a str,
+    in_block_comment: &mut bool,
+    preserve_quote_syntax: bool,
+) -> Option<Cow<'a, str>> {
+    if preserve_quote_syntax {
+        return Some(Cow::Borrowed(line));
+    }
+
+    let trimmed = line.trim();
+    // Java provenance: TContext.buildCodeIterator runs long-, short-, then
+    // inner-comment iterators before UmlSource.seed() hashes the result.
+    if *in_block_comment {
+        if trimmed.contains("'/") {
+            *in_block_comment = false;
+        }
+        return None;
+    }
+    if trimmed.starts_with("/'") {
+        if !trimmed.contains("'/") || trimmed.ends_with("/'") {
+            *in_block_comment = true;
+        }
+        return None;
+    }
+    if trimmed.starts_with('\'') {
+        return None;
+    }
+
+    let uncommented = strip_inline_comment(line);
+    if uncommented.len() == line.len() {
+        Some(Cow::Borrowed(line))
+    } else {
+        Some(Cow::Owned(uncommented))
+    }
 }
 
 /// Mirror the source reader that runs before Java's TIM expansion.
@@ -4436,6 +4477,41 @@ $record(SaffronArchive)\n\
             seed_line.is_some_and(|line| line == "skinparam __svgIdSeed 1unuin6l8h5nq"),
             "SVG IDs use StringUtils.seed over the unflattened in-place theme expansion: {seed_line:?}"
         );
+    }
+
+    #[test]
+    fn theme_seed_identity_uses_post_tim_comment_stream() {
+        let commented = concat!(
+            "@startuml\n",
+            "' comment before theme\n",
+            "!theme cerulean\n",
+            "\n",
+            "/' long comment after theme\n",
+            "ignored identity text\n",
+            "'/\n",
+            "class \"O'Brien\" as FreshLedger ' trailing comment\n",
+            "@enduml\n",
+        );
+        let uncommented = concat!(
+            "@startuml\n",
+            "!theme cerulean\n",
+            "\n",
+            "class \"O'Brien\" as FreshLedger \n",
+            "@enduml\n",
+        );
+
+        let commented = preprocess_full(commented, None);
+        let uncommented = preprocess_full(uncommented, None);
+
+        assert_eq!(commented.uml_source, uncommented.uml_source);
+        assert_eq!(
+            svg_id_seed_prefix(&commented.uml_source),
+            svg_id_seed_prefix(&uncommented.uml_source)
+        );
+        assert!(commented.uml_source.contains("\"O'Brien\""));
+        assert!(!commented.uml_source.contains("comment before theme"));
+        assert!(!commented.uml_source.contains("ignored identity text"));
+        assert!(!commented.uml_source.contains("trailing comment"));
     }
 
     #[test]
