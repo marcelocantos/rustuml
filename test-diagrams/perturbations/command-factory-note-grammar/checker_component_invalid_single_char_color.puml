@@ -1,0 +1,8 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+[Anchor] as Anchor
+note "bad color" as BadColor #R
+BadColor ..> Anchor
+@enduml

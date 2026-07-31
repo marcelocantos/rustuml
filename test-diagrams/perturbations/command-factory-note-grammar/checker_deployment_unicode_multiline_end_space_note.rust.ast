@@ -1,0 +1,79 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode \"Anchor\" as Anchor\nnote as Métrique.Δelta_7 $rétention <<UnicodeLedger>> #Thistle\n  Unicode body\nend note\nMétrique.Δelta_7 ..> Anchor : unicode reuse\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Anchor",
+                label: "Anchor",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 1,
+                quark_order: 0,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Métrique.Δelta_7",
+                to: "Anchor",
+                label: Some(
+                    "unicode reuse",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Dashed,
+                length: 2,
+                source_line: 5,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "Métrique.Δelta_7",
+                ),
+                target: None,
+                text: "Unicode body",
+                color: Some(
+                    "#Thistle",
+                ),
+                tags: [
+                    "rétention",
+                ],
+                stereotype: Some(
+                    "UnicodeLedger",
+                ),
+                owner: None,
+                quark_order: 1,
+                position: Right,
+                source_line: 3,
+            },
+        ],
+    },
+)

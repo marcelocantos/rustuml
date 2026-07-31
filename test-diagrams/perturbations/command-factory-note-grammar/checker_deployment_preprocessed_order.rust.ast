@@ -1,0 +1,79 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnote as Generated.DeploymentMemo $generated <<GeneratedLedger>> #Wheat\n  generated deployment body\nendnote\nnode \"Late Anchor\" as LateAnchor\nGenerated.DeploymentMemo ..> LateAnchor : later reuse\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "LateAnchor",
+                label: "Late Anchor",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 7,
+                quark_order: 1,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Generated.DeploymentMemo",
+                to: "LateAnchor",
+                label: Some(
+                    "later reuse",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Dashed,
+                length: 2,
+                source_line: 8,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "Generated.DeploymentMemo",
+                ),
+                target: None,
+                text: "generated deployment body",
+                color: Some(
+                    "#Wheat",
+                ),
+                tags: [
+                    "generated",
+                ],
+                stereotype: Some(
+                    "GeneratedLedger",
+                ),
+                owner: None,
+                quark_order: 0,
+                position: Right,
+                source_line: 3,
+            },
+        ],
+    },
+)

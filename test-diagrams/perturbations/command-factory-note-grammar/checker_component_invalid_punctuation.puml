@@ -1,0 +1,8 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+[Anchor] as Anchor
+note "bad code" as Bad-Component $audit
+Bad-Component ..> Anchor
+@enduml

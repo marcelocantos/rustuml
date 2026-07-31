@@ -1,0 +1,8 @@
+@startuml
+node "Anchor" as Anchor
+note "tag-only payload" as DTag $audit $blue-team
+note "stereotype-only payload" as DStereo <<Ledger>>
+note "color-only payload" as DColor #MistyRose
+note "all decorations payload" as Deployment.Memo_7 $audit $blue-team <<AuditLedger>> #LightBlue
+Deployment.Memo_7 ..> Anchor : reviewed
+@enduml

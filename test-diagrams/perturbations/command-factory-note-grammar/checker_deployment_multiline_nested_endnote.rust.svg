@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="309px" preserveAspectRatio="none" style="width:249px;height:309px;background:#FFFFFF;" version="1.1" viewBox="0 0 249 309" width="249px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Outer-->
+<g class="cluster" data-qualified-name="Outer" data-source-line="2" id="ent0003">
+<polygon fill="none" points="16,16,26,6,224,6,224,164.62,214,174.62,16,174.62,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="214" x2="224" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="214" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="214" x2="214" y1="16" y2="174.62"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="40.9609" x="95.5195" y="32.5352">Outer</text>
+</g>
+<!--cluster Inner-->
+<g class="cluster" data-qualified-name="Outer.Inner" data-source-line="3" id="ent0004">
+<polygon fill="none" points="40,64,50,54,200,54,200,140.62,190,150.62,40,150.62,40,64" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="190" x2="200" y1="64" y2="54"/>
+<line style="stroke:#181818;stroke-width:1;" x1="40" x2="190" y1="64" y2="64"/>
+<line style="stroke:#181818;stroke-width:1;" x1="190" x2="190" y1="64" y2="150.62"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="37.5977" x="97.2012" y="80.5352">Inner</text>
+</g>
+<g class="entity" data-qualified-name="Outer.Inner.Ledger.Memo_42" data-source-line="5" id="ent0005">
+<path d="M56.02,94 L56.02,134.6211 A0,0 0 0 0 56.02,134.6211 L116,134.6211 L120,237.46 L124,134.6211 L183.978,134.6211 A0,0 0 0 0 183.978,134.6211 L183.978,104 L173.978,94 L56.02,94 A0,0 0 0 0 56.02,94" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M173.978,94 L173.978,104 L183.978,104 L173.978,94" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="87.5405" x="62.02" y="111.5684">first body line</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="106.958" x="62.02" y="126.8789">second body line</text>
+</g>
+<!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="75.73,247.62,85.73,237.62,164.2652,237.62,164.2652,274.1083,154.2652,284.1083,75.73,284.1083,75.73,247.62" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="154.2652" x2="164.2652" y1="247.62" y2="237.62"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="75.73" x2="154.2652" y1="247.62" y2="247.62"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="154.2652" x2="154.2652" y1="247.62" y2="284.1083"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.5352" x="90.73" y="271.1552">Anchor</text>
+</g>
+</g></svg>

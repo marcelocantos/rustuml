@@ -1,0 +1,38 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as Generated.DeploymentMemo $generated <<GeneratedLedger>> #Wheat
+        generated deployment body
+      endnote
+      node "Late Anchor" as LateAnchor
+      Generated.DeploymentMemo ..> LateAnchor : later reuse
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: LateAnchor
+    label: Late Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 7
+    quark_order: 1
+  connections:
+  - from: Generated.DeploymentMemo
+    to: LateAnchor
+    label: later reuse
+    arrow_at_end: true
+    style: Dashed
+    source_line: 8
+  notes:
+  - id: Generated.DeploymentMemo
+    text: generated deployment body
+    color: '#Wheat'
+    tags:
+    - generated
+    stereotype: GeneratedLedger
+    quark_order: 0
+    position: Right
+    source_line: 3

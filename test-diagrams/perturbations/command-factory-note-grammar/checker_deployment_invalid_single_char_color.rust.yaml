@@ -1,0 +1,33 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor" as Anchor
+      note "bad color" as BadColor #R
+      BadColor ..> Anchor
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor
+    label: Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: BadColor
+    to: Anchor
+    label: null
+    arrow_at_end: true
+    style: Dashed
+    source_line: 3
+  notes:
+  - id: BadColor
+    text: bad color
+    color: '#R'
+    quark_order: 1
+    position: Right
+    source_line: 2

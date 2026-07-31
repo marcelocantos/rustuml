@@ -1,0 +1,57 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ComponentDispatchMarker {
+        interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+      }
+      [Anchor] as Anchor
+      note "bad color" as BadColor #R
+      BadColor ..> Anchor
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ComponentDispatchMarkerInterface
+    label: Component Dispatch Marker
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: Anchor
+    label: Anchor
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections:
+  - from: BadColor
+    to: Anchor
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: true
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages:
+  - name: ComponentDispatchMarker
+    label: ComponentDispatchMarker
+    stereotype: null
+    kind: Component
+    source_line: 1
+    components:
+    - ComponentDispatchMarkerInterface
+    packages: []
+  notes:
+  - id: BadColor
+    color: '#R'
+    text: bad color
+    target: null
+    position: Right
+    source_line: 5

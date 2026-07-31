@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="162px" preserveAspectRatio="none" style="width:129px;height:162px;background:#FFFFFF;" version="1.1" viewBox="0 0 129 162" width="129px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,101.31,26,91.31,104.5352,91.31,104.5352,127.7983,94.5352,137.7983,16,137.7983,16,101.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="94.5352" x2="104.5352" y1="101.31" y2="91.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="94.5352" y1="101.31" y2="101.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="94.5352" x2="94.5352" y1="101.31" y2="137.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.5352" x="31" y="124.8452">Anchor</text>
+</g>
+<g class="entity" data-qualified-name="BadColor" data-source-line="2" id="ent0003">
+<path d="M20.09,6 L20.09,31.3105 A0,0 0 0 0 20.09,31.3105 L56.27,31.3105 L60.27,91.01 L64.27,31.3105 L100.4533,31.3105 A0,0 0 0 0 100.4533,31.3105 L100.4533,16 L90.4533,6 L20.09,6 A0,0 0 0 0 20.09,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M90.4533,6 L90.4533,16 L100.4533,16 L90.4533,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="59.3633" x="26.09" y="23.5684">bad color</text>
+</g>
+</g></svg>

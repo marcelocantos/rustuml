@@ -1,0 +1,12 @@
+@startuml
+node "Anchor" as Anchor
+node "Outer" {
+  node "Inner" {
+    note as Ledger.Memo_42 $retained <<NestedLedger>> #PaleGreen
+      first body line
+      second body line
+    endnote
+  }
+}
+Ledger.Memo_42 ..> Anchor : nested reuse
+@enduml

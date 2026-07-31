@@ -1,0 +1,5 @@
+@startuml
+node "Anchor" as Anchor
+note "composite color payload" as Composite.Note $audit <<CompositeLedger>> #back:LightBlue;line.dashed:Red
+Composite.Note ..> Anchor : composite reuse
+@enduml

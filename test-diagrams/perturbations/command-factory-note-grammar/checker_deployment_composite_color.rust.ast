@@ -1,0 +1,79 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode \"Anchor\" as Anchor\nnote \"composite color payload\" as Composite.Note $audit <<CompositeLedger>> #back:LightBlue;line.dashed:Red\nComposite.Note ..> Anchor : composite reuse\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Anchor",
+                label: "Anchor",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 1,
+                quark_order: 0,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Composite.Note",
+                to: "Anchor",
+                label: Some(
+                    "composite reuse",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Dashed,
+                length: 2,
+                source_line: 3,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "Composite.Note",
+                ),
+                target: None,
+                text: "composite color payload",
+                color: Some(
+                    "#back:LightBlue;line.dashed:Red",
+                ),
+                tags: [
+                    "audit",
+                ],
+                stereotype: Some(
+                    "CompositeLedger",
+                ),
+                owner: None,
+                quark_order: 1,
+                position: Right,
+                source_line: 2,
+            },
+        ],
+    },
+)

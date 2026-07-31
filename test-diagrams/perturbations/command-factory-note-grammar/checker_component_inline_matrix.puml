@@ -1,0 +1,11 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+[Anchor] as Anchor
+note "tag-only payload" as CTag $audit $blue-team
+note "stereotype-only payload" as CStereo <<Ledger>>
+note "color-only payload" as CColor #MistyRose
+note "all decorations payload" as Component.Memo_7 $audit $blue-team <<AuditLedger>> #LightBlue
+Component.Memo_7 ..> Anchor : reviewed
+@enduml

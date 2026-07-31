@@ -1,0 +1,47 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ComponentDispatchMarker {
+        interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+      }
+      [Anchor] as Anchor
+      note as Métrique.Δelta_7 $rétention <<UnicodeLedger>> #Thistle
+        Unicode body
+      end note
+      Métrique.Δelta_7 ..> Anchor : unicode reuse
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ComponentDispatchMarkerInterface
+    label: Component Dispatch Marker
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: Anchor
+    label: Anchor
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: ComponentDispatchMarker
+    label: ComponentDispatchMarker
+    stereotype: null
+    kind: Component
+    source_line: 1
+    components:
+    - ComponentDispatchMarkerInterface
+    packages: []
+  notes:
+  - id: Métrique.Δelta_7
+    tags:
+    - rétention
+    stereotype: UnicodeLedger
+    color: '#Thistle'
+    text: Unicode body
+    target: null
+    position: Right
+    source_line: 6

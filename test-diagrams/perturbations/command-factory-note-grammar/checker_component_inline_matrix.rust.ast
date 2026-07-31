@@ -1,0 +1,140 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ncomponent ComponentDispatchMarker {\n  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface\n}\n[Anchor] as Anchor\nnote \"tag-only payload\" as CTag $audit $blue-team\nnote \"stereotype-only payload\" as CStereo <<Ledger>>\nnote \"color-only payload\" as CColor #MistyRose\nnote \"all decorations payload\" as Component.Memo_7 $audit $blue-team <<AuditLedger>> #LightBlue\nComponent.Memo_7 ..> Anchor : reviewed\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        components: [
+            Component {
+                id: "ComponentDispatchMarkerInterface",
+                label: "Component Dispatch Marker",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 2,
+                kind: Component,
+            },
+            Component {
+                id: "Anchor",
+                label: "Anchor",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 4,
+                kind: Component,
+            },
+        ],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [],
+        connections: [],
+        removed_connections: [],
+        packages: [
+            ComponentPackage {
+                name: "ComponentDispatchMarker",
+                label: "ComponentDispatchMarker",
+                stereotype: None,
+                kind: Component,
+                color: None,
+                source_line: 1,
+                components: [
+                    "ComponentDispatchMarkerInterface",
+                ],
+                packages: [],
+            },
+        ],
+        together: [],
+        notes: [
+            ComponentNote {
+                id: Some(
+                    "CTag",
+                ),
+                owner: None,
+                tags: [
+                    "audit",
+                    "blue-team",
+                ],
+                stereotype: None,
+                color: None,
+                text: "tag-only payload",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 5,
+            },
+            ComponentNote {
+                id: Some(
+                    "CStereo",
+                ),
+                owner: None,
+                tags: [],
+                stereotype: Some(
+                    "Ledger",
+                ),
+                color: None,
+                text: "stereotype-only payload",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 6,
+            },
+            ComponentNote {
+                id: Some(
+                    "CColor",
+                ),
+                owner: None,
+                tags: [],
+                stereotype: None,
+                color: Some(
+                    "#MistyRose",
+                ),
+                text: "color-only payload",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 7,
+            },
+            ComponentNote {
+                id: Some(
+                    "Component.Memo_7",
+                ),
+                owner: None,
+                tags: [
+                    "audit",
+                    "blue-team",
+                ],
+                stereotype: Some(
+                    "AuditLedger",
+                ),
+                color: Some(
+                    "#LightBlue",
+                ),
+                text: "all decorations payload",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 8,
+            },
+        ],
+        removed_notes: [],
+    },
+)

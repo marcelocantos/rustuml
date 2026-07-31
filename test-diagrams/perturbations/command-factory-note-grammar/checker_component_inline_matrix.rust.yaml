@@ -1,0 +1,69 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ComponentDispatchMarker {
+        interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+      }
+      [Anchor] as Anchor
+      note "tag-only payload" as CTag $audit $blue-team
+      note "stereotype-only payload" as CStereo <<Ledger>>
+      note "color-only payload" as CColor #MistyRose
+      note "all decorations payload" as Component.Memo_7 $audit $blue-team <<AuditLedger>> #LightBlue
+      Component.Memo_7 ..> Anchor : reviewed
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ComponentDispatchMarkerInterface
+    label: Component Dispatch Marker
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: Anchor
+    label: Anchor
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: ComponentDispatchMarker
+    label: ComponentDispatchMarker
+    stereotype: null
+    kind: Component
+    source_line: 1
+    components:
+    - ComponentDispatchMarkerInterface
+    packages: []
+  notes:
+  - id: CTag
+    tags:
+    - audit
+    - blue-team
+    text: tag-only payload
+    target: null
+    position: Right
+    source_line: 5
+  - id: CStereo
+    stereotype: Ledger
+    text: stereotype-only payload
+    target: null
+    position: Right
+    source_line: 6
+  - id: CColor
+    color: '#MistyRose'
+    text: color-only payload
+    target: null
+    position: Right
+    source_line: 7
+  - id: Component.Memo_7
+    tags:
+    - audit
+    - blue-team
+    stereotype: AuditLedger
+    color: '#LightBlue'
+    text: all decorations payload
+    target: null
+    position: Right
+    source_line: 8
