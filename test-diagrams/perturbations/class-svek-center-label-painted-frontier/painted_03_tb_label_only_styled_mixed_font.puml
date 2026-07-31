@@ -1,0 +1,6 @@
+@startuml
+top to bottom direction
+class PaintedStyledNorth3201
+class PaintedStyledSouth3217
+PaintedStyledNorth3201 -down-> PaintedStyledSouth3217 : <size:18>Wide</size> H<sub>2</sub>O + X<sup>2</sup> 3221
+@enduml

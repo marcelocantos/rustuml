@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class PaintedNoteOnlySource3101
+class PaintedNoteOnlyTarget3113
+PaintedNoteOnlySource3101 --> PaintedNoteOnlyTarget3113
+note on link
+  bottom only Wwm 3119
+  row with qij 3121
+end note
+@enduml

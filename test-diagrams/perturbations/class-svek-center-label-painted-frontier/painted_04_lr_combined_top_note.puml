@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class PaintedTopLeft3301
+class PaintedTopRight3313
+PaintedTopLeft3301 --> PaintedTopRight3313 : label over top note qij 3319
+note top on link
+  top note Wwm 3323
+  row small 3329
+end note
+@enduml

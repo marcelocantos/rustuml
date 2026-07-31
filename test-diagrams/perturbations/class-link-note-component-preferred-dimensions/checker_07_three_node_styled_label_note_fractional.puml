@@ -1,0 +1,12 @@
+@startuml
+skinparam defaultFontName Arial
+class CheckerClnFreshHub2801
+class CheckerClnFreshSpoke2811
+class CheckerClnFreshTail2821
+CheckerClnFreshHub2801 --> CheckerClnFreshSpoke2811 : <size:17>wide</size> H<sub>2</sub>O label 2817
+CheckerClnFreshSpoke2811 --> CheckerClnFreshTail2821 : second owner label iiww 2823
+note on link
+  component row Wwm 2827
+  small <size:10>ten</size> and super X<sup>2</sup>
+end note
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+class PaintedBottomNorth3401
+class PaintedBottomSouth3413
+PaintedBottomNorth3401 -down-> PaintedBottomSouth3413 : bottom explicit label 3419
+note bottom on link : explicit bottom note qijwm 3421
+@enduml
