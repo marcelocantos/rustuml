@@ -6,6 +6,7 @@
 use serde::{Deserialize, Serialize};
 
 use super::DiagramMeta;
+use super::style::PlantUmlColors;
 
 pub const DEFAULT_DEPLOYMENT_LINK_LENGTH: usize = 2;
 
@@ -160,8 +161,8 @@ pub struct DeploymentConnection {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DeploymentLinkNote {
     pub text: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub color: Option<String>,
+    #[serde(default, skip_serializing_if = "PlantUmlColors::is_empty")]
+    pub colors: PlantUmlColors,
     pub position: DeploymentNotePosition,
 }
 

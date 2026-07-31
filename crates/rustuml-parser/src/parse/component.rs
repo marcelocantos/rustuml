@@ -1910,7 +1910,7 @@ mod tests {
             "component Anchor\nnote \"bad order\" as Bad.Note #MistyRose <<WrongOrder>>\nBad.Note --> Anchor",
             "component Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
             "component Anchor\nnote \"left\u{201c}right\" as Embedded.Quote\nEmbedded.Quote --> Anchor",
-            "component Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
+            "component Anchor\nnote as BadCompositeValue #back:LightBlue;line.dashed:NoSuchColor\npayload\nendnote\nBadCompositeValue --> Anchor",
         ] {
             let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
             let Err(error) = parse_component(&lines) else {

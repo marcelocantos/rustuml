@@ -5,6 +5,51 @@
 
 use serde::{Deserialize, Serialize};
 
+/// Sparse color channels produced by PlantUML's shared `ColorParser` and
+/// `Colors` model.
+#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PlantUmlColors {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub back: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub header: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub arrow: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line_style: Option<PlantUmlLineStyle>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub shadowing: Option<bool>,
+}
+
+impl PlantUmlColors {
+    pub fn is_empty(&self) -> bool {
+        self == &Self::default()
+    }
+}
+
+/// The channel receiving an unkeyed color in `Colors(data, set, mainType)`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PlantUmlColorType {
+    Text,
+    Line,
+    Back,
+    Header,
+    Arrow,
+}
+
+/// A line-stroke directive retained independently of line color.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PlantUmlLineStyle {
+    Dashed,
+    Dotted,
+    Bold,
+}
+
 /// The ordered sparse declarations that make up a diagram's style cascade.
 #[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct StyleProgram {

@@ -10,6 +10,7 @@ use regex::Regex;
 
 use super::ParseError;
 use crate::diagram::deployment::*;
+use crate::diagram::style::{PlantUmlColorType, PlantUmlColors};
 use crate::diagram::{DiagramMeta, LegendHorizontalAlignment, LegendVerticalAlignment};
 
 /// All keywords that introduce a deployment diagram element.
@@ -491,7 +492,7 @@ fn deployment_note_position(value: &str) -> DeploymentNotePosition {
 enum DeploymentLinkNoteCommand {
     Inline(DeploymentLinkNote),
     Multiline {
-        color: Option<String>,
+        colors: PlantUmlColors,
         position: DeploymentNotePosition,
     },
 }
@@ -518,29 +519,49 @@ fn parse_deployment_link_note_command(
         // `CommandFactoryNoteOnLink.executeInternal` defaults to BOTTOM.
         .unwrap_or(DeploymentNotePosition::Bottom);
     let mut suffix = captures.get(2)?.as_str().trim_start();
-    let color = if suffix.starts_with('#') {
-        let end = suffix
-            .find(|character: char| character.is_whitespace() || character == ':')
-            .unwrap_or(suffix.len());
-        let token = &suffix[..end];
-        if !super::named_note_color_is_valid(token) {
+    let colors = if suffix.starts_with('#') {
+        // `ColorParser.PART2` uses colons inside one color expression, while
+        // the command's inline body also begins with a colon. Match the
+        // longest valid color-language prefix whose remainder starts at a
+        // command boundary, as Java's concatenated regex does.
+        let parsed = suffix
+            .char_indices()
+            .map(|(index, _)| index)
+            .chain(std::iter::once(suffix.len()))
+            .filter(|end| *end > 1)
+            .rev()
+            .find_map(|end| {
+                let remainder = &suffix[end..];
+                (remainder.is_empty()
+                    || remainder.starts_with(':')
+                    || remainder.starts_with(char::is_whitespace))
+                .then(|| {
+                    super::parse_plantuml_colors(&suffix[..end], PlantUmlColorType::Back)
+                        .map(|colors| (end, colors))
+                })
+                .flatten()
+            });
+        let Some((end, colors)) = parsed else {
             return Some(Err("invalid note-on-link color"));
-        }
+        };
         suffix = suffix[end..].trim_start();
-        Some(token.to_string())
+        colors
     } else {
-        None
+        PlantUmlColors::default()
     };
 
     if suffix.is_empty() {
-        return Some(Ok(DeploymentLinkNoteCommand::Multiline { color, position }));
+        return Some(Ok(DeploymentLinkNoteCommand::Multiline {
+            colors,
+            position,
+        }));
     }
     let Some(text) = suffix.strip_prefix(':') else {
         return Some(Err("invalid note-on-link command"));
     };
     Some(Ok(DeploymentLinkNoteCommand::Inline(DeploymentLinkNote {
         text: text.trim_start().to_string(),
-        color,
+        colors,
         position,
     })))
 }
@@ -575,7 +596,7 @@ struct NoteAccum {
 
 struct LinkNoteAccum {
     connection_index: usize,
-    color: Option<String>,
+    colors: PlantUmlColors,
     position: DeploymentNotePosition,
     command_line: usize,
     lines: Vec<String>,
@@ -681,7 +702,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 }
                 connections[accum.connection_index].note = Some(DeploymentLinkNote {
                     text: deployment_link_note_text(&accum.lines),
-                    color: accum.color,
+                    colors: accum.colors,
                     position: accum.position,
                 });
             } else {
@@ -864,10 +885,10 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     // Java `Link.addNote` is replacement, not accumulation.
                     connections[connection_index].note = Some(note);
                 }
-                DeploymentLinkNoteCommand::Multiline { color, position } => {
+                DeploymentLinkNoteCommand::Multiline { colors, position } => {
                     link_note_accum = Some(LinkNoteAccum {
                         connection_index,
-                        color,
+                        colors,
                         position,
                         command_line: current_line,
                         lines: Vec::new(),
@@ -1555,7 +1576,7 @@ mod tests {
             "node Anchor\nnote \"bad order\" as Bad.Deployment #MistyRose <<WrongOrder>>\nBad.Deployment --> Anchor",
             "node Anchor\nnote \"bad color\" as BadColor #R\nBadColor --> Anchor",
             "node Anchor\nnote \"left\u{e121}right\" as Embedded.Quote\nEmbedded.Quote --> Anchor",
-            "node Anchor\nnote as BadComposite #back:LightBlue;line.dashed:Red\npayload\nendnote\nBadComposite --> Anchor",
+            "node Anchor\nnote as BadCompositeValue #back:LightBlue;line.dashed:NoSuchColor\npayload\nendnote\nBadCompositeValue --> Anchor",
         ] {
             let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
             let Err(error) = parse_deployment(&lines) else {
@@ -1675,9 +1696,46 @@ mod tests {
                 .as_ref()
                 .unwrap_or_else(|| panic!("missing link note for {command}"));
             assert_eq!(note.position, expected_position, "{command}");
-            assert_eq!(note.color.as_deref(), expected_color, "{command}");
+            assert_eq!(note.colors.back.as_deref(), expected_color, "{command}");
             assert_eq!(note.text, expected_text, "{command}");
         }
+    }
+
+    #[test]
+    fn link_note_part2_colors_retain_independent_style_channels() {
+        let diagram = parse(
+            "node RenamedSourceColor\n\
+             database RenamedTargetColor\n\
+             RenamedSourceColor --> RenamedTargetColor\n\
+             note left on link #back:FF0000;line.dashed:00FF00;text:0000FF;header:Gold;shadowing:false : renamed chromatic payload",
+        );
+        let note = diagram.connections[0].note.as_ref().unwrap();
+        assert_eq!(note.colors.back.as_deref(), Some("FF0000"));
+        assert_eq!(note.colors.line.as_deref(), Some("00FF00"));
+        assert_eq!(note.colors.text.as_deref(), Some("0000FF"));
+        assert_eq!(note.colors.header.as_deref(), Some("Gold"));
+        assert_eq!(
+            note.colors.line_style,
+            Some(crate::diagram::style::PlantUmlLineStyle::Dashed)
+        );
+        assert_eq!(note.colors.shadowing, Some(false));
+
+        let multiline = parse(
+            "node RenamedSourceMulti\n\
+             node RenamedTargetMulti\n\
+             RenamedSourceMulti --> RenamedTargetMulti\n\
+             note on link #Wheat;line.bold:Navy;text:Red\n\
+               retained multiline body\n\
+             endnote",
+        );
+        let note = multiline.connections[0].note.as_ref().unwrap();
+        assert_eq!(note.colors.back.as_deref(), Some("#Wheat"));
+        assert_eq!(note.colors.line.as_deref(), Some("Navy"));
+        assert_eq!(note.colors.text.as_deref(), Some("Red"));
+        assert_eq!(
+            note.colors.line_style,
+            Some(crate::diagram::style::PlantUmlLineStyle::Bold)
+        );
     }
 
     #[test]
@@ -1698,7 +1756,7 @@ mod tests {
         let connection = &diagram.connections[0];
         let note = connection.note.as_ref().unwrap();
         assert_eq!(note.text, "first renamed line\nsecond renamed line");
-        assert_eq!(note.color.as_deref(), Some("#FFCCAA"));
+        assert_eq!(note.colors.back.as_deref(), Some("#FFCCAA"));
         assert_eq!(note.position, DeploymentNotePosition::Top);
         assert_eq!(connection.direction, Some(DeploymentLinkDirection::Right));
         assert_eq!(connection.source_line, 4);
@@ -1749,7 +1807,7 @@ mod tests {
         assert_eq!(diagram.connections.len(), 2);
         let note = diagram.connections[0].note.as_ref().unwrap();
         assert_eq!(note.text, "replacement memo");
-        assert_eq!(note.color.as_deref(), Some("#PaleGreen"));
+        assert_eq!(note.colors.back.as_deref(), Some("#PaleGreen"));
         assert_eq!(note.position, DeploymentNotePosition::Left);
         assert!(diagram.connections[1].note.is_none());
         assert_eq!(diagram.notes.len(), 1);
