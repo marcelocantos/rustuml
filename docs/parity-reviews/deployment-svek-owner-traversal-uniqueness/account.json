@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-svek-owner-traversal-uniqueness",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "c5c23b9ab6e5d515f3cf667a6d3394c4b1ecc1cb",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder.buildImage",
+        "GraphvizImageBuilder.printGroups",
+        "GraphvizImageBuilder.printGroup",
+        "GraphvizImageBuilder.getUnpackagedEntities"
+      ],
+      "lines": "208-229,348-430",
+      "role": "Builds each top-level group exactly once through recursive group traversal, then emits root unpackaged leaves exactly once; a group member cannot enter both streams."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": [
+        "Bibliotekon.createNode",
+        "Bibliotekon.allNodes"
+      ],
+      "lines": "50-74,153-155",
+      "role": "Stores one SvekNode per Entity in insertion order; downstream position lookup and painting consume the same unique inventory."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "deployment_svek_leaf_order.collect_owner",
+        "deployment_svek_leaf_order"
+      ],
+      "lines": "3930-4030",
+      "role": "Recursively emits every top-level cluster from the explicit roots loop, then calls collect_owner(None), whose child recursion emits those same clusters and leaves a second time."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "render_no_oracle layout registration and slot remap"
+      ],
+      "lines": "4076-4102,4232-4247",
+      "role": "LayoutGraph deduplicates repeated node IDs, but Rust advances next_layout_slot and overwrites logical slots for every duplicate plan entry; remapping then indexes beyond the unique solved position vector."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": [
+        "LayoutGraph.add_node"
+      ],
+      "lines": "263-273",
+      "role": "Returns false for a duplicate ID and deliberately retains one physical graph node, exposing the renderer's invalid duplicate logical plan."
+    }
+  ],
+  "claimed_invariant": "The DESCRIPTION SVEK plan is an ordered partition of renderable leaves by immediate owner. Groups are traversed recursively before root unpackaged leaves, but every leaf appears exactly once and every logical layout slot corresponds to exactly one accepted LayoutGraph node. Position remapping must be a bijection over that unique inventory rather than a counter over attempted insertions.",
+  "causal_divergence": "The new groups-first Rust planner performs the correct explicit root-group recursion, but its final collect_owner(None) call also recursively visits root groups. Cluster leaves therefore occur twice in the plan. LayoutGraph rejects the duplicate add_node calls while the renderer still increments and stores later slot numbers, so valid nested DESCRIPTION diagrams panic when those nonexistent slots are read. Root-only inputs pass because they have no child-group recursion to duplicate.",
+  "planned_model_change": "Separate owner-local leaf emission from child-group recursion. Traverse every top-level group recursively once, then emit only the root owner's direct unpackaged leaves and notes without descending into groups again. Treat LayoutGraph.add_node rejection as an invariant violation during plan construction so slot accounting can never silently diverge from the physical graph inventory. Keep groups-first order and the independent canonical node/note remap intact.",
+  "perturbation_axes": [
+    "root-only leaves versus one and several top-level groups",
+    "one-level versus deeply nested groups",
+    "ordinary leaves versus owned floating notes",
+    "one, two, and four direct leaves",
+    "linked versus unconstrained leaves",
+    "left-to-right versus top-to-bottom direction"
+  ],
+  "acceptance": [
+    "The existing parser and renderer unit suites complete without an index panic.",
+    "Fresh valid nested DESCRIPTION cases from the rejected reviews reach a rendered SVG rather than panicking.",
+    "Root note-before-node and node-before-note controls retain their corrected ordering.",
+    "A focused plan test proves that nested leaves appear once and that groups still precede root unpackaged leaves.",
+    "An independent checker attacks duplicate IDs, sibling roots, deep nesting, owned notes, and mixed root/group leaves at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "bounds checks or filter_map that silently drops nonexistent solved positions",
+    "clamping a slot to the solved vector length",
+    "removing groups-first ordering to make the inventories happen to align",
+    "post-hoc coordinate or SVG repair",
+    "fixture labels, expected coordinates, comparator changes, or baseline changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/deployment-unconstrained-leaf-emission-order/review.json",
+    "docs/parity-reviews/cuca-single-strategy-three-leaf-gate/review.json",
+    "cargo test -p rustuml-parser -p rustuml-render --lib (16 nested cluster panics at deployment.rs:4238)"
+  ]
+}
