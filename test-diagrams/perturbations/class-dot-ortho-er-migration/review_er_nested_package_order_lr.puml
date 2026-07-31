@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam linetype spline
+skinparam linetype ortho
+hide empty members
+
+package CommerceShelf9311 {
+  entity Ledger9317
+  entity Invoice9313
+  package FulfilmentShelf9319 {
+    entity Parcel9321
+  }
+  entity Payment9315
+  Payment9315 }o--|| Ledger9317 : posts to
+  Invoice9313 ||--o{ Payment9315 : paid by
+  Payment9315 ||--o{ Parcel9321 : releases parcel
+}
+@enduml
