@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-decoration-vertical-stack",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "4c02c93e",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/DiagramChromeFactory12026.java",
+      "symbol": "DiagramChromeFactory12026.addHeaderAndFooter",
+      "lines": "382-412",
+      "role": "Builds header and footer ribbons and wraps the complete body with DecorateEntityImage.addTopAndBottom."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/DisplayPositioned.java",
+      "symbol": "DisplayPositioned.createRibbon",
+      "lines": "118-127",
+      "role": "Creates each styled ribbon through Style.createTextBlockBordered."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "symbol": "Style.createTextBlockBordered",
+      "lines": "315-332",
+      "role": "Creates a creole text block from the resolved decoration font and wraps it with style padding, border, and margin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "symbols": [
+        "SheetBlock1.initMap",
+        "SheetBlock1.calculateDimensionSlow"
+      ],
+      "lines": "116-198",
+      "role": "Lays out each display stripe through Sea, advances y by that stripe's measured height, and reports the complete stacked MinMax."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DecorateEntityImage.java",
+      "symbol": "DecorateEntityImage.drawU",
+      "lines": "103-134",
+      "role": "Places the footer at yImage + dimOriginal.height, after the complete wrapped body dimension rather than after its last visible primitive."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/EntityImageDegenerated.java",
+      "symbols": [
+        "EntityImageDegenerated.calculateDimension",
+        "EntityImageDegenerated.drawU"
+      ],
+      "lines": "50-91",
+      "role": "Places a one-leaf entity after a 7px inset and retains the same 7px invisible slack below its intrinsic image."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbol": "SvekResult.calculateDimension",
+      "lines": "125-136",
+      "role": "Normalises the painted minimum to 6 and reports the painted MinMax plus 15, leaving 9px below the normalised painted maximum."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "DecorationLayout::emit",
+      "lines": "8785-8840",
+      "role": "Advances every decoration line by the class-member line height, regardless of the resolved decoration font size."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_plantuml_svg footer emission",
+      "lines": "6231-6250",
+      "role": "Anchors every footer from visible body_bottom with one SVEK-derived gap, even when the body follows EntityImageDegenerated."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/edge-cases/edge_meta_header_and_footer.puml",
+    "test-diagrams/golden/edge-cases/edge_size_long_header_footer.puml",
+    "test-diagrams/golden/edge-cases/edge_render_left_header.puml"
+  ],
+  "claimed_invariant": "Decoration display rows advance by the measured height of each resolved-font stripe, exactly as SheetBlock1 advances its Sea stack. Footer placement begins after the complete wrapped body dimension: visible body bottom plus 7px for EntityImageDegenerated or plus 9px for SvekResult, followed by the first 10px ribbon line's 9.668px baseline ascent. Labels, line count, alignment, width, and topology affect measured content but do not change this ownership.",
+  "causal_divergence": "Rust uses the 14px class-member line box for all page decorations, so the second 10px header/footer row is 4.711px too low while each first row is exact. Rust also applies the SvekResult footer gap to a one-leaf EntityImageDegenerated body; its invisible bottom slack is 7px rather than SvekResult's 9px, placing a one-line footer exactly 2px too low. These are independent vertical composition errors visible in the multiline linked and one-leaf long-ribbon controls.",
+  "planned_model_change": "Accumulate per-line decoration offsets with text_render::label_height at the resolved decoration font size instead of the class-member line-height constant. Preserve the existing title behavior because its 14px resolved line height is the same measured 16.4883 value. Select the footer body's invisible bottom slack from the existing uses_degenerated_entity lifecycle predicate: 7px for EntityImageDegenerated and 9px for SvekResult, then add the existing first-line baseline ascent. Do not branch on fixture names, labels, line counts, or observed coordinates.",
+  "checked_derivations": [
+    {
+      "input": "test-diagrams/golden/edge-cases/edge_meta_header_and_footer.puml",
+      "derivation": "The first Java header baseline is 9.668 and the second is 21.4453, a measured 11.7773 stripe height matching text_render::label_height at font size 10. Rust currently advances by 16.4883, producing 26.1563 and the observed 4.711 difference. The same difference repeats between the two footer rows."
+    },
+    {
+      "input": "test-diagrams/golden/edge-cases/edge_size_long_header_footer.puml",
+      "derivation": "The one-leaf visible body bottom is 67.7773 and the Java footer baseline is 84.4453. Their 16.668 difference decomposes into EntityImageDegenerated's 7px bottom slack plus the 9.668 first-line baseline. Rust's SVEK-derived 18.668 gap is exactly 2px too large."
+    }
+  ],
+  "perturbation_axes": [
+    "one through four header and footer lines",
+    "10px header/footer versus 14px title/caption fonts",
+    "one unlinked root leaf versus linked and multi-leaf SVEK bodies",
+    "left, centre, and right ribbon alignment",
+    "short, long, renamed, and Unicode line content",
+    "header only, footer only, and combined header/footer",
+    "title and caption nested with header/footer"
+  ],
+  "scope_boundary": "This mechanism owns vertical row stacking inside page-decoration text blocks and the lifecycle-specific invisible bottom slack used to place class-diagram footers. It does not own horizontal centring, glyph metrics, legend rendering, body layout, routing, document margins, decoration styles, outer canvas dimensions, or comparator behavior.",
+  "acceptance": [
+    "Multiline header/footer rows match Java through measured font-specific stripe heights.",
+    "One-leaf footer placement uses EntityImageDegenerated slack while linked SVEK footer placement remains unchanged.",
+    "Existing title, caption, single-line header, and linked footer matches do not regress.",
+    "Fresh renamed perturbations cover changed line count and body lifecycle.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "fixture-name or label-text conditions",
+    "special cases for exactly two lines",
+    "subtracting 4.711 or 2 from emitted coordinates",
+    "post-hoc SVG string surgery",
+    "comparator, eligibility, or golden changes"
+  ]
+}
