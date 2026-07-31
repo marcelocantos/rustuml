@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "class-note-gradient-paint",
-  "status": "account_committed_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -98,9 +98,24 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "b1af8158",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "Pending implementation and independent review.",
-    "review_status": "This account predates implementation and does not attest acceptance."
+    "accepted_result": "skin_note_bg_gradient becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,166/11,251 to 11,167/11,251, with skinparam moving from 404/410 to 405/410 and every other family unchanged.",
+    "model_evidence": "The class-diagram gradient inventory now traverses the complete SVEK node emission stream and registers selected note backgrounds in the same tuple namespace as class paints. ResolvedNoteStyle retains explicit-over-style paint precedence and resolves gradients without changing solid normalization. The degenerate single-note envelope emits the same generated definitions. Fresh renamed inputs cover all four policies, five-note duplicate reuse, inline-over-style selection, class/note tuple sharing, and a lone named note.",
+    "commands": [
+      "cargo test -p rustuml-render --lib no_oracle_note_ -- --nocapture",
+      "cargo test -p rustuml-render --lib no_oracle_single_named_note_emits_its_gradient_resource -- --nocapture",
+      "cargo build -p rustuml-oracle --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/skinparam/skin_note_bg_gradient.puml",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java runtime are unavailable. This record does not self-attest acceptance."
   }
 }

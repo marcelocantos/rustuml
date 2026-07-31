@@ -3657,40 +3657,57 @@ fn class_gradient_endpoints(
     }
 }
 
-fn class_gradients(diagram: &ClassDiagram) -> Vec<ClassGradient> {
+fn class_diagram_gradients(diagram: &ClassDiagram) -> Vec<ClassGradient> {
     let source = diagram.meta.source.as_deref().unwrap_or("");
     let mut gradients: Vec<ClassGradient> = Vec::new();
-    for entity_index in entity_emission_order(diagram) {
-        let entity = &diagram.entities[entity_index];
-        let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
-        let body = entity.color.as_deref().or(font.class_background.as_deref());
-        // Java `EntityImageClass.drawInternal` copies an entity BACK color to
-        // HEADER. Only a style-selected body can have a distinct header paint.
-        let header = if entity.color.is_some() {
-            body
-        } else {
-            font.header_background.as_deref().or(body)
-        };
-        for value in [body, header].into_iter().flatten() {
-            let Some((raw1, raw2, policy)) = split_class_gradient(value) else {
-                continue;
-            };
-            let color1 = crate::sequence::resolve_color(raw1);
-            let color2 = crate::sequence::resolve_color(raw2);
-            if gradients.iter().any(|gradient| {
-                gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
-            }) {
-                continue;
+    for node in svek_node_emission_order(diagram) {
+        match node {
+            SvekNodeEmission::Entity(entity_index) => {
+                let entity = &diagram.entities[entity_index];
+                let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+                let body = entity.color.as_deref().or(font.class_background.as_deref());
+                // Java `EntityImageClass.drawInternal` copies an entity BACK
+                // color to HEADER. Only a style-selected body can have a
+                // distinct header paint.
+                let header = if entity.color.is_some() {
+                    body
+                } else {
+                    font.header_background.as_deref().or(body)
+                };
+                for value in [body, header].into_iter().flatten() {
+                    register_class_gradient(source, &mut gradients, value);
+                }
             }
-            gradients.push(ClassGradient {
-                color1,
-                color2,
-                policy,
-                id: crate::filter_registry::gradient_id_for(source, gradients.len()),
-            });
+            SvekNodeEmission::Note(note_index) => {
+                if let Some(value) =
+                    selected_note_background_value(diagram, &diagram.notes[note_index])
+                {
+                    register_class_gradient(source, &mut gradients, value);
+                }
+            }
+            SvekNodeEmission::EmptyPackage(_) => {}
         }
     }
     gradients
+}
+
+fn register_class_gradient(source: &str, gradients: &mut Vec<ClassGradient>, value: &str) {
+    let Some((raw1, raw2, policy)) = split_class_gradient(value) else {
+        return;
+    };
+    let color1 = crate::sequence::resolve_color(raw1);
+    let color2 = crate::sequence::resolve_color(raw2);
+    if gradients.iter().any(|gradient| {
+        gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+    }) {
+        return;
+    }
+    gradients.push(ClassGradient {
+        color1,
+        color2,
+        policy,
+        id: crate::filter_registry::gradient_id_for(source, gradients.len()),
+    });
 }
 
 fn class_gradient_defs(gradients: &[ClassGradient]) -> String {
@@ -3713,6 +3730,19 @@ fn gradient_fill_from_defs(value: Option<&str>, defs: Option<&str>) -> Option<St
     let color2 = crate::sequence::resolve_color(raw2);
     defs.and_then(|defs| resolve_gradient_id(defs, &color1, &color2, policy))
         .map(|id| format!("url(#{id})"))
+        .or(Some(color1))
+}
+
+fn gradient_fill_from_registry(value: Option<&str>, gradients: &[ClassGradient]) -> Option<String> {
+    let (raw1, raw2, policy) = split_class_gradient(value?)?;
+    let color1 = crate::sequence::resolve_color(raw1);
+    let color2 = crate::sequence::resolve_color(raw2);
+    gradients
+        .iter()
+        .find(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        })
+        .map(|gradient| format!("url(#{})", gradient.id))
         .or(Some(color1))
 }
 
@@ -5661,7 +5691,7 @@ fn render_plantuml_svg(
     // `<linearGradient>` PlantUML generates for a `#c1/c2` gradient
     // background, or background-colour filters). The entity rects reference
     // these via oracle-captured `fill="url(#...)"`, so the ids must be live.
-    let gradients = class_gradients(diagram);
+    let gradients = class_diagram_gradients(diagram);
     let mut generated_defs = class_gradient_defs(&gradients);
     if let Some(shadow_defs) = shadow_filter_id
         .as_deref()
@@ -14942,13 +14972,16 @@ impl ResolvedNoteStyle {
     /// paint together.
     fn for_note(diagram: &ClassDiagram, note: &Note) -> Self {
         let solid_color = |value: &str| {
-            (!value.contains(['/', '|'])).then(|| crate::sequence::resolve_color(value.trim()))
+            split_class_gradient(value)
+                .is_none()
+                .then(|| crate::sequence::resolve_color(value.trim()))
         };
-        let background = note
-            .color
-            .as_deref()
-            .map(crate::sequence::resolve_color)
-            .or_else(|| note_skinparam(diagram, "BackgroundColor").and_then(solid_color))
+        let background_value = selected_note_background_value(diagram, note);
+        let background = background_value
+            .and_then(|value| {
+                gradient_fill_from_registry(Some(value), &class_diagram_gradients(diagram))
+                    .or_else(|| solid_color(value))
+            })
             .unwrap_or_else(|| NOTE_FILL.to_string());
         let border = note_skinparam(diagram, "BorderColor")
             .and_then(solid_color)
@@ -15005,6 +15038,15 @@ impl ResolvedNoteStyle {
             content
         }
     }
+}
+
+fn selected_note_background_value<'a>(
+    diagram: &'a ClassDiagram,
+    note: &'a Note,
+) -> Option<&'a str> {
+    note.color
+        .as_deref()
+        .or_else(|| note_skinparam(diagram, "BackgroundColor"))
 }
 
 fn note_skinparam<'a>(diagram: &'a ClassDiagram, suffix: &str) -> Option<&'a str> {
@@ -16027,7 +16069,12 @@ fn render_single_named_note(
     emit_note_body(&mut body, note, x, y, width, sprites, &style);
     body.push_str("</g>");
     svg.raw_inline(&body);
-    svg.finalize_plantuml()
+    let mut rendered = svg.finalize_plantuml();
+    let defs = class_gradient_defs(&class_diagram_gradients(diagram));
+    if !defs.is_empty() {
+        rendered = rendered.replacen("<defs/>", &format!("<defs>{defs}</defs>"), 1);
+    }
+    rendered
 }
 
 /// Render a class-diagram that has no entities/notes but does carry one or
@@ -21427,6 +21474,107 @@ class HorizontalReuseFresh1129 #A0B0C0|#D0E0F0
         );
         assert!(
             entity_body("EpochAfterFresh1217").contains(&format!(r#"fill="url(#{})""#, ids[0])),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_note_gradients_preserve_policy_order_and_reuse() {
+        let input = r#"@startuml
+note as VerticalNoteFresh1301 #102030-#405060
+  vertical fresh
+end note
+note as HorizontalNoteFresh1303 #A0B0C0|#D0E0F0
+  horizontal fresh
+end note
+note as RisingNoteFresh1307 #123456\#ABCDEF
+  rising fresh
+end note
+note as FallingNoteFresh1319 #654321/#FEDCBA
+  falling fresh
+end note
+note as HorizontalReuseNoteFresh1321 #A0B0C0|#D0E0F0
+  horizontal reuse fresh
+end note
+@enduml"#;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let source = diagram.meta().source.as_deref().unwrap();
+        let ids = (0..4)
+            .map(|index| crate::filter_registry::gradient_id_for(source, index))
+            .collect::<Vec<_>>();
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 4, "{svg}");
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="50%" x2="50%" y1="0%" y2="100%">"#,
+            ids[0]
+        )));
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="0%" x2="100%" y1="50%" y2="50%">"#,
+            ids[1]
+        )));
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="0%" x2="100%" y1="100%" y2="0%">"#,
+            ids[2]
+        )));
+        assert!(svg.contains(&format!(
+            r#"<linearGradient id="{}" x1="0%" x2="100%" y1="0%" y2="100%">"#,
+            ids[3]
+        )));
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{})""#, ids[1])).count(),
+            4,
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_note_and_class_share_gradient_tuple_with_inline_precedence() {
+        let input = "@startuml\n\
+            skinparam noteBackgroundColor #102132/#435465\n\
+            class SharedClassFresh1409 #A1B2C3|#D4E5F6\n\
+            note as SharedNoteFresh1423 #A1B2C3|#D4E5F6\n\
+              shared fresh\n\
+            end note\n\
+            note as StyledNoteFresh1427\n\
+              styled fresh\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let source = diagram.meta().source.as_deref().unwrap();
+        let shared_id = crate::filter_registry::gradient_id_for(source, 0);
+        let styled_id = crate::filter_registry::gradient_id_for(source, 1);
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 2, "{svg}");
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{shared_id})""#)).count(),
+            3,
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{styled_id})""#)).count(),
+            2,
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_single_named_note_emits_its_gradient_resource() {
+        let input = "@startuml\n\
+            note as SoloGradientFresh1451 #0A1B2C/#D3E4F5\n\
+              solo gradient fresh\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let source = diagram.meta().source.as_deref().unwrap();
+        let id = crate::filter_registry::gradient_id_for(source, 0);
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 1, "{svg}");
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{id})""#)).count(),
+            2,
             "{svg}"
         );
     }
