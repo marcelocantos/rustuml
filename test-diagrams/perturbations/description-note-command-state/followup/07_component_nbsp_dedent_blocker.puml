@@ -1,0 +1,8 @@
+@startuml
+component "NBSP Anchor" as NbspAnchor
+note as NbspMemo
+ 
+  CHK_NBSP_INDENT_8207
+endnote
+NbspAnchor --> NbspMemo
+@enduml

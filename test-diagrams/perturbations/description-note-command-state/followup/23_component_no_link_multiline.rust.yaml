@@ -1,0 +1,42 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component OrphanComponentMulti
+      note left on link #LightYellow
+        CHK_ORPHAN_COMPONENT_MULTI_8223
+      endnote
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: OrphanComponentMulti
+    label: OrphanComponentMulti
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces:
+  - id: endn
+    label: endn
+    source_line: 4
+  - id: te
+    label: te
+    source_line: 4
+  connections:
+  - from: endn
+    to: te
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: false
+    arrow_at_start: false
+    arrow_at_end: false
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  packages: []
+  notes: []

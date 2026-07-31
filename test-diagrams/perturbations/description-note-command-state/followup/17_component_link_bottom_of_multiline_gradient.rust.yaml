@@ -1,0 +1,66 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component CompBottomOfSource
+      component CompBottomOfSink
+      CompBottomOfSource --> CompBottomOfSink : CHK_COMP_BOTTOM_OF_EDGE_8217
+      note bottom of link #Green/LightBlue
+        CHK_COMP_BOTTOM_OF_NOTE_A_8217
+        CHK_COMP_BOTTOM_OF_NOTE_B_8217
+
+      endnote
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CompBottomOfSource
+    label: CompBottomOfSource
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CompBottomOfSink
+    label: CompBottomOfSink
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces:
+  - id: endn
+    label: endn
+    source_line: 8
+  - id: te
+    label: te
+    source_line: 8
+  connections:
+  - from: CompBottomOfSource
+    to: CompBottomOfSink
+    label: CHK_COMP_BOTTOM_OF_EDGE_8217
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 3
+  - from: endn
+    to: te
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: false
+    arrow_at_start: false
+    arrow_at_end: false
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 8
+  packages: []
+  notes: []

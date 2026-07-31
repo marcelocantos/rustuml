@@ -1,0 +1,4 @@
+
+thread 'main' (301270242) panicked at crates/rustuml-render/src/deployment.rs:4406:17:
+DESCRIPTION SVEK plan contains duplicate note ConflictDeployId
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

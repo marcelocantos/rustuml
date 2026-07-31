@@ -1,0 +1,74 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component CompLatestA
+      component CompLatestB
+      component CompLatestC
+      CompLatestA --> CompLatestB : CHK_COMP_FIRST_EDGE_8230
+      CompLatestB --> CompLatestC : CHK_COMP_LATEST_EDGE_8230
+      note on link : CHK_COMP_REPLACED_NOTE_8230
+      note on link : CHK_COMP_REPLACEMENT_NOTE_8230
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CompLatestA
+    label: CompLatestA
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CompLatestB
+    label: CompLatestB
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: CompLatestC
+    label: CompLatestC
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  interfaces: []
+  connections:
+  - from: CompLatestA
+    to: CompLatestB
+    label: CHK_COMP_FIRST_EDGE_8230
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CompLatestB
+    to: CompLatestC
+    label: CHK_COMP_LATEST_EDGE_8230
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 5
+  packages: []
+  notes:
+  - text: CHK_COMP_REPLACED_NOTE_8230
+    target: null
+    connection: 1
+    position: Bottom
+    source_line: 6
+  - text: CHK_COMP_REPLACEMENT_NOTE_8230
+    target: null
+    connection: 1
+    position: Bottom
+    source_line: 7

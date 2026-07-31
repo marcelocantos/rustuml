@@ -1,0 +1,6 @@
+@startuml
+node OrphanDeployMulti
+note right of link #LightBlue
+  CHK_ORPHAN_DEPLOY_MULTI_8225
+endnote
+@enduml

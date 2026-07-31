@@ -1,0 +1,40 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DeployBlankBodyA
+      node DeployBlankBodyB
+      DeployBlankBodyA --> DeployBlankBodyB
+      note on link
+
+      endnote
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployBlankBodyA
+    label: DeployBlankBodyA
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DeployBlankBodyB
+    label: DeployBlankBodyB
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: DeployBlankBodyA
+    to: DeployBlankBodyB
+    label: null
+    note:
+      text: ''
+      position: Bottom
+      source_line: 5
+    arrow_at_end: true
+    source_line: 3

@@ -1,0 +1,37 @@
+type: UseCase
+diagram:
+  meta:
+    source: |
+      @startuml
+      actor "Control Parent" as ActorParent
+      actor "Control Child" as ActorChild
+      ActorChild --|> ActorParent : CHK_ACTOR_GENERALIZATION_EDGE_8241
+      note on link : CHK_ACTOR_GENERALIZATION_NOTE_8241
+      @enduml
+  direction: TopToBottom
+  actors:
+  - id: ActorParent
+    label: Control Parent
+    stereotype: null
+    source_line: 1
+  - id: ActorChild
+    label: Control Child
+    stereotype: null
+    source_line: 2
+  use_cases: []
+  connections:
+  - from: ActorChild
+    to: ActorParent
+    label: CHK_ACTOR_GENERALIZATION_EDGE_8241
+    stereotype: null
+    queue_len: 2
+    arrow: true
+    extension: true
+    source_line: 3
+  packages: []
+  notes:
+  - text: CHK_ACTOR_GENERALIZATION_NOTE_8241
+    kind: !OnLink
+      connection: 0
+    position: Bottom
+    source_line: 4

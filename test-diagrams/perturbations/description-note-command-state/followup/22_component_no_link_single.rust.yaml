@@ -1,0 +1,19 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component OrphanComponentSingle
+      note on link : CHK_ORPHAN_COMPONENT_SINGLE_8222
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: OrphanComponentSingle
+    label: OrphanComponentSingle
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes: []

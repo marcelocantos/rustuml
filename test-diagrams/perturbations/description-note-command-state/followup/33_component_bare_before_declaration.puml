@@ -1,0 +1,8 @@
+@startuml
+note as BareBeforeMemo
+  CHK_BARE_BEFORE_NAMED_BODY_8233
+endnote
+note : CHK_BARE_BEFORE_DECL_INVALID_8233
+component BareBeforeAnchor
+BareBeforeAnchor --> BareBeforeMemo
+@enduml

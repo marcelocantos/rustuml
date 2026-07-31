@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="187px" preserveAspectRatio="none" style="width:535px;height:187px;background:#FFFFFF;" version="1.1" viewBox="0 0 535 187" width="535px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity RegisteredTarget-->
+<g class="entity" data-qualified-name="RegisteredTarget" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="160.4492" x="45.79" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="186.2392" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="184.2392" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="184.2392" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120.4492" x="60.79" y="40.5352">Registered Target</text>
+</g>
+<g class="entity" data-qualified-name="RegisteredMemo" data-source-line="2" id="ent0003">
+<path d="M6,148.49 L6,173.8005 A0,0 0 0 0 6,173.8005 L246.0259,173.8005 A0,0 0 0 0 246.0259,173.8005 L246.0259,158.49 L236.0259,148.49 L130.01,148.49 L126.01,53.7 L122.01,148.49 L6,148.49 A0,0 0 0 0 6,148.49" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M236.0259,148.49 L236.0259,158.49 L246.0259,158.49 L236.0259,148.49" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="219.0259" x="12" y="166.0584">CHK_FLOATING_REGISTERED_8211</text>
+</g>
+<g class="entity" data-qualified-name="GMN4" data-source-line="3" id="ent0005">
+<path d="M276.11,17.59 L276.11,26.24 L206.53,30.24 L276.11,34.24 L276.11,42.9005 A0,0 0 0 0 276.11,42.9005 L521.9122,42.9005 A0,0 0 0 0 521.9122,42.9005 L521.9122,27.59 L511.9122,17.59 L276.11,17.59 A0,0 0 0 0 276.11,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M511.9122,17.59 L511.9122,27.59 L521.9122,27.59 L511.9122,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="224.8022" x="282.11" y="35.1584">CHK_ATTACHED_REGISTERED_8211</text>
+</g>
+</g></svg>

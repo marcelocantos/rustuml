@@ -1,0 +1,9 @@
+@startuml
+package "Outer Component Scope" as OuterComponentScope {
+  component "Nested Component" as NestedComponent
+  note as NestedComponentMemo #HoneyDew
+    CHK_NESTED_COMPONENT_NOTE_8209
+  endnote
+  NestedComponent --> NestedComponentMemo
+}
+@enduml

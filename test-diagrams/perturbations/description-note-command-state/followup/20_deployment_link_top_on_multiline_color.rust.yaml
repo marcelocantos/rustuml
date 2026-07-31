@@ -1,0 +1,46 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DeployTopSource
+      node DeployTopSink
+      DeployTopSource --> DeployTopSink : CHK_DEPLOY_TOP_EDGE_8220
+      note top on link #LightYellow
+          CHK_DEPLOY_TOP_NOTE_A_8220
+
+            CHK_DEPLOY_TOP_NOTE_B_8220
+      endnote
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployTopSource
+    label: DeployTopSource
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DeployTopSink
+    label: DeployTopSink
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: DeployTopSource
+    to: DeployTopSink
+    label: CHK_DEPLOY_TOP_EDGE_8220
+    note:
+      text: |-
+        CHK_DEPLOY_TOP_NOTE_A_8220
+
+          CHK_DEPLOY_TOP_NOTE_B_8220
+      color: '#LightYellow'
+      position: Top
+      source_line: 5
+    arrow_at_end: true
+    source_line: 3

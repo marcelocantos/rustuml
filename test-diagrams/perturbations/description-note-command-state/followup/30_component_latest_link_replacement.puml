@@ -1,0 +1,9 @@
+@startuml
+component CompLatestA
+component CompLatestB
+component CompLatestC
+CompLatestA --> CompLatestB : CHK_COMP_FIRST_EDGE_8230
+CompLatestB --> CompLatestC : CHK_COMP_LATEST_EDGE_8230
+note on link : CHK_COMP_REPLACED_NOTE_8230
+note on link : CHK_COMP_REPLACEMENT_NOTE_8230
+@enduml

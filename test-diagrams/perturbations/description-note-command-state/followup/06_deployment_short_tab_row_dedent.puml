@@ -1,0 +1,9 @@
+@startuml
+node "Tab Dedent Anchor" as TabDedentAnchor
+note as TabDedentMemo
+		CHK_TAB_ALPHA_8206
+	
+		CHK_TAB_OMEGA_8206
+endnote
+TabDedentAnchor --> TabDedentMemo
+@enduml

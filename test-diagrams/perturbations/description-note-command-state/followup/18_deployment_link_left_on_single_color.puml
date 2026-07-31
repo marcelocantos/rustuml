@@ -1,0 +1,6 @@
+@startuml
+node DeployLeftSource
+node DeployLeftSink
+DeployLeftSource --> DeployLeftSink : CHK_DEPLOY_LEFT_EDGE_8218
+note left on link #MistyRose : CHK_DEPLOY_LEFT_NOTE_8218
+@enduml

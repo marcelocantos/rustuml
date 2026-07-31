@@ -1,0 +1,24 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ConflictCompId
+      note "CHK_COMP_ID_CONFLICT_8237" as ConflictCompId
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ConflictCompId
+    label: ConflictCompId
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections: []
+  packages: []
+  notes:
+  - id: ConflictCompId
+    text: CHK_COMP_ID_CONFLICT_8237
+    target: null
+    position: Right
+    source_line: 2

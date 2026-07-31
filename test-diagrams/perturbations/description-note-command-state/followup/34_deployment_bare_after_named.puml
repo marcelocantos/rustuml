@@ -1,0 +1,8 @@
+@startuml
+node DeployBareAnchor
+note as DeployBareMemo
+  CHK_DEPLOY_BARE_NAMED_BODY_8234
+endnote
+note : CHK_DEPLOY_BARE_INVALID_8234
+DeployBareAnchor --> DeployBareMemo
+@enduml

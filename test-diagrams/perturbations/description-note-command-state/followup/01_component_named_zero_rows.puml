@@ -1,0 +1,6 @@
+@startuml
+component "Row Anchor" as RowAnchor
+note as RowMemo
+endnote
+RowAnchor --> RowMemo
+@enduml

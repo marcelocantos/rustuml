@@ -1,0 +1,9 @@
+@startuml
+node DeployLatestA
+node DeployLatestB
+node DeployLatestC
+DeployLatestA --> DeployLatestB : CHK_DEPLOY_FIRST_EDGE_8231
+DeployLatestB --> DeployLatestC : CHK_DEPLOY_LATEST_EDGE_8231
+note left on link #Wheat : CHK_DEPLOY_REPLACED_NOTE_8231
+note right of link #LightBlue : CHK_DEPLOY_REPLACEMENT_NOTE_8231
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+component CompZeroBodyA
+component CompZeroBodyB
+CompZeroBodyA --> CompZeroBodyB
+note on link
+endnote
+@enduml

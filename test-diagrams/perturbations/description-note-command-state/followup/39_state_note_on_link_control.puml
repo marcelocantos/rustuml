@@ -1,0 +1,7 @@
+@startuml
+state "Control Alpha" as StateControlAlpha
+state "Control Beta" as StateControlBeta
+[*] --> StateControlAlpha
+StateControlAlpha --> StateControlBeta : CHK_STATE_EDGE_8239
+note on link : CHK_STATE_LINK_NOTE_8239
+@enduml

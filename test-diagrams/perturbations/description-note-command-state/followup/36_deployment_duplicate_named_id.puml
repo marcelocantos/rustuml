@@ -1,0 +1,6 @@
+@startuml
+node DuplicateDeployAnchor
+note "CHK_DUPLICATE_DEPLOY_FIRST_8236" as DuplicateDeployMemo
+note "CHK_DUPLICATE_DEPLOY_SECOND_8236" as DuplicateDeployMemo
+DuplicateDeployAnchor --> DuplicateDeployMemo
+@enduml

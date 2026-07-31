@@ -1,0 +1,52 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Registered Target" as RegisteredTarget
+      note "CHK_FLOATING_REGISTERED_8211" as RegisteredMemo #MistyRose
+      note right of RegisteredTarget : CHK_ATTACHED_REGISTERED_8211
+      RegisteredTarget --> RegisteredMemo
+      note on link : CHK_LINK_REGISTERED_8211
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RegisteredTarget
+    label: Registered Target
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections:
+  - from: RegisteredTarget
+    to: RegisteredMemo
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  packages: []
+  notes:
+  - id: RegisteredMemo
+    color: '#MistyRose'
+    text: CHK_FLOATING_REGISTERED_8211
+    target: null
+    position: Right
+    source_line: 2
+  - text: CHK_ATTACHED_REGISTERED_8211
+    target: RegisteredTarget
+    position: Right
+    source_line: 3
+  - text: CHK_LINK_REGISTERED_8211
+    target: null
+    connection: 0
+    position: Bottom
+    source_line: 5

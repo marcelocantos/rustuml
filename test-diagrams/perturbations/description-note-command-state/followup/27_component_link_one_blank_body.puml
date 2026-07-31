@@ -1,0 +1,8 @@
+@startuml
+component CompBlankBodyA
+component CompBlankBodyB
+CompBlankBodyA --> CompBlankBodyB
+note on link
+
+endnote
+@enduml

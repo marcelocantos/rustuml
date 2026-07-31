@@ -1,0 +1,2680 @@
+{
+  "case_count": 45,
+  "cases": {
+    "01_component_named_zero_rows": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {},
+      "java_markers": [],
+      "java_note_boxes": {
+        "RowMemo": {
+          "height": 69.58,
+          "width": 21.0
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {
+        "RowMemo": {
+          "height": 69.59,
+          "width": 21.0
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "02_component_named_one_blank_row": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {},
+      "java_markers": [],
+      "java_note_boxes": {
+        "RowMemo": {
+          "height": 69.58,
+          "width": 21.0
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {
+        "RowMemo": {
+          "height": 69.59,
+          "width": 21.0
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "03_component_named_internal_no_trailing": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "TrailingMemo": {
+          "CHK_BODY_DEEP_8203": [
+            {
+              "x": 14.2266,
+              "y": 107.8095
+            }
+          ],
+          "CHK_BODY_FIRST_8203": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_BODY_DEEP_8203": [
+          "CHK_BODY_DEEP_8203"
+        ],
+        "CHK_BODY_FIRST_8203": [
+          "CHK_BODY_FIRST_8203"
+        ]
+      },
+      "java_markers": [
+        "CHK_BODY_DEEP_8203",
+        "CHK_BODY_FIRST_8203"
+      ],
+      "java_note_boxes": {
+        "TrailingMemo": {
+          "height": 115.5516,
+          "width": 175.0703
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "TrailingMemo": {
+          "CHK_BODY_DEEP_8203": [
+            {
+              "x": 14.2266,
+              "y": 107.8095
+            }
+          ],
+          "CHK_BODY_FIRST_8203": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_BODY_DEEP_8203": [
+          "CHK_BODY_DEEP_8203"
+        ],
+        "CHK_BODY_FIRST_8203": [
+          "CHK_BODY_FIRST_8203"
+        ]
+      },
+      "rust_markers": [
+        "CHK_BODY_DEEP_8203",
+        "CHK_BODY_FIRST_8203"
+      ],
+      "rust_note_boxes": {
+        "TrailingMemo": {
+          "height": 115.5516,
+          "width": 175.0703
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "04_component_named_internal_with_trailing": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "TrailingMemo": {
+          "CHK_BODY_DEEP_8203": [
+            {
+              "x": 14.2266,
+              "y": 107.8995
+            }
+          ],
+          "CHK_BODY_FIRST_8203": [
+            {
+              "x": 6.0,
+              "y": 77.2784
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_BODY_DEEP_8203": [
+          "CHK_BODY_DEEP_8203"
+        ],
+        "CHK_BODY_FIRST_8203": [
+          "CHK_BODY_FIRST_8203"
+        ]
+      },
+      "java_markers": [
+        "CHK_BODY_DEEP_8203",
+        "CHK_BODY_FIRST_8203"
+      ],
+      "java_note_boxes": {
+        "TrailingMemo": {
+          "height": 130.9522,
+          "width": 175.0703
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "TrailingMemo": {
+          "CHK_BODY_DEEP_8203": [
+            {
+              "x": 14.2266,
+              "y": 107.8095
+            }
+          ],
+          "CHK_BODY_FIRST_8203": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_BODY_DEEP_8203": [
+          "CHK_BODY_DEEP_8203"
+        ],
+        "CHK_BODY_FIRST_8203": [
+          "CHK_BODY_FIRST_8203"
+        ]
+      },
+      "rust_markers": [
+        "CHK_BODY_DEEP_8203",
+        "CHK_BODY_FIRST_8203"
+      ],
+      "rust_note_boxes": {
+        "TrailingMemo": {
+          "height": 115.5516,
+          "width": 175.0703
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "05_component_short_space_row_dedent": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "SpaceDedentMemo": {
+          "CHK_SPACE_ALPHA_8205": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ],
+          "CHK_SPACE_OMEGA_8205": [
+            {
+              "x": 6.0,
+              "y": 107.8095
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_SPACE_ALPHA_8205": [
+          "CHK_SPACE_ALPHA_8205"
+        ],
+        "CHK_SPACE_OMEGA_8205": [
+          "CHK_SPACE_OMEGA_8205"
+        ]
+      },
+      "java_markers": [
+        "CHK_SPACE_ALPHA_8205",
+        "CHK_SPACE_OMEGA_8205"
+      ],
+      "java_note_boxes": {
+        "SpaceDedentMemo": {
+          "height": 115.5516,
+          "width": 186.3184
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "SpaceDedentMemo": {
+          "CHK_SPACE_ALPHA_8205": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ],
+          "CHK_SPACE_OMEGA_8205": [
+            {
+              "x": 6.0,
+              "y": 107.8095
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_SPACE_ALPHA_8205": [
+          "CHK_SPACE_ALPHA_8205"
+        ],
+        "CHK_SPACE_OMEGA_8205": [
+          "CHK_SPACE_OMEGA_8205"
+        ]
+      },
+      "rust_markers": [
+        "CHK_SPACE_ALPHA_8205",
+        "CHK_SPACE_OMEGA_8205"
+      ],
+      "rust_note_boxes": {
+        "SpaceDedentMemo": {
+          "height": 115.5516,
+          "width": 186.3184
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "06_deployment_short_tab_row_dedent": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "TabDedentMemo": {
+          "CHK_TAB_ALPHA_8206": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ],
+          "CHK_TAB_OMEGA_8206": [
+            {
+              "x": 6.0,
+              "y": 107.8095
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_TAB_ALPHA_8206": [
+          "CHK_TAB_ALPHA_8206"
+        ],
+        "CHK_TAB_OMEGA_8206": [
+          "CHK_TAB_OMEGA_8206"
+        ]
+      },
+      "java_markers": [
+        "CHK_TAB_ALPHA_8206",
+        "CHK_TAB_OMEGA_8206"
+      ],
+      "java_note_boxes": {
+        "TabDedentMemo": {
+          "height": 115.5516,
+          "width": 171.7886
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "TabDedentMemo": {
+          "CHK_TAB_ALPHA_8206": [
+            {
+              "x": 38.9063,
+              "y": 77.1884
+            }
+          ],
+          "CHK_TAB_OMEGA_8206": [
+            {
+              "x": 38.9063,
+              "y": 107.8095
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_TAB_ALPHA_8206": [
+          "CHK_TAB_ALPHA_8206"
+        ],
+        "CHK_TAB_OMEGA_8206": [
+          "CHK_TAB_OMEGA_8206"
+        ]
+      },
+      "rust_markers": [
+        "CHK_TAB_ALPHA_8206",
+        "CHK_TAB_OMEGA_8206"
+      ],
+      "rust_note_boxes": {
+        "TabDedentMemo": {
+          "height": 115.5516,
+          "width": 204.6948
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "07_component_nbsp_dedent_blocker": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "NbspMemo": {
+          "CHK_NBSP_INDENT_8207": [
+            {
+              "x": 14.2266,
+              "y": 92.5889
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_NBSP_INDENT_8207": [
+          "CHK_NBSP_INDENT_8207"
+        ]
+      },
+      "java_markers": [
+        "CHK_NBSP_INDENT_8207"
+      ],
+      "java_note_boxes": {
+        "NbspMemo": {
+          "height": 100.3311,
+          "width": 187.8672
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "NbspMemo": {
+          "CHK_NBSP_INDENT_8207": [
+            {
+              "x": 6.0,
+              "y": 92.5889
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_NBSP_INDENT_8207": [
+          "CHK_NBSP_INDENT_8207"
+        ]
+      },
+      "rust_markers": [
+        "CHK_NBSP_INDENT_8207"
+      ],
+      "rust_note_boxes": {
+        "NbspMemo": {
+          "height": 100.3311,
+          "width": 179.6406
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "08_deployment_named_internal_trailing": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "DeployRowsMemo": {
+          "CHK_DEPLOY_DEEP_8208": [
+            {
+              "x": 14.2266,
+              "y": 107.8995
+            }
+          ],
+          "CHK_DEPLOY_FIRST_8208": [
+            {
+              "x": 6.0,
+              "y": 77.2784
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_DEPLOY_DEEP_8208": [
+          "CHK_DEPLOY_DEEP_8208"
+        ],
+        "CHK_DEPLOY_FIRST_8208": [
+          "CHK_DEPLOY_FIRST_8208"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_DEEP_8208",
+        "CHK_DEPLOY_FIRST_8208"
+      ],
+      "java_note_boxes": {
+        "DeployRowsMemo": {
+          "height": 130.9522,
+          "width": 188.7559
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "DeployRowsMemo": {
+          "CHK_DEPLOY_DEEP_8208": [
+            {
+              "x": 14.2266,
+              "y": 107.8095
+            }
+          ],
+          "CHK_DEPLOY_FIRST_8208": [
+            {
+              "x": 6.0,
+              "y": 77.1884
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_DEPLOY_DEEP_8208": [
+          "CHK_DEPLOY_DEEP_8208"
+        ],
+        "CHK_DEPLOY_FIRST_8208": [
+          "CHK_DEPLOY_FIRST_8208"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_DEEP_8208",
+        "CHK_DEPLOY_FIRST_8208"
+      ],
+      "rust_note_boxes": {
+        "DeployRowsMemo": {
+          "height": 115.5516,
+          "width": 188.7559
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "09_component_nested_named_owner": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "OuterComponentScope.NestedComponentMemo": {
+          "CHK_NESTED_COMPONENT_NOTE_8209": [
+            {
+              "x": 6.0,
+              "y": 77.0784
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_NESTED_COMPONENT_NOTE_8209": [
+          "CHK_NESTED_COMPONENT_NOTE_8209"
+        ]
+      },
+      "java_markers": [
+        "CHK_NESTED_COMPONENT_NOTE_8209"
+      ],
+      "java_note_boxes": {
+        "OuterComponentScope": {
+          "height": 182.8,
+          "width": 304.0
+        },
+        "OuterComponentScope.NestedComponentMemo": {
+          "height": 84.8205,
+          "width": 272.5894
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "OuterComponentScope.NestedComponentMemo": {
+          "CHK_NESTED_COMPONENT_NOTE_8209": [
+            {
+              "x": 6.0,
+              "y": 77.0884
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_NESTED_COMPONENT_NOTE_8209": [
+          "CHK_NESTED_COMPONENT_NOTE_8209"
+        ]
+      },
+      "rust_markers": [
+        "CHK_NESTED_COMPONENT_NOTE_8209"
+      ],
+      "rust_note_boxes": {
+        "OuterComponentScope": {
+          "height": 182.7988,
+          "width": 304.0
+        },
+        "OuterComponentScope.NestedComponentMemo": {
+          "height": 84.8305,
+          "width": 272.5894
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "10_deployment_nested_named_owner": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "OuterDeployScope.NestedDeployMemo": {
+          "CHK_NESTED_DEPLOY_NOTE_8210": [
+            {
+              "x": 6.0,
+              "y": 77.0784
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_NESTED_DEPLOY_NOTE_8210": [
+          "CHK_NESTED_DEPLOY_NOTE_8210"
+        ]
+      },
+      "java_markers": [
+        "CHK_NESTED_DEPLOY_NOTE_8210"
+      ],
+      "java_note_boxes": {
+        "OuterDeployScope.NestedDeployMemo": {
+          "height": 84.8205,
+          "width": 239.6387
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "OuterDeployScope.NestedDeployMemo": {
+          "CHK_NESTED_DEPLOY_NOTE_8210": [
+            {
+              "x": 6.0,
+              "y": 77.0884
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_NESTED_DEPLOY_NOTE_8210": [
+          "CHK_NESTED_DEPLOY_NOTE_8210"
+        ]
+      },
+      "rust_markers": [
+        "CHK_NESTED_DEPLOY_NOTE_8210"
+      ],
+      "rust_note_boxes": {
+        "OuterDeployScope.NestedDeployMemo": {
+          "height": 84.8305,
+          "width": 239.6387
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "11_component_registered_note_chain": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No link defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ATTACHED_REGISTERED_8211": [
+          "note right of RegisteredTarget : CHK_ATTACHED_REGISTERED_8211"
+        ],
+        "CHK_FLOATING_REGISTERED_8211": [
+          "note \"CHK_FLOATING_REGISTERED_8211\" as RegisteredMemo #MistyRose"
+        ],
+        "CHK_LINK_REGISTERED_8211": [
+          "note on link : CHK_LINK_REGISTERED_8211"
+        ]
+      },
+      "java_markers": [
+        "CHK_ATTACHED_REGISTERED_8211",
+        "CHK_FLOATING_REGISTERED_8211",
+        "CHK_LINK_REGISTERED_8211"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "java_valid": false,
+          "kind": "acceptance",
+          "rust_valid": true
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "GMN4": {
+          "CHK_ATTACHED_REGISTERED_8211": [
+            {
+              "x": 75.58,
+              "y": 17.5684
+            }
+          ]
+        },
+        "RegisteredMemo": {
+          "CHK_FLOATING_REGISTERED_8211": [
+            {
+              "x": 6.0,
+              "y": 112.3584
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_ATTACHED_REGISTERED_8211": [
+          "CHK_ATTACHED_REGISTERED_8211"
+        ],
+        "CHK_FLOATING_REGISTERED_8211": [
+          "CHK_FLOATING_REGISTERED_8211"
+        ]
+      },
+      "rust_markers": [
+        "CHK_ATTACHED_REGISTERED_8211",
+        "CHK_FLOATING_REGISTERED_8211"
+      ],
+      "rust_note_boxes": {
+        "GMN4": {
+          "height": 25.3105,
+          "width": 315.3822
+        },
+        "RegisteredMemo": {
+          "height": 120.1005,
+          "width": 240.0259
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "12_deployment_registered_note_chain": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "DeployRegisteredMemo": {
+          "CHK_DEPLOY_FLOATING_REGISTERED_8212": [
+            {
+              "x": 6.0,
+              "y": 17.5684
+            }
+          ]
+        },
+        "GMN6": {
+          "CHK_DEPLOY_ATTACHED_REGISTERED_8212": [
+            {
+              "x": 6.0,
+              "y": 17.5684
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_DEPLOY_ATTACHED_REGISTERED_8212": [
+          "CHK_DEPLOY_ATTACHED_REGISTERED_8212"
+        ],
+        "CHK_DEPLOY_EDGE_LABEL_8212": [
+          "CHK_DEPLOY_EDGE_LABEL_8212"
+        ],
+        "CHK_DEPLOY_FLOATING_REGISTERED_8212": [
+          "CHK_DEPLOY_FLOATING_REGISTERED_8212"
+        ],
+        "CHK_DEPLOY_LINK_REGISTERED_8212": [
+          "CHK_DEPLOY_LINK_REGISTERED_8212"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_ATTACHED_REGISTERED_8212",
+        "CHK_DEPLOY_EDGE_LABEL_8212",
+        "CHK_DEPLOY_FLOATING_REGISTERED_8212",
+        "CHK_DEPLOY_LINK_REGISTERED_8212"
+      ],
+      "java_note_boxes": {
+        "DeployRegisteredMemo": {
+          "height": 25.3105,
+          "width": 295.625
+        },
+        "GMN6": {
+          "height": 25.3105,
+          "width": 336.09
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "DeployRegisteredMemo": {
+          "CHK_DEPLOY_FLOATING_REGISTERED_8212": [
+            {
+              "x": 6.0,
+              "y": 17.5684
+            }
+          ]
+        },
+        "GMN6": {
+          "CHK_DEPLOY_ATTACHED_REGISTERED_8212": [
+            {
+              "x": 6.0,
+              "y": 17.5684
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_DEPLOY_ATTACHED_REGISTERED_8212": [
+          "CHK_DEPLOY_ATTACHED_REGISTERED_8212"
+        ],
+        "CHK_DEPLOY_EDGE_LABEL_8212": [
+          "CHK_DEPLOY_EDGE_LABEL_8212"
+        ],
+        "CHK_DEPLOY_FLOATING_REGISTERED_8212": [
+          "CHK_DEPLOY_FLOATING_REGISTERED_8212"
+        ],
+        "CHK_DEPLOY_LINK_REGISTERED_8212": [
+          "CHK_DEPLOY_LINK_REGISTERED_8212"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_ATTACHED_REGISTERED_8212",
+        "CHK_DEPLOY_EDGE_LABEL_8212",
+        "CHK_DEPLOY_FLOATING_REGISTERED_8212",
+        "CHK_DEPLOY_LINK_REGISTERED_8212"
+      ],
+      "rust_note_boxes": {
+        "DeployRegisteredMemo": {
+          "height": 25.3105,
+          "width": 295.625
+        },
+        "GMN6": {
+          "height": 25.3105,
+          "width": 370.8
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "13_component_link_bottom_on_single": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_BOTTOM_EDGE_8213": [
+          "CHK_COMP_BOTTOM_EDGE_8213"
+        ],
+        "CHK_COMP_BOTTOM_NOTE_8213": [
+          "CHK_COMP_BOTTOM_NOTE_8213"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_BOTTOM_EDGE_8213",
+        "CHK_COMP_BOTTOM_NOTE_8213"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_COMP_BOTTOM_EDGE_8213": [
+          "CHK_COMP_BOTTOM_EDGE_8213"
+        ],
+        "CHK_COMP_BOTTOM_NOTE_8213": [
+          "CHK_COMP_BOTTOM_NOTE_8213"
+        ]
+      },
+      "rust_markers": [
+        "CHK_COMP_BOTTOM_EDGE_8213",
+        "CHK_COMP_BOTTOM_NOTE_8213"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "14_component_link_left_on_single_color": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_LEFT_EDGE_8214": [
+          "CHK_COMP_LEFT_EDGE_8214"
+        ],
+        "CHK_COMP_LEFT_NOTE_8214": [
+          "CHK_COMP_LEFT_NOTE_8214"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_LEFT_EDGE_8214",
+        "CHK_COMP_LEFT_NOTE_8214"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "java_only": [
+            "CHK_COMP_LEFT_NOTE_8214"
+          ],
+          "kind": "visible_markers",
+          "rust_only": []
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_COMP_LEFT_EDGE_8214": [
+          "CHK_COMP_LEFT_EDGE_8214"
+        ]
+      },
+      "rust_markers": [
+        "CHK_COMP_LEFT_EDGE_8214"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "15_component_link_right_of_single_gradient": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_RIGHT_EDGE_8215": [
+          "CHK_COMP_RIGHT_EDGE_8215"
+        ],
+        "CHK_COMP_RIGHT_NOTE_8215": [
+          "CHK_COMP_RIGHT_NOTE_8215"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_RIGHT_EDGE_8215",
+        "CHK_COMP_RIGHT_NOTE_8215"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "java_only": [
+            "CHK_COMP_RIGHT_NOTE_8215"
+          ],
+          "kind": "visible_markers",
+          "rust_only": []
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_COMP_RIGHT_EDGE_8215": [
+          "CHK_COMP_RIGHT_EDGE_8215"
+        ]
+      },
+      "rust_markers": [
+        "CHK_COMP_RIGHT_EDGE_8215"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "16_component_link_top_on_multiline_color": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_TOP_EDGE_8216": [
+          "CHK_COMP_TOP_EDGE_8216"
+        ],
+        "CHK_COMP_TOP_NOTE_A_8216": [
+          "CHK_COMP_TOP_NOTE_A_8216"
+        ],
+        "CHK_COMP_TOP_NOTE_B_8216": [
+          "CHK_COMP_TOP_NOTE_B_8216"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_TOP_EDGE_8216",
+        "CHK_COMP_TOP_NOTE_A_8216",
+        "CHK_COMP_TOP_NOTE_B_8216"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "java_only": [
+            "CHK_COMP_TOP_NOTE_A_8216",
+            "CHK_COMP_TOP_NOTE_B_8216"
+          ],
+          "kind": "visible_markers",
+          "rust_only": []
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_COMP_TOP_EDGE_8216": [
+          "CHK_COMP_TOP_EDGE_8216"
+        ]
+      },
+      "rust_markers": [
+        "CHK_COMP_TOP_EDGE_8216"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "17_component_link_bottom_of_multiline_gradient": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_BOTTOM_OF_EDGE_8217": [
+          "CHK_COMP_BOTTOM_OF_EDGE_8217"
+        ],
+        "CHK_COMP_BOTTOM_OF_NOTE_A_8217": [
+          "CHK_COMP_BOTTOM_OF_NOTE_A_8217"
+        ],
+        "CHK_COMP_BOTTOM_OF_NOTE_B_8217": [
+          "CHK_COMP_BOTTOM_OF_NOTE_B_8217"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_BOTTOM_OF_EDGE_8217",
+        "CHK_COMP_BOTTOM_OF_NOTE_A_8217",
+        "CHK_COMP_BOTTOM_OF_NOTE_B_8217"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "java_only": [
+            "CHK_COMP_BOTTOM_OF_NOTE_A_8217",
+            "CHK_COMP_BOTTOM_OF_NOTE_B_8217"
+          ],
+          "kind": "visible_markers",
+          "rust_only": []
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_COMP_BOTTOM_OF_EDGE_8217": [
+          "CHK_COMP_BOTTOM_OF_EDGE_8217"
+        ]
+      },
+      "rust_markers": [
+        "CHK_COMP_BOTTOM_OF_EDGE_8217"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "18_deployment_link_left_on_single_color": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_LEFT_EDGE_8218": [
+          "CHK_DEPLOY_LEFT_EDGE_8218"
+        ],
+        "CHK_DEPLOY_LEFT_NOTE_8218": [
+          "CHK_DEPLOY_LEFT_NOTE_8218"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_LEFT_EDGE_8218",
+        "CHK_DEPLOY_LEFT_NOTE_8218"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_DEPLOY_LEFT_EDGE_8218": [
+          "CHK_DEPLOY_LEFT_EDGE_8218"
+        ],
+        "CHK_DEPLOY_LEFT_NOTE_8218": [
+          "CHK_DEPLOY_LEFT_NOTE_8218"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_LEFT_EDGE_8218",
+        "CHK_DEPLOY_LEFT_NOTE_8218"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "19_deployment_link_right_of_single_gradient": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_RIGHT_EDGE_8219": [
+          "CHK_DEPLOY_RIGHT_EDGE_8219"
+        ],
+        "CHK_DEPLOY_RIGHT_NOTE_8219": [
+          "CHK_DEPLOY_RIGHT_NOTE_8219"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_RIGHT_EDGE_8219",
+        "CHK_DEPLOY_RIGHT_NOTE_8219"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_DEPLOY_RIGHT_EDGE_8219": [
+          "CHK_DEPLOY_RIGHT_EDGE_8219"
+        ],
+        "CHK_DEPLOY_RIGHT_NOTE_8219": [
+          "CHK_DEPLOY_RIGHT_NOTE_8219"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_RIGHT_EDGE_8219",
+        "CHK_DEPLOY_RIGHT_NOTE_8219"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "20_deployment_link_top_on_multiline_color": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_TOP_EDGE_8220": [
+          "CHK_DEPLOY_TOP_EDGE_8220"
+        ],
+        "CHK_DEPLOY_TOP_NOTE_A_8220": [
+          "CHK_DEPLOY_TOP_NOTE_A_8220"
+        ],
+        "CHK_DEPLOY_TOP_NOTE_B_8220": [
+          "CHK_DEPLOY_TOP_NOTE_B_8220"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_TOP_EDGE_8220",
+        "CHK_DEPLOY_TOP_NOTE_A_8220",
+        "CHK_DEPLOY_TOP_NOTE_B_8220"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_DEPLOY_TOP_EDGE_8220": [
+          "CHK_DEPLOY_TOP_EDGE_8220"
+        ],
+        "CHK_DEPLOY_TOP_NOTE_A_8220": [
+          "CHK_DEPLOY_TOP_NOTE_A_8220"
+        ],
+        "CHK_DEPLOY_TOP_NOTE_B_8220": [
+          "CHK_DEPLOY_TOP_NOTE_B_8220"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_TOP_EDGE_8220",
+        "CHK_DEPLOY_TOP_NOTE_A_8220",
+        "CHK_DEPLOY_TOP_NOTE_B_8220"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "21_deployment_link_bottom_of_multiline_gradient": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_BOTTOM_EDGE_8221": [
+          "CHK_DEPLOY_BOTTOM_EDGE_8221"
+        ],
+        "CHK_DEPLOY_BOTTOM_NOTE_A_8221": [
+          "CHK_DEPLOY_BOTTOM_NOTE_A_8221"
+        ],
+        "CHK_DEPLOY_BOTTOM_NOTE_B_8221": [
+          "CHK_DEPLOY_BOTTOM_NOTE_B_8221"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_BOTTOM_EDGE_8221",
+        "CHK_DEPLOY_BOTTOM_NOTE_A_8221",
+        "CHK_DEPLOY_BOTTOM_NOTE_B_8221"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_DEPLOY_BOTTOM_EDGE_8221": [
+          "CHK_DEPLOY_BOTTOM_EDGE_8221"
+        ],
+        "CHK_DEPLOY_BOTTOM_NOTE_A_8221": [
+          "CHK_DEPLOY_BOTTOM_NOTE_A_8221"
+        ],
+        "CHK_DEPLOY_BOTTOM_NOTE_B_8221": [
+          "CHK_DEPLOY_BOTTOM_NOTE_B_8221"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_BOTTOM_EDGE_8221",
+        "CHK_DEPLOY_BOTTOM_NOTE_A_8221",
+        "CHK_DEPLOY_BOTTOM_NOTE_B_8221"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "22_component_no_link_single": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No link defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ORPHAN_COMPONENT_SINGLE_8222": [
+          "note on link : CHK_ORPHAN_COMPONENT_SINGLE_8222"
+        ]
+      },
+      "java_markers": [
+        "CHK_ORPHAN_COMPONENT_SINGLE_8222"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "java_valid": false,
+          "kind": "acceptance",
+          "rust_valid": true
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "23_component_no_link_multiline": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No link defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ORPHAN_COMPONENT_MULTI_8223": [
+          "CHK_ORPHAN_COMPONENT_MULTI_8223"
+        ]
+      },
+      "java_markers": [
+        "CHK_ORPHAN_COMPONENT_MULTI_8223"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "java_valid": false,
+          "kind": "acceptance",
+          "rust_valid": true
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "24_deployment_no_link_single": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No link defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ORPHAN_DEPLOY_SINGLE_8224": [
+          "note on link : CHK_ORPHAN_DEPLOY_SINGLE_8224"
+        ]
+      },
+      "java_markers": [
+        "CHK_ORPHAN_DEPLOY_SINGLE_8224"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 1,
+      "rust_valid": false,
+      "rust_yaml_status": 1
+    },
+    "25_deployment_no_link_multiline": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No link defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ORPHAN_DEPLOY_MULTI_8225": [
+          "CHK_ORPHAN_DEPLOY_MULTI_8225"
+        ]
+      },
+      "java_markers": [
+        "CHK_ORPHAN_DEPLOY_MULTI_8225"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 1,
+      "rust_valid": false,
+      "rust_yaml_status": 1
+    },
+    "26_component_link_zero_body": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No note defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {},
+      "java_markers": [],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "java_valid": false,
+          "kind": "acceptance",
+          "rust_valid": true
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "27_component_link_one_blank_body": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {},
+      "java_markers": [],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "28_deployment_link_zero_body": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "No note defined (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {},
+      "java_markers": [],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 1,
+      "rust_valid": false,
+      "rust_yaml_status": 1
+    },
+    "29_deployment_link_one_blank_body": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {},
+      "java_markers": [],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "30_component_latest_link_replacement": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_FIRST_EDGE_8230": [
+          "CHK_COMP_FIRST_EDGE_8230"
+        ],
+        "CHK_COMP_LATEST_EDGE_8230": [
+          "CHK_COMP_LATEST_EDGE_8230"
+        ],
+        "CHK_COMP_REPLACEMENT_NOTE_8230": [
+          "CHK_COMP_REPLACEMENT_NOTE_8230"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_FIRST_EDGE_8230",
+        "CHK_COMP_LATEST_EDGE_8230",
+        "CHK_COMP_REPLACEMENT_NOTE_8230"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "java_only": [
+            "CHK_COMP_REPLACEMENT_NOTE_8230"
+          ],
+          "kind": "visible_markers",
+          "rust_only": [
+            "CHK_COMP_REPLACED_NOTE_8230"
+          ]
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_COMP_FIRST_EDGE_8230": [
+          "CHK_COMP_FIRST_EDGE_8230"
+        ],
+        "CHK_COMP_LATEST_EDGE_8230": [
+          "CHK_COMP_LATEST_EDGE_8230"
+        ],
+        "CHK_COMP_REPLACED_NOTE_8230": [
+          "CHK_COMP_REPLACED_NOTE_8230"
+        ]
+      },
+      "rust_markers": [
+        "CHK_COMP_FIRST_EDGE_8230",
+        "CHK_COMP_LATEST_EDGE_8230",
+        "CHK_COMP_REPLACED_NOTE_8230"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "31_deployment_latest_link_replacement": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_FIRST_EDGE_8231": [
+          "CHK_DEPLOY_FIRST_EDGE_8231"
+        ],
+        "CHK_DEPLOY_LATEST_EDGE_8231": [
+          "CHK_DEPLOY_LATEST_EDGE_8231"
+        ],
+        "CHK_DEPLOY_REPLACEMENT_NOTE_8231": [
+          "CHK_DEPLOY_REPLACEMENT_NOTE_8231"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_FIRST_EDGE_8231",
+        "CHK_DEPLOY_LATEST_EDGE_8231",
+        "CHK_DEPLOY_REPLACEMENT_NOTE_8231"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_DEPLOY_FIRST_EDGE_8231": [
+          "CHK_DEPLOY_FIRST_EDGE_8231"
+        ],
+        "CHK_DEPLOY_LATEST_EDGE_8231": [
+          "CHK_DEPLOY_LATEST_EDGE_8231"
+        ],
+        "CHK_DEPLOY_REPLACEMENT_NOTE_8231": [
+          "CHK_DEPLOY_REPLACEMENT_NOTE_8231"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_FIRST_EDGE_8231",
+        "CHK_DEPLOY_LATEST_EDGE_8231",
+        "CHK_DEPLOY_REPLACEMENT_NOTE_8231"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "32_component_bare_after_named": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "Syntax Error? (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_BARE_AFTER_NAMED_BODY_8232": [
+          "CHK_BARE_AFTER_NAMED_BODY_8232"
+        ],
+        "CHK_BARE_AFTER_NAMED_INVALID_8232": [
+          "note : CHK_BARE_AFTER_NAMED_INVALID_8232"
+        ]
+      },
+      "java_markers": [
+        "CHK_BARE_AFTER_NAMED_BODY_8232",
+        "CHK_BARE_AFTER_NAMED_INVALID_8232"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 1,
+      "rust_valid": false,
+      "rust_yaml_status": 1
+    },
+    "33_component_bare_before_declaration": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_BARE_BEFORE_DECL_INVALID_8233": [
+          "note : CHK_BARE_BEFORE_DECL_INVALID_8233"
+        ],
+        "CHK_BARE_BEFORE_NAMED_BODY_8233": [
+          "CHK_BARE_BEFORE_NAMED_BODY_8233"
+        ]
+      },
+      "java_markers": [
+        "CHK_BARE_BEFORE_DECL_INVALID_8233",
+        "CHK_BARE_BEFORE_NAMED_BODY_8233"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 1,
+      "rust_valid": false,
+      "rust_yaml_status": 1
+    },
+    "34_deployment_bare_after_named": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "Syntax Error? (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_BARE_INVALID_8234": [
+          "note : CHK_DEPLOY_BARE_INVALID_8234"
+        ],
+        "CHK_DEPLOY_BARE_NAMED_BODY_8234": [
+          "CHK_DEPLOY_BARE_NAMED_BODY_8234"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_BARE_INVALID_8234",
+        "CHK_DEPLOY_BARE_NAMED_BODY_8234"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "java_valid": false,
+          "kind": "acceptance",
+          "rust_valid": true
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "DeployBareMemo": {
+          "CHK_DEPLOY_BARE_NAMED_BODY_8234": [
+            {
+              "x": 6.0,
+              "y": 77.0884
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_DEPLOY_BARE_NAMED_BODY_8234": [
+          "CHK_DEPLOY_BARE_NAMED_BODY_8234"
+        ]
+      },
+      "rust_markers": [
+        "CHK_DEPLOY_BARE_NAMED_BODY_8234"
+      ],
+      "rust_note_boxes": {
+        "DeployBareMemo": {
+          "height": 84.8305,
+          "width": 276.1948
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "35_component_duplicate_named_id": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "Note already created: DuplicateCompMemo (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DUPLICATE_COMP_FIRST_8235": [
+          "note \"CHK_DUPLICATE_COMP_FIRST_8235\" as DuplicateCompMemo"
+        ],
+        "CHK_DUPLICATE_COMP_SECOND_8235": [
+          "note \"CHK_DUPLICATE_COMP_SECOND_8235\" as DuplicateCompMemo"
+        ]
+      },
+      "java_markers": [
+        "CHK_DUPLICATE_COMP_FIRST_8235",
+        "CHK_DUPLICATE_COMP_SECOND_8235"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "kind": "rust_panic",
+          "message": "DESCRIPTION SVEK plan contains duplicate note DuplicateCompMemo",
+          "rust_status": 101
+        }
+      ],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 101,
+      "rust_valid": false,
+      "rust_yaml_status": 0
+    },
+    "36_deployment_duplicate_named_id": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "Note already created: DuplicateDeployMemo (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DUPLICATE_DEPLOY_FIRST_8236": [
+          "note \"CHK_DUPLICATE_DEPLOY_FIRST_8236\" as DuplicateDeployMemo"
+        ],
+        "CHK_DUPLICATE_DEPLOY_SECOND_8236": [
+          "note \"CHK_DUPLICATE_DEPLOY_SECOND_8236\" as DuplicateDeployMemo"
+        ]
+      },
+      "java_markers": [
+        "CHK_DUPLICATE_DEPLOY_FIRST_8236",
+        "CHK_DUPLICATE_DEPLOY_SECOND_8236"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "kind": "rust_panic",
+          "message": "DESCRIPTION SVEK plan contains duplicate note DuplicateDeployMemo",
+          "rust_status": 101
+        }
+      ],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 101,
+      "rust_valid": false,
+      "rust_yaml_status": 0
+    },
+    "37_component_note_element_id_conflict": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "Note already created: ConflictCompId (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_COMP_ID_CONFLICT_8237": [
+          "note \"CHK_COMP_ID_CONFLICT_8237\" as ConflictCompId"
+        ]
+      },
+      "java_markers": [
+        "CHK_COMP_ID_CONFLICT_8237"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "kind": "rust_panic",
+          "message": "DESCRIPTION SVEK plan contains duplicate note ConflictCompId",
+          "rust_status": 101
+        }
+      ],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 101,
+      "rust_valid": false,
+      "rust_yaml_status": 0
+    },
+    "38_deployment_note_element_id_conflict": {
+      "java_border_ink": null,
+      "java_clipped_text": [],
+      "java_diagram_type": null,
+      "java_error_text": [
+        "Note already created: ConflictDeployId (Assumed diagram type: component)"
+      ],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_DEPLOY_ID_CONFLICT_8238": [
+          "note \"CHK_DEPLOY_ID_CONFLICT_8238\" as ConflictDeployId"
+        ]
+      },
+      "java_markers": [
+        "CHK_DEPLOY_ID_CONFLICT_8238"
+      ],
+      "java_note_boxes": {},
+      "java_status": 200,
+      "java_valid": false,
+      "mismatches": [
+        {
+          "kind": "rust_panic",
+          "message": "DESCRIPTION SVEK plan contains duplicate note ConflictDeployId",
+          "rust_status": 101
+        }
+      ],
+      "rust_border_ink": null,
+      "rust_clipped_text": [],
+      "rust_diagram_type": null,
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {},
+      "rust_markers": [],
+      "rust_note_boxes": {},
+      "rust_status": 101,
+      "rust_valid": false,
+      "rust_yaml_status": 0
+    },
+    "39_state_note_on_link_control": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "STATE",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_STATE_EDGE_8239": [
+          "CHK_STATE_EDGE_8239"
+        ],
+        "CHK_STATE_LINK_NOTE_8239": [
+          "CHK_STATE_LINK_NOTE_8239"
+        ]
+      },
+      "java_markers": [
+        "CHK_STATE_EDGE_8239",
+        "CHK_STATE_LINK_NOTE_8239"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "STATE",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_STATE_EDGE_8239": [
+          "CHK_STATE_EDGE_8239"
+        ],
+        "CHK_STATE_LINK_NOTE_8239": [
+          "CHK_STATE_LINK_NOTE_8239"
+        ]
+      },
+      "rust_markers": [
+        "CHK_STATE_EDGE_8239",
+        "CHK_STATE_LINK_NOTE_8239"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "40_usecase_note_on_link_control": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_USECASE_EDGE_8240": [
+          "CHK_USECASE_EDGE_8240"
+        ],
+        "CHK_USECASE_LINK_NOTE_8240": [
+          "CHK_USECASE_LINK_NOTE_8240"
+        ]
+      },
+      "java_markers": [
+        "CHK_USECASE_EDGE_8240",
+        "CHK_USECASE_LINK_NOTE_8240"
+      ],
+      "java_note_boxes": {
+        "UsecaseActor": {
+          "height": 42.0,
+          "width": 26.0
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_USECASE_EDGE_8240": [
+          "CHK_USECASE_EDGE_8240"
+        ],
+        "CHK_USECASE_LINK_NOTE_8240": [
+          "CHK_USECASE_LINK_NOTE_8240"
+        ]
+      },
+      "rust_markers": [
+        "CHK_USECASE_EDGE_8240",
+        "CHK_USECASE_LINK_NOTE_8240"
+      ],
+      "rust_note_boxes": {
+        "UsecaseActor": {
+          "height": 42.0,
+          "width": 26.0
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "41_actor_generalization_link_control": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ACTOR_GENERALIZATION_EDGE_8241": [
+          "CHK_ACTOR_GENERALIZATION_EDGE_8241"
+        ],
+        "CHK_ACTOR_GENERALIZATION_NOTE_8241": [
+          "CHK_ACTOR_GENERALIZATION_NOTE_8241"
+        ]
+      },
+      "java_markers": [
+        "CHK_ACTOR_GENERALIZATION_EDGE_8241",
+        "CHK_ACTOR_GENERALIZATION_NOTE_8241"
+      ],
+      "java_note_boxes": {
+        "ActorChild": {
+          "height": 42.0,
+          "width": 26.0
+        },
+        "ActorParent": {
+          "height": 42.0,
+          "width": 26.0
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_ACTOR_GENERALIZATION_EDGE_8241": [
+          "CHK_ACTOR_GENERALIZATION_EDGE_8241"
+        ],
+        "CHK_ACTOR_GENERALIZATION_NOTE_8241": [
+          "CHK_ACTOR_GENERALIZATION_NOTE_8241"
+        ]
+      },
+      "rust_markers": [
+        "CHK_ACTOR_GENERALIZATION_EDGE_8241",
+        "CHK_ACTOR_GENERALIZATION_NOTE_8241"
+      ],
+      "rust_note_boxes": {
+        "ActorChild": {
+          "height": 42.0,
+          "width": 26.0
+        },
+        "ActorParent": {
+          "height": 42.0,
+          "width": 26.0
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "42_actor_sequence_link_control": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ACTOR_SEQUENCE_EDGE_8242": [
+          "CHK_ACTOR_SEQUENCE_EDGE_8242"
+        ],
+        "CHK_ACTOR_SEQUENCE_NOTE_8242": [
+          "CHK_ACTOR_SEQUENCE_NOTE_8242"
+        ]
+      },
+      "java_markers": [
+        "CHK_ACTOR_SEQUENCE_EDGE_8242",
+        "CHK_ACTOR_SEQUENCE_NOTE_8242"
+      ],
+      "java_note_boxes": {
+        "ActorReceiver": {
+          "height": 42.0,
+          "width": 26.0
+        },
+        "ActorSender": {
+          "height": 42.0,
+          "width": 26.0
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "kind": "svg_clipping",
+          "text": [
+            {
+              "left": 185.4353,
+              "right": 416.6677,
+              "text": "CHK_ACTOR_SEQUENCE_NOTE_8242",
+              "view_left": 0.0,
+              "view_right": 381.0
+            }
+          ]
+        },
+        {
+          "java": "DESCRIPTION",
+          "kind": "diagram_type",
+          "rust": "SEQUENCE"
+        }
+      ],
+      "rust_border_ink": 4,
+      "rust_clipped_text": [
+        {
+          "left": 185.4353,
+          "right": 416.6677,
+          "text": "CHK_ACTOR_SEQUENCE_NOTE_8242",
+          "view_left": 0.0,
+          "view_right": 381.0
+        }
+      ],
+      "rust_diagram_type": "SEQUENCE",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_ACTOR_SEQUENCE_EDGE_8242": [
+          "CHK_ACTOR_SEQUENCE_EDGE_8242"
+        ],
+        "CHK_ACTOR_SEQUENCE_NOTE_8242": [
+          "CHK_ACTOR_SEQUENCE_NOTE_8242"
+        ]
+      },
+      "rust_markers": [
+        "CHK_ACTOR_SEQUENCE_EDGE_8242",
+        "CHK_ACTOR_SEQUENCE_NOTE_8242"
+      ],
+      "rust_note_boxes": {
+        "ActorReceiver": {
+          "height": 42.0,
+          "width": 26.0
+        },
+        "ActorSender": {
+          "height": 42.0,
+          "width": 26.0
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "43_class_note_on_link_control": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "CLASS",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_CLASS_EDGE_8243": [
+          "CHK_CLASS_EDGE_8243"
+        ],
+        "CHK_CLASS_LINK_NOTE_8243": [
+          "CHK_CLASS_LINK_NOTE_8243"
+        ]
+      },
+      "java_markers": [
+        "CHK_CLASS_EDGE_8243",
+        "CHK_CLASS_LINK_NOTE_8243"
+      ],
+      "java_note_boxes": {
+        "ClassControlA": {
+          "height": 8.94,
+          "width": 0.0
+        },
+        "ClassControlB": {
+          "height": 8.94,
+          "width": 0.0
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [
+        {
+          "java_only": [
+            "CHK_CLASS_LINK_NOTE_8243"
+          ],
+          "kind": "visible_markers",
+          "rust_only": []
+        }
+      ],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "CLASS",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_CLASS_EDGE_8243": [
+          "CHK_CLASS_EDGE_8243"
+        ]
+      },
+      "rust_markers": [
+        "CHK_CLASS_EDGE_8243"
+      ],
+      "rust_note_boxes": {
+        "ClassControlA": {
+          "height": 8.94,
+          "width": 0.0
+        },
+        "ClassControlB": {
+          "height": 8.94,
+          "width": 0.0
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "44_deployment_root_link_nested_note": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {},
+      "java_marker_text": {
+        "CHK_ROOT_LINK_EDGE_8244": [
+          "CHK_ROOT_LINK_EDGE_8244"
+        ],
+        "CHK_ROOT_LINK_NESTED_NOTE_8244": [
+          "CHK_ROOT_LINK_NESTED_NOTE_8244"
+        ]
+      },
+      "java_markers": [
+        "CHK_ROOT_LINK_EDGE_8244",
+        "CHK_ROOT_LINK_NESTED_NOTE_8244"
+      ],
+      "java_note_boxes": {},
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {},
+      "rust_marker_text": {
+        "CHK_ROOT_LINK_EDGE_8244": [
+          "CHK_ROOT_LINK_EDGE_8244"
+        ],
+        "CHK_ROOT_LINK_NESTED_NOTE_8244": [
+          "CHK_ROOT_LINK_NESTED_NOTE_8244"
+        ]
+      },
+      "rust_markers": [
+        "CHK_ROOT_LINK_EDGE_8244",
+        "CHK_ROOT_LINK_NESTED_NOTE_8244"
+      ],
+      "rust_note_boxes": {},
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    },
+    "45_component_named_then_registered_link_note": {
+      "java_border_ink": 0,
+      "java_clipped_text": [],
+      "java_diagram_type": "DESCRIPTION",
+      "java_error_text": [],
+      "java_marker_offsets": {
+        "RegisteredChainMemo": {
+          "CHK_REGISTERED_CHAIN_BODY_8245": [
+            {
+              "x": 6.0,
+              "y": 17.5684
+            }
+          ]
+        }
+      },
+      "java_marker_text": {
+        "CHK_REGISTERED_CHAIN_BODY_8245": [
+          "CHK_REGISTERED_CHAIN_BODY_8245"
+        ],
+        "CHK_REGISTERED_CHAIN_EDGE_8245": [
+          "CHK_REGISTERED_CHAIN_EDGE_8245"
+        ],
+        "CHK_REGISTERED_CHAIN_LINK_NOTE_8245": [
+          "CHK_REGISTERED_CHAIN_LINK_NOTE_8245"
+        ]
+      },
+      "java_markers": [
+        "CHK_REGISTERED_CHAIN_BODY_8245",
+        "CHK_REGISTERED_CHAIN_EDGE_8245",
+        "CHK_REGISTERED_CHAIN_LINK_NOTE_8245"
+      ],
+      "java_note_boxes": {
+        "RegisteredChainMemo": {
+          "height": 86.14,
+          "width": 258.8721
+        }
+      },
+      "java_status": 0,
+      "java_valid": true,
+      "mismatches": [],
+      "rust_border_ink": 0,
+      "rust_clipped_text": [],
+      "rust_diagram_type": "DESCRIPTION",
+      "rust_error_text": [],
+      "rust_marker_offsets": {
+        "RegisteredChainMemo": {
+          "CHK_REGISTERED_CHAIN_BODY_8245": [
+            {
+              "x": 6.0,
+              "y": 17.5684
+            }
+          ]
+        }
+      },
+      "rust_marker_text": {
+        "CHK_REGISTERED_CHAIN_BODY_8245": [
+          "CHK_REGISTERED_CHAIN_BODY_8245"
+        ],
+        "CHK_REGISTERED_CHAIN_EDGE_8245": [
+          "CHK_REGISTERED_CHAIN_EDGE_8245"
+        ],
+        "CHK_REGISTERED_CHAIN_LINK_NOTE_8245": [
+          "CHK_REGISTERED_CHAIN_LINK_NOTE_8245"
+        ]
+      },
+      "rust_markers": [
+        "CHK_REGISTERED_CHAIN_BODY_8245",
+        "CHK_REGISTERED_CHAIN_EDGE_8245",
+        "CHK_REGISTERED_CHAIN_LINK_NOTE_8245"
+      ],
+      "rust_note_boxes": {
+        "RegisteredChainMemo": {
+          "height": 86.14,
+          "width": 258.8721
+        }
+      },
+      "rust_status": 0,
+      "rust_valid": true,
+      "rust_yaml_status": 0
+    }
+  },
+  "dedent_checks": [
+    {
+      "case": "05_component_short_space_row_dedent",
+      "entity": "SpaceDedentMemo",
+      "java": {
+        "CHK_SPACE_ALPHA_8205": [
+          {
+            "x": 6.0,
+            "y": 77.1884
+          }
+        ],
+        "CHK_SPACE_OMEGA_8205": [
+          {
+            "x": 6.0,
+            "y": 107.8095
+          }
+        ]
+      },
+      "mismatch": false,
+      "rust": {
+        "CHK_SPACE_ALPHA_8205": [
+          {
+            "x": 6.0,
+            "y": 77.1884
+          }
+        ],
+        "CHK_SPACE_OMEGA_8205": [
+          {
+            "x": 6.0,
+            "y": 107.8095
+          }
+        ]
+      }
+    },
+    {
+      "case": "06_deployment_short_tab_row_dedent",
+      "entity": "TabDedentMemo",
+      "java": {
+        "CHK_TAB_ALPHA_8206": [
+          {
+            "x": 6.0,
+            "y": 77.1884
+          }
+        ],
+        "CHK_TAB_OMEGA_8206": [
+          {
+            "x": 6.0,
+            "y": 107.8095
+          }
+        ]
+      },
+      "mismatch": true,
+      "rust": {
+        "CHK_TAB_ALPHA_8206": [
+          {
+            "x": 38.9063,
+            "y": 77.1884
+          }
+        ],
+        "CHK_TAB_OMEGA_8206": [
+          {
+            "x": 38.9063,
+            "y": 107.8095
+          }
+        ]
+      }
+    }
+  ],
+  "java_valid_count": 31,
+  "metamorphic": [
+    {
+      "after": "02_component_named_one_blank_row",
+      "before": "01_component_named_zero_rows",
+      "entity": "RowMemo",
+      "java": {
+        "after": {
+          "height": 69.58,
+          "width": 21.0
+        },
+        "before": {
+          "height": 69.58,
+          "width": 21.0
+        },
+        "height_delta": 0.0
+      },
+      "mismatch": false,
+      "rust": {
+        "after": {
+          "height": 69.59,
+          "width": 21.0
+        },
+        "before": {
+          "height": 69.59,
+          "width": 21.0
+        },
+        "height_delta": 0.0
+      }
+    },
+    {
+      "after": "04_component_named_internal_with_trailing",
+      "before": "03_component_named_internal_no_trailing",
+      "entity": "TrailingMemo",
+      "java": {
+        "after": {
+          "height": 130.9522,
+          "width": 175.0703
+        },
+        "before": {
+          "height": 115.5516,
+          "width": 175.0703
+        },
+        "height_delta": 15.4006
+      },
+      "mismatch": true,
+      "rust": {
+        "after": {
+          "height": 115.5516,
+          "width": 175.0703
+        },
+        "before": {
+          "height": 115.5516,
+          "width": 175.0703
+        },
+        "height_delta": 0.0
+      }
+    }
+  ],
+  "mismatch_count": 19,
+  "mismatches": [
+    {
+      "case": "11_component_registered_note_chain",
+      "java_valid": false,
+      "kind": "acceptance",
+      "rust_valid": true
+    },
+    {
+      "case": "14_component_link_left_on_single_color",
+      "java_only": [
+        "CHK_COMP_LEFT_NOTE_8214"
+      ],
+      "kind": "visible_markers",
+      "rust_only": []
+    },
+    {
+      "case": "15_component_link_right_of_single_gradient",
+      "java_only": [
+        "CHK_COMP_RIGHT_NOTE_8215"
+      ],
+      "kind": "visible_markers",
+      "rust_only": []
+    },
+    {
+      "case": "16_component_link_top_on_multiline_color",
+      "java_only": [
+        "CHK_COMP_TOP_NOTE_A_8216",
+        "CHK_COMP_TOP_NOTE_B_8216"
+      ],
+      "kind": "visible_markers",
+      "rust_only": []
+    },
+    {
+      "case": "17_component_link_bottom_of_multiline_gradient",
+      "java_only": [
+        "CHK_COMP_BOTTOM_OF_NOTE_A_8217",
+        "CHK_COMP_BOTTOM_OF_NOTE_B_8217"
+      ],
+      "kind": "visible_markers",
+      "rust_only": []
+    },
+    {
+      "case": "22_component_no_link_single",
+      "java_valid": false,
+      "kind": "acceptance",
+      "rust_valid": true
+    },
+    {
+      "case": "23_component_no_link_multiline",
+      "java_valid": false,
+      "kind": "acceptance",
+      "rust_valid": true
+    },
+    {
+      "case": "26_component_link_zero_body",
+      "java_valid": false,
+      "kind": "acceptance",
+      "rust_valid": true
+    },
+    {
+      "case": "30_component_latest_link_replacement",
+      "java_only": [
+        "CHK_COMP_REPLACEMENT_NOTE_8230"
+      ],
+      "kind": "visible_markers",
+      "rust_only": [
+        "CHK_COMP_REPLACED_NOTE_8230"
+      ]
+    },
+    {
+      "case": "34_deployment_bare_after_named",
+      "java_valid": false,
+      "kind": "acceptance",
+      "rust_valid": true
+    },
+    {
+      "case": "35_component_duplicate_named_id",
+      "kind": "rust_panic",
+      "message": "DESCRIPTION SVEK plan contains duplicate note DuplicateCompMemo",
+      "rust_status": 101
+    },
+    {
+      "case": "36_deployment_duplicate_named_id",
+      "kind": "rust_panic",
+      "message": "DESCRIPTION SVEK plan contains duplicate note DuplicateDeployMemo",
+      "rust_status": 101
+    },
+    {
+      "case": "37_component_note_element_id_conflict",
+      "kind": "rust_panic",
+      "message": "DESCRIPTION SVEK plan contains duplicate note ConflictCompId",
+      "rust_status": 101
+    },
+    {
+      "case": "38_deployment_note_element_id_conflict",
+      "kind": "rust_panic",
+      "message": "DESCRIPTION SVEK plan contains duplicate note ConflictDeployId",
+      "rust_status": 101
+    },
+    {
+      "case": "42_actor_sequence_link_control",
+      "kind": "svg_clipping",
+      "text": [
+        {
+          "left": 185.4353,
+          "right": 416.6677,
+          "text": "CHK_ACTOR_SEQUENCE_NOTE_8242",
+          "view_left": 0.0,
+          "view_right": 381.0
+        }
+      ]
+    },
+    {
+      "case": "42_actor_sequence_link_control",
+      "java": "DESCRIPTION",
+      "kind": "diagram_type",
+      "rust": "SEQUENCE"
+    },
+    {
+      "case": "43_class_note_on_link_control",
+      "java_only": [
+        "CHK_CLASS_LINK_NOTE_8243"
+      ],
+      "kind": "visible_markers",
+      "rust_only": []
+    },
+    {
+      "case": "03_component_named_internal_no_trailing -> 04_component_named_internal_with_trailing",
+      "kind": "row_cardinality"
+    },
+    {
+      "case": "06_deployment_short_tab_row_dedent",
+      "kind": "common_dedent"
+    }
+  ],
+  "rust_valid_count": 36,
+  "verdict": "REJECT"
+}

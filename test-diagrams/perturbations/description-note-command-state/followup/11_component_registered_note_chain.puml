@@ -1,0 +1,7 @@
+@startuml
+component "Registered Target" as RegisteredTarget
+note "CHK_FLOATING_REGISTERED_8211" as RegisteredMemo #MistyRose
+note right of RegisteredTarget : CHK_ATTACHED_REGISTERED_8211
+RegisteredTarget --> RegisteredMemo
+note on link : CHK_LINK_REGISTERED_8211
+@enduml

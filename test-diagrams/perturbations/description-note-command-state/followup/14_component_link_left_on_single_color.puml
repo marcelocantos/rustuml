@@ -1,0 +1,6 @@
+@startuml
+component CompLeftSource
+component CompLeftSink
+CompLeftSource --> CompLeftSink : CHK_COMP_LEFT_EDGE_8214
+note left on link #MistyRose : CHK_COMP_LEFT_NOTE_8214
+@enduml

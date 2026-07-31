@@ -1,0 +1,41 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Row Anchor" as RowAnchor
+      note as RowMemo
+      endnote
+      RowAnchor --> RowMemo
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: RowAnchor
+    label: Row Anchor
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections:
+  - from: RowAnchor
+    to: RowMemo
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  packages: []
+  notes:
+  - id: RowMemo
+    text: ''
+    target: null
+    position: Right
+    source_line: 3

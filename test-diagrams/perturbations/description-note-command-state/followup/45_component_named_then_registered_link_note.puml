@@ -1,0 +1,10 @@
+@startuml
+component RegisteredChainA
+component RegisteredChainB
+note as RegisteredChainMemo #HoneyDew
+  CHK_REGISTERED_CHAIN_BODY_8245
+endnote
+RegisteredChainA --> RegisteredChainB : CHK_REGISTERED_CHAIN_EDGE_8245
+note on link : CHK_REGISTERED_CHAIN_LINK_NOTE_8245
+RegisteredChainMemo ..> RegisteredChainA
+@enduml

@@ -1,0 +1,46 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Outer Deploy Scope" as OuterDeployScope {
+        node "Nested Deploy Node" as NestedDeployNode
+        note as NestedDeployMemo #Wheat
+          CHK_NESTED_DEPLOY_NOTE_8210
+        endnote
+        NestedDeployNode --> NestedDeployMemo
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: OuterDeployScope
+    label: Outer Deploy Scope
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - NestedDeployNode
+    source_line: 1
+    quark_order: 0
+  - id: NestedDeployNode
+    label: Nested Deploy Node
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: NestedDeployNode
+    to: NestedDeployMemo
+    label: null
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: NestedDeployMemo
+    text: CHK_NESTED_DEPLOY_NOTE_8210
+    color: '#Wheat'
+    owner: OuterDeployScope
+    quark_order: 2
+    position: Right
+    source_line: 4

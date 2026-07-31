@@ -1,0 +1,45 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node DeployBottomSource
+      node DeployBottomSink
+      DeployBottomSource --> DeployBottomSink : CHK_DEPLOY_BOTTOM_EDGE_8221
+      note bottom of link #Green/LightBlue
+        CHK_DEPLOY_BOTTOM_NOTE_A_8221
+        CHK_DEPLOY_BOTTOM_NOTE_B_8221
+
+      endnote
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployBottomSource
+    label: DeployBottomSource
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DeployBottomSink
+    label: DeployBottomSink
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: DeployBottomSource
+    to: DeployBottomSink
+    label: CHK_DEPLOY_BOTTOM_EDGE_8221
+    note:
+      text: |
+        CHK_DEPLOY_BOTTOM_NOTE_A_8221
+        CHK_DEPLOY_BOTTOM_NOTE_B_8221
+      color: '#Green/LightBlue'
+      position: Bottom
+      source_line: 5
+    arrow_at_end: true
+    source_line: 3

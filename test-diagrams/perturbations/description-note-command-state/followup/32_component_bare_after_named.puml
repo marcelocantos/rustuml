@@ -1,0 +1,8 @@
+@startuml
+component BareAfterAnchor
+note as BareAfterMemo
+  CHK_BARE_AFTER_NAMED_BODY_8232
+endnote
+note : CHK_BARE_AFTER_NAMED_INVALID_8232
+BareAfterAnchor --> BareAfterMemo
+@enduml

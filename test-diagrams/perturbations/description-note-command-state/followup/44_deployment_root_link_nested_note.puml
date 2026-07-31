@@ -1,0 +1,8 @@
+@startuml
+node RootLinkSource
+node RootLinkSink
+RootLinkSource --> RootLinkSink : CHK_ROOT_LINK_EDGE_8244
+node "Nested Note Scope" as NestedNoteScope {
+  note left on link #Lavender : CHK_ROOT_LINK_NESTED_NOTE_8244
+}
+@enduml

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="284px" preserveAspectRatio="none" style="width:374px;height:284px;background:#FFFFFF;" version="1.1" viewBox="0 0 374 284" width="374px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity ActorParent-->
+<g class="entity" data-qualified-name="ActorParent" data-source-line="1" id="ent0002">
+<ellipse cx="54.9693" cy="202.4883" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M54.9693,210.4883 L54.9693,237.4883 M41.9693,218.4883 L67.9693,218.4883 M54.9693,237.4883 L41.9693,252.4883 M54.9693,237.4883 L67.9693,252.4883" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.9385" x="6.0001" y="267.5234">Control Parent</text>
+</g>
+<!--entity ActorChild-->
+<g class="entity" data-qualified-name="ActorChild" data-source-line="2" id="ent0003">
+<ellipse cx="54.9693" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M54.9693,22 L54.9693,49 M41.9693,30 L67.9693,30 M54.9693,49 L41.9693,64 M54.9693,49 L67.9693,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.2959" x="9.8214" y="79.0352">Control Child</text>
+</g>
+<!--link ActorChild to ActorParent-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="extension" data-source-line="3" id="lnk4">
+<path d="M54.97,82.48 C54.97,114.84 54.97,143.21 54.97,175.55" fill="none" id="ActorChild-to-ActorParent" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="none" points="54.97,193.55,60.97,175.55,48.97,175.55,54.97,193.55" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="273.0952" x="71.3421" y="125.5566">CHK_ACTOR_GENERALIZATION_EDGE_8241</text>
+<path d="M59.9693,134.2988 L59.9693,159.2988 L354.9693,159.2988 L354.9693,144.2988 L344.9693,134.2988 L59.9693,134.2988" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M344.9693,134.2988 L344.9693,144.2988 L354.9693,144.2988 L344.9693,134.2988" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="274.8408" x="65.9693" y="151.8672">CHK_ACTOR_GENERALIZATION_NOTE_8241</text>
+</g>
+</g></svg>

@@ -1,0 +1,64 @@
+type: State
+diagram:
+  meta:
+    source: |
+      @startuml
+      state "Control Alpha" as StateControlAlpha
+      state "Control Beta" as StateControlBeta
+      [*] --> StateControlAlpha
+      StateControlAlpha --> StateControlBeta : CHK_STATE_EDGE_8239
+      note on link : CHK_STATE_LINK_NOTE_8239
+      @enduml
+  direction: TopToBottom
+  states:
+  - id: StateControlAlpha
+    label: Control Alpha
+    kind: Normal
+    descriptions: []
+    substates: []
+    source_line: 1
+    fill: null
+    stroke: null
+    stroke_style: null
+    stereotype: null
+    composite: false
+    concurrent_separator: null
+    concurrent_regions: []
+    parent: null
+    url: null
+    tooltip: null
+    decl_line: 1
+  - id: StateControlBeta
+    label: Control Beta
+    kind: Normal
+    descriptions: []
+    substates: []
+    source_line: 2
+    fill: null
+    stroke: null
+    stroke_style: null
+    stereotype: null
+    composite: false
+    concurrent_separator: null
+    concurrent_regions: []
+    parent: null
+    url: null
+    tooltip: null
+    decl_line: 2
+  transitions:
+  - from: '[*]'
+    to: StateControlAlpha
+    label: null
+    source_line: 3
+  - from: StateControlAlpha
+    to: StateControlBeta
+    label: CHK_STATE_EDGE_8239
+    source_line: 4
+  notes:
+  - text: CHK_STATE_LINK_NOTE_8239
+    kind: !OnLink
+      transition_index: 1
+      position: Bottom
+    source_line: 5
+    command_line: 5
+    creation_order: 0

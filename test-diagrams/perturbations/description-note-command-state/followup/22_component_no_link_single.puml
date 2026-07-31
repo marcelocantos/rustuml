@@ -1,0 +1,4 @@
+@startuml
+component OrphanComponentSingle
+note on link : CHK_ORPHAN_COMPONENT_SINGLE_8222
+@enduml

@@ -1,0 +1,39 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Deploy Rows Anchor" as DeployRowsAnchor
+      note as DeployRowsMemo
+          CHK_DEPLOY_FIRST_8208
+
+            CHK_DEPLOY_DEEP_8208
+
+      endnote
+      DeployRowsAnchor --> DeployRowsMemo
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DeployRowsAnchor
+    label: Deploy Rows Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: DeployRowsAnchor
+    to: DeployRowsMemo
+    label: null
+    arrow_at_end: true
+    source_line: 8
+  notes:
+  - id: DeployRowsMemo
+    text: |
+      CHK_DEPLOY_FIRST_8208
+
+        CHK_DEPLOY_DEEP_8208
+    quark_order: 1
+    position: Right
+    source_line: 3

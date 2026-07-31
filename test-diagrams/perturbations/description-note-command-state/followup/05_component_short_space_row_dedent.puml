@@ -1,0 +1,9 @@
+@startuml
+component "Space Dedent Anchor" as SpaceDedentAnchor
+note as SpaceDedentMemo
+    CHK_SPACE_ALPHA_8205
+ 
+    CHK_SPACE_OMEGA_8205
+endnote
+SpaceDedentAnchor --> SpaceDedentMemo
+@enduml

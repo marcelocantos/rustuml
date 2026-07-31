@@ -1,0 +1,4 @@
+@startuml
+component ConflictCompId
+note "CHK_COMP_ID_CONFLICT_8237" as ConflictCompId
+@enduml

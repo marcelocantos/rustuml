@@ -1,0 +1,9 @@
+@startuml
+node "Registered Source" as RegisteredSource
+node "Registered Sink" as RegisteredSink
+note "CHK_DEPLOY_FLOATING_REGISTERED_8212" as DeployRegisteredMemo #LightBlue
+RegisteredSource --> RegisteredSink : CHK_DEPLOY_EDGE_LABEL_8212
+note on link : CHK_DEPLOY_LINK_REGISTERED_8212
+note left of RegisteredSink : CHK_DEPLOY_ATTACHED_REGISTERED_8212
+DeployRegisteredMemo ..> RegisteredSink
+@enduml

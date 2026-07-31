@@ -1,0 +1,6 @@
+@startuml
+node DeployRightSource
+node DeployRightSink
+DeployRightSource --> DeployRightSink : CHK_DEPLOY_RIGHT_EDGE_8219
+note right of link #Red/LightBlue : CHK_DEPLOY_RIGHT_NOTE_8219
+@enduml
