@@ -1,0 +1,10 @@
+@startuml
+scale 1.375
+
+file "Draft Spec" as Draft
+file "Review Notes" as Review
+file "Archive Copy" as Archive
+
+Draft --> Review : handoff
+Review --> Archive : store
+@enduml

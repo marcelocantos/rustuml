@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "mechanism": "svg-path-arc-flag-scaling",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-svg-path-arc-flag-scaling-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit 4585be985d694bad6abacc18b7ac88b2fb2204e4, did not edit production source, and did not edit account.json."
+  },
+  "rust_revision": "5067b2599899864cdf87851064377da83a36bb37",
+  "rust_short_revision": "5067b259",
+  "account_commit": "fd52b8e70ba993a07a215ef5d3b8a615f634e9e4",
+  "implementation_commit": "4585be985d694bad6abacc18b7ac88b2fb2204e4",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show fd52b8e70ba993a07a215ef5d3b8a615f634e9e4:docs/parity-reviews/svg-path-arc-flag-scaling/account.json",
+    "git show 4585be985d694bad6abacc18b7ac88b2fb2204e4 -- crates/rustuml-render/src/scale.rs",
+    "git merge-base --is-ancestor fd52b8e70ba993a07a215ef5d3b8a615f634e9e4 4585be985d694bad6abacc18b7ac88b2fb2204e4",
+    "git merge-base --is-ancestor 4585be985d694bad6abacc18b7ac88b2fb2204e4 5067b2599899864cdf87851064377da83a36bb37",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/UPath.java",
+    "env JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.puml test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_file_chain.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_file_chain.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_file_chain.puml > /tmp/arc_flag_file_pass_rust.svg",
+    "xmllint --noout test-diagrams/perturbations/svg-path-arc-flag-scaling/*.svg",
+    "rg -n -i \"syntax error|error line|plantuml.*error|an error has occured|\\[From string|No class |Your data does not sound like|does&#160;not&#160;sound\" test-diagrams/perturbations/svg-path-arc-flag-scaling -g '*.svg'",
+    "shasum -a 256 docs/parity-reviews/svg-path-arc-flag-scaling/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one test-diagrams/perturbations/svg-path-arc-flag-scaling/*.puml test-diagrams/perturbations/svg-path-arc-flag-scaling/*.svg"
+  ],
+  "no_cargo_or_rustc": true,
+  "artifact_hashes": {
+    "account_json_sha256": "3c16b7b7c7d3aa60aecae9d88e29201fce24ca5a6a2da994e276d6b4f5399a0f",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_sha256": "851173d3a2690ebc753cf6ccb34a0049ad3a1be6139c2cb66b18be0639be4515",
+    "sources": {
+      "checker_explicit_scale_file_chain.puml": "2b6733a75fd644a2296f55294fe4c1be4ac03a56840aa91d2a639768f3adf242",
+      "checker_explicit_scale_folder_stack_file.puml": "2d27b0307f30659f2117403a52ae47fd4330a7ca2285fc78622f321114a75ecd",
+      "checker_fractional_dpi_group_and_note.puml": "b7e8c394a8cd9271745e633a73f604200c4b32ee895fdd62e168be232aedfdd0"
+    },
+    "java_svgs": {
+      "checker_explicit_scale_file_chain.svg": "5ceb23c21845d93f433402195048501e1597cfd9a0263ccb3d46546e86d5cae4",
+      "checker_explicit_scale_folder_stack_file.svg": "df56c5bd10050a171b6a84989f43a3bc4e72eef109186b2694bd090b843201f8",
+      "checker_fractional_dpi_group_and_note.svg": "94c5fc6eba028317a67581547275b2d6eb16accaad1d3e7fc9599009fbb2ee71"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_file_chain.puml",
+      "golden": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_file_chain.svg",
+      "axes": [
+        "explicit fractional scale 1.375",
+        "file-symbol topologies with mixed line and absolute arc commands",
+        "repeated 00 flag arcs across multiple independent entities"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml",
+      "golden": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.svg",
+      "axes": [
+        "explicit scale 1.75",
+        "folder and stack cluster paths with mixed 01 and 00 flag arcs",
+        "class-package topology using Java's package-symbol path emitters"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.puml",
+      "golden": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_fractional_dpi_group_and_note.svg",
+      "axes": [
+        "fractional dpi 125",
+        "sequence group header and rounded note paths",
+        "mixed line and absolute arc commands in two independent rounded surfaces"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "Java's oracle path is narrower than the broadest account wording implies. SvgGraphics.svgPath emits uppercase A for each SEG_ARCTO segment and resets parameter roles by construction; lowercase a and repeated tuples under one retained command letter are not reachable on this Java product path, although supporting them in Rust is harmless.",
+    "Static inspection found no fixture-shaped logic, golden-data reads, coordinate-keyed rewrites, or unexplained constants in the reviewed Rust change. The mechanism itself is localized to scale_path_d via a command/parameter-index predicate for A/a tuple slots 3 and 4.",
+    "The clean file-chain heldout passes no-oracle structural comparison under explicit scale 1.375. Its Java and Rust SVGs both preserve 0/1 flags in multiple file-corner arcs while continuing to scale radii, endpoints, and stroke widths.",
+    "The fresh folder/stack heldout is valid and rejects the current head. The failing difference is not an arc flag drift: Rust emits the stack pre-rect placeholder as style stroke:none; while Java retains stroke:none;stroke-width:1.75;. Because the input is valid and preserved, the latest checker verdict must remain rejected even though this residue is outside the claimed arc-flag mechanism.",
+    "The fresh fractional-dpi sequence heldout also rejects the current head on a real arc-bearing topology. Rust drops the rounded-corner behavior for the group frame and group header path, removing rx/ry on the frame rect and replacing Java's trailing A11.7188,11.7188 0 0 1 segment with a straight close. Again, the input is valid and preserved, so the checker verdict stays rejected.",
+    "All preserved checker SVGs are well-formed XML and contain no PlantUML error markers. The rejected verdict here is driven by two executable counterexamples on the shipped no-oracle path, not by the implementer's attestation or by the unit tests added with the fix."
+  ],
+  "verdict": "rejected"
+}

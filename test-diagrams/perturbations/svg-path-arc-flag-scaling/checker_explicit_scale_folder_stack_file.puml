@@ -1,0 +1,13 @@
+@startuml
+scale 1.75
+
+folder "Archive Folder" as FolderA {
+  class Ingress
+}
+
+stack "Batch Stack" as StackB {
+  class Worker
+}
+
+Ingress --> Worker : handoff
+@enduml

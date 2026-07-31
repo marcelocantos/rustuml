@@ -1,0 +1,12 @@
+@startuml
+skinparam dpi 125
+skinparam roundcorner 18
+
+Alice -> Bob : ping
+group Review Window
+  Bob --> Alice : pong
+  note right of Bob
+    rounded note payload
+  end note
+end
+@enduml
