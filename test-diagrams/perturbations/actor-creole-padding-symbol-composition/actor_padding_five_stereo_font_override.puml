@@ -1,0 +1,8 @@
+@startuml
+skinparam Padding 5
+skinparam actorFontName "Arial"
+skinparam actorFontSize 17
+actor "Font Override Actor" as FontActor <<service-axis>>
+usecase "Dispatch Guard" as DispatchGuard
+FontActor --> DispatchGuard : guarded
+@enduml

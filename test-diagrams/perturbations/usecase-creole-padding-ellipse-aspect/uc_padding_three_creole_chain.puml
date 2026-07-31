@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam Padding 3
+usecase "**Approve** //Queue//" as ApproveQueue
+usecase "Renamed Reconcile & Close" as ReconcileClose
+usecase "Fresh Downstream Signal" as DownstreamSignal
+ApproveQueue --> ReconcileClose
+ReconcileClose --> DownstreamSignal
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+skinparam Padding 7
+<style>
+usecase {
+  Padding 19
+  Shadowing 4
+}
+</style>
+usecase "Styled Symbol Padding Probe" as StyledProbe <<style-axis>>
+usecase "Comparison Sink" as Sink
+StyledProbe --> Sink
+@enduml

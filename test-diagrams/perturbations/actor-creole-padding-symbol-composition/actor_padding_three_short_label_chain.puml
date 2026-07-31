@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam Padding 3
+actor "I" as ShortActor
+usecase "Renamed First Action" as FirstAction
+usecase "Renamed Second Action" as SecondAction
+ShortActor --> FirstAction
+FirstAction --> SecondAction
+@enduml

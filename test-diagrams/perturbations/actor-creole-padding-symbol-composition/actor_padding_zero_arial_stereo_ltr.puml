@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 15
+skinparam Padding 0
+actor "Zero Axis Reviewer" as ZeroReviewer <<external-axis>>
+usecase "Review Fresh Request" as FreshRequest
+ZeroReviewer --> FreshRequest : sees
+@enduml

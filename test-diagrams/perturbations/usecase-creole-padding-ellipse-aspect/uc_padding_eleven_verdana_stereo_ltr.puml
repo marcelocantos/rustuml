@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam defaultFontName Verdana
+skinparam defaultFontSize 12
+skinparam Padding 11
+usecase "Renamed audit summary held-out surface" as FreshAuditSurface <<audit-axis>>
+usecase "Post Review Dispatch" as Dispatch
+FreshAuditSurface --> Dispatch : reviewed
+@enduml

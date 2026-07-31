@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="264px" preserveAspectRatio="none" style="width:230px;height:264px;background:#FFFFFF;" version="1.1" viewBox="0 0 230 264" width="230px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity ApproveQueue-->
+<g class="entity" data-qualified-name="ApproveQueue" data-source-line="4" id="ent0002">
+<ellipse cx="111.2975" cy="22.6632" fill="#F1F1F1" rx="71.3162" ry="16.6632" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="60.6758" x="56.8185" y="27.4074">Approve</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="4.4297" x="117.4943" y="27.4074">&#160;</text><text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="43.8525" x="121.924" y="27.4074">Queue</text>
+</g>
+<!--entity ReconcileClose-->
+<g class="entity" data-qualified-name="ReconcileClose" data-source-line="5" id="ent0003">
+<ellipse cx="111.2975" cy="122.786" fill="#F1F1F1" rx="105.2975" ry="23.4595" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="187.25" x="17.6725" y="127.5301">Renamed Reconcile &amp; Close</text>
+</g>
+<!--entity DownstreamSignal-->
+<g class="entity" data-qualified-name="DownstreamSignal" data-source-line="6" id="ent0004">
+<ellipse cx="111.2975" cy="228.2982" fill="#F1F1F1" rx="98.2633" ry="22.0527" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="171.7666" x="25.4142" y="233.0423">Fresh Downstream Signal</text>
+</g>
+<!--link ApproveQueue to ReconcileClose-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk5">
+<path d="M111.3,39.43 C111.3,55.57 111.3,74.82 111.3,93.11" fill="none" id="ApproveQueue-to-ReconcileClose" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="111.3,99.11,115.3,90.11,111.3,94.11,107.3,90.11,111.3,99.11" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link ReconcileClose to DownstreamSignal-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk6">
+<path d="M111.3,146.5 C111.3,164.24 111.3,182.7 111.3,200.05" fill="none" id="ReconcileClose-to-DownstreamSignal" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="111.3,206.05,115.3,197.05,111.3,201.05,107.3,197.05,111.3,206.05" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

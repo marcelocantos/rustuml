@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="144px" preserveAspectRatio="none" style="width:528px;height:144px;background:#FFFFFF;" version="1.1" viewBox="0 0 528 144" width="528px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity IntakeZero-->
+<g class="entity" data-qualified-name="IntakeZero" data-source-line="5" id="ent0002">
+<ellipse cx="78.2518" cy="69.042" fill="#F1F1F1" rx="72.2518" ry="16.8504" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="108.3765" x="24.0636" y="74.1663">Zero Axis Intake</text>
+</g>
+<!--entity ArchiveDecision-->
+<g class="entity" data-qualified-name="ArchiveDecision" data-source-line="6" id="ent0003">
+<ellipse cx="411.7137" cy="29.042" fill="#F1F1F1" rx="103.2101" ry="23.042" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="180.9155" x="321.2559" y="34.1663">Renamed Archive Decision</text>
+</g>
+<!--entity EscalationReview-->
+<g class="entity" data-qualified-name="EscalationReview" data-source-line="7" id="ent0004">
+<ellipse cx="411.7137" cy="109.042" fill="#F1F1F1" rx="96.119" ry="21.6238" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="165.0659" x="329.1807" y="114.1663">Fresh Escalation Review</text>
+</g>
+<!--link IntakeZero to ArchiveDecision-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="8" id="lnk5">
+<path d="M143.16,61.33 C193.39,55.27 258.0333,47.4692 314.1033,40.6992" fill="none" id="IntakeZero-to-ArchiveDecision" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="320.06,39.98,310.6454,37.0877,315.0961,40.5794,311.6044,45.03,320.06,39.98" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="96.731" x="181.5" y="41.962">promoted path</text>
+</g>
+<!--link IntakeZero to EscalationReview-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="9" id="lnk6">
+<path d="M140.8,77.8 C153.89,79.6 167.65,81.43 180.5,83.04 C227.89,88.99 274.886,94.3638 318.056,99.1138" fill="none" id="IntakeZero-to-EscalationReview" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="324.02,99.77,315.5115,94.8097,319.05,99.2231,314.6365,102.7617,324.02,99.77" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="63.252" x="198" y="79.542">«include»</text>
+</g>
+</g></svg>

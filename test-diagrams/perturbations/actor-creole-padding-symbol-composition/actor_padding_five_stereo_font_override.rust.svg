@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="249px" preserveAspectRatio="none" style="width:179px;height:249px;background:#FFFFFF;" version="1.1" viewBox="0 0 179 249" width="179px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FontActor-->
+<g class="entity" data-qualified-name="FontActor" data-source-line="4" id="ent0002">
+<ellipse cx="85.1633" cy="42.0972" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M85.1633,50.0972 L85.1633,77.0972 M72.1633,58.0972 L98.1633,58.0972 M85.1633,77.0972 L72.1633,92.0972 M85.1633,77.0972 L98.1633,92.0972" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="'Arial'" font-size="17" lengthAdjust="spacing" textLength="148.3267" x="11" y="114.543">Font Override Actor</text>
+<text fill="#000000" font-family="'Arial'" font-size="17" font-style="italic" lengthAdjust="spacing" textLength="107.5532" x="31.3867" y="25.6441">«service-axis»</text>
+</g>
+<!--entity DispatchGuard-->
+<g class="entity" data-qualified-name="DispatchGuard" data-source-line="5" id="ent0003">
+<ellipse cx="85.1633" cy="217.7793" fill="#F1F1F1" rx="66.4314" ry="17.6338" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104.8154" x="32.7556" y="222.5235">Dispatch Guard</text>
+</g>
+<!--link FontActor to DispatchGuard-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="6" id="lnk4">
+<path d="M85.16,123.29 C85.16,150.77 85.16,175.41 85.16,193.88" fill="none" id="FontActor-to-DispatchGuard" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="85.16,199.88,89.16,190.88,85.16,194.88,81.16,190.88,85.16,199.88" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="52.2793" x="86.16" y="166.7184">guarded</text>
+</g>
+</g></svg>

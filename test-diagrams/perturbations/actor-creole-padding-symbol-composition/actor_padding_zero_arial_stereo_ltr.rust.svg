@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="116px" preserveAspectRatio="none" style="width:423px;height:116px;background:#FFFFFF;" version="1.1" viewBox="0 0 423 116" width="423px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity ZeroReviewer-->
+<g class="entity" data-qualified-name="ZeroReviewer" data-source-line="5" id="ent0002">
+<ellipse cx="71.0171" cy="34.2622" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M71.0171,42.2622 L71.0171,69.2622 M58.0171,50.2622 L84.0171,50.2622 M71.0171,69.2622 L58.0171,84.2622 M71.0171,69.2622 L84.0171,84.2622" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="130.0342" x="6" y="99.832">Zero Axis Reviewer</text>
+<text fill="#000000" font-family="Arial" font-size="15" font-style="italic" lengthAdjust="spacing" textLength="100.752" x="20.6411" y="22.8091">«external-axis»</text>
+</g>
+<!--entity FreshRequest-->
+<g class="entity" data-qualified-name="FreshRequest" data-source-line="6" id="ent0003">
+<ellipse cx="319.2972" cy="55.5535" fill="#F1F1F1" rx="90.263" ry="20.4526" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="151.7285" x="243.4329" y="60.6777">Review Fresh Request</text>
+</g>
+<!--link ZeroReviewer to FreshRequest-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk4">
+<path d="M136.4,55.55 C164.62,55.55 192.22,55.55 222.81,55.55" fill="none" id="ZeroReviewer-to-FreshRequest" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="228.81,55.55,219.81,51.55,223.81,55.55,219.81,59.55,228.81,55.55" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="Arial" font-size="15" lengthAdjust="spacing" textLength="31.6846" x="167.03" y="52.052">sees</text>
+</g>
+</g></svg>

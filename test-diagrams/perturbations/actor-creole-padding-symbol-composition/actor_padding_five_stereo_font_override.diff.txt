@@ -1,0 +1,32 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "261px"), ("preserveAspectRatio", "none"), ("style", "width:169px;height:261px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 169 261"), ("width", "169px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "249px"), ("preserveAspectRatio", "none"), ("style", "width:179px;height:249px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 179 249"), ("width", "179px"), ("zoomAndPan", "magnify")]
+  [4] <ellipse> attr mismatch:
+    expected: [("cx", "80.1633"), ("cy", "44.0483"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "85.1633"), ("cy", "42.0972"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [5] <path> attr mismatch:
+    expected: [("d", "M80.1633,52.0483 L80.1633,79.0483 M67.1633,60.0483 L93.1633,60.0483 M80.1633,79.0483 L67.1633,94.0483 M80.1633,79.0483 L93.1633,94.0483"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M85.1633,50.0972 L85.1633,77.0972 M72.1633,58.0972 L98.1633,58.0972 M85.1633,77.0972 L72.1633,92.0972 M85.1633,77.0972 L98.1633,92.0972"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "'Arial'"), ("font-size", "17"), ("lengthAdjust", "spacing"), ("textLength", "148.3267"), ("x", "6"), ("y", "116.4941")]
+    actual:   [("fill", "#000000"), ("font-family", "'Arial'"), ("font-size", "17"), ("lengthAdjust", "spacing"), ("textLength", "148.3267"), ("x", "11"), ("y", "114.543")]
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "'Arial'"), ("font-size", "17"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "108.6489"), ("x", "25.8389"), ("y", "26.9458")]
+    actual:   [("fill", "#000000"), ("font-family", "'Arial'"), ("font-size", "17"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "107.5532"), ("x", "31.3867"), ("y", "25.6441")]
+  [9] <ellipse> attr mismatch:
+    expected: [("cx", "80.1614"), ("cy", "229.7338"), ("fill", "#F1F1F1"), ("rx", "66.4314"), ("ry", "17.6338"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "85.1633"), ("cy", "217.7793"), ("fill", "#F1F1F1"), ("rx", "66.4314"), ("ry", "17.6338"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "104.8154"), ("x", "27.7537"), ("y", "234.478")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "104.8154"), ("x", "32.7556"), ("y", "222.5235")]
+  [12] <path> attr mismatch:
+    expected: [("d", "M80.16,125.55 C80.16,156.17 80.16,185.32 80.16,205.68"), ("fill", "none"), ("id", "FontActor-to-DispatchGuard"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M85.16,123.29 C85.16,150.77 85.16,175.41 85.16,193.88"), ("fill", "none"), ("id", "FontActor-to-DispatchGuard"), ("style", "stroke:#181818;stroke-width:1;")]
+  [13] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "80.16,211.68,84.16,202.68,80.16,206.68,76.16,202.68,80.16,211.68"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "85.16,199.88,89.16,190.88,85.16,194.88,81.16,190.88,85.16,199.88"), ("style", "stroke:#181818;stroke-width:1;")]
+  [14] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "52.2793"), ("x", "86.16"), ("y", "173.6584")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "52.2793"), ("x", "86.16"), ("y", "166.7184")]
+

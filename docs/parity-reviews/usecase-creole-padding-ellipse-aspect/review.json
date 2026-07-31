@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "mechanism": "usecase-creole-padding-ellipse-aspect",
+  "verdict": "REJECT",
+  "reviewed_at": "2026-07-31T21:45:13Z",
+  "identity": {
+    "role": "independent skeptical checker",
+    "agent": "OpenAI Codex",
+    "model": "gpt-5",
+    "tool": "Codex desktop shell plus apply_patch",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "java_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rust_repo": "/private/tmp/rustuml-t14-usecase-text-padding",
+    "rust_revision": "dcecf006426ce609fb8f7504f20431bc096f2553",
+    "account_commit": "5f23a662",
+    "implementation_commits": [
+      "5965e56a",
+      "6e10066f"
+    ],
+    "frozen_rustuml": "/private/tmp/rustuml-t14-usecase-text-padding-target/release/rustuml",
+    "frozen_diff_one": "/private/tmp/rustuml-t14-usecase-text-padding-target/release/examples/diff_one"
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-t14-usecase-text-padding rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "rg -n \"minty|superhero|united|cerulean|preproc|theme|fixture|golden|Padding|padding|5\\\\.0|10\\\\.0|11\\\\.0|Verdana|Arial|actor|usecase\" crates/rustuml-render/src/usecase.rs",
+    "rg -n \"class USymbolUsecase|class USymbolActor|class USymbolSimpleAbstract|class EntityImageDescription|class BodyEnhanced2|class SheetBlock1|getCreole|getMarginX|TextBlockInEllipse|skinparam Padding|Padding\" src/main/java/net/sourceforge/plantuml -S",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -checkonly <puml>",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < <puml> > <stem>.svg",
+    "/private/tmp/rustuml-t14-usecase-text-padding-target/release/rustuml -tsvg <puml> > <stem>.rust.svg",
+    "/private/tmp/rustuml-t14-usecase-text-padding-target/release/examples/diff_one --no-oracle <puml> > <stem>.diff.txt 2>&1"
+  ],
+  "source_audit": {
+    "java_data_flow": [
+      "Display#getCreole reads ISkinSimple#getPadding and constructs SheetBlock1 with that padding and explicit horizontal margins.",
+      "SheetBlock1 stores ClockwiseTopRightBottomLeft.same(padding), translates drawing by left/top padding, and calculateDimensionSlow calls XDimension2D.delta(padding.getBottom() + padding.getTop()); XDimension2D.delta(one_arg) adds the same value to width and height.",
+      "EntityImageDescription builds the description body with BodyFactory#create3, which returns BodyEnhanced2; BodyEnhanced2#getMarginX returns 0.",
+      "USymbolUsecase#asSmall merges stereotype and label top-to-bottom, then feeds that block into TextBlockInEllipse for both measurement and drawing."
+    ],
+    "rust_data_flow": [
+      "SkinColors::from_meta resolves global skinparam Padding into creole_padding.",
+      "use_case_dim uses creole_padding in body block dimensions, stereotype block dimensions, footprint atoms, and TextBlockInEllipse-style radii.",
+      "render_use_case paints from the same UseCaseDim and does not branch on theme names or golden fixture paths."
+    ],
+    "fixture_shaped_logic": "No theme-name, golden-file, fixture-label, or corpus-path branch was found in the touched usecase renderer surface. Existing numeric constants in this file are generally accompanied by Java provenance comments, including the new creole_padding comments."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_eleven_verdana_stereo_ltr.puml",
+      "axes": [
+        "Padding 11",
+        "Verdana",
+        "stereotype",
+        "left-to-right topology",
+        "renamed labels",
+        "link label"
+      ],
+      "java_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_eleven_verdana_stereo_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_eleven_verdana_stereo_ltr.rust.svg",
+      "diff": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_eleven_verdana_stereo_ltr.diff.txt",
+      "diff_status": 1,
+      "summary": "Rejected counterexample: Java canvas is 619x107 while Rust is 597x107; the first use-case ellipse differs (expected rx=156.6145 ry=43.6142, actual rx=156.444 ry=43.5691), stereotype textLength differs (75.0703 vs 72.1758), and the downstream node, route, arrowhead, and link label shift."
+    },
+    {
+      "path": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_three_creole_chain.puml",
+      "axes": [
+        "Padding 3",
+        "SansSerif",
+        "Creole bold/italic atoms",
+        "vertical chain topology",
+        "renamed labels"
+      ],
+      "java_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_three_creole_chain.svg",
+      "rust_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_three_creole_chain.rust.svg",
+      "diff": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_three_creole_chain.diff.txt",
+      "diff_status": 0,
+      "summary": "Passed: SVGs are structurally equivalent."
+    },
+    {
+      "path": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_zero_arial_fanout.puml",
+      "axes": [
+        "Padding 0",
+        "Arial",
+        "left-to-right fanout",
+        "renamed labels",
+        "include stereotype on relation"
+      ],
+      "java_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_zero_arial_fanout.svg",
+      "rust_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_zero_arial_fanout.rust.svg",
+      "diff": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_padding_zero_arial_fanout.diff.txt",
+      "diff_status": 1,
+      "summary": "Rejected counterexample: with explicit Padding 0, Arial text baselines and one relation stereotype textLength diverge. This is not a padding-value proof failure by itself, but it violates the claimed acceptance that padding-zero/font-axis held-outs retain exact output."
+    },
+    {
+      "path": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_symbol_padding_inert_with_global_seven.puml",
+      "axes": [
+        "global Padding 7",
+        "symbol-style Padding 19",
+        "symbol-style Shadowing 4",
+        "stereotype",
+        "renamed labels"
+      ],
+      "java_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_symbol_padding_inert_with_global_seven.svg",
+      "rust_svg": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_symbol_padding_inert_with_global_seven.rust.svg",
+      "diff": "test-diagrams/perturbations/usecase-creole-padding-ellipse-aspect/uc_symbol_padding_inert_with_global_seven.diff.txt",
+      "diff_status": 0,
+      "summary": "Passed: SVGs are structurally equivalent."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Fresh valid held-outs are not all byte/structure exact",
+      "detail": "Two of four use-case perturbations fail diff_one --no-oracle. The Verdana/stereotype/padding/topology case directly exercises the mechanism's advertised axes and changes ellipse geometry plus downstream layout. The Arial/Padding 0 fanout shows a control-axis residue. Under the T14 held-out rule, these counterexamples reject the mechanism even though the high-level Java padding account is plausible."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "No fixture-shaped product logic found",
+      "detail": "The touched Rust renderer surface did not contain branches keyed to the four original themed fixtures, theme names, golden paths, or fixture labels."
+    }
+  ],
+  "residue": [
+    "The rejecting use-case failures may partly belong to font/stereotype metrics or link-label layout rather than the scalar padding data flow alone. They still block acceptance because the mechanism account explicitly included font, stereotype, topology, and padding-zero axes as held-out validation requirements.",
+    "No Cargo, rustc, product tests, or product-code edits were run or made during this review."
+  ]
+}

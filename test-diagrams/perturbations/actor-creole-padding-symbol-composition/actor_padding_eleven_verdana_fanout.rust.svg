@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="205px" preserveAspectRatio="none" style="width:405px;height:205px;background:#FFFFFF;" version="1.1" viewBox="0 0 405 205" width="405px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity WideOperator-->
+<g class="entity" data-qualified-name="WideOperator" data-source-line="5" id="ent0002">
+<ellipse cx="108.9277" cy="58.1604" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M108.9277,66.1604 L108.9277,93.1604 M95.9277,74.1604 L121.9277,74.1604 M108.9277,93.1604 L95.9277,108.1604 M108.9277,93.1604 L121.9277,108.1604" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Verdana" font-size="12" lengthAdjust="spacing" textLength="183.8555" x="17" y="132.7248">Renamed Wide Audit Operator</text>
+</g>
+<!--entity FreshIntake-->
+<g class="entity" data-qualified-name="FreshIntake" data-source-line="6" id="ent0003">
+<ellipse cx="331.4503" cy="24.9523" fill="#F1F1F1" rx="45.759" ry="18.9523" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Verdana" font-size="12" lengthAdjust="spacing" textLength="76.0605" x="293.42" y="28.7443">Fresh Intake</text>
+</g>
+<!--entity NovelReview-->
+<g class="entity" data-qualified-name="NovelReview" data-source-line="7" id="ent0004">
+<ellipse cx="331.4503" cy="97.9524" fill="#F1F1F1" rx="48.3404" ry="19.1235" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Verdana" font-size="12" lengthAdjust="spacing" textLength="80.877" x="291.0118" y="101.7443">Novel Review</text>
+</g>
+<!--entity ArchiveHeldOut-->
+<g class="entity" data-qualified-name="ArchiveHeldOut" data-source-line="8" id="ent0005">
+<ellipse cx="331.4503" cy="171.9524" fill="#F1F1F1" rx="59.5948" ry="19.717" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="Verdana" font-size="12" lengthAdjust="spacing" textLength="101.8535" x="280.5235" y="175.7443">Archive Held Out</text>
+</g>
+<!--link WideOperator to FreshIntake-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="9" id="lnk6">
+<path d="M212.12,64.12 C241.75,54.31 266.4636,46.1345 289.0436,38.6645" fill="none" id="WideOperator-to-FreshIntake" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="294.74,36.78,284.9391,35.8092,289.993,38.3504,287.4518,43.4043,294.74,36.78" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link WideOperator to NovelReview-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="10" id="lnk7">
+<path d="M212.12,97.95 C236.79,97.95 256.01,97.95 276.79,97.95" fill="none" id="WideOperator-to-NovelReview" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="282.79,97.95,273.79,93.95,277.79,97.95,273.79,101.95,282.79,97.95" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link WideOperator to ArchiveHeldOut-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="11" id="lnk8">
+<path d="M212.12,132.24 C239.16,141.32 261.1616,148.7017 282.9516,156.0117" fill="none" id="WideOperator-to-ArchiveHeldOut" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="288.64,157.92,281.3796,151.2652,283.8996,156.3297,278.8351,158.8498,288.64,157.92" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

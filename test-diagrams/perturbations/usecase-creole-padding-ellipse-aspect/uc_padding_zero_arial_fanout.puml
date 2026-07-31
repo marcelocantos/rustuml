@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam defaultFontSize 15
+skinparam Padding 0
+usecase "Zero Axis Intake" as IntakeZero
+usecase "Renamed Archive Decision" as ArchiveDecision
+usecase "Fresh Escalation Review" as EscalationReview
+IntakeZero --> ArchiveDecision : promoted path
+IntakeZero ..> EscalationReview : <<include>>
+@enduml

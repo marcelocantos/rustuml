@@ -1,0 +1,50 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "205px"), ("preserveAspectRatio", "none"), ("style", "width:394px;height:205px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 394 205"), ("width", "394px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "205px"), ("preserveAspectRatio", "none"), ("style", "width:405px;height:205px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 405 205"), ("width", "405px"), ("zoomAndPan", "magnify")]
+  [4] <ellipse> attr mismatch:
+    expected: [("cx", "97.9277"), ("cy", "58.16"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "108.9277"), ("cy", "58.1604"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [5] <path> attr mismatch:
+    expected: [("d", "M97.9277,66.16 L97.9277,93.16 M84.9277,74.16 L110.9277,74.16 M97.9277,93.16 L84.9277,108.16 M97.9277,93.16 L110.9277,108.16"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M108.9277,66.1604 L108.9277,93.1604 M95.9277,74.1604 L121.9277,74.1604 M108.9277,93.1604 L95.9277,108.1604 M108.9277,93.1604 L121.9277,108.1604"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "183.8555"), ("x", "6"), ("y", "132.7245")]
+    actual:   [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "183.8555"), ("x", "17"), ("y", "132.7248")]
+  [8] <ellipse> attr mismatch:
+    expected: [("cx", "320.449"), ("cy", "24.9523"), ("fill", "#F1F1F1"), ("rx", "45.759"), ("ry", "18.9523"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "331.4503"), ("cy", "24.9523"), ("fill", "#F1F1F1"), ("rx", "45.759"), ("ry", "18.9523"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [9] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "76.0605"), ("x", "282.4187"), ("y", "28.7443")]
+    actual:   [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "76.0605"), ("x", "293.42"), ("y", "28.7443")]
+  [11] <ellipse> attr mismatch:
+    expected: [("cx", "320.4504"), ("cy", "97.9535"), ("fill", "#F1F1F1"), ("rx", "48.3404"), ("ry", "19.1235"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "331.4503"), ("cy", "97.9524"), ("fill", "#F1F1F1"), ("rx", "48.3404"), ("ry", "19.1235"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "80.877"), ("x", "280.0119"), ("y", "101.7455")]
+    actual:   [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "80.877"), ("x", "291.0118"), ("y", "101.7443")]
+  [14] <ellipse> attr mismatch:
+    expected: [("cx", "320.4548"), ("cy", "171.947"), ("fill", "#F1F1F1"), ("rx", "59.5948"), ("ry", "19.717"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "331.4503"), ("cy", "171.9524"), ("fill", "#F1F1F1"), ("rx", "59.5948"), ("ry", "19.717"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "101.8535"), ("x", "269.528"), ("y", "175.739")]
+    actual:   [("fill", "#000000"), ("font-family", "Verdana"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "101.8535"), ("x", "280.5235"), ("y", "175.7443")]
+  [17] <path> attr mismatch:
+    expected: [("d", "M201.12,64.12 C230.75,54.32 255.4636,46.1345 278.0436,38.6645"), ("fill", "none"), ("id", "WideOperator-to-FreshIntake"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M212.12,64.12 C241.75,54.31 266.4636,46.1345 289.0436,38.6645"), ("fill", "none"), ("id", "WideOperator-to-FreshIntake"), ("style", "stroke:#181818;stroke-width:1;")]
+  [18] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "283.74,36.78,273.9391,35.8092,278.993,38.3504,276.4518,43.4043,283.74,36.78"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "294.74,36.78,284.9391,35.8092,289.993,38.3504,287.4518,43.4043,294.74,36.78"), ("style", "stroke:#181818;stroke-width:1;")]
+  [20] <path> attr mismatch:
+    expected: [("d", "M201.12,97.95 C225.79,97.95 245.01,97.95 265.79,97.95"), ("fill", "none"), ("id", "WideOperator-to-NovelReview"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M212.12,97.95 C236.79,97.95 256.01,97.95 276.79,97.95"), ("fill", "none"), ("id", "WideOperator-to-NovelReview"), ("style", "stroke:#181818;stroke-width:1;")]
+  [21] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "271.79,97.95,262.79,93.95,266.79,97.95,262.79,101.95,271.79,97.95"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "282.79,97.95,273.79,93.95,277.79,97.95,273.79,101.95,282.79,97.95"), ("style", "stroke:#181818;stroke-width:1;")]
+  [23] <path> attr mismatch:
+    expected: [("d", "M201.12,132.25 C228.16,141.32 250.1616,148.7017 271.9516,156.0117"), ("fill", "none"), ("id", "WideOperator-to-ArchiveHeldOut"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M212.12,132.24 C239.16,141.32 261.1616,148.7017 282.9516,156.0117"), ("fill", "none"), ("id", "WideOperator-to-ArchiveHeldOut"), ("style", "stroke:#181818;stroke-width:1;")]
+  [24] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "277.64,157.92,270.3796,151.2652,272.8996,156.3297,267.8351,158.8498,277.64,157.92"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "288.64,157.92,281.3796,151.2652,283.8996,156.3297,278.8351,158.8498,288.64,157.92"), ("style", "stroke:#181818;stroke-width:1;")]
+

@@ -1,0 +1,8 @@
+SVG structural differences:
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Arial"), ("font-size", "15"), ("lengthAdjust", "spacing"), ("textLength", "96.731"), ("x", "181.5"), ("y", "41.5198")]
+    actual:   [("fill", "#000000"), ("font-family", "Arial"), ("font-size", "15"), ("lengthAdjust", "spacing"), ("textLength", "96.731"), ("x", "181.5"), ("y", "41.962")]
+  [19] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Arial"), ("font-size", "15"), ("lengthAdjust", "spacing"), ("textLength", "64.2188"), ("x", "197.5"), ("y", "79.1098")]
+    actual:   [("fill", "#000000"), ("font-family", "Arial"), ("font-size", "15"), ("lengthAdjust", "spacing"), ("textLength", "63.252"), ("x", "198"), ("y", "79.542")]
+
