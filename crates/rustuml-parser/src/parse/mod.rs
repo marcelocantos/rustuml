@@ -125,6 +125,58 @@ fn plantuml_color_value_is_resolvable(value: &str) -> bool {
     }
 }
 
+pub(super) fn plantuml_color_matches_ordinary_syntax(color: &str) -> bool {
+    color
+        .strip_prefix('#')
+        .is_some_and(|value| plantuml_color_value_parts(value).is_some())
+}
+
+pub(super) fn plantuml_color_matches_part2_syntax(color: &str) -> bool {
+    let Some(value) = color.strip_prefix('#') else {
+        return false;
+    };
+    let mut tokens = value.split(';').collect::<Vec<_>>();
+    if tokens.last() == Some(&"") {
+        tokens.pop();
+    }
+    if tokens.is_empty() || tokens.iter().any(|token| token.is_empty()) {
+        return false;
+    }
+
+    let directive_name = |token: &str| {
+        token
+            .split_once(':')
+            .map_or(token, |(name, _)| name)
+            .to_ascii_lowercase()
+    };
+    let is_directive = |name: &str| {
+        matches!(
+            name,
+            "text"
+                | "back"
+                | "header"
+                | "line"
+                | "line.dashed"
+                | "line.dotted"
+                | "line.bold"
+                | "shadowing"
+        )
+    };
+
+    if !is_directive(&directive_name(tokens[0]))
+        && (plantuml_color_value_parts(tokens.remove(0)).is_none() || tokens.is_empty())
+    {
+        return false;
+    }
+    tokens.into_iter().all(|token| {
+        let (name, value) = token
+            .split_once(':')
+            .map_or((token, None), |(name, value)| (name, Some(value)));
+        is_directive(&name.to_ascii_lowercase())
+            && value.is_none_or(|value| plantuml_color_value_parts(value).is_some())
+    })
+}
+
 fn set_plantuml_color_channel(
     colors: &mut PlantUmlColors,
     channel: PlantUmlColorType,
@@ -2201,6 +2253,21 @@ mod tests {
         let line_main = parse_plantuml_colors("#Red;back:Blue", PlantUmlColorType::Line).unwrap();
         assert_eq!(line_main.line.as_deref(), Some("#Red"));
         assert_eq!(line_main.back.as_deref(), Some("Blue"));
+    }
+
+    #[test]
+    fn color_parser_keeps_ordinary_and_part2_syntax_membership_distinct() {
+        assert!(plantuml_color_matches_ordinary_syntax("#back"));
+        assert!(plantuml_color_matches_part2_syntax("#back"));
+        assert!(!plantuml_color_matches_ordinary_syntax("#line.dotted"));
+        assert!(plantuml_color_matches_part2_syntax("#line.dotted"));
+        assert!(!plantuml_color_matches_ordinary_syntax("#back:Red"));
+        assert!(plantuml_color_matches_part2_syntax("#back:Red"));
+        assert!(plantuml_color_matches_part2_syntax(
+            "#Wheat;line.bold:Navy;text:Red"
+        ));
+        assert!(!plantuml_color_matches_part2_syntax("#Wheat;"));
+        assert!(!plantuml_color_matches_part2_syntax("#back:Red;;line:Blue"));
     }
 
     #[test]

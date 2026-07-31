@@ -15,7 +15,7 @@ use rustuml_layout::graph::{
     ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult,
 };
 use rustuml_parser::diagram::deployment::*;
-use rustuml_parser::diagram::style::{PlantUmlColors, PlantUmlLineStyle, StyleScheme};
+use rustuml_parser::diagram::style::StyleScheme;
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::handwritten::{
@@ -3150,6 +3150,9 @@ const NOTE_FONT_SIZE: f64 = 13.0;
 const NOTE_MARGIN_X1: f64 = 6.0;
 const NOTE_MARGIN_X2: f64 = 15.0;
 const NOTE_MARGIN_Y: f64 = 5.0;
+// Java `ComponentRoseNote` keeps `Style.getStroke()` when Colors overrides
+// the folded symbol context; Rose's default line thickness is one half pixel.
+const LINK_NOTE_STROKE_WIDTH: f64 = 1.0 / 2.0;
 // Java provenance: `EntityImageNoteLink` delegates to `ComponentRoseNote`,
 // whose preferred size adds Rose's five-pixel padding on every side before
 // `SvekEdge` merges it with the ordinary center label.
@@ -3581,13 +3584,11 @@ fn render_deployment_link_note(
         .as_deref()
         .map(crate::sequence::resolve_color)
         .unwrap_or_else(|| STROKE.to_string());
-    let stroke_style = deployment_note_stroke_style(&note.colors, &stroke);
-    let text_color = note
-        .colors
-        .text
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| TEXT_COLOR.to_string());
+    // `ComponentRoseNote` passes Colors to `Style.getSymbolContext`, which
+    // consumes BACK and LINE but keeps the style stroke and prebuilt text
+    // configuration. TEXT and the retained specific line stroke are inert on
+    // this folded link-note path.
+    let stroke_style = format!("stroke:{stroke};stroke-width:{LINK_NOTE_STROKE_WIDTH};");
     // `ComponentRoseNote.drawInternalU` truncates the text-box dimensions
     // before `EntityImageNoteLink` paints the folded note inside SvekEdge.
     let width = dim.width.floor();
@@ -3615,30 +3616,16 @@ fn render_deployment_link_note(
 
     let mut baseline = y + NOTE_MARGIN_Y + pm::ascent(NOTE_FONT_SIZE);
     for line in note.text.lines() {
-        emit_text_colored(
+        emit_text(
             svg,
             line,
             x + NOTE_MARGIN_X1,
             baseline,
             NOTE_FONT_SIZE,
-            &text_color,
             false,
             false,
         );
         baseline += text_render::label_height(line, NOTE_FONT_SIZE);
-    }
-}
-
-fn deployment_note_stroke_style(colors: &PlantUmlColors, stroke: &str) -> String {
-    match colors.line_style {
-        Some(PlantUmlLineStyle::Dashed) => {
-            format!("stroke:{stroke};stroke-width:1;stroke-dasharray:7,7;")
-        }
-        Some(PlantUmlLineStyle::Dotted) => {
-            format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;")
-        }
-        Some(PlantUmlLineStyle::Bold) => format!("stroke:{stroke};stroke-width:2;"),
-        None => format!("stroke:{stroke};stroke-width:0.5;"),
     }
 }
 
@@ -8574,7 +8561,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     }
 
     #[test]
-    fn link_note_color_channels_drive_fill_border_text_and_stroke() {
+    fn link_note_consumes_only_component_rose_symbol_color_channels() {
         let render_source = |color: &str, text: &str| {
             let source = format!(
                 "node RenamedColorSource\nnode RenamedColorTarget\nRenamedColorSource --> RenamedColorTarget\nnote left on link {color} : {text}"
@@ -8589,26 +8576,24 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             "renamed dashed chroma",
         );
         assert!(
-            dashed.contains(
-                r##"fill="#FF0000" style="stroke:#00FF00;stroke-width:1;stroke-dasharray:7,7;""##
-            ),
+            dashed.contains(r##"fill="#FF0000" style="stroke:#00FF00;stroke-width:0.5;""##),
             "{dashed}"
         );
         assert!(
-            dashed.contains(r##"<text fill="#0000FF""##)
+            dashed.contains(r##"<text fill="#000000""##)
                 && dashed.contains(">renamed dashed chroma</text>"),
             "{dashed}"
         );
 
         let dotted = render_source("#back:Wheat;line.dotted", "renamed dotted chroma");
         assert!(
-            dotted.contains(r##"stroke:#181818;stroke-width:1;stroke-dasharray:1,3;"##),
+            dotted.contains(r##"fill="#F5DEB3" style="stroke:#181818;stroke-width:0.5;""##),
             "{dotted}"
         );
 
         let bold = render_source("#back:Wheat;line.bold:Navy", "renamed bold chroma");
         assert!(
-            bold.contains(r##"stroke:#000080;stroke-width:2;"##),
+            bold.contains(r##"fill="#F5DEB3" style="stroke:#000080;stroke-width:0.5;""##),
             "{bold}"
         );
     }
@@ -8631,7 +8616,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         ] {
             let note = DeploymentLinkNote {
                 text: "renamed compound note".to_string(),
-                colors: PlantUmlColors::default(),
+                colors: rustuml_parser::diagram::style::PlantUmlColors::default(),
                 position,
             };
             let size = deployment_link_note_label_size(&note, dim, Some(label));
@@ -8661,7 +8646,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
 
         let note = DeploymentLinkNote {
             text: "note-only control".to_string(),
-            colors: PlantUmlColors::default(),
+            colors: rustuml_parser::diagram::style::PlantUmlColors::default(),
             position: DeploymentNotePosition::Bottom,
         };
         let note_only_size = deployment_link_note_label_size(&note, dim, None);
