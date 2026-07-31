@@ -1,0 +1,6 @@
+@startuml
+class CheckerClnAtlas2601
+class CheckerClnBeacon2609
+CheckerClnAtlas2601 --> CheckerClnBeacon2609 : ok
+note on link : fractional vault note qijwm 2617
+@enduml

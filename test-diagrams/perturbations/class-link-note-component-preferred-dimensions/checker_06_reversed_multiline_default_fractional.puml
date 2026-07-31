@@ -1,0 +1,9 @@
+@startuml
+class CheckerClnNorth2741
+class CheckerClnSouth2749
+CheckerClnNorth2741 <-- CheckerClnSouth2749 : reverse label O0wm 2753
+note on link
+  upper qij fractional 2759
+  lower Wwm fractional 2767
+end note
+@enduml
