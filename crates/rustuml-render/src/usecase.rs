@@ -208,6 +208,7 @@ struct SkinColors {
     uc_font_family: String,
     uc_font_size: u32,
     uc_stereo_font_color: String,
+    creole_padding: f64,
     arrow_color: String,
     arrow_head_color: String,
     arrow_stroke_width: f64,
@@ -298,6 +299,12 @@ impl SkinColors {
             ),
             uc_stereo_font_color: skin_color(skinparams, "usecaseStereotypeFontColor")
                 .unwrap_or(uc_font_color),
+            // Java `Display#getCreole` reads the global `SkinParam#getPadding`
+            // when it constructs every `SheetBlock1`. This is independent of
+            // the use-case symbol style's own Padding property.
+            creole_padding: skin_value(skinparams, &["padding"])
+                .and_then(|value| value.parse::<f64>().ok())
+                .unwrap_or(0.0),
             // Link styles are rebuilt from each Link's captured StyleBuilder
             // below. Do not seed them from the final raw skinparam map: Java
             // `Link#getStyleBuilder` never receives Entity's legacy refresh.
@@ -463,9 +470,9 @@ impl SkinColors {
         if let Some(value) = stereotype_style.property("fontColor") {
             result.uc_stereo_font_color = crate::sequence::resolve_color(value);
         }
-        // `EntityImageDescription` reads Padding and Shadowing into style
-        // values, but `USymbolUsecase#asSmall` consumes neither. They remain
-        // intentionally inert here.
+        // `EntityImageDescription` reads symbol-style Padding and Shadowing,
+        // but `USymbolUsecase#asSmall` consumes neither. Global Creole
+        // padding was resolved separately by `from_meta`.
         result
     }
 
@@ -1139,13 +1146,21 @@ struct ActorDim {
 struct UseCaseDim {
     label_w: f64,
     stereo_w: f64,
-    body_line_tops: Vec<f64>,
-    separators: Vec<UseCaseSeparatorPlacement>,
-    body_offset_y: f64,
+    text_block: UseCaseTextBlock,
     text_x_shift: f64,
     footprint_center_y: f64,
     rx: f64,
     ry: f64,
+}
+
+struct UseCaseTextBlock {
+    width: f64,
+    height: f64,
+    stereo_text_top: Option<f64>,
+    body_line_tops: Vec<f64>,
+    separators: Vec<UseCaseSeparatorPlacement>,
+    footprint_lines: Vec<FootprintLine>,
+    footprint_bounds: Vec<FootprintBounds>,
 }
 
 #[derive(Clone, Copy)]
@@ -1269,6 +1284,7 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
 
 fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     let font_size = skin.uc_font_size as f64;
+    let padding = skin.creole_padding;
     let label_w =
         text_render::measure_with_family(&uc.label, font_size, false, &skin.uc_font_family);
     let stereo_w = uc
@@ -1296,8 +1312,8 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
         .iter()
         .map(|line| text_render::label_height_with_family(line, font_size, &skin.uc_font_family))
         .collect();
-    let (body_line_tops, separators, compartment_bounds, body_height) =
-        use_case_body_layout(&body_widths, &body_heights, &uc.separators);
+    let (mut body_line_tops, mut separators, mut compartment_bounds, body_block_w, body_block_h) =
+        use_case_body_layout(&body_widths, &body_heights, &uc.separators, padding);
     let stereo_height = uc
         .stereotype
         .as_ref()
@@ -1309,28 +1325,41 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
             )
         })
         .unwrap_or(0.0);
-    let body_offset_y = if uc.stereotype.is_some() {
-        stereo_height
-    } else {
-        0.0
-    };
-    // Java `Display.getCreole` builds the standalone stereotype through
-    // `SheetBlock1`, whose one-pixel horizontal padding contributes to the
-    // merged block dimension (and therefore alpha). `Footprint` records only
-    // the painted text corners inside that padding.
+    // Java composes two independently padded Creole blocks: the standalone
+    // stereotype (additionally wrapped in a one-pixel horizontal margin) and
+    // the BodyEnhanced2 label. `TextBlockVertical` stacks and centre-aligns
+    // those natural blocks before `TextBlockInEllipse` measures or paints it.
     let stereo_block_w = if uc.stereotype.is_some() {
-        stereo_w + 2.0
+        stereo_w + 2.0 * padding + 2.0
     } else {
         0.0
     };
-    let body_block_w = body_widths.iter().copied().fold(0.0_f64, f64::max);
+    let stereo_block_h = if uc.stereotype.is_some() {
+        stereo_height + 2.0 * padding
+    } else {
+        0.0
+    };
     let block_w = stereo_block_w.max(body_block_w);
-    let block_h = body_offset_y + body_height;
+    let block_h = stereo_block_h + body_block_h;
+    for top in &mut body_line_tops {
+        *top += stereo_block_h;
+    }
+    for separator in &mut separators {
+        separator.y += stereo_block_h;
+    }
+    let body_x = (block_w - body_block_w) / 2.0;
+    for bounds in &mut compartment_bounds {
+        bounds.start.0 += body_x;
+        bounds.end.0 += body_x;
+        bounds.start.1 += stereo_block_h;
+        bounds.end.1 += stereo_block_h;
+    }
+
     let mut footprint_lines = Vec::with_capacity(body_widths.len() + 1);
     if let Some(stereotype) = &uc.stereotype {
         footprint_lines.extend(use_case_footprint_atoms(
             &format!("\u{00AB}{stereotype}\u{00BB}"),
-            0.0,
+            padding,
             font_size,
             &skin.uc_font_family,
         ));
@@ -1338,27 +1367,38 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     for (line, &top) in body_lines.iter().zip(&body_line_tops) {
         footprint_lines.extend(use_case_footprint_atoms(
             line,
-            body_offset_y + top,
+            top,
             font_size,
             &skin.uc_font_family,
         ));
     }
-    let body_x = (block_w - body_block_w) / 2.0;
-    let footprint_bounds: Vec<_> = compartment_bounds
-        .iter()
-        .map(|bounds| FootprintBounds {
-            start: (body_x + bounds.start.0, body_offset_y + bounds.start.1),
-            end: (body_x + bounds.end.0, body_offset_y + bounds.end.1),
-        })
-        .collect();
-    let (rx, ry, footprint_center_x, footprint_center_y) =
-        use_case_ellipse_radii(&footprint_lines, &footprint_bounds, block_w, block_h);
+    let mut footprint_bounds = Vec::with_capacity(compartment_bounds.len() + 1);
+    if uc.stereotype.is_some() {
+        // `EntityImageDescription` wraps the independently padded stereotype
+        // in `TextBlockUtils.withMargin(..., 1, 0)`. `TextBlockMarged#drawU`
+        // paints a full-size `UEmpty`, and `Footprint#drawEmpty` retains its
+        // two diagonal corners after `TextBlockVertical` centres the wrapper.
+        let stereo_x = (block_w - stereo_block_w) / 2.0;
+        footprint_bounds.push(FootprintBounds {
+            start: (stereo_x, 0.0),
+            end: (stereo_x + stereo_block_w, stereo_block_h),
+        });
+    }
+    footprint_bounds.extend(compartment_bounds);
+    let text_block = UseCaseTextBlock {
+        width: block_w,
+        height: block_h,
+        stereo_text_top: uc.stereotype.as_ref().map(|_| padding),
+        body_line_tops,
+        separators,
+        footprint_lines,
+        footprint_bounds,
+    };
+    let (rx, ry, footprint_center_x, footprint_center_y) = use_case_ellipse_radii(&text_block);
     UseCaseDim {
         label_w,
         stereo_w,
-        body_line_tops,
-        separators,
-        body_offset_y,
+        text_block,
         text_x_shift: block_w / 2.0 - footprint_center_x,
         footprint_center_y,
         rx,
@@ -1440,22 +1480,29 @@ fn use_case_body_layout(
     line_widths: &[f64],
     line_heights: &[f64],
     separators: &[UseCaseSeparator],
+    padding: f64,
 ) -> (
     Vec<f64>,
     Vec<UseCaseSeparatorPlacement>,
     Vec<FootprintBounds>,
     f64,
+    f64,
 ) {
     let line_count = line_widths.len();
     let mut line_tops = Vec::with_capacity(line_count);
     let mut placements = Vec::with_capacity(separators.len());
-    let mut y = 0.0;
+    // Each compartment is its own `SheetBlock1`: the first is undecorated,
+    // while every block introduced by a separator is wrapped in BodyEnhanced2's
+    // four-pixel vertical margin. Padding therefore occurs once per block,
+    // inside the decorated bounds, rather than once around the complete body.
+    let mut y = padding;
     let mut decorated = false;
     for line_index in 0..=line_count {
         for separator in separators
             .iter()
             .filter(|separator| separator.before_line.min(line_count) == line_index)
         {
+            y += padding;
             if decorated {
                 y += COMPARTMENT_MARGIN_Y;
             }
@@ -1464,7 +1511,7 @@ fn use_case_body_layout(
                 style: separator.style,
                 y,
             });
-            y += COMPARTMENT_MARGIN_Y;
+            y += COMPARTMENT_MARGIN_Y + padding;
             decorated = true;
         }
         if line_index < line_count {
@@ -1472,10 +1519,11 @@ fn use_case_body_layout(
             y += line_heights.get(line_index).copied().unwrap_or(LINE_H);
         }
     }
+    y += padding;
     if decorated {
         y += COMPARTMENT_MARGIN_Y;
     }
-    let body_width = line_widths.iter().copied().fold(0.0_f64, f64::max);
+    let body_width = line_widths.iter().copied().fold(0.0_f64, f64::max) + 2.0 * padding;
     let compartment_bounds = placements
         .iter()
         .enumerate()
@@ -1488,7 +1536,8 @@ fn use_case_body_layout(
             let width = line_widths[placement.before_line.min(line_count)..end_line]
                 .iter()
                 .copied()
-                .fold(0.0_f64, f64::max);
+                .fold(0.0_f64, f64::max)
+                + 2.0 * padding;
             let x = (body_width - width) / 2.0;
             FootprintBounds {
                 start: (x, placement.y),
@@ -1499,7 +1548,7 @@ fn use_case_body_layout(
             }
         })
         .collect();
-    (line_tops, placements, compartment_bounds, y)
+    (line_tops, placements, compartment_bounds, body_width, y)
 }
 
 #[derive(Clone, Copy)]
@@ -1569,22 +1618,19 @@ fn smallest_enclosing_circle(
     circle
 }
 
-fn use_case_ellipse_radii(
-    lines: &[FootprintLine],
-    bounds: &[FootprintBounds],
-    text_w: f64,
-    text_h: f64,
-) -> (f64, f64, f64, f64) {
+fn use_case_ellipse_radii(text_block: &UseCaseTextBlock) -> (f64, f64, f64, f64) {
     // Java provenance: `svek.image.EntityImageUseCase.calculateDimensionSlow`
     // wraps the merged stereotype/body `TextBlock` in `TextBlockInEllipse`.
     // `Footprint.getEllipse` records every painted text corner after scaling
     // y by alpha, then `SmallestEnclosingCircle.findSec` computes the circle
     // before `getUEllipse().bigger(6)` adds three pixels to each radius.
-    let w = text_w.max(1.0);
-    let h = text_h.max(1.0);
+    let w = text_block.width.max(1.0);
+    let h = text_block.height.max(1.0);
     let alpha = (h / w).clamp(0.2, 0.8);
-    let mut points = Vec::with_capacity(lines.len() * 4 + bounds.len() * 2);
-    for line in lines {
+    let mut points = Vec::with_capacity(
+        text_block.footprint_lines.len() * 4 + text_block.footprint_bounds.len() * 2,
+    );
+    for line in &text_block.footprint_lines {
         let x = (w - line.line_width) / 2.0 + line.x;
         let baseline = line.top + line.first_baseline_ascent;
         // Java `Footprint.MyUGraphic.drawText` shifts the measured line box
@@ -1598,10 +1644,11 @@ fn use_case_ellipse_radii(
             (x + line.width, bottom / alpha),
         ]);
     }
-    // Java `TextBlockMarged.drawU` emits one `UEmpty` for each decorated
-    // compartment. `Footprint.MyUGraphic.drawEmpty` records only the two
-    // diagonal corners, so their asymmetry is part of the enclosing circle.
-    for bounds in bounds {
+    // Java `TextBlockMarged.drawU` emits `UEmpty` for the stereotype's fixed
+    // horizontal wrapper and for each decorated compartment.
+    // `Footprint.MyUGraphic.drawEmpty` records only the two diagonal corners,
+    // so their asymmetry is part of the enclosing circle.
+    for bounds in &text_block.footprint_bounds {
         points.push((bounds.start.0, bounds.start.1 / alpha));
         points.push((bounds.end.0, bounds.end.1 / alpha));
     }
@@ -2997,6 +3044,7 @@ fn render_use_case(
     if let Some(stereo) = &uc.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
         let text_y = text_origin_y
+            + dim.text_block.stereo_text_top.unwrap_or(0.0)
             + text_render::label_first_baseline_ascent_with_family(
                 &stereo_text,
                 skin.uc_font_size as f64,
@@ -3027,8 +3075,12 @@ fn render_use_case(
         svg.raw(&buf);
     }
     let text_y = text_origin_y
-        + dim.body_offset_y
-        + dim.body_line_tops.first().copied().unwrap_or(0.0)
+        + dim
+            .text_block
+            .body_line_tops
+            .first()
+            .copied()
+            .unwrap_or(0.0)
         + text_render::label_first_baseline_ascent_with_family(
             if uc.description.is_empty() {
                 &uc.label
@@ -3120,8 +3172,8 @@ fn render_use_case(
                 .unwrap_or(cx_anchor + dim.text_x_shift - lw / 2.0);
             let ly = captured_y.get(line_idx).copied().unwrap_or_else(|| {
                 text_origin_y
-                    + dim.body_offset_y
                     + dim
+                        .text_block
                         .body_line_tops
                         .get(body_line)
                         .copied()
@@ -3136,19 +3188,12 @@ fn render_use_case(
                 flush_seps(svg, &mut sep_idx, ly);
             } else {
                 for separator in dim
+                    .text_block
                     .separators
                     .iter()
                     .filter(|separator| separator.before_line == body_line)
                 {
-                    render_usecase_separator(
-                        svg,
-                        separator,
-                        dim,
-                        cx,
-                        cy,
-                        text_origin_y + dim.body_offset_y,
-                        stroke,
-                    );
+                    render_usecase_separator(svg, separator, dim, cx, cy, text_origin_y, stroke);
                 }
             }
             line_idx += 1;
@@ -3175,19 +3220,12 @@ fn render_use_case(
             flush_seps(svg, &mut sep_idx, f64::INFINITY);
         } else {
             for separator in dim
+                .text_block
                 .separators
                 .iter()
                 .filter(|separator| separator.before_line >= uc.description.len())
             {
-                render_usecase_separator(
-                    svg,
-                    separator,
-                    dim,
-                    cx,
-                    cy,
-                    text_origin_y + dim.body_offset_y,
-                    stroke,
-                );
+                render_usecase_separator(svg, separator, dim, cx, cy, text_origin_y, stroke);
             }
         }
     }
@@ -3200,10 +3238,10 @@ fn render_usecase_separator(
     dim: &UseCaseDim,
     cx: f64,
     cy: f64,
-    body_origin_y: f64,
+    text_origin_y: f64,
     stroke: &str,
 ) {
-    let line_y = body_origin_y + separator.y;
+    let line_y = text_origin_y + separator.y;
     let emit_line = |svg: &mut SvgBuilder, y: f64, dotted: bool| {
         let normalized_y = ((y - cy) / dim.ry).clamp(-1.0, 1.0);
         let half_width = dim.rx * (1.0 - normalized_y * normalized_y).max(0.0).sqrt();
@@ -4168,6 +4206,13 @@ fn extension_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
 
 #[cfg(test)]
 mod tests {
+    fn assert_close(actual: f64, expected: f64) {
+        assert!(
+            (actual - expected).abs() < 0.0001,
+            "expected {expected}, got {actual}"
+        );
+    }
+
     #[test]
     fn parsed_then_rendered() {
         let input = "@startuml\nactor User\nusecase \"Login\" as UC1\nUser --> UC1\n@enduml";
@@ -5175,7 +5220,7 @@ External --> Review
     }
 
     #[test]
-    fn usecase_padding_and_shadow_remain_symbol_inert() {
+    fn usecase_symbol_padding_and_shadow_remain_inert() {
         let plain =
             rustuml_parser::parse::parse("@startuml\nusecase \"Inert Controls\" as Probe\n@enduml")
                 .unwrap();
@@ -5196,10 +5241,182 @@ External --> Review
         let plain_dim = super::use_case_dim(&plain.use_cases[0], &plain_style);
         let styled_dim = super::use_case_dim(&styled.use_cases[0], &styled_style);
 
-        // Java `USymbolUsecase#asSmall` does not consume the parsed Padding or
-        // Shadowing values.
+        // Java `USymbolUsecase#asSmall` does not consume symbol-style Padding
+        // or Shadowing. This is distinct from global `skinparam Padding`,
+        // which `Display#getCreole` passes to every `SheetBlock1`.
         assert_eq!(plain_dim.rx, styled_dim.rx);
         assert_eq!(plain_dim.ry, styled_dim.ry);
+    }
+
+    #[test]
+    fn global_padding_composes_natural_blocks_across_font_and_label_axes() {
+        let cases = [
+            ("sans-serif", 14, "IO"),
+            ("Verdana", 12, "Renamed account approval queue"),
+            ("Arial", 17, "**Bold** and //italic// controls"),
+        ];
+
+        for (font, font_size, label) in cases {
+            for padding in [0.0, 3.0, 5.0, 11.0] {
+                let input = format!(
+                    "@startuml\n\
+                     skinparam defaultFontName {font}\n\
+                     skinparam defaultFontSize {font_size}\n\
+                     skinparam Padding {padding}\n\
+                     usecase \"{label}\" as Probe\n\
+                     @enduml"
+                );
+                let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+                    panic!("expected use-case diagram");
+                };
+                let base = super::SkinColors::from_meta(&usecase.meta, None);
+                let skin = base.for_use_case(&usecase.meta, &usecase.use_cases[0]);
+                let dim = super::use_case_dim(&usecase.use_cases[0], &skin);
+                let label_height = crate::text_render::label_height_with_family(
+                    label,
+                    font_size as f64,
+                    &skin.uc_font_family,
+                );
+
+                assert_close(skin.creole_padding, padding);
+                assert_close(dim.text_block.width, dim.label_w + 2.0 * padding);
+                assert_close(dim.text_block.height, label_height + 2.0 * padding);
+                assert_close(dim.text_block.body_line_tops[0], padding);
+                assert!(
+                    dim.text_block
+                        .footprint_lines
+                        .iter()
+                        .all(|atom| (atom.top - padding).abs() < 0.0001)
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn explicit_zero_padding_preserves_the_unpadded_render() {
+        let plain = rustuml_parser::parse::parse(
+            "@startuml\n' padding control\nusecase \"Zero Padding Control\" as Probe\n@enduml",
+        )
+        .unwrap();
+        let explicit = rustuml_parser::parse::parse(
+            "@startuml\nskinparam Padding 0\nusecase \"Zero Padding Control\" as Probe\n@enduml",
+        )
+        .unwrap();
+
+        assert_eq!(crate::render_svg(&plain), crate::render_svg(&explicit));
+    }
+
+    #[test]
+    fn global_padding_translates_stereotype_and_compartment_composition() {
+        let stereotype_input = |padding: f64| {
+            format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 usecase RenamedHeldOutApprovalSurface <<audit-axis>>\n\
+                 @enduml"
+            )
+        };
+        let stereotype_dim = |padding: f64| {
+            let diagram = rustuml_parser::parse::parse(&stereotype_input(padding)).unwrap();
+            let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+                panic!("expected use-case diagram");
+            };
+            let base = super::SkinColors::from_meta(&usecase.meta, None);
+            let skin = base.for_use_case(&usecase.meta, &usecase.use_cases[0]);
+            super::use_case_dim(&usecase.use_cases[0], &skin)
+        };
+        let stereotype_padding = 7.0;
+        let plain_stereo = stereotype_dim(0.0);
+        let padded_stereo = stereotype_dim(stereotype_padding);
+        assert_close(
+            padded_stereo.text_block.height - plain_stereo.text_block.height,
+            4.0 * stereotype_padding,
+        );
+        assert_close(
+            padded_stereo.text_block.stereo_text_top.unwrap(),
+            stereotype_padding,
+        );
+        assert_close(
+            padded_stereo.text_block.body_line_tops[0] - plain_stereo.text_block.body_line_tops[0],
+            3.0 * stereotype_padding,
+        );
+        assert_close(
+            padded_stereo.text_block.footprint_lines[0].top,
+            stereotype_padding,
+        );
+        let stereo_bound = padded_stereo.text_block.footprint_bounds[0];
+        let stereo_bound_width = stereo_bound.end.0 - stereo_bound.start.0;
+        assert!(padded_stereo.text_block.width > stereo_bound_width);
+        assert_close(
+            stereo_bound_width,
+            padded_stereo.stereo_w + 2.0 * stereotype_padding + 2.0,
+        );
+        assert_close(
+            stereo_bound.start.0,
+            (padded_stereo.text_block.width - stereo_bound_width) / 2.0,
+        );
+        assert_close(stereo_bound.start.1, 0.0);
+        assert_close(
+            stereo_bound.end.1 - stereo_bound.start.1,
+            plain_stereo.text_block.body_line_tops[0] + 2.0 * stereotype_padding,
+        );
+
+        let multiline_input = |padding: f64| {
+            format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 usecase FreshFlow as \"\n\
+                 Summary\n\
+                 ....\n\
+                 First detail\n\
+                 ====\n\
+                 Second detail\n\
+                 ____\n\
+                 Final detail\n\
+                 \"\n\
+                 @enduml"
+            )
+        };
+        let multiline_dim = |padding: f64| {
+            let diagram = rustuml_parser::parse::parse(&multiline_input(padding)).unwrap();
+            let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+                panic!("expected use-case diagram");
+            };
+            let base = super::SkinColors::from_meta(&usecase.meta, None);
+            let skin = base.for_use_case(&usecase.meta, &usecase.use_cases[0]);
+            super::use_case_dim(&usecase.use_cases[0], &skin)
+        };
+        let plain = multiline_dim(0.0);
+        let padded = multiline_dim(5.0);
+        assert_close(padded.text_block.width - plain.text_block.width, 10.0);
+        assert_close(padded.text_block.height - plain.text_block.height, 40.0);
+        for (index, (&plain_top, &padded_top)) in plain
+            .text_block
+            .body_line_tops
+            .iter()
+            .zip(&padded.text_block.body_line_tops)
+            .enumerate()
+        {
+            assert_close(padded_top - plain_top, 5.0 * (2 * index + 1) as f64);
+        }
+        for (index, (plain_bounds, padded_bounds)) in plain
+            .text_block
+            .footprint_bounds
+            .iter()
+            .zip(&padded.text_block.footprint_bounds)
+            .enumerate()
+        {
+            assert_close(
+                padded_bounds.start.1 - plain_bounds.start.1,
+                10.0 * (index + 1) as f64,
+            );
+            assert_close(
+                (padded_bounds.end.0 - padded_bounds.start.0)
+                    - (plain_bounds.end.0 - plain_bounds.start.0),
+                10.0,
+            );
+        }
     }
 
     #[test]
