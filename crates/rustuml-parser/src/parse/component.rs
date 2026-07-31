@@ -1921,6 +1921,39 @@ mod tests {
     }
 
     #[test]
+    fn pattern2_quoted_named_notes_are_reused_by_later_relations() {
+        for (opening, closing) in [
+            ('\u{201c}', '\u{201d}'),
+            ('\u{201d}', '\u{201c}'),
+            ('"', '\u{201d}'),
+            ('\u{e121}', '\u{e121}'),
+        ] {
+            let source = format!(
+                "component Anchor\nnote {opening}quoted payload{closing} as Ledger.Note $audit <<Trace>> #MistyRose\nLedger.Note --> Anchor"
+            );
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let diagram =
+                parse_component(&lines).unwrap_or_else(|error| panic!("{source:?}: {error:?}"));
+            assert_eq!(diagram.notes.len(), 1, "{source:?}");
+            assert_eq!(diagram.notes[0].id.as_deref(), Some("Ledger.Note"));
+            assert_eq!(diagram.connections.len(), 1);
+            assert_eq!(diagram.connections[0].from, "Ledger.Note");
+            assert!(
+                !diagram
+                    .components
+                    .iter()
+                    .any(|item| item.id == "Ledger.Note")
+            );
+            assert!(
+                !diagram
+                    .interfaces
+                    .iter()
+                    .any(|item| item.id == "Ledger.Note")
+            );
+        }
+    }
+
+    #[test]
     fn multiline_notes_use_the_first_source_mapped_body_record() {
         let lines = vec![
             crate::preprocess::source_line_marker(10, "component Worker"),

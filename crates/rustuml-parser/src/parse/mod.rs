@@ -35,6 +35,13 @@ use crate::preprocess;
 
 const NAMED_NOTE_CODE_PATTERN: &str = r"[\p{L}\p{N}_.]+";
 
+// Java provenance: `Pattern2.QUOTED_REPLACEMENTS` expands `%g` to ASCII
+// double quote, U+201C, U+201D, and `Jaws.BLOCK_E1_INVISIBLE_QUOTE` U+E121.
+// `CommandFactoryNote.singleLine` independently accepts any member at either
+// boundary and excludes the whole set from DISPLAY.
+const NAMED_NOTE_QUOTE_CLASS: &str = r#"[\"\u{201C}\u{201D}\u{E121}]"#;
+const NAMED_NOTE_NON_QUOTE_CLASS: &str = r#"[^\"\u{201C}\u{201D}\u{E121}]"#;
+
 // Java provenance: `ColorTrieNode` registers this case-insensitive inventory
 // for `HColorSet.parseSimpleColor`, including PlantUML's ArchiMate aliases.
 const PLANTUML_NAMED_COLORS: &str = "
@@ -156,7 +163,7 @@ fn named_note_decorations(suffix: &str) -> Option<(Vec<String>, Option<String>, 
 pub(super) fn parse_named_note_inline(line: &str) -> Option<NamedNoteCommand> {
     static COMMAND: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
         regex::Regex::new(&format!(
-            r#"^(?i:note)\s+\"([^\"]+)\"\s+(?i:as)\s+({NAMED_NOTE_CODE_PATTERN})(.*)$"#
+            r"^(?i:note)\s+{NAMED_NOTE_QUOTE_CLASS}({NAMED_NOTE_NON_QUOTE_CLASS}+){NAMED_NOTE_QUOTE_CLASS}\s+(?i:as)\s+({NAMED_NOTE_CODE_PATTERN})(.*)$"
         ))
         .unwrap()
     });
@@ -173,7 +180,10 @@ pub(super) fn parse_named_note_inline(line: &str) -> Option<NamedNoteCommand> {
 
 pub(super) fn looks_like_named_note_inline_command(line: &str) -> bool {
     static PREFIX: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
-        regex::Regex::new(r#"^(?i:note)\s+"[^"]*"\s+(?i:as)(?:\s|$)"#).unwrap()
+        regex::Regex::new(&format!(
+            r"^(?i:note)\s+{NAMED_NOTE_QUOTE_CLASS}{NAMED_NOTE_NON_QUOTE_CLASS}*{NAMED_NOTE_QUOTE_CLASS}\s+(?i:as)(?:\s|$)"
+        ))
+        .unwrap()
     });
     PREFIX.is_match(line)
 }
@@ -1882,6 +1892,33 @@ mod tests {
 
         assert!(parse_named_note_inline(r#"note "payload" as ValidPrefix-invalid"#).is_none());
         assert!(parse_named_note_multiline("note as ValidCode #Red <<WrongOrder>>").is_none());
+    }
+
+    #[test]
+    fn named_note_inline_uses_java_pattern2_double_quote_alphabet() {
+        for (opening, closing) in [
+            ('"', '"'),
+            ('\u{201c}', '\u{201d}'),
+            ('\u{201d}', '\u{201c}'),
+            ('"', '\u{201d}'),
+            ('\u{e121}', '\u{e121}'),
+        ] {
+            let source = format!(
+                "note {opening}payload{closing} as Ledger.Note $audit <<Trace>> #MistyRose"
+            );
+            let command = parse_named_note_inline(&source).unwrap_or_else(|| panic!("{source:?}"));
+            assert_eq!(command.display.as_deref(), Some("payload"));
+            assert_eq!(command.code, "Ledger.Note");
+            assert_eq!(command.tags, ["audit"]);
+            assert_eq!(command.stereotype.as_deref(), Some("Trace"));
+            assert_eq!(command.color.as_deref(), Some("#MistyRose"));
+            assert!(looks_like_named_note_inline_command(&source));
+        }
+
+        for embedded in ['"', '\u{201c}', '\u{201d}', '\u{e121}'] {
+            let source = format!("note \"left{embedded}right\" as Ledger.Note");
+            assert!(parse_named_note_inline(&source).is_none(), "{source:?}");
+        }
     }
 
     #[test]
