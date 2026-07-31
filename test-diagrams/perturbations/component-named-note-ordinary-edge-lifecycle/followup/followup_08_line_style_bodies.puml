@@ -1,0 +1,11 @@
+@startuml
+note "fresh line styles" as FollowStyleN8
+component FollowSolid8
+component FollowDashed8
+component FollowDotted8
+component FollowBold8
+FollowStyleN8 --> FollowSolid8 : solid
+FollowStyleN8 ..> FollowDashed8 : dashed
+FollowStyleN8 ~~> FollowDotted8 : dotted
+FollowStyleN8 ==> FollowBold8 : bold
+@enduml

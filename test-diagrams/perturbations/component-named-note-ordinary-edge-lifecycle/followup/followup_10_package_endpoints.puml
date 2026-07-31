@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package "Fresh Outer Package" as FollowOuterP10 {
+  component "Fresh Inner Worker" as FollowInnerC10
+}
+package "Fresh Other Package" as FollowOtherP10 {
+  component "Fresh Other Worker" as FollowOtherC10
+}
+note "fresh group peer" as FollowGroupN10
+FollowGroupN10 -left-> FollowOuterP10 : note-to-group
+FollowOtherP10 -up-> FollowGroupN10 : group-to-note
+FollowGroupN10 -right-> FollowInnerC10 : note-to-member
+FollowOtherC10 -down-> FollowGroupN10 : member-to-note
+@enduml

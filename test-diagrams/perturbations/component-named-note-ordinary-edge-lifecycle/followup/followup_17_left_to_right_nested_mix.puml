@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package "Fresh LR Owner" as FollowLRP17 {
+  note as FollowLRN17
+    fresh lr nested
+  end note
+  component FollowNear17
+  component FollowFar17
+  interface FollowPort17
+  FollowNear17 -left-> FollowLRN17 : left-in
+  FollowLRN17 -right-> FollowFar17 : right-out
+  FollowLRN17 -> FollowPort17 : implicit-right-out
+}
+@enduml

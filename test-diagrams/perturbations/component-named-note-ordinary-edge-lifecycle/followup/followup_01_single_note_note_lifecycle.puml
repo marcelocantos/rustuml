@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+note "fresh alpha payload" as FollowAlphaN1
+note as FollowBetaN1
+  fresh beta payload
+end note
+FollowAlphaN1 -right-> FollowBetaN1 : note-to-note-only
+@enduml

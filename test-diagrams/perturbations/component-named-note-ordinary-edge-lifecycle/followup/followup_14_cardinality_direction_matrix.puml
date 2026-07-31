@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+component FollowTail14
+component FollowHead14
+component FollowUp14
+component FollowDown14
+note "fresh cardinalities" as FollowCardN14
+FollowTail14 "tail-L" -left-> "head-L" FollowCardN14 : left-card
+FollowCardN14 "tail-U" -up-> "head-U" FollowUp14 : up-card
+FollowCardN14 "tail-R" -right-> "head-R" FollowHead14 : right-card
+FollowDown14 "tail-D" -down-> "head-D" FollowCardN14 : down-card
+@enduml

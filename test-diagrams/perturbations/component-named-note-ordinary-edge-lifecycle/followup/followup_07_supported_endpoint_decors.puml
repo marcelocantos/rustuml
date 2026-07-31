@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+note "fresh endpoint decorations" as FollowDecorN7
+component FollowA7
+component FollowB7
+component FollowC7
+component FollowD7
+component FollowE7
+component FollowF7
+component FollowG7
+component FollowH7
+FollowDecorN7 o-- FollowA7 : aggregation-start
+FollowDecorN7 --o FollowB7 : aggregation-end
+FollowDecorN7 *-- FollowC7 : composition-start
+FollowDecorN7 --* FollowD7 : composition-end
+FollowDecorN7 #-- FollowE7 : square-start
+FollowDecorN7 --# FollowF7 : square-end
+FollowDecorN7 0-- FollowG7 : circle-start
+FollowDecorN7 --0 FollowH7 : circle-end
+@enduml

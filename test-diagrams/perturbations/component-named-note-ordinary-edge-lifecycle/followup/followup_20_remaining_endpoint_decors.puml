@@ -1,0 +1,44 @@
+@startuml
+left to right direction
+note "fresh remaining decorations" as FollowRemainingN20
+component FollowA20
+component FollowB20
+component FollowC20
+component FollowD20
+component FollowE20
+component FollowF20
+component FollowG20
+component FollowH20
+component FollowI20
+component FollowJ20
+component FollowK20
+component FollowL20
+component FollowM20
+component FollowN20
+component FollowO20
+component FollowP20
+component FollowQ20
+component FollowR20
+component FollowS20
+component FollowT20
+FollowRemainingN20 <||-- FollowA20 : redefines-start
+FollowRemainingN20 --||> FollowB20 : redefines-end
+FollowRemainingN20 <|:-- FollowC20 : definedby-start
+FollowRemainingN20 --:|> FollowD20 : definedby-end
+FollowRemainingN20 }-- FollowE20 : crowfoot-start
+FollowRemainingN20 --{ FollowF20 : crowfoot-end
+FollowRemainingN20 }o-- FollowG20 : circle-crowfoot-start
+FollowRemainingN20 --o{ FollowH20 : circle-crowfoot-end
+FollowRemainingN20 |o-- FollowI20 : circle-line-start
+FollowRemainingN20 --o| FollowJ20 : circle-line-end
+FollowRemainingN20 ||-- FollowK20 : double-line-start
+FollowRemainingN20 --|| FollowL20 : double-line-end
+FollowRemainingN20 }|-- FollowM20 : line-crowfoot-start
+FollowRemainingN20 --|{ FollowN20 : line-crowfoot-end
+FollowRemainingN20 <_-- FollowO20 : underscored-arrow-start
+FollowRemainingN20 --_> FollowP20 : underscored-arrow-end
+FollowRemainingN20 0)-- FollowQ20 : circle-connect-start
+FollowRemainingN20 --(0 FollowR20 : circle-connect-end
+FollowRemainingN20 )-- FollowS20 : parenthesis-start
+FollowRemainingN20 --( FollowT20 : parenthesis-end
+@enduml

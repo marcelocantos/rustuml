@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+component FollowParallelC15
+note "fresh parallel routes" as FollowParallelN15
+FollowParallelN15 -right-> FollowParallelC15 : forward-solid
+FollowParallelN15 .right.> FollowParallelC15 : forward-dotted
+FollowParallelC15 -left-> FollowParallelN15 : reverse-solid
+FollowParallelC15 .left.> FollowParallelN15 : reverse-dotted
+@enduml

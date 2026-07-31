@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="323px" preserveAspectRatio="none" style="width:543px;height:323px;background:#FFFFFF;" version="1.1" viewBox="0 0 543 323" width="543px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster FollowDomainP11-->
+<g class="cluster" data-qualified-name="FollowDomainP11" data-source-line="2" id="ent0002">
+<path d="M8.5,6 L109.4277,6 A3.75,3.75 0 0 1 111.9277,8.5 L118.9277,28.4883 L526.2173,28.4883 A2.5,2.5 0 0 1 528.7173,30.9883 L528.7173,244.5 A2.5,2.5 0 0 1 526.2173,247 L8.5,247 A2.5,2.5 0 0 1 6,244.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="118.9277" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="99.9277" x="10" y="21.5352">Fresh Domain</text>
+</g>
+<!--cluster FollowLedgerP11-->
+<g class="cluster" data-qualified-name="FollowDomainP11.FollowLedgerP11" data-source-line="3" id="ent0003">
+<path d="M32.5,49 L164.9756,49 A3.75,3.75 0 0 1 167.4756,51.5 L174.4756,71.4883 L502.2173,71.4883 A2.5,2.5 0 0 1 504.7173,73.9883 L504.7173,220.5 A2.5,2.5 0 0 1 502.2173,223 L32.5,223 A2.5,2.5 0 0 1 30,220.5 L30,51.5 A2.5,2.5 0 0 1 32.5,49" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="30" x2="174.4756" y1="71.4883" y2="71.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="131.4756" x="34" y="64.5352">Fresh Ledger Area</text>
+</g>
+<!--entity FollowLocalA11-->
+<g class="entity" data-qualified-name="FollowDomainP11.FollowLedgerP11.FollowLocalA11" data-source-line="7" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148.0967" x="48.32" y="160.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="176.4167" y="165.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="174.4167" y="167.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="174.4167" y="171.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.0967" x="63.32" y="194.2952">Fresh Local One</text>
+</g>
+<!--entity FollowLocalB11-->
+<g class="entity" data-qualified-name="FollowDomainP11.FollowLedgerP11.FollowLocalB11" data-source-line="8" id="ent0006">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148.9717" x="339.75" y="83.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="468.7217" y="88.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="466.7217" y="90.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="466.7217" y="94.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.9717" x="354.75" y="117.2952">Fresh Local Two</text>
+</g>
+<!--entity FollowRootC11-->
+<g class="entity" data-qualified-name="FollowRootC11" data-source-line="13" id="ent0011">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="146.0732" x="341.19" y="262.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="467.2632" y="267.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="465.2632" y="269.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="465.2632" y="273.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.0732" x="356.19" y="296.2952">Fresh Root Peer</text>
+</g>
+<g class="entity" data-qualified-name="FollowDomainP11.FollowLedgerP11.Follow.Audit.N11" data-source-line="5" id="ent0004">
+<path d="M46,84.34 L46,109.6505 L198.7456,109.6505 L198.7456,94.34 L188.7456,84.34 L46,84.34" fill="#F0F8FF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M188.7456,84.34 L188.7456,94.34 L198.7456,94.34 L188.7456,84.34" fill="#F0F8FF" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="131.7456" x="52" y="101.9084">nested fresh payload</text>
+</g>
+<!--reverse link FollowLocalA11 to Follow.Audit.N11-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0004" data-link-type="dependency" data-source-line="9" id="lnk8">
+<path d="M122.37,154.68 C122.37,138.37 122.37,123.2 122.37,109.85" fill="none" id="FollowLocalA11-backto-Follow.Audit.N11" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="122.37,160.68,126.37,151.68,122.37,155.68,118.37,151.68,122.37,160.68" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70.3892" x="75.8728" y="140.2739">nested-left</text>
+</g>
+<!--reverse link Follow.Audit.N11 to FollowLocalB11-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0006" data-link-type="dependency" data-source-line="10" id="lnk10">
+<path d="M205.1464,99.8164 C248.4264,101.3064 296.45,102.97 339.4,104.45" fill="none" id="Follow.Audit.N11-backto-FollowLocalB11" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="199.15,99.61,208.007,103.9173,204.147,99.782,208.2823,95.922,199.15,99.61" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="65.9966" x="236.7456" y="97.3786">nested-up</text>
+</g>
+<!--link Follow.Audit.N11 to FollowRootC11-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0011" data-link-type="dependency" data-source-line="14" id="lnk12">
+<path d="M145.28,110.05 C160.4,119.14 180.91,131.62 198.75,143 C262.88,183.92 331.4614,230.1718 373.6314,258.9018" fill="none" id="Follow.Audit.N11-to-FollowRootC11" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="378.59,262.28,373.4043,253.9069,374.4578,259.4648,368.9,260.5184,378.59,262.28" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="79.3711" x="229.7456" y="162.434">cross-owner</text>
+</g>
+</g></svg>

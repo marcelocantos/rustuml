@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="314px" preserveAspectRatio="none" style="width:427px;height:314px;background:#FFFFFF;" version="1.1" viewBox="0 0 427 314" width="427px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FollowTail14-->
+<g class="entity" data-qualified-name="FollowTail14" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125.9688" x="282.83" y="254"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="388.7988" y="259"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="386.7988" y="261"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="386.7988" y="265"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.9688" x="297.83" y="287.5352">FollowTail14</text>
+</g>
+<!--entity FollowHead14-->
+<g class="entity" data-qualified-name="FollowHead14" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="135.9219" x="277.85" y="173"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="393.7719" y="178"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="391.7719" y="180"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="391.7719" y="184"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95.9219" x="292.85" y="206.5352">FollowHead14</text>
+</g>
+<!--entity FollowUp14-->
+<g class="entity" data-qualified-name="FollowUp14" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.8027" x="17.02" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="116.8227" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="114.8227" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="114.8227" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.8027" x="32.02" y="40.5352">FollowUp14</text>
+</g>
+<!--entity FollowDown14-->
+<g class="entity" data-qualified-name="FollowDown14" data-source-line="5" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="139.8525" x="7" y="88"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="126.8525" y="93"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="124.8525" y="95"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="124.8525" y="99"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99.8525" x="22" y="121.5352">FollowDown14</text>
+</g>
+<g class="entity" data-qualified-name="FollowCardN14" data-source-line="6" id="ent0006">
+<path d="M279.06,78.59 L279.06,103.9005 L412.5595,103.9005 L412.5595,88.59 L402.5595,78.59 L279.06,78.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M402.5595,78.59 L402.5595,88.59 L412.5595,88.59 L402.5595,78.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="112.4995" x="285.06" y="96.1584">fresh cardinalities</text>
+</g>
+<!--reverse link FollowCardN14 to FollowTail14-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0002" data-link-type="dependency" data-source-line="7" id="lnk8">
+<path d="M292.8998,106.414 C260.6098,118.114 225.8809,136.73 206.1009,170.75 C183.0209,210.43 235.3609,240.26 282.4309,258.11" fill="none" id="FollowCardN14-backto-FollowTail14" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="298.5409,104.37,288.7166,103.6753,293.84,106.0733,291.4419,111.1967,298.5409,104.37" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55.5039" x="184.8534" y="184.3125">left-card</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="45.1255" x="227.8323" y="124.5952">head-L</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="34.0107" x="240.7672" y="269.5813">tail-L</text>
+</g>
+<!--reverse link FollowUp14 to FollowCardN14-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0006" data-link-type="dependency" data-source-line="8" id="lnk10">
+<path d="M143.01,45.1171 C187.85,55.3671 243.2309,68.03 287.5809,78.16" fill="none" id="FollowUp14-backto-FollowCardN14" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="137.1609,43.78,145.0432,49.685,142.0352,44.8942,146.826,41.8862,137.1609,43.78" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="51.1113" x="186.8534" y="50.055">up-card</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="47.2012" x="144.8868" y="58.3041">head-U</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="36.0864" x="234.9152" y="71.2627">tail-U</text>
+</g>
+<!--link FollowCardN14 to FollowHead14-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0003" data-link-type="dependency" data-source-line="9" id="lnk11">
+<path d="M345.8109,104.19 C345.8109,121.23 345.8109,145.52 345.8109,166.68" fill="none" id="FollowCardN14-to-FollowHead14" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="345.8109,172.68,349.8109,163.68,345.8109,167.68,341.8109,163.68,345.8109,172.68" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="64.9746" x="302.3144" y="143.5181">right-card</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="35.2993" x="304.4181" y="124.3511">tail-R</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="46.4141" x="293.9746" y="162.3281">head-R</text>
+</g>
+<!--link FollowDown14 to FollowCardN14-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency" data-source-line="10" id="lnk12">
+<path d="M147.3509,106.04 C187.9709,103 232.9777,99.6289 272.9677,96.6289" fill="none" id="FollowDown14-to-FollowCardN14" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="278.9509,96.18,269.6769,92.8645,273.9649,96.554,270.2754,100.8421,278.9509,96.18" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="69.1133" x="177.8534" y="95.433">down-card</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="36.8164" x="154.9861" y="118.8207">tail-D</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="47.9312" x="223.1047" y="109.9873">head-D</text>
+</g>
+</g></svg>

@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+note "fresh core arrowheads" as FollowCoreN6
+component FollowA6
+component FollowB6
+component FollowC6
+component FollowD6
+component FollowE6
+component FollowF6
+component FollowG6
+component FollowH6
+FollowCoreN6 -> FollowA6 : end-arrow
+FollowCoreN6 <- FollowB6 : start-arrow
+FollowCoreN6 <-> FollowC6 : both-arrows
+FollowCoreN6 -- FollowD6 : no-arrow
+FollowCoreN6 ..> FollowE6 : dotted-end
+FollowCoreN6 <.. FollowF6 : dotted-start
+FollowCoreN6 <|-- FollowG6 : extension-start
+FollowCoreN6 --|> FollowH6 : extension-end
+@enduml

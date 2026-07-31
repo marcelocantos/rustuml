@@ -1,0 +1,14 @@
+@startuml
+component FollowRightPeer2
+component FollowLeftPeer2
+component FollowUpPeer2
+component FollowDownPeer2
+note "right mouth" as FollowRightN2
+note "left mouth" as FollowLeftN2
+note "up mouth" as FollowUpN2
+note "down mouth" as FollowDownN2
+FollowRightN2 -right-> FollowRightPeer2
+FollowLeftPeer2 <-left- FollowLeftN2
+FollowUpPeer2 <-up- FollowUpN2
+FollowDownN2 -down-> FollowDownPeer2
+@enduml

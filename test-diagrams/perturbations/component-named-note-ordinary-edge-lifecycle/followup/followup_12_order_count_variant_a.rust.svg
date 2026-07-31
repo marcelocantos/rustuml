@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="314px" preserveAspectRatio="none" style="width:393px;height:314px;background:#FFFFFF;" version="1.1" viewBox="0 0 393 314" width="393px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FollowA12-->
+<g class="entity" data-qualified-name="FollowA12" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="110.9502" x="122.01" y="253.98"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="212.9602" y="258.98"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="210.9602" y="260.98"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="210.9602" y="264.98"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70.9502" x="137.01" y="287.5152">FollowA12</text>
+</g>
+<!--entity FollowB12-->
+<g class="entity" data-qualified-name="FollowB12" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="109.3438" x="195.82" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="285.1638" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="283.1638" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="283.1638" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="69.3438" x="210.82" y="40.5352">FollowB12</text>
+</g>
+<!--entity FollowC12-->
+<g class="entity" data-qualified-name="FollowC12" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="110.9775" x="7" y="130.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="97.9775" y="135.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="95.9775" y="137.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="95.9775" y="141.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70.9775" x="22" y="164.0252">FollowC12</text>
+</g>
+<!--entity FollowD12-->
+<g class="entity" data-qualified-name="FollowD12" data-source-line="4" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="111.7773" x="267.6" y="253.98"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="359.3773" y="258.98"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="357.3773" y="260.98"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="357.3773" y="264.98"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71.7773" x="282.6" y="287.5152">FollowD12</text>
+</g>
+<g class="entity" data-qualified-name="FollowOrderN12" data-source-line="5" id="ent0006">
+<path d="M198.34,141.08 L198.34,166.3905 L302.6213,166.3905 L302.6213,151.08 L292.6213,141.08 L198.34,141.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M292.6213,141.08 L292.6213,151.08 L302.6213,151.08 L292.6213,141.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="83.2813" x="204.34" y="158.6484">fresh order A</text>
+</g>
+<!--link FollowOrderN12 to FollowA12-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0002" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M243.2163,166.8234 C231.1063,186.9934 209.6659,222.66 194.2459,248.33" fill="none" id="FollowOrderN12-to-FollowA12" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="191.1563,253.4734,199.2197,247.8181,193.731,249.1872,192.3618,243.6986,191.1563,253.4734" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="45.4746" x="219.3558" y="220.5484">edge-a</text>
+</g>
+<!--link FollowB12 to FollowOrderN12-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="7" id="lnk8">
+<path d="M250.4863,53.8134 C250.4863,79.4734 250.4863,114.4234 250.4863,134.6434" fill="none" id="FollowB12-to-FollowOrderN12" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="250.4863,140.6434,254.4863,131.6434,250.4863,135.6434,246.4863,131.6434,250.4863,140.6434" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="46.4775" x="251.4851" y="97.06">edge-b</text>
+</g>
+<!--reverse link FollowC12 to FollowOrderN12-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0006" data-link-type="dependency" data-source-line="8" id="lnk10">
+<path d="M124.3863,153.7334 C149.6063,153.7334 173.2263,153.7334 198.0263,153.7334" fill="none" id="FollowC12-backto-FollowOrderN12" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="118.3863,153.7334,127.3863,157.7334,123.3863,153.7334,127.3863,149.7334,118.3863,153.7334" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="44.9541" x="136.1592" y="147.3042">edge-c</text>
+</g>
+<!--reverse link FollowOrderN12 to FollowD12-->
+<g class="link" data-entity-1="ent0006" data-entity-2="ent0005" data-link-type="dependency" data-source-line="9" id="lnk12">
+<path d="M260.8448,171.9674 C272.9548,192.1374 294.3863,227.8034 309.8163,253.4734" fill="none" id="FollowOrderN12-backto-FollowD12" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="257.7563,166.8234,258.9597,176.5984,260.33,171.1101,265.8184,172.4805,257.7563,166.8234" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="46.4775" x="292.3558" y="220.5484">edge-d</text>
+</g>
+</g></svg>

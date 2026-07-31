@@ -1,0 +1,19 @@
+@startuml
+component FollowA22
+component FollowB22
+component FollowC22
+component FollowD22
+component FollowE22
+component FollowF22
+component FollowG22
+component FollowH22
+note "fresh direction abbreviations" as FollowDirN22
+FollowDirN22 -l-> FollowA22 : left-short
+FollowDirN22 -le-> FollowB22 : left-medium
+FollowDirN22 -r-> FollowC22 : right-short
+FollowDirN22 -ri-> FollowD22 : right-medium
+FollowDirN22 -u-> FollowE22 : up-short
+FollowDirN22 -d-> FollowF22 : down-short
+FollowDirN22 -do-> FollowG22 : down-medium
+FollowDirN22 -right-> FollowH22 : right-full-control
+@enduml
