@@ -2232,7 +2232,11 @@ impl StateSkin {
         }
         skin.document_background = document_style
             .property("backgroundColor")
-            .map(crate::sequence::resolve_color);
+            // Java keeps HColors.transparent as a no-paint token through
+            // TitledDiagram#calculateBackColor and TextBlockExporter12026.
+            // Resolve named colors only after render_state distinguishes that
+            // semantic token from an opaque document background.
+            .map(str::to_string);
         skin.document_margin = document_style.box_sides("margin");
         skin
     }
@@ -12959,6 +12963,52 @@ CobaltDecision --> [*]
         assert!(svg.contains(r##"data-qualified-name="ArchiveVault91""##));
         assert!(svg.contains(r##"<g class="end_entity""##));
         assert!(svg.contains(r##"fill="#A1B2C3" rx="6" ry="6""##));
+    }
+
+    #[test]
+    fn document_background_preserves_transparency_until_paint_selection() {
+        let themed = rustuml_parser::parse::parse(concat!(
+            "@startuml\n",
+            "!theme aws-orange\n",
+            "[*] --> FreshWaitingRoom\n",
+            "FreshWaitingRoom --> FreshDispatchBay : release\n",
+            "FreshDispatchBay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let themed_svg = crate::render_svg(&themed);
+        assert!(!themed_svg.contains("background:#FFFFFF;"));
+        assert!(!themed_svg.contains(r##"<rect fill="#FFFFFF""##));
+
+        let opaque_after_theme = rustuml_parser::parse::parse(concat!(
+            "@startuml\n",
+            "!theme aws-orange\n",
+            "skinparam backgroundColor #123ABC\n",
+            "[*] --> FreshWaitingRoom\n",
+            "FreshWaitingRoom --> FreshDispatchBay : release\n",
+            "FreshDispatchBay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let opaque_svg = crate::render_svg(&opaque_after_theme);
+        assert!(opaque_svg.contains("background:#123ABC;"));
+        assert!(opaque_svg.contains(r##"<rect fill="#123ABC""##));
+
+        let transparent_after_opaque = rustuml_parser::parse::parse(concat!(
+            "@startuml\n",
+            "skinparam backgroundColor #123ABC\n",
+            "skinparam backgroundColor transparent\n",
+            "left to right direction\n",
+            "[*] --> FreshWaitingRoom\n",
+            "FreshWaitingRoom --> FreshDispatchBay : release\n",
+            "FreshDispatchBay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let transparent_svg = crate::render_svg(&transparent_after_opaque);
+        assert!(!transparent_svg.contains("background:#123ABC;"));
+        assert!(!transparent_svg.contains("background:#FFFFFF;"));
+        assert!(!transparent_svg.contains(r##"<rect fill="#123ABC""##));
     }
 
     #[test]

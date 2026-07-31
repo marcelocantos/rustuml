@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "state-document-background-token",
   "created": "2026-07-31",
-  "status": "accounted_preimplementation",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "d3f55c68b2fc145e982f826a70c2d460d3ad8c31",
   "java_locations": [
@@ -73,8 +73,21 @@
     "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_state.puml"
   ],
   "claimed_invariant": "The final root.document background is an optional paint, not merely an RGB color string. BackgroundColor declarations from theme skinparams, theme styles, user skinparams, and user styles share one ordered cascade. A final transparent token means no SVG root background and contributes no painted frontier; a final opaque color paints the root and, when non-white, the full-canvas rectangle. Diagram topology, labels, theme palette, declaration order, and explicit user overrides can change which declaration wins, but color normalization must not erase transparency before that semantic decision.",
-  "causal_divergence": "The parser and StyleCascade correctly retain and select each affected theme's final `skinparam BackgroundColor transparent`. StateSkin::from_diagram then maps document_style.backgroundColor through sequence::resolve_color. That helper deliberately treats unknown named colors as #FFFFFF, so the semantic token transparent becomes opaque white before render_state computes bg_is_transparent. Rust therefore emits `background:#FFFFFF;`; its painted root frontier also raises the exported height by exactly one SVG unit in the observed themed state cases. Java retains HColors.transparent through TitledDiagram.calculateBackColor and TextBlockExporter12026, so it emits neither the root background nor the extra painted extent. The repeated 1.0417px physical-height delta is a consequence of token erasure and SVG unit conversion, not a height constant to tune.",
+  "causal_divergence": "The parser and StyleCascade correctly retain and select each affected theme's final `skinparam BackgroundColor transparent`. StateSkin::from_diagram then maps document_style.backgroundColor through sequence::resolve_color. That helper deliberately treats unknown named colors as #FFFFFF, so the semantic token transparent becomes opaque white before render_state computes bg_is_transparent. Rust therefore emits `background:#FFFFFF;` while Java retains HColors.transparent through TitledDiagram.calculateBackColor and TextBlockExporter12026 and emits no root background. The initial account also hypothesized that this root paint caused the repeated one-unit canvas-height delta. The implementation experiment falsified that part: removing the background leaves the height delta unchanged because the Rust root dimension is calculated before root SVG paint selection. The height residue is owned by the distinct flat SVEK painted-envelope mechanism and is not adjusted here.",
   "planned_model_change": "Keep StateSkin.document_background as the raw winning style token, matching the class and use-case renderers' semantic handling. Test transparent before calling resolve_color; resolve only opaque values. Preserve the existing StyleCascade order, document margin resolution, explicit non-white background rectangle, and default-white behavior when no declaration exists. Add focused tests with renamed states and multiple declaration orders, including transparent theme-style/skinparam values and an opaque user override. Do not special-case theme names or subtract one pixel from themed canvases.",
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "result": "The white root background disappears from all eleven inspected themed state outputs while opaque user overrides still emit the selected root background and full-canvas rectangle. The frozen shipped-path census remains 11,116/11,251 because each inspected golden still differs by the independent one-unit root height. This mechanism therefore corrects semantic output without claiming a new passing pair.",
+    "commands": [
+      "cargo test -p rustuml-render --lib document_background_preserves_transparency_until_paint_selection",
+      "cargo build --release -p rustuml-oracle --example diff_one",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_aws_orange_state.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_black_knight_state.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_state.puml",
+      "cargo test --test golden_no_oracle --release -- --nocapture"
+    ],
+    "review_status": "Independent adversarial review remains pending. The local Java oracle is unavailable, so this record does not self-attest acceptance."
+  },
   "perturbation_axes": [
     "transparent versus named, short-hex, and full-hex opaque backgrounds",
     "theme skinparam versus theme style versus user skinparam versus user style ownership",
