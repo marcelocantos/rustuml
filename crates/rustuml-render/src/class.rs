@@ -7517,11 +7517,12 @@ fn emit_stack_envelope(
     let radius = PACKAGE_ROUND_CORNER / 2.0;
     write!(
         svg,
-        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:none;" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:none;stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
         fill,
         fmt4(height),
         fmt4(radius),
         fmt4(radius),
+        stroke_width,
         fmt4(width - 2.0 * STACK_SIDE_INSET),
         fmt4(x + STACK_SIDE_INSET),
         fmt4(y),
@@ -18117,7 +18118,27 @@ mod tests {
 
         let stack = render_symbol_cluster_primitive(PackageKind::Stack);
         assert!(stack.contains("<path "), "{stack}");
-        assert!(stack.contains(r#"style="stroke:none;""#), "{stack}");
+        assert!(
+            stack.contains(r#"style="stroke:none;stroke-width:"#),
+            "{stack}"
+        );
+    }
+
+    #[test]
+    fn scaled_stack_transparent_layer_retains_resolved_stroke_width() {
+        let input = "@startuml\n\
+                     scale 1.75\n\
+                     stack \"Renamed batch stack\" as BatchStack {\n\
+                       class RenamedWorker\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"style="stroke:none;stroke-width:1.75;""#),
+            "the transparent layer must retain the scaled active stroke: {svg}"
+        );
     }
 
     #[test]
