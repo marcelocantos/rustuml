@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-note-original-index-identity",
+  "created": "2026-07-31",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "2040e57c",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbol": "CommandFactoryNoteOnEntity.executeInternal",
+      "lines": "258-292",
+      "role": "Creates an attached note as its own NOTE entity and link; its identity is not renumbered by unrelated note-on-link or named-note commands."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder.printEntities",
+        "GraphvizImageBuilder.buildImage"
+      ],
+      "lines": "226-259,348-363",
+      "role": "Builds and paints each surviving entity and link by object identity rather than by its ordinal among one filtered note subtype."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "allocate_state_svg_ids",
+        "attached_note_specs",
+        "render_with_oracle note loop"
+      ],
+      "lines": "1920-2105,946-978,8045-8070",
+      "role": "Allocation and attached-note positions retain the original diagram.notes index, but emission filters out named and link notes before enumerate(), replacing that identity with a compressed subtype ordinal."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/state/state_multiple_notes.puml",
+    "test-diagrams/golden/state/state_mixed_all_features.puml"
+  ],
+  "claimed_invariant": "A StateNote's index is its stable identity within diagram.notes across allocation, layout, and painting. Filtering note subtypes may select which painter owns an item but must never renumber the surviving attached notes. An attached note following a note-on-link, named floating note, or any other subtype must still retrieve its own StateNoteSvgIds and AttachedNotePosition.",
+  "causal_divergence": "Rust correctly stores each attached position with the original diagram.notes index. During emission it first filters out named floating and link notes, then calls enumerate(), producing a new compressed index. state_multiple_notes therefore looks for original index 1 instead of 2 after a link note; state_mixed_all_features looks for index 0 instead of 1 after a named note. Both miss their routed positions and fall into the legacy fallback, which invents GMN IDs, uses approximate geometry, and leaks the state border color into note strokes.",
+  "planned_model_change": "Enumerate diagram.notes before filtering painter-owned subtypes so emission carries the original index into the attached-position lookup. Keep allocation, geometry, style, and fallback behavior unchanged. Add a fresh reordered note mixture covering named floating, note-on-link, and attached notes with renamed labels.",
+  "perturbation_axes": [
+    "attached note before and after a note-on-link",
+    "attached note before and after a named floating note",
+    "one and multiple attached notes",
+    "left and right attachment",
+    "renamed aliases, states, and multiline text"
+  ],
+  "scope_boundary": "This mechanism owns stable StateNote identity across subtype filtering. It does not own UID allocation formulas, note geometry, Opale eligibility, note styles, transition labels, Graphviz routing, comparator behavior, or corpus eligibility.",
+  "acceptance": [
+    "Both evidence inputs use their allocated GMN/entity IDs and routed attached-note positions and become structurally equivalent.",
+    "A fresh mixed-order perturbation preserves every original note index through its owning painter.",
+    "Existing pure attached-note and note-on-link controls do not regress.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict and held-out Java/Rust evidence at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "fixture-name or note-text conditions",
+    "special cases for index 1 or 2",
+    "manual GMN renumbering after render",
+    "captured note geometry",
+    "post-hoc SVG rewriting",
+    "comparator changes"
+  ]
+}
