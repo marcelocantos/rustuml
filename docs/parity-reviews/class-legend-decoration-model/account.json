@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-legend-decoration-model",
+  "created": "2026-07-31",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "1f7faee3",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/DiagramChromeFactory12026.java",
+      "symbols": [
+        "DiagramChromeFactory12026.create",
+        "DiagramChromeFactory12026.addLegend"
+      ],
+      "lines": "140-148,324-335",
+      "role": "Wraps the raw diagram with the legend before title, caption, header, and footer, preserving the parsed horizontal and vertical legend alignments."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/activitydiagram3/ftile/EntityImageLegend.java",
+      "symbol": "EntityImageLegend.create",
+      "lines": "47-54",
+      "role": "Resolves the diagram-specific document legend style and creates the legend through Style.createTextBlockBordered."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "symbol": "Style.createTextBlockBordered",
+      "lines": "315-331",
+      "role": "Creates the Creole text block and composes style padding, border, rounded background, and external margin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DecorateEntityImage.java",
+      "symbols": [
+        "DecorateEntityImage.drawU",
+        "DecorateEntityImage.calculateDimension"
+      ],
+      "lines": "103-134,160-166",
+      "role": "Merges the original and legend dimensions top-to-bottom, centers the original over the merged width, places the legend by its own horizontal alignment, and stacks it above or below according to vertical alignment."
+    },
+    {
+      "path": "src/main/resources/skin/plantuml.skin",
+      "symbol": "document legend style",
+      "lines": "46-53",
+      "role": "Defines the default black line, #DDDDDD background, 14px font, 15px round corner, 5px padding, and 12px external margin."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbol": "ClassParser::try_meta",
+      "lines": "1930-1939",
+      "role": "Recognizes class legend block prefixes but discards their horizontal and vertical alignment tokens."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "DecorationLayout::new",
+      "lines": "8769-8800",
+      "role": "Composes title, header, caption, and footer directly around the class body and omits the legend wrapper."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_plantuml_svg legend emission",
+      "lines": "5728-5740,6233-6239",
+      "role": "Emits legends only when oracle-captured geometry is available, so the shipped no-oracle path loses the parsed legend entirely."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/edge-cases/edge_meta_legend_center.puml",
+    "test-diagrams/golden/edge-cases/edge_meta_legend_left.puml",
+    "test-diagrams/golden/edge-cases/edge_meta_legend_right.puml",
+    "test-diagrams/golden/edge-cases/edge_meta_all_combined.puml"
+  ],
+  "claimed_invariant": "A class legend is a styled bordered text block with 5px internal padding, a one-pixel bordered-dimension extent, and 12px external margins. DecorateEntityImage first merges that block top-to-bottom with the raw class body, centers the narrower body over their shared width, aligns the legend block left, center, or right over that same width, and stacks it top or bottom. Title, caption, header, and footer then wrap the already legend-decorated body in Java factory order.",
+  "causal_divergence": "The Rust class parser stores legend content but not its alignment state, and the shipped class renderer has no no-oracle legend wrapper. Consequently the class body retains its undecorated dimensions and position, no legend group is emitted, and later title/caption/header/footer wrappers compose around the wrong child dimension. The existing meta-only legend renderer is a separate empty-body approximation and cannot supply the missing class-body composition.",
+  "planned_model_change": "Parse class legend alignment tokens into DiagramMeta using the same enum model already used by component and deployment parsers. Extend DecorationLayout with an inner legend-wrapped body dimension, lifecycle-independent body and legend offsets, and top/bottom legend heights; then apply the existing outer title/caption/header/footer wrappers to that inner result in Java order. Emit a no-oracle legend group from measured 14px rows and the source-defined default style. Reuse the existing oracle legend emission unchanged when oracle geometry is present. Do not branch on fixture names, legend text, body cardinality, or observed coordinates.",
+  "checked_derivations": [
+    {
+      "input": "test-diagrams/golden/edge-cases/edge_meta_legend_center.puml",
+      "derivation": "The 111.8564px text run becomes a 121.8564px drawn rectangle after 5px padding on each side and a 146.8564px legend block after 12px margins plus the bordered block's final one-pixel dimension extent. The 70.7051px one-leaf body is therefore translated by (146.8564 - 70.7051) / 2 = 38.07565px, matching the expected entity shift from x=7 to x=45.0757."
+    },
+    {
+      "input": "test-diagrams/golden/edge-cases/edge_meta_all_combined.puml",
+      "derivation": "The 90.582px legend rectangle yields a 115.582px inner legend-wrapped width, which is narrower than the 188.8633px title block. Because Java adds the title after the legend, the complete legend/body child is translated by (188.8633 - 115.582) / 2 = 36.64065px; adding the legend's 12px margin produces the expected rectangle x=48.6406."
+    }
+  ],
+  "perturbation_axes": [
+    "left, center, and right horizontal alignment with a body wider than the legend",
+    "top versus bottom vertical placement",
+    "one through three legend lines with renamed text",
+    "one unlinked leaf versus linked and multi-leaf SVEK bodies",
+    "legend alone versus nesting with title, caption, header, and footer"
+  ],
+  "scope_boundary": "This mechanism owns class legend parsing, bordered-block measurement, wrapper ordering, placement, and emission. It does not own Creole-rich legend cells, custom legend skinparams, class body layout, title/header/footer glyph metrics, oracle extraction, routing, comparator behavior, or corpus eligibility.",
+  "acceptance": [
+    "All four existing class legend evidence inputs become structurally equivalent without oracle data.",
+    "Fresh renamed perturbations cover horizontal alignment over a wider body and top/bottom placement.",
+    "Existing title, caption, header, footer, and legend-only empty-body matches do not regress.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Parser and renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "fixture-name or legend-text conditions",
+    "per-alignment coordinate constants",
+    "post-hoc SVG string surgery",
+    "golden-data access from shipping crates",
+    "comparator, eligibility, or frozen-census changes"
+  ]
+}
