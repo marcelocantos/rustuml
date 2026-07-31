@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-degenerated-decoration-dimension",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "809507cb59607e75c6a2eb199ec891eb380124fa",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbol": "GraphvizImageBuilder.buildImage",
+      "lines": "211-223",
+      "role": "Selects EntityImageDegenerated for exactly one non-state root leaf with no links or groups."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/EntityImageDegenerated.java",
+      "symbols": [
+        "EntityImageDegenerated.calculateDimension",
+        "EntityImageDegenerated.drawU"
+      ],
+      "lines": "50-91",
+      "role": "Defines delta as 7, reports the intrinsic entity dimension plus delta on both sides, and paints the entity translated by that same delta."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/DiagramChromeFactory12026.java",
+      "symbols": [
+        "DiagramChromeFactory12026.addTitle",
+        "DiagramChromeFactory12026.addCaption",
+        "DiagramChromeFactory12026.addHeaderAndFooter"
+      ],
+      "lines": "342-412",
+      "role": "Builds title, caption, header, and footer as styled text blocks and wraps the body with DecorateEntityImage."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockBordered.java",
+      "symbol": "TextBlockBordered.calculateDimension",
+      "lines": "79-99",
+      "role": "Calculates each styled decoration block as its text plus margins and a final one pixel in both width and height, including transparent-border styles."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DecorateEntityImage.java",
+      "symbols": [
+        "DecorateEntityImage.drawU",
+        "DecorateEntityImage.calculateDimension"
+      ],
+      "lines": "103-165",
+      "role": "Merges body and decoration dimensions and centres the body at (dimTotal.width - dimOriginal.width) / 2."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_plantuml_svg body decoration layout",
+      "lines": "5349-5367",
+      "role": "Uses a common 15-pixel body width addition for both SVEK and the already-detected degenerated lifecycle before centring under page decorations."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "DecorationLayout::block_width",
+      "lines": "8727-8736",
+      "role": "Models decoration text plus padding and margin but omits the final one-pixel TextBlockBordered width already modeled by block_height."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/edge-cases/edge_meta_long_title.puml",
+    "test-diagrams/golden/edge-cases/edge_meta_multiline_title.puml",
+    "test-diagrams/golden/edge-cases/edge_render_no_title.puml",
+    "test-diagrams/golden/edge-cases/edge_size_long_title.puml",
+    "test-diagrams/golden/edge-cases/edge_unicode_chinese_title.puml"
+  ],
+  "claimed_invariant": "For a one-leaf class diagram, page-decoration centring composes two independently owned Java dimensions: EntityImageDegenerated reports the intrinsic body plus exactly fourteen pixels, while each styled title, caption, header, or footer reports text, style insets, and TextBlockBordered's final one-pixel extent. DecorateEntityImage then centres the body from those complete dimensions. Changing labels, line count, alignment, or Unicode content changes measured text but not either ownership rule.",
+  "causal_divergence": "Rust already selects the degenerated lifecycle but feeds page-decoration layout a generic fifteen-pixel SVEK body addition. It simultaneously omits TextBlockBordered's final one-pixel width from every decoration. When a decoration is wider than the body, the centring numerator is therefore two pixels smaller than Java's: the decoration is one pixel too narrow and the body is one pixel too wide. Division by two places every body primitive exactly one pixel too far left in the observed title cluster.",
+  "planned_model_change": "Use EntityImageDegenerated's source-defined fourteen-pixel body addition when uses_degenerated_entity is true, retaining the existing generic SVEK addition for every other lifecycle. Add DECORATION_BORDER_EXTENT once to DecorationLayout::block_width after selecting the widest text line, matching the existing block_height model. Do not alter text metrics, coordinates, or fixture-specific branches. Measure the resulting outer canvas separately; any canvas model change requires a source-backed amendment committed before implementation.",
+  "perturbation_axes": [
+    "renamed single class with different intrinsic widths",
+    "short, long, and multiline titles",
+    "title versus caption versus header and footer",
+    "left, centre, and right decoration alignment",
+    "ASCII versus Unicode decoration text",
+    "one unlinked root leaf versus two leaves or one linked leaf",
+    "hidden-title directive with a still-present title block",
+    "default style versus changed padding and margin"
+  ],
+  "scope_boundary": "This mechanism owns only horizontal dimension composition and body centring for page decorations around class bodies, with a lifecycle-specific body width for EntityImageDegenerated and the universal TextBlockBordered width extent. It does not own legend rendering, vertical header/footer baselines, glyph measurement, bidirectional text, SVEK routing, explicit document margins, outer SVG canvas dimensions, or comparator behavior.",
+  "acceptance": [
+    "The repeated one-pixel body shift disappears across the long, multiline, hidden, and Unicode title cluster without fixture-name or label-text conditions.",
+    "Undecorated one-leaf diagrams and decorated multi-entity SVEK diagrams do not regress.",
+    "Fresh renamed and topology-varied perturbations preserve the lifecycle and decoration dimension rules.",
+    "Class renderer tests, full no-oracle ratchet, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
