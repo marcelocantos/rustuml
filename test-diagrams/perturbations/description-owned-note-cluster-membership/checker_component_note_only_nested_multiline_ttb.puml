@@ -1,0 +1,11 @@
+@startuml
+component OuterVesselC401 {
+  interface [DispatchProbeC400] as DispatchProbeC400
+  component InnerHoldC402 {
+    note as LedgerC403
+      multiline owned record C404
+      remains inside the inner hold
+    end note
+  }
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+component DispatchProbeC460
+node "Dotted Outer C461" as DottedOuterC461 {
+  node "Dotted Inner C462" as DottedInnerC462 {
+    note "dotted inline identity C463" as Ledger.C464
+  }
+}
+component "Dotted Root C465" as DottedRootC465
+@enduml

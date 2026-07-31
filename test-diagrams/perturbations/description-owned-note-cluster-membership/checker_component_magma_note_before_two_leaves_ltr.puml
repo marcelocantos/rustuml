@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+component DispatchProbeC420
+node "Before Rack C421" as BeforeRackC421 {
+  note as BeforeLedgerC422
+    first standalone note C423
+  end note
+  component "Second Member C424" as BeforeServiceC424
+  component "Third Member C425" as BeforeStoreC425
+}
+@enduml

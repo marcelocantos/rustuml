@@ -1,0 +1,8 @@
+@startuml
+component DispatchProbeC470
+component "Root First C471" as RootFirstC471
+note as RootLedgerC472
+  root standalone note C473
+end note
+component "Root Third C474" as RootThirdC474
+@enduml

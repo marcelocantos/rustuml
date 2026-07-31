@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+component DispatchProbeC410
+node "Inline Cabinet C411" as InlineCabinetC411 {
+  note "inline owned record C412" as InlineLedgerC413
+}
+component "Root Witness C414" as RootWitnessC414
+@enduml

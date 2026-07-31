@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+component DispatchProbeC450
+node "Linked Cabinet C451" as LinkedCabinetC451 {
+  component "Linked Service C452" as LinkedServiceC452
+  note as LinkedLedgerC453
+    explicitly linked note C454
+  end note
+}
+LinkedLedgerC453 --> LinkedServiceC452
+@enduml

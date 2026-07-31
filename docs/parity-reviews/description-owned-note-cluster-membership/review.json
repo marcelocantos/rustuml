@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-owned-note-cluster-membership",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop terminal",
+    "implemented_change": false
+  },
+  "scope": {
+    "included": "Only PlantUML sources whose Rust YAML output began `type: Component`; Class and Deployment dispatches were rejected while designing the held-out set and are not evidence here.",
+    "excluded": [
+      "ClassDiagram dispatches",
+      "DeploymentDiagram dispatches",
+      "the separate component-first-quark-owner-retention mechanism"
+    ]
+  },
+  "revisions": {
+    "implementation_rust_commit": "e3829ed039f1367310f9520239dfbf6d9cada403",
+    "pre_code_account_commit": "d62028750349bc752e2bb39d7be0a144ef310cc8",
+    "scope_amendment_commit": "b1a660e92d6e313025218ec92d72ba3b6ea74a9a",
+    "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "product_binary": {
+    "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/rustuml",
+    "sha256": "76bb413a2c463e12560fff361740dfe321f9c007331b72e41c3471a4ef2e310c",
+    "modes": ["--yaml -pipe", "-tsvg -pipe"],
+    "source_verification": "Immediately before the final evidence run, the shipping Rust paths changed by e3829ed0 matched that commit. An unrelated uncommitted crates/rustuml-render/src/deployment.rs edit appeared after the binary and held-out SVG timestamps; it is out of scope and was not exercised by Component dispatches. The three Component implementation paths still match e3829ed0."
+  },
+  "java_oracle_validation": "Every generated Java SVG was produced headlessly, passed `xmllint --noout`, and contained none of `Syntax Error?`, `PlantUML Error`, `Error line`, or `Unexpected error`.",
+  "commands": [
+    "git show --format=fuller --stat e3829ed0",
+    "git show --format=fuller d6202875 -- docs/parity-reviews/description-owned-note-cluster-membership/account.json",
+    "git show --format=fuller b1a660e9 -- docs/parity-reviews/description-owned-note-cluster-membership/account.json",
+    "sha256sum target/debug/rustuml",
+    "git diff --quiet e3829ed0 -- crates/rustuml crates/rustuml-parser crates/rustuml-render",
+    "target/debug/rustuml --yaml -pipe < INPUT",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > JAVA_SVG",
+    "target/debug/rustuml -tsvg -pipe < INPUT > RUST_SVG",
+    "xmllint --noout JAVA_SVG RUST_SVG"
+  ],
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_note_only_nested_multiline_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_note_only_nested_multiline_ttb.svg",
+      "axes": ["two-level owner", "note-only inner owner", "multiline named note", "renamed labels", "top-to-bottom"],
+      "rust_dispatch": "Component",
+      "result": "Ownership, note-only cluster membership, owner-qualified named-note projection, and solved geometry hold. Rust emits data-source-line 4 where Java emits 5: Java locates a multiline note at its first body line, while Rust retains the opener line."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_note_only_inline_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_note_only_inline_ltr.svg",
+      "axes": ["note-only owner", "inline named note", "root sibling", "left-to-right", "renamed labels"],
+      "rust_dispatch": "Component",
+      "result": "PASS for the claimed ownership path: one cluster and one owner-qualified named note, with the note solved inside its owner rather than the root stream."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_magma_note_before_two_leaves_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_magma_note_before_two_leaves_ltr.svg",
+      "axes": ["mixed owner", "named note before two leaves", "three-member Magma gate", "left-to-right", "renamed labels"],
+      "rust_dispatch": "Component",
+      "result": "PASS for owner-local Magma inventory and cross-kind slot remapping: Java and Rust preserve ent0004/5/6 for note and leaves and solve the same owner-local arrangement, subject only to ordinary sub-pixel formatting drift."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_magma_note_after_two_leaves_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_magma_note_after_two_leaves_ttb.svg",
+      "axes": ["mixed owner", "named note after two leaves", "three-member Magma gate", "top-to-bottom", "renamed labels"],
+      "rust_dispatch": "Component",
+      "result": "PASS for owner-local Magma inventory and cross-kind slot remapping. The note belongs to AfterRackC431 rather than root or a sibling owner."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_named_note_explicit_link_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_named_note_explicit_link_ltr.svg",
+      "axes": ["mixed owner", "multiline named note", "explicit note link", "left-to-right", "renamed labels"],
+      "rust_dispatch": "Component",
+      "result": "The named note remains addressable and its Opale-style linked form is materialized once under LinkedCabinetC451. Rust gives the multiline note source line 5; Java gives source line 6, the same first-body-line defect."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_nested_attached_multiline_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_nested_attached_multiline_ttb.svg",
+      "axes": ["two-level owner", "multiline attached note", "hidden attachment link", "top-to-bottom", "renamed labels"],
+      "rust_dispatch": "Component",
+      "result": "FAIL: the note is geometrically inside AttachedOuterC441.AttachedInnerC442 and is excluded from Magma, but Java projects its generated identity as AttachedOuterC441.AttachedInnerC442.GMN6 while Rust emits bare GMN6. This is a lost owner-qualified projection for an attached first-class leaf."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_inline_dotted_note_id_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_inline_dotted_note_id_ttb.svg",
+      "axes": ["two-level owner", "inline named note", "dotted note id", "root sibling", "top-to-bottom"],
+      "rust_dispatch": "Component",
+      "result": "FAIL: valid Java identity Ledger.C464 is accepted as DottedOuterC461.DottedInnerC462.Ledger.C464. Rust RE_NOTE_INLINE captures only \\w+ and silently truncates it to Ledger, emitting DottedOuterC461.DottedInnerC462.Ledger."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_root_named_note_magma_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/description-owned-note-cluster-membership/checker_component_root_named_note_magma_ttb.svg",
+      "axes": ["root owner", "multiline named note", "four-member root Magma gate", "note declaration between leaves", "top-to-bottom"],
+      "rust_dispatch": "Component",
+      "result": "PASS for root ownership and root Magma membership; the note is a single solved root leaf with the expected qualified name and UID."
+    }
+  ],
+  "implementation_audit": {
+    "java_provenance": "Read CommandFactoryNote.executeInternal, Entity.getParentContainer/leafs/groups/isEmpty, GraphvizImageBuilder.getUnpackagedEntities/printGroups/printGroup, and CucaDiagram.isStandalone/applySingleStrategy at the requested Java revision.",
+    "parser_and_ast": "ComponentNote now retains id and owner for inline, multiline, and attached forms. Nested qualification and standard inline/multiline ownership work. Inline and multiline grammars disagree: RE_NOTE_INLINE at crates/rustuml-parser/src/parse/component.rs:285-288 accepts only \\w+, while RE_NOTE_MULTI accepts [\\w.]+.",
+    "layout_and_clusters": "component_svek_leaf_order and the slot remap correctly interleave laid-out notes with components/interfaces. render_with_oracle registers owned notes through LayoutGraph::add_cluster_node after package cluster registration. The note-only and two Magma controls confirm no root leakage in the exercised cases.",
+    "magma": "add_component_single_strategy_to_layout correctly includes unlinked named notes only in note.owner and excludes attached notes through their target link in the exercised controls.",
+    "uids_and_names": "Named floating notes are owner-qualified. Event::AttachedNote in crates/rustuml-render/src/component.rs:553-568 creates a bare GMN name, unlike Java's owner-qualified generated leaf identity; the nested attached counterexample disproves this projection.",
+    "final_painting": "Rust batches note entity painting after ordinary entities at crates/rustuml-render/src/component.rs:3271-3375. Java emits source-order note entities before later ordinary entities. This changes SVG textual order but did not change the tested note ownership or solved visual geometry, so it is residue rather than an independent rejection of this account. It remains an exact-output parity gap.",
+    "anti_overfit": "The implementation diff contains no fixture labels, perturbation paths, golden reads, baseline updates, comparator changes, include_str!, or new unexplained numeric constants. Its own unit tests are implementer-owned and were not accepted as checker evidence."
+  },
+  "findings": [
+    {
+      "severity": "P1",
+      "title": "Inline dotted note IDs are silently truncated",
+      "rust_location": "crates/rustuml-parser/src/parse/component.rs:285-286,646-655",
+      "java_behavior": "CommandFactoryNote resolves the whole explicit code through the current quark context.",
+      "evidence": "checker_component_inline_dotted_note_id_ttb.puml",
+      "impact": "Rust changes a valid named note's identity, qualified SVG name, linkability, and future owner-local membership semantics."
+    },
+    {
+      "severity": "P1",
+      "title": "Attached notes discard the qualified generated leaf identity",
+      "rust_location": "crates/rustuml-render/src/component.rs:553-568",
+      "java_behavior": "The generated GMN leaf remains a child of its immediate owner and is emitted with that qualified name.",
+      "evidence": "checker_component_nested_attached_multiline_ttb.puml",
+      "impact": "The physical note is laid out in the owner cluster but its product identity is projected as root GMN6, contradicting the heterogeneous owner relation."
+    },
+    {
+      "severity": "P2",
+      "title": "Multiline note source locations use the opener, not Java's first body line",
+      "rust_location": "crates/rustuml-parser/src/parse/component.rs:719",
+      "evidence": [
+        "checker_component_note_only_nested_multiline_ttb.puml",
+        "checker_component_named_note_explicit_link_ltr.puml"
+      ],
+      "impact": "This alters source metadata and can perturb source-order UID and emission logic."
+    }
+  ],
+  "residue": [
+    "All eight fresh Java and Rust SVGs differ byte-for-byte because of formatting, version-processing instruction, source metadata, and entity batching; byte equality was not used as the mechanism oracle.",
+    "The separate current deployment.rs worktree modification appeared after the evidence binary and SVG timestamps. It was neither edited nor included in the Component mechanism verdict.",
+    "No Cargo or rustc command was run by this checker."
+  ],
+  "conclusion": "REJECTED. The central model is substantially present for ordinary named notes, owner-local clusters, Magma, and slot remapping, but the legal dotted-inline name and attached-note owner projection are counterexamples to the Component-specific claimed invariant. The three findings must be resolved and independently rechecked before this mechanism can be accepted."
+}

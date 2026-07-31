@@ -1,0 +1,8 @@
+@startuml
+component DispatchProbeC430
+node "After Rack C431" as AfterRackC431 {
+  component "First Member C432" as AfterServiceC432
+  component "Second Member C433" as AfterStoreC433
+  note "last standalone note C434" as AfterLedgerC435
+}
+@enduml

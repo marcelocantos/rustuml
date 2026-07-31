@@ -1,0 +1,12 @@
+@startuml
+component DispatchProbeC440
+node "Attached Outer C441" as AttachedOuterC441 {
+  node "Attached Inner C442" as AttachedInnerC442 {
+    component "Attached Target C443" as AttachedTargetC443
+    note right of AttachedTargetC443
+      attached note C444
+      must stay in the inner owner
+    end note
+  }
+}
+@enduml
