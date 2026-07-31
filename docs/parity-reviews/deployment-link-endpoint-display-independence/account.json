@@ -23,25 +23,32 @@
       "symbols": ["CucaDiagram.cleanId"],
       "lines": "195-199",
       "role": "Ordinary endpoint cleaning removes only surrounding double quotes and preserves the enclosed code exactly."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "symbols": ["CommandCreateElementFull.getRegexConcat", "CommandCreateElementFull.executeArg"],
+      "lines": "82-129,132-226",
+      "role": "A quoted declaration without an explicit alias uses the quoted token as CODE1, removes only the quotes through cleanId, and therefore registers the exact same quark code that a later quoted relation endpoint resolves."
     }
   ],
   "rust_locations": [
     {
       "path": "crates/rustuml-parser/src/parse/deployment.rs",
-      "symbols": ["parse_endpoint", "resolve_id", "resolve_connection_endpoint"],
-      "lines": "48-82,162-178",
-      "role": "The connection parser already removes ordinary endpoint quotes, but resolution then searches DeploymentNode.label and rewrites a matching display string to its alias; unknown codes are additionally normalized through label_to_id."
+      "symbols": ["parse_endpoint", "resolve_id", "resolve_connection_endpoint", "RE_NODE_QUOTED"],
+      "lines": "48-82,162-178,454-461,798-833",
+      "role": "The connection parser already removes ordinary endpoint quotes, but resolution then searches DeploymentNode.label and rewrites a matching display string to its alias; unknown codes are additionally normalized through label_to_id. Quoted declarations without aliases also normalize their code through label_to_id, so exact endpoint lookup would otherwise expose a duplicate Rust identity that Java never creates."
     }
   ],
-  "claimed_invariant": "For the currently supported plain and double-quoted CommandLinkElement endpoint forms, relation identity is the cleaned endpoint code itself. Surrounding quotes are syntax and disappear; spaces, dots, Unicode letters and other code content inside the supported form remain unchanged. An existing node or named note is reused only when its code equals that cleaned code. Matching an entity's display label does not create an alias reference. Otherwise one default dummy leaf is created with the cleaned code as both identity and display, and subsequent equal endpoint codes reuse it.",
-  "causal_divergence": "Rust conflates declaration convenience with relation identity. resolve_id was designed to turn labels into declaration-safe ids, then was reused by CommandLinkElement parsing. That makes an explicit endpoint code silently alias any entity with equal display text and normalizes fresh quoted codes, whereas Java asks the quark registry only about the cleaned code.",
-  "planned_model_change": "Keep declaration and attached-note target resolution unchanged. For explicit DeploymentConnection endpoints only, resolve named notes and nodes by exact code; otherwise retain the quote-cleaned raw endpoint string as the new dummy id and label. Remove display-label search and label_to_id normalization from this relation path. Add alias-collision tests proving quoted and bare display text remain independent from an existing aliased declaration while exact aliases still reuse it.",
+  "claimed_invariant": "For the currently supported plain and double-quoted CommandCreateElementFull and CommandLinkElement forms, quark identity is the cleaned code itself. Surrounding quotes are syntax and disappear; spaces, dots, Unicode letters and other code content inside the supported form remain unchanged. A quoted declaration without `as` registers that exact cleaned code. A relation reuses an existing node or named note only when its code equals the cleaned endpoint code; matching display text never creates an alias reference. Otherwise one default dummy leaf is created with the cleaned code as both identity and display, and subsequent equal endpoint codes reuse it.",
+  "causal_divergence": "Rust conflates declaration convenience with quark identity. label_to_id was designed to manufacture identifier-safe strings from display text, then was applied both to no-alias quoted declarations and to relation endpoints. resolve_id additionally searches display labels. Together those choices make an explicit endpoint silently alias an unrelated display string while making a genuine quoted declaration impossible to address by its Java code.",
+  "planned_model_change": "For quoted Deployment declarations without `as`, preserve the quote-cleaned display token as both code and label. Keep explicitly aliased declarations and attached-note target resolution unchanged. For explicit DeploymentConnection endpoints, resolve named notes and nodes by exact code; otherwise retain the quote-cleaned raw endpoint string as the new default dummy id and label. Remove display-label search and label_to_id normalization from this relation path. Add alias-collision and no-alias declaration tests proving exact code reuse.",
   "perturbation_axes": [
     "quoted versus bare endpoint code",
     "code equal to an existing alias versus code equal only to display text",
     "source versus destination endpoint",
     "spaces, dots and Unicode content",
     "node versus named-note existing identity",
+    "quoted declaration with versus without an explicit alias",
     "endpoint declared before versus materialized by the relation",
     "repeated relation reuse versus first dummy creation",
     "top-to-bottom versus left-to-right relation"
@@ -49,6 +56,7 @@
   "acceptance": [
     "The triggering quoted-display probe contains the declared ServiceAlias, the AliasMemo note and a distinct Service Label dummy, with the relation targeting the dummy.",
     "An exact ServiceAlias endpoint still reuses the declared node and creates no dummy.",
+    "A quoted no-alias declaration such as artifact \"app.deb\" owns code app.deb and is reused by the same quoted relation endpoint.",
     "Bare single-token display collisions also remain independent, matching Java quark identity rather than Rust label lookup.",
     "Fresh quoted endpoint codes preserve spaces/dots/Unicode in AST identity and are reused by later equal endpoints.",
     "An independent checker attacks endpoint side, quote form, alias/display collisions, punctuation, declaration order and repetition."
@@ -58,7 +66,7 @@
     "matching display labels only when the endpoint was unquoted",
     "normalizing fresh relation codes through label_to_id",
     "deduplicating the rendered SVG after the parser has chosen the wrong endpoint",
-    "changing declaration aliases or attached-note target semantics as part of this fix"
+    "changing explicitly aliased declarations or attached-note target semantics as part of this fix"
   ],
   "declared_residue": [
     "CommandLinkElement actor, component, interface, use-case and business endpoint notation forms remain a separate grammar and node-kind mechanism.",
