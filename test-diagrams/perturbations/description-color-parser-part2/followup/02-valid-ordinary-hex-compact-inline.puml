@@ -1,0 +1,6 @@
+@startuml
+node "Color Beta Source" as CBS
+artifact "Color Beta Artifact" as CBA
+CBS --> CBA
+note left on link #00FF99: ordinary compact hex inline 02
+@enduml

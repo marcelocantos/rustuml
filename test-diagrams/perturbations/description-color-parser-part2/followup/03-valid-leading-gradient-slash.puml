@@ -1,0 +1,6 @@
+@startuml
+node "Color Gamma Source" as CGS
+node "Color Gamma Target" as CGT
+CGS --> CGT
+note bottom of link #Red/LightBlue : leading slash gradient 03
+@enduml

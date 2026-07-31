@@ -1,0 +1,6 @@
+@startuml
+node "Color Aleph Source" as CALS
+node "Color Aleph Target" as CALT
+CALS --> CALT
+note bottom of link #shadowing:t : one-character shadowing value should reject 25
+@enduml

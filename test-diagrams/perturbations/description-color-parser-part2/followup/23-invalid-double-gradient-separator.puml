@@ -1,0 +1,6 @@
+@startuml
+node "Color Psi Source" as CPSS
+node "Color Psi Target" as CPST
+CPSS --> CPST
+note right on link #Red/Blue/Green : double gradient separator should reject 23
+@enduml

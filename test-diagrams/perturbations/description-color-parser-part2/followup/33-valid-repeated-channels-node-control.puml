@@ -1,0 +1,6 @@
+@startuml
+node "Color Teth Source" as CTES
+node "Color Teth Target" as CTET
+CTES --> CTET
+note bottom on link #back:Red;back:LightBlue;line:Green;line:Purple;text:Blue;text:Black : repeated channels node control 33
+@enduml

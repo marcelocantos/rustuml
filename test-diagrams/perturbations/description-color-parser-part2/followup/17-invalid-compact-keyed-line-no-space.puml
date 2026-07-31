@@ -1,0 +1,6 @@
+@startuml
+node "Color Rho Source" as CRS
+database "Color Rho Target" as CRT
+CRS --> CRT
+note bottom of link #back:Red;line:Blue: compact keyed line boundary should reject 17
+@enduml

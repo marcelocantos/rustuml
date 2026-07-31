@@ -1,0 +1,6 @@
+@startuml
+node "Color Delta Source" as CDS
+queue "Color Delta Queue" as CDQ
+CDS --> CDQ
+note top on link #Red\LightBlue;line:DarkGreen;text:Black : leading backslash gradient part2 04
+@enduml

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="238px" preserveAspectRatio="none" style="width:305px;height:238px;background:#FFFFFF;" version="1.1" viewBox="0 0 305 238" width="305px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="g1v5nf59avklq90" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#90EE90"/></linearGradient></defs><g><!--cluster Color Xi Folder-->
+<g class="cluster" data-qualified-name="CXF" data-source-line="2" id="ent0003">
+<path d="M8.5,133.4883 L116.7695,133.4883 A3.75,3.75 0 0 1 119.2695,135.9883 L126.2695,155.9766 L173.5,155.9766 A2.5,2.5 0 0 1 176,158.4766 L176,221.4783 A2.5,2.5 0 0 1 173.5,223.9783 L8.5,223.9783 A2.5,2.5 0 0 1 6,221.4783 L6,135.9883 A2.5,2.5 0 0 1 8.5,133.4883" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="126.2695" y1="155.9766" y2="155.9766"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="107.2695" x="10" y="149.0235">Color Xi Folder</text>
+</g>
+<!--entity Color Xi Artifact-->
+<g class="entity" data-qualified-name="CXF.CXA" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="138.2881" x="21.86" y="168.49"/>
+<polygon fill="#F1F1F1" points="143.1481,173.49,143.1481,187.49,155.1481,187.49,155.1481,179.49,149.1481,173.49,143.1481,173.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="149.1481" x2="149.1481" y1="173.49" y2="179.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="155.1481" x2="149.1481" y1="179.49" y2="179.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.2881" x="31.86" y="195.0252">Color Xi Artifact</text>
+</g>
+<!--entity Color Xi Source-->
+<g class="entity" data-qualified-name="CXS" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="19.07,16,29.07,6,162.9284,6,162.9284,42.4883,152.9284,52.4883,19.07,52.4883,19.07,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="152.9284" x2="162.9284" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="19.07" x2="152.9284" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="152.9284" x2="152.9284" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="103.8584" x="34.07" y="39.5352">Color Xi Source</text>
+</g>
+<!--link CXS to CXA-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M91,52.74 C91,83.77 91,133.16 91,162.23" fill="none" id="CXS-to-CXA" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="91,168.23,95,159.23,91,163.23,87,159.23,91,168.23" style="stroke:#181818;stroke-width:1;"/>
+<path d="M96,87.49 L96,112.49 L290,112.49 L290,97.49 L280,87.49 L96,87.49" fill="url(#g1v5nf59avklq90)" style="stroke:#0000FF;stroke-width:1;stroke-dasharray:7,7;"/>
+<path d="M280,87.49 L280,97.49 L290,97.49 L280,87.49" fill="url(#g1v5nf59avklq90)" style="stroke:#0000FF;stroke-width:1;stroke-dasharray:7,7;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="173.9639" x="102" y="105.0584">keyed gradient multiline 14</text>
+</g>
+</g></svg>
