@@ -1,0 +1,8 @@
+@startuml
+note "Review memo two incidents" as ReviewMemo
+node "Visible service" as VisibleService
+database "Hidden storage" as HiddenStorage
+ReviewMemo --> VisibleService : visible channel
+HiddenStorage "tail H" -[HIDDEN,dashed;#red,bold]up[#blue]-> "head M" ReviewMemo : hidden channel label
+queue "After hidden relation" as AfterHiddenRelation
+@enduml

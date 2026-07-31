@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+node "Ingress" as Ingress
+node "Worker" as Worker
+node "Auditor" as Auditor
+Ingress --> Worker : first visible
+Ingress -[hidden]- Worker : suppressed duplicate
+Ingress ..> Worker : second visible
+Worker --> Auditor : after duplicate
+artifact "After duplicates" as AfterDuplicates
+@enduml

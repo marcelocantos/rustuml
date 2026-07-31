@@ -1,0 +1,8 @@
+@startuml
+node "North service" as NorthService
+node "South service" as SouthService
+node "East observer" as EastObserver
+SouthService -[hidden,thickness=3,#green]up----> NorthService : long hidden upward
+NorthService -right-> EastObserver : visible side route
+artifact "After upward hidden" as AfterUpwardHidden
+@enduml

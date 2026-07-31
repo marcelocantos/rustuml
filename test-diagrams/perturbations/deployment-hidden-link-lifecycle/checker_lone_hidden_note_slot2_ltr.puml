@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+note "Stage memo hidden only" as StageMemo
+node "Runtime Alpha" as RuntimeAlpha
+artifact "After lone hidden" as AfterLoneHidden
+StageMemo -right[#DarkGreen,hidden]-> RuntimeAlpha : invisible center text
+@enduml

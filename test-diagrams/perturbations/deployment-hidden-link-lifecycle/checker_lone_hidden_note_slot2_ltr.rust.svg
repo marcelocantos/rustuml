@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="228px" preserveAspectRatio="none" style="width:198px;height:228px;background:#FFFFFF;" version="1.1" viewBox="0 0 198 228" width="198px" zoomAndPan="magnify"><?plantuml ?><defs/><g><g class="entity" data-qualified-name="StageMemo" data-source-line="2" id="ent0002">
+<path d="M6,81.09 L6,106.4005 A0,0 0 0 0 6,106.4005 L90.67,106.4005 L94.67,157.43 L98.67,106.4005 L183.3364,106.4005 A0,0 0 0 0 183.3364,106.4005 L183.3364,91.09 L173.3364,81.09 L6,81.09 A0,0 0 0 0 6,81.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M173.3364,81.09 L173.3364,91.09 L183.3364,91.09 L173.3364,81.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="156.3364" x="12" y="98.6584">Stage memo hidden only</text>
+</g>
+<!--entity Runtime Alpha-->
+<g class="entity" data-qualified-name="RuntimeAlpha" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="24.79,167.5,34.79,157.5,164.54,157.5,164.54,193.9883,154.54,203.9883,24.79,203.9883,24.79,167.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="154.54" x2="164.54" y1="167.5" y2="157.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="24.79" x2="154.54" y1="167.5" y2="167.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="154.54" x2="154.54" y1="167.5" y2="203.9883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99.75" x="39.79" y="191.0352">Runtime Alpha</text>
+</g>
+<!--entity After lone hidden-->
+<g class="entity" data-qualified-name="AfterLoneHidden" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="148.4121" x="20.46" y="7"/>
+<polygon fill="#F1F1F1" points="151.8721,12,151.8721,26,163.8721,26,163.8721,18,157.8721,12,151.8721,12" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="157.8721" x2="157.8721" y1="12" y2="18"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="163.8721" x2="157.8721" y1="18" y2="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118.4121" x="30.46" y="33.5352">After lone hidden</text>
+</g>
+</g></svg>

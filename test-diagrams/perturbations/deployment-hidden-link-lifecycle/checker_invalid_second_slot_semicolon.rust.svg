@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="77px" preserveAspectRatio="none" style="width:173px;height:77px;background:#FFFFFF;" version="1.1" viewBox="0 0 173 77" width="173px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity A-->
+<g class="entity" data-qualified-name="A" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,65.6592,6,65.6592,42.4883,55.6592,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="55.6592" x2="65.6592" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="55.6592" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="55.6592" x2="55.6592" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="9.6592" x="31" y="39.5352">A</text>
+</g>
+<!--entity B-->
+<g class="entity" data-qualified-name="B" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="100.8,16,110.8,6,148.8527,6,148.8527,42.4883,138.8527,52.4883,100.8,52.4883,100.8,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="138.8527" x2="148.8527" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="100.8" x2="138.8527" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="138.8527" x2="138.8527" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8.0527" x="115.8" y="39.5352">B</text>
+</g>
+</g></svg>
