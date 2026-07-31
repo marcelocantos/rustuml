@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-command-prefix-semantics",
+  "verdict": "REJECTED",
+  "verdict_reason": "Rejected. The Java-valid perturbation set contains multiple failing no-oracle counterexamples. The decisive failures are mechanism-shaped: Rust preserves the ampersand prefix in the AST but never consumes Note.parallel in sequence rendering, so a teoz grouped parallel note advances vertically where Java groups it with the preceding tile; and Rust's sequence note consumer grammar still rejects Java-valid quoted participant operands on prefixed notes. Additional combined/over-several cases expose horizontal layout gaps around merged notes, while the basic slash merge controls pass.",
+  "reviewed_at_utc": "2026-07-31T15:18:26Z",
+  "checker": {
+    "identity": "Codex GPT-5",
+    "role": "independent adversarial checker, not implementer",
+    "tooling": [
+      "Codex desktop shell in /private/tmp/rustuml-integrate-20260731a",
+      "pinned Java PlantUML JAR invoked with java -Djava.awt.headless=true",
+      "target/release/examples/diff_one --no-oracle only for Rust rendering checks",
+      "rg, git, nl, sed, xmllint, shasum for inspection and validation"
+    ]
+  },
+  "revisions": {
+    "rust_implementation_revision_reviewed": "be05a84e723a7384787bbef25052833d1c7ffb4e",
+    "worktree_head_observed_after_docs_only_update": "18786c3ae14d782d13c57e9b8c8670033bec9664",
+    "worktree_head_note": "git diff be05a84e723a7384787bbef25052833d1c7ffb4e..HEAD -- crates was empty; HEAD only added docs/parity-reviews/description-owned-note-cluster-membership/account.json.",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commits": [
+      "04e70e40",
+      "b0c83614"
+    ],
+    "diff_one_path": "target/release/examples/diff_one",
+    "diff_one_sha256": "e51bc679b3001a0a67959b86b6979a51afb01b3d82b2a9f81170cdf33d76c07d",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "constraints_observed": {
+    "shipping_code_modified": false,
+    "account_json_modified": false,
+    "cargo_or_rustc_run": false,
+    "committed": false,
+    "owned_paths_written": [
+      "test-diagrams/perturbations/sequence-note-command-prefix-semantics/",
+      "docs/parity-reviews/sequence-note-command-prefix-semantics/review.json"
+    ]
+  },
+  "source_audit": {
+    "java_observations": [
+      "FactorySequenceNoteCommand accepts optional PARALLEL \"&\" followed by optional VMERGE \"/\" before note, hnote, or rnote for single-line and multiline one-participant notes, then calls note.goParallel() and SequenceDiagram.addNote(note, tryMerge).",
+      "FactorySequenceNoteOverSeveralCommand uses the same PARALLEL then VMERGE prefix grammar for note, hnote, and rnote over two participants.",
+      "SequenceDiagram.addNote only merges when the immediately preceding event is Note or Notes; after any other event kind, slash appends an ordinary Note event.",
+      "NotesBoxes.ensureConstraints reserves half of each raw component preferred width before/after note participants and pairwise space between distinct adjacent note members for classic merged Notes layout.",
+      "In teoz, NoteTile.getEvent() returns the Note, and GroupingTile.mergeParallel tests tile.getEvent().isParallel(), so Note.isParallel() is semantically visible for grouped teoz notes.",
+      "A combined & / note that merges into a Notes event is more subtle than the account states: Notes extends AbstractEvent and does not override isParallel(), and NotesTile.getEvent() returns the Notes aggregate. The individual Note keeps its parallel flag, but the merged aggregate is not itself an event-level parallel tile."
+    ],
+    "rust_observations": [
+      "sequence_note_prefix strips an optional leading '&' and then an optional leading '/' with whitespace in the Java order.",
+      "SeqParser::try_note computes merge_with_previous as try_merge && last event is Event::Note(_), which preserves Java's immediate-note predecessor rule for the flat Rust event stream.",
+      "The sequence note regex remains narrower than Java: it accepts only \\w+(,\\w+)* participant operands, not Java's [%pLN_.@]+ or quoted participant operand forms.",
+      "sequence::Note now serializes parallel and merge_with_previous fields, but rg over the renderer found no consumer for note.parallel; only merge_with_previous drives sequence layout.",
+      "The renderer reconstructs contiguous merged note groups from flat Event::Note entries and applies NotesBoxes-like spacing constraints before solving participant x positions.",
+      "The new note_component_preferred_width constants have adjacent Java-source comments for ComponentRoseNote/Hexagonal/Box preferred widths, but the teoz NotesTile path is not represented by the cited NotesBoxes-only layout model."
+    ],
+    "fixture_shaped_logic_search": {
+      "commands": [
+        "rg -n \"parallel hnote in group|combined parallel merge row|quoted participant parallel|compact prefix|sequence-note-command-prefix-semantics|vmerge_three_note|Gateway Node|LightCyan|LightPink\" crates",
+        "rg -n \"\\\\.parallel|parallel:|merge_with_previous|sequence_note_prefix|note_component_preferred_width|NotesBoxes|ComponentRoseNote|34\\\\.0|18\\\\.0|7\\\\.0|5\\\\.0\" crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/ascii.rs"
+      ],
+      "result": "No shipping-code references to the fresh filenames or payload strings were found. Color-name hits such as LightCyan were unrelated existing tests. No fixture-keyed logic was found for this mechanism."
+    }
+  },
+  "commands": [
+    {
+      "command": "git rev-parse HEAD",
+      "result": "18786c3ae14d782d13c57e9b8c8670033bec9664"
+    },
+    {
+      "command": "git diff --stat be05a84e723a7384787bbef25052833d1c7ffb4e..HEAD -- crates && git diff --name-only be05a84e723a7384787bbef25052833d1c7ffb4e..HEAD -- crates",
+      "result": "No output; no shipping crate changes after be05a84e."
+    },
+    {
+      "command": "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "result": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "command": "shasum -a 256 target/release/examples/diff_one",
+      "result": "e51bc679b3001a0a67959b86b6979a51afb01b3d82b2a9f81170cdf33d76c07d"
+    },
+    {
+      "command": "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "result": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    {
+      "command": "nl/sed source inspection of FactorySequenceNoteCommand.java, FactorySequenceNoteOverSeveralCommand.java, SequenceDiagram.java, Note.java, Notes.java, NotesBoxes.java, DrawableSetInitializer.java, TileBuilder.java, NoteTile.java, NotesTile.java, GroupingTile.java, and Rust parse/render sequence files",
+      "result": "Source observations recorded above."
+    },
+    {
+      "command": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <all fresh .puml files>",
+      "result": "exit 0; generated same-stem SVGs for all fresh inputs."
+    },
+    {
+      "command": "rg -n -i \"syntax error|error line|plantuml.*error|cannot parse|no diagram\" test-diagrams/perturbations/sequence-note-command-prefix-semantics/*.svg",
+      "result": "exit 1 with no matches; Java SVGs did not contain syntax/error markers."
+    },
+    {
+      "command": "xmllint --noout test-diagrams/perturbations/sequence-note-command-prefix-semantics/*.svg",
+      "result": "exit 0; Java SVGs are well-formed XML."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/parallel_teoz_group_hnote_mixed_case.puml",
+      "result": "exit 1; SVG structural differences."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/vmerge_three_note_aggregate_all_shapes.puml",
+      "result": "exit 0; SVGs are structurally equivalent."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/combined_parallel_merge_teoz_group_over_several.puml",
+      "result": "exit 1; SVG structural differences."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/slash_after_message_then_note_control.puml",
+      "result": "exit 0; SVGs are structurally equivalent."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/inline_prefix_spacing_case_matrix.puml",
+      "result": "exit 1; SVG structural differences."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/reversed_over_participants_merge_span.puml",
+      "result": "exit 1; SVG structural differences."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/quoted_prefixed_participant_grammar.puml",
+      "result": "exit 1; SVG structural differences."
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-note-command-prefix-semantics/compact_prefix_no_space_multiline.puml",
+      "result": "exit 0; SVGs are structurally equivalent."
+    }
+  ],
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/parallel_teoz_group_hnote_mixed_case.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/parallel_teoz_group_hnote_mixed_case.svg",
+      "axes": [
+        "ampersand parallel prefix",
+        "hnote shape",
+        "mixed-case command spelling",
+        "one participant",
+        "teoz grouped layout"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "counterexample": true,
+      "summary": "Java height/viewBox is 214px while Rust is 239px; the hnote polygon is at y=90.4541 in Java and y=115.1094 in Rust, and the following message/tail participants are shifted down by the same row. This matches Rust ignoring Note.parallel in rendering while Java teoz grouping consumes Note.isParallel()."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/vmerge_three_note_aggregate_all_shapes.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/vmerge_three_note_aggregate_all_shapes.svg",
+      "axes": [
+        "slash vertical merge prefix",
+        "three-note aggregate",
+        "note, hnote, and rnote shapes",
+        "one participant and two participants",
+        "prefix spacing and mixed case"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 0,
+      "counterexample": false,
+      "summary": "Passes. This supports the basic flat-stream merge reconstruction for a classic three-note aggregate."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/combined_parallel_merge_teoz_group_over_several.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/combined_parallel_merge_teoz_group_over_several.svg",
+      "axes": [
+        "combined ampersand plus slash prefix",
+        "slash vertical merge prefix",
+        "three-note aggregate",
+        "note, rnote, and hnote shapes",
+        "two-participant spans and one participant",
+        "teoz grouped layout"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "counterexample": true,
+      "summary": "Fails horizontally: Java SVG width is 603px while Rust is 511px, participant centers and group frame width differ, and every merged note member is shifted/compressed. This attacks the account's NotesBoxes-only constraint model for teoz merged notes and combined prefixes."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/slash_after_message_then_note_control.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/slash_after_message_then_note_control.svg",
+      "axes": [
+        "slash after non-note predecessor",
+        "slash after note predecessor",
+        "note, hnote, and rnote shapes",
+        "one participant",
+        "compact and spaced slash prefixes"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 0,
+      "counterexample": false,
+      "summary": "Passes. This supports the immediate-predecessor rule: slash after messages stands alone, slash after a note merges."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/inline_prefix_spacing_case_matrix.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/inline_prefix_spacing_case_matrix.svg",
+      "axes": [
+        "single-line note commands",
+        "ampersand prefix",
+        "slash prefix",
+        "combined ampersand plus slash prefix",
+        "all note shapes",
+        "prefix spacing and mixed case",
+        "two-participant span"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "counterexample": true,
+      "summary": "Fails on the combined inline rnote over A,B: Java rectangle is width 244 at x=105 with centered text x=121.9244; Rust rectangle is width 266 at x=95 with text x=99. This exposes an over-several rectangular note layout gap on a combined-prefix case."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/reversed_over_participants_merge_span.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/reversed_over_participants_merge_span.svg",
+      "axes": [
+        "slash vertical merge prefix",
+        "three-note aggregate",
+        "reversed two-participant spans",
+        "note, hnote, and rnote shapes",
+        "one participant and two participants"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "counterexample": true,
+      "summary": "Fails on the reversed rnote span: Java rectangle is width 261 at x=191 with text x=213.5272; Rust rectangle is width 250 at x=196 with text x=200. This probes participant-order handling in merged over-several notes."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/quoted_prefixed_participant_grammar.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/quoted_prefixed_participant_grammar.svg",
+      "axes": [
+        "ampersand prefix",
+        "slash prefix",
+        "quoted participant operand",
+        "note and rnote shapes",
+        "predecessor note merge",
+        "one participant"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "counterexample": true,
+      "summary": "Java accepts & note right of \"Gateway Node\" and creates/renders the quoted participant operand; Rust's sequence note regex does not accept quoted operands, causing element count 46 vs 33 and a missing participant/note sequence. This directly falsifies full Java prefix grammar parity."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/compact_prefix_no_space_multiline.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-command-prefix-semantics/compact_prefix_no_space_multiline.svg",
+      "axes": [
+        "compact &/ combined prefix",
+        "compact slash prefix",
+        "endnote/endhnote/endrnote terminators",
+        "three-note aggregate",
+        "note, hnote, and rnote shapes",
+        "two-participant span and one participant"
+      ],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 0,
+      "counterexample": false,
+      "summary": "Passes. This supports compact prefix and compact terminator handling for the classic merged aggregate path."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "rejecting",
+      "title": "Ampersand parallel survives parsing but is not rendered",
+      "evidence": [
+        "Rust source search found Note.parallel only in parser/AST/tests and no renderer consumer.",
+        "Java teoz GroupingTile.mergeParallel uses tile.getEvent().isParallel(); NoteTile.getEvent() returns the Note.",
+        "parallel_teoz_group_hnote_mixed_case.puml fails with the Java hnote sharing the previous vertical band and Rust placing it one row later."
+      ],
+      "conclusion": "The implementation does not satisfy the account's requirement that ampersand parallel intent be preserved through downstream layout."
+    },
+    {
+      "id": "F2",
+      "severity": "rejecting",
+      "title": "Sequence note consumer grammar remains narrower than Java's prefix grammar",
+      "evidence": [
+        "Java note commands accept participant operands matching [%pLN_.@]+ or quoted strings.",
+        "Rust SeqParser::try_note still uses a regex that captures only \\w+(,\\w+)* participants.",
+        "quoted_prefixed_participant_grammar.puml is Java-valid and fails because the prefixed quoted-participant note is not constructed by Rust."
+      ],
+      "conclusion": "The implementation is not a single canonical Java-compatible sequence note command parser; it still rejects Java-valid prefixed note operands."
+    },
+    {
+      "id": "F3",
+      "severity": "rejecting",
+      "title": "Combined/over-several merged note layout is incomplete, especially under teoz",
+      "evidence": [
+        "combined_parallel_merge_teoz_group_over_several.puml fails with width 603px expected vs 511px actual and compressed merged-note/group geometry.",
+        "inline_prefix_spacing_case_matrix.puml and reversed_over_participants_merge_span.puml fail on rectangular over-several note width/text placement.",
+        "The account and Rust comments cite NotesBoxes.ensureConstraints, but Java teoz uses NotesTile for merged Notes and has separate positioning behavior."
+      ],
+      "conclusion": "The merged note layout model is not complete across the requested combined-prefix and participant-topology axes."
+    },
+    {
+      "id": "F4",
+      "severity": "audit",
+      "title": "Account overstates event-level parallel semantics for combined & / notes",
+      "evidence": [
+        "Java Note.goParallel sets the member Note flag before SequenceDiagram.addNote.",
+        "When slash merges the note, Java replaces/appends into a Notes aggregate whose class does not override AbstractEvent.isParallel().",
+        "NotesTile.getEvent() returns the Notes aggregate, so teoz parallel grouping does not see the member Note.parallel flag through Event.isParallel()."
+      ],
+      "conclusion": "The causal account should distinguish unmerged Note parallel semantics from merged Notes aggregate semantics before implementation is retried."
+    },
+    {
+      "id": "F5",
+      "severity": "supporting",
+      "title": "No fixture-shaped logic found for the fresh perturbations",
+      "evidence": [
+        "Searches for fresh filenames, payload text, and mechanism names found no shipping-code references.",
+        "The basic three-note slash aggregate, slash-after-message control, and compact no-space multiline aggregate all pass."
+      ],
+      "conclusion": "The rejection is due to remaining mechanism gaps, not detected fixture-specific special casing."
+    }
+  ]
+}

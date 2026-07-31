@@ -1,0 +1,15 @@
+@startuml
+participant Tiny
+participant Wide
+Tiny -> Wide : compact prefix seed
+&/note over Tiny, Wide
+combined compact no-space folded span
+endnote
+/hnote right of Wide
+compact slash hex merge
+endhnote
+/rnote right of Tiny
+compact slash rectangular third merge
+endrnote
+Wide -> Tiny : compact prefix done
+@enduml

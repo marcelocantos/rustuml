@@ -1,0 +1,19 @@
+@startuml
+!pragma teoz true
+participant Left
+participant Middle
+participant Right
+group CombinedPrefix
+Left -> Middle : before combined
+note over Left, Middle
+base folded row
+end note
+& / rnote over Middle, Right #DDFFDD
+combined parallel merge row
+end rnote
+/ hnote right of Right
+third merged row
+end hnote
+Middle -> Right : after combined
+end
+@enduml

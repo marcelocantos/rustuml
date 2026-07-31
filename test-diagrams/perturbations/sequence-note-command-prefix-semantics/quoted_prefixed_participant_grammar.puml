@@ -1,0 +1,12 @@
+@startuml
+participant "Gateway Node" as Gateway
+participant Backend
+Gateway -> Backend : request
+& note right of "Gateway Node" #LightYellow
+quoted participant parallel folded note
+end note
+/ rnote right of Backend
+quoted predecessor then merged backend rectangle
+end rnote
+Backend -> Gateway : response
+@enduml

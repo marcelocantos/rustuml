@@ -1,0 +1,18 @@
+@startuml
+participant Solo
+participant Peer
+Solo -> Peer : predecessor is message
+/rnote right of Peer
+slash after message must stand alone
+end rnote
+Peer -> Solo : reset predecessor to message
+/ note right of Peer
+slash after second message also stands alone
+end note
+note right of Peer
+base mergeable folded note
+end note
+/ hnote right of Peer
+merge only after a note predecessor
+end hnote
+@enduml

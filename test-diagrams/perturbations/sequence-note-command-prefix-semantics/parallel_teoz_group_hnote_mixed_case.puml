@@ -1,0 +1,12 @@
+@startuml
+!pragma teoz true
+participant Alpha
+participant Beta
+group ParallelNoteProbe
+Alpha -> Beta : before hnote
+& HNoTe right of Beta #LightBlue
+parallel hnote in group
+end hnote
+Beta -> Alpha : after hnote
+end
+@enduml

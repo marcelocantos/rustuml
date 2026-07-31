@@ -1,0 +1,16 @@
+@startuml
+participant Left
+participant Middle
+participant Right
+Left -> Right : seed reversed span
+note over Right, Left
+reversed folded span first
+end note
+/ hnote right of Middle
+merged middle hex note
+end hnote
+/ rnote over Right, Middle
+merged reversed rectangular span
+end rnote
+Right -> Left : after reversed span
+@enduml

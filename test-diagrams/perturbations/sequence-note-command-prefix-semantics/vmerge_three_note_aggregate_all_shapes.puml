@@ -1,0 +1,16 @@
+@startuml
+participant One
+participant Two
+participant Three
+One -> Two : seed
+note right of One #LightYellow
+folded first aggregate member
+end note
+/ HNote over One, Two #LightBlue
+hex second aggregate member spans two
+end hnote
+/ rnote right of Three #LightGreen
+rect third aggregate member on one
+end rnote
+Two -> Three : after
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+participant A
+participant B
+A -> B : start inline matrix
+&    NoTe right of B #LightCyan : parallel folded inline
+/    HNote right of B #LightPink : slash hex inline follows a note
+& / rnote over A, B #LightGreen : combined rectangular inline span
+B -> A : done inline matrix
+@enduml
