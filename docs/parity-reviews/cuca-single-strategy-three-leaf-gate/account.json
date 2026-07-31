@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "mechanism": "cuca-single-strategy-three-leaf-gate",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "b70be5ee",
+  "java_locations": [
+    "src/main/java/net/atmp/CucaDiagram.java:762-786 applySingleStrategy",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java:58-70 putInSquare",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java:42-61 putInSquare"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:add_single_strategy_links and add_square_invisible_links",
+    "crates/rustuml-render/src/deployment.rs:add_deployment_magma_constraints"
+  ],
+  "invariant": "CucaDiagram.applySingleStrategy inventories immediate standalone leaves for each group, but creates and applies a Magma only when that group has at least three standalone leaves. SquareMaker's links therefore never constrain a one- or two-leaf group. For three or more leaves, SquareMaker uses ceil(sqrt(n)) rows, noDisplay(1) within a row, and noDisplay(2) at each new row head.",
+  "causal_divergence": "The class-standalone-leaf-magma-ordering and deployment-floating-note-svek-lifecycle accounts incorrectly attributed a two-leaf constraint to Java. Their implementations consequently call the SquareMaker port for two members. A fresh left-to-right note-plus-node deployment input exposes the error because the extra invisible edge fixes a rank that Java leaves unconstrained. The class implementation contains the same boundary error even though its original two-notes-plus-class counterexample correctly enters Magma at three leaves.",
+  "planned_change": "Restore the shared minimum to three standalone leaves in both class and deployment SquareMaker adapters without changing their leaf inventories, source ordering, owner partitioning, branch calculation, or constraints for groups of three or more. Add direct tests that two-member groups receive no Magma constraints while three-member groups retain Java row behavior.",
+  "supersedes_claims": [
+    "docs/parity-reviews/class-standalone-leaf-magma-ordering/account.json: two-leaf Magma invariant and planned minimum",
+    "docs/parity-reviews/deployment-floating-note-svek-lifecycle/account.json: two-member constraint invariant and planned minimum"
+  ],
+  "perturbation_axes": [
+    "one, two, three, and four standalone leaves",
+    "top-to-bottom versus left-to-right direction",
+    "floating note before versus after an ordinary leaf",
+    "root versus nested container ownership",
+    "linked versus unlinked controls",
+    "class-family versus DESCRIPTION-family consumers"
+  ],
+  "scope_boundary": "This correction owns only the CucaDiagram minimum-cardinality gate. It does not change standalone membership, declaration order, note paint, package ownership, branch computation, comparator policy, baselines, or fixture eligibility.",
+  "acceptance": [
+    "Both preserved size-two left-to-right deployment counterexamples pass diff_one --no-oracle",
+    "The preserved two-floating-notes-then-class size-three counterexample still passes diff_one --no-oracle",
+    "Fresh size-one through size-four perturbations cover both directions and declaration orders",
+    "Class and deployment renderer unit tests remain green",
+    "Independent checker records an accepted verdict at the corrective implementation revision"
+  ],
+  "forbidden_approaches": [
+    "direction-specific or fixture-specific exceptions",
+    "post-layout coordinate changes",
+    "changing leaf inventory to hide the threshold error",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/deployment-floating-note-svek-lifecycle/review.json",
+    "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ltr.puml",
+    "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ltr.puml",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_multiple_note_blocks_then_class.puml"
+  ]
+}
