@@ -1,14 +1,17 @@
 {
   "schema_version": 1,
   "mechanism": "class-empty-package-round-corner-propagation",
-  "status": "accounted_before_code",
+  "status": "rejected_remediation_accounted_before_code",
+  "implementation_revision": "1bf7053c",
+  "rejected_review_revision": "d8c2c860",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:getStyle and drawU",
     "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:constructor and drawU",
     "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java:drawFolder",
     "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:packageStyle",
-    "src/main/java/net/sourceforge/plantuml/svek/PackageStyle.java:fromString"
+    "src/main/java/net/sourceforge/plantuml/svek/PackageStyle.java:fromString",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:drawUPolygon"
   ],
   "rust_locations": [
     "crates/rustuml-render/src/class.rs:empty_package_round_corner",
@@ -16,8 +19,8 @@
     "crates/rustuml-render/src/class.rs:emit_layout_empty_symbol_folder_shape"
   ],
   "invariant": "EntityImageEmptyPackage resolves classDiagram.package.title and stores its RoundCorner diameter in Fashion before ClusterDecoration selects the concrete painter. An unknown packageStyle such as `stack` falls back to PackageStyle.FOLDER in SkinParam, so the resulting USymbolFolder must consume the package-title diameter. USymbolFolder uses a polygon only when the diameter is zero; otherwise every body corner has radius diameter/2 and the tab shoulder uses radius 1.5 times that radius.",
-  "causal_divergence": "Rust now resolves and stores the correct package-title diameter in EmptyPackageLayout, but emit_layout_empty_symbol_folder_shape still hardcodes the default 2.5 and 3.75 radii. The preserved packageStyle checker therefore has the correct semantic fallback to a folder but paints the wrong Fashion geometry.",
-  "planned_change": "Pass EmptyPackageLayout.round_corner into the empty folder/package path equations, including Java's zero-diameter polygon branch and nonzero tab/body arcs. Preserve PackageStyle's supported-value set and unknown-value fallback; do not add `stack` as a supported packageStyle. Apply the same resolved package-title value to ordinary empty-package folder rendering where it shares EntityImageEmptyPackage ownership.",
+  "causal_divergence": "The first implementation now resolves and paints the correct package-title diameter, including Java's zero polygon branch. The independent checker accepted all nonzero held-outs but found that Rust still measures a zero-corner polygon as a path-shaped frontier. Java LimitFinder.drawUPolygon expands every polygon by HACK_X_FOR_POLYGON=10 on both horizontal sides, shifting a lone image right by 10 and widening its canvas by 20. Rust's empty_package_painted_frontier currently returns the unexpanded folder bounds.",
+  "planned_change": "Keep the accepted path equations. When EntityImageEmptyPackage selects a folder/package painter and the resolved diameter is zero, model LimitFinder's polygon frontier as min_x=-10 and max_x=width+10 using the existing LIMIT_FINDER_POLYGON_OVERSCAN_X constant. Nonzero UPath folders retain their exact frontier. Preserve PackageStyle's supported-value set and unknown-value fallback; do not add `stack` as a supported packageStyle.",
   "perturbation_axes": [
     "unknown packageStyle fallback versus explicit folder/package symbol",
     "zero versus odd and even nonzero package-title diameter",
