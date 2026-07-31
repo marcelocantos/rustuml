@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-svg-qualified-name-projection",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:81-114,213",
+    "src/main/java/net/atmp/CucaDiagram.java:195-199",
+    "src/main/java/net/sourceforge/plantuml/plasma/Plasma.java:52-89",
+    "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:57-89",
+    "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java:57-72",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:288-296",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java:1352-1358"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/deployment.rs:700-713,1147-1161",
+    "crates/rustuml-render/src/class.rs:1757-1773",
+    "crates/rustuml-render/src/deployment.rs:804-812,1175-1198,5471-5484",
+    "crates/rustuml-render/src/svg.rs"
+  ],
+  "invariant": "Description-diagram model identity is the quote-cleaned quark code, independent of visible display text. SVG group metadata is a separate projection: Java joins ancestor quark codes with Plasma's hidden separator and UGroup.fix replaces every character outside ASCII word characters, space, and hyphen with a dot before serializing data-qualified-name.",
+  "causal_divergence": "Rust correctly changed quoted no-alias declarations to retain the raw quark code, but deployment SVG naming still infers whether an ID came from a label by recomputing label_to_id. For quoted code such as `Pod: Frontend`, id equals label, so the heuristic emits the raw colon. Java never performs this inference: it preserves `Pod: Frontend` in the quark and later UGroup.fix projects the colon and hidden hierarchy separators to dots. The same stale heuristic is duplicated in own_qname, qualified_name, and deployment_qnames, so metadata identity depends incorrectly on display shape.",
+  "planned_change": "Move the already ported UGroup.fix-compatible projection from the class renderer into the shared SVG module. Build deployment qualified names exclusively from canonical node IDs and parent ownership, then apply the shared projection at the SVG metadata boundary. Remove renderer-side label_to_id and qname_label_segment inference. Widen quoted display-first aliases to Java's code grammar so dotted aliases remain canonical codes and pass through the same projection. Cover leaf, cluster, note, and link metadata consumers with model-level tests.",
+  "perturbation_axes": [
+    "identity form: quoted no-alias, quoted display-first alias, code-first alias, and bare ID",
+    "code characters: colon, dot, hyphen, underscore, Unicode punctuation, and escaped newline",
+    "ownership depth: root, one-level container, and deeper nesting",
+    "identity versus display: metadata projection changes while visible display text remains unchanged"
+  ],
+  "predecessor_rejection": "docs/parity-reviews/deployment-link-endpoint-display-independence/review.json identified the missing UGroup.fix projection; this account narrows and corrects that rejected mechanism without reverting canonical quark identity.",
+  "acceptance": [
+    "deploy_kubernetes returns to strict no-oracle parity without changing DeploymentNode.id.",
+    "Fresh nested colon/dot and alias/newline diagrams match Java metadata and visible text.",
+    "Explicit aliases, bare IDs, repeated labels under different owners, notes, and links retain canonical identity.",
+    "No golden labels, coordinates, per-fixture branches, or post-hoc SVG string surgery are introduced."
+  ],
+  "forbidden_approaches": [
+    "restore lossy label_to_id model identities",
+    "special-case colon or the Kubernetes fixture",
+    "derive metadata identity from display equality",
+    "rewrite completed SVG strings after rendering"
+  ],
+  "status": "planned"
+}
