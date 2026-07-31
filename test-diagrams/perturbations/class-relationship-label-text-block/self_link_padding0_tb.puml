@@ -1,0 +1,7 @@
+@startuml
+skinparam Padding 0
+skinparam ArrowFontName Verdana
+skinparam ArrowFontSize 12
+class LoopAnchor
+LoopAnchor --> LoopAnchor : Self audit branch
+@enduml

@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-relationship-label-text-block",
+  "review_date": "2026-07-31",
+  "account_commit": "7527ab798c0a8d1294c2d40eb7cf4063785e8755",
+  "implementation_commit": "5067b2599899864cdf87851064377da83a36bb37",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-class-relationship-label-text-block-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit 5067b2599899864cdf87851064377da83a36bb37, did not edit shipping code, and did not edit account.json. This review adds only held-out evidence and review.json."
+  },
+  "revisions": {
+    "checker_worktree": "/private/tmp/rustuml-integrate-20260731a",
+    "checker_worktree_state": "branch codex/t14-integration",
+    "rust_revision_checked": "5067b2599899864cdf87851064377da83a36bb37",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_is_ancestor_of_implementation": true,
+    "head_matches_implementation": true
+  },
+  "binary": {
+    "path": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "sha256": "851173d3a2690ebc753cf6ccb34a0049ad3a1be6139c2cb66b18be0639be4515",
+    "mode": "--no-oracle",
+    "rebuilt_by_checker": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "mode": "-Djava.awt.headless=true -tsvg"
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "b39bff599a929cb757357dd8915631c42054c6cd94ba3f6773965da7c6d59b64"
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a status --short --branch",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline -5",
+    "git show 7527ab79:docs/parity-reviews/class-relationship-label-text-block/account.json",
+    "git show 5067b259 -- crates/rustuml-render/src/class.rs",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor 7527ab79 5067b259",
+    "git -C /private/tmp/rustuml-integrate-20260731a rev-parse HEAD",
+    "rg -n \"relationship_center_layout|relationship_arrow_font|render_no_oracle_relationship|label_arrow|from_multiplicity|to_multiplicity\" crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs",
+    "sed -n '13740,14530p' crates/rustuml-render/src/class.rs",
+    "sed -n '2410,2455p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '60,95p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/LinkArg.java",
+    "sed -n '250,560p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '688,707p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+    "sed -n '196,215p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+    "sed -n '57,110p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+    "sed -n '16762,16835p' crates/rustuml-render/src/class.rs",
+    "rg -n -S 'class-relationship-label-text-block|Fresh audit lane|first line|second line|Self audit branch|Fresh gate|published lane|anchor route|note top line|note lower line|CardinalWest|CardinalEast|PlainNorth|PlainSouth' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "env JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-relationship-label-text-block/*.puml",
+    "for f in test-diagrams/perturbations/class-relationship-label-text-block/*.puml; do base=${f%.puml}; target/release/examples/diff_one --no-oracle \"$f\" > \"$base.diff.txt\" 2>&1; printf '\\nhelper_exit=%s\\n' \"$?\" >> \"$base.diff.txt\"; done",
+    "for stem in cardinality_only_control_tb font_multiline_lr link_note_lr visibility_label_tb; do target/release/examples/diff_one --no-oracle --print-rust \"test-diagrams/perturbations/class-relationship-label-text-block/${stem}.puml\" > \"test-diagrams/perturbations/class-relationship-label-text-block/${stem}.rust.svg\"; done",
+    "shasum -a 256 docs/parity-reviews/class-relationship-label-text-block/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one test-diagrams/perturbations/class-relationship-label-text-block/*.puml test-diagrams/perturbations/class-relationship-label-text-block/*.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "GraphvizImageBuilder resolves arrow style through root.element.classDiagram.arrow before SvekEdge constructs the label block.",
+      "SvekEdge builds labelOnly from Display.create0/font, then addVisibilityModifier prepends a VisibilityModifier icon with a 0/1/2/0 margin shield before the outer relationship margin.",
+      "Display.getCreole creates a SheetBlock1 with skinParam.getPadding(), so multiline labels become stacked text rows and the final text block width and height include that padding.",
+      "SvekEdge merges EntityImageNoteLink with the label block via TextBlockUtils.mergeTB/mergeLR, and appendTable truncates only the finished merged block dimensions before Graphviz solves the center label box."
+    ],
+    "rust": [
+      "The implementation diff is structurally honest in the narrow sense: it routes center-label measurement through relationship_arrow_font, reads the last declared skinparam Padding, and reuses the resulting offsets for both Graphviz label dimensions and painted text placement.",
+      "No fixture-shaped branch, golden-data read, coordinate-keyed SVG surgery, or new unexplained numeric literal was found in the reviewed shipping diff.",
+      "Rust Relationship currently has no field for a link visibility modifier, and class parsing leaves a leading visibility character inside relationship.label instead of splitting it into icon metadata.",
+      "relationship_center_layout still measures relationship.label as one flat string through text_render::measure_no_underline_with_family and text_render::label_height_with_family; it does not split multiline labels into Display rows before sizing or painting.",
+      "The link-note axis still depends on note_box_dims rather than a Java-equivalent EntityImageNoteLink component measurement, so merged note compositions are only as accurate as that separate note model."
+    ],
+    "constant_review": {
+      "status": "supported",
+      "details": "The reviewed implementation introduces no new parity-affecting constants beyond existing relationship padding, margin, and link-arrow constants already present in class.rs."
+    },
+    "fixture_shaping_review": {
+      "status": "not_found",
+      "details": "Fresh held-out labels and aliases do not appear in shipping crates, and no mechanism name, fixture name, or per-fixture conditional was found."
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/padding_after_relation_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/padding_after_relation_tb.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/padding_after_relation_tb.diff.txt",
+      "axes": [
+        "padding declared after the relationship",
+        "ArrowFontName Verdana",
+        "ArrowFontSize 12",
+        "top-to-bottom direction"
+      ],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/font_multiline_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/font_multiline_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-label-text-block/font_multiline_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/font_multiline_lr.diff.txt",
+      "axes": [
+        "left-to-right direction",
+        "ArrowFontName Courier New",
+        "ArrowFontSize 17",
+        "multiline relationship label"
+      ],
+      "result": "FAIL",
+      "finding": "Java emits two centered text rows, but Rust emits one literal `first line\\nsecond line` text node and inflates the center-label width to 234.6382px."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/self_link_padding0_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/self_link_padding0_tb.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/self_link_padding0_tb.diff.txt",
+      "axes": [
+        "self-link",
+        "Padding 0",
+        "ArrowFontName Verdana",
+        "ArrowFontSize 12"
+      ],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/magic_arrow_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/magic_arrow_tb.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/magic_arrow_tb.diff.txt",
+      "axes": [
+        "single-line label with trailing guide arrow",
+        "Padding 5",
+        "top-to-bottom direction"
+      ],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/visibility_label_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/visibility_label_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-label-text-block/visibility_label_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/visibility_label_tb.diff.txt",
+      "axes": [
+        "leading visibility modifier on the relationship label",
+        "Padding 5",
+        "ArrowFontName Verdana",
+        "ArrowFontSize 12"
+      ],
+      "result": "FAIL",
+      "finding": "Java strips the `+`, paints a visibility icon, and emits `published lane`; Rust has no visibility model here and prints the literal `+ published lane` as plain text."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/link_note_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/link_note_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-label-text-block/link_note_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/link_note_lr.diff.txt",
+      "axes": [
+        "left-to-right direction",
+        "multiline note on link",
+        "single-line center label",
+        "Padding 5"
+      ],
+      "result": "FAIL",
+      "finding": "Rust's merged note block is 10px narrower and 10px shorter than Java's EntityImageNoteLink composition, shifting the edge and both entities upward by about 11px."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/creole_label_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/creole_label_tb.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/creole_label_tb.diff.txt",
+      "axes": [
+        "Creole-formatted single-line relationship label",
+        "ArrowFontName Times New Roman",
+        "ArrowFontSize 16",
+        "Padding 5"
+      ],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/cardinality_only_control_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/cardinality_only_control_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-relationship-label-text-block/cardinality_only_control_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/cardinality_only_control_tb.diff.txt",
+      "axes": [
+        "no center label",
+        "endpoint cardinalities only",
+        "Padding 13",
+        "top-to-bottom direction"
+      ],
+      "result": "FAIL_CONTROL",
+      "finding": "Endpoint cardinality text still lands at different x/y coordinates even when the center-label mechanism is absent; this is preserved as adjacent class endpoint-label residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-relationship-label-text-block/no_label_control_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-relationship-label-text-block/no_label_control_lr.svg",
+      "diff": "test-diagrams/perturbations/class-relationship-label-text-block/no_label_control_lr.diff.txt",
+      "axes": [
+        "no center label",
+        "no cardinalities",
+        "left-to-right direction",
+        "Padding 0"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Multiline relationship labels do not use the claimed Java text-block model.",
+      "evidence": "Java Display.getCreole plus SheetBlock1 turns `first line\\nsecond line` into two rows with padding. Rust relationship_center_layout measures the raw string once and render emits one literal `first line\\nsecond line` text node, so the fresh font_multiline_lr input fails."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Visibility-prefixed relationship labels are not modeled at all in the reviewed Rust path.",
+      "evidence": "Java LinkArg.build strips a leading visibility character into link visibility metadata, and SvekEdge.addVisibilityModifier paints the icon before the label. Rust Relationship has no such field and the fresh visibility_label_tb input renders `+ published lane` as plain text with no visibility glyph."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The implementation does not generalize to link-note compositions claimed in the account.",
+      "evidence": "Fresh link_note_lr is valid Java and fails with a narrower, shorter Rust note block. The reviewed diff changed center-label padding and font use, but did not replace note_box_dims with a Java-equivalent EntityImageNoteLink measurement, so the account's note-axis acceptance is unsupported."
+    },
+    {
+      "severity": "non_rejecting",
+      "summary": "The narrow padding, arrow-font, self-link, and guide-arrow claims are supported on fresh held-outs.",
+      "evidence": "padding_after_relation_tb, self_link_padding0_tb, magic_arrow_tb, creole_label_tb, and no_label_control_lr all pass through the no-oracle product path."
+    },
+    {
+      "severity": "non_rejecting",
+      "summary": "A separate endpoint-cardinality residue remains in this class family.",
+      "evidence": "cardinality_only_control_tb fails even without a center label. This is preserved as adjacent control evidence rather than attributed to the reviewed center-label change."
+    },
+    {
+      "severity": "non_rejecting",
+      "summary": "No fixture-shaped logic or unexplained constants were found in the implementation diff.",
+      "evidence": "Source inspection found shared style/padding/font plumbing but no held-out strings, filename checks, coordinate-keyed branches, or suspicious constant ladders."
+    }
+  ],
+  "summary": {
+    "fresh_inputs_total": 9,
+    "valid_java_inputs": 9,
+    "java_syntax_errors": 0,
+    "passes": 5,
+    "failures": 4,
+    "mechanism_relevant_failures": 3,
+    "control_failures_not_needed_for_verdict": 1,
+    "cargo_or_rustc_run": false,
+    "shipping_files_modified": false,
+    "account_json_modified": false
+  },
+  "verdict": "REJECT"
+}

@@ -1,0 +1,8 @@
+@startuml
+skinparam ArrowFontName Verdana
+skinparam ArrowFontSize 12
+class MeridianSource
+class HarborTarget
+MeridianSource --> HarborTarget : Fresh audit lane
+skinparam Padding 13
+@enduml

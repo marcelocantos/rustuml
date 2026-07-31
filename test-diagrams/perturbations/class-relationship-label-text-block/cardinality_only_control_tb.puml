@@ -1,0 +1,6 @@
+@startuml
+skinparam Padding 13
+class CardinalWest
+class CardinalEast
+CardinalWest "1" --> "0..*" CardinalEast
+@enduml

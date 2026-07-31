@@ -1,0 +1,8 @@
+@startuml
+skinparam Padding 5
+skinparam ArrowFontName Times New Roman
+skinparam ArrowFontSize 16
+class CreoleSource
+class CreoleTarget
+CreoleSource --> CreoleTarget : <b>bold</b> //tilt//
+@enduml

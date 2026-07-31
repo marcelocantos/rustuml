@@ -1,0 +1,8 @@
+@startuml
+skinparam Padding 5
+skinparam ArrowFontName Verdana
+skinparam ArrowFontSize 12
+class CipherNorth
+class CipherSouth
+CipherNorth --> CipherSouth : + published lane
+@enduml

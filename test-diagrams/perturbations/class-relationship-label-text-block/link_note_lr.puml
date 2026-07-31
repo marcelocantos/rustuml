@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam Padding 5
+skinparam ArrowFontName Verdana
+skinparam ArrowFontSize 12
+class NoteOrigin
+class NoteTarget
+NoteOrigin --> NoteTarget : anchor route
+note on link
+  note top line
+  note lower line
+end note
+@enduml
