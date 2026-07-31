@@ -36,6 +36,7 @@ positive evidence under the strict schema.
 
 | Mechanism | Archived review records |
 | --- | --- |
+| `stack-transparent-rectangle-stroke-state` | `review.json@51451c51` |
 | `stack-transparent-inset-limitfinder-frontier` | `review.json@597ee2b5`, `review-2.json@dfc8cb0f` |
 | `svg-logical-monospace-serialization` | `review.json@3232c7d7`, `review-2.json@639dd02a` |
 | `class-quoted-symbol-container-dispatch` | `review.json@4467575c`, `review-followup.json@69d166ec`, `review-followup-2.json@70faf074`, `review-followup-3.json@16ce5244` |
@@ -49,22 +50,27 @@ positive evidence under the strict schema.
 | `state-composite-entry-exit-frontier` | `review.json@b968263f`, `review-2.json@090de99d`, `review-3.json@fe6814b6` |
 | `state-flat-svek-painted-envelope` | `review.json@fe9b5701` |
 
-## Unresolved
+## Archived Legacy Accepts
 
-These records remain accepted as authored but cannot select positive evidence
-under the stricter schema. No replacement claim was invented.
+The records below retain their authored accepted verdict and every original
+byte under `legacy-accepted-<sha256-prefix>.json`. That filename is
+deliberately nonselecting: it preserves the historical claim without allowing
+the stronger gate to treat incomplete provenance as current approval. Each
+mechanism remains represented by its canonical `account.json`; a new
+independent review is required before it can select positive evidence.
 
-| Mechanism | Blocking evidence gap |
-| --- | --- |
-| `deployment-opale-peer-svek-node-gate` | The current canonical account is at `9aeb64ed5f58b109ecbb19178359c2b4a9bfda4b`; the review-attested implementation `4a9bccfd78b36af225e6a194587535e9a744c939` does not descend from it. |
-| `description-link-note-color-factory-consumption` | The current canonical account is at `1ee8a31fb069a02e566d797c9f4d21d2ce101035`; the preserved review does not attest a distinct implementation revision that descends from it. |
-| `tim-procedure-following-source-origins` | The current canonical account is at `d04b7ec69d7f86aeafbc9202da3c41ef7569ddac`; its accepted review lacks both a distinct attested implementation descendant and explicit checker tool and independence claims. |
-| `state-skinparam-canonical-key-resolution` | Its recorded account and implementation commits are usable, but the accepted review lacks explicit checker tool and independence claims. |
-| `class-together-structural-layout` | The accepted `review-2.json` names only a task id and model. It records neither checker tool nor independence, and has no revisions object. |
-| `deployment-hidden-link-lifecycle` | The checker and Git provenance can be normalized, but its valid held-outs record observations rather than a pass result accepted by the strict selector; no full no-oracle comparison claim is present to promote. |
-| `preprocessed-source-comment-identity` | The review names implementation `be4f0c2feb131cfde8f46b239ffefd4a3e46a860`, but no byte-identical current account commit precedes it; its checker object also lacks explicit model and tool fields. |
-| `state-autonomous-dot-option-spacing` | The accepted `review-2.json` names only a task id and model and has no attested account, implementation, or Java revisions. |
-| `state-autonomous-root-painted-normalization` | There is no directory-local canonical `account.json`; the accepted review is therefore not eligible to select evidence. Its `checker_identity` also cannot satisfy the required single explicit reviewer/checker container. |
-| `state-choice-polygon-serialization` | The accepted `review-2.json` names only a task id and model and has no attested account, implementation, or Java revisions. |
-| `state-composite-entry-exit-frontier` | The accepted `review-4.json` names only a task id and model and has no attested account, implementation, or Java revisions. |
-| `state-flat-svek-painted-envelope` | The accepted `review-2.json` names only a task id and model and has no attested account, implementation, or Java revisions. |
+| Mechanism | Archive | SHA-256 | Blocking evidence gap |
+| --- | --- | --- | --- |
+| `class-together-structural-layout` | `legacy-accepted-b19d87fb.json` | `b19d87fb2da5d22e34baba96e537181782c2e80ad998d01e9c2cad56db1c6596` | No checker tool or independence attestation and no revisions object. |
+| `deployment-hidden-link-lifecycle` | `legacy-accepted-9076c079.json` | `9076c079783060d78e72b3d76d0e3c126958631a26c7919e705ba6a8a3830594` | Revision aliases are incomplete, evidence path aliases conflict, and the valid held-outs record observations rather than a strict no-oracle pass with two positive axes. |
+| `deployment-opale-peer-svek-node-gate` | `legacy-accepted-3bce3bb4.json` | `3bce3bb4c81d924b376c4ba7fca5766d520308796de0d058f0709a975b296c38` | The reviewer does not separately attest its tool, and the attested implementation does not descend from the current canonical account. |
+| `description-link-note-color-factory-consumption` | `legacy-accepted-e36666b4.json` | `e36666b47236a40d42d882cae10c4bc50fa802fb11ca944b43758fe67d37c88b` | No distinct implementation revision descending from the current canonical account is attested. |
+| `preprocessed-source-comment-identity` | `legacy-accepted-d5411865.json` | `d541186500881e0ed6cf9ff74ca63fc8572169d3bef25e7b76887b4bacbcdac0` | No byte-identical canonical account commit precedes the named implementation, and the checker object lacks explicit model and tool fields. |
+| `state-autonomous-dot-option-spacing` | `legacy-accepted-af5492cd.json` | `af5492cdd963484534501fee72825784fcb37265760d6223eea8244ef095e07d` | No checker tool or independence attestation and no account, implementation, or Java revision attestation. |
+| `state-autonomous-painted-bounds` | `legacy-accepted-e2654044.json` | `e2654044268f1a9857be049cf8aaa2fa345c859b732b4d48703941b33d54ac8a` | The third-round checker records only a task id and model and has no revisions object; the two earlier rejected reviews remain canonical counterevidence. |
+| `state-autonomous-root-painted-normalization` | `legacy-accepted-5150c843.json` | `5150c8439d76e3c5bc0205c424b948a005c28ec71a828d4b8ca9144941b9a59a` | The review uses a noncanonical checker identity container and incomplete revision aliases. The exact proposed account was copied into the canonical directory with SHA-256 `46b0227ec4ef007d6d6eb62e887e27d6e603fc943148813afcd4a5d11fffac3c`. |
+| `state-choice-polygon-serialization` | `legacy-accepted-2a320ac8.json` | `2a320ac8374c99b1069660c0635fd160406290630e91dc22f6bdb05b6203c698` | No checker tool or independence attestation and no account, implementation, or Java revision attestation. |
+| `state-composite-entry-exit-frontier` | `legacy-accepted-eff0f27e.json` | `eff0f27e04b2a2465904a58759e69018dde1029aaf4856634350007392b7ce01` | No checker tool or independence attestation and no account, implementation, or Java revision attestation. |
+| `state-flat-svek-painted-envelope` | `legacy-accepted-79bb9205.json` | `79bb92057cd5506d74db1b2d928606ceafef640680f4fab30ab9974ec6c8dc4e` | No checker tool or independence attestation and no account, implementation, or Java revision attestation. |
+| `state-skinparam-canonical-key-resolution` | `legacy-accepted-1730f87c.json` | `1730f87c01c9dd14b7fc8889fcbe7fdefee03e2de9bcc160e91bd4e47a034dbe` | Account and implementation commits are recoverable, but the original record does not explicitly attest checker tool or independence. |
+| `tim-procedure-following-source-origins` | `legacy-accepted-3e1ed6fc.json` | `3e1ed6fc8cb1d8c22e64aff5c16da02a334c42a16ba80589e58414886d5d5085` | No distinct implementation descendant and no explicit checker tool or independence attestation. |

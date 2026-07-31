@@ -4,6 +4,7 @@
   "reviewed_at": "2026-07-30",
   "reviewer": {
     "identity": "Codex independent adversarial checker; not the implementer",
+    "independence": "Codex independent adversarial checker; not the implementer",
     "model": "gpt-5",
     "reasoning_effort": "high",
     "tool": "Codex desktop shell with zsh, an isolated git worktree, OpenJDK 21, the pinned Java PlantUML JAR, and the frozen bf4b9c0a diff_one helper; no Cargo or rustc invoked"
