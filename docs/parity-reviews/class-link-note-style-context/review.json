@@ -15,6 +15,34 @@
   ],
   "evaluated_rust_revision": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "revisions": {
+    "account_commit": "ad0862f957a00bc2284bf68e7b428feefb301a51",
+    "implementation_commit": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "evidence_normalization": {
+    "auditor": {
+      "identity": "Codex provenance auditor, task 019ee369-54e2-7203-afce-ddde7bfe1723",
+      "model": "GPT-5 Codex",
+      "tool": "Codex desktop; git, jq, shasum, and xmllint",
+      "independence": "This normalization pass did not implement this mechanism or author its original review; it changed provenance metadata only."
+    },
+    "scope": "Provenance normalization from the preserved record and Git history only; no parity result was re-executed and no original checker field, command, input, finding, verdict, perturbation, or artifact hash was altered.",
+    "original_evidence_commit": "eba0554329c4255503bf042da9670a4555deff0e",
+    "original_evidence_parent": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+    "checks": [
+      "git cat-file -e ad0862f957a00bc2284bf68e7b428feefb301a51^{commit}: pass",
+      "git hash-object docs/parity-reviews/class-link-note-style-context/account.json equals git rev-parse ad0862f957a00bc2284bf68e7b428feefb301a51:docs/parity-reviews/class-link-note-style-context/account.json (605ef20c80849d85c3d1afa1c78f3b54190aedfa): pass",
+      "git merge-base --is-ancestor ad0862f957a00bc2284bf68e7b428feefb301a51 388e22e710a63cc44a8a5222f2525a41c5405ff8: pass",
+      "git rev-parse eba0554329c4255503bf042da9670a4555deff0e^ equals evaluated_rust_revision 388e22e710a63cc44a8a5222f2525a41c5405ff8: pass",
+      "git hash-object review.json equals its blob in eba0554329c4255503bf042da9670a4555deff0e before normalization: pass",
+      "all declared implementation_commits exist, descend from the account commit, and are ancestors of the evaluated revision: pass",
+      "review java_revision equals account java_revision 71806a23780b04a5ccde2f8ceb5121edad5eb711: pass",
+      "account SHA-256, both fresh source SHA-256 values, preserved Java/Rust/diff exit files, and structural-equivalence diff text agree with the review: pass",
+      "the original evidence commit adds review and perturbation artifacts only, and the single explicit checker object, independence statement, commands, inputs, findings, and accepted verdict are internally consistent: pass"
+    ],
+    "identity_limit": "Git does not cryptographically prove the old checker's model identity; this audit preserves that explicit attestation and establishes internal consistency without strengthening it."
+  },
   "reassessed_prior_rejects": [
     {
       "commit": "da1a9a64d571f8cf5adfba3a2b383017ed5eab8e",
