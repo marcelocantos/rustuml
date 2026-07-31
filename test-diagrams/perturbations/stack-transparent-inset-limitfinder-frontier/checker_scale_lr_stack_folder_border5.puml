@@ -1,0 +1,19 @@
+@startuml
+scale 1.75
+left to right direction
+skinparam packageBorderThickness 5
+
+stack "Scaled Intake Ledger" as ScaledIntakeLedger {
+  class RequestBatchAlpha
+  class DispatchQueueOmega
+  interface ApprovalPortSigma
+}
+
+folder "Sibling Review Folder" as SiblingReviewFolder {
+  class FolderWitnessLambda
+}
+
+RequestBatchAlpha --> ApprovalPortSigma : request_audit
+DispatchQueueOmega --> ApprovalPortSigma : ship_bundle
+ApprovalPortSigma ..> FolderWitnessLambda : publish_review_log
+@enduml

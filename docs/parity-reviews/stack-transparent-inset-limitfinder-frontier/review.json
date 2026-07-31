@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "mechanism": "stack-transparent-inset-limitfinder-frontier",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and the existing target/release/examples/diff_one --no-oracle helper"
+  },
+  "revisions": {
+    "review_checkout_head": "666c0b74ba777fdd1e7a90e3bfeef86fe8dba1e4",
+    "review_worktree_dirty_paths": [
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "account_commit": "fe4f07b48dd9e6e27897e3b4af146160c3dd195c",
+    "implementation_commit": "743d463a655367f936e2a40368015b0bd00b4060",
+    "evidence_commit": "3a6b42127faa6e3b00eab6a4751e605dec88b0da",
+    "implementation_tree": "066420793ef372d867a498be89665e3385489d7c",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "artifacts": {
+    "diff_one": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+      "sha256": "df036e55369a49b12f73f2d38190b555a48472f758545522e1699620bdc98fa3",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "commands": [
+    "git -C /private/tmp/rustuml-integrate-20260731a status --short",
+    "git -C /private/tmp/rustuml-integrate-20260731a log --oneline --decorate -n 12",
+    "git -C /private/tmp/rustuml-integrate-20260731a show --stat --oneline fe4f07b4 743d463a 3a6b4212",
+    "git -C /private/tmp/rustuml-integrate-20260731a show 743d463a:crates/rustuml-render/src/class.rs | sed -n '4212,4252p'",
+    "git -C /private/tmp/rustuml-integrate-20260731a show 743d463a:crates/rustuml-render/src/class.rs | sed -n '4459,4498p'",
+    "git -C /private/tmp/rustuml-integrate-20260731a diff --check fe4f07b4..743d463a",
+    "git -C /private/tmp/rustuml-integrate-20260731a merge-base --is-ancestor fe4f07b4 743d463a",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sed -n '50,110p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java",
+    "sed -n '160,230p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sed -n '120,155p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "rg -n \"Default Frontier Archive|Scaled Intake Ledger|Dpi Frontier Stack|Rounded Empty Sentinel|stack-transparent-inset-limitfinder-frontier\" /private/tmp/rustuml-integrate-20260731a/crates -S",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_default_tb_two_children_renamed.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_scale_lr_stack_folder_border5.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_dpi_tb_one_child_external_class.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_leaf_control_scaled_roundcorner.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_default_tb_two_children_renamed.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_scale_lr_stack_folder_border5.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_dpi_tb_one_child_external_class.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_leaf_control_scaled_roundcorner.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.puml",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/*.puml /private/tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/*.svg",
+    "shasum -a 256 /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "source_inspection": {
+    "java_model_supported": [
+      "USymbolStack.drawQueue draws a transparent inset URectangle translated by the 15px border before drawing the outer UPath.",
+      "LimitFinder.drawRectangle records URectangle minima at x - 1 and y - 1 even when the rectangle fill and stroke are none.",
+      "SvekResult.calculateDimension measures the fully drawn result and moves the entire cluster manager by 6 - minX and 6 - minY."
+    ],
+    "rust_model_audit": [
+      "743d463a adds PackageKind::Stack to package_cluster_painted_min with minY = position.y - LIMIT_FINDER_RECTANGLE_INSET and leaves minX unchanged.",
+      "743d463a also threads the same stack-only minY into body_top accounting for painted cluster positions.",
+      "The same implementation leaves empty_package_painted_frontier unchanged: Stack falls through to the generic min_x = 0, min_y = 0 branch, so empty stack packages never receive the inset-minY contribution."
+    ],
+    "fixture_logic_audit": [
+      "No reference to the fresh labels, mechanism directory, or other fixture-shaped strings was found in production crates.",
+      "No golden-data embedding, coordinate-keyed SVG surgery, comparator changes, or new unexplained constants were found in the implementation diff."
+    ]
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_default_tb_two_children_renamed.puml",
+      "java_svg": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_default_tb_two_children_renamed.svg",
+      "axes": [
+        "default scale",
+        "stack alone",
+        "two children",
+        "renamed labels"
+      ],
+      "source_sha256": "ddaadef6c7e2dbdede36977e8902fc2cfaade7b4d75603b8837e2fc8c39f824d",
+      "java_svg_sha256": "6a423d38783939fa9cae660ff8f94675531f11bda089367dee98f8aafb79625d",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_scale_lr_stack_folder_border5.puml",
+      "java_svg": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_scale_lr_stack_folder_border5.svg",
+      "axes": [
+        "explicit scale 1.75",
+        "left-to-right direction",
+        "sibling symbol cluster",
+        "three children",
+        "border thickness 5",
+        "renamed labels"
+      ],
+      "source_sha256": "f8ab694cf7f570239dbb29961817c4c3bfeb691a6716e76d588927526448fe27",
+      "java_svg_sha256": "aabe071e66d35c1e3ce5396ed1a10f3c98b9db47af266008def27ea5ff26afed",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_dpi_tb_one_child_external_class.puml",
+      "java_svg": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_dpi_tb_one_child_external_class.svg",
+      "axes": [
+        "dpi 168",
+        "one child",
+        "external class sibling",
+        "renamed labels"
+      ],
+      "source_sha256": "7b0662f212ad71b55f0403ff32628752da38440bac82bed0d0d78894490420b2",
+      "java_svg_sha256": "a04c3dfc0d0954dc2008c4bc92c37ce91365d3957f7b13eb9b448554f9dac593",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.puml",
+      "java_svg": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_cluster_control_scaled_roundcorner.svg",
+      "axes": [
+        "explicit scale 1.5",
+        "empty stack cluster control",
+        "roundcorner 20"
+      ],
+      "source_sha256": "9a89401fc37201e43a712311444be7b7130a410e42b082e47ef32d0074876080",
+      "java_svg_sha256": "25796f1c0fd86304276ef234bb397636cb715c86193ef917ca795641b7287413",
+      "result": "fail: class-dispatch empty stack cluster remains 1 scaled base unit too high; Java rect/path/text start at y=10.5/10.5/45.8027 while Rust emits y=9/9/44.3027 and shortens the root SVG height from 87px to 85.5px"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_leaf_control_scaled_roundcorner.puml",
+      "java_svg": "test-diagrams/perturbations/stack-transparent-inset-limitfinder-frontier/checker_empty_leaf_control_scaled_roundcorner.svg",
+      "axes": [
+        "explicit scale 1.5",
+        "empty leaf control",
+        "adjacent DESCRIPTION dispatch",
+        "roundcorner 20"
+      ],
+      "source_sha256": "32bce8e1eb0684c77eb9c30db89e5fbc6ae4f35045caccd82c6bfdc416e4a0ee",
+      "java_svg_sha256": "2da2660f9a6bd8c969b500cca790c496c8fa166682b75106672b00d7592fcc37",
+      "result": "fail: adjacent DESCRIPTION-path stack rendering still ignores the requested roundcorner and emits the default 5px diameter (rx=3.75 after scaling versus Java rx=15)"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs": 5,
+    "passes": 3,
+    "failures": 2
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The claimed LimitFinder model is only partially realized in Rust.",
+      "detail": "The fresh class-dispatch empty-cluster control fails with the exact scaled one-unit signature the mechanism is supposed to eliminate: Rust emits the whole empty stack 1.5px too high and the root SVG 1.5px too short at scale 1.5."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The missing path is visible in source, not inferred only from the SVG.",
+      "detail": "743d463a adds Stack handling to package_cluster_painted_min for non-empty cluster positions, but empty_package_painted_frontier still falls through to min_y = 0. Empty stack packages therefore bypass the transparent-rectangle frontier and never receive the Svek-style downward normalization."
+    },
+    {
+      "severity": "informational",
+      "summary": "The non-empty stack-cluster cases generalize across the tested axes.",
+      "detail": "Default, scaled-with-sibling, and dpi one-child held-outs all compare structurally equal, which supports the narrow non-empty-cluster account rather than disproving it."
+    },
+    {
+      "severity": "informational",
+      "summary": "No overfitting signal was found in the implementation diff.",
+      "detail": "The review did not find fixture-label branches, golden-data reads, comparator changes, or new magic constants. The rejection comes from a fresh valid counterexample and an uncovered Rust path."
+    },
+    {
+      "severity": "informational",
+      "summary": "A separate adjacent stack issue remains in DESCRIPTION dispatch.",
+      "detail": "The fresh empty-leaf control fails because the DESCRIPTION-path stack symbol ignores the requested roundcorner and keeps the default diameter. That is outside this mechanism's class-cluster scope but remains preserved as a valid fresh failure."
+    }
+  ],
+  "verdict": "REJECTED",
+  "verdict_reason": "A fresh valid class-dispatch empty stack cluster disproves acceptance of the implementation at 743d463a: empty stack packages still miss the transparent inset frontier because empty_package_painted_frontier has no Stack branch. Under the held-out rule, that valid fresh failure rejects this mechanism even though the non-empty stack-cluster probes pass."
+}

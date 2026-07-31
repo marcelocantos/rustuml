@@ -1,0 +1,7 @@
+@startuml
+scale 1.5
+skinparam roundcorner 20
+
+stack "Rounded Empty Cluster" as RoundedEmptyCluster {
+}
+@enduml

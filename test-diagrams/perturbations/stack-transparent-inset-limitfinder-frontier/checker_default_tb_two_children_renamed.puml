@@ -1,0 +1,8 @@
+@startuml
+stack "Default Frontier Archive" as DefaultFrontierArchive {
+  class IntakeRegisterMu
+  class ArchiveStoreNu
+}
+
+IntakeRegisterMu --> ArchiveStoreNu : promote_default_ledger
+@enduml

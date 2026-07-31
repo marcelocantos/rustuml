@@ -1,0 +1,11 @@
+@startuml
+skinparam dpi 168
+
+stack "Dpi Frontier Stack" as DpiFrontierStack {
+  class SolePayloadGamma
+}
+
+class ExternalMirrorBeta
+
+SolePayloadGamma --> ExternalMirrorBeta : reconcile_frontier_snapshot
+@enduml
