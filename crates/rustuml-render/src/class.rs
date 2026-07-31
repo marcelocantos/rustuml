@@ -13398,6 +13398,28 @@ fn render_relationship_svg(
     }
 
     let center_layout = relationship_center_layout(diagram, rel, note, &diagram.meta.sprites);
+    // PlantUML `SvekEdge` builds its center block with the note as the first
+    // child for LEFT/TOP and the label as the first child for RIGHT/BOTTOM
+    // (`SvekEdge.java`, constructor branches around `mergeLR`/`mergeTB`). The
+    // corresponding TextBlock composites paint children in that same order.
+    let note_precedes_label = note.is_some_and(|note| {
+        matches!(note.position, NotePosition::Left | NotePosition::Top)
+    });
+    if note_precedes_label
+        && let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout)
+    {
+        render_relationship_note(
+            svg,
+            diagram,
+            rel,
+            note,
+            position.x + center.note_x + MARGIN + layout_x_bias,
+            position.y + center.note_y + MARGIN,
+            center.note_width,
+            center.note_height,
+            &diagram.meta.sprites,
+        );
+    }
     if relationship_has_center_label(rel)
         && let Some(position) = edge_path.label
         && let Some(center) = center_layout
@@ -13437,7 +13459,9 @@ fn render_relationship_svg(
             );
         }
     }
-    if let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout) {
+    if !note_precedes_label
+        && let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout)
+    {
         render_relationship_note(
             svg,
             diagram,
@@ -21342,6 +21366,44 @@ mod tests {
             bottom.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING
         );
         assert!(bottom.height > bottom.label_height);
+    }
+
+    #[test]
+    fn relationship_note_and_label_paint_in_composite_child_order() {
+        for (position, note_first) in [
+            ("left", true),
+            ("top", true),
+            ("right", false),
+            ("bottom", false),
+        ] {
+            let label = format!("{position} relationship label");
+            let payload = format!("{position} relationship note");
+            let input = format!(
+                "@startuml\nclass PaintOrderWest\nclass PaintOrderEast\nPaintOrderWest --> PaintOrderEast : {label}\nnote {position} on link : {payload}\n@enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let svg = crate::render_svg(&diagram);
+            let link = svg
+                .split_once(r#"<g class="link""#)
+                .unwrap()
+                .1
+                .split_once("</g>")
+                .unwrap()
+                .0;
+            let note_outline = link.find(r#"fill="#FEFFDD""#).unwrap();
+            let note_text = link.find(&format!(">{payload}</text>")).unwrap();
+            let label_text = link.find(&format!(">{label}</text>")).unwrap();
+
+            assert!(
+                note_outline < note_text,
+                "{position} note must paint its Opale outline before its text"
+            );
+            assert_eq!(
+                note_text < label_text,
+                note_first,
+                "{position} merged children painted out of order"
+            );
+        }
     }
 
     #[test]
