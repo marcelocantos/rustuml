@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-shadow-limitfinder-envelope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": [
+        "LimitFinder#drawRectangle",
+        "LimitFinder#drawEllipse",
+        "LimitFinder#drawUPolygon"
+      ],
+      "lines": "160-200",
+      "role": "Defines the painter envelope: rectangles and ellipses extend their positive axes by twice deltaShadow, while polygons retain the fixed ten-pixel horizontal overscan and ignore their shadow field."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java",
+      "symbols": [
+        "EntityImageStateCommon#getShape"
+      ],
+      "lines": "112-119",
+      "role": "Copies the resolved state style shadow onto the ordinary state's URectangle before SvekResult measures it."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImagePseudoState.java",
+      "symbols": [
+        "EntityImagePseudoState#drawU"
+      ],
+      "lines": "91-103",
+      "role": "Copies the resolved history style shadow onto the history UEllipse."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageBranch.java",
+      "symbols": [
+        "EntityImageBranch#drawU"
+      ],
+      "lines": "66-94",
+      "role": "Copies the resolved activity-diamond shadow onto a choice UPolygon; LimitFinder deliberately does not add that shadow to its bounds."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageSynchroBar.java",
+      "symbols": [
+        "EntityImageSynchroBar#drawU"
+      ],
+      "lines": "72-84",
+      "role": "Copies the resolved activity-bar shadow onto the fork/join URectangle."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "state_pseudostate_style",
+        "autonomous_state_style",
+        "flat_painted_envelope_has_no_shadow_extensions",
+        "flat_painted_bounds"
+      ],
+      "lines": "2340-2447, 2617-2788, 3624-3639, 6445-6501",
+      "role": "Resolves the same state and pseudostate shadow channels and emits shadow filters, but rejects every shadowed graph from the otherwise complete flat LimitFinder-equivalent collector."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/state/state_skinparam_shadowing.puml"
+  ],
+  "claimed_invariant": "SvekResult derives its canvas from the union of emitted primitive painters. Shadow affects that union according to the primitive consumed by LimitFinder, not according to a diagram-wide canvas adjustment: a URectangle or UEllipse contributes two times its own resolved deltaShadow to its maximum x and y; a UPolygon contributes no shadow extension; unshadowed paths, labels, and decorations retain their existing bounds. Each state image resolves its own style, so ordinary states, start/end circles, history circles, and fork/join bars may carry different shadow values in one graph. The final graph envelope takes the maximum of those independently extended primitives.",
+  "causal_divergence": "Rust already emits the same shadow filter and matching interior primitives for state_skinparam_shadowing, but flat_painted_envelope_has_no_shadow_extensions disables the primitive-aware collector whenever any resolved state or pseudostate shadow is positive. The fallback dimensions consequently omit the positive-axis shadow frontier and report 71 by 342 instead of Java's 77 by 348. The six-pixel difference on each axis is exactly LimitFinder's two-times-three-pixel extension for `shadowing true`. This is not a fixed canvas discrepancy: numeric, stereotype, CSS, and pseudostate-specific shadows can differ, and the primitive owning the maximum can change with topology and direction.",
+  "planned_model_change": "Delete the zero-shadow activation restriction and make flat_painted_bounds include each node's resolved shadow according to its emitted primitive. Resolve start, end, initial, final, history, fork, join, port, and ordinary-state styles through the same functions used by SVG emission. Add two times the resolved shadow to the positive bounds of ellipses and rectangles only; retain the existing polygon rule for choices. Reuse the existing shared painter union, origin normalization, export integerization, and composite-state implementation. Add fresh tests that vary numeric shadow magnitude, CSS provenance, pseudostate-only shadow, labels, topology, and direction, including a choice-polygon control that proves a nonzero filter does not expand LimitFinder.",
+  "perturbation_axes": [
+    "boolean three-pixel shadow versus numeric two- and four-pixel shadows",
+    "legacy skinparam versus embedded style provenance",
+    "ordinary state rectangle versus start/end/history ellipses, choice polygon, and fork/join rectangle",
+    "renamed short and long state labels",
+    "linear versus branching topology",
+    "top-to-bottom versus left-to-right direction",
+    "the identity of the primitive owning the positive x and y maxima"
+  ],
+  "scope_boundary": "This mechanism owns only flat state SVEK canvas bounds for shadows already emitted by modeled state and pseudostate painters. It does not change shadow filter generation, filter appearance, Graphviz routing, notes, titles, composites, document margins, comparator slack, golden eligibility, or unrelated diagram families.",
+  "acceptance": [
+    "state_skinparam_shadowing matches structurally through render_svg without oracle input.",
+    "Focused fresh tests prove two-times-shadow bounds for independently styled rectangles and ellipses and preserve the polygon-specific no-extension rule.",
+    "The state and full no-oracle ratchets do not regress any existing match.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "adding six pixels to the state canvas",
+    "keying behavior to the shadowing fixture or its labels",
+    "using one diagram-wide shadow value for all images",
+    "extending every primitive regardless of its LimitFinder method",
+    "post-hoc SVG string surgery",
+    "comparator or eligibility changes"
+  ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "review_status": "Independent adversarial review and Java-generated held-outs remain pending. This account is a pre-implementation causal claim and does not self-attest acceptance."
+  }
+}
