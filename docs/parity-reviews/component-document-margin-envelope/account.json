@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-document-margin-envelope",
+  "status": "investigated_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java",
+      "symbols": [
+        "TextBlockExporter12026.Builder#calculateMargin",
+        "TextBlockExporter12026#calculateFinalDimension",
+        "TextBlockExporter12026#exportTo"
+      ],
+      "lines": "158-171, 189-193, 478-484",
+      "role": "Resolves root.document Margin, adds left and right exactly once to the unwrapped diagram dimension, and translates drawing by the left and top values."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": [
+        "SvekResult#calculateDimension"
+      ],
+      "lines": "127-136",
+      "role": "Normalizes the painted SVEK body to origin 6 and returns its measured extent with the fixed 15-unit envelope delta."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#ensureVisible"
+      ],
+      "lines": "142-149",
+      "role": "Records a positive-axis paint frontier as integer x+1/y+1; this five-unit tail after SVEK's normalized origin is distinct from diagram chrome's seven-unit trailing width."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/component.rs",
+      "symbols": [
+        "compute_no_oracle_canvas",
+        "component_chrome_layout",
+        "render_plantuml_svg"
+      ],
+      "lines": "1927-1939, 2171-2180, 5496-5584, 5611-5760",
+      "role": "Shifts the painted body by document left/top margins and replaces the body envelope tail before chrome composition, but subtracts CHROME_RIGHT_PAD (7) where the adjacent model and Java SVEK normalization require the five-unit positive-axis tail."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_united_component.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml"
+  ],
+  "claimed_invariant": "A root.document margin wraps the completed SVEK body: left/top translate every painted body coordinate and left+right/top+bottom enlarge the body dimension exactly once. Replacing an already represented SVEK tail must use that tail's own normalized positive-axis extent, not the unrelated trailing width used later by title, legend, header, and footer chrome.",
+  "causal_divergence": "The four Bootstrap-derived component themes all resolve root Margin 10. Rust translates their body correctly, but its right-side wrapper subtracts CHROME_RIGHT_PAD (7) even though the code comment identifies the replaced SVEK positive-axis tail as five units. The two-unit discrepancy survives final dpi=100 scaling as a 2.0833-unit root width deficit (150 instead of 152.0833). Entity geometry and all non-Cerulean paint already agree structurally, isolating the divergence to envelope composition; Cerulean's missing gradient is explicitly outside this mechanism.",
+  "planned_model_change": "Replace the right-margin subtraction with SVEK_ENVELOPE_ORIGIN - 1.0, the same named positive-axis tail already used for the bottom-margin replacement. Add fresh renamed component perturbations covering symmetric and asymmetric document margins, dpi 96 and dpi 100, and content whose right frontier is owned by an entity versus a link label. Do not alter layout coordinates, theme identity, scaling, or chrome constants.",
+  "perturbation_axes": [
+    "symmetric versus asymmetric root.document margins",
+    "dpi 96 versus dpi 100 final scaling",
+    "entity-owned versus link-label-owned right paint frontier",
+    "renamed component labels and connection labels",
+    "with and without title/header/footer chrome"
+  ],
+  "scope_boundary": "This mechanism owns component-diagram outer dimension composition when root.document Margin is non-default. It does not alter SVEK routing, entity dimensions, text metrics, gradient generation, use-case layout, theme parsing, global scaling, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "The Minty, Superhero, and United component theme inputs match structurally through render_svg without oracle input.",
+    "Cerulean's root width and body coordinates match while its separately owned gradient-resource difference remains visible.",
+    "Fresh renamed inputs prove symmetric/asymmetric margins and dpi scaling compose from the same formula.",
+    "Existing component envelope, title, legend, header, footer, and no-margin tests remain green.",
+    "The renderer suite, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching theme names, fixture labels, dpi 100, or the observed 2.0833 output delta",
+    "changing CHROME_RIGHT_PAD or SVEK_CANVAS_PAD globally",
+    "post-hoc SVG width rewriting",
+    "folding Cerulean gradient generation into this envelope change",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "pending",
+    "model_evidence": "pending",
+    "commands": [],
+    "review_status": "Implementation and independent review pending."
+  }
+}
