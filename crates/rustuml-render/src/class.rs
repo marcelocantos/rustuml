@@ -13233,21 +13233,12 @@ fn render_relationship_svg(
         && let Some(position) = edge_path.label
         && let Some(center) = center_layout
     {
-        // Java `SvekEdge` margins the text first, then
-        // `StringWithArrow.addMagicArrow` prepends the arrow outside that
-        // margin. Keep the text's one-pixel inset, but not on the arrow block.
-        let label_margin = relationship_label_margin(rel);
+        // Java `Display` pads the text, `SvekEdge` adds the relationship
+        // margin, and `StringWithArrow` prepends the magic arrow last.
         let label_x = position.x + (center.width - center.label_width) / 2.0;
         let block_x = label_x + MARGIN + layout_x_bias;
-        let block_y = position.y + MARGIN + label_margin;
         if rel.label_arrow != LinkArrow::None {
-            let content_height = rel
-                .label
-                .as_deref()
-                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
-                .unwrap_or(0.0)
-                .max(LINK_ARROW_BLOCK_SIZE);
-            let block_top = block_y + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
+            let block_top = position.y + MARGIN + center.magic_arrow_offset_y;
             emit_link_arrow(svg, rel.label_arrow, &path_points, block_x, block_top);
         }
         if let Some(label) = rel.label.as_deref() {
@@ -13255,17 +13246,12 @@ fn render_relationship_svg(
                 svg,
                 label,
                 Some(rustuml_layout::graph::EdgeLabelPosition {
-                    x: label_x
-                        + if rel.label_arrow == LinkArrow::None {
-                            0.0
-                        } else {
-                            LINK_ARROW_BLOCK_SIZE
-                        },
-                    y: position.y + label_margin,
+                    x: label_x + center.label_text_offset_x,
+                    y: position.y + center.label_text_offset_y,
                     width: position.width,
                     height: position.height,
                 }),
-                label_margin + layout_x_bias,
+                layout_x_bias,
                 (0.0, 0.0),
             );
         }
@@ -14278,14 +14264,7 @@ fn class_magic_arrow_polygons(
             let center =
                 relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
             let label_x = position.x + (center.width - center.label_width) / 2.0;
-            let margin = relationship_label_margin(relationship);
-            let content_height = relationship
-                .label
-                .as_deref()
-                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
-                .unwrap_or(0.0)
-                .max(LINK_ARROW_BLOCK_SIZE);
-            let block_top = position.y + margin + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
+            let block_top = position.y + center.magic_arrow_offset_y;
             let (start_len, end_len) = relationship_retraction_lengths(relationship);
             let path_points = shortened_endpoint_points(&edge.points, start_len, end_len);
             link_arrow_polygon_points(relationship.label_arrow, &path_points, label_x, block_top)
@@ -14381,6 +14360,9 @@ struct RelationshipCenterLayout {
     height: f64,
     label_width: f64,
     label_height: f64,
+    label_text_offset_x: f64,
+    label_text_offset_y: f64,
+    magic_arrow_offset_y: f64,
     note_width: f64,
     note_height: f64,
 }
@@ -14408,10 +14390,11 @@ fn relationship_note_indices(diagram: &ClassDiagram) -> Vec<Option<usize>> {
     owners
 }
 
-/// Port of `SvekEdge`'s `labelText` construction. A relation label is wrapped
-/// in its standard margin, then the default-bottom `EntityImageNoteLink` is
-/// merged below it. `appendTable` truncates the final dimensions before dot
-/// solves the label box.
+/// Port of `SvekEdge`'s `labelText` construction. `Display` applies the final
+/// global padding to the arrow-font text block, the relationship margin wraps
+/// that block, an optional magic arrow is prepended, and the default-bottom
+/// `EntityImageNoteLink` is merged last. `appendTable` truncates only the
+/// completed dimensions before dot solves the label box.
 fn relationship_center_layout(
     diagram: &ClassDiagram,
     relationship: &Relationship,
@@ -14423,32 +14406,72 @@ fn relationship_center_layout(
         return None;
     }
 
+    let arrow_font = relationship_arrow_font(diagram, relationship);
+    let padding = diagram
+        .meta
+        .skinparams
+        .iter()
+        .filter(|skinparam| skinparam.key.eq_ignore_ascii_case("padding"))
+        .filter_map(|skinparam| skinparam.value.trim().parse::<f64>().ok())
+        .next_back()
+        .unwrap_or(0.0);
     let margin = relationship_label_margin(relationship);
-    let label_width = if has_label {
-        relationship
-            .label
-            .as_deref()
-            .map(|label| {
-                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
-            })
-            .unwrap_or(0.0)
-            + if relationship.label_arrow == LinkArrow::None {
-                0.0
-            } else {
-                LINK_ARROW_BLOCK_SIZE
-            }
-            + 2.0 * margin
+    let (text_width, text_height) = relationship
+        .label
+        .as_deref()
+        .map(|label| {
+            (
+                text_render::measure_no_underline_with_family(
+                    label,
+                    arrow_font.size,
+                    false,
+                    &arrow_font.family,
+                ),
+                text_render::label_height_with_family(label, arrow_font.size, &arrow_font.family),
+            )
+        })
+        .unwrap_or((0.0, 0.0));
+    let has_text = relationship.label.is_some();
+    let text_block_width = if has_text {
+        text_width + 2.0 * (padding + margin)
     } else {
         0.0
     };
-    let label_height = if has_label {
-        relationship
-            .label
-            .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
-            .unwrap_or(0.0)
-            .max(LINK_ARROW_BLOCK_SIZE)
-            + 2.0 * margin
+    let text_block_height = if has_text {
+        text_height + 2.0 * (padding + margin)
+    } else {
+        0.0
+    };
+    let has_magic_arrow = relationship.label_arrow != LinkArrow::None;
+    let label_width = text_block_width
+        + if has_magic_arrow {
+            LINK_ARROW_BLOCK_SIZE
+        } else {
+            0.0
+        };
+    let label_height = text_block_height.max(if has_magic_arrow {
+        LINK_ARROW_BLOCK_SIZE
+    } else {
+        0.0
+    });
+    let label_text_offset_x = if has_text {
+        padding
+            + margin
+            + if has_magic_arrow {
+                LINK_ARROW_BLOCK_SIZE
+            } else {
+                0.0
+            }
+    } else {
+        0.0
+    };
+    let label_text_offset_y = if has_text {
+        (label_height - text_block_height) / 2.0 + padding + margin
+    } else {
+        0.0
+    };
+    let magic_arrow_offset_y = if has_magic_arrow {
+        (label_height - LINK_ARROW_BLOCK_SIZE) / 2.0
     } else {
         0.0
     };
@@ -14467,6 +14490,9 @@ fn relationship_center_layout(
         height: label_height + note_height + 2.0 * note_component_padding,
         label_width,
         label_height,
+        label_text_offset_x,
+        label_text_offset_y,
+        magic_arrow_offset_y,
         note_width,
         note_height,
     })
@@ -14514,29 +14540,13 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
             continue;
         };
         let midpoint = ((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0);
-        let margin = relationship_label_margin(relationship);
-        let width = (relationship
-            .label
-            .as_deref()
-            .map(|label| {
-                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
-            })
-            .unwrap_or(0.0)
-            + if relationship.label_arrow == LinkArrow::None {
-                0.0
-            } else {
-                LINK_ARROW_BLOCK_SIZE
-            }
-            + 2.0 * margin)
-            .floor();
-        let height = (relationship
-            .label
-            .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
-            .unwrap_or(0.0)
-            .max(LINK_ARROW_BLOCK_SIZE)
-            + 2.0 * margin)
-            .floor();
+        let Some(center) =
+            relationship_center_layout(diagram, relationship, None, &diagram.meta.sprites)
+        else {
+            continue;
+        };
+        let width = center.label_width.floor();
+        let height = center.label_height.floor();
 
         let mostly_vertical = (end.1 - start.1).abs() >= (end.0 - start.0).abs();
         let (x, y) = if mostly_vertical {
@@ -17498,15 +17508,7 @@ mod tests {
             relationship_center_layout(&diagram, relationship, None, &diagram.meta.sprites)
                 .expect("center label layout");
         let label_x = 12.0 + (center.width - center.label_width) / 2.0;
-        let content_height = relationship
-            .label
-            .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
-            .unwrap_or(0.0)
-            .max(LINK_ARROW_BLOCK_SIZE);
-        let block_top = 40.0
-            + relationship_label_margin(relationship)
-            + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
+        let block_top = 40.0 + center.magic_arrow_offset_y;
         let raw_polygon =
             link_arrow_polygon_points(relationship.label_arrow, &raw_points, label_x, block_top)
                 .unwrap();
@@ -17529,6 +17531,106 @@ mod tests {
             .fold(f64::INFINITY, f64::min);
         assert_eq!(bounds.0, visible_min_x - LIMIT_FINDER_POLYGON_OVERSCAN_X);
         assert_eq!(bounds.2, visible_min_y);
+    }
+
+    #[test]
+    fn relationship_center_layout_uses_final_padding_for_renamed_labels() {
+        let label = "renamed relation text";
+        let mut layouts = Vec::new();
+        for padding in [0.0, 5.0, 13.0] {
+            let source = format!(
+                "@startuml\n\
+                 skinparam ArrowFontName Verdana\n\
+                 skinparam ArrowFontSize 12\n\
+                 class RenamedOrigin\n\
+                 class RenamedDestination\n\
+                 RenamedOrigin --> RenamedDestination : {label}\n\
+                 skinparam Padding {padding}\n\
+                 @enduml"
+            );
+            let Diagram::Class(diagram) =
+                rustuml_parser::parse::parse(&source).expect("class relationship parses")
+            else {
+                panic!("expected class diagram");
+            };
+            let relationship = &diagram.relationships[0];
+            let arrow_font = relationship_arrow_font(&diagram, relationship);
+            let center =
+                relationship_center_layout(&diagram, relationship, None, &diagram.meta.sprites)
+                    .expect("center label layout");
+            let expected_width = text_render::measure_no_underline_with_family(
+                label,
+                arrow_font.size,
+                false,
+                &arrow_font.family,
+            ) + 2.0 * (padding + RELATIONSHIP_LABEL_MARGIN);
+            let expected_height =
+                text_render::label_height_with_family(label, arrow_font.size, &arrow_font.family)
+                    + 2.0 * (padding + RELATIONSHIP_LABEL_MARGIN);
+
+            assert!((center.label_width - expected_width).abs() < f64::EPSILON);
+            assert!((center.label_height - expected_height).abs() < f64::EPSILON);
+            assert_eq!(
+                center.label_text_offset_x,
+                padding + RELATIONSHIP_LABEL_MARGIN
+            );
+            assert_eq!(
+                center.label_text_offset_y,
+                padding + RELATIONSHIP_LABEL_MARGIN
+            );
+            layouts.push(center);
+        }
+
+        assert_eq!(layouts[1].label_width - layouts[0].label_width, 10.0);
+        assert_eq!(layouts[1].label_height - layouts[0].label_height, 10.0);
+        assert_eq!(layouts[2].label_width - layouts[0].label_width, 26.0);
+        assert_eq!(layouts[2].label_height - layouts[0].label_height, 26.0);
+    }
+
+    #[test]
+    fn relationship_center_layout_tracks_arrow_font_with_no_label_control() {
+        let layout_for = |family: &str, size: f64| {
+            let source = format!(
+                "@startuml\n\
+                 skinparam Padding 5\n\
+                 skinparam ArrowFontName {family}\n\
+                 skinparam ArrowFontSize {size}\n\
+                 class FontOrigin\n\
+                 class FontDestination\n\
+                 class UnlabelledControl\n\
+                 FontOrigin --> FontDestination : independently renamed\n\
+                 FontDestination --> UnlabelledControl\n\
+                 @enduml"
+            );
+            let Diagram::Class(diagram) =
+                rustuml_parser::parse::parse(&source).expect("class relationships parse")
+            else {
+                panic!("expected class diagram");
+            };
+            let labelled = &diagram.relationships[0];
+            let unlabelled = &diagram.relationships[1];
+            let font = relationship_arrow_font(&diagram, labelled);
+            let center =
+                relationship_center_layout(&diagram, labelled, None, &diagram.meta.sprites)
+                    .expect("labelled relationship layout");
+
+            assert!(
+                relationship_center_layout(&diagram, unlabelled, None, &diagram.meta.sprites)
+                    .is_none()
+            );
+            (font, center)
+        };
+
+        let (verdana, verdana_layout) = layout_for("Verdana", 12.0);
+        let (courier, courier_layout) = layout_for("Courier New", 17.0);
+        assert_eq!(verdana.family, "Verdana");
+        assert_eq!(verdana.size, 12.0);
+        assert_eq!(courier.family, "Courier New");
+        assert_eq!(courier.size, 17.0);
+        assert_ne!(verdana_layout.label_width, courier_layout.label_width);
+        assert_ne!(verdana_layout.label_height, courier_layout.label_height);
+        assert_eq!(verdana_layout.label_text_offset_x, 6.0);
+        assert_eq!(courier_layout.label_text_offset_x, 6.0);
     }
 
     #[test]
