@@ -284,11 +284,6 @@ const RELATIONSHIP_LABEL_FONT_SIZE: f64 = 13.0;
 /// `SvekEdge.addVisibilityModifier` wraps center labels in a one-pixel shield.
 const RELATIONSHIP_LABEL_MARGIN: f64 = 1.0;
 const SELF_RELATIONSHIP_LABEL_MARGIN: f64 = 6.0;
-// Graphviz's external-label placer leaves this much of a fixed HTML table
-// below the midpoint of a vertical orthogonal edge. Extracted from Java
-// `SvekEdge.appendDotString` `xlabel` layouts with renamed labels and 2-9
-// chained nodes.
-const ORTHO_XLABEL_VERTICAL_INSET: f64 = 5.0;
 /// Java `TextBlockArrow2` reserves one font-size square before the label. Its
 /// triangle size is `(int)(fontSize * .80)`, hence 10px at the 13px arrow font.
 const LINK_ARROW_BLOCK_SIZE: f64 = RELATIONSHIP_LABEL_FONT_SIZE;
@@ -2724,7 +2719,6 @@ fn render_with_oracle_uid_origin(
             }
         }
     }
-    let uses_ortho_labels = has_ortho_linetype(diagram);
     for rel_idx in svek_relationship_order(diagram) {
         let rel = &diagram.relationships[rel_idx];
         let from = relationship_layout_id(diagram, &rel.from);
@@ -2745,16 +2739,16 @@ fn render_with_oracle_uid_origin(
                 layout.add_same_rank(&from, &to);
             }
         }
-        // Java `SvekEdge.appendDotString` sends center labels through
-        // Graphviz's `xlabel` channel for `DotSplines.ORTHO`, so they do not
-        // reserve rank space.
         let note = rel.link_note.as_ref();
-        let label_size = (!uses_ortho_labels)
-            .then(|| relationship_center_layout(diagram, rel, note, &diagram.meta.sprites))
-            .flatten()
-            .map(|center| EdgeLabelSize {
-                width: center.width,
-                height: center.height,
+        // `LayoutGraph` maps this renderer-owned fixed-size block to Graphviz
+        // `xlabel` when the selected routing mode is orthogonal, matching
+        // Java `SvekEdge.appendDotString` without reserving rank space.
+        let label_size =
+            relationship_center_layout(diagram, rel, note, &diagram.meta.sprites).map(|center| {
+                EdgeLabelSize {
+                    width: center.width,
+                    height: center.height,
+                }
             });
         let endpoint_size = |label: Option<&str>| {
             label
@@ -2816,9 +2810,6 @@ fn render_with_oracle_uid_origin(
         &mut result.cluster_positions,
         &mut result.edge_paths,
     );
-    if uses_ortho_labels {
-        synthesize_ortho_edge_labels(diagram, &mut result.edge_paths);
-    }
     // Java `SvekResult.calculateDimension` measures the rendered MinMax and
     // calls `moveDelta(6 - minX, 6 - minY)`. An Opale polygon begins at its
     // node minimum, while ordinary class images retain the renderer's 1px
@@ -12555,16 +12546,6 @@ fn class_svek_spacing(diagram: &ClassDiagram) -> (f64, f64) {
     )
 }
 
-fn has_ortho_linetype(diagram: &ClassDiagram) -> bool {
-    diagram
-        .meta
-        .skinparams
-        .iter()
-        .rev()
-        .find(|sp| sp.key.eq_ignore_ascii_case("linetype"))
-        .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("ortho"))
-}
-
 fn class_svek_spline_routing(diagram: &ClassDiagram) -> SplineRouting {
     let linetype = diagram
         .meta
@@ -14804,67 +14785,6 @@ fn relationship_label_margin(relationship: &Relationship) -> f64 {
         SELF_RELATIONSHIP_LABEL_MARGIN
     } else {
         RELATIONSHIP_LABEL_MARGIN
-    }
-}
-
-fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePath]) {
-    let edge_indices = relationship_edge_indices(diagram, edge_paths);
-    for (relationship, edge_idx) in diagram.relationships.iter().zip(edge_indices) {
-        if !relationship_has_center_label(relationship) && relationship.link_note.is_none() {
-            continue;
-        }
-        let Some(edge) = edge_idx.and_then(|idx| edge_paths.get_mut(idx)) else {
-            continue;
-        };
-        let start_len = relationship
-            .from_decor
-            .map(endpoint_decoration_length)
-            .unwrap_or(0.0)
-            .max(if relationship_decorates_from(relationship) {
-                relationship_decoration_length(relationship.kind)
-            } else {
-                0.0
-            });
-        let end_len = relationship
-            .to_decor
-            .map(endpoint_decoration_length)
-            .unwrap_or(0.0)
-            .max(if relationship_decorates_to(relationship) {
-                relationship_decoration_length(relationship.kind)
-            } else {
-                0.0
-            });
-        let points = shortened_endpoint_points(&edge.points, start_len, end_len);
-        let (Some(start), Some(end)) = (points.first(), points.last()) else {
-            continue;
-        };
-        let midpoint = ((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0);
-        let Some(center) = relationship_center_layout(
-            diagram,
-            relationship,
-            relationship.link_note.as_ref(),
-            &diagram.meta.sprites,
-        ) else {
-            continue;
-        };
-        let width = center.width.floor();
-        let height = center.height.floor();
-
-        let mostly_vertical = (end.1 - start.1).abs() >= (end.0 - start.0).abs();
-        let (x, y) = if mostly_vertical {
-            (
-                midpoint.0 - width,
-                midpoint.1 - height + ORTHO_XLABEL_VERTICAL_INSET,
-            )
-        } else {
-            (midpoint.0 - width / 2.0, midpoint.1 - height)
-        };
-        edge.label = Some(rustuml_layout::graph::EdgeLabelPosition {
-            x,
-            y,
-            width,
-            height,
-        });
     }
 }
 
