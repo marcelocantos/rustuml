@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="496px" preserveAspectRatio="none" style="width:567px;height:496px;background:#FFFFFF;" version="1.1" viewBox="0 0 567 496" width="567px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FollowA6-->
+<g class="entity" data-qualified-name="FollowA6" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="102.0977" x="159.03" y="436"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="241.1277" y="441"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="239.1277" y="443"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="239.1277" y="447"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.0977" x="174.03" y="469.5352">FollowA6</text>
+</g>
+<!--entity FollowB6-->
+<g class="entity" data-qualified-name="FollowB6" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100.4912" x="159.83" y="355"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="240.3212" y="360"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="238.3212" y="362"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="238.3212" y="366"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60.4912" x="174.83" y="388.5352">FollowB6</text>
+</g>
+<!--entity FollowC6-->
+<g class="entity" data-qualified-name="FollowC6" data-source-line="5" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="102.125" x="159.02" y="274"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="241.145" y="279"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="239.145" y="281"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="239.145" y="285"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.125" x="174.02" y="307.5352">FollowC6</text>
+</g>
+<!--entity FollowD6-->
+<g class="entity" data-qualified-name="FollowD6" data-source-line="6" id="ent0006">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="102.9248" x="450.87" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="533.7948" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="531.7948" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="531.7948" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.9248" x="465.87" y="40.5352">FollowD6</text>
+</g>
+<!--entity FollowE6-->
+<g class="entity" data-qualified-name="FollowE6" data-source-line="7" id="ent0007">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100.0264" x="452.32" y="88"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="532.3464" y="93"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="530.3464" y="95"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="530.3464" y="99"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60.0264" x="467.32" y="121.5352">FollowE6</text>
+</g>
+<!--entity FollowF6-->
+<g class="entity" data-qualified-name="FollowF6" data-source-line="8" id="ent0008">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99.9443" x="452.36" y="169"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="532.3043" y="174"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="530.3043" y="176"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="530.3043" y="180"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59.9443" x="467.36" y="202.5352">FollowF6</text>
+</g>
+<!--entity FollowG6-->
+<g class="entity" data-qualified-name="FollowG6" data-source-line="9" id="ent0009">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="102.5557" x="451.06" y="250"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="533.6157" y="255"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="531.6157" y="257"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="531.6157" y="261"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.5557" x="466.06" y="283.5352">FollowG6</text>
+</g>
+<!--entity FollowH6-->
+<g class="entity" data-qualified-name="FollowH6" data-source-line="10" id="ent0010">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="102.7266" x="450.97" y="331"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="533.6966" y="336"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="531.6966" y="338"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="531.6966" y="342"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.7266" x="465.97" y="364.5352">FollowH6</text>
+</g>
+<g class="entity" data-qualified-name="FollowCoreN6" data-source-line="2" id="ent0002">
+<path d="M129.28,179.59 L129.28,204.9005 L290.8679,204.9005 L290.8679,189.59 L280.8679,179.59 L129.28,179.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M280.8679,179.59 L280.8679,189.59 L290.8679,189.59 L280.8679,179.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="140.5879" x="135.28" y="197.1584">fresh core arrowheads</text>
+</g>
+<!--link FollowCoreN6 to FollowA6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="11" id="lnk11">
+<path d="M129.161,202.98 C100.211,211.15 70.441,225.52 52.921,250.75 C6.001,318.27 70.941,361.32 129.281,419.25 C137.731,427.63 142.9693,431.7696 153.6293,437.3696" fill="none" id="FollowCoreN6-to-FollowA6" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="158.941,440.16,152.8337,432.4333,154.5146,437.8347,149.1132,439.5156,158.941,440.16" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="66.8345" x="29.2849" y="264.3125">end-arrow</text>
+</g>
+<!--reverse link FollowCoreN6 to FollowB6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="12" id="lnk12">
+<path d="M147.6767,206.9802 C90.5767,223.1002 20.551,252.64 49.921,299.75 C73.761,337.98 122.231,358.11 159.641,368.36" fill="none" id="FollowCoreN6-backto-FollowB6" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="153.451,205.35,143.7027,203.9457,148.639,206.7085,145.8763,211.6448,153.451,205.35" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72.1919" x="26.2849" y="296.3125">start-arrow</text>
+</g>
+<!--link FollowCoreN6 to FollowC6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="13" id="lnk13">
+<path d="M210.081,211.19 C210.081,228.23 210.081,246.52 210.081,267.68" fill="none" id="FollowCoreN6-FollowC6" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="210.081,205.19,206.081,214.19,210.081,210.19,214.081,214.19,210.081,205.19" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="210.081,273.68,214.081,264.68,210.081,268.68,206.081,264.68,210.081,273.68" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="79.0664" x="159.0788" y="244.5181">both-arrows</text>
+</g>
+<!--link FollowCoreN6 to FollowD6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0006" data-link-type="association" data-source-line="14" id="lnk14">
+<path d="M226.301,179.13 C246.821,161.87 284.941,131.27 320.871,110.25 C362.731,85.76 413.451,63.9 450.441,49.24" fill="none" id="FollowCoreN6-FollowD6" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="59.395" x="341.3728" y="59.5127">no-arrow</text>
+</g>
+<!--link FollowCoreN6 to FollowE6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0007" data-link-type="dependency" data-source-line="15" id="lnk15">
+<path d="M258.041,179.14 C311.301,164.28 392.0117,141.7524 446.2417,126.6224" fill="none" id="FollowCoreN6-to-FollowE6" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="452.021,125.01,442.2771,123.5757,447.2049,126.3537,444.427,131.2815,452.021,125.01" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72.3315" x="334.8728" y="131.747">dotted-end</text>
+</g>
+<!--reverse link FollowCoreN6 to FollowF6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0008" data-link-type="dependency" data-source-line="16" id="lnk16">
+<path d="M297.161,192.25 C348.671,192.25 407.981,192.25 452.011,192.25" fill="none" id="FollowCoreN6-backto-FollowF6" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="291.161,192.25,300.161,196.25,296.161,192.25,300.161,188.25,291.161,192.25" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="77.689" x="332.3728" y="188.8125">dotted-start</text>
+</g>
+<!--reverse link FollowCoreN6 to FollowG6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0009" data-link-type="extension" data-source-line="17" id="lnk17">
+<path d="M275.378,210.1902 C328.318,224.9702 396.751,244.06 451.031,259.21" fill="none" id="FollowCoreN6-backto-FollowG6" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="none" points="258.041,205.35,273.7646,215.9692,276.9914,204.4112,258.041,205.35" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="98.1982" x="321.8728" y="219.6755">extension-start</text>
+</g>
+<!--link FollowCoreN6 to FollowH6-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0010" data-link-type="extension" data-source-line="18" id="lnk18">
+<path d="M226.301,205.36 C246.821,222.62 284.941,253.22 320.871,274.25 C362.881,298.82 397.0732,314.1281 434.1032,328.7781" fill="none" id="FollowCoreN6-to-FollowH6" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="none" points="450.841,335.4,436.3105,323.1989,431.896,334.3574,450.841,335.4" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92.8408" x="324.8728" y="270.8125">extension-end</text>
+</g>
+</g></svg>

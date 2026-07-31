@@ -1,0 +1,11 @@
+@startuml
+component FollowA12
+component FollowB12
+component FollowC12
+component FollowD12
+note "fresh order A" as FollowOrderN12
+FollowOrderN12 --> FollowA12 : edge-a
+FollowB12 --> FollowOrderN12 : edge-b
+FollowOrderN12 -left-> FollowC12 : edge-c
+FollowD12 -up-> FollowOrderN12 : edge-d
+@enduml

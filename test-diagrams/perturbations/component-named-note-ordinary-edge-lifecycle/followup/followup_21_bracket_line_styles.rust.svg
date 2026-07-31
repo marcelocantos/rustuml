@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="190px" preserveAspectRatio="none" style="width:728px;height:190px;background:#FFFFFF;" version="1.1" viewBox="0 0 728 190" width="728px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FollowDashed21-->
+<g class="entity" data-qualified-name="FollowDashed21" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.9453" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="138.9453" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="136.9453" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="136.9453" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.9453" x="22" y="40.5352">FollowDashed21</text>
+</g>
+<!--entity FollowDotted21-->
+<g class="entity" data-qualified-name="FollowDotted21" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="147.4609" x="194.24" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="321.7009" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="319.7009" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="319.7009" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.4609" x="209.24" y="40.5352">FollowDotted21</text>
+</g>
+<!--entity FollowBold21-->
+<g class="entity" data-qualified-name="FollowBold21" data-source-line="4" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="130.8018" x="376.57" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="487.3718" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="485.3718" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="485.3718" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.8018" x="391.57" y="40.5352">FollowBold21</text>
+</g>
+<!--entity FollowRed21-->
+<g class="entity" data-qualified-name="FollowRed21" data-source-line="5" id="ent0006">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="126.7549" x="19.6" y="130.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="126.3549" y="135.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="124.3549" y="137.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="124.3549" y="141.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86.7549" x="34.6" y="164.0252">FollowRed21</text>
+</g>
+<!--entity FollowBlue21-->
+<g class="entity" data-qualified-name="FollowBlue21" data-source-line="6" id="ent0007">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="129.8789" x="181.03" y="130.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="290.9089" y="135.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="288.9089" y="137.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="288.9089" y="141.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.8789" x="196.03" y="164.0252">FollowBlue21</text>
+</g>
+<!--entity FollowHidden21-->
+<g class="entity" data-qualified-name="FollowHidden21" data-source-line="7" id="ent0008">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="149.7373" x="346.1" y="130.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="475.8373" y="135.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="473.8373" y="137.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="473.8373" y="141.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109.7373" x="361.1" y="164.0252">FollowHidden21</text>
+</g>
+<!--entity FollowControl21-->
+<g class="entity" data-qualified-name="FollowControl21" data-source-line="8" id="ent0009">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="151.877" x="552.03" y="130.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="683.907" y="135.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="681.907" y="137.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="681.907" y="141.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111.877" x="567.03" y="164.0252">FollowControl21</text>
+</g>
+<g class="entity" data-qualified-name="FollowBracketN21" data-source-line="1" id="ent0002">
+<path d="M542.4,17.59 L542.4,42.9005 A0,0 0 0 0 542.4,42.9005 L623.97,42.9005 L627.97,129.99 L631.97,42.9005 L713.5538,42.9005 A0,0 0 0 0 713.5538,42.9005 L713.5538,27.59 L703.5538,17.59 L542.4,17.59 A0,0 0 0 0 542.4,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M703.5538,17.59 L703.5538,27.59 L713.5538,27.59 L703.5538,17.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="150.1538" x="548.4" y="35.1584">fresh bracket line styles</text>
+</g>
+</g></svg>

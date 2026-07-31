@@ -1,0 +1,17 @@
+@startuml
+note "fresh bracket line styles" as FollowBracketN21
+component FollowDashed21
+component FollowDotted21
+component FollowBold21
+component FollowRed21
+component FollowBlue21
+component FollowHidden21
+component FollowControl21
+FollowBracketN21 -[dashed]-> FollowDashed21 : bracket-dashed
+FollowBracketN21 -[dotted]-> FollowDotted21 : bracket-dotted
+FollowBracketN21 -[bold]-> FollowBold21 : bracket-bold
+FollowBracketN21 -[#red]-> FollowRed21 : bracket-red
+FollowBracketN21 -[#blue,dashed]-> FollowBlue21 : bracket-blue-dashed
+FollowBracketN21 -[hidden]-> FollowHidden21 : bracket-hidden
+FollowBracketN21 --> FollowControl21 : plain-control
+@enduml

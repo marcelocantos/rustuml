@@ -1,0 +1,10 @@
+@startuml
+component FollowHiddenPeer18
+component FollowVisiblePeer18
+component FollowControlA18
+component FollowControlB18
+note "fresh hidden lifecycle" as FollowHiddenN18
+FollowHiddenN18 -[hidden]-> FollowHiddenPeer18
+FollowHiddenN18 --> FollowVisiblePeer18 : visible-opale-candidate
+FollowControlA18 --> FollowControlB18 : uid-control
+@enduml

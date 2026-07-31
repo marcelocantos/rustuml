@@ -1,0 +1,11 @@
+@startuml
+component FollowNorth4
+component FollowSouth4
+component FollowEast4
+component FollowWest4
+note "fresh forward matrix" as FollowPivotN4 #Wheat
+FollowNorth4 -right-> FollowPivotN4 : right-note-target
+FollowPivotN4 -right-> FollowSouth4 : right-note-source
+FollowEast4 -down-> FollowPivotN4 : down-note-target
+FollowPivotN4 -down-> FollowWest4 : down-note-source
+@enduml

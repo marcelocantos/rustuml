@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+component FollowNorth3
+component FollowSouth3
+component FollowEast3
+component FollowWest3
+note as FollowPivotN3 #LightBlue
+  fresh reversed matrix
+end note
+FollowNorth3 <-left- FollowPivotN3 : left-source
+FollowPivotN3 -left-> FollowSouth3 : left-target
+FollowEast3 <-up- FollowPivotN3 : up-source
+FollowPivotN3 -up-> FollowWest3 : up-target
+@enduml

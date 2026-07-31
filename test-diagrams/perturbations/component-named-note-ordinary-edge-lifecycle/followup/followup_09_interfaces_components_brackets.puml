@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+() "Fresh Input Port" as FollowInputI9
+interface "Fresh Output Port" as FollowOutputI9
+component "Fresh Worker" as FollowWorkerC9
+note "fresh mixed leaf kinds" as FollowMixedN9
+FollowMixedN9 -left-> FollowInputI9 : to-lollipop
+FollowOutputI9 -up-> FollowMixedN9 : from-interface
+FollowMixedN9 -right-> [FreshBracketC9] : to-bracket
+FollowWorkerC9 -down-> FollowMixedN9 : from-component
+@enduml

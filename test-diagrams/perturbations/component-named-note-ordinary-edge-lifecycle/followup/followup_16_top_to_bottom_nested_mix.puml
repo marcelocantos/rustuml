@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+package "Fresh TB Owner" as FollowTBP16 {
+  note "fresh tb nested" as FollowTBN16
+  component FollowTop16
+  component FollowBottom16
+  () FollowPort16
+  FollowTop16 -up-> FollowTBN16 : up-in
+  FollowTBN16 -down-> FollowBottom16 : down-out
+  FollowPort16 --> FollowTBN16 : implicit-down-in
+}
+@enduml

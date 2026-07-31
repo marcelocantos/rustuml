@@ -1,0 +1,9 @@
+@startuml
+component FollowShort5
+component FollowLong5
+component FollowReverse5
+note "fresh implicit directions" as FollowImplicitN5
+FollowImplicitN5 -> FollowShort5 : implicit-short-right
+FollowLong5 --> FollowImplicitN5 : implicit-long-down
+FollowImplicitN5 <-- FollowReverse5 : reversed-text-arrow
+@enduml

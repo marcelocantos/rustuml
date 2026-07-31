@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+note "fresh extended decorations" as FollowExtendedN19
+component FollowA19
+component FollowB19
+component FollowC19
+component FollowD19
+component FollowE19
+component FollowF19
+component FollowG19
+component FollowH19
+FollowExtendedN19 x-- FollowA19 : not-nav-start
+FollowExtendedN19 --x FollowB19 : not-nav-end
+FollowExtendedN19 +-- FollowC19 : plus-start
+FollowExtendedN19 --+ FollowD19 : plus-end
+FollowExtendedN19 @-- FollowE19 : filled-circle-start
+FollowExtendedN19 --@ FollowF19 : filled-circle-end
+FollowExtendedN19 <<-- FollowG19 : triangle-arrow-start
+FollowExtendedN19 -->> FollowH19 : triangle-arrow-end
+@enduml

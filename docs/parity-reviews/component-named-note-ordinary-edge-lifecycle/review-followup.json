@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "mechanism": "component-named-note-ordinary-edge-lifecycle",
+  "review_kind": "independent_adversarial_followup",
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5 (Codex)",
+    "implemented_mechanism": false,
+    "tool": "Codex desktop",
+    "review_date": "2026-08-01"
+  },
+  "verdict": "REJECT",
+  "verdict_reason": "The four endpoint lookups changed by 1f523d5e correctly preserve ordinary left/up named-note edges for the supported grammar, but the corrected account's broader lifecycle invariant is still false. Fresh valid Component inputs preserve additional Java Link objects that Rust drops before logical endpoint normalization. This causes missing ordinary note edges and shifted/reused link UIDs for bold bodies, dot-bodied directions, direction abbreviations, bracket line styles, hidden-link lifecycle, and valid endpoint decorations. Under the requested gate, any one of these missing-edge or UID counterexamples rejects the mechanism.",
+  "revisions": {
+    "rust_checkout": "/private/tmp/rustuml-component-note-edges-followup",
+    "rust_branch": "codex/t14-component-note-edges-followup",
+    "rust_revision": "1f523d5e1bbbcd011138b8da141a12d767f279aa",
+    "java_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "artifacts": {
+    "frozen_rustuml": {
+      "path": "/private/tmp/rustuml-component-note-edges-followup/target/release/rustuml",
+      "sha256": "1c7876126b3021e4a0a389d03ce995ee12c89134c732926a846818f9a5e23a95"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account_json": {
+      "path": "docs/parity-reviews/component-named-note-ordinary-edge-lifecycle/account.json",
+      "sha256": "cede54675d94ab2f139533d6552f835ca83d51693c6a6f9d495713f933625285"
+    },
+    "preserved_prior_review": {
+      "path": "docs/parity-reviews/component-named-note-ordinary-edge-lifecycle/review.json",
+      "sha256": "f3936c5a159ea88d25d366b300943647429ce56b34ace5d3c9cdc57c5c48af62",
+      "modified": false
+    },
+    "comparison_inventory": "test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/comparison.json"
+  },
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git branch --show-current",
+    "shasum -a 256 /private/tmp/rustuml-component-note-edges-followup/target/release/rustuml",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "shasum -a 256 docs/parity-reviews/component-named-note-ordinary-edge-lifecycle/account.json",
+    "shasum -a 256 docs/parity-reviews/component-named-note-ordinary-edge-lifecycle/review.json",
+    "git show --format=fuller --no-ext-diff --unified=100 1f523d5e1bbbcd011138b8da141a12d767f279aa -- crates/rustuml-render/src/component.rs",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java | sed -n '80,335p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Link.java | sed -n '100,175p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '125,335p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '215,870p'",
+    "nl -ba crates/rustuml-parser/src/parse/component.rs | sed -n '35,90p;900,1175p'",
+    "nl -ba crates/rustuml-render/src/component.rs | sed -n '970,1045p;1960,2095p;3505,4155p;6813,6866p'",
+    "rg -n \"Follow|ReverseLedger|UpMemo|InlineMemo|Ledger|Memo|component_opalized_floating_note|logical_from|logical_to|ConnectionDirection::(Left|Up)\" crates/rustuml-render/src/component.rs crates/rustuml-parser/src/parse/component.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/*.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -checkonly test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/*.puml",
+    "for f in test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/*.puml; do /private/tmp/rustuml-component-note-edges-followup/target/release/rustuml --no-oracle -tsvg \"$f\" > \"${f%.puml}.rust.svg\" || exit $?; done",
+    "/private/tmp/rustuml-component-note-edges-followup/target/release/rustuml --no-oracle --ast test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/followup_08_line_style_bodies.puml",
+    "/private/tmp/rustuml-component-note-edges-followup/target/release/rustuml --no-oracle --ast test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/followup_15_parallel_endpoint_routes.puml",
+    "/private/tmp/rustuml-component-note-edges-followup/target/release/rustuml --no-oracle --ast test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/followup_18_hidden_link_uid_lifecycle.puml",
+    "python3 /private/tmp/component_note_followup_compare.py test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup > test-diagrams/perturbations/component-named-note-ordinary-edge-lifecycle/followup/comparison.json"
+  ],
+  "source_review": {
+    "java_evidence": [
+      "CommandLinkElement.executeArg at lines 201-241 parses the complete endpoint decoration and direction grammar, constructs a source-order Link, and replaces it with Link.getInv() for LEFT or UP before diagram.addLink.",
+      "Link's constructor at lines 123-137 allocates the link UID, while Link.getInv at lines 145-155 allocates a second UID and swaps entities, decorations, endpoint labels, ports, and LinkArg identity as one object.",
+      "GraphvizImageBuilder.buildImage at lines 226-259 constructs and registers every surviving SvekEdge before Opale marking; onlyOneLink at lines 313-326 decides note cardinality from the retained Link objects.",
+      "SvekEdge's constructor at lines 226-257 derives ports and endpoint clusters from link.getEntity1/getEntity2; solveLine at lines 611-648 orients Graphviz's path against those same nodes; drawU at lines 824-849 emits the same Link UID and endpoint entity UIDs.",
+      "The Java JAR accepted all 22 fresh inputs with -checkonly and emitted no syntax-error or exception marker in any SVG."
+    ],
+    "rust_evidence": [
+      "The parser keeps source-order Connection.from/to and a direction enum. no_oracle_layout_edge_ends at component.rs:6857-6866 is the single left/up inversion point used by layout and paint.",
+      "Commit 1f523d5e changes component/interface paint lookups at component.rs:3577-3596 from conn.from/conn.to to logical_from/logical_to. The standard reversed matrices now match Java link IDs, endpoint UIDs, path IDs, labels, link types, and polygon endpoint side.",
+      "RE_DESCRIPTION_CONN at component parser lines 46-50 admits only a subset of Java's valid body and endpoint decoration characters; RE_DESCRIPTION_LINK_DIRECTION at lines 54-55 admits only hyphen-prefixed full direction names and is applied to the whole source line.",
+      "A valid relation that those regexes reject never reaches connections.push at lines 1123-1140, so layout, UID simulation, Opale cardinality, and the corrected paint normalizer cannot preserve it.",
+      "component_opalized_floating_note at component.rs:1000-1022 counts only retained Rust Connection values. Dropping a hidden or otherwise styled relation can therefore turn Java's multiply linked note into a Rust single-link note and suppress its visible ordinary edge."
+    ],
+    "fixture_shape_search": "No shipping branch or lookup is keyed to any Follow* held-out label. Ledger/Memo strings occur only in tests below cfg(test), not in production endpoint resolution. The 1f523d5e shipping hunk consists solely of four identity substitutions from conn.from/conn.to to logical_from/logical_to.",
+    "constant_audit": "The 1f523d5e production change adds or changes no numeric constant, threshold, metrics table, or branch condition. No unexplained parity-affecting constant was introduced by the logical endpoint normalization fix."
+  },
+  "comparison_method": {
+    "validity": "The pinned Java JAR returned exit 0 for -checkonly over all 22 fresh inputs. Generated Java and Rust SVGs were scanned for syntax errors, diagram-description errors, exceptions, and parse-error markers; none were present.",
+    "inventory": "For each same-stem pair, the checker extracted entity qualified-name to UID mappings and every link group's ID, endpoint entity UIDs, source line, link type, path ID, labels, and decoration element inventory. Polygon centroids were classified against the first path's start/end coordinates to detect arrowhead-side reversal without requiring pixel-identical geometry.",
+    "summary": {
+      "fresh_cases": 22,
+      "java_visible_link_groups": 110,
+      "rust_visible_link_groups": 76,
+      "exact_mechanism_inventory_cases": 12,
+      "divergent_cases": 10,
+      "rejecting_missing_edge_or_uid_cases": 7
+    }
+  },
+  "inputs": [
+    {
+      "name": "followup_01_single_note_note_lifecycle",
+      "axes": ["single note-to-note relation", "left-to-right", "explicit right", "inline and multiline notes"],
+      "result": "PASS: Java and Rust both retain one ordinary note-to-note link with identical lifecycle metadata."
+    },
+    {
+      "name": "followup_02_single_opale_direction_controls",
+      "axes": ["single relation", "note source and target", "left/right/up/down", "Opale controls"],
+      "result": "PASS: both emit zero standalone link groups for all four singly linked notes."
+    },
+    {
+      "name": "followup_03_left_up_reversed_matrix",
+      "axes": ["left/up", "reversed logical endpoints", "note source and target", "four links", "multiline note"],
+      "result": "PASS: all four IDs, endpoint UIDs, labels, path identities, and arrowhead sides match Java."
+    },
+    {
+      "name": "followup_04_right_down_forward_matrix",
+      "axes": ["right/down", "forward endpoints", "note source and target", "four links"],
+      "result": "PASS: all four ordinary edges match the mechanism inventory."
+    },
+    {
+      "name": "followup_05_implicit_direction_text_order",
+      "axes": ["implicit short/right", "implicit long/down", "reversed textual endpoint order"],
+      "result": "PASS: all three ordinary edges and arrowhead sides match Java."
+    },
+    {
+      "name": "followup_06_core_arrowheads_and_lines",
+      "axes": ["start/end/bidirectional/no arrow", "solid/dashed/dotted", "inheritance triangles"],
+      "result": "PASS: eight ordinary edges match IDs, UIDs, types, labels, path identities, and polygon sides."
+    },
+    {
+      "name": "followup_07_supported_endpoint_decors",
+      "axes": ["aggregation", "composition", "square", "circle", "both endpoint sides"],
+      "result": "FAIL: Rust retains all eight edges but emits them as undecorated associations with no Java endpoint shapes. This is not needed for the binary reject gate because later cases contain missing edges."
+    },
+    {
+      "name": "followup_08_line_style_bodies",
+      "axes": ["solid", "dashed", "dotted", "bold body", "note source", "four links"],
+      "result": "REJECT: Java emits lnk7 through lnk10; Rust emits only lnk7 through lnk9 and drops the valid bold FollowStyleN8 ==> FollowBold8 edge."
+    },
+    {
+      "name": "followup_09_interfaces_components_brackets",
+      "axes": ["lollipop interface", "interface keyword", "bracket component", "component", "all directions"],
+      "result": "PASS: four mixed-kind ordinary edges match Java lifecycle metadata and orientation."
+    },
+    {
+      "name": "followup_10_package_endpoints",
+      "axes": ["package source and target", "package members", "aliases", "left/up/right/down"],
+      "result": "PASS: four group/member ordinary edges match Java lifecycle metadata and orientation."
+    },
+    {
+      "name": "followup_11_nested_alias_ownership",
+      "axes": ["two-level nesting", "dotted note alias", "cross-owner edge", "multiline note", "left/up/right"],
+      "result": "PASS: all three nested and cross-owner edges match."
+    },
+    {
+      "name": "followup_12_order_count_variant_a",
+      "axes": ["components before note", "four links", "changed source order", "left/up/implicit"],
+      "result": "PASS: all four source-ordered link lifecycles match Java."
+    },
+    {
+      "name": "followup_13_order_count_variant_b",
+      "axes": ["note before components", "reversed declaration order", "five links", "extra dotted edge"],
+      "result": "PASS: all five source-ordered link lifecycles match Java."
+    },
+    {
+      "name": "followup_14_cardinality_direction_matrix",
+      "axes": ["tail/head cardinalities", "left/up/right/down", "note source and target"],
+      "result": "PASS: all four edge IDs, endpoint UIDs, labels, cardinalities, and arrowhead sides match."
+    },
+    {
+      "name": "followup_15_parallel_endpoint_routes",
+      "axes": ["parallel same endpoints", "solid and dotted explicit directions", "left/right", "textual reversal"],
+      "result": "REJECT: Java emits lnk4, lnk5, lnk7, and lnk9; Rust drops both dot-bodied direction links and emits only lnk4 and lnk6, shifting the reversed link UID."
+    },
+    {
+      "name": "followup_16_top_to_bottom_nested_mix",
+      "axes": ["top-to-bottom rankdir", "nested owner", "component and interface", "up/down/implicit"],
+      "result": "FAIL: edge lifecycle and orientation match, but Rust rewrites label implicit-down-in to implicit--in because direction normalization scans the center label."
+    },
+    {
+      "name": "followup_17_left_to_right_nested_mix",
+      "axes": ["left-to-right rankdir", "nested owner", "component and interface", "left/right/implicit"],
+      "result": "FAIL: edge lifecycle and orientation match, but Rust rewrites label implicit-right-out to implicit--out."
+    },
+    {
+      "name": "followup_18_hidden_link_uid_lifecycle",
+      "axes": ["hidden styled relation", "visible note relation", "ordinary control", "UID sequencing"],
+      "result": "REJECT: Java retains the hidden Link in note cardinality, emits visible note edge lnk8 and control lnk9; Rust drops the hidden relation, Opale-suppresses the visible edge, and reuses lnk8 for the unrelated control."
+    },
+    {
+      "name": "followup_19_extended_endpoint_decors",
+      "axes": ["not-navigable", "plus", "filled circle", "double-chevron arrows", "both endpoint sides"],
+      "result": "REJECT: Java emits eight ordinary links; Rust parses only the two double-chevron links and emits six fewer edges with collapsed UID sequencing."
+    },
+    {
+      "name": "followup_20_remaining_endpoint_decors",
+      "axes": ["redefines", "defined-by", "crowfoot families", "double line", "underscored arrow", "circle-connect", "parenthesis"],
+      "result": "REJECT: Java emits twenty ordinary links; Rust emits ten, with missing valid endpoints and divergent link types/decorations among survivors."
+    },
+    {
+      "name": "followup_21_bracket_line_styles",
+      "axes": ["dashed/dotted/bold bracket styles", "line colors", "combined color and dash", "hidden", "plain control"],
+      "result": "REJECT: Java emits six visible ordinary note links while Rust drops all six styled relations, misclassifies the remaining plain control as the note's sole relation, and Opale-suppresses it, producing zero link groups."
+    },
+    {
+      "name": "followup_22_direction_abbreviations",
+      "axes": ["l/le/r/ri/u/d/do direction aliases", "full right control", "note source", "eight links"],
+      "result": "REJECT: Java emits all eight ordinary links; Rust drops seven valid abbreviated directions, then Opale-suppresses the full-direction control because it appears singly linked."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Dropped styled links corrupt note cardinality and global link UID lifecycle",
+      "evidence": [
+        "followup_18_hidden_link_uid_lifecycle: Java emits note edge lnk8 and control lnk9; Rust emits only the unrelated control as lnk8.",
+        "followup_21_bracket_line_styles: Java emits six visible note edges; Rust emits none after dropping six styled relations and Opale-suppressing the sole parsed control."
+      ],
+      "mechanism": "Rust computes Opale eligibility and UID simulation from its incomplete parsed Connection list. Java computes both from retained Link objects before SvekEdge paint. Logical endpoint normalization cannot repair relations that disappeared before that boundary."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Valid direction grammar still loses edges and shifts inverted-link UIDs",
+      "evidence": [
+        "followup_15_parallel_endpoint_routes: Java emits four links including dot-bodied .right.> and .left.>; Rust emits two and shifts reverse-solid from Java lnk7 to Rust lnk6.",
+        "followup_22_direction_abbreviations: Java emits eight links for l/le/r/ri/u/d/do plus full right; Rust emits zero visible links."
+      ],
+      "mechanism": "Java CommandLinkElement accepts direction aliases and direction text between any valid body segments. Rust's direction regex accepts only -(down|up|left|right) followed by [-.>], so valid Link identities never reach no_oracle_layout_edge_ends."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Valid link body and endpoint decoration grammar drops ordinary named-note edges",
+      "evidence": [
+        "followup_08_line_style_bodies: the bold ==> link is missing in Rust (Java 4, Rust 3).",
+        "followup_19_extended_endpoint_decors: six of eight valid links are missing in Rust.",
+        "followup_20_remaining_endpoint_decors: ten of twenty valid links are missing in Rust."
+      ],
+      "mechanism": "RE_DESCRIPTION_CONN's arrow character class is narrower than CommandLinkElement HEAD/BODY/STYLE grammar. Missing parser objects entail missing layout edges, paint groups, and UID consumption."
+    },
+    {
+      "severity": "non_rejecting_additional",
+      "title": "Parsed endpoint decorations do not survive generic ordinary-edge paint",
+      "evidence": [
+        "followup_07_supported_endpoint_decors: Java emits aggregation, composition, square, and circle endpoint shapes on all eight links; Rust emits the same edge groups as undecorated associations."
+      ],
+      "mechanism": "The current Connection model records only arrows, extension triangles, and a few socket shapes, so other Java LinkDecor identities collapse before paint."
+    },
+    {
+      "severity": "non_rejecting_additional",
+      "title": "Direction stripping mutates valid center labels",
+      "evidence": [
+        "followup_16_top_to_bottom_nested_mix: implicit-down-in becomes implicit--in.",
+        "followup_17_left_to_right_nested_mix: implicit-right-out becomes implicit--out."
+      ],
+      "mechanism": "RE_DESCRIPTION_LINK_DIRECTION.replace_all runs over the entire trimmed relation line rather than only the arrow token."
+    },
+    {
+      "severity": "confirmed_fix_scope",
+      "title": "The four logical endpoint lookup substitutions repair the originally reported left/up omission",
+      "evidence": [
+        "followup_03_left_up_reversed_matrix, followup_09_interfaces_components_brackets, followup_10_package_endpoints, followup_11_nested_alias_ownership, followup_12_order_count_variant_a, followup_13_order_count_variant_b, and followup_14_cardinality_direction_matrix retain every expected link and match Java metadata/orientation."
+      ],
+      "mechanism": "For parsed supported relations, component, interface, package, and named-note paint lookup now consistently consumes logical_from/logical_to."
+    }
+  ],
+  "verdict_gate": "REJECT. Seven fresh Java-valid cases contain missing ordinary edges or link UID lifecycle divergence. The corrected left/up endpoint fix works within its narrow parsed grammar, but the account's complete ordinary-edge lifecycle invariant is not satisfied."
+}

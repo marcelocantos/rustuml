@@ -1,0 +1,4956 @@
+[
+  {
+    "case": "followup_01_single_note_note_lifecycle",
+    "java_links": [
+      {
+        "id": "lnk4",
+        "comment": "link FollowAlphaN1 to FollowBetaN1",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowAlphaN1-to-FollowBetaN1",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "note-to-note-only"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk4",
+        "comment": "link FollowAlphaN1 to FollowBetaN1",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowAlphaN1-to-FollowBetaN1",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "note-to-note-only"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowAlphaN1": "ent0002",
+      "FollowBetaN1": "ent0003"
+    },
+    "rust_note_uids": {
+      "FollowAlphaN1": "ent0002",
+      "FollowBetaN1": "ent0003"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_02_single_opale_direction_controls",
+    "java_links": [],
+    "rust_links": [],
+    "java_note_uids": {
+      "FollowRightN2": "ent0006",
+      "FollowLeftN2": "ent0007",
+      "FollowUpN2": "ent0008",
+      "FollowDownN2": "ent0009"
+    },
+    "rust_note_uids": {
+      "FollowRightN2": "ent0006",
+      "FollowLeftN2": "ent0007",
+      "FollowUpN2": "ent0008",
+      "FollowDownN2": "ent0009"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_03_left_up_reversed_matrix",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "link FollowPivotN3 to FollowNorth3",
+        "entity_1": "ent0006",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowPivotN3-to-FollowNorth3",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "left-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "reverse link FollowSouth3 to FollowPivotN3",
+        "entity_1": "ent0003",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowSouth3-backto-FollowPivotN3",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowPivotN3 to FollowEast3",
+        "entity_1": "ent0006",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowPivotN3-to-FollowEast3",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "up-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "reverse link FollowWest3 to FollowPivotN3",
+        "entity_1": "ent0005",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowWest3-backto-FollowPivotN3",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowPivotN3-to-FollowNorth3",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "left-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowSouth3-backto-FollowPivotN3",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowPivotN3-to-FollowEast3",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "up-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowWest3-backto-FollowPivotN3",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowNorth3": "ent0002",
+      "FollowPivotN3": "ent0006"
+    },
+    "rust_note_uids": {
+      "FollowNorth3": "ent0002",
+      "FollowPivotN3": "ent0006"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_04_right_down_forward_matrix",
+    "java_links": [
+      {
+        "id": "lnk7",
+        "comment": "link FollowNorth4 to FollowPivotN4",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowNorth4-to-FollowPivotN4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-note-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "link FollowPivotN4 to FollowSouth4",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowPivotN4-to-FollowSouth4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-note-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "link FollowEast4 to FollowPivotN4",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowEast4-to-FollowPivotN4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-note-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "link FollowPivotN4 to FollowWest4",
+        "entity_1": "ent0006",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowPivotN4-to-FollowWest4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-note-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk7",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowNorth4-to-FollowPivotN4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-note-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowPivotN4-to-FollowSouth4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-note-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowEast4-to-FollowPivotN4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-note-target"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowPivotN4-to-FollowWest4",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-note-source"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowNorth4": "ent0002",
+      "FollowPivotN4": "ent0006"
+    },
+    "rust_note_uids": {
+      "FollowNorth4": "ent0002",
+      "FollowPivotN4": "ent0006"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_05_implicit_direction_text_order",
+    "java_links": [
+      {
+        "id": "lnk6",
+        "comment": "link FollowImplicitN5 to FollowShort5",
+        "entity_1": "ent0005",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "5",
+        "path_id": "FollowImplicitN5-to-FollowShort5",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit-short-right"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk7",
+        "comment": "link FollowLong5 to FollowImplicitN5",
+        "entity_1": "ent0003",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowLong5-to-FollowImplicitN5",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit-long-down"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowImplicitN5 to FollowReverse5",
+        "entity_1": "ent0005",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowImplicitN5-backto-FollowReverse5",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "reversed-text-arrow"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk6",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "5",
+        "path_id": "FollowImplicitN5-to-FollowShort5",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit-short-right"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk7",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowLong5-to-FollowImplicitN5",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit-long-down"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowImplicitN5-backto-FollowReverse5",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "reversed-text-arrow"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowImplicitN5": "ent0005"
+    },
+    "rust_note_uids": {
+      "FollowImplicitN5": "ent0005"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_06_core_arrowheads_and_lines",
+    "java_links": [
+      {
+        "id": "lnk11",
+        "comment": "link FollowCoreN6 to FollowA6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowCoreN6-to-FollowA6",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "end-arrow"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "reverse link FollowCoreN6 to FollowB6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowCoreN6-backto-FollowB6",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "start-arrow"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "link FollowCoreN6 to FollowC6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "13",
+        "path_id": "FollowCoreN6-FollowC6",
+        "polygon_sides": [
+          "end",
+          "start"
+        ],
+        "labels": [
+          "both-arrows"
+        ],
+        "polygons": 2,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "link FollowCoreN6 to FollowD6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "association",
+        "source_line": "14",
+        "path_id": "FollowCoreN6-FollowD6",
+        "polygon_sides": [],
+        "labels": [
+          "no-arrow"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk15",
+        "comment": "link FollowCoreN6 to FollowE6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "dependency",
+        "source_line": "15",
+        "path_id": "FollowCoreN6-to-FollowE6",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "dotted-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "reverse link FollowCoreN6 to FollowF6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0008",
+        "link_type": "dependency",
+        "source_line": "16",
+        "path_id": "FollowCoreN6-backto-FollowF6",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "dotted-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk17",
+        "comment": "reverse link FollowCoreN6 to FollowG6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "extension",
+        "source_line": "17",
+        "path_id": "FollowCoreN6-backto-FollowG6",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "extension-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk18",
+        "comment": "link FollowCoreN6 to FollowH6",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "extension",
+        "source_line": "18",
+        "path_id": "FollowCoreN6-to-FollowH6",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "extension-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowCoreN6-to-FollowA6",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "end-arrow"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowCoreN6-backto-FollowB6",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "start-arrow"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "13",
+        "path_id": "FollowCoreN6-FollowC6",
+        "polygon_sides": [
+          "end",
+          "start"
+        ],
+        "labels": [
+          "both-arrows"
+        ],
+        "polygons": 2,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "association",
+        "source_line": "14",
+        "path_id": "FollowCoreN6-FollowD6",
+        "polygon_sides": [],
+        "labels": [
+          "no-arrow"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk15",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "dependency",
+        "source_line": "15",
+        "path_id": "FollowCoreN6-to-FollowE6",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "dotted-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0008",
+        "link_type": "dependency",
+        "source_line": "16",
+        "path_id": "FollowCoreN6-backto-FollowF6",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "dotted-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk17",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "extension",
+        "source_line": "17",
+        "path_id": "FollowCoreN6-backto-FollowG6",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "extension-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk18",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "extension",
+        "source_line": "18",
+        "path_id": "FollowCoreN6-to-FollowH6",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "extension-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowCoreN6": "ent0002"
+    },
+    "rust_note_uids": {
+      "FollowCoreN6": "ent0002"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_07_supported_endpoint_decors",
+    "java_links": [
+      {
+        "id": "lnk11",
+        "comment": "reverse link FollowDecorN7 to FollowA7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "aggregation",
+        "source_line": "11",
+        "path_id": "FollowDecorN7-backto-FollowA7",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "aggregation-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowDecorN7 to FollowB7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "aggregation",
+        "source_line": "12",
+        "path_id": "FollowDecorN7-to-FollowB7",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "aggregation-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "reverse link FollowDecorN7 to FollowC7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "composition",
+        "source_line": "13",
+        "path_id": "FollowDecorN7-backto-FollowC7",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "composition-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "link FollowDecorN7 to FollowD7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "composition",
+        "source_line": "14",
+        "path_id": "FollowDecorN7-to-FollowD7",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "composition-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk15",
+        "comment": "reverse link FollowDecorN7 to FollowE7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "",
+        "source_line": "15",
+        "path_id": "FollowDecorN7-backto-FollowE7",
+        "polygon_sides": [],
+        "labels": [
+          "square-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 1,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "link FollowDecorN7 to FollowF7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0008",
+        "link_type": "",
+        "source_line": "16",
+        "path_id": "FollowDecorN7-to-FollowF7",
+        "polygon_sides": [],
+        "labels": [
+          "square-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 1,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk17",
+        "comment": "reverse link FollowDecorN7 to FollowG7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "",
+        "source_line": "17",
+        "path_id": "FollowDecorN7-backto-FollowG7",
+        "polygon_sides": [],
+        "labels": [
+          "circle-start"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk18",
+        "comment": "link FollowDecorN7 to FollowH7",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "",
+        "source_line": "18",
+        "path_id": "FollowDecorN7-to-FollowH7",
+        "polygon_sides": [],
+        "labels": [
+          "circle-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "association",
+        "source_line": "11",
+        "path_id": "FollowDecorN7-FollowA7",
+        "polygon_sides": [],
+        "labels": [
+          "aggregation-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "association",
+        "source_line": "12",
+        "path_id": "FollowDecorN7-FollowB7",
+        "polygon_sides": [],
+        "labels": [
+          "aggregation-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "association",
+        "source_line": "13",
+        "path_id": "FollowDecorN7-FollowC7",
+        "polygon_sides": [],
+        "labels": [
+          "composition-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "association",
+        "source_line": "14",
+        "path_id": "FollowDecorN7-FollowD7",
+        "polygon_sides": [],
+        "labels": [
+          "composition-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk15",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "association",
+        "source_line": "15",
+        "path_id": "FollowDecorN7-FollowE7",
+        "polygon_sides": [],
+        "labels": [
+          "square-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0008",
+        "link_type": "association",
+        "source_line": "16",
+        "path_id": "FollowDecorN7-FollowF7",
+        "polygon_sides": [],
+        "labels": [
+          "square-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk17",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "association",
+        "source_line": "17",
+        "path_id": "FollowDecorN7-FollowG7",
+        "polygon_sides": [],
+        "labels": [
+          "circle-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk18",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "association",
+        "source_line": "18",
+        "path_id": "FollowDecorN7-FollowH7",
+        "polygon_sides": [],
+        "labels": [
+          "circle-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowDecorN7": "ent0002"
+    },
+    "rust_note_uids": {
+      "FollowDecorN7": "ent0002"
+    },
+    "differences": [
+      {
+        "field": "lnk11.link_type",
+        "java": "aggregation",
+        "rust": "association"
+      },
+      {
+        "field": "lnk11.path_id",
+        "java": "FollowDecorN7-backto-FollowA7",
+        "rust": "FollowDecorN7-FollowA7"
+      },
+      {
+        "field": "lnk11.polygon_sides",
+        "java": [
+          "start"
+        ],
+        "rust": []
+      },
+      {
+        "field": "lnk11.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk12.link_type",
+        "java": "aggregation",
+        "rust": "association"
+      },
+      {
+        "field": "lnk12.path_id",
+        "java": "FollowDecorN7-to-FollowB7",
+        "rust": "FollowDecorN7-FollowB7"
+      },
+      {
+        "field": "lnk12.polygon_sides",
+        "java": [
+          "end"
+        ],
+        "rust": []
+      },
+      {
+        "field": "lnk12.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk13.link_type",
+        "java": "composition",
+        "rust": "association"
+      },
+      {
+        "field": "lnk13.path_id",
+        "java": "FollowDecorN7-backto-FollowC7",
+        "rust": "FollowDecorN7-FollowC7"
+      },
+      {
+        "field": "lnk13.polygon_sides",
+        "java": [
+          "start"
+        ],
+        "rust": []
+      },
+      {
+        "field": "lnk13.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk14.link_type",
+        "java": "composition",
+        "rust": "association"
+      },
+      {
+        "field": "lnk14.path_id",
+        "java": "FollowDecorN7-to-FollowD7",
+        "rust": "FollowDecorN7-FollowD7"
+      },
+      {
+        "field": "lnk14.polygon_sides",
+        "java": [
+          "end"
+        ],
+        "rust": []
+      },
+      {
+        "field": "lnk14.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk15.link_type",
+        "java": "",
+        "rust": "association"
+      },
+      {
+        "field": "lnk15.path_id",
+        "java": "FollowDecorN7-backto-FollowE7",
+        "rust": "FollowDecorN7-FollowE7"
+      },
+      {
+        "field": "lnk15.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 1,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk16.link_type",
+        "java": "",
+        "rust": "association"
+      },
+      {
+        "field": "lnk16.path_id",
+        "java": "FollowDecorN7-to-FollowF7",
+        "rust": "FollowDecorN7-FollowF7"
+      },
+      {
+        "field": "lnk16.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 1,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk17.link_type",
+        "java": "",
+        "rust": "association"
+      },
+      {
+        "field": "lnk17.path_id",
+        "java": "FollowDecorN7-backto-FollowG7",
+        "rust": "FollowDecorN7-FollowG7"
+      },
+      {
+        "field": "lnk17.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk18.link_type",
+        "java": "",
+        "rust": "association"
+      },
+      {
+        "field": "lnk18.path_id",
+        "java": "FollowDecorN7-to-FollowH7",
+        "rust": "FollowDecorN7-FollowH7"
+      },
+      {
+        "field": "lnk18.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      }
+    ]
+  },
+  {
+    "case": "followup_08_line_style_bodies",
+    "java_links": [
+      {
+        "id": "lnk7",
+        "comment": "link FollowStyleN8 to FollowSolid8",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowStyleN8-to-FollowSolid8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "solid"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "link FollowStyleN8 to FollowDashed8",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowStyleN8-to-FollowDashed8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "dashed"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "link FollowStyleN8 to FollowDotted8",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowStyleN8-to-FollowDotted8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "dotted"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "link FollowStyleN8 to FollowBold8",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowStyleN8-to-FollowBold8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "bold"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk7",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowStyleN8-to-FollowSolid8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "solid"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowStyleN8-to-FollowDashed8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "dashed"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowStyleN8-to-FollowDotted8",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "dotted"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowStyleN8": "ent0002"
+    },
+    "rust_note_uids": {
+      "FollowStyleN8": "ent0002"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 4,
+        "rust": 3
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk7",
+          "lnk8",
+          "lnk9",
+          "lnk10"
+        ],
+        "rust": [
+          "lnk7",
+          "lnk8",
+          "lnk9"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "followup_09_interfaces_components_brackets",
+    "java_links": [
+      {
+        "id": "lnk7",
+        "comment": "reverse link FollowInputI9 to FollowMixedN9",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowInputI9-backto-FollowMixedN9",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "to-lollipop"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "reverse link FollowMixedN9 to FollowOutputI9",
+        "entity_1": "ent0005",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowMixedN9-backto-FollowOutputI9",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "from-interface"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "link FollowMixedN9 to FreshBracketC9",
+        "entity_1": "ent0005",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowMixedN9-to-FreshBracketC9",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "to-bracket"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowWorkerC9 to FollowMixedN9",
+        "entity_1": "ent0004",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowWorkerC9-to-FollowMixedN9",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "from-component"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk7",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowInputI9-backto-FollowMixedN9",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "to-lollipop"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowMixedN9-backto-FollowOutputI9",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "from-interface"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowMixedN9-to-FreshBracketC9",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "to-bracket"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowWorkerC9-to-FollowMixedN9",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "from-component"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowMixedN9": "ent0005"
+    },
+    "rust_note_uids": {
+      "FollowMixedN9": "ent0005"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_10_package_endpoints",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowOuterP10 to FollowGroupN10",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowOuterP10-backto-FollowGroupN10",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "note-to-group"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "reverse link FollowGroupN10 to FollowOtherP10",
+        "entity_1": "ent0006",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowGroupN10-backto-FollowOtherP10",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "group-to-note"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "link FollowGroupN10 to FollowInnerC10",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowGroupN10-to-FollowInnerC10",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "note-to-member"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowOtherC10 to FollowGroupN10",
+        "entity_1": "ent0005",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowOtherC10-to-FollowGroupN10",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "member-to-note"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowOuterP10-backto-FollowGroupN10",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "note-to-group"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowGroupN10-backto-FollowOtherP10",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "group-to-note"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowGroupN10-to-FollowInnerC10",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "note-to-member"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowOtherC10-to-FollowGroupN10",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "member-to-note"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowGroupN10": "ent0006"
+    },
+    "rust_note_uids": {
+      "FollowGroupN10": "ent0006"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_11_nested_alias_ownership",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowLocalA11 to Follow.Audit.N11",
+        "entity_1": "ent0005",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowLocalA11-backto-Follow.Audit.N11",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "nested-left"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "reverse link Follow.Audit.N11 to FollowLocalB11",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "Follow.Audit.N11-backto-FollowLocalB11",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "nested-up"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link Follow.Audit.N11 to FollowRootC11",
+        "entity_1": "ent0004",
+        "entity_2": "ent0011",
+        "link_type": "dependency",
+        "source_line": "14",
+        "path_id": "Follow.Audit.N11-to-FollowRootC11",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "cross-owner"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowLocalA11-backto-Follow.Audit.N11",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "nested-left"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "Follow.Audit.N11-backto-FollowLocalB11",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "nested-up"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0011",
+        "link_type": "dependency",
+        "source_line": "14",
+        "path_id": "Follow.Audit.N11-to-FollowRootC11",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "cross-owner"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowDomainP11.FollowLedgerP11.Follow.Audit.N11": "ent0004"
+    },
+    "rust_note_uids": {
+      "FollowDomainP11.FollowLedgerP11.Follow.Audit.N11": "ent0004"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_12_order_count_variant_a",
+    "java_links": [
+      {
+        "id": "lnk7",
+        "comment": "link FollowOrderN12 to FollowA12",
+        "entity_1": "ent0006",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowOrderN12-to-FollowA12",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-a"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "link FollowB12 to FollowOrderN12",
+        "entity_1": "ent0003",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowB12-to-FollowOrderN12",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-b"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "reverse link FollowC12 to FollowOrderN12",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowC12-backto-FollowOrderN12",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-c"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "reverse link FollowOrderN12 to FollowD12",
+        "entity_1": "ent0006",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowOrderN12-backto-FollowD12",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-d"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk7",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowOrderN12-to-FollowA12",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-a"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowB12-to-FollowOrderN12",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-b"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowC12-backto-FollowOrderN12",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-c"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowOrderN12-backto-FollowD12",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-d"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowOrderN12": "ent0006"
+    },
+    "rust_note_uids": {
+      "FollowOrderN12": "ent0006"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_13_order_count_variant_b",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowOrderN13 to FollowD13",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowOrderN13-backto-FollowD13",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-d"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "link FollowOrderN13 to FollowD13",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowOrderN13-to-FollowD13",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-extra"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "reverse link FollowC13 to FollowOrderN13",
+        "entity_1": "ent0004",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowC13-backto-FollowOrderN13",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-c"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "link FollowB13 to FollowOrderN13",
+        "entity_1": "ent0005",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowB13-to-FollowOrderN13",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-b"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowOrderN13 to FollowA13",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowOrderN13-to-FollowA13",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-a"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowOrderN13-backto-FollowD13",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-d"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowC13-backto-FollowOrderN13",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "edge-c"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowB13-to-FollowOrderN13",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-b"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowOrderN13-to-FollowA13",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-a"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowOrderN13-to-FollowD13",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "edge-extra"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowOrderN13": "ent0002"
+    },
+    "rust_note_uids": {
+      "FollowOrderN13": "ent0002"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_14_cardinality_direction_matrix",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowCardN14 to FollowTail14",
+        "entity_1": "ent0006",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowCardN14-backto-FollowTail14",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-card",
+          "head-L",
+          "tail-L"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "reverse link FollowUp14 to FollowCardN14",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowUp14-backto-FollowCardN14",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-card",
+          "head-U",
+          "tail-U"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "link FollowCardN14 to FollowHead14",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowCardN14-to-FollowHead14",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-card",
+          "tail-R",
+          "head-R"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowDown14 to FollowCardN14",
+        "entity_1": "ent0005",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowDown14-to-FollowCardN14",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-card",
+          "tail-D",
+          "head-D"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowCardN14-backto-FollowTail14",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-card",
+          "head-L",
+          "tail-L"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowUp14-backto-FollowCardN14",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-card",
+          "head-U",
+          "tail-U"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowCardN14-to-FollowHead14",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-card",
+          "tail-R",
+          "head-R"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0005",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowDown14-to-FollowCardN14",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-card",
+          "tail-D",
+          "head-D"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowCardN14": "ent0006"
+    },
+    "rust_note_uids": {
+      "FollowCardN14": "ent0006"
+    },
+    "differences": []
+  },
+  {
+    "case": "followup_15_parallel_endpoint_routes",
+    "java_links": [
+      {
+        "id": "lnk4",
+        "comment": "link FollowParallelN15 to FollowParallelC15",
+        "entity_1": "ent0003",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "4",
+        "path_id": "FollowParallelN15-to-FollowParallelC15",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "forward-solid"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk5",
+        "comment": "link FollowParallelN15 to FollowParallelC15",
+        "entity_1": "ent0003",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "5",
+        "path_id": "FollowParallelN15-to-FollowParallelC15-1",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "forward-dotted"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk7",
+        "comment": "reverse link FollowParallelN15 to FollowParallelC15",
+        "entity_1": "ent0003",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowParallelN15-backto-FollowParallelC15",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "reverse-solid"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "reverse link FollowParallelN15 to FollowParallelC15",
+        "entity_1": "ent0003",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowParallelN15-backto-FollowParallelC15-1",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "reverse-dotted"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk4",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "4",
+        "path_id": "FollowParallelN15-to-FollowParallelC15",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "forward-solid"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk6",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0002",
+        "link_type": "dependency",
+        "source_line": "6",
+        "path_id": "FollowParallelN15-backto-FollowParallelC15",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "reverse-solid"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowParallelN15": "ent0003"
+    },
+    "rust_note_uids": {
+      "FollowParallelN15": "ent0003"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 4,
+        "rust": 2
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk4",
+          "lnk5",
+          "lnk7",
+          "lnk9"
+        ],
+        "rust": [
+          "lnk4",
+          "lnk6"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "followup_16_top_to_bottom_nested_mix",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowTBN16 to FollowTop16",
+        "entity_1": "ent0003",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowTBN16-backto-FollowTop16",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-in"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "link FollowTBN16 to FollowBottom16",
+        "entity_1": "ent0003",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowTBN16-to-FollowBottom16",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-out"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "link FollowPort16 to FollowTBN16",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowPort16-to-FollowTBN16",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit-down-in"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowTBN16-backto-FollowTop16",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-in"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowTBN16-to-FollowBottom16",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-out"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowPort16-to-FollowTBN16",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit--in"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowTBP16.FollowTBN16": "ent0003"
+    },
+    "rust_note_uids": {
+      "FollowTBP16.FollowTBN16": "ent0003"
+    },
+    "differences": [
+      {
+        "field": "lnk10.labels",
+        "java": [
+          "implicit-down-in"
+        ],
+        "rust": [
+          "implicit--in"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "followup_17_left_to_right_nested_mix",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "reverse link FollowLRN17 to FollowNear17",
+        "entity_1": "ent0003",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowLRN17-backto-FollowNear17",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-in"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "link FollowLRN17 to FollowFar17",
+        "entity_1": "ent0003",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowLRN17-to-FollowFar17",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-out"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "link FollowLRN17 to FollowPort17",
+        "entity_1": "ent0003",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowLRN17-to-FollowPort17",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit-right-out"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowLRN17-backto-FollowNear17",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-in"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowLRN17-to-FollowFar17",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-out"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk10",
+        "comment": "",
+        "entity_1": "ent0003",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowLRN17-to-FollowPort17",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "implicit--out"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowLRP17.FollowLRN17": "ent0003",
+      "FollowLRP17.FollowNear17": "ent0004"
+    },
+    "rust_note_uids": {
+      "FollowLRP17.FollowNear17": "ent0004",
+      "FollowLRP17.FollowLRN17": "ent0003"
+    },
+    "differences": [
+      {
+        "field": "lnk10.labels",
+        "java": [
+          "implicit-right-out"
+        ],
+        "rust": [
+          "implicit--out"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "followup_18_hidden_link_uid_lifecycle",
+    "java_links": [
+      {
+        "id": "lnk8",
+        "comment": "link FollowHiddenN18 to FollowVisiblePeer18",
+        "entity_1": "ent0006",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "7",
+        "path_id": "FollowHiddenN18-to-FollowVisiblePeer18",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "visible-opale-candidate"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk9",
+        "comment": "link FollowControlA18 to FollowControlB18",
+        "entity_1": "ent0004",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowControlA18-to-FollowControlB18",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "uid-control"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk8",
+        "comment": "",
+        "entity_1": "ent0004",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "8",
+        "path_id": "FollowControlA18-to-FollowControlB18",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "uid-control"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowHiddenN18": "ent0006"
+    },
+    "rust_note_uids": {
+      "FollowHiddenN18": "ent0006"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 2,
+        "rust": 1
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk8",
+          "lnk9"
+        ],
+        "rust": [
+          "lnk8"
+        ]
+      },
+      {
+        "field": "lnk8.entity_1",
+        "java": "ent0006",
+        "rust": "ent0004"
+      },
+      {
+        "field": "lnk8.entity_2",
+        "java": "ent0003",
+        "rust": "ent0005"
+      },
+      {
+        "field": "lnk8.source_line",
+        "java": "7",
+        "rust": "8"
+      },
+      {
+        "field": "lnk8.path_id",
+        "java": "FollowHiddenN18-to-FollowVisiblePeer18",
+        "rust": "FollowControlA18-to-FollowControlB18"
+      },
+      {
+        "field": "lnk8.labels",
+        "java": [
+          "visible-opale-candidate"
+        ],
+        "rust": [
+          "uid-control"
+        ]
+      }
+    ]
+  },
+  {
+    "case": "followup_19_extended_endpoint_decors",
+    "java_links": [
+      {
+        "id": "lnk11",
+        "comment": "reverse link FollowExtendedN19 to FollowA19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "not_navigable",
+        "source_line": "11",
+        "path_id": "FollowExtendedN19-backto-FollowA19",
+        "polygon_sides": [],
+        "labels": [
+          "not-nav-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowExtendedN19 to FollowB19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "not_navigable",
+        "source_line": "12",
+        "path_id": "FollowExtendedN19-to-FollowB19",
+        "polygon_sides": [],
+        "labels": [
+          "not-nav-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      },
+      {
+        "id": "lnk13",
+        "comment": "reverse link FollowExtendedN19 to FollowC19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "nested",
+        "source_line": "13",
+        "path_id": "FollowExtendedN19-backto-FollowC19",
+        "polygon_sides": [],
+        "labels": [
+          "plus-start"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 2,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "link FollowExtendedN19 to FollowD19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "nested",
+        "source_line": "14",
+        "path_id": "FollowExtendedN19-to-FollowD19",
+        "polygon_sides": [],
+        "labels": [
+          "plus-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 2,
+        "paths": 1
+      },
+      {
+        "id": "lnk15",
+        "comment": "reverse link FollowExtendedN19 to FollowE19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "",
+        "source_line": "15",
+        "path_id": "FollowExtendedN19-backto-FollowE19",
+        "polygon_sides": [],
+        "labels": [
+          "filled-circle-start"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "link FollowExtendedN19 to FollowF19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0008",
+        "link_type": "",
+        "source_line": "16",
+        "path_id": "FollowExtendedN19-to-FollowF19",
+        "polygon_sides": [],
+        "labels": [
+          "filled-circle-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk17",
+        "comment": "reverse link FollowExtendedN19 to FollowG19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "dependency",
+        "source_line": "17",
+        "path_id": "FollowExtendedN19-backto-FollowG19",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "triangle-arrow-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk18",
+        "comment": "link FollowExtendedN19 to FollowH19",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "18",
+        "path_id": "FollowExtendedN19-to-FollowH19",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "triangle-arrow-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk11",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "dependency",
+        "source_line": "17",
+        "path_id": "FollowExtendedN19-backto-FollowG19",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "triangle-arrow-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "18",
+        "path_id": "FollowExtendedN19-to-FollowH19",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "triangle-arrow-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "java_note_uids": {
+      "FollowExtendedN19": "ent0002"
+    },
+    "rust_note_uids": {
+      "FollowExtendedN19": "ent0002"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 8,
+        "rust": 2
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk11",
+          "lnk12",
+          "lnk13",
+          "lnk14",
+          "lnk15",
+          "lnk16",
+          "lnk17",
+          "lnk18"
+        ],
+        "rust": [
+          "lnk11",
+          "lnk12"
+        ]
+      },
+      {
+        "field": "lnk11.entity_2",
+        "java": "ent0003",
+        "rust": "ent0009"
+      },
+      {
+        "field": "lnk11.link_type",
+        "java": "not_navigable",
+        "rust": "dependency"
+      },
+      {
+        "field": "lnk11.source_line",
+        "java": "11",
+        "rust": "17"
+      },
+      {
+        "field": "lnk11.path_id",
+        "java": "FollowExtendedN19-backto-FollowA19",
+        "rust": "FollowExtendedN19-backto-FollowG19"
+      },
+      {
+        "field": "lnk11.labels",
+        "java": [
+          "not-nav-start"
+        ],
+        "rust": [
+          "triangle-arrow-start"
+        ]
+      },
+      {
+        "field": "lnk11.polygon_sides",
+        "java": [],
+        "rust": [
+          "start"
+        ]
+      },
+      {
+        "field": "lnk11.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 2
+        },
+        "rust": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk12.entity_2",
+        "java": "ent0004",
+        "rust": "ent0010"
+      },
+      {
+        "field": "lnk12.link_type",
+        "java": "not_navigable",
+        "rust": "dependency"
+      },
+      {
+        "field": "lnk12.source_line",
+        "java": "12",
+        "rust": "18"
+      },
+      {
+        "field": "lnk12.path_id",
+        "java": "FollowExtendedN19-to-FollowB19",
+        "rust": "FollowExtendedN19-to-FollowH19"
+      },
+      {
+        "field": "lnk12.labels",
+        "java": [
+          "not-nav-end"
+        ],
+        "rust": [
+          "triangle-arrow-end"
+        ]
+      },
+      {
+        "field": "lnk12.polygon_sides",
+        "java": [],
+        "rust": [
+          "end"
+        ]
+      },
+      {
+        "field": "lnk12.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 2
+        },
+        "rust": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      }
+    ]
+  },
+  {
+    "case": "followup_20_remaining_endpoint_decors",
+    "java_links": [
+      {
+        "id": "lnk23",
+        "comment": "reverse link FollowRemainingN20 to FollowA20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "redefines",
+        "source_line": "23",
+        "path_id": "FollowRemainingN20-backto-FollowA20",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "redefines-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 1,
+        "paths": 1
+      },
+      {
+        "id": "lnk24",
+        "comment": "link FollowRemainingN20 to FollowB20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "redefines",
+        "source_line": "24",
+        "path_id": "FollowRemainingN20-to-FollowB20",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "redefines-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 1,
+        "paths": 1
+      },
+      {
+        "id": "lnk25",
+        "comment": "reverse link FollowRemainingN20 to FollowC20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "definedby",
+        "source_line": "25",
+        "path_id": "FollowRemainingN20-backto-FollowC20",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "definedby-start"
+        ],
+        "polygons": 1,
+        "ellipses": 2,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk26",
+        "comment": "link FollowRemainingN20 to FollowD20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "definedby",
+        "source_line": "26",
+        "path_id": "FollowRemainingN20-to-FollowD20",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "definedby-end"
+        ],
+        "polygons": 1,
+        "ellipses": 2,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk27",
+        "comment": "reverse link FollowRemainingN20 to FollowE20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "crowfoot",
+        "source_line": "27",
+        "path_id": "FollowRemainingN20-backto-FollowE20",
+        "polygon_sides": [],
+        "labels": [
+          "crowfoot-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 3,
+        "paths": 1
+      },
+      {
+        "id": "lnk28",
+        "comment": "link FollowRemainingN20 to FollowF20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0008",
+        "link_type": "crowfoot",
+        "source_line": "28",
+        "path_id": "FollowRemainingN20-to-FollowF20",
+        "polygon_sides": [],
+        "labels": [
+          "crowfoot-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 3,
+        "paths": 1
+      },
+      {
+        "id": "lnk29",
+        "comment": "reverse link FollowRemainingN20 to FollowG20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "crowfoot",
+        "source_line": "29",
+        "path_id": "FollowRemainingN20-backto-FollowG20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-crowfoot-start"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 3,
+        "paths": 1
+      },
+      {
+        "id": "lnk30",
+        "comment": "link FollowRemainingN20 to FollowH20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "crowfoot",
+        "source_line": "30",
+        "path_id": "FollowRemainingN20-to-FollowH20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-crowfoot-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 3,
+        "paths": 1
+      },
+      {
+        "id": "lnk31",
+        "comment": "reverse link FollowRemainingN20 to FollowI20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0011",
+        "link_type": "association",
+        "source_line": "31",
+        "path_id": "FollowRemainingN20-backto-FollowI20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-line-start"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 2,
+        "paths": 1
+      },
+      {
+        "id": "lnk32",
+        "comment": "link FollowRemainingN20 to FollowJ20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0012",
+        "link_type": "association",
+        "source_line": "32",
+        "path_id": "FollowRemainingN20-to-FollowJ20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-line-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 2,
+        "paths": 1
+      },
+      {
+        "id": "lnk33",
+        "comment": "reverse link FollowRemainingN20 to FollowK20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0013",
+        "link_type": "association",
+        "source_line": "33",
+        "path_id": "FollowRemainingN20-backto-FollowK20",
+        "polygon_sides": [],
+        "labels": [
+          "double-line-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 3,
+        "paths": 1
+      },
+      {
+        "id": "lnk34",
+        "comment": "link FollowRemainingN20 to FollowL20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0014",
+        "link_type": "association",
+        "source_line": "34",
+        "path_id": "FollowRemainingN20-to-FollowL20",
+        "polygon_sides": [],
+        "labels": [
+          "double-line-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 3,
+        "paths": 1
+      },
+      {
+        "id": "lnk35",
+        "comment": "reverse link FollowRemainingN20 to FollowM20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0015",
+        "link_type": "crowfoot",
+        "source_line": "35",
+        "path_id": "FollowRemainingN20-backto-FollowM20",
+        "polygon_sides": [],
+        "labels": [
+          "line-crowfoot-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 4,
+        "paths": 1
+      },
+      {
+        "id": "lnk36",
+        "comment": "link FollowRemainingN20 to FollowN20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0016",
+        "link_type": "crowfoot",
+        "source_line": "36",
+        "path_id": "FollowRemainingN20-to-FollowN20",
+        "polygon_sides": [],
+        "labels": [
+          "line-crowfoot-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 4,
+        "paths": 1
+      },
+      {
+        "id": "lnk37",
+        "comment": "reverse link FollowRemainingN20 to FollowO20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0017",
+        "link_type": "dependency",
+        "source_line": "37",
+        "path_id": "FollowRemainingN20-backto-FollowO20",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "underscored-arrow-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk38",
+        "comment": "link FollowRemainingN20 to FollowP20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0018",
+        "link_type": "dependency",
+        "source_line": "38",
+        "path_id": "FollowRemainingN20-to-FollowP20",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "underscored-arrow-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk39",
+        "comment": "reverse link FollowRemainingN20 to FollowQ20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0019",
+        "link_type": "",
+        "source_line": "39",
+        "path_id": "FollowRemainingN20-backto-FollowQ20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-connect-start"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      },
+      {
+        "id": "lnk40",
+        "comment": "link FollowRemainingN20 to FollowR20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0020",
+        "link_type": "",
+        "source_line": "40",
+        "path_id": "FollowRemainingN20-to-FollowR20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-connect-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      },
+      {
+        "id": "lnk41",
+        "comment": "reverse link FollowRemainingN20 to FollowS20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0021",
+        "link_type": "",
+        "source_line": "41",
+        "path_id": "FollowRemainingN20-backto-FollowS20",
+        "polygon_sides": [],
+        "labels": [
+          "parenthesis-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      },
+      {
+        "id": "lnk42",
+        "comment": "link FollowRemainingN20 to FollowT20",
+        "entity_1": "ent0002",
+        "entity_2": "ent0022",
+        "link_type": "",
+        "source_line": "42",
+        "path_id": "FollowRemainingN20-to-FollowT20",
+        "polygon_sides": [],
+        "labels": [
+          "parenthesis-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      }
+    ],
+    "rust_links": [
+      {
+        "id": "lnk23",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "extension",
+        "source_line": "23",
+        "path_id": "FollowRemainingN20-backto-FollowA20",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "redefines-start"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk24",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "extension",
+        "source_line": "24",
+        "path_id": "FollowRemainingN20-to-FollowB20",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "redefines-end"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk25",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0011",
+        "link_type": "association",
+        "source_line": "31",
+        "path_id": "FollowRemainingN20-FollowI20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-line-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk26",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0012",
+        "link_type": "association",
+        "source_line": "32",
+        "path_id": "FollowRemainingN20-FollowJ20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-line-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk27",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0013",
+        "link_type": "association",
+        "source_line": "33",
+        "path_id": "FollowRemainingN20-FollowK20",
+        "polygon_sides": [],
+        "labels": [
+          "double-line-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk28",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0014",
+        "link_type": "association",
+        "source_line": "34",
+        "path_id": "FollowRemainingN20-FollowL20",
+        "polygon_sides": [],
+        "labels": [
+          "double-line-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk29",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0019",
+        "link_type": "association",
+        "source_line": "39",
+        "path_id": "FollowRemainingN20-FollowQ20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-connect-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk30",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0020",
+        "link_type": "",
+        "source_line": "40",
+        "path_id": "FollowRemainingN20-to-FollowR20",
+        "polygon_sides": [],
+        "labels": [
+          "circle-connect-end"
+        ],
+        "polygons": 0,
+        "ellipses": 1,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      },
+      {
+        "id": "lnk31",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0021",
+        "link_type": "association",
+        "source_line": "41",
+        "path_id": "FollowRemainingN20-FollowS20",
+        "polygon_sides": [],
+        "labels": [
+          "parenthesis-start"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk32",
+        "comment": "",
+        "entity_1": "ent0002",
+        "entity_2": "ent0022",
+        "link_type": "",
+        "source_line": "42",
+        "path_id": "FollowRemainingN20-to-FollowT20",
+        "polygon_sides": [],
+        "labels": [
+          "parenthesis-end"
+        ],
+        "polygons": 0,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 2
+      }
+    ],
+    "java_note_uids": {
+      "FollowRemainingN20": "ent0002",
+      "FollowN20": "ent0016"
+    },
+    "rust_note_uids": {
+      "FollowN20": "ent0016",
+      "FollowRemainingN20": "ent0002"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 20,
+        "rust": 10
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk23",
+          "lnk24",
+          "lnk25",
+          "lnk26",
+          "lnk27",
+          "lnk28",
+          "lnk29",
+          "lnk30",
+          "lnk31",
+          "lnk32",
+          "lnk33",
+          "lnk34",
+          "lnk35",
+          "lnk36",
+          "lnk37",
+          "lnk38",
+          "lnk39",
+          "lnk40",
+          "lnk41",
+          "lnk42"
+        ],
+        "rust": [
+          "lnk23",
+          "lnk24",
+          "lnk25",
+          "lnk26",
+          "lnk27",
+          "lnk28",
+          "lnk29",
+          "lnk30",
+          "lnk31",
+          "lnk32"
+        ]
+      },
+      {
+        "field": "lnk23.link_type",
+        "java": "redefines",
+        "rust": "extension"
+      },
+      {
+        "field": "lnk23.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 1,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk24.link_type",
+        "java": "redefines",
+        "rust": "extension"
+      },
+      {
+        "field": "lnk24.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 1,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 1,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk25.entity_2",
+        "java": "ent0005",
+        "rust": "ent0011"
+      },
+      {
+        "field": "lnk25.link_type",
+        "java": "definedby",
+        "rust": "association"
+      },
+      {
+        "field": "lnk25.source_line",
+        "java": "25",
+        "rust": "31"
+      },
+      {
+        "field": "lnk25.path_id",
+        "java": "FollowRemainingN20-backto-FollowC20",
+        "rust": "FollowRemainingN20-FollowI20"
+      },
+      {
+        "field": "lnk25.labels",
+        "java": [
+          "definedby-start"
+        ],
+        "rust": [
+          "circle-line-start"
+        ]
+      },
+      {
+        "field": "lnk25.polygon_sides",
+        "java": [
+          "start"
+        ],
+        "rust": []
+      },
+      {
+        "field": "lnk25.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 2,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk26.entity_2",
+        "java": "ent0006",
+        "rust": "ent0012"
+      },
+      {
+        "field": "lnk26.link_type",
+        "java": "definedby",
+        "rust": "association"
+      },
+      {
+        "field": "lnk26.source_line",
+        "java": "26",
+        "rust": "32"
+      },
+      {
+        "field": "lnk26.path_id",
+        "java": "FollowRemainingN20-to-FollowD20",
+        "rust": "FollowRemainingN20-FollowJ20"
+      },
+      {
+        "field": "lnk26.labels",
+        "java": [
+          "definedby-end"
+        ],
+        "rust": [
+          "circle-line-end"
+        ]
+      },
+      {
+        "field": "lnk26.polygon_sides",
+        "java": [
+          "end"
+        ],
+        "rust": []
+      },
+      {
+        "field": "lnk26.decoration_inventory",
+        "java": {
+          "polygons": 1,
+          "ellipses": 2,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk27.entity_2",
+        "java": "ent0007",
+        "rust": "ent0013"
+      },
+      {
+        "field": "lnk27.link_type",
+        "java": "crowfoot",
+        "rust": "association"
+      },
+      {
+        "field": "lnk27.source_line",
+        "java": "27",
+        "rust": "33"
+      },
+      {
+        "field": "lnk27.path_id",
+        "java": "FollowRemainingN20-backto-FollowE20",
+        "rust": "FollowRemainingN20-FollowK20"
+      },
+      {
+        "field": "lnk27.labels",
+        "java": [
+          "crowfoot-start"
+        ],
+        "rust": [
+          "double-line-start"
+        ]
+      },
+      {
+        "field": "lnk27.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 3,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk28.entity_2",
+        "java": "ent0008",
+        "rust": "ent0014"
+      },
+      {
+        "field": "lnk28.link_type",
+        "java": "crowfoot",
+        "rust": "association"
+      },
+      {
+        "field": "lnk28.source_line",
+        "java": "28",
+        "rust": "34"
+      },
+      {
+        "field": "lnk28.path_id",
+        "java": "FollowRemainingN20-to-FollowF20",
+        "rust": "FollowRemainingN20-FollowL20"
+      },
+      {
+        "field": "lnk28.labels",
+        "java": [
+          "crowfoot-end"
+        ],
+        "rust": [
+          "double-line-end"
+        ]
+      },
+      {
+        "field": "lnk28.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 3,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk29.entity_2",
+        "java": "ent0009",
+        "rust": "ent0019"
+      },
+      {
+        "field": "lnk29.link_type",
+        "java": "crowfoot",
+        "rust": "association"
+      },
+      {
+        "field": "lnk29.source_line",
+        "java": "29",
+        "rust": "39"
+      },
+      {
+        "field": "lnk29.path_id",
+        "java": "FollowRemainingN20-backto-FollowG20",
+        "rust": "FollowRemainingN20-FollowQ20"
+      },
+      {
+        "field": "lnk29.labels",
+        "java": [
+          "circle-crowfoot-start"
+        ],
+        "rust": [
+          "circle-connect-start"
+        ]
+      },
+      {
+        "field": "lnk29.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 3,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk30.entity_2",
+        "java": "ent0010",
+        "rust": "ent0020"
+      },
+      {
+        "field": "lnk30.link_type",
+        "java": "crowfoot",
+        "rust": ""
+      },
+      {
+        "field": "lnk30.source_line",
+        "java": "30",
+        "rust": "40"
+      },
+      {
+        "field": "lnk30.path_id",
+        "java": "FollowRemainingN20-to-FollowH20",
+        "rust": "FollowRemainingN20-to-FollowR20"
+      },
+      {
+        "field": "lnk30.labels",
+        "java": [
+          "circle-crowfoot-end"
+        ],
+        "rust": [
+          "circle-connect-end"
+        ]
+      },
+      {
+        "field": "lnk30.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 3,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 0,
+          "paths": 2
+        }
+      },
+      {
+        "field": "lnk31.entity_2",
+        "java": "ent0011",
+        "rust": "ent0021"
+      },
+      {
+        "field": "lnk31.source_line",
+        "java": "31",
+        "rust": "41"
+      },
+      {
+        "field": "lnk31.path_id",
+        "java": "FollowRemainingN20-backto-FollowI20",
+        "rust": "FollowRemainingN20-FollowS20"
+      },
+      {
+        "field": "lnk31.labels",
+        "java": [
+          "circle-line-start"
+        ],
+        "rust": [
+          "parenthesis-start"
+        ]
+      },
+      {
+        "field": "lnk31.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 2,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 1
+        }
+      },
+      {
+        "field": "lnk32.entity_2",
+        "java": "ent0012",
+        "rust": "ent0022"
+      },
+      {
+        "field": "lnk32.link_type",
+        "java": "association",
+        "rust": ""
+      },
+      {
+        "field": "lnk32.source_line",
+        "java": "32",
+        "rust": "42"
+      },
+      {
+        "field": "lnk32.path_id",
+        "java": "FollowRemainingN20-to-FollowJ20",
+        "rust": "FollowRemainingN20-to-FollowT20"
+      },
+      {
+        "field": "lnk32.labels",
+        "java": [
+          "circle-line-end"
+        ],
+        "rust": [
+          "parenthesis-end"
+        ]
+      },
+      {
+        "field": "lnk32.decoration_inventory",
+        "java": {
+          "polygons": 0,
+          "ellipses": 1,
+          "rects": 0,
+          "lines": 2,
+          "paths": 1
+        },
+        "rust": {
+          "polygons": 0,
+          "ellipses": 0,
+          "rects": 0,
+          "lines": 0,
+          "paths": 2
+        }
+      }
+    ]
+  },
+  {
+    "case": "followup_21_bracket_line_styles",
+    "java_links": [
+      {
+        "id": "lnk10",
+        "comment": "link FollowBracketN21 to FollowDashed21",
+        "entity_1": "ent0002",
+        "entity_2": "ent0003",
+        "link_type": "dependency",
+        "source_line": "9",
+        "path_id": "FollowBracketN21-to-FollowDashed21",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "bracket-dashed"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk11",
+        "comment": "link FollowBracketN21 to FollowDotted21",
+        "entity_1": "ent0002",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowBracketN21-to-FollowDotted21",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "bracket-dotted"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk12",
+        "comment": "link FollowBracketN21 to FollowBold21",
+        "entity_1": "ent0002",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowBracketN21-to-FollowBold21",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "bracket-bold"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk13",
+        "comment": "link FollowBracketN21 to FollowRed21",
+        "entity_1": "ent0002",
+        "entity_2": "ent0006",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowBracketN21-to-FollowRed21",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "bracket-red"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "link FollowBracketN21 to FollowBlue21",
+        "entity_1": "ent0002",
+        "entity_2": "ent0007",
+        "link_type": "dependency",
+        "source_line": "13",
+        "path_id": "FollowBracketN21-to-FollowBlue21",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "bracket-blue-dashed"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "link FollowBracketN21 to FollowControl21",
+        "entity_1": "ent0002",
+        "entity_2": "ent0009",
+        "link_type": "dependency",
+        "source_line": "15",
+        "path_id": "FollowBracketN21-to-FollowControl21",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "plain-control"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [],
+    "java_note_uids": {
+      "FollowBracketN21": "ent0002"
+    },
+    "rust_note_uids": {
+      "FollowBracketN21": "ent0002"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 6,
+        "rust": 0
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk10",
+          "lnk11",
+          "lnk12",
+          "lnk13",
+          "lnk14",
+          "lnk16"
+        ],
+        "rust": []
+      }
+    ]
+  },
+  {
+    "case": "followup_22_direction_abbreviations",
+    "java_links": [
+      {
+        "id": "lnk12",
+        "comment": "reverse link FollowA22 to FollowDirN22",
+        "entity_1": "ent0002",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "10",
+        "path_id": "FollowA22-backto-FollowDirN22",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-short"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk14",
+        "comment": "reverse link FollowB22 to FollowDirN22",
+        "entity_1": "ent0003",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "11",
+        "path_id": "FollowB22-backto-FollowDirN22",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "left-medium"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk15",
+        "comment": "link FollowDirN22 to FollowC22",
+        "entity_1": "ent0010",
+        "entity_2": "ent0004",
+        "link_type": "dependency",
+        "source_line": "12",
+        "path_id": "FollowDirN22-to-FollowC22",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-short"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk16",
+        "comment": "link FollowDirN22 to FollowD22",
+        "entity_1": "ent0010",
+        "entity_2": "ent0005",
+        "link_type": "dependency",
+        "source_line": "13",
+        "path_id": "FollowDirN22-to-FollowD22",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-medium"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk18",
+        "comment": "reverse link FollowE22 to FollowDirN22",
+        "entity_1": "ent0006",
+        "entity_2": "ent0010",
+        "link_type": "dependency",
+        "source_line": "14",
+        "path_id": "FollowE22-backto-FollowDirN22",
+        "polygon_sides": [
+          "start"
+        ],
+        "labels": [
+          "up-short"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk19",
+        "comment": "link FollowDirN22 to FollowF22",
+        "entity_1": "ent0010",
+        "entity_2": "ent0007",
+        "link_type": "dependency",
+        "source_line": "15",
+        "path_id": "FollowDirN22-to-FollowF22",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-short"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk20",
+        "comment": "link FollowDirN22 to FollowG22",
+        "entity_1": "ent0010",
+        "entity_2": "ent0008",
+        "link_type": "dependency",
+        "source_line": "16",
+        "path_id": "FollowDirN22-to-FollowG22",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "down-medium"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      },
+      {
+        "id": "lnk21",
+        "comment": "link FollowDirN22 to FollowH22",
+        "entity_1": "ent0010",
+        "entity_2": "ent0009",
+        "link_type": "dependency",
+        "source_line": "17",
+        "path_id": "FollowDirN22-to-FollowH22",
+        "polygon_sides": [
+          "end"
+        ],
+        "labels": [
+          "right-full-control"
+        ],
+        "polygons": 1,
+        "ellipses": 0,
+        "rects": 0,
+        "lines": 0,
+        "paths": 1
+      }
+    ],
+    "rust_links": [],
+    "java_note_uids": {
+      "FollowDirN22": "ent0010"
+    },
+    "rust_note_uids": {
+      "FollowDirN22": "ent0010"
+    },
+    "differences": [
+      {
+        "field": "link_count",
+        "java": 8,
+        "rust": 0
+      },
+      {
+        "field": "link_ids",
+        "java": [
+          "lnk12",
+          "lnk14",
+          "lnk15",
+          "lnk16",
+          "lnk18",
+          "lnk19",
+          "lnk20",
+          "lnk21"
+        ],
+        "rust": []
+      }
+    ]
+  }
+]

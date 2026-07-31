@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="314px" preserveAspectRatio="none" style="width:479px;height:314px;background:#FFFFFF;" version="1.1" viewBox="0 0 479 314" width="479px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FollowShort5-->
+<g class="entity" data-qualified-name="FollowShort5" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="128.2314" x="337.18" y="130.49"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="445.4114" y="135.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="443.4114" y="137.49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="443.4114" y="141.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88.2314" x="352.18" y="164.0252">FollowShort5</text>
+</g>
+<!--entity FollowLong5-->
+<g class="entity" data-qualified-name="FollowLong5" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125.9209" x="28.34" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="134.2609" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="132.2609" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="132.2609" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.9209" x="43.34" y="40.5352">FollowLong5</text>
+</g>
+<!--entity FollowReverse5-->
+<g class="entity" data-qualified-name="FollowReverse5" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="144.8018" x="18.9" y="253.98"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="143.7018" y="258.98"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="141.7018" y="260.98"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="141.7018" y="264.98"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104.8018" x="33.9" y="287.5152">FollowReverse5</text>
+</g>
+<g class="entity" data-qualified-name="FollowImplicitN5" data-source-line="4" id="ent0005">
+<path d="M6,141.08 L6,166.3905 L176.5952,166.3905 L176.5952,151.08 L166.5952,141.08 L6,141.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M166.5952,141.08 L166.5952,151.08 L176.5952,151.08 L166.5952,141.08" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="149.5952" x="12" y="158.6484">fresh implicit directions</text>
+</g>
+<!--link FollowImplicitN5 to FollowShort5-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0002" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M176.8281,153.7317 C227.3681,153.7317 284.3281,153.7317 330.6981,153.7317" fill="none" id="FollowImplicitN5-to-FollowShort5" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="336.6981,153.7317,327.6981,149.7317,331.6981,153.7317,327.6981,157.7317,336.6981,153.7317" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124.8901" x="194.8867" y="147.3025">implicit-short-right</text>
+</g>
+<!--link FollowLong5 to FollowImplicitN5-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M91.2981,53.8117 C91.2981,79.4717 91.2981,114.4217 91.2981,134.6417" fill="none" id="FollowLong5-to-FollowImplicitN5" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="91.2981,140.6417,95.2981,131.6417,91.2981,135.6417,87.2981,131.6417,91.2981,140.6417" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124.084" x="92.2957" y="97.0584">implicit-long-down</text>
+</g>
+<!--reverse link FollowImplicitN5 to FollowReverse5-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0004" data-link-type="dependency" data-source-line="7" id="lnk8">
+<path d="M91.2981,172.8217 C91.2981,192.9917 91.2981,227.8017 91.2981,253.4717" fill="none" id="FollowImplicitN5-backto-FollowReverse5" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="91.2981,166.8217,87.2981,175.8217,91.2981,171.8217,95.2981,175.8217,91.2981,166.8217" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="129.708" x="92.2957" y="220.5467">reversed-text-arrow</text>
+</g>
+</g></svg>

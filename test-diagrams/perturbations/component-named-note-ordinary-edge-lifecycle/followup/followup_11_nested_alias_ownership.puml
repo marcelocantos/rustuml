@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+package "Fresh Domain" as FollowDomainP11 {
+  package "Fresh Ledger Area" as FollowLedgerP11 {
+    note as Follow.Audit.N11 #AliceBlue
+      nested fresh payload
+    end note
+    component "Fresh Local One" as FollowLocalA11
+    component "Fresh Local Two" as FollowLocalB11
+    Follow.Audit.N11 -left-> FollowLocalA11 : nested-left
+    FollowLocalB11 -up-> Follow.Audit.N11 : nested-up
+  }
+}
+component "Fresh Root Peer" as FollowRootC11
+Follow.Audit.N11 -right-> FollowRootC11 : cross-owner
+@enduml

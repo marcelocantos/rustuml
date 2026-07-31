@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="229px" preserveAspectRatio="none" style="width:764px;height:229px;background:#FFFFFF;" version="1.1" viewBox="0 0 764 229" width="764px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity FollowInputI9-->
+<g class="entity" data-qualified-name="FollowInputI9" data-source-line="2" id="ent0002">
+<ellipse cx="387.235068" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108.4795" x="332.9953" y="44.5352">Fresh Input Port</text>
+</g>
+<!--entity FollowOutputI9-->
+<g class="entity" data-qualified-name="FollowOutputI9" data-source-line="3" id="ent0003">
+<ellipse cx="690.67" cy="87" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120.5586" x="630.3907" y="117.5352">Fresh Output Port</text>
+</g>
+<!--entity FollowWorkerC9-->
+<g class="entity" data-qualified-name="FollowWorkerC9" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="129.3047" x="7" y="63.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="116.3047" y="68.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="114.3047" y="70.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="114.3047" y="74.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.3047" x="22" y="97.2952">Fresh Worker</text>
+</g>
+<!--entity FreshBracketC9-->
+<g class="entity" data-qualified-name="FreshBracketC9" data-source-line="8" id="ent0010">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145.3008" x="314.58" y="168.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="439.8808" y="173.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="437.8808" y="175.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="437.8808" y="179.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105.3008" x="329.58" y="202.2952">FreshBracketC9</text>
+</g>
+<g class="entity" data-qualified-name="FollowMixedN9" data-source-line="5" id="ent0005">
+<path d="M306.3,74.35 L306.3,99.6605 L468.1608,99.6605 L468.1608,84.35 L458.1608,74.35 L306.3,74.35" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M458.1608,74.35 L458.1608,84.35 L468.1608,84.35 L458.1608,74.35" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="140.8608" x="312.3" y="91.9184">fresh mixed leaf kinds</text>
+</g>
+<!--reverse link FollowInputI9 to FollowMixedN9-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M387.24,29.2342 C387.24,42.0742 387.24,59.3542 387.24,73.9442" fill="none" id="FollowInputI9-backto-FollowMixedN9" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="387.24,23.2342,383.24,32.2342,387.24,28.2342,391.24,32.2342,387.24,23.2342" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="67.7358" x="342.2351" y="53.7449">to-lollipop</text>
+</g>
+<!--reverse link FollowMixedN9 to FollowOutputI9-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk9">
+<path d="M474.62,87.0042 C551.01,87.0042 652.47,87.0042 681.93,87.0042" fill="none" id="FollowMixedN9-backto-FollowOutputI9" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="468.62,87.0042,477.62,91.0042,473.62,87.0042,477.62,83.0042,468.62,87.0042" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92.8535" x="499.1655" y="83.5725">from-interface</text>
+</g>
+<!--link FollowMixedN9 to FreshBracketC9-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0010" data-link-type="dependency" data-source-line="8" id="lnk11">
+<path d="M387.24,99.9442 C387.24,116.9842 387.24,141.2742 387.24,162.4342" fill="none" id="FollowMixedN9-to-FreshBracketC9" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="387.24,168.4342,391.24,159.4342,387.24,163.4342,383.24,159.4342,387.24,168.4342" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="67.4121" x="342.2351" y="139.2781">to-bracket</text>
+</g>
+<!--link FollowWorkerC9 to FollowMixedN9-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency" data-source-line="9" id="lnk12">
+<path d="M136.49,87.0042 C185.47,87.0042 247.38,87.0042 300.03,87.0042" fill="none" id="FollowWorkerC9-to-FollowMixedN9" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="306.03,87.0042,297.03,83.0042,301.03,87.0042,297.03,91.0042,306.03,87.0042" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108.9321" x="167.3047" y="83.5725">from-component</text>
+</g>
+</g></svg>
