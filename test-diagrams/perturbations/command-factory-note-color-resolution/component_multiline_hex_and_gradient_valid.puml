@@ -1,0 +1,15 @@
+@startuml
+component Anchor
+note as SolidSix #123456
+six digit body
+endnote
+note as AlphaEight #1020307F
+eight digit body
+end note
+note as OneNibbleGradient #A-B
+one nibble gradient body
+endnote
+SolidSix --> Anchor
+AlphaEight --> Anchor
+OneNibbleGradient --> Anchor
+@enduml

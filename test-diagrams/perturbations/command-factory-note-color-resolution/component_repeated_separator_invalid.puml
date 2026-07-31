@@ -1,0 +1,5 @@
+@startuml
+component Anchor
+note "repeated separator should reject" as BadRepeat #Red-Blue-Green
+BadRepeat --> Anchor : repeated separators must not create a note identity
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+node Target
+note as TransparentSolid #transparent
+transparent solid body
+endnote
+note as BackgroundSolid #background
+background solid body
+endnote
+note as AutomaticSolid #automatic
+automatic solid body
+endnote
+TransparentSolid --> Target
+BackgroundSolid --> Target
+AutomaticSolid --> Target
+@enduml

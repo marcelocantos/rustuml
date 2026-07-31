@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="77px" preserveAspectRatio="none" style="width:592px;height:77px;background:#FFFFFF;" version="1.1" viewBox="0 0 592 77" width="592px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Target Node-->
+<g class="entity" data-qualified-name="Target" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="443.27,16,453.27,6,567.3315,6,567.3315,42.4883,557.3315,52.4883,443.27,52.4883,443.27,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="557.3315" x2="567.3315" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="443.27" x2="557.3315" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="557.3315" x2="557.3315" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84.0615" x="458.27" y="39.5352">Target Node</text>
+</g>
+<g class="entity" data-qualified-name="AliasNote" data-source-line="3" id="ent0003">
+<path d="M6,16.59 L6,41.9005 A0,0 0 0 0 6,41.9005 L192.2739,41.9005 A0,0 0 0 0 192.2739,41.9005 L192.2739,34.59 L443,29.24 L192.2739,26.59 L192.2739,26.59 L182.2739,16.59 L6,16.59 A0,0 0 0 0 6,16.59" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M182.2739,16.59 L182.2739,26.59 L192.2739,26.59 L182.2739,16.59" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="165.2739" x="12" y="34.1584">archimate alias lower case</text>
+</g>
+</g></svg>

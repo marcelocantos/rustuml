@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="151px" preserveAspectRatio="none" style="width:314px;height:151px;background:#FFFFFF;" version="1.1" viewBox="0 0 314 151" width="314px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="88.5352" x="107.9" y="91.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="176.4352" y="96.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="174.4352" y="98.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="174.4352" y="102.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.5352" x="122.9" y="124.8452">Anchor</text>
+</g>
+<g class="entity" data-qualified-name="TransparentSolid" data-source-line="2" id="ent0003">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L76.55,31.3105 L132.48,91.01 L84.55,31.3105 L134.3325,31.3105 A0,0 0 0 0 134.3325,31.3105 L134.3325,16 L124.3325,6 L6,6 A0,0 0 0 0 6,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M124.3325,6 L124.3325,16 L134.3325,16 L124.3325,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="107.3325" x="12" y="23.5684">transparent solid</text>
+</g>
+<g class="entity" data-qualified-name="BackgroundSolid" data-source-line="3" id="ent0004">
+<path d="M169.78,6 L169.78,31.3105 A0,0 0 0 0 169.78,31.3105 L220.66,31.3105 L172.1,91.01 L228.66,31.3105 L300.55,31.3105 A0,0 0 0 0 300.55,31.3105 L300.55,16 L290.55,6 L169.78,6 A0,0 0 0 0 169.78,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M290.55,6 L290.55,16 L300.55,16 L290.55,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="109.77" x="175.78" y="23.5684">background solid</text>
+</g>
+</g></svg>

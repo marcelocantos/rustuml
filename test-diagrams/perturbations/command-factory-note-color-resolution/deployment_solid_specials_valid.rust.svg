@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="162px" preserveAspectRatio="none" style="width:574px;height:162px;background:#FFFFFF;" version="1.1" viewBox="0 0 574 162" width="574px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Target-->
+<g class="entity" data-qualified-name="Target" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="245.75,101.31,255.75,91.31,329.8281,91.31,329.8281,127.7983,319.8281,137.7983,245.75,137.7983,245.75,101.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="319.8281" x2="329.8281" y1="101.31" y2="91.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="245.75" x2="319.8281" y1="101.31" y2="101.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="319.8281" x2="319.8281" y1="101.31" y2="137.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44.0781" x="260.75" y="124.8452">Target</text>
+</g>
+<g class="entity" data-qualified-name="TransparentSolid" data-source-line="3" id="ent0003">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L109.53,31.3105 L245.39,93.65 L117.53,31.3105 L169.5874,31.3105 A0,0 0 0 0 169.5874,31.3105 L169.5874,16 L159.5874,6 L6,6 A0,0 0 0 0 6,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M159.5874,6 L159.5874,16 L169.5874,16 L159.5874,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="142.5874" x="12" y="23.5684">transparent solid body</text>
+</g>
+<g class="entity" data-qualified-name="BackgroundSolid" data-source-line="6" id="ent0004">
+<path d="M204.78,6 L204.78,31.3105 A0,0 0 0 0 204.78,31.3105 L283.79,31.3105 L287.79,91.01 L291.79,31.3105 L370.8049,31.3105 A0,0 0 0 0 370.8049,31.3105 L370.8049,16 L360.8049,6 L204.78,6 A0,0 0 0 0 204.78,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M360.8049,6 L360.8049,16 L370.8049,16 L360.8049,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="145.0249" x="210.78" y="23.5684">background solid body</text>
+</g>
+<g class="entity" data-qualified-name="AutomaticSolid" data-source-line="9" id="ent0005">
+<path d="M406.11,6 L406.11,31.3105 A0,0 0 0 0 406.11,31.3105 L453.7,31.3105 L330.25,93.11 L461.7,31.3105 L559.4777,31.3105 A0,0 0 0 0 559.4777,31.3105 L559.4777,16 L549.4777,6 L406.11,6 A0,0 0 0 0 406.11,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M549.4777,6 L549.4777,16 L559.4777,16 L549.4777,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="132.3677" x="412.11" y="23.5684">automatic solid body</text>
+</g>
+</g></svg>

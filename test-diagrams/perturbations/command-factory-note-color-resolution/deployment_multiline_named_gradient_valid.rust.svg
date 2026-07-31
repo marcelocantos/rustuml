@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="162px" preserveAspectRatio="none" style="width:210px;height:162px;background:#FFFFFF;" version="1.1" viewBox="0 0 210 162" width="210px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Target-->
+<g class="entity" data-qualified-name="Target" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="58.77,101.31,68.77,91.31,142.8481,91.31,142.8481,127.7983,132.8481,137.7983,58.77,137.7983,58.77,101.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="132.8481" x2="142.8481" y1="101.31" y2="91.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="58.77" x2="132.8481" y1="101.31" y2="101.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="132.8481" x2="132.8481" y1="101.31" y2="137.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44.0781" x="73.77" y="124.8452">Target</text>
+</g>
+<g class="entity" data-qualified-name="GradientOK" data-source-line="3" id="ent0003">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L96.81,31.3105 L100.81,91.01 L104.81,31.3105 L195.6128,31.3105 A0,0 0 0 0 195.6128,31.3105 L195.6128,16 L185.6128,6 L6,6 A0,0 0 0 0 6,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M185.6128,6 L185.6128,16 L195.6128,16 L185.6128,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="168.6128" x="12" y="23.5684">valid named gradient body</text>
+</g>
+</g></svg>
