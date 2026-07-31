@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "mechanism": "rgba-color-normalization",
+  "status": "investigating",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+      "symbols": [
+        "HColorSet#parseColor",
+        "HColorSet#parseSimpleColor"
+      ],
+      "lines": "75-117, 119-153",
+      "role": "Parses eight hex digits in RRGGBBAA order, constructing XColor from byte pairs at offsets 0, 2, 4, and 6."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/awt/XColor.java",
+      "symbols": [
+        "XColor#toSvg"
+      ],
+      "lines": "105-113",
+      "role": "Serializes zero alpha as #00000000, opaque alpha as six-digit RGB, and partial alpha as uppercase RRGGBBAA."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics#setFillColor",
+        "SvgGraphics#fixColor"
+      ],
+      "lines": "516-540",
+      "role": "Maps the canonical zero-alpha sentinel #00000000 to SVG paint none before emitting shape attributes."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "symbols": [
+        "ColorParser#COLOR_REGEXP",
+        "ColorParser#simpleColor"
+      ],
+      "lines": "44-47, 70-80",
+      "role": "Admits hexadecimal entity-color tokens to HColorSet without assigning a separate alpha syntax."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "parse_entity_colors"
+      ],
+      "lines": "2482-2552",
+      "role": "Correctly retains the complete entity color token, including all eight hexadecimal digits."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "resolve_color"
+      ],
+      "lines": "27-46",
+      "role": "Canonicalizes three- and six-digit colors but passes eight-digit input through unchanged, so downstream class paint interprets #80FF0000 as an opaque invalid-looking token instead of RRGGBBAA with zero alpha."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "resolve_flat_or_gradient_start",
+        "render_entity_content"
+      ],
+      "lines": "3704-3708, 9270-9360",
+      "role": "Uses the shared color resolver for inline class background paint; geometry and every non-fill attribute already match the frozen Java output."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/edge-cases/edge_color_hex_with_alpha.puml",
+    "test-diagrams/golden/edge-cases/edge_color_hex_with_alpha.svg"
+  ],
+  "claimed_invariant": "PlantUML hexadecimal colors have one shared canonicalization rule across renderer families. One digit is grayscale, three digits expand RGB nibbles, six digits are opaque RGB, and eight digits are RRGGBBAA. An alpha byte of 00 produces SVG paint none regardless of the RGB bytes; FF serializes as six-digit RGB; intermediate alpha remains an uppercase eight-digit SVG color. The rule belongs to color resolution, not class entities or one fixture.",
+  "causal_divergence": "The frozen source supplies #80FF0000. Java parses bytes as red=0x80, green=0xFF, blue=0x00, alpha=0x00, then XColor.toSvg and SvgGraphics.fixColor reduce the fully transparent paint to none. Rust's shared resolve_color recognizes only three and six hex digits and returns the original eight-digit token, which class rendering emits verbatim as fill=#80FF0000. Both class rectangles are otherwise structurally and geometrically identical, isolating the failure to RGBA byte order and zero-alpha serialization.",
+  "planned_model_change": "Extend the shared color resolver with a small typed hexadecimal parser that follows HColorSet arities and XColor.toSvg serialization. Canonicalize eight-digit RRGGBBAA for every caller, including alpha-zero none and alpha-FF contraction, while retaining existing named, three-digit, and six-digit behavior. Add renamed renderer perturbations and direct resolver tests across zero, partial, and full alpha, mixed case, and differing RGB bytes so no condition is tied to #80FF0000 or class count.",
+  "perturbation_axes": [
+    "alpha bytes 00, 01, 7F, 80, FE, and FF",
+    "different red, green, and blue bytes",
+    "uppercase versus lowercase hexadecimal input",
+    "inline entity background versus shared skinparam color consumers",
+    "one versus three renamed entities",
+    "three-, six-, and eight-digit hexadecimal arities"
+  ],
+  "scope_boundary": "This mechanism owns canonical parsing and SVG serialization of simple hexadecimal colors. It does not alter gradients, named-color lookup, inline channel routing, geometry, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "edge_color_hex_with_alpha matches structurally through render_svg without oracle input.",
+    "Fresh direct tests prove RRGGBBAA byte order, zero-alpha none, opaque-alpha contraction, partial-alpha preservation, and case normalization for values absent from the golden corpus.",
+    "Fresh renamed class inputs prove transparent paint is topology- and label-independent.",
+    "Parser and renderer tests pass and the full no-oracle ratchet has no regression in any family.",
+    "The frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching the literal #80FF0000",
+    "special-casing edge_color_hex_with_alpha or class entity counts",
+    "rewriting rendered SVG after shape emission",
+    "treating eight digits as AARRGGBB",
+    "comparator, eligibility, park-list, or golden changes"
+  ]
+}
