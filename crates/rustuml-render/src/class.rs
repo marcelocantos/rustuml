@@ -30,6 +30,7 @@ use crate::layout_oracle::{
 };
 use crate::style::Theme;
 use crate::style_cascade::{StyleCascade, StyleSignature};
+pub(crate) use crate::svg::translate_qualified_name;
 use crate::svg::{SvgBuilder, normalize_svg_link_title};
 use crate::text_render::{self, TextBase};
 
@@ -1753,24 +1754,6 @@ fn sprite_surface_rgb(color: &str) -> [u8; 3] {
 // ---------------------------------------------------------------------------
 // SVG output helpers
 // ---------------------------------------------------------------------------
-
-/// Translate special characters in an entity label to PlantUML's
-/// `data-qualified-name` form. Java's serialiser replaces every character
-/// that is not an ASCII alphanumeric, `.`, `_`, space, or `-` with `.` —
-/// this includes ASCII punctuation *and* all non-ASCII characters (CJK,
-/// accented Latin, etc.), so e.g. `Ärger` → `.rger` and `客户端` → `...`.
-pub(crate) fn translate_qualified_name(label: &str) -> String {
-    label
-        .chars()
-        .map(|c| {
-            if c.is_ascii_alphanumeric() || c == '.' || c == '_' || c == ' ' || c == '-' {
-                c
-            } else {
-                '.'
-            }
-        })
-        .collect()
-}
 
 /// Build an entity's `data-qualified-name`: the containing-package prefix
 /// joined with the (already translated) short label by dots.
