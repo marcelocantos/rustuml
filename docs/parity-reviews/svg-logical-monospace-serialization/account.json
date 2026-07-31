@@ -1,10 +1,15 @@
 {
   "schema_version": 1,
   "mechanism": "svg-logical-monospace-serialization",
-  "status": "rejected_remediation_accounted_before_code",
+  "status": "remediation_green_pending_independent_rereview",
   "account_revision": "bc9e5362",
   "implementation_revision": "336db230",
   "rejected_review_revision": "666c0b74",
+  "remediation_account_revisions": [
+    "75acf82a",
+    "f40a6d89"
+  ],
+  "remediation_revision": "001e13f2",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java:UFontImpl#getFamily",
@@ -71,6 +76,18 @@
     {
       "command": "cargo test --test golden_no_oracle --release",
       "result": "passed at the ratcheted product baseline of 11174 / 11250"
+    },
+    {
+      "command": "cargo test -p rustuml-render --lib",
+      "result": "824 passed, 0 failed after the inline-family remediation"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle on all six mechanism-specific preserved review inputs plus activity/act_creole_monospace.puml",
+      "result": "all seven SVGs are structurally equivalent after distinguishing inline Courier New, Monospaced, and CSS monospace semantics"
+    },
+    {
+      "command": "cargo test --test golden_no_oracle --release",
+      "result": "passed at the ratcheted product baseline of 11174 / 11250 after remediation"
     }
   ]
 }
