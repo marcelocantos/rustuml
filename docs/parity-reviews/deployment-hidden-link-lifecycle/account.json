@@ -16,19 +16,31 @@
       "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
       "symbols": ["GraphvizImageBuilder.onlyOneLink", "GraphvizImageBuilder.buildImage"],
       "lines": "238-258,313-326",
-      "role": "Keeps invisible links in the diagram/layout collection but excludes them from the semantic single-visible-link count used for preliminary Opale eligibility."
+      "role": "Counts bracket-hidden links during semantic single-link classification because `goHidden` does not make `Link.isInvis()` true; an incident hidden link therefore prevents preliminary Opale eligibility."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
-      "symbols": ["SvekEdge.appendLine", "SvekEdge.drawU"],
-      "lines": "485-610,823-834",
-      "role": "Serializes the invisible edge to Graphviz so it constrains routing, then suppresses its ordinary SVG paint group."
+      "symbols": ["SvekEdge.appendLine", "SvekEdge.solveLine", "SvekEdge.drawU", "SvekEdge.isHidden"],
+      "lines": "411-474,611-620,823-840,1276-1278",
+      "role": "Serializes a bracket-hidden edge as an ordinary Graphviz edge and solves its route; `isHidden` remains separate from `isInvis` for the later paint layer."
     },
     {
       "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
-      "symbols": ["Link.isInvis"],
-      "lines": "177-185",
-      "role": "Exposes invisibility as link semantics independently from link existence, source order and UID."
+      "symbols": ["Link.isInvis", "Link.isHidden"],
+      "lines": "177-185,458-460",
+      "role": "Keeps Graphviz invisibility and paint-layer hidden state as independent semantics; the bracket keyword sets the latter."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/WithLinkType.java",
+      "symbols": ["WithLinkType.goHidden", "WithLinkType.applyOneStyle"],
+      "lines": "49-53,100-102,139-164",
+      "role": "Maps the `hidden` style token to the paint-layer `hidden` flag without changing LinkType or Graphviz visibility."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["SvekResult.drawU"],
+      "lines": "82-101",
+      "role": "Applies `UHidden.HIDDEN` only while drawing a hidden solved edge, preserving its semantic and layout participation."
     }
   ],
   "rust_locations": [
@@ -51,9 +63,9 @@
       "role": "All retained connections already participate in layout and UID order, but every connection is counted for Opale incidence and painted because visibility is absent."
     }
   ],
-  "claimed_invariant": "A valid Deployment `hidden` bracket style creates one explicit invisible DeploymentConnection at the command source line. It retains cleaned endpoints, direction, labels, shaft length and source-order link UID exactly like a visible relation. The edge participates in Graphviz layout and can change other solved routes, but emits no ordinary SVG link group, path, arrowhead or label. Invisible incident links are excluded from GraphvizImageBuilder's preliminary one-visible-link count for a named note; their layout effect can still make the remaining visible edge multi-cubic and revoke Opale later.",
-  "causal_divergence": "Rust treated the arrow shaft as a flat character run and had no link visibility field. Encountering the Java bracket style terminates scanning, so the whole command falls through and disappears. That erases an event rather than making it invisible, changing topology, layout constraints, Opale routing and every later global UID.",
-  "planned_model_change": "Extend Deployment arrow scanning to retain bracket style clauses while deriving arrowhead, direction, line style and length from the bracket-free shaft. Capture whether any style token is `hidden` and store it on DeploymentConnection. Add every hidden edge to layout and UID allocation as today, exclude it from visible Opale incidence, and skip only its SVG paint phase. Preserve labels and endpoint metadata in the AST even though paint is suppressed.",
+  "claimed_invariant": "A valid Deployment `hidden` bracket style creates one explicit paint-hidden DeploymentConnection at the command source line. It retains cleaned endpoints, direction, labels, shaft length and source-order link UID exactly like a visible relation. Unlike Graphviz `style=invis`, the edge is serialized and solved as an ordinary edge and is counted by GraphvizImageBuilder.onlyOneLink, so an incident hidden relation prevents named-note Opale absorption. Only SvekResult's final paint layer suppresses its SVG group, path, arrowhead and label.",
+  "causal_divergence": "Rust treated the arrow shaft as a flat character run and had no paint-hidden link channel. Encountering the Java bracket style terminates scanning, so the whole command falls through and disappears. That erases an event rather than retaining an ordinary solved edge whose paint is hidden, changing topology, layout constraints, Opale classification and every later global UID.",
+  "planned_model_change": "Extend Deployment arrow scanning to retain bracket style clauses while deriving arrowhead, direction, line style and length from the bracket-free shaft. Capture whether any style token is `hidden` and store it on DeploymentConnection. Add every hidden edge to layout, solved route matching, semantic Opale incidence and UID allocation exactly like a visible edge, then skip only its final SVG paint phase. Preserve labels and endpoint metadata in the AST even though paint is suppressed.",
   "perturbation_axes": [
     "hidden relation alone versus visible plus hidden",
     "note incident versus ordinary node-to-node",
@@ -66,15 +78,15 @@
   ],
   "acceptance": [
     "The rejecting visible-plus-hidden probe retains two AST connections and assigns AfterHidden ent0007 while painting no hidden link group.",
-    "The hidden edge participates in layout sufficiently for the visible edge's solved-cubic Opale decision to match Java.",
-    "A lone hidden note link is ignored by the preliminary visible-incidence count but still consumes its link UID.",
+    "The hidden edge participates in layout and semantic incidence so visible-plus-hidden note topology prevents preliminary Opale classification like Java.",
+    "A lone hidden note link counts as the note's single semantic relation, consumes its link UID and is suppressed only at paint time.",
     "Ordinary hidden node-to-node links constrain layout, consume UIDs and paint nothing.",
     "An independent checker attacks style slot, direction, endpoint side, labels, layout direction, incidence and downstream UID order."
   ],
   "forbidden_approaches": [
     "discarding hidden commands after recognizing their syntax",
     "painting the edge and deleting its SVG group post hoc",
-    "counting invisible links as visible Opale incidence",
+    "mapping bracket-hidden to Graphviz `style=invis` or excluding it from Opale incidence",
     "skipping hidden edges in layout or UID allocation",
     "keying behavior to HiddenControlMemo or reviewed source lines"
   ],
