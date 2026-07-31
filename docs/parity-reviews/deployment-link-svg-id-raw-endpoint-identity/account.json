@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-svg-id-raw-endpoint-identity",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "5509e362",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": ["idCommentForSvg", "commentForSvg"],
+      "lines": "104-125",
+      "role": "Builds SVG path IDs and comments directly from each endpoint Entity.getName, preserving punctuation, and inserts only the relation token chosen by link decoration."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java",
+      "symbols": ["put", "fix"],
+      "lines": "57-72",
+      "role": "Applies punctuation projection to group metadata such as data-qualified-name, establishing that this projection is a separate channel from Link.idCommentForSvg."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["own_qname", "render_connection", "deployment_connection_path_base_id"],
+      "lines": "795-798, 3624-3669, 6802-6825",
+      "role": "Reuses UGroup-qualified endpoint names when constructing oracle-assisted and no-oracle link IDs, so punctuation such as colon is projected to a dot."
+    },
+    {
+      "path": "crates/rustuml-render/src/svg.rs",
+      "symbols": ["translate_qualified_name"],
+      "lines": "8-24",
+      "role": "Correctly owns UGroup metadata projection but must not be applied to raw Link path identity."
+    }
+  ],
+  "claimed_invariant": "Deployment link SVG path IDs and link comments are serialized from the raw canonical endpoint entity names. Colon, slash, dot, hyphen, spaces, and other endpoint punctuation remain observable in this channel. Only the relation token (-to-, -backto-, or a bare hyphen) is synthesized. UGroup metadata projection is independently applied to data-qualified-name and data-entity attributes and must not leak into link identity.",
+  "causal_divergence": "After the qualified-name projection fix, Rust's own_qname correctly projects canonical quark codes for group metadata. The same helper is still reused by render_connection and deployment_connection_path_base_id. A valid endpoint named `Relay:East` therefore emits Java's projected data-qualified-name `Relay.East` but incorrectly also emits path id `Relay.East-to-front.door`; Java Link.idCommentForSvg emits raw `Relay:East-to-front.door`. Geometry and visible text are otherwise independent of this identity channel.",
+  "planned_model_change": "Build oracle-assisted edge lookup candidates, path IDs, and comments directly from DeploymentConnection.from/to canonical IDs. Keep own_qname and deployment_qnames exclusively for UGroup metadata. Preserve existing direction/reversal and duplicate-suffix logic. Add a model test asserting that the same colon-bearing endpoint has projected group metadata and a raw path ID.",
+  "perturbation_axes": [
+    "endpoint punctuation: colon, slash, dot, hyphen, spaces, and Unicode punctuation",
+    "link decoration: directed, reversed, undecorated, dotted, and duplicate relations",
+    "ownership: root endpoints, nested endpoints, and cross-container links",
+    "identity form: quoted no-alias, display-first alias, code-first alias, and bare canonical ID"
+  ],
+  "scope_boundary": "This mechanism owns only Deployment link SVG path IDs, oracle edge lookup identity, and link comments. It does not own data-qualified-name projection, parser grammar, model IDs, Graphviz node or edge order, routes, coordinate serialization, collision handling, painted bounds, canvas dimensions, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "Colon- and slash-bearing endpoints retain raw punctuation in path IDs while their data-qualified-name attributes remain projected.",
+    "Forward, reverse, undecorated, and duplicate links preserve existing relation-token and suffix behavior.",
+    "The preserved slash-container probe's path ID matches Java without changing its geometry.",
+    "Renderer and no-oracle family metrics show no new failures.",
+    "A separate checker generates fresh valid identity forms over at least two independent axes and records a verdict."
+  ],
+  "forbidden_approaches": [
+    "special-casing Relay:East, Kubernetes, checker filenames, or any fixture label",
+    "removing UGroup projection from qualified-name metadata",
+    "rewriting completed SVG strings",
+    "changing parser identity, routes, coordinates, canvas dimensions, or comparator controls"
+  ]
+}
