@@ -1,8 +1,10 @@
 {
   "schema_version": 1,
   "mechanism": "stack-round-corner-geometry",
-  "status": "scope_corrected_before_deployment_implementation",
+  "status": "implementation_green_pending_independent_review",
   "initial_account_revision": "fe4f07b4",
+  "scope_correction_revision": "00c4fb8f",
+  "implementation_revision": "2ed0e249",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:Cluster#getStyle and Cluster#drawU",
@@ -48,5 +50,23 @@
     "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.svg",
     "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
     "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.svg"
+  ],
+  "implementation_evidence": [
+    {
+      "command": "cargo test -p rustuml-render stack_",
+      "result": "six stack-related tests passed, including leaf/cluster corner style and zero-path coverage"
+    },
+    {
+      "command": "target/release/examples/diff_one --no-oracle on checker_unscaled_empty_stack_roundcorner_zero, checker_explicit_scale_thick_stack_cluster, checker_dpi_stack_cluster_roundcorner_nonzero, and checker_explicit_scale_folder_stack_file",
+      "result": "all four preserved CLASS and DESCRIPTION stack inputs are structurally equivalent"
+    },
+    {
+      "command": "cargo test -p rustuml-render --lib",
+      "result": "823 passed, 0 failed in the final combined stack state"
+    },
+    {
+      "command": "cargo test --test golden_no_oracle --release",
+      "result": "passed at the ratcheted product baseline of 11174 / 11250"
+    }
   ]
 }
