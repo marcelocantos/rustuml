@@ -201,10 +201,11 @@ pub(crate) fn finalize_painted_resources(svg: &str, source: &str, document_scale
     let mut renames: Vec<(&str, String)> = Vec::new();
     let mut gradient_index = 0;
     let mut finalized_defs = String::new();
-    for resource in resources
-        .iter()
-        .filter(|resource| painted.contains(&resource.id))
-    {
+    for painted_id in &painted {
+        let resource = resources
+            .iter()
+            .find(|resource| resource.id == *painted_id)
+            .expect("painted resource came from parsed definitions");
         let new_id = match resource.kind {
             SvgResourceKind::Filter => resource.id.to_string(),
             SvgResourceKind::Gradient => {
@@ -532,7 +533,7 @@ mod tests {
     }
 
     #[test]
-    fn painted_theme_resources_are_lazy_compacted_in_registration_order() {
+    fn painted_theme_resources_are_lazy_compacted_in_first_paint_order() {
         let source = concat!(
             "@startuml\n",
             "!theme fresh-copper\n",
@@ -574,8 +575,8 @@ mod tests {
             .and_then(|(_, rest)| rest.split_once("</defs>"))
             .map(|(defs, _)| defs)
             .unwrap();
-        let expected_first = format!(r#"id="{shadow}""#);
-        let expected_second = format!(r#"id="{}""#, gradient(0));
+        let expected_first = format!(r#"id="{}""#, gradient(0));
+        let expected_second = format!(r#"id="{shadow}""#);
         let expected_third = format!(r#"id="{}""#, gradient(1));
         assert!(defs.find(&expected_first).unwrap() < defs.find(&expected_second).unwrap());
         assert!(defs.find(&expected_second).unwrap() < defs.find(&expected_third).unwrap());

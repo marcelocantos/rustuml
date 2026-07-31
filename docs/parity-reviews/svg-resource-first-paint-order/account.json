@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "svg-resource-first-paint-order",
-  "status": "account_committed_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -80,9 +80,23 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "757011b6",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "Pending implementation and independent review.",
-    "review_status": "This account predates implementation and does not attest acceptance."
+    "accepted_result": "preproc_theme_materia_class becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,167/11,251 to 11,168/11,251, with preprocessing moving from 285/307 to 286/307 and every other family unchanged.",
+    "model_evidence": "finalize_painted_resources now emits parsed generated resources by the body scan's first-reference sequence rather than using that sequence only as a membership filter over eager definitions. Gradient suffixes are reassigned in first-paint order, fixed shadow ids are retained, and body references are rewritten through the same mapping. The fresh direct test deliberately supplies eager gradient/filter order different from same-shape fill/filter first use, includes unused gradients, and verifies both defs order and compacted references.",
+    "commands": [
+      "cargo test -p rustuml-render --lib painted_theme_resources_are_lazy_compacted_in_first_paint_order -- --nocapture",
+      "cargo build -p rustuml-oracle --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_materia_class.puml",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java runtime are unavailable. This record does not self-attest acceptance."
   }
 }
