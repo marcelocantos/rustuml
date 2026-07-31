@@ -1,0 +1,8 @@
+@startuml
+node "Rack group" as RackGroup {
+  node "Resident service" as ResidentService
+}
+note "Group peer memo" as GroupMemo
+GroupMemo --> RackGroup
+artifact "Created later" as LaterArtifact
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+node "Entry" as Entry
+node "Nested domain" as NestedDomain {
+  node "Focus" as Focus
+  node "Support" as Support
+}
+node "Exit" as Exit
+note "External routed memo" as ExternalMemo
+Entry --> Focus
+Support --> Focus
+Focus --> Exit
+ExternalMemo --> Focus
+artifact "Created later" as LaterArtifact
+@enduml

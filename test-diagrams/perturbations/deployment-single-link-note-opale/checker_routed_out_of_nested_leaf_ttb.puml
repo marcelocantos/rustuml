@@ -1,0 +1,15 @@
+@startuml
+top to bottom direction
+node "Nested source domain" as SourceDomain {
+  note "Internal routed memo" as InternalMemo
+  node "Internal peer" as InternalPeer
+  node "Internal pressure" as InternalPressure
+}
+node "Outside north" as OutsideNorth
+node "Outside south" as OutsideSouth
+OutsideNorth --> InternalPeer
+InternalPressure --> OutsideSouth
+InternalPeer --> OutsideSouth
+InternalMemo --> OutsideSouth
+queue "Created later" as LaterQueue
+@enduml

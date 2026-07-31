@@ -1,0 +1,6 @@
+@startuml
+note "Source-side memo" as SourceMemo
+node "Receiving node" as Receiver
+SourceMemo --> Receiver
+artifact "Created later" as LaterArtifact
+@enduml

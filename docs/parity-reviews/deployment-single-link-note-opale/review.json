@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-single-link-note-opale",
+  "reviewed_at": "2026-08-01T02:40:39+10:00",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker; did not implement the reviewed change",
+    "model": "GPT-5 family (Codex; exact serving variant is not exposed)",
+    "tool": "Codex desktop shell with zsh, OpenJDK 21, Python standard-library XML parsing, xmllint, the pinned Java PlantUML JAR, and the frozen RustUML shipping binary"
+  },
+  "review_context": {
+    "isolated_worktree": "/private/tmp/rustuml-check-deployment-opale",
+    "isolated_branch": "codex/t14-check-deployment-opale",
+    "cargo_or_rustc_invocations": 0,
+    "product_code_changes": 0,
+    "account_changes": 0
+  },
+  "revisions": {
+    "account_commit": "076e0d2ee4d8b3c2437e755247c249724bfe839f",
+    "implementation_commit": "d38c51a8f89b775ac505a059cc41d8904227fdb8",
+    "checker_repo_head_before_review": "d38c51a8f89b775ac505a059cc41d8904227fdb8",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rust_binary": {
+      "path": "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml",
+      "sha256": "083a621c97902313133ebb631794101320b7f6b68b535b67c3bf3f8eace1cd2a",
+      "reported_version": "rustuml 0.7.0",
+      "source_revision": "d38c51a8f89b775ac505a059cc41d8904227fdb8"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML 1.2026.3beta6 / 71806a2",
+      "graphviz_version": "dot 15.0.0 (20260523.1842)"
+    }
+  },
+  "classification": {
+    "verification_class": "reference-comparable converted to decidable semantic SVG checks",
+    "oracle": "Pinned Java PlantUML source and JAR",
+    "loop": "Fresh valid PlantUML inputs rendered through the pinned JAR and exact frozen shipping binary, followed by XML-validity, SVG group/UID, note-outline, side, and leader-tip comparison",
+    "declared_residue": "Generic Graphviz control-point and unrelated sub-threshold placement differences were observed but were not used to reject the mechanism. Three hostile long-route layouts remained one-cubic in Java, so this review did not obtain an independent multi-cubic named-note route."
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git rev-parse 076e0d2e d38c51a8 d38c51a8^",
+    "git rev-parse HEAD  # in /Users/marcelo/work/github.com/plantuml/plantuml",
+    "sed -n '1,260p' docs/parity-reviews/deployment-single-link-note-opale/account.json",
+    "rg -n -A 55 '^## Parity Honesty Rules' AGENTS.md",
+    "git show --format=fuller --find-renames d38c51a8 -- crates/rustuml-render/src/deployment.rs",
+    "sed -n '110,340p' src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sed -n '175,380p' src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+    "sed -n '780,855p' src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '1210,1275p' src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '129,149p;238,262p;313,328p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '4550,4760p;6330,6375p;6580,6675p'",
+    "shasum -a 256 /private/tmp/rustuml-deployment-note-relations/target/debug/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml --version",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <all preserved .puml inputs>",
+    "for f in test-diagrams/perturbations/deployment-single-link-note-opale/*.puml; do n=${f##*/}; n=${n%.puml}; /private/tmp/rustuml-deployment-note-relations/target/debug/rustuml -pipe -tsvg < \"$f\" > \"/private/tmp/rustuml-opale-rust-svg/${n}.svg\" || exit 1; done",
+    "for f in test-diagrams/perturbations/deployment-single-link-note-opale/*.svg /private/tmp/rustuml-opale-rust-svg/*.svg; do xmllint --noout \"$f\" || exit 1; done",
+    "rg -l 'Syntax Error|syntax error|An error has occured|Error line' test-diagrams/perturbations/deployment-single-link-note-opale/*.svg",
+    "python3 -c '<ElementTree semantic scanner: entity qualified-name to UID map, link-group IDs, and first note-path command count for every Java/Rust pair>'",
+    "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml --yaml test-diagrams/perturbations/deployment-single-link-note-opale/checker_group_peer_single_link.puml",
+    "/private/tmp/rustuml-deployment-note-relations/target/debug/rustuml --yaml test-diagrams/perturbations/deployment-single-link-note-opale/checker_visible_plus_hidden_link.puml",
+    "git diff --unified=0 d38c51a8^ d38c51a8 -- crates/rustuml-render/src/deployment.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})'",
+    "git grep -n -E 'Source-side memo|Destination-side memo|Cardinality memo|Nested destination|Two-link memo|Group peer memo|Visible plus hidden|Long routed memo' d38c51a8 -- crates",
+    "shasum -a 256 test-diagrams/perturbations/deployment-single-link-note-opale/*"
+  ],
+  "source_inspection": {
+    "java": [
+      "GraphvizImageBuilder.isOpalisable initially requires non-strict UML, a NOTE entity, exactly one non-invisible incident link, and a non-note peer at lines 133-147 and 313-326.",
+      "GraphvizImageBuilder.buildImage performs an additional peer-node gate at lines 245-258: it calls Bibliotekon.getNode(peer) and marks the SvekEdge Opale only when that result is non-null. A container/group peer has no SvekNode, so its link remains ordinary.",
+      "SvekEdge.solve revokes the optimistic Opale flag when DotPath contains more than one cubic segment; SvekEdge.drawU suppresses the ordinary link group only while the final flag remains true.",
+      "EntityImageNote.drawU reverses the solved path toward the note, selects LEFT, RIGHT, UP, or DOWN by orthogonal distance in that tie order, and embeds the opposite endpoint as the leader tip."
+    ],
+    "rust": [
+      "deployment_note_opale_connection at deployment.rs:6601-6642 checks strict UML, raw incident connection count, note peer kind, edge presence, and bezier_count, but it never rejects a declared container/group peer.",
+      "render_no_oracle collects every accepted connection index into opale_connection_indices, and render_no_oracle_edges returns early for those indices at deployment.rs:4559-4581 and 6353-6358. The missing group-peer gate therefore removes a real Java link event from paint.",
+      "The frozen binary's YAML for checker_group_peer_single_link retains one explicit GroupMemo-to-RackGroup connection, proving the failure is the Opale classifier rather than relation loss.",
+      "The frozen binary's YAML for checker_visible_plus_hidden_link omits the valid HiddenControlMemo -[hidden]- HiddenPeer relation entirely. That lost parser/layout/UID event changes Opale eligibility and downstream identity before the renderer classifier runs."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in the production diff.",
+    "held_out_label_search": "No fresh held-out label appeared under crates at d38c51a8.",
+    "golden_reads": "No include_str!, include_bytes!, test-diagrams, golden, or fixture reference was added.",
+    "output_surgery": "No replace/replacen or coordinate-keyed SVG post-processing was added.",
+    "unexplained_constants": "No new high-precision parity constant or threshold ladder was introduced; the new branch uses the Java-derived bezier_count <= 1 gate and existing named note dimensions."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_source_solid_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_source_solid_ttb.svg",
+      "sha256": {"puml": "692c24fec49f8f41314cb9c044cd42c2b13a872009d8166a9654ee15b5e4c4a0", "java_svg": "e33944cff02bb7a973a66418f823a41be95e981d89b38103cbbbe52ba491150c"},
+      "axes": ["note is source", "top-to-bottom", "solid directed", "later entity UID"],
+      "observed": "Java and Rust both absorb the sole link, embed a bottom-side leader, emit no ordinary link group, and assign LaterArtifact ent0005.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_destination_dotted_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_destination_dotted_ltr.svg",
+      "sha256": {"puml": "8110b1eb1091d2e0308db82d9298772bf8d1f0750ff73d68c64d5225b705e168", "java_svg": "802eeec7071d1a03086e654e5588c712df8e00298cba5faa90f4584f1dabec96"},
+      "axes": ["note is destination", "left-to-right", "dotted directed", "later entity UID"],
+      "observed": "Both absorb the sole link, use the left note side, emit no link group, and assign LaterQueue ent0005; corresponding geometry differs only by 0.01 serialization units.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_source_left_labeled_cardinalities.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_source_left_labeled_cardinalities.svg",
+      "sha256": {"puml": "bab688a7b17b5e1a85c282294094c416c3d8018aa9cde3ee1d4b1ed95df9b7f7", "java_svg": "52d859fe7777caae7c1d595e3088e486f2f4ec7cfb5d59e1b855b5aa7613a72b"},
+      "axes": ["note is source", "left direction hint", "directed", "link label", "tail and head cardinalities"],
+      "observed": "Both suppress the ordinary labeled link, use the top note side, preserve the link's UID event, and assign LaterDatabase ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_nested_destination_reverse_arrow.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_nested_destination_reverse_arrow.svg",
+      "sha256": {"puml": "f41f171cb2c9d7e3ea975d82f53f8c4d91b3d02d49eb6324a4a253fab47d259c", "java_svg": "64fd1da9be904c1fa0adf165c18b1bc16328a88dbd8a32cae1db3fa143c2771a"},
+      "axes": ["nested ownership", "note is logical destination", "reverse arrow", "later nested entity UID"],
+      "observed": "Both emit OuterDomain.NestedMemo once as an Opale note with a bottom-side leader, no link group, and NestedLater ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_nested_source_right_directed.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_nested_source_right_directed.svg",
+      "sha256": {"puml": "28ced20596b9e37733149c9ef5d9f65a9084c73aa98e89375b92ffc38fd61737", "java_svg": "87f7a58b138ee82b9db8bb3656e48e6ac6a31f587308bbdfd8e5f6b65561c55d"},
+      "axes": ["nested ownership", "note is source", "left-to-right", "right direction hint", "link label"],
+      "observed": "Both absorb the connection, use the top note side, and assign ApplicationZone.NestedLater ent0006 despite unrelated vertical placement residue.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_root_dotted_undirected.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_root_dotted_undirected.svg",
+      "sha256": {"puml": "34ce3f558805867986d1610d3ca6588ca7de03a464a5c9273d9ae91ab5c65c10", "java_svg": "3257f44f68f8474aaec49c1b87a947c8fd950d7b0751a92d4eba0bcdb6d99b4b"},
+      "axes": ["root ownership", "note is destination", "dotted undirected", "later entity UID"],
+      "observed": "Both absorb the dotted connection, use the top note side, and assign LaterFile ent0005.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_two_visible_links.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_two_visible_links.svg",
+      "sha256": {"puml": "339ff5262e44450023dab76000fcefa5fbd4415c2390e4caff085d5102b25ed0", "java_svg": "f9512b9a6876bf7812b068aedf22c8f2638a3fb17c1e8bb4050be7bf281d6dbe"},
+      "axes": ["two visible incident links", "mixed source and destination", "solid directed and undirected"],
+      "observed": "Both keep a normal folded note, emit lnk5 and lnk6, and assign LaterArtifact ent0007.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_note_to_note.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_note_to_note.svg",
+      "sha256": {"puml": "c4bcf2ee177064d87826855c938d390c0a06a526d910b1f7bc07d7b6a1086d9c", "java_svg": "4981dd58cb95fd2762358d22d96ff77717bce79a02c1473d725c081e00a46028"},
+      "axes": ["note-to-note peer", "dotted directed", "later entity UID"],
+      "observed": "Both keep two normal folded notes, emit lnk5, and assign LaterArtifact ent0006.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_strictuml_single_link.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_strictuml_single_link.svg",
+      "sha256": {"puml": "f96715f70546c8a35c22ee80593e810a12709c515296651863b36105203a2819", "java_svg": "224c0e0c95e5423335e398f76a7de5c1a8039a0eb8bafdd79ca9bc81d5384d2f"},
+      "axes": ["strict UML", "single directed link", "later entity UID"],
+      "observed": "Both retain a normal folded note and lnk4, with LaterArtifact ent0005.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_group_peer_single_link.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_group_peer_single_link.svg",
+      "sha256": {"puml": "56e67d87a416a5dd4e614141b3ca257b9853131a25ad01ff15f9bc1f4a3a92c1", "java_svg": "c297cc20dda52b95f26b032d2eb7ad8e5b4538673e6bcf924bdefbf485632fec"},
+      "axes": ["root note", "declared container peer", "directed", "nested peer content", "later entity UID"],
+      "observed": "Java keeps GroupMemo normal and emits GroupMemo-to-RackGroup as lnk5 because RackGroup has no SvekNode. Rust classifies the same explicit AST connection as Opale, embeds a leader into GroupMemo, and emits no lnk5. Entity UIDs happen to remain equal, including LaterArtifact ent0006.",
+      "result": "FAIL"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_visible_plus_hidden_link.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_visible_plus_hidden_link.svg",
+      "sha256": {"puml": "111b468469a3d19b06585c5b716f36247cd5367ae26f11a7349012b4c2df9286", "java_svg": "2f5e801c2cb4265f9af87ce473c51ebf19d52b615d80a3c5d1cd3e31df943652"},
+      "axes": ["one visible relation", "one hidden relation", "layout-only edge", "downstream UID"],
+      "observed": "Java retains the hidden relation as a layout and UID event, keeps the note normal, paints visible lnk5, suppresses the hidden link group, and assigns AfterHidden ent0007. Rust omits the hidden relation from YAML, absorbs the remaining visible relation, emits no link group, and assigns AfterHidden ent0006.",
+      "result": "FAIL"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_routed_candidate_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_routed_candidate_ltr.svg",
+      "sha256": {"puml": "4a2b90bb6e73833d6c29ad46d3ff3d3e84ebf73b7c23432bb4b74d52a43d9588", "java_svg": "e1ae4d9de03902fae4070d91fdc5be2bbf4ad3621afbdaf91f916d92b5460160"},
+      "axes": ["left-to-right", "branch convergence", "four competing ordinary routes", "single note route"],
+      "observed": "Java and Rust each emit four ordinary link groups and absorb the note's fifth relation. The Java note route remained one-cubic.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_routed_into_nested_leaf_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_routed_into_nested_leaf_ltr.svg",
+      "sha256": {"puml": "d0868b120585f9743d9c0efd037bce5e0b1af070c19a44ad2856fabe28c28cbc", "java_svg": "961b77bfc06991db532ab6cf1cc76321c18770105042e651925438b09e743bcf"},
+      "axes": ["left-to-right", "external note into nested leaf", "cluster boundary", "three competing ordinary routes"],
+      "observed": "Both emit three ordinary link groups, absorb the note relation, choose the top note side, and preserve LaterArtifact ent0012. The Java note route remained one-cubic.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_routed_out_of_nested_leaf_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_routed_out_of_nested_leaf_ttb.svg",
+      "sha256": {"puml": "d4255a6ebcbff271cf53f075705b3362cb04b1675fc42c91a9c6a913cdb1d1bc", "java_svg": "062fec29f49fc4182d1b3a6681ef00e21207d590916deb8691acdfb9c015acf2"},
+      "axes": ["top-to-bottom", "nested note to external leaf", "cluster boundary", "three competing ordinary routes"],
+      "observed": "Both emit three ordinary link groups, absorb the note relation, choose the bottom note side, and preserve LaterQueue ent0012. The target-side leader tip tracks the target boundary in both despite unrelated horizontal placement residue; the Java note route remained one-cubic.",
+      "result": "PASS"
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_multicubic_candidate_nested_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-single-link-note-opale/checker_multicubic_candidate_nested_ltr.svg",
+      "sha256": {"puml": "fc4c7c2cb55b6a410bbd8b9ff9fcd1023a9a30feaf1e944046b1eb8ad30f82d2", "java_svg": "bcd3d1a4ebc4ed9e2321ddde198c75f3fa62aa898541fba7336cb2fb67882da8"},
+      "axes": ["left-to-right", "nested note", "long route across three ranks", "cluster boundary"],
+      "observed": "Both emit the three chain links, absorb the note-to-FarTarget relation, use the right note side, and preserve LaterArtifact ent0012. The deliberately long Java route still solved as one cubic, so it is not an independent multi-cubic control.",
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "summary": "Rust wrongly marks a named note linked to a declared container as Opale.",
+      "causal_evidence": "Java's buildImage requires Bibliotekon.getNode(peer) to be non-null before handing an edge to EntityImageNote. A group peer has a Cluster rather than a SvekNode. Rust checks only whether the peer is another named note, then maps the group to a cluster endpoint proxy and suppresses the real relation.",
+      "counterexample": "checker_group_peer_single_link.puml",
+      "observable_divergence": "Java: normal note plus visible lnk5. Rust: leader-bearing note and no link group."
+    },
+    {
+      "severity": "high",
+      "summary": "A valid hidden relation is lost before Opale classification, changing layout/paint and downstream UID identity.",
+      "causal_evidence": "Java retains HiddenControlMemo -[hidden]- HiddenPeer as an invisible layout/link event. The frozen Rust YAML omits it, so deployment_note_opale_connection sees only one incident relation and the UID model never allocates the hidden link event.",
+      "counterexample": "checker_visible_plus_hidden_link.puml",
+      "observable_divergence": "Java paints visible lnk5 with a normal note and assigns AfterHidden ent0007; Rust absorbs the visible relation and assigns AfterHidden ent0006."
+    },
+    {
+      "severity": "informational",
+      "summary": "The positive controls support the implementation's central endpoint and side-selection model.",
+      "evidence": "Across source/destination, top-to-bottom/left-to-right, dotted/solid/directed, root/nested, labels/cardinalities, note-to-note, two-link, and strict-UML probes, Java and Rust agree on ordinary-link presence, Opale outline topology, side selection, and entity/link UID progression."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped logic, golden-data read, output surgery, or unexplained parity constant was found.",
+      "evidence": "Production-diff and held-out-label searches were clean."
+    }
+  ],
+  "verdict": "REJECTED"
+}

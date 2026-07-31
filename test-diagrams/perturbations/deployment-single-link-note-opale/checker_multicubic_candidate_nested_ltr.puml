@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+node "Source domain" as LongSourceDomain {
+  note "Long routed memo" as LongRoutedMemo
+  node "Anchor" as LongAnchor
+}
+node "First hop" as FirstHop
+node "Second hop" as SecondHop
+node "Far target" as FarTarget
+LongAnchor --> FirstHop
+FirstHop --> SecondHop
+SecondHop --> FarTarget
+LongRoutedMemo --> FarTarget
+artifact "Created later" as LaterArtifact
+@enduml

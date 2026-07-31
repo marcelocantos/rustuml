@@ -1,0 +1,7 @@
+@startuml
+note "First memo" as FirstMemo
+note "Second memo" as SecondMemo
+node "Dispatch anchor" as DispatchAnchor
+FirstMemo ..> SecondMemo
+artifact "Created later" as LaterArtifact
+@enduml

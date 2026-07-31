@@ -1,0 +1,8 @@
+@startuml
+node "Outer domain" as OuterDomain {
+  note "Nested destination" as NestedMemo
+  node "Nested sender" as NestedSender
+  NestedMemo <-- NestedSender
+  artifact "Nested later" as NestedLater
+}
+@enduml

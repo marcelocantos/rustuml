@@ -1,0 +1,7 @@
+@startuml
+skinparam style strictuml
+note "Strict memo" as StrictMemo
+node "Strict peer" as StrictPeer
+StrictMemo --> StrictPeer
+artifact "Created later" as LaterArtifact
+@enduml

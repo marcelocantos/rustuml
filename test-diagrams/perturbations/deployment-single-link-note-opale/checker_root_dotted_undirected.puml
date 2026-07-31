@@ -1,0 +1,6 @@
+@startuml
+note "Dotted undirected" as DottedMemo
+node "Dotted peer" as DottedPeer
+DottedPeer .. DottedMemo
+file "Created later" as LaterFile
+@enduml

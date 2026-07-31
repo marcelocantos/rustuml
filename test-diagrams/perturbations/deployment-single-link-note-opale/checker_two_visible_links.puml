@@ -1,0 +1,8 @@
+@startuml
+note "Two-link memo" as TwoLinkMemo
+node "First peer" as FirstPeer
+node "Second peer" as SecondPeer
+TwoLinkMemo -- FirstPeer
+SecondPeer --> TwoLinkMemo
+artifact "Created later" as LaterArtifact
+@enduml
