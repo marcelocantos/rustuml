@@ -4424,6 +4424,36 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     if let Some(result) = result.as_mut() {
         adjust_deployment_endpoint_labels(diagram, &dims, result);
     }
+    let opale_note_connections: HashMap<usize, usize> = result
+        .as_ref()
+        .map(|result| {
+            diagram
+                .notes
+                .iter()
+                .enumerate()
+                .filter_map(|(note_index, _)| {
+                    deployment_note_opale_connection(
+                        diagram,
+                        note_index,
+                        &result.edge_paths,
+                        &cluster_endpoint_nodes,
+                        &cluster_ids,
+                    )
+                    .map(|(connection_index, _)| (note_index, connection_index))
+                })
+                .collect()
+        })
+        .unwrap_or_default();
+    let opale_connection_indices: HashSet<usize> =
+        opale_note_connections.values().copied().collect();
+    let edge_paint_bounds = result.as_ref().and_then(|result| {
+        deployment_edge_paint_bounds(
+            diagram,
+            result,
+            &cluster_endpoint_nodes,
+            &opale_connection_indices,
+        )
+    });
     let cluster_frame = deployment_cluster_frame(diagram, &dims, result.as_ref());
     let y_frame = deployment_body_y_frame(
         diagram,
@@ -4431,6 +4461,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         &note_dims,
         &laid_out_note_indices,
         result.as_ref(),
+        edge_paint_bounds,
     );
     let mut body_margin_y = cluster_frame
         .map(|frame| frame.margin_y)
@@ -4442,6 +4473,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         &note_dims,
         &laid_out_note_indices,
         result.as_ref(),
+        edge_paint_bounds,
     );
     let mut body_margin_x = x_frame
         .map(|frame| frame.margin)
@@ -4489,13 +4521,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             })
         })
         .unwrap_or(content_w + BODY_RIGHT_MARGIN);
-    let total_w = deployment_edge_label_x_bounds(diagram, result.as_ref())
-        .map(|(_, max_x)| {
-            // Java `SvekResult.calculateDimension` measures the complete
-            // `SvekEdge`, including the one-pixel-margined center-label box,
-            // with `LimitFinder` before adding its fixed dimension delta.
-            total_w.max(max_x + body_margin_x + SVEK_DIMENSION_DELTA)
-        })
+    let total_w = edge_paint_bounds
+        .map(|bounds| total_w.max(bounds.max_x + body_margin_x + SVEK_DIMENSION_DELTA))
         .unwrap_or(total_w);
     let total_h = y_frame
         .map(|frame| frame.painted_max_y + frame.margin + SVEK_DIMENSION_DELTA)
@@ -4507,6 +4534,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             })
         })
         .unwrap_or(content_h + BODY_BOTTOM_MARGIN);
+    let total_h = edge_paint_bounds
+        .map(|bounds| total_h.max(bounds.max_y + body_margin_y + SVEK_DIMENSION_DELTA))
+        .unwrap_or(total_h);
     let deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
     let warning_height = if deprecated_handwritten {
         deprecated_handwritten_warning_block_height()
@@ -4561,28 +4591,6 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
 
     let no_oracle_uids = build_deployment_no_oracle_uid_model(diagram);
     let id_for_node = &no_oracle_uids.entity_ids;
-    let opale_note_connections: HashMap<usize, usize> = result
-        .as_ref()
-        .map(|result| {
-            diagram
-                .notes
-                .iter()
-                .enumerate()
-                .filter_map(|(note_index, _)| {
-                    deployment_note_opale_connection(
-                        diagram,
-                        note_index,
-                        &result.edge_paths,
-                        &cluster_endpoint_nodes,
-                        &cluster_ids,
-                    )
-                    .map(|(connection_index, _)| (note_index, connection_index))
-                })
-                .collect()
-        })
-        .unwrap_or_default();
-    let opale_connection_indices: HashSet<usize> =
-        opale_note_connections.values().copied().collect();
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
     let sprite_cache = crate::sprite::SpriteCache::from_sprites_scaled_with_colors(
@@ -5429,12 +5437,30 @@ struct DeploymentYFrame {
     painted_max_y: f64,
 }
 
+#[derive(Clone, Copy)]
+struct DeploymentPaintBounds {
+    min_x: f64,
+    min_y: f64,
+    max_x: f64,
+    max_y: f64,
+}
+
+impl DeploymentPaintBounds {
+    fn include_rect(&mut self, min_x: f64, min_y: f64, max_x: f64, max_y: f64) {
+        self.min_x = self.min_x.min(min_x);
+        self.min_y = self.min_y.min(min_y);
+        self.max_x = self.max_x.max(max_x);
+        self.max_y = self.max_y.max(max_y);
+    }
+}
+
 fn deployment_body_y_frame(
     diagram: &DeploymentDiagram,
     dims: &[DeploymentNodeDim],
     note_dims: &[DeploymentNoteDim],
     laid_out_note_indices: &[usize],
     result: Option<&LayoutResult>,
+    edge_paint_bounds: Option<DeploymentPaintBounds>,
 ) -> Option<DeploymentYFrame> {
     let result = result?;
     if !deployment_cluster_ids(diagram, laid_out_note_indices).is_empty() {
@@ -5455,6 +5481,10 @@ fn deployment_body_y_frame(
         let y = (position.y * 100.0).round() / 100.0;
         painted_min_y = painted_min_y.min(y);
         painted_max_y = painted_max_y.max(y + note_dims[note_index].height);
+    }
+    if let Some(bounds) = edge_paint_bounds {
+        painted_min_y = painted_min_y.min(bounds.min_y);
+        painted_max_y = painted_max_y.max(bounds.max_y);
     }
     (painted_min_y.is_finite() && painted_max_y.is_finite()).then_some(DeploymentYFrame {
         // `SvekResult.calculateDimension` moves the `LimitFinder` minimum to
@@ -5678,6 +5708,7 @@ fn deployment_body_x_frame(
     note_dims: &[DeploymentNoteDim],
     laid_out_note_indices: &[usize],
     result: Option<&LayoutResult>,
+    edge_paint_bounds: Option<DeploymentPaintBounds>,
 ) -> Option<DeploymentXFrame> {
     let result = result?;
     if !deployment_cluster_ids(diagram, laid_out_note_indices).is_empty() {
@@ -5702,42 +5733,9 @@ fn deployment_body_x_frame(
         painted_min_x = painted_min_x.min(x);
         painted_max_x = painted_max_x.max(x + note_dims[note_index].width);
     }
-    // Java `SvekResult.calculateDimension` delegates to
-    // `TextBlockUtils.getMinMax`; `LimitFinder.drawDotPath` includes every
-    // solved cubic control point, including routes that bend beyond all
-    // entity rectangles.
-    for (conn_index, conn) in diagram.connections.iter().enumerate() {
-        if conn.hidden {
-            continue;
-        }
-        let (layout_from, layout_to, _) = deployment_connection_layout(conn);
-        let matching_index = diagram.connections[..conn_index]
-            .iter()
-            .filter(|previous| {
-                let (previous_from, previous_to, _) = deployment_connection_layout(previous);
-                previous_from == layout_from && previous_to == layout_to
-            })
-            .count();
-        let Some(edge) = result
-            .edge_paths
-            .iter()
-            .filter(|edge| {
-                deployment_layout_endpoint_matches(&edge.from, layout_from)
-                    && deployment_layout_endpoint_matches(&edge.to, layout_to)
-            })
-            .nth(matching_index)
-        else {
-            continue;
-        };
-        for &(x, _) in &edge.points {
-            let x = (x * 100.0).round() / 100.0;
-            painted_min_x = painted_min_x.min(x);
-            painted_max_x = painted_max_x.max(x);
-        }
-    }
-    if let Some((min_x, max_x)) = deployment_edge_label_x_bounds(diagram, Some(result)) {
-        painted_min_x = painted_min_x.min(min_x);
-        painted_max_x = painted_max_x.max(max_x);
+    if let Some(bounds) = edge_paint_bounds {
+        painted_min_x = painted_min_x.min(bounds.min_x);
+        painted_max_x = painted_max_x.max(bounds.max_x);
     }
     painted_min_x.is_finite().then_some(DeploymentXFrame {
         // `LimitFinder.drawUPolygon` expands polygon bounds by 10px on both
@@ -5748,44 +5746,52 @@ fn deployment_body_x_frame(
     })
 }
 
-fn deployment_edge_label_x_bounds(
+fn deployment_edge_paint_bounds(
     diagram: &DeploymentDiagram,
-    result: Option<&LayoutResult>,
-) -> Option<(f64, f64)> {
-    let result = result?;
-    let mut painted_min_x = f64::INFINITY;
-    let mut painted_max_x = f64::NEG_INFINITY;
+    result: &LayoutResult,
+    cluster_endpoint_nodes: &HashMap<String, String>,
+    opale_connection_indices: &HashSet<usize>,
+) -> Option<DeploymentPaintBounds> {
+    let mut bounds = DeploymentPaintBounds {
+        min_x: f64::INFINITY,
+        min_y: f64::INFINITY,
+        max_x: f64::NEG_INFINITY,
+        max_y: f64::NEG_INFINITY,
+    };
     for (conn_index, conn) in diagram.connections.iter().enumerate() {
-        if conn.hidden {
+        // `SvekEdge.drawU` returns before drawing an edge handed to the Opale
+        // note renderer, so that edge has no independent LimitFinder pass.
+        if opale_connection_indices.contains(&conn_index) {
             continue;
         }
-        let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
-        let matching_index = diagram.connections[..conn_index]
-            .iter()
-            .filter(|previous| {
-                let (previous_from, previous_to, _) = deployment_connection_layout(previous);
-                previous_from == layout_from && previous_to == layout_to
-            })
-            .count();
-        let Some(edge) = result
-            .edge_paths
-            .iter()
-            .filter(|edge| {
-                deployment_layout_endpoint_matches(&edge.from, layout_from)
-                    && deployment_layout_endpoint_matches(&edge.to, layout_to)
-            })
-            .nth(matching_index)
-        else {
+        let (_, _, reversed) = deployment_connection_layout(conn);
+        let Some(edge) = deployment_connection_edge(
+            diagram,
+            conn_index,
+            &result.edge_paths,
+            cluster_endpoint_nodes,
+        ) else {
             continue;
         };
+        // `LimitFinder.drawDotPath` measures the solved route even under
+        // `UHidden`; hidden affects only the later SVG driver.
+        for &(x, y) in &edge.points {
+            let x = (x * 100.0).round() / 100.0;
+            let y = (y * 100.0).round() / 100.0;
+            bounds.include_rect(x, y, x, y);
+        }
         if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
             // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
             // Graphviz solves their origin from an integer-truncated placeholder,
             // then `LimitFinder` sees the original renderer width when drawing.
             let x = (label.x * 100.0).round() / 100.0;
-            painted_min_x = painted_min_x.min(x);
-            painted_max_x =
-                painted_max_x.max(x + text_render::measure(label_text, 13.0, false) + 2.0);
+            let y = (label.y * 100.0).round() / 100.0;
+            bounds.include_rect(
+                x,
+                y,
+                x + text_render::measure(label_text, 13.0, false) + 2.0,
+                y + text_render::label_height(label_text, 13.0) + 2.0,
+            );
         }
         let (tail_text, head_text) = if reversed {
             (conn.head_label.as_deref(), conn.tail_label.as_deref())
@@ -5799,20 +5805,16 @@ fn deployment_edge_label_x_bounds(
             // `manageCollision` runs after Graphviz parsing, so its moved
             // position is not serialized through dot a second time.
             let x = position.x;
-            painted_min_x = painted_min_x.min(x);
-            painted_max_x = painted_max_x.max(x + text_render::measure(text, 13.0, false));
+            let y = position.y;
+            bounds.include_rect(
+                x,
+                y,
+                x + text_render::measure(text, 13.0, false),
+                y + text_render::label_height(text, 13.0),
+            );
         }
     }
-    painted_min_x
-        .is_finite()
-        .then_some((painted_min_x, painted_max_x))
-}
-
-fn deployment_layout_endpoint_matches(layout_endpoint: &str, logical_endpoint: &str) -> bool {
-    layout_endpoint == logical_endpoint
-        || layout_endpoint
-            .strip_prefix("__svek_group_endpoint_")
-            .is_some_and(|endpoint| endpoint == logical_endpoint)
+    bounds.min_x.is_finite().then_some(bounds)
 }
 
 fn adjust_deployment_endpoint_labels(
@@ -5897,15 +5899,20 @@ fn adjust_deployment_endpoint_labels(
         moved((min + max) / 2.0)
     };
 
-    for conn in &diagram.connections {
-        if conn.hidden {
-            continue;
-        }
+    for (conn_index, conn) in diagram.connections.iter().enumerate() {
         let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
+        let matching_index = diagram.connections[..conn_index]
+            .iter()
+            .filter(|previous| {
+                let (previous_from, previous_to, _) = deployment_connection_layout(previous);
+                previous_from == layout_from && previous_to == layout_to
+            })
+            .count();
         let Some(edge) = result
             .edge_paths
             .iter_mut()
-            .find(|edge| edge.from == layout_from && edge.to == layout_to)
+            .filter(|edge| edge.from == layout_from && edge.to == layout_to)
+            .nth(matching_index)
         else {
             continue;
         };
@@ -8190,6 +8197,41 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(!svg.contains(r#"id="lnk6""#), "{svg}");
         assert!(
             svg.contains(r#"data-qualified-name="AfterHidden" data-source-line="6" id="ent0007""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn hidden_parallel_relation_still_extends_limit_finder_envelope() {
+        let source = "@startuml\n\
+                      left to right direction\n\
+                      node \"Ingress\" as Ingress\n\
+                      node \"Worker\" as Worker\n\
+                      node \"Auditor\" as Auditor\n\
+                      Ingress --> Worker : first visible\n\
+                      Ingress -[hidden]- Worker : suppressed duplicate\n\
+                      Ingress ..> Worker : second visible\n\
+                      Worker --> Auditor : after duplicate\n\
+                      artifact \"After duplicates\" as AfterDuplicates\n\
+                      @enduml";
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) =
+            rustuml_parser::parse::parse_auto_with_base(source, None).unwrap()
+        else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(
+            svg.contains(r#"style="width:697px;height:166px;background:#FFFFFF;""#),
+            "{svg}"
+        );
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 3, "{svg}");
+        assert!(!svg.contains("suppressed duplicate"), "{svg}");
+        assert!(
+            svg.contains(
+                r#"data-qualified-name="AfterDuplicates" data-source-line="9" id="ent0009""#
+            ),
             "{svg}"
         );
     }
