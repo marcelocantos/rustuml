@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+package "First Basin 787" as FirstBasin787 {
+  together {
+    component "Initial Prism 787" as SharedPrism787
+    component "First Marker 787" as FirstMarker787
+  }
+}
+package "Second Basin 787" as SecondBasin787 {
+  together {
+    component "Renamed Prism 787" as SharedPrism787
+    component "Second Marker 787" as SecondMarker787
+  }
+}
+FirstMarker787 -down-> SecondMarker787
+@enduml

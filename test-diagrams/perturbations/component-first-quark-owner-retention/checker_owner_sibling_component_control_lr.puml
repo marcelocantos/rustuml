@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package "Azure Forge 741" as AzureForge741 {
+  component "Shared Helix 741" as SharedHelix741
+  component "Alpha Witness 741" as AlphaWitness741
+}
+package "Copper Harbor 741" as CopperHarbor741 {
+  component "Shared Helix 741" as SharedHelix741
+  component "Beta Witness 741" as BetaWitness741
+}
+AlphaWitness741 -right-> BetaWitness741
+@enduml

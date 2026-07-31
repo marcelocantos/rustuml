@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+package "Emerald Bay 769" as EmeraldBay769 {
+  [FluxPort769] -down-> [BayAnchor769]
+}
+package "Ruby Bay 769" as RubyBay769 {
+  component FluxPort769
+  component "Ruby Anchor 769" as RubyAnchor769
+}
+BayAnchor769 -down-> RubyAnchor769
+@enduml

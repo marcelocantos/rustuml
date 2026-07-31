@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package "Violet Frame 761" as VioletFrame761 {
+  interface [Shared Panel 761] as SharedPanel761
+  [Violet Anchor 761] as VioletAnchor761
+}
+package "Amber Frame 761" as AmberFrame761 {
+  [Shared Panel 761] as SharedPanel761
+  component "Amber Anchor 761" as AmberAnchor761
+}
+VioletAnchor761 -right-> AmberAnchor761
+@enduml

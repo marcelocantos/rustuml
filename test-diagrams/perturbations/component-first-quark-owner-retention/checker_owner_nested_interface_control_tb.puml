@@ -1,0 +1,14 @@
+@startuml
+top to bottom direction
+package "Indigo Campus 751" as IndigoCampus751 {
+  package "Quartz Cell 751" as QuartzCell751 {
+    interface "Shared Gate 751" as SharedGate751
+    component "Inner Probe 751" as InnerProbe751
+  }
+}
+package "Ochre Campus 751" as OchreCampus751 {
+  interface "Shared Gate 751" as SharedGate751
+  component "Outer Probe 751" as OuterProbe751
+}
+SharedGate751 -down-> OuterProbe751
+@enduml

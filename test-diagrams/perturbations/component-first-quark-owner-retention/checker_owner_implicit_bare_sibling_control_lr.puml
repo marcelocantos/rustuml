@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+package "Ivory Pier 793" as IvoryPier793 {
+  SharedSignal793 -right-> IvoryAnchor793
+}
+package "Saffron Pier 793" as SaffronPier793 {
+  SharedSignal793 -right-> SaffronAnchor793
+  component "Saffron Probe 793" as SaffronProbe793
+}
+IvoryAnchor793 -down-> SaffronProbe793
+@enduml
