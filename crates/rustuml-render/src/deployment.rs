@@ -3699,8 +3699,13 @@ struct DeploymentNoteLayout {
     height: f64,
 }
 
-fn deployment_note_layout_id(index: usize) -> String {
-    format!("__deployment_note_{index}")
+fn deployment_note_layout_id(note: &DeploymentNote, index: usize) -> String {
+    // Java named notes are ordinary quark-backed SVEK leaves, so explicit
+    // relations address their code directly. Attached generated notes retain
+    // a private layout id because their GMN identity is allocated later.
+    note.id
+        .clone()
+        .unwrap_or_else(|| format!("__deployment_note_{index}"))
 }
 
 fn deployment_note_dim(note: &DeploymentNote) -> DeploymentNoteDim {
@@ -4235,7 +4240,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             }
             DeploymentSvekLeaf::Note(note_index) => {
                 let dim = note_dims[note_index];
-                let note_id = deployment_note_layout_id(note_index);
+                let note_id = deployment_note_layout_id(&diagram.notes[note_index], note_index);
                 assert!(
                     layout.add_node(&note_id, "", dim.width, dim.height),
                     "DESCRIPTION SVEK plan contains duplicate note {note_id}"
@@ -4303,7 +4308,10 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         if let Some(owner) = note.owner.as_deref()
             && cluster_ids.contains(owner)
         {
-            layout.add_cluster_node(owner, &deployment_note_layout_id(note_index));
+            layout.add_cluster_node(
+                owner,
+                &deployment_note_layout_id(&diagram.notes[note_index], note_index),
+            );
         }
     }
     add_deployment_magma_constraints(&mut layout, diagram, &parent_of, &cluster_ids);
@@ -4312,7 +4320,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         let Some(target) = note.target.as_deref() else {
             continue;
         };
-        let note_id = deployment_note_layout_id(note_index);
+        let note_id = deployment_note_layout_id(note, note_index);
         let layout_target = cluster_endpoint_nodes
             .get(target)
             .map(String::as_str)
@@ -4595,7 +4603,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             render_floating_deployment_note(svg, note, layout, uid);
             return;
         };
-        let note_id = deployment_note_layout_id(layout.note_index);
+        let note_id = deployment_note_layout_id(note, layout.note_index);
         let layout_target = cluster_endpoint_nodes
             .get(target)
             .map(String::as_str)
@@ -5035,7 +5043,7 @@ fn add_deployment_magma_constraints(
                     note.quark_order,
                     note.source_line,
                     1_u8,
-                    deployment_note_layout_id(index),
+                    deployment_note_layout_id(note, index),
                 )
             }),
     );
@@ -5079,7 +5087,7 @@ fn add_deployment_magma_constraints(
                             note.quark_order,
                             note.source_line,
                             1_u8,
-                            deployment_note_layout_id(index),
+                            deployment_note_layout_id(note, index),
                         )
                     }),
             )
@@ -6205,6 +6213,10 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
                     .map_or(own_name.clone(), |owner| format!("{owner}.{own_name}"));
                 let entity_id = format!("ent{next_uid:04}");
                 next_uid += 1;
+                if let Some(id) = note.id.as_ref() {
+                    entity_ids.insert(id.clone(), entity_id.clone());
+                    entity_ids.insert(qualified_name.clone(), entity_id.clone());
+                }
                 note_ids.insert(
                     index,
                     DeploymentNoteUid {
@@ -7809,6 +7821,46 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         );
         assert!(
             !svg.contains(r#"data-qualified-name="InnerLedger""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn named_note_relation_reuses_one_owner_qualified_svek_leaf() {
+        let source = "@startuml\n\
+                      left to right direction\n\
+                      folder \"Arrow Owner\" as ArrowOwner {\n\
+                        note \"relation memo\" as ArrowMemo\n\
+                        database \"Arrow Sink\" as ArrowSink\n\
+                        ArrowMemo --> ArrowSink\n\
+                        actor \"Free Observer\" as FreeObserver\n\
+                      }\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        assert!(!diagram.nodes.iter().any(|node| node.id == "ArrowMemo"));
+        assert_eq!(diagram.notes[0].target, None);
+        assert_eq!(diagram.connections.len(), 1);
+
+        let svg = render(&diagram, &Theme::default());
+        assert_eq!(
+            svg.matches(r#"data-qualified-name="ArrowOwner.ArrowMemo""#)
+                .count(),
+            1,
+            "{svg}"
+        );
+        assert!(!svg.contains(r#"data-qualified-name="ArrowMemo""#), "{svg}");
+        assert!(
+            svg.contains(r#"data-entity-1="ent0003" data-entity-2="ent0004""#),
+            "{svg}"
+        );
+        assert!(svg.contains(r#"id="lnk5""#), "{svg}");
+        assert!(
+            svg.contains(
+                r#"data-qualified-name="ArrowOwner.FreeObserver" data-source-line="6" id="ent0006""#
+            ),
             "{svg}"
         );
     }
