@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-named-note-relation-identity-events",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
+  "triggering_review": "docs/parity-reviews/deployment-owned-note-cluster-membership/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+      "symbols": ["CommandLinkElement.getDummy", "CommandLinkElement.executeArg"],
+      "lines": "216-224,250-291",
+      "role": "Resolves each relation endpoint through the heterogeneous quark context, reuses existing note data before dummy creation, and records the explicit link at its command source position."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.executeInternal"],
+      "lines": "141-163",
+      "role": "Materializes a named note as an ordinary quark-backed leaf that can later be used by CommandLinkElement without changing note kind or ownership."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.printGroups"],
+      "lines": "399-435",
+      "role": "Registers the same named note leaf once and lets explicit links address that SVEK node."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["RE_NOTE_LINK shortcut", "general connection endpoint materialization"],
+      "lines": "703-723,862-925",
+      "role": "The dotted shortcut mutates a floating note into an attachment and discards the relation; the general path searches only DeploymentNode and creates a duplicate ordinary node for a known note id."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_note_layout_id", "build_deployment_no_oracle_uid_model", "render_no_oracle_edges"],
+      "lines": "3702-3704,6020-6095,6235-6305",
+      "role": "Named notes use private index layout ids and their entity ids are absent from the endpoint map, so an explicit DeploymentConnection cannot currently address the existing note leaf."
+    }
+  ],
+  "claimed_invariant": "A Deployment named note and an explicit relation endpoint with the same code are one heterogeneous quark identity. Parsing never creates a DeploymentNode duplicate and never converts the note into an attached note. Every valid shaft style and direction produces a DeploymentConnection at the command source line. SVEK addresses the existing named-note node, the UID model assigns one note entity UID and a later source-order link UID, owner qualification remains unchanged, and the note paints exactly once.",
+  "causal_divergence": "Rust has separate node and note identity inventories. Its general connection path treats a known note as unknown and creates a root DeploymentNode; its special two-dot path avoids duplication by mutating the note into target state, but thereby changes semantic kind, invents a hidden attachment link at note creation time, and erases the explicit relation event. Both failures are consequences of not resolving relation endpoints through one heterogeneous identity model.",
+  "planned_model_change": "Remove the note-link mutation shortcut and parse dotted relations through the ordinary connection path. Resolve raw endpoints against nodes and named notes before dummy-node creation; create a node only when neither inventory owns the id. Use a named note's explicit id as its SVEK layout node id while retaining private generated ids for attached notes. Register named note entity ids for relation metadata. Keep explicit DeploymentConnection source order, style, direction, labels and UID consumption unchanged.",
+  "perturbation_axes": [
+    "named note at source versus target endpoint",
+    "dotted, solid, directed and reverse-directed shafts",
+    "root versus nested owner",
+    "note declared before versus after ordinary endpoint",
+    "simple versus dotted note code",
+    "one versus multiple relations to the same note",
+    "linked and unlinked sibling leaves",
+    "left-to-right versus top-to-bottom"
+  ],
+  "acceptance": [
+    "Every valid named-note relation emits one note entity, no duplicate DeploymentNode, and one explicit link event.",
+    "Ordered qualified-name and UID inventories match Java for the three rejecting held-outs and fresh perturbations.",
+    "Dotted relations no longer set DeploymentNote.target or consume hidden-link UIDs.",
+    "Nested note owner qualification and owner-local cluster registration remain intact.",
+    "An independent checker attacks endpoint side, shaft, depth, declaration order, multiplicity and code punctuation."
+  ],
+  "forbidden_approaches": [
+    "deduplicating SVG output after creating two AST entities",
+    "retaining the relation-as-attachment shortcut for selected shafts",
+    "fixture ids, source-line exceptions, coordinate surgery, comparator or baseline changes",
+    "changing named note ownership to the relation endpoint's owner"
+  ],
+  "declared_residue": [
+    "Sub-threshold two-member placement and unrelated root-cluster placement remain separate layout mechanisms.",
+    "Invalid cross-kind duplicate declarations and Java error-page parity are outside this valid relation mechanism."
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_named_arrow_link_ltr.puml",
+    "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_named_dotted_link_ttb.puml",
+    "test-diagrams/perturbations/deployment-owned-note-cluster-membership/checker_root_named_reverse_arrow_ttb.puml"
+  ]
+}
