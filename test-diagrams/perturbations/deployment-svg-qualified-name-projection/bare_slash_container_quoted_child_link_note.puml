@@ -1,0 +1,8 @@
+@startuml
+cloud zone/prod {
+  artifact "Relay:East"
+}
+queue "Front Door" as front.door
+"Relay:East" --> front.door : transfer
+note on link: path metadata
+@enduml

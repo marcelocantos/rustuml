@@ -1,0 +1,11 @@
+SVG structural differences:
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "tenant-a"), ("data-source-line", "2"), ("id", "ent0002")]
+    actual:   [("class", "cluster"), ("data-qualified-name", "tenant"), ("data-source-line", "2"), ("id", "ent0002")]
+  [7] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "tenant-a.api.one"), ("data-source-line", "3"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "tenant.api.one"), ("data-source-line", "3"), ("id", "ent0003")]
+  [13] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "tenant-a.note.one"), ("data-source-line", "4"), ("id", "ent0004")]
+    actual:   [("class", "entity"), ("data-qualified-name", "tenant.note.one"), ("data-source-line", "4"), ("id", "ent0004")]
+
