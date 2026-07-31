@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "mechanism": "command-factory-note-color-resolution",
-  "status": "corrected_before_followup_code",
+  "status": "corrected_before_second_followup_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-  "rust_revision": "47cfdb4b631b2655b78c892e19e7c8ac113f25b1",
+  "rust_revision": "c5a6884206a81b02adad9bbec44d1e22ffb14963",
   "triggering_review": "docs/parity-reviews/command-factory-note-color-resolution/review.json",
+  "rejecting_followup_review": "docs/parity-reviews/command-factory-note-color-resolution/review-followup.json",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
@@ -28,7 +29,19 @@
       "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
       "symbols": ["ColorTrieNode.INSTANCE", "ColorTrieNode.register", "ColorTrieNode.getColor"],
       "lines": "49-210,225-245",
-      "role": "Defines the case-insensitive named-color inventory, including CSS names and PlantUML ArchiMate aliases."
+      "role": "Defines the case-insensitive named-color inventory. The seven ArchiMate aliases are paintable colors with exact RGB values: BUSINESS FFFFCC, APPLICATION C2F0FF, MOTIVATION CCCCFF, STRATEGY F8E7C0, TECHNOLOGY C9FFC9, PHYSICAL 97FF97 and IMPLEMENTATION FFE0E0."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColor.java",
+      "symbols": ["HColor.toRGB", "HColor.toSvg"],
+      "lines": "66-91",
+      "role": "Separates opaque RGB serialization from SVG serialization that preserves XColor alpha. Legacy gradient creation calls toRGB, while flat drawing passes the alpha-preserving SVG form."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": ["SvgGraphics.createSvgGradient", "SvgGraphics.fillMe"],
+      "lines": "184-196,887-901",
+      "role": "Creates legacy gradient stops from endpoint toRGB values, dropping alpha, and normalizes a flat #RRGGBBAA fill to #RRGGBB plus five-decimal fill-opacity A/255."
     }
   ],
   "rust_locations": [
@@ -63,9 +76,9 @@
       "role": "The no-oracle note painter resolves only flat colors and has no generated gradient registry; transparent/background therefore fall through to ordinary color fallback instead of HColors.none."
     }
   ],
-  "claimed_invariant": "A named-note color is accepted only if the complete suffix passes both Java stages: ColorParser.exp1 recognizes the token and HColorSet.getColor resolves that same token. Inline and multiline commands in Component and Deployment share this rule. Registered names and supported hex forms are parseSimpleColor values and may form two-color gradients. Transparent/background resolve to HColors.none and automatic resolves to HColorAutomagic only as whole parseColor values; none is painted as SVG fill=none, while sentinel gradient endpoints are rejected. Every accepted ordinary or gradient HColor reaches the named-note body and fold paint.",
-  "causal_divergence": "The first Rust parser fix reused one predicate for both whole colors and gradient endpoints, admitting parseColor-only sentinels where Java calls parseSimpleColor. Downstream, Component hard-codes NOTE_FILL and Deployment sends sentinels through a generic flat resolver, so accepted color semantics are discarded: transparent/background become default fills and note gradients are absent from generated resource inventories.",
-  "planned_model_change": "Split whole-color resolution from parseSimpleColor endpoint resolution in the shared named-note parser. Whole colors retain transparent/background/automatic; gradient endpoints accept only registered names and supported hex forms. Carry accepted note colors through the existing generated gradient registries: include named-note colors in Component's inventory and add the same source-derived registry to Deployment. Resolve transparent and background to SVG none in the shared HColor paint helper, and pass each note's flat or gradient fill through every Component and Deployment named-note paint shape without changing geometry or identity.",
+  "claimed_invariant": "A named-note color is accepted only if the complete suffix passes both Java stages: ColorParser.exp1 recognizes the token and HColorSet.getColor resolves that same token. Inline and multiline commands in Component and Deployment share this rule. Registered names, including the seven ArchiMate aliases, and supported hex forms are paintable parseSimpleColor values and may form two-color gradients. Transparent/background resolve to HColors.none and automatic resolves to HColorAutomagic only as whole parseColor values; none is painted as SVG fill=none, while sentinel gradient endpoints are rejected. Flat eight-digit #RRGGBBAA paint preserves alpha as #RRGGBB plus fill-opacity A/255 on every note body and fold path. Legacy two-color gradients serialize each endpoint through HColor.toRGB, so endpoint alpha is intentionally discarded. Every accepted ordinary or gradient HColor reaches the named-note body and fold paint.",
+  "causal_divergence": "The parser and gradient-policy corrections now match Java, but Rust's generic string resolver accepts the ArchiMate names without mapping them and falls back to white. It also forwards eight-digit tokens directly into flat SVG fill attributes and gradient stop-color values. Java resolves aliases to their registered XColor, splits flat RGBA into RGB plus fill-opacity in SvgGraphics.fillMe, and calls toRGB when creating a legacy HColorGradient resource. The parser token is correct; the divergence is the missing structured HColor-to-SVG serialization stage.",
+  "planned_model_change": "Add the seven Java-cited ArchiMate RGB mappings to the shared color resolver. Introduce a note-paint representation that separates flat resolved RGB from optional alpha, emitting a five-decimal fill-opacity attribute alongside every Component and Deployment note body/fold fill. For generated legacy note gradients, normalize eight-digit endpoints through the same HColor RGB projection before deduplication and stop emission, discarding alpha exactly as Java toRGB does. Keep transparent/background none and existing gradient policies/resource order unchanged. The separately reviewed Component ordinary-edge lifecycle owns the multi-link note failure and is not repaired by color branches.",
   "perturbation_axes": [
     "inline versus multiline command",
     "Component versus Deployment consumer",
@@ -74,6 +87,9 @@
     "solid color versus gradient separator and endpoints",
     "whole transparent/background versus the same words as gradient endpoints",
     "flat none paint versus generated named-note gradient resource",
+    "each ArchiMate alias as flat and gradient endpoint with mixed case",
+    "flat eight-digit alpha values 00, 01, 7F, 80, FE and FF",
+    "eight-digit gradient endpoints versus equivalent six-digit endpoint deduplication",
     "multi-channel composite recognized by ColorParser but rejected by CommandFactoryNote resolution",
     "invalid command before versus after declarations and relations"
   ],
@@ -83,6 +99,8 @@
     "Unknown names and malformed gradient endpoints reject the whole command rather than silently dropping only the color.",
     "Whole #transparent and #background notes paint body and fold with fill=none in Component and Deployment.",
     "Accepted named-note gradients register and reference the same source-derived resource mechanism as other painted gradients.",
+    "All seven ArchiMate aliases paint their ColorTrieNode RGB values in flat and gradient notes rather than white fallback.",
+    "Flat eight-digit notes emit six-digit fill plus Java-formatted fill-opacity on body and fold, while gradient stops omit endpoint alpha and deduplicate against equivalent six-digit endpoints.",
     "Existing valid Component and Deployment named-note decoration tests remain green.",
     "An independent checker attacks grammar/resolution boundaries, family, command form, ordering and downstream identity effects."
   ],
@@ -93,6 +111,7 @@
     "maintaining different color rules in Component and Deployment"
   ],
   "declared_residue": [
+    "Component multi-link named-note edges are governed by component-named-note-ordinary-edge-lifecycle and its preserved checker record; color acceptance does not depend on that independent edge-paint fix.",
     "General Colors multi-channel parsing for commands that construct a Colors object remains separate; CommandFactoryNote resolves its captured value as one HColor.",
     "Custom runtime color registration, if introduced, will require replacing the frozen ColorTrieNode inventory with a shared registry.",
     "Whole #automatic remains accepted because Java parseColor returns HColorAutomagic; the reference revision crashes while rendering it, so no normal Java SVG exists to claim as paint parity."
