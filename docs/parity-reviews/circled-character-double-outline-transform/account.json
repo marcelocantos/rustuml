@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "circled-character-double-outline-transform",
   "created": "2026-07-31",
-  "status": "planned",
+  "status": "rejected",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "b39c489a",
   "java_locations": [
@@ -67,6 +67,20 @@
       "derivation": "The R outline retains its complete topology and y coordinates but Rust x coordinates differ by 0.0044-0.0045px throughout the contour. A constant translation of the same outline through a single-precision scale explains the coherent residual; changing the character center or entity layout would move the ellipse or produce larger quarter-pixel deltas."
     }
   ],
+  "experimental_result": {
+    "implementation_revision": "reverted before implementation commit",
+    "observed_result": "Replacing ab_glyph's f32 scale factor with the direct f64 ratio font_size / units_per_em produced byte-identical Rust SVG paths for all four evidence inputs. None became structurally equivalent.",
+    "rejection_reason": "At the default 17px font and 2048 units-per-em, the relevant ratio is exactly representable in binary, so the proposed precision change cannot explain the residual. The causal account is falsified. The arithmetic experiment was reverted completely; no shipping code or baseline change remains.",
+    "next_hypothesis": "Inspect whether Java's logical Monospaced Bold TextLayout selects a different physical font face, outline instance, or UnusedSpace center depending on stereotype construction and font fallback. Derive that model from Java font resolution and normalized outline coordinates before another code change.",
+    "commands": [
+      "cargo test -p rustuml-render centered_character_uses_extracted_awt_centers_at_renamed_sizes --lib",
+      "cargo build --release --example diff_one -p rustuml-oracle",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_spot_letter_G.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_spot_letter_U.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_class_spots.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_stereotype_spot_colors.puml"
+    ]
+  },
   "perturbation_axes": [
     "custom and default spot characters across the printable ASCII range",
     "integer and fractional canvas translations",
