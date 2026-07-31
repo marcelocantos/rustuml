@@ -1,0 +1,8 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+[Anchor] as Anchor
+note "bad order" as Bad.Component #MistyRose <<WrongOrder>>
+Bad.Component ..> Anchor
+@enduml

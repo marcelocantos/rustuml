@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="118px" preserveAspectRatio="none" style="width:537px;height:118px;background:#FFFFFF;" version="1.1" viewBox="0 0 537 118" width="537px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster ComponentDispatchMarker-->
+<g class="cluster" data-qualified-name="ComponentDispatchMarker" data-source-line="1" id="ent0002">
+<rect fill="none" height="97.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="266" x="257.2676" y="7"/>
+<rect fill="none" height="10" style="stroke:#181818;stroke-width:1;" width="15" x="503.2676" y="12"/>
+<rect fill="none" height="2" style="stroke:#181818;stroke-width:1;" width="4" x="501.2676" y="14"/>
+<rect fill="none" height="2" style="stroke:#181818;stroke-width:1;" width="4" x="501.2676" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="197.1006" x="291.7173" y="33.5352">ComponentDispatchMarker</text>
+</g>
+<!--entity ComponentDispatchMarkerInterface-->
+<g class="entity" data-qualified-name="ComponentDispatchMarker.ComponentDispatchMarkerInterface" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="234.5781" x="272.98" y="42"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="487.5581" y="47"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="485.5581" y="49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="485.5581" y="53"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="194.5781" x="287.98" y="75.5352">Component Dispatch Marker</text>
+</g>
+<!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="88.5352" x="7" y="42"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="75.5352" y="47"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="73.5352" y="49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="73.5352" y="53"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.5352" x="22" y="75.5352">Anchor</text>
+</g>
+<g class="entity" data-qualified-name="Métrique.Δelta_7" data-source-line="6" id="ent0005">
+<path d="M130.69,52.59 L130.69,77.9005 L237.8467,77.9005 L237.8467,62.59 L227.8467,52.59 L130.69,52.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M227.8467,52.59 L227.8467,62.59 L237.8467,62.59 L227.8467,52.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="86.1567" x="136.69" y="70.1584">Unicode body</text>
+</g>
+</g></svg>

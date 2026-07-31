@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="179px" preserveAspectRatio="none" style="width:561px;height:179px;background:#FFFFFF;" version="1.1" viewBox="0 0 561 179" width="561px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="45.26,118.31,55.26,108.31,133.7952,108.31,133.7952,144.7983,123.7952,154.7983,45.26,154.7983,45.26,118.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="123.7952" x2="133.7952" y1="118.31" y2="108.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="45.26" x2="123.7952" y1="118.31" y2="118.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="123.7952" x2="123.7952" y1="118.31" y2="154.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.5352" x="60.26" y="141.8452">Anchor</text>
+</g>
+<g class="entity" data-qualified-name="DTag" data-source-line="2" id="ent0003">
+<path d="M208.2,6 L208.2,31.3105 L336.8436,31.3105 L336.8436,16 L326.8436,6 L208.2,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M326.8436,6 L326.8436,16 L336.8436,16 L326.8436,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="107.6436" x="214.2" y="23.5684">tag-only payload</text>
+</g>
+<g class="entity" data-qualified-name="DStereo" data-source-line="3" id="ent0004">
+<path d="M372.1,6 L372.1,31.3105 L546.9545,31.3105 L546.9545,16 L536.9545,6 L372.1,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M536.9545,6 L536.9545,16 L546.9545,16 L536.9545,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="153.8545" x="378.1" y="23.5684">stereotype-only payload</text>
+</g>
+<g class="entity" data-qualified-name="DColor" data-source-line="4" id="ent0005">
+<path d="M202.42,118.9 L202.42,144.2105 L342.6226,144.2105 L342.6226,128.9 L332.6226,118.9 L202.42,118.9" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M332.6226,118.9 L332.6226,128.9 L342.6226,128.9 L332.6226,118.9" fill="#FFE4E1" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="119.2026" x="208.42" y="136.4684">color-only payload</text>
+</g>
+<g class="entity" data-qualified-name="Deployment.Memo_7" data-source-line="5" id="ent0006">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L85.52,31.3105 L89.52,108.05 L93.52,31.3105 L173.0469,31.3105 A0,0 0 0 0 173.0469,31.3105 L173.0469,16 L163.0469,6 L6,6 A0,0 0 0 0 6,6" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M163.0469,6 L163.0469,16 L173.0469,16 L163.0469,6" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="146.0469" x="12" y="23.5684">all decorations payload</text>
+</g>
+</g></svg>

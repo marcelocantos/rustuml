@@ -1,0 +1,105 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode \"Anchor\" as Anchor\nnode \"Outer\" {\n  node \"Inner\" {\n    note as Ledger.Memo_42 $retained <<NestedLedger>> #PaleGreen\n      first body line\n      second body line\n    endnote\n  }\n}\nLedger.Memo_42 ..> Anchor : nested reuse\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Anchor",
+                label: "Anchor",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 1,
+                quark_order: 0,
+            },
+            DeploymentNode {
+                id: "Outer",
+                label: "Outer",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [
+                    "Inner",
+                ],
+                source_line: 2,
+                quark_order: 1,
+            },
+            DeploymentNode {
+                id: "Inner",
+                label: "Inner",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [],
+                source_line: 3,
+                quark_order: 2,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Ledger.Memo_42",
+                to: "Anchor",
+                label: Some(
+                    "nested reuse",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Dashed,
+                length: 2,
+                source_line: 10,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "Ledger.Memo_42",
+                ),
+                target: None,
+                text: "first body line\nsecond body line",
+                color: Some(
+                    "#PaleGreen",
+                ),
+                tags: [
+                    "retained",
+                ],
+                stereotype: Some(
+                    "NestedLedger",
+                ),
+                owner: Some(
+                    "Inner",
+                ),
+                quark_order: 3,
+                position: Right,
+                source_line: 5,
+            },
+        ],
+    },
+)

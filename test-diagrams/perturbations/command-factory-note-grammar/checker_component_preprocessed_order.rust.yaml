@@ -1,0 +1,47 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ComponentDispatchMarker {
+        interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+      }
+      note as Generated.ComponentMemo $generated <<GeneratedLedger>> #Wheat
+        generated component body
+      endnote
+      [Late Anchor] as LateAnchor
+      Generated.ComponentMemo ..> LateAnchor : later reuse
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ComponentDispatchMarkerInterface
+    label: Component Dispatch Marker
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: LateAnchor
+    label: Late Anchor
+    stereotypes: []
+    source_line: 10
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: ComponentDispatchMarker
+    label: ComponentDispatchMarker
+    stereotype: null
+    kind: Component
+    source_line: 1
+    components:
+    - ComponentDispatchMarkerInterface
+    packages: []
+  notes:
+  - id: Generated.ComponentMemo
+    tags:
+    - generated
+    stereotype: GeneratedLedger
+    color: '#Wheat'
+    text: generated component body
+    target: null
+    position: Right
+    source_line: 6

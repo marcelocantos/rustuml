@@ -1,0 +1,90 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ncomponent ComponentDispatchMarker {\n  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface\n}\nnote as Generated.ComponentMemo $generated <<GeneratedLedger>> #Wheat\n  generated component body\nendnote\n[Late Anchor] as LateAnchor\nGenerated.ComponentMemo ..> LateAnchor : later reuse\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        components: [
+            Component {
+                id: "ComponentDispatchMarkerInterface",
+                label: "Component Dispatch Marker",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 2,
+                kind: Component,
+            },
+            Component {
+                id: "LateAnchor",
+                label: "Late Anchor",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 10,
+                kind: Component,
+            },
+        ],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [],
+        connections: [],
+        removed_connections: [],
+        packages: [
+            ComponentPackage {
+                name: "ComponentDispatchMarker",
+                label: "ComponentDispatchMarker",
+                stereotype: None,
+                kind: Component,
+                color: None,
+                source_line: 1,
+                components: [
+                    "ComponentDispatchMarkerInterface",
+                ],
+                packages: [],
+            },
+        ],
+        together: [],
+        notes: [
+            ComponentNote {
+                id: Some(
+                    "Generated.ComponentMemo",
+                ),
+                owner: None,
+                tags: [
+                    "generated",
+                ],
+                stereotype: Some(
+                    "GeneratedLedger",
+                ),
+                color: Some(
+                    "#Wheat",
+                ),
+                text: "generated component body",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 6,
+            },
+        ],
+        removed_notes: [],
+    },
+)

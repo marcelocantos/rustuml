@@ -1,0 +1,8 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+[Anchor] as Anchor
+note "simple reuse payload" as SimpleMemo $audit <<SimpleLedger>> #MistyRose
+SimpleMemo ..> Anchor : simple reuse
+@enduml

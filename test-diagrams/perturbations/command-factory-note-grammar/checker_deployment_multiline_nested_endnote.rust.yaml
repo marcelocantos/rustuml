@@ -1,0 +1,63 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor" as Anchor
+      node "Outer" {
+        node "Inner" {
+          note as Ledger.Memo_42 $retained <<NestedLedger>> #PaleGreen
+            first body line
+            second body line
+          endnote
+        }
+      }
+      Ledger.Memo_42 ..> Anchor : nested reuse
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor
+    label: Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: Outer
+    label: Outer
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - Inner
+    source_line: 2
+    quark_order: 1
+  - id: Inner
+    label: Inner
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children: []
+    source_line: 3
+    quark_order: 2
+  connections:
+  - from: Ledger.Memo_42
+    to: Anchor
+    label: nested reuse
+    arrow_at_end: true
+    style: Dashed
+    source_line: 10
+  notes:
+  - id: Ledger.Memo_42
+    text: |-
+      first body line
+      second body line
+    color: '#PaleGreen'
+    tags:
+    - retained
+    stereotype: NestedLedger
+    owner: Inner
+    quark_order: 3
+    position: Right
+    source_line: 5

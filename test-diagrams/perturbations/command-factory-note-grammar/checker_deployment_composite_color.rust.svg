@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="179px" preserveAspectRatio="none" style="width:214px;height:179px;background:#FFFFFF;" version="1.1" viewBox="0 0 214 179" width="214px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="49.55,118.31,59.55,108.31,138.0852,108.31,138.0852,144.7983,128.0852,154.7983,49.55,154.7983,49.55,118.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="128.0852" x2="138.0852" y1="118.31" y2="108.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="49.55" x2="128.0852" y1="118.31" y2="118.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="128.0852" x2="128.0852" y1="118.31" y2="154.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.5352" x="64.55" y="141.8452">Anchor</text>
+</g>
+<g class="entity" data-qualified-name="Composite.Note" data-source-line="2" id="ent0003">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L89.81,31.3105 L93.81,108.05 L97.81,31.3105 L181.6289,31.3105 A0,0 0 0 0 181.6289,31.3105 L181.6289,16 L171.6289,6 L6,6 A0,0 0 0 0 6,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M171.6289,6 L171.6289,16 L181.6289,16 L171.6289,6" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="154.6289" x="12" y="23.5684">composite color payload</text>
+</g>
+</g></svg>

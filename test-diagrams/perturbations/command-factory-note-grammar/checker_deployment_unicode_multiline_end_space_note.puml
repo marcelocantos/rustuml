@@ -1,0 +1,7 @@
+@startuml
+node "Anchor" as Anchor
+note as Métrique.Δelta_7 $rétention <<UnicodeLedger>> #Thistle
+  Unicode body
+end note
+Métrique.Δelta_7 ..> Anchor : unicode reuse
+@enduml

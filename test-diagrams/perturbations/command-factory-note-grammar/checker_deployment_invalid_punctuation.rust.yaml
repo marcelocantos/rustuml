@@ -1,0 +1,34 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor" as Anchor
+      note "bad code" as Bad-Deployment $audit
+      Bad-Deployment ..> Anchor
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor
+    label: Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: Bad_Deployment
+    label: Bad-Deployment
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 1
+  connections:
+  - from: Bad_Deployment
+    to: Anchor
+    label: null
+    arrow_at_end: true
+    style: Dashed
+    source_line: 3

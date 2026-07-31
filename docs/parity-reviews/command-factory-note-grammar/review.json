@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-grammar",
+  "verdict": "REJECTED",
+  "checked_at": "2026-08-01",
+  "checker": {
+    "identity": "independent Codex adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop terminal"
+  },
+  "revisions": {
+    "rust": "927452a18b24cc49540eea3c0cf51b87a5974b54",
+    "rust_account": "af57c84865bc4467f5c90dde2108193f168663a0",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rust_binary": "/private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml",
+    "rust_binary_sha256": "d78cb402d29f3833a57f3a90659dae2c33abe16e50008f6022f046c0d0a76919"
+  },
+  "provenance_correction": {
+    "reason": "The originally assigned external binary was overwritten after an initial probing pass. Every result from that binary was invalidated and excluded from this review.",
+    "invalidated_binary": "/private/tmp/rustuml-command-note-grammar/target/debug/rustuml",
+    "replacement_binary": "/private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml",
+    "replacement_built_from_exact_checker_worktree": true,
+    "all_probe_svg_and_ast_captures_regenerated": true,
+    "old_binary_used_after_correction": false
+  },
+  "scope": {
+    "account": "docs/parity-reviews/command-factory-note-grammar/account.json",
+    "reviewed_rust": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/component.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-parser/src/diagram/component.rs",
+      "crates/rustuml-parser/src/diagram/deployment.rs"
+    ],
+    "reviewed_java": [
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "src/main/java/net/sourceforge/plantuml/stereo/Stereotag.java",
+      "src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java",
+      "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java"
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD; git branch --show-current; /private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml --version; shasum -a 256 /private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml",
+    "sed -n '62,140p' AGENTS.md; cat docs/parity-reviews/command-factory-note-grammar/account.json",
+    "git show --format=fuller --find-renames --find-copies 927452a18b24cc49540eea3c0cf51b87a5974b54 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/diagram/component.rs crates/rustuml-parser/src/diagram/deployment.rs",
+    "sed and rg inspection of Java CommandFactoryNote, Stereotag, StereotypePattern, ColorParser, and CommandLinkElement",
+    "for each test-diagrams/perturbations/command-factory-note-grammar/*.puml: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe; /private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml -pipe -tsvg; /private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml -pipe --yaml; /private/tmp/rustuml-check-command-note-grammar/target/debug/rustuml -pipe --ast",
+    "xmllint --noout test-diagrams/perturbations/command-factory-note-grammar/*.java.svg test-diagrams/perturbations/command-factory-note-grammar/*.rust.svg",
+    "git diff --check 927452a18b24cc49540eea3c0cf51b87a5974b54^ 927452a18b24cc49540eea3c0cf51b87a5974b54; rg -n -i 'include_str!|golden|fixture|checker_|command-factory-note-grammar|BadColor|SimpleMemo|Component\\.Memo_7' crates/rustuml-parser/src/parse crates/rustuml-parser/src/diagram"
+  ],
+  "cargo_or_rustc_run": false,
+  "verification": {
+    "inputs": 17,
+    "java_svgs": 17,
+    "rust_svgs": 17,
+    "rust_yaml_asts": 17,
+    "rust_debug_asts": 17,
+    "xml_validated_svgs": 34,
+    "valid_controls": "Simple Component references and all ordinary Deployment named-note forms retained code, ordered tags, stereotype, color token, owner/source order, and one note identity.",
+    "fresh_binary_only": true
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_inline_matrix.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_inline_matrix.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_inline_matrix.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_inline_matrix.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_inline_matrix.rust.yaml",
+      "axes": ["Component dispatch", "inline", "simple and dotted codes", "tags/stereotype/color separately and combined", "root ownership", "dotted relation reuse"],
+      "result": "FAIL: Rust retains all four notes and decorations, but its Component AST has connections: [] for the valid Component.Memo_7 relation. Java creates the note and its relation through CommandLinkElement."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_multiline_nested_endnote.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_multiline_nested_endnote.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_multiline_nested_endnote.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_multiline_nested_endnote.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_multiline_nested_endnote.rust.yaml",
+      "axes": ["Component dispatch", "multiline", "nested owner", "dotted code", "tags/stereotype/color", "endnote", "relation reuse"],
+      "result": "FAIL: Rust correctly preserves owner Outer.Inner, body, and decorations, but drops the valid Ledger.Memo_42 relation because the Component endpoint grammar excludes dots."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_unicode_multiline_end_space_note.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_unicode_multiline_end_space_note.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_unicode_multiline_end_space_note.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_unicode_multiline_end_space_note.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_unicode_multiline_end_space_note.rust.yaml",
+      "axes": ["Component dispatch", "multiline", "Unicode code and tag", "end note", "combined decorations", "relation reuse"],
+      "result": "FAIL: Rust keeps the raw Unicode note code and decorations, but its AST has connections: [] for the valid relation. Java emits the relation; its non-ASCII qualified-name normalization is recorded as declared residue and is not itself a rejecting finding."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_composite_color.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_composite_color.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_composite_color.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_composite_color.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_composite_color.rust.yaml",
+      "axes": ["Component dispatch", "inline", "combined decorations", "invalid color resolution"],
+      "result": "FAIL: Java produces its No such color error page; Rust creates Composite.Note and silently retains the unresolved token."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_preprocessed_order.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_preprocessed_order.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_preprocessed_order.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_preprocessed_order.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_preprocessed_order.rust.yaml",
+      "axes": ["Component dispatch", "preprocessor procedure", "multiline", "source order", "dotted relation reuse"],
+      "result": "FAIL: note decorations and source line 6 agree with Java, but the generated dotted-note relation is absent from the Rust AST."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_reordered.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_reordered.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_reordered.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_reordered.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_reordered.rust.yaml",
+      "axes": ["Component dispatch", "invalid color-before-stereotype order"],
+      "result": "Negative control: Rust creates no note or prefix identity, although Java reports a syntax-error page while Rust renders the remaining source."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_punctuation.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_punctuation.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_punctuation.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_punctuation.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_punctuation.rust.yaml",
+      "axes": ["Component dispatch", "invalid code punctuation"],
+      "result": "Negative control: Rust creates no named note or prefix identity; Java reports a syntax-error page."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_single_char_color.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_single_char_color.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_single_char_color.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_single_char_color.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_invalid_single_char_color.rust.yaml",
+      "axes": ["Component dispatch", "inline", "invalid ColorParser token", "relation reuse"],
+      "result": "FAIL: Java reports syntax error for #R; Rust creates BadColor with color #R and a relation to Anchor."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_simple_relation_reuse.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_simple_relation_reuse.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_simple_relation_reuse.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_simple_relation_reuse.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_component_simple_relation_reuse.rust.yaml",
+      "axes": ["Component dispatch", "inline", "simple code", "combined decorations", "relation reuse"],
+      "result": "PASS: one SimpleMemo note, ordered decorations, matching source order, and one relation are retained. This isolates the Component failure to codes accepted by the named-note grammar but rejected by its endpoint grammar."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_inline_matrix.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_inline_matrix.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_inline_matrix.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_inline_matrix.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_inline_matrix.rust.yaml",
+      "axes": ["Deployment dispatch", "inline", "simple and dotted codes", "tags/stereotype/color separately and combined", "relation reuse"],
+      "result": "PASS: all note fields, UID order, and Deployment.Memo_7 relation agree structurally with Java."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_multiline_nested_endnote.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_multiline_nested_endnote.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_multiline_nested_endnote.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_multiline_nested_endnote.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_multiline_nested_endnote.rust.yaml",
+      "axes": ["Deployment dispatch", "multiline", "nested owner", "dotted code", "combined decorations", "endnote", "relation reuse"],
+      "result": "PASS: outer/inner ownership, source order, note identity, decorations, and relation inventory agree structurally with Java."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_unicode_multiline_end_space_note.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_unicode_multiline_end_space_note.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_unicode_multiline_end_space_note.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_unicode_multiline_end_space_note.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_unicode_multiline_end_space_note.rust.yaml",
+      "axes": ["Deployment dispatch", "multiline", "Unicode code and tag", "end note", "combined decorations", "relation reuse"],
+      "result": "PASS for parser identity: Rust preserves raw Unicode code, decorations, source order, and relation. Java SVG metadata folds non-ASCII characters to dots; that separately declared normalization is not a rejecting finding."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_composite_color.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_composite_color.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_composite_color.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_composite_color.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_composite_color.rust.yaml",
+      "axes": ["Deployment dispatch", "inline", "combined decorations", "invalid color resolution"],
+      "result": "FAIL: Java produces No such color while Rust creates Composite.Note and its relation."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_preprocessed_order.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_preprocessed_order.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_preprocessed_order.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_preprocessed_order.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_preprocessed_order.rust.yaml",
+      "axes": ["Deployment dispatch", "preprocessor procedure", "multiline", "source order", "dotted relation reuse"],
+      "result": "PASS: Generated.DeploymentMemo remains first, retains all decorations and source line 3, and is reused by the later relation."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_reordered.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_reordered.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_reordered.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_reordered.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_reordered.rust.yaml",
+      "axes": ["Deployment dispatch", "invalid color-before-stereotype order", "dotted code", "family fallthrough"],
+      "result": "FAIL: Java reports syntax error. Rust rejects the note opener but later creates a Bad_Deployment node and relation from the invalid source line."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_punctuation.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_punctuation.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_punctuation.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_punctuation.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_punctuation.rust.yaml",
+      "axes": ["Deployment dispatch", "invalid code punctuation", "family fallthrough"],
+      "result": "FAIL: Java reports syntax error. Rust creates Bad_Deployment as an ordinary node and connects it to Anchor."
+    },
+    {
+      "path": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_single_char_color.puml",
+      "java_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_single_char_color.java.svg",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_single_char_color.rust.svg",
+      "rust_ast": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_single_char_color.rust.ast",
+      "rust_yaml": "test-diagrams/perturbations/command-factory-note-grammar/checker_deployment_invalid_single_char_color.rust.yaml",
+      "axes": ["Deployment dispatch", "inline", "invalid ColorParser token", "relation reuse"],
+      "result": "FAIL: Java reports syntax error for #R; Rust creates BadColor with color #R and a relation to Anchor."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "The shared color suffix over-accepts tokens Java rejects",
+      "java_mechanism": "CommandFactoryNote delegates the final slot to ColorParser.exp1(), whose COLOR_REGEXP/COLORS_REGEXP grammar is narrower than an arbitrary non-whitespace suffix; execution also resolves the captured value and returns No such color on failure.",
+      "rust_mechanism": "parse::named_note_decorations at parse/mod.rs:47-71 accepts #[^\\s]+ without Java color grammar or resolution.",
+      "evidence": [
+        "checker_component_invalid_single_char_color.puml",
+        "checker_deployment_invalid_single_char_color.puml",
+        "checker_component_composite_color.puml",
+        "checker_deployment_composite_color.puml"
+      ],
+      "impact": "Both families create a named note and relation for #R, and silently render a Java No such color case. This is a parser recognition and product-semantics mismatch."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Component cannot reuse named-note codes admitted by the shared grammar",
+      "java_mechanism": "CommandFactoryNote creates the note quark from its dotted/Unicode CODE; CommandLinkElement cleanId/quarkInContext resolves a later relation endpoint back to that entity.",
+      "rust_mechanism": "parse/component.rs:45-49 restricts RE_DESCRIPTION_CONN bare endpoints to \\w+, while parse/mod.rs:36 and parse/component.rs:710-800 admit dots and Unicode in a named note. The relation does not match and is omitted from the AST.",
+      "evidence": [
+        "checker_component_inline_matrix.puml",
+        "checker_component_multiline_nested_endnote.puml",
+        "checker_component_unicode_multiline_end_space_note.puml",
+        "checker_component_preprocessed_order.puml",
+        "checker_component_simple_relation_reuse.puml"
+      ],
+      "impact": "The simple control succeeds, but every dotted valid Component relation is lost despite the named note being present. This violates the account's relation-reuse invariant; it is distinct from Java's declared Unicode-to-dot SVG metadata normalization."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Deployment invalid-note rejection falls through into synthetic endpoint creation",
+      "java_mechanism": "A malformed CommandFactoryNote command rejects the diagram rather than creating a quark or relation endpoint.",
+      "rust_mechanism": "When the shared note parser returns None, parse/deployment.rs proceeds to its ordinary relation parser, which materializes Bad_Deployment from the later relation line.",
+      "evidence": [
+        "checker_deployment_invalid_reordered.puml",
+        "checker_deployment_invalid_punctuation.puml"
+      ],
+      "impact": "Malformed note syntax changes entity inventory and UID/source ordering instead of rejecting. The account expressly forbids invalid punctuation or reordered decorations from creating identities."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "unexplained_constants_found": false,
+    "evidence": "The implementation diff centralizes grammar and adds AST fields. Its changed product paths contain no golden-data read, include_str!, checker-name, fixture-label, or test-specific branch. The failures come from the Java grammar/data-flow boundary, not fixture fitting."
+  },
+  "non_rejecting_residue": [
+    "Java folds non-ASCII characters in SVG qualified-name metadata while Rust preserves the raw parsed code. This was observed in both families and was not counted as a rejection.",
+    "Styling effects of valid retained note tags/stereotypes remain outside the command-recognition claim and were not used as findings."
+  ],
+  "required_follow_up": "Do not accept this mechanism. Port ColorParser recognition and failure semantics rather than #[^\\s]+; make Component endpoint parsing resolve the same named-note CODE domain as CommandFactoryNote/CommandLinkElement; and prevent Deployment from treating a rejected note declaration as a later ordinary endpoint. Rerun this preserved corpus with a new independent checker."
+}

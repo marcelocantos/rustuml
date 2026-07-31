@@ -1,0 +1,60 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor" as Anchor
+      note "tag-only payload" as DTag $audit $blue-team
+      note "stereotype-only payload" as DStereo <<Ledger>>
+      note "color-only payload" as DColor #MistyRose
+      note "all decorations payload" as Deployment.Memo_7 $audit $blue-team <<AuditLedger>> #LightBlue
+      Deployment.Memo_7 ..> Anchor : reviewed
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor
+    label: Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: Deployment.Memo_7
+    to: Anchor
+    label: reviewed
+    arrow_at_end: true
+    style: Dashed
+    source_line: 6
+  notes:
+  - id: DTag
+    text: tag-only payload
+    tags:
+    - audit
+    - blue-team
+    quark_order: 1
+    position: Right
+    source_line: 2
+  - id: DStereo
+    text: stereotype-only payload
+    stereotype: Ledger
+    quark_order: 2
+    position: Right
+    source_line: 3
+  - id: DColor
+    text: color-only payload
+    color: '#MistyRose'
+    quark_order: 3
+    position: Right
+    source_line: 4
+  - id: Deployment.Memo_7
+    text: all decorations payload
+    color: '#LightBlue'
+    tags:
+    - audit
+    - blue-team
+    stereotype: AuditLedger
+    quark_order: 4
+    position: Right
+    source_line: 5

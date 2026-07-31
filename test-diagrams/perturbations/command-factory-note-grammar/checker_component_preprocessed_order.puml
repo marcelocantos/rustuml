@@ -1,0 +1,13 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+!procedure $emit_component_note()
+note as Generated.ComponentMemo $generated <<GeneratedLedger>> #Wheat
+  generated component body
+endnote
+!endprocedure
+$emit_component_note()
+[Late Anchor] as LateAnchor
+Generated.ComponentMemo ..> LateAnchor : later reuse
+@enduml

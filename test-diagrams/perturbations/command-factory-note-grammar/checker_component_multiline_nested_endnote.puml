@@ -1,0 +1,15 @@
+@startuml
+component ComponentDispatchMarker {
+  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+}
+[Anchor] as Anchor
+package Outer {
+  package Inner {
+    note as Ledger.Memo_42 $retained <<NestedLedger>> #PaleGreen
+      first body line
+      second body line
+    endnote
+  }
+}
+Ledger.Memo_42 ..> Anchor : nested reuse
+@enduml

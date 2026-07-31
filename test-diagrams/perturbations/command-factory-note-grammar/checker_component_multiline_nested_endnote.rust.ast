@@ -1,0 +1,113 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ncomponent ComponentDispatchMarker {\n  interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface\n}\n[Anchor] as Anchor\npackage Outer {\n  package Inner {\n    note as Ledger.Memo_42 $retained <<NestedLedger>> #PaleGreen\n      first body line\n      second body line\n    endnote\n  }\n}\nLedger.Memo_42 ..> Anchor : nested reuse\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        components: [
+            Component {
+                id: "ComponentDispatchMarkerInterface",
+                label: "Component Dispatch Marker",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 2,
+                kind: Component,
+            },
+            Component {
+                id: "Anchor",
+                label: "Anchor",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 4,
+                kind: Component,
+            },
+        ],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [],
+        connections: [],
+        removed_connections: [],
+        packages: [
+            ComponentPackage {
+                name: "ComponentDispatchMarker",
+                label: "ComponentDispatchMarker",
+                stereotype: None,
+                kind: Component,
+                color: None,
+                source_line: 1,
+                components: [
+                    "ComponentDispatchMarkerInterface",
+                ],
+                packages: [],
+            },
+            ComponentPackage {
+                name: "Outer",
+                label: "Outer",
+                stereotype: None,
+                kind: Package,
+                color: None,
+                source_line: 5,
+                components: [],
+                packages: [
+                    ComponentPackage {
+                        name: "Inner",
+                        label: "Inner",
+                        stereotype: None,
+                        kind: Package,
+                        color: None,
+                        source_line: 6,
+                        components: [],
+                        packages: [],
+                    },
+                ],
+            },
+        ],
+        together: [],
+        notes: [
+            ComponentNote {
+                id: Some(
+                    "Ledger.Memo_42",
+                ),
+                owner: Some(
+                    "Outer.Inner",
+                ),
+                tags: [
+                    "retained",
+                ],
+                stereotype: Some(
+                    "NestedLedger",
+                ),
+                color: Some(
+                    "#PaleGreen",
+                ),
+                text: "first body line\nsecond body line",
+                target: None,
+                connection: None,
+                position: Right,
+                source_line: 8,
+            },
+        ],
+        removed_notes: [],
+    },
+)

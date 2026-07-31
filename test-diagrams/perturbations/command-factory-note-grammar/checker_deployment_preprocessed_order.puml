@@ -1,0 +1,10 @@
+@startuml
+!procedure $emit_deployment_note()
+note as Generated.DeploymentMemo $generated <<GeneratedLedger>> #Wheat
+  generated deployment body
+endnote
+!endprocedure
+$emit_deployment_note()
+node "Late Anchor" as LateAnchor
+Generated.DeploymentMemo ..> LateAnchor : later reuse
+@enduml

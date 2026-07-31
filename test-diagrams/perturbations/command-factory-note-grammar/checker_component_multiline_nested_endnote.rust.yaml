@@ -1,0 +1,69 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component ComponentDispatchMarker {
+        interface [Component Dispatch Marker] as ComponentDispatchMarkerInterface
+      }
+      [Anchor] as Anchor
+      package Outer {
+        package Inner {
+          note as Ledger.Memo_42 $retained <<NestedLedger>> #PaleGreen
+            first body line
+            second body line
+          endnote
+        }
+      }
+      Ledger.Memo_42 ..> Anchor : nested reuse
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: ComponentDispatchMarkerInterface
+    label: Component Dispatch Marker
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: Anchor
+    label: Anchor
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections: []
+  packages:
+  - name: ComponentDispatchMarker
+    label: ComponentDispatchMarker
+    stereotype: null
+    kind: Component
+    source_line: 1
+    components:
+    - ComponentDispatchMarkerInterface
+    packages: []
+  - name: Outer
+    label: Outer
+    stereotype: null
+    kind: Package
+    source_line: 5
+    components: []
+    packages:
+    - name: Inner
+      label: Inner
+      stereotype: null
+      kind: Package
+      source_line: 6
+      components: []
+      packages: []
+  notes:
+  - id: Ledger.Memo_42
+    owner: Outer.Inner
+    tags:
+    - retained
+    stereotype: NestedLedger
+    color: '#PaleGreen'
+    text: |-
+      first body line
+      second body line
+    target: null
+    position: Right
+    source_line: 8

@@ -1,0 +1,36 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor" as Anchor
+      note "composite color payload" as Composite.Note $audit <<CompositeLedger>> #back:LightBlue;line.dashed:Red
+      Composite.Note ..> Anchor : composite reuse
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor
+    label: Anchor
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: Composite.Note
+    to: Anchor
+    label: composite reuse
+    arrow_at_end: true
+    style: Dashed
+    source_line: 3
+  notes:
+  - id: Composite.Note
+    text: composite color payload
+    color: '#back:LightBlue;line.dashed:Red'
+    tags:
+    - audit
+    stereotype: CompositeLedger
+    quark_order: 1
+    position: Right
+    source_line: 2
