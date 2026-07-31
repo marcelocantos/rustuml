@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "mechanism": "stack-transparent-rectangle-stroke-state",
-  "status": "account_committed_before_implementation",
+  "status": "implementation_awaiting_independent_review",
+  "account_revision": "26666342",
+  "implementation_revision": "e1ad6ea1",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:USymbolStack#drawQueue",
@@ -37,5 +39,11 @@
   "evidence_inputs": [
     "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml",
     "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.svg"
+  ],
+  "implementation_evidence": "emit_stack_envelope now serializes the existing resolved stroke_width on the HColors.none inset rectangle, while leaving the surrounding path and geometry untouched. The preserved checker input is structurally equivalent through diff_one --no-oracle, and all 819 rustuml-render library tests pass.",
+  "commands": [
+    "cargo test -p rustuml-render --lib",
+    "cargo build --release -p rustuml-oracle --example diff_one",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml"
   ]
 }
