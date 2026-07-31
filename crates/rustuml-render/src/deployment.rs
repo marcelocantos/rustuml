@@ -8414,8 +8414,8 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     #[test]
     fn link_path_identity_stays_raw_while_group_identity_is_projected() {
         let source = "@startuml\n\
-                      component \"Ingress: Canary\"\n\
-                      component \"Archive Sink\" as sink.v2\n\
+                      node \"Ingress: Canary\"\n\
+                      node \"Archive Sink\" as sink.v2\n\
                       \"Ingress: Canary\" --> sink.v2\n\
                       @enduml";
         let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
