@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-magma-semantic-leaf-membership",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "18786c3ae14d782d13c57e9b8c8670033bec9664",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.isStandalone",
+        "CucaDiagram.applySingleStrategy"
+      ],
+      "lines": "713-720,762-793",
+      "role": "Builds each owner's Magma candidates from immediate g.leafs(), excludes link-incident leaves, and applies the three-member gate before any rendering mutation."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": [
+        "Entity.isGroup",
+        "Entity.leafs",
+        "Entity.groups"
+      ],
+      "lines": "375-386,645-663",
+      "role": "Partitions immediate semantic children by groupType versus leafType. Ordinary classes and note entities are leaves; an empty package is still a group while Magma is computed."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder.printGroups"
+      ],
+      "lines": "408-421",
+      "role": "Only during later SVEK construction detects an empty package group, mutates it to LeafType.EMPTY_PACKAGE, and emits it as a renderer node."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+      "symbols": [
+        "GeneralImageBuilder.createEntityImageBlock"
+      ],
+      "lines": "118-119,198-206",
+      "role": "Assigns paint images to NOTE and EMPTY_PACKAGE after semantic ownership and Magma decisions; a renderable node role does not retroactively make an empty package an Entity.leafs() member."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "package_render_model",
+        "svek_node_emission_order"
+      ],
+      "lines": "3894-3982,4820-4984",
+      "role": "Correctly gives direct empty packages EmptyLeaf or SymbolLeaf render roles and emits them as SvekNodeEmission::EmptyPackage nodes."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "add_single_strategy_links"
+      ],
+      "lines": "2919-2978",
+      "role": "Incorrectly derives semantic Magma membership from the broader SVEK emission stream and explicitly admits EmptyPackage beside ordinary entities and standalone notes."
+    }
+  ],
+  "claimed_invariant": "Class Magma membership is derived from the pre-render semantic entity tree: immediate non-group leaves that are not incident to links. Empty packages remain group entities at that phase and never enter Magma, even though SVEK later mutates them into renderer leaf nodes. SVEK emission roles, semantic leaf membership, and SVG painting order are related but distinct inventories.",
+  "causal_divergence": "Rust uses SvekNodeEmission as both the renderer inventory and the source for add_single_strategy_links. Because EmptyPackage is legitimately present in that render inventory, it is also incorrectly counted and constrained by Magma. Java computes Magma first from Entity.leafs(), where the package is still a group, then independently converts the empty group into a paintable node. The rejected held-outs isolate this inventory collapse: ordinary class/note geometry agrees while adding an empty package changes Rust's invisible constraints only.",
+  "planned_model_change": "Keep SvekNodeEmission::EmptyPackage unchanged for layout registration and painting, but remove it from add_single_strategy_links membership. Make that function explicitly project semantic immediate leaves: ordinary entities and standalone floating notes only, partitioned by owner and filtered by link incidence. Preserve the existing three-member gate and SquareMaker edge construction. Add tests where the same empty package remains emitted but does not change the semantic member count or invisible-edge set.",
+  "perturbation_axes": [
+    "two, three, four, and five immediate candidates around the Magma threshold",
+    "ordinary classes and floating notes with versus without one empty package",
+    "root versus nested owner",
+    "descendant leaves versus immediate leaves",
+    "linked and attached-note exclusions",
+    "source-order permutations",
+    "left-to-right versus top-to-bottom direction",
+    "plain versus explicitly symbolized empty packages"
+  ],
+  "acceptance": [
+    "Empty packages remain registered and painted as SVEK nodes but contribute no Magma member or invisible SquareMaker edge.",
+    "The rejected mixed empty-package perturbations converge without changing the correct two-leaf gate or note/class membership.",
+    "Nested descendants, linked classes, and attached notes remain excluded for their independent Java reasons.",
+    "Existing class renderer tests, no-oracle ratchets, and focused semantic-member tests pass.",
+    "An independent checker attacks count, ownership, links, order, direction, and empty-package symbol variants at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "removing empty packages from SVEK emission or painting",
+    "moving empty-package coordinates after Graphviz",
+    "changing the three-member gate or SquareMaker branch formula",
+    "count-specific or direction-specific exceptions",
+    "fixture labels, expected coordinates, comparator changes, or baseline changes"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/class-standalone-leaf-magma-ordering/review.json",
+    "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count3_descendant_exclusion_tb.puml",
+    "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_nested_count4_attached_exclusion_lr.puml",
+    "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count3_mixed_order_lr.puml",
+    "test-diagrams/perturbations/class-standalone-leaf-magma-ordering/checker_root_count5_linked_exclusion_tb.puml"
+  ]
+}
