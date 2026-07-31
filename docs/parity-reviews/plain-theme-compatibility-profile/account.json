@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "mechanism": "plain-theme-compatibility-profile",
+  "status": "investigating",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/tim/TContext.java",
+      "symbols": [
+        "TContext#executeOneLineNotSafe",
+        "TContext#executeTheme"
+      ],
+      "lines": "396, 725-750",
+      "role": "Executes a requested theme body at the directive position, before subsequent user declarations."
+    },
+    {
+      "path": "src/main/resources/themes/puml-theme-plain.puml",
+      "symbols": [
+        "plain root style",
+        "plain class and circled-character skinparams"
+      ],
+      "lines": "15-43, 65-72, 88-105, 150-169",
+      "role": "Declares the plain theme's white background, black foreground and line color, Verdana text, one-pixel root line thickness, five-pixel root margin, class paint, and circled-character behavior."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": [
+        "SkinParam#setParam",
+        "SkinParam#getCircledCharacterRadius"
+      ],
+      "lines": "211-240, 526-532",
+      "role": "Converts each executed legacy skinparam into the shared style builder while retaining non-style values such as the circled-character radius."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "symbols": [
+        "FromSkinparamToStyle#FromSkinparamToStyle"
+      ],
+      "lines": "174-199",
+      "role": "Maps class background, border, font, and thickness keys to sparse class style properties."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/StyleStorage.java",
+      "symbols": [
+        "StyleStorage#computeMergedStyle"
+      ],
+      "lines": "102-129",
+      "role": "Merges the root and class declarations by signature and property instead of applying a dense renderer palette."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/preprocess/themes.rs",
+      "symbols": [
+        "get_theme_source"
+      ],
+      "lines": "27-72",
+      "role": "Excludes the upstream plain theme source for licensing and currently treats the known name exactly like an unknown theme."
+    },
+    {
+      "path": "crates/rustuml-parser/src/preprocess/mod.rs",
+      "symbols": [
+        "PreprocessContext#try_theme"
+      ],
+      "lines": "1834-1922",
+      "role": "Replays bundled theme bodies through the ordinary preprocessor and preserves their directive epoch, but emits only a marker when plain has no bundled source."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/style.rs",
+      "symbols": [
+        "extract_style_program",
+        "convert_skinparam"
+      ],
+      "lines": "151-209, 974-1047",
+      "role": "Already reconstructs theme execution order and converts sparse CSS and skinparams into an ordered StyleProgram."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "class_document_margin",
+        "ClassFontOverrides#from_skinparams"
+      ],
+      "lines": "3116-3124, 3230-3390",
+      "role": "Contains renderer-local checks for the plain theme name that recover only Verdana, radius nine, and the class spot colors. Root margin, class paint, border thickness, and arrow color therefore retain unrelated built-in defaults."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/edge-cases/edge_theme_plain.puml",
+    "test-diagrams/golden/edge-cases/edge_theme_plain.svg"
+  ],
+  "claimed_invariant": "A known but source-excluded theme remains a theme execution, not an unknown-name renderer hint. Its independently encoded behavioral declarations enter the same ordered theme-body stream as bundled themes, at the !theme directive epoch. Earlier user declarations are replaced property by property by the theme; later user declarations replace the theme. Renderers consume the resulting StyleProgram and ordinary skinparam metadata without branching on the theme name.",
+  "causal_divergence": "Java executes the plain theme and resolves its root and class declarations through the normal style cascade. Rust deliberately omits the upstream source for licensing, leaving only __theme plain. The class renderer recognizes that marker and supplies three isolated defaults, so icon radius, icon paint, and text family match, while the class body remains #F1F1F1 with a #181818 half-pixel border at the default envelope origin. The frozen Java output instead has white class bodies, black one-pixel borders and arrows, and a five-pixel root document margin. The coherent displacement and paint cluster comes from one missing theme execution, not independent geometry constants.",
+  "planned_model_change": "Add a general compatibility-profile path beside bundled theme-source lookup. Encode the plain profile from semantic palette and metric fields under RustUML's own Apache-2.0 source, generate sparse root and class declarations from those fields, and replay the generated body through the existing theme-tail mechanism. Preserve __theme as availability metadata, but remove renderer-local plain-name defaults once the ordinary style and skinparam paths supply them. Exercise the profile before and after user CSS and legacy skinparam declarations so source order, entity snapshots, and final link styling remain causal.",
+  "perturbation_axes": [
+    "renamed class labels and relationship labels",
+    "one, two, and three class topologies",
+    "user class paint and border declarations before versus after !theme plain",
+    "user root margin and line declarations before versus after !theme plain",
+    "CSS syntax versus legacy skinparam syntax",
+    "plain versus an unknown theme name"
+  ],
+  "scope_boundary": "This mechanism owns semantic loading and ordered replay for the known source-excluded plain theme profile. It does not bundle or reproduce the upstream theme file, alter permissively licensed themes, make unknown names load plain, change comparator tolerance, edit golden data, or key behavior to fixture labels, graph size, source coordinates, or rendered coordinates.",
+  "acceptance": [
+    "edge_theme_plain matches structurally through render_svg without oracle input.",
+    "Fresh valid class perturbations prove that later user declarations override the profile and that the profile overrides earlier declarations.",
+    "A fresh unknown theme remains unstyled and cannot acquire the plain profile.",
+    "Renderer code no longer tests the plain theme name.",
+    "Parser and renderer tests pass and the full no-oracle ratchet has no regression in any family.",
+    "The frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "copying or embedding the GPL-inherited upstream theme source",
+    "retaining or adding renderer branches on __theme plain",
+    "tuning class coordinates, dimensions, or colors directly against edge_theme_plain",
+    "fixture-label or topology-count branches",
+    "post-hoc SVG string surgery",
+    "comparator, eligibility, park-list, or golden changes"
+  ]
+}
