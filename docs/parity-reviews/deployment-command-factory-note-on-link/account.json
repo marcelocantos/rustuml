@@ -108,9 +108,26 @@
       ],
       "lines": "85-127",
       "role": "Registers both CommandFactoryNoteOnLink forms for the shared DESCRIPTION factory used by Component and Deployment diagrams."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": [
+        "PSystemBuilder.createPSystem",
+        "PSystemBuilder.isOk"
+      ],
+      "lines": "203-272",
+      "role": "Tries every start-compatible factory in registration order and accepts the first factory that consumes the complete source without returning an error; note-on-link therefore participates in DESCRIPTION viability rather than acting as a standalone State score."
     }
   ],
   "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype"
+      ],
+      "lines": "502-1271",
+      "role": "Approximates Java factory viability with subtype evidence. The existing bare note-on-link State/UseCase score can outvote Deployment leaves and bypass the parser that now owns the DESCRIPTION command."
+    },
     {
       "path": "crates/rustuml-parser/src/parse/deployment.rs",
       "symbols": [
