@@ -7,7 +7,14 @@
     "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java:roundCorner root conversion",
     "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:styleTitle and Fashion construction",
     "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java:drawArtifact",
-    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:drawQueue"
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:drawQueue",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolRectangle.java:drawRect",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolCard.java:drawCard",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolComponent1.java and USymbolComponent2.java",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFrame.java",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFile.java",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolCollections.java"
   ],
   "rust_locations": [
     "crates/rustuml-parser/src/parse/style.rs:legacy roundcorner mapping",
@@ -15,12 +22,12 @@
     "crates/rustuml-render/src/deployment.rs:OracleRenderContext and emit_entity",
     "crates/rustuml-render/src/deployment.rs:deployment symbol shape emitters"
   ],
-  "invariant": "Java converts generic `skinparam roundcorner N` into a root RoundCorner style. Every EntityImageDescription resolves its symbol-specific title signature with that root inheritance, stores the diameter in Fashion, and passes the same value to the concrete USymbol painter. Consequently a DESCRIPTION stack cluster and sibling rounded rectangle-based leaves such as artifact share the generic diameter unless a more specific declaration overrides it. Scaling happens only after these base coordinates are painted.",
-  "causal_divergence": "Rust hardcodes the 2.5 radius in several deployment leaf painters and the fresh checker observes the same default diameter on the stack cluster. Although the parser preserves the generic root declaration and raw skinparam, the resolved diameter is not consistently carried through the deployment render context to every Fashion-equivalent symbol painter. The result is a mixed document where Java applies diameter 17 to both stack and artifact while Rust keeps diameter 5.",
-  "planned_change": "Resolve the effective final RoundCorner diameter from the concrete componentDiagram symbol-title or group signature with inherited root compatibility, then carry that diameter through the deployment render context and shape dispatch. Parameterize the rounded rectangle-based artifact and default rectangle paths that Java paints through Fashion, and retain shape-specific paths that do not consume Fashion.RoundCorner. Specific componentDiagram stack.title or group.stack declarations continue to outrank generic root values. Do not derive any value from scaled SVG coordinates.",
+  "invariant": "Java converts generic `skinparam roundcorner N` into a root RoundCorner style. Every EntityImageDescription resolves its symbol-specific title signature with that root inheritance, stores the diameter in Fashion, and passes the same value to each concrete USymbol painter that consumes Fashion.RoundCorner. The consumer set at the pinned Java revision includes stack, artifact, rectangle, card, component, frame, folder, file, and collections. Consequently a DESCRIPTION stack cluster and those sibling symbols share the generic diameter unless a more specific declaration overrides it. Scaling happens only after these base coordinates are painted.",
+  "causal_divergence": "Rust resolves only two stack-wide diameters and hardcodes the 2.5 radius in the other deployment symbol painters. The fresh checker observes the default diameter on both stack and artifact. Although the parser preserves the generic root declaration and raw skinparam, the effective symbol-specific diameter is not carried through the deployment render context and shape dispatch. This loses both generic inheritance and per-symbol override precedence.",
+  "planned_change": "Resolve the effective final RoundCorner diameter from each concrete componentDiagram symbol-title or group signature with inherited root compatibility, then carry that per-symbol diameter through the deployment render context and shape dispatch. Parameterize every Rust painter corresponding to a pinned-Java USymbol consumer of Fashion.RoundCorner: stack, artifact, rectangle/agent, card, component, frame, folder, file, and collections. Preserve fixed geometry for symbols whose Java painter does not consume Fashion.RoundCorner. Specific componentDiagram symbol.title or group.symbol declarations continue to outrank generic root values. Do not derive any value from scaled SVG coordinates.",
   "perturbation_axes": [
     "generic root roundcorner versus symbol-specific override",
-    "stack cluster versus explicit stack leaf versus artifact control",
+    "stack cluster versus explicit stack leaf versus multiple non-stack Fashion consumers",
     "zero versus odd and even nonzero diameters",
     "style declaration before versus after entity construction",
     "explicit scale versus dpi",
@@ -30,7 +37,7 @@
   "acceptance": [
     "The preserved checker_description_cluster_odd_scale input passes diff_one --no-oracle for both stack and artifact corners.",
     "Unit tests prove generic inheritance and symbol-specific override precedence across cluster and leaf consumers.",
-    "Fresh valid Java perturbations cover at least two symbol kinds and two independent style/topology axes.",
+    "Fresh valid Java perturbations cover at least three Fashion-consuming symbol kinds and two independent style/topology axes.",
     "The renderer suite and no-oracle product ratchet remain green.",
     "An independent checker records an accepted verdict at the exact implementation revision."
   ],
