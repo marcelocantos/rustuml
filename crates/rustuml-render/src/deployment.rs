@@ -1385,6 +1385,7 @@ fn emit_cloud_cluster(
     ));
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_plain_rect_cluster(
     svg: &mut SvgBuilder,
     x: f64,
@@ -1604,6 +1605,7 @@ fn emit_rounded_rect_with_round_corner(
 
 // ---- Card cluster (rect + horizontal line) --------------------------------
 
+#[allow(clippy::too_many_arguments)]
 fn emit_card_cluster(
     svg: &mut SvgBuilder,
     x: f64,
@@ -1663,6 +1665,7 @@ fn emit_component(
 
 // ---- Component cluster (rounded rect + plug icon, cluster stroke-width) ----
 
+#[allow(clippy::too_many_arguments)]
 fn emit_component_cluster(
     svg: &mut SvgBuilder,
     x: f64,
@@ -1731,6 +1734,7 @@ fn emit_frame(
 
 // ---- Frame cluster --------------------------------------------------------
 
+#[allow(clippy::too_many_arguments)]
 fn emit_frame_cluster(
     svg: &mut SvgBuilder,
     x: f64,
@@ -1836,6 +1840,7 @@ fn emit_folder(
 /// Folder cluster shape: like the leaf folder but the tab width tracks the
 /// (bold) title width and the divider/outline use the cluster stroke
 /// (#000000, width 1.5). Tab band height is text_height + 6.
+#[allow(clippy::too_many_arguments)]
 fn emit_folder_cluster(
     svg: &mut SvgBuilder,
     x: f64,
@@ -2049,6 +2054,7 @@ fn emit_package_cluster(
 
 // ---- Stack ----------------------------------------------------------------
 
+#[allow(clippy::too_many_arguments)]
 fn emit_stack(
     svg: &mut SvgBuilder,
     x: f64,
@@ -3442,6 +3448,65 @@ fn render_attached_deployment_note(
     svg.raw("</g>");
 }
 
+fn render_floating_deployment_note(
+    svg: &mut SvgBuilder,
+    note: &DeploymentNote,
+    layout: &DeploymentNoteLayout,
+    uid: &DeploymentNoteUid,
+) {
+    let x = layout.x;
+    let y = layout.y;
+    let right = x + layout.width;
+    let bottom = y + layout.height;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+
+    // Java `EntityImageNote#drawNormal` paints `Opale.getPolygonNormal`, then
+    // draws the folded corner as a second primitive with the graphics stroke.
+    let path = format!(
+        "M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}",
+        x = fc(x),
+        y = fc(y),
+        bottom = fc(bottom),
+        right = fc(right),
+        fold_y = fc(fold_y),
+        fold_x = fc(fold_x),
+    );
+    let fold_path = format!(
+        "M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}",
+        fold_x = fc(fold_x),
+        y = fc(y),
+        fold_y = fc(fold_y),
+        right = fc(right),
+    );
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        uid.qualified_name, note.source_line, uid.entity_id
+    ));
+    svg.raw(&format!(
+        r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:1;"/>"#
+    ));
+    let mut text_y = y + NOTE_MARGIN_Y;
+    for line in note.text.lines() {
+        let ascent = text_render::label_ascent(line, NOTE_FONT_SIZE);
+        text_y += ascent;
+        emit_text(
+            svg,
+            line,
+            x + NOTE_MARGIN_X1,
+            text_y,
+            NOTE_FONT_SIZE,
+            false,
+            false,
+        );
+        text_y += text_render::label_height(line, NOTE_FONT_SIZE) - ascent;
+    }
+    svg.raw("</g>");
+}
+
 // ---------------------------------------------------------------------------
 // Connections (oracle-driven)
 // ---------------------------------------------------------------------------
@@ -3684,10 +3749,13 @@ fn laid_out_deployment_note_indices(diagram: &DeploymentDiagram) -> Vec<usize> {
         .iter()
         .enumerate()
         .filter_map(|(index, note)| {
-            note.target
-                .as_deref()
-                .filter(|target| diagram.nodes.iter().any(|node| node.id == *target))
-                .map(|_| index)
+            note.target.as_deref().map_or(Some(index), |target| {
+                diagram
+                    .nodes
+                    .iter()
+                    .any(|node| node.id == target)
+                    .then_some(index)
+            })
         })
         .collect()
 }
@@ -4234,44 +4302,68 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     {
         leaves.push((0, root.source_line, *root, qualified_name(root, None)));
     }
-    for (_, _, node, qname) in leaves {
-        emit_entity(&mut svg, node, &qname, &ctx);
-    }
-    if let Some(result) = result.as_ref() {
+    let emit_note_layout = |svg: &mut SvgBuilder, layout: &DeploymentNoteLayout| {
+        let Some(result) = result.as_ref() else {
+            return;
+        };
+        let note = &diagram.notes[layout.note_index];
+        let Some(uid) = no_oracle_uids.note_ids.get(&layout.note_index) else {
+            return;
+        };
+        let Some(target) = note.target.as_deref() else {
+            render_floating_deployment_note(svg, note, layout, uid);
+            return;
+        };
+        let note_id = deployment_note_layout_id(layout.note_index);
+        let layout_target = cluster_endpoint_nodes
+            .get(target)
+            .map(String::as_str)
+            .unwrap_or(target);
+        let (from, to) = match note.position {
+            DeploymentNotePosition::Top | DeploymentNotePosition::Left => {
+                (note_id.as_str(), layout_target)
+            }
+            DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => {
+                (layout_target, note_id.as_str())
+            }
+        };
+        let edge = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == from && edge.to == to);
+        render_attached_deployment_note(svg, note, layout, uid, edge, body_margin_x, body_margin_y);
+    };
+
+    if cluster_ids.is_empty() {
+        enum RootEntityEmission<'a> {
+            Node(&'a DeploymentNode, String),
+            Note(&'a DeploymentNoteLayout),
+        }
+        let mut emissions = leaves
+            .into_iter()
+            .map(|(_, source_line, node, qname)| {
+                (source_line, RootEntityEmission::Node(node, qname))
+            })
+            .collect::<Vec<_>>();
+        emissions.extend(note_layouts.iter().map(|layout| {
+            (
+                diagram.notes[layout.note_index].source_line,
+                RootEntityEmission::Note(layout),
+            )
+        }));
+        emissions.sort_by_key(|(source_line, _)| *source_line);
+        for (_, emission) in emissions {
+            match emission {
+                RootEntityEmission::Node(node, qname) => emit_entity(&mut svg, node, &qname, &ctx),
+                RootEntityEmission::Note(layout) => emit_note_layout(&mut svg, layout),
+            }
+        }
+    } else {
+        for (_, _, node, qname) in leaves {
+            emit_entity(&mut svg, node, &qname, &ctx);
+        }
         for layout in &note_layouts {
-            let note = &diagram.notes[layout.note_index];
-            let Some(uid) = no_oracle_uids.note_ids.get(&layout.note_index) else {
-                continue;
-            };
-            let Some(target) = note.target.as_deref() else {
-                continue;
-            };
-            let note_id = deployment_note_layout_id(layout.note_index);
-            let layout_target = cluster_endpoint_nodes
-                .get(target)
-                .map(String::as_str)
-                .unwrap_or(target);
-            let (from, to) = match note.position {
-                DeploymentNotePosition::Top | DeploymentNotePosition::Left => {
-                    (note_id.as_str(), layout_target)
-                }
-                DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => {
-                    (layout_target, note_id.as_str())
-                }
-            };
-            let edge = result
-                .edge_paths
-                .iter()
-                .find(|edge| edge.from == from && edge.to == to);
-            render_attached_deployment_note(
-                &mut svg,
-                note,
-                layout,
-                uid,
-                edge,
-                body_margin_x,
-                body_margin_y,
-            );
+            emit_note_layout(&mut svg, layout);
         }
     }
     if let Some(result) = result.as_ref() {
@@ -4630,8 +4722,8 @@ fn add_deployment_magma_constraints(
         .iter()
         .flat_map(|connection| [connection.from.as_str(), connection.to.as_str()])
         .collect();
-    let add_group = |layout: &mut LayoutGraph, members: Vec<&str>| {
-        if members.len() < 3 {
+    let add_group = |layout: &mut LayoutGraph, members: Vec<String>| {
+        if members.len() < 2 {
             return;
         }
         // Java `CucaDiagram.applySingleStrategy` delegates standalone
@@ -4640,15 +4732,15 @@ fn add_deployment_magma_constraints(
         let mut head = 0;
         for index in 1..members.len() {
             if index - head == branch {
-                layout.add_edge_with_minlen(members[head], members[index], None, 1);
+                layout.add_invisible_edge_with_minlen(&members[head], &members[index], 1);
                 head = index;
             } else {
-                layout.add_edge_with_minlen(members[index - 1], members[index], None, 0);
+                layout.add_invisible_edge_with_minlen(&members[index - 1], &members[index], 0);
             }
         }
     };
 
-    let root_members = diagram
+    let mut root_members = diagram
         .nodes
         .iter()
         .filter(|node| {
@@ -4656,9 +4748,18 @@ fn add_deployment_magma_constraints(
                 && !parent_of.contains_key(&node.id)
                 && !linked.contains(node.id.as_str())
         })
-        .map(|node| node.id.as_str())
-        .collect();
-    add_group(layout, root_members);
+        .map(|node| (node.source_line, node.id.clone()))
+        .collect::<Vec<_>>();
+    root_members.extend(
+        diagram
+            .notes
+            .iter()
+            .enumerate()
+            .filter(|(_, note)| note.target.is_none())
+            .map(|(index, note)| (note.source_line, deployment_note_layout_id(index))),
+    );
+    root_members.sort_by_key(|(source_line, _)| *source_line);
+    add_group(layout, root_members.into_iter().map(|(_, id)| id).collect());
 
     for container in diagram
         .nodes
@@ -4671,7 +4772,7 @@ fn add_deployment_magma_constraints(
             .filter(|child| {
                 !cluster_ids.contains(child.as_str()) && !linked.contains(child.as_str())
             })
-            .map(String::as_str)
+            .cloned()
             .collect();
         add_group(layout, members);
     }
@@ -5802,7 +5903,9 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
                 );
                 // The hidden note-to-target Link consumes the next global UID
                 // even though Opale absorbs it into the note outline.
-                next_uid += 1;
+                if note.target.is_some() {
+                    next_uid += 1;
+                }
             }
             Item::Conn(index) => {
                 if matches!(
@@ -7266,6 +7369,35 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"L134.1992,30.74 L168.72,26.74 L134.1992,22.74"#));
         assert!(svg.contains(r#">owner: team 109</text>"#));
         assert!(svg.contains(r#">mode: warm 113</text>"#));
+    }
+
+    #[test]
+    fn no_oracle_floating_note_shares_source_order_and_magma_with_root_leaves() {
+        let source = "@startuml\n\
+            note as RenamedLedger733\n\
+              control body remains display text\n\
+            end note\n\
+            node RenamedRuntime739\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let Some(note_start) =
+            svg.find(r#"data-qualified-name="RenamedLedger733" data-source-line="2" id="ent0002""#)
+        else {
+            panic!("floating note entity: {svg}");
+        };
+        let Some(node_start) = svg
+            .find(r#"data-qualified-name="RenamedRuntime739" data-source-line="4" id="ent0003""#)
+        else {
+            panic!("later deployment entity: {svg}");
+        };
+        assert!(note_start < node_start, "{svg}");
+        assert!(svg[note_start..node_start].contains("control body remains display text"));
+        assert!(!svg[note_start..node_start].contains(" L0,0 "), "{svg}");
     }
 
     #[test]

@@ -625,7 +625,10 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 id: Some(caps[1].to_string()),
                 target: None,
                 position: DeploymentNotePosition::Right,
-                source_line: current_line + 1,
+                // Preprocessing strips the `@startuml` line before the first
+                // content record; the multiline command's Java location is
+                // the adjacent original source line.
+                source_line: current_line.max(1) + 1,
                 lines: Vec::new(),
             });
             continue;
