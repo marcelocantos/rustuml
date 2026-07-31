@@ -509,6 +509,63 @@ enum DeploymentLinkNoteCommand {
     },
 }
 
+fn is_java_pattern_space(character: char) -> bool {
+    matches!(
+        character,
+        ' ' | '\t' | '\n' | '\u{000B}' | '\u{000C}' | '\r' | '\u{00A0}'
+    )
+}
+
+fn trim_java_pattern_space_start(value: &str) -> &str {
+    value.trim_start_matches(is_java_pattern_space)
+}
+
+fn single_line_link_note_suffix(suffix: &str) -> Option<(Option<&str>, &str)> {
+    if let Some(body) = suffix.strip_prefix(':') {
+        return Some((None, trim_java_pattern_space_start(body)));
+    }
+    if !suffix.starts_with('#') {
+        return None;
+    }
+
+    // Java registers the single-line command first. Within its optional color
+    // leaf PART2 is attempted before COLOR_REGEXP, and each alternative may
+    // backtrack until the rest of the complete command regex can consume the
+    // body colon.
+    for part2 in [true, false] {
+        for end in suffix
+            .char_indices()
+            .map(|(index, _)| index)
+            .chain(std::iter::once(suffix.len()))
+            .filter(|end| *end > 1)
+            .rev()
+        {
+            let color = &suffix[..end];
+            let matches = if part2 {
+                super::plantuml_color_matches_part2_syntax(color)
+            } else {
+                super::plantuml_color_matches_ordinary_syntax(color)
+            };
+            if !matches {
+                continue;
+            }
+            let remainder = &suffix[end..];
+            let after_space = trim_java_pattern_space_start(remainder);
+            let Some(body) = after_space.strip_prefix(':') else {
+                continue;
+            };
+            // PART2's final negative lookahead excludes an immediate colon.
+            // A consumed semicolon or intervening Pattern2 space makes the
+            // boundary explicit; otherwise only COLOR_REGEXP can own it.
+            if part2 && remainder.starts_with(':') && !color.ends_with(';') {
+                continue;
+            }
+            return Some((Some(color), trim_java_pattern_space_start(body)));
+        }
+    }
+    None
+}
+
 /// Parse the command owned by Java `CommandFactoryNoteOnLink`.
 ///
 /// The outer `Option` distinguishes this factory's prefix from unrelated note
@@ -530,52 +587,44 @@ fn parse_deployment_link_note_command(
         .map(|value| deployment_note_position(&value.as_str().to_ascii_lowercase()))
         // `CommandFactoryNoteOnLink.executeInternal` defaults to BOTTOM.
         .unwrap_or(DeploymentNotePosition::Bottom);
-    let mut suffix = captures.get(2)?.as_str().trim_start();
-    let colors = if suffix.starts_with('#') {
-        // `ColorParser.PART2` uses colons inside one color expression, while
-        // the command's inline body also begins with a colon. Match the
-        // longest valid color-language prefix whose remainder starts at a
-        // command boundary, as Java's concatenated regex does.
-        let parsed = suffix
-            .char_indices()
-            .map(|(index, _)| index)
-            .chain(std::iter::once(suffix.len()))
-            .filter(|end| *end > 1)
-            .rev()
-            .find_map(|end| {
-                let remainder = &suffix[end..];
-                (remainder.is_empty()
-                    || remainder.starts_with(':')
-                    || remainder.starts_with(char::is_whitespace))
-                .then(|| {
-                    super::parse_plantuml_colors(&suffix[..end], PlantUmlColorType::Back)
-                        .map(|colors| (end, colors))
-                })
-                .flatten()
-            });
-        let Some((end, colors)) = parsed else {
-            return Some(Err("invalid note-on-link color"));
+    let suffix = trim_java_pattern_space_start(captures.get(2)?.as_str());
+    if let Some((color, text)) = single_line_link_note_suffix(suffix) {
+        let colors = if let Some(color) = color {
+            let Some(colors) = super::parse_plantuml_colors(color, PlantUmlColorType::Back) else {
+                return Some(Err("invalid note-on-link color"));
+            };
+            colors
+        } else {
+            PlantUmlColors::default()
         };
-        suffix = suffix[end..].trim_start();
-        colors
-    } else {
-        PlantUmlColors::default()
-    };
+        return Some(Ok(DeploymentLinkNoteCommand::Inline(DeploymentLinkNote {
+            text: text.to_string(),
+            colors,
+            position,
+        })));
+    }
 
     if suffix.is_empty() {
+        return Some(Ok(DeploymentLinkNoteCommand::Multiline {
+            colors: PlantUmlColors::default(),
+            position,
+        }));
+    }
+    if suffix.starts_with('#') {
+        if !super::plantuml_color_matches_part2_syntax(suffix)
+            && !super::plantuml_color_matches_ordinary_syntax(suffix)
+        {
+            return Some(Err("invalid note-on-link color"));
+        }
+        let Some(colors) = super::parse_plantuml_colors(suffix, PlantUmlColorType::Back) else {
+            return Some(Err("invalid note-on-link color"));
+        };
         return Some(Ok(DeploymentLinkNoteCommand::Multiline {
             colors,
             position,
         }));
     }
-    let Some(text) = suffix.strip_prefix(':') else {
-        return Some(Err("invalid note-on-link command"));
-    };
-    Some(Ok(DeploymentLinkNoteCommand::Inline(DeploymentLinkNote {
-        text: text.trim_start().to_string(),
-        colors,
-        position,
-    })))
+    Some(Err("invalid note-on-link command"))
 }
 
 fn last_note_eligible_connection_index(
@@ -1755,6 +1804,50 @@ mod tests {
             note.colors.line_style,
             Some(crate::diagram::style::PlantUmlLineStyle::Bold)
         );
+    }
+
+    #[test]
+    fn link_note_color_boundary_follows_single_then_multiline_factory_order() {
+        for command in [
+            "note on link #back:Red : spaced body",
+            "note on link #back:Red;: semicolon body",
+        ] {
+            let diagram = parse(&format!(
+                "node BoundaryA\nnode BoundaryB\nBoundaryA --> BoundaryB\n{command}"
+            ));
+            let note = diagram.connections[0].note.as_ref().unwrap();
+            assert_eq!(note.colors.back.as_deref(), Some("Red"), "{command}");
+        }
+
+        for command in [
+            "note on link #back:Red: compact body",
+            "note on link #header:Gold\nmultiline body\nendnote",
+            "note on link #back:Wheat;line.dotted\nmultiline body\nendnote",
+        ] {
+            let lines =
+                format!("node BoundaryA\nnode BoundaryB\nBoundaryA --> BoundaryB\n{command}")
+                    .lines()
+                    .map(str::to_string)
+                    .collect::<Vec<_>>();
+            let error = parse_deployment(&lines).unwrap_err();
+            assert_eq!(error.line, 4, "{command}");
+            assert_eq!(error.message, "invalid note-on-link color", "{command}");
+        }
+
+        for command in [
+            "note on link #line.dotted\nmultiline body\nendnote",
+            "note on link #line.bold:Navy\nmultiline body\nendnote",
+            "note on link #Wheat;line.dotted\nmultiline body\nendnote",
+        ] {
+            let diagram = parse(&format!(
+                "node BoundaryA\nnode BoundaryB\nBoundaryA --> BoundaryB\n{command}"
+            ));
+            assert_eq!(
+                diagram.connections[0].note.as_ref().unwrap().text,
+                "multiline body",
+                "{command}"
+            );
+        }
     }
 
     #[test]
