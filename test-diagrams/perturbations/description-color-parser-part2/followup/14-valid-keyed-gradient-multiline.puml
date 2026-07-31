@@ -1,0 +1,10 @@
+@startuml
+node "Color Xi Source" as CXS
+folder "Color Xi Folder" as CXF {
+  artifact "Color Xi Artifact" as CXA
+}
+CXS --> CXA
+note bottom on link #back:Gold/LightGreen;line.dashed:Blue
+  keyed gradient multiline 14
+endnote
+@enduml

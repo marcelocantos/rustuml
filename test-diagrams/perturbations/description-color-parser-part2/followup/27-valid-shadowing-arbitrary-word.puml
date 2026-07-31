@@ -1,0 +1,6 @@
+@startuml
+node "Color Gimel Source" as CGIS
+node "Color Gimel Target" as CGIT
+CGIS --> CGIT
+note left of link #shadowing:maybe;back:WhiteSmoke : shadowing arbitrary word 27
+@enduml

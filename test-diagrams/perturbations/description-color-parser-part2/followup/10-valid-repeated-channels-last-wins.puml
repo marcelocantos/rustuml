@@ -1,0 +1,6 @@
+@startuml
+node "Color Kappa Source" as CKS
+component "Color Kappa Target" as CKT
+CKS --> CKT
+note bottom on link #back:Red;back:LightBlue;line:Green;line:Purple;text:Blue;text:Black : repeated channels 10
+@enduml

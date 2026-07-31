@@ -1,0 +1,6 @@
+@startuml
+node "Color Chi Source" as CCHS
+node "Color Chi Target" as CCHT
+CCHS --> CCHT
+note top of link #back:;line:Blue : omitted keyed value should reject 22
+@enduml

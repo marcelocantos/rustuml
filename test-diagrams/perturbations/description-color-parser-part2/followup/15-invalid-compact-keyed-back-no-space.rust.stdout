@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="218px" preserveAspectRatio="none" style="width:416px;height:218px;background:#FFFFFF;" version="1.1" viewBox="0 0 416 218" width="416px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Color Omicron Source-->
+<g class="entity" data-qualified-name="COS" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,205.2285,6,205.2285,42.4883,195.2285,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="195.2285" x2="205.2285" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="195.2285" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="195.2285" x2="195.2285" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="149.2285" x="31" y="39.5352">Color Omicron Source</text>
+</g>
+<!--entity Color Omicron Target-->
+<g class="entity" data-qualified-name="COT" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="16.72,157.49,26.72,147.49,204.4993,147.49,204.4993,183.9783,194.4993,193.9783,16.72,193.9783,16.72,157.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="194.4993" x2="204.4993" y1="157.49" y2="147.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16.72" x2="194.4993" y1="157.49" y2="157.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="194.4993" x2="194.4993" y1="157.49" y2="193.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147.7793" x="31.72" y="181.0252">Color Omicron Target</text>
+</g>
+<!--link COS to COT-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M110.61,52.97 C110.61,78.9 110.61,115.09 110.61,141.02" fill="none" id="COS-to-COT" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="110.61,147.02,114.61,138.02,110.61,142.02,106.61,138.02,110.61,147.02" style="stroke:#181818;stroke-width:1;"/>
+<path d="M115.61,87.49 L115.61,112.49 L401.61,112.49 L401.61,97.49 L391.61,87.49 L115.61,87.49" fill="#FF0000" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M391.61,87.49 L391.61,97.49 L401.61,97.49 L391.61,87.49" fill="#FF0000" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="265.4717" x="121.61" y="105.0584">compact keyed boundary should reject 15</text>
+</g>
+</g></svg>

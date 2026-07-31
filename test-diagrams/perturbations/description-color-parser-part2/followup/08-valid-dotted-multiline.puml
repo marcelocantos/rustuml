@@ -1,0 +1,9 @@
+@startuml
+node "Color Theta Source" as CTS
+database "Color Theta Database" as CTD
+CTS --> CTD
+note left on link #back:Wheat;line.dotted
+  dotted multiline body 08
+  second retained row
+endnote
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+node "Color Mu Source" as CMS
+database "Color Mu Target" as CMT
+CMS --> CMT
+note left of link #BaCk:Lavender;LiNe.DoTtEd:Teal;TeXt:DarkRed : mixed case directives 12
+@enduml

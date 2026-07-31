@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="232px" preserveAspectRatio="none" style="width:297px;height:232px;background:#FFFFFF;" version="1.1" viewBox="0 0 297 232" width="297px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Color Theta Source-->
+<g class="entity" data-qualified-name="CTS" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,185.3564,6,185.3564,42.4883,175.3564,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="175.3564" x2="185.3564" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="175.3564" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="175.3564" x2="175.3564" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129.3564" x="31" y="39.5352">Color Theta Source</text>
+</g>
+<!--entity Color Theta Database-->
+<g class="entity" data-qualified-name="CTD" data-source-line="2" id="ent0003">
+<path d="M17.43,172.49 C17.43,162.49 100.6771,162.49 100.6771,162.49 C100.6771,162.49 183.9241,162.49 183.9241,172.49 L183.9241,197.9783 C183.9241,207.9783 100.6771,207.9783 100.6771,207.9783 C100.6771,207.9783 17.43,207.9783 17.43,197.9783 L17.43,172.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M17.43,172.49 C17.43,182.49 100.6771,182.49 100.6771,182.49 C100.6771,182.49 183.9241,182.49 183.9241,172.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="146.4941" x="27.43" y="200.0252">Color Theta Database</text>
+</g>
+<!--link CTS to CTD-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M100.68,52.97 C100.68,82.33 100.68,127.13 100.68,156.17" fill="none" id="CTS-to-CTD" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="100.68,162.17,104.68,153.17,100.68,157.17,96.68,153.17,100.68,162.17" style="stroke:#181818;stroke-width:1;"/>
+<path d="M105.68,87.49 L105.68,127.49 L282.68,127.49 L282.68,97.49 L272.68,87.49 L105.68,87.49" fill="#F5DEB3" style="stroke:#181818;stroke-width:1;stroke-dasharray:1,3;"/>
+<path d="M272.68,87.49 L272.68,97.49 L282.68,97.49 L272.68,87.49" fill="#F5DEB3" style="stroke:#181818;stroke-width:1;stroke-dasharray:1,3;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="156.6475" x="111.68" y="105.0584">dotted multiline body 08</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="128.1655" x="111.68" y="120.3689">second retained row</text>
+</g>
+</g></svg>

@@ -1,0 +1,8 @@
+@startuml
+node "Color Iota Source" as CIS
+artifact "Color Iota Artifact" as CIA
+CIS --> CIA
+note right of link #line.bold:Navy;text:Maroon;back:MintCream
+  bold multiline body 09
+endnote
+@enduml

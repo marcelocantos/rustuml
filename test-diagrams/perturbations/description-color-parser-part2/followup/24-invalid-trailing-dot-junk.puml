@@ -1,0 +1,6 @@
+@startuml
+node "Color Omega Source" as COMS
+node "Color Omega Target" as COMT
+COMS --> COMT
+note left on link #line.dashed.red : trailing dotted junk should reject 24
+@enduml

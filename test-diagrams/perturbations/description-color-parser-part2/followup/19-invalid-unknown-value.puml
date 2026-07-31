@@ -1,0 +1,6 @@
+@startuml
+node "Color Tau Source" as CTSrc
+node "Color Tau Target" as CTTgt
+CTSrc --> CTTgt
+note right of link #back:NoSuchColor;line:Blue : unknown color value should reject 19
+@enduml

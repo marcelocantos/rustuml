@@ -1,0 +1,421 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-color-parser-part2",
+  "verdict": "REJECT",
+  "checker": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop shell/apply_patch; immutable shipped rustuml and diff_one binaries",
+    "implemented_mechanism": false
+  },
+  "scope": {
+    "worktree": "/private/tmp/rustuml-description-color-checker",
+    "branch": "codex/t14-description-color-checker",
+    "rust_implementation_revision": "25cdc5ceccc906ae94dd8788facbd2c78690074a",
+    "java_oracle_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_oracle_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rust_binary": "/private/tmp/rustuml-deployment-link-notes/target/release/rustuml",
+    "rust_binary_sha256": "5cbf912220501ed82404a88c31e0cc293ad735dbd0ebd5fd5507ea59ee3d5f4f",
+    "diff_one_binary": "/private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one",
+    "diff_one_binary_sha256": "778e2ff32ac0272d3e905fd272e001a07bcdbe1790e01b8d3306f5c4b3d831a3",
+    "cargo_or_build_invocations": []
+  },
+  "source_review": {
+    "read_files": [
+      "AGENTS.md parity rules",
+      "docs/parity-reviews/description-color-parser-part2/account.json",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/Colors.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/ColorType.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractComponent.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/LinkStyle.java",
+      "crates/rustuml-parser/src/diagram/deployment.rs",
+      "crates/rustuml-parser/src/diagram/style.rs",
+      "crates/rustuml-parser/src/parse/component.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs",
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-render/src/deployment.rs"
+    ],
+    "java_model_observations": [
+      "ColorParser.PART2 accepts the semicolon/directive language and uses a directive terminator of `(?:;|(?![\\w;:.]))`, so a keyed directive immediately followed by the inline body colon is not a valid color boundary.",
+      "Colors lowercases and tokenizes the accepted expression, assigns BACK and LINE colors into a sparse map, and records line.dashed, line.dotted, or line.bold as a LinkStyle.",
+      "EntityImageNoteLink creates a ComponentType.NOTE via Rose.createComponentNote(..., colors). ComponentRoseNote stores `symbolContext = getSymbolContext(colors)`, then draws the folded polygon through `symbolContext.apply(ug)`.",
+      "AbstractComponent.getSymbolContext(Colors) delegates to Style.getSymbolContext(HColorSet, Colors). That method consumes BACK and LINE colors, but it uses `getStroke()` rather than `getStroke(colors)`, so `Colors.getSpecificLineStroke()` is not applied to folded link-note borders.",
+      "AbstractTextualComponent builds the text block from `getFontConfiguration()`, which calls Style.getFontConfiguration(HColorSet) without the Colors value. Therefore a TEXT color on a folded link note is accepted by the parser but does not color the rendered text in this Java path.",
+      "LinkStyle.getStroke3() does define dashed 7,7, dotted 1,3, and bold thickness 2. The problem is not the numeric provenance; the problem is that this NOTE rendering path does not apply that LinkStyle."
+    ],
+    "rust_model_observations": [
+      "Rust introduced a sparse PlantUmlColors AST and parse_plantuml_colors largely mirrors COLOR_REGEXP/PART2 token assignment.",
+      "parse_deployment_link_note_command searches for the longest valid color-language prefix and treats a remainder starting with ':' as a command boundary for all color branches. This is broader than Java PART2 for keyed directives because Java's PART2 negative lookahead rejects that colon boundary.",
+      "render_deployment_link_note applies note.colors.text directly to text fill and note.colors.line_style directly to the folded note border. That is stronger than the Java folded link-note path."
+    ],
+    "anti_overfit_review": {
+      "fixture_shaped_logic": "No shipping-code branch keyed to the fresh checker names, labels, perturbation path, or expected SVG bytes was found in the inspected parser/render/CLI files.",
+      "opaque_output_replay": "No golden SVG read, fixture replay, or post-hoc SVG coordinate surgery for this mechanism was found in the inspected shipping files.",
+      "constants": "The new dash constants in deployment_note_stroke_style match LinkStyle.getStroke3(), but their use in this folded link-note path is model-incompatible with Java output and source flow.",
+      "over_broad_acceptance": "Confirmed for compact keyed inline boundaries and several multiline PART2 starts."
+    }
+  },
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-deployment-link-notes/target/release/rustuml /private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '1,240p' docs/parity-reviews/description-color-parser-part2/account.json",
+    "git show --find-renames -- crates/rustuml-parser/src/diagram/deployment.rs crates/rustuml-parser/src/diagram/style.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/deployment.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT.puml > STEM.java.stdout 2> STEM.java.stderr; printf exit to STEM.java.exit; cp STEM.java.stdout STEM.svg",
+    "/private/tmp/rustuml-deployment-link-notes/target/release/rustuml -pipe -tsvg < INPUT.puml > STEM.rust.stdout 2> STEM.rust.stderr; printf exit to STEM.rust.exit; cp STEM.rust.stdout STEM.rust.svg",
+    "/private/tmp/rustuml-deployment-link-notes/target/release/examples/diff_one --no-oracle INPUT.puml > STEM.diff.stdout 2> STEM.diff.stderr; printf exit to STEM.diff.exit",
+    "rg -n \"description-color-parser-part2|followup|Color Alpha|Color Epsilon|compact keyed|keyed channels inline|text only channel|dotted precedence|include_str!|include_bytes!|test-diagrams/perturbations|\\.svg|\\.puml|back:FF0000|line\\.dashed:00FF00|NoSuchColor\" crates/rustuml-parser/src crates/rustuml-render/src crates/rustuml/src"
+  ],
+  "evidence_directory": "test-diagrams/perturbations/description-color-parser-part2/followup",
+  "evidence_suffixes_per_stem": [
+    ".puml",
+    ".java.stdout",
+    ".java.stderr",
+    ".java.exit",
+    ".svg",
+    ".rust.stdout",
+    ".rust.stderr",
+    ".rust.exit",
+    ".rust.svg",
+    ".diff.stdout",
+    ".diff.stderr",
+    ".diff.exit"
+  ],
+  "generated_inputs": [
+    {
+      "stem": "01-valid-ordinary-named-inline",
+      "axes": ["ordinary named BACK", "inline", "renamed endpoints"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree"
+    },
+    {
+      "stem": "02-valid-ordinary-hex-compact-inline",
+      "axes": ["ordinary hex BACK", "compact ordinary color/body colon boundary"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree"
+    },
+    {
+      "stem": "03-valid-leading-gradient-slash",
+      "axes": ["leading BACK gradient", "slash policy"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree"
+    },
+    {
+      "stem": "04-valid-leading-gradient-backslash-part2",
+      "axes": ["leading BACK gradient", "backslash policy", "keyed line and text"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree for visible output in this case"
+    },
+    {
+      "stem": "05-valid-keyed-back-line-text",
+      "axes": ["keyed back", "keyed line", "keyed text", "inline"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java text remains #000000; Rust renders #0000FF"
+    },
+    {
+      "stem": "06-valid-header-shadowing-dotted",
+      "axes": ["keyed header", "shadowing:false", "line.dotted without color"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java folded note border remains solid stroke-width 0.5; Rust renders dotted stroke-width 1"
+    },
+    {
+      "stem": "07-valid-dashed-with-color",
+      "axes": ["line.dashed with color", "keyed back"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java border is #006400 solid stroke-width 0.5; Rust renders #006400 dashed stroke-width 1"
+    },
+    {
+      "stem": "08-valid-dotted-multiline",
+      "axes": ["multiline note-on-link", "line.dotted without color", "color vocabulary"],
+      "java": "error",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "counterexample: Java emits No such color error page; Rust renders SVG"
+    },
+    {
+      "stem": "09-valid-bold-color-multiline",
+      "axes": ["multiline note-on-link", "line.bold with color", "keyed text", "keyed back"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java text remains #000000 and border stroke-width 0.5; Rust renders text #800000 and border stroke-width 2"
+    },
+    {
+      "stem": "10-valid-repeated-channels-last-wins",
+      "axes": ["repeated channels", "component keyword topology"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "excluded from color verdict because Rust classified the whole diagram as STATE while Java classified DESCRIPTION"
+    },
+    {
+      "stem": "11-valid-style-precedence-dashed-wins",
+      "axes": ["line.bold", "line.dotted", "line.dashed", "style precedence"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java uses final LINE color #FF0000 but solid stroke-width 0.5; Rust also applies dashed stroke"
+    },
+    {
+      "stem": "12-valid-mixed-case-directives",
+      "axes": ["mixed casing", "line.dotted with color", "keyed text"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java accepts mixed case but renders default text and solid border; Rust renders DarkRed text and dotted border"
+    },
+    {
+      "stem": "13-valid-position-top-of-link",
+      "axes": ["position top of link", "ordinary leading BACK", "line.bold without color"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java border remains default solid stroke-width 0.5; Rust renders stroke-width 2"
+    },
+    {
+      "stem": "14-valid-keyed-gradient-multiline",
+      "axes": ["multiline note-on-link", "keyed gradient BACK", "line.dashed with color"],
+      "java": "error",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "counterexample: Java emits No such color error page; Rust renders SVG"
+    },
+    {
+      "stem": "15-invalid-compact-keyed-back-no-space",
+      "axes": ["compact keyed color/body colon boundary"],
+      "java": "error",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "counterexample: Java rejects the immediate colon boundary after keyed back; Rust accepts and renders"
+    },
+    {
+      "stem": "16-invalid-compact-style-no-space",
+      "axes": ["compact line-style/body colon boundary"],
+      "java": "error",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "counterexample: Java rejects the immediate colon boundary after line.dashed; Rust accepts and renders"
+    },
+    {
+      "stem": "17-invalid-compact-keyed-line-no-space",
+      "axes": ["compact keyed line/body colon boundary", "multiple keyed directives"],
+      "java": "error",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "counterexample: Java rejects the immediate colon boundary after keyed line; Rust accepts and renders"
+    },
+    {
+      "stem": "18-invalid-unknown-key",
+      "axes": ["invalid key"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "19-invalid-unknown-value",
+      "axes": ["invalid color value"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "20-invalid-hash-inside-value",
+      "axes": ["invalid keyed value syntax"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "21-invalid-double-semicolon",
+      "axes": ["invalid separator"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "22-invalid-omitted-keyed-value",
+      "axes": ["omitted keyed value"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "23-invalid-double-gradient-separator",
+      "axes": ["invalid gradient separator"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "24-invalid-trailing-dot-junk",
+      "axes": ["trailing junk"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "25-invalid-shadowing-one-char",
+      "axes": ["invalid shadowing value length"],
+      "java": "error",
+      "rust": "error",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "agree reject"
+    },
+    {
+      "stem": "26-valid-shadowing-false-back",
+      "axes": ["shadowing:false", "keyed back"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree for visible output"
+    },
+    {
+      "stem": "27-valid-shadowing-arbitrary-word",
+      "axes": ["shadowing arbitrary word", "keyed back"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree for visible output"
+    },
+    {
+      "stem": "28-valid-text-only",
+      "axes": ["keyed text only"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java text remains #000000; Rust renders #00008B"
+    },
+    {
+      "stem": "29-valid-header-only-multiline",
+      "axes": ["multiline note-on-link", "header only"],
+      "java": "error",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 2,
+      "semantic_result": "counterexample: Java emits No such color error page; Rust renders SVG"
+    },
+    {
+      "stem": "30-valid-line-style-precedence-dotted",
+      "axes": ["line color", "line.bold", "line.dotted", "style precedence without dashed"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 1,
+      "semantic_result": "counterexample: Java uses LINE color #FFA500 but solid stroke-width 0.5; Rust also applies dotted stroke"
+    },
+    {
+      "stem": "31-valid-keyed-boundary-space",
+      "axes": ["keyed color/body boundary with space"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree"
+    },
+    {
+      "stem": "32-valid-keyed-boundary-semicolon",
+      "axes": ["keyed color/body boundary with trailing semicolon"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree"
+    },
+    {
+      "stem": "33-valid-repeated-channels-node-control",
+      "axes": ["repeated channels", "plain node topology"],
+      "java": "accept",
+      "rust": "accept",
+      "diff_one_no_oracle_exit": 0,
+      "semantic_result": "agree: last BACK and LINE values win; final text value is default black"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "rejecting",
+      "summary": "Rust applies the TEXT channel to folded link-note text, but Java accepts the channel without consuming it on this rendering path.",
+      "source_basis": [
+        "AbstractTextualComponent constructs the text block from getFontConfiguration(), which ignores Colors.",
+        "ComponentRoseNote passes Colors only into getSymbolContext(colors), used for the folded note shape."
+      ],
+      "evidence": [
+        "05-valid-keyed-back-line-text.java.stdout has the note text fill #000000 while 05-valid-keyed-back-line-text.rust.stdout uses #0000FF.",
+        "28-valid-text-only.java.stdout has the note text fill #000000 while 28-valid-text-only.rust.stdout uses #00008B."
+      ]
+    },
+    {
+      "id": "F2",
+      "severity": "rejecting",
+      "summary": "Rust applies line.dashed/line.dotted/line.bold to folded link-note borders, but Java's folded ComponentRoseNote path keeps the default solid 0.5 stroke.",
+      "source_basis": [
+        "Style.getSymbolContext(HColorSet, Colors) consumes BACK and LINE colors but uses getStroke(), not getStroke(Colors).",
+        "ComponentRoseNote.drawInternalU applies that Fashion to the folded polygon."
+      ],
+      "evidence": [
+        "07-valid-dashed-with-color.java.stdout renders #006400 solid stroke-width 0.5; Rust renders #006400 stroke-width 1 with stroke-dasharray 7,7.",
+        "30-valid-line-style-precedence-dotted.java.stdout renders #FFA500 solid stroke-width 0.5; Rust renders #FFA500 stroke-width 1 with stroke-dasharray 1,3.",
+        "13-valid-position-top-of-link.java.stdout renders default solid stroke-width 0.5 for line.bold without color; Rust renders stroke-width 2."
+      ]
+    },
+    {
+      "id": "F3",
+      "severity": "rejecting",
+      "summary": "Rust over-accepts compact keyed PART2 inline boundaries that Java rejects.",
+      "source_basis": [
+        "ColorParser.PART2 terminates a directive with semicolon or a negative lookahead that excludes ':'; Rust treats any remainder starting with ':' as a valid command boundary after parse_plantuml_colors succeeds."
+      ],
+      "evidence": [
+        "15-invalid-compact-keyed-back-no-space: Java exit 200 error page; Rust exit 0 rendered SVG.",
+        "16-invalid-compact-style-no-space: Java exit 200 syntax error page; Rust exit 0 rendered SVG.",
+        "17-invalid-compact-keyed-line-no-space: Java exit 200 error page; Rust exit 0 rendered SVG."
+      ]
+    },
+    {
+      "id": "F4",
+      "severity": "rejecting",
+      "summary": "Rust accepts and renders several multiline PART2 starts for which Java emits an error page.",
+      "source_basis": [
+        "The account claims inline and multiline note-on-link color handling; the frozen Java oracle is the acceptance source for this command surface."
+      ],
+      "evidence": [
+        "08-valid-dotted-multiline: Java exit 200 No such color error page; Rust exit 0 rendered SVG.",
+        "14-valid-keyed-gradient-multiline: Java exit 200 No such color error page; Rust exit 0 rendered SVG.",
+        "29-valid-header-only-multiline: Java exit 200 No such color error page; Rust exit 0 rendered SVG."
+      ]
+    }
+  ],
+  "positive_controls": [
+    "Ordinary named and hex leading BACK values agree on 01 and 02.",
+    "Leading gradients agree on 03 and 04.",
+    "BACK and LINE keyed color channels agree on visible fill/border colors in 05, 07, 11, 12, 30, and 33.",
+    "Trailing semicolon and whitespace boundaries agree on 31 and 32.",
+    "Invalid keys, unknown values, bad separators, omitted values, and trailing junk agree as rejects on 18 through 25."
+  ],
+  "conclusion": "The mechanism cannot be accepted. The typed parser is partly successful, but the claimed Java channel-consumption model is wrong for folded link notes: TEXT and specific line stroke are retained by Colors but not consumed by ComponentRoseNote output. The Rust implementation also over-accepts compact keyed inline boundaries and several multiline PART2 starts. All counterexamples and outputs are preserved under the followup evidence directory."
+}

@@ -1,0 +1,6 @@
+@startuml
+node "Color Zayin Source" as CZAS
+node "Color Zayin Target" as CZAT
+CZAS --> CZAT
+note left of link #back:Red : keyed boundary with space 31
+@enduml

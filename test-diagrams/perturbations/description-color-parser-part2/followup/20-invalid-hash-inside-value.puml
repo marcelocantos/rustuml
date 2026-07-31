@@ -1,0 +1,6 @@
+@startuml
+node "Color Upsilon Source" as CUS
+artifact "Color Upsilon Target" as CUT
+CUS --> CUT
+note left of link #back:#Red;line:Blue : hash inside keyed value should reject 20
+@enduml

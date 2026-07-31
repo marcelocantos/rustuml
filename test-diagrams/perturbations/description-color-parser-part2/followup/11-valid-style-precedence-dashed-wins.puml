@@ -1,0 +1,6 @@
+@startuml
+node "Color Lambda Source" as CLS
+node "Color Lambda Target" as CLT
+CLS --> CLT
+note top of link #line.bold:Blue;line.dotted:Green;line.dashed:Red;back:White : style precedence 11
+@enduml

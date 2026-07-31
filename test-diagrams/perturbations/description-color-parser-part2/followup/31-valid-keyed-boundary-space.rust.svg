@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="218px" preserveAspectRatio="none" style="width:332px;height:218px;background:#FFFFFF;" version="1.1" viewBox="0 0 332 218" width="332px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Color Zayin Source-->
+<g class="entity" data-qualified-name="CZAS" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,183.292,6,183.292,42.4883,173.292,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="173.292" x2="183.292" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="173.292" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="173.292" x2="173.292" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="127.292" x="31" y="39.5352">Color Zayin Source</text>
+</g>
+<!--entity Color Zayin Target-->
+<g class="entity" data-qualified-name="CZAT" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="16.72,157.49,26.72,147.49,182.5628,147.49,182.5628,183.9783,172.5628,193.9783,16.72,193.9783,16.72,157.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="172.5628" x2="182.5628" y1="157.49" y2="147.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16.72" x2="172.5628" y1="157.49" y2="157.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="172.5628" x2="172.5628" y1="157.49" y2="193.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="125.8428" x="31.72" y="181.0252">Color Zayin Target</text>
+</g>
+<!--link CZAS to CZAT-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M99.65,52.97 C99.65,78.9 99.65,115.09 99.65,141.02" fill="none" id="CZAS-to-CZAT" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="99.65,147.02,103.65,138.02,99.65,142.02,95.65,138.02,99.65,147.02" style="stroke:#181818;stroke-width:1;"/>
+<path d="M104.65,87.49 L104.65,112.49 L317.65,112.49 L317.65,97.49 L307.65,87.49 L104.65,87.49" fill="#FF0000" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M307.65,87.49 L307.65,97.49 L317.65,97.49 L307.65,87.49" fill="#FF0000" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="192.3213" x="110.65" y="105.0584">keyed boundary with space 31</text>
+</g>
+</g></svg>
