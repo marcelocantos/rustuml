@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-hidden-link-lifecycle",
+  "checker": {
+    "identity": "independent adversarial checker",
+    "model": "OpenAI GPT-5 Codex",
+    "tool": "Codex desktop",
+    "implemented_change": false
+  },
+  "account_reviewed": "docs/parity-reviews/deployment-hidden-link-lifecycle/account.json",
+  "revisions": {
+    "rust_revision": "a615fc0310376fe7eca11b585011fa72c76ad053",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_status": [
+      "M CLAUDE.md",
+      "?? svek.dot",
+      "?? svek.svg"
+    ],
+    "java_worktree_note": "Dirty entries were not read or modified as implementation inputs; oracle source was inspected read-only at the requested revision.",
+    "rust_binary": {
+      "path": "/private/tmp/rustuml-deployment-hidden-links/target/release/rustuml",
+      "sha256": "3098452e3503e460781b47f01197e25eaac8589798ce93e86eceecd340b4fe04"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "source_inspection": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+        "evidence": "LINE_STYLE admits hidden, colors, thickness, semicolon groups in ARROW_STYLE1 and one LINE_STYLE group in ARROW_STYLE2; executeArg always creates and adds a Link."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/decoration/WithLinkType.java",
+        "evidence": "applyOneStyle uses equalsIgnoreCase and maps hidden to goHidden without changing LinkType invisibility."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+        "evidence": "isInvis checks invisible LinkType or explicit invis; isHidden is a separate paint-layer predicate."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+        "evidence": "onlyOneLink skips Link.isInvis only, so bracket-hidden links remain semantic note incidences."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+        "evidence": "appendLine emits style=invis only for isInvis; hidden edges are serialized, solved, and then exposed through SvekEdge.isHidden."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java and klimt/drawing/LimitFinder.java",
+        "evidence": "SvekResult applies UHidden.HIDDEN to hidden edges; LimitFinder accepts UHidden as a no-op change and still records UText and DotPath bounds during dimension calculation."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/parse/deployment.rs",
+        "evidence": "deployment_arrow_has_style is case-insensitive, style validation accepts hidden/color/thickness groups, and the held-out AST retains hidden DeploymentConnection entries."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "layout.add_edge_with_label_sizes_and_minlen is called for hidden connections, and build_deployment_no_oracle_uid_model allocates UIDs for hidden connections."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "render_no_oracle_edges skips conn.hidden before opening the link group; this correctly suppresses visible hidden link paint but also removes the edge from later paint-envelope modeling."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "deployment_body_y_frame considers only entity and note bounds; deployment_body_x_frame and deployment_edge_label_x_bounds explicitly continue past conn.hidden, unlike Java LimitFinder under UHidden."
+      }
+    ],
+    "fixture_shaped_logic": "No fixture-label conditionals, golden reads, coordinate-keyed SVG surgery, or mechanism-specific unexplained constants were found in the inspected hidden-link data flow."
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short",
+    "shasum -a 256 /private/tmp/rustuml-deployment-hidden-links/target/release/rustuml",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "rg -n \"hidden|isHidden|isInvis|goHidden|LINE_STYLE|applyOneStyle|onlyOneLink|appendLine|UHidden|style=invis|invis\" <named Java files>",
+    "rg -n \"hidden|is_hidden|Visibility|DeploymentConnection|try_parse_connection|deployment_note_opale_connection|build_deployment_no_oracle_uid_model|render_no_oracle_edges|line_style|style\" <named Rust files>",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_lone_hidden_note_slot2_ltr.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_visible_plus_hidden_source_dest_labels.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_ordinary_hidden_direction_length.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_ordinary_hidden_direction_length.puml",
+    "for f in test-diagrams/perturbations/deployment-hidden-link-lifecycle/*.puml; do base=${f%.puml}; /private/tmp/rustuml-deployment-hidden-links/target/release/rustuml --no-oracle -tsvg \"$f\" > \"$base.rust.svg\"; code=$?; echo \"$code $f\"; done",
+    "/private/tmp/rustuml-deployment-hidden-links/target/release/rustuml --no-oracle --ast test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.puml",
+    "/private/tmp/rustuml-deployment-hidden-links/target/release/rustuml --no-oracle --ast test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_ordinary_hidden_direction_length.puml",
+    "diff -u test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.svg test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.rust.svg > test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.diff.txt",
+    "diff -u test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.svg test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.rust.svg > test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.diff.txt"
+  ],
+  "inputs": [
+    {
+      "stem": "checker_lone_hidden_note_slot2_ltr",
+      "valid": true,
+      "axes": [
+        "lone hidden note incidence",
+        "left-to-right direction",
+        "style slot 2",
+        "case/color companion",
+        "hidden center label",
+        "later entity UID"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_lone_hidden_note_slot2_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_lone_hidden_note_slot2_ltr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_lone_hidden_note_slot2_ltr.rust.svg",
+      "observation": "Java and Rust both render zero visible link groups and assign ent0004 to the later entity."
+    },
+    {
+      "stem": "checker_visible_plus_hidden_source_dest_labels",
+      "valid": true,
+      "axes": [
+        "visible plus hidden note incidence",
+        "destination-side note incidence",
+        "up direction reversal",
+        "style slot 1 and slot 2",
+        "semicolon group",
+        "mixed-case hidden",
+        "tail/head labels",
+        "later entity UID"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_visible_plus_hidden_source_dest_labels.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_visible_plus_hidden_source_dest_labels.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_visible_plus_hidden_source_dest_labels.rust.svg",
+      "observation": "Java and Rust both render one visible link group, suppress hidden label text, and assign AfterHiddenRelation ent0008."
+    },
+    {
+      "stem": "checker_duplicate_endpoint_hidden_middle",
+      "valid": true,
+      "axes": [
+        "ordinary node-to-node topology",
+        "duplicate endpoints",
+        "hidden event between two visible parallel edges",
+        "left-to-right direction",
+        "hidden center label",
+        "source-order UID after hidden event"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.rust.svg",
+      "diff": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.diff.txt",
+      "observation": "Rejecting counterexample: IDs and visible link groups match, but Java emits height/viewBox 166px while Rust emits 152px. The hidden duplicate label/route is not visible in either SVG, but Java's hidden paint pass still contributes to the LimitFinder envelope."
+    },
+    {
+      "stem": "checker_ordinary_hidden_direction_length",
+      "valid": true,
+      "axes": [
+        "ordinary node-to-node topology",
+        "up direction",
+        "long shaft length",
+        "hidden with thickness and color companions",
+        "later entity UID"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_ordinary_hidden_direction_length.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_ordinary_hidden_direction_length.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_ordinary_hidden_direction_length.rust.svg",
+      "observation": "Java and Rust both retain the hidden link for UID order: AfterUpwardHidden is ent0008 and the visible side route is lnk7."
+    },
+    {
+      "stem": "checker_invalid_second_slot_semicolon",
+      "valid": false,
+      "axes": [
+        "malformed second style slot semicolon"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.rust.svg",
+      "diff": "test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_invalid_second_slot_semicolon.diff.txt",
+      "observation": "Non-counting invalid probe: Java reports a syntax error on line 4, while Rust exits 0 and renders nodes A and B."
+    }
+  ],
+  "findings": [
+    {
+      "id": "valid-counterexample-hidden-label-envelope",
+      "severity": "rejecting",
+      "input": "checker_duplicate_endpoint_hidden_middle",
+      "evidence": [
+        "Java: height=\"166px\", viewBox=\"0 0 697 166\".",
+        "Rust: height=\"152px\", viewBox=\"0 0 697 152\".",
+        "Both outputs have ent0009 for AfterDuplicates, lnk5/lnk7/lnk8 for visible links, and no visible text for the hidden label \"suppressed duplicate\".",
+        "Rust AST contains four connections and marks the second Ingress->Worker relation hidden with label \"suppressed duplicate\"."
+      ],
+      "causal_account": "Java applies UHidden.HIDDEN to a hidden SvekEdge at the final paint layer. LimitFinder.apply accepts UHidden and continues recording DotPath and UText bounds, so hidden edge labels/routes can affect the final SVG envelope even though the emitted SVG group/path/text is suppressed. Rust retains the hidden connection for AST, layout, Opale incidence, and UID order, but its no-oracle body frame skips hidden edges from paint-envelope modeling. This violates the claimed invariant that only the final SVG paint is suppressed."
+    },
+    {
+      "id": "invalid-overacceptance-second-slot-semicolon",
+      "severity": "non_rejecting_invalid_probe",
+      "input": "checker_invalid_second_slot_semicolon",
+      "evidence": [
+        "Java exits with an error SVG for A -down[hidden;bold]-> B.",
+        "Rust exits 0 and renders nodes A and B without an error."
+      ],
+      "causal_account": "This confirms overacceptance around malformed style-slot syntax, but it is invalid PlantUML and therefore does not count as the required held-out counterexample."
+    }
+  ],
+  "verdict": "REJECTED",
+  "verdict_reason": "A single valid held-out counterexample is sufficient to reject: checker_duplicate_endpoint_hidden_middle shows Java hidden-edge paint suppression still participates in SVG envelope calculation, while Rust skips hidden connections from that envelope."
+}

@@ -1,0 +1,57 @@
+--- test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.svg	2026-08-01 03:22:04
++++ test-diagrams/perturbations/deployment-hidden-link-lifecycle/checker_duplicate_endpoint_hidden_middle.rust.svg	2026-08-01 03:22:21
+@@ -1 +1,51 @@
+-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="166px" preserveAspectRatio="none" style="width:697px;height:166px;background:#FFFFFF;" version="1.1" viewBox="0 0 697 166" width="697px" zoomAndPan="magnify"><?plantuml 1.2026.3beta6?><defs/><g><!--entity Ingress--><g class="entity" data-qualified-name="Ingress" data-source-line="2" id="ent0002"><polygon fill="#F1F1F1" points="31.11,91.5,41.11,81.5,120.3629,81.5,120.3629,117.9883,110.3629,127.9883,31.11,127.9883,31.11,91.5" style="stroke:#181818;stroke-width:0.5;"/><line style="stroke:#181818;stroke-width:0.5;" x1="110.3629" x2="120.3629" y1="91.5" y2="81.5"/><line style="stroke:#181818;stroke-width:0.5;" x1="31.11" x2="110.3629" y1="91.5" y2="91.5"/><line style="stroke:#181818;stroke-width:0.5;" x1="110.3629" x2="110.3629" y1="91.5" y2="127.9883"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49.2529" x="46.11" y="115.0352">Ingress</text></g><!--entity Worker--><g class="entity" data-qualified-name="Worker" data-source-line="3" id="ent0003"><polygon fill="#F1F1F1" points="340.48,91.5,350.48,81.5,428.4956,81.5,428.4956,117.9883,418.4956,127.9883,340.48,127.9883,340.48,91.5" style="stroke:#181818;stroke-width:0.5;"/><line style="stroke:#181818;stroke-width:0.5;" x1="418.4956" x2="428.4956" y1="91.5" y2="81.5"/><line style="stroke:#181818;stroke-width:0.5;" x1="340.48" x2="418.4956" y1="91.5" y2="91.5"/><line style="stroke:#181818;stroke-width:0.5;" x1="418.4956" x2="418.4956" y1="91.5" y2="127.9883"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.0156" x="355.48" y="115.0352">Worker</text></g><!--entity Auditor--><g class="entity" data-qualified-name="Auditor" data-source-line="4" id="ent0004"><polygon fill="#F1F1F1" points="581.5,91.5,591.5,81.5,672.2705,81.5,672.2705,117.9883,662.2705,127.9883,581.5,127.9883,581.5,91.5" style="stroke:#181818;stroke-width:0.5;"/><line style="stroke:#181818;stroke-width:0.5;" x1="662.2705" x2="672.2705" y1="91.5" y2="81.5"/><line style="stroke:#181818;stroke-width:0.5;" x1="581.5" x2="662.2705" y1="91.5" y2="91.5"/><line style="stroke:#181818;stroke-width:0.5;" x1="662.2705" x2="662.2705" y1="91.5" y2="127.9883"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50.7705" x="596.5" y="115.0352">Auditor</text></g><!--entity AfterDuplicates--><g class="entity" data-qualified-name="AfterDuplicates" data-source-line="9" id="ent0009"><rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="137.4814" x="7" y="7"/><polygon fill="#F1F1F1" points="127.4814,12,127.4814,26,139.4814,26,139.4814,18,133.4814,12,127.4814,12" style="stroke:#181818;stroke-width:0.5;"/><line style="stroke:#181818;stroke-width:0.5;" x1="133.4814" x2="133.4814" y1="12" y2="18"/><line style="stroke:#181818;stroke-width:0.5;" x1="139.4814" x2="133.4814" y1="18" y2="18"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.4814" x="17" y="33.5352">After duplicates</text></g><!--link Ingress to Worker--><g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk5"><path d="M120.78,94.87 C137.5,91.59 156.78,88.36 174.48,86.75 C234.68,81.25 250.48,79.46 310.48,86.75 C320.2,87.93 324.6508,88.5801 334.3408,90.8701" fill="none" id="Ingress-to-Worker" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="340.18,92.25,332.3412,86.2873,335.314,91.1,330.5013,94.0729,340.18,92.25" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="69.5132" x="207.98" y="78.4984">first visible</text></g><!--link Ingress to Worker--><!--link Ingress to Worker--><g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk7"><path d="M120.68,123.54 C137.23,129.68 156.41,135.69 174.48,138.75 C234.08,148.82 251.47,151.81 310.48,138.75 C320.58,136.51 325.4617,135.1447 335.0817,130.8947" fill="none" id="Ingress-to-Worker-1" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/><polygon fill="#181818" points="340.57,128.47,330.7212,128.4481,335.9964,130.4905,333.954,135.7658,340.57,128.47" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="88.9307" x="198.48" y="135.3184">second visible</text></g><!--link Worker to Auditor--><g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8"><path d="M428.74,104.75 C471.87,104.75 531.78,104.75 575.35,104.75" fill="none" id="Worker-to-Auditor" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="581.35,104.75,572.35,100.75,576.35,104.75,572.35,108.75,581.35,104.75" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="91.3872" x="459.5" y="101.3184">after duplicate</text></g><?plantuml-src LOyn3i8m34NtdiBgtXw00Gc9XHCm88OGEwr5bLIno_bf6wk1xUlzxszxeg2W2J8Fem9o9g-SOXCJ4hItE6GIQS49c3RddlARycuKQVoo86igXkd69g7hpXQ64mJEel1XuTT4DV8O6P7Yiwj9MUPvCma1btbYxxGEzFrFfv1F4OzIuzjQEsNDkA0hgqKkAmVdTJtztobVx_1wi2y0?></g></svg>
+\ No newline at end of file
++<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="152px" preserveAspectRatio="none" style="width:697px;height:152px;background:#FFFFFF;" version="1.1" viewBox="0 0 697 152" width="697px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Ingress-->
++<g class="entity" data-qualified-name="Ingress" data-source-line="2" id="ent0002">
++<polygon fill="#F1F1F1" points="31.11,91.5,41.11,81.5,120.3629,81.5,120.3629,117.9883,110.3629,127.9883,31.11,127.9883,31.11,91.5" style="stroke:#181818;stroke-width:0.5;"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="110.3629" x2="120.3629" y1="91.5" y2="81.5"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="31.11" x2="110.3629" y1="91.5" y2="91.5"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="110.3629" x2="110.3629" y1="91.5" y2="127.9883"/>
++<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49.2529" x="46.11" y="115.0352">Ingress</text>
++</g>
++<!--entity Worker-->
++<g class="entity" data-qualified-name="Worker" data-source-line="3" id="ent0003">
++<polygon fill="#F1F1F1" points="340.48,91.5,350.48,81.5,428.4956,81.5,428.4956,117.9883,418.4956,127.9883,340.48,127.9883,340.48,91.5" style="stroke:#181818;stroke-width:0.5;"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="418.4956" x2="428.4956" y1="91.5" y2="81.5"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="340.48" x2="418.4956" y1="91.5" y2="91.5"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="418.4956" x2="418.4956" y1="91.5" y2="127.9883"/>
++<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.0156" x="355.48" y="115.0352">Worker</text>
++</g>
++<!--entity Auditor-->
++<g class="entity" data-qualified-name="Auditor" data-source-line="4" id="ent0004">
++<polygon fill="#F1F1F1" points="581.5,91.5,591.5,81.5,672.2705,81.5,672.2705,117.9883,662.2705,127.9883,581.5,127.9883,581.5,91.5" style="stroke:#181818;stroke-width:0.5;"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="662.2705" x2="672.2705" y1="91.5" y2="81.5"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="581.5" x2="662.2705" y1="91.5" y2="91.5"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="662.2705" x2="662.2705" y1="91.5" y2="127.9883"/>
++<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50.7705" x="596.5" y="115.0352">Auditor</text>
++</g>
++<!--entity After duplicates-->
++<g class="entity" data-qualified-name="AfterDuplicates" data-source-line="9" id="ent0009">
++<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="137.4814" x="7" y="7"/>
++<polygon fill="#F1F1F1" points="127.4814,12,127.4814,26,139.4814,26,139.4814,18,133.4814,12,127.4814,12" style="stroke:#181818;stroke-width:0.5;"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="133.4814" x2="133.4814" y1="12" y2="18"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="139.4814" x2="133.4814" y1="18" y2="18"/>
++<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.4814" x="17" y="33.5352">After duplicates</text>
++</g>
++<!--link Ingress to Worker-->
++<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk5">
++<path d="M120.78,94.87 C137.5,91.59 156.78,88.36 174.48,86.74 C234.68,81.25 250.48,79.46 310.48,86.74 C320.2,87.92 324.6495,88.5858 334.3395,90.8658" fill="none" id="Ingress-to-Worker" style="stroke:#181818;stroke-width:1;"/>
++<polygon fill="#181818" points="340.18,92.24,332.3354,86.285,335.3129,91.0948,330.5031,94.0723,340.18,92.24" style="stroke:#181818;stroke-width:1;"/>
++<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="69.5132" x="207.98" y="78.4984">first visible</text>
++</g>
++<!--link Ingress to Worker-->
++<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk7">
++<path d="M120.68,123.54 C137.23,129.67 156.41,135.69 174.48,138.74 C234.08,148.81 251.47,151.81 310.48,138.74 C320.58,136.51 325.4617,135.1447 335.0817,130.8947" fill="none" id="Ingress-to-Worker-1" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
++<polygon fill="#181818" points="340.57,128.47,330.7212,128.4481,335.9964,130.4905,333.954,135.7658,340.57,128.47" style="stroke:#181818;stroke-width:1;"/>
++<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="88.9307" x="198.48" y="135.3084">second visible</text>
++</g>
++<!--link Worker to Auditor-->
++<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8">
++<path d="M428.74,104.74 C471.87,104.74 531.78,104.74 575.35,104.74" fill="none" id="Worker-to-Auditor" style="stroke:#181818;stroke-width:1;"/>
++<polygon fill="#181818" points="581.35,104.74,572.35,100.74,576.35,104.74,572.35,108.74,581.35,104.74" style="stroke:#181818;stroke-width:1;"/>
++<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="91.3872" x="459.5" y="101.3084">after duplicate</text>
++</g>
++</g></svg>
+\ No newline at end of file
