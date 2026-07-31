@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-link-note-color-factory-consumption",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "d9b51142feace4bf4fe80c50edecbc34b42eb2b5",
+  "triggering_review": "docs/parity-reviews/description-color-parser-part2/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": ["DescriptionDiagramFactory.initCommandsList"],
+      "lines": "98-106",
+      "role": "Registers CommandFactoryNoteOnLink's single-line command before its multiline command, so a first line consumable by both is owned and executed by the single-line form."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "symbols": ["getRegexConcatSingleLine", "getRegexConcatMultiLine", "executeInternal"],
+      "lines": "75-169",
+      "role": "Builds the two complete command regexes around the same optional ColorParser leaf. The single-line form appends optional space, the body colon, and NOTE; the multiline form ends immediately after the color. Both resolve the captured color only after command selection."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "symbols": ["COLOR_REGEXP", "PART2", "COLORS_REGEXP", "getColor"],
+      "lines": "41-80",
+      "role": "Orders PART2 before ordinary COLOR_REGEXP. PART2 may end before whitespace or end-of-input but its negative lookahead forbids ending immediately before a colon; the ordinary branch can then backtrack to a shorter hash word."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/Colors.java",
+      "symbols": ["Colors(String, HColorSet, ColorType)", "getSpecificLineStroke"],
+      "lines": "54-126",
+      "role": "Resolves the already-captured expression into sparse channels and retains a line style. A syntactically captured ordinary token such as #back can therefore fail later with NoSuchColorException."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "symbols": ["ComponentRoseNote", "drawInternalU"],
+      "lines": "64-125",
+      "role": "Passes Colors only to getSymbolContext(colors), then paints the folded polygon with that Fashion and paints its prebuilt text block separately."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/style/Style.java",
+      "symbols": ["getSymbolContext(HColorSet, Colors)", "getFontConfiguration(HColorSet, Colors)"],
+      "lines": "217-247",
+      "role": "The symbol context consumes BACK and LINE but deliberately calls getStroke() without Colors. A Colors-aware font method exists, but this component does not call it."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "symbols": ["AbstractTextualComponent"],
+      "lines": "70-100",
+      "role": "Constructs the note text block using getFontConfiguration() before ComponentRoseNote stores Colors, so the retained TEXT channel is not consumed by folded link-note text."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["parse_deployment_link_note_command"],
+      "lines": "516-582",
+      "role": "Searches for the longest semantically valid color prefix and treats every immediate colon as a command boundary. That bypasses Java's full-regex command selection and rejects no syntactically captured-but-unresolvable fallback."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["parse_plantuml_colors", "plantuml_color_value_parts"],
+      "lines": "90-259",
+      "role": "Already separates structural color-token recognition from palette resolution internally, but exposes only a combined successful typed parse."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["render_deployment_link_note", "deployment_note_stroke_style"],
+      "lines": "3580-3660",
+      "role": "Consumes retained TEXT and line-style channels even though Java's ComponentRoseNote path consumes only BACK and LINE."
+    }
+  ],
+  "claimed_invariant": "A Description link-note first line is classified by the complete registered command regexes before its captured color is resolved. The single-line command has precedence. For a compact keyed form such as #back:Red: body, PART2 cannot terminate immediately before the body colon, so the regex can fall back to ordinary #back, use the first colon as the body delimiter, and then fail resolving #back. The same fallback can steal an apparent multiline start such as #header:Gold; a dotted directive name prevents that shorter ordinary match and allows the multiline command to own the line. Once a valid Colors value reaches ComponentRoseNote, BACK and LINE affect the folded polygon, while TEXT and the specific line stroke remain retained but visually unused on this component path.",
+  "causal_divergence": "Rust selected a color prefix by longest successful semantic parse instead of reproducing Java's command-regex ownership followed by color resolution. It therefore accepted compact keyed boundaries and multiline starts that Java's earlier single-line command captures as an invalid ordinary color. Rust then treated every retained channel as paint input, while Java's folded-note component passes Colors only through a symbol-context path that ignores the specific stroke and constructs text from the ordinary style font configuration.",
+  "planned_model_change": "Model single-line command consumability before multiline consumability. Distinguish structural ordinary-color capture from successful palette resolution so a shorter Java-compatible capture can own the command and fail terminally. For PART2, allow an inline delimiter after whitespace or an explicitly consumed trailing semicolon, but not as an immediate negative-lookahead boundary. Preserve all typed Colors channels in the AST, then make Deployment folded link-note rendering consume only BACK and LINE with the default solid style and default text color.",
+  "perturbation_axes": [
+    "inline keyed PART2 with whitespace, trailing semicolon, and compact colon boundaries",
+    "apparent multiline starts beginning with back, text, header, line, line.dotted, and line.bold",
+    "leading ordinary color before keyed directives versus a keyed directive first",
+    "retained TEXT and line-style channels with independently changed BACK and LINE",
+    "mixed-case directives and named versus hexadecimal values",
+    "renamed endpoints, changed note positions, and changed one-line versus multi-row bodies"
+  ],
+  "scope_boundary": "This follow-up owns Description Deployment link-note command selection at the color/body boundary and ComponentRoseNote channel consumption. It does not change subtype scoring, link eligibility, body dedent, geometry, Graphviz routing, other diagram families' note renderers, comparator behavior, baselines, park lists, or guard allow-lists.",
+  "acceptance": [
+    "Parser tests demonstrate single-line precedence, compact keyed rejection, whitespace and semicolon acceptance, and the back/text/header/line versus dotted-name multiline split.",
+    "AST tests demonstrate that valid TEXT and line-style channels remain retained even though this renderer ignores them.",
+    "Renderer tests demonstrate independent BACK and LINE output with default black text and a solid half-pixel border for dashed, dotted, and bold retained styles.",
+    "All 33 preserved rejection-review inputs agree with Java on accept/error outcome and structural output where comparison is applicable, excluding separately recorded subtype ownership cases.",
+    "Focused tests, affected-crate tests, clippy with warnings denied, and a frozen release binary pass before a new independent adversarial review.",
+    "A separate checker generates fresh command-boundary and channel-consumption inputs and records exact revisions, commands, evidence, findings, and verdict."
+  ],
+  "forbidden_approaches": [
+    "special-casing checker labels, stems, note text, endpoint names, or individual fixture strings",
+    "treating every colon after a semantically valid PART2 prefix as an inline delimiter",
+    "discarding retained channels merely because this particular renderer does not consume them",
+    "painting TEXT or specific line stroke in folded Deployment link notes",
+    "post-hoc SVG surgery, golden reads from shipping crates, comparator changes, or baseline changes"
+  ]
+}
