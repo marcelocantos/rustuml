@@ -5,7 +5,8 @@
     "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
     "identity": "independent adversarial checker",
     "model": "GPT-5 Codex / Codex desktop",
-    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle"
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle",
+    "independence": "independent adversarial checker"
   },
   "requested_rust_revision": "10a16ee37cc98b38f5ba465b217a3362ab73a8ed (not a Git object in this checkout)",
   "rust_revision": "10a16ee323cf2a2a21054967681eec6e43cd5b22",
@@ -13,6 +14,11 @@
   "account_commit": "4fe430091e56f22963be85e0592e7b65e0511829",
   "implementation_commit": "1482ade4ff70df8c2da81848b11956d66179a029",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "revisions": {
+    "account_commit": "4fe430091e56f22963be85e0592e7b65e0511829",
+    "implementation_commit": "1482ade4ff70df8c2da81848b11956d66179a029",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
   "commands": [
     "git show 4fe43009:docs/parity-reviews/class-package-direct-standalone-layout/account.json",
     "git merge-base --is-ancestor 4fe430091e56f22963be85e0592e7b65e0511829 1482ade4ff70df8c2da81848b11956d66179a029",

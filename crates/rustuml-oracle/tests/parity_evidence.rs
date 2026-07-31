@@ -884,18 +884,35 @@ fn require_one_string_field(
     path: &Path,
     violations: &mut Vec<String>,
 ) {
-    if fields.iter().any(|field| {
-        object
-            .get(*field)
-            .and_then(Value::as_str)
-            .is_some_and(|text| !text.trim().is_empty())
-    }) {
-        return;
+    let mut values = BTreeSet::new();
+    for field in fields {
+        let Some(value) = object.get(*field) else {
+            continue;
+        };
+        let Some(value) = value
+            .as_str()
+            .map(str::trim)
+            .filter(|value| !value.is_empty())
+        else {
+            violations.push(format!(
+                "{}: {field} must be a non-empty string when present",
+                path.display()
+            ));
+            continue;
+        };
+        values.insert(value.to_owned());
     }
-    violations.push(format!(
-        "{}: one of {fields:?} must be a non-empty string",
-        path.display()
-    ));
+    if values.is_empty() {
+        violations.push(format!(
+            "{}: one of {fields:?} must be a non-empty string",
+            path.display()
+        ));
+    } else if values.len() > 1 {
+        violations.push(format!(
+            "{}: conflicting narrative aliases {fields:?}: {values:?}",
+            path.display()
+        ));
+    }
 }
 
 fn require_one_descriptive_field(
@@ -904,17 +921,31 @@ fn require_one_descriptive_field(
     path: &Path,
     violations: &mut Vec<String>,
 ) {
-    if fields.iter().any(|field| {
-        object
-            .get(*field)
-            .is_some_and(descriptive_value_is_non_empty)
-    }) {
-        return;
+    let mut values = BTreeSet::new();
+    for field in fields {
+        let Some(value) = object.get(*field) else {
+            continue;
+        };
+        if !descriptive_value_is_non_empty(value) {
+            violations.push(format!(
+                "{}: {field} must be a non-empty string/list/object when present",
+                path.display()
+            ));
+            continue;
+        }
+        values.insert(serde_json::to_string(value).expect("JSON values serialize"));
     }
-    violations.push(format!(
-        "{}: one of {fields:?} must be a non-empty string/list/object",
-        path.display()
-    ));
+    if values.is_empty() {
+        violations.push(format!(
+            "{}: one of {fields:?} must be a non-empty string/list/object",
+            path.display()
+        ));
+    } else if values.len() > 1 {
+        violations.push(format!(
+            "{}: conflicting narrative aliases {fields:?}: {values:?}",
+            path.display()
+        ));
+    }
 }
 
 fn descriptive_value_is_non_empty(value: &Value) -> bool {
@@ -1016,6 +1047,7 @@ fn require_reviewer(
     path: &Path,
     violations: &mut Vec<String>,
 ) {
+    validate_reviewer_container_consensus(object, path, violations);
     if has_historical_reviewer_marker(object) {
         return;
     }
@@ -1081,6 +1113,7 @@ fn validate_explicit_checker(
         return;
     }
     let reviewer = reviewers[0];
+    validate_reviewer_container_consensus(object, path, violations);
     for (label, fields) in [
         ("identity", REVIEWER_IDENTITY_FIELDS),
         ("model", REVIEWER_MODEL_FIELDS),
@@ -1115,6 +1148,29 @@ fn validate_explicit_checker(
     if !independence {
         violations.push(format!(
             "{}: accepted review must explicitly attest checker independence",
+            path.display()
+        ));
+    }
+}
+
+fn validate_reviewer_container_consensus(
+    object: &serde_json::Map<String, Value>,
+    path: &Path,
+    violations: &mut Vec<String>,
+) {
+    let mut containers = BTreeSet::new();
+    for field in ["reviewer", "checker", "checker_identity", "identity"] {
+        let Some(value) = object.get(field) else {
+            continue;
+        };
+        let Some(container) = value.as_object() else {
+            continue;
+        };
+        containers.insert(serde_json::to_string(container).expect("JSON objects serialize"));
+    }
+    if containers.len() > 1 {
+        violations.push(format!(
+            "{}: conflicting reviewer identity containers",
             path.display()
         ));
     }
@@ -1477,6 +1533,39 @@ mod tests {
     }
 
     #[test]
+    fn account_narrative_aliases_must_agree() {
+        let object = json!({
+            "invariant": "the first model",
+            "claimed_invariant": "a different model",
+            "planned_change": "port the first model",
+            "planned_model_change": "port a different model"
+        })
+        .as_object()
+        .unwrap()
+        .clone();
+        let mut violations = Vec::new();
+        require_one_string_field(
+            &object,
+            ACCOUNT_INVARIANT_FIELDS,
+            Path::new("account.json"),
+            &mut violations,
+        );
+        require_one_descriptive_field(
+            &object,
+            ACCOUNT_PLANNED_CHANGE_FIELDS,
+            Path::new("account.json"),
+            &mut violations,
+        );
+        assert!(
+            violations
+                .iter()
+                .all(|violation| violation.contains("conflicting narrative aliases")),
+            "{violations:?}"
+        );
+        assert_eq!(violations.len(), 2, "{violations:?}");
+    }
+
+    #[test]
     fn positive_heldout_requires_explicit_known_pass_signal() {
         let missing_result = json!({
             "source": "test-diagrams/perturbations/m/case.puml",
@@ -1666,6 +1755,28 @@ mod tests {
         assert!(contains_violation(
             &report,
             "does not exist in this repository"
+        ));
+    }
+
+    #[test]
+    fn conflicting_legacy_reviewer_containers_are_rejected() {
+        let fixture = accepted_fixture("conflicting-reviewer-containers");
+        mutate_review(&fixture.root, |review| {
+            review.insert(
+                "checker_identity".to_owned(),
+                json!({
+                    "identity": "a different checker",
+                    "model": "another model",
+                    "tool": "another tool"
+                }),
+            );
+        });
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "conflicting reviewer identity containers"
         ));
     }
 

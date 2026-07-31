@@ -9,6 +9,8 @@
     "implemented_change": false
   },
   "revisions": {
+    "account_commit": "948ac3ac4419fdb080a1622c989dca0f879c634a",
+    "implementation_commit": "8e3293558e45963ebd57d910370fbfa8d3660da3",
     "combined_rust_revision": "ee4dbd88e1fe14273a73fb62d54813b3885bd993",
     "implementation_revision": "8e3293558e45963ebd57d910370fbfa8d3660da3",
     "pre_code_account": "docs/parity-reviews/component-attached-note-contextual-identity/account.json",

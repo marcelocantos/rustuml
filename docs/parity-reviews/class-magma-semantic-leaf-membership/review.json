@@ -5,7 +5,8 @@
     "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
     "identity": "independent adversarial checker; did not implement the mechanism",
     "model": "GPT-5 Codex",
-    "tool": "Codex desktop, exact supplied RustUML shipping binary, Java PlantUML JAR, xmllint, and an inline XML structural comparator"
+    "tool": "Codex desktop, exact supplied RustUML shipping binary, Java PlantUML JAR, xmllint, and an inline XML structural comparator",
+    "independence": "independent adversarial checker; did not implement the mechanism"
   },
   "verdict": "ACCEPTED",
   "revisions": {
