@@ -39,6 +39,9 @@ pub struct DeploymentNote {
     pub target: Option<String>,
     /// The note text.
     pub text: String,
+    /// Explicit note background color, retained as a PlantUML color token.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     /// Requested side of an attached note.
     #[serde(default)]
     pub position: DeploymentNotePosition,

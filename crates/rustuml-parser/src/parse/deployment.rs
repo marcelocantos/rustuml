@@ -384,6 +384,7 @@ fn deployment_note_position(value: &str) -> DeploymentNotePosition {
 struct NoteAccum {
     target: Option<String>,
     id: Option<String>,
+    color: Option<String>,
     position: DeploymentNotePosition,
     source_line: usize,
     lines: Vec<String>,
@@ -435,22 +436,26 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     });
 
     // note "text" as ID  — floating note
-    static RE_NOTE_FLOATING: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+    static RE_NOTE_FLOATING: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*(#\S+)?\s*$"#).unwrap()
+    });
 
     // note as ID [#color] — multiline floating note
     static RE_NOTE_FLOATING_MULTI: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+([\w.]+)\s*(?:#\S+)?\s*$").unwrap());
+        LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+([\w.]+)\s*(#\S+)?\s*$").unwrap());
 
     // note direction of target : text  (inline attached note)
     static RE_NOTE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#)
-            .unwrap()
+        Regex::new(
+            r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*(#\S+)?\s*:\s*(.+)$"#,
+        )
+        .unwrap()
     });
 
     // note direction of target  (multiline attached note — no colon)
     static RE_NOTE_ATTACHED_MULTI: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*$"#).unwrap()
+        Regex::new(r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*(#\S+)?\s*$"#)
+            .unwrap()
     });
 
     // N1 .. N2  — note link (N1 is the note ID, N2 is the target)
@@ -489,6 +494,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     id: accum.id,
                     target: accum.target,
                     text,
+                    color: accum.color,
                     position: accum.position,
                     source_line: accum.source_line,
                 });
@@ -614,6 +620,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 id: Some(id),
                 target: None,
                 text,
+                color: caps.get(3).map(|value| value.as_str().to_string()),
                 position: DeploymentNotePosition::Right,
                 source_line: current_line,
             });
@@ -624,6 +631,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             note_accum = Some(NoteAccum {
                 id: Some(caps[1].to_string()),
                 target: None,
+                color: caps.get(2).map(|value| value.as_str().to_string()),
                 position: DeploymentNotePosition::Right,
                 // Preprocessing strips the `@startuml` line before the first
                 // content record; the multiline command's Java location is
@@ -639,11 +647,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let position = deployment_note_position(&caps[1].to_ascii_lowercase());
             let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
-            let text = caps[3].trim().to_string();
+            let text = caps[4].trim().to_string();
             notes.push(DeploymentNote {
                 id: None,
                 target: Some(target),
                 text,
+                color: caps.get(3).map(|value| value.as_str().to_string()),
                 position,
                 source_line: current_line,
             });
@@ -658,6 +667,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             note_accum = Some(NoteAccum {
                 id: None,
                 target: Some(target),
+                color: caps.get(3).map(|value| value.as_str().to_string()),
                 position,
                 source_line: current_line + 1,
                 lines: Vec::new(),
@@ -1086,7 +1096,7 @@ mod tests {
     #[test]
     fn floating_multiline_note_owns_payload_before_later_nodes() {
         let d = parse(
-            "NoTe as DispatchPayload\n\
+            "NoTe as DispatchPayload #MistyRose\n\
              control body remains note text\n\
              EnD NoTe\n\
              node RuntimeNode",
@@ -1094,9 +1104,31 @@ mod tests {
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].id.as_deref(), Some("DispatchPayload"));
         assert_eq!(d.notes[0].text, "control body remains note text");
+        assert_eq!(d.notes[0].color.as_deref(), Some("#MistyRose"));
         assert_eq!(d.notes[0].source_line, 2);
         assert_eq!(d.nodes.len(), 1);
         assert_eq!(d.nodes[0].id, "RuntimeNode");
+    }
+
+    #[test]
+    fn explicit_note_colors_survive_every_deployment_command_form() {
+        let d = parse(
+            "node Server\n\
+             note \"inline floating\" as InlineFloat #AliceBlue\n\
+             note as MultiFloat #MistyRose\n\
+             multiline floating\n\
+             endnote\n\
+             note right of Server #LightGreen : inline attached\n\
+             note left of Server #Wheat\n\
+             multiline attached\n\
+             end note",
+        );
+
+        assert_eq!(d.notes.len(), 4);
+        assert_eq!(d.notes[0].color.as_deref(), Some("#AliceBlue"));
+        assert_eq!(d.notes[1].color.as_deref(), Some("#MistyRose"));
+        assert_eq!(d.notes[2].color.as_deref(), Some("#LightGreen"));
+        assert_eq!(d.notes[3].color.as_deref(), Some("#Wheat"));
     }
 
     #[test]

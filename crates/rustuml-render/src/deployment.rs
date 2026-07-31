@@ -3167,6 +3167,13 @@ const NOTE_MARGIN_Y: f64 = 5.0;
 const NOTE_CONNECTOR_HALF: f64 = 4.0;
 const NOTE_GAP: f64 = 10.0;
 
+fn deployment_note_fill(note: &DeploymentNote) -> String {
+    note.color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string())
+}
+
 /// Which edge of the note box the leader notch is spliced into, derived
 /// from the apex position relative to the box.
 #[derive(Clone, Copy)]
@@ -3300,6 +3307,7 @@ fn render_attached_deployment_note(
     body_margin_x: f64,
     body_margin_y: f64,
 ) {
+    let fill = deployment_note_fill(note);
     let center = (
         layout.x + layout.width / 2.0,
         layout.y + layout.height / 2.0,
@@ -3424,10 +3432,10 @@ fn render_attached_deployment_note(
         uid.qualified_name, note.source_line, uid.entity_id
     ));
     svg.raw(&format!(
-        r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     svg.raw(&format!(
-        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
 
     let mut text_y = y + NOTE_MARGIN_Y;
@@ -3454,6 +3462,7 @@ fn render_floating_deployment_note(
     layout: &DeploymentNoteLayout,
     uid: &DeploymentNoteUid,
 ) {
+    let fill = deployment_note_fill(note);
     let x = layout.x;
     let y = layout.y;
     let right = x + layout.width;
@@ -3484,10 +3493,10 @@ fn render_floating_deployment_note(
         uid.qualified_name, note.source_line, uid.entity_id
     ));
     svg.raw(&format!(
-        r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     svg.raw(&format!(
-        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:1;"/>"#
+        r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:1;"/>"#
     ));
     let mut text_y = y + NOTE_MARGIN_Y;
     for line in note.text.lines() {
@@ -7400,6 +7409,24 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(note_start < node_start, "{svg}");
         assert!(svg[note_start..node_start].contains("control body remains display text"));
         assert!(!svg[note_start..node_start].contains(" L0,0 "), "{svg}");
+    }
+
+    #[test]
+    fn no_oracle_note_color_paints_body_and_fold_from_ast() {
+        let source = "@startuml\n\
+            node RenamedRuntime743\n\
+            note as RenamedLedger751 #MistyRose\n\
+              retained color payload\n\
+            endnote\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert_eq!(svg.matches(r##"fill="#FFE4E1""##).count(), 2, "{svg}");
+        assert!(svg.contains(">retained color payload</text>"), "{svg}");
     }
 
     #[test]
