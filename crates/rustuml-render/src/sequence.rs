@@ -2069,8 +2069,8 @@ pub(crate) fn gradient_endpoints(
 }
 
 fn resolve_gradient_id(defs: &str, c1: &str, c2: &str, policy: char) -> Option<String> {
-    let c1 = c1.trim_start_matches('#');
-    let c2 = c2.trim_start_matches('#');
+    let c1 = resolve_color(c1);
+    let c2 = resolve_color(c2);
     let (x1, x2, y1, y2) = gradient_endpoints(policy);
     let mut rest = defs;
     while let Some(start) = rest.find("<linearGradient") {
@@ -2093,8 +2093,8 @@ fn resolve_gradient_id(defs: &str, c1: &str, c2: &str, policy: char) -> Option<S
             })
             .collect();
         if let (Some(id), [s0, s1, ..]) = (id, stops.as_slice())
-            && s0.trim_start_matches('#').eq_ignore_ascii_case(c1)
-            && s1.trim_start_matches('#').eq_ignore_ascii_case(c2)
+            && s0.eq_ignore_ascii_case(&c1)
+            && s1.eq_ignore_ascii_case(&c2)
             && attr_value(elem, "x1").is_none_or(|value| value == x1)
             && attr_value(elem, "x2").is_none_or(|value| value == x2)
             && attr_value(elem, "y1").is_none_or(|value| value == y1)
@@ -2113,7 +2113,12 @@ fn resolve_gradient_id(defs: &str, c1: &str, c2: &str, policy: char) -> Option<S
 /// reference when the value is a `#c1/c2`-style gradient and the oracle
 /// captured the matching `<linearGradient>` def, otherwise the flat colour.
 pub(crate) fn gradient_fill_or(val: &str, gradient_defs: Option<&str>) -> String {
-    if val.trim().eq_ignore_ascii_case("transparent") {
+    // `HColorSet.parseColor` maps both whole values to `HColors.none()`.
+    let whole = val.trim().strip_prefix('#').unwrap_or(val.trim());
+    if matches!(
+        whole.to_ascii_lowercase().as_str(),
+        "transparent" | "background"
+    ) {
         "none".to_string()
     } else if let Some((c1, c2, policy)) = split_gradient_colors(val)
         && let Some(id) = gradient_defs.and_then(|defs| resolve_gradient_id(defs, c1, c2, policy))

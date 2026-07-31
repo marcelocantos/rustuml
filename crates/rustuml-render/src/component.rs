@@ -141,6 +141,11 @@ fn component_gradients(diagram: &ComponentDiagram) -> Vec<ComponentGradient> {
             register_component_gradient(source, &mut gradients, color);
         }
     }
+    for note in &diagram.notes {
+        if let Some(color) = note.color.as_deref() {
+            register_component_gradient(source, &mut gradients, color);
+        }
+    }
 
     gradients
 }
@@ -157,6 +162,13 @@ fn component_gradient_defs(gradients: &[ComponentGradient]) -> String {
         .unwrap();
     }
     defs
+}
+
+fn component_note_fill(note: &ComponentNote, gradient_defs: Option<&str>) -> String {
+    note.color
+        .as_deref()
+        .map(|color| crate::sequence::gradient_fill_or(color, gradient_defs))
+        .unwrap_or_else(|| NOTE_FILL.to_string())
 }
 
 fn component_dash_suffix(dash: Option<(f64, f64)>) -> String {
@@ -3334,6 +3346,7 @@ pub fn render_with_oracle(
                     uid,
                     edge.map(|edge| (edge, svek_edge_dx, svek_edge_dy)),
                     (position, Some(note_is_first)),
+                    gradient_defs,
                     &mut svg,
                 );
                 continue;
@@ -3342,7 +3355,7 @@ pub fn render_with_oracle(
                 && note.target.is_none()
                 && let (Some(layout), Some(uid)) = (layout, uid)
             {
-                render_normal_component_note(note, layout, uid, &mut svg);
+                render_normal_component_note(note, layout, uid, gradient_defs, &mut svg);
                 continue;
             }
             if let (Some(layout), Some(uid), Some(target)) = (layout, uid, note.target.as_deref()) {
@@ -3363,7 +3376,7 @@ pub fn render_with_oracle(
                     .iter()
                     .find(|edge| edge.from == from && edge.to == to);
                 if target_package.is_some() {
-                    render_normal_component_note(note, layout, uid, &mut svg);
+                    render_normal_component_note(note, layout, uid, gradient_defs, &mut svg);
                 } else {
                     render_attached_component_note(
                         note,
@@ -3371,6 +3384,7 @@ pub fn render_with_oracle(
                         uid,
                         edge.map(|edge| (edge, svek_edge_dx, svek_edge_dy)),
                         (note.position, None),
+                        gradient_defs,
                         &mut svg,
                     );
                 }
@@ -3380,9 +3394,9 @@ pub fn render_with_oracle(
                     &positions,
                     &comp_dims,
                     &diagram.components,
+                    gradient_defs,
                     &mut svg,
-                    total_w,
-                    total_h,
+                    (total_w, total_h),
                 );
             }
         }
@@ -3939,6 +3953,7 @@ pub fn render_with_oracle(
                         note_x,
                         note_y,
                         &note_dims[note_index],
+                        gradient_defs,
                         &mut svg,
                     );
                 }
@@ -7435,8 +7450,10 @@ fn render_normal_component_note(
     note: &ComponentNote,
     layout: &ComponentNoteLayout,
     uid: &NoOracleNoteUid,
+    gradient_defs: Option<&str>,
     svg: &mut SvgBuilder,
 ) {
+    let fill = component_note_fill(note, gradient_defs);
     let x = layout.x;
     let y = layout.y;
     let w = layout.width;
@@ -7466,10 +7483,10 @@ fn render_normal_component_note(
         uid.qualified_name, note.source_line, uid.entity_id
     ));
     svg.raw(&format!(
-        r#"<path d="{body_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{body_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     svg.raw(&format!(
-        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:1;"/>"#
+        r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:1;"/>"#
     ));
 
     let mut text_y = y + NOTE_MARGIN_Y;
@@ -7503,8 +7520,10 @@ fn render_component_link_note(
     x: f64,
     y: f64,
     dim: &CompDim,
+    gradient_defs: Option<&str>,
     svg: &mut SvgBuilder,
 ) {
+    let fill = component_note_fill(note, gradient_defs);
     // `ComponentRoseNote.drawInternalU` truncates the text-box dimensions
     // before delegating the folded rectangle to `Opale`.
     let width = dim.width.floor();
@@ -7514,7 +7533,7 @@ fn render_component_link_note(
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
     svg.raw(&format!(
-        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         x = fc(x),
         y = fc(y),
         bottom = fc(bottom),
@@ -7523,7 +7542,7 @@ fn render_component_link_note(
         fold_x = fc(fold_x),
     ));
     svg.raw(&format!(
-        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         fold_x = fc(fold_x),
         y = fc(y),
         fold_y = fc(fold_y),
@@ -7559,8 +7578,10 @@ fn render_attached_component_note(
     uid: &NoOracleNoteUid,
     edge: Option<(&EdgePath, f64, f64)>,
     geometry: (ComponentNotePosition, Option<bool>),
+    gradient_defs: Option<&str>,
     svg: &mut SvgBuilder,
 ) {
+    let fill = component_note_fill(note, gradient_defs);
     let (position, note_is_first) = geometry;
     let center = (
         layout.x + layout.width / 2.0,
@@ -7696,10 +7717,10 @@ fn render_attached_component_note(
         uid.qualified_name, note.source_line, uid.entity_id
     ));
     svg.raw(&format!(
-        r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     svg.raw(&format!(
-        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
 
     let mut text_y = y + NOTE_MARGIN_Y;
@@ -7733,10 +7754,12 @@ fn render_fallback_note(
     positions: &[(f64, f64)],
     comp_dims: &[CompDim],
     components: &[Component],
+    gradient_defs: Option<&str>,
     svg: &mut SvgBuilder,
-    canvas_w: f64,
-    canvas_h: f64,
+    canvas: (f64, f64),
 ) {
+    let (canvas_w, canvas_h) = canvas;
+    let fill = component_note_fill(note, gradient_defs);
     let lines: Vec<&str> = note.text.lines().collect();
     let note_w = lines
         .iter()
@@ -7765,7 +7788,7 @@ fn render_fallback_note(
 
     // Note box with dog-ear, matching PlantUML's path-based rendering.
     // PlantUML uses a path for the note shape including a connector line.
-    svg.note_box(nx, ny, note_w, note_h, NOTE_FOLD, NOTE_FILL, STROKE);
+    svg.note_box(nx, ny, note_w, note_h, NOTE_FOLD, &fill, STROKE);
 
     for (i, line) in lines.iter().enumerate() {
         let ty = ny + NOTE_PAD + (i as f64 + 1.0) * NOTE_LINE_H - 2.0;
@@ -10695,5 +10718,24 @@ LateRelay3449 --> InlineRelay3457
                 super::ComponentSvekLeaf::Component(1)
             ]
         );
+    }
+
+    #[test]
+    fn named_note_colors_reach_none_and_gradient_paint() {
+        let input = "@startuml\n\
+                     component Anchor\n\
+                     note \"transparent solid\" as TransparentSolid #transparent\n\
+                     note \"background solid\" as BackgroundSolid #background\n\
+                     note \"gradient solid\" as GradientSolid #Red/LightBlue\n\
+                     TransparentSolid --> Anchor\n\
+                     BackgroundSolid --> Anchor\n\
+                     GradientSolid --> Anchor\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.matches(r#"fill="none""#).count() >= 4, "{svg}");
+        assert_eq!(svg.matches("<linearGradient ").count(), 1, "{svg}");
+        assert!(svg.matches(r#"fill="url(#"#).count() >= 2, "{svg}");
     }
 }
