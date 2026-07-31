@@ -3585,22 +3585,22 @@ pub fn render_with_oracle(
                 .components
                 .iter()
                 .enumerate()
-                .find(|(_, c)| c.id == conn.from);
+                .find(|(_, c)| c.id == logical_from);
             let to_comp = diagram
                 .components
                 .iter()
                 .enumerate()
-                .find(|(_, c)| c.id == conn.to);
+                .find(|(_, c)| c.id == logical_to);
             let from_iface = diagram
                 .interfaces
                 .iter()
                 .enumerate()
-                .find(|(_, i)| i.id == conn.from);
+                .find(|(_, i)| i.id == logical_from);
             let to_iface = diagram
                 .interfaces
                 .iter()
                 .enumerate()
-                .find(|(_, i)| i.id == conn.to);
+                .find(|(_, i)| i.id == logical_to);
             let from_package = package_qualified_names.get(logical_from).and_then(|qname| {
                 cluster_positions
                     .iter()
@@ -10843,5 +10843,51 @@ LateRelay3449 --> InlineRelay3457
         );
         assert!(two_sided_svg.contains(r#"id="lnk6""#), "{two_sided_svg}");
         assert!(two_sided_svg.contains(r#"id="lnk7""#), "{two_sided_svg}");
+    }
+
+    #[test]
+    fn reversed_named_note_edges_use_direction_normalized_endpoint_identity() {
+        let left = rustuml_parser::parse::parse(
+            "@startuml\n\
+             left to right direction\n\
+             package Envelope {\n\
+               component North\n\
+               component South\n\
+               note as ReverseLedger #LightBlue\n\
+                 reversal payload\n\
+               end note\n\
+               North <-left- ReverseLedger : into-note\n\
+               ReverseLedger -left-> South : out-of-note\n\
+               North --> South : control\n\
+             }\n\
+             @enduml",
+        )
+        .unwrap();
+        let left_svg = crate::render_svg(&left);
+        assert_eq!(
+            left_svg.matches(r#"<g class="link""#).count(),
+            3,
+            "{left_svg}"
+        );
+        for label in ["into-note", "out-of-note", "control"] {
+            assert!(left_svg.contains(&format!(">{label}</text>")), "{left_svg}");
+        }
+
+        let up = rustuml_parser::parse::parse(
+            "@startuml\n\
+             component Lower\n\
+             component Upper\n\
+             note \"vertical payload\" as VerticalLedger #Wheat\n\
+             Lower \"tail-count\" -up-> \"head-count\" VerticalLedger : climbs\n\
+             Upper --> VerticalLedger : second\n\
+             VerticalLedger --> Lower : return\n\
+             @enduml",
+        )
+        .unwrap();
+        let up_svg = crate::render_svg(&up);
+        assert_eq!(up_svg.matches(r#"<g class="link""#).count(), 3, "{up_svg}");
+        for label in ["climbs", "second", "return", "tail-count", "head-count"] {
+            assert!(up_svg.contains(&format!(">{label}</text>")), "{up_svg}");
+        }
     }
 }
