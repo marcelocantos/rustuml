@@ -33,6 +33,14 @@
       "role": "Stores ampersand parallel state on the sequence event for downstream layout rather than treating the prefix as ignorable syntax."
     },
     {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/NotesBoxes.java",
+      "symbols": [
+        "NotesBoxes.ensureConstraints"
+      ],
+      "lines": "69-86",
+      "role": "Makes a merged Notes event a horizontal-layout aggregate as well as a shared vertical row: every member reserves half its raw component preferred width before its first participant and after its second participant, and adjacent members on distinct participants reserve half the sum between them."
+    },
+    {
       "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
       "symbols": [
         "PSystemCommandFactory.getCandidate",
@@ -80,7 +88,7 @@
   ],
   "claimed_invariant": "The sequence note command grammar accepts an optional ampersand parallel prefix, then an optional slash vertical-merge prefix, before note, hnote, or rnote in both single- and multiline forms. These prefixes are semantic: ampersand makes the note event parallel in sequence layout, while slash asks event insertion to merge the note with the immediately preceding Note or Notes event and has no effect when the predecessor is another event kind. Span ownership, parser construction, event insertion, and rendering must all consume one parsed prefix record.",
   "causal_divergence": "Rust's shared note_command_parts knows enough to strip ampersand and slash for completed-body masking, but SeqParser::try_note independently starts its regex at the note keyword. The selected sequence consumer therefore rejects the opener after dispatch has hidden its body, drops the note, and may create participants from exposed or subsequently parsed payload in related paths. Merely admitting the opener would still be wrong: NoteBuffer and sequence::Note have no parallel or try-merge state, and the renderer only knows ordinary note rows. The missing mechanism spans command parsing and sequence event semantics, not two prefix-specific fixture exceptions.",
-  "planned_model_change": "Replace destructive prefix stripping with a canonical SequenceNoteCommand parse result carrying parallel, try_merge, shape, position, participants, color, inline/body mode, and source line. Use it for both dispatch span recognition and SeqParser construction. Preserve parallel and try_merge through NoteBuffer and the sequence event model. Centralize note insertion to mirror SequenceDiagram.addNote: slash coalesces only with an immediately preceding note group; ampersand marks the event for the renderer's parallel frontier. Extend sequence layout to consume those structural states rather than applying coordinate offsets. Honor Java's prefix order and whitespace grammar, including a combined ampersand-plus-slash form, across note, hnote, and rnote.",
+  "planned_model_change": "Replace destructive prefix stripping with a canonical SequenceNoteCommand parse result carrying parallel, try_merge, shape, position, participants, color, inline/body mode, and source line. Use it for both dispatch span recognition and SeqParser construction. Preserve parallel and try_merge through NoteBuffer and the sequence event model. Centralize note insertion to mirror SequenceDiagram.addNote: slash coalesces only with an immediately preceding note group; ampersand marks the event for the renderer's parallel frontier. Represent a coalesced Notes event in layout with one shared vertical frontier and the same raw preferred-width participant constraints installed by NotesBoxes.ensureConstraints, rather than applying coordinate offsets. Honor Java's prefix order and whitespace grammar, including a combined ampersand-plus-slash form, across note, hnote, and rnote.",
   "perturbation_axes": [
     "ampersand parallel versus slash vertical merge versus both prefixes versus neither",
     "note versus hnote versus rnote shapes",
