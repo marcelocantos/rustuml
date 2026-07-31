@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-note-component-preferred-dimensions",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-class-link-note-component-preferred-dimensions-2026-08-01",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, frozen rustuml CLI, and frozen target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit 24276de6b82d8be9e697da12e20ce09b17f047e2, did not edit production source, did not edit account.json, and did not rebuild frozen binaries."
+  },
+  "rust_revision": "24276de6b82d8be9e697da12e20ce09b17f047e2",
+  "rust_branch": "codex/t14-class-link-notes-checker",
+  "checker_workspace": "/private/tmp/rustuml-class-link-notes-checker",
+  "account_commit": "e1f11afd0334ffccc8f7876535304ce1c280bf7d",
+  "implementation_commit": "24276de6b82d8be9e697da12e20ce09b17f047e2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_worktree_status": "At requested revision; dirty unrelated files were observed and not edited: CLAUDE.md, svek.dot, svek.svg."
+  },
+  "frozen_binaries": {
+    "rustuml_cli": {
+      "path": "/private/tmp/rustuml-class-link-notes/target/release/rustuml",
+      "sha256": "87bc067b5748ecbb2e59215c7da4cb05596cb73d3ddf0e3f3effdb58a0ba77db"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-class-link-notes/target/release/examples/diff_one",
+      "sha256": "c75645e9563101bb7886ac6e5ee6e829874abd06a599aa9b7abfb48dc0b9af2a",
+      "mode": "--no-oracle"
+    }
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "mcp__bullseye.bullseye_frontier({\"cwd\":\"/private/tmp/rustuml-class-link-notes-checker\"})",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat AGENTS.md",
+    "cat docs/parity-reviews/class-link-note-component-preferred-dimensions/account.json",
+    "git rev-parse HEAD",
+    "git branch --show-current",
+    "git status --short --branch",
+    "git log --follow --format=%H -- docs/parity-reviews/class-link-note-component-preferred-dimensions/account.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short --branch",
+    "shasum -a 256 /private/tmp/rustuml-class-link-notes/target/release/rustuml /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one",
+    "awk 'NR>=60 && NR<=130 { printf \"%5d %s\\n\", NR, $0 }' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+    "awk 'NR>=45 && NR<=95 { printf \"%5d %s\\n\", NR, $0 }' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+    "awk 'NR>=55 && NR<=110 { printf \"%5d %s\\n\", NR, $0 }' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockVertical.java",
+    "awk 'NR>=105 && NR<=135 { printf \"%5d %s\\n\", NR, $0 }' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockUtils.java",
+    "awk 'NR>=270 && NR<=330 { printf \"%5d %s\\n\", NR, $0 } NR>=415 && NR<=445 { printf \"%5d %s\\n\", NR, $0 } NR>=490 && NR<=520 { printf \"%5d %s\\n\", NR, $0 } NR>=725 && NR<=750 { printf \"%5d %s\\n\", NR, $0 } NR>=935 && NR<=955 { printf \"%5d %s\\n\", NR, $0 }' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "git diff --unified=80 HEAD^ HEAD -- crates/rustuml-render/src/class.rs",
+    "awk 'NR>=13380 && NR<=13510 { printf \"%5d %s\\n\", NR, $0 } NR>=14560 && NR<=14740 { printf \"%5d %s\\n\", NR, $0 } NR>=16940 && NR<=17010 { printf \"%5d %s\\n\", NR, $0 }' crates/rustuml-render/src/class.rs",
+    "awk 'NR>=2200 && NR<=2260 { printf \"%5d %s\\n\", NR, $0 }' crates/rustuml-layout/src/graph.rs",
+    "rg -n \"edge_class_note_on_link|0\\\\.367|0\\\\.734|78\\\\.935|78\\\\.570|105\\\\.734|115\\\\.734|class-link-note|fixture|checker_|perturbations/class-link-note-component-preferred-dimensions|include_str!|include_bytes!|test-diagrams|golden|replace\\\\(|replacen\\\\(\" crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml/src/main.rs crates/rustuml-oracle/tests/harness_guards.rs",
+    "rg -n \"\\\\b[0-9]+\\\\.[0-9]{3,}\\\\b\" crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs",
+    "rg -n \"CheckerCln|fractional vault note qijwm|dominant relationship label qvwm|tiny xi|flip dir label iiww|solo fractional link memo O0Il|control fractional label 2737|reverse label O0wm\" test-diagrams/golden -g '*.puml'",
+    "for puml in test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.puml; do stem=${puml%.puml}; JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$puml\" > \"$stem.java.stdout\" 2> \"$stem.java.stderr\"; printf \"%s\\n\" \"$?\" > \"$stem.java.exit\"; done",
+    "for puml in test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.puml; do stem=${puml%.puml}; /private/tmp/rustuml-class-link-notes/target/release/rustuml -tsvg \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; printf \"%s\\n\" \"$?\" > \"$stem.rust.exit\"; done",
+    "for puml in test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.puml; do stem=${puml%.puml}; /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2>&1; printf \"%s\\n\" \"$?\" > \"$stem.diff.exit\"; done",
+    "puml=test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_06_reversed_multiline_default_fractional.puml; stem=${puml%.puml}; JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$puml\" > \"$stem.java.stdout\" 2> \"$stem.java.stderr\"; printf \"%s\\n\" \"$?\" > \"$stem.java.exit\"; /private/tmp/rustuml-class-link-notes/target/release/rustuml -tsvg \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; printf \"%s\\n\" \"$?\" > \"$stem.rust.exit\"; /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2>&1; printf \"%s\\n\" \"$?\" > \"$stem.diff.exit\"",
+    "xmllint --noout test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.svg test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*.rust.svg",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-class-link-notes/target/release/rustuml /private/tmp/rustuml-class-link-notes/target/release/examples/diff_one docs/parity-reviews/class-link-note-component-preferred-dimensions/account.json test-diagrams/perturbations/class-link-note-component-preferred-dimensions/*",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java:77-85,99-128",
+        "finding": "getPreferredWidth/getPreferredHeight add ComponentRoseNote padding and shadow delta to fractional text dimensions. drawInternalU casts getTextWidth/getTextHeight to int only for the visible folded polygon and text-box expansion path."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java:61-77",
+        "finding": "EntityImageNoteLink creates the Rose NOTE component and exposes comp.getPreferredWidth/Height directly as its calculated dimension before drawing the same component in that area."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockUtils.java:123-130 and TextBlockVertical.java:71-102",
+        "finding": "mergeTB constructs TextBlockVertical when neither child is empty. TextBlockVertical merges child dimensions top/bottom, uses the untruncated maximum child width, and centers each child using its own untruncated calculated width."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:301-318,433-437,497-500,734-740,944-947",
+        "finding": "SvekEdge builds labelText by merging ordinary label and EntityImageNoteLink, calculates the complete labelText dimension plus shield, truncates only inside appendTable when writing Graphviz's fixed HTML table, then paints the original labelText at the solved position."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-render/src/class.rs:14560-14714",
+        "finding": "The implementation keeps note_natural_width/height separate from note_width/height floors, builds note_component_width/height with RELATIONSHIP_NOTE_COMPONENT_PADDING, and centers labels/notes using the natural component width."
+      },
+      {
+        "location": "crates/rustuml-render/src/class.rs:2553-2564,2754-2774,5716-5739,13428-13468",
+        "finding": "The natural RelationshipCenterLayout width/height feeds EdgeLabelSize for Graphviz and the same center model feeds painted envelope, link label emission, and note paint placement."
+      },
+      {
+        "location": "crates/rustuml-layout/src/graph.rs:2230-2238",
+        "finding": "edge_label_table still performs integer truncation at the Graphviz serialization boundary, matching SvekEdge.appendTable's order."
+      }
+    ],
+    "fixture_shape_review": {
+      "finding": "The implementation diff adds no golden reads, fixture labels, checker stems, coordinate-keyed SVG surgery, observed 0.367/0.734 offsets, or new high-precision compensating constants. The only changed production arithmetic is the natural component dimension split and existing padding/floor layers."
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_01_note_dominant_fractional.puml",
+      "golden": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_01_note_dominant_fractional.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_01_note_dominant_fractional.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_01_note_dominant_fractional.diff.txt",
+      "axes": [
+        "note-dominant width",
+        "fractional note text width",
+        "ordinary label shorter than note",
+        "default bottom note-on-link"
+      ],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. The note textLength is fractional (205.6831) and wider than the ordinary label textLength (15.5835), exercising the natural note component as the merged width."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_02_label_dominant_fractional.puml",
+      "golden": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_02_label_dominant_fractional.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_02_label_dominant_fractional.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_02_label_dominant_fractional.diff.txt",
+      "axes": [
+        "label-dominant width",
+        "fractional label text width",
+        "ordinary label wider than note",
+        "default bottom note-on-link"
+      ],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. The ordinary label textLength is fractional (440.667) and much wider than the note textLength (39.3237), so both label and note child centering are exercised."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_03_reversed_multiline_fractional.puml",
+      "golden": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_03_reversed_multiline_fractional.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_03_reversed_multiline_fractional.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_03_reversed_multiline_fractional.diff.txt",
+      "axes": [
+        "explicit left-to-right direction",
+        "reversed relationship",
+        "multiline note body",
+        "fractional note row widths"
+      ],
+      "result": "fail",
+      "diff_exit": 1,
+      "finding": "Rejecting held-out. Java-valid input renders in both engines, but strict diff shows a consistent 0.2422px y drift across class rectangles, class glyphs, the reversed edge path, the ordinary label, and both note rows. The note rows keep matching textLength values (168.8096 and 172.561), so the preferred-dimension split itself is not isolated as wrong; nevertheless this requested changed-direction perturbation fails the no-oracle checker and must be preserved."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_04_note_only_vertical_fractional.puml",
+      "golden": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_04_note_only_vertical_fractional.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_04_note_only_vertical_fractional.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_04_note_only_vertical_fractional.diff.txt",
+      "axes": [
+        "note-only edge label",
+        "top-to-bottom direction",
+        "explicit down arrow",
+        "fractional note text width"
+      ],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. This covers the empty ordinary-label path where the center label is the note component alone; note textLength is fractional (227.8555)."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_05_label_only_control.puml",
+      "golden": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_05_label_only_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_05_label_only_control.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_05_label_only_control.diff.txt",
+      "axes": [
+        "label-only control",
+        "no note component",
+        "fractional ordinary label width"
+      ],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. This control verifies the change did not move an ordinary relationship label without a link note."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_06_reversed_multiline_default_fractional.puml",
+      "golden": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_06_reversed_multiline_default_fractional.svg",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_06_reversed_multiline_default_fractional.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/checker_06_reversed_multiline_default_fractional.diff.txt",
+      "axes": [
+        "reversed relationship",
+        "multiline note body",
+        "default graph direction",
+        "fractional note row widths"
+      ],
+      "result": "pass",
+      "diff_exit": 0,
+      "finding": "Structurally equivalent. This separates reversed/multiline note composition from the explicit left-to-right layout failure in checker_03."
+    }
+  ],
+  "artifact_hashes": {
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_json_sha256": "518009158244084b69dfd6b187b9e741ec56d808c600178f00620bf2bd13b2dd",
+    "sources": {
+      "checker_01_note_dominant_fractional.puml": "4d04f97d0971d614fd45ac3c74159fdd400fdcabeb24415e3851fa5abd3ab836",
+      "checker_02_label_dominant_fractional.puml": "3d68eb4251733aedeb4267e145891cf74d7603d5e84d9360a2580355f0c0a229",
+      "checker_03_reversed_multiline_fractional.puml": "a1fde710396fb0b5484fcac8cfbbc38e8da699d36532f9baef2d994ec37f912c",
+      "checker_04_note_only_vertical_fractional.puml": "0925bf71fc5775b716a75bb581ee735f99e4b61a83ed5b41a94f543e5e8db66b",
+      "checker_05_label_only_control.puml": "d7f00ebf429ef371af42a03ea58e7198781edbb42111e18b643822a59582a190",
+      "checker_06_reversed_multiline_default_fractional.puml": "9c8ead106c753e75967c84c2f0ffb910aff30735202c65629bc236f55da979a6"
+    },
+    "java_svgs": {
+      "checker_01_note_dominant_fractional.svg": "d1ea8566e243859efcf4ee260af42aa1fd7b2fcb9f11125841c122d9f0d4a01e",
+      "checker_02_label_dominant_fractional.svg": "548a8021918b55cae5cc37e4ce6e0656a29deec826dfaf435ef8181f6972f93e",
+      "checker_03_reversed_multiline_fractional.svg": "0315cb09cc9c2c4f0ae311d9feb08473d2566e6daad6619d0198ba0035a9906f",
+      "checker_04_note_only_vertical_fractional.svg": "2e98bcf184ed3f4521be2a727747147db11aee7a71ac3ee004af1664184622ca",
+      "checker_05_label_only_control.svg": "37ffede8c4e74ba1b3b5c8793acdf13f1d0a2c94744d3d02b4d81515f4db3a9d",
+      "checker_06_reversed_multiline_default_fractional.svg": "bea0c9b016a4ea14b03271573adc8479622612c68d59cf1963179a9826fcd05d"
+    },
+    "rust_svgs": {
+      "checker_01_note_dominant_fractional.rust.svg": "9a48c02c0f126b348101ad11201cfc96ede49e96e47b952a6f545b8af78beb52",
+      "checker_02_label_dominant_fractional.rust.svg": "619e08dd44c58ee34482ad60130396ef9e3cff1902d01690fa1306af6a010691",
+      "checker_03_reversed_multiline_fractional.rust.svg": "4ae6814be97c1247673307216ab3eccecf09258569615dc7cd283b3cc42a771b",
+      "checker_04_note_only_vertical_fractional.rust.svg": "bf7c15b47a929e52f132d604029f17b6f8b3feb1b4846dc00215c95b8e129682",
+      "checker_05_label_only_control.rust.svg": "bc540e40e199ccf1ead00db1f78b5de9da8c6e73c5b2317a19a03d6b97e412b7",
+      "checker_06_reversed_multiline_default_fractional.rust.svg": "c57b45c5cb23797281f276645c8fee21f7ba474b3417849a124409908f38f855"
+    },
+    "diff_outputs": {
+      "checker_01_note_dominant_fractional.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_02_label_dominant_fractional.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_03_reversed_multiline_fractional.diff.txt": "25ee4ae582d897bea8a0ba5ade1b8cb73faa4d49291765778d9f77bf59c89db5",
+      "checker_04_note_only_vertical_fractional.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_05_label_only_control.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_06_reversed_multiline_default_fractional.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+    }
+  },
+  "findings": [
+    "The account was committed before the implementation: e1f11afd0334ffccc8f7876535304ce1c280bf7d is the parent and ancestor of 24276de6b82d8be9e697da12e20ce09b17f047e2. The checker branch was at the requested maker commit before evidence was added.",
+    "The Java causal trace supports the account. ComponentRoseNote preferred dimensions retain fractional text size plus component padding; EntityImageNoteLink exposes those preferred dimensions; TextBlockVertical centers children from untruncated child widths; and SvekEdge truncates only in appendTable before painting the original fractional TextBlock.",
+    "The Rust implementation is a mechanism-shaped fix rather than a fixture-shaped patch. It separates natural note dimensions, visible floored polygon dimensions, and Graphviz table truncation, and it uses the same model in layout, painted envelope, label placement, and note placement.",
+    "Static searches found no implementation references to the triggering fixture, checker labels, mechanism perturbation path, golden file reads, include_str/include_bytes of test diagrams, coordinate-keyed SVG surgery, the observed half-fraction offsets, or new high-precision compensating constants in the touched production paths.",
+    "Five fresh held-outs pass strict no-oracle comparison: note-dominant fractional width, label-dominant fractional width, note-only vertical fractional width, label-only control, and default-direction reversed multiline note composition.",
+    "One fresh held-out fails: checker_03_reversed_multiline_fractional combines explicit left-to-right direction, a reversed edge, and a multiline note. The failure is a consistent 0.2422px vertical drift across nodes, edge, ordinary label, and note rows. The default-direction reversed multiline companion passes, so this looks like broader left-to-right SVEK envelope/bias residue rather than proof that the preferred-dimensions split is wrong.",
+    "Under the T14 held-out rule and the user's instruction, the failing Java-valid fresh changed-direction perturbation is preserved and forces a rejected verdict. Acceptance should wait until the left-to-right counterexample either passes or is explicitly scoped into a separate signed-off target/account."
+  ],
+  "verdict": "rejected",
+  "verdict_reason": "REJECT. The preferred-dimension causal claim and implementation survive static scrutiny and five mechanism-shaped fresh probes, but a preserved fresh valid changed-direction perturbation fails strict no-oracle comparison. The failure appears to expose a broader left-to-right layout/bias residue rather than fixture-shaped logic in this fix, but the latest adversarial checker evidence cannot accept the mechanism while that held-out fails."
+}

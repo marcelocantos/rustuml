@@ -1,0 +1,6 @@
+@startuml
+class CheckerClnLabelSource2621
+class CheckerClnLabelTarget2633
+CheckerClnLabelSource2621 --> CheckerClnLabelTarget2633 : dominant relationship label qvwm 2637 stretches wider than the note
+note on link : tiny xi
+@enduml
