@@ -5733,8 +5733,7 @@ fn render_plantuml_svg(
                 );
             }
             if note.is_some() {
-                let note_x =
-                    position.x + MARGIN + layout_x_bias + (center.width - center.note_width) / 2.0;
+                let note_x = relationship_note_x(position.x, center) + MARGIN + layout_x_bias;
                 let note_y =
                     position.y + MARGIN + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
                 // `SvekResult.calculateDimension` measures the rendered graph
@@ -13455,7 +13454,7 @@ fn render_relationship_svg(
         }
     }
     if let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout) {
-        let note_x = position.x + (center.width - center.note_width) / 2.0;
+        let note_x = relationship_note_x(position.x, center);
         let note_y = position.y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
         render_relationship_note(
             svg,
@@ -14559,6 +14558,7 @@ fn relationship_has_center_label(relationship: &Relationship) -> bool {
 
 #[derive(Clone, Copy)]
 struct RelationshipCenterLayout {
+    /// Natural `TextBlockVertical` dimensions used when painting children.
     width: f64,
     height: f64,
     label_width: f64,
@@ -14566,6 +14566,9 @@ struct RelationshipCenterLayout {
     label_text_offset_x: f64,
     label_text_offset_y: f64,
     magic_arrow_offset_y: f64,
+    /// Natural Rose component width, including its five-pixel outer padding.
+    note_component_width: f64,
+    /// Integer-truncated visible `ComponentRoseNote` polygon dimensions.
     note_width: f64,
     note_height: f64,
 }
@@ -14678,27 +14681,36 @@ fn relationship_center_layout(
     } else {
         0.0
     };
-    let (note_width, note_height) = note
+    let (note_natural_width, note_natural_height) = note
         .map(|note| note_box_dims(diagram, note, sprites))
-        .map(|(width, height)| (width.floor(), height.floor()))
         .unwrap_or((0.0, 0.0));
+    let (note_width, note_height) = (note_natural_width.floor(), note_natural_height.floor());
     let note_component_padding = if note.is_some() {
         RELATIONSHIP_NOTE_COMPONENT_PADDING
     } else {
         0.0
     };
+    let note_component_width = note_natural_width + 2.0 * note_component_padding;
+    let note_component_height = note_natural_height + 2.0 * note_component_padding;
 
     Some(RelationshipCenterLayout {
-        width: label_width.max(note_width + 2.0 * note_component_padding),
-        height: label_height + note_height + 2.0 * note_component_padding,
+        width: label_width.max(note_component_width),
+        height: label_height + note_component_height,
         label_width,
         label_height,
         label_text_offset_x,
         label_text_offset_y,
         magic_arrow_offset_y,
+        note_component_width,
         note_width,
         note_height,
     })
+}
+
+fn relationship_note_x(position_x: f64, center: RelationshipCenterLayout) -> f64 {
+    position_x
+        + (center.width - center.note_component_width) / 2.0
+        + RELATIONSHIP_NOTE_COMPONENT_PADDING
 }
 
 fn relationship_label_margin(relationship: &Relationship) -> f64 {
@@ -20967,6 +20979,46 @@ mod tests {
         assert_eq!(
             relationship_note_indices(&diagram),
             [Some(0), None, Some(1)]
+        );
+    }
+
+    #[test]
+    fn relationship_note_merge_keeps_fractional_component_preferred_width() {
+        let input = "@startuml\n\
+            class FractionalSender1201\n\
+            class FractionalReceiver1213\n\
+            FractionalSender1201 --> FractionalReceiver1213 : compact label\n\
+            note on link : fractional note payload 1229\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let relationship = &diagram.relationships[0];
+        let note = &diagram.notes[0];
+        let (natural_width, _) = note_box_dims(&diagram, note, &diagram.meta.sprites);
+        let center =
+            relationship_center_layout(&diagram, relationship, Some(note), &diagram.meta.sprites)
+                .unwrap();
+
+        assert_ne!(natural_width, natural_width.floor());
+        assert_eq!(center.note_width, natural_width.floor());
+        assert_eq!(
+            center.note_component_width,
+            natural_width + 2.0 * RELATIONSHIP_NOTE_COMPONENT_PADDING
+        );
+        assert_eq!(
+            center.width,
+            center.note_component_width.max(center.label_width)
+        );
+
+        let old_label_x = (center.note_width + 2.0 * RELATIONSHIP_NOTE_COMPONENT_PADDING
+            - center.label_width)
+            / 2.0;
+        let natural_label_x = (center.width - center.label_width) / 2.0;
+        assert_eq!(
+            natural_label_x - old_label_x,
+            (natural_width - natural_width.floor()) / 2.0
         );
     }
 
