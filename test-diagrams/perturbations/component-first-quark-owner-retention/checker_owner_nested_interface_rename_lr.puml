@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package "Marble Domain 757" as MarbleDomain757 {
+  package "Inner Relay 757" as InnerRelay757 {
+    interface "Initial Portal 757" as SharedPortal757
+    component "Inner Beacon 757" as InnerBeacon757
+  }
+}
+package "Granite Domain 757" as GraniteDomain757 {
+  interface "Renamed Portal 757" as SharedPortal757
+  component "Granite Beacon 757" as GraniteBeacon757
+}
+SharedPortal757 -right-> GraniteBeacon757
+@enduml

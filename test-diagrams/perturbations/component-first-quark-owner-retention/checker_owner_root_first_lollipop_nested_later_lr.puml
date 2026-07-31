@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+() "Shared Socket 773" as SharedSocket773
+component "Root Sensor 773" as RootSensor773
+package "Nested Station 773" as NestedStation773 {
+  () "Shared Socket 773" as SharedSocket773
+  component "Nested Sensor 773" as NestedSensor773
+}
+RootSensor773 -right-> NestedSensor773
+@enduml

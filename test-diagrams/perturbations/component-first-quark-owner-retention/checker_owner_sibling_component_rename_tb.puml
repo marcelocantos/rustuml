@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+package "Cobalt Workshop 743" as CobaltWorkshop743 {
+  component "First Rotor 743" as SharedRotor743
+  component "Workshop Probe 743" as WorkshopProbe743
+}
+package "Silver Annex 743" as SilverAnnex743 {
+  component "Renamed Rotor 743" as SharedRotor743
+  component "Annex Probe 743" as AnnexProbe743
+}
+WorkshopProbe743 -down-> AnnexProbe743
+@enduml
