@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-floating-note-svek-lifecycle",
+  "verdict": "REJECTED",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop using exec_command, apply_patch, and bullseye tools",
+    "role": "checker-only; did not implement f1378066"
+  },
+  "revisions": {
+    "account_commit": "46352889f28f1d14614690b65a95a48618db7ec4",
+    "parser_precursor_commit": "bf402b565d6cdc8ca9ebf4e5b2b56cbdb8005d96",
+    "implementation_commit_under_review": "f137806683f2dc6e90d681898703c0b8573c135b",
+    "review_worktree_head": "f137806683f2dc6e90d681898703c0b8573c135b",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "target/release/examples/diff_one",
+    "cargo_was_run": false
+  },
+  "commands": [
+    {
+      "cmd": "git status --short",
+      "result": "clean before checker edits"
+    },
+    {
+      "cmd": "git show --stat --summary 46352889",
+      "result": "account commit inspected"
+    },
+    {
+      "cmd": "git show --stat --summary bf402b56",
+      "result": "parser precursor inspected"
+    },
+    {
+      "cmd": "git show --stat --summary f1378066",
+      "result": "implementation commit inspected"
+    },
+    {
+      "cmd": "sed -n '120,152p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "result": "Java multiline floating note command creation and leaf lifecycle inspected"
+    },
+    {
+      "cmd": "sed -n '226,235p;399,407p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "result": "Java root entity printing order and unpackaged-entity selection inspected"
+    },
+    {
+      "cmd": "sed -n '232,285p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "result": "Java normal note paint versus Opale attached-note path inspected"
+    },
+    {
+      "cmd": "sed -n '760,785p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+      "result": "Java Magma application gate inspected"
+    },
+    {
+      "cmd": "sed -n '37,70p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java",
+      "result": "Java square branching rule inspected"
+    },
+    {
+      "cmd": "sed -n '620,650p' crates/rustuml-parser/src/parse/deployment.rs",
+      "result": "Rust multiline floating note source-line mapping inspected"
+    },
+    {
+      "cmd": "sed -n '3451,3508p' crates/rustuml-render/src/deployment.rs",
+      "result": "Rust floating deployment note normal paint inspected"
+    },
+    {
+      "cmd": "sed -n '3746,3760p' crates/rustuml-render/src/deployment.rs",
+      "result": "Rust floating-note layout admission inspected"
+    },
+    {
+      "cmd": "sed -n '4305,4360p' crates/rustuml-render/src/deployment.rs",
+      "result": "Rust root emission ordering for floating notes versus leaves inspected"
+    },
+    {
+      "cmd": "sed -n '4714,4778p' crates/rustuml-render/src/deployment.rs",
+      "result": "Rust Magma/SquareMaker port for standalone members inspected"
+    },
+    {
+      "cmd": "sed -n '5857,5924p' crates/rustuml-render/src/deployment.rs",
+      "result": "Rust no-oracle UID allocation for nodes, notes, and hidden note links inspected"
+    },
+    {
+      "cmd": "git grep -n \"checker_|BeforeLedger201|AfterLedger202|QueueMemo203|LateLedger204|ControlNode205|AfterLedger206|BeforeLedger207|DispatchPayload922|RuntimeNode922|deployment-floating-note-svek-lifecycle\" f1378066 -- crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-render/src/deployment.rs docs/parity-reviews/deployment-floating-note-svek-lifecycle || true",
+      "result": "no fixture-shaped or mechanism-name conditionals found in shipping Rust files"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/*.puml",
+      "result": "fresh same-stem Java SVGs generated for all checker_ held-outs"
+    },
+    {
+      "cmd": "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml",
+      "result": "PASS"
+    },
+    {
+      "cmd": "for p in test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/*.puml; do target/release/examples/diff_one --no-oracle \"$p\"; done",
+      "result": "4 PASS, 3 FAIL"
+    }
+  ],
+  "source_audit": {
+    "java_model": [
+      "CommandFactoryNote creates a real NOTE leaf at command execution time via reallyCreateLeaf, so a multiline `note as ID ... end note` participates in later SVEK processing as an ordinary root leaf.",
+      "GraphvizImageBuilder first prints root groups, then prints `getUnpackagedEntities()`, whose entity stream is `dotData.getLeafs()` filtered to top-parent leaves. That supports the account's root-leaf lifecycle and source-order emission claim.",
+      "EntityImageNote draws unattached notes through `drawNormal()` and only uses Opale pointer geometry when `isOpalisable()` finds exactly one non-note link.",
+      "SquareMaker itself would happily link size-2 lists, but CucaDiagram.applySingleStrategy never calls Magma for `standalones.size() < 3`. That means Java does not apply the standalone square strategy to two-member root streams at all."
+    ],
+    "rust_model": [
+      "The parser precursor and f1378066 now keep multiline deployment floating notes atomic and assign them explicit note records with a Java-aligned source-line offset.",
+      "The renderer now admits targetless deployment notes into the layout stream, allocates no hidden-link UID for unattached notes, and renders them through a dedicated folded-note normal path rather than the attached Opale path.",
+      "For root-only diagrams, the renderer merges floating notes and root leaves into one emission list sorted by source line, matching the claimed Java root stream ordering.",
+      "The Magma port in `add_deployment_magma_constraints` extends the root standalone stream with floating notes, but it also applies the SquareMaker constraints to `members.len() == 2`, which is broader than Java's `applySingleStrategy` gate."
+    ],
+    "fixture_logic_search": [
+      "No shipping-code references to the preserved post-terminator counterexample, the fresh checker aliases, or the mechanism name were found in `crates/rustuml-parser/src/parse/deployment.rs` or `crates/rustuml-render/src/deployment.rs` at `f1378066`.",
+      "The floating-note paint path reuses existing note constants (`NOTE_FOLD`, `NOTE_MARGIN_X1`, `NOTE_MARGIN_X2`, `NOTE_MARGIN_Y`) rather than introducing fresh unexplained decimals."
+    ]
+  },
+  "preserved_replay": [
+    {
+      "puml": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml",
+      "result": "PASS",
+      "observation": "The preserved post-terminator DESCRIPTION counterexample now renders both the floating note and the later node under the no-oracle path."
+    }
+  ],
+  "perturbations": [
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ltr.svg",
+      "axes": [
+        "floating note before leaf",
+        "two-member standalone root stream",
+        "left-to-right direction",
+        "renamed alias"
+      ],
+      "result": "FAIL",
+      "failure_summary": "Java places the root node above the note in a 199x127 canvas. Rust forces the note above the node in a 199x137 canvas, matching a size-2 Magma constraint that Java never applies."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ttb.svg",
+      "axes": [
+        "leaf before floating note",
+        "two-member standalone root stream",
+        "top-to-bottom direction",
+        "multiline body"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_three_member_note_before_two_leaves_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_three_member_note_before_two_leaves_ltr.svg",
+      "axes": [
+        "floating note before leaves",
+        "three-member standalone root stream",
+        "left-to-right direction",
+        "renamed aliases",
+        "wider multiline body"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_four_member_two_leaves_then_note_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_four_member_two_leaves_then_note_ltr.svg",
+      "axes": [
+        "floating note after leaves",
+        "four-member standalone root stream",
+        "left-to-right direction",
+        "renamed aliases",
+        "longer body"
+      ],
+      "result": "PASS"
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_attached_multiline_control_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_attached_multiline_control_ltr.svg",
+      "axes": [
+        "attached deployment note control",
+        "left-to-right direction",
+        "multiline attached body",
+        "later standalone database"
+      ],
+      "result": "FAIL",
+      "failure_summary": "The attached-note control remains structurally divergent in the no-oracle path, with a substantially different canvas and root packing. This does not falsify the floating-note normal-paint claim by itself, but it shows the broader deployment note layout surface is still not fully modelled."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_node_before_note_ltr.svg",
+      "axes": [
+        "leaf before floating note",
+        "two-member standalone root stream",
+        "left-to-right direction",
+        "renamed alias"
+      ],
+      "result": "FAIL",
+      "failure_summary": "The same size-2 left-to-right divergence appears when the declaration order is reversed: Java keeps the note below the node, while Rust forces the note above it. This isolates the failure to the size-2 LTR standalone strategy rather than source order alone."
+    },
+    {
+      "puml": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ttb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-floating-note-svek-lifecycle/checker_two_member_note_before_node_ttb.svg",
+      "axes": [
+        "floating note before leaf",
+        "two-member standalone root stream",
+        "top-to-bottom direction",
+        "renamed alias"
+      ],
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "The account overstates Java's Magma coverage for two-member root streams",
+      "evidence": "Java `CucaDiagram.applySingleStrategy()` skips `standalones.size() < 3`, but Rust `add_deployment_magma_constraints()` applies the square-link strategy when `members.len() >= 2`.",
+      "interpretation": "The mechanism claim that two standalone leaves receive Java-style invisible left-right constraints is false. The Rust port generalizes SquareMaker beyond the Java call site."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Fresh valid size-2 left-to-right held-outs disprove the generalized layout model",
+      "evidence": "Both `checker_two_member_note_before_node_ltr.puml` and `checker_two_member_node_before_note_ltr.puml` fail `diff_one --no-oracle`, while the analogous top-to-bottom cases pass.",
+      "interpretation": "The surviving divergence is not note paint or UID allocation. It is the standalone layout strategy applied to two-member left-to-right root streams."
+    },
+    {
+      "severity": "supporting",
+      "title": "The preserved post-terminator counterexample and larger 3/4-member LTR streams now pass",
+      "evidence": "The preserved `checker_post_terminator_deployment_visible.puml` plus fresh `checker_three_member_note_before_two_leaves_ltr.puml` and `checker_four_member_two_leaves_then_note_ltr.puml` are structurally equivalent.",
+      "interpretation": "The parser precursor, root note admission, UID lifecycle, and normal note paint are real gains. The rejection is narrower than the whole account."
+    },
+    {
+      "severity": "residual",
+      "title": "An attached-note control still diverges on the no-oracle path",
+      "evidence": "`checker_attached_multiline_control_ltr.puml` fails with a different canvas and root packing.",
+      "interpretation": "That control is outside the central floating-note lifecycle claim, but it shows the surrounding deployment note layout surface is still incomplete and should not be attested as closed."
+    },
+    {
+      "severity": "supporting",
+      "title": "No fixture-shaped logic or golden-output dependency was found",
+      "evidence": "A targeted `git grep` against the preserved and fresh checker aliases returned no hits in shipping Rust files.",
+      "interpretation": "The rejection is about an incorrect Java model boundary, not about fixture-shaped cheating."
+    }
+  ],
+  "summary": {
+    "preserved_failures_replayed": 1,
+    "preserved_failures_now_passing": 1,
+    "fresh_valid_inputs": 7,
+    "fresh_valid_passes": 4,
+    "fresh_valid_failures": 3
+  },
+  "verdict_reason": "REJECTED. The old counterexample is fixed and the normal floating-note lifecycle is materially better, but the causal account is still too broad. Java does not apply Magma to two-member standalone groups, while Rust does, and fresh valid left-to-right size-2 held-outs fail on exactly that boundary. Under the T14 held-out rule, those counterexamples reject the mechanism."
+}

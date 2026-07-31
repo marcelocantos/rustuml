@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+note as QueueMemo203
+first body line
+second body line with extra width
+end note
+node GatewayAlpha203
+database ArchiveBeta203
+@enduml

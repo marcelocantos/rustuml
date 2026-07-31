@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node FirstWorker204
+artifact SecondPayload204
+note as LateLedger204
+longer floating note body for four-member ordering
+end note
+database ThirdStore204
+@enduml

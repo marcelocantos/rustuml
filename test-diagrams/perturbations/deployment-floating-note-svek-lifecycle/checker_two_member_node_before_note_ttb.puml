@@ -1,0 +1,7 @@
+@startuml
+node RuntimeHub202
+note as AfterLedger202
+a much longer audit trail body
+with a second line
+end note
+@enduml
