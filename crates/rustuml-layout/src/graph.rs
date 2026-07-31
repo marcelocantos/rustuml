@@ -1282,7 +1282,6 @@ impl LayoutGraph {
             .take_while(|&&node_idx| {
                 let id = &self.nodes[node_idx].id;
                 self.plantuml_svek_inverted_starts.contains(id)
-                    || self.plantuml_svek_line0_nodes.contains(id)
             })
             .count();
         for &node_idx in &graphviz_node_order[..early_node_count] {
@@ -1423,6 +1422,18 @@ impl LayoutGraph {
             }
         }
         for &edge_idx in &early_edge_indices {
+            // A textual DOT edge creates undeclared endpoints immediately,
+            // before their later node statements apply shape and dimensions.
+            // Reproduce that stream with raw C API handles; `create_node!`
+            // configures the existing handles during the ordinary-node phase.
+            for node_id in [&self.edges[edge_idx].from, &self.edges[edge_idx].to] {
+                if node_handles.contains_key(node_id) {
+                    continue;
+                }
+                let node_name = CString::new(node_id.as_str()).unwrap();
+                let node = graphviz_ffi::agnode(g, node_name.as_ptr(), 1);
+                node_handles.insert(node_id.clone(), node);
+            }
             create_edge!(edge_idx);
         }
         let direct_together_for_node = |node_id: &str| {
