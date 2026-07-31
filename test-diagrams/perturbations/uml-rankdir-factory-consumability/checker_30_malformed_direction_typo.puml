@@ -1,0 +1,6 @@
+@startuml
+left to sideways direction
+participant Dune
+participant Ember
+Dune -> Ember : malformed direction probe
+@enduml

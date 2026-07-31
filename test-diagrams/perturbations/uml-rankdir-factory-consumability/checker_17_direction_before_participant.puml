@@ -1,0 +1,6 @@
+@startuml
+top to bottom direction
+participant Drift
+participant Elm
+Drift -> Elm : dispatch
+@enduml

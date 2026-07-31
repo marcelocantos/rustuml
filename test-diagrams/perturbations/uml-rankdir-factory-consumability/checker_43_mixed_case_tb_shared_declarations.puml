@@ -1,0 +1,6 @@
+@startuml
+database "Xeric Store" as XericStore
+queue "Yellow Queue" as YellowQueue
+XericStore --> YellowQueue : handoff
+ToP To BoTtOm DiReCtIoN
+@enduml

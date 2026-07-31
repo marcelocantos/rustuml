@@ -1,0 +1,5 @@
+@startuml
+Nacre -> Onyx : final request
+destroy Onyx
+top to bottom direction
+@enduml

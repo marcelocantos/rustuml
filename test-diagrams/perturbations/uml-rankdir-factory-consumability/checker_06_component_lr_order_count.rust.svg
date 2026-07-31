@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="67px" preserveAspectRatio="none" style="width:599px;height:67px;background:#FFFFFF;" version="1.1" viewBox="0 0 599 67" width="599px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity AmberApi-->
+<g class="entity" data-qualified-name="AmberApi" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="110.9297" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="97.9297" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="95.9297" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="95.9297" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70.9297" x="22" y="40.5352">Amber API</text>
+</g>
+<!--entity BerylWorker-->
+<g class="entity" data-qualified-name="BerylWorker" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125.3877" x="222.9297" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="328.3174" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="326.3174" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="326.3174" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.3877" x="237.9297" y="40.5352">Beryl Worker</text>
+</g>
+<!--entity CeruleanSink-->
+<g class="entity" data-qualified-name="CeruleanSink" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="133.0576" x="452.3174" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="565.375" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="563.375" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="563.375" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="93.0576" x="467.3174" y="40.5352">Cerulean Sink</text>
+</g>
+<!--link AmberApi to BerylWorker-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M118.42,30.25 C150.02,30.25 183.81,30.25 216.53,30.25" fill="none" id="AmberApi-to-BerylWorker" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="222.53,30.25,213.53,26.25,217.53,30.25,213.53,34.25,222.53,30.25" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="43.6338" x="148.9297" y="26.8125">submit</text>
+</g>
+<!--link BerylWorker to CeruleanSink-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M348.59,30.25 C380.56,30.25 413.56,30.25 446.07,30.25" fill="none" id="BerylWorker-to-CeruleanSink" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="452.07,30.25,443.07,26.25,447.07,30.25,443.07,34.25,452.07,30.25" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42.6182" x="379.3174" y="26.8125">persist</text>
+</g>
+</g></svg>

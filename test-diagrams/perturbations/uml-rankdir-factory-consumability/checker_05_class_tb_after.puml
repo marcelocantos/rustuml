@@ -1,0 +1,8 @@
+@startuml
+class DeltaRouter
+interface EchoPort
+class FoxtrotWorker
+DeltaRouter ..> EchoPort
+FoxtrotWorker ..|> DeltaRouter
+top to bottom direction
+@enduml

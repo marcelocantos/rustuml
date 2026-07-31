@@ -1,0 +1,9 @@
+@startuml
+!$horizontal = false
+!if $horizontal
+left to right direction
+!endif
+participant Zephyr
+participant Acorn
+Zephyr -> Acorn : ordinary sequence
+@enduml

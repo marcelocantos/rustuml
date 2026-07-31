@@ -1,0 +1,4 @@
+@startuml
+LeFt To RiGhT DiReCtIoN
+Vellum -> Whistle : case-folded weak relation
+@enduml

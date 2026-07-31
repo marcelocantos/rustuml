@@ -1,0 +1,10 @@
+@startuml
+state OpalCold
+state PearlWarm
+state QuartzDone
+[*] --> OpalCold
+OpalCold --> PearlWarm : heat
+PearlWarm --> QuartzDone : finish
+QuartzDone --> [*]
+top to bottom direction
+@enduml

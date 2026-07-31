@@ -1,0 +1,9 @@
+@startuml
+Birch -> Cinder : start
+ALT primary
+  Cinder --> Birch : pass
+ELSE secondary
+  Cinder --> Birch : fail
+END
+ToP To BoTtOm DiReCtIoN
+@enduml

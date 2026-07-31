@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+component "Frost Adapter" as FrostAdapter
+participant GladeCaller
+GladeCaller -> FrostAdapter : invoke
+@enduml

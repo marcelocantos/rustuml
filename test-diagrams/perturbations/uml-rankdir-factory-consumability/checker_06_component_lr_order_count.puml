@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+component "Amber API" as AmberApi
+component "Beryl Worker" as BerylWorker
+component "Cerulean Sink" as CeruleanSink
+AmberApi --> BerylWorker : submit
+BerylWorker --> CeruleanSink : persist
+@enduml

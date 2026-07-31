@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class AuroraLedger
+class BirchIndex
+class CobaltArchive
+AuroraLedger --> BirchIndex : reads
+BirchIndex --> CobaltArchive : stores
+@enduml

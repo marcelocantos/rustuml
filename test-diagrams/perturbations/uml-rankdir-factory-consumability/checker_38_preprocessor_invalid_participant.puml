@@ -1,0 +1,9 @@
+@startuml
+!procedure $rank()
+left to right direction
+!endprocedure
+$rank()
+participant Umbra
+participant Vale
+Umbra -> Vale : expanded command
+@enduml

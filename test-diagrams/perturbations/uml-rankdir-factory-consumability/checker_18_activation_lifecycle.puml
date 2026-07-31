@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+activate Fir
+Fir -> Grove : open
+deactivate Fir
+@enduml

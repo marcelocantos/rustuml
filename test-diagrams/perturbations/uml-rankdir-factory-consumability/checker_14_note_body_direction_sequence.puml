@@ -1,0 +1,9 @@
+@startuml
+participant Xylem
+participant Yarrow
+note over Xylem
+left to right direction
+autonumber
+end note
+Xylem -> Yarrow : payload text only
+@enduml

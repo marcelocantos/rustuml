@@ -1,0 +1,6 @@
+@startuml
+LEFT TO RIGHT DIRECTION
+database "Woven Store" as WovenStore
+queue "Xanthic Queue" as XanthicQueue
+WovenStore --> XanthicQueue : enqueue
+@enduml

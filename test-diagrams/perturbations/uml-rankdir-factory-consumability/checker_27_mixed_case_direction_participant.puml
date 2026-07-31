@@ -1,0 +1,6 @@
+@startuml
+LeFt To RiGhT DiReCtIoN
+participant Xenon
+participant Yucca
+Xenon -> Yucca : mixed case probe
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+[*] --> MistIdle
+state MistIdle
+state NightActive
+MistIdle --> NightActive : wake
+NightActive --> [*] : settle
+@enduml

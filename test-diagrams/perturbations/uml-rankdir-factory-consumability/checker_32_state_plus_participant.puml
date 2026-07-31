@@ -1,0 +1,6 @@
+@startuml
+top to bottom direction
+state HarborWait
+participant IvoryCaller
+IvoryCaller -> HarborWait : wake
+@enduml

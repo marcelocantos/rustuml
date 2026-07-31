@@ -1,0 +1,7 @@
+@startuml
+Hearth -> Indigo : first
+autonumber 7 3 "<b>[000]"
+top to bottom direction
+Indigo --> Hearth : second
+autonumber stop
+@enduml
