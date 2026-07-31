@@ -1,0 +1,8 @@
+@startuml
+node "Observation enclosure" as ObservationShelf {
+  note "Contained context" as ContainedContext
+}
+note "External observation" as ExternalMemo
+ExternalMemo --> ObservationShelf
+artifact "After observation peer" as AfterObservation
+@enduml

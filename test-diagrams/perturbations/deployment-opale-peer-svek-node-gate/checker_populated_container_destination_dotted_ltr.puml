@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Populated enclosure" as PopulatedShelf {
+  artifact "resident module" as ResidentModule
+}
+note "Populated peer observation" as PopulatedMemo
+PopulatedShelf ..> PopulatedMemo
+database "After populated peer" as AfterPopulated
+@enduml

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="257px" preserveAspectRatio="none" style="width:462px;height:257px;background:#FFFFFF;" version="1.1" viewBox="0 0 462 257" width="462px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Outer enclosure-->
+<g class="cluster" data-qualified-name="OuterShelf" data-source-line="2" id="ent0002">
+<polygon fill="none" points="178.4816,16,188.4816,6,437.0916,6,437.0916,222,427.0916,232,178.4816,232,178.4816,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="427.0916" x2="437.0916" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="178.4816" x2="427.0916" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="427.0916" x2="427.0916" y1="16" y2="232"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="115.5957" x="245.9888" y="32.5352">Outer enclosure</text>
+</g>
+<!--cluster Inner enclosure-->
+<g class="cluster" data-qualified-name="OuterShelf.InnerShelf" data-source-line="3" id="ent0003">
+<polygon fill="none" points="210.4816,72,220.4816,62,405.0916,62,405.0916,190,395.0916,200,210.4816,200,210.4816,72" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="395.0916" x2="405.0916" y1="72" y2="62"/>
+<line style="stroke:#181818;stroke-width:1;" x1="210.4816" x2="395.0916" y1="72" y2="72"/>
+<line style="stroke:#181818;stroke-width:1;" x1="395.0916" x2="395.0916" y1="72" y2="200"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="112.2324" x="247.6704" y="88.5352">Inner enclosure</text>
+</g>
+<!--entity resident service-->
+<g class="entity" data-qualified-name="OuterShelf.InnerShelf.ResidentService" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="146.6064" x="234.48" y="129.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="361.0864" y="134.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="359.0864" y="136.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="359.0864" y="140.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.6064" x="249.48" y="163.2952">resident service</text>
+</g>
+<g class="entity" data-qualified-name="NestedMemo" data-source-line="7" id="ent0005">
+<path d="M-12.43,81.34 L-12.43,106.6505 L162.4816,106.6505 L162.4816,91.34 L152.4816,81.34 L-12.43,81.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M152.4816,81.34 L152.4816,91.34 L162.4816,91.34 L152.4816,81.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="153.9116" x="-6.43" y="98.9084">Nested peer observation</text>
+</g>
+<!--entity After nested peer-->
+<g class="entity" data-qualified-name="AfterNested" data-source-line="9" id="ent0007">
+<path d="M11,19.76 L139.043,19.76 C144.043,19.76 144.043,33.0041 144.043,33.0041 C144.043,33.0041 144.043,46.2483 139.043,46.2483 L11,46.2483 C6,46.2483 6,33.0041 6,33.0041 C6,33.0041 6,19.76 11,19.76" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M139.043,19.76 C134.043,19.76 134.043,33.0041 134.043,33.0041 C134.043,46.2483 139.043,46.2483 139.043,46.2483" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118.043" x="11" y="38.2952">After nested peer</text>
+</g>
+<!--link NestedMemo to InnerShelf-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0003" data-link-type="dependency" data-source-line="8" id="lnk6">
+<path d="M162.94,94 C170.9887,94 179.2347,94 187.5074,94 C191.6438,94 195.7869,94 199.9153,94 C201.9796,94 204.0401,94 206.0944,94 C207.1215,94 208.1471,94 209.1708,94 C209.4267,94 203.6825,94 203.9381,94" fill="none" id="NestedMemo-to-InnerShelf" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="209.9381,94,200.9381,90,204.9381,94,200.9381,98,209.9381,94" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

@@ -1,0 +1,8 @@
+@startuml
+note "Forward group observation" as ForwardMemo
+DeferredShelf --> ForwardMemo
+node "Deferred enclosure" as DeferredShelf {
+  artifact "deferred resident" as DeferredResident
+}
+file "After forward peer" as AfterForward
+@enduml

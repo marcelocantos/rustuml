@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="212px" preserveAspectRatio="none" style="width:188px;height:212px;background:#FFFFFF;" version="1.1" viewBox="0 0 188 212" width="188px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Frame enclosure-->
+<g class="cluster" data-qualified-name="FrameShelf" data-source-line="2" id="ent0002">
+<rect fill="none" height="123" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="167.16" x="7" y="75.7442"/>
+<path d="M136.0479,75.7442 L136.0479,85.2324 L126.0479,95.2324 L7,95.2324" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="119.0479" x="10" y="90.2793">Frame enclosure</text>
+</g>
+<!--entity frame resident-->
+<g class="entity" data-qualified-name="FrameShelf.FrameResident" data-source-line="3" id="ent0003">
+<path d="M31,141 L31,172.4883 A2.5,2.5 0 0 0 33.5,174.9883 L147.6553,174.9883 A2.5,2.5 0 0 0 150.1553,172.4883 L150.1553,148.5 L140.1553,138.5 L33.5,138.5 A2.5,2.5 0 0 0 31,141" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M140.1553,138.5 L140.1553,146 A2.5,2.5 0 0 0 142.6553,148.5 L150.1553,148.5" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99.1553" x="41" y="162.0352">frame resident</text>
+</g>
+<g class="entity" data-qualified-name="FrameMemo" data-source-line="5" id="ent0004">
+<path d="M216.6,90.09 L216.6,115.4005 L386.5985,115.4005 L386.5985,100.09 L376.5985,90.09 L216.6,90.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M376.5985,90.09 L376.5985,100.09 L386.5985,100.09 L376.5985,90.09" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="148.9985" x="222.6" y="107.6584">Frame peer observation</text>
+</g>
+<!--entity After frame peer-->
+<g class="entity" data-qualified-name="AfterFrame" data-source-line="7" id="ent0006">
+<path d="M24.55,16 C24.55,6 90.5739,6 90.5739,6 C90.5739,6 156.5979,6 156.5979,16 L156.5979,41.4883 C156.5979,51.4883 90.5739,51.4883 90.5739,51.4883 C90.5739,51.4883 24.55,51.4883 24.55,41.4883 L24.55,16" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M24.55,16 C24.55,26 90.5739,26 90.5739,26 C90.5739,26 156.5979,26 156.5979,16" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112.0479" x="34.55" y="43.5352">After frame peer</text>
+</g>
+<!--link FrameShelf to FrameMemo-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk5">
+<path d="M174.7762,102.74 C175.216,102.74 175.6563,102.74 176.0971,102.74 C176.9787,102.74 177.8623,102.74 178.7476,102.74 C180.5181,102.74 182.2955,102.74 184.0777,102.74 C187.6419,102.74 191.2251,102.74 194.8102,102.74 C201.9805,102.74 203.1587,102.74 210.21,102.74" fill="none" id="FrameShelf-to-FrameMemo" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="216.21,102.74,207.21,98.74,211.21,102.74,207.21,106.74,216.21,102.74" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

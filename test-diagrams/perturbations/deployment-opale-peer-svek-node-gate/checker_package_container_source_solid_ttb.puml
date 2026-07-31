@@ -1,0 +1,8 @@
+@startuml
+package "Package enclosure" as PackageShelf {
+  component "package resident" as PackageResident
+}
+note "Package peer observation" as PackageMemo
+PackageMemo --> PackageShelf
+artifact "After package peer" as AfterPackage
+@enduml

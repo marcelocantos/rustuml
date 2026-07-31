@@ -1,0 +1,6 @@
+@startuml
+node "Leaf peer" as LeafPeer
+note "Leaf source control" as LeafSourceMemo
+LeafSourceMemo --> LeafPeer
+artifact "After leaf source" as AfterLeafSource
+@enduml

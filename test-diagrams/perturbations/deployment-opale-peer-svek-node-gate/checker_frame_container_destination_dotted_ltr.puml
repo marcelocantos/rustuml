@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+frame "Frame enclosure" as FrameShelf {
+  file "frame resident" as FrameResident
+}
+note "Frame peer observation" as FrameMemo
+FrameShelf ..> FrameMemo
+database "After frame peer" as AfterFrame
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "Display enclosure" as DisplayShelf {
+  artifact "display resident" as DisplayResident
+}
+note "Quoted peer observation" as QuotedMemo
+"Display enclosure" --> QuotedMemo
+queue "After quoted peer" as AfterQuoted
+@enduml

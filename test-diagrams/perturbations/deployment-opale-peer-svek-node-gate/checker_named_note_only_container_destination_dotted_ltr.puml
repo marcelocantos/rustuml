@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+frame "Review enclosure" as ReviewShelf {
+  note "Contained review" as ContainedReview
+}
+note "External review observation" as ReviewMemo
+ReviewShelf ..> ReviewMemo
+database "After review peer" as AfterReview
+@enduml

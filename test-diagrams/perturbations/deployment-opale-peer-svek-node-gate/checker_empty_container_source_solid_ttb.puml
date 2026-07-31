@@ -1,0 +1,7 @@
+@startuml
+node "Empty enclosure" as EmptyShelf {
+}
+note "Empty peer observation" as EmptyMemo
+EmptyMemo --> EmptyShelf
+artifact "After empty peer" as AfterEmpty
+@enduml
