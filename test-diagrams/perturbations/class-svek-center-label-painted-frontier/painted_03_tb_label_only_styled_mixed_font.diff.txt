@@ -1,0 +1,19 @@
+SVG structural differences:
+  [20] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "18"), ("lengthAdjust", "spacing"), ("textLength", "41.959"), ("x", "106.48"), ("y", "103.4023")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "18"), ("lengthAdjust", "spacing"), ("textLength", "41.959"), ("x", "106.4824"), ("y", "106.4024")]
+  [21] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "9.5532"), ("x", "152.5523"), ("y", "104.457")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "9.5532"), ("x", "152.5547"), ("y", "107.457")]
+  [22] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "6.3232"), ("x", "162.1055"), ("y", "108.0898")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "6.3232"), ("x", "162.1079"), ("y", "111.0898")]
+  [23] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "36.7974"), ("x", "168.4287"), ("y", "104.457")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "36.7974"), ("x", "168.4312"), ("y", "107.457")]
+  [24] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "6.3232"), ("x", "205.2261"), ("y", "99.0898")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "6.3232"), ("x", "205.2285"), ("y", "102.0898")]
+  [25] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "32.8809"), ("x", "215.6626"), ("y", "104.457")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "32.8809"), ("x", "215.665"), ("y", "107.457")]

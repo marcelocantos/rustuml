@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+skinparam noteFontSize 15
+class CheckerClnFreshNorth2901
+class CheckerClnFreshSouth2911
+CheckerClnFreshNorth2901 -down-> CheckerClnFreshSouth2911
+note on link
+  note only Wwm 2917
+  second line iiww 2921
+end note
+@enduml
