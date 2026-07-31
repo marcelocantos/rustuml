@@ -1,0 +1,30 @@
+State(
+    StateDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ncloud zone/prod {\n  artifact \"Relay:East\"\n}\nqueue \"Front Door\" as front.door\n\"Relay:East\" --> front.door : transfer\nnote on link: path metadata\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        states: [],
+        transitions: [],
+        notes: [],
+    },
+)
