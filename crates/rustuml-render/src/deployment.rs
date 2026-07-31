@@ -5794,6 +5794,14 @@ fn include_deployment_center_label_paint_bounds(
     origin: (f64, f64),
     label_size: EdgeLabelSize,
 ) {
+    // `TextBlockMarged.drawU` emits the full margin box as a `UEmpty`
+    // before painting the translated text rows.
+    bounds.include_rect(
+        origin.0,
+        origin.1,
+        origin.0 + label_size.width,
+        origin.1 + label_size.height,
+    );
     let mut row_y = origin.1 + 1.0;
     for row in deployment_center_label_rows(label) {
         let row = deployment_center_label_display_row(row);
@@ -8820,6 +8828,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
                 + LIMIT_FINDER_TEXT_ADJUST
         );
         assert!(bounds.min_y < 20.0);
+        assert_eq!(bounds.max_x, 10.0 + size.width);
 
         let source = "@startuml\n\
                       node FreshIngress\n\
