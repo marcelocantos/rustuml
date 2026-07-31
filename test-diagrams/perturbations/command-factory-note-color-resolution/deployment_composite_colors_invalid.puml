@@ -1,0 +1,7 @@
+@startuml
+node Target
+note as BadComposite #back:LightBlue;line.dashed:Red
+composite color object should reject for named note
+endnote
+BadComposite --> Target : composite must not create a note identity
+@enduml

@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-color-resolution",
+  "verdict": "REJECT",
+  "checker": {
+    "identity": "Codex GPT-5, independent adversarial checker",
+    "tool": "Codex desktop exec_command/apply_patch",
+    "role": "Adversarial checker; did not modify implementation code and did not run Cargo"
+  },
+  "revisions": {
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rust_worktree": "/private/tmp/rustuml-check-note-colors",
+    "rust_revision": "20a1698b5ffc558be60f0f488b9031e7446de12f",
+    "rust_binary": "/private/tmp/rustuml-named-note-colors/target/release/rustuml"
+  },
+  "commands": [
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /private/tmp/rustuml-check-note-colors rev-parse HEAD",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < INPUT > STEM.java.svg 2> STEM.java.stderr; printf status to STEM.java.status",
+    "/private/tmp/rustuml-named-note-colors/target/release/rustuml -pipe -tsvg < INPUT > STEM.rust.svg 2> STEM.rust.stderr; printf status to STEM.rust.status",
+    "rg -n \"parseColor\\(|parseSimpleColor\\(|transparent|background|automatic|parseSimpleColor\\(s.substring\" src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+    "rg -n \"named_note_simple_color_is_resolvable|named_note_color_is_valid|transparent|background|automatic\" crates/rustuml-parser/src/parse/mod.rs",
+    "rg -n \"fn deployment_note_fill|render_normal_component_note|resolve_color\" crates/rustuml-render/src/deployment.rs crates/rustuml-render/src/component.rs crates/rustuml-render/src/sequence.rs"
+  ],
+  "source_review": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+        "lines": "44,47,90",
+        "finding": "exp1 recognizes a COLOR_REGEXP/part2 token; this is only the first stage."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+        "lines": "86,104,153-154",
+        "finding": "The captured COLOR is resolved by HColorSet.getColor before the command succeeds."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+        "lines": "75-88,106-110,119",
+        "finding": "transparent/background/automatic are whole-color parseColor cases. Gradients split on -\\\\|/ and resolve each endpoint with parseSimpleColor, which does not contain those special cases."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/parse/mod.rs",
+        "lines": "64-104",
+        "finding": "named_note_simple_color_is_resolvable includes transparent/background/automatic, and named_note_color_is_valid reuses it for both whole colors and gradient endpoints."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "lines": "3142-3146",
+        "finding": "Deployment named note colors are sent through the generic resolve_color path; resolve_color does not map transparent/background to Java's HColors.none."
+      },
+      {
+        "path": "crates/rustuml-render/src/component.rs",
+        "lines": "7434,7469-7472,7699-7702",
+        "finding": "No-oracle component note rendering uses NOTE_FILL for note body/fold paths, so retained note.color is not applied in these paths."
+      },
+      {
+        "path": "crates/rustuml-render/src/sequence.rs",
+        "lines": "30,179-185",
+        "finding": "resolve_color falls back unknown non-hex names to #FFFFFF and has no HColors.none handling for transparent/background outside gradient_fill_or's exact transparent branch."
+      }
+    ]
+  },
+  "valid_heldouts": [
+    {
+      "stem": "component_inline_palette_case_hex_valid",
+      "axes": ["Component", "inline", "mixed-case ArchiMate palette alias", "3-digit hex", "subsequent relations"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "No acceptance-boundary failure found."
+    },
+    {
+      "stem": "component_multiline_hex_and_gradient_valid",
+      "axes": ["Component", "multiline", "6-digit hex", "8-digit hex", "one-nibble gradient endpoints", "subsequent relations"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "No acceptance-boundary failure found."
+    },
+    {
+      "stem": "deployment_inline_archimate_case_valid",
+      "axes": ["Deployment", "inline", "lowercase ArchiMate palette alias", "subsequent relation"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "No acceptance-boundary failure found."
+    },
+    {
+      "stem": "deployment_multiline_named_gradient_valid",
+      "axes": ["Deployment", "multiline", "tags", "stereotype", "named-color gradient", "subsequent relation"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "No acceptance-boundary failure found."
+    },
+    {
+      "stem": "component_solid_transparent_background_valid",
+      "axes": ["Component", "inline", "transparent whole color", "background whole color", "subsequent relations"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "FAIL: Java renders both note fills as none, but Rust renders the component note body/fold with #FEFFDD."
+    },
+    {
+      "stem": "deployment_solid_transparent_background_valid",
+      "axes": ["Deployment", "multiline", "transparent whole color", "background whole color", "subsequent relations"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "FAIL: Java renders both note fills as none, but Rust renders the deployment note body/fold with #FFFFFF."
+    }
+  ],
+  "supplemental_invalid_or_java_error_probes": [
+    {
+      "stem": "component_gradient_special_endpoint_invalid",
+      "axes": ["Component", "inline", "gradient", "transparent endpoint", "subsequent declaration"],
+      "java_status": 200,
+      "rust_status": 0,
+      "result": "FAIL: Java emits No such color for #transparent/Red; Rust renders a BadSpecial note identity and continues to render the following After component."
+    },
+    {
+      "stem": "deployment_gradient_automatic_endpoint_invalid",
+      "axes": ["Deployment", "multiline", "gradient", "automatic endpoint", "subsequent declaration"],
+      "java_status": 200,
+      "rust_status": 0,
+      "result": "FAIL: Java emits No such color for #automatic-Blue; Rust renders a BadAutomatic note identity and continues to render the following After node."
+    },
+    {
+      "stem": "component_unknown_name_invalid",
+      "axes": ["Component", "inline", "unknown name"],
+      "java_status": 200,
+      "rust_status": 1,
+      "result": "Rust rejects, matching the Java rejection boundary at CLI level."
+    },
+    {
+      "stem": "deployment_composite_colors_invalid",
+      "axes": ["Deployment", "multiline", "ColorParser part2 composite"],
+      "java_status": 200,
+      "rust_status": 1,
+      "result": "Rust rejects, matching the Java rejection boundary at CLI level."
+    },
+    {
+      "stem": "component_repeated_separator_invalid",
+      "axes": ["Component", "inline", "repeated gradient separators"],
+      "java_status": 200,
+      "rust_status": 1,
+      "result": "Rust rejects, matching the Java rejection boundary at CLI level."
+    },
+    {
+      "stem": "component_solid_specials_valid",
+      "axes": ["Component", "inline", "transparent whole color", "background whole color", "automatic whole color"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "Java accepts parsing but emits a crash SVG/stderr for HColorAutomagic during rendering; preserved as residue for #automatic."
+    },
+    {
+      "stem": "deployment_solid_specials_valid",
+      "axes": ["Deployment", "multiline", "transparent whole color", "background whole color", "automatic whole color"],
+      "java_status": 0,
+      "rust_status": 0,
+      "result": "Java accepts parsing but emits a crash SVG/stderr for HColorAutomagic during rendering; preserved as residue for #automatic."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "rejecting",
+      "summary": "Rust over-accepts special values as gradient endpoints.",
+      "evidence": [
+        "HColorSet.parseColor handles transparent/background/automatic before parseSimpleColor, but gradient endpoints use parseSimpleColor only.",
+        "component_gradient_special_endpoint_invalid.java.svg contains No such color for #transparent/Red while component_gradient_special_endpoint_invalid.rust.svg contains data-qualified-name=\"BadSpecial\" and the later After component.",
+        "deployment_gradient_automatic_endpoint_invalid.java.svg contains No such color for #automatic-Blue while deployment_gradient_automatic_endpoint_invalid.rust.svg contains data-qualified-name=\"BadAutomatic\" and the later After node."
+      ]
+    },
+    {
+      "id": "F2",
+      "severity": "rejecting",
+      "summary": "Rust does not preserve HColorSet's whole-color none resolution for transparent/background named notes.",
+      "evidence": [
+        "component_solid_transparent_background_valid.java.svg renders TransparentSolid and BackgroundSolid note paths with fill=\"none\"; the Rust SVG renders the same note paths with fill=\"#FEFFDD\".",
+        "deployment_solid_transparent_background_valid.java.svg renders TransparentSolid and BackgroundSolid note paths with fill=\"none\"; the Rust SVG renders the same note paths with fill=\"#FFFFFF\".",
+        "The Rust parser stores the raw token, but the downstream renderers do not carry Java's HColors.none result."
+      ]
+    },
+    {
+      "id": "F3",
+      "severity": "non_rejecting",
+      "summary": "No fixture-shaped logic or golden-file read was found in the touched named-note color parser path.",
+      "evidence": [
+        "Reviewed crates/rustuml-parser/src/parse/mod.rs named-note helpers and searched parser/render sources for include_str!/golden/test-diagrams/fixture-shaped terms relevant to this mechanism.",
+        "The remaining issue is model incompleteness, not fixture-specific branching."
+      ]
+    }
+  ],
+  "preserved_evidence_directory": "test-diagrams/perturbations/command-factory-note-color-resolution",
+  "accepted_residue": [
+    "Java PlantUML 1.2026.3beta6 accepts #automatic as a whole named-note color but crashes during SVG rendering with HColorAutomagic; this was preserved but not used as the primary rejection because the Java reference itself does not produce a normal diagram.",
+    "The Java error pages for invalid probes report assumed diagram type component even for deployment-like sources; this appears to be PlantUML's assumption text in the error renderer, not a Rust finding."
+  ],
+  "conclusion": "The claimed ColorParser.exp1/HColorSet equivalence is disproved. The implementation conflates whole-color parseColor specials with parseSimpleColor gradient endpoints, and it does not propagate HColors.none semantics for transparent/background through the observable Rust output. Verdict: REJECT."
+}

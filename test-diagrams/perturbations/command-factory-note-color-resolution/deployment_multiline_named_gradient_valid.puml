@@ -1,0 +1,7 @@
+@startuml
+node Target
+note as GradientOK $review <<GradientLedger>> #Red/LightBlue
+valid named gradient body
+endnote
+GradientOK --> Target
+@enduml

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="200px" preserveAspectRatio="none" style="width:369px;height:200px;background:#FFFFFF;" version="1.1" viewBox="0 0 369 200" width="369px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Target-->
+<g class="entity" data-qualified-name="Target" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="79.13,139.49,89.13,129.49,163.2081,129.49,163.2081,165.9783,153.2081,175.9783,79.13,175.9783,79.13,139.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="153.2081" x2="163.2081" y1="139.49" y2="129.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="79.13" x2="153.2081" y1="139.49" y2="139.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="153.2081" x2="153.2081" y1="139.49" y2="175.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="44.0781" x="94.13" y="163.0252">Target</text>
+</g>
+<g class="entity" data-qualified-name="BadAutomatic" data-source-line="3" id="ent0003">
+<path d="M6,16.59 L6,41.9005 A0,0 0 0 0 6,41.9005 L117.17,41.9005 L121.17,128.99 L125.17,41.9005 L236.3457,41.9005 A0,0 0 0 0 236.3457,41.9005 L236.3457,26.59 L226.3457,16.59 L6,16.59 A0,0 0 0 0 6,16.59" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M226.3457,16.59 L226.3457,26.59 L236.3457,26.59 L226.3457,16.59" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="209.3457" x="12" y="34.1584">automatic endpoint should reject</text>
+</g>
+<!--entity After-->
+<g class="entity" data-qualified-name="After" data-source-line="6" id="ent0005">
+<polygon fill="#F1F1F1" points="271.39,16,281.39,6,344.9613,6,344.9613,42.4883,334.9613,52.4883,271.39,52.4883,271.39,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="334.9613" x2="344.9613" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="271.39" x2="334.9613" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="334.9613" x2="334.9613" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="33.5713" x="286.39" y="39.5352">After</text>
+</g>
+</g></svg>

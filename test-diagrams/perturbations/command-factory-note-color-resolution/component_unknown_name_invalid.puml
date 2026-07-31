@@ -1,0 +1,5 @@
+@startuml
+component Anchor
+note "unknown color should reject" as BadUnknown #InvisibleOctarine
+BadUnknown --> Anchor : unknown color must not create a note identity
+@enduml

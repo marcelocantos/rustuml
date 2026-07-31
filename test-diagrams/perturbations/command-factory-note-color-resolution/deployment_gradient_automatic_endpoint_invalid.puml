@@ -1,0 +1,8 @@
+@startuml
+node Target
+note as BadAutomatic #automatic-Blue
+automatic endpoint should reject
+endnote
+BadAutomatic --> Target : must not create a note identity
+node After
+@enduml

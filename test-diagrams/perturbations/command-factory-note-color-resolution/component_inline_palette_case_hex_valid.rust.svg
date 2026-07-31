@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="105px" preserveAspectRatio="none" style="width:633px;height:105px;background:#FFFFFF;" version="1.1" viewBox="0 0 633 105" width="633px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor-->
+<g class="entity" data-qualified-name="Anchor" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="140.2969" x="479.35" y="25.41"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="599.6469" y="30.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="597.6469" y="32.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="597.6469" y="36.41"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100.2969" x="494.35" y="58.9452">Anchor Service</text>
+</g>
+<g class="entity" data-qualified-name="CaseMix" data-source-line="3" id="ent0003">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L169.3462,31.3105 A0,0 0 0 0 169.3462,31.3105 L169.3462,27.95 L479.05,44.12 L169.3462,19.95 L169.3462,16 L159.3462,6 L6,6 A0,0 0 0 0 6,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M159.3462,6 L159.3462,16 L169.3462,16 L159.3462,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="142.3462" x="12" y="23.5684">Palette CASE boundary</text>
+</g>
+<g class="entity" data-qualified-name="Hex3" data-source-line="4" id="ent0004">
+<path d="M29.04,66 L29.04,91.3105 A0,0 0 0 0 29.04,91.3105 L146.3086,91.3105 A0,0 0 0 0 146.3086,91.3105 L146.3086,84 L479.1,63.4 L146.3086,76 L146.3086,76 L136.3086,66 L29.04,66 A0,0 0 0 0 29.04,66" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M136.3086,66 L136.3086,76 L146.3086,76 L136.3086,66" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="96.2686" x="35.04" y="83.5684">Three digit hex</text>
+</g>
+</g></svg>

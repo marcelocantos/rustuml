@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+component "Anchor Service" as Anchor
+note "Palette CASE boundary" as CaseMix $audit <<HueLedger>> #bUsInEsS
+note "Three digit hex" as Hex3 #AbC
+CaseMix --> Anchor : named palette alias remains an identity
+Hex3 ..> Anchor : short hex remains an identity
+@enduml

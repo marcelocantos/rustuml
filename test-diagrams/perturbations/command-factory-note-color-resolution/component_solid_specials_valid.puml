@@ -1,0 +1,9 @@
+@startuml
+component Anchor
+note "transparent solid" as TransparentSolid #transparent
+note "background solid" as BackgroundSolid #background
+note "automatic solid" as AutomaticSolid #automatic
+TransparentSolid --> Anchor
+BackgroundSolid --> Anchor
+AutomaticSolid --> Anchor
+@enduml

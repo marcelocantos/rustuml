@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+node "Target Node" as Target
+note "archimate alias lower case" as AliasNote #implementation
+AliasNote --> Target : alias color keeps note identity
+@enduml

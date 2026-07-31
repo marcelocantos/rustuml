@@ -1,0 +1,6 @@
+@startuml
+component Anchor
+note "transparent endpoint should reject" as BadSpecial #transparent/Red
+BadSpecial --> Anchor : must not create a note identity
+component After
+@enduml
