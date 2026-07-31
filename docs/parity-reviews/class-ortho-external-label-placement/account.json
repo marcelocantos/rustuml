@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-ortho-external-label-placement",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "fa3d6f2f438ef630583d35ac323d4cb97c7ec56e",
+  "depends_on": "class-dot-ortho-er-migration",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["appendLine", "appendDotString", "solve", "manageCollision"],
+      "role": "Builds the renderer-owned center block and serializes it as an external xlabel under DotSplines.ORTHO, then consumes Graphviz's solved position instead of reserving rank space."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": ["createDotString"],
+      "role": "Enables forcelabels for orthogonal graphs so the external fixed-size blocks are placed even when collision-free placement is constrained."
+    },
+    {
+      "path": "vendored Graphviz common/postproc.c",
+      "symbols": ["placeLabels", "addXLabel"],
+      "role": "Places edge xlabels against solved graph objects and records the resulting lower-left label box."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["render_no_oracle", "synthesize_ortho_edge_labels"],
+      "role": "Suppresses every center label size when ortho is selected, then reconstructs a midpoint-derived position after layout."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": ["EdgeSpec", "add_edge_with_label_sizes_and_minlen", "edge_label_position"],
+      "role": "Supports Graphviz label, taillabel, and headlabel placeholders but has no typed center-xlabel channel or solved xlabel extraction."
+    },
+    {
+      "path": "vendor/graphviz/lib/rustuml_helpers.c",
+      "symbols": ["rustuml_edge_label_box"],
+      "role": "Exposes ED_label, ED_tail_label, and ED_head_label but not ED_xlabel."
+    }
+  ],
+  "claimed_invariant": "Under effective linetype ortho, a Class-family relationship center block is the same renderer-owned text/note block used by other SVEK modes, but its fixed dimensions travel through Graphviz's external xlabel channel. It does not reserve rank space as an ordinary label. Graphviz places it against the complete solved graph, including nodes, clusters, routes, and other labels; Rust must consume that solved box and paint the original block there. Label text, relationship kind, ER decorations, package depth, topology, and source order do not select separate placement formulas.",
+  "causal_divergence": "After activating the real ortho router and removing the obsolete ER route deltas, 50/54 ortho ER pairs remain exact and eight direct ortho failures become exact. In the four large remaining ER schemas, entity, cluster, route, and decoration geometry is already aligned; the observed differences are center-label positions. Rust intentionally passes label_size=None whenever has_ortho_linetype is true and synthesize_ortho_edge_labels places labels from shortened endpoint midpoints. Java instead gives Graphviz an xlabel fixed-size table, so labels on self-links, crossings, fanout, and long compound routes are placed with global collision information unavailable to the midpoint formula.",
+  "planned_model_change": "Add an explicit external-center-label size to LayoutGraph edges. For Ortho routing, serialize the renderer-owned fixed-size HTML table through the Graphviz xlabel attribute, expose ED_xlabel's solved box through the C helper, and return it in EdgePath.label. Keep ordinary label, tail-label, and head-label channels unchanged. Pass the existing relationship center block as the external label from Class rendering and remove synthesize_ortho_edge_labels once every caller consumes solved xlabels. Preserve Graphviz's forcelabels setting from the routing mechanism.",
+  "perturbation_axes": [
+    "ordinary Class versus ER crow-foot relationship blocks",
+    "top-to-bottom versus left-to-right direction",
+    "straight, crossing, fanout, diamond, parallel, and self-loop topology",
+    "flat versus nested package/cluster ownership",
+    "short versus long labels and empty versus nonempty center blocks",
+    "center text alone versus link-note composite center blocks",
+    "renamed entities and changed relationship declaration order"
+  ],
+  "acceptance": [
+    "Fresh ortho inputs prove center labels come from Graphviz's solved xlabel boxes under changed topology, direction, labels, and declaration order.",
+    "All 50 previously passing ortho ER pairs remain passing and the four large ER schemas improve without family regressions.",
+    "The remaining direct ortho cluster improves where its divergence is label placement; unrelated self-route or family-dispatch residue is recorded separately rather than tuned here.",
+    "Layout and renderer suites, no-oracle perturbations, harness guards, and the shipped golden no-oracle ratchet pass before acceptance."
+  ],
+  "forbidden_approaches": [
+    "midpoint, fixture-family, relationship-count, or label-text placement branches",
+    "per-label coordinate offsets or collision constants not present in the Java/Graphviz model",
+    "using ordinary label rank constraints for ortho xlabels",
+    "post-hoc SVG surgery, golden reads, comparator changes, baseline weakening, or selector changes"
+  ]
+}
