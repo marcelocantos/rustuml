@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-sheet-padding",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "311cceed1274adca6d02ca1d262d82b7ef6c0a89",
+  "triggering_review": "docs/parity-reviews/class-svek-center-label-horizontal-painted-frontier/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbols": ["getCreole"],
+      "lines": "688-696",
+      "role": "Reads spriteContainer.getPadding() and passes it to SheetBlock1 for every Display-created note text block."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": ["getPadding"],
+      "lines": "1101-1105",
+      "role": "Resolves the effective global skinparam Padding value consumed by Display."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "symbols": ["SheetBlock1", "calculateDimensionSlow", "drawU"],
+      "lines": "74-94,195-210",
+      "role": "Adds top+bottom padding to both preferred dimensions and translates painted atoms by left/top padding."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "symbols": ["AbstractTextualComponent", "getTextWidth", "getTextHeight"],
+      "lines": "62-94,101-115",
+      "role": "Builds ComponentRoseNote's text block through Display and composes the padded sheet dimensions with Rose's own note margins."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["ResolvedNoteStyle", "note_body_dimensions", "note_box_dims", "relationship_note_box_dims", "emit_note_body"],
+      "lines": "15224-15375,17037-17160,17363-17470",
+      "role": "Measures and paints note content with Rose margins but carries no global text-sheet padding in the resolved note model."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["relationship_center_layout", "render_relationship_note"],
+      "lines": "14677-14794,16310-16379",
+      "role": "Correctly preserves natural Rose component dimensions once supplied, so the missing sheet padding must enter before component composition and paint."
+    }
+  ],
+  "claimed_invariant": "Class standalone and relationship-owned notes build their Creole Display through a SheetBlock1 padded by the effective global skinparam Padding. That sheet padding enlarges natural text width and height symmetrically and translates every painted text/table/tree/code/sprite atom by its left/top amount. Rose's fixed component margins and five-pixel component padding are separate outer layers and must not absorb or replace the sheet padding.",
+  "causal_divergence": "For skinparam Padding 3, Java's fresh link note adds six pixels to both natural sheet dimensions and paints text three pixels farther right/down inside the folded note. Rust keeps the same measured glyph widths but omits this layer, producing a folded polygon six pixels narrower and text three pixels too far left/up relative to that polygon. Combined with the independent zero-seeded root MinMax, the visible note starts five pixels too far right while the class row follows a different center.",
+  "planned_model_change": "Carry effective global padding in ResolvedNoteStyle. Add twice that padding to the note body's natural width and height before Rose margins, and paint the existing body model inside an inset rectangle translated by padding on both axes. Use one shared wrapper so ordinary text, code, tree, table, separators, sprites, and LaTeX receive the same sheet translation and available width. Keep Rose margins, component padding, and Graphviz integer truncation distinct.",
+  "perturbation_axes": [
+    "Padding zero, positive integer, and fractional values",
+    "standalone versus relationship-owned notes",
+    "plain multiline text versus code/tree/table/sprite content",
+    "left, right, top, and bottom relationship note positions",
+    "note-dominant versus label-dominant center widths",
+    "changed note font family and renamed text widths"
+  ],
+  "scope_boundary": "This mechanism owns global Display sheet padding inside Class notes. It does not own Rose component padding/margins, root MinMax initialization, relationship label padding, routing, collision order, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved Padding 3 link-note perturbation gains six pixels of polygon width and a three-pixel text inset from the model rather than fixture constants.",
+    "Padding zero is behaviorally unchanged.",
+    "Unit tests cover at least plain relationship text and one structured note body under changed padding.",
+    "Full renderer and no-oracle suites show no new failures.",
+    "A separate checker creates fresh note-content and note-position perturbations and records a verdict."
+  ],
+  "forbidden_approaches": [
+    "adding three or six pixels only for the rejecting note",
+    "folding sheet padding into Rose's fixed five-pixel component padding",
+    "keying behavior to note text, source line, fixture path, or ORTHO",
+    "post-hoc SVG coordinate or width rewriting",
+    "changing comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
