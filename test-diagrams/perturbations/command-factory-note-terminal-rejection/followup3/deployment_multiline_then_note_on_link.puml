@@ -1,0 +1,10 @@
+@startuml
+node AnchorDOL
+node ArchiveDOL
+note as ForceDeployLink
+ready for link note
+endnote
+ForceDeployLink --> AnchorDOL
+AnchorDOL --> ArchiveDOL : primary route
+note on link : deployment link note should survive
+@enduml

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="185px" preserveAspectRatio="none" style="width:192px;height:185px;background:#FFFFFF;" version="1.1" viewBox="0 0 192 185" width="192px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity AnchorDMG-->
+<g class="entity" data-qualified-name="AnchorDMG" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="31.04,16,41.04,6,152.2373,6,152.2373,42.4883,142.2373,52.4883,31.04,52.4883,31.04,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="142.2373" x2="152.2373" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="31.04" x2="142.2373" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="142.2373" x2="142.2373" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81.1973" x="46.04" y="39.5352">AnchorDMG</text>
+</g>
+<g class="entity" data-qualified-name="GapCarryDeploy" data-source-line="3" id="ent0003">
+<path d="M6,129.49 L6,170.1111 A0,0 0 0 0 6,170.1111 L177.2681,170.1111 A0,0 0 0 0 177.2681,170.1111 L177.2681,139.49 L167.2681,129.49 L95.63,129.49 L91.63,52.82 L87.63,129.49 L6,129.49 A0,0 0 0 0 6,129.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M167.2681,129.49 L167.2681,139.49 L177.2681,139.49 L167.2681,129.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="130.8506" x="12" y="147.0584">first deployment line</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="150.2681" x="12" y="162.3689">second deployment line</text>
+</g>
+</g></svg>

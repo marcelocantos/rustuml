@@ -1,0 +1,9 @@
+@startuml
+component AnchorVCA
+component ArchiveVCA
+note as AttachCarryComp
+ready for attached note
+endnote
+AnchorVCA --> ArchiveVCA : primary route
+note left of AnchorVCA : component attached note survives
+@enduml

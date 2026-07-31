@@ -1,0 +1,37 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node AnchorDMG
+      note as GapCarryDeploy
+      first deployment line
+
+      second deployment line
+      endnote
+      AnchorDMG --> GapCarryDeploy : gap note relation
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: AnchorDMG
+    label: AnchorDMG
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  connections:
+  - from: AnchorDMG
+    to: GapCarryDeploy
+    label: gap note relation
+    arrow_at_end: true
+    source_line: 7
+  notes:
+  - id: GapCarryDeploy
+    text: |-
+      first deployment line
+      second deployment line
+    quark_order: 1
+    position: Right
+    source_line: 3

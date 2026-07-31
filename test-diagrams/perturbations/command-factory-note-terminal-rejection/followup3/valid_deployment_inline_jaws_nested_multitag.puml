@@ -1,0 +1,8 @@
+@startuml
+node OuterVDI {
+  node AnchorVDI
+  note “payload  as AuditDeploy $ops $kept <<Ledger>> #LightBlue
+  AnchorVDI --> AuditDeploy : traces
+  note left of AnchorVDI : attached deploy audit
+}
+@enduml

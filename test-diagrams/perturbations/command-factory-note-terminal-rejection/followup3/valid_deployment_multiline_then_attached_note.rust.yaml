@@ -1,0 +1,48 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node AnchorVDA
+      node ArchiveVDA
+      note as AttachCarryDeploy
+      ready for attached note
+      endnote
+      AnchorVDA --> ArchiveVDA : primary route
+      note right of AnchorVDA : deployment attached note survives
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: AnchorVDA
+    label: AnchorVDA
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: ArchiveVDA
+    label: ArchiveVDA
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: AnchorVDA
+    to: ArchiveVDA
+    label: primary route
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: AttachCarryDeploy
+    text: ready for attached note
+    quark_order: 2
+    position: Right
+    source_line: 4
+  - target: AnchorVDA
+    text: deployment attached note survives
+    quark_order: 3
+    position: Right
+    source_line: 7

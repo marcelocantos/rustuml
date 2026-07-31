@@ -1,0 +1,36 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component AnchorCME
+      note as EmptyCarryComp
+      end note
+      AnchorCME --> EmptyCarryComp : empty note relation
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: AnchorCME
+    label: AnchorCME
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  interfaces: []
+  connections:
+  - from: AnchorCME
+    to: EmptyCarryComp
+    label: empty note relation
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  packages: []
+  notes: []

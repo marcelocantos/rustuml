@@ -1,0 +1,5 @@
+@startuml
+node AnchorIDT
+note "payload" as EscapeIDT $opstail <<Trace>> #LightBlue
+AnchorIDT --> EscapeIDT : should not survive
+@enduml

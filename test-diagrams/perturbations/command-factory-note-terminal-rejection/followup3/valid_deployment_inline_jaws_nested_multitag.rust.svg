@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="235px" preserveAspectRatio="none" style="width:412px;height:235px;background:#FFFFFF;" version="1.1" viewBox="0 0 412 235" width="412px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterVDI-->
+<g class="cluster" data-qualified-name="OuterVDI" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,387,6,387,200.8,377,210.8,16,210.8,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="377" x2="387" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="377" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="377" x2="377" y1="16" y2="210.8"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="66.4863" x="164.2568" y="32.5352">OuterVDI</text>
+</g>
+<!--entity AnchorVDI-->
+<g class="entity" data-qualified-name="OuterVDI.AnchorVDI" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="258.9,56,268.9,46,371.108,46,371.108,82.4883,361.108,92.4883,258.9,92.4883,258.9,56" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="361.108" x2="371.108" y1="56" y2="46"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="258.9" x2="361.108" y1="56" y2="56"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="361.108" x2="361.108" y1="56" y2="92.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.208" x="273.9" y="79.5352">AnchorVDI</text>
+</g>
+<g class="entity" data-qualified-name="OuterVDI.AuditDeploy" data-source-line="3" id="ent0004">
+<path d="M277.81,169.49 L277.81,194.8005 A0,0 0 0 0 277.81,194.8005 L352.1811,194.8005 A0,0 0 0 0 352.1811,194.8005 L352.1811,179.49 L342.1811,169.49 L319,169.49 L315,92.95 L311,169.49 L277.81,169.49 A0,0 0 0 0 277.81,169.49" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M342.1811,169.49 L342.1811,179.49 L352.1811,179.49 L342.1811,169.49" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="49.2578" x="283.81" y="187.0584">payload</text>
+</g>
+<g class="entity" data-qualified-name="OuterVDI.GMN6" data-source-line="5" id="ent0007">
+<path d="M32.17,56.59 L32.17,81.9005 A0,0 0 0 0 32.17,81.9005 L189.8223,81.9005 A0,0 0 0 0 189.8223,81.9005 L189.8223,74.59 L258.49,69.24 L189.8223,66.59 L189.8223,66.59 L179.8223,56.59 L32.17,56.59 A0,0 0 0 0 32.17,56.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M179.8223,56.59 L179.8223,66.59 L189.8223,66.59 L179.8223,56.59" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="136.6523" x="38.17" y="74.1584">attached deploy audit</text>
+</g>
+</g></svg>

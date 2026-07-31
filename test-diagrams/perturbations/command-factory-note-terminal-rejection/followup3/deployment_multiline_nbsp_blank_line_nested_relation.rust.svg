@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="251px" preserveAspectRatio="none" style="width:243px;height:251px;background:#FFFFFF;" version="1.1" viewBox="0 0 243 251" width="243px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterGapDeploy-->
+<g class="cluster" data-qualified-name="OuterGapDeploy" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,218,6,218,216.11,208,226.11,16,226.11,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="208" x2="218" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="208" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="208" x2="208" y1="16" y2="226.11"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="119.1436" x="53.4282" y="32.5352">OuterGapDeploy</text>
+</g>
+<!--entity AnchorDMN-->
+<g class="entity" data-qualified-name="OuterGapDeploy.AnchorDMN" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="32.29,56,42.29,46,153.7129,46,153.7129,82.4883,143.7129,92.4883,32.29,92.4883,32.29,56" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="143.7129" x2="153.7129" y1="56" y2="46"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="32.29" x2="143.7129" y1="56" y2="56"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="143.7129" x2="143.7129" y1="56" y2="92.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81.4229" x="47.29" y="79.5352">AnchorDMN</text>
+</g>
+<g class="entity" data-qualified-name="OuterGapDeploy.GapNbspDeploy" data-source-line="4" id="ent0004">
+<path d="M32.42,169.49 L32.42,210.1111 A0,0 0 0 0 32.42,210.1111 L201.5743,210.1111 A0,0 0 0 0 201.5743,210.1111 L201.5743,179.49 L191.5743,169.49 L117,169.49 L97.57,92.82 L109,169.49 L32.42,169.49 A0,0 0 0 0 32.42,169.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M191.5743,169.49 L191.5743,179.49 L201.5743,179.49 L191.5743,169.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="139.8706" x="38.42" y="187.0584">alpha deployment line</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="148.1543" x="38.42" y="202.3689">omega deployment line</text>
+</g>
+</g></svg>

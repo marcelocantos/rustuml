@@ -1,0 +1,11 @@
+@startuml
+node OuterGapDeploy {
+  node AnchorDMN
+  note as GapNbspDeploy
+  alpha deployment line
+   
+  omega deployment line
+  End Note
+  AnchorDMN --> GapNbspDeploy : nbsp gap relation
+}
+@enduml

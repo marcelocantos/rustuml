@@ -1,0 +1,62 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package OuterComp {
+      component AnchorVCI
+      note ”payload trail" as AuditComp $ops $kept <<Ledger>> #MistyRose
+      AnchorVCI --> AuditComp : traces
+      note right of AnchorVCI : attached audit
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: AnchorVCI
+    label: AnchorVCI
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: AnchorVCI
+    to: AuditComp
+    label: traces
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  packages:
+  - name: OuterComp
+    label: OuterComp
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - AnchorVCI
+    packages: []
+  notes:
+  - id: AuditComp
+    owner: OuterComp
+    tags:
+    - ops
+    - kept
+    stereotype: Ledger
+    color: '#MistyRose'
+    text: payload trail
+    target: null
+    position: Right
+    source_line: 3
+  - owner: OuterComp
+    text: attached audit
+    target: AnchorVCI
+    position: Right
+    source_line: 5

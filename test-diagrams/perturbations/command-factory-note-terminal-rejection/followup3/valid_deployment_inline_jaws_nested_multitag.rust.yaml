@@ -1,0 +1,55 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node OuterVDI {
+        node AnchorVDI
+        note “payload  as AuditDeploy $ops $kept <<Ledger>> #LightBlue
+        AnchorVDI --> AuditDeploy : traces
+        note left of AnchorVDI : attached deploy audit
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: OuterVDI
+    label: OuterVDI
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - AnchorVDI
+    source_line: 1
+    quark_order: 0
+  - id: AnchorVDI
+    label: AnchorVDI
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: AnchorVDI
+    to: AuditDeploy
+    label: traces
+    arrow_at_end: true
+    source_line: 4
+  notes:
+  - id: AuditDeploy
+    text: 'payload '
+    color: '#LightBlue'
+    tags:
+    - ops
+    - kept
+    stereotype: Ledger
+    owner: OuterVDI
+    quark_order: 2
+    position: Right
+    source_line: 3
+  - target: AnchorVDI
+    text: attached deploy audit
+    owner: OuterVDI
+    quark_order: 3
+    position: Left
+    source_line: 5

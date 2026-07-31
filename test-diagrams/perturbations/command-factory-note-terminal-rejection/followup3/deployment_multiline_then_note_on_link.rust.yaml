@@ -1,0 +1,49 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node AnchorDOL
+      node ArchiveDOL
+      note as ForceDeployLink
+      ready for link note
+      endnote
+      ForceDeployLink --> AnchorDOL
+      AnchorDOL --> ArchiveDOL : primary route
+      note on link : deployment link note should survive
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: AnchorDOL
+    label: AnchorDOL
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: ArchiveDOL
+    label: ArchiveDOL
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: ForceDeployLink
+    to: AnchorDOL
+    label: null
+    arrow_at_end: true
+    source_line: 6
+  - from: AnchorDOL
+    to: ArchiveDOL
+    label: primary route
+    arrow_at_end: true
+    source_line: 7
+  notes:
+  - id: ForceDeployLink
+    text: ready for link note
+    quark_order: 2
+    position: Right
+    source_line: 4
