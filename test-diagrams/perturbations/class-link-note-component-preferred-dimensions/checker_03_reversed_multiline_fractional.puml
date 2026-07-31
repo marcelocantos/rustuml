@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class CheckerClnWest2657
+class CheckerClnEast2663
+CheckerClnWest2657 <-- CheckerClnEast2663 : flip dir label iiww 2671
+note on link
+  first fractional row lIl 2677
+  wider fractional Wwm 2683
+end note
+@enduml

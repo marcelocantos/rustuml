@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+class CheckerClnNoteOnlyFrom2711
+class CheckerClnNoteOnlyTo2713
+CheckerClnNoteOnlyFrom2711 -down-> CheckerClnNoteOnlyTo2713
+note on link : solo fractional link memo O0Il 2719
+@enduml
