@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "mechanism": "xml-comment-safe-document-scaling",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java:TextBlockExporter12026#exportDiagramInternal",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/UGraphicSvg.java:UGraphicSvg constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/scale.rs:scale_svg_numbers",
+    "crates/rustuml-render/src/lib.rs:render_svg_with_theme"
+  ],
+  "invariant": "PlantUML applies skinparam dpi and explicit document scale once to the complete graphics backend, independently of SVG comments, processing instructions, declarations, element labels, or punctuation. Rust's finished-SVG scaling pass must therefore recognize non-element XML constructs by their own terminators and apply attribute quote tracking only inside actual opening or self-closing element tags.",
+  "causal_divergence": "Rust scale_svg_numbers currently searches every '<' construct for the next unquoted '>' before deciding whether it is an element. The generated comment <!--class O'Brien Ledger--> contains an apostrophe, which opens a fictitious attribute quote. The scanner consequently copies the comment, entity group, rectangles, icon, and header text as one non-element span without scaling, then resumes inside the entity. Java's graphics-backend scale has no text-lexing dependency, so every primitive is uniformly scaled by dpi/96. The malformed classBorderColor command in the triggering input is unrelated: both implementations retain it and resolve its malformed color to white.",
+  "planned_change": "Split finished-SVG lexical scanning by XML construct. Copy comments through '-->', processing instructions through '?>', CDATA through ']]>', declarations through their closing '>', and closing tags through '>'. Only opening and self-closing element tags use quote-aware '>' discovery and scale_tag. Preserve byte-oriented serialization and the existing numeric attribute/path/style transformations; do not parse or rewrite comment text.",
+  "perturbation_axes": [
+    "apostrophes in class, package, link, and other generated XML comments versus no apostrophe",
+    "single, balanced, and repeated apostrophes inside non-element markup",
+    "skinparam dpi 96, 100, and 125 versus explicit scale directives",
+    "apostrophized entity first, middle, or last in the painted document",
+    "comments adjacent to processing instructions, declarations, CDATA, closing tags, and ordinary elements",
+    "valid, malformed, and absent legacy color skinparams with identical labels"
+  ],
+  "scope_boundary": "This mechanism owns lexical boundaries in the final SVG scaling pass. It does not change preprocessing, label parsing, style epochs, malformed-color fallback, entity dimensions, layout, XML comment contents, comparator behavior, or fixture eligibility.",
+  "acceptance": [
+    "Every geometric element after an apostrophe-bearing XML comment is scaled uniformly by the active document factor.",
+    "Comments, processing instructions, declarations, CDATA, closing tags, and text content remain byte-for-byte unchanged.",
+    "Existing root rounding, path, polygon, style, font-size, filter, and oracle-layout scaling tests remain green.",
+    "Fresh Java-generated perturbations exercise at least two independent punctuation, scale, and entity-order axes through the no-oracle path.",
+    "An independent checker audits this account and implementation at exact revisions and preserves all passing or failing perturbations."
+  ],
+  "forbidden_approaches": [
+    "special-casing O'Brien, class comments, fixture labels, or known SVG coordinates",
+    "removing or escaping generated comments solely to avoid the lexer defect",
+    "entity-specific rescaling or post-hoc geometry replacement",
+    "changing DPI values, style epochs, comparator tolerance, skip markers, or baselines"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.puml",
+    "test-diagrams/perturbations/preprocessed-source-comment-identity/quote_comment_axes.svg"
+  ]
+}
