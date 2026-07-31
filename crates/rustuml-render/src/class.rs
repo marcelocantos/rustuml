@@ -14851,9 +14851,23 @@ fn shortened_endpoint_points(
         return out;
     }
     if start_len > 0.0 {
-        let tangent = unit_vector(out[0], out[1]);
-        out[0] = add(out[0], scale(tangent, start_len));
-        out[1] = add(out[1], scale(tangent, start_len));
+        let tangent = dotpath_start_unit_tangent(&out);
+        let shift = scale(tangent, start_len);
+        if out.len() >= 7 {
+            let first_chord = (out[3].0 - out[0].0, out[3].1 - out[0].1);
+            if start_len >= first_chord.0.hypot(first_chord.1) {
+                out.drain(..3);
+                let residual = (shift.0 - first_chord.0, shift.1 - first_chord.1);
+                out[0] = add(out[0], residual);
+                out[1] = add(out[1], residual);
+            } else {
+                out[0] = add(out[0], shift);
+                out[1] = add(out[1], shift);
+            }
+        } else {
+            out[0] = add(out[0], shift);
+            out[1] = add(out[1], shift);
+        }
     }
     if end_len > 0.0 {
         let last = out.len() - 1;
@@ -14862,6 +14876,24 @@ fn shortened_endpoint_points(
         out[last - 1] = add(out[last - 1], scale(tangent, end_len));
     }
     out
+}
+
+/// Java `DotPath.getStartTangeante` uses the first control direction and
+/// falls back to the first cubic's endpoint chord when that control coincides
+/// with the start. A fully degenerate first cubic inherits Java's zero-angle
+/// direction so `moveStartPoint` can still consume it.
+fn dotpath_start_unit_tangent(points: &[(f64, f64)]) -> (f64, f64) {
+    let control = unit_vector(points[0], points[1]);
+    if control != (0.0, 0.0) {
+        return control;
+    }
+    if let Some(&endpoint) = points.get(3) {
+        let chord = unit_vector(points[0], endpoint);
+        if chord != (0.0, 0.0) {
+            return chord;
+        }
+    }
+    (1.0, 0.0)
 }
 
 fn endpoint_decoration_length(decor: EndpointDecor) -> f64 {
@@ -17926,6 +17958,46 @@ mod tests {
             .fold(f64::INFINITY, f64::min);
         assert_eq!(bounds.0, visible_min_x - LIMIT_FINDER_POLYGON_OVERSCAN_X);
         assert_eq!(bounds.2, visible_min_y);
+    }
+
+    #[test]
+    fn class_dotpath_start_retraction_consumes_one_short_cubic() {
+        let points = vec![
+            (0.0, 0.0),
+            (0.0, 0.0),
+            (0.0, 4.0),
+            (0.0, 4.0),
+            (0.0, 12.0),
+            (0.0, 16.0),
+            (0.0, 20.0),
+        ];
+
+        let retracted = shortened_endpoint_points(&points, 6.0, 0.0);
+
+        assert_eq!(
+            retracted,
+            vec![(0.0, 6.0), (0.0, 14.0), (0.0, 16.0), (0.0, 20.0)]
+        );
+    }
+
+    #[test]
+    fn class_dotpath_start_retraction_retains_a_longer_first_cubic() {
+        let points = vec![
+            (0.0, 0.0),
+            (0.0, 0.0),
+            (0.0, 4.0),
+            (0.0, 4.0),
+            (0.0, 12.0),
+            (0.0, 16.0),
+            (0.0, 20.0),
+        ];
+
+        let retracted = shortened_endpoint_points(&points, 3.0, 0.0);
+
+        assert_eq!(retracted.len(), points.len());
+        assert_eq!(retracted[0], (0.0, 3.0));
+        assert_eq!(retracted[1], (0.0, 3.0));
+        assert_eq!(&retracted[2..], &points[2..]);
     }
 
     #[test]
