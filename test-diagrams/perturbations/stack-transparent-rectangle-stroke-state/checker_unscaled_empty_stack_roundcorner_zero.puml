@@ -1,0 +1,5 @@
+@startuml
+skinparam roundcorner 0
+
+stack "Solo Review Stack 731" as SoloReviewStack
+@enduml

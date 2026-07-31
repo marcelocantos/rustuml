@@ -1,0 +1,13 @@
+@startuml
+skinparam dpi 144
+skinparam roundcorner 22
+
+stack "Transit Stack 731" as TransitStack731 {
+  class FirstWorker731
+  class SecondWorker731
+  interface AuditPort731
+}
+
+FirstWorker731 --> AuditPort731 : publish_transit_state
+SecondWorker731 --> AuditPort731 : verify_transit_state
+@enduml

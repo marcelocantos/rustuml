@@ -1,0 +1,11 @@
+@startuml
+scale 1.625
+skinparam packageBorderThickness 3
+
+stack "Scaled Batch Stack 731" as ScaledBatchStack {
+  class IntakeJob731
+  class ResultArchive731
+}
+
+IntakeJob731 --> ResultArchive731 : promote_scaled_batch
+@enduml

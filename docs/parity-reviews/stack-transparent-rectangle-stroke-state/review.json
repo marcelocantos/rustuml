@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "mechanism": "stack-transparent-rectangle-stroke-state",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-adversarial-checker-stack-transparent-rectangle-stroke-state-2026-07-31",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, headless Java PlantUML JAR, and /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle",
+    "independence": "Did not implement commit e1ad6ea103bfc3e61aae128aa92dd4f4789e8aa9, did not edit shipping code, and did not edit account.json."
+  },
+  "checker": {
+    "date": "2026-07-31",
+    "workspace": "/private/tmp/rustuml-integrate-20260731a",
+    "mode": "adversarial maker-checker review"
+  },
+  "revisions": {
+    "rust_review_revision": "d9ee01a16cea684d98da991b193ba46d690fead8",
+    "account_commit": "d9ee01a16cea684d98da991b193ba46d690fead8",
+    "pre_account_commit": "26666342ffaa1ab5748f2709f83286c9e69cadf0",
+    "implementation_commit": "e1ad6ea103bfc3e61aae128aa92dd4f4789e8aa9",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "comparator": "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one",
+    "comparator_sha256": "3f8ef154951748e7fbd35aed7fe0d044b54fd6243ccfe48ee8db8f476e6cc924"
+  },
+  "documents_read": [
+    "AGENTS.md parity honesty and T14 rules",
+    "docs/parity-reviews/stack-transparent-rectangle-stroke-state/account.json at d9ee01a16cea684d98da991b193ba46d690fead8",
+    "docs/parity-reviews/svg-path-arc-flag-scaling/review.json",
+    "crates/rustuml-render/src/class.rs at d9ee01a16cea684d98da991b193ba46d690fead8",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java at 71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  ],
+  "source_inspection": {
+    "java": [
+      "USymbolStack.drawQueue builds the inset URectangle, then draws it through ug.apply(HColors.none()).apply(UTranslate.dx(border)).draw(rect), without clearing the active UStroke.",
+      "SvgGraphics.createRectangleInternal always calls styleMe after fillMe.",
+      "SvgGraphics.styleMe serializes both stroke and stroke-width whenever strokeWidth is not the string \"0\"."
+    ],
+    "rust": [
+      "The implementation change in emit_stack_envelope only threads the existing stroke_width argument into the transparent inset rect style, leaving geometry and title/content placement untouched.",
+      "The reviewed production diff introduces no new parity-affecting numeric constants; it reuses the existing stroke_width argument.",
+      "The implementation diff contains no shipping-path fixture names, golden reads, or coordinate-keyed rewrites. The only fixture-like strings are in the added regression test."
+    ],
+    "fixture_shape_search": {
+      "command": "git show --format= --no-ext-diff e1ad6ea1 -- crates/rustuml-render/src/class.rs | rg -n 'include_str|include_bytes|read_to_string|checker_explicit_scale_folder_stack_file|Batch Stack|StackB|test-diagrams|golden|stroke:none;stroke-width'",
+      "result": "Only the new production style literal and the added regression test mention the preserved checker shape. No shipping-path golden reads or fixture keyed branches were found."
+    }
+  },
+  "commands": [
+    "git rev-parse d9ee01a1 e1ad6ea1 26666342",
+    "git show --stat --summary 26666342",
+    "git show --stat --summary d9ee01a1",
+    "git show --stat --summary e1ad6ea1",
+    "git show e1ad6ea1 -- crates/rustuml-render/src/class.rs",
+    "sed -n '1,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java",
+    "sed -n '572,626p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "sed -n '7488,7555p' crates/rustuml-render/src/class.rs",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.puml test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.puml test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
+    "xmllint --noout test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.svg test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.svg test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|does&#160;not&#160;sound|No class ' test-diagrams/perturbations/stack-transparent-rectangle-stroke-state -g '*.svg'",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.puml",
+    "/private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
+    "git merge-base --is-ancestor 26666342 d9ee01a1 && git merge-base --is-ancestor e1ad6ea1 d9ee01a1",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one docs/parity-reviews/stack-transparent-rectangle-stroke-state/account.json test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.puml test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.puml test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.svg test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.svg test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.svg"
+  ],
+  "constraints_observed": {
+    "ran_cargo": false,
+    "rebuilt_rust": false,
+    "edited_shipping_code": false,
+    "edited_account": false,
+    "edited_prior_reviews": false,
+    "review_only_changes": true,
+    "java_syntax_errors": 0
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "1dc2cee171e67d9091f41280c7a2338318513e50a862507595ead74139d4850e",
+    "sources": {
+      "checker_unscaled_empty_stack_roundcorner_zero.puml": "ca3d2359ac01d83a10c0ab1e9f98f6cf5cdd9d5ec1a8e4c486f57d3a853f78e8",
+      "checker_explicit_scale_thick_stack_cluster.puml": "148217790abed03fac9c1feb23de39bda684fa69a77722e86b7365d2a6414f8a",
+      "checker_dpi_stack_cluster_roundcorner_nonzero.puml": "7ab0dede90df2457e35eb64c045df7f905fe0b838981aae12033b067a1992b2e"
+    },
+    "java_svgs": {
+      "checker_unscaled_empty_stack_roundcorner_zero.svg": "b75640179209540d212e3b48d8b5422a1ac388430d0c5d21e34dcaf6b5f563e4",
+      "checker_explicit_scale_thick_stack_cluster.svg": "1a3d8ab574a0ff33464cb03593505e949878acffcc52b288637869765ecaa5c6",
+      "checker_dpi_stack_cluster_roundcorner_nonzero.svg": "a6b9f7c9b9cef26a8e53d889615c5029ae724683d58fa52064302c39f536567a"
+    }
+  },
+  "perturbation_directory": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.puml",
+      "golden": "test-diagrams/perturbations/svg-path-arc-flag-scaling/checker_explicit_scale_folder_stack_file.svg",
+      "axes": [
+        "preserved explicit scale 1.75",
+        "stack cluster plus sibling folder",
+        "renamed label lineage from the prior rejecting counterexample"
+      ],
+      "used_by_implementer": true,
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.puml",
+      "golden": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.svg",
+      "axes": [
+        "unscaled default stroke width",
+        "empty stack leaf",
+        "renamed label",
+        "roundcorner zero"
+      ],
+      "used_by_implementer": false,
+      "result": "fail",
+      "failure_summary": "Java emits a zero-corner stack with no rx/ry on the transparent rect and a six-segment straight outline path. Rust still emits rx/ry and rounded arc segments."
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.puml",
+      "golden": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_explicit_scale_thick_stack_cluster.svg",
+      "axes": [
+        "explicit scale 1.625",
+        "custom packageBorderThickness 3",
+        "stack cluster with changed child count",
+        "renamed labels"
+      ],
+      "used_by_implementer": false,
+      "result": "fail",
+      "failure_summary": "The transparent rect now carries the correct stroke-width:1.625, but the whole stack cluster is vertically shifted upward by 1.625px and the root height shrinks accordingly."
+    },
+    {
+      "source": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
+      "golden": "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.svg",
+      "axes": [
+        "skinparam dpi 144",
+        "default line thickness under document scaling",
+        "stack cluster with changed children and renamed labels",
+        "roundcorner nonzero"
+      ],
+      "used_by_implementer": false,
+      "result": "fail",
+      "failure_summary": "Java uses the configured roundcorner value through USymbolStack, yielding 16.5px radii after dpi scaling. Rust still uses a fixed 2.5px base radius and also shows the same stack-cluster vertical origin drift."
+    }
+  ],
+  "findings": [
+    "The claimed Java paint-state account is locally correct. USymbolStack applies HColors.none() without clearing stroke width, and SvgGraphics.styleMe serializes stroke-width whenever the active width is nonzero.",
+    "The Rust production diff is correspondingly narrow and honest: it threads the existing stroke_width argument into the transparent inset rect style and introduces no new parity constants or fixture-shaped production logic.",
+    "The preserved held-out checker_explicit_scale_folder_stack_file now passes /private/tmp/rustuml-integrate-20260731a/target/release/examples/diff_one --no-oracle.",
+    "However, the first fresh valid counterexample already rejects the change. With roundcorner zero on an empty stack leaf, Java removes rounded geometry entirely, while Rust still emits rx/ry and rounded arc segments. That is executable product drift on a fresh axis and is sufficient for rejection under the T14 rules.",
+    "The second fresh valid counterexample rejects even though the target mechanism itself appears fixed: the transparent rect style contains stroke-width:1.625 in both outputs, but the stack cluster envelope, title baseline, child boxes, and root height are all shifted upward on the Rust side by the scaled stroke amount.",
+    "The third fresh valid counterexample rejects for two broader reasons: Rust still hardcodes the stack corner radius from its local package constant instead of using the configured roundcorner value that Java passes through USymbolStack, and it repeats the stack-cluster vertical-origin drift under dpi scaling.",
+    "Because all three fresh perturbations are valid Java inputs, have preserved Java SVGs, and fail through the shipped no-oracle comparator, the checker verdict must be REJECT even though the narrow transparent-stroke-state insight itself is real."
+  ],
+  "summary": {
+    "preserved_inputs_rerun": 1,
+    "fresh_inputs": 3,
+    "passes": 1,
+    "failures": 3,
+    "java_syntax_errors": 0
+  },
+  "verdict": "rejected",
+  "verdict_reason": "I found three valid fresh no-oracle counterexamples at the requested Rust and Java revisions. The preserved stack/folder/file input now passes, but the broader stack symbol model still diverges on zero-roundcorner geometry, configured roundcorner propagation, and stack-cluster vertical placement, so this mechanism cannot be accepted yet."
+}
