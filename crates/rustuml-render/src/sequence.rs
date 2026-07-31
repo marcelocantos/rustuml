@@ -1977,7 +1977,7 @@ fn parse_filter_id(defs: &str) -> Option<String> {
     Some(rest[start..start + end].to_string())
 }
 
-fn split_gradient_colors(val: &str) -> Option<(&str, &str, char)> {
+pub(crate) fn split_gradient_colors(val: &str) -> Option<(&str, &str, char)> {
     for policy in ['-', '\\', '|', '/'] {
         if let Some((left, right)) = val.split_once(policy) {
             let left = left.trim();
@@ -1997,7 +1997,9 @@ fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
     v.find('"').map(|q| &v[..q])
 }
 
-fn gradient_endpoints(policy: char) -> (&'static str, &'static str, &'static str, &'static str) {
+pub(crate) fn gradient_endpoints(
+    policy: char,
+) -> (&'static str, &'static str, &'static str, &'static str) {
     // Java provenance: `SvgGraphics.createSvgGradient` maps
     // `HColorGradient.getPolicy()` to these endpoint pairs.
     match policy {

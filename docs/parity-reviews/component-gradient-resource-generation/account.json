@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "component-gradient-resource-generation",
-  "status": "investigated_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -80,11 +80,19 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "52a1153c",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "pending",
-    "model_evidence": "pending",
-    "commands": [],
-    "review_status": "Implementation and independent review pending."
+    "accepted_result": "The Cerulean component output now emits and references the Java-compatible #59B6EC-#2FA4E7 vertical gradient; its structural diff is reduced to the separately recorded root-width mismatch. The shipped-path census remains 11,168/11,251 because that independent mismatch still rejects the pair, and every family count remains unchanged.",
+    "model_evidence": "component_gradients inventories raw background declarations without choosing among them. Existing style resolution and inline BACK precedence select the actual paint, gradient_fill_or preserves the tuple as a resource reference, and finalize_painted_resources removes dead tuples and compacts ids by first paint. Fresh tests exercise all four policies, duplicate reuse across two entities, pure-CSS source snapshots, inline-over-style precedence, an unpainted document gradient, and an unpainted late component declaration. The full 811-test renderer suite and clippy are green.",
+    "commands": [
+      "cargo test -p rustuml-render --lib component_inline_gradients_preserve_every_policy_and_reuse -- --nocapture",
+      "cargo test -p rustuml-render --lib component_gradient_inventory_follows_selected_snapshots_and_drops_dead_values -- --nocapture",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-oracle --test harness_guards"
+    ],
+    "review_status": "Implemented and locally verified. Independent adversarial review remains pending because checker capacity is unavailable. The aggregate harness_guards target also remains red on pre-existing decimal-literal baseline drift and incomplete historical review records; comparator_constants_frozen, error_golden_census_is_frozen, no_golden_data_embedded_in_shipping_crates, and parity_review_paths_reject_traversal pass."
   }
 }

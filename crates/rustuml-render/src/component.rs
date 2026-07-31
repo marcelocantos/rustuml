@@ -90,6 +90,75 @@ struct ComponentLinkRenderStyle {
     font_size: f64,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+struct ComponentGradient {
+    color1: String,
+    color2: String,
+    policy: char,
+    id: String,
+}
+
+fn register_component_gradient(source: &str, gradients: &mut Vec<ComponentGradient>, value: &str) {
+    let Some((raw1, raw2, policy)) = crate::sequence::split_gradient_colors(value) else {
+        return;
+    };
+    let color1 = crate::sequence::resolve_color(raw1);
+    let color2 = crate::sequence::resolve_color(raw2);
+    if gradients.iter().any(|gradient| {
+        gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+    }) {
+        return;
+    }
+    gradients.push(ComponentGradient {
+        color1,
+        color2,
+        policy,
+        id: crate::filter_registry::gradient_id_for(source, gradients.len()),
+    });
+}
+
+fn component_gradients(diagram: &ComponentDiagram) -> Vec<ComponentGradient> {
+    let source = diagram.meta.source.as_deref().unwrap_or("");
+    let mut gradients = Vec::new();
+
+    // Java preserves gradient values through style resolution and registers
+    // only the tuple selected when an entity is painted. Inventory every
+    // background declaration here; `finalize_painted_resources` removes
+    // unselected tuples and imposes first-paint order on the retained set.
+    for skinparam in &diagram.meta.skinparams {
+        let key = skinparam.key.to_ascii_lowercase();
+        if key == "backgroundcolor" || key.ends_with("backgroundcolor") {
+            register_component_gradient(source, &mut gradients, &skinparam.value);
+        }
+    }
+    for declaration in &diagram.meta.style_program.declarations {
+        if declaration.property.eq_ignore_ascii_case("backgroundcolor") {
+            register_component_gradient(source, &mut gradients, &declaration.value);
+        }
+    }
+    for component in &diagram.components {
+        if let Some(color) = component.color.as_deref() {
+            register_component_gradient(source, &mut gradients, color);
+        }
+    }
+
+    gradients
+}
+
+fn component_gradient_defs(gradients: &[ComponentGradient]) -> String {
+    let mut defs = String::new();
+    for gradient in gradients {
+        let (x1, x2, y1, y2) = crate::sequence::gradient_endpoints(gradient.policy);
+        write!(
+            defs,
+            r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
+            gradient.id, gradient.color1, gradient.color2,
+        )
+        .unwrap();
+    }
+    defs
+}
+
 fn component_dash_suffix(dash: Option<(f64, f64)>) -> String {
     dash.map(|(visible, space)| {
         format!(
@@ -1187,9 +1256,15 @@ pub fn render_with_oracle(
     let mut component_font_bold = false;
     let mut component_font_italic = false;
     let mut bg_value: Option<String> = None;
+    let generated_gradients = oracle.is_none().then(|| component_gradients(diagram));
+    let generated_gradient_defs = generated_gradients
+        .as_deref()
+        .map(component_gradient_defs)
+        .filter(|defs| !defs.is_empty());
     let gradient_defs = oracle
         .map(|o| o.defs_inner_xml.as_str())
-        .filter(|d| !d.is_empty());
+        .filter(|d| !d.is_empty())
+        .or(generated_gradient_defs.as_deref());
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -2673,7 +2748,11 @@ pub fn render_with_oracle(
             .and_then(|r| r.fill.clone())
             // Java `Style#eventuallyOverride(colors)` applies declaration
             // colors after the entity-builder snapshot.
-            .or_else(|| comp.color.as_deref().map(crate::sequence::resolve_color));
+            .or_else(|| {
+                comp.color
+                    .as_deref()
+                    .map(|color| crate::sequence::gradient_fill_or(color, gradient_defs))
+            });
         let fill = fill_owned.as_deref().unwrap_or(&render_style.fill);
 
         // Use oracle width/height when available — they're authoritative.
@@ -9296,6 +9375,94 @@ mod tests {
             numeric_attr(styled_root, "height") - numeric_attr(control_root, "height"),
             9.0
         );
+    }
+
+    #[test]
+    fn component_inline_gradients_preserve_every_policy_and_reuse() {
+        let input = r##"@startuml
+component VerticalFresh3401 #102030-#405060
+component HorizontalFresh3407 #A0B0C0|#D0E0F0
+component RisingFresh3413 #123456\#ABCDEF
+component FallingFresh3419 #654321/#FEDCBA
+component VerticalReuse3421 #102030-#405060
+VerticalFresh3401 --> HorizontalFresh3407
+HorizontalFresh3407 --> RisingFresh3413
+RisingFresh3413 --> FallingFresh3419
+FallingFresh3419 --> VerticalReuse3421
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let source = component_diagram.meta.source.as_deref().unwrap_or("");
+        let first_id = crate::filter_registry::gradient_id_for(source, 0);
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 4, "{svg}");
+        assert_eq!(svg.matches(r#"fill="url(#"#).count(), 20, "{svg}");
+        assert!(svg.contains(&format!(r#"id="{first_id}" x1="50%" x2="50%""#)));
+        for endpoints in [
+            r#"x1="50%" x2="50%" y1="0%" y2="100%""#,
+            r#"x1="0%" x2="100%" y1="50%" y2="50%""#,
+            r#"x1="0%" x2="100%" y1="100%" y2="0%""#,
+            r#"x1="0%" x2="100%" y1="0%" y2="100%""#,
+        ] {
+            assert!(svg.contains(endpoints), "missing {endpoints}: {svg}");
+        }
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{first_id})""#)).count(),
+            8
+        );
+    }
+
+    #[test]
+    fn component_gradient_inventory_follows_selected_snapshots_and_drops_dead_values() {
+        let input = r##"@startuml
+<style>
+component {
+  BackgroundColor #112233-#445566
+}
+document {
+  BackgroundColor #010203|#040506
+}
+</style>
+component "Early Relay 3433" as EarlyRelay3433
+component "Early Sink 3439" as EarlySink3439
+<style>
+component {
+  BackgroundColor #778899|#AABBCC
+}
+</style>
+component "Late Relay 3449" as LateRelay3449
+component "Inline Relay 3457" as InlineRelay3457 #DDEEFF/#102132
+<style>
+component {
+  BackgroundColor #314253\#647586
+}
+</style>
+EarlyRelay3433 --> EarlySink3439
+EarlySink3439 --> LateRelay3449
+LateRelay3449 --> InlineRelay3457
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("<linearGradient ").count(), 3, "{svg}");
+        assert_eq!(svg.matches(r#"fill="url(#"#).count(), 16, "{svg}");
+        for selected in [
+            "#112233", "#445566", "#778899", "#AABBCC", "#DDEEFF", "#102132",
+        ] {
+            assert!(
+                svg.contains(selected),
+                "missing selected stop {selected}: {svg}"
+            );
+        }
+        for dead in ["#010203", "#040506", "#314253", "#647586"] {
+            assert!(
+                !svg.contains(dead),
+                "unpainted inventory value survived: {dead}: {svg}"
+            );
+        }
     }
 
     #[test]
