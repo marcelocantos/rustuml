@@ -2157,8 +2157,15 @@ mod tests {
             mixed_layout.run_baselines.len(),
             mixed_layout.segments.len()
         );
+        let base_y = 21.0 + mixed_layout.first_baseline;
         for baseline in &mixed_layout.run_baselines {
-            assert!(buf.contains(&format!(r#" y="{}">"#, pm::fmt_coord(21.0 + baseline))));
+            let offset = baseline - mixed_layout.first_baseline;
+            let emitted_y = if offset != 0.0 {
+                (base_y * 256.0).round() / 256.0 + offset
+            } else {
+                base_y
+            };
+            assert!(buf.contains(&format!(r#" y="{}">"#, pm::fmt_coord(emitted_y))));
         }
     }
 
