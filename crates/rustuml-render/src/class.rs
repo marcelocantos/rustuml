@@ -4347,13 +4347,34 @@ fn package_skinparam<'a>(
     None
 }
 
-fn stack_round_corner(diagram: &ClassDiagram) -> f64 {
-    // Java `Cluster#getStyle` and `EntityImageEmptyPackage#getStyle` resolve
-    // this concrete symbol signature, then `ClusterDecoration` passes the
-    // resulting RoundCorner diameter through `Fashion` to `USymbolStack`.
+fn stack_cluster_round_corner(diagram: &ClassDiagram) -> f64 {
+    // Java `Cluster#getStyle` resolves `classDiagram.group.stack`, then
+    // `ClusterDecoration` passes that RoundCorner diameter through `Fashion`
+    // to `USymbolStack`.
     StyleCascade::new(&diagram.meta.style_program)
         .resolve(
             &StyleSignature::from_selectors(["root", "element", "classDiagram", "group", "stack"]),
+            StyleScheme::Regular,
+        )
+        .property("roundCorner")
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(PACKAGE_ROUND_CORNER)
+}
+
+fn empty_package_round_corner(diagram: &ClassDiagram) -> f64 {
+    // Java `EntityImageEmptyPackage#getStyle` always resolves
+    // `classDiagram.package.title`; `ClusterDecoration` may subsequently
+    // choose `USymbolStack`, but that paint choice does not change the style
+    // signature already stored in the image's `Fashion`.
+    StyleCascade::new(&diagram.meta.style_program)
+        .resolve(
+            &StyleSignature::from_selectors([
+                "root",
+                "element",
+                "classDiagram",
+                "package",
+                "title",
+            ]),
             StyleScheme::Regular,
         )
         .property("roundCorner")
@@ -6454,7 +6475,7 @@ fn layout_package_clusters(
                 fill,
                 stroke,
                 stroke_width,
-                round_corner: stack_round_corner(diagram),
+                round_corner: stack_cluster_round_corner(diagram),
                 filter_attr: filter_attr.clone(),
                 font_fill,
                 url: pkg.url.clone(),
@@ -6556,7 +6577,7 @@ fn layout_empty_packages(
                 stereotype_lines: visible_package_stereotype_lines(package),
                 fill,
                 stroke,
-                round_corner: stack_round_corner(diagram),
+                round_corner: empty_package_round_corner(diagram),
                 font_fill,
                 url: package.url.clone(),
                 url_tooltip: package.url_tooltip.clone(),
@@ -18279,6 +18300,69 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(!svg.contains(" rx="), "{svg}");
         assert!(!svg.contains(" A"), "{svg}");
+    }
+
+    #[test]
+    fn stack_round_corner_uses_the_style_of_the_class_image_role() {
+        let explicit_empty_stack = rustuml_parser::parse::parse(
+            "@startuml\n\
+             stack EmptyRole {\n}\n\
+             <style>\n\
+             classDiagram {\n\
+               stack { RoundCorner 19 }\n\
+             }\n\
+             </style>\n\
+             @enduml",
+        )
+        .unwrap();
+        let explicit_svg = crate::render_svg(&explicit_empty_stack);
+        assert!(
+            explicit_svg.contains(r#"rx="2.5" ry="2.5""#),
+            "{explicit_svg}"
+        );
+        assert!(
+            !explicit_svg.contains(r#"rx="9.5" ry="9.5""#),
+            "{explicit_svg}"
+        );
+
+        let package_style_stack = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam packageStyle stack\n\
+             package OuterRole {\n\
+               package EmptyRole {\n}\n\
+               class PeerRole\n\
+             }\n\
+             <style>\n\
+             classDiagram {\n\
+               group { stack { RoundCorner 5 } }\n\
+               package { title { RoundCorner 24 } }\n\
+             }\n\
+             </style>\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::Class(package_style_stack) = package_style_stack
+        else {
+            panic!("expected class diagram");
+        };
+        assert_eq!(empty_package_round_corner(&package_style_stack), 24.0);
+        assert_eq!(stack_cluster_round_corner(&package_style_stack), 5.0);
+
+        let cluster = rustuml_parser::parse::parse(
+            "@startuml\n\
+             stack ClusterRole {\n  class Payload\n}\n\
+             <style>\n\
+             classDiagram {\n\
+               group { stack { RoundCorner 18 } }\n\
+               package { title { RoundCorner 24 } }\n\
+             }\n\
+             </style>\n\
+             @enduml",
+        )
+        .unwrap();
+        let cluster_svg = crate::render_svg(&cluster);
+        assert!(cluster_svg.contains("A9,9 0 0 1"), "{cluster_svg}");
+        assert!(!cluster_svg.contains("A12,12 0 0 1"), "{cluster_svg}");
     }
 
     #[test]
