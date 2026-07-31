@@ -365,12 +365,11 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         [0, 0, 0],
     );
     let ctx = OracleRenderContext {
+        diagram,
         oracle,
         id_for_node: &id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
-        stack_leaf_round_corner: deployment_stack_round_corner(diagram, false),
-        stack_cluster_round_corner: deployment_stack_round_corner(diagram, true),
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
@@ -591,17 +590,27 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
     }
 }
 
-fn deployment_stack_round_corner(diagram: &DeploymentDiagram, cluster: bool) -> f64 {
+fn deployment_round_corner(
+    diagram: &DeploymentDiagram,
+    kind: DeploymentNodeKind,
+    cluster: bool,
+    source_line: usize,
+) -> f64 {
+    // Java `EntityImageDescription` resolves the concrete symbol title style
+    // and stores its RoundCorner diameter in `Fashion`. `Cluster#getStyle`
+    // does the corresponding `group.<symbol>` resolution for big symbols.
     // `DiagramType.DESCRIPTION#getStyleName` is `componentDiagram`.
-    // Java clusters resolve `group.stack`; explicit leaves resolve
-    // `stack.title`, then both pass the diameter to `USymbolStack`.
+    let symbol = skin_keyword(kind);
+    if symbol.is_empty() {
+        return RX_RY * 2.0;
+    }
     let signature = if cluster {
-        StyleSignature::from_selectors(["root", "element", "componentDiagram", "group", "stack"])
+        StyleSignature::from_selectors(["root", "element", "componentDiagram", "group", symbol])
     } else {
-        StyleSignature::from_selectors(["root", "element", "componentDiagram", "stack", "title"])
+        StyleSignature::from_selectors(["root", "element", "componentDiagram", symbol, "title"])
     };
     StyleCascade::new(&diagram.meta.style_program)
-        .resolve(&signature, StyleScheme::Regular)
+        .resolve_entity_at_source_line(&signature, StyleScheme::Regular, source_line)
         .property("roundCorner")
         .and_then(|value| value.parse::<f64>().ok())
         .unwrap_or(RX_RY * 2.0)
@@ -801,12 +810,11 @@ fn own_qname(node: &DeploymentNode) -> String {
 }
 
 struct OracleRenderContext<'a> {
+    diagram: &'a DeploymentDiagram,
     oracle: &'a OracleLayout,
     id_for_node: &'a HashMap<String, String>,
     skin_fills: &'a HashMap<DeploymentNodeKind, String>,
     skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
-    stack_leaf_round_corner: f64,
-    stack_cluster_round_corner: f64,
     sprites: &'a HashMap<String, rustuml_parser::diagram::SpriteData>,
     sprite_cache: &'a crate::sprite::SpriteCache,
     handwritten: bool,
@@ -872,7 +880,7 @@ fn emit_clusters_dfs(
                         cluster_fill.as_deref(),
                         stroke,
                         &node.label,
-                        ctx.stack_cluster_round_corner,
+                        deployment_round_corner(ctx.diagram, node.kind, true, node.source_line),
                     );
                 }
                 if let (Some(&text_x), Some(&text_y)) =
@@ -893,7 +901,7 @@ fn emit_clusters_dfs(
                     cluster_fill.as_deref(),
                     stroke,
                     &node.label,
-                    ctx.stack_cluster_round_corner,
+                    deployment_round_corner(ctx.diagram, node.kind, true, node.source_line),
                 );
                 emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
             }
@@ -1017,7 +1025,13 @@ fn emit_entity(
                 emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
             }
         } else if matches!(node.kind, Collections) {
-            emit_collections_entity(svg, node, rect, &entity_fill);
+            emit_collections_entity(
+                svg,
+                node,
+                rect,
+                &entity_fill,
+                deployment_round_corner(ctx.diagram, node.kind, false, node.source_line),
+            );
         } else if matches!(node.kind, Cloud) {
             emit_cloud_entity(svg, node, rect, &entity_fill);
         } else {
@@ -1031,7 +1045,7 @@ fn emit_entity(
                 &entity_fill,
                 stroke,
                 &node.label,
-                ctx.stack_leaf_round_corner,
+                deployment_round_corner(ctx.diagram, node.kind, false, node.source_line),
             );
             if !emit_oracle_image_label_children(svg, rect) {
                 emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
@@ -1256,23 +1270,25 @@ fn emit_entity_shape(
     fill: &str,
     stroke: &str,
     label: &str,
-    stack_round_corner: f64,
+    round_corner: f64,
 ) {
     use DeploymentNodeKind::*;
     match kind {
         Node => emit_tag_polygon(svg, x, y, w, h, fill, 0.5, stroke),
-        Artifact => emit_artifact(svg, x, y, w, h, fill, stroke),
-        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
-        Component => emit_component(svg, x, y, w, h, fill, stroke),
-        Frame => emit_frame(svg, x, y, w, h, fill, label),
-        Folder => emit_folder(svg, x, y, w, h, fill, stroke),
-        File => emit_file(svg, x, y, w, h, fill, stroke),
+        Artifact => emit_artifact_round_corner(svg, x, y, w, h, fill, stroke, round_corner),
+        Card | Rectangle | Agent => {
+            emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 0.5)
+        }
+        Component => emit_component(svg, x, y, w, h, fill, stroke, round_corner),
+        Frame => emit_frame(svg, x, y, w, h, fill, label, round_corner),
+        Folder => emit_folder(svg, x, y, w, h, fill, stroke, round_corner),
+        File => emit_file(svg, x, y, w, h, fill, stroke, round_corner),
         Package => emit_package(svg, x, y, w, h, fill, stroke, label),
-        Stack => emit_stack(svg, x, y, w, h, fill, stroke, stack_round_corner),
+        Stack => emit_stack(svg, x, y, w, h, fill, stroke, round_corner),
         Storage => emit_storage(svg, x, y, w, h, fill, stroke),
         Database => emit_database(svg, x, y, w, h, fill, stroke, label),
         Queue => emit_queue(svg, x, y, w, h, fill, stroke),
-        _ => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
+        _ => emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 0.5),
     }
 }
 
@@ -1287,7 +1303,7 @@ fn emit_cluster_shape(
     fill: Option<&str>,
     stroke: &str,
     label: &str,
-    stack_round_corner: f64,
+    round_corner: f64,
 ) {
     use DeploymentNodeKind::*;
     // Clusters default to no fill; a `#color` paints the cluster background.
@@ -1295,21 +1311,31 @@ fn emit_cluster_shape(
     match kind {
         // Clusters use stroke-width=1 (per goldens).
         Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
-        Artifact => emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
+        Artifact => emit_artifact_round_corner_with_stroke_width(
+            svg,
+            x,
+            y,
+            w,
+            h,
+            fill,
+            stroke,
+            1.0,
+            round_corner,
+        ),
         Storage => emit_storage_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
         // Card cluster has rect + horizontal line under title.
-        Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
+        Card => emit_card_cluster(svg, x, y, w, h, fill, stroke, round_corner),
         // Rectangle / Agent cluster: bare rect, no line.
-        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke),
+        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke, round_corner),
         // Component cluster: rounded rect + UML component plug icon at the
         // top-right, identical to the leaf component shape but drawn with the
         // cluster stroke-width (1) instead of the leaf 0.5.
-        Component => emit_component_cluster(svg, x, y, w, h, fill, stroke),
+        Component => emit_component_cluster(svg, x, y, w, h, fill, stroke, round_corner),
         Cloud => emit_cloud_cluster(svg, x, y, w, h, fill, stroke),
-        Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
-        Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
+        Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke, round_corner),
+        Folder => emit_folder_cluster(svg, x, y, w, h, fill, label, round_corner),
         Package => emit_package_cluster(svg, x, y, w, h, fill, label),
-        Stack => emit_stack_cluster(svg, x, y, w, h, fill, stack_round_corner),
+        Stack => emit_stack_cluster(svg, x, y, w, h, fill, round_corner),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
@@ -1367,14 +1393,9 @@ fn emit_plain_rect_cluster(
     h: f64,
     fill: &str,
     stroke: &str,
+    round_corner: f64,
 ) {
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(w),
-        x = fc(x),
-        y = fc(y),
-    ));
+    emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 1.0);
 }
 
 // ---- Node ("tag" polygon) -------------------------------------------------
@@ -1444,7 +1465,7 @@ pub(crate) fn emit_artifact(
     fill: &str,
     stroke: &str,
 ) {
-    emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5);
+    emit_artifact_round_corner_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5, RX_RY * 2.0);
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1458,13 +1479,53 @@ pub(crate) fn emit_artifact_with_stroke_width(
     stroke: &str,
     stroke_width: f64,
 ) {
+    emit_artifact_round_corner_with_stroke_width(
+        svg,
+        x,
+        y,
+        w,
+        h,
+        fill,
+        stroke,
+        stroke_width,
+        RX_RY * 2.0,
+    );
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_artifact_round_corner(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    round_corner: f64,
+) {
+    emit_artifact_round_corner_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5, round_corner);
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_artifact_round_corner_with_stroke_width(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+    round_corner: f64,
+) {
     let sw = fc(stroke_width);
     let x_s = fc(x);
     let y_s = fc(y);
     let w_s = fc(w);
     let h_s = fc(h);
+    let corner_attrs = rounded_rect_corner_attrs(round_corner);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:{sw};" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+        r#"<rect fill="{fill}" height="{h_s}"{corner_attrs} style="stroke:{stroke};stroke-width:{sw};" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
     ));
     // Folded corner polygon at top-right (12x14 box, inset 5 from right and 5 from top).
     let fx = x + w - 17.0; // 12 wide, then 5 from right edge
@@ -1509,7 +1570,17 @@ pub(crate) fn emit_artifact_with_stroke_width(
 
 // ---- Rounded rect (card / rectangle / agent leaf) --------------------------
 
-fn emit_rounded_rect(
+fn rounded_rect_corner_attrs(round_corner: f64) -> String {
+    if round_corner == 0.0 {
+        String::new()
+    } else {
+        let radius = round_corner / 2.0;
+        format!(r#" rx="{}" ry="{}""#, fc(radius), fc(radius))
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_rounded_rect_with_round_corner(
     svg: &mut SvgBuilder,
     x: f64,
     y: f64,
@@ -1517,10 +1588,14 @@ fn emit_rounded_rect(
     h: f64,
     fill: &str,
     stroke: &str,
+    round_corner: f64,
+    stroke_width: f64,
 ) {
+    let corner_attrs = rounded_rect_corner_attrs(round_corner);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}"{corner_attrs} style="stroke:{stroke};stroke-width:{stroke_width};" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
+        stroke_width = fc(stroke_width),
         w = fc(w),
         x = fc(x),
         y = fc(y),
@@ -1537,14 +1612,9 @@ fn emit_card_cluster(
     h: f64,
     fill: &str,
     stroke: &str,
+    round_corner: f64,
 ) {
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(w),
-        x = fc(x),
-        y = fc(y),
-    ));
+    emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 1.0);
     // Horizontal line under the title row (at y + 20.4883).
     let ly = y + 20.4883;
     svg.raw(&format!(
@@ -1557,14 +1627,18 @@ fn emit_card_cluster(
 
 // ---- Component (rect + tab + bars) ----------------------------------------
 
-fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(w),
-        x = fc(x),
-        y = fc(y),
-    ));
+#[allow(clippy::too_many_arguments)]
+fn emit_component(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    round_corner: f64,
+) {
+    emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 0.5);
     // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
@@ -1597,14 +1671,9 @@ fn emit_component_cluster(
     h: f64,
     fill: &str,
     stroke: &str,
+    round_corner: f64,
 ) {
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(w),
-        x = fc(x),
-        y = fc(y),
-    ));
+    emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 1.0);
     // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
@@ -1629,14 +1698,18 @@ fn emit_component_cluster(
 
 // ---- Frame (rect + small tab path top-left) -------------------------------
 
-fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, label: &str) {
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(w),
-        x = fc(x),
-        y = fc(y),
-    ));
+#[allow(clippy::too_many_arguments)]
+fn emit_frame(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    label: &str,
+    round_corner: f64,
+) {
+    emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, STROKE, round_corner, 0.5);
     // Tab path in the top-left corner: drop 5px, then a 7px diagonal cut down
     // to y+12, then back to the left edge. The tab's right edge sits at
     // x + (label_w + 40) / 3 (derived from goldens).
@@ -1666,16 +1739,11 @@ fn emit_frame_cluster(
     h: f64,
     fill: &str,
     stroke: &str,
+    round_corner: f64,
 ) {
     // Frame cluster: bare rect with stroke-width=1. The tab is emitted
     // by emit_cluster_label since it depends on label width.
-    svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-        h = fc(h),
-        w = fc(w),
-        x = fc(x),
-        y = fc(y),
-    ));
+    emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 1.0);
 }
 
 /// Emit the small tab path used by frame clusters in the top-left corner.
@@ -1705,27 +1773,54 @@ fn emit_frame_tab(svg: &mut SvgBuilder, x: f64, y: f64, label_w: f64) {
 /// Folder shape: a rounded rectangle with a tab (file-folder flap) across the
 /// top-left. The flap is a fixed 43.5px wide and the tab band is 21px tall for
 /// a single-line title. A horizontal line separates the tab from the body.
-fn emit_folder(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+#[allow(clippy::too_many_arguments)]
+fn emit_folder(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    round_corner: f64,
+) {
     let xr = x + w;
     let yb = y + h;
-    let flap_r = x + 43.5;
+    let title_right = x + 46.0;
+    let slope_right = title_right + 7.0;
     let tab_y = y + 21.0;
-    let d = format!(
-        "M{x25},{y_s} L{flap_r},{y_s} A3.75,3.75 0 0 1 {flap_r2},{y85} L{flap_r95},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
-        x25 = fc(x + 2.5),
-        y_s = fc(y),
-        flap_r = fc(flap_r),
-        flap_r2 = fc(flap_r + 2.5),
-        y85 = fc(y + 2.5),
-        flap_r95 = fc(flap_r + 9.5),
-        ty = fc(tab_y),
-        xr25 = fc(xr - 2.5),
-        xr_s = fc(xr),
-        ty25 = fc(tab_y + 2.5),
-        yb2 = fc(yb - 2.5),
-        yb_s = fc(yb),
-        x_s = fc(x),
-    );
+    let radius = round_corner / 2.0;
+    let d = if round_corner == 0.0 {
+        format!(
+            "M{x},{y} L{title_right},{y} L{slope_right},{tab_y} L{xr},{tab_y} L{xr},{yb} L{x},{yb} L{x},{y}",
+            x = fc(x),
+            y = fc(y),
+            title_right = fc(title_right),
+            slope_right = fc(slope_right),
+            tab_y = fc(tab_y),
+            xr = fc(xr),
+            yb = fc(yb),
+        )
+    } else {
+        format!(
+            "M{x_r},{y} L{title_left},{y} A{title_radius},{title_radius} 0 0 1 {title_right},{y_r} L{slope_right},{tab_y} L{xr_r},{tab_y} A{radius},{radius} 0 0 1 {xr},{tab_y_r} L{xr},{yb_r} A{radius},{radius} 0 0 1 {xr_r},{yb} L{x_r},{yb} A{radius},{radius} 0 0 1 {x},{yb_r} L{x},{y_r} A{radius},{radius} 0 0 1 {x_r},{y}",
+            x = fc(x),
+            y = fc(y),
+            x_r = fc(x + radius),
+            y_r = fc(y + radius),
+            title_left = fc(title_right - radius),
+            title_radius = fc(radius * 1.5),
+            title_right = fc(title_right),
+            slope_right = fc(slope_right),
+            tab_y = fc(tab_y),
+            tab_y_r = fc(tab_y + radius),
+            xr = fc(xr),
+            xr_r = fc(xr - radius),
+            yb = fc(yb),
+            yb_r = fc(yb - radius),
+            radius = fc(radius),
+        )
+    };
     svg.raw(&format!(
         r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
@@ -1733,7 +1828,7 @@ fn emit_folder(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str,
     svg.raw(&format!(
         r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
         x1 = fc(x),
-        x2 = fc(flap_r + 9.5),
+        x2 = fc(slope_right),
         ty = fc(tab_y),
     ));
 }
@@ -1749,36 +1844,54 @@ fn emit_folder_cluster(
     h: f64,
     fill: &str,
     label: &str,
+    round_corner: f64,
 ) {
     let xr = x + w;
     let yb = y + h;
     let label_w = text_render::measure(label, FONT_SIZE, true);
-    let flap_r = x + label_w + 3.5;
+    let title_right = x + label_w + 6.0;
+    let slope_right = title_right + 7.0;
     let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
     let cstroke = "#000000";
-    let d = format!(
-        "M{x25},{y_s} L{flap_r},{y_s} A3.75,3.75 0 0 1 {flap_r2},{y85} L{flap_r95},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
-        x25 = fc(x + 2.5),
-        y_s = fc(y),
-        flap_r = fc(flap_r),
-        flap_r2 = fc(flap_r + 2.5),
-        y85 = fc(y + 2.5),
-        flap_r95 = fc(flap_r + 9.5),
-        ty = fc(tab_y),
-        xr25 = fc(xr - 2.5),
-        xr_s = fc(xr),
-        ty25 = fc(tab_y + 2.5),
-        yb2 = fc(yb - 2.5),
-        yb_s = fc(yb),
-        x_s = fc(x),
-    );
+    let radius = round_corner / 2.0;
+    let d = if round_corner == 0.0 {
+        format!(
+            "M{x},{y} L{title_right},{y} L{slope_right},{tab_y} L{xr},{tab_y} L{xr},{yb} L{x},{yb} L{x},{y}",
+            x = fc(x),
+            y = fc(y),
+            title_right = fc(title_right),
+            slope_right = fc(slope_right),
+            tab_y = fc(tab_y),
+            xr = fc(xr),
+            yb = fc(yb),
+        )
+    } else {
+        format!(
+            "M{x_r},{y} L{title_left},{y} A{title_radius},{title_radius} 0 0 1 {title_right},{y_r} L{slope_right},{tab_y} L{xr_r},{tab_y} A{radius},{radius} 0 0 1 {xr},{tab_y_r} L{xr},{yb_r} A{radius},{radius} 0 0 1 {xr_r},{yb} L{x_r},{yb} A{radius},{radius} 0 0 1 {x},{yb_r} L{x},{y_r} A{radius},{radius} 0 0 1 {x_r},{y}",
+            x = fc(x),
+            y = fc(y),
+            x_r = fc(x + radius),
+            y_r = fc(y + radius),
+            title_left = fc(title_right - radius),
+            title_radius = fc(radius * 1.5),
+            title_right = fc(title_right),
+            slope_right = fc(slope_right),
+            tab_y = fc(tab_y),
+            tab_y_r = fc(tab_y + radius),
+            xr = fc(xr),
+            xr_r = fc(xr - radius),
+            yb = fc(yb),
+            yb_r = fc(yb - radius),
+            radius = fc(radius),
+        )
+    };
     svg.raw(&format!(
         r#"<path d="{d}" fill="{fill}" style="stroke:{cstroke};stroke-width:1.5;"/>"#
     ));
     svg.raw(&format!(
         r#"<line style="stroke:{cstroke};stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
         x1 = fc(x),
-        x2 = fc(flap_r + 9.5),
+        x2 = fc(slope_right),
         ty = fc(tab_y),
     ));
 }
@@ -1787,34 +1900,69 @@ fn emit_folder_cluster(
 
 /// File (document) shape: a rounded rectangle with a folded top-right corner
 /// (a 10×10 dog-ear). Two paths: the body outline and the fold triangle.
-fn emit_file(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+#[allow(clippy::too_many_arguments)]
+fn emit_file(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    round_corner: f64,
+) {
     let xr = x + w;
     let yb = y + h;
-    let body = format!(
-        "M{x_s},{y2} L{x_s},{yb2} A2.5,2.5 0 0 0 {x25},{yb_s} L{xr25},{yb_s} A2.5,2.5 0 0 0 {xr_s},{yb2} L{xr_s},{y10} L{xr10},{y_s} L{x25},{y_s} A2.5,2.5 0 0 0 {x_s},{y2}",
-        x_s = fc(x),
-        y2 = fc(y + 2.5),
-        yb2 = fc(yb - 2.5),
-        x25 = fc(x + 2.5),
-        yb_s = fc(yb),
-        xr25 = fc(xr - 2.5),
-        xr_s = fc(xr),
-        y10 = fc(y + 10.0),
-        xr10 = fc(xr - 10.0),
-        y_s = fc(y),
-    );
+    let radius = round_corner / 2.0;
+    let body = if round_corner == 0.0 {
+        format!(
+            "M{x},{y} L{x},{yb} L{xr},{yb} L{xr},{y10} L{xr10},{y} L{x},{y}",
+            x = fc(x),
+            y = fc(y),
+            yb = fc(yb),
+            xr = fc(xr),
+            y10 = fc(y + 10.0),
+            xr10 = fc(xr - 10.0),
+        )
+    } else {
+        format!(
+            "M{x},{y_r} L{x},{yb_r} A{radius},{radius} 0 0 0 {x_r},{yb} L{xr_r},{yb} A{radius},{radius} 0 0 0 {xr},{yb_r} L{xr},{y10} L{xr10},{y} L{x_r},{y} A{radius},{radius} 0 0 0 {x},{y_r}",
+            x = fc(x),
+            y = fc(y),
+            x_r = fc(x + radius),
+            y_r = fc(y + radius),
+            yb = fc(yb),
+            yb_r = fc(yb - radius),
+            xr = fc(xr),
+            xr_r = fc(xr - radius),
+            y10 = fc(y + 10.0),
+            xr10 = fc(xr - 10.0),
+            radius = fc(radius),
+        )
+    };
     svg.raw(&format!(
         r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
-    let fold = format!(
-        "M{xr10},{y_s} L{xr10},{y75} A2.5,2.5 0 0 0 {xr75},{y10} L{xr_s},{y10}",
-        xr10 = fc(xr - 10.0),
-        y_s = fc(y),
-        y75 = fc(y + 7.5),
-        xr75 = fc(xr - 7.5),
-        y10 = fc(y + 10.0),
-        xr_s = fc(xr),
-    );
+    let fold = if round_corner == 0.0 {
+        format!(
+            "M{xr10},{y} L{xr10},{y10} L{xr},{y10}",
+            xr10 = fc(xr - 10.0),
+            y = fc(y),
+            y10 = fc(y + 10.0),
+            xr = fc(xr),
+        )
+    } else {
+        format!(
+            "M{xr10},{y} L{xr10},{fold_y} A{radius},{radius} 0 0 0 {fold_x},{y10} L{xr},{y10}",
+            xr10 = fc(xr - 10.0),
+            y = fc(y),
+            fold_y = fc(y + 10.0 - radius),
+            fold_x = fc(xr - 10.0 + radius),
+            y10 = fc(y + 10.0),
+            xr = fc(xr),
+            radius = fc(radius),
+        )
+    };
     svg.raw(&format!(
         r#"<path d="{fold}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
@@ -2850,9 +2998,20 @@ fn emit_collections_entity(
     node: &DeploymentNode,
     rect: &crate::layout_oracle::EntityRect,
     fill: &str,
+    round_corner: f64,
 ) {
     // Back card (the captured body rect).
-    emit_rounded_rect(svg, rect.x, rect.y, rect.width, rect.height, fill, STROKE);
+    emit_rounded_rect_with_round_corner(
+        svg,
+        rect.x,
+        rect.y,
+        rect.width,
+        rect.height,
+        fill,
+        STROKE,
+        round_corner,
+        0.5,
+    );
     // Front card: offset up-left by 4px. Prefer the oracle's aux rect when
     // present, else derive it.
     let (fx, fy, fw, fh) = rect
@@ -2860,7 +3019,7 @@ fn emit_collections_entity(
         .first()
         .map(|a| (a.x, a.y, a.width, a.height))
         .unwrap_or((rect.x - 4.0, rect.y - 4.0, rect.width, rect.height));
-    emit_rounded_rect(svg, fx, fy, fw, fh, fill, STROKE);
+    emit_rounded_rect_with_round_corner(svg, fx, fy, fw, fh, fill, STROKE, round_corner, 0.5);
     let label_w = text_render::measure(&node.label, FONT_SIZE, false);
     let label_x = rect
         .text_x_values
@@ -3668,12 +3827,11 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
         [0, 0, 0],
     );
     let ctx = OracleRenderContext {
+        diagram,
         oracle: &oracle,
         id_for_node: &no_oracle_uids.entity_ids,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
-        stack_leaf_round_corner: deployment_stack_round_corner(diagram, false),
-        stack_cluster_round_corner: deployment_stack_round_corner(diagram, true),
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: false,
@@ -4021,12 +4179,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         [0, 0, 0],
     );
     let ctx = OracleRenderContext {
+        diagram,
         oracle: &oracle,
         id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
-        stack_leaf_round_corner: deployment_stack_round_corner(diagram, false),
-        stack_cluster_round_corner: deployment_stack_round_corner(diagram, true),
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
@@ -6177,6 +6334,97 @@ mod tests {
             .and_then(|(_, tail)| tail.split_once('>'))
             .map(|(tag, _)| tag)
             .unwrap_or_else(|| panic!("missing {element} in {content}"))
+    }
+
+    #[test]
+    fn deployment_round_corner_resolves_generic_and_symbol_specific_fashion() {
+        let generic = rustuml_parser::parse::parse_auto_with_base(
+            "@startuml\n\
+             stack GenericStack {\n  node Child\n}\n\
+             artifact GenericArtifact\n\
+             rectangle GenericRectangle\n\
+             skinparam roundcorner 17\n\
+             @enduml",
+            None,
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(generic) = generic else {
+            panic!("expected deployment diagram");
+        };
+        for node in &generic.nodes {
+            let cluster = !node.children.is_empty();
+            if matches!(
+                node.kind,
+                DeploymentNodeKind::Stack
+                    | DeploymentNodeKind::Artifact
+                    | DeploymentNodeKind::Rectangle
+            ) {
+                assert_eq!(
+                    deployment_round_corner(&generic, node.kind, cluster, node.source_line),
+                    17.0,
+                    "{}",
+                    node.id
+                );
+            }
+        }
+
+        let specific = rustuml_parser::parse::parse_auto_with_base(
+            "@startuml\n\
+             <style>\n\
+             componentDiagram {\n\
+               group { stack { RoundCorner 18 } }\n\
+               artifact { title { RoundCorner 22 } }\n\
+               rectangle { title { RoundCorner 14 } }\n\
+             }\n\
+             </style>\n\
+             stack SpecificStack {\n  node Child\n}\n\
+             artifact SpecificArtifact\n\
+             rectangle SpecificRectangle\n\
+             @enduml",
+            None,
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(specific) = specific else {
+            panic!("expected deployment diagram");
+        };
+        for node in &specific.nodes {
+            let expected = match node.kind {
+                DeploymentNodeKind::Stack => Some(18.0),
+                DeploymentNodeKind::Artifact => Some(22.0),
+                DeploymentNodeKind::Rectangle => Some(14.0),
+                _ => None,
+            };
+            if let Some(expected) = expected {
+                assert_eq!(
+                    deployment_round_corner(
+                        &specific,
+                        node.kind,
+                        !node.children.is_empty(),
+                        node.source_line,
+                    ),
+                    expected,
+                    "{}",
+                    node.id
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn deployment_fashion_consumers_receive_the_resolved_corner() {
+        let source = "@startuml\n\
+                      skinparam roundcorner 18\n\
+                      stack CornerStack {\n  artifact CornerArtifact\n}\n\
+                      rectangle CornerRectangle\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"rx="9" ry="9""#), "{svg}");
+        assert!(svg.contains("A9,9 0 0 1"), "{svg}");
     }
 
     #[test]
