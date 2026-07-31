@@ -1,0 +1,8 @@
+@startuml
+node "Outer Host" as Outer {
+  artifact "Payload" as Payload
+  note “curly deployment memo” as Curly.Deploy_67 $ops <<UnicodeQuote>> #PaleGreen
+  Curly.Deploy_67 --> Payload : should reuse the note
+  Payload --> Outer : later relation
+}
+@enduml

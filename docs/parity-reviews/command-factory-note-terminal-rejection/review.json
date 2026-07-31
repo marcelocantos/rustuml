@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-terminal-rejection",
+  "verdict": "REJECT",
+  "checked_at": "2026-08-01",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-2026-08-01",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not implement the reviewed change and was instructed to try to disprove the claimed Java/Rust equivalence."
+  },
+  "revisions": {
+    "rust": "20a1698b5ffc558be60f0f488b9031e7446de12f",
+    "account_commit": "05cde75192bc8d5a2803dae199d858c76308ee5f",
+    "implementation_commit": "20a1698b5ffc558be60f0f488b9031e7446de12f",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "/private/tmp/rustuml-named-note-colors/target/release/rustuml",
+    "rust_binary_sha256": "7ff6b4057339b49a4c7dc319cc6915834efefd7b5f3bf5f41869cd0650ab4348",
+    "rust_binary_version": "rustuml 0.7.0"
+  },
+  "chronology": {
+    "account_parent": "379887352ec585e0e1d05dcaa48b88496f9b095f",
+    "implementation_parent": "05cde75192bc8d5a2803dae199d858c76308ee5f",
+    "account_preceded_implementation": true
+  },
+  "reviewed_sources": {
+    "rust": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/component.rs",
+      "crates/rustuml-parser/src/parse/deployment.rs"
+    ],
+    "java": [
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java"
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git status --short --branch",
+    "git log --oneline --decorate -8",
+    "git show --format=fuller --find-renames 20a1698b5ffc558be60f0f488b9031e7446de12f -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs",
+    "git show -s --format='%H%n%P%n%s' 05cde751 20a1698b",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "sed -n '70,155p' src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+    "sed -n '45,145p' src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+    "shasum -a 256 /private/tmp/rustuml-named-note-colors/target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "/private/tmp/rustuml-named-note-colors/target/release/rustuml --version",
+    "for each perturbation source: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe; /private/tmp/rustuml-named-note-colors/target/release/rustuml -pipe -tsvg; /private/tmp/rustuml-named-note-colors/target/release/rustuml -pipe --ast; /private/tmp/rustuml-named-note-colors/target/release/rustuml -pipe --yaml",
+    "xmllint --noout test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_*.java.svg test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_*.rust.svg",
+    "xmllint --noout test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_*.java.svg test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_*plain_floating_control.rust.svg",
+    "rg -n -i 'include_str!|golden|fixture|checker_|command-factory-note-terminal-rejection|Bad-Component|Bad\\.Deploy|Curly|Memo\\.Valid|Runbook\\.Valid|invalid named note command' crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs",
+    "git diff --check 20a1698b5ffc558be60f0f488b9031e7446de12f"
+  ],
+  "cargo_or_rustc_run": false,
+  "artifact_convention": "For every BASE.puml below, the preserved directory contains BASE.java.svg, BASE.java.stderr, BASE.java.status, BASE.rust.svg, BASE.rust.stderr, BASE.rust.status, BASE.rust.ast, BASE.rust.ast.stderr, BASE.rust.yaml, and BASE.rust.yaml.stderr. Empty stdout/stderr files are retained for failed or silent commands.",
+  "verification": {
+    "sources": 12,
+    "counted_java_valid_sources": 6,
+    "counted_java_successes": 6,
+    "counted_mechanism_passes": 3,
+    "counted_mechanism_failures": 3,
+    "supplemental_java_invalid_sources": 6,
+    "supplemental_named_note_rejection_agreements": 4,
+    "supplemental_plain_note_acceptance_mismatches": 2,
+    "xml_validated_outputs": 20,
+    "cargo_or_rustc_invocations": 0
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_component_ascii_inline_controls.puml",
+      "java_valid": true,
+      "counted": true,
+      "axes": [
+        "Component",
+        "ASCII inline named-note prefix",
+        "dotted alias",
+        "two tags then stereotype then valid gradient color",
+        "nested package ownership",
+        "attached-note and note-on-link controls",
+        "later relation"
+      ],
+      "result": "PASS",
+      "detail": "Java and Rust preserve the named note, decorations, nested owner, dotted relation reuse, attached note, link note, and later relation."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_component_ascii_multiline_nested.puml",
+      "java_valid": true,
+      "counted": true,
+      "axes": [
+        "Component",
+        "multiline named-note prefix",
+        "Unicode dotted code",
+        "two tags then stereotype then valid six-digit hex color",
+        "end note terminator",
+        "nested package and later alias relations"
+      ],
+      "result": "PASS_WITH_DECLARED_METADATA_RESIDUE",
+      "detail": "Both sides retain the note body, decoration order, ownership and relation reuse. Java folds the non-ASCII code character in SVG qualified-name metadata while Rust retains it, matching the previously recorded metadata residue and not the terminal-rejection mechanism."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_deployment_ascii_inline_controls.puml",
+      "java_valid": true,
+      "counted": true,
+      "axes": [
+        "Deployment",
+        "ASCII inline named-note prefix",
+        "dotted alias",
+        "tag then stereotype then valid gradient color",
+        "nested node ownership",
+        "attached-note and note-on-link controls",
+        "later relation"
+      ],
+      "result": "FAIL",
+      "detail": "The named and attached notes survive, but Java emits the valid 'bundle edge' note on the preceding link while Rust Deployment silently drops the command and has only two notes in its AST."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_deployment_ascii_multiline_nested.puml",
+      "java_valid": true,
+      "counted": true,
+      "axes": [
+        "Deployment",
+        "multiline named-note prefix",
+        "dotted alias",
+        "two tags then stereotype then valid eight-digit hex color",
+        "two nested containers",
+        "compact endnote",
+        "later relations"
+      ],
+      "result": "PASS",
+      "detail": "Both sides retain the multiline note, complete decorations, nested owner, alias reuse, and later relations."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_component_curly_inline_later_relation.puml",
+      "java_valid": true,
+      "counted": true,
+      "axes": [
+        "Component",
+        "Unicode curly quote delimiters",
+        "inline named-note prefix",
+        "dotted alias",
+        "tag then stereotype then valid named color",
+        "relation to the would-be code",
+        "independent later relation"
+      ],
+      "result": "FAIL",
+      "detail": "Java creates Curly.Component_61 as a note. Rust ignores the valid opener, then the relation synthesizes Curly.Component_61 as an Interface; the note body and decorations disappear and the later relation proceeds against the mutated AST."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/valid_deployment_curly_inline_nested_later_relation.puml",
+      "java_valid": true,
+      "counted": true,
+      "axes": [
+        "Deployment",
+        "Unicode curly quote delimiters",
+        "inline named-note prefix",
+        "dotted alias",
+        "tag then stereotype then valid named color",
+        "nested ownership",
+        "relation to the would-be code and independent later relation"
+      ],
+      "result": "FAIL",
+      "detail": "Java creates Outer.Curly.Deploy_67 as a nested note. Rust ignores the valid opener, then materializes Curly.Deploy_67 as a root Default node with quark order 2 when the relation is parsed."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_component_inline_code_punctuation.puml",
+      "java_valid": false,
+      "counted": false,
+      "axes": [
+        "Component",
+        "inline invalid code punctuation",
+        "valid following decoration order",
+        "would-be endpoint relation and later relation"
+      ],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java exits 200 with syntax error; Rust exits 1 at the opener with 'invalid named note command' and emits no AST."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_deployment_inline_decoration_order.puml",
+      "java_valid": false,
+      "counted": false,
+      "axes": [
+        "Deployment",
+        "inline color-before-stereotype order",
+        "dotted code",
+        "would-be endpoint relation and later relation"
+      ],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java exits 200 with syntax error; Rust exits 1 at the opener and emits no AST, so the later relation cannot synthesize the code."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_component_multiline_unknown_color.puml",
+      "java_valid": false,
+      "counted": false,
+      "axes": [
+        "Component",
+        "multiline prefix",
+        "unknown color",
+        "nested package",
+        "would-be endpoint relation and later relation"
+      ],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java exits 200 with No such color; Rust exits 1 at the opener and emits no AST. Diagnostic timing and wording differ but are declared residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_deployment_multiline_composite_color.puml",
+      "java_valid": false,
+      "counted": false,
+      "axes": [
+        "Deployment",
+        "multiline prefix",
+        "syntactically recognized but unresolvable composite color",
+        "nested node",
+        "would-be endpoint relation and later relation"
+      ],
+      "result": "NEGATIVE_CONTROL_PASS",
+      "detail": "Java exits 200 with No such color; Rust exits 1 at the opener and emits no AST."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_component_plain_floating_control.puml",
+      "java_valid": false,
+      "counted": false,
+      "axes": [
+        "Component",
+        "claimed plain floating-note control",
+        "later relation"
+      ],
+      "result": "SUPPLEMENTAL_PROVENANCE_MISMATCH",
+      "detail": "Java rejects 'note : ...' as syntax error. Rust accepts it as a ComponentNote and continues. This source cannot count as a valid held-out, but it disproves the account's statement that Java has a distinct valid plain floating-note factory here."
+    },
+    {
+      "source": "test-diagrams/perturbations/command-factory-note-terminal-rejection/invalid_deployment_plain_floating_control.puml",
+      "java_valid": false,
+      "counted": false,
+      "axes": [
+        "Deployment-shaped source",
+        "claimed plain floating-note control",
+        "later relation",
+        "top-level subtype selection"
+      ],
+      "result": "SUPPLEMENTAL_DECLARED_RESIDUE_AND_PROVENANCE_MISMATCH",
+      "detail": "Java rejects the line. Rust exits successfully after selecting a Class AST and interpreting 'note' as an entity with a field. The subtype behavior is declared residue, but the source still establishes that the claimed Java-valid plain-note control does not exist."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "The ownership predicate excludes Java-valid curly-quoted inline commands",
+      "java_mechanism": "CommandFactoryNote.singleLine delimits DISPLAY with [%g]. Pattern2 expands %g to ASCII double quote, Unicode left/right double quotes, and the Jaws invisible quote marker. The exact Java revision therefore accepts the two preserved curly-quoted commands as named notes.",
+      "rust_mechanism": "parse_named_note_inline and looks_like_named_note_inline_command both hard-code ASCII double quotes. The valid Java opener is neither parsed nor claimed as an invalid owned command, so family parsing continues.",
+      "downstream_mutation": "The later relation materializes the missing code as an Interface in Component and as a root Default Deployment node with a new quark order. This is the exact accidental AST mutation the mechanism claims to prevent.",
+      "evidence": [
+        "valid_component_curly_inline_later_relation.puml",
+        "valid_deployment_curly_inline_nested_later_relation.puml"
+      ]
+    },
+    {
+      "severity": "rejecting",
+      "title": "Deployment does not retain the Java-valid note-on-link control",
+      "java_mechanism": "DescriptionDiagramFactory registers CommandFactoryNoteOnLink for the shared DESCRIPTION family, and its single-line grammar accepts 'note on link : bundle edge'. Java attaches the preserved text to the preceding Worker-to-Bundle link.",
+      "rust_mechanism": "Component has an explicit note-on-link branch, but Deployment has none. After named and attached note handling, an unmatched line reaches the end of the loop and parse_deployment still returns Ok.",
+      "impact": "The account claims valid note-on-link commands remain owned by a distinct factory, but the Deployment output silently omits the note. This also shows the all-lines-consumed Java model is not represented by the Rust family parser beyond the two newly guarded prefixes.",
+      "evidence": [
+        "valid_deployment_ascii_inline_controls.puml"
+      ]
+    },
+    {
+      "severity": "account_defect",
+      "title": "Java provenance is incomplete and the plain-note control is not valid Java syntax",
+      "detail": "The account cites CommandFactoryNote but omits Pattern2, which defines the quote alphabet that defeats the implementation. It also says plain floating notes remain owned by a distinct factory, but DescriptionDiagramFactory registers named, attached, and link note factories only; both preserved 'note : ...' probes are Java syntax errors. The invalid probes do not count toward held-out coverage."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The narrow invalid-suffix terminal guard works on the sampled failures",
+      "detail": "Invalid code punctuation, decoration reordering, unknown color, and composite color all reject before Rust emits an AST. No later endpoint or relation mutation occurs in those four probes."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "golden_or_fixture_reads_found": false,
+    "unexplained_numeric_constants_found": false,
+    "unexplained_branch_or_grammar_issue": "The two general prefix regexes are not fixture-shaped, but their ASCII-only quote grammar was derived without the Pattern2 %g dependency and is therefore incomplete.",
+    "evidence": "The implementation diff adds only shared prefix predicates, terminal error branches, and bounded unit cases. No shipping-code check names this mechanism, a held-out label, a corpus path, golden bytes, coordinates, or branch counts."
+  },
+  "residue_assessment": [
+    "Exact Java/Rust error SVG artwork, error line choice, and diagnostic wording were not compared; rejection depends on Java-valid acceptance and AST semantics instead.",
+    "The Unicode-code SVG qualified-name normalization observed in the valid Component multiline control was not counted as a terminal-rejection failure.",
+    "The Deployment-shaped invalid plain-note source selecting Rust's Class parser falls under the account's declared top-level subtype residue; it is preserved only as evidence that the claimed plain-note Java control is not valid."
+  ],
+  "required_follow_up": "Do not accept this mechanism. Model CommandFactoryNote's quote delimiters from Java Pattern2 %g in both the parser and ownership predicate, add valid curly-quoted Component and Deployment regressions with later relations, and either implement Deployment note-on-link ownership or narrow and correct the account's control claim with a separate convergence target. Remove or correct the assertion that plain floating 'note : ...' is valid in Java Description diagrams.",
+  "verdict_reason": "REJECT. Six fresh Java-valid held-outs exercised family, inline/multiline form, decoration and color order, aliases, nesting, attached/link controls, and later relations. Three fail the claimed equivalence: two valid curly-quoted named notes fall through and permit later relations to synthesize ordinary endpoints, and one valid Deployment note-on-link is silently dropped. The sampled invalid named-note suffixes do terminate correctly, but that narrower success does not establish the claimed command-factory ownership model."
+}

@@ -1,0 +1,10 @@
+@startuml
+node "Nested" as Nested {
+  artifact "Anchor" as Anchor
+  note as Composite.Color_73 $ops <<Broken>> #back:LightBlue;line.dashed:Red
+    composite color body
+  end note
+  Composite.Color_73 --> Anchor : must not survive
+  Anchor --> Nested : later relation
+}
+@enduml

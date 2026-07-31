@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="352px" preserveAspectRatio="none" style="width:423px;height:352px;background:#FFFFFF;" version="1.1" viewBox="0 0 423 352" width="423px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Edge Rack-->
+<g class="cluster" data-qualified-name="Rack" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,398,6,398,317.29,388,327.29,16,327.29,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="388" x2="398" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="388" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="388" x2="388" y1="16" y2="327.29"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="73.9375" x="166.0313" y="32.5352">Edge Rack</text>
+</g>
+<!--entity Worker-->
+<g class="entity" data-qualified-name="Rack.Worker" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="293.99,158.31,303.99,148.31,382.0056,148.31,382.0056,184.7983,372.0056,194.7983,293.99,194.7983,293.99,158.31" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="372.0056" x2="382.0056" y1="158.31" y2="148.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="293.99" x2="372.0056" y1="158.31" y2="158.31"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="372.0056" x2="372.0056" y1="158.31" y2="194.7983"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.0156" x="308.99" y="181.8452">Worker</text>
+</g>
+<!--entity Bundle-->
+<g class="entity" data-qualified-name="Rack.Bundle" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="76.0879" x="299.96" y="271.8"/>
+<polygon fill="#F1F1F1" points="359.0479,276.8,359.0479,290.8,371.0479,290.8,371.0479,282.8,365.0479,276.8,359.0479,276.8" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="365.0479" x2="365.0479" y1="276.8" y2="282.8"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="371.0479" x2="365.0479" y1="282.8" y2="282.8"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46.0879" x="309.96" y="298.3352">Bundle</text>
+</g>
+<g class="entity" data-qualified-name="Rack.Deploy.Valid_29" data-source-line="4" id="ent0005">
+<path d="M267.74,46 L267.74,71.3105 A0,0 0 0 0 267.74,71.3105 L322.39,71.3105 L335.36,148.05 L330.39,71.3105 L382.26,71.3105 A0,0 0 0 0 382.26,71.3105 L382.26,56 L372.26,46 L267.74,46 A0,0 0 0 0 267.74,46" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M372.26,46 L372.26,56 L382.26,56 L372.26,46" fill="#FFFFFF" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="93.52" x="273.74" y="63.5684">release marker</text>
+</g>
+<g class="entity" data-qualified-name="Rack.GMN8" data-source-line="7" id="ent0009">
+<path d="M31.55,158.9 L31.55,184.2105 A0,0 0 0 0 31.55,184.2105 L224.4445,184.2105 A0,0 0 0 0 224.4445,184.2105 L224.4445,176.9 L293.78,171.55 L224.4445,168.9 L224.4445,168.9 L214.4445,158.9 L31.55,158.9 A0,0 0 0 0 31.55,158.9" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M214.4445,158.9 L214.4445,168.9 L224.4445,168.9 L214.4445,158.9" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="171.8945" x="37.55" y="176.4684">attached deployment detail</text>
+</g>
+<!--link Worker to Bundle-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M338,195.03 C338,217.22 338,244.8 338,265.66" fill="none" id="Worker-to-Bundle" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="338,271.66,342,262.66,338,266.66,334,262.66,338,271.66" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="33.7314" x="339" y="238.3684">loads</text>
+</g>
+</g></svg>

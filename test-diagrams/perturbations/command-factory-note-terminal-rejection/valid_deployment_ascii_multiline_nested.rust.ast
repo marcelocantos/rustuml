@@ -1,0 +1,125 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ncloud \"Region\" as Region {\n  node \"Host\" as Host {\n    artifact \"Agent\" as Agent\n    note as Runbook.Valid_53 $ops $blue <<Runbook>> #80FFAA00\n      restart only after the drain completes\n      verify the alias relation remains stable\n    endnote\n    Runbook.Valid_53 --> Agent : consult\n    Agent --> Host : reports\n  }\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Region",
+                label: "Region",
+                kind: Cloud,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [
+                    "Host",
+                ],
+                source_line: 1,
+                quark_order: 0,
+            },
+            DeploymentNode {
+                id: "Host",
+                label: "Host",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [
+                    "Agent",
+                ],
+                source_line: 2,
+                quark_order: 1,
+            },
+            DeploymentNode {
+                id: "Agent",
+                label: "Agent",
+                kind: Artifact,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 3,
+                quark_order: 2,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Runbook.Valid_53",
+                to: "Agent",
+                label: Some(
+                    "consult",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                hidden: false,
+                length: 2,
+                source_line: 8,
+            },
+            DeploymentConnection {
+                from: "Agent",
+                to: "Host",
+                label: Some(
+                    "reports",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                hidden: false,
+                length: 2,
+                source_line: 9,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "Runbook.Valid_53",
+                ),
+                target: None,
+                text: "restart only after the drain completes\nverify the alias relation remains stable",
+                color: Some(
+                    "#80FFAA00",
+                ),
+                tags: [
+                    "ops",
+                    "blue",
+                ],
+                stereotype: Some(
+                    "Runbook",
+                ),
+                owner: Some(
+                    "Host",
+                ),
+                quark_order: 3,
+                position: Right,
+                source_line: 5,
+            },
+        ],
+    },
+)

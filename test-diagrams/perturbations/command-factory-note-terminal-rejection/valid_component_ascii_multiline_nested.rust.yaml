@@ -1,0 +1,83 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package "Operations" as Ops {
+        component "Core API" as Core
+        note as Memo.Ω_41 $ops $fresh <<Runbook>> #A1B2C3
+          rotate credentials after handoff
+          retain the previous audit marker
+        end note
+        Memo.Ω_41 --> Core : governs
+        Core --> [Later Peer] : exposes
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Core
+    label: Core API
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: Later Peer
+    label: Later Peer
+    stereotypes: []
+    source_line: 8
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.Ω_41
+    to: Core
+    label: governs
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  - from: Core
+    to: Later Peer
+    label: exposes
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 8
+  packages:
+  - name: Ops
+    label: Operations
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - Core
+    - Later Peer
+    packages: []
+  notes:
+  - id: Memo.Ω_41
+    owner: Ops
+    tags:
+    - ops
+    - fresh
+    stereotype: Runbook
+    color: '#A1B2C3'
+    text: |-
+      rotate credentials after handoff
+      retain the previous audit marker
+    target: null
+    position: Right
+    source_line: 4

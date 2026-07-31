@@ -1,0 +1,10 @@
+@startuml
+package "Nested" as Nested {
+  component "Anchor" as Anchor
+  note as Unknown.Color_71 $audit <<Broken>> #DefinitelyNotAPlantUmlColor
+    unknown color body
+  endnote
+  Unknown.Color_71 --> Anchor : must not survive
+  Anchor --> [After] : later relation
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+node "Edge Rack" as Rack {
+  node "Worker" as Worker
+  artifact "Bundle" as Bundle
+  note "release marker" as Deploy.Valid_29 $release <<Marker>> #Gold-White
+  Deploy.Valid_29 --> Worker : consult
+  Worker --> Bundle : loads
+  note left of Worker : attached deployment detail
+  note on link : bundle edge
+}
+@enduml

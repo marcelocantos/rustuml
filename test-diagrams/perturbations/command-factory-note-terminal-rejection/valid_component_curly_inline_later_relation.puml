@@ -1,0 +1,6 @@
+@startuml
+component "Anchor" as Anchor
+note “curly component memo” as Curly.Component_61 $audit <<UnicodeQuote>> #LightBlue
+Curly.Component_61 --> Anchor : should reuse the note
+Anchor --> [Downstream] : later relation
+@enduml

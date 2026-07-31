@@ -1,0 +1,91 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package "Ledger Zone" as Zone {
+        component "Ingress" as IN
+        component "Archive" as AR
+        note "handoff memo" as Memo.Valid_17 $audit $night <<Ledger>> #LightBlue/White
+        Memo.Valid_17 --> IN : consult
+        IN --> AR : persist
+        note right of IN : attached detail
+        note on link : archive edge
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: IN
+    label: Ingress
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: AR
+    label: Archive
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.Valid_17
+    to: IN
+    label: consult
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 5
+  - from: IN
+    to: AR
+    label: persist
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages:
+  - name: Zone
+    label: Ledger Zone
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - IN
+    - AR
+    packages: []
+  notes:
+  - id: Memo.Valid_17
+    owner: Zone
+    tags:
+    - audit
+    - night
+    stereotype: Ledger
+    color: '#LightBlue/White'
+    text: handoff memo
+    target: null
+    position: Right
+    source_line: 4
+  - owner: Zone
+    text: attached detail
+    target: IN
+    position: Right
+    source_line: 7
+  - text: archive edge
+    target: null
+    connection: 1
+    position: Bottom
+    source_line: 8

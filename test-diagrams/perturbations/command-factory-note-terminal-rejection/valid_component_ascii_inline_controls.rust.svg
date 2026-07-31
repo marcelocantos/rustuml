@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="379px" preserveAspectRatio="none" style="width:326px;height:379px;background:#FFFFFF;" version="1.1" viewBox="0 0 326 379" width="326px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Zone-->
+<g class="cluster" data-qualified-name="Zone" data-source-line="1" id="ent0002">
+<path d="M8.5,6 L98.9004,6 A3.75,3.75 0 0 1 101.4004,8.5 L108.4004,28.4883 L308.5,28.4883 A2.5,2.5 0 0 1 311,30.9883 L311,361.7871 A2.5,2.5 0 0 1 308.5,364.2871 L8.5,364.2871 A2.5,2.5 0 0 1 6,361.7871 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="108.4004" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="89.4004" x="10" y="21.5352">Ledger Zone</text>
+</g>
+<!--entity IN-->
+<g class="entity" data-qualified-name="Zone.IN" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="89.2529" x="22.37" y="143.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="91.6229" y="148.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="89.6229" y="150.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="89.6229" y="154.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49.2529" x="37.37" y="176.8452">Ingress</text>
+</g>
+<!--entity AR-->
+<g class="entity" data-qualified-name="Zone.AR" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="90.3398" x="21.83" y="301.8"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="92.1698" y="306.8"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="90.1698" y="308.8"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="90.1698" y="312.8"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="50.3398" x="36.83" y="335.3352">Archive</text>
+</g>
+<g class="entity" data-qualified-name="Zone.Memo.Valid_17" data-source-line="4" id="ent0005">
+<path d="M22.17,41 L22.17,66.3105 A0,0 0 0 0 22.17,66.3105 L73.72,66.3105 L69.43,143.05 L81.72,66.3105 L135.8267,66.3105 A0,0 0 0 0 135.8267,66.3105 L135.8267,51 L125.8267,41 L22.17,41 A0,0 0 0 0 22.17,41" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M125.8267,41 L125.8267,51 L135.8267,51 L125.8267,41" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="92.6567" x="28.17" y="58.5684">handoff memo</text>
+</g>
+<g class="entity" data-qualified-name="Zone.GMN8" data-source-line="7" id="ent0009">
+<path d="M180.84,153.9 L180.84,162.55 L112.09,166.55 L180.84,170.55 L180.84,179.2105 A0,0 0 0 0 180.84,179.2105 L295.1696,179.2105 A0,0 0 0 0 295.1696,179.2105 L295.1696,163.9 L285.1696,153.9 L180.84,153.9 A0,0 0 0 0 180.84,153.9" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M285.1696,153.9 L285.1696,163.9 L295.1696,163.9 L285.1696,153.9" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="93.3296" x="186.84" y="171.4684">attached detail</text>
+</g>
+<!--link IN to AR-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M67,189.98 C67,219.64 67,265.64 67,295.41" fill="none" id="IN-to-AR" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="67,301.41,71,292.41,67,296.41,63,292.41,67,301.41" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42.6182" x="101.1113" y="233.3672">persist</text>
+<path d="M72,242.1094 L72,267.1094 L172,267.1094 L172,252.1094 L162,242.1094 L72,242.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M162,242.1094 L162,252.1094 L172,252.1094 L162,242.1094" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="79.8408" x="78" y="259.6777">archive edge</text>
+</g>
+</g></svg>

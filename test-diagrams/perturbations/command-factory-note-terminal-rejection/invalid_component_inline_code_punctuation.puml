@@ -1,0 +1,6 @@
+@startuml
+component "Anchor" as Anchor
+note "punctuated code" as Bad-Component $audit <<Broken>> #MistyRose
+Bad-Component --> Anchor : must not synthesize an endpoint
+Anchor --> [After] : later relation
+@enduml

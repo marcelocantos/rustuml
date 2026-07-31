@@ -1,0 +1,5 @@
+@startuml
+component "Anchor" as Anchor
+note : plain floating component note
+Anchor --> [After] : later relation
+@enduml

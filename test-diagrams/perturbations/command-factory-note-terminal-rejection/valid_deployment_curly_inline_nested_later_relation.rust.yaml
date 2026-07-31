@@ -1,0 +1,50 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Outer Host" as Outer {
+        artifact "Payload" as Payload
+        note “curly deployment memo” as Curly.Deploy_67 $ops <<UnicodeQuote>> #PaleGreen
+        Curly.Deploy_67 --> Payload : should reuse the note
+        Payload --> Outer : later relation
+      }
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Outer
+    label: Outer Host
+    kind: Node
+    stereotype: null
+    declared_container: true
+    children:
+    - Payload
+    source_line: 1
+    quark_order: 0
+  - id: Payload
+    label: Payload
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  - id: Curly.Deploy_67
+    label: Curly.Deploy_67
+    kind: Default
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 4
+    quark_order: 2
+  connections:
+  - from: Curly.Deploy_67
+    to: Payload
+    label: should reuse the note
+    arrow_at_end: true
+    source_line: 4
+  - from: Payload
+    to: Outer
+    label: later relation
+    arrow_at_end: true
+    source_line: 5
