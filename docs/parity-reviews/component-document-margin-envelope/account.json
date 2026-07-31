@@ -40,7 +40,7 @@
         "render_plantuml_svg"
       ],
       "lines": "1927-1939, 2171-2180, 5496-5584, 5611-5760",
-      "role": "Shifts the painted body by document left/top margins and replaces the body envelope tail before chrome composition, but subtracts CHROME_RIGHT_PAD (7) where the adjacent model and Java SVEK normalization require the five-unit positive-axis tail."
+      "role": "Shifts the painted body by document left/top margins before measuring a max-only canvas, then tries to recover the wrapped dimension by replacing fixed tails. This conflates SVEK's measured min/max span, Graphviz label placeholders, outer document margins, and later chrome composition."
     }
   ],
   "evidence_inputs": [
@@ -50,8 +50,8 @@
     "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml"
   ],
   "claimed_invariant": "A root.document margin wraps the completed SVEK body: left/top translate every painted body coordinate and left+right/top+bottom enlarge the body dimension exactly once. Replacing an already represented SVEK tail must use that tail's own normalized positive-axis extent, not the unrelated trailing width used later by title, legend, header, and footer chrome.",
-  "causal_divergence": "The four Bootstrap-derived component themes all resolve root Margin 10. Rust translates their body correctly, but its right-side wrapper subtracts CHROME_RIGHT_PAD (7) even though the code comment identifies the replaced SVEK positive-axis tail as five units. The two-unit discrepancy survives final dpi=100 scaling as a 2.0833-unit root width deficit (150 instead of 152.0833). Entity geometry and all non-Cerulean paint already agree structurally, isolating the divergence to envelope composition; Cerulean's missing gradient is explicitly outside this mechanism.",
-  "planned_model_change": "Replace the right-margin subtraction with SVEK_ENVELOPE_ORIGIN - 1.0, the same named positive-axis tail already used for the bottom-margin replacement. Add fresh renamed component perturbations covering symmetric and asymmetric document margins, dpi 96 and dpi 100, and content whose right frontier is owned by an entity versus a link label. Do not alter layout coordinates, theme identity, scaling, or chrome constants.",
+  "causal_divergence": "The four Bootstrap-derived component themes all resolve root Margin 10. Rust translates their bodies correctly, but compute_no_oracle_canvas measures only positive maxima and uses Graphviz placeholder rectangles as proxies for Java's drawn TextBlock/LimitFinder envelope. It then mixes document-margin replacement with fixed SVEK and chrome tails. Diagnostics show the theme width is owned by the WebApp-to-Database center-label placeholder at x=126.236332 after the left margin, whereas Java computes the SVEK dimension from the complete painted min/max span before TextBlockExporter12026 adds the outer margins. A constant-only substitution can make the four fixtures green, but breaks the source-level margin invariant and the existing asymmetric-margin perturbation; that experiment is rejected. Cerulean's missing gradient remains explicitly outside this mechanism.",
+  "planned_model_change": "Port the complete Java ordering: compute a component painted-envelope min/max from the same primitive models used to render entities, paths, center-label TextBlocks, endpoint labels, notes, and clusters; normalize the SVEK body from that span with Java's 15-unit delta; then apply root.document left/right/top/bottom margins exactly once around the completed body before chrome composition. Replace Graphviz placeholder-size proxies with the actual drawn label-block bounds. Add fresh renamed component perturbations covering symmetric and asymmetric document margins, dpi 96 and dpi 100, and content whose frontier is owned by an entity versus a link label. Do not alter theme identity, comparator tolerance, or final SVG strings.",
   "perturbation_axes": [
     "symmetric versus asymmetric root.document margins",
     "dpi 96 versus dpi 100 final scaling",
@@ -76,11 +76,16 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "a6e8988a",
     "implementation_revision": "pending implementation commit",
     "accepted_result": "pending",
-    "model_evidence": "pending",
-    "commands": [],
-    "review_status": "Implementation and independent review pending."
+    "model_evidence": "A temporary owner diagnostic (removed before commit) showed comp_label_requires is horizontally owned by its edge-label placeholder at max_x=94.352552 and vertically by component Bar at max_y=176.97659325; the Minty theme is owned by its edge-label placeholder at max_x=126.236332 and component Database at max_y=212.167976375. Both currently receive the same fixed +14 tail despite Java SvekResult using a measured min/max span. Replacing only CHROME_RIGHT_PAD with the five-unit positive-axis tail would fit the frozen themes by cancellation, not by reproducing that model, so no implementation was accepted.",
+    "commands": [
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_united_component.puml",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml"
+    ],
+    "review_status": "Investigation complete; the constant-only candidate was rejected as non-generative. Full painted min/max implementation and independent review remain pending."
   }
 }
