@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+
+class SourceShort
+class TargetShort
+class LeftAnchor
+class RightAnchor
+
+LeftAnchor -- SourceShort
+RightAnchor -- TargetShort
+SourceShort <.. TargetShort
+@enduml

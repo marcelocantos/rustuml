@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dotpath-start-retraction-segment-consumption",
+  "generated_by": "GPT-5 Codex adversarial checker",
+  "note": "Generated from pinned Java SVGs and preserved Rust SVGs originally rendered from the requested target path before the observed binary overwrite; no Cargo/rustc invocation was used.",
+  "fixtures": [
+    {
+      "stem": "ortho_lr_inheritance_package_consume",
+      "java_id": "SourceBox-backto-TargetNode",
+      "rust_id": "SourceBox-backto-TargetNode",
+      "routing": "ORTHO",
+      "direction": "left-to-right",
+      "start_decoration": "inheritance triangle",
+      "endpoint_kind": "package-to-ordinary",
+      "branch_claim": "consume leading start cubic when decoration length reaches first chord",
+      "decoration_length_px": 18.0,
+      "java_path": {
+        "d": "M185.1752,43 C185.9552,43 169.9053,43 170.6859,43 C172.2473,43 173.8095,43 175.3706,43 C178.4927,43 181.6102,43 184.7065,43 C190.8992,43 197.0075,43 202.9,43",
+        "point_count": 13,
+        "cubic_segments": 4,
+        "start_point": [
+          185.1752,
+          43.0
+        ],
+        "first_control": [
+          185.9552,
+          43.0
+        ],
+        "first_endpoint": [
+          170.6859,
+          43.0
+        ],
+        "first_chord_px": 14.4893
+      },
+      "rust_path": {
+        "d": "M185.1752,43 C185.9552,43 169.9053,43 170.6859,43 C172.2473,43 173.8095,43 175.3706,43 C178.4927,43 181.6102,43 184.7065,43 C190.8992,43 197.0075,43 202.9,43",
+        "point_count": 13,
+        "cubic_segments": 4,
+        "start_point": [
+          185.1752,
+          43.0
+        ],
+        "first_control": [
+          185.9552,
+          43.0
+        ],
+        "first_endpoint": [
+          170.6859,
+          43.0
+        ],
+        "first_chord_px": 14.4893
+      },
+      "same_segment_count": true,
+      "max_point_delta_px": 0.0,
+      "diff_report": "SVG structural differences:\n  [52] <path> attr mismatch:\n    expected: [(\"codeLine\", \"16\"), (\"d\", \"M185.1752,43 C185.9552,43 169.9053,43 170.6859,43 C172.2473,43 173.8095,43 175.3706,43 C178.4927,43 181.6102,43 184.7065,43 C190.8992,43 197.0075,43 202.9,43\"), (\"fill\", \"none\"), (\"id\", \"SourceBox-backto-TargetNode\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"codeLine\", \"16\"), (\"d\", \"M185.1752,43 C185.565,43 167.9548,43 168.3448,43 C169.1248,43 169.9053,43 170.6859,43 C172.2473,43 173.8095,43 175.3706,43 C178.4927,43 181.6102,43 184.7065,43 C190.8992,43 197.0075,43 202.9,43\"), (\"fill\", \"none\"), (\"id\", \"SourceBox-backto-TargetNode\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]"
+    },
+    {
+      "stem": "ortho_lr_dependency_ordinary_no_consume",
+      "java_id": "DepSource-backto-DepTarget",
+      "rust_id": "DepSource-backto-DepTarget",
+      "routing": "ORTHO",
+      "direction": "left-to-right",
+      "start_decoration": "dependency arrow",
+      "endpoint_kind": "ordinary-to-ordinary",
+      "branch_claim": "do not consume multi-cubic start when first chord exceeds decoration length",
+      "decoration_length_px": 6.0,
+      "java_path": {
+        "d": "M303.93,106 C323.22,106 334.43,106 334.43,106 C334.43,106 334.43,39 334.43,39 C334.43,39 348.18,39 364.41,39",
+        "point_count": 10,
+        "cubic_segments": 3,
+        "start_point": [
+          303.93,
+          106.0
+        ],
+        "first_control": [
+          323.22,
+          106.0
+        ],
+        "first_endpoint": [
+          334.43,
+          106.0
+        ],
+        "first_chord_px": 30.5
+      },
+      "rust_path": {
+        "d": "M303.927,106 C323.2203,106 334.4297,106 334.4297,106 C334.4297,106 334.4297,39 334.4297,39 C334.4297,39 348.1835,39 364.4087,39",
+        "point_count": 10,
+        "cubic_segments": 3,
+        "start_point": [
+          303.927,
+          106.0
+        ],
+        "first_control": [
+          323.2203,
+          106.0
+        ],
+        "first_endpoint": [
+          334.4297,
+          106.0
+        ],
+        "first_chord_px": 30.5027
+      },
+      "same_segment_count": true,
+      "max_point_delta_px": 0.0035,
+      "diff_report": "SVGs are structurally equivalent"
+    },
+    {
+      "stem": "ortho_tb_dependency_ordinary_no_consume",
+      "java_id": "SourceShort-backto-TargetShort",
+      "rust_id": "SourceShort-backto-TargetShort",
+      "routing": "ORTHO",
+      "direction": "top-to-bottom",
+      "start_decoration": "dependency arrow",
+      "endpoint_kind": "ordinary-to-ordinary",
+      "branch_claim": "single-cubic start is guarded from consumption by Java beziers.size() > 1",
+      "decoration_length_px": 6.0,
+      "java_path": {
+        "d": "M177.18,169.24 C177.18,187.02 177.18,205.08 177.18,222.84",
+        "point_count": 4,
+        "cubic_segments": 1,
+        "start_point": [
+          177.18,
+          169.24
+        ],
+        "first_control": [
+          177.18,
+          187.02
+        ],
+        "first_endpoint": [
+          177.18,
+          222.84
+        ],
+        "first_chord_px": 53.6
+      },
+      "rust_path": {
+        "d": "M177.18,169.24 C177.18,187.02 177.18,205.08 177.18,222.84",
+        "point_count": 4,
+        "cubic_segments": 1,
+        "start_point": [
+          177.18,
+          169.24
+        ],
+        "first_control": [
+          177.18,
+          187.02
+        ],
+        "first_endpoint": [
+          177.18,
+          222.84
+        ],
+        "first_chord_px": 53.6
+      },
+      "same_segment_count": true,
+      "max_point_delta_px": 0.0,
+      "diff_report": "SVGs are structurally equivalent"
+    },
+    {
+      "stem": "spline_lr_aggregation_ordinary_retraction",
+      "java_id": "AggregateSource-backto-AggregateTarget",
+      "rust_id": "AggregateSource-backto-AggregateTarget",
+      "routing": "spline",
+      "direction": "left-to-right",
+      "start_decoration": "aggregation diamond",
+      "endpoint_kind": "ordinary-to-ordinary",
+      "branch_claim": "aggregation start retraction remains Java-equivalent; final path is one cubic so it is decoration coverage, not segment-consumption proof",
+      "decoration_length_px": 12.0,
+      "java_path": {
+        "d": "M166.96,114 C186.27,114 195.1,114 214.38,114",
+        "point_count": 4,
+        "cubic_segments": 1,
+        "start_point": [
+          166.96,
+          114.0
+        ],
+        "first_control": [
+          186.27,
+          114.0
+        ],
+        "first_endpoint": [
+          214.38,
+          114.0
+        ],
+        "first_chord_px": 47.42
+      },
+      "rust_path": {
+        "d": "M166.96,114 C186.27,114 195.1,114 214.38,114",
+        "point_count": 4,
+        "cubic_segments": 1,
+        "start_point": [
+          166.96,
+          114.0
+        ],
+        "first_control": [
+          186.27,
+          114.0
+        ],
+        "first_endpoint": [
+          214.38,
+          114.0
+        ],
+        "first_chord_px": 47.42
+      },
+      "same_segment_count": true,
+      "max_point_delta_px": 0.0,
+      "diff_report": "SVGs are structurally equivalent"
+    },
+    {
+      "stem": "spline_tb_parenthesis_package_consume",
+      "java_id": "ParentEndpoint-backto-ReceiverTwo",
+      "rust_id": "ParentEndpoint-to-ReceiverTwo",
+      "routing": "spline",
+      "direction": "top-to-bottom",
+      "start_decoration": "parenthesis",
+      "endpoint_kind": "package-to-ordinary",
+      "branch_claim": "package-source parenthesis path preserves Java segment sequence; observed mismatch is relationship id plus sub-pixel serialization drift",
+      "decoration_length_px": 10.0,
+      "java_path": {
+        "d": "M181.824,191.8471 C181.8853,192.0596 179.28,182.979 179.342,183.1922 C179.4659,183.6184 179.5912,184.0457 179.7179,184.474 C180.2247,186.187 180.7538,187.915 181.3053,189.6477 C183.5113,196.5781 186.075,203.5825 189,210 C192.03,216.65 195.99,223.45 199.98,229.62",
+        "point_count": 16,
+        "cubic_segments": 5,
+        "start_point": [
+          181.824,
+          191.8471
+        ],
+        "first_control": [
+          181.8853,
+          192.0596
+        ],
+        "first_endpoint": [
+          179.342,
+          183.1922
+        ],
+        "first_chord_px": 9.003756
+      },
+      "rust_path": {
+        "d": "M181.8225,191.8477 C181.8838,192.0603 179.278,182.9798 179.34,183.193 C179.4639,183.6192 179.5893,184.0465 179.716,184.4748 C180.2229,186.1878 180.7522,187.9158 181.3038,189.6484 C183.5101,196.5787 186.0744,203.5829 189,210 C192.0302,216.6468 195.992,223.4473 199.9777,229.6211",
+        "point_count": 16,
+        "cubic_segments": 5,
+        "start_point": [
+          181.8225,
+          191.8477
+        ],
+        "first_control": [
+          181.8838,
+          192.0603
+        ],
+        "first_endpoint": [
+          179.34,
+          183.193
+        ],
+        "first_chord_px": 9.003701
+      },
+      "same_segment_count": true,
+      "max_point_delta_px": 0.00336,
+      "diff_report": "SVG structural differences:\n  [49] <path> attr mismatch:\n    expected: [(\"codeLine\", \"15\"), (\"d\", \"M181.824,191.8471 C181.8853,192.0596 179.28,182.979 179.342,183.1922 C179.4659,183.6184 179.5912,184.0457 179.7179,184.474 C180.2247,186.187 180.7538,187.915 181.3053,189.6477 C183.5113,196.5781 186.075,203.5825 189,210 C192.03,216.65 195.99,223.45 199.98,229.62\"), (\"fill\", \"none\"), (\"id\", \"ParentEndpoint-backto-ReceiverTwo\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"codeLine\", \"15\"), (\"d\", \"M181.8225,191.8477 C181.853,191.9538 179.1245,182.4482 179.1551,182.5545 C179.2164,182.767 179.278,182.9798 179.34,183.193 C179.4639,183.6192 179.5893,184.0465 179.716,184.4748 C180.2229,186.1878 180.7522,187.9158 181.3038,189.6484 C183.5101,196.5787 186.0744,203.5829 189,210 C192.0302,216.6468 195.992,223.4473 199.9777,229.6211\"), (\"fill\", \"none\"), (\"id\", \"ParentEndpoint-to-ReceiverTwo\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+class DepSource
+class DepTarget
+class UpperBypass
+class LowerBypass
+class SideEntry
+class SideExit
+
+UpperBypass -- LowerBypass
+SideEntry -- SideExit
+DepSource -- SideEntry
+LowerBypass -- DepTarget
+DepSource <-- DepTarget
+@enduml

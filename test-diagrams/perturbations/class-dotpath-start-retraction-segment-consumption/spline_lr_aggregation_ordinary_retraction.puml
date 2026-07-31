@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+skinparam linetype spline
+
+class AggregateSource
+class MiddleOne
+class MiddleTwo
+class AggregateTarget
+class DetourTop
+class DetourBottom
+
+DetourTop --> MiddleOne
+AggregateSource o-- AggregateTarget
+MiddleOne --> MiddleTwo
+MiddleTwo --> DetourBottom
+@enduml
