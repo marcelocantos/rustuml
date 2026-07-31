@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="194px" preserveAspectRatio="none" style="width:188px;height:194px;background:#FFFFFF;" version="1.1" viewBox="0 0 188 194" width="188px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Clear881-->
+<g class="entity" data-qualified-name="Clear881" data-source-line="4" id="ent0002">
+<ellipse cx="90.0585" cy="14" fill="none" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M90.0585,22 L90.0585,49 M77.0585,30 L103.0585,30 M90.0585,49 L77.0585,64 M90.0585,49 L103.0585,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="153.9453" x="13.0858" y="79.0352">Transparent Actor 881</text>
+</g>
+<!--entity Flat887-->
+<g class="entity" data-qualified-name="Flat887" data-source-line="5" id="ent0003">
+<ellipse cx="90.0585" cy="161.2" fill="#ABCDEF" rx="84.0585" ry="19.2117" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="139.5898" x="20.2636" y="165.9441">Flat Control Use 887</text>
+</g>
+<!--link Clear881 to Flat887-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="6" id="lnk4">
+<path d="M90.06,82.23 C90.06,102.11 90.06,119.67 90.06,135.64" fill="none" id="Clear881-to-Flat887" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="90.06,141.64,94.06,132.64,90.06,136.64,86.06,132.64,90.06,141.64" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

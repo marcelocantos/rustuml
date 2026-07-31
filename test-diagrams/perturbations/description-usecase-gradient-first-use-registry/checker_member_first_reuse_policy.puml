@@ -1,0 +1,13 @@
+@startuml
+skinparam shadowing false
+skinparam actorBackgroundColor #112233|#445566
+skinparam usecaseBackgroundColor #112233-#445566
+actor "Root First Actor" as RootActor
+rectangle "Checker Review Boundary" {
+  usecase "Member First Use" as MemberUse
+  actor "Member Actor Reuses" as MemberActor
+}
+usecase "Root Tail Use" as TailUse
+RootActor --> MemberUse
+MemberActor --> TailUse
+@enduml

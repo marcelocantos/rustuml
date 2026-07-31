@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-usecase-gradient-first-use-registry",
+  "verdict": "accepted",
+  "reviewed_at": "2026-08-01T08:09:00+1000",
+  "reviewer": {
+    "identity": "independent Codex adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "implementation_author": false
+  },
+  "revisions": {
+    "account_commit": "a3d1e98c8d85098b9eda828262c8f56c2e7bb420",
+    "implementation_commit": "3de7ee5abeb4dc1383f135acfec3f289092c3c22",
+    "implementation_parent": "a3d1e98c8d85098b9eda828262c8f56c2e7bb420",
+    "review_branch": "codex/t14-usecase-gradient-registry",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_note": "Pinned revision checked out; only unrelated CLAUDE.md is modified.",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "target/release/rustuml",
+    "rust_binary_sha256": "964ae5824346214ccbfa5d526722099c3600ed0073ef95922fb987a8558049ff"
+  },
+  "constraints": {
+    "cargo_or_rustc_invoked": false,
+    "full_renderer_suite": "not rerun by this checker; user supplied full renderer 866/866 as precondition",
+    "evidence_scope": "fresh perturbation inputs, Java references from pinned JAR, Rust outputs from frozen target/release/rustuml, source audit"
+  },
+  "source_audit": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+        "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+        "finding": "SvgGraphics initializes gradientId from 'g' plus getSeed(seed); createSvgGradient keys the map by color1, color2, and policy, appends gradients.size() only on first key insertion, and emits policy-specific endpoints."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+        "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+        "finding": "applyFillColor turns HColorGradient backgrounds into SvgGraphics.createSvgGradient calls before setting fill='url(#id)'."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverEllipseSvg.java",
+        "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+        "finding": "Ellipse drawing delegates fill handling to DriverRectangleSvg.applyFillColor, so Description use-case ovals consume the same gradient registry as rectangles."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+        "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+        "finding": "EntityImageDescription resolves the entity Fashion/background once, then asSmall.drawU paints the actor/use-case symbol using that background."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-render/src/filter_registry.rs",
+        "revision": "3de7ee5abeb4dc1383f135acfec3f289092c3c22",
+        "finding": "GradientKey is exactly resolved color1, resolved color2, and policy. GradientRegistry assigns ids by seed prefix plus insertion index and deduplicates equal keys."
+      },
+      {
+        "path": "crates/rustuml-render/src/usecase.rs",
+        "revision": "3de7ee5abeb4dc1383f135acfec3f289092c3c22",
+        "finding": "DescriptionPaint preserves gradient type until paint ordering. description_gradient_registry walks the same entity order used by render, registers only actor/use-case gradients, and supplies registry ids to fill attributes."
+      },
+      {
+        "path": "crates/rustuml-parser/src/preprocess/mod.rs",
+        "revision": "3de7ee5abeb4dc1383f135acfec3f289092c3c22",
+        "finding": "The parser/preprocessor injects __svgIdSeed from the Java-compatible StringUtils.seed path; usecase.rs consumes that prefix before falling back to hashing meta.source."
+      },
+      {
+        "path": "crates/rustuml-render/src/sequence.rs",
+        "revision": "3de7ee5abeb4dc1383f135acfec3f289092c3c22",
+        "finding": "Sequence now calls the shared endpoint and registry renderer while retaining its existing skinparam traversal for registration."
+      }
+    ]
+  },
+  "adversarial_search": {
+    "fixture_logic": {
+      "status": "passed",
+      "commands": [
+        "rg -n \"cerulean|preproc|theme|Minty|Superhero|United|Reddress|59B6EC|2FA4E7|g1k3twfgxk2yb30|gradient_id_for\\(|source\\.contains|label|fixture|golden|preprocessing\" crates/rustuml-render/src/filter_registry.rs crates/rustuml-render/src/usecase.rs crates/rustuml-render/src/sequence.rs"
+      ],
+      "finding": "No production-code branch was keyed to the Cerulean fixture, golden paths, known gradient ids, or expected SVG dimensions. Hits were tests, generic labels, comments, or unrelated existing code."
+    },
+    "unexplained_constants": {
+      "status": "passed",
+      "finding": "New mechanism constants are SVG endpoint strings taken directly from SvgGraphics#createSvgGradient policy mapping. No parity-affecting high-precision numeric constants were added for this mechanism."
+    },
+    "seed_ownership": {
+      "status": "passed",
+      "finding": "Held-outs with plain source-hash seeds produced Java/Rust matching ids; source audit confirms parser-carried __svgIdSeed is preferred when present and the fallback hashes meta.source."
+    },
+    "first_paint_order": {
+      "status": "passed",
+      "finding": "The package-member held-out forced a top-level actor to appear earlier in source than package members. Java and Rust both assigned g...0 to the package member use-case gradient and g...1 to the actor gradient."
+    },
+    "dedup_key": {
+      "status": "passed",
+      "finding": "The named-color held-out reused Gold/LightBlue across actor and use-case backgrounds. Java and Rust both emitted one gradient definition and three url fills; the inline solid actor did not consume the gradient id."
+    },
+    "policy_orientation": {
+      "status": "passed",
+      "finding": "Held-outs covered '/', '-', and '|' policies. Java and Rust endpoint attributes matched for each exercised policy."
+    },
+    "flat_fill_behavior": {
+      "status": "passed",
+      "finding": "The flat/transparent control emitted zero gradients in both Java and Rust, with transparent actor fill='none' and flat use-case fill='#ABCDEF'."
+    },
+    "shared_sequence_behavior": {
+      "status": "passed",
+      "finding": "The Sequence control emitted the same two gradient ids, endpoints, stops, and url fill counts in Java and Rust using the shared registry renderer."
+    }
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.puml",
+      "sha256": "e7b102b1e4d69e9c065b681056af9eeeefd9e69a34ab128605adee437a824de5",
+      "axes": [
+        "package member first-paint order versus earlier top-level source order",
+        "actor versus use-case policy distinction",
+        "repeated use of both gradient keys"
+      ],
+      "java_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.java.svg",
+      "java_svg_sha256": "82c2616e18ff2a66ee3debec1e96a741b16ddd91adafbbc4888752bab87d2bc5",
+      "rust_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.rust.svg",
+      "rust_svg_sha256": "d7d37508ee9f42a877498bbe8eb2937f83a5e9f49da6125a23c0a37d4a0881dd",
+      "gradient_summary": "Java/Rust: two gradients; g1xzbs2opsav1b0 is '-' vertical #112233->#445566 with two fills; g1xzbs2opsav1b1 is '|' horizontal #112233->#445566 with two fills.",
+      "mechanism_result": "pass",
+      "non_mechanism_residue": "Whole SVGs differ in Description package layout dimensions and coordinates; gradient definitions and fill ownership match."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.puml",
+      "sha256": "cd28a9e082c79435b1553b4b394d60d00bf911246d781c5fab534b57773964a5",
+      "axes": [
+        "named color endpoint normalization",
+        "source-seeded id fallback",
+        "dedup across actor and use-case kinds",
+        "inline flat override"
+      ],
+      "java_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.java.svg",
+      "java_svg_sha256": "9d6ff96c96d73c3693d1e1ee05f41140ab353c72298146649c9f048fb9037a6a",
+      "rust_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.rust.svg",
+      "rust_svg_sha256": "ddb181f84265b1cff8bb7f479755bc3c0329dc4075994ff31254570d63dc0a4e",
+      "gradient_summary": "Java/Rust: one gradient guutdgt34xahj0, diagonal '/' #FFD700->#ADD8E6, three url fills, inline actor fill #98FB98.",
+      "mechanism_result": "pass",
+      "non_mechanism_residue": "Whole SVGs differ only by standard Rust metadata omission and minor existing coordinate formatting; gradient facts match."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.puml",
+      "sha256": "5b7e7c41e86df9c934c1616a71bf179ea10c325106ee8df077e8e817b8d1228b",
+      "axes": [
+        "transparent actor background",
+        "flat use-case color",
+        "absence of hidden gradient allocation"
+      ],
+      "java_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.java.svg",
+      "java_svg_sha256": "0da4dfb8970b6e700ccafe688ef11df7f37375da02e279354d4fad114483d515",
+      "rust_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.rust.svg",
+      "rust_svg_sha256": "8466d65d475ad46d8e414195da3134954e512e88d941ca1ed0dc3ad43f97d372",
+      "gradient_summary": "Java/Rust: zero gradients, no url fills, transparent actor fill='none', flat use-case fill='#ABCDEF'.",
+      "mechanism_result": "pass",
+      "non_mechanism_residue": "Whole SVGs differ by standard Rust metadata omission and minor existing coordinate formatting; flat-fill contract matches."
+    },
+    {
+      "path": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.puml",
+      "sha256": "8c54d94af6486d9259d0eff678c8ff42f33e94abd32625aaf855183074d07333",
+      "axes": [
+        "shared registry renderer used by Sequence",
+        "actor and participant gradient policies",
+        "source-seeded ids"
+      ],
+      "java_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.java.svg",
+      "java_svg_sha256": "51414a41bd04393e40f6f8d9d857eed9be2e0546898c18dcd5fa6929374ab495",
+      "rust_svg": "test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.rust.svg",
+      "rust_svg_sha256": "89a932138990cd4ef6e465273d79228d85f088a7090482c002e61d0a3fcec2f3",
+      "gradient_summary": "Java/Rust: g1cnp6g3luih1i0 is actor '|' #FF0000->#0000FF with two fills; g1cnp6g3luih1i1 is participant '/' #00FFFF->#FFC0CB with two fills.",
+      "mechanism_result": "pass",
+      "non_mechanism_residue": "Whole SVGs differ by standard Rust metadata omission; gradient facts match."
+    }
+  ],
+  "commands": [
+    "cat AGENTS.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "cat docs/parity-reviews/description-usecase-gradient-first-use-registry/account.json",
+    "git show --stat --oneline a3d1e98c",
+    "git show --stat --oneline 3de7ee5a",
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml grep -n \"createSvgGradient\" 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/klimt/drawing/svg",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml grep -n \"gradientId\\|getSeed\\|gradients\" 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml grep -n \"drawU\\|EntityImageDescription\\|getBackcolor\\|gradient\" 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml grep -n \"applyFillColor\\|HColorGradient\" 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverEllipseSvg.java src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+    "rg -n \"svgIdSeed|id_seed_prefix|StringUtils.seed|seed_prefix|__svg\" crates/rustuml-parser crates/rustuml-render",
+    "rg -n \"linearGradient|GradientRegistry|DescriptionPaint|description_gradient|gradient_endpoints|GradientKey|gradient_fill_for_key\" crates/rustuml-render/src/usecase.rs crates/rustuml-render/src/filter_registry.rs crates/rustuml-render/src/sequence.rs",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.java.svg",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.rust.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.java.svg",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.rust.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.java.svg",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.rust.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.java.svg",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.rust.svg",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_member_first_reuse_policy.java.svg",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_source_seed_named_reuse_inline_override.java.svg",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_flat_transparent_no_gradient.java.svg",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.puml > test-diagrams/perturbations/description-usecase-gradient-first-use-registry/checker_sequence_shared_registry_control.java.svg",
+    "ruby -e 'Dir[\"test-diagrams/perturbations/description-usecase-gradient-first-use-registry/*.{java,rust}.svg\"].sort.each do |path| s=File.read(path); puts \"## #{File.basename(path)}\"; puts \"gradients=#{s.scan(/<linearGradient\\b.*?<\\/linearGradient>/m).size}\"; s.scan(/<linearGradient\\b[^>]*id=\"([^\"]+)\"[^>]*x1=\"([^\"]+)\"[^>]*x2=\"([^\"]+)\"[^>]*y1=\"([^\"]+)\"[^>]*y2=\"([^\"]+)\".*?<stop offset=\"0%\" stop-color=\"([^\"]+)\"\\/><stop offset=\"100%\" stop-color=\"([^\"]+)\"\\/><\\/linearGradient>/m).each_with_index { |g,i| puts \"g#{i}=#{g.join(\" \")}\" }; fills=s.scan(/fill=\"url\\(#([^\"]+)\\)\"/).flatten; puts \"url_fills=#{fills.tally.sort.map{|k,v| \"#{k}:#{v}\"}.join(\",\")}\"; puts \"solid_sample=#{s.scan(/fill=\"(#[0-9A-Fa-f]{6}|none)\"/).flatten.tally.sort.map{|k,v| \"#{k}:#{v}\"}.join(\",\")}\"; end'",
+    "shasum -a 256 test-diagrams/perturbations/description-usecase-gradient-first-use-registry/*.{puml,java.svg,rust.svg}",
+    "shasum -a 256 target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "aborted_attempts": [
+    {
+      "command_pattern": "parallel java -jar ... -tsvg -pipe for all four inputs without -Djava.awt.headless=true",
+      "exit_code": 134,
+      "effect": "All four .java.svg outputs were zero bytes. They were overwritten by successful serial headless runs before evidence was evaluated."
+    }
+  ],
+  "residue": [
+    "Description held-outs are not whole-SVG byte matches because existing no-oracle layout and metadata still differ from Java. This review accepts only the gradient registry mechanism: definition identity/order/endpoints/stops, fill references, deduplication, and flat-fill behavior.",
+    "No comparator or Cargo-based perturbation test was run because the user explicitly forbade Cargo/rustc in this checker task and no frozen diff_one binary existed in this worktree."
+  ],
+  "rationale": "The implementation matches Java's SvgGraphics gradient ownership model for the reviewed mechanism: source-seeded ids are assigned in first use order, the key is resolved color1/color2/policy, endpoint orientation matches Java, equal keys deduplicate across actor and use-case shapes, flat and transparent colors do not allocate hidden gradient definitions, and the shared Sequence registry rendering remains compatible on the held-out control. No fixture-shaped logic or unexplained mechanism constants were found."
+}

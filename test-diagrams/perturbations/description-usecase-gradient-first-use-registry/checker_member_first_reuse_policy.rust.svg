@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="207px" preserveAspectRatio="none" style="width:382px;height:207px;background:#FFFFFF;" version="1.1" viewBox="0 0 382 207" width="382px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="g1xzbs2opsav1b0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#112233"/><stop offset="100%" stop-color="#445566"/></linearGradient><linearGradient id="g1xzbs2opsav1b1" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#112233"/><stop offset="100%" stop-color="#445566"/></linearGradient></defs><g><!--cluster Checker Review Boundary-->
+<g class="cluster" data-qualified-name="Checker Review Boundary" data-source-line="5" id="ent0003">
+<rect fill="none" height="85.86" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="202" x="7" y="106.99"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="186.6621" x="14.6689" y="122.5252">Checker Review Boundary</text>
+</g>
+<!--entity MemberUse-->
+<g class="entity" data-qualified-name="Checker Review Boundary.MemberUse" data-source-line="6" id="ent0004">
+<ellipse cx="112" cy="159.4173" fill="url(#g1xzbs2opsav1b0)" rx="75.145" ry="17.429" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118.4189" x="52.7905" y="164.1614">Member First Use</text>
+</g>
+<!--entity RootActor-->
+<g class="entity" data-qualified-name="RootActor" data-source-line="4" id="ent0002">
+<ellipse cx="112" cy="14" fill="url(#g1xzbs2opsav1b1)" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M112,22 L112,49 M99,30 L125,30 M112,49 L99,64 M112,49 L125,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.1963" x="58.9019" y="79.0352">Root First Actor</text>
+</g>
+<!--entity MemberActor-->
+<g class="entity" data-qualified-name="MemberActor" data-source-line="7" id="ent0005">
+<ellipse cx="294" cy="14" fill="url(#g1xzbs2opsav1b1)" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M294,22 L294,49 M281,30 L307,30 M294,49 L281,64 M294,49 L307,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="147.9365" x="220.0317" y="79.0352">Member Actor Reuses</text>
+</g>
+<!--entity TailUse-->
+<g class="entity" data-qualified-name="TailUse" data-source-line="9" id="ent0006">
+<ellipse cx="294" cy="159.4173" fill="url(#g1xzbs2opsav1b0)" rx="63.8277" ry="15.1655" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.4619" x="249.269" y="164.1614">Root Tail Use</text>
+</g>
+<!--link RootActor to MemberUse-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="10" id="lnk7">
+<path d="M112,82.28 C112,102.33 112,120.01 112,135.58" fill="none" id="RootActor-to-MemberUse" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="112,141.58,116,132.58,112,136.58,108,132.58,112,141.58" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link MemberActor to TailUse-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency" data-source-line="11" id="lnk8">
+<path d="M294,82.28 C294,103.36 294,122.46 294,137.92" fill="none" id="MemberActor-to-TailUse" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="294,143.92,298,134.92,294,138.92,290,134.92,294,143.92" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

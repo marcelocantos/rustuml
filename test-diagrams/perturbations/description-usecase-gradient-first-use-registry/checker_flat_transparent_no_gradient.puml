@@ -1,0 +1,8 @@
+@startuml
+skinparam shadowing false
+skinparam actorBackgroundColor transparent
+skinparam usecaseBackgroundColor #ABCDEF
+actor "Transparent Actor 881" as Clear881
+usecase "Flat Control Use 887" as Flat887
+Clear881 --> Flat887
+@enduml

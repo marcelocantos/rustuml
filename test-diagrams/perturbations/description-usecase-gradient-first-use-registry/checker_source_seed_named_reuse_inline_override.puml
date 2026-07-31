@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam actorBackgroundColor Gold/LightBlue
+skinparam usecaseBackgroundColor Gold/LightBlue
+actor "Solid Override Actor 847" as Solid847 #PaleGreen
+actor "Gradient Actor 853" as Gradient853
+usecase "Gradient Use 859" as Use859
+usecase "Gradient Use 863" as Use863
+Gradient853 --> Use859
+Solid847 --> Use863
+@enduml

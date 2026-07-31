@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="206px" preserveAspectRatio="none" style="width:397px;height:206px;background:#FFFFFF;" version="1.1" viewBox="0 0 397 206" width="397px" zoomAndPan="magnify"><?plantuml ?><defs><linearGradient id="guutdgt34xahj0" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#ADD8E6"/></linearGradient></defs><g><!--entity Solid847-->
+<g class="entity" data-qualified-name="Solid847" data-source-line="5" id="ent0002">
+<ellipse cx="89.6616" cy="125" fill="#98FB98" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M89.6616,133 L89.6616,160 M76.6616,141 L102.6616,141 M89.6616,160 L76.6616,175 M89.6616,160 L102.6616,175" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167.3232" x="6" y="190.0352">Solid Override Actor 847</text>
+</g>
+<!--entity Gradient853-->
+<g class="entity" data-qualified-name="Gradient853" data-source-line="6" id="ent0003">
+<ellipse cx="89.6616" cy="14" fill="url(#guutdgt34xahj0)" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M89.6616,22 L89.6616,49 M76.6616,30 L102.6616,30 M89.6616,49 L76.6616,64 M89.6616,49 L102.6616,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="129.9717" x="24.6758" y="79.0352">Gradient Actor 853</text>
+</g>
+<!--entity Use859-->
+<g class="entity" data-qualified-name="Use859" data-source-line="7" id="ent0004">
+<ellipse cx="308.3842" cy="43.7441" fill="url(#guutdgt34xahj0)" rx="75.0609" ry="17.4122" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118.2139" x="249.2773" y="48.4883">Gradient Use 859</text>
+</g>
+<!--entity Use863-->
+<g class="entity" data-qualified-name="Use863" data-source-line="8" id="ent0005">
+<ellipse cx="308.3842" cy="154.7441" fill="url(#guutdgt34xahj0)" rx="75.0609" ry="17.4122" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118.2139" x="249.2773" y="159.4883">Gradient Use 863</text>
+</g>
+<!--link Gradient853 to Use859-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="9" id="lnk6">
+<path d="M155.1,43.74 C179.55,43.74 201.6,43.74 226.91,43.74" fill="none" id="Gradient853-to-Use859" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="232.91,43.74,223.91,39.74,227.91,43.74,223.91,47.74,232.91,43.74" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link Solid847 to Use863-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="10" id="lnk7">
+<path d="M173.52,154.74 C193.12,154.74 207.9,154.74 227.09,154.74" fill="none" id="Solid847-to-Use863" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="233.09,154.74,224.09,150.74,228.09,154.74,224.09,158.74,233.09,154.74" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>
