@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-floating-note-svek-lifecycle",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:executeInternal",
+    "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java:createEntityImageBlock",
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:printEntities and getUnpackagedEntities",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java:drawNormal",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java:putInSquare",
+    "src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java:putInSquare and computeBranch"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/deployment.rs:RE_NOTE_FLOATING_MULTI and note_accum",
+    "crates/rustuml-render/src/deployment.rs:laid_out_deployment_note_indices",
+    "crates/rustuml-render/src/deployment.rs:render_no_oracle note node creation and emission",
+    "crates/rustuml-render/src/deployment.rs:add_deployment_magma_constraints",
+    "crates/rustuml-render/src/deployment.rs:build_deployment_no_oracle_uid_model"
+  ],
+  "invariant": "A DESCRIPTION `note as ID ... end note` creates an ordinary root leaf of type NOTE at the command's creation point. GraphvizImageBuilder emits it in the same unpackaged entity stream as later root leaves, GeneralImageBuilder selects EntityImageNote, and an unlinked note is painted with EntityImageNote.drawNormal rather than Opale pointer geometry. Before SVEK, Magma/SquareMaker includes every unlinked standalone leaf in creation order; two leaves receive an invisible left-right link with noDisplay(1).",
+  "causal_divergence": "Rust now parses the floating multiline note into DeploymentDiagram, but laid_out_deployment_note_indices admits only notes with a valid target. The note is therefore absent from the layout and emission streams even though its UID is allocated. Deployment Magma constraints also enumerate only nodes and incorrectly skip a two-member standalone stream, whereas Java includes the note and adds the two-member left-right constraint.",
+  "planned_change": "Admit targetless floating notes as SVEK nodes, emit them with the normal folded-note path and text model, and include their source-ordered layout IDs with unlinked root nodes in the deployment Magma stream. Use invisible SquareMaker constraints for two or more members with Java's ceil-sqrt branch rule and noDisplay-derived rank lengths. Preserve attached-note Opale behavior and canonical downstream position indexing.",
+  "perturbation_axes": [
+    "floating note before versus after a deployment leaf",
+    "two-member versus three- and four-member standalone streams",
+    "renamed note aliases and deployment symbols",
+    "top-to-bottom versus left-to-right direction",
+    "one versus multiple note body lines",
+    "floating note alone versus attached-note controls"
+  ],
+  "scope_boundary": "This mechanism owns deployment floating-note materialization, normal note paint, and its participation in root Magma ordering. It does not own class-diagram floating-note placement, attached-note pointer geometry, note style colors, subtype selection, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "The preserved post-terminator DESCRIPTION counterexample renders both the floating note and later node and passes diff_one --no-oracle",
+    "Fresh valid held-outs cover declaration order and standalone-count or direction axes",
+    "Attached deployment note perturbations retain their prior results",
+    "Renderer unit tests and no-oracle product ratchets remain green",
+    "An independent checker records an accepted verdict at the implementation revision"
+  ],
+  "forbidden_approaches": [
+    "special-casing DispatchPayload922, RuntimeNode922, fixture paths, or measured coordinates",
+    "rendering a note outside the layout model",
+    "reusing attached pointer geometry for an unlinked note",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "docs/parity-reviews/multiline-note-body-dispatch-isolation/review.json",
+    "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml"
+  ]
+}
