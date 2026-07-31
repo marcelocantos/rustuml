@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-color-resolution",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "d5c0ee1b8a30991a3c0bd6847f60ad0b48a091e6",
+  "triggering_review": "docs/parity-reviews/command-factory-note-grammar/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "symbols": ["ColorParser.COLOR_REGEXP", "ColorParser.COLORS_REGEXP", "ColorParser.exp1"],
+      "lines": "41-47,70-92",
+      "role": "Recognizes the optional final color slot using PlantUML's simple/gradient and multi-channel color grammar rather than an arbitrary hash suffix."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.singleLine", "CommandFactoryNote.multiLine", "CommandFactoryNote.executeInternal"],
+      "lines": "76-106,141-163",
+      "role": "Shares the color slot across inline and multiline named notes, then resolves the complete captured token with HColorSet.getColor before the command succeeds."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+      "symbols": ["HColorSet.getColor", "HColorSet.parseColor", "HColorSet.parseSimpleColor"],
+      "lines": "66-116,119-155",
+      "role": "Rejects unresolved names and malformed composites, while accepting registered names, supported hex arities and two-color gradients."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/color/ColorTrieNode.java",
+      "symbols": ["ColorTrieNode.INSTANCE", "ColorTrieNode.register", "ColorTrieNode.getColor"],
+      "lines": "49-210,225-245",
+      "role": "Defines the case-insensitive named-color inventory, including CSS names and PlantUML ArchiMate aliases."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["named_note_decorations", "parse_named_note_inline", "parse_named_note_multiline"],
+      "lines": "47-109",
+      "role": "Currently captures any non-whitespace `#` suffix and returns it without grammar or color-resolution validation."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["parse_component"],
+      "lines": "709-800",
+      "role": "Creates Component notes whenever the shared helper returns a command, so an invalid color currently creates identity and later links."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["parse_deployment"],
+      "lines": "560-940",
+      "role": "Uses the same helper and therefore shares the over-acceptance and downstream synthetic-event effects."
+    }
+  ],
+  "claimed_invariant": "A named-note color is accepted only if the complete suffix passes both Java stages: ColorParser.exp1 recognizes the token and HColorSet.getColor resolves that same token. Inline and multiline commands in Component and Deployment share this rule. Valid registered names, supported hex forms and resolvable two-color gradients remain colors; one-character exp1 misses, unknown names and multi-channel composites that HColorSet cannot resolve do not create a named note.",
+  "causal_divergence": "Rust collapsed recognition and execution into a single permissive `#[^\\s]+` capture. That treats every hash suffix as a successful color, so malformed or unresolved commands create note identities, relations and UIDs that Java rejects before diagram construction.",
+  "planned_model_change": "Add a shared named-note color predicate beside named_note_decorations. Mirror ColorParser's applicable simple/gradient token shape, then resolve each simple color against HColorSet's hex arities, special values and case-insensitive ColorTrieNode name inventory. Reject the entire named-note command when the captured suffix fails either stage. Keep tags and stereotype ordering unchanged and exercise both command forms and consuming families.",
+  "perturbation_axes": [
+    "inline versus multiline command",
+    "Component versus Deployment consumer",
+    "registered mixed-case name versus unknown name",
+    "three, six and eight digit hex versus one-character exp1 miss",
+    "solid color versus gradient separator and endpoints",
+    "multi-channel composite recognized by ColorParser but rejected by CommandFactoryNote resolution",
+    "invalid command before versus after declarations and relations"
+  ],
+  "acceptance": [
+    "The four preserved invalid color counterexamples no longer create named-note identities or relations and follow Java's rejection semantics.",
+    "Fresh valid named, hex and gradient colors survive in both inline and multiline helpers with exact original tokens.",
+    "Unknown names and malformed gradient endpoints reject the whole command rather than silently dropping only the color.",
+    "Existing valid Component and Deployment named-note decoration tests remain green.",
+    "An independent checker attacks grammar/resolution boundaries, family, command form, ordering and downstream identity effects."
+  ],
+  "forbidden_approaches": [
+    "special-casing #R or the reviewed composite text",
+    "accepting every alphabetic name and relying on renderer white fallback",
+    "dropping an invalid color while still creating the note",
+    "maintaining different color rules in Component and Deployment"
+  ],
+  "declared_residue": [
+    "General Colors multi-channel parsing for commands that construct a Colors object remains separate; CommandFactoryNote resolves its captured value as one HColor.",
+    "Custom runtime color registration, if introduced, will require replacing the frozen ColorTrieNode inventory with a shared registry.",
+    "Rendering normalization of valid colors remains outside this parser command-acceptance mechanism."
+  ]
+}
