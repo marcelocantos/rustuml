@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "Client port" as ClientPort
+node "Gateway hub" as GatewayHub
+queue "Audit queue" as AuditQueue
+ClientPort --> GatewayHub : visible request
+GatewayHub --> AuditQueue : visible fanout
+ClientPort -[hidden]-> AuditQueue : hidden center label deliberately wide enough to probe horizontal paint bounds
+artifact "After hidden last" as AfterHiddenLast
+@enduml

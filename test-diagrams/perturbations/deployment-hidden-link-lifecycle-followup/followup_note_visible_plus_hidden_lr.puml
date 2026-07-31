@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+note "Two incident memo" as TwoIncidentMemo
+component "Visible peer" as VisiblePeer
+database "Hidden peer" as HiddenPeer
+TwoIncidentMemo --> VisiblePeer : visible memo relation
+TwoIncidentMemo -[hidden]-> HiddenPeer : hidden memo relation with wide center label
+artifact "After two incident memo" as AfterTwoIncidentMemo
+@enduml

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="152px" preserveAspectRatio="none" style="width:742px;height:152px;background:#FFFFFF;" version="1.1" viewBox="0 0 742 152" width="742px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Ingress-->
+<g class="entity" data-qualified-name="IngressAlias" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="61.27,91.5,71.27,81.5,150.5229,81.5,150.5229,117.9883,140.5229,127.9883,61.27,127.9883,61.27,91.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="140.5229" x2="150.5229" y1="91.5" y2="81.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="61.27" x2="140.5229" y1="91.5" y2="91.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="140.5229" x2="140.5229" y1="91.5" y2="127.9883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="49.2529" x="76.27" y="115.0352">Ingress</text>
+</g>
+<!--entity Worker-->
+<g class="entity" data-qualified-name="WorkerAlias" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="354.8,91.5,364.8,81.5,442.8156,81.5,442.8156,117.9883,432.8156,127.9883,354.8,127.9883,354.8,91.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="432.8156" x2="442.8156" y1="91.5" y2="81.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="354.8" x2="432.8156" y1="91.5" y2="91.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="432.8156" x2="432.8156" y1="91.5" y2="127.9883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.0156" x="369.8" y="115.0352">Worker</text>
+</g>
+<!--entity Exit-->
+<g class="entity" data-qualified-name="ExitAlias" data-source-line="4" id="ent0004">
+<polygon fill="#F1F1F1" points="651.82,91.5,661.82,81.5,717.277,81.5,717.277,117.9883,707.277,127.9883,651.82,127.9883,651.82,91.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="707.277" x2="717.277" y1="91.5" y2="81.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="651.82" x2="707.277" y1="91.5" y2="91.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="707.277" x2="707.277" y1="91.5" y2="127.9883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="25.457" x="666.82" y="115.0352">Exit</text>
+</g>
+<!--entity After parallel hidden last-->
+<g class="entity" data-qualified-name="AfterParallelHiddenLast" data-source-line="9" id="ent0009">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="197.8018" x="7" y="7"/>
+<polygon fill="#F1F1F1" points="187.8018,12,187.8018,26,199.8018,26,199.8018,18,193.8018,12,187.8018,12" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="193.8018" x2="193.8018" y1="12" y2="18"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="199.8018" x2="193.8018" y1="18" y2="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="167.8018" x="17" y="33.5352">After parallel hidden last</text>
+</g>
+<!--link IngressAlias to WorkerAlias-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M150.82,95.89 C194.9,88.23 264.7,79.44 324.8,86.74 C334.52,87.92 338.9692,88.5871 348.6692,90.8671" fill="none" id="IngressAlias-to-WorkerAlias" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="354.51,92.24,346.664,86.2868,349.6427,91.0959,344.8335,94.0745,354.51,92.24" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="69.5132" x="245.3" y="80.5784">visible first</text>
+</g>
+<!--link IngressAlias to WorkerAlias-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M150.74,108.21 C194.75,111.2 264.5,114.63 324.8,111.74 C334.47,111.28 338.8558,111.0353 348.6458,110.1253" fill="none" id="IngressAlias-to-WorkerAlias-1" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="354.62,109.57,345.2884,106.4201,349.6415,110.0328,346.0288,114.3858,354.62,109.57" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="88.9307" x="235.8" y="108.3084">visible second</text>
+</g>
+<!--link WorkerAlias to ExitAlias-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8">
+<path d="M443.21,104.74 C500.65,104.74 594.58,104.74 645.6,104.74" fill="none" id="WorkerAlias-to-ExitAlias" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="651.6,104.74,642.6,100.74,646.6,104.74,642.6,108.74,651.6,104.74" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="147.7036" x="473.82" y="101.3084">visible after hidden last</text>
+</g>
+</g></svg>

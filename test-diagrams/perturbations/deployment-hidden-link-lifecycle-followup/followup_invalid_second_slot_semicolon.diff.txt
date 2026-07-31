@@ -1,0 +1,23 @@
+--- test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.svg	2026-08-01 03:41:04
++++ test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.rust.svg	2026-08-01 03:41:28
+@@ -1 +1,17 @@
+-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="153px" preserveAspectRatio="none" style="width:460px;height:153px;background:#000000;" version="1.1" viewBox="0 0 460 153" width="460px" zoomAndPan="magnify"><?plantuml 1.2026.3beta6?><defs/><g><text fill="#33FF02" font-family="sans-serif" font-size="12" font-style="italic" font-weight="700" lengthAdjust="spacing" textLength="447.5098" x="5" y="17">PlantUML version 1.2026.3beta6 / 71806a2 [2026-06-18 16:03:22 UTC]</text><rect fill="#33FF02" height="21.4883" style="stroke:#33FF02;stroke-width:1;" width="445.3311" x="5" y="27.1328"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="443.3311" x="6" y="42.1328">[From followup_invalid_second_slot_semicolon.puml (line 4) ]</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="4.6143" x="5" y="62.6211">&#160;</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="73.1992" x="5" y="79.1094">@startuml</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="50.5381" x="5" y="95.5977">node A</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="49.0479" x="5" y="112.0859">node B</text><text fill="#33FF02" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" text-decoration="wavy underline" textLength="192.4453" x="5" y="128.5742">A -down[hidden;bold]-&gt; B</text><text fill="#FF0000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="365.4629" x="9.6143" y="145.0625">Syntax Error? (Assumed diagram type: component)</text><?plantuml-src oyjFILLmvCe3KKvSZWgwAVdbUT4PcIafgNdMIVavAR6wTWfE0000?></g></svg>
+\ No newline at end of file
++<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="77px" preserveAspectRatio="none" style="width:173px;height:77px;background:#FFFFFF;" version="1.1" viewBox="0 0 173 77" width="173px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity A-->
++<g class="entity" data-qualified-name="A" data-source-line="1" id="ent0002">
++<polygon fill="#F1F1F1" points="16,16,26,6,65.6592,6,65.6592,42.4883,55.6592,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="55.6592" x2="65.6592" y1="16" y2="6"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="55.6592" y1="16" y2="16"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="55.6592" x2="55.6592" y1="16" y2="52.4883"/>
++<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="9.6592" x="31" y="39.5352">A</text>
++</g>
++<!--entity B-->
++<g class="entity" data-qualified-name="B" data-source-line="2" id="ent0003">
++<polygon fill="#F1F1F1" points="100.8,16,110.8,6,148.8527,6,148.8527,42.4883,138.8527,52.4883,100.8,52.4883,100.8,16" style="stroke:#181818;stroke-width:0.5;"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="138.8527" x2="148.8527" y1="16" y2="6"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="100.8" x2="138.8527" y1="16" y2="16"/>
++<line style="stroke:#181818;stroke-width:0.5;" x1="138.8527" x2="138.8527" y1="16" y2="52.4883"/>
++<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="8.0527" x="115.8" y="39.5352">B</text>
++</g>
++</g></svg>
+\ No newline at end of file

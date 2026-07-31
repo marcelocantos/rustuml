@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="411px" preserveAspectRatio="none" style="width:340px;height:411px;background:#FFFFFF;" version="1.1" viewBox="0 0 340 411" width="340px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity North ingress-->
+<g class="entity" data-qualified-name="NorthIngress" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,148.292,6,148.292,42.4883,138.292,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="138.292" x2="148.292" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="138.292" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="138.292" x2="138.292" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92.292" x="31" y="39.5352">North ingress</text>
+</g>
+<!--entity South worker-->
+<g class="entity" data-qualified-name="SouthWorker" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="17.14,349.98,27.14,339.98,147.1488,339.98,147.1488,376.4683,137.1488,386.4683,17.14,386.4683,17.14,349.98" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="137.1488" x2="147.1488" y1="349.98" y2="339.98"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="17.14" x2="137.1488" y1="349.98" y2="349.98"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="137.1488" x2="137.1488" y1="349.98" y2="386.4683"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.0088" x="32.14" y="373.5152">South worker</text>
+</g>
+<!--entity Observer store-->
+<g class="entity" data-qualified-name="ObserverStore" data-source-line="3" id="ent0004">
+<path d="M100.12,183.49 C100.12,173.49 160.1488,173.49 160.1488,173.49 C160.1488,173.49 220.1776,173.49 220.1776,183.49 L220.1776,208.9783 C220.1776,218.9783 160.1488,218.9783 160.1488,218.9783 C160.1488,218.9783 100.12,218.9783 100.12,208.9783 L100.12,183.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M100.12,183.49 C100.12,193.49 160.1488,193.49 160.1488,193.49 C160.1488,193.49 220.1776,193.49 220.1776,183.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="100.0576" x="110.12" y="211.0252">Observer store</text>
+</g>
+<!--entity After route only-->
+<g class="entity" data-qualified-name="AfterRouteOnly" data-source-line="7" id="ent0008">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="137.1328" x="183.58" y="9.5"/>
+<polygon fill="#F1F1F1" points="303.7128,14.5,303.7128,28.5,315.7128,28.5,315.7128,20.5,309.7128,14.5,303.7128,14.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="309.7128" x2="309.7128" y1="14.5" y2="20.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="315.7128" x2="309.7128" y1="20.5" y2="20.5"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.1328" x="193.58" y="36.0352">After route only</text>
+</g>
+<!--link NorthIngress to ObserverStore-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M92.83,52.84 C107.81,84.52 132.3156,136.3556 147.1556,167.7456" fill="none" id="NorthIngress-to-ObserverStore" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="149.72,173.17,149.4896,163.3238,147.583,168.6497,142.2571,166.7431,149.72,173.17" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link ObserverStore to SouthWorker-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M149.79,219.14 C134.95,250.52 110.3536,302.5452 95.3636,334.2652" fill="none" id="ObserverStore-to-SouthWorker" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="92.8,339.69,100.2619,333.2619,94.9363,335.1694,93.0289,329.8438,92.8,339.69" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

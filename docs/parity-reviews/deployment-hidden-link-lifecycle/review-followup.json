@@ -1,0 +1,293 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-hidden-link-lifecycle",
+  "focus": "corrected hidden-edge paint-envelope model",
+  "checker": {
+    "identity": "independent adversarial follow-up checker",
+    "model": "OpenAI GPT-5 Codex",
+    "tool": "Codex desktop",
+    "implemented_change": false
+  },
+  "account_reviewed": "docs/parity-reviews/deployment-hidden-link-lifecycle/account.json",
+  "previous_review_read_only": "docs/parity-reviews/deployment-hidden-link-lifecycle/review.json",
+  "revisions": {
+    "rust_revision": "5e8f68b8550519d0e0bbbbb8d5fce16e1b03032f",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_status": [
+      "M CLAUDE.md",
+      "?? svek.dot",
+      "?? svek.svg"
+    ],
+    "java_worktree_note": "Dirty entries were not modified. Java source inspection used the requested checkout under /Users/marcelo/work/github.com/plantuml/plantuml.",
+    "rust_binary": {
+      "path": "/private/tmp/rustuml-hidden-envelope/target/release/rustuml",
+      "sha256": "19f58e4bc996e0a229dc5692d2318f35f312602f923df5c8bf6e9e4b97365812"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "source_inspection": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+        "evidence": "LINE_STYLE admits hidden in bracket style slots; executeArg creates and adds a Link after applying styles."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/decoration/WithLinkType.java",
+        "evidence": "applyOneStyle maps hidden to goHidden without changing LinkType invisibility."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+        "evidence": "isInvis and isHidden are separate predicates."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+        "evidence": "onlyOneLink skips only Link.isInvis, so bracket-hidden links count as semantic note incidences."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+        "evidence": "appendLine emits style=invis only for isInvis; hidden edges are serialized, solved, and reported by SvekEdge.isHidden."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+        "evidence": "drawU applies UHidden.HIDDEN only at draw time for hidden edges."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+        "evidence": "apply accepts UHidden as a no-op drawing change, while drawText and drawDotPath continue recording bounds."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+        "evidence": "The SVG driver suppresses hidden shape elements while the earlier dimension pass has already measured their draw calls."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+        "evidence": "DeploymentConnection now carries a hidden paint-state flag distinct from style and routing."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/deployment.rs",
+        "evidence": "Deployment arrow style validation accepts hidden case-insensitively across allowed style groups and stores the hidden flag on ParsedDeploymentConnection."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "Layout adds every connection, including hidden, with center and endpoint label sizes; UID allocation assigns link IDs for hidden connections."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "deployment_note_opale_connection counts hidden connections as semantic incidences, matching Java onlyOneLink behavior."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "render_no_oracle_edges skips conn.hidden only at final SVG emission."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "evidence": "deployment_edge_paint_bounds includes route points plus center, tail, and head labels for all non-Opale solved edges, including hidden edges, and body X/Y frames incorporate those bounds."
+      }
+    ],
+    "fixture_shaped_logic": "Searches for the old fixture labels, exact rejected dimensions, binary hash, include_str!, golden reads, and mechanism path found old labels only inside #[cfg(test)] unit tests. No shipping-path fixture labels, coordinate-keyed SVG surgery, binary-hash gates, or unexplained hidden-envelope constants were found in the inspected data flow."
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git status --short",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short",
+    "shasum -a 256 /private/tmp/rustuml-hidden-envelope/target/release/rustuml",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sed -n '58,240p' src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java",
+    "sed -n '45,170p' src/main/java/net/sourceforge/plantuml/decoration/WithLinkType.java",
+    "sed -n '170,190p' src/main/java/net/sourceforge/plantuml/abel/Link.java",
+    "sed -n '450,465p' src/main/java/net/sourceforge/plantuml/abel/Link.java",
+    "sed -n '238,330p' src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sed -n '400,480p' src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '604,626p' src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '815,845p' src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '1268,1280p' src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '72,105p' src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "sed -n '72,175p' src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sed -n '120,290p' src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sed -n '345,385p' src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "sed -n '120,190p' crates/rustuml-parser/src/diagram/deployment.rs",
+    "sed -n '180,430p' crates/rustuml-parser/src/parse/deployment.rs",
+    "sed -n '4360,4505p' crates/rustuml-render/src/deployment.rs",
+    "sed -n '5450,5825p' crates/rustuml-render/src/deployment.rs",
+    "sed -n '6320,6705p' crates/rustuml-render/src/deployment.rs",
+    "rg -n \"HiddenControlMemo|suppressed duplicate|checker_duplicate|include_str!|test-diagrams|deployment-hidden-link-lifecycle|height=\\\"166|viewBox=\\\"0 0 697|19f58|5e8f68|golden\" crates/rustuml-render/src/deployment.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/diagram/deployment.rs",
+    "rg -n \"#\\[cfg\\(test\\)\\]|mod tests\" crates/rustuml-render/src/deployment.rs crates/rustuml-parser/src/parse/deployment.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/*.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_center_label_lr_hidden_last.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_cluster_escape_hidden_label_lr.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_hidden_last_parallel_tail_head_lr.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_hidden_only_opale_tb.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_visible_plus_hidden_lr.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_route_only_tb_hidden_first.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_tail_head_tb_hidden_middle.puml test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_up_reversal_alias_order.puml",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_center_label_lr_hidden_last.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_center_label_lr_hidden_last.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_cluster_escape_hidden_label_lr.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_cluster_escape_hidden_label_lr.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_hidden_last_parallel_tail_head_lr.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_hidden_last_parallel_tail_head_lr.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_hidden_only_opale_tb.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_hidden_only_opale_tb.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_visible_plus_hidden_lr.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_visible_plus_hidden_lr.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_route_only_tb_hidden_first.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_route_only_tb_hidden_first.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_tail_head_tb_hidden_middle.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_tail_head_tb_hidden_middle.rust.svg",
+    "/private/tmp/rustuml-hidden-envelope/target/release/rustuml --no-oracle -tsvg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_up_reversal_alias_order.puml > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_up_reversal_alias_order.rust.svg",
+    "diff -u test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.svg test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.rust.svg > test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.diff.txt"
+  ],
+  "inputs": [
+    {
+      "stem": "followup_route_only_tb_hidden_first",
+      "valid": true,
+      "axes": [
+        "route-only hidden edge",
+        "top-to-bottom direction",
+        "hidden first among source-order edges",
+        "Y expansion by long hidden route",
+        "ordinary node-to-node topology"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_route_only_tb_hidden_first.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_route_only_tb_hidden_first.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_route_only_tb_hidden_first.rust.svg",
+      "observation": "Java and Rust both emit 340x411 viewBox 0 0 340 411, two visible link groups with IDs lnk6 and lnk7, and no hidden link paint."
+    },
+    {
+      "stem": "followup_center_label_lr_hidden_last",
+      "valid": true,
+      "axes": [
+        "center label hidden edge",
+        "left-to-right direction",
+        "hidden last after visible edges",
+        "X expansion by wide hidden label",
+        "ordinary node-to-node topology"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_center_label_lr_hidden_last.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_center_label_lr_hidden_last.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_center_label_lr_hidden_last.rust.svg",
+      "observation": "Java and Rust both emit 1067x152 viewBox 0 0 1067 152, two visible link groups with IDs lnk5 and lnk6, and neither output paints the hidden center label text."
+    },
+    {
+      "stem": "followup_tail_head_tb_hidden_middle",
+      "valid": true,
+      "axes": [
+        "tail and head labels on hidden edge",
+        "top-to-bottom direction",
+        "hidden middle among parallel edges",
+        "X and Y expansion by endpoint labels",
+        "ordinary node-to-node topology"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_tail_head_tb_hidden_middle.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_tail_head_tb_hidden_middle.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_tail_head_tb_hidden_middle.rust.svg",
+      "observation": "Java and Rust both emit 482x324 viewBox 0 0 482 324, three visible link groups with IDs lnk5, lnk7, and lnk8, and suppress the hidden tail/head labels."
+    },
+    {
+      "stem": "followup_up_reversal_alias_order",
+      "valid": true,
+      "axes": [
+        "up-direction reversal",
+        "alias endpoints",
+        "tail, head, and center labels on hidden edge",
+        "hidden link before visible downstream edge",
+        "source-order UID after reversed hidden event"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_up_reversal_alias_order.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_up_reversal_alias_order.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_up_reversal_alias_order.rust.svg",
+      "observation": "Java and Rust both emit 583x182 viewBox 0 0 583 182, one visible link group with ID lnk7, and no hidden reversed-edge label text."
+    },
+    {
+      "stem": "followup_note_hidden_only_opale_tb",
+      "valid": true,
+      "axes": [
+        "named-note single hidden incidence",
+        "Opale eligibility",
+        "top-to-bottom direction",
+        "hidden note center label",
+        "later entity UID order"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_hidden_only_opale_tb.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_hidden_only_opale_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_hidden_only_opale_tb.rust.svg",
+      "observation": "Java and Rust both emit 389x183 viewBox 0 0 389 183, zero visible link groups, and no hidden note-link label text."
+    },
+    {
+      "stem": "followup_note_visible_plus_hidden_lr",
+      "valid": true,
+      "axes": [
+        "named-note visible plus hidden incidences",
+        "Opale disqualification by two semantic links",
+        "left-to-right direction",
+        "hidden note center label",
+        "later entity UID order"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_visible_plus_hidden_lr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_visible_plus_hidden_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_note_visible_plus_hidden_lr.rust.svg",
+      "observation": "Java and Rust both emit 684x181 viewBox 0 0 684 181, one visible link group with ID lnk5, and no hidden note-link label text."
+    },
+    {
+      "stem": "followup_hidden_last_parallel_tail_head_lr",
+      "valid": true,
+      "axes": [
+        "tail and head labels on hidden edge",
+        "left-to-right direction",
+        "hidden last among parallel endpoint edges",
+        "ordinary node-to-node topology",
+        "source-order UID gap before downstream visible edge"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_hidden_last_parallel_tail_head_lr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_hidden_last_parallel_tail_head_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_hidden_last_parallel_tail_head_lr.rust.svg",
+      "observation": "Java and Rust both emit 742x152 viewBox 0 0 742 152, three visible link groups with IDs lnk5, lnk6, and lnk8, and suppress the hidden endpoint labels."
+    },
+    {
+      "stem": "followup_cluster_escape_hidden_label_lr",
+      "valid": true,
+      "axes": [
+        "hidden edge from clustered node to ordinary node",
+        "left-to-right direction",
+        "center-label envelope expansion",
+        "cluster frame interaction",
+        "visible edge sharing the same endpoints"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_cluster_escape_hidden_label_lr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_cluster_escape_hidden_label_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_cluster_escape_hidden_label_lr.rust.svg",
+      "observation": "Java and Rust both emit 852x189 viewBox 0 0 852 189, one visible link group with ID lnk6, and no hidden cluster-escape label text."
+    },
+    {
+      "stem": "followup_invalid_second_slot_semicolon",
+      "valid": false,
+      "axes": [
+        "malformed second style slot semicolon"
+      ],
+      "puml": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.rust.svg",
+      "diff": "test-diagrams/perturbations/deployment-hidden-link-lifecycle-followup/followup_invalid_second_slot_semicolon.diff.txt",
+      "observation": "Non-counting invalid supplement: Java reports a syntax-error SVG, while Rust exits 0 and renders nodes A and B."
+    }
+  ],
+  "findings": [
+    {
+      "id": "no-valid-counterexample-found",
+      "severity": "none",
+      "evidence": [
+        "All eight valid held-outs matched Java width, height, and viewBox exactly.",
+        "All valid held-outs matched the number and IDs of visible link groups.",
+        "No Java or Rust valid SVG painted hidden center, tail, or head labels.",
+        "The matrix covered route-only hidden edges, center labels, tail/head labels, X expansion, Y expansion, LR and TB layout, up reversal, hidden first/middle/last among source-order edges, named-note Opale eligibility/disqualification, aliases, declaration/source order, and a cluster-frame interaction."
+      ],
+      "causal_account": "The inspected Rust implementation now retains hidden deployment connections through parsing, layout, UID allocation, Opale incidence, and solved paint-envelope accumulation. Hidden connections are skipped only in final SVG edge emission. The held-outs did not expose a divergence from Java's UHidden plus LimitFinder model."
+    },
+    {
+      "id": "invalid-second-slot-overacceptance-persists",
+      "severity": "non_rejecting_invalid_probe",
+      "input": "followup_invalid_second_slot_semicolon",
+      "evidence": [
+        "Java generated an error SVG for A -down[hidden;bold]-> B.",
+        "Rust exited 0 and rendered nodes A and B."
+      ],
+      "causal_account": "This repeats a parser overacceptance around malformed second style-slot syntax. It remains invalid PlantUML and therefore does not count as a held-out rejection of the corrected hidden-edge paint-envelope model."
+    }
+  ],
+  "verdict": "ACCEPTED",
+  "verdict_reason": "I could not disprove the corrected hidden-edge paint-envelope claim with fresh valid held-outs across the requested axes. The only divergence found is the known invalid semicolon-style overacceptance, which is outside the valid held-out acceptance gate."
+}

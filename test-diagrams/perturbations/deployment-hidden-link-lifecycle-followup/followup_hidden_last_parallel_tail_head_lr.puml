@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+node "Ingress" as IngressAlias
+node "Worker" as WorkerAlias
+node "Exit" as ExitAlias
+IngressAlias --> WorkerAlias : visible first
+IngressAlias ..> WorkerAlias : visible second
+IngressAlias "tail hidden last long" -[hidden]-> "head hidden last long" WorkerAlias
+WorkerAlias --> ExitAlias : visible after hidden last
+artifact "After parallel hidden last" as AfterParallelHiddenLast
+@enduml

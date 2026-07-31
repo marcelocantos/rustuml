@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="189px" preserveAspectRatio="none" style="width:852px;height:189px;background:#FFFFFF;" version="1.1" viewBox="0 0 852 189" width="852px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Outer rack-->
+<g class="cluster" data-qualified-name="OuterRack" data-source-line="2" id="ent0002">
+<polygon fill="none" points="16,72.7441,26,62.7441,174.3,62.7441,174.3,154.7441,164.3,164.7441,16,164.7441,16,72.7441" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="164.3" x2="174.3" y1="72.7441" y2="62.7441"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="164.3" y1="72.7441" y2="72.7441"/>
+<line style="stroke:#181818;stroke-width:1;" x1="164.3" x2="164.3" y1="72.7441" y2="164.7441"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="76.4805" x="52.9098" y="89.2793">Outer rack</text>
+</g>
+<!--entity Inner service-->
+<g class="entity" data-qualified-name="OuterRack.InnerService" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="32,112.5,42,102.5,158.2969,102.5,158.2969,138.9883,148.2969,148.9883,32,148.9883,32,112.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="148.2969" x2="158.2969" y1="112.5" y2="102.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="32" x2="148.2969" y1="112.5" y2="112.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="148.2969" x2="148.2969" y1="112.5" y2="148.9883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86.2969" x="47" y="136.0352">Inner service</text>
+</g>
+<!--entity External warehouse-->
+<g class="entity" data-qualified-name="ExternalWarehouse" data-source-line="5" id="ent0004">
+<path d="M674.49,114 C674.49,104 750.8875,104 750.8875,104 C750.8875,104 827.2849,104 827.2849,114 L827.2849,139.4883 C827.2849,149.4883 750.8875,149.4883 750.8875,149.4883 C750.8875,149.4883 674.49,149.4883 674.49,139.4883 L674.49,114" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M674.49,114 C674.49,124 750.8875,124 750.8875,124 C750.8875,124 827.2849,124 827.2849,114" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="132.7949" x="684.49" y="141.5352">External warehouse</text>
+</g>
+<!--entity After cluster escape-->
+<g class="entity" data-qualified-name="AfterClusterEscape" data-source-line="8" id="ent0007">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="164.6885" x="12.8" y="7"/>
+<polygon fill="#F1F1F1" points="160.4885,12,160.4885,26,172.4885,26,172.4885,18,166.4885,12,160.4885,12" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.4885" x2="166.4885" y1="12" y2="18"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="172.4885" x2="166.4885" y1="18" y2="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="134.6885" x="22.8" y="33.5352">After cluster escape</text>
+</g>
+<!--link InnerService to ExternalWarehouse-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="7" id="lnk6">
+<path d="M158.71,143 C174.51,146.63 191.52,149.9 207.49,151.74 C400.44,173.97 451.59,174.31 644.49,151.74 C654.21,150.61 658.4374,150.0812 668.3974,148.0812" fill="none" id="InnerService-to-ExternalWarehouse-1" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="674.28,146.9,664.6686,144.7501,669.3779,147.8844,666.2436,152.5936,674.28,146.9" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="133.9482" x="359.49" y="148.3084">visible cluster escape</text>
+</g>
+</g></svg>

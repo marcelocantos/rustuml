@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="324px" preserveAspectRatio="none" style="width:482px;height:324px;background:#FFFFFF;" version="1.1" viewBox="0 0 482 324" width="482px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Start alpha-->
+<g class="entity" data-qualified-name="StartAlpha" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="187.7412,16,197.7412,6,300.6533,6,300.6533,42.4883,290.6533,52.4883,187.7412,52.4883,187.7412,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="290.6533" x2="300.6533" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="187.7412" x2="290.6533" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="290.6533" x2="290.6533" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.9121" x="202.7412" y="39.5352">Start alpha</text>
+</g>
+<!--entity End omega-->
+<g class="entity" data-qualified-name="EndOmega" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="186.4812,139.49,196.4812,129.49,301.9294,129.49,301.9294,165.9783,291.9294,175.9783,186.4812,175.9783,186.4812,139.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="291.9294" x2="301.9294" y1="139.49" y2="129.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="186.4812" x2="291.9294" y1="139.49" y2="139.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="291.9294" x2="291.9294" y1="139.49" y2="175.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75.4482" x="201.4812" y="163.0252">End omega</text>
+</g>
+<!--entity Side relay-->
+<g class="entity" data-qualified-name="SideRelay" data-source-line="3" id="ent0004">
+<polygon fill="#F1F1F1" points="191.5812,262.98,201.5812,252.98,296.8302,252.98,296.8302,289.4683,286.8302,299.4683,191.5812,299.4683,191.5812,262.98" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="286.8302" x2="296.8302" y1="262.98" y2="252.98"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="191.5812" x2="286.8302" y1="262.98" y2="262.98"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="286.8302" x2="286.8302" y1="262.98" y2="299.4683"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="65.249" x="206.5812" y="286.5152">Side relay</text>
+</g>
+<!--entity After tail head-->
+<g class="entity" data-qualified-name="AfterTailHead" data-source-line="8" id="ent0009">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="126.5234" x="335.9412" y="9.5"/>
+<polygon fill="#F1F1F1" points="445.4646,14.5,445.4646,28.5,457.4646,28.5,457.4646,20.5,451.4646,14.5,445.4646,14.5" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="451.4646" x2="451.4646" y1="14.5" y2="20.5"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="457.4646" x2="451.4646" y1="20.5" y2="20.5"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96.5234" x="345.9412" y="36.0352">After tail head</text>
+</g>
+<!--link StartAlpha to EndOmega-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M187.2512,38.96 C161.3012,46.08 132.9212,59.02 117.2012,82.49 C96.2312,113.78 137.5954,130.8284 180.2854,140.6984" fill="none" id="StartAlpha-to-EndOmega" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="186.1312,142.05,178.2635,136.1255,181.2597,140.9237,176.4614,143.9199,186.1312,142.05" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="99.874" x="118.2012" y="96.0584">first visible lane</text>
+</g>
+<!--link StartAlpha to EndOmega-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M254.4012,52.91 C257.9312,61.93 261.4412,72.51 263.2012,82.49 C265.9912,98.33 263.4115,110.2261 257.9215,123.6561" fill="none" id="StartAlpha-to-EndOmega-2" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="255.6512,129.21,262.7593,122.3928,257.5431,124.5818,255.3541,119.3656,255.6512,129.21" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="119.2915" x="265.0112" y="96.0584">second visible lane</text>
+</g>
+<!--link EndOmega to SideRelay-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="7" id="lnk8">
+<path d="M244.2012,176.3 C244.2012,198.12 244.2012,225 244.2012,246.78" fill="none" id="EndOmega-to-SideRelay" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="244.2012,252.78,248.2012,243.78,244.2012,247.78,240.2012,243.78,244.2012,252.78" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124.3696" x="245.2012" y="219.5484">after middle hidden</text>
+</g>
+</g></svg>
