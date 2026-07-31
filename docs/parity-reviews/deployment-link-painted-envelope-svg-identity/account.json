@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-painted-envelope-svg-identity",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/abel/Link.java:104-121",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:270-319,837-843,937",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java:49-83",
+    "src/main/java/net/sourceforge/plantuml/svek/SvgResult.java:50-61,141-153",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:123-137"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/deployment.rs:248-277,3629-3655",
+    "crates/rustuml-render/src/deployment.rs:3811-3922,5950-6023",
+    "crates/rustuml-render/src/deployment.rs:6575-6787,6805-6827,6984-7001",
+    "crates/rustuml-layout/src/graph.rs:1547-1599,1659-1690,2233-2241"
+  ],
+  "invariant": "SVG metadata has distinct identity channels. UGroup qualified-name values project canonical quark paths through UGroup.fix, but Link.idCommentForSvg builds the painted path id directly from each endpoint Entity.getName and therefore preserves punctuation such as colon. Graphviz receives an integer fixed-size table for the merged link label and note, but SvekResult calculates the final canvas from primitives actually painted through LimitFinder, not from unused HTML-table cell padding. Finally, SvgResult parses Graphviz's two-decimal SVG coordinates before applying the serialized SVG Y-axis transform; serialization and axis inversion do not commute at decimal boundaries.",
+  "causal_divergence": "Rust reuses own_qname, which applies UGroup.fix, when constructing deployment path ids, changing `Relay:East` to `Relay.East`. Its edge envelope includes the full padded Graphviz label placeholder: for a bottom link note this counts the unused five-pixel right table padding plus the note's fractional preferred width, making the integer canvas six pixels too wide even though the painted note ends earlier. Rust also converts raw Graphviz points to screen Y and only then rounds to two decimals. Java's Graphviz SVG serializes mathematical Y first and SvgResult applies the serialized axis afterward; one control point in the preserved slash-container probe consequently differs by 0.01.",
+  "planned_change": "Separate raw endpoint names from qualified-name projection for both oracle-assisted fallback and no-oracle path ids. Compute link-note edge bounds from the same painted note and text block origins used by rendering, while retaining the padded merged size solely as Graphviz layout input. Thread LayoutResult.svg_y_origin through deployment edge serialization and serialize mathematical Y before axis inversion, matching the existing component-renderer model. Leave parser identity, factory selection, layout dimensions, and UGroup qualified-name projection unchanged.",
+  "perturbation_axes": [
+    "endpoint identity: colon, slash, dot, hyphen, and Unicode punctuation",
+    "link decoration: directed, undecorated, reversed, and duplicate relations",
+    "link note placement: top, bottom, left, and right with and without a center label",
+    "layout ownership: root-to-root, nested leaf to root, and cluster-adjacent endpoints",
+    "serialization boundary: control points immediately below and above a two-decimal rounding boundary"
+  ],
+  "predecessor_rejection": "docs/parity-reviews/deployment-svg-qualified-name-projection/review.json remains REJECT; this follow-up addresses the two residual structural differences after parser/factory corrections through 1eb54f46.",
+  "acceptance": [
+    "The preserved bare slash-container probe has Java's 202px canvas, raw `Relay:East-to-front.door` path id, and serialized spline coordinates.",
+    "The display-first hyphen-container probe remains structurally equivalent.",
+    "Focused tests distinguish raw link identity from UGroup qualified names and exercise painted note envelopes plus pre-inversion Y serialization.",
+    "Parser 667 and renderer 857 library tests remain green under parent-owned verification."
+  ],
+  "forbidden_approaches": [
+    "special-case either checker filename, label, canvas width, or coordinate",
+    "remove UGroup.fix from data-qualified-name metadata",
+    "add a six-pixel canvas correction or a 0.01 spline correction",
+    "change parser identity or factory precedence"
+  ],
+  "status": "planned"
+}
