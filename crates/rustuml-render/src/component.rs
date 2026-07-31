@@ -1655,11 +1655,6 @@ pub fn render_with_oracle(
             style
         })
         .collect();
-    let component_layout_arrow_font_size = component_link_styles
-        .iter()
-        .map(|style| style.font_size)
-        .max_by(f64::total_cmp)
-        .unwrap_or(component_arrow_font_size);
     let component_shadows: Vec<f64> = component_entity_styles
         .iter()
         .map(|style| style.shadow)
@@ -1713,7 +1708,7 @@ pub fn render_with_oracle(
 
     let use_oracle = oracle.is_some();
     let (component_node_sep, short_label_compat) =
-        component_no_oracle_spacing(diagram, component_layout_arrow_font_size);
+        component_no_oracle_spacing(diagram, &component_link_styles);
 
     // Try Sugiyama layout (skip when oracle is available).
     let layout_result = if use_oracle {
@@ -1891,6 +1886,7 @@ pub fn render_with_oracle(
                 width: component_edge_label_layout_width(
                     label,
                     link_style.font_size,
+                    &link_style.font_family,
                     center_label_margin + component_padding,
                     short_label_compat,
                 ),
@@ -1905,6 +1901,7 @@ pub fn render_with_oracle(
                     width: component_edge_label_layout_width(
                         label,
                         link_style.font_size,
+                        &link_style.font_family,
                         center_label_margin + component_padding,
                         short_label_compat,
                     ),
@@ -2163,6 +2160,7 @@ pub fn render_with_oracle(
                     component_edge_label_layout_width(
                         label,
                         component_link_styles[connection_index].font_size,
+                        &component_link_styles[connection_index].font_family,
                         margin + component_padding,
                         short_label_compat,
                     )
@@ -3618,6 +3616,7 @@ pub fn render_with_oracle(
                     width: component_edge_label_layout_width(
                         label,
                         component_arrow_font_size,
+                        &component_arrow_font_family,
                         center_label_margin,
                         short_label_compat,
                     ),
@@ -3635,12 +3634,16 @@ pub fn render_with_oracle(
                         conn.direction,
                         Some(ConnectionDirection::Left | ConnectionDirection::Right)
                     );
-                    let measured_layout_width =
-                        text_render::measure(label, component_arrow_font_size, false)
-                            + label_margin * 2.0;
+                    let measured_layout_width = text_render::measure_with_family(
+                        label,
+                        component_arrow_font_size,
+                        false,
+                        &component_arrow_font_family,
+                    ) + label_margin * 2.0;
                     let placeholder_width = component_edge_label_layout_width(
                         label,
                         component_arrow_font_size,
+                        &component_arrow_font_family,
                         label_margin,
                         short_label_compat,
                     );
@@ -6416,7 +6419,10 @@ fn component_interface_shield(
     Some((shield_x, shield_y))
 }
 
-fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64) -> (f64, bool) {
+fn component_no_oracle_spacing(
+    diagram: &ComponentDiagram,
+    link_styles: &[ComponentLinkRenderStyle],
+) -> (f64, bool) {
     let default = GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px;
     let qualified_names = build_qualified_names(&diagram.packages);
     let has_root_mixed_interface_rank = diagram.interfaces.iter().any(|interface| {
@@ -6465,18 +6471,21 @@ fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64)
     let shortest_horizontal_table = diagram
         .connections
         .iter()
-        .filter(|connection| {
+        .zip(link_styles)
+        .filter(|(connection, _)| {
             connection.from != connection.to
                 && matches!(
                     connection.direction,
                     Some(ConnectionDirection::Left | ConnectionDirection::Right)
                 )
         })
-        .filter_map(|connection| connection.label.as_deref())
-        .map(|label| {
+        .filter_map(|(connection, style)| connection.label.as_deref().map(|label| (label, style)))
+        .map(|(label, style)| {
             // Java `SvekEdge.addVisibilityModifier` adds one pixel on each
             // side, then `appendTable` truncates the fixed table width.
-            (text_render::measure(label, arrow_font_size, false) + LINK_LABEL_MARGIN * 2.0).floor()
+            (text_render::measure_with_family(label, style.font_size, false, &style.font_family)
+                + LINK_LABEL_MARGIN * 2.0)
+                .floor()
         })
         .min_by(f64::total_cmp);
 
@@ -6506,10 +6515,16 @@ fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64)
 fn component_edge_label_layout_width(
     label: &str,
     arrow_font_size: f64,
+    arrow_font_family: &str,
     margin: f64,
     short_label_compat: bool,
 ) -> f64 {
-    let measured = text_render::measure(label, arrow_font_size, false) + margin * 2.0;
+    // `GraphvizImageBuilder#buildImage` passes the resolved arrow
+    // FontConfiguration to `SvekEdge`; both the visible TextBlock and the
+    // fixed HTML table call calculateDimension on that same face.
+    let measured =
+        text_render::measure_with_family(label, arrow_font_size, false, arrow_font_family)
+            + margin * 2.0;
     if !short_label_compat {
         return measured;
     }
@@ -8939,8 +8954,18 @@ mod tests {
             panic!("expected clustered component diagram");
         };
 
-        let root_spacing = super::component_no_oracle_spacing(&root, super::LINK_FONT);
-        let clustered_spacing = super::component_no_oracle_spacing(&clustered, super::LINK_FONT);
+        let link_style = super::ComponentLinkRenderStyle {
+            stroke: super::STROKE.to_string(),
+            stroke_width: 1.0,
+            dash: None,
+            font_color: super::TEXT_COLOR.to_string(),
+            font_family: "sans-serif".to_string(),
+            font_size: super::LINK_FONT,
+        };
+        let root_styles = vec![link_style.clone(); root.connections.len()];
+        let clustered_styles = vec![link_style; clustered.connections.len()];
+        let root_spacing = super::component_no_oracle_spacing(&root, &root_styles);
+        let clustered_spacing = super::component_no_oracle_spacing(&clustered, &clustered_styles);
         assert_eq!(root_spacing, (18.0, false));
         assert_ne!(clustered_spacing.0, root_spacing.0);
     }
@@ -9716,6 +9741,33 @@ LateRelay3449 --> InlineRelay3457
         assert_eq!(
             canvas_width, required_width,
             "SvekEdge's one-pixel right label margin must participate in the canvas: {svg}"
+        );
+    }
+
+    #[test]
+    fn resolved_arrow_font_sizes_the_same_graphviz_placeholder_it_paints() {
+        let input = "@startuml\n\
+                     <style>\n\
+                     root {\n\
+                       Margin 10\n\
+                       Padding 6\n\
+                     }\n\
+                     </style>\n\
+                     skinparam Padding 5\n\
+                     skinparam defaultFontName Verdana\n\
+                     skinparam defaultFontSize 12\n\
+                     skinparam dpi 100\n\
+                     component AxisSource\n\
+                     component AxisTarget\n\
+                     AxisSource --> AxisTarget : axis label\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"style="width:169px;height:240px;background:#FFFFFF;""#)
+                && svg.contains(r#"width="169.7917px""#),
+            "the Verdana label width must drive the hidden table and root frontier: {svg}"
         );
     }
 
