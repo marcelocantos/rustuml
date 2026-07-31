@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-owned-note-cluster-membership",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "e3829ed039f1367310f9520239dfbf6d9cada403",
+  "dispatch_scope": "DESCRIPTION sources confirmed by the shipping binary to select Diagram::Deployment. Component and Class dispatches are separate mechanisms.",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.executeInternal"],
+      "lines": "141-163",
+      "role": "Creates a named NOTE Entity through the current quark context, giving it the same immediate parent relation as ordinary leaves."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": ["CommandFactoryNoteOnEntity.executeInternal"],
+      "role": "Creates an attached note Entity in the current group and a hidden note-to-target Link, so the note is owned locally but is not standalone."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": ["Entity.getParentContainer", "Entity.leafs", "Entity.groups", "Entity.isEmpty"],
+      "lines": "639-679",
+      "role": "Defines the heterogeneous quark-backed child relation and makes a group with any surviving note nonempty."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.getUnpackagedEntities", "GraphvizImageBuilder.printGroups", "GraphvizImageBuilder.printGroup"],
+      "lines": "399-435",
+      "role": "Emits direct note and ordinary leaves inside their owner cluster and only top-parent leaves in the root stream."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": ["CucaDiagram.isStandalone", "CucaDiagram.applySingleStrategy"],
+      "lines": "713-718,762-789",
+      "role": "Builds each owner's Magma from immediate unlinked leaves; attached notes and their targets are excluded by the hidden link."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["floating and attached note construction", "add_child"],
+      "lines": "608-695,804-852",
+      "role": "Correctly retains DeploymentNote.owner and quark_order, while DeploymentNode.children intentionally stores only ordinary node ids."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["render_no_oracle cluster_ids", "deployment_svek_leaf_order", "cluster registration"],
+      "lines": "3931-4166",
+      "role": "The owner-aware leaf order can see notes, but cluster_ids comes only from nonempty node.children and only ordinary child nodes are registered in clusters."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["add_deployment_magma_constraints"],
+      "lines": "4871-4940",
+      "role": "Appends every targetless note to root Magma regardless of owner and never includes direct owned floating notes in an owner-local set."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["emit_clusters_dfs", "collect_entities_svek_order", "deployment_cluster_frame", "adjust_deployment_endpoint_labels", "layout_deployment_rects"],
+      "lines": "823-972,5273-5395,5567-5620,5877-5940",
+      "role": "Traversal, painting and geometry independently recompute the node-children-only cluster predicate, so partial registration would leave inventories inconsistent."
+    }
+  ],
+  "claimed_invariant": "Deployment rendering projects one heterogeneous immediate-child relation from ordinary nodes and all laid-out notes. A node is a cluster whenever it has any renderable direct child. Owned notes are solved and painted exactly once inside that cluster with an owner-qualified name. Root and owner-local Magma inventories contain only their immediate unlinked leaves in quark order; attached notes are cluster members but non-standalone because their hidden link touches the note and target.",
+  "causal_divergence": "DeploymentNote already carries owner and quark_order, but the renderer repeatedly projects cluster identity from DeploymentNode.children alone. Note-only owners collapse to leaf entities; owned notes are omitted from cluster membership and qualified identity; targetless owned notes leak into root Magma; and downstream geometry consumes a different cluster/leaf inventory from SVEK ordering. These symptoms share one missing heterogeneous owner projection.",
+  "planned_model_change": "Introduce one owner-aware deployment cluster projection derived from ordinary children plus laid-out notes and use it in graph construction, traversal, frame calculation, endpoint adjustment and rectangle recovery. Register every owned laid-out note with its owner cluster. Build root and owner-local Magma candidates by quark order from immediate unlinked ordinary leaves and floating notes. Prefix named note qualified identities with deployment_qnames(owner). Preserve attached-note hidden-link layout and exclude it from Magma. Thread the same cluster set through paint traversal so note-only owners cannot collapse later.",
+  "perturbation_axes": [
+    "note-only versus mixed owners",
+    "floating named versus attached notes",
+    "root, one-level and two-level ownership",
+    "note before versus after ordinary leaves",
+    "two versus three standalone leaves across Magma's gate",
+    "linked versus unlinked controls",
+    "left-to-right versus top-to-bottom direction",
+    "renamed labels and sibling owners"
+  ],
+  "acceptance": [
+    "Every fresh evidence source is confirmed to dispatch as Diagram::Deployment.",
+    "A note-only owner renders as a cluster and its note is neither omitted nor emitted as a root leaf.",
+    "Owned floating notes join only their owner's Magma inventory; attached notes join no Magma inventory.",
+    "Nested owner, root stream, frame and solved-position inventories remain cardinality-consistent without panic or fallback.",
+    "Named notes use owner-qualified SVG identity and paint once.",
+    "An independent checker attacks depth, attachment, links, order, cardinality, direction and renamed labels at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "adding note ids to DeploymentNode.children while consumers assume every child indexes DeploymentNode",
+    "filtering owned notes out of root paint without cluster registration",
+    "coordinate translations or SVG string reparenting after layout",
+    "treating every owned note as standalone",
+    "fixture aliases, filenames, coordinates, comparator or baseline changes"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_root_note_only_owner_with_link_ltr.puml"
+  ]
+}
