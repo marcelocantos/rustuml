@@ -14272,6 +14272,31 @@ fn svek_layout_x_bias(
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
+    let edge_indices = relationship_edge_indices(diagram, edge_paths);
+    let mapped_center_edges = diagram
+        .relationships
+        .iter()
+        .zip(&edge_indices)
+        .filter_map(|(relationship, edge_idx)| {
+            let edge_idx = (*edge_idx)?;
+            let edge = edge_paths.get(edge_idx)?;
+            let note = relationship.link_note.as_ref();
+            relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
+            edge.label?;
+            Some(edge_idx)
+        })
+        .collect::<HashSet<_>>();
+    let center_label_minima = diagram
+        .relationships
+        .iter()
+        .zip(&edge_indices)
+        .filter_map(|(relationship, edge_idx)| {
+            let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
+            let position = edge.label?;
+            let note = relationship.link_note.as_ref();
+            relationship_center_painted_min_x(diagram, relationship, note, position.x)
+        })
+        .collect::<Vec<_>>();
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
             let icon = font.visibility_icon_geom();
@@ -14322,8 +14347,16 @@ fn svek_layout_x_bias(
                 .iter()
                 .flat_map(|edge| edge.points.iter().map(|point| point.0)),
         )
+        .chain(center_label_minima)
+        .chain(
+            edge_paths
+                .iter()
+                .enumerate()
+                .filter(|(idx, _)| !mapped_center_edges.contains(idx))
+                .filter_map(|(_, edge)| edge.label.map(|label| label.x)),
+        )
         .chain(edge_paths.iter().flat_map(|edge| {
-            [edge.label, edge.tail_label, edge.head_label]
+            [edge.tail_label, edge.head_label]
                 .into_iter()
                 .flatten()
                 .map(|label| label.x)
@@ -14362,6 +14395,26 @@ fn svek_layout_x_bias(
         // second time merely because an enclosed class rectangle starts later.
         envelope_bias.max(0.0)
     }
+}
+
+/// The horizontal frontier Java obtains by painting a relationship's natural
+/// center block through `LimitFinder`. Graphviz's fixed table only anchors the
+/// block; preferred-size padding with no primitive does not own the minimum.
+fn relationship_center_painted_min_x(
+    diagram: &ClassDiagram,
+    relationship: &Relationship,
+    note: Option<&ClassLinkNote>,
+    position_x: f64,
+) -> Option<f64> {
+    let center = relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
+    let mut min_x = f64::INFINITY;
+    if relationship.label.is_some() {
+        min_x = min_x.min(position_x + center.label_text_offset_x);
+    }
+    if note.is_some() {
+        min_x = min_x.min(position_x + center.note_x);
+    }
+    min_x.is_finite().then_some(min_x)
 }
 
 /// Vertical twin of `svek_layout_x_bias`. Java
@@ -17973,6 +18026,71 @@ mod tests {
         assert_ne!(verdana_layout.label_height, courier_layout.label_height);
         assert_eq!(verdana_layout.label_text_offset_x, 6.0);
         assert_eq!(courier_layout.label_text_offset_x, 6.0);
+    }
+
+    #[test]
+    fn relationship_center_horizontal_frontier_uses_painted_children() {
+        let parse_relationship = |source: &str| {
+            let Diagram::Class(diagram) =
+                rustuml_parser::parse::parse(source).expect("class relationship parses")
+            else {
+                panic!("expected class diagram");
+            };
+            diagram
+        };
+        let position_x = 37.25;
+
+        let note_only = parse_relationship(
+            "@startuml\n\
+             class FreshLeft\n\
+             class FreshRight\n\
+             FreshLeft -- FreshRight\n\
+             note on link\n\
+               renamed folded note\n\
+             end note\n\
+             @enduml",
+        );
+        let note_relationship = &note_only.relationships[0];
+        let note = note_relationship
+            .link_note
+            .as_ref()
+            .expect("relationship-owned note");
+        let note_layout = relationship_center_layout(
+            &note_only,
+            note_relationship,
+            Some(note),
+            &note_only.meta.sprites,
+        )
+        .expect("note center layout");
+        let note_min = relationship_center_painted_min_x(
+            &note_only,
+            note_relationship,
+            Some(note),
+            position_x,
+        )
+        .expect("painted note frontier");
+        assert_eq!(note_min, position_x + note_layout.note_x);
+        assert!(note_min > position_x);
+
+        let label_only = parse_relationship(
+            "@startuml\n\
+             class LabelSource\n\
+             class LabelTarget\n\
+             LabelSource -- LabelTarget : renamed center text\n\
+             @enduml",
+        );
+        let label_relationship = &label_only.relationships[0];
+        let label_layout = relationship_center_layout(
+            &label_only,
+            label_relationship,
+            None,
+            &label_only.meta.sprites,
+        )
+        .expect("label center layout");
+        assert_eq!(
+            relationship_center_painted_min_x(&label_only, label_relationship, None, position_x,),
+            Some(position_x + label_layout.label_text_offset_x)
+        );
     }
 
     #[test]
