@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+hide empty members
+
+package ControlRoom84201 {
+  class DirectPanel84203
+  class RemovedPanel84205
+  package InnerDesk84207 {
+    class NestedDial84211
+    class NestedSwitch84213
+  }
+  class DirectScreen84217
+}
+class RootOperator84219
+
+RemovedPanel84205 -- NestedDial84211
+remove RemovedPanel84205
+RootOperator84219 "control tail 84223" -- "dial head 84229" NestedDial84211
+DirectPanel84203 -- DirectScreen84217
+NestedDial84211 -- NestedSwitch84213
+RootOperator84219 -- ControlRoom84201
+@enduml

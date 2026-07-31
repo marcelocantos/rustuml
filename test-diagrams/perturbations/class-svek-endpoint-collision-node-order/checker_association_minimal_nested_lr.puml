@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+hide empty members
+
+package Terminal84001 {
+  class LineAlpha84003
+  class LineBeta84005
+  class ServiceRecord84007
+  (LineAlpha84003, LineBeta84005) .. ServiceRecord84007
+  package LaterRoom84011 {
+    class LateSensor84013
+  }
+}
+
+LateSensor84013 "sensor tail 84017" -- "line head 84019" LineAlpha84003
+@enduml

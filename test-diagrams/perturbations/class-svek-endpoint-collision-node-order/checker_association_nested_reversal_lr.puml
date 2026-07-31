@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+hide empty members
+
+package Yard83601 {
+  class WestRail83603
+  class EastRail83605
+  class TrackLedger83607
+  WestRail83603 -- EastRail83605
+  (WestRail83603, EastRail83605) .. TrackLedger83607
+  package LateBay83611 {
+    class BaySensor83613
+    class BayArchive83617
+  }
+  class LateSignal83619
+}
+
+BaySensor83613 "bay tail 83623" -- "rail head 83629" WestRail83603 : reverse scan
+LateSignal83619 -- BayArchive83617
+BayArchive83617 -- TrackLedger83607
+@enduml

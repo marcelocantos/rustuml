@@ -1,0 +1,20 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+hide empty members
+
+package Observatory83101 {
+  class DirectBeacon83103
+  package Archive83107 {
+    class NestedRelay83111
+    class NestedLedger83113
+  }
+  class DirectConsole83117
+}
+class ExteriorProbe83119
+
+ExteriorProbe83119 -- Observatory83101 : package telemetry
+NestedRelay83111 "outbound role 83123" -- "inbound role 83129" ExteriorProbe83119 : routed audit
+DirectBeacon83103 o-- DirectConsole83117 : direct brace
+NestedLedger83113 <|-- NestedRelay83111
+@enduml

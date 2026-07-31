@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-endpoint-collision-node-order",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-endpoint-collision-checker",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, and immutable diff_one --no-oracle",
+    "independence": "The implementation revision predated this review. The checker did not edit production code, account.json, baselines, comparator logic, park or error markers, or allow-lists."
+  },
+  "revisions": {
+    "rust_revision_checked": "29be84de25e3903d66b47504522e63f45b9ac668",
+    "rust_short_revision": "29be84de",
+    "account_commit": "65c69099ce4f8043b5cd3f006bb82848364f261c",
+    "implementation_commit": "29be84de25e3903d66b47504522e63f45b9ac668",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "artifacts": {
+    "rustuml": {
+      "path": "/private/tmp/rustuml-frozen/29be84de/rustuml",
+      "sha256_required": "576f11f4f91097491b5f88b70ba6d3ac14458d1ad44f6121b1974d9351746865",
+      "sha256_before_every_evidence_run": "576f11f4f91097491b5f88b70ba6d3ac14458d1ad44f6121b1974d9351746865",
+      "sha256_after_every_evidence_run": "576f11f4f91097491b5f88b70ba6d3ac14458d1ad44f6121b1974d9351746865"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-frozen/29be84de/diff_one",
+      "sha256_required": "bc2ee50d6ad83de18565791e578a2444c8a58b4c77306dd89e38a638c1540ade",
+      "sha256_before_every_evidence_run": "bc2ee50d6ad83de18565791e578a2444c8a58b4c77306dd89e38a638c1540ade",
+      "sha256_after_every_evidence_run": "bc2ee50d6ad83de18565791e578a2444c8a58b4c77306dd89e38a638c1540ade"
+    },
+    "binary_hash_observations": {
+      "evidence_runs_with_pre_and_post_hashes": 35,
+      "mismatches": 0,
+      "note": "The same two-path shasum command ran immediately before and after each Java generation, comparison, and Rust-SVG capture evidence run."
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account_json_sha256": "0b58ca7002ecfc441173b4039a56e931a77a0a86caa67d7b07d32280d0b722fb"
+  },
+  "commands": {
+    "identity": [
+      "git rev-parse HEAD",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "shasum -a 256 /private/tmp/rustuml-frozen/29be84de/rustuml /private/tmp/rustuml-frozen/29be84de/diff_one",
+      "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-svek-endpoint-collision-node-order/account.json"
+    ],
+    "source_audit": [
+      "git show --format=fuller --find-renames HEAD -- crates/rustuml-render/src/class.rs",
+      "sed -n '4780,5005p' crates/rustuml-render/src/class.rs",
+      "sed -n '14070,14225p' crates/rustuml-render/src/class.rs",
+      "sed -n '180,470p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "sed -n '35,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "sed -n '390,480p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "sed -n '1160,1235p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "sed -n '90,350p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "rg -n 'include_str!|include_bytes!|golden|fixture|checker_|perturbation' crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml/src/main.rs -S"
+    ],
+    "java_generation": [
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_reordered_reversed_lr.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_attached_note_interleave_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_empty_package_interleave_lr.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_association_point_before_tail_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_association_nested_reversal_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_spline_nested_tail_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_spline_reversed_note_lr.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_association_minimal_spline_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_association_minimal_nested_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_order_pair_group_gap_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_order_pair_direct_early_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_removed_leaf_control_lr.puml"
+    ],
+    "per_stem_rust_svg_command": "/private/tmp/rustuml-frozen/29be84de/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-svek-endpoint-collision-node-order/<stem>.puml > test-diagrams/perturbations/class-svek-endpoint-collision-node-order/<stem>.rust.svg",
+    "per_stem_compare_command": "/private/tmp/rustuml-frozen/29be84de/diff_one --no-oracle test-diagrams/perturbations/class-svek-endpoint-collision-node-order/<stem>.puml > test-diagrams/perturbations/class-svek-endpoint-collision-node-order/<stem>.diff.txt 2>&1",
+    "validation": [
+      "xmllint --noout test-diagrams/perturbations/class-svek-endpoint-collision-node-order/*.svg",
+      "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type' test-diagrams/perturbations/class-svek-endpoint-collision-node-order -g '*.svg'",
+      "shasum -a 256 test-diagrams/perturbations/class-svek-endpoint-collision-node-order/*",
+      "git diff --check"
+    ]
+  },
+  "fresh_input_stems": [
+    "checker_nested_direct_before_group_tb",
+    "checker_nested_reordered_reversed_lr",
+    "checker_attached_note_interleave_tb",
+    "checker_empty_package_interleave_lr",
+    "checker_association_point_before_tail_tb",
+    "checker_association_nested_reversal_lr",
+    "checker_spline_nested_tail_tb",
+    "checker_spline_reversed_note_lr",
+    "checker_association_minimal_spline_tb",
+    "checker_association_minimal_nested_lr",
+    "checker_order_pair_group_gap_tb",
+    "checker_order_pair_direct_early_tb",
+    "checker_removed_leaf_control_lr"
+  ],
+  "perturbations": [
+    {
+      "stem": "checker_nested_direct_before_group_tb",
+      "axes": ["direct leaf declared after a nested package", "tail and head labels", "top-to-bottom", "ORTHO"],
+      "result": "fail",
+      "evidence": "Only the outbound endpoint text exceeds strict tolerance: Java x=133.0945, y=173.2252; Rust x=133.1256, y=173.2249."
+    },
+    {
+      "stem": "checker_nested_reordered_reversed_lr",
+      "axes": ["root declaration before package", "reversed endpoint direction", "left-to-right", "ORTHO"],
+      "result": "fail",
+      "evidence": "The center-label placement and tail endpoint label differ; this case is not isolated to collision traversal."
+    },
+    {
+      "stem": "checker_attached_note_interleave_tb",
+      "axes": ["attached plain note in direct-leaf stream", "nested package", "top-to-bottom", "ORTHO"],
+      "result": "pass",
+      "evidence": "SVGs are structurally equivalent."
+    },
+    {
+      "stem": "checker_empty_package_interleave_lr",
+      "axes": ["empty package leaf", "filled nested package", "left-to-right", "ORTHO"],
+      "result": "pass",
+      "evidence": "SVGs are structurally equivalent."
+    },
+    {
+      "stem": "checker_association_point_before_tail_tb",
+      "axes": ["association point created before later leaves", "preexisting base relation", "top-to-bottom", "ORTHO"],
+      "result": "fail",
+      "evidence": "Java and Rust association topology diverges before endpoint collision; preserved as a broad-stream stress failure, not an isolated collision counterexample."
+    },
+    {
+      "stem": "checker_association_nested_reversal_lr",
+      "axes": ["association point inside package", "later nested package", "reversed endpoint", "left-to-right"],
+      "result": "fail",
+      "evidence": "Java and Rust association layout diverges broadly before collision resolution."
+    },
+    {
+      "stem": "checker_spline_nested_tail_tb",
+      "axes": ["default spline routing", "direct leaf after nested package", "top-to-bottom", "endpoint labels"],
+      "result": "fail",
+      "evidence": "The strict comparator reports a canvas-envelope mismatch."
+    },
+    {
+      "stem": "checker_spline_reversed_note_lr",
+      "axes": ["default spline routing", "attached note", "reversed endpoint", "left-to-right"],
+      "result": "pass",
+      "evidence": "SVGs are structurally equivalent."
+    },
+    {
+      "stem": "checker_association_minimal_spline_tb",
+      "axes": ["minimal no-base association point", "point before later leaf", "default spline", "top-to-bottom"],
+      "result": "pass",
+      "evidence": "SVGs are structurally equivalent; this geometry did not expose the source-level point-order mismatch."
+    },
+    {
+      "stem": "checker_association_minimal_nested_lr",
+      "axes": ["minimal no-base association point", "later nested package", "left-to-right", "endpoint reversal"],
+      "result": "fail",
+      "evidence": "Association graph layout differs broadly; not isolated to collision traversal."
+    },
+    {
+      "stem": "checker_order_pair_group_gap_tb",
+      "axes": ["direct leaf declared after nested group", "same semantic graph as paired control", "top-to-bottom", "ORTHO"],
+      "result": "fail",
+      "evidence": "Only paired-tail endpoint text fails: Java x=183.6233, y=173.4547; Rust x=183.6014, y=173.4545."
+    },
+    {
+      "stem": "checker_order_pair_direct_early_tb",
+      "axes": ["same direct leaf moved before nested group", "same semantic graph as paired control", "top-to-bottom", "ORTHO"],
+      "result": "fail",
+      "evidence": "The failure is byte-for-byte identical to the group-gap variant, proving declaration placement no longer changes the Rust collision traversal while the required shipped-path result remains red."
+    },
+    {
+      "stem": "checker_removed_leaf_control_lr",
+      "axes": ["removed leaf created inside direct-leaf stream", "hidden lifecycle participant", "left-to-right", "ORTHO"],
+      "result": "fail",
+      "evidence": "Java retains the source leaf while Rust removes it, producing an unrelated lifecycle-model divergence; preserved but not used as the primary rejection."
+    }
+  ],
+  "artifact_hashes": {
+    "checker_nested_direct_before_group_tb": {
+      "puml": "286534e844dc3bb92d8358323ac658ce4442061863db5e0d637070512d8a655b",
+      "java_svg": "5452502e7dd5a0703a6059533178e4cf1ad5d0a5f45f368d34fe34b7a845c148",
+      "rust_svg": "562637b2db40337ff3a0dd6d34f737345185f2d2505b91062ed0fb99df7bc711",
+      "diff": "bad0fad83abf4b21d78c170c4489a8ecf12c21bff2be595e8d72d4689389f9b8"
+    },
+    "checker_nested_reordered_reversed_lr": {
+      "puml": "2dc4d8cc78403de97f63a814ef8d8edb97819fe4efb77c5b7aa9bcbcd5b0d7e1",
+      "java_svg": "17aaf51ec2837bc9bfc1732c0ef622321f166f5aaf6b5bb6822ce23a819440de",
+      "rust_svg": "c15de0edd129017a68a9623b0bd7c0e43cdff97df8516f4c4bafe0c13b2aae6e",
+      "diff": "0cdccb96c719a340621eea20f83b637b152f315b191067b4496aaeb590f60a0f"
+    },
+    "checker_attached_note_interleave_tb": {
+      "puml": "1707bac2eaf1f12ad3c21ede49a16df73c3771ebda23bb9021451e199423ec49",
+      "java_svg": "9916b9d420cf73e0583cd67d28381b0bec236c5e850151df97a30b1e43f53ab3",
+      "rust_svg": "ddd5b4428cab1b97df909139a15870972c7c8140b38ba44331c1e4c1f158e52d",
+      "diff": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+    },
+    "checker_empty_package_interleave_lr": {
+      "puml": "2f3411110d6827cf7a3051752a92a76be0dc29629edbe8cc984c62c5ddbace12",
+      "java_svg": "10e909f7216e031ba76c9a964175db46ce2ae2c7a02121ae114f73e1a2ef82bd",
+      "rust_svg": "92fc31e3c25e327f7aa407ef13fb8b5c64e58f1d8d5823bcb05e1c90c904932b",
+      "diff": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+    },
+    "checker_association_point_before_tail_tb": {
+      "puml": "536487ec353eccad015e92d6d85bf382fc4113a56a7415506b7cf7de9bbc15ba",
+      "java_svg": "fdda853dc186d7481ba8af323178b49ee74ad01dc6fa9f010b8d2a618ab5bb2a",
+      "rust_svg": "52170bab68a36cc85668719e2378df545ab5639c66e09ea6228aec89aa9c205c",
+      "diff": "9460c1b4f7ffadc29484314ee6da3d2c5b7df5935076115c0d77b3f3746ec8fb"
+    },
+    "checker_association_nested_reversal_lr": {
+      "puml": "189a9b5a7822f5ba0500e47fb54abfb9070c05f5a70684e06aa093fcd591bb23",
+      "java_svg": "f37a7a636190568e6ef002c2437264d7643a9b866c187e1e6e4261e943171e95",
+      "rust_svg": "6b0071e9c03783417176a52fa015e496c910e0c76c699f91c40df337833f123a",
+      "diff": "dbeceb5fd2644861443b26c4338728bb40c02125a875b2ecbbb58a1b0100bdb0"
+    },
+    "checker_spline_nested_tail_tb": {
+      "puml": "156cecfdb7e598f3035b511ea3f576ba6f6df89a88e2c6fc701019ffad983f58",
+      "java_svg": "d5132e79885de623110c890f496fe3340f11d364df80f0279c31b5485443689b",
+      "rust_svg": "2d16afbe43be8928e6082eb871faff26c065c3304e1644aad1feaf6df95cccb4",
+      "diff": "8ceee2273024e9872b2e97d9977b5c5ab3da8b9012fa790567503ce0761906e9"
+    },
+    "checker_spline_reversed_note_lr": {
+      "puml": "92e68dcb5daca25bc169a8f6406c269ee045ca799b815a2a67e80c47bf659306",
+      "java_svg": "b44de4bf63f95718fb56993262ada8aa6e5d57722407c60d1bda1d78b1691d52",
+      "rust_svg": "1d2ca485f74fe15a9b9e9ee405463a4cf6d67b31e344e339c476e7f9bebc8839",
+      "diff": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+    },
+    "checker_association_minimal_spline_tb": {
+      "puml": "0c5c63286425c2cd5396546d8803f34a34f1b6dd133dc35f6aea7e5ba3921bcd",
+      "java_svg": "a6f13e6815e0af12e1b6f199d316fd5ef530c1e9ff9945574c6174d30ac393b3",
+      "rust_svg": "9fc4e2cf9db4c8212521597620da4254d49b75bb8ed2332130828a0e653f149f",
+      "diff": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+    },
+    "checker_association_minimal_nested_lr": {
+      "puml": "b897f31fcef4227fb238cb059e95a04264a1d83d77828bae8ef7eeebec80978f",
+      "java_svg": "85d784ffd1f8ecbd352741fe96211edbb75fac24559974640eff1a580b94a7cb",
+      "rust_svg": "1897c6b5e6e4c53cd8e6462e963abd7c391e8c4ca6a2d734690c4a74c51d1fb8",
+      "diff": "6be3c28ef7448a65243dbcde9b73fc1374981687eab90afb7bae7f9d1b3da3c5"
+    },
+    "checker_order_pair_group_gap_tb": {
+      "puml": "78b5bea22c657a35993139868b7baff34eabee47d8cffd66f50d0b18ef5ae2ad",
+      "java_svg": "7c7e1e099d0c1583fcaac64bd9839df42ad43dd79a61b541f7164be584ab24cb",
+      "rust_svg": "566ed1baae0ab7b763e72f3fee61f01108658eeb269a96a259fa90e9ec45e86c",
+      "diff": "f7bb2893c2db1b658539035f0decfa0660ad60df084afb7fd23894afe323dafb"
+    },
+    "checker_order_pair_direct_early_tb": {
+      "puml": "92a632418c559d3c9b5187530fbff21e654733d43fb30d865817093337ced29c",
+      "java_svg": "9a771810689d8680d3ad56e5f1d65360423ff39dc0583c3d3b75b6d4db3e8e67",
+      "rust_svg": "fc8b7da810b3aed7d1dbad7d33f0b4edf561ebfade95818c6100c8cd5c7a2908",
+      "diff": "f7bb2893c2db1b658539035f0decfa0660ad60df084afb7fd23894afe323dafb"
+    },
+    "checker_removed_leaf_control_lr": {
+      "puml": "7e1355ff173fde9a0df21f8fa0e31cf28c91b1f736fa1a6bd6ce166b612c68a8",
+      "java_svg": "6164dc15f5c03ee2338f7baf5648e9ddc3be11aed1f887e2bd9bb4961a4bccae",
+      "rust_svg": "744f08e80232d8255294542d4a64d6b80efe0d2bff50977cff4713f7d89bdfa7",
+      "diff": "7488d71fd2de07ddca6c1d8952d5ef212318dd4825602b73e31e151b76f5496e"
+    }
+  },
+  "findings": [
+    "Java's core model is as claimed for ordinary leaves, notes, and empty packages: GraphvizImageBuilder prints direct leaves before child groups, Bibliotekon preserves createNode insertion order in a LinkedHashMap, DotStringFactory passes allNodes to every solved edge, and SvekEdge.manageCollision mutates each endpoint label after each intersecting node.",
+    "Rust's new collision-only slot projection follows svek_node_emission_order without globally reordering renderer-owned positions. The two declaration-order variants produce the same Java endpoint coordinates and the same Rust endpoint coordinates, supporting that narrow ordering change.",
+    "The required shipped-path perturbation gate is nevertheless red. Both declaration-order variants fail on only the same endpoint label: Java x=183.6233 versus Rust x=183.6014. checker_nested_direct_before_group_tb independently fails on only its tail label, Java x=133.0945 versus Rust x=133.1256. These are valid, in-scope endpoint-collision outputs, not syntax pages or fixture metadata.",
+    "The account's broader unified-stream claim is incomplete for association points. AbstractClassOrObjectDiagram.Association constructs the POINT_FOR_ASSOCIATION Entity at the association statement, under the shared endpoint parent when possible; GraphvizImageBuilder later encounters that point in ordinary package or root leaf order. Rust's SvekNodeEmission has no association-point variant and svek_collision_layout_slots unconditionally chains all association slots after every entity, note, and empty-package slot.",
+    "The minimal root association control passes, so its geometry did not activate a noncommutative point collision. The nested association probes fail much earlier in layout and cannot isolate collision order. The source-level stream mismatch remains real, but the primary rejection does not rely on those confounded outputs.",
+    "Plain attached-note and empty-package controls pass in both routing directions exercised. This supports those stream members rather than merely finding universal failures.",
+    "The removed-leaf probe exposes separate lifecycle semantics and is not used as the primary rejection. It is preserved because the checker was instructed to probe hidden or omitted participants and preserve every result.",
+    "Static inspection found no fixture labels, perturbation filenames, golden reads, SVG post-processing, coordinate-keyed conditionals, new parity constants, comparator changes, or frozen-control changes in the implementation diff.",
+    "All 13 Java SVGs are well-formed XML and contain no recognized PlantUML syntax or error-page markers. Every run used the pinned Java revision and immutable binary identities, with no Cargo or rustc invocation."
+  ],
+  "summary": {
+    "fresh_valid_inputs": 13,
+    "passes": 4,
+    "failures": 9,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false,
+    "binary_identity_mismatches": 0
+  },
+  "rejection_basis": "The mandatory no-oracle held-out gate fails on fresh valid endpoint-collision cases, including an isolated declaration-order pair, and the claimed unified collision stream omits Java's source-interleaved association-point entities.",
+  "verdict": "rejected"
+}
