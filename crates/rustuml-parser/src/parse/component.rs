@@ -289,7 +289,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut note_owner: Option<String> = None;
     let mut note_connection: Option<usize> = None;
     let mut note_position = ComponentNotePosition::Right;
-    let mut note_source_line = 0;
+    let mut note_source_line: Option<usize> = None;
     let mut note_lines: Vec<String> = Vec::new();
     let mut in_note: bool = false;
     // Multiline title accumulation.
@@ -346,6 +346,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
             if in_note {
+                if note_lines.is_empty() && note_source_line.is_none() {
+                    note_source_line = Some(current_line);
+                }
                 note_lines.push(String::new());
             }
             continue;
@@ -387,7 +390,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         target: note_target.take(),
                         connection: note_connection.take(),
                         position: note_position,
-                        source_line: note_source_line,
+                        source_line: note_source_line
+                            .expect("nonempty multiline note has a body source line"),
                     });
                 }
                 note_id = None;
@@ -395,8 +399,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_target = None;
                 note_connection = None;
                 note_lines.clear();
+                note_source_line = None;
                 in_note = false;
             } else {
+                if note_lines.is_empty() && note_source_line.is_none() {
+                    note_source_line = Some(current_line);
+                }
                 note_lines.push(trimmed.to_string());
             }
             continue;
@@ -689,10 +697,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_owner = package_qualified_name(&package_stack);
                 note_connection = None;
                 note_position = position;
-                // `CommandFactoryNoteOnEntity.createMultiLine` creates the
-                // entity at the body `BlocLines` location after removing the
-                // opening command line.
-                note_source_line = current_line + 1;
+                // `CommandFactoryNoteOnEntity.createMultiLine` removes the
+                // opener before selecting the body `BlocLines` location. The
+                // first body record below supplies its source-mapped line.
+                note_source_line = None;
                 note_lines.clear();
                 in_note = true;
             }
@@ -737,7 +745,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 note_position = ComponentNotePosition::Bottom;
                 // `CommandFactoryNoteOnLink.createMultiLine` creates its note
                 // component from the body `BlocLines`, after the command.
-                note_source_line = current_line + 1;
+                note_source_line = Some(current_line + 1);
                 note_lines.clear();
                 in_note = true;
             }
@@ -772,7 +780,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             note_owner = package_qualified_name(&package_stack);
             note_connection = None;
             note_position = ComponentNotePosition::Right;
-            note_source_line = current_line;
+            note_source_line = None;
             note_lines.clear();
             in_note = true;
             continue;
@@ -1808,5 +1816,26 @@ mod tests {
 
         let invalid = parse("note \"payload\" as ValidPrefix-invalid");
         assert!(invalid.notes.is_empty());
+    }
+
+    #[test]
+    fn multiline_notes_use_the_first_source_mapped_body_record() {
+        let lines = vec![
+            crate::preprocess::source_line_marker(10, "component Worker"),
+            crate::preprocess::source_line_marker(20, "note right of Worker"),
+            crate::preprocess::source_line_marker(90, ""),
+            crate::preprocess::source_line_marker(91, "attached payload"),
+            crate::preprocess::source_line_marker(92, "end note"),
+            crate::preprocess::source_line_marker(30, "note as NamedLedger"),
+            crate::preprocess::source_line_marker(145, "named payload"),
+            crate::preprocess::source_line_marker(146, "end note"),
+            crate::preprocess::source_line_marker(400, "note \"inline payload\" as InlineLedger"),
+        ];
+        let d = parse_component(&lines).unwrap();
+
+        assert_eq!(d.notes.len(), 3);
+        assert_eq!(d.notes[0].source_line, 90);
+        assert_eq!(d.notes[1].source_line, 145);
+        assert_eq!(d.notes[2].source_line, 400);
     }
 }
