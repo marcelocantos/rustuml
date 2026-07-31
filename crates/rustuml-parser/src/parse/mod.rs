@@ -35,6 +35,78 @@ use crate::preprocess;
 
 const NAMED_NOTE_CODE_PATTERN: &str = r"[\p{L}\p{N}_.]+";
 
+// Java provenance: `ColorTrieNode` registers this case-insensitive inventory
+// for `HColorSet.parseSimpleColor`, including PlantUML's ArchiMate aliases.
+const PLANTUML_NAMED_COLORS: &str = "
+aliceblue antiquewhite aqua aquamarine azure beige bisque black blanchedalmond
+blue blueviolet brown burlywood cadetblue chartreuse chocolate coral
+cornflowerblue cornsilk crimson cyan darkblue darkcyan darkgoldenrod darkgray
+darkgrey darkgreen darkkhaki darkmagenta darkolivegreen darkorange darkorchid
+darkred darksalmon darkseagreen darkslateblue darkslategray darkslategrey
+darkturquoise darkviolet deeppink deepskyblue dimgray dimgrey dodgerblue
+firebrick floralwhite forestgreen fuchsia gainsboro ghostwhite gold goldenrod
+gray grey green greenyellow honeydew hotpink indianred indigo ivory khaki
+lavender lavenderblush lawngreen lemonchiffon lightblue lightcoral lightcyan
+lightgoldenrodyellow lightgray lightgrey lightgreen lightpink lightsalmon
+lightseagreen lightskyblue lightslategray lightslategrey lightsteelblue
+lightyellow lime limegreen linen magenta maroon mediumaquamarine mediumblue
+mediumorchid mediumpurple mediumseagreen mediumslateblue mediumspringgreen
+mediumturquoise mediumvioletred midnightblue mintcream mistyrose moccasin
+navajowhite navy oldlace olive olivedrab orange orangered orchid palegoldenrod
+palegreen paleturquoise palevioletred papayawhip peachpuff peru pink plum
+powderblue purple red rosybrown royalblue saddlebrown salmon sandybrown seagreen
+seashell sienna silver skyblue slateblue slategray slategrey snow springgreen
+steelblue tan teal thistle tomato turquoise violet wheat white whitesmoke yellow
+yellowgreen business application motivation strategy technology physical
+implementation
+";
+
+fn named_note_simple_color_is_resolvable(value: &str) -> bool {
+    if matches!(
+        value.to_ascii_lowercase().as_str(),
+        "transparent" | "background" | "automatic"
+    ) {
+        return true;
+    }
+    if matches!(value.len(), 1 | 3 | 6 | 8)
+        && value.chars().all(|character| character.is_ascii_hexdigit())
+    {
+        return true;
+    }
+    PLANTUML_NAMED_COLORS
+        .split_ascii_whitespace()
+        .any(|name| name.eq_ignore_ascii_case(value))
+}
+
+fn named_note_color_is_valid(color: &str) -> bool {
+    let Some(value) = color.strip_prefix('#') else {
+        return false;
+    };
+    let is_word = |part: &str| {
+        !part.is_empty()
+            && part
+                .chars()
+                .all(|character| character.is_ascii_alphanumeric() || character == '_')
+    };
+    let separators = value
+        .char_indices()
+        .filter(|(_, character)| matches!(character, '-' | '\\' | '|' | '/'))
+        .collect::<Vec<_>>();
+    match separators.as_slice() {
+        [] => value.len() >= 2 && is_word(value) && named_note_simple_color_is_resolvable(value),
+        [(index, separator)] => {
+            let right_index = *index + separator.len_utf8();
+            let left = &value[..*index];
+            let right = &value[right_index..];
+            is_word(left)
+                && is_word(right)
+                && named_note_simple_color_is_resolvable(left)
+                && named_note_simple_color_is_resolvable(right)
+        }
+        _ => false,
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub(super) struct NamedNoteCommand {
     pub display: Option<String>,
@@ -69,6 +141,12 @@ fn named_note_decorations(suffix: &str) -> Option<(Vec<String>, Option<String>, 
             .to_string()
     });
     let color = captures.get(3).map(|color| color.as_str().to_string());
+    if color
+        .as_deref()
+        .is_some_and(|color| !named_note_color_is_valid(color))
+    {
+        return None;
+    }
     Some((tags, stereotype, color))
 }
 
@@ -1788,6 +1866,49 @@ mod tests {
 
         assert!(parse_named_note_inline(r#"note "payload" as ValidPrefix-invalid"#).is_none());
         assert!(parse_named_note_multiline("note as ValidCode #Red <<WrongOrder>>").is_none());
+    }
+
+    #[test]
+    fn named_note_colors_pass_color_parser_and_hcolor_resolution() {
+        for color in [
+            "#MistyRose",
+            "#bUsInEsS",
+            "#ABC",
+            "#123456",
+            "#12345678",
+            "#A-B",
+            "#Red/LightBlue",
+            "#transparent",
+        ] {
+            let inline = parse_named_note_inline(&format!(
+                "note \"inline payload\" as InlineLedger {color}"
+            ))
+            .unwrap();
+            let multiline =
+                parse_named_note_multiline(&format!("note as MultilineLedger {color}")).unwrap();
+            assert_eq!(inline.color.as_deref(), Some(color));
+            assert_eq!(multiline.color.as_deref(), Some(color));
+        }
+
+        for color in [
+            "#A",
+            "#NoSuchColor",
+            "#back:LightBlue;line.dashed:Red",
+            "#Red-UnknownColor",
+            "#Red-Blue-Green",
+        ] {
+            assert!(
+                parse_named_note_inline(&format!(
+                    "note \"invalid payload\" as InvalidLedger {color}"
+                ))
+                .is_none(),
+                "{color}"
+            );
+            assert!(
+                parse_named_note_multiline(&format!("note as InvalidLedger {color}")).is_none(),
+                "{color}"
+            );
+        }
     }
 
     #[test]
