@@ -815,12 +815,14 @@ pub struct Style {
     pub underline: bool,
     pub wavy_underline: bool,
     pub line_through: bool,
+    /// Dedicated Creole monospace markup (`""...""`, backticks, and code).
+    /// An arbitrary `<font:Name>` family change does not set this flag.
     pub monospace: bool,
     /// SVG `fill` attribute when overridden by `<color:...>`.
     pub fill: Option<String>,
     /// Absolute font-size override from `<size:N>` (pixels).
     pub size: Option<u32>,
-    /// Custom font-family from `<font:Name>` (only used when not monospace).
+    /// Custom font-family from `<font:Name>`.
     pub font_family: Option<String>,
     /// `"sub"` or `"super"` from `<sub>` / `<sup>`.
     pub baseline_shift: Option<&'static str>,
@@ -1326,8 +1328,6 @@ fn handle_tag(
             let content = collect_until_tag(chars, "</font>");
             let mut nested = style.clone();
             nested.font_family = Some(font_name);
-            // <font:Name> behaves like monospace for spacing per existing impl.
-            nested.monospace = true;
             walk_segments(&content, &nested, skip_underline, out);
         }
         _ if tag.starts_with("font ") && (tag.contains('\'') || tag.contains('"')) => {
@@ -1499,6 +1499,20 @@ mod tests {
             parse_segments(r#"""mono activity"""#),
             vec![seg("mono\u{00a0}activity", mono_style())]
         );
+    }
+
+    #[test]
+    fn segments_font_family_change_does_not_imply_monospace_markup() {
+        for family in ["Courier New", "Courier", "mOnOsPaCeD"] {
+            let style = Style {
+                font_family: Some(family.to_string()),
+                ..Style::default()
+            };
+            assert_eq!(
+                parse_segments(&format!("<font:{family}>wide  lane</font>")),
+                vec![seg("wide  lane", style)]
+            );
+        }
     }
 
     #[test]
