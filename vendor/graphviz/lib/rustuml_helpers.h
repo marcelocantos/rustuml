@@ -47,7 +47,8 @@ void rustuml_edge_bezier_arrows(Agedge_t *e, size_t idx,
                                 int *sflag, double *sp_x, double *sp_y,
                                 int *eflag, double *ep_x, double *ep_y);
 
-// Get a solved edge label box. kind: 0 = center, 1 = tail, 2 = head.
+// Get a solved edge label box.
+// kind: 0 = center, 1 = tail, 2 = head, 3 = external center.
 // Returns 1 when the requested label exists and has a solved position.
 int rustuml_edge_label_box(Agedge_t *e, int kind,
                            double *x, double *y,
