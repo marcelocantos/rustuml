@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+database "Métrique.v3 Réseau"
+queue Collector
+"Métrique.v3 Réseau" -right-> Collector : unicode dotted source
+@enduml

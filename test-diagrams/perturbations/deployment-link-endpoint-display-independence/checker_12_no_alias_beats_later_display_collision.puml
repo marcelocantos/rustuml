@@ -1,0 +1,7 @@
+@startuml
+node "Data Plane"
+artifact "Data Plane" as AlternateAlias
+database Sink
+"Data Plane" --> Sink : exact no-alias code
+AlternateAlias --> Sink : exact explicit alias
+@enduml

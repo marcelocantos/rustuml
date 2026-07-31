@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+node Alpha
+node Omega
+Alpha -right-> Étape.v4 : create bare
+Étape.v4 -right-> Omega : reuse source
+Omega -right-> Étape.v4 : reuse target
+@enduml

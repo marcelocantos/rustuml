@@ -1,0 +1,57 @@
+Sequence(
+    SequenceDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nleft to right direction\ndatabase \"Métrique.v3 Réseau\"\nqueue Collector\n\"Métrique.v3 Réseau\" -right-> Collector : unicode dotted source\n@enduml\n",
+            ),
+        },
+        participants: [
+            Participant {
+                id: "Métrique.v3 Réseau",
+                label: "Métrique.v3 Réseau",
+                kind: Database,
+                order: Some(
+                    0,
+                ),
+                stereotype: None,
+                url: None,
+                color: None,
+                source_line: 2,
+            },
+            Participant {
+                id: "Collector",
+                label: "Collector",
+                kind: Queue,
+                order: Some(
+                    1,
+                ),
+                stereotype: None,
+                url: None,
+                color: None,
+                source_line: 3,
+            },
+        ],
+        events: [],
+        autonumber: None,
+        hide_footbox: false,
+        teoz: false,
+        boxes: [],
+    },
+)

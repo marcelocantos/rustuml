@@ -1,0 +1,5 @@
+@startuml
+artifact "Étage.v9 Réel"
+node EntryNode
+EntryNode --> "Étage.v9 Réel" : unicode target control
+@enduml

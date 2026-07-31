@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+note "unicode memo" as Mémo.v6
+node Origin
+Origin -right-> "Mémo.v6" : quoted note target
+"Mémo.v6" -right-> Origin : quoted note source
+@enduml

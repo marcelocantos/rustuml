@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="261px" preserveAspectRatio="none" style="width:226px;height:261px;background:#FFFFFF;" version="1.1" viewBox="0 0 226 261" width="226px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Alpha-->
+<g class="entity" data-qualified-name="Alpha" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="118.37,16,128.37,6,197.3075,6,197.3075,42.4883,187.3075,52.4883,118.37,52.4883,118.37,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="187.3075" x2="197.3075" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="118.37" x2="187.3075" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="187.3075" x2="187.3075" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="38.9375" x="133.37" y="39.5352">Alpha</text>
+</g>
+<!--entity Omega-->
+<g class="entity" data-qualified-name="Omega" data-source-line="3" id="ent0003">
+<polygon fill="#F1F1F1" points="113.73,97,123.73,87,201.937,87,201.937,123.4883,191.937,133.4883,113.73,133.4883,113.73,97" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="191.937" x2="201.937" y1="97" y2="87"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="113.73" x2="191.937" y1="97" y2="97"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="191.937" x2="191.937" y1="97" y2="133.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.207" x="128.73" y="120.5352">Omega</text>
+</g>
+<!--entity Étape.v4-->
+<g class="entity" data-qualified-name="Étape.v4" data-source-line="4" id="ent0004">
+<ellipse cx="157.8377" cy="214.2483" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57.6953" x="128.99" y="244.7834">Étape.v4</text>
+</g>
+<!--link Alpha to Étape.v4-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M117.88,42.67 C87.77,55.14 48.61,76.95 30.08,110.74 C6,154.67 69.3162,185.0297 115.0762,201.0297" fill="none" id="Alpha-to-Étape.v4" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="120.74,203.01,113.5646,196.2636,116.0202,201.3597,110.9241,203.8153,120.74,203.01" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="70.5415" x="12.73" y="124.3084">create bare</text>
+</g>
+<!--link Étape.v4 to Omega-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M157.84,223.19 C157.84,242.24 157.84,174.63 157.84,139.8" fill="none" id="Étape.v4-to-Omega" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="157.84,133.8,153.84,142.8,157.84,138.8,161.84,142.8,157.84,133.8" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="80.5137" x="106.34" y="164.4384">reuse source</text>
+</g>
+<!--link Omega to Étape.v4-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M180.23,133.82 C181.33,148.24 181.616,164.4889 180.466,178.9389" fill="none" id="Omega-to-Étape.v4" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="179.99,184.92,184.6914,176.2657,180.3867,179.9358,176.7166,175.631,179.99,184.92" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="76.1846" x="131.34" y="164.4384">reuse target</text>
+</g>
+</g></svg>

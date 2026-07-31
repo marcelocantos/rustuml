@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="182px" preserveAspectRatio="none" style="width:248px;height:182px;background:#FFFFFF;" version="1.1" viewBox="0 0 248 182" width="248px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Release Bundle-->
+<g class="entity" data-qualified-name="Release Bundle" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="131.6846" x="7" y="129.49"/>
+<polygon fill="#F1F1F1" points="121.6846,134.49,121.6846,148.49,133.6846,148.49,133.6846,140.49,127.6846,134.49,121.6846,134.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="127.6846" x2="127.6846" y1="134.49" y2="140.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="133.6846" x2="127.6846" y1="140.49" y2="140.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="101.6846" x="17" y="156.0252">Release Bundle</text>
+</g>
+<!--entity Builder-->
+<g class="entity" data-qualified-name="Builder" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="29.25,16,39.25,6,116.4248,6,116.4248,42.4883,106.4248,52.4883,29.25,52.4883,29.25,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="106.4248" x2="116.4248" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="29.25" x2="106.4248" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="106.4248" x2="106.4248" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="47.1748" x="44.25" y="39.5352">Builder</text>
+</g>
+<!--link Builder to Release Bundle-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M72.84,52.71 C72.84,74.91 72.84,102.49 72.84,123.35" fill="none" id="Builder-to-Release Bundle" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="72.84,129.35,76.84,120.35,72.84,124.35,68.84,120.35,72.84,129.35" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="158.7676" x="73.84" y="96.0584">declared code with space</text>
+</g>
+</g></svg>

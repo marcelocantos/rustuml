@@ -1,0 +1,7 @@
+@startuml
+node FirstPeer
+node SecondPeer
+FirstPeer --> "Fresh.v2 Identity" : create once
+"Fresh.v2 Identity" --> SecondPeer : reuse as source
+SecondPeer --> "Fresh.v2 Identity" : reuse as target
+@enduml

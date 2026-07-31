@@ -1,0 +1,6 @@
+@startuml
+note "release memo" as memo.v5
+artifact Package
+"memo.v5" --> Package : exact note source
+Package --> memo.v5 : exact note target
+@enduml

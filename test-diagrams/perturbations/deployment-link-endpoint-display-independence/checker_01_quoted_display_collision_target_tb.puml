@@ -1,0 +1,5 @@
+@startuml
+node "Quartz Service" as QuartzAlias
+note "target probe" as TargetProbe
+TargetProbe --> "Quartz Service" : display is not code
+@enduml

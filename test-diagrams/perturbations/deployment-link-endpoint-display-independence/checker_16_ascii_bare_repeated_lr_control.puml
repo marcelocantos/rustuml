@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+node AlphaControl
+node OmegaControl
+AlphaControl -right-> Stage.v4 : create bare
+Stage.v4 -right-> OmegaControl : reuse source
+OmegaControl -right-> Stage.v4 : reuse target
+@enduml

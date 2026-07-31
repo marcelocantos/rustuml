@@ -1,0 +1,88 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nleft to right direction\nnode Peer\nartifact \"Late Bound.v8\"\nPeer -right-> \"Late Bound.v8\" : declaration before relation\n\"Late Bound.v8\" -right-> Peer : reverse endpoint side\n@enduml\n",
+            ),
+        },
+        direction: LeftToRight,
+        nodes: [
+            DeploymentNode {
+                id: "Peer",
+                label: "Peer",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 2,
+                quark_order: 0,
+            },
+            DeploymentNode {
+                id: "Late Bound.v8",
+                label: "Late Bound.v8",
+                kind: Artifact,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 3,
+                quark_order: 1,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "Peer",
+                to: "Late Bound.v8",
+                label: Some(
+                    "declaration before relation",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: Some(
+                    Right,
+                ),
+                style: Solid,
+                length: 2,
+                source_line: 4,
+            },
+            DeploymentConnection {
+                from: "Late Bound.v8",
+                to: "Peer",
+                label: Some(
+                    "reverse endpoint side",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: Some(
+                    Right,
+                ),
+                style: Solid,
+                length: 2,
+                source_line: 5,
+            },
+        ],
+        notes: [],
+    },
+)

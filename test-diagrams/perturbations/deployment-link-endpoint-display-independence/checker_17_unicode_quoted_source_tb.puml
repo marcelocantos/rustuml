@@ -1,0 +1,5 @@
+@startuml
+artifact "Étage.v9 Réel"
+node ExitNode
+"Étage.v9 Réel" --> ExitNode : unicode source without direction hint
+@enduml

@@ -1,0 +1,88 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnote \"release memo\" as memo.v5\nartifact Package\n\"memo.v5\" --> Package : exact note source\nPackage --> memo.v5 : exact note target\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Package",
+                label: "Package",
+                kind: Artifact,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 2,
+                quark_order: 1,
+            },
+        ],
+        connections: [
+            DeploymentConnection {
+                from: "memo.v5",
+                to: "Package",
+                label: Some(
+                    "exact note source",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 3,
+            },
+            DeploymentConnection {
+                from: "Package",
+                to: "memo.v5",
+                label: Some(
+                    "exact note target",
+                ),
+                tail_label: None,
+                head_label: None,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                direction: None,
+                style: Solid,
+                length: 2,
+                source_line: 4,
+            },
+        ],
+        notes: [
+            DeploymentNote {
+                id: Some(
+                    "memo.v5",
+                ),
+                target: None,
+                text: "release memo",
+                color: None,
+                tags: [],
+                stereotype: None,
+                owner: None,
+                quark_order: 0,
+                position: Right,
+                source_line: 1,
+            },
+        ],
+    },
+)
