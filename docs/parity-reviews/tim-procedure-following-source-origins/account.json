@@ -22,6 +22,14 @@
       ],
       "lines": "344-359, 456-472",
       "role": "Appends generated procedure lines with body locations while later top-level iterator lines retain their own independent StringLocated locations."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/BlockUml.java",
+      "symbols": [
+        "BlockUml#BlockUml"
+      ],
+      "lines": "138-157",
+      "role": "Feeds the extracted block's existing StringLocated stream through TimLoader without replacing locations, including shared preamble definitions and their established absolute location domain."
     }
   ],
   "rust_locations": [
@@ -39,20 +47,22 @@
     "test-diagrams/golden/preprocessing/preproc_complex_crud_generator.puml",
     "test-diagrams/golden/preprocessing/preproc_complex_crud_generator.svg"
   ],
-  "claimed_invariant": "TIM output carries per-line source ownership independent of flattened output position. Procedure-emitted plain lines retain their definition-body locations; every later ordinary top-level line retains its original diagram location regardless of how many lines prior procedure calls emitted.",
-  "causal_divergence": "The CRUD generator expands three nine-line procedure bodies. Rust correctly marks the generated class and repository content with procedure-body locations, but try_function_call only pads until output.len reaches the caller line and does not enable explicit origins for later source lines. Since expanded output already exceeds the raw position, padding is a no-op and the two final links are parsed at flattened positions 57 and 58. Java's top-level StringLocated objects remain lines 27 and 28 after removing @startuml, which the golden SVG reports. Geometry, entities, UIDs, link endpoints, paint, and labels already agree.",
-  "planned_model_change": "After a top-level procedure expansion that emits body lines, enable the existing explicit source-marker mode for all subsequent user content, just as multiline definelong, foreach, while, and include expansion already do. Keep procedure body markers unchanged. Add fresh tests with renamed entities covering zero, one, and repeated calls; calls that emit more and fewer lines than their source footprint; blank/comment lines after calls; and a later ordinary relationship whose source origin must remain stable.",
+  "claimed_invariant": "TIM output carries per-line source ownership independent of flattened output position. Procedure-emitted plain lines retain their definition-body locations; every later ordinary top-level line retains its original diagram location regardless of how many lines prior procedure calls emitted. A block beginning at the first source line uses PlantUML's zero-based diagram positions, while an extracted block with shared preamble definitions preserves the established preamble-backed absolute position domain.",
+  "causal_divergence": "The CRUD generator expands three nine-line procedure bodies. Rust correctly marks the generated class and repository content with procedure-body locations, but try_function_call only pads until output.len reaches the caller line and does not enable explicit origins for later source lines. Since expanded output already exceeds the raw position, padding is a no-op and the two final links are parsed at flattened positions 57 and 58. Java's top-level StringLocated objects remain lines 27 and 28 after removing @startuml, which the golden SVG reports. A first implementation that enabled markers exposed a second ownership boundary in the full parser suite: multi-diagram sources with shared preamble procedures intentionally preserve their extracted absolute position domain, where the ordinary line in preproc_05_procedure_header is 8 rather than the block-local 7. Geometry, entities, UIDs, link endpoints, paint, and labels already agree.",
+  "planned_model_change": "After a top-level procedure expansion that emits body lines, enable the existing explicit source-marker mode for all subsequent user content, just as multiline definelong, foreach, while, and include expansion already do. Track whether the active top-level @start marker followed a preamble: sources beginning with @start retain the current zero-based diagram position, while extracted blocks with preceding definitions retain their established absolute marker position. Keep procedure body markers unchanged. Add fresh tests with renamed entities covering mixed body lengths, repeated calls, blank/comment lines after calls, a later ordinary relationship, and the existing preamble-backed sequence control.",
   "perturbation_axes": [
     "single versus repeated procedure calls",
     "short versus long emitted procedure bodies",
     "ordinary content immediately after a call versus after blanks and comments",
     "renamed entities and changed call order",
-    "procedure body origins versus following caller-file origins"
+    "procedure body origins versus following caller-file origins",
+    "inline first-line @start blocks versus shared preamble-backed blocks"
   ],
   "scope_boundary": "This mechanism owns source-origin metadata after top-level procedure expansion. It does not change TIM text expansion, procedure body attribution, parser semantics, UIDs, layout, geometry, paint, comparator behavior, golden data, or fixture eligibility.",
   "acceptance": [
     "preproc_complex_crud_generator reports link source lines 27 and 28 and becomes structurally equivalent through render_svg without oracle input.",
     "Fresh tests prove stable following-line origins across renamed single and repeated procedure expansions with different body lengths.",
+    "The preamble-backed sequence control retains source line 8 while first-line @start class controls retain their zero-based diagram positions.",
     "Procedure-emitted entities continue to use their definition-body source locations.",
     "Existing include, loop, definelong, procedure, parser, and renderer source-origin tests remain green.",
     "The parser and renderer suites, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
