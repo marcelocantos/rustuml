@@ -3149,8 +3149,8 @@ fn deployment_note_fill(note: &DeploymentNote, gradient_defs: Option<&str>) -> S
 
 fn deployment_note_fill_from_color(color: Option<&str>, gradient_defs: Option<&str>) -> String {
     color
-        .map(|color| crate::sequence::gradient_fill_or(color, gradient_defs))
-        .unwrap_or_else(|| NOTE_FILL.to_string())
+        .map(|color| crate::sequence::hcolor_fill_attributes(color, gradient_defs))
+        .unwrap_or_else(|| format!(r#"fill="{NOTE_FILL}""#))
 }
 
 fn deployment_note_gradient_defs(diagram: &DeploymentDiagram) -> String {
@@ -3170,8 +3170,8 @@ fn deployment_note_gradient_defs(diagram: &DeploymentDiagram) -> String {
         let Some((raw1, raw2, policy)) = crate::sequence::split_gradient_colors(color) else {
             continue;
         };
-        let color1 = crate::sequence::resolve_color(raw1);
-        let color2 = crate::sequence::resolve_color(raw2);
+        let color1 = crate::sequence::resolve_color_rgb(raw1);
+        let color2 = crate::sequence::resolve_color_rgb(raw2);
         if gradients
             .iter()
             .any(|(existing1, existing2, existing_policy, _)| {
@@ -3467,10 +3467,10 @@ fn render_attached_deployment_note(
         uid.qualified_name, note.source_line, uid.entity_id
     ));
     svg.raw(&format!(
-        r#"<path d="{path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{path}" {fill} style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     svg.raw(&format!(
-        r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{fold_path}" {fill} style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
 
     let mut text_y = y + NOTE_MARGIN_Y;
@@ -3529,10 +3529,10 @@ fn render_floating_deployment_note(
         uid.qualified_name, note.source_line, uid.entity_id
     ));
     svg.raw(&format!(
-        r#"<path d="{path}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{path}" {fill} style="stroke:{STROKE};stroke-width:0.5;"/>"#
     ));
     svg.raw(&format!(
-        r#"<path d="{fold_path}" fill="{fill}" style="stroke:{STROKE};stroke-width:1;"/>"#
+        r#"<path d="{fold_path}" {fill} style="stroke:{STROKE};stroke-width:1;"/>"#
     ));
     let mut text_y = y + NOTE_MARGIN_Y;
     for line in note.text.lines() {
@@ -3570,7 +3570,7 @@ fn render_deployment_link_note(
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
     svg.raw(&format!(
-        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" {fill} style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         x = fc(x),
         y = fc(y),
         bottom = fc(bottom),
@@ -3579,7 +3579,7 @@ fn render_deployment_link_note(
         fold_x = fc(fold_x),
     ));
     svg.raw(&format!(
-        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" {fill} style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         fold_x = fc(fold_x),
         y = fc(y),
         fold_y = fc(fold_y),
@@ -8826,5 +8826,36 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.matches(r#"fill="none""#).count() >= 4, "{svg}");
         assert_eq!(svg.matches("<linearGradient ").count(), 1, "{svg}");
         assert!(svg.matches(r#"fill="url(#"#).count() >= 2, "{svg}");
+    }
+
+    #[test]
+    fn named_note_alias_and_rgba_paint_follow_hcolor_svg_projection() {
+        let source = "@startuml\n\
+                      node Target\n\
+                      note \"alias payload\" as AliasSolid #mOtIvAtIoN\n\
+                      note \"alpha payload\" as AlphaSolid #77889980\n\
+                      note \"alpha gradient\" as AlphaGradient #10203001/405060FE\n\
+                      AliasSolid --> Target\n\
+                      AlphaSolid --> Target\n\
+                      AlphaGradient --> Target\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.matches(r##"fill="#CCCCFF""##).count() >= 2, "{svg}");
+        assert!(
+            svg.matches(r##"fill="#778899" fill-opacity="0.50196""##)
+                .count()
+                >= 2,
+            "{svg}"
+        );
+        assert!(svg.contains(r##"stop-color="#102030""##), "{svg}");
+        assert!(svg.contains(r##"stop-color="#405060""##), "{svg}");
+        assert!(!svg.contains("#10203001"), "{svg}");
+        assert!(!svg.contains("#405060FE"), "{svg}");
     }
 }
