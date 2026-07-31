@@ -140,6 +140,10 @@ pub struct DeploymentConnection {
     pub direction: Option<DeploymentLinkDirection>,
     #[serde(default, skip_serializing_if = "DeploymentLinkStyle::is_solid")]
     pub style: DeploymentLinkStyle,
+    /// A `note on link` value owned by this connection. Java stores this on
+    /// `Link`, so it has no independent quark, source line, or UID.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub note: Option<DeploymentLinkNote>,
     /// Paint-hidden link style: retained for solving and UID order, not painted.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub hidden: bool,
@@ -151,6 +155,14 @@ pub struct DeploymentConnection {
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DeploymentLinkNote {
+    pub text: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    pub position: DeploymentNotePosition,
 }
 
 fn default_deployment_link_length() -> usize {

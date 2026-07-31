@@ -88,7 +88,7 @@ fn named_note_whole_color_is_resolvable(value: &str) -> bool {
     ) || named_note_simple_color_is_resolvable(value)
 }
 
-fn named_note_color_is_valid(color: &str) -> bool {
+pub(super) fn named_note_color_is_valid(color: &str) -> bool {
     let Some(value) = color.strip_prefix('#') else {
         return false;
     };

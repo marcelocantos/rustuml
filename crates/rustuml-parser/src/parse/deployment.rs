@@ -488,6 +488,77 @@ fn deployment_note_position(value: &str) -> DeploymentNotePosition {
     }
 }
 
+enum DeploymentLinkNoteCommand {
+    Inline(DeploymentLinkNote),
+    Multiline {
+        color: Option<String>,
+        position: DeploymentNotePosition,
+    },
+}
+
+/// Parse the command owned by Java `CommandFactoryNoteOnLink`.
+///
+/// The outer `Option` distinguishes this factory's prefix from unrelated note
+/// commands. Once the prefix matches, malformed suffixes stay terminal through
+/// the inner `Result`, matching `PSystemCommandFactory` command ownership.
+fn parse_deployment_link_note_command(
+    line: &str,
+) -> Option<Result<DeploymentLinkNoteCommand, &'static str>> {
+    static PREFIX: LazyLock<Regex> = LazyLock::new(|| {
+        // Java provenance: `CommandFactoryNoteOnLink` lines 75-103 at
+        // 71806a23780b04a5ccde2f8ceb5121edad5eb711. The optional position is
+        // followed by zero-or-more spaces, so Java also accepts `lefton`.
+        Regex::new(r"(?i)^note\s+(?:(right|left|top|bottom)\s*)?(?:on|of)\s+link\b(.*)$").unwrap()
+    });
+
+    let captures = PREFIX.captures(line)?;
+    let position = captures
+        .get(1)
+        .map(|value| deployment_note_position(&value.as_str().to_ascii_lowercase()))
+        // `CommandFactoryNoteOnLink.executeInternal` defaults to BOTTOM.
+        .unwrap_or(DeploymentNotePosition::Bottom);
+    let mut suffix = captures.get(2)?.as_str().trim_start();
+    let color = if suffix.starts_with('#') {
+        let end = suffix
+            .find(|character: char| character.is_whitespace() || character == ':')
+            .unwrap_or(suffix.len());
+        let token = &suffix[..end];
+        if !super::named_note_color_is_valid(token) {
+            return Some(Err("invalid note-on-link color"));
+        }
+        suffix = suffix[end..].trim_start();
+        Some(token.to_string())
+    } else {
+        None
+    };
+
+    if suffix.is_empty() {
+        return Some(Ok(DeploymentLinkNoteCommand::Multiline { color, position }));
+    }
+    let Some(text) = suffix.strip_prefix(':') else {
+        return Some(Err("invalid note-on-link command"));
+    };
+    Some(Ok(DeploymentLinkNoteCommand::Inline(DeploymentLinkNote {
+        text: text.trim_start().to_string(),
+        color,
+        position,
+    })))
+}
+
+fn last_note_eligible_connection_index(
+    connections: &[DeploymentConnection],
+    notes: &[DeploymentNote],
+) -> Option<usize> {
+    let is_note_id = |id: &str| {
+        notes
+            .iter()
+            .any(|note| note.id.as_deref().is_some_and(|note_id| note_id == id))
+    };
+    connections
+        .iter()
+        .rposition(|connection| !is_note_id(&connection.from) && !is_note_id(&connection.to))
+}
+
 /// Accumulator for multiline note bodies.
 struct NoteAccum {
     target: Option<String>,
@@ -502,9 +573,38 @@ struct NoteAccum {
     lines: Vec<String>,
 }
 
+struct LinkNoteAccum {
+    connection_index: usize,
+    color: Option<String>,
+    position: DeploymentNotePosition,
+    command_line: usize,
+    lines: Vec<String>,
+}
+
+fn deployment_link_note_text(lines: &[String]) -> String {
+    // Java `CommandFactoryNoteOnLink.createMultiLine` calls
+    // `BlocLines.removeEmptyColumns`: remove only the leading columns shared
+    // by every nonblank body line, preserving relative and trailing space.
+    let common_indent = lines
+        .iter()
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| {
+            line.bytes()
+                .take_while(|byte| matches!(byte, b' ' | b'\t'))
+                .count()
+        })
+        .min()
+        .unwrap_or(0);
+    lines
+        .iter()
+        .map(|line| line.get(common_indent..).unwrap_or("").to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseError> {
     let mut nodes: Vec<DeploymentNode> = Vec::new();
-    let mut connections = Vec::new();
+    let mut connections: Vec<DeploymentConnection> = Vec::new();
     let mut notes = Vec::new();
     let mut meta = DiagramMeta::default();
     let mut direction = DeploymentLayoutDirection::TopToBottom;
@@ -515,6 +615,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     // Multiline note accumulator.
     let mut note_accum: Option<NoteAccum> = None;
+    let mut link_note_accum: Option<LinkNoteAccum> = None;
 
     // Legend accumulator.
     let mut in_legend = false;
@@ -564,6 +665,35 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
+
+        // Multiline link-note body. Java keeps this as one command and assigns
+        // the completed value to the existing Link without allocating a quark.
+        // Consume it before the empty-line fast path so body whitespace remains
+        // available to `BlocLines.removeEmptyColumns` semantics.
+        if link_note_accum.is_some() {
+            if super::is_ordinary_note_terminator(trimmed) {
+                let accum = link_note_accum.take().unwrap();
+                if accum.lines.is_empty() {
+                    return Err(ParseError {
+                        line: accum.command_line,
+                        message: "no note defined".to_string(),
+                    });
+                }
+                connections[accum.connection_index].note = Some(DeploymentLinkNote {
+                    text: deployment_link_note_text(&accum.lines),
+                    color: accum.color,
+                    position: accum.position,
+                });
+            } else {
+                link_note_accum
+                    .as_mut()
+                    .unwrap()
+                    .lines
+                    .push(super::source_text(line).to_string());
+            }
+            continue;
+        }
+
         if trimmed.is_empty() {
             continue;
         }
@@ -713,6 +843,36 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             );
             if created && let Some(parent_id) = stack.last().cloned() {
                 add_child(&mut nodes, &parent_id, &id);
+            }
+            continue;
+        }
+
+        if let Some(command) = parse_deployment_link_note_command(trimmed) {
+            let command = command.map_err(|message| ParseError {
+                line: current_line,
+                message: message.to_string(),
+            })?;
+            let Some(connection_index) = last_note_eligible_connection_index(&connections, &notes)
+            else {
+                return Err(ParseError {
+                    line: current_line,
+                    message: "no link defined for note on link".to_string(),
+                });
+            };
+            match command {
+                DeploymentLinkNoteCommand::Inline(note) => {
+                    // Java `Link.addNote` is replacement, not accumulation.
+                    connections[connection_index].note = Some(note);
+                }
+                DeploymentLinkNoteCommand::Multiline { color, position } => {
+                    link_note_accum = Some(LinkNoteAccum {
+                        connection_index,
+                        color,
+                        position,
+                        command_line: current_line,
+                        lines: Vec::new(),
+                    });
+                }
             }
             continue;
         }
@@ -868,6 +1028,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     arrow_at_end,
                     direction,
                     style,
+                    note: None,
                     hidden,
                     length,
                     source_line: current_line,
@@ -1004,11 +1165,19 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 arrow_at_end,
                 direction,
                 style,
+                note: None,
                 hidden,
                 length,
                 source_line: current_line,
             });
         }
+    }
+
+    if let Some(accum) = link_note_accum {
+        return Err(ParseError {
+            line: accum.command_line,
+            message: "unterminated note on link".to_string(),
+        });
     }
 
     Ok(DeploymentDiagram {
@@ -1458,6 +1627,170 @@ mod tests {
         assert!(d.notes[0].quark_order < nested.quark_order);
         assert!(nested.quark_order < root.quark_order);
         assert_eq!(d.notes[0].owner.as_deref(), Some("Outer"));
+    }
+
+    #[test]
+    fn link_note_command_matrix_is_owned_by_the_connection() {
+        for (command, expected_position, expected_color, expected_text) in [
+            (
+                "NoTe On LiNk : default renamed memo",
+                DeploymentNotePosition::Bottom,
+                None,
+                "default renamed memo",
+            ),
+            (
+                "note left of link #LightBlue : left renamed memo",
+                DeploymentNotePosition::Left,
+                Some("#LightBlue"),
+                "left renamed memo",
+            ),
+            (
+                "note right on link : right renamed memo",
+                DeploymentNotePosition::Right,
+                None,
+                "right renamed memo",
+            ),
+            (
+                "note top of link : top renamed memo",
+                DeploymentNotePosition::Top,
+                None,
+                "top renamed memo",
+            ),
+            (
+                "note bottom on link : bottom renamed memo",
+                DeploymentNotePosition::Bottom,
+                None,
+                "bottom renamed memo",
+            ),
+        ] {
+            let diagram = parse(&format!(
+                "node RenamedIngress71\nnode RenamedArchive73\nRenamedIngress71 --> RenamedArchive73 : renamed route\n{command}"
+            ));
+            assert!(diagram.notes.is_empty(), "{command}");
+            assert_eq!(diagram.connections.len(), 1, "{command}");
+            assert_eq!(diagram.connections[0].source_line, 3, "{command}");
+            let note = diagram.connections[0]
+                .note
+                .as_ref()
+                .unwrap_or_else(|| panic!("missing link note for {command}"));
+            assert_eq!(note.position, expected_position, "{command}");
+            assert_eq!(note.color.as_deref(), expected_color, "{command}");
+            assert_eq!(note.text, expected_text, "{command}");
+        }
+    }
+
+    #[test]
+    fn multiline_link_note_preserves_nested_topology_without_a_quark() {
+        let diagram = parse(
+            "node RenamedOuter101 {\n\
+               node RenamedIngress103\n\
+               node RenamedArchive107\n\
+               RenamedIngress103 -right-> RenamedArchive107 : nested route\n\
+               note top of link #FFCCAA\n\
+                 first renamed line\n\
+                 second renamed line\n\
+               EnDnOtE\n\
+               artifact RenamedLater109\n\
+             }",
+        );
+
+        let connection = &diagram.connections[0];
+        let note = connection.note.as_ref().unwrap();
+        assert_eq!(note.text, "first renamed line\nsecond renamed line");
+        assert_eq!(note.color.as_deref(), Some("#FFCCAA"));
+        assert_eq!(note.position, DeploymentNotePosition::Top);
+        assert_eq!(connection.direction, Some(DeploymentLinkDirection::Right));
+        assert_eq!(connection.source_line, 4);
+        assert!(diagram.notes.is_empty());
+        let later = diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == "RenamedLater109")
+            .unwrap();
+        assert_eq!(later.quark_order, 3);
+        assert!(diagram.nodes[0].children.contains(&later.id));
+    }
+
+    #[test]
+    fn multiline_link_note_dedents_only_the_common_body_columns() {
+        let lines = [
+            "node RenamedA113",
+            "node RenamedB127",
+            "RenamedA113 --> RenamedB127",
+            "note on link",
+            "  alpha  ",
+            "    beta",
+            "",
+            "  gamma",
+            "end note",
+        ]
+        .map(str::to_string);
+        let diagram = parse_deployment(&lines).unwrap();
+
+        assert_eq!(
+            diagram.connections[0].note.as_ref().unwrap().text,
+            "alpha  \n  beta\n\ngamma"
+        );
+    }
+
+    #[test]
+    fn repeated_link_note_replaces_and_skips_note_endpoint_links() {
+        let diagram = parse(
+            "node RenamedOrigin131\n\
+             node RenamedTarget137\n\
+             RenamedOrigin131 --> RenamedTarget137 : durable route\n\
+             note on link : superseded memo\n\
+             note \"floating control\" as Floating139\n\
+             Floating139 --> RenamedTarget137\n\
+             note left on link #PaleGreen : replacement memo",
+        );
+
+        assert_eq!(diagram.connections.len(), 2);
+        let note = diagram.connections[0].note.as_ref().unwrap();
+        assert_eq!(note.text, "replacement memo");
+        assert_eq!(note.color.as_deref(), Some("#PaleGreen"));
+        assert_eq!(note.position, DeploymentNotePosition::Left);
+        assert!(diagram.connections[1].note.is_none());
+        assert_eq!(diagram.notes.len(), 1);
+    }
+
+    #[test]
+    fn link_note_without_an_eligible_prior_link_is_terminal() {
+        for (source, expected_line) in [
+            ("node RenamedOnly151\nnote on link : rejected memo", 2),
+            (
+                "note \"floating\" as Floating157\nnode RenamedPeer163\nFloating157 --> RenamedPeer163\nnote of link : rejected note edge",
+                4,
+            ),
+        ] {
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let error = parse_deployment(&lines).unwrap_err();
+            assert_eq!(error.line, expected_line, "{source}");
+            assert_eq!(error.message, "no link defined for note on link");
+        }
+    }
+
+    #[test]
+    fn invalid_or_unterminated_link_note_commands_are_terminal() {
+        for (source, expected_message) in [
+            (
+                "node RenamedA167\nnode RenamedB173\nRenamedA167 --> RenamedB173\nnote on link #NotAPlantUmlColor : rejected",
+                "invalid note-on-link color",
+            ),
+            (
+                "node RenamedA167\nnode RenamedB173\nRenamedA167 --> RenamedB173\nnote on link\nunterminated body",
+                "unterminated note on link",
+            ),
+            (
+                "node RenamedA167\nnode RenamedB173\nRenamedA167 --> RenamedB173\nnote on link\nend note",
+                "no note defined",
+            ),
+        ] {
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let error = parse_deployment(&lines).unwrap_err();
+            assert_eq!(error.line, 4, "{source}");
+            assert_eq!(error.message, expected_message, "{source}");
+        }
     }
 
     #[test]
