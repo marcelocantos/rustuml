@@ -1,0 +1,9 @@
+@startuml
+note as FirstPayload921
+control first body text
+end note
+note as SecondPayload921
+boundary second body text
+end note
+class AfterTerminator921
+@enduml

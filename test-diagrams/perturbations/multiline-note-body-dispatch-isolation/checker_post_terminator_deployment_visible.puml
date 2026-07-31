@@ -1,0 +1,6 @@
+@startuml
+note as DispatchPayload922
+control body remains hidden
+end note
+node RuntimeNode922
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+participant Sender
+participant Receiver
+Sender -> Receiver : message
+note right #MistyRose
+control body text
+boundary body text
+end note
+Receiver --> Sender : ack
+@enduml

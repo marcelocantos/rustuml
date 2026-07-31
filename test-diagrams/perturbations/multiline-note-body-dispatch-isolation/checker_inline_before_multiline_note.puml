@@ -1,0 +1,7 @@
+@startuml
+note "control inline remains literal text" as InlinePayload920
+note as MultilinePayload920
+boundary body text
+node body text
+end note
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+class BracePayloadTarget917
+note left of BracePayloadTarget917 #LightYellow {
+control remains display text
+boundary remains display text too
+}
+@enduml

@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "mechanism": "multiline-note-body-dispatch-isolation",
+  "account_commit": "3ff57540f2fb39745eb92363bf3094ac8eec49b0",
+  "implementation_commit": "c2aa2daaeecd2b69ebd0e04673b894ef9e0232c0",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "codex-desktop-current-task-2026-07-31",
+    "model": "GPT-5",
+    "role": "independent adversarial checker; did not implement c2aa2daa"
+  },
+  "review_context": {
+    "review_worktree_head": "3432c11cac1e8a8397e7fea8650b91c47b72be04",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one_binary": "target/release/examples/diff_one",
+    "cargo_was_run": false,
+    "source_dirty_files_left_unstaged": [
+      "crates/rustuml-parser/src/parse/mod.rs"
+    ]
+  },
+  "commands": [
+    "git show --stat --oneline 3ff57540",
+    "git show --stat --oneline c2aa2daa",
+    "sed -n '120,320p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "sed -n '1,300p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandMultilines2.java",
+    "sed -n '1,230p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "sed -n '1,280p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "sed -n '1,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+    "sed -n '300,430p' crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n '1060,1115p' crates/rustuml-parser/src/parse/mod.rs",
+    "git grep -n \"fixture\\|golden\\|rereview_note_only\\|DispatchMemo\\|multiline-note-body-dispatch-isolation\" c2aa2daa -- crates/rustuml-parser/src/parse/mod.rs docs/parity-reviews/multiline-note-body-dispatch-isolation || true",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/multiline-note-body-dispatch-isolation/*.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml",
+    "for p in test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_*.puml; do target/release/examples/diff_one --no-oracle \"$p\"; done"
+  ],
+  "source_inspection": {
+    "java_model": [
+      "PSystemBuilder tries SequenceDiagramFactory before ClassDiagramFactory, then Activity, Description, and the later UML factories for @startuml sources.",
+      "PSystemCommandFactory.getCandidate first tests a single line. If a command returns OK_PARTIAL, isMultilineCommandOk accumulates physical lines into one BlocLines value until that same command returns OK or NOT_OK.",
+      "CommandMultilines2 matches only the first line against the starting regex while the final line must match the command's end regex; interior lines are command payload.",
+      "CommandFactoryNote accepts `note as CODE ... end note` as a Class command, and CommandFactoryNoteOnEntity accepts both `note ... end note` and bracket-terminated `note ... { ... }` attached forms.",
+      "SequenceDiagramFactory registers multiline `note`, `hnote`, and `rnote` commands; their terminators include `end note`, `end hnote`, and `end rnote` depending on the form."
+    ],
+    "rust_model": [
+      "detect_uml_subtype now computes completed_multiline_note_payload and skips lines marked as payload before applying subtype heuristics.",
+      "completed_multiline_note_payload recognizes only openers whose first whitespace token equals `note`, excludes colon and quoted single-line forms, and hides through a later case-insensitive `end note` terminator.",
+      "The opener line remains visible to scoring. Mixed-case `NoTe as ...` is not counted as class evidence by the later subtype heuristics, so an otherwise note-only diagram can fall back to the default SEQUENCE subtype.",
+      "Bracket-terminated attached notes, `hnote`, and `rnote` are outside the current span detector even though Java accepts them as multiline commands."
+    ],
+    "fixture_logic_search": [
+      "No shipping-code references to golden SVG contents, fixture labels, or the preserved rereview filenames were found in c2aa2daa.",
+      "The only `DispatchMemo` strings found in c2aa2daa are parser unit tests and the causal account, not product conditionals."
+    ]
+  },
+  "preserved_failures_replayed": [
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_exact_case.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_scale.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_prefix_control_three_lines.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_control_keyword_plain.puml",
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/svg-logical-monospace-serialization/rereview_note_only_boundary_keyword_plain.puml",
+      "result": "pass"
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_brace_payload_keywords.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_brace_payload_keywords.svg",
+      "axes": [
+        "attached class note",
+        "bracket terminator",
+        "body-leading control and boundary keywords",
+        "color"
+      ],
+      "result": "fail",
+      "failure_summary": "Java renders CLASS with an attached note. Rust renders SEQUENCE, creating participant data from note-body words such as `remains`."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_endnote_colored_indented.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_attached_endnote_colored_indented.svg",
+      "axes": [
+        "attached class note",
+        "end note terminator",
+        "indentation",
+        "color",
+        "body-leading control and boundary keywords"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_floating_mixed_case_colored.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_floating_mixed_case_colored.svg",
+      "axes": [
+        "floating class note",
+        "mixed-case opener and terminator",
+        "color",
+        "body-leading keyword",
+        "Creole markup"
+      ],
+      "result": "fail",
+      "failure_summary": "Java command regexes accept the mixed-case note block as CLASS. Rust hides the payload but does not count the mixed-case opener as class evidence, so it falls back to SEQUENCE."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_inline_before_multiline_note.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_inline_before_multiline_note.svg",
+      "axes": [
+        "quoted inline note before multiline note",
+        "floating class note",
+        "body-leading boundary and node keywords"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_multiple_note_blocks_then_class.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_multiple_note_blocks_then_class.svg",
+      "axes": [
+        "multiple floating note blocks",
+        "post-terminator class command",
+        "body-leading control and boundary keywords",
+        "declaration order"
+      ],
+      "result": "fail",
+      "failure_summary": "Both sides render CLASS, but the no-oracle SVG differs in floating-note/class placement. This is a valid held-out failure adjacent to the same multiline note block family."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_post_terminator_deployment_visible.svg",
+      "axes": [
+        "floating note before deployment command",
+        "post-terminator top-level command",
+        "body-leading control keyword"
+      ],
+      "result": "fail",
+      "failure_summary": "Java DESCRIPTION keeps the note entity and then renders the node command. Rust selects DESCRIPTION but the deployment parser consumes the note body as a `control` entity named `body`, so subtype isolation alone is insufficient."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_hnote_body_keywords.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_hnote_body_keywords.svg",
+      "axes": [
+        "sequence hnote",
+        "end hnote terminator",
+        "body-leading component and database keywords",
+        "two participants and arrow topology"
+      ],
+      "result": "fail",
+      "failure_summary": "Java renders the multiline hnote. Rust stays SEQUENCE but omits the note block, producing a shorter lifeline diagram."
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_note_on_arrow_keywords.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_note_on_arrow_keywords.svg",
+      "axes": [
+        "sequence note on arrow",
+        "end note terminator",
+        "body-leading control and boundary keywords",
+        "post-terminator reply arrow"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_rnote_right_keywords.puml",
+      "golden": "test-diagrams/perturbations/multiline-note-body-dispatch-isolation/checker_sequence_rnote_right_keywords.svg",
+      "axes": [
+        "sequence rnote",
+        "end rnote terminator",
+        "body-leading actor and node keywords",
+        "two participants and arrow topology"
+      ],
+      "result": "fail",
+      "failure_summary": "Java renders the multiline rnote. Rust stays SEQUENCE but omits the note block, producing a shorter lifeline diagram."
+    }
+  ],
+  "invalid_probes": [
+    {
+      "source_name": "checker_unterminated_payload_keyword_probe.puml",
+      "result": "java_error",
+      "observation": "Java emitted an error page for an unterminated `note as ...` block, so this was not committed as a valid held-out. It supports the account boundary that unterminated spans must not hide arbitrary later source."
+    }
+  ],
+  "findings": [
+    "The Java source inspection supports the narrow claim that completed `note ... end note` interiors are accumulated as command payload before factory selection proceeds.",
+    "The five preserved note-only failures from the prior SVG logical monospace review now pass under `target/release/examples/diff_one --no-oracle`, so c2aa2daa fixed that exact `note as ... end note` body-keyword leak.",
+    "The implementation is too narrow for Java's multiline-note grammar. Java-valid bracket-terminated attached notes are not hidden by `completed_multiline_note_payload`, and fresh `checker_attached_brace_payload_keywords.puml` changes from Java CLASS to Rust SEQUENCE.",
+    "The implementation leaves mixed-case note openers under-modeled. Java accepts mixed-case command regexes, but fresh `checker_floating_mixed_case_colored.puml` falls back to Rust SEQUENCE because the opener is not scored as class evidence.",
+    "Subtype isolation alone does not preserve Java's model when a note block precedes a DESCRIPTION command: fresh `checker_post_terminator_deployment_visible.puml` selects DESCRIPTION but Rust's deployment parser consumes note payload as a top-level control entity.",
+    "Sequence multiline note forms remain incomplete for `hnote` and `rnote`: fresh Java-valid sequence held-outs stay SEQUENCE in Rust but drop the note block, failing no-oracle comparison.",
+    "No fixture-shaped product logic or golden-output dependency was found in c2aa2daa for this mechanism."
+  ],
+  "summary": {
+    "preserved_failures_replayed": 5,
+    "preserved_failures_now_passing": 5,
+    "fresh_valid_inputs": 9,
+    "fresh_valid_passes": 3,
+    "fresh_valid_failures": 6,
+    "java_error_inputs_excluded_from_heldouts": 1
+  },
+  "verdict": "rejected",
+  "verdict_reason": "Rejected. The old counterexamples pass, but fresh valid held-outs disprove the claimed grammar boundary across bracket-terminated attached notes, mixed-case note commands, DESCRIPTION note consumption before post-terminator commands, and sequence `hnote`/`rnote` forms. Under the T14 held-out rule, any failing valid held-out rejects the implementation."
+}

@@ -1,0 +1,6 @@
+@startuml
+NoTe as MixedCasePayload919 #LightGreen
+  control line stays payload
+  <b>boundary markup stays payload</b>
+EnD NoTe
+@enduml

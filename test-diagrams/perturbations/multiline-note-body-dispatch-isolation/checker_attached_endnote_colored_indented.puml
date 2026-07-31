@@ -1,0 +1,7 @@
+@startuml
+class IndentedPayloadTarget918
+  note right of IndentedPayloadTarget918 #AliceBlue
+    control indented display text
+    boundary indented display text
+  end note
+@enduml

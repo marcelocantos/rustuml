@@ -1,0 +1,10 @@
+@startuml
+participant Client
+participant Service
+Client -> Service : call
+rnote right of Service #LightYellow
+actor body text
+node body text
+end rnote
+Service --> Client : result
+@enduml

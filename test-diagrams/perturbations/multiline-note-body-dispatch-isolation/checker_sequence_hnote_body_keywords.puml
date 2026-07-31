@@ -1,0 +1,10 @@
+@startuml
+participant Alice
+participant Bob
+Alice -> Bob : request
+hnote over Alice, Bob #LightBlue
+component body text
+database body text
+end hnote
+Bob --> Alice : response
+@enduml
