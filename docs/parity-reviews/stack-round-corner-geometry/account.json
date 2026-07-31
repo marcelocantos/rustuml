@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "mechanism": "stack-round-corner-geometry",
+  "status": "account_committed_before_implementation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:Cluster#getStyle and Cluster#drawU",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:ClusterDecoration#drawU and getTextBlock",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:EntityImageEmptyPackage#getStyle and drawU",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStack.java:USymbolStack#drawQueue"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:layout_package_clusters",
+    "crates/rustuml-render/src/class.rs:layout_empty_packages",
+    "crates/rustuml-render/src/class.rs:emit_stack_envelope"
+  ],
+  "invariant": "ClusterDecoration and EntityImageEmptyPackage resolve the concrete root.element.classDiagram.group.stack style and pass its RoundCorner diameter through Fashion to USymbolStack. USymbolStack rounds the inset URectangle by that diameter, uses radius RoundCorner/2 for each outer-path arc, and takes a distinct six-segment straight-line branch when RoundCorner is zero.",
+  "causal_divergence": "Rust does not carry resolved stack RoundCorner into either stack layout record. emit_stack_envelope instead hardcodes PACKAGE_ROUND_CORNER/2 for rx, ry, and every arc, and has no zero branch. The fresh empty-stack roundcorner-zero checker therefore retains arcs, while the fresh dpi checker uses a fixed scaled radius instead of the configured style radius.",
+  "planned_change": "Resolve RoundCorner from the concrete classDiagram group stack style, retain the diameter on cluster and empty-stack layout records, and pass it into emit_stack_envelope. Emit Java's exact straight path and omit rx/ry when the diameter is zero; otherwise use half the diameter for the inset SVG radius and outer path arcs. Preserve the generic document scaler as the only dpi/scale transform.",
+  "perturbation_axes": [
+    "roundcorner zero versus odd and even nonzero diameters",
+    "empty stack leaf versus nonempty stack cluster",
+    "generic roundcorner versus stack-specific style declaration",
+    "style declaration before versus after stack construction",
+    "unscaled versus dpi and explicit scale",
+    "renamed labels and changed child counts"
+  ],
+  "scope_boundary": "This mechanism owns stack corner-style resolution and the inset/outline path geometry only. It does not alter the transparent rectangle's stroke state, SVEK envelope normalization, stack dimensions or margins, child layout, generic SVG scaling, comparator behavior, baselines, or fixture eligibility.",
+  "acceptance": [
+    "The preserved zero-roundcorner and configured nonzero-roundcorner checker inputs pass diff_one --no-oracle apart from separately recorded envelope drift.",
+    "Tests cover zero, odd, and even diameters for both leaf and cluster paths.",
+    "Fresh Java perturbations cover style source order, scale form, topology, and labels.",
+    "The renderer suite and no-oracle ratchet remain green.",
+    "An independent checker records an accepted verdict at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "matching checker labels, dpi 144, or known scaled radii",
+    "changing the generic scaler or post-processing SVG paths",
+    "folding SVEK origin drift into the corner model",
+    "changing comparator tolerance, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.puml",
+    "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_unscaled_empty_stack_roundcorner_zero.svg",
+    "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.puml",
+    "test-diagrams/perturbations/stack-transparent-rectangle-stroke-state/checker_dpi_stack_cluster_roundcorner_nonzero.svg"
+  ]
+}
