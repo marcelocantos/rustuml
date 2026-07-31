@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S40" as CAnchorS40
+note "hyphen code" as Suffix.CS40-bad
+component "Peer S40" as CPeerS40
+Suffix.CS40 --> CAnchorS40 : ownership
+component "Late S40" as CLateS40
+CAnchorS40 --> CLateS40 : survives
+CAnchorS40 --> CPeerS40 : order
+@enduml

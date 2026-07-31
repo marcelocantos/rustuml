@@ -1,0 +1,11 @@
+@startuml
+node "Anchor L31" as DAnchorL31
+note as Long.DL31 #LightBlue <<Late>>
+body L31
+endnote
+artifact "Peer L31" as DPeerL31
+Long.DL31 --> DAnchorL31 : ownership
+cloud "Late L31" as DLateL31
+DAnchorL31 --> DLateL31 : survives
+DAnchorL31 --> DPeerL31 : order
+@enduml

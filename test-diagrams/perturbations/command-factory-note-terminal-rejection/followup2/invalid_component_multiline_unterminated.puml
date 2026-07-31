@@ -1,0 +1,9 @@
+@startuml
+component "Anchor L50" as CAnchorL50
+component "Peer L50" as CPeerL50
+CAnchorL50 --> CPeerL50 : before
+note as Long.CL50
+body without a terminator
+component "Swallowed L50" as Swallowed.CL50
+Long.CL50 --> Swallowed.CL50 : swallowed relation
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S80" as CAnchorS80
+note "duplicate stereo" as Suffix.CS80 <<One>> <<Two>>
+component "Peer S80" as CPeerS80
+Suffix.CS80 --> CAnchorS80 : ownership
+component "Late S80" as CLateS80
+CAnchorS80 --> CLateS80 : survives
+CAnchorS80 --> CPeerS80 : order
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S71" as DAnchorS71
+note "wrong tag order" as Suffix.DS71 <<First>> $late
+artifact "Peer S71" as DPeerS71
+Suffix.DS71 --> DAnchorS71 : ownership
+cloud "Late S71" as DLateS71
+DAnchorS71 --> DLateS71 : survives
+DAnchorS71 --> DPeerS71 : order
+@enduml

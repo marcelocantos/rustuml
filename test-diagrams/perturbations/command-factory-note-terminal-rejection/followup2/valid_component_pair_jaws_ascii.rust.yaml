@@ -1,0 +1,73 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor V12C" as CAnchorV12C
+      note matrix V12C" as Memo.CV12C $first $second <<Reviewed>> #PaleGreen
+      component "Peer V12C" as CPeerV12C
+      Memo.CV12C --> CAnchorV12C : ownership
+      component "Late V12C" as CLateV12C
+      CAnchorV12C --> CPeerV12C : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorV12C
+    label: Anchor V12C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerV12C
+    label: Peer V12C
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateV12C
+    label: Late V12C
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.CV12C
+    to: CAnchorV12C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorV12C
+    to: CPeerV12C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: Memo.CV12C
+    tags:
+    - first
+    - second
+    stereotype: Reviewed
+    color: '#PaleGreen'
+    text: matrix V12C
+    target: null
+    position: Right
+    source_line: 2

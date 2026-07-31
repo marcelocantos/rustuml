@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S21" as DAnchorS21
+note missing code as
+artifact "Peer S21" as DPeerS21
+Suffix.DS21 --> DAnchorS21 : ownership
+cloud "Late S21" as DLateS21
+DAnchorS21 --> DLateS21 : survives
+DAnchorS21 --> DPeerS21 : order
+@enduml

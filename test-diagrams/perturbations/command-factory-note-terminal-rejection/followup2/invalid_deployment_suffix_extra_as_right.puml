@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S11" as DAnchorS11
+note ”extra as” as as Suffix.DS11
+artifact "Peer S11" as DPeerS11
+Suffix.DS11 --> DAnchorS11 : ownership
+cloud "Late S11" as DLateS11
+DAnchorS11 --> DLateS11 : survives
+DAnchorS11 --> DPeerS11 : order
+@enduml

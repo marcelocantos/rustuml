@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S61" as DAnchorS61
+note wrong order as Suffix.DS61 #LightBlue <<Late>>
+artifact "Peer S61" as DPeerS61
+Suffix.DS61 --> DAnchorS61 : ownership
+cloud "Late S61" as DLateS61
+DAnchorS61 --> DLateS61 : survives
+DAnchorS61 --> DPeerS61 : order
+@enduml

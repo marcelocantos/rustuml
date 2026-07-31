@@ -1,0 +1,11 @@
+@startuml
+node "Anchor M2D" as DAnchorM2D
+note AS Multi.DM2D <<Long Form>>
+multiline M2D
+second row 1
+ENDNOTE
+artifact "Peer M2D" as DPeerM2D
+Multi.DM2D --> DAnchorM2D : ownership
+cloud "Late M2D" as DLateM2D
+DAnchorM2D --> DPeerM2D : order
+@enduml

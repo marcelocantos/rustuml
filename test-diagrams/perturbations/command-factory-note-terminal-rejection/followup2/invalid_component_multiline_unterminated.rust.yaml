@@ -1,0 +1,44 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor L50" as CAnchorL50
+      component "Peer L50" as CPeerL50
+      CAnchorL50 --> CPeerL50 : before
+      note as Long.CL50
+      body without a terminator
+      component "Swallowed L50" as Swallowed.CL50
+      Long.CL50 --> Swallowed.CL50 : swallowed relation
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorL50
+    label: Anchor L50
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerL50
+    label: Peer L50
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: CAnchorL50
+    to: CPeerL50
+    label: before
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 3
+  packages: []
+  notes: []

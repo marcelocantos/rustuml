@@ -1,0 +1,67 @@
+type: Component
+diagram:
+  meta:
+    source: "@startuml\ncomponent \"Anchor V13C\" as CAnchorV13C\nNoTe\tmatrix\\nV13C“\tAS\tMemo.CV13C $nbsp $second <<Mixed Case>> #LightBlue/LightGreen\ncomponent \"Peer V13C\" as CPeerV13C\nMemo.CV13C --> CAnchorV13C : ownership\ncomponent \"Late V13C\" as CLateV13C\nCAnchorV13C --> CPeerV13C : order\n@enduml\n"
+  direction: TopToBottom
+  components:
+  - id: CAnchorV13C
+    label: Anchor V13C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerV13C
+    label: Peer V13C
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateV13C
+    label: Late V13C
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.CV13C
+    to: CAnchorV13C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorV13C
+    to: CPeerV13C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: Memo.CV13C
+    tags:
+    - nbsp
+    - second
+    stereotype: Mixed Case
+    color: '#LightBlue/LightGreen'
+    text: |-
+      matrix
+      V13C
+    target: null
+    position: Right
+    source_line: 2

@@ -1,0 +1,11 @@
+@startuml
+component "Anchor M2C" as CAnchorM2C
+note AS Multi.CM2C <<Long Form>>
+multiline M2C
+second row 1
+ENDNOTE
+component "Peer M2C" as CPeerM2C
+Multi.CM2C --> CAnchorM2C : ownership
+component "Late M2C" as CLateM2C
+CAnchorM2C --> CPeerM2C : order
+@enduml

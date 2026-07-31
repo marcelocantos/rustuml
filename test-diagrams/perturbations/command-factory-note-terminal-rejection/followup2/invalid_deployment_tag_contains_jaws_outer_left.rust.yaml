@@ -1,0 +1,65 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor T31" as DAnchorT31
+      note “tag quote T31“ as Tag.DT31 $audittail <<TagProbe>> #LightBlue
+      artifact "Peer T31" as DPeerT31
+      Tag.DT31 --> DAnchorT31 : ownership
+      cloud "Late T31" as DLateT31
+      DAnchorT31 --> DLateT31 : survives
+      DAnchorT31 --> DPeerT31 : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorT31
+    label: Anchor T31
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerT31
+    label: Peer T31
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateT31
+    label: Late T31
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Tag.DT31
+    to: DAnchorT31
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorT31
+    to: DLateT31
+    label: survives
+    arrow_at_end: true
+    source_line: 6
+  - from: DAnchorT31
+    to: DPeerT31
+    label: order
+    arrow_at_end: true
+    source_line: 7
+  notes:
+  - id: Tag.DT31
+    text: tag quote T31
+    color: '#LightBlue'
+    tags:
+    - audittail
+    stereotype: TagProbe
+    quark_order: 1
+    position: Right
+    source_line: 2

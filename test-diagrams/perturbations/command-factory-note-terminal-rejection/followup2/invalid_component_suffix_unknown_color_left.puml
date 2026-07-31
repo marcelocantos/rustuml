@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S90" as CAnchorS90
+note “unknown color“ as Suffix.CS90 #HeldoutColorSuffixCS90
+component "Peer S90" as CPeerS90
+Suffix.CS90 --> CAnchorS90 : ownership
+component "Late S90" as CLateS90
+CAnchorS90 --> CLateS90 : survives
+CAnchorS90 --> CPeerS90 : order
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Anchor U01" as DAnchorU01
+NOTE "unterminated U01 as Unclosed.DU01 $open
+artifact "Peer U01" as DPeerU01
+Unclosed.DU01 --> DAnchorU01 : ownership
+cloud "Late U01" as DLateU01
+DAnchorU01 --> DLateU01 : survives
+DAnchorU01 --> DPeerU01 : order
+@enduml

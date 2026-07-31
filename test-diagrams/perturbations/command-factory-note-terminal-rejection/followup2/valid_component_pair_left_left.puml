@@ -1,0 +1,8 @@
+@startuml
+component "Anchor V05C" as CAnchorV05C
+NoTe “matrix\nV05C“ AS Memo.CV05C $nbsp $second <<Mixed Case>> #LightBlue/LightGreen
+component "Peer V05C" as CPeerV05C
+Memo.CV05C --> CAnchorV05C : ownership
+component "Late V05C" as CLateV05C
+CAnchorV05C --> CPeerV05C : order
+@enduml

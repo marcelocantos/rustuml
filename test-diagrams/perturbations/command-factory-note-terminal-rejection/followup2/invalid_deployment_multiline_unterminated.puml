@@ -1,0 +1,9 @@
+@startuml
+node "Anchor L51" as DAnchorL51
+artifact "Peer L51" as DPeerL51
+DAnchorL51 --> DPeerL51 : before
+note as Long.DL51
+body without a terminator
+database "Swallowed L51" as Swallowed.DL51
+Long.DL51 --> Swallowed.DL51 : swallowed relation
+@enduml

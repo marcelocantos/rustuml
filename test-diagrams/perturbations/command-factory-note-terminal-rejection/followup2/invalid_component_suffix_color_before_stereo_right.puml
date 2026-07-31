@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S60" as CAnchorS60
+note ”wrong order” as Suffix.CS60 #LightBlue <<Late>>
+component "Peer S60" as CPeerS60
+Suffix.CS60 --> CAnchorS60 : ownership
+component "Late S60" as CLateS60
+CAnchorS60 --> CLateS60 : survives
+CAnchorS60 --> CPeerS60 : order
+@enduml

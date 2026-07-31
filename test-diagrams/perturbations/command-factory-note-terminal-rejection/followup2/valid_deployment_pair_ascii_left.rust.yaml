@@ -1,0 +1,58 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor V01D" as DAnchorV01D
+      NoTe "matrix\nV01D“ As Memo.DV01D <<Reviewed>>
+      artifact "Peer V01D" as DPeerV01D
+      Memo.DV01D --> DAnchorV01D : ownership
+      cloud "Late V01D" as DLateV01D
+      DAnchorV01D --> DPeerV01D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV01D
+    label: Anchor V01D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV01D
+    label: Peer V01D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV01D
+    label: Late V01D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV01D
+    to: DAnchorV01D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV01D
+    to: DPeerV01D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV01D
+    text: |-
+      matrix
+      V01D
+    stereotype: Reviewed
+    quark_order: 1
+    position: Right
+    source_line: 2

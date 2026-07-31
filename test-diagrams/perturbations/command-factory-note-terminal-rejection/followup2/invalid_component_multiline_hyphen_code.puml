@@ -1,0 +1,11 @@
+@startuml
+component "Anchor L20" as CAnchorL20
+note as Long.CL20-bad
+body L20
+endnote
+component "Peer L20" as CPeerL20
+Long.CL20 --> CAnchorL20 : ownership
+component "Late L20" as CLateL20
+CAnchorL20 --> CLateL20 : survives
+CAnchorL20 --> CPeerL20 : order
+@enduml

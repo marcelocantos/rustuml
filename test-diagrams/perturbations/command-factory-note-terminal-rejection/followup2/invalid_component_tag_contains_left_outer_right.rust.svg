@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="292px" preserveAspectRatio="none" style="width:255px;height:292px;background:#FFFFFF;" version="1.1" viewBox="0 0 255 292" width="255px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity CAnchorT10-->
+<g class="entity" data-qualified-name="CAnchorT10" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.5225" x="64.27" y="108.31"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="163.7925" y="113.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="161.7925" y="115.31"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="161.7925" y="119.31"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.5225" x="79.27" y="141.8452">Anchor T10</text>
+</g>
+<!--entity CPeerT10-->
+<g class="entity" data-qualified-name="CPeerT10" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100.0537" x="7" y="231.8"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="87.0537" y="236.8"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="85.0537" y="238.8"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="85.0537" y="242.8"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60.0537" x="22" y="265.3352">Peer T10</text>
+</g>
+<!--entity CLateT10-->
+<g class="entity" data-qualified-name="CLateT10" data-source-line="5" id="ent0006">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="99.2197" x="142.42" y="231.8"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="221.6397" y="236.8"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="219.6397" y="238.8"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="219.6397" y="242.8"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="59.2197" x="157.42" y="265.3352">Late T10</text>
+</g>
+<g class="entity" data-qualified-name="Tag.CT10" data-source-line="2" id="ent0003">
+<path d="M68.84,6 L68.84,31.3105 A0,0 0 0 0 68.84,31.3105 L120.03,31.3105 L124.03,108.05 L128.03,31.3105 L179.215,31.3105 A0,0 0 0 0 179.215,31.3105 L179.215,16 L169.215,6 L68.84,6 A0,0 0 0 0 68.84,6" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M169.215,6 L169.215,16 L179.215,16 L169.215,6" fill="#ADD8E6" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="89.375" x="74.84" y="23.5684">tag quote T10</text>
+</g>
+<!--link CAnchorT10 to CLateT10-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0006" data-link-type="dependency" data-source-line="6" id="lnk7">
+<path d="M136.6644,155.1195 C148.8744,176.9495 164.344,204.5837 176.534,226.3637" fill="none" id="CAnchorT10-to-CLateT10" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="179.4644,231.5995,178.5593,221.7923,177.0224,227.2364,171.5783,225.6995,179.4644,231.5995" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="51.0986" x="163.1025" y="198.3667">survives</text>
+</g>
+<!--link CAnchorT10 to CPeerT10-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="7" id="lnk8">
+<path d="M111.5844,155.1195 C99.5544,176.9495 84.3216,204.5653 72.3116,226.3453" fill="none" id="CAnchorT10-to-CPeerT10" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="69.4144,231.5995,77.263,225.6498,71.8287,227.221,70.2575,221.7868,69.4144,231.5995" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="34.0488" x="95.5426" y="198.3667">order</text>
+</g>
+</g></svg>

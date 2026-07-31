@@ -1,0 +1,54 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Anchor V03D\" as DAnchorV03D\nnOtE\t\"matrix\\nV03D\tas\tMemo.DV03D $first $second <<Reviewed>> #PaleGreen\nartifact \"Peer V03D\" as DPeerV03D\nMemo.DV03D --> DAnchorV03D : ownership\ncloud \"Late V03D\" as DLateV03D\nDAnchorV03D --> DPeerV03D : order\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV03D
+    label: Anchor V03D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV03D
+    label: Peer V03D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV03D
+    label: Late V03D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV03D
+    to: DAnchorV03D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV03D
+    to: DPeerV03D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV03D
+    text: |-
+      matrix
+      V03D
+    color: '#PaleGreen'
+    tags:
+    - first
+    - second
+    stereotype: Reviewed
+    quark_order: 1
+    position: Right
+    source_line: 2

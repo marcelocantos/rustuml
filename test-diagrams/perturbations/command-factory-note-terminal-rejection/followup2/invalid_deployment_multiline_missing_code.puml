@@ -1,0 +1,9 @@
+@startuml
+node "Anchor L01" as DAnchorL01
+note as
+artifact "Peer L01" as DPeerL01
+Long.DL01 --> DAnchorL01 : ownership
+cloud "Late L01" as DLateL01
+DAnchorL01 --> DLateL01 : survives
+DAnchorL01 --> DPeerL01 : order
+@enduml

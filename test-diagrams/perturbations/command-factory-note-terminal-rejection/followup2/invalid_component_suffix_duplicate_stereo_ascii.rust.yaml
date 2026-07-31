@@ -1,0 +1,85 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor S80" as CAnchorS80
+      note "duplicate stereo" as Suffix.CS80 <<One>> <<Two>>
+      component "Peer S80" as CPeerS80
+      Suffix.CS80 --> CAnchorS80 : ownership
+      component "Late S80" as CLateS80
+      CAnchorS80 --> CLateS80 : survives
+      CAnchorS80 --> CPeerS80 : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorS80
+    label: Anchor S80
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerS80
+    label: Peer S80
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateS80
+    label: Late S80
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Suffix.CS80
+    to: CAnchorS80
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorS80
+    to: CLateS80
+    label: survives
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  - from: CAnchorS80
+    to: CPeerS80
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  packages: []
+  notes:
+  - id: Suffix.CS80
+    stereotype: One>> <<Two
+    text: duplicate stereo
+    target: null
+    position: Right
+    source_line: 2

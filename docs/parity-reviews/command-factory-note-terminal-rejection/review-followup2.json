@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "mechanism": "command-factory-note-terminal-rejection",
+  "review_kind": "second_follow_up",
+  "verdict": "REJECT",
+  "checked_at": "2026-08-01T04:59:54+10:00",
+  "checker": {
+    "identity": "codex-desktop-independent-adversarial-checker-2026-08-01-followup2",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop terminal",
+    "role": "independent adversarial checker",
+    "independence": "The checker did not implement revision e6edba58d8d722fa40d95a560cb1c149c5da0a7b and was explicitly instructed to try to disprove the corrected causal account."
+  },
+  "revisions": {
+    "rust": "e6edba58d8d722fa40d95a560cb1c149c5da0a7b",
+    "rust_branch": "codex/t14-note-terminal-followup2",
+    "implementation_commit": "e6edba58d8d722fa40d95a560cb1c149c5da0a7b",
+    "implementation_parent": "2a40d45f512014d7b5912102f040adcf8b5a462e",
+    "account_commit": "2a40d45f512014d7b5912102f040adcf8b5a462e",
+    "account_parent": "c5a6884206a81b02adad9bbec44d1e22ffb14963",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_checkout_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "rust_binary": "/private/tmp/rustuml-note-terminal-followup2/target/release/rustuml",
+    "rust_binary_sha256": "a329060db0d3f92cb5ab217f02676dced26bf9a34a6fbb012bafae96a210e897",
+    "rust_binary_version": "rustuml 0.7.0"
+  },
+  "chronology": {
+    "account_preceded_implementation": true,
+    "account_is_direct_implementation_parent": true,
+    "detail": "The corrected account commit 2a40d45f is the direct parent of the reviewed implementation e6edba58."
+  },
+  "preserved_prior_records": {
+    "account.json": "cc2c995f5ec949b70469d78f8e905437b130d9782343e34cb7e1dd712fb6a6e2",
+    "review.json": "d37ae5a41fe3802e3c903be41863cd5b66177248dbe92febbf91662a9453e36e",
+    "review-followup.json": "571f185b72c7f37b032336b5ab716745f13633f323b6b14be5a3bbb1cdf35915",
+    "hash_algorithm": "SHA-256",
+    "modified_by_checker": false
+  },
+  "reviewed_sources": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+        "symbols": ["Pattern2.QUOTED_REPLACEMENTS", "Pattern2.compileInternal", "Pattern2.transform"],
+        "assessment": "%g expands to U+0022, U+201C, U+201D and U+E121 everywhere it appears, not only in DISPLAY. %s expands to Java regex whitespace plus NBSP, and matching is case-insensitive."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/stereo/Stereotag.java",
+        "symbols": ["Stereotag.SINGLE", "Stereotag.pattern"],
+        "assessment": "The tag body is [^%s{}%g<>$]+, so every Pattern2 %g member is forbidden inside a tag."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+        "symbols": ["CommandFactoryNote.singleLine", "CommandFactoryNote.multiLine", "CommandFactoryNote.createSingleLine", "CommandFactoryNote.createMultiLine"],
+        "assessment": "The inline and multiline forms compose the shared tag, stereotype and color grammars. Multiline validity is partial until an endnote/end note terminator is found."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+        "symbols": ["DescriptionDiagramFactory.initCommandsList"],
+        "assessment": "The Description inventory registers named-note, note-on-link and note-on-entity factories. The latter two require on/of/link or a position token and do not share note + whitespace + %g openers."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+        "symbols": ["CommandFactoryNoteOnEntity.getRegexConcatSingleLine", "CommandFactoryNoteOnEntity.getRegexConcatMultiLine"],
+        "assessment": "Attached-note commands require right/left/top/bottom immediately after note whitespace, excluding %g opener overlap."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+        "symbols": ["CommandFactoryNoteOnLink.getRegexConcatSingleLine", "CommandFactoryNoteOnLink.getRegexConcatMultiLine"],
+        "assessment": "Link-note commands require optional position followed by on/of link and do not overlap the named-note %g opener."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+        "symbols": ["PSystemCommandFactory.getCandidate", "PSystemCommandFactory.isMultilineCommandOk", "PSystemCommandFactory.executeFewLines"],
+        "assessment": "No matching complete command yields a syntax-error PSystem; an unterminated multiline candidate never becomes an executable step."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/parse/mod.rs",
+        "symbols": ["NAMED_NOTE_QUOTE_CLASS", "NAMED_NOTE_NON_QUOTE_CLASS", "named_note_decorations", "parse_named_note_inline", "looks_like_named_note_inline_command", "parse_named_note_multiline"],
+        "lines": "36-214",
+        "assessment": "The repaired ownership predicate claims every note + Rust whitespace + %g opener. The successful decoration regex at line 132 excludes only ASCII double quote from tag bodies, so U+201C, U+201D and U+E121 pass parse_named_note_inline before the terminal predicate is consulted."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/component.rs",
+        "symbols": ["parse_component"],
+        "lines": "371-407,711-814,1143-1152",
+        "assessment": "Inline parse success is committed before terminal ownership validation. Multiline state consumes every later line while in_note is true, but EOF performs no in_note validation and returns an accepted diagram without the note or swallowed declarations/relations."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/deployment.rs",
+        "symbols": ["parse_deployment"],
+        "lines": "565-609,720-769,1004-1011",
+        "assessment": "Inline parse success likewise precedes terminal ownership validation. note_accum consumes all later lines until a terminator, but EOF returns Ok without checking that note_accum remains populated."
+      }
+    ]
+  },
+  "causal_assessment": {
+    "claimed_inline_opener_boundary": "SUPPORTED_BUT_INSUFFICIENT",
+    "command_selection": "No competing Description command factory was found for note + whitespace + a %g opener. The e6edba58 prefix predicate correctly claims malformed openers across U+0022, U+201C, U+201D and U+E121.",
+    "first_disproof": "The account treats the four-member %g model as a DISPLAY boundary but Java also substitutes %g inside Stereotag.pattern. Rust's successful decoration regex excludes only U+0022. A tag containing U+201C, U+201D or U+E121 therefore makes Java return syntax error while Rust creates a named note carrying that character in its tag. Because parsing succeeds, looks_like_named_note_inline_command never gets a chance to reject it.",
+    "second_disproof": "Java's multiline command remains partial until endnote/end note is found and rejects at EOF. Rust Component in_note and Deployment note_accum consume later declarations and relations as body, then EOF silently discards the unfinished note state and returns Ok.",
+    "conclusion": "The implementation repairs the previously reported embedded-DISPLAY escape but does not establish the account's broader invariant that failure anywhere after a uniquely owned opener rejects the candidate."
+  },
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git log --oneline --decorate -8",
+    "git show --format=fuller --find-renames e6edba58d8d722fa40d95a560cb1c149c5da0a7b -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/deployment.rs",
+    "git show -s --format=%H%n%P%n%s e6edba58d8d722fa40d95a560cb1c149c5da0a7b",
+    "git show -s --format=%H%n%P%n%s 2a40d45f512014d7b5912102f040adcf8b5a462e",
+    "git rev-parse HEAD (in /Users/marcelo/work/github.com/plantuml/plantuml)",
+    "shasum -a 256 target/release/rustuml /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sed/awk source inspection of Java Pattern2, Stereotag, CommandFactoryNote, CommandFactoryNoteOnEntity, CommandFactoryNoteOnLink, DescriptionDiagramFactory and PSystemCommandFactory",
+    "sed/awk source inspection of Rust parse/mod.rs, parse/component.rs and parse/deployment.rs",
+    "ruby test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2/generate_cases.rb",
+    "ruby test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2/run_matrix.rb",
+    "for every case via run_matrix.rb: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < CASE.puml",
+    "for every case via run_matrix.rb: /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml --no-oracle -tsvg CASE.puml",
+    "for every case via run_matrix.rb: /private/tmp/rustuml-note-terminal-followup2/target/release/rustuml --no-oracle --yaml CASE.puml",
+    "find test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2 -name '*.java.svg' -exec xmllint --noout {} +",
+    "find test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2 -name '*.rust.svg' -size +0 -exec xmllint --noout {} +",
+    "rg -n command-factory-note-terminal-rejection|followup2|held-out labels|include_str!|test-diagrams/perturbations across shipping crates",
+    "Ruby artifact completeness check for every .puml and same-stem Java/Rust outputs",
+    "jq result-count, expectation-mismatch, valid-rejection and rejecting-case checks over results.json"
+  ],
+  "execution_constraints": {
+    "cargo_or_rustc_run": false,
+    "binary_rebuilt_or_modified": false,
+    "shipping_code_modified": false,
+    "account_modified": false,
+    "prior_reviews_modified": false,
+    "no_oracle_product_path": true,
+    "no_oracle_flag_note": "The frozen CLI has no dedicated --no-oracle match arm; with CASE.puml later in argv, CASE.puml becomes the final input and the binary executes its ordinary product parser/renderer. The exact requested --no-oracle argv token was nevertheless supplied on every Rust execution, and no oracle crate, Java subprocess or Cargo path is reachable from this binary invocation."
+  },
+  "case_evidence": {
+    "root": "test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2",
+    "manifest": "test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2/cases.json",
+    "manifest_sha256": "ac95b7fe133876f36270c2dae062b5ab17b6161fb8820afbe02f8113189777d0",
+    "results": "test-diagrams/perturbations/command-factory-note-terminal-rejection/followup2/results.json",
+    "results_sha256": "496d39f600cf94af247ddb8c9c9ed522ea12b6c08eec35a34a8e01577afb85a4",
+    "artifact_convention": "Each of 96 .puml sources has same-stem .java.svg/.java.stderr/.java.status and .rust.svg/.rust.stderr/.rust.status/.rust.yaml/.rust.yaml.stderr/.rust.yaml.status files. Empty Rust SVG is retained for parser rejection.",
+    "total_files": 964,
+    "missing_expected_artifacts": 0,
+    "families": {
+      "component": 48,
+      "deployment": 48
+    },
+    "quote_alphabet": {
+      "ascii": "U+0022",
+      "left": "U+201C",
+      "right": "U+201D",
+      "jaws": "U+E121"
+    },
+    "matrix": [
+      {
+        "category": "valid inline independent opener/closer pairs",
+        "count": 32,
+        "coverage": "All 16 %g opener/closer pairs in each family; ASCII/tab/NBSP whitespace, mixed note/as case, absent and present tags/stereotypes/colors, gradients, renamed labels, changed declaration order/count, and later note relations."
+      },
+      {
+        "category": "valid multiline variants",
+        "count": 8,
+        "coverage": "Both families; endnote/end note case variants, NBSP, optional decorations, renamed labels and later note relations."
+      },
+      {
+        "category": "Java-valid combined stereotype payload probes",
+        "count": 2,
+        "coverage": "Java's non-greedy stereotype expression accepts the complete <<One>> <<Two>> payload as one stereotype; both binaries accept."
+      },
+      {
+        "category": "malformed embedded %g and missing closer",
+        "count": 16,
+        "coverage": "Every %g member appears as an embedded premature delimiter and every %g member appears as a missing-closer opener in both families, with would-be endpoint and independent later relations."
+      },
+      {
+        "category": "malformed as/code/decoration/color suffixes",
+        "count": 18,
+        "coverage": "Missing/extra as and code, hyphenated code, extra color, color/stereotype and stereotype/tag order, and unknown color across rotating %g delimiters and both families."
+      },
+      {
+        "category": "quote-bearing tags",
+        "count": 8,
+        "coverage": "Every %g member inside a tag in each family, with rotating outer delimiters and later note/ordinary relations."
+      },
+      {
+        "category": "malformed multiline commands",
+        "count": 12,
+        "coverage": "Missing code, extra as, bad code, decoration order, unknown color and missing terminator in each family; EOF cases place declarations and relations after the opener."
+      }
+    ]
+  },
+  "verification": {
+    "sources": 96,
+    "java_valid": 42,
+    "java_invalid": 54,
+    "accept_agreements": 42,
+    "reject_agreements": 46,
+    "malformed_accepted_by_rust": 8,
+    "valid_rejected_by_rust": 0,
+    "generator_expectation_mismatches": 0,
+    "java_svg_xml_valid": 96,
+    "nonempty_rust_svg_xml_valid": 50,
+    "cargo_or_rustc_invocations": 0
+  },
+  "rejecting_cases": [
+    {
+      "source": "invalid_component_tag_contains_left_outer_right.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "Rust creates Tag.CT10 as a named note with tag audit<U+201C>tail and retains all three later relations; Java reports syntax error on the note line."
+    },
+    {
+      "source": "invalid_deployment_tag_contains_left_outer_jaws.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "Rust creates Tag.DT11 with tag audit<U+201C>tail; Java rejects."
+    },
+    {
+      "source": "invalid_component_tag_contains_right_outer_jaws.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "Rust creates Tag.CT20 with tag audit<U+201D>tail; Java rejects."
+    },
+    {
+      "source": "invalid_deployment_tag_contains_right_outer_ascii.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "Rust creates Tag.DT21 with tag audit<U+201D>tail; Java rejects."
+    },
+    {
+      "source": "invalid_component_tag_contains_jaws_outer_ascii.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "Rust creates Tag.CT30 with tag audit<U+E121>tail; Java rejects."
+    },
+    {
+      "source": "invalid_deployment_tag_contains_jaws_outer_left.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "Rust creates Tag.DT31 with tag audit<U+E121>tail; Java rejects."
+    },
+    {
+      "source": "invalid_component_multiline_unterminated.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "After valid declarations and a relation, Rust enters named-note body state, consumes a later component declaration and relation, reaches EOF, emits neither the note nor swallowed syntax, and returns an accepted Component diagram."
+    },
+    {
+      "source": "invalid_deployment_multiline_unterminated.puml",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "detail": "After valid declarations and a relation, Rust enters note_accum, consumes a later database declaration and relation, reaches EOF, emits neither the note nor swallowed syntax, and returns an accepted Deployment diagram."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Pattern2 quote characters in tags bypass terminal rejection through the successful parse path",
+      "java_provenance": "Stereotag.SINGLE is (\\$[^%s{}%g<>$]+). Pattern2 transforms %g to U+0022/U+201C/U+201D/U+E121 before CommandFactoryNote matches, so all four are forbidden in a valid tag.",
+      "rust_data_flow": "named_note_decorations uses [^\\s{}\\\"<>$]+ and therefore forbids only U+0022. parse_named_note_inline returns Some for U+201C/U+201D/U+E121 tag bodies; Component and Deployment commit the note before looks_like_named_note_inline_command is reached.",
+      "evidence": [
+        "invalid_component_tag_contains_left_outer_right",
+        "invalid_deployment_tag_contains_left_outer_jaws",
+        "invalid_component_tag_contains_right_outer_jaws",
+        "invalid_deployment_tag_contains_right_outer_ascii",
+        "invalid_component_tag_contains_jaws_outer_ascii",
+        "invalid_deployment_tag_contains_jaws_outer_left"
+      ],
+      "impact": "Six note + whitespace + %g opener commands rejected by Java are accepted as fully formed notes by Rust, directly falsifying terminal rejection after the unique opener."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Unterminated multiline named notes are silently accepted at EOF",
+      "java_provenance": "CommandMultilines2 remains OK_PARTIAL until CommandFactoryNote.END matches. PSystemCommandFactory.isMultilineCommandOk returns no candidate when EOF arrives first, yielding syntax-error output.",
+      "rust_data_flow": "Component's in_note and Deployment's note_accum consume all following lines, but neither parser checks unfinished note state after its input loop. Both return Ok and silently omit the note plus the later declaration and relation consumed as body.",
+      "evidence": [
+        "invalid_component_multiline_unterminated",
+        "invalid_deployment_multiline_unterminated"
+      ],
+      "impact": "Malformed multiline openers escape rejection in both reviewed families and can suppress arbitrary later declarations and relations while producing a successful diagram."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "The second follow-up fixes the previously reported inline opener escape",
+      "detail": "All eight embedded-%g cases, all eight missing-closer cases and eighteen ordinary malformed suffix cases now reject before later endpoint synthesis in both families."
+    },
+    {
+      "severity": "non_rejecting",
+      "title": "No valid command was rejected",
+      "detail": "All 32 independent %g opener/closer combinations, eight valid multiline variants and two Java-valid combined stereotype payload probes were accepted by both binaries."
+    }
+  ],
+  "anti_overfit_audit": {
+    "fixture_shaped_logic_found": false,
+    "golden_or_perturbation_reads_found": false,
+    "unexplained_numeric_constants_found": false,
+    "evidence": "The reviewed diff adds a general four-member prefix predicate and two unit cases. Searches found no mechanism name, followup2 path, held-out labels or perturbation reads in shipping code. Existing include_str! matches are theme assets and pre-existing renderer self-source checks, not this mechanism's fixtures."
+  },
+  "declared_residue_assessment": [
+    "Deployment note-on-link remains outside this review and was not used to reach the verdict.",
+    "Java error-page artwork and diagnostic wording were not compared; Java process acceptance/rejection and Rust process/YAML behavior were the oracle.",
+    "The quote-bearing tag failures are not a separate command factory: they occur inside CommandFactoryNote's own Stereotag suffix grammar after the exact opener governed by this account.",
+    "The EOF failures are an independent multiline ownership defect in the same named-note command state and were required by the requested inline/multiline adversarial matrix."
+  ],
+  "verdict_reason": "REJECT. Revision e6edba58 correctly claims malformed inline openers at note + whitespace + each Pattern2 %g delimiter and rejects the prior embedded-DISPLAY counterexamples. It still accepts six Java-invalid inline commands because Rust's successful tag grammar omits U+201C, U+201D and U+E121 from the forbidden %g set, so terminal rejection is bypassed. It also accepts unterminated multiline named notes in both Component and Deployment, swallowing later declarations and relations before returning success. Any malformed opener accepted by Rust requires rejection under the requested gate."
+}

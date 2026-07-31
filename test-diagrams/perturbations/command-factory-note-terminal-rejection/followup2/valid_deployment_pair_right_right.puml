@@ -1,0 +1,8 @@
+@startuml
+node "Anchor V10D" as DAnchorV10D
+NOTE ”matrix V10D” aS Memo.DV10D #LightBlue
+artifact "Peer V10D" as DPeerV10D
+Memo.DV10D --> DAnchorV10D : ownership
+cloud "Late V10D" as DLateV10D
+DAnchorV10D --> DPeerV10D : order
+@enduml

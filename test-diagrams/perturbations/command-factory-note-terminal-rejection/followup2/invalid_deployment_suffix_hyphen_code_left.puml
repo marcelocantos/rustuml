@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S41" as DAnchorS41
+note “hyphen code“ as Suffix.DS41-bad
+artifact "Peer S41" as DPeerS41
+Suffix.DS41 --> DAnchorS41 : ownership
+cloud "Late S41" as DLateS41
+DAnchorS41 --> DLateS41 : survives
+DAnchorS41 --> DPeerS41 : order
+@enduml

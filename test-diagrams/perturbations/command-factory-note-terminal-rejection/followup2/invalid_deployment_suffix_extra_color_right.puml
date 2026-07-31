@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S51" as DAnchorS51
+note ”extra color” as Suffix.DS51 #LightBlue #PaleGreen
+artifact "Peer S51" as DPeerS51
+Suffix.DS51 --> DAnchorS51 : ownership
+cloud "Late S51" as DLateS51
+DAnchorS51 --> DLateS51 : survives
+DAnchorS51 --> DPeerS51 : order
+@enduml

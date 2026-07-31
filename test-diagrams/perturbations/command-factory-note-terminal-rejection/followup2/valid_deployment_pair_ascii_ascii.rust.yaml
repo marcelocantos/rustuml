@@ -1,0 +1,49 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Anchor V00D\" as DAnchorV00D\nnote\t\"matrix V00D\"\tAS\tMemo.DV00D $tag\nartifact \"Peer V00D\" as DPeerV00D\nMemo.DV00D --> DAnchorV00D : ownership\ncloud \"Late V00D\" as DLateV00D\nDAnchorV00D --> DPeerV00D : order\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV00D
+    label: Anchor V00D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV00D
+    label: Peer V00D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV00D
+    label: Late V00D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV00D
+    to: DAnchorV00D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV00D
+    to: DPeerV00D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV00D
+    text: matrix V00D
+    tags:
+    - tag
+    quark_order: 1
+    position: Right
+    source_line: 2

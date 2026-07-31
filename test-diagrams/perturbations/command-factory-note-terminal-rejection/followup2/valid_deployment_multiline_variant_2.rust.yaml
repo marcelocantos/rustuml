@@ -1,0 +1,61 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor M2D" as DAnchorM2D
+      note AS Multi.DM2D <<Long Form>>
+      multiline M2D
+      second row 1
+      ENDNOTE
+      artifact "Peer M2D" as DPeerM2D
+      Multi.DM2D --> DAnchorM2D : ownership
+      cloud "Late M2D" as DLateM2D
+      DAnchorM2D --> DPeerM2D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorM2D
+    label: Anchor M2D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerM2D
+    label: Peer M2D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 6
+    quark_order: 2
+  - id: DLateM2D
+    label: Late M2D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 8
+    quark_order: 3
+  connections:
+  - from: Multi.DM2D
+    to: DAnchorM2D
+    label: ownership
+    arrow_at_end: true
+    source_line: 7
+  - from: DAnchorM2D
+    to: DPeerM2D
+    label: order
+    arrow_at_end: true
+    source_line: 9
+  notes:
+  - id: Multi.DM2D
+    text: |-
+      multiline M2D
+      second row 1
+    stereotype: Long Form
+    quark_order: 1
+    position: Right
+    source_line: 3

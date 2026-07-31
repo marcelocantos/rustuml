@@ -1,0 +1,51 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Anchor V06D\" as DAnchorV06D\nNOTE\t“matrix V06D”\taS\tMemo.DV06D $audit <<Terminal>> #LightBlue|LightGreen\nartifact \"Peer V06D\" as DPeerV06D\nMemo.DV06D --> DAnchorV06D : ownership\ncloud \"Late V06D\" as DLateV06D\nDAnchorV06D --> DPeerV06D : order\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV06D
+    label: Anchor V06D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV06D
+    label: Peer V06D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV06D
+    label: Late V06D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV06D
+    to: DAnchorV06D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV06D
+    to: DPeerV06D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV06D
+    text: matrix V06D
+    color: '#LightBlue|LightGreen'
+    tags:
+    - audit
+    stereotype: Terminal
+    quark_order: 1
+    position: Right
+    source_line: 2

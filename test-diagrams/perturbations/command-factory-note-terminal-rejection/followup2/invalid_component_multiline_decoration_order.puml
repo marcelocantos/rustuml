@@ -1,0 +1,11 @@
+@startuml
+component "Anchor L30" as CAnchorL30
+note as Long.CL30 #LightBlue <<Late>>
+body L30
+endnote
+component "Peer L30" as CPeerL30
+Long.CL30 --> CAnchorL30 : ownership
+component "Late L30" as CLateL30
+CAnchorL30 --> CLateL30 : survives
+CAnchorL30 --> CPeerL30 : order
+@enduml

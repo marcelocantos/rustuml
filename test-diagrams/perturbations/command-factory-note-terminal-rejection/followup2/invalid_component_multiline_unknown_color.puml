@@ -1,0 +1,11 @@
+@startuml
+component "Anchor L40" as CAnchorL40
+note as Long.CL40 #HeldoutMultilineLongCL40
+body L40
+endnote
+component "Peer L40" as CPeerL40
+Long.CL40 --> CAnchorL40 : ownership
+component "Late L40" as CLateL40
+CAnchorL40 --> CLateL40 : survives
+CAnchorL40 --> CPeerL40 : order
+@enduml

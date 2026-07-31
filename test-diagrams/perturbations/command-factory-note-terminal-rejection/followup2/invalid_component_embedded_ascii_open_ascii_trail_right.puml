@@ -1,0 +1,9 @@
+@startuml
+component "Anchor E00" as CAnchorE00
+note "left"right” as Escape.CE00 $embedded
+component "Peer E00" as CPeerE00
+Escape.CE00 --> CAnchorE00 : ownership
+component "Late E00" as CLateE00
+CAnchorE00 --> CLateE00 : survives
+CAnchorE00 --> CPeerE00 : order
+@enduml
