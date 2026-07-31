@@ -1,0 +1,7 @@
+@startuml
+package Outer {
+  component "Anchor Display"
+  note "memo" as Ledger.C464
+  [Anchor Display] <- Ledger.C464 : "late-note"
+}
+@enduml

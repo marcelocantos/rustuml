@@ -1,0 +1,5 @@
+@startuml
+component Sink
+note "memo" as Ledger.C464
+Ledger.C464 "1" ..> [Sink] : "sync"
+@enduml

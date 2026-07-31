@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package Outer {
+  note as Mémo.Δelta_7
+    payload
+  end note
+  component A
+  component B
+  Mémo.Δelta_7 --> A
+  B <-left- Mémo.Δelta_7
+}
+@enduml
