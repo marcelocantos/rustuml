@@ -1,0 +1,9 @@
+@startuml
+component "Anchor U00" as CAnchorU00
+NOTE "unterminated U00 as Unclosed.CU00 $open
+component "Peer U00" as CPeerU00
+Unclosed.CU00 --> CAnchorU00 : ownership
+component "Late U00" as CLateU00
+CAnchorU00 --> CLateU00 : survives
+CAnchorU00 --> CPeerU00 : order
+@enduml

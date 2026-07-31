@@ -1,0 +1,68 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor V00C" as CAnchorV00C
+      note "matrix V00C" as Memo.CV00C
+      component "Peer V00C" as CPeerV00C
+      Memo.CV00C --> CAnchorV00C : ownership
+      component "Late V00C" as CLateV00C
+      CAnchorV00C --> CPeerV00C : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorV00C
+    label: Anchor V00C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerV00C
+    label: Peer V00C
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateV00C
+    label: Late V00C
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.CV00C
+    to: CAnchorV00C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorV00C
+    to: CPeerV00C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: Memo.CV00C
+    text: matrix V00C
+    target: null
+    position: Right
+    source_line: 2

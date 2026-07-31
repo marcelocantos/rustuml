@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S10" as CAnchorS10
+note “extra as“ as as Suffix.CS10
+component "Peer S10" as CPeerS10
+Suffix.CS10 --> CAnchorS10 : ownership
+component "Late S10" as CLateS10
+CAnchorS10 --> CLateS10 : survives
+CAnchorS10 --> CPeerS10 : order
+@enduml

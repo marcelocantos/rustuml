@@ -1,0 +1,8 @@
+@startuml
+component "Anchor V15C" as CAnchorV15C
+nOtE matrix\nV15C aS Memo.CV15C $audit <<Terminal>> #LightBlue|LightGreen
+component "Peer V15C" as CPeerV15C
+Memo.CV15C --> CAnchorV15C : ownership
+component "Late V15C" as CLateV15C
+CAnchorV15C --> CPeerV15C : order
+@enduml

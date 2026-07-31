@@ -1,0 +1,8 @@
+@startuml
+node "Anchor V08D" as DAnchorV08D
+note ”matrix V08D" AS Memo.DV08D $tag
+artifact "Peer V08D" as DPeerV08D
+Memo.DV08D --> DAnchorV08D : ownership
+cloud "Late V08D" as DLateV08D
+DAnchorV08D --> DPeerV08D : order
+@enduml

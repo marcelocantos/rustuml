@@ -1,0 +1,8 @@
+@startuml
+component "Anchor V08C" as CAnchorV08C
+note ”matrix V08C" as Memo.CV08C
+component "Peer V08C" as CPeerV08C
+Memo.CV08C --> CAnchorV08C : ownership
+component "Late V08C" as CLateV08C
+CAnchorV08C --> CPeerV08C : order
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S50" as CAnchorS50
+note “extra color“ as Suffix.CS50 #LightBlue #PaleGreen
+component "Peer S50" as CPeerS50
+Suffix.CS50 --> CAnchorS50 : ownership
+component "Late S50" as CLateS50
+CAnchorS50 --> CLateS50 : survives
+CAnchorS50 --> CPeerS50 : order
+@enduml

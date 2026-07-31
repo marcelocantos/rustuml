@@ -1,0 +1,9 @@
+@startuml
+component "Anchor T30" as CAnchorT30
+note "tag quote T30" as Tag.CT30 $audittail <<TagProbe>> #LightBlue
+component "Peer T30" as CPeerT30
+Tag.CT30 --> CAnchorT30 : ownership
+component "Late T30" as CLateT30
+CAnchorT30 --> CLateT30 : survives
+CAnchorT30 --> CPeerT30 : order
+@enduml

@@ -1,0 +1,69 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor V14C" as CAnchorV14C
+      NOTE matrix V14C” As Memo.CV14C #LightBlue-LightGreen
+      component "Peer V14C" as CPeerV14C
+      Memo.CV14C --> CAnchorV14C : ownership
+      component "Late V14C" as CLateV14C
+      CAnchorV14C --> CPeerV14C : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorV14C
+    label: Anchor V14C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerV14C
+    label: Peer V14C
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateV14C
+    label: Late V14C
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.CV14C
+    to: CAnchorV14C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorV14C
+    to: CPeerV14C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: Memo.CV14C
+    color: '#LightBlue-LightGreen'
+    text: matrix V14C
+    target: null
+    position: Right
+    source_line: 2

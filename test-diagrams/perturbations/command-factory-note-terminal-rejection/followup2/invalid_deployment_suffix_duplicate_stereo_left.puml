@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S81" as DAnchorS81
+note “duplicate stereo“ as Suffix.DS81 <<One>> <<Two>>
+artifact "Peer S81" as DPeerS81
+Suffix.DS81 --> DAnchorS81 : ownership
+cloud "Late S81" as DLateS81
+DAnchorS81 --> DLateS81 : survives
+DAnchorS81 --> DPeerS81 : order
+@enduml

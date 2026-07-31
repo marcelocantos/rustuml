@@ -1,0 +1,8 @@
+@startuml
+component "Anchor V01C" as CAnchorV01C
+NoTe	"matrix\nV01C“	AS	Memo.CV01C $tag
+component "Peer V01C" as CPeerV01C
+Memo.CV01C --> CAnchorV01C : ownership
+component "Late V01C" as CLateV01C
+CAnchorV01C --> CPeerV01C : order
+@enduml

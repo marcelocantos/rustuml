@@ -1,0 +1,9 @@
+@startuml
+node "Anchor E21" as DAnchorE21
+note left”right“ as Escape.DE21 $embedded
+artifact "Peer E21" as DPeerE21
+Escape.DE21 --> DAnchorE21 : ownership
+cloud "Late E21" as DLateE21
+DAnchorE21 --> DLateE21 : survives
+DAnchorE21 --> DPeerE21 : order
+@enduml

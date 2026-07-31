@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S91" as DAnchorS91
+note ”unknown color” as Suffix.DS91 #HeldoutColorSuffixDS91
+artifact "Peer S91" as DPeerS91
+Suffix.DS91 --> DAnchorS91 : ownership
+cloud "Late S91" as DLateS91
+DAnchorS91 --> DLateS91 : survives
+DAnchorS91 --> DPeerS91 : order
+@enduml

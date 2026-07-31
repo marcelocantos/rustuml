@@ -1,0 +1,77 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor M3C" as CAnchorM3C
+      NoTe AS Multi.CM3C $multi <<Long Form>> #Lavender
+      multiline M3C
+      second row 0
+      EnD NoTe
+      component "Peer M3C" as CPeerM3C
+      Multi.CM3C --> CAnchorM3C : ownership
+      component "Late M3C" as CLateM3C
+      CAnchorM3C --> CPeerM3C : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorM3C
+    label: Anchor M3C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerM3C
+    label: Peer M3C
+    stereotypes: []
+    source_line: 6
+    kind: Component
+  - id: CLateM3C
+    label: Late M3C
+    stereotypes: []
+    source_line: 8
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Multi.CM3C
+    to: CAnchorM3C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  - from: CAnchorM3C
+    to: CPeerM3C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 9
+  packages: []
+  notes:
+  - id: Multi.CM3C
+    tags:
+    - multi
+    stereotype: Long Form
+    color: '#Lavender'
+    text: |-
+      multiline M3C
+      second row 0
+    target: null
+    position: Right
+    source_line: 3

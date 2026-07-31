@@ -1,0 +1,8 @@
+@startuml
+component "Anchor V14C" as CAnchorV14C
+NOTE matrix V14C” As Memo.CV14C #LightBlue-LightGreen
+component "Peer V14C" as CPeerV14C
+Memo.CV14C --> CAnchorV14C : ownership
+component "Late V14C" as CLateV14C
+CAnchorV14C --> CPeerV14C : order
+@enduml

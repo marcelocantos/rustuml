@@ -1,0 +1,88 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor T20" as CAnchorT20
+      note tag quote T20 as Tag.CT20 $audit”tail <<TagProbe>> #LightBlue
+      component "Peer T20" as CPeerT20
+      Tag.CT20 --> CAnchorT20 : ownership
+      component "Late T20" as CLateT20
+      CAnchorT20 --> CLateT20 : survives
+      CAnchorT20 --> CPeerT20 : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorT20
+    label: Anchor T20
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerT20
+    label: Peer T20
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateT20
+    label: Late T20
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Tag.CT20
+    to: CAnchorT20
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorT20
+    to: CLateT20
+    label: survives
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  - from: CAnchorT20
+    to: CPeerT20
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  packages: []
+  notes:
+  - id: Tag.CT20
+    tags:
+    - audit”tail
+    stereotype: TagProbe
+    color: '#LightBlue'
+    text: tag quote T20
+    target: null
+    position: Right
+    source_line: 2

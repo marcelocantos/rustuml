@@ -1,0 +1,11 @@
+@startuml
+component "Anchor M0C" as CAnchorM0C
+note as Multi.CM0C
+multiline M0C
+second row 3
+endnote
+component "Peer M0C" as CPeerM0C
+Multi.CM0C --> CAnchorM0C : ownership
+component "Late M0C" as CLateM0C
+CAnchorM0C --> CPeerM0C : order
+@enduml

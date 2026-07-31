@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S30" as CAnchorS30
+note extra code as Suffix.CS30 TrailingCode
+component "Peer S30" as CPeerS30
+Suffix.CS30 --> CAnchorS30 : ownership
+component "Late S30" as CLateS30
+CAnchorS30 --> CLateS30 : survives
+CAnchorS30 --> CPeerS30 : order
+@enduml

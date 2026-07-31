@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S20" as CAnchorS20
+note ”missing code” as
+component "Peer S20" as CPeerS20
+Suffix.CS20 --> CAnchorS20 : ownership
+component "Late S20" as CLateS20
+CAnchorS20 --> CLateS20 : survives
+CAnchorS20 --> CPeerS20 : order
+@enduml

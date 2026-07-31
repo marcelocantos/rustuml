@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S00" as CAnchorS00
+note "missing as" Suffix.CS00
+component "Peer S00" as CPeerS00
+Suffix.CS00 --> CAnchorS00 : ownership
+component "Late S00" as CLateS00
+CAnchorS00 --> CLateS00 : survives
+CAnchorS00 --> CPeerS00 : order
+@enduml

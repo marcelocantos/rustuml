@@ -1,0 +1,64 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor M3D" as DAnchorM3D
+      NoTe AS Multi.DM3D $multi <<Long Form>> #Lavender
+      multiline M3D
+      second row 0
+      EnD NoTe
+      artifact "Peer M3D" as DPeerM3D
+      Multi.DM3D --> DAnchorM3D : ownership
+      cloud "Late M3D" as DLateM3D
+      DAnchorM3D --> DPeerM3D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorM3D
+    label: Anchor M3D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerM3D
+    label: Peer M3D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 6
+    quark_order: 2
+  - id: DLateM3D
+    label: Late M3D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 8
+    quark_order: 3
+  connections:
+  - from: Multi.DM3D
+    to: DAnchorM3D
+    label: ownership
+    arrow_at_end: true
+    source_line: 7
+  - from: DAnchorM3D
+    to: DPeerM3D
+    label: order
+    arrow_at_end: true
+    source_line: 9
+  notes:
+  - id: Multi.DM3D
+    text: |-
+      multiline M3D
+      second row 0
+    color: '#Lavender'
+    tags:
+    - multi
+    stereotype: Long Form
+    quark_order: 1
+    position: Right
+    source_line: 3

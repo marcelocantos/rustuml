@@ -1,0 +1,9 @@
+@startuml
+node "Anchor T01" as DAnchorT01
+note ”tag quote T01” as Tag.DT01 $audit"tail <<TagProbe>> #LightBlue
+artifact "Peer T01" as DPeerT01
+Tag.DT01 --> DAnchorT01 : ownership
+cloud "Late T01" as DLateT01
+DAnchorT01 --> DLateT01 : survives
+DAnchorT01 --> DPeerT01 : order
+@enduml

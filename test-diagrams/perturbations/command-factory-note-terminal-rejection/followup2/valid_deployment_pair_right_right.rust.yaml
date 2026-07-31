@@ -1,0 +1,56 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor V10D" as DAnchorV10D
+      NOTE ”matrix V10D” aS Memo.DV10D #LightBlue
+      artifact "Peer V10D" as DPeerV10D
+      Memo.DV10D --> DAnchorV10D : ownership
+      cloud "Late V10D" as DLateV10D
+      DAnchorV10D --> DPeerV10D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV10D
+    label: Anchor V10D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV10D
+    label: Peer V10D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV10D
+    label: Late V10D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV10D
+    to: DAnchorV10D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV10D
+    to: DPeerV10D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV10D
+    text: matrix V10D
+    color: '#LightBlue'
+    quark_order: 1
+    position: Right
+    source_line: 2

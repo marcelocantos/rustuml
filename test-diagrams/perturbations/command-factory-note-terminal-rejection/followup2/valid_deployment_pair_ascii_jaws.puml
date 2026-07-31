@@ -1,0 +1,8 @@
+@startuml
+node "Anchor V03D" as DAnchorV03D
+nOtE	"matrix\nV03D	as	Memo.DV03D $first $second <<Reviewed>> #PaleGreen
+artifact "Peer V03D" as DPeerV03D
+Memo.DV03D --> DAnchorV03D : ownership
+cloud "Late V03D" as DLateV03D
+DAnchorV03D --> DPeerV03D : order
+@enduml

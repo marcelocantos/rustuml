@@ -1,0 +1,60 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor V04D" as DAnchorV04D
+      note “matrix V04D" AS Memo.DV04D $nbsp $second <<Mixed Case>> #LightBlue/LightGreen
+      artifact "Peer V04D" as DPeerV04D
+      Memo.DV04D --> DAnchorV04D : ownership
+      cloud "Late V04D" as DLateV04D
+      DAnchorV04D --> DPeerV04D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV04D
+    label: Anchor V04D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV04D
+    label: Peer V04D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV04D
+    label: Late V04D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV04D
+    to: DAnchorV04D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV04D
+    to: DPeerV04D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV04D
+    text: matrix V04D
+    color: '#LightBlue/LightGreen'
+    tags:
+    - nbsp
+    - second
+    stereotype: Mixed Case
+    quark_order: 1
+    position: Right
+    source_line: 2

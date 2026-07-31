@@ -1,0 +1,1741 @@
+{
+  "schema_version": 1,
+  "rust_binary": "/private/tmp/rustuml-note-terminal-followup2/target/release/rustuml",
+  "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+  "commands": {
+    "java": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe < CASE.puml",
+    "rust_svg": "/private/tmp/rustuml-note-terminal-followup2/target/release/rustuml --no-oracle -tsvg CASE.puml",
+    "rust_yaml": "/private/tmp/rustuml-note-terminal-followup2/target/release/rustuml --no-oracle --yaml CASE.puml"
+  },
+  "counts": {
+    "ACCEPT_AGREEMENT": 42,
+    "REJECT_AGREEMENT": 46,
+    "MALFORMED_ACCEPTED_BY_RUST": 8
+  },
+  "results": [
+    {
+      "name": "valid_component_pair_ascii_ascii",
+      "source": "valid_component_pair_ascii_ascii.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer ascii",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 0",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_ascii_ascii",
+      "source": "valid_deployment_pair_ascii_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer ascii",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 1",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_ascii_left",
+      "source": "valid_component_pair_ascii_left.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer left",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 1",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_ascii_left",
+      "source": "valid_deployment_pair_ascii_left.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer left",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 2",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_ascii_right",
+      "source": "valid_component_pair_ascii_right.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer right",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 2",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_ascii_right",
+      "source": "valid_deployment_pair_ascii_right.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer right",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 3",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_ascii_jaws",
+      "source": "valid_component_pair_ascii_jaws.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer jaws",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 3",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_ascii_jaws",
+      "source": "valid_deployment_pair_ascii_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener ascii",
+        "%g closer jaws",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 4",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_left_ascii",
+      "source": "valid_component_pair_left_ascii.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer ascii",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 4",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_left_ascii",
+      "source": "valid_deployment_pair_left_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer ascii",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 5",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_left_left",
+      "source": "valid_component_pair_left_left.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer left",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 5",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_left_left",
+      "source": "valid_deployment_pair_left_left.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer left",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 6",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_left_right",
+      "source": "valid_component_pair_left_right.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer right",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 6",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_left_right",
+      "source": "valid_deployment_pair_left_right.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer right",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 7",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_left_jaws",
+      "source": "valid_component_pair_left_jaws.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer jaws",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 7",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_left_jaws",
+      "source": "valid_deployment_pair_left_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener left",
+        "%g closer jaws",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 0",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_right_ascii",
+      "source": "valid_component_pair_right_ascii.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer ascii",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 0",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_right_ascii",
+      "source": "valid_deployment_pair_right_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer ascii",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 1",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_right_left",
+      "source": "valid_component_pair_right_left.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer left",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 1",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_right_left",
+      "source": "valid_deployment_pair_right_left.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer left",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 2",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_right_right",
+      "source": "valid_component_pair_right_right.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer right",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 2",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_right_right",
+      "source": "valid_deployment_pair_right_right.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer right",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 3",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_right_jaws",
+      "source": "valid_component_pair_right_jaws.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer jaws",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 3",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_right_jaws",
+      "source": "valid_deployment_pair_right_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener right",
+        "%g closer jaws",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 4",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_jaws_ascii",
+      "source": "valid_component_pair_jaws_ascii.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer ascii",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 4",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_jaws_ascii",
+      "source": "valid_deployment_pair_jaws_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer ascii",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 5",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_jaws_left",
+      "source": "valid_component_pair_jaws_left.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer left",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 5",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_jaws_left",
+      "source": "valid_deployment_pair_jaws_left.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer left",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 6",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_jaws_right",
+      "source": "valid_component_pair_jaws_right.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer right",
+        "NBSP command whitespace",
+        "mixed keyword case",
+        "decoration variant 6",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_jaws_right",
+      "source": "valid_deployment_pair_jaws_right.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer right",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 7",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_pair_jaws_jaws",
+      "source": "valid_component_pair_jaws_jaws.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer jaws",
+        "ASCII command whitespace",
+        "mixed keyword case",
+        "decoration variant 7",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_pair_jaws_jaws",
+      "source": "valid_deployment_pair_jaws_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline",
+        "%g opener jaws",
+        "%g closer jaws",
+        "tab command whitespace",
+        "mixed keyword case",
+        "decoration variant 0",
+        "renamed labels",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_multiline_variant_0",
+      "source": "valid_component_multiline_variant_0.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator endnote",
+        "optional decoration variant 0",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_multiline_variant_1",
+      "source": "valid_component_multiline_variant_1.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator end note",
+        "optional decoration variant 1",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_multiline_variant_2",
+      "source": "valid_component_multiline_variant_2.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator ENDNOTE",
+        "optional decoration variant 2",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_component_multiline_variant_3",
+      "source": "valid_component_multiline_variant_3.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator EnD NoTe",
+        "optional decoration variant 3",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_multiline_variant_0",
+      "source": "valid_deployment_multiline_variant_0.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator endnote",
+        "optional decoration variant 0",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_multiline_variant_1",
+      "source": "valid_deployment_multiline_variant_1.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator end note",
+        "optional decoration variant 1",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_multiline_variant_2",
+      "source": "valid_deployment_multiline_variant_2.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator ENDNOTE",
+        "optional decoration variant 2",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "valid_deployment_multiline_variant_3",
+      "source": "valid_deployment_multiline_variant_3.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "multiline",
+        "terminator EnD NoTe",
+        "optional decoration variant 3",
+        "case/NBSP",
+        "later relation reuse"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_embedded_ascii_open_ascii_trail_right",
+      "source": "invalid_component_embedded_ascii_open_ascii_trail_right.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener ascii",
+        "embedded %g ascii",
+        "trailing %g right",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_embedded_ascii_open_left_trail_jaws",
+      "source": "invalid_deployment_embedded_ascii_open_left_trail_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener left",
+        "embedded %g ascii",
+        "trailing %g jaws",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_embedded_left_open_left_trail_jaws",
+      "source": "invalid_component_embedded_left_open_left_trail_jaws.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener left",
+        "embedded %g left",
+        "trailing %g jaws",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_embedded_left_open_right_trail_ascii",
+      "source": "invalid_deployment_embedded_left_open_right_trail_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener right",
+        "embedded %g left",
+        "trailing %g ascii",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_embedded_right_open_right_trail_ascii",
+      "source": "invalid_component_embedded_right_open_right_trail_ascii.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener right",
+        "embedded %g right",
+        "trailing %g ascii",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_embedded_right_open_jaws_trail_left",
+      "source": "invalid_deployment_embedded_right_open_jaws_trail_left.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener jaws",
+        "embedded %g right",
+        "trailing %g left",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_embedded_jaws_open_jaws_trail_left",
+      "source": "invalid_component_embedded_jaws_open_jaws_trail_left.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener jaws",
+        "embedded %g jaws",
+        "trailing %g left",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_embedded_jaws_open_ascii_trail_right",
+      "source": "invalid_deployment_embedded_jaws_open_ascii_trail_right.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener ascii",
+        "embedded %g jaws",
+        "trailing %g right",
+        "would-be endpoint relation",
+        "later declaration/order"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_missing_closer_after_ascii",
+      "source": "invalid_component_missing_closer_after_ascii.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener ascii",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_missing_closer_after_ascii",
+      "source": "invalid_deployment_missing_closer_after_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener ascii",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_missing_closer_after_left",
+      "source": "invalid_component_missing_closer_after_left.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener left",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_missing_closer_after_left",
+      "source": "invalid_deployment_missing_closer_after_left.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener left",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_missing_closer_after_right",
+      "source": "invalid_component_missing_closer_after_right.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener right",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_missing_closer_after_right",
+      "source": "invalid_deployment_missing_closer_after_right.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener right",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_missing_closer_after_jaws",
+      "source": "invalid_component_missing_closer_after_jaws.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener jaws",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_missing_closer_after_jaws",
+      "source": "invalid_deployment_missing_closer_after_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g opener jaws",
+        "missing closer",
+        "case/NBSP",
+        "would-be endpoint relation"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_missing_as_ascii",
+      "source": "invalid_component_suffix_missing_as_ascii.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter ascii",
+        "missing as",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_missing_as_left",
+      "source": "invalid_deployment_suffix_missing_as_left.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter left",
+        "missing as",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_extra_as_left",
+      "source": "invalid_component_suffix_extra_as_left.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter left",
+        "extra as",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_extra_as_right",
+      "source": "invalid_deployment_suffix_extra_as_right.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter right",
+        "extra as",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_missing_code_right",
+      "source": "invalid_component_suffix_missing_code_right.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter right",
+        "missing code",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_missing_code_jaws",
+      "source": "invalid_deployment_suffix_missing_code_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter jaws",
+        "missing code",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_extra_code_jaws",
+      "source": "invalid_component_suffix_extra_code_jaws.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter jaws",
+        "extra code",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_extra_code_ascii",
+      "source": "invalid_deployment_suffix_extra_code_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter ascii",
+        "extra code",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_hyphen_code_ascii",
+      "source": "invalid_component_suffix_hyphen_code_ascii.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter ascii",
+        "hyphen code",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_hyphen_code_left",
+      "source": "invalid_deployment_suffix_hyphen_code_left.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter left",
+        "hyphen code",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_extra_color_left",
+      "source": "invalid_component_suffix_extra_color_left.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter left",
+        "extra color",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_extra_color_right",
+      "source": "invalid_deployment_suffix_extra_color_right.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter right",
+        "extra color",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_color_before_stereo_right",
+      "source": "invalid_component_suffix_color_before_stereo_right.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter right",
+        "color before stereo",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_color_before_stereo_jaws",
+      "source": "invalid_deployment_suffix_color_before_stereo_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter jaws",
+        "color before stereo",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_tag_after_stereo_jaws",
+      "source": "invalid_component_suffix_tag_after_stereo_jaws.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter jaws",
+        "tag after stereo",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_tag_after_stereo_ascii",
+      "source": "invalid_deployment_suffix_tag_after_stereo_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter ascii",
+        "tag after stereo",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_duplicate_stereo_ascii",
+      "source": "invalid_component_suffix_duplicate_stereo_ascii.puml",
+      "family": "component",
+      "expected_java_valid": true,
+      "axes": [
+        "inline Java-valid combined stereotype payload",
+        "%g delimiter ascii",
+        "duplicate stereo",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_duplicate_stereo_left",
+      "source": "invalid_deployment_suffix_duplicate_stereo_left.puml",
+      "family": "deployment",
+      "expected_java_valid": true,
+      "axes": [
+        "inline Java-valid combined stereotype payload",
+        "%g delimiter left",
+        "duplicate stereo",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "ACCEPT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_suffix_unknown_color_left",
+      "source": "invalid_component_suffix_unknown_color_left.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter left",
+        "unknown color",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_suffix_unknown_color_right",
+      "source": "invalid_deployment_suffix_unknown_color_right.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed",
+        "%g delimiter right",
+        "unknown color",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_tag_contains_ascii_outer_left",
+      "source": "invalid_component_tag_contains_ascii_outer_left.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g left",
+        "tag contains %g ascii",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_tag_contains_ascii_outer_right",
+      "source": "invalid_deployment_tag_contains_ascii_outer_right.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g right",
+        "tag contains %g ascii",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_tag_contains_left_outer_right",
+      "source": "invalid_component_tag_contains_left_outer_right.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g right",
+        "tag contains %g left",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_deployment_tag_contains_left_outer_jaws",
+      "source": "invalid_deployment_tag_contains_left_outer_jaws.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g jaws",
+        "tag contains %g left",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_component_tag_contains_right_outer_jaws",
+      "source": "invalid_component_tag_contains_right_outer_jaws.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g jaws",
+        "tag contains %g right",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_deployment_tag_contains_right_outer_ascii",
+      "source": "invalid_deployment_tag_contains_right_outer_ascii.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g ascii",
+        "tag contains %g right",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_component_tag_contains_jaws_outer_ascii",
+      "source": "invalid_component_tag_contains_jaws_outer_ascii.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g ascii",
+        "tag contains %g jaws",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_deployment_tag_contains_jaws_outer_left",
+      "source": "invalid_deployment_tag_contains_jaws_outer_left.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "inline malformed decoration",
+        "outer %g left",
+        "tag contains %g jaws",
+        "would-be endpoint relation",
+        "later declarations and relations"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_component_multiline_missing_code",
+      "source": "invalid_component_multiline_missing_code.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "missing code",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_multiline_missing_code",
+      "source": "invalid_deployment_multiline_missing_code.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "missing code",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_multiline_extra_as",
+      "source": "invalid_component_multiline_extra_as.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "extra as",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_multiline_extra_as",
+      "source": "invalid_deployment_multiline_extra_as.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "extra as",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_multiline_hyphen_code",
+      "source": "invalid_component_multiline_hyphen_code.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "hyphen code",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_multiline_hyphen_code",
+      "source": "invalid_deployment_multiline_hyphen_code.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "hyphen code",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_multiline_decoration_order",
+      "source": "invalid_component_multiline_decoration_order.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "decoration order",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_multiline_decoration_order",
+      "source": "invalid_deployment_multiline_decoration_order.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "decoration order",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_multiline_unknown_color",
+      "source": "invalid_component_multiline_unknown_color.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "unknown color",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_deployment_multiline_unknown_color",
+      "source": "invalid_deployment_multiline_unknown_color.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "unknown color",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 1,
+      "rust_yaml_exit": 1,
+      "result": "REJECT_AGREEMENT"
+    },
+    {
+      "name": "invalid_component_multiline_unterminated",
+      "source": "invalid_component_multiline_unterminated.puml",
+      "family": "component",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "unterminated",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    },
+    {
+      "name": "invalid_deployment_multiline_unterminated",
+      "source": "invalid_deployment_multiline_unterminated.puml",
+      "family": "deployment",
+      "expected_java_valid": false,
+      "axes": [
+        "multiline malformed",
+        "unterminated",
+        "later declarations and relations",
+        "renamed labels/count"
+      ],
+      "java_exit": 200,
+      "rust_exit": 0,
+      "rust_yaml_exit": 0,
+      "result": "MALFORMED_ACCEPTED_BY_RUST"
+    }
+  ]
+}

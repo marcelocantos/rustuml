@@ -1,0 +1,62 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor S81" as DAnchorS81
+      note “duplicate stereo“ as Suffix.DS81 <<One>> <<Two>>
+      artifact "Peer S81" as DPeerS81
+      Suffix.DS81 --> DAnchorS81 : ownership
+      cloud "Late S81" as DLateS81
+      DAnchorS81 --> DLateS81 : survives
+      DAnchorS81 --> DPeerS81 : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorS81
+    label: Anchor S81
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerS81
+    label: Peer S81
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateS81
+    label: Late S81
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Suffix.DS81
+    to: DAnchorS81
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorS81
+    to: DLateS81
+    label: survives
+    arrow_at_end: true
+    source_line: 6
+  - from: DAnchorS81
+    to: DPeerS81
+    label: order
+    arrow_at_end: true
+    source_line: 7
+  notes:
+  - id: Suffix.DS81
+    text: duplicate stereo
+    stereotype: One>> <<Two
+    quark_order: 1
+    position: Right
+    source_line: 2

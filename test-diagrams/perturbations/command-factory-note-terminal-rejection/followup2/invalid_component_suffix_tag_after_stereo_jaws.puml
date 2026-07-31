@@ -1,0 +1,9 @@
+@startuml
+component "Anchor S70" as CAnchorS70
+note wrong tag order as Suffix.CS70 <<First>> $late
+component "Peer S70" as CPeerS70
+Suffix.CS70 --> CAnchorS70 : ownership
+component "Late S70" as CLateS70
+CAnchorS70 --> CLateS70 : survives
+CAnchorS70 --> CPeerS70 : order
+@enduml

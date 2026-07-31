@@ -1,0 +1,50 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Anchor V09D\" as DAnchorV09D\nNoTe\t”matrix\\nV09D“\tAs\tMemo.DV09D <<Reviewed>>\nartifact \"Peer V09D\" as DPeerV09D\nMemo.DV09D --> DAnchorV09D : ownership\ncloud \"Late V09D\" as DLateV09D\nDAnchorV09D --> DPeerV09D : order\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV09D
+    label: Anchor V09D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV09D
+    label: Peer V09D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV09D
+    label: Late V09D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV09D
+    to: DAnchorV09D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV09D
+    to: DPeerV09D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV09D
+    text: |-
+      matrix
+      V09D
+    stereotype: Reviewed
+    quark_order: 1
+    position: Right
+    source_line: 2

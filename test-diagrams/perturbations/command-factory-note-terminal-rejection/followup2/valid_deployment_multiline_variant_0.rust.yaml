@@ -1,0 +1,60 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor M0D" as DAnchorM0D
+      note as Multi.DM0D
+      multiline M0D
+      second row 3
+      endnote
+      artifact "Peer M0D" as DPeerM0D
+      Multi.DM0D --> DAnchorM0D : ownership
+      cloud "Late M0D" as DLateM0D
+      DAnchorM0D --> DPeerM0D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorM0D
+    label: Anchor M0D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerM0D
+    label: Peer M0D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 6
+    quark_order: 2
+  - id: DLateM0D
+    label: Late M0D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 8
+    quark_order: 3
+  connections:
+  - from: Multi.DM0D
+    to: DAnchorM0D
+    label: ownership
+    arrow_at_end: true
+    source_line: 7
+  - from: DAnchorM0D
+    to: DPeerM0D
+    label: order
+    arrow_at_end: true
+    source_line: 9
+  notes:
+  - id: Multi.DM0D
+    text: |-
+      multiline M0D
+      second row 3
+    quark_order: 1
+    position: Right
+    source_line: 3

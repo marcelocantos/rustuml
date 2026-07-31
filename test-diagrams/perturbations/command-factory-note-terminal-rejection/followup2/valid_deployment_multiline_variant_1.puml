@@ -1,0 +1,11 @@
+@startuml
+node "Anchor M1D" as DAnchorM1D
+NoTe as Multi.DM1D $multi
+multiline M1D
+second row 2
+end note
+artifact "Peer M1D" as DPeerM1D
+Multi.DM1D --> DAnchorM1D : ownership
+cloud "Late M1D" as DLateM1D
+DAnchorM1D --> DPeerM1D : order
+@enduml

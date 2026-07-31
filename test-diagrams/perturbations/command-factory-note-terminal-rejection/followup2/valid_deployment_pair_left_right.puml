@@ -1,0 +1,8 @@
+@startuml
+node "Anchor V06D" as DAnchorV06D
+NOTE	“matrix V06D”	aS	Memo.DV06D $audit <<Terminal>> #LightBlue|LightGreen
+artifact "Peer V06D" as DPeerV06D
+Memo.DV06D --> DAnchorV06D : ownership
+cloud "Late V06D" as DLateV06D
+DAnchorV06D --> DPeerV06D : order
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+node "Anchor L41" as DAnchorL41
+note as Long.DL41 #HeldoutMultilineLongDL41
+body L41
+endnote
+artifact "Peer L41" as DPeerL41
+Long.DL41 --> DAnchorL41 : ownership
+cloud "Late L41" as DLateL41
+DAnchorL41 --> DLateL41 : survives
+DAnchorL41 --> DPeerL41 : order
+@enduml

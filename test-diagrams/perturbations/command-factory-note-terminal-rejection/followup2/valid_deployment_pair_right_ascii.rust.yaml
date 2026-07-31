@@ -1,0 +1,57 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor V08D" as DAnchorV08D
+      note ”matrix V08D" AS Memo.DV08D $tag
+      artifact "Peer V08D" as DPeerV08D
+      Memo.DV08D --> DAnchorV08D : ownership
+      cloud "Late V08D" as DLateV08D
+      DAnchorV08D --> DPeerV08D : order
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV08D
+    label: Anchor V08D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV08D
+    label: Peer V08D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV08D
+    label: Late V08D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV08D
+    to: DAnchorV08D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV08D
+    to: DPeerV08D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV08D
+    text: matrix V08D
+    tags:
+    - tag
+    quark_order: 1
+    position: Right
+    source_line: 2

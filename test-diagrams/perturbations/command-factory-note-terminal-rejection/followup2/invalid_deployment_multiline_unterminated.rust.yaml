@@ -1,0 +1,37 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node "Anchor L51" as DAnchorL51
+      artifact "Peer L51" as DPeerL51
+      DAnchorL51 --> DPeerL51 : before
+      note as Long.DL51
+      body without a terminator
+      database "Swallowed L51" as Swallowed.DL51
+      Long.DL51 --> Swallowed.DL51 : swallowed relation
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorL51
+    label: Anchor L51
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerL51
+    label: Peer L51
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: DAnchorL51
+    to: DPeerL51
+    label: before
+    arrow_at_end: true
+    source_line: 3

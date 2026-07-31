@@ -1,0 +1,52 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Anchor V12D\" as DAnchorV12D\nnote\tmatrix V12D\"\tAS\tMemo.DV12D $nbsp $second <<Mixed Case>> #LightBlue/LightGreen\nartifact \"Peer V12D\" as DPeerV12D\nMemo.DV12D --> DAnchorV12D : ownership\ncloud \"Late V12D\" as DLateV12D\nDAnchorV12D --> DPeerV12D : order\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV12D
+    label: Anchor V12D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV12D
+    label: Peer V12D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV12D
+    label: Late V12D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV12D
+    to: DAnchorV12D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV12D
+    to: DPeerV12D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV12D
+    text: matrix V12D
+    color: '#LightBlue/LightGreen'
+    tags:
+    - nbsp
+    - second
+    stereotype: Mixed Case
+    quark_order: 1
+    position: Right
+    source_line: 2

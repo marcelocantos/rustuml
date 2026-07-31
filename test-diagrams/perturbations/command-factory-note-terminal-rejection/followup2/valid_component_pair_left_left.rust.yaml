@@ -1,0 +1,75 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor V05C" as CAnchorV05C
+      NoTe “matrix\nV05C“ AS Memo.CV05C $nbsp $second <<Mixed Case>> #LightBlue/LightGreen
+      component "Peer V05C" as CPeerV05C
+      Memo.CV05C --> CAnchorV05C : ownership
+      component "Late V05C" as CLateV05C
+      CAnchorV05C --> CPeerV05C : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorV05C
+    label: Anchor V05C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerV05C
+    label: Peer V05C
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateV05C
+    label: Late V05C
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.CV05C
+    to: CAnchorV05C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorV05C
+    to: CPeerV05C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: Memo.CV05C
+    tags:
+    - nbsp
+    - second
+    stereotype: Mixed Case
+    color: '#LightBlue/LightGreen'
+    text: |-
+      matrix
+      V05C
+    target: null
+    position: Right
+    source_line: 2

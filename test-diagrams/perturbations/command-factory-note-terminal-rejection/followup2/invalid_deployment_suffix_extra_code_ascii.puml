@@ -1,0 +1,9 @@
+@startuml
+node "Anchor S31" as DAnchorS31
+note "extra code" as Suffix.DS31 TrailingCode
+artifact "Peer S31" as DPeerS31
+Suffix.DS31 --> DAnchorS31 : ownership
+cloud "Late S31" as DLateS31
+DAnchorS31 --> DLateS31 : survives
+DAnchorS31 --> DPeerS31 : order
+@enduml

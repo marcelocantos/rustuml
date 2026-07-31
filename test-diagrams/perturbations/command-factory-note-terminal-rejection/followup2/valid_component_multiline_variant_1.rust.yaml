@@ -1,0 +1,75 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component "Anchor M1C" as CAnchorM1C
+      NoTe as Multi.CM1C $multi
+      multiline M1C
+      second row 2
+      end note
+      component "Peer M1C" as CPeerM1C
+      Multi.CM1C --> CAnchorM1C : ownership
+      component "Late M1C" as CLateM1C
+      CAnchorM1C --> CPeerM1C : order
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: CAnchorM1C
+    label: Anchor M1C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerM1C
+    label: Peer M1C
+    stereotypes: []
+    source_line: 6
+    kind: Component
+  - id: CLateM1C
+    label: Late M1C
+    stereotypes: []
+    source_line: 8
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Multi.CM1C
+    to: CAnchorM1C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 7
+  - from: CAnchorM1C
+    to: CPeerM1C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 9
+  packages: []
+  notes:
+  - id: Multi.CM1C
+    tags:
+    - multi
+    text: |-
+      multiline M1C
+      second row 2
+    target: null
+    position: Right
+    source_line: 3

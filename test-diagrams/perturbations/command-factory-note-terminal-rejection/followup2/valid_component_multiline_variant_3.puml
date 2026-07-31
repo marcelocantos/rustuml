@@ -1,0 +1,11 @@
+@startuml
+component "Anchor M3C" as CAnchorM3C
+NoTe AS Multi.CM3C $multi <<Long Form>> #Lavender
+multiline M3C
+second row 0
+EnD NoTe
+component "Peer M3C" as CPeerM3C
+Multi.CM3C --> CAnchorM3C : ownership
+component "Late M3C" as CLateM3C
+CAnchorM3C --> CPeerM3C : order
+@enduml

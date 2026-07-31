@@ -1,0 +1,8 @@
+@startuml
+node "Anchor V15D" as DAnchorV15D
+nOtE	matrix\nV15D	as	Memo.DV15D
+artifact "Peer V15D" as DPeerV15D
+Memo.DV15D --> DAnchorV15D : ownership
+cloud "Late V15D" as DLateV15D
+DAnchorV15D --> DPeerV15D : order
+@enduml

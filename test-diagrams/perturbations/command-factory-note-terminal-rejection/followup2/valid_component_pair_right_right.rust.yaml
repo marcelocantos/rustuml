@@ -1,0 +1,61 @@
+type: Component
+diagram:
+  meta:
+    source: "@startuml\ncomponent \"Anchor V10C\" as CAnchorV10C\nNOTE\t”matrix V10C”\tAs\tMemo.CV10C <<Reviewed>>\ncomponent \"Peer V10C\" as CPeerV10C\nMemo.CV10C --> CAnchorV10C : ownership\ncomponent \"Late V10C\" as CLateV10C\nCAnchorV10C --> CPeerV10C : order\n@enduml\n"
+  direction: TopToBottom
+  components:
+  - id: CAnchorV10C
+    label: Anchor V10C
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: CPeerV10C
+    label: Peer V10C
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: CLateV10C
+    label: Late V10C
+    stereotypes: []
+    source_line: 5
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Memo.CV10C
+    to: CAnchorV10C
+    label: ownership
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: CAnchorV10C
+    to: CPeerV10C
+    label: order
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages: []
+  notes:
+  - id: Memo.CV10C
+    stereotype: Reviewed
+    text: matrix V10C
+    target: null
+    position: Right
+    source_line: 2

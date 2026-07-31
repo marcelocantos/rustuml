@@ -1,0 +1,11 @@
+@startuml
+node "Anchor M3D" as DAnchorM3D
+NoTe AS Multi.DM3D $multi <<Long Form>> #Lavender
+multiline M3D
+second row 0
+EnD NoTe
+artifact "Peer M3D" as DPeerM3D
+Multi.DM3D --> DAnchorM3D : ownership
+cloud "Late M3D" as DLateM3D
+DAnchorM3D --> DPeerM3D : order
+@enduml

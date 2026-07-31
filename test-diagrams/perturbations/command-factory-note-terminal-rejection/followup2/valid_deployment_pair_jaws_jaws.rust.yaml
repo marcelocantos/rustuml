@@ -1,0 +1,49 @@
+type: Deployment
+diagram:
+  meta:
+    source: "@startuml\nnode \"Anchor V15D\" as DAnchorV15D\nnOtE\tmatrix\\nV15D\tas\tMemo.DV15D\nartifact \"Peer V15D\" as DPeerV15D\nMemo.DV15D --> DAnchorV15D : ownership\ncloud \"Late V15D\" as DLateV15D\nDAnchorV15D --> DPeerV15D : order\n@enduml\n"
+  direction: TopToBottom
+  nodes:
+  - id: DAnchorV15D
+    label: Anchor V15D
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: DPeerV15D
+    label: Peer V15D
+    kind: Artifact
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 3
+    quark_order: 2
+  - id: DLateV15D
+    label: Late V15D
+    kind: Cloud
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 5
+    quark_order: 3
+  connections:
+  - from: Memo.DV15D
+    to: DAnchorV15D
+    label: ownership
+    arrow_at_end: true
+    source_line: 4
+  - from: DAnchorV15D
+    to: DPeerV15D
+    label: order
+    arrow_at_end: true
+    source_line: 6
+  notes:
+  - id: Memo.DV15D
+    text: |-
+      matrix
+      V15D
+    quark_order: 1
+    position: Right
+    source_line: 2
