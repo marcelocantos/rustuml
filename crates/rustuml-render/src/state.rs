@@ -6406,8 +6406,8 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else {
-        let mut layout =
-            LayoutGraph::new(state_layout_direction(diagram)).with_plantuml_svek_spacing();
+        let mut layout = LayoutGraph::new(state_layout_direction(diagram))
+            .with_spacing(autonomous_outer_spacing(diagram));
         for id in &layout_node_ids {
             if let Some(note) = floating_notes.iter().find(|note| note.alias == *id) {
                 layout.add_node(id, "", note.width, note.height);
@@ -12932,6 +12932,57 @@ Violet --> [*]
             spacing.rank_sep_px,
             GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px
         );
+    }
+
+    #[test]
+    fn flat_state_layout_uses_independent_root_spacing_options() {
+        fn dimensions(svg: &str) -> (f64, f64) {
+            let values = svg
+                .split_once(r#"viewBox="0 0 "#)
+                .unwrap()
+                .1
+                .split_once('"')
+                .unwrap()
+                .0
+                .split_whitespace()
+                .map(|value| value.parse::<f64>().unwrap())
+                .collect::<Vec<_>>();
+            (values[0], values[1])
+        }
+
+        let chain = |ranksep| {
+            rustuml_parser::parse::parse(&format!(
+                "@startuml\n\
+                 skinparam ranksep {ranksep}\n\
+                 [*] --> CopperHarbor\n\
+                 CopperHarbor --> VioletRelay\n\
+                 VioletRelay --> AmberDepot\n\
+                 AmberDepot --> QuartzVault\n\
+                 QuartzVault --> [*]\n\
+                 @enduml"
+            ))
+            .unwrap()
+        };
+        let fanout = |nodesep| {
+            rustuml_parser::parse::parse(&format!(
+                "@startuml\n\
+                 skinparam nodesep {nodesep}\n\
+                 [*] --> CopperHub\n\
+                 CopperHub --> VioletRelay\n\
+                 CopperHub --> AmberDepot\n\
+                 CopperHub --> QuartzVault\n\
+                 @enduml"
+            ))
+            .unwrap()
+        };
+
+        let (_, compact_height) = dimensions(&crate::render_svg(&chain(30)));
+        let (_, expanded_height) = dimensions(&crate::render_svg(&chain(90)));
+        assert!(expanded_height > compact_height);
+
+        let (compact_width, _) = dimensions(&crate::render_svg(&fanout(20)));
+        let (expanded_width, _) = dimensions(&crate::render_svg(&fanout(100)));
+        assert!(expanded_width > compact_width);
     }
 
     #[test]

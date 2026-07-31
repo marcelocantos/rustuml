@@ -103,6 +103,21 @@
   ],
   "experimental_result": {
     "implementation_revision": "pending implementation commit",
-    "review_status": "Independent adversarial review and Java-generated held-outs remain pending. This account is a pre-implementation causal claim and does not self-attest acceptance."
+    "accepted_result": "state_global_skinparam_ranksep becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,161/11,251 to 11,162/11,251, with state moving from 895/901 to 896/901 and every other family unchanged.",
+    "model_evidence": "The flat root LayoutGraph now consumes the same independently reviewed Java-compatible spacing resolver as composite-bearing roots. A fresh renamed test varies ranksep on a five-rank chain and nodesep on a three-way fan-out and proves each accepted option enlarges only its relevant layout axis; the existing accepted grammar tests retain invalid and zero controls.",
+    "commands": [
+      "cargo test -p rustuml-render --lib flat_state_layout_uses_independent_root_spacing_options",
+      "cargo build --release -p rustuml-oracle --example diff_one",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/state/state_global_skinparam_ranksep.puml",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java oracle are unavailable. This record does not self-attest acceptance."
   }
 }
