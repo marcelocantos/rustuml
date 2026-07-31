@@ -221,6 +221,13 @@ fn tim_comment_line<'a>(line: &'a str, in_long_comment: &mut bool) -> Option<Cow
     if trimmed.starts_with('\'') {
         return None;
     }
+    // `TLineType#getFromLineInternal` classifies the complete greedy
+    // `^\s*/'.*'/\s*$` form as COMMENT_SIMPLE. The short-comment iterator
+    // consumes it before the inner-comment iterator can preserve a suffix
+    // after an earlier closing token.
+    if trimmed.starts_with("/'") && trimmed.ends_with("'/") {
+        return None;
+    }
     if trimmed.starts_with("/'") {
         let Some(close) = line.find("'/") else {
             *in_long_comment = true;
@@ -4592,6 +4599,28 @@ NorthwindLedger --> SaffronArchive
         assert!(output.uml_source.contains("field  visible"));
         assert!(!output.uml_source.contains("hidden-field"));
         assert!(output.uml_source.contains("' ordinary apostrophe"));
+    }
+
+    #[test]
+    fn whole_line_comment_precedes_inner_comment_suffix_retention() {
+        let input = concat!(
+            "@startuml\n",
+            "!theme cerulean\n",
+            "/' outer '/ class Ghost /' final '/\n",
+            "/' prefix '/ class PrefixKept\n",
+            "class SuffixKept /' suffix '/\n",
+            "field /'''hidden-field'''/ visible\n",
+            "@enduml\n",
+        );
+        let output = preprocess_full(input, None);
+
+        assert!(!output.lines.iter().any(|line| line.contains("Ghost")));
+        assert!(output.lines.iter().any(|line| line.contains("PrefixKept")));
+        assert!(output.lines.iter().any(|line| line.contains("SuffixKept")));
+        assert!(!output.uml_source.contains("Ghost"));
+        assert!(output.uml_source.contains(" class PrefixKept"));
+        assert!(output.uml_source.contains("class SuffixKept "));
+        assert!(output.uml_source.contains("field  visible"));
     }
 
     #[test]
