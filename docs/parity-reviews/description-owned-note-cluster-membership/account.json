@@ -4,7 +4,8 @@
   "status": "corrected_before_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision": "79803e8d0ce6eeb1fbbad4e700dd644d6653f4bc",
-  "correction": "The first account correctly described PlantUML's heterogeneous quark ownership but named Rust's DeploymentDiagram path. The preserved counterexamples dispatch through Diagram::Component and are rendered by component.rs. This correction was committed before any production change for the mechanism.",
+  "correction": "The first account correctly described PlantUML's heterogeneous quark ownership but treated one Rust projection as the whole DESCRIPTION path. The duplicate-leaf note-owner counterexamples dispatch through Diagram::Component and are rendered by component.rs. The Component-specific account correction was committed before any production change for this mechanism.",
+  "dispatch_scope": "This mechanism is intentionally limited to DESCRIPTION inputs that Rust's factory selects as Diagram::Component. A 2026-07-31 binary dispatch survey showed that superficially similar note-owner inputs select Diagram::Class or Diagram::Deployment depending on their other commands. Those paths require separate pre-code accounts and implementations; this record makes no completion claim for them.",
   "java_locations": [
     {
       "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
@@ -90,10 +91,11 @@
     "fixture aliases, source filenames, expected coordinates, comparator changes or baseline changes"
   ],
   "evidence_inputs": [
-    "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_root_two_leaves_with_owned_note_leak_ltr.puml",
-    "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_single_owned_note_ttb.puml",
-    "test-diagrams/perturbations/deployment-unconstrained-leaf-emission-order/review_nested_three_member_note_control_file_ltr.puml",
-    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_attached_note_only_owner_ttb.puml",
-    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_note_only_inner_owner_ttb.puml"
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_sibling_duplicate_leaf_note_owner_ltr.puml",
+    "test-diagrams/perturbations/deployment-svek-owner-traversal-uniqueness/checker_nested_duplicate_leaf_note_owner_ttb.puml"
+  ],
+  "dispatch_survey_residue": [
+    "review_nested_single_owned_note_ttb.puml selects Diagram::Class and is outside this account.",
+    "review_nested_three_member_note_control_file_ltr.puml and checker_attached_note_only_owner_ttb.puml select Diagram::Deployment and are outside this account."
   ]
 }
