@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "mechanism": "parser-initial-empty-source-origin",
+  "status": "proposed",
+  "java_revision": "1d3268e9160544eb19271c390112929691ce69b7",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/core/UmlSource.java",
+      "symbols": [
+        "UmlSource#removeInitialNoise",
+        "UmlSource#isNoise"
+      ],
+      "lines": "76-103",
+      "role": "Defines initial source noise as a contiguous prefix beginning immediately after the start directive. Empty strings are noise only while that prefix remains open; later empty strings remain in the source stream."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": [
+        "PSystemCommandFactory#createSystem",
+        "PSystemCommandFactory#getCandidate"
+      ],
+      "lines": "74-113, 178-201",
+      "role": "Consumes the effective UmlSource in order and passes each surviving StringLocated location to the matched diagram command. Interior no-op lines are consumed as ordinary commands and retain their positions."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java",
+      "symbols": [
+        "UGroup#UGroup(LineLocation)"
+      ],
+      "lines": "49-53",
+      "role": "Serializes the command LineLocation position directly as data-source-line, with no renderer-side correction."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/preprocess/mod.rs",
+      "symbols": [
+        "preprocess_full_inner",
+        "source_identity_input_lines",
+        "PreprocessContext#process_lines"
+      ],
+      "lines": "87-130, 185-207, 766-781",
+      "role": "The SVG-identity path already removes raw empty lines immediately after the start directive, but the parser path still enumerates the untrimmed input and therefore assigns every later statement an inflated source origin."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "source_line_and_trimmed",
+        "parse_with_base"
+      ],
+      "lines": "236-240, 1373-1415",
+      "role": "Consumes preprocessor source markers as authoritative parser and SVG source locations."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.svg"
+  ],
+  "claimed_invariant": "The effective diagram source begins with the start directive followed by the first non-empty content line. A raw empty prefix immediately after the start directive is absent from the parser location domain. Once any non-empty content is observed, later blank lines remain in the stream and advance subsequent source locations. This is a source-stream invariant shared by all parsers, not a class-renderer metadata adjustment.",
+  "causal_divergence": "The frozen Java SVG assigns Foo, Bar, and their relationship source positions 1, 5, and 9 even though the file contains three raw empty lines between @startuml and Foo; the three empty lines between each later statement do advance the next position. Rust's source-identity path already produces that exact stream for hashing, but preprocess_full_inner calls PreprocessContext::process on the original input for parsing. current_diagram_source_line removes only the @startuml offset, so Rust assigns 4, 8, and 12. Geometry, command identity, and all other SVG content already match. The defect is the parser's raw-input domain, not output metadata formatting.",
+  "planned_model_change": "Feed the same initial-empty-filtered input representation into the parser preprocessor while preserving existing raw source numbers for every line after the first content line. Generalize the existing source_identity_input_lines helper into a shared raw diagram input filter used by both parsing and identity construction. Add parser tests with renamed entities that vary initial empty-prefix length and interior blank-run length, proving that only the former is removed and that a diagram with no initial prefix is unchanged.",
+  "perturbation_axes": [
+    "zero, one, and several initial empty lines",
+    "zero, one, and several interior empty lines",
+    "renamed entity and relationship labels",
+    "two versus three declarations",
+    "empty lines containing spaces or tabs versus zero-length lines"
+  ],
+  "scope_boundary": "This mechanism owns raw empty-line admission immediately after a diagram start directive and the resulting parser source origins. It does not alter non-empty directives, comments, generated TIM line attribution, include locations, interior blank lines, layout, rendering, IDs, comparator behavior, or golden eligibility.",
+  "acceptance": [
+    "edge_whitespace_multiple_blank_lines matches structurally through render_svg without oracle input.",
+    "Fresh valid class perturbations prove that changing initial blank-prefix length leaves content origins unchanged while changing an interior blank-run length advances later origins.",
+    "Parser and renderer tests pass and the full no-oracle ratchet has no regression in any family.",
+    "The four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "subtracting a fixture-specific constant from rendered data-source-line strings",
+    "normalizing all blank lines out of the diagram",
+    "special-casing class names, relationship labels, or the edge-cases family",
+    "post-hoc SVG string surgery",
+    "comparator or eligibility changes"
+  ],
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "pending implementation and shipped-path census",
+    "model_evidence": "pending fresh parser perturbations and frozen-golden verification",
+    "commands": [],
+    "review_status": "Causal account recorded before implementation; independent adversarial review remains pending."
+  }
+}
