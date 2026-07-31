@@ -1,0 +1,40 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Anchor_611
+      node Archive_619
+      note right of Anchor_611 : attached-note control
+      Anchor_611 --> Archive_619
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor_611
+    label: Anchor_611
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: Archive_619
+    label: Archive_619
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: Anchor_611
+    to: Archive_619
+    label: null
+    arrow_at_end: true
+    source_line: 4
+  notes:
+  - target: Anchor_611
+    text: attached-note control
+    quark_order: 2
+    position: Right
+    source_line: 3

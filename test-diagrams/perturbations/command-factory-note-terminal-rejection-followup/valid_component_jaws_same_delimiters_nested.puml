@@ -1,0 +1,9 @@
+@startuml
+package Outer_451 {
+  component Anchor_452
+  component Archive_459
+  note invisible quote payload as Jaws.Ledger_457 $audit <<Trace>> #MistyRose
+  Jaws.Ledger_457 --> Anchor_452
+  Anchor_452 --> Archive_459
+}
+@enduml

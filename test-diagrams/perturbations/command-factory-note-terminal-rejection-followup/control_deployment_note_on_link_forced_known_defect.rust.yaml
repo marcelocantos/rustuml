@@ -1,0 +1,47 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Anchor_671
+      node Archive_679
+      note "forces deployment selection" as Force.Deploy_677
+      Force.Deploy_677 --> Anchor_671
+      Anchor_671 --> Archive_679 : primary route
+      note on link : forced deployment link-note control
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor_671
+    label: Anchor_671
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: Archive_679
+    label: Archive_679
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: Force.Deploy_677
+    to: Anchor_671
+    label: null
+    arrow_at_end: true
+    source_line: 4
+  - from: Anchor_671
+    to: Archive_679
+    label: primary route
+    arrow_at_end: true
+    source_line: 5
+  notes:
+  - id: Force.Deploy_677
+    text: forces deployment selection
+    quark_order: 2
+    position: Right
+    source_line: 3

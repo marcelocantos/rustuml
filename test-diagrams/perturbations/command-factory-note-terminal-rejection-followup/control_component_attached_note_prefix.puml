@@ -1,0 +1,6 @@
+@startuml
+component Anchor_601
+component Archive_609
+note left of Anchor_601 : attached-note control
+Anchor_601 --> Archive_609
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node Outer_561 {
+  node Anchor_562
+  node Archive_569
+  note unknown color as Broken.Deploy_567 $audit <<Trace>> #NotAColor
+  Broken.Deploy_567 --> Anchor_562
+  Anchor_562 --> Archive_569
+}
+@enduml

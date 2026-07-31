@@ -1,0 +1,55 @@
+type: Deployment
+diagram:
+  meta:
+    source: |
+      @startuml
+      node Anchor_491
+      node Archive_499
+      note as Deploy.Ledger_497 $audit <<Trace>> #MistyRose
+        multiline deployment body
+        retains named ownership
+      endnote
+      Deploy.Ledger_497 --> Anchor_491
+      Anchor_491 --> Archive_499
+      @enduml
+  direction: TopToBottom
+  nodes:
+  - id: Anchor_491
+    label: Anchor_491
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 1
+    quark_order: 0
+  - id: Archive_499
+    label: Archive_499
+    kind: Node
+    stereotype: null
+    declared_container: false
+    children: []
+    source_line: 2
+    quark_order: 1
+  connections:
+  - from: Deploy.Ledger_497
+    to: Anchor_491
+    label: null
+    arrow_at_end: true
+    source_line: 7
+  - from: Anchor_491
+    to: Archive_499
+    label: null
+    arrow_at_end: true
+    source_line: 8
+  notes:
+  - id: Deploy.Ledger_497
+    text: |-
+      multiline deployment body
+      retains named ownership
+    color: '#MistyRose'
+    tags:
+    - audit
+    stereotype: Trace
+    quark_order: 2
+    position: Right
+    source_line: 4

@@ -1,0 +1,7 @@
+@startuml
+component Anchor_551
+component Archive_559
+note ”wrong decoration order“ as Broken.Component_557 #MistyRose <<Trace>> $audit
+Broken.Component_557 --> Anchor_551
+Anchor_551 --> Archive_559
+@enduml

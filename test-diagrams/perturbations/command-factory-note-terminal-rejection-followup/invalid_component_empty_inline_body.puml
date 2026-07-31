@@ -1,0 +1,7 @@
+@startuml
+component Anchor_531
+component Archive_539
+note “” as Empty.Component_537 $audit <<Trace>> #MistyRose
+Empty.Component_537 --> Anchor_531
+Anchor_531 --> Archive_539
+@enduml

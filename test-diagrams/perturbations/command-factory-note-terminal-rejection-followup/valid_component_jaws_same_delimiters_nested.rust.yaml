@@ -1,0 +1,78 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Outer_451 {
+        component Anchor_452
+        component Archive_459
+        note invisible quote payload as Jaws.Ledger_457 $audit <<Trace>> #MistyRose
+        Jaws.Ledger_457 --> Anchor_452
+        Anchor_452 --> Archive_459
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Anchor_452
+    label: Anchor_452
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  - id: Archive_459
+    label: Archive_459
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Jaws.Ledger_457
+    to: Anchor_452
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 5
+  - from: Anchor_452
+    to: Archive_459
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 6
+  packages:
+  - name: Outer_451
+    label: Outer_451
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components:
+    - Anchor_452
+    - Archive_459
+    packages: []
+  notes:
+  - id: Jaws.Ledger_457
+    owner: Outer_451
+    tags:
+    - audit
+    stereotype: Trace
+    color: '#MistyRose'
+    text: invisible quote payload
+    target: null
+    position: Right
+    source_line: 4

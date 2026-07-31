@@ -1,0 +1,9 @@
+@startuml
+component Anchor_571
+component Archive_579
+note as Broken.Component-577 $audit <<Trace>> #MistyRose
+  malformed code must stop parsing
+end note
+Broken.Component-577 --> Anchor_571
+Anchor_571 --> Archive_579
+@enduml

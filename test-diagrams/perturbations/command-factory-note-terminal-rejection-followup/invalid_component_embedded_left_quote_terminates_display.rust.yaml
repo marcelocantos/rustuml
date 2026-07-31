@@ -1,0 +1,60 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component Anchor_511
+      component Archive_519
+      note "alpha“omega" as Escape.Component_517 $audit <<Trace>> #MistyRose
+      Escape.Component_517 --> Anchor_511
+      Anchor_511 --> Archive_519
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Anchor_511
+    label: Anchor_511
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: Archive_519
+    label: Archive_519
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces:
+  - id: Escape.Component_517
+    label: Escape.Component_517
+    source_line: 4
+  connections:
+  - from: Escape.Component_517
+    to: Anchor_511
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 4
+  - from: Anchor_511
+    to: Archive_519
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 5
+  packages: []
+  notes: []

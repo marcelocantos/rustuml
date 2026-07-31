@@ -1,0 +1,8 @@
+@startuml
+node Anchor_671
+node Archive_679
+note "forces deployment selection" as Force.Deploy_677
+Force.Deploy_677 --> Anchor_671
+Anchor_671 --> Archive_679 : primary route
+note on link : forced deployment link-note control
+@enduml

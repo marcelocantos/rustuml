@@ -1,0 +1,46 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      component Anchor_621
+      component Archive_629
+      Anchor_621 --> Archive_629 : primary route
+      note on link : component link-note control
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Anchor_621
+    label: Anchor_621
+    stereotypes: []
+    source_line: 1
+    kind: Component
+  - id: Archive_629
+    label: Archive_629
+    stereotypes: []
+    source_line: 2
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Anchor_621
+    to: Archive_629
+    label: primary route
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 3
+  packages: []
+  notes:
+  - text: component link-note control
+    target: null
+    connection: 0
+    position: Bottom
+    source_line: 4

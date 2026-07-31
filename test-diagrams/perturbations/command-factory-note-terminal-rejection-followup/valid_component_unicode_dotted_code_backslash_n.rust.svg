@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="273px" preserveAspectRatio="none" style="width:154px;height:273px;background:#FFFFFF;" version="1.1" viewBox="0 0 154 273" width="154px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor_641-->
+<g class="entity" data-qualified-name="Anchor_641" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="122.0928" x="12.36" y="106.62"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="114.4528" y="111.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="112.4528" y="113.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="112.4528" y="117.62"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82.0928" x="27.36" y="140.1552">Anchor_641</text>
+</g>
+<!--entity Archive_649-->
+<g class="entity" data-qualified-name="Archive_649" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="123.8975" x="11.46" y="213.11"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="115.3575" y="218.11"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="113.3575" y="220.11"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="113.3575" y="224.11"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83.8975" x="26.46" y="246.6452">Archive_649</text>
+</g>
+<g class="entity" data-qualified-name="Métrique.Δelta_647" data-source-line="3" id="ent0004">
+<path d="M6,6 L6,46.6211 A0,0 0 0 0 6,46.6211 L69.41,46.6211 L73.41,106.15 L77.41,46.6211 L140.8135,46.6211 A0,0 0 0 0 140.8135,46.6211 L140.8135,16 L130.8135,6 L6,6 A0,0 0 0 0 6,6" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M130.8135,6 L130.8135,16 L140.8135,16 L130.8135,6" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="110.1509" x="12" y="23.5684">unicode payload\</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="113.8135" x="12" y="38.8789">with a second line</text>
+</g>
+<!--link Anchor_641 to Archive_649-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M73.4097,153.5389 C73.4097,171.0689 73.4097,189.2089 73.4097,206.7289" fill="none" id="Anchor_641-to-Archive_649" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="73.4097,212.7289,77.4097,203.7289,73.4097,207.7289,69.4097,203.7289,73.4097,212.7289" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

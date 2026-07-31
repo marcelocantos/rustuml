@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="307px" preserveAspectRatio="none" style="width:191px;height:307px;background:#FFFFFF;" version="1.1" viewBox="0 0 191 307" width="191px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Anchor_411-->
+<g class="entity" data-qualified-name="Anchor_411" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="170.7783" x="7" y="123.62"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="157.7783" y="128.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="155.7783" y="130.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="155.7783" y="134.62"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="130.7783" x="22" y="157.1552">Anchor worker 411</text>
+</g>
+<!--entity Archive_419-->
+<g class="entity" data-qualified-name="Archive_419" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="153.8115" x="15.48" y="247.11"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="149.2915" y="252.11"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="147.2915" y="254.11"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="147.2915" y="258.11"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113.8115" x="30.48" y="280.6452">Archive sink 419</text>
+</g>
+<g class="entity" data-qualified-name="Metrica.Delta_417" data-source-line="3" id="ent0004">
+<path d="M26.72,6 L26.72,46.6211 A0,0 0 0 0 26.72,46.6211 L88.39,46.6211 L92.39,123.43 L96.39,46.6211 L158.055,46.6211 A0,0 0 0 0 158.055,46.6211 L158.055,16 L148.055,6 L26.72,6 A0,0 0 0 0 26.72,6" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M148.055,6 L148.055,16 L158.055,16 L148.055,6" fill="#FFE4E1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="97.7349" x="32.72" y="23.5684">first validation\</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="110.335" x="32.72" y="38.8789">second validation</text>
+</g>
+<!--link Anchor_411 to Archive_419-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M92.39,170.4289 C92.39,192.2589 92.39,219.1289 92.39,240.9089" fill="none" id="Anchor_411-to-Archive_419" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="92.39,246.9089,96.39,237.9089,92.39,241.9089,88.39,237.9089,92.39,246.9089" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="49.2451" x="93.3892" y="213.6767">persists</text>
+</g>
+</g></svg>

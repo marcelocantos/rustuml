@@ -1,0 +1,7 @@
+@startuml
+component "Anchor worker 411" as Anchor_411
+component "Archive sink 419" as Archive_419
+note "first validation\\nsecond validation” as Metrica.Delta_417 $audit <<Trace>> #MistyRose
+Metrica.Delta_417 --> Anchor_411 : validates
+Anchor_411 --> Archive_419 : persists
+@enduml

@@ -1,0 +1,92 @@
+type: Component
+diagram:
+  meta:
+    source: |
+      @startuml
+      package Root_481 {
+        package Inner_482 {
+          component Anchor_483
+          component Archive_489
+          note as Metrique.Delta_487 $audit <<Trace>> #MistyRose
+            multiline validation body
+            retains named ownership
+          end note
+          Metrique.Delta_487 --> Anchor_483
+          Anchor_483 --> Archive_489
+        }
+      }
+      @enduml
+  direction: TopToBottom
+  components:
+  - id: Anchor_483
+    label: Anchor_483
+    stereotypes: []
+    source_line: 3
+    kind: Component
+  - id: Archive_489
+    label: Archive_489
+    stereotypes: []
+    source_line: 4
+    kind: Component
+  interfaces: []
+  connections:
+  - from: Metrique.Delta_487
+    to: Anchor_483
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 9
+  - from: Anchor_483
+    to: Archive_489
+    label: null
+    from_mult: null
+    to_mult: null
+    dashed: false
+    has_arrow: true
+    arrow_at_start: false
+    arrow_at_end: true
+    extension_at_start: false
+    extension_at_end: false
+    direction: Down
+    length: 2
+    shape: Plain
+    source_line: 10
+  packages:
+  - name: Root_481
+    label: Root_481
+    stereotype: null
+    kind: Package
+    source_line: 1
+    components: []
+    packages:
+    - name: Inner_482
+      label: Inner_482
+      stereotype: null
+      kind: Package
+      source_line: 2
+      components:
+      - Anchor_483
+      - Archive_489
+      packages: []
+  notes:
+  - id: Metrique.Delta_487
+    owner: Root_481.Inner_482
+    tags:
+    - audit
+    stereotype: Trace
+    color: '#MistyRose'
+    text: |-
+      multiline validation body
+      retains named ownership
+    target: null
+    position: Right
+    source_line: 6
