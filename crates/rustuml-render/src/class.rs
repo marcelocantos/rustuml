@@ -4233,6 +4233,15 @@ fn empty_package_painted_frontier(
             max_x: width,
             max_y: height,
         },
+        // The transparent inset rectangle in `USymbolStack` is still seen by
+        // Java `LimitFinder`; its translated top is one unit above the outer
+        // path, while the path continues to own every other frontier edge.
+        Some(PackageKind::Stack) => PaintedFrontier {
+            min_x: 0.0,
+            min_y: -LIMIT_FINDER_RECTANGLE_INSET,
+            max_x: width,
+            max_y: height,
+        },
         _ => PaintedFrontier {
             min_x: 0.0,
             min_y: 0.0,
@@ -14394,7 +14403,7 @@ fn empty_package_frontier_minima(
             let package = &diagram.packages[package_idx];
             if !matches!(
                 empty_package_symbol_kind(diagram, package),
-                Some(PackageKind::Cloud | PackageKind::ComponentUml1)
+                Some(PackageKind::Cloud | PackageKind::ComponentUml1 | PackageKind::Stack)
             ) {
                 return None;
             }
@@ -18229,6 +18238,21 @@ mod tests {
         assert_eq!(
             package_cluster_painted_min(&diagram, &position),
             (23.0, 41.0 - LIMIT_FINDER_RECTANGLE_INSET)
+        );
+
+        let empty =
+            rustuml_parser::parse::parse("@startuml\nstack EmptyFrontierStack {\n}\n@enduml")
+                .unwrap();
+        let rustuml_parser::diagram::Diagram::Class(empty) = empty else {
+            panic!("expected class diagram");
+        };
+        let package = &empty.packages[0];
+        let (width, height) = empty_package_intrinsic_dims(&empty, package);
+        let frontier = empty_package_painted_frontier(&empty, package, width, height);
+        assert_eq!(frontier.min_y, -LIMIT_FINDER_RECTANGLE_INSET);
+        assert_eq!(
+            (frontier.min_x, frontier.max_x, frontier.max_y),
+            (0.0, width, height)
         );
     }
 
