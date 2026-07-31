@@ -177,13 +177,12 @@ const GENERIC_BOX_HEIGHT: f64 = 16.1328;
 const GENERIC_TEXT_BASELINE: f64 = 12.6016;
 // Gap between the header (icon + name) right edge and the generic box left edge.
 const GENERIC_HEADER_GAP: f64 = 8.0;
-/// Baseline-to-baseline distance between multiple stereotype lines.
-const STEREOTYPE_LINE_HEIGHT: f64 = 14.1328;
+/// Java: `svek/HeaderLayout.java` (`getDimension`, `drawU`) uses the complete
+/// 12px AWT text height for each stereotype row; SVG formatting rounds only
+/// after the header and icon are positioned.
+const STEREOTYPE_LINE_HEIGHT: f64 = 14.1328125;
 /// Stereotype text baseline y relative to entity rect top.
 const STEREOTYPE_Y_OFFSET: f64 = 16.6016;
-/// Icon center y relative to entity rect top when stereotypes are present.
-const ICON_CY_WITH_STEREO: f64 = 20.3105;
-
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_BORDER: &str = "#181818";
 const NOTE_FOLD: f64 = 10.0;
@@ -9683,11 +9682,7 @@ fn render_entity_content(
     });
     let icon_cy = if let Some(cy) = icon_cy_override {
         cy
-    } else if dim.has_stereotypes {
-        y + ICON_CY_WITH_STEREO
-            + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT / 2.0
     } else {
-        let circle_height = icon_radius * 2.0 + CIRCLED_ICON_TOP_INSET * 2.0;
         let header_height = class_header_height(
             entity,
             dim.hide,
@@ -9699,9 +9694,9 @@ fn render_entity_content(
             &font.name_family,
             icon_radius,
         );
-        // Java `HeaderLayout.drawU` vertically centres the complete
-        // circled-character block inside the measured header.
-        y + (header_height - circle_height) / 2.0 + CIRCLED_ICON_TOP_INSET + icon_radius
+        // Java: `svek/HeaderLayout.java` (`drawU`) centres the symmetric
+        // circled-character block with `yCircle = (height-circleDim.height)/2`.
+        y + header_height / 2.0
     };
     if !dim.hide.circle && !suppress_header_icon && !is_object_entity {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
@@ -19433,7 +19428,7 @@ mod tests {
         let svg = crate::render_svg(&diagram);
 
         assert!(svg.contains(r#"style="width:187px;height:101px;background:#FFFFFF;""#));
-        assert!(svg.contains(r##"<rect fill="#F1F1F1" height="81.5976" rx="2.5" ry="2.5""##));
+        assert!(svg.contains(r##"<rect fill="#F1F1F1" height="81.5977" rx="2.5" ry="2.5""##));
         assert!(svg.contains(r#"y1="47.6211" y2="47.6211""#));
         assert!(svg.contains(">void reconcile()</text>"));
         assert!(svg.contains(">boolean verify()</text>"));
@@ -20787,6 +20782,47 @@ mod tests {
         assert!(svg.contains(r##"fill="#12ABEF""##));
         assert!(!svg.contains(CLASS_GLYPH));
         assert!(!svg.contains(">G</text>"));
+    }
+
+    #[test]
+    fn stereotyped_header_centers_spot_from_measured_header_height() {
+        for input in [
+            "@startuml\nclass \"Renamed\\nLedger\" as Fresh << (W,#12ABEF) NewKind >>\n@enduml",
+            "@startuml\nclass Fresh <<first>> <<second>> << (w,#12ABEF) third >>\n@enduml",
+        ] {
+            let diagram = rustuml_parser::parse::parse(input).unwrap();
+            let svg = crate::render_svg(&diagram);
+            let entity = svg.split_once(r#"<g class="entity""#).unwrap().1;
+            let rect = entity
+                .split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            let ellipse = entity
+                .split_once("<ellipse ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            let separator = entity
+                .split_once("<line ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            let rect_y = attr_value(rect, " y").unwrap().parse::<f64>().unwrap();
+            let icon_cy = attr_value(ellipse, " cy").unwrap().parse::<f64>().unwrap();
+            let separator_y = attr_value(separator, " y1")
+                .unwrap()
+                .parse::<f64>()
+                .unwrap();
+
+            assert!((icon_cy - (rect_y + separator_y) / 2.0).abs() < 0.0001);
+        }
     }
 
     #[test]

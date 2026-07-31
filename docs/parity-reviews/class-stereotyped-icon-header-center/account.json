@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-stereotyped-icon-header-center",
   "created": "2026-07-31",
-  "status": "planned",
+  "status": "implemented_dependency_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "ee9594df",
   "java_locations": [
@@ -73,6 +73,18 @@
     "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
     "An independent checker records a verdict at the exact implementation revision."
   ],
+  "experimental_result": {
+    "implementation_revision": "this implementation commit",
+    "result": "The model change makes every numeric coordinate in the G and U glyph paths byte-identical to Java. Both fixtures still fail because Rust omits Java PathIterator.SEG_CLOSE's final Z command for these implicitly closed TrueType contours.",
+    "headline_effect": "No no-oracle census movement; the family baseline is unchanged.",
+    "dependency": "centered-character-contour-closure",
+    "verification": [
+      "cargo test -p rustuml-render --lib: 796 passed",
+      "cargo clippy -p rustuml-render --lib -- -D warnings: passed",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release: passed with no baseline diff"
+    ],
+    "independent_review": "Pending; the checker pool was unavailable at this revision."
+  },
   "forbidden_approaches": [
     "per-character paths or offsets",
     "retuning ICON_CY_WITH_STEREO to another observed literal",
