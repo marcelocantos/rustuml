@@ -15,7 +15,7 @@ use rustuml_layout::graph::{
     ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult,
 };
 use rustuml_parser::diagram::deployment::*;
-use rustuml_parser::diagram::style::StyleScheme;
+use rustuml_parser::diagram::style::{PlantUmlColors, PlantUmlLineStyle, StyleScheme};
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::handwritten::{
@@ -2784,6 +2784,20 @@ fn emit_text(
     bold: bool,
     italic: bool,
 ) {
+    emit_text_colored(svg, content, x, y, fs, TEXT_COLOR, bold, italic);
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_text_colored(
+    svg: &mut SvgBuilder,
+    content: &str,
+    x: f64,
+    y: f64,
+    fs: f64,
+    color: &str,
+    bold: bool,
+    italic: bool,
+) {
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
@@ -2793,7 +2807,7 @@ fn emit_text(
             y,
             font_size: fs as u32,
             font_family: "sans-serif",
-            fill: TEXT_COLOR,
+            fill: color,
             bold,
             italic,
             underline: false,
@@ -3178,7 +3192,7 @@ fn deployment_note_gradient_defs(diagram: &DeploymentDiagram) -> String {
             diagram
                 .connections
                 .iter()
-                .filter_map(|connection| connection.note.as_ref()?.color.as_deref()),
+                .filter_map(|connection| connection.note.as_ref()?.colors.back.as_deref()),
         );
     for color in colors {
         let Some((raw1, raw2, policy)) = crate::sequence::split_gradient_colors(color) else {
@@ -3574,7 +3588,20 @@ fn render_deployment_link_note(
     dim: DeploymentNoteDim,
     gradient_defs: Option<&str>,
 ) {
-    let fill = deployment_note_fill_from_color(note.color.as_deref(), gradient_defs);
+    let fill = deployment_note_fill_from_color(note.colors.back.as_deref(), gradient_defs);
+    let stroke = note
+        .colors
+        .line
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| STROKE.to_string());
+    let stroke_style = deployment_note_stroke_style(&note.colors, &stroke);
+    let text_color = note
+        .colors
+        .text
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| TEXT_COLOR.to_string());
     // `ComponentRoseNote.drawInternalU` truncates the text-box dimensions
     // before `EntityImageNoteLink` paints the folded note inside SvekEdge.
     let width = dim.width.floor();
@@ -3584,7 +3611,7 @@ fn render_deployment_link_note(
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
     svg.raw(&format!(
-        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{fill}" style="{stroke_style}"/>"#,
         x = fc(x),
         y = fc(y),
         bottom = fc(bottom),
@@ -3593,7 +3620,7 @@ fn render_deployment_link_note(
         fold_x = fc(fold_x),
     ));
     svg.raw(&format!(
-        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{fill}" style="{stroke_style}"/>"#,
         fold_x = fc(fold_x),
         y = fc(y),
         fold_y = fc(fold_y),
@@ -3602,16 +3629,30 @@ fn render_deployment_link_note(
 
     let mut baseline = y + NOTE_MARGIN_Y + pm::ascent(NOTE_FONT_SIZE);
     for line in note.text.lines().map(deployment_note_display_row) {
-        emit_text(
+        emit_text_colored(
             svg,
             line,
             x + NOTE_MARGIN_X1,
             baseline,
             NOTE_FONT_SIZE,
+            &text_color,
             false,
             false,
         );
         baseline += text_render::label_height(line, NOTE_FONT_SIZE);
+    }
+}
+
+fn deployment_note_stroke_style(colors: &PlantUmlColors, stroke: &str) -> String {
+    match colors.line_style {
+        Some(PlantUmlLineStyle::Dashed) => {
+            format!("stroke:{stroke};stroke-width:1;stroke-dasharray:7,7;")
+        }
+        Some(PlantUmlLineStyle::Dotted) => {
+            format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;")
+        }
+        Some(PlantUmlLineStyle::Bold) => format!("stroke:{stroke};stroke-width:2;"),
+        None => format!("stroke:{stroke};stroke-width:0.5;"),
     }
 }
 
@@ -8704,6 +8745,46 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     }
 
     #[test]
+    fn link_note_color_channels_drive_fill_border_text_and_stroke() {
+        let render_source = |color: &str, text: &str| {
+            let source = format!(
+                "node RenamedColorSource\nnode RenamedColorTarget\nRenamedColorSource --> RenamedColorTarget\nnote left on link {color} : {text}"
+            );
+            let lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            let diagram = rustuml_parser::parse::deployment::parse_deployment(&lines).unwrap();
+            render(&diagram, &Theme::default())
+        };
+
+        let dashed = render_source(
+            "#back:FF0000;line.dashed:00FF00;text:0000FF",
+            "renamed dashed chroma",
+        );
+        assert!(
+            dashed.contains(
+                r##"fill="#FF0000" style="stroke:#00FF00;stroke-width:1;stroke-dasharray:7,7;""##
+            ),
+            "{dashed}"
+        );
+        assert!(
+            dashed.contains(r##"<text fill="#0000FF""##)
+                && dashed.contains(">renamed dashed chroma</text>"),
+            "{dashed}"
+        );
+
+        let dotted = render_source("#back:Wheat;line.dotted", "renamed dotted chroma");
+        assert!(
+            dotted.contains(r##"stroke:#181818;stroke-width:1;stroke-dasharray:1,3;"##),
+            "{dotted}"
+        );
+
+        let bold = render_source("#back:Wheat;line.bold:Navy", "renamed bold chroma");
+        assert!(
+            bold.contains(r##"stroke:#000080;stroke-width:2;"##),
+            "{bold}"
+        );
+    }
+
+    #[test]
     fn link_note_compound_blocks_cover_every_java_merge_position() {
         let dim = DeploymentNoteDim {
             width: 40.0,
@@ -8721,7 +8802,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         ] {
             let note = DeploymentLinkNote {
                 text: "renamed compound note".to_string(),
-                color: None,
+                colors: PlantUmlColors::default(),
                 position,
             };
             let size = deployment_link_note_label_size(&note, dim, Some(label));
@@ -8751,7 +8832,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
 
         let note = DeploymentLinkNote {
             text: "note-only control".to_string(),
-            color: None,
+            colors: PlantUmlColors::default(),
             position: DeploymentNotePosition::Bottom,
         };
         let note_only_size = deployment_link_note_label_size(&note, dim, None);

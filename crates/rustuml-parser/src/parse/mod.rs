@@ -31,6 +31,7 @@ mod style;
 
 use crate::diagram::Diagram;
 use crate::diagram::class::PackageKind;
+use crate::diagram::style::{PlantUmlColorType, PlantUmlColors, PlantUmlLineStyle};
 use crate::preprocess;
 use regex::Regex;
 use std::sync::LazyLock;
@@ -90,10 +91,7 @@ fn named_note_whole_color_is_resolvable(value: &str) -> bool {
     ) || named_note_simple_color_is_resolvable(value)
 }
 
-pub(super) fn named_note_color_is_valid(color: &str) -> bool {
-    let Some(value) = color.strip_prefix('#') else {
-        return false;
-    };
+fn plantuml_color_value_parts(value: &str) -> Option<(&str, Option<(char, &str)>)> {
     let is_word = |part: &str| {
         !part.is_empty()
             && part
@@ -105,18 +103,160 @@ pub(super) fn named_note_color_is_valid(color: &str) -> bool {
         .filter(|(_, character)| matches!(character, '-' | '\\' | '|' | '/'))
         .collect::<Vec<_>>();
     match separators.as_slice() {
-        [] => value.len() >= 2 && is_word(value) && named_note_whole_color_is_resolvable(value),
+        [] if value.chars().count() >= 2 && is_word(value) => Some((value, None)),
         [(index, separator)] => {
             let right_index = *index + separator.len_utf8();
             let left = &value[..*index];
             let right = &value[right_index..];
-            is_word(left)
-                && is_word(right)
-                && named_note_simple_color_is_resolvable(left)
+            (is_word(left) && is_word(right)).then_some((left, Some((*separator, right))))
+        }
+        _ => None,
+    }
+}
+
+fn plantuml_color_value_is_resolvable(value: &str) -> bool {
+    let Some((left, gradient)) = plantuml_color_value_parts(value) else {
+        return false;
+    };
+    match gradient {
+        None => named_note_whole_color_is_resolvable(left),
+        Some((_, right)) => {
+            named_note_simple_color_is_resolvable(left)
                 && named_note_simple_color_is_resolvable(right)
         }
-        _ => false,
     }
+}
+
+fn set_plantuml_color_channel(
+    colors: &mut PlantUmlColors,
+    channel: PlantUmlColorType,
+    value: String,
+) {
+    *match channel {
+        PlantUmlColorType::Text => &mut colors.text,
+        PlantUmlColorType::Line => &mut colors.line,
+        PlantUmlColorType::Back => &mut colors.back,
+        PlantUmlColorType::Header => &mut colors.header,
+        PlantUmlColorType::Arrow => &mut colors.arrow,
+    } = Some(value);
+}
+
+/// Port of PlantUML `ColorParser.COLORS_REGEXP` plus the channel assignment in
+/// `Colors(String, HColorSet, ColorType)`.
+pub(super) fn parse_plantuml_colors(
+    color: &str,
+    main_channel: PlantUmlColorType,
+) -> Option<PlantUmlColors> {
+    let value = color.strip_prefix('#')?;
+    if plantuml_color_value_is_resolvable(value) {
+        let mut colors = PlantUmlColors::default();
+        set_plantuml_color_channel(&mut colors, main_channel, color.to_string());
+        return Some(colors);
+    }
+
+    let mut tokens = value.split(';').collect::<Vec<_>>();
+    if tokens.last() == Some(&"") {
+        tokens.pop();
+    }
+    if tokens.is_empty() || tokens.iter().any(|token| token.is_empty()) {
+        return None;
+    }
+
+    let directive_name = |token: &str| {
+        token
+            .split_once(':')
+            .map_or(token, |(name, _)| name)
+            .to_ascii_lowercase()
+    };
+    let is_directive = |name: &str| {
+        matches!(
+            name,
+            "text"
+                | "back"
+                | "header"
+                | "line"
+                | "line.dashed"
+                | "line.dotted"
+                | "line.bold"
+                | "shadowing"
+        )
+    };
+
+    let mut colors = PlantUmlColors::default();
+    if !is_directive(&directive_name(tokens[0])) {
+        let leading = tokens.remove(0);
+        if tokens.is_empty() || !plantuml_color_value_is_resolvable(leading) {
+            return None;
+        }
+        set_plantuml_color_channel(&mut colors, main_channel, format!("#{leading}"));
+    }
+
+    let mut saw_directive = false;
+    let mut saw_dashed = false;
+    let mut saw_dotted = false;
+    let mut saw_bold = false;
+    for token in tokens {
+        let (name, value) = token
+            .split_once(':')
+            .map_or((token, None), |(name, value)| (name, Some(value)));
+        let name = name.to_ascii_lowercase();
+        if !is_directive(&name) {
+            return None;
+        }
+        saw_directive = true;
+
+        let color_value = |value: Option<&str>| {
+            value
+                .filter(|value| plantuml_color_value_is_resolvable(value))
+                .map(str::to_string)
+        };
+        match name.as_str() {
+            "text" => colors.text = color_value(value),
+            "back" => colors.back = color_value(value),
+            "header" => colors.header = color_value(value),
+            "line" => colors.line = color_value(value),
+            "shadowing" => {
+                let value = value.filter(|value| plantuml_color_value_parts(value).is_some())?;
+                colors.shadowing = Some(value.eq_ignore_ascii_case("true"));
+            }
+            "line.dashed" | "line.dotted" | "line.bold" => {
+                if let Some(value) = value {
+                    colors.line = color_value(Some(value));
+                    colors.line.as_ref()?;
+                }
+                saw_dashed |= name == "line.dashed";
+                saw_dotted |= name == "line.dotted";
+                saw_bold |= name == "line.bold";
+            }
+            _ => unreachable!(),
+        }
+        if matches!(name.as_str(), "text" | "back" | "header" | "line") {
+            let assigned = match name.as_str() {
+                "text" => &colors.text,
+                "back" => &colors.back,
+                "header" => &colors.header,
+                _ => &colors.line,
+            };
+            assigned.as_ref()?;
+        }
+    }
+    if !saw_directive {
+        return None;
+    }
+    colors.line_style = if saw_dashed {
+        Some(PlantUmlLineStyle::Dashed)
+    } else if saw_dotted {
+        Some(PlantUmlLineStyle::Dotted)
+    } else if saw_bold {
+        Some(PlantUmlLineStyle::Bold)
+    } else {
+        None
+    };
+    Some(colors)
+}
+
+pub(super) fn named_note_color_is_valid(color: &str) -> bool {
+    parse_plantuml_colors(color, PlantUmlColorType::Back).is_some()
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1977,6 +2117,8 @@ mod tests {
             "#transparent",
             "#background",
             "#automatic",
+            "#back:LightBlue;line.dashed:Red",
+            "#Wheat;text:Navy;line.dotted:Green;header:Gold;shadowing:true",
         ] {
             let inline = parse_named_note_inline(&format!(
                 "note \"inline payload\" as InlineLedger {color}"
@@ -1991,12 +2133,16 @@ mod tests {
         for color in [
             "#A",
             "#NoSuchColor",
-            "#back:LightBlue;line.dashed:Red",
             "#Red-UnknownColor",
             "#Red-Blue-Green",
             "#transparent/Red",
             "#automatic-Blue",
             "#Red|background",
+            "#back:",
+            "#back:Red;;line:Blue",
+            "#back:Red;junk:Blue",
+            "#back:Red;line:#Blue",
+            "#back:Red;line.dashed:NoSuchColor",
         ] {
             assert!(
                 parse_named_note_inline(&format!(
@@ -2010,6 +2156,25 @@ mod tests {
                 "{color}"
             );
         }
+    }
+
+    #[test]
+    fn color_parser_part2_routes_channels_and_stroke_independently() {
+        let colors = parse_plantuml_colors(
+            "#Wheat;back:Red;text:Navy;line.bold:Blue;line.dotted;line.dashed:Green;header:Gold;shadowing:true;back:Pink",
+            PlantUmlColorType::Back,
+        )
+        .unwrap();
+        assert_eq!(colors.back.as_deref(), Some("Pink"));
+        assert_eq!(colors.line.as_deref(), Some("Green"));
+        assert_eq!(colors.text.as_deref(), Some("Navy"));
+        assert_eq!(colors.header.as_deref(), Some("Gold"));
+        assert_eq!(colors.line_style, Some(PlantUmlLineStyle::Dashed));
+        assert_eq!(colors.shadowing, Some(true));
+
+        let line_main = parse_plantuml_colors("#Red;back:Blue", PlantUmlColorType::Line).unwrap();
+        assert_eq!(line_main.line.as_deref(), Some("#Red"));
+        assert_eq!(line_main.back.as_deref(), Some("Blue"));
     }
 
     #[test]
