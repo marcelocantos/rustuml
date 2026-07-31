@@ -3747,9 +3747,22 @@ fn gradient_fill_from_registry(value: Option<&str>, gradients: &[ClassGradient])
 }
 
 fn resolve_flat_or_gradient_start(value: &str) -> String {
-    split_gradient_colors(value)
-        .map(|(first, _)| crate::sequence::resolve_color(first))
-        .unwrap_or_else(|| crate::sequence::resolve_color(value))
+    // Java `DriverRectangleSvg#applyFillColor` preserves the selected HColor
+    // type: alpha-zero paint becomes SVG `none`, while a gradient remains a
+    // typed tuple. Inline color syntax retains its required `#` sigil in the
+    // parser model, while skinparams do not; Java's color set maps both forms
+    // to the same transparent HColor.
+    let value = value.trim();
+    if value
+        .strip_prefix('#')
+        .is_some_and(|name| name.eq_ignore_ascii_case("transparent"))
+    {
+        "none".to_string()
+    } else {
+        // Without active defs this intentionally retains the existing
+        // first-stop fallback for gradients.
+        crate::sequence::gradient_fill_or(value, None)
+    }
 }
 
 fn style_stroke_width(style: &str) -> Option<&str> {
@@ -21475,6 +21488,87 @@ class HorizontalReuseFresh1129 #A0B0C0|#D0E0F0
         assert!(
             entity_body("EpochAfterFresh1217").contains(&format!(r#"fill="url(#{})""#, ids[0])),
             "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_class_transparency_is_a_paint_token_in_every_fill_channel() {
+        let entity_body = |svg: &str, name: &str| {
+            svg.split_once(&format!(r#"data-qualified-name="{name}""#))
+                .unwrap_or_else(|| panic!("missing {name}: {svg}"))
+                .1
+                .split_once("</g>")
+                .unwrap()
+                .0
+                .to_string()
+        };
+        let first_rect = |body: &str| {
+            body.split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0
+                .to_string()
+        };
+
+        let body_transparent = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam classBackgroundColor transparent\n\
+             skinparam classHeaderBackgroundColor #445566\n\
+             class \"Body Transparent 1231\" as BodyTransparent1231 {\n\
+               payload: String\n\
+             }\n\
+             @enduml",
+        )
+        .unwrap();
+        let body_svg = crate::render_svg(&body_transparent);
+        let body = entity_body(&body_svg, "BodyTransparent1231");
+        assert!(first_rect(&body).contains(r#"fill="none""#), "{body_svg}");
+        assert!(body.contains(r##"fill="#445566""##), "{body_svg}");
+
+        let header_transparent = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam classBackgroundColor #DDEEFF\n\
+             skinparam classHeaderBackgroundColor transparent\n\
+             class \"Header Transparent 1237\" as HeaderTransparent1237 {\n\
+               payload: String\n\
+             }\n\
+             @enduml",
+        )
+        .unwrap();
+        let header_svg = crate::render_svg(&header_transparent);
+        let body = entity_body(&header_svg, "HeaderTransparent1237");
+        assert!(
+            first_rect(&body).contains(r##"fill="#DDEEFF""##),
+            "{header_svg}"
+        );
+        assert!(body.contains(r#"fill="none""#), "{header_svg}");
+
+        let inline_transparent = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam classBackgroundColor #AABBCC\n\
+             class \"Inline Transparent 1249\" as InlineTransparent1249 #transparent\n\
+             @enduml",
+        )
+        .unwrap();
+        let inline_svg = crate::render_svg(&inline_transparent);
+        let body = entity_body(&inline_svg, "InlineTransparent1249");
+        assert!(first_rect(&body).contains(r#"fill="none""#), "{inline_svg}");
+
+        let stereotype_transparent = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam classBackgroundColor #AABBCC\n\
+             skinparam classBackgroundColor<<ghost_channel_1259>> transparent\n\
+             class \"Stereotype Transparent 1259\" as StereotypeTransparent1259 <<ghost_channel_1259>>\n\
+             @enduml",
+        )
+        .unwrap();
+        let stereotype_svg = crate::render_svg(&stereotype_transparent);
+        let body = entity_body(&stereotype_svg, "StereotypeTransparent1259");
+        assert!(
+            first_rect(&body).contains(r#"fill="none""#),
+            "{stereotype_svg}"
         );
     }
 

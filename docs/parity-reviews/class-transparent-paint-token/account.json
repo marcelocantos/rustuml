@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "class-transparent-paint-token",
-  "status": "investigated_implementation_pending",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -87,11 +87,19 @@
     "comparator, eligibility, park-list, or golden changes"
   ],
   "experimental_result": {
-    "account_revision": "pending account commit",
+    "account_revision": "d3772c1446852cfe4f01301612b8abbcd82cd8f6",
     "implementation_revision": "pending implementation commit",
-    "accepted_result": "pending",
-    "model_evidence": "pending",
-    "commands": [],
-    "review_status": "Implementation and independent review pending."
+    "accepted_result": "preproc_theme_cerulean-outline_class becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,168/11,251 to 11,169/11,251, with preprocessing moving from 286/307 to 287/307 and every other family unchanged.",
+    "model_evidence": "resolve_flat_or_gradient_start now preserves transparent as the SVG token none while retaining the existing first-stop behavior for gradients and palette resolution for solid colors. It also normalizes the parser-retained # sigil in inline #transparent syntax without changing the global named-color fallback. Fresh tests cover transparent body with a solid header, transparent header with a solid body, inline #transparent precedence, stereotype-selected transparency, and neighboring solid channels.",
+    "commands": [
+      "cargo test -p rustuml-render --lib no_oracle_class_transparency_is_a_paint_token_in_every_fill_channel -- --nocapture",
+      "cargo build --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_theme_cerulean-outline_class.puml",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local arm64 Java runtime are unavailable. This record does not self-attest acceptance."
   }
 }
