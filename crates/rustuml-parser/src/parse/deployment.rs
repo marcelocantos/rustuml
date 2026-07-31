@@ -369,7 +369,10 @@ fn try_parse_connection(
                                     direction: deployment_link_direction(&shaft),
                                     style: deployment_link_style(&shaft),
                                     hidden: deployment_arrow_has_style(arrow, "hidden"),
-                                    length: deployment_link_length(&shaft),
+                                    length: deployment_link_length(
+                                        &shaft,
+                                        deployment_link_direction(&shaft),
+                                    ),
                                 });
                             }
                         }
@@ -444,7 +447,7 @@ fn try_parse_connection(
         direction: deployment_link_direction(&shaft),
         style: deployment_link_style(&shaft),
         hidden: deployment_arrow_has_style(arrow, "hidden"),
-        length: deployment_link_length(&shaft),
+        length: deployment_link_length(&shaft, deployment_link_direction(&shaft)),
     })
 }
 
@@ -472,7 +475,16 @@ fn deployment_link_style(arrow: &str) -> DeploymentLinkStyle {
     }
 }
 
-fn deployment_link_length(arrow: &str) -> usize {
+fn deployment_link_length(arrow: &str, direction: Option<DeploymentLinkDirection>) -> usize {
+    // Java `CommandLinkElement` normalizes explicit horizontal links to one
+    // rank even though their source spelling has shaft characters on both
+    // sides of the direction token.
+    if matches!(
+        direction,
+        Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right)
+    ) {
+        return 1;
+    }
     arrow
         .chars()
         .filter(|character| matches!(character, '-' | '.' | '~' | '='))
@@ -1330,6 +1342,14 @@ mod tests {
                 Some(DeploymentLinkDirection::Up),
                 Some(DeploymentLinkDirection::Down),
             ]
+        );
+        assert_eq!(
+            diagram
+                .connections
+                .iter()
+                .map(|connection| connection.length)
+                .collect::<Vec<_>>(),
+            vec![1, 1, 2, 2]
         );
     }
 
