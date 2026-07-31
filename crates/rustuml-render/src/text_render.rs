@@ -1211,6 +1211,7 @@ fn family_table_text_width(
     bold: bool,
     plain_table: &[f64; 95],
     bold_table: &[f64; 95],
+    guillemet_advance: f64,
 ) -> f64 {
     let table = if bold { bold_table } else { plain_table };
     text.chars()
@@ -1218,12 +1219,21 @@ fn family_table_text_width(
             let code = c as usize;
             if (32..=126).contains(&code) {
                 table[code - 32] * font_size
+            } else if c == '\u{00AB}' || c == '\u{00BB}' {
+                guillemet_advance * font_size
             } else {
                 sans_text_width(&c.to_string(), font_size, bold)
             }
         })
         .sum()
 }
+
+// Java provenance: `FileFormat#getJavaDimension` asks AWT `FontMetrics` for
+// the resolved physical font. The per-em advances and cross-size derivation
+// from the pinned Java output are recorded in
+// `docs/parity-reviews/description-physical-family-guillemet-advances/account.json`.
+const ARIAL_GUILLEMET_ADVANCE: f64 = 0.55615234375;
+const VERDANA_GUILLEMET_ADVANCE: f64 = 0.64453125;
 
 const HELVETICA_UPM: f64 = 2048.0;
 
@@ -1346,13 +1356,23 @@ fn family_text_width(
     match family {
         MetricFamily::Mono => pm::mono_text_width(text, font_size),
         MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size),
-        MetricFamily::Arial => {
-            family_table_text_width(text, font_size, bold, &ARIAL_WIDTH, &ARIAL_BOLD_WIDTH)
-        }
+        MetricFamily::Arial => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            &ARIAL_WIDTH,
+            &ARIAL_BOLD_WIDTH,
+            ARIAL_GUILLEMET_ADVANCE,
+        ),
         MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold),
-        MetricFamily::Verdana => {
-            family_table_text_width(text, font_size, bold, &VERDANA_WIDTH, &VERDANA_BOLD_WIDTH)
-        }
+        MetricFamily::Verdana => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            &VERDANA_WIDTH,
+            &VERDANA_BOLD_WIDTH,
+            VERDANA_GUILLEMET_ADVANCE,
+        ),
         MetricFamily::TimesNewRoman => {
             pm::times_new_roman_text_width(text, font_size, bold, italic)
         }
@@ -1972,6 +1992,22 @@ mod tests {
         assert_eq!(
             pm::fmt_coord(measure_with_family("Alice", 14.0, false, "Verdana")),
             "32.8877"
+        );
+        assert_eq!(
+            measure_with_family("\u{00AB}\u{00BB}", 15.0, false, "Arial"),
+            ARIAL_GUILLEMET_ADVANCE * 30.0
+        );
+        assert_eq!(
+            measure_with_family("\u{00AB}\u{00BB}", 17.0, false, "Arial"),
+            ARIAL_GUILLEMET_ADVANCE * 34.0
+        );
+        assert_eq!(
+            measure_with_family("\u{00AB}\u{00BB}", 12.0, false, "Verdana"),
+            VERDANA_GUILLEMET_ADVANCE * 24.0
+        );
+        assert_eq!(
+            measure_with_family("\u{00AB}\u{00BB}", 12.0, false, "sans-serif"),
+            measure("\u{00AB}\u{00BB}", 12.0, false)
         );
         assert_eq!(
             pm::fmt_coord(measure_with_family("Alice", 12.0, false, "Helvetica")),

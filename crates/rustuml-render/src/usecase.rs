@@ -40,8 +40,6 @@ const ACTOR_STEREOTYPE_MARGIN_X: f64 = 1.0;
 /// Java provenance: `skin.ActorStickMan.getPreferredHeight()` adds twice the
 /// current stroke thickness to this 58px geometry plus its final 1px guard.
 const ACTOR_STICKMAN_BASE_HEIGHT: f64 = 59.0;
-/// Vertical offset from head centre to stereotype baseline (measured).
-const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 /// Extracted line advance for the undecorated `MethodsOrFieldsArea` created by
 /// Java `BodyEnhanced1.buildTextBlock`; decorated bodies use `TextBlockMarged`.
 const LINE_H: f64 = 16.4883;
@@ -759,8 +757,14 @@ pub fn render_with_oracle(
             UseCaseChromeLayout::identity(diagram, orc.canvas_width, orc.canvas_height),
         )
     } else {
-        let (body_width, body_height) =
-            compute_canvas(diagram, &positions, &actor_dims, &uc_dims, &note_dims);
+        let (body_width, body_height) = compute_canvas(
+            diagram,
+            &positions,
+            &actor_dims,
+            &uc_dims,
+            &note_dims,
+            &connection_styles,
+        );
         let chrome = usecase_chrome_layout(diagram, body_width, body_height);
         positions.translate(chrome.body_dx, chrome.body_dy);
         (chrome.canvas_width, chrome.canvas_height, chrome)
@@ -1150,6 +1154,7 @@ struct ActorDim {
 struct ActorTextBlock {
     content_width: f64,
     content_height: f64,
+    first_baseline_ascent: f64,
     padding: f64,
     margin_x: f64,
 }
@@ -1186,6 +1191,31 @@ struct UseCaseTextBlock {
     separators: Vec<UseCaseSeparatorPlacement>,
     footprint_lines: Vec<FootprintLine>,
     footprint_bounds: Vec<FootprintBounds>,
+}
+
+#[derive(Clone, Copy)]
+// Java provenance: `SvekEdge` measures the `Display#create0` Creole block,
+// then adds its one-pixel `labelShield` before serializing the Graphviz table.
+// `SheetBlock1` owns the inner global padding and text translation.
+struct EdgeTextBlock {
+    content_width: f64,
+    content_height: f64,
+    first_baseline_ascent: f64,
+    padding: f64,
+}
+
+impl EdgeTextBlock {
+    fn width(self) -> f64 {
+        self.content_width + 2.0 * (self.padding + 1.0)
+    }
+
+    fn height(self) -> f64 {
+        self.content_height + 2.0 * (self.padding + 1.0)
+    }
+
+    fn text_inset(self) -> f64 {
+        self.padding + 1.0
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -1252,21 +1282,33 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     let label = ActorTextBlock {
         content_width: label_w,
         content_height: label_h,
+        first_baseline_ascent: label_first_baseline_ascent,
         padding,
         margin_x: 0.0,
     };
     let stroke_thickness = skin.actor_border_thickness.parse::<f64>().unwrap_or(0.5);
-    let text_block_h = pm::text_height(font_size);
-    let stereotype = actor.stereotype.as_ref().map(|stereotype| ActorTextBlock {
-        content_width: text_render::measure_with_family(
-            &format!("\u{00AB}{stereotype}\u{00BB}"),
-            font_size,
-            false,
-            &skin.actor_font_family,
-        ),
-        content_height: text_block_h,
-        padding,
-        margin_x: ACTOR_STEREOTYPE_MARGIN_X,
+    let stereotype = actor.stereotype.as_ref().map(|stereotype| {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        ActorTextBlock {
+            content_width: text_render::measure_with_family(
+                &text,
+                font_size,
+                false,
+                &skin.actor_font_family,
+            ),
+            content_height: text_render::label_height_with_family(
+                &text,
+                font_size,
+                &skin.actor_font_family,
+            ),
+            first_baseline_ascent: text_render::label_first_baseline_ascent_with_family(
+                &text,
+                font_size,
+                &skin.actor_font_family,
+            ),
+            padding,
+            margin_x: ACTOR_STEREOTYPE_MARGIN_X,
+        }
     });
     let stickman_width = ACTOR_ARM_HALF * 2.0 + stroke_thickness * 2.0;
     let width = label
@@ -1278,7 +1320,7 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     // Creole `SheetBlock1`; `Sea.doAlign` bottom-aligns mixed `AtomText`
     // families, so the first run's baseline comes from its own descent within
     // the tallest atom box rather than from the surrounding sans-serif font.
-    let label_gap = label_first_baseline_ascent + 1.0 + stroke_thickness + label.padding;
+    let label_gap = label.first_baseline_ascent + 1.0 + stroke_thickness + label.padding;
     // `SvekResult.calculateDimension` normalizes from the minimum painted
     // bound, not the node box. A stereotype's AWT line box overhangs the image
     // origin by the remainder after its baseline; without one, the stickman's
@@ -1291,18 +1333,24 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     if let Some(stereotype) = stereotype {
         paint_min_x = paint_min_x.min(stereotype.text_x(width));
     }
-    let paint_min_y = if stereotype.is_some() {
-        -(text_block_h - label_gap)
+    let paint_min_y = if let Some(stereotype) = stereotype {
+        stereotype.padding + stereotype.first_baseline_ascent - stereotype.content_height + 1.5
     } else {
         stroke_thickness
     };
+    let stereo_baseline_offset = stereotype.map_or(0.0, |stereotype| {
+        stereotype.content_height - stereotype.first_baseline_ascent
+            + stereotype.padding
+            + stroke_thickness
+            + ACTOR_HEAD_R
+    });
     let height = stickman_height + label.height() + stereotype.map_or(0.0, ActorTextBlock::height);
     ActorDim {
         label,
         stereotype,
         stroke_thickness,
         label_gap,
-        stereo_baseline_offset: ACTOR_STEREO_OFFSET + padding,
+        stereo_baseline_offset,
         paint_min_x,
         paint_min_y,
         width,
@@ -2049,18 +2097,14 @@ fn layout_usecase_positions(
                     let label = conn.label.as_deref().or(conn.stereotype.as_deref());
                     if let Some(label) = label {
                         // Java `SvekEdge.getLabel` wraps an ordinary relation
-                        // label in a one-pixel margin. `appendLine` serializes
-                        // that renderer-owned size as a fixed HTML table so
-                        // Graphviz solves the same label obstacle Java later
-                        // replaces with painted text.
+                        // label in a one-pixel shield outside the padded
+                        // `SheetBlock1`. `appendLine` serializes that complete
+                        // block so Graphviz and the later painter share one
+                        // obstacle model.
+                        let block = edge_text_block(label, connection_style);
                         let label_size = EdgeLabelSize {
-                            width: text_render::measure_with_family(
-                                label,
-                                connection_style.arrow_font_size as f64,
-                                false,
-                                &connection_style.arrow_font_family,
-                            ) + 2.0,
-                            height: pm::text_height(connection_style.arrow_font_size as f64) + 2.0,
+                            width: block.width(),
+                            height: block.height(),
                         };
                         layout.add_edge_with_label_sizes_and_minlen(
                             &conn.from,
@@ -2165,6 +2209,29 @@ fn layout_usecase_positions(
                 .map(|p| cluster_painted_bounds(diagram, p).0),
         )
         .fold(f64::INFINITY, f64::min);
+    let min_entity_layout_x = diagram
+        .actors
+        .iter()
+        .map(|actor| node_positions[actor.id.as_str()].x)
+        .chain(
+            diagram
+                .use_cases
+                .iter()
+                .map(|uc| node_positions[uc.id.as_str()].x),
+        )
+        .chain(
+            entity_note_indices
+                .iter()
+                .map(|&index| note_node_id(&diagram.notes[index], index))
+                .map(|id| node_positions[id.as_str()].x),
+        )
+        .chain(
+            result
+                .cluster_positions
+                .iter()
+                .map(|p| cluster_painted_bounds(diagram, p).0),
+        )
+        .fold(f64::INFINITY, f64::min);
     let min_edge_painted_x = result
         .edge_paths
         .iter()
@@ -2181,11 +2248,16 @@ fn layout_usecase_positions(
         .iter()
         .any(|connection| connection.extension);
     let edge_owns_left_envelope = min_edge_painted_x < min_entity_painted_x;
+    let entity_has_transparent_left_inset =
+        min_entity_layout_x.is_finite() && min_entity_painted_x > min_entity_layout_x;
     // Root entity-only diagrams retain `GraphvizImageBuilder`'s established
-    // node-box offset. Recompute X when a non-node primitive owns the minimum,
-    // as `SvekResult` must for clusters, solved edges, and polygon extremities.
-    let needs_painted_x_normalization =
-        !result.cluster_positions.is_empty() || has_generalization || edge_owns_left_envelope;
+    // node-box offset while paint begins at that box edge. Recompute X when a
+    // non-node primitive owns the minimum or the leftmost node starts with
+    // transparent Creole padding, as `SvekResult` measures painted content.
+    let needs_painted_x_normalization = !result.cluster_positions.is_empty()
+        || has_generalization
+        || edge_owns_left_envelope
+        || entity_has_transparent_left_inset;
     let origin_x = if needs_painted_x_normalization && min_painted_x.is_finite() {
         base_origin_x - min_painted_x
     } else {
@@ -2222,7 +2294,7 @@ fn layout_usecase_positions(
         )
         .chain(result.edge_paths.iter().filter_map(|edge| {
             let label = edge.label?;
-            let (connection_index, _) =
+            let (connection_index, connection) =
                 diagram
                     .connections
                     .iter()
@@ -2237,13 +2309,18 @@ fn layout_usecase_positions(
             }
             let (_, solved_y) = quantized_svek_label_origin(label.x, label.y);
             let connection_style = &connection_styles[connection_index];
+            let text = connection
+                .label
+                .as_deref()
+                .or(connection.stereotype.as_deref())?;
+            let block = edge_text_block(text, connection_style);
             // `SvekEdge.drawU` paints the real one-pixel-margined text at the
-            // fixed-table origin recovered by `solveLine`.
+            // fixed-table origin recovered by `solveLine`. `SheetBlock1`
+            // translates the glyphs inside that shield by global padding.
             // `LimitFinder.drawText` then moves the UText baseline upward by
             // its line-box height minus 1.5 pixels.
             Some(
-                solved_y + 1.0 + pm::ascent(connection_style.arrow_font_size as f64)
-                    - pm::text_height(connection_style.arrow_font_size as f64)
+                solved_y + block.text_inset() + block.first_baseline_ascent - block.content_height
                     + 1.5,
             )
         }))
@@ -2409,6 +2486,29 @@ fn note_on_connection(
     })
 }
 
+fn edge_text_block(label: &str, skin: &SkinColors) -> EdgeTextBlock {
+    let font_size = skin.arrow_font_size as f64;
+    EdgeTextBlock {
+        content_width: text_render::measure_with_family(
+            label,
+            font_size,
+            false,
+            &skin.arrow_font_family,
+        ),
+        content_height: text_render::label_height_with_family(
+            label,
+            font_size,
+            &skin.arrow_font_family,
+        ),
+        first_baseline_ascent: text_render::label_first_baseline_ascent_with_family(
+            label,
+            font_size,
+            &skin.arrow_font_family,
+        ),
+        padding: skin.creole_padding,
+    }
+}
+
 fn link_note_label_size(
     connection: &UseCaseConnection,
     note: &UseCaseNote,
@@ -2429,13 +2529,9 @@ fn link_note_label_size(
             height: note_height,
         };
     };
-    let label_width = text_render::measure_with_family(
-        label,
-        skin.arrow_font_size as f64,
-        false,
-        &skin.arrow_font_family,
-    ) + 2.0;
-    let label_height = pm::text_height(skin.arrow_font_size as f64) + 2.0;
+    let label_block = edge_text_block(label, skin);
+    let label_width = label_block.width();
+    let label_height = label_block.height();
     match note.position {
         UseCaseNotePosition::Left | UseCaseNotePosition::Right => EdgeLabelSize {
             width: note_width + label_width,
@@ -2607,6 +2703,7 @@ fn compute_canvas(
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
     note_dims: &[NoteDim],
+    connection_styles: &[SkinColors],
 ) -> (f64, f64) {
     let degenerated = actor_dims.len() + uc_dims.len() == 1
         && positions.edge_paths.is_empty()
@@ -2653,6 +2750,36 @@ fn compute_canvas(
             max_y = max_y.max(y + SVEK_CANVAS_PAD);
         }
         if let Some(label) = edge.label {
+            let ordinary_label = diagram
+                .connections
+                .iter()
+                .enumerate()
+                .find(|(_, connection)| {
+                    connection.from == edge.from
+                        && connection.to == edge.to
+                        && (connection.label.is_some() || connection.stereotype.is_some())
+                })
+                .filter(|(connection_index, _)| {
+                    note_on_connection(diagram, *connection_index).is_none()
+                });
+            if let Some((connection_index, connection)) = ordinary_label {
+                let text = connection
+                    .label
+                    .as_deref()
+                    .or(connection.stereotype.as_deref())
+                    .expect("ordinary labeled edge has text");
+                let skin = &connection_styles[connection_index];
+                let block = edge_text_block(text, skin);
+                let painted_height = text_render::label_limit_finder_height_with_family(
+                    text,
+                    skin.arrow_font_size as f64,
+                    &skin.arrow_font_family,
+                );
+                max_x =
+                    max_x.max(label.x + block.text_inset() + block.content_width + SVEK_CANVAS_PAD);
+                max_y = max_y.max(label.y + block.text_inset() + painted_height + SVEK_CANVAS_PAD);
+                continue;
+            }
             let rose_note_trailing_pad = diagram
                 .connections
                 .iter()
@@ -3669,41 +3796,47 @@ fn link_note_blocks(
     let Some(label) = label else {
         return ((x, y), (x, y));
     };
-    // `SvekEdge.getLabel` wraps the edge label in a one-pixel margin before
-    // merging it with `EntityImageNoteLink`.
-    let label_width = text_render::measure_with_family(
-        label,
-        skin.arrow_font_size as f64,
-        false,
-        &skin.arrow_font_family,
-    ) + 2.0;
-    let label_height = pm::text_height(skin.arrow_font_size as f64) + 2.0;
-    let ascent = pm::ascent(skin.arrow_font_size as f64);
+    // `SvekEdge.getLabel` wraps the padded Creole edge label in its one-pixel
+    // shield before merging it with `EntityImageNoteLink`.
+    let label_block = edge_text_block(label, skin);
+    let label_width = label_block.width();
+    let label_height = label_block.height();
+    let text_inset = label_block.text_inset();
+    let baseline = text_inset + label_block.first_baseline_ascent;
     match note.position {
         UseCaseNotePosition::Left => {
             let merged_height = note_height.max(label_height);
             let note_y = y + (merged_height - note_height) / 2.0;
             let label_y = y + (merged_height - label_height) / 2.0;
-            ((x + note_width + 1.0, label_y + 1.0 + ascent), (x, note_y))
+            (
+                (x + note_width + text_inset, label_y + baseline),
+                (x, note_y),
+            )
         }
         UseCaseNotePosition::Right => {
             let merged_height = note_height.max(label_height);
             let note_y = y + (merged_height - note_height) / 2.0;
             let label_y = y + (merged_height - label_height) / 2.0;
-            ((x + 1.0, label_y + 1.0 + ascent), (x + label_width, note_y))
+            (
+                (x + text_inset, label_y + baseline),
+                (x + label_width, note_y),
+            )
         }
         UseCaseNotePosition::Top => {
             let merged_width = note_width.max(label_width);
             let note_x = x + (merged_width - note_width) / 2.0;
             let label_x = x + (merged_width - label_width) / 2.0;
-            ((label_x + 1.0, y + note_height + 1.0 + ascent), (note_x, y))
+            (
+                (label_x + text_inset, y + note_height + baseline),
+                (note_x, y),
+            )
         }
         UseCaseNotePosition::Bottom => {
             let merged_width = note_width.max(label_width);
             let note_x = x + (merged_width - note_width) / 2.0;
             let label_x = x + (merged_width - label_width) / 2.0;
             (
-                (label_x + 1.0, y + 1.0 + ascent),
+                (label_x + text_inset, y + baseline),
                 (note_x, y + label_height),
             )
         }
@@ -3928,10 +4061,15 @@ fn render_no_oracle_connections(
                 })
             } else {
                 // `SvekEdge.solveLine` captures the fixed-table origin, then
-                // `drawU` replaces it with the real one-pixel-margined label.
+                // `drawU` replaces it with the real padded Creole label inside
+                // SvekEdge's one-pixel shield.
                 edge.label.map(|label_box| {
                     let (x, y) = quantized_svek_label_origin(label_box.x, label_box.y);
-                    (x + 1.0, y + 1.0 + pm::ascent(skin.arrow_font_size as f64))
+                    let block = edge_text_block(&label, skin);
+                    (
+                        x + block.text_inset(),
+                        y + block.text_inset() + block.first_baseline_ascent,
+                    )
                 })
             };
             let Some((x, y)) = position else {
@@ -4848,6 +4986,70 @@ mod tests {
         );
         assert_close(padded.paint_min_y - plain.paint_min_y, padding);
         assert_close(padded_stereo.margin_x, super::ACTOR_STEREOTYPE_MARGIN_X);
+    }
+
+    #[test]
+    fn physical_actor_stereotype_metrics_own_baseline_and_painted_frontier() {
+        let input = "@startuml\n\
+                     skinparam defaultFontName Arial\n\
+                     skinparam defaultFontSize 15\n\
+                     skinparam Padding 7\n\
+                     actor \"Fresh Physical Reviewer\" as Reviewer <<novel-axis>>\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let base = super::SkinColors::from_meta(&usecase.meta, None);
+        let skin = base.for_actor(&usecase.meta, &usecase.actors[0]);
+        let dim = super::actor_dim(&usecase.actors[0], &skin);
+        let stereotype = dim.stereotype.expect("stereotype block");
+
+        assert_close(
+            dim.stereo_baseline_offset,
+            stereotype.content_height - stereotype.first_baseline_ascent
+                + stereotype.padding
+                + dim.stroke_thickness
+                + super::ACTOR_HEAD_R,
+        );
+        assert_close(
+            dim.paint_min_y,
+            stereotype.padding + stereotype.first_baseline_ascent - stereotype.content_height + 1.5,
+        );
+    }
+
+    #[test]
+    fn padded_edge_text_block_drives_layout_and_paint_from_one_model() {
+        let input = "@startuml\n\
+                     skinparam defaultFontName Verdana\n\
+                     skinparam defaultFontSize 12\n\
+                     skinparam Padding 11\n\
+                     usecase \"Fresh Source\" as Source\n\
+                     usecase \"Novel Sink\" as Sink\n\
+                     Source --> Sink : held-out relation\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let connection = &usecase.connections[0];
+        let base = super::SkinColors::from_meta(&usecase.meta, None);
+        let skin = base.for_connection(&usecase.meta, connection);
+        let label = connection.label.as_deref().expect("relation label");
+        let block = super::edge_text_block(label, &skin);
+
+        assert_close(block.padding, 11.0);
+        assert_close(block.text_inset(), 12.0);
+        assert_close(block.width(), block.content_width + 24.0);
+        assert_close(block.height(), block.content_height + 24.0);
+        assert_close(
+            block.first_baseline_ascent,
+            crate::text_render::label_first_baseline_ascent_with_family(
+                label,
+                12.0,
+                &skin.arrow_font_family,
+            ),
+        );
     }
 
     #[test]

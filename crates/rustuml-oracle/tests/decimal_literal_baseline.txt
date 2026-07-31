@@ -29,7 +29,7 @@ crates/rustuml-render/src/salt.rs 1
 crates/rustuml-render/src/scale.rs 39
 crates/rustuml-render/src/sequence.rs 112
 crates/rustuml-render/src/state.rs 53
-crates/rustuml-render/src/text_render.rs 409
+crates/rustuml-render/src/text_render.rs 421
 crates/rustuml-render/src/timing.rs 3
 crates/rustuml-render/src/usecase.rs 33
 crates/rustuml-render/src/wbs.rs 3
