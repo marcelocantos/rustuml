@@ -2481,7 +2481,7 @@ fn render_with_oracle_uid_origin(
     let mut empty_package_layout_slots = vec![None; diagram.packages.len()];
     let mut next_layout_slot = 0;
     let svek_nodes = svek_node_emission_order(diagram);
-    for node in svek_nodes {
+    for node in svek_nodes.iter().copied() {
         match node {
             SvekNodeEmission::Entity(idx) => {
                 let entity = &diagram.entities[idx];
@@ -2590,7 +2590,8 @@ fn render_with_oracle_uid_origin(
         }
     }
     let attached_layout_slots = attached_layout_slots_by_note
-        .into_iter()
+        .iter()
+        .copied()
         .flatten()
         .collect::<Vec<_>>();
     for (idx, pkg) in diagram.packages.iter().enumerate() {
@@ -2786,6 +2787,18 @@ fn render_with_oracle_uid_origin(
         }
     }
     let solved_positions = result.node_positions.clone();
+    let collision_layout_slots = svek_collision_layout_slots(
+        diagram,
+        &entity_layout_slots,
+        &floating_layout_slots,
+        &attached_layout_slots_by_note,
+        &empty_package_layout_slots,
+        &association_layout_slots,
+    );
+    let mut collision_node_positions = collision_layout_slots
+        .iter()
+        .map(|&slot| solved_positions[slot])
+        .collect::<Vec<_>>();
     result.node_positions = entity_layout_slots
         .iter()
         .chain(&association_layout_slots)
@@ -2804,12 +2817,16 @@ fn render_with_oracle_uid_origin(
                 .filter_map(|&slot| solved_positions.get(slot).copied()),
         )
         .collect();
-    normalize_svek_package_envelope(
+    let (package_dx, package_dy) = normalize_svek_package_envelope(
         diagram,
         &mut result.node_positions,
         &mut result.cluster_positions,
         &mut result.edge_paths,
     );
+    for position in &mut collision_node_positions {
+        position.x += package_dx;
+        position.y += package_dy;
+    }
     // Java `SvekResult.calculateDimension` measures the rendered MinMax and
     // calls `moveDelta(6 - minX, 6 - minY)`. An Opale polygon begins at its
     // node minimum, while ordinary class images retain the renderer's 1px
@@ -2842,6 +2859,10 @@ fn render_with_oracle_uid_origin(
             pos.x += note_dx;
             pos.y += note_dy;
         }
+        for pos in &mut collision_node_positions {
+            pos.x += note_dx;
+            pos.y += note_dy;
+        }
         for cluster in &mut result.cluster_positions {
             cluster.x += note_dx;
             cluster.y += note_dy;
@@ -2868,7 +2889,7 @@ fn render_with_oracle_uid_origin(
             }
         }
     }
-    resolve_endpoint_label_collisions(diagram, &result.node_positions, &mut result.edge_paths);
+    resolve_endpoint_label_collisions(diagram, &collision_node_positions, &mut result.edge_paths);
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
     render_plantuml_svg(
@@ -4598,9 +4619,9 @@ fn normalize_svek_package_envelope(
     node_positions: &mut [NodePosition],
     cluster_positions: &mut [ClusterPosition],
     edge_paths: &mut [EdgePath],
-) {
+) -> (f64, f64) {
     if cluster_positions.is_empty() {
-        return;
+        return (0.0, 0.0);
     }
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let min_x = cluster_positions
@@ -4658,6 +4679,7 @@ fn normalize_svek_package_envelope(
             label.y += dy;
         }
     }
+    (dx, dy)
 }
 
 fn painted_package_cluster_ids(diagram: &ClassDiagram) -> std::collections::HashSet<String> {
@@ -14079,6 +14101,28 @@ fn emit_relationship_endpoint_label(
     }
 }
 
+fn svek_collision_layout_slots(
+    diagram: &ClassDiagram,
+    entity_layout_slots: &[usize],
+    floating_layout_slots: &[Option<usize>],
+    attached_layout_slots: &[Option<usize>],
+    empty_package_layout_slots: &[Option<usize>],
+    association_layout_slots: &[usize],
+) -> Vec<usize> {
+    svek_node_emission_order(diagram)
+        .into_iter()
+        .map(|emission| match emission {
+            SvekNodeEmission::Entity(idx) => entity_layout_slots[idx],
+            SvekNodeEmission::Note(idx) => attached_layout_slots[idx]
+                .or(floating_layout_slots[idx])
+                .expect("SVEK note emission must own a layout slot"),
+            SvekNodeEmission::EmptyPackage(idx) => empty_package_layout_slots[idx]
+                .expect("SVEK empty-package emission must own a layout slot"),
+        })
+        .chain(association_layout_slots.iter().copied())
+        .collect()
+}
+
 fn resolve_endpoint_label_collisions(
     diagram: &ClassDiagram,
     nodes: &[NodePosition],
@@ -21049,6 +21093,64 @@ mod tests {
             svg.find(pair[0]).expect("missing earlier SVEK node")
                 < svg.find(pair[1]).expect("missing later SVEK node")
         }));
+    }
+
+    #[test]
+    fn collision_layout_slots_follow_svek_creation_order() {
+        let input = "@startuml\n\
+            class RootAlpha\n\
+            package Outer {\n\
+              class DirectDelta\n\
+              package Inner {\n\
+                class NestedGamma\n\
+              }\n\
+              class DirectBeta\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+
+        // Graphviz slots are allocated in SVEK creation order even though
+        // entity indices retain parser order for rendering.
+        let slots = svek_collision_layout_slots(&diagram, &[3, 0, 2, 1], &[], &[], &[], &[4]);
+        assert_eq!(slots, [0, 1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn endpoint_label_collision_moves_are_order_dependent() {
+        let label = rustuml_layout::graph::EdgeLabelPosition {
+            x: 15.0,
+            y: 15.0,
+            width: 10.0,
+            height: 10.0,
+        };
+        let first_node = NodePosition {
+            x: 0.0,
+            y: 0.0,
+            width: 10.0,
+            height: 10.0,
+        };
+        let second_node = NodePosition {
+            x: 0.0,
+            y: 5.0,
+            width: 10.0,
+            height: 10.0,
+        };
+
+        let mut forward = label;
+        for node in [first_node, second_node] {
+            move_label_away_from_node(&mut forward, &node);
+        }
+        let mut reverse = label;
+        for node in [second_node, first_node] {
+            move_label_away_from_node(&mut reverse, &node);
+        }
+
+        assert!(forward.x > label.x);
+        assert!(reverse.x > label.x);
+        assert!((forward.y - reverse.y).abs() > 0.5);
     }
 
     #[test]
