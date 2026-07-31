@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "uml-rankdir-factory-consumability",
-  "status": "accounted_before_code",
+  "status": "refined_before_code",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision": "5d494292c14b853a75778aa9f3369c4d69ee6ba4",
   "triggering_review": "docs/parity-reviews/deployment-link-endpoint-display-independence/review.json",
@@ -45,9 +45,9 @@
       "role": "Scores sequence and graph-shaped signals, but currently treats a direction directive as a Class tiebreak only when every non-Sequence family has score zero. Shared database/queue declarations therefore leave Sequence's score eligible even though Java rejected that factory."
     }
   ],
-  "claimed_invariant": "For an @startuml source containing `left to right direction` or `top to bottom direction`, SequenceDiagramFactory is not a viable Java candidate because its command inventory has no CommandRankDir. Sequence-only lexical evidence must therefore be excluded from final subtype selection. Remaining viable families are compared using their existing semantic evidence and Java-compatible tie order: a bare direction or direction plus weak ordinary arrow reaches Class, shared DESCRIPTION declarations and links reach the Rust DESCRIPTION subtype that consumes them, and commands not consumable by either continue to later factories.",
+  "claimed_invariant": "For an @startuml source containing `left to right direction` or `top to bottom direction`, SequenceDiagramFactory is not a viable Java candidate because its command inventory has no CommandRankDir. Sequence-only lexical evidence must therefore be excluded from final subtype selection. Remaining viable families are compared using their existing semantic evidence and Java-compatible tie order: a bare direction or direction plus weak ordinary arrow reaches Class, shared DESCRIPTION declarations and links reach the Rust DESCRIPTION subtype that consumes them, and commands not consumable by either continue to later factories. If the same source also contains a command registered only by SequenceDiagramFactory, such as participant, autonumber, activation, return, box, ref-over or footbox syntax, no later factory may silently discard that command; the candidate set is empty and the source is a syntax error.",
   "causal_divergence": "Rust treated subtype selection as unrestricted score maximization. Its narrow direction correction only raised Class when all graph-family scores were zero, so shared `database` and `queue` declarations gave Sequence ten points, their arrow gave it another point, and Deployment's ten points lost. Java never compares those strengths: the rank-direction command has already eliminated Sequence before declarations and arrows are considered by later factories.",
-  "planned_model_change": "Track Sequence factory viability separately from lexical scores. A recognized rank-direction command marks Sequence nonviable. At final selection, choose the highest-scoring viable subtype, preserving the existing subtype order for ties; do not add Deployment points, inspect labels, or key behavior to Unicode. Retain the existing graph-style Class correction for weak arrows, and make a direction-only source fall through to the first remaining zero-score subtype rather than the eliminated Sequence candidate.",
+  "planned_model_change": "Track Sequence factory viability separately from lexical scores. A recognized rank-direction command marks Sequence nonviable. At final selection, choose the highest-scoring viable subtype, preserving the existing subtype order for ties; do not add Deployment points, inspect labels, or key behavior to Unicode. Retain the existing graph-style Class correction for weak arrows, and make a direction-only source fall through to the first remaining zero-score subtype rather than the eliminated Sequence candidate. Track the strong Sequence-only commands visibly registered by SequenceDiagramFactory; when one coexists with rank direction, return a no-factory parser error instead of dispatching to a later permissive parser.",
   "perturbation_axes": [
     "left-to-right versus top-to-bottom direction",
     "direction before versus after declarations and links",
@@ -63,7 +63,7 @@
     "The preserved checker_06 source selects Deployment/DESCRIPTION on the no-oracle path and retains its entities and relation.",
     "Fresh shared-keyword sources with either direction and varied declaration order select the same Java family without relying on label spelling.",
     "A direction-only source and a direction plus weak ordinary arrow do not select Sequence.",
-    "Sequence-specific content plus a rank-direction command is not made valid by forcing Deployment; Rust follows the first remaining family that can consume the complete source or returns a parser error.",
+    "Participant, autonumber, activation, return, box, ref-over and footbox content plus a rank-direction command returns a parser error rather than being made valid by a later permissive parser.",
     "Unrelated sources without a rank-direction command retain their existing subtype selection.",
     "An independent checker attacks command order, shared keywords, later-factory continuation and invalid mixed grammars."
   ],
@@ -75,7 +75,7 @@
     "changing the command parsers to accept syntax solely to make the selected family succeed"
   ],
   "declared_residue": [
-    "This correction models the proven CommandRankDir exclusion for Sequence; full command-inventory viability for every UML factory remains broader work.",
+    "This correction models the proven CommandRankDir exclusion for Sequence and its intersection with strong Sequence-only commands registered in SequenceDiagramFactory; full command-inventory viability for every UML factory remains broader work.",
     "Rust splits Java DescriptionDiagramFactory into Component, UseCase and Deployment models, so selection among those Rust subtypes continues to use existing semantic evidence.",
     "Unicode UGroup metadata serialization and repeated left-to-right unresolved-edge paint suppression are separate mechanisms from factory consumability."
   ]
