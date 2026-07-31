@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-root-painted-minmax-initialization",
+  "review_status": "accepted",
+  "created": "2026-08-01T08:51:35+10:00",
+  "identity": {
+    "agent": "Codex",
+    "model": "GPT-5",
+    "role": "independent adversarial checker",
+    "implemented_change": false,
+    "notes": "Reviewed only the root painted MinMax initialization mechanism from the shared implementation commit. Did not edit production code, accounts, baselines, comparator, park list, error markers, or allow-lists. Did not run Cargo or rustc."
+  },
+  "revisions": {
+    "account_commit": "7e0f0909",
+    "account_subject": "account: class root painted MinMax initialization",
+    "implementation_commit": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "implementation_subject": "fix: model Class note sheet padding and empty MinMax",
+    "worktree_head": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "java_plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_status": ["M CLAUDE.md"]
+  },
+  "artifacts": {
+    "rustuml_binary": {
+      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml",
+      "sha256": "07c5cadd202782713600039c22f1e88b84584619774456ae8bbe640c788f385c"
+    },
+    "diff_one_binary": {
+      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one",
+      "sha256": "ad4351991f36728379bffb827309ce4d8ef7d405fd029ed686859cd705faa3da"
+    },
+    "plantuml_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "evidence_manifest": "test-diagrams/perturbations/class-svek-root-painted-minmax-initialization/SHA256SUMS"
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git show --stat --oneline 7e0f0909 ca01f728 46ac174e",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java | sed -n '100,155p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java | sed -n '70,115p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/geom/MinMaxMutable.java | sed -n '45,90p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14240,14540p'",
+    "git show --unified=0 46ac174e -- crates/rustuml-render/src/class.rs | rg -n \"^[+]([^+]|$)|note_only|PadTable|WIDEST|PaddingSource|PaddingTarget|8171|8923|9011|Golden|golden|fixture|test-diagrams|\\\\.svg|include_str|class_note_sheet_padding|painted_coordinate_minimum|sheet_padding|RELATIONSHIP_NOTE_COMPONENT_PADDING|NOTE_PAD\"",
+    "rg -n \"note_only_tb_left_wide_note|mm_01|pad_03|PadTable|WIDEST|8171|8923|9011|test-diagrams|golden|include_str|\\\\.svg\" crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-root-painted-minmax-initialization/*.puml",
+    "for f in test-diagrams/perturbations/class-svek-root-painted-minmax-initialization/*.puml; do /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml -tsvg \"$f\" > \"${f%.puml}.rust.svg\"; done",
+    "for f in test-diagrams/perturbations/class-svek-root-painted-minmax-initialization/*.puml; do stem=\"${f%.puml}\"; /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one --no-oracle \"$f\" > \"$stem.diff.txt\" 2>&1; done",
+    "find test-diagrams/perturbations/class-svek-root-painted-minmax-initialization -type f ! -name SHA256SUMS | sort | xargs shasum -a 256 > test-diagrams/perturbations/class-svek-root-painted-minmax-initialization/SHA256SUMS",
+    "shasum -a 256 /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "java_provenance_checked": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "lines": "130-135",
+      "finding": "SvekResult obtains the painted bounds through TextBlockUtils.getMinMax(this, stringBounder, false), moves the complete graph by 6 - minX/minY, and returns the moved MinMax dimension plus 15 pixels."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "lines": "90-94",
+      "finding": "LimitFinder.create delegates empty-state behavior to MinMaxMutable.getEmpty(initToZero)."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/geom/MinMaxMutable.java",
+      "lines": "45-50",
+      "finding": "initToZero=false starts minX/minY at Double.MAX_VALUE and does not insert the origin into the painted frontier."
+    }
+  ],
+  "rust_provenance_checked": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "14265-14399",
+      "finding": "svek_layout_x_bias now folds all horizontal painted candidates through painted_coordinate_minimum, which starts from positive infinity and returns None for a genuinely empty stream instead of seeding root diagrams with 0.0."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "14327-14381",
+      "finding": "The candidate stream still includes nodes, painted clusters, empty package minima, edge path points, mapped center blocks, unmapped Graphviz labels, endpoint decorations, magic arrows, and visibility polygons."
+    }
+  ],
+  "fixture_shape_search": {
+    "result": "no fixture-shaped production logic found in the implementation hunk",
+    "notes": "The shared commit introduced a generic empty-minimum helper and preserved existing candidate streams. The only fresh fixture labels found by the search are in tests/evidence, not production. Existing historical comments elsewhere in class.rs mention goldens, but they were not introduced by this change."
+  },
+  "perturbations": [
+    {
+      "stem": "mm_01_root_tb_positive_note_only",
+      "axes": ["root graph", "top-to-bottom", "positive painted frontier", "note-only relationship center block"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "mm_02_root_lr_decor_visibility_negative_probe",
+      "axes": ["root graph", "left-to-right", "decorated edge", "visibility polygon candidate", "negative-minimum probe"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "mm_03_together_tb_label_only",
+      "axes": ["together block", "top-to-bottom", "label-only center block", "positive frontier"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "mm_04_together_lr_note_only",
+      "axes": ["together block", "left-to-right", "note-only center block", "positive frontier"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "mm_05_nested_tb_positive_note_label",
+      "axes": ["nested package", "top-to-bottom", "combined label and note", "positive frontier"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "mm_06_nested_lr_decor_negative_probe",
+      "axes": ["nested package", "left-to-right", "decorated edge", "visibility candidate", "negative-minimum probe"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "prior_note_only_tb_left_wide_note",
+      "axes": ["prior rejecting witness", "root graph", "top-to-bottom", "ortho", "note-only left link note"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0,
+      "classification": "The previous x=11 versus x=6 rejection no longer reproduces under 46ac174e."
+    }
+  ],
+  "verdict": {
+    "accepted": true,
+    "reason": "The implementation matches Java's empty LimitFinder/MinMax lifecycle for the reviewed horizontal normalization mechanism. Fresh root, together, nested, LR/TB, positive-frontier, and negative-candidate probes all passed diff_one --no-oracle, and the prior rejecting note-only witness now passes. I found no fixture-shaped production keying or unexplained new layout constants in this mechanism."
+  }
+}

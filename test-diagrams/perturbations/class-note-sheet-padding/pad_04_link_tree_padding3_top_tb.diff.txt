@@ -1,0 +1,29 @@
+SVG structural differences:
+  [25] <rect> attr mismatch:
+    expected: [("fill", "#FEFFDD"), ("height", "2"), ("style", "stroke:#000000;stroke-width:0.5;"), ("width", "2"), ("x", "119.31"), ("y", "107.1453")]
+    actual:   [("fill", "#FEFFDD"), ("height", "2"), ("style", "stroke:#000000;stroke-width:1;"), ("width", "2"), ("x", "119.3125"), ("y", "107.1435")]
+  [26] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "112.31"), ("x2", "120.31"), ("y1", "108.1453"), ("y2", "108.1453")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "112.3125"), ("x2", "120.3125"), ("y1", "108.1435"), ("y2", "108.1435")]
+  [27] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "112.31"), ("x2", "112.31"), ("y1", "100.49"), ("y2", "108.1453")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "112.3125"), ("x2", "112.3125"), ("y1", "100.4883"), ("y2", "108.1435")]
+  [28] <rect> attr mismatch:
+    expected: [("fill", "#FEFFDD"), ("height", "2"), ("style", "stroke:#000000;stroke-width:0.5;"), ("width", "2"), ("x", "119.31"), ("y", "122.4558")]
+    actual:   [("fill", "#FEFFDD"), ("height", "2"), ("style", "stroke:#000000;stroke-width:1;"), ("width", "2"), ("x", "119.3125"), ("y", "122.4541")]
+  [29] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "112.31"), ("x2", "120.31"), ("y1", "123.4558"), ("y2", "123.4558")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "112.3125"), ("x2", "120.3125"), ("y1", "123.4541"), ("y2", "123.4541")]
+  [30] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "112.31"), ("x2", "112.31"), ("y1", "108.1453"), ("y2", "123.4558")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "112.3125"), ("x2", "112.3125"), ("y1", "108.1435"), ("y2", "123.4541")]
+  [31] <rect> attr mismatch:
+    expected: [("fill", "#FEFFDD"), ("height", "2"), ("style", "stroke:#000000;stroke-width:0.5;"), ("width", "2"), ("x", "119.31"), ("y", "137.7664")]
+    actual:   [("fill", "#FEFFDD"), ("height", "2"), ("style", "stroke:#000000;stroke-width:1;"), ("width", "2"), ("x", "119.3125"), ("y", "137.7646")]
+  [32] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "112.31"), ("x2", "120.31"), ("y1", "138.7664"), ("y2", "138.7664")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "112.3125"), ("x2", "120.3125"), ("y1", "138.7646"), ("y2", "138.7646")]
+  [33] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "112.31"), ("x2", "112.31"), ("y1", "123.4558"), ("y2", "138.7664")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "112.3125"), ("x2", "112.3125"), ("y1", "123.4541"), ("y2", "138.7646")]
+

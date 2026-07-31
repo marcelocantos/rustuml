@@ -1,0 +1,8 @@
+@startuml
+skinparam Padding 2
+together {
+  class TogetherNorth8311
+  class TogetherSouth8317
+}
+TogetherNorth8311 --> TogetherSouth8317 : together label frontier renamed 8311
+@enduml

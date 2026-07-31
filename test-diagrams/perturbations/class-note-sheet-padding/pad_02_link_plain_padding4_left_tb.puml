@@ -1,0 +1,10 @@
+@startuml
+skinparam Padding 4
+class PadLeftNorth8821
+class PadLeftSouth8831
+PadLeftNorth8821 --> PadLeftSouth8831
+note left on link
+  positive padding link note left 8821
+  WIDE-PADDING-FOUR-ROW-8831
+end note
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+skinparam Padding 0
+class PadTableZeroNorth9511
+class PadTableZeroSouth9517
+PadTableZeroNorth9511 --> PadTableZeroSouth9517
+note on link
+  |= Key 9511 |= Value 9517 |
+  | alpha | zero padding table |
+  | beta | control row |
+end note
+@enduml

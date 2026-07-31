@@ -1,0 +1,10 @@
+@startuml
+skinparam Padding 0
+class MinMaxNorth8171
+class MinMaxSouth8179
+MinMaxNorth8171 --> MinMaxSouth8179
+note left on link
+  fresh root note owns the left frontier 8171
+  WIDEST-ROOT-POSITIVE-MINIMUM-8179
+end note
+@enduml

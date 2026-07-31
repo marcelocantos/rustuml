@@ -1,0 +1,9 @@
+@startuml
+skinparam Padding 1.5
+class PadStandaloneTable9239
+note bottom of PadStandaloneTable9239
+  |= Column 9239 |= Column 9241 |
+  | one | fractional standalone |
+  | two | table body |
+end note
+@enduml

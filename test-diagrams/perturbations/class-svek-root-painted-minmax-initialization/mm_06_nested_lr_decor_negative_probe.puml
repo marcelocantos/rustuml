@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam Padding 0
+package "Left Container 8641" {
+  class "Nested Decorated 8647" as NestedDecorated8647 {
+    # packageMember8647
+  }
+}
+package "Right Container 8651" {
+  class "Nested Receiver 8651" as NestedReceiver8651
+}
+NestedDecorated8647 o-- NestedReceiver8651 : nested decorated center 8641
+@enduml

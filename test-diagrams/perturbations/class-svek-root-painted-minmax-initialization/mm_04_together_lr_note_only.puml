@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam Padding 1
+together {
+  class TogetherWest8423
+  class TogetherEast8429
+}
+TogetherWest8423 --> TogetherEast8429
+note top on link
+  together note body shifts painted frontier 8423
+  second renamed note row 8429
+end note
+@enduml

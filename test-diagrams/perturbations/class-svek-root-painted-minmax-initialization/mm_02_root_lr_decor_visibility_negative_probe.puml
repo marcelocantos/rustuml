@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam Padding 0
+class "Protected West 8291" as MinMaxWest8291 {
+  # packageProbe8291
+}
+class "Decorated East 8299" as MinMaxEast8299 {
+  - hiddenProbe8299
+}
+MinMaxWest8291 *-- MinMaxEast8299 : wide center label for negative frontier probe 8291
+@enduml

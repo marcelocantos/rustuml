@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-sheet-padding",
+  "review_status": "rejected",
+  "created": "2026-08-01T08:51:35+10:00",
+  "identity": {
+    "agent": "Codex",
+    "model": "GPT-5",
+    "role": "independent adversarial checker",
+    "implemented_change": false,
+    "notes": "Reviewed only the Class note Display sheet-padding mechanism from the shared implementation commit. Did not edit production code, accounts, baselines, comparator, park list, error markers, or allow-lists. Did not run Cargo or rustc."
+  },
+  "revisions": {
+    "account_commit": "ca01f728",
+    "account_subject": "account: class note Display sheet padding",
+    "implementation_commit": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "implementation_subject": "fix: model Class note sheet padding and empty MinMax",
+    "worktree_head": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "java_plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_status": ["M CLAUDE.md"]
+  },
+  "artifacts": {
+    "rustuml_binary": {
+      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml",
+      "sha256": "07c5cadd202782713600039c22f1e88b84584619774456ae8bbe640c788f385c"
+    },
+    "diff_one_binary": {
+      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one",
+      "sha256": "ad4351991f36728379bffb827309ce4d8ef7d405fd029ed686859cd705faa3da"
+    },
+    "plantuml_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "evidence_manifest": "test-diagrams/perturbations/class-note-sheet-padding/SHA256SUMS"
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git show --stat --oneline 7e0f0909 ca01f728 46ac174e",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml status --short",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java | sed -n '670,705p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | sed -n '1096,1110p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java | sed -n '65,115p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java | sed -n '185,220p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java | sed -n '55,120p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java | sed -n '70,155p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java | sed -n '40,90p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '15220,15430p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '16980,17490p'",
+    "git show --unified=0 46ac174e -- crates/rustuml-render/src/class.rs | rg -n \"^[+]([^+]|$)|note_only|PadTable|WIDEST|PaddingSource|PaddingTarget|8171|8923|9011|Golden|golden|fixture|test-diagrams|\\\\.svg|include_str|class_note_sheet_padding|painted_coordinate_minimum|sheet_padding|RELATIONSHIP_NOTE_COMPONENT_PADDING|NOTE_PAD\"",
+    "rg -n \"note_only_tb_left_wide_note|mm_01|pad_03|PadTable|WIDEST|8171|8923|9011|test-diagrams|golden|include_str|\\\\.svg\" crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-note-sheet-padding/*.puml",
+    "for f in test-diagrams/perturbations/class-note-sheet-padding/*.puml; do /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml -tsvg \"$f\" > \"${f%.puml}.rust.svg\"; done",
+    "for f in test-diagrams/perturbations/class-note-sheet-padding/*.puml; do stem=\"${f%.puml}\"; /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one --no-oracle \"$f\" > \"$stem.diff.txt\" 2>&1; done",
+    "rg -n 'fill=\"#FEFFDD\"|Key 8923|Key 9721|alpha|beta|stroke:#000000' test-diagrams/perturbations/class-note-sheet-padding/pad_03_link_table_fractional_right_lr.svg test-diagrams/perturbations/class-note-sheet-padding/pad_03_link_table_fractional_right_lr.rust.svg test-diagrams/perturbations/class-note-sheet-padding/pad_11_link_table_pair_padding0.svg test-diagrams/perturbations/class-note-sheet-padding/pad_11_link_table_pair_padding0.rust.svg",
+    "rg -n 'fill=\"#FEFFDD\"|root 9011|branch 9013|leaf 9019|root 9811|branch 9813|leaf 9819|stroke:#000000' test-diagrams/perturbations/class-note-sheet-padding/pad_04_link_tree_padding3_top_tb.svg test-diagrams/perturbations/class-note-sheet-padding/pad_04_link_tree_padding3_top_tb.rust.svg test-diagrams/perturbations/class-note-sheet-padding/pad_12_link_tree_pair_padding0.svg test-diagrams/perturbations/class-note-sheet-padding/pad_12_link_tree_pair_padding0.rust.svg",
+    "find test-diagrams/perturbations/class-note-sheet-padding -type f ! -name SHA256SUMS | sort | xargs shasum -a 256 > test-diagrams/perturbations/class-note-sheet-padding/SHA256SUMS",
+    "shasum -a 256 /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "java_provenance_checked": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "lines": "688-695",
+      "finding": "Display.getCreole reads spriteContainer.getPadding() and passes it to SheetBlock1."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "lines": "1101-1105",
+      "finding": "SkinParam.getPadding resolves the global legacy Padding value consumed by Display."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "lines": "74-94,195-210",
+      "finding": "SheetBlock1 stores same-valued padding, expands preferred dimensions by the paired padding amount, and translates atoms by left/top padding before painting."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "lines": "73-114",
+      "finding": "AbstractTextualComponent builds the note text block through Display and composes that padded sheet with the Rose component margins."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "lines": "61-78",
+      "finding": "Relationship-owned link notes are Rose note components whose preferred size and drawing both flow through the Display-created text block."
+    }
+  ],
+  "rust_provenance_checked": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "15225-15379",
+      "finding": "ResolvedNoteStyle carries sheet_padding from the last parseable global skinparam Padding value for both standalone and relationship-owned Class notes."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "17052-17172",
+      "finding": "note_box_dims and relationship_note_box_dims add twice sheet_padding around the measured body before Rose note margins."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "lines": "17378-17391",
+      "finding": "emit_note_body translates body painting by sheet_padding and reduces the available width by twice sheet_padding."
+    }
+  ],
+  "fixture_shape_search": {
+    "result": "no fixture-shaped production logic found in the implementation hunk",
+    "notes": "The production hunk uses generic skinparam lookup and generic dimension/paint insets. I found no production condition keyed to labels, stems, golden paths, ORTHO, or generated perturbation names. Existing historical comments elsewhere in class.rs mention goldens, but they were not introduced by this change."
+  },
+  "perturbations": [
+    {
+      "stem": "pad_01_link_plain_padding0_tb",
+      "axes": ["link note", "plain body", "Padding 0", "top-to-bottom"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "pad_02_link_plain_padding4_left_tb",
+      "axes": ["link note", "plain body", "Padding 4", "left position", "top-to-bottom"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "pad_03_link_table_fractional_right_lr",
+      "axes": ["link note", "table body", "Padding 2.5", "right position", "left-to-right"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "key_observation": "Java note path spans approximately 231x79 while Rust spans approximately 221x64; Java table grid uses stroke-width 0.5 while Rust uses 1.0. Text and grid positions diverge inside the note as well as layout extents.",
+      "classification": "In-scope counterexample to the broad structured-body claim. The zero-padding table controls also fail, so the immediate root is not just missing padding extraction, but the account claimed structured table atoms were covered by the shared sheet wrapper."
+    },
+    {
+      "stem": "pad_04_link_tree_padding3_top_tb",
+      "axes": ["link note", "tree body", "Padding 3", "top position", "top-to-bottom"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "key_observation": "The note polygon and text positions are effectively aligned, but tree branch primitives differ by stroke-width 0.5 versus 1.0 and tiny coordinate rounding.",
+      "classification": "In-scope structured-note evidence, but not decisive for the sheet-padding math by itself because the same tree primitive stroke mismatch appears in zero-padding controls."
+    },
+    {
+      "stem": "pad_05_standalone_plain_padding6_left",
+      "axes": ["standalone attached note", "plain body", "Padding 6", "left position"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "pad_06_standalone_table_fractional_bottom",
+      "axes": ["standalone attached note", "table body", "Padding 1.5", "bottom position"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "key_observation": "The table note body is narrower/shorter in Rust than Java and grid strokes differ; the same table-family divergence appears in link-note table controls.",
+      "classification": "In-scope counterexample to the broad structured-body claim."
+    },
+    {
+      "stem": "pad_07_standalone_tree_padding2_right_lr",
+      "axes": ["standalone attached note", "tree body", "Padding 2", "right position", "left-to-right"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "pad_08_link_mono_padding5_bottom_lr",
+      "axes": ["link note", "monospace body", "Padding 5", "bottom position", "left-to-right"],
+      "result": "structurally_equivalent",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "pad_09_link_table_padding0_control",
+      "axes": ["link note", "table body", "Padding 0", "control"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "classification": "Shows table primitive parity debt exists even without sheet padding."
+    },
+    {
+      "stem": "pad_10_link_tree_padding0_control",
+      "axes": ["link note", "tree body", "Padding 0", "control"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "classification": "Shows tree primitive stroke-width parity debt exists even without sheet padding."
+    },
+    {
+      "stem": "pad_11_link_table_pair_padding0",
+      "axes": ["link note", "same-content table body", "Padding 0", "delta control for pad_03"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "classification": "Confirms table-body absolute parity is already failing at zero padding."
+    },
+    {
+      "stem": "pad_12_link_tree_pair_padding0",
+      "axes": ["link note", "same-content tree body", "Padding 0", "delta control for pad_04"],
+      "result": "structural_diff",
+      "diff_one_exit": 1,
+      "classification": "Confirms tree branch stroke-width mismatch is already present at zero padding."
+    }
+  ],
+  "verdict": {
+    "accepted": false,
+    "reason": "The plain and monospace padding path behaves: Padding 0, positive integer, standalone notes, relationship-owned notes, and several LR/TB positions pass. However, the requested mechanism account explicitly claimed structured note bodies would be covered by the same SheetBlock1-style wrapper, and fresh table/tree perturbations produce in-scope structural diffs. The most decisive failures are table notes: both link-owned and standalone table bodies remain narrower/shorter in Rust and have grid stroke/layout differences. Zero-padding controls show the root cause is pre-existing structured-note primitive parity, not merely missing global Padding parsing, but the broad class-note-sheet-padding claim cannot be accepted while those structured-body counterexamples fail.",
+    "required_followup": "Either narrow this mechanism and account to the subset actually validated by fresh evidence, or add a separate causal account and implementation for Class note table/tree primitive parity before re-reviewing the structured-body claim. Preserve these counterexamples; they should remain failing evidence until the structured note painter model is fixed."
+  }
+}

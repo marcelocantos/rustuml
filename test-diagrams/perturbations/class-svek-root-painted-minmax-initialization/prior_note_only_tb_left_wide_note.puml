@@ -1,0 +1,11 @@
+@startuml
+skinparam linetype ortho
+skinparam Padding 3
+class NoteOnlyNorth7421
+class NoteOnlySouth7421
+NoteOnlyNorth7421 --> NoteOnlySouth7421
+note left on link
+  the renamed note block owns the painted left edge
+  WIDEST-WORD-FOR-PADDING-AXIS-7143
+end note
+@enduml

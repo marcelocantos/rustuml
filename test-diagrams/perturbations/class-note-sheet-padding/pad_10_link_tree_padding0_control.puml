@@ -1,0 +1,11 @@
+@startuml
+skinparam Padding 0
+class PadTreeZeroNorth9613
+class PadTreeZeroSouth9619
+PadTreeZeroNorth9613 --> PadTreeZeroSouth9619
+note on link
+  |_ root 9613
+  |__ branch 9619
+  |___ leaf 9623
+end note
+@enduml

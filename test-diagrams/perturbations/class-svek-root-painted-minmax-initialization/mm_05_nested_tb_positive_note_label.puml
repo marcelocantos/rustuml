@@ -1,0 +1,13 @@
+@startuml
+skinparam Padding 0
+package "Outer MinMax 8531" {
+  package "Inner MinMax 8537" {
+    class "Nested Source 8531" as NestedMinMaxSource8531
+  }
+}
+class "Nested Target 8537" as NestedMinMaxTarget8537
+NestedMinMaxSource8531 --> NestedMinMaxTarget8537 : nested label 8531
+note bottom on link
+  nested package positive frontier note 8537
+end note
+@enduml
