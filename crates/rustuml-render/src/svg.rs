@@ -5,6 +5,25 @@
 
 use std::fmt::Write;
 
+/// Project a PlantUML model identity into an SVG `UGroup` metadata value.
+///
+/// Java's `UGroup.fix` replaces every character outside ASCII word
+/// characters, space, and hyphen with a dot. Keeping this at the SVG boundary
+/// lets renderers preserve canonical model identities until serialization.
+/// Source: PlantUML `klimt/UGroup.java:57-60` (`[^-\w ]`).
+pub(crate) fn translate_qualified_name(value: &str) -> String {
+    value
+        .chars()
+        .map(|ch| {
+            if ch.is_ascii_alphanumeric() || ch == '_' || ch == ' ' || ch == '-' {
+                ch
+            } else {
+                '.'
+            }
+        })
+        .collect()
+}
+
 pub(crate) fn normalize_svg_link_title(title: &str) -> String {
     let mut normalized = String::with_capacity(title.len());
     let mut rest = title;
@@ -892,6 +911,14 @@ fn escape_xml(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn qualified_name_projection_matches_java_ugroup_fix() {
+        assert_eq!(
+            translate_qualified_name("domain\u{1}Service: Ω\nworker.v2"),
+            "domain.Service. ..worker.v2"
+        );
+    }
 
     #[test]
     fn link_titles_follow_java_unicode_and_newline_normalization() {
