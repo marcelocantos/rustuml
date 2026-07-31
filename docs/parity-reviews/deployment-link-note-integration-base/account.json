@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-note-integration-base",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "0a2a8f8741280c74c57fc15d8457d4175c432fe1",
+  "triggering_evidence": [
+    "docs/parity-reviews/description-link-note-color-factory-consumption/review.json",
+    "docs/parity-reviews/deployment-command-factory-note-on-link/review-followup.json"
+  ],
+  "prior_account": "docs/parity-reviews/deployment-command-factory-note-on-link/account.json at commit 70fd1609",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "symbols": ["getRegexConcatSingleLine", "getRegexConcatMultiLine", "executeInternal"],
+      "role": "Selects a complete note-on-link command, resolves its color, obtains the last eligible non-note link, and stores one replacement note value on that link."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": ["getLastLink"],
+      "role": "Scans backward for a link whose endpoints are not NOTE leaves and returns no link when only note-endpoint links exist."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["SvekEdge", "appendLine", "solve", "drawU"],
+      "role": "Merges the ordinary Display label and EntityImageNoteLink into one center-label block before Graphviz layout, then paints both inside the owning edge group."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": ["getHorizontalDzeta", "getVerticalDzeta", "createDotString"],
+      "role": "Projects compound edge-label and endpoint-decoration dimensions into dynamic node and rank separation before DOT serialization."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": ["drawEmpty", "drawText"],
+      "role": "Computes the painted frontier as the union of the compound margin UEmpty and every emitted text-row rectangle."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["createPSystem", "isOk"],
+      "role": "Chooses the first factory that consumes the complete source; mixed DESCRIPTION leaves remain one viable Description diagram rather than being selected by independent syntax scores."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "role": "Uses evidence scores instead of complete-factory viability and can route mixed nested DESCRIPTION input to Component or State, bypassing Deployment link-note ownership."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["parse_deployment_link_note_command", "parse_deployment"],
+      "role": "Owns the accepted color-command model on the integration branch but lacks the complete reviewed link-note geometry base used by that mechanism's checker binary."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_edge_paint_bounds", "render_no_oracle", "render_no_oracle_edges"],
+      "role": "The integration branch does not project the complete compound label, dynamic spacing, and LimitFinder primitive union that made the accepted color held-outs structurally exact."
+    }
+  ],
+  "claimed_invariant": "A valid DESCRIPTION note-on-link is link-owned data, not a node. It attaches to the most recent eligible non-note link, replaces any prior note on that link, participates in complete DESCRIPTION factory viability, contributes a label-plus-note compound block and endpoint decorations to Graphviz spacing, and contributes both margin-box and painted text primitives to the final frontier. The same invariant must hold on the assembled integration revision used for product parity, not only on a checker binary built from another branch.",
+  "causal_divergence": "The accepted description-link-note-color review executed binaries from codex/t14-deployment-link-notes. Those binaries included commits 88a8fe80 through 860e3540 implementing Deployment link-owned notes, Display rows, dynamic SVEK spacing, and painted-bound unions. That base was later rejected by review c62ee2ab for three independent counterexamples and was correctly omitted from codex/t14-integration. The color parser/consumer patch was then cherry-picked alone. Consequently ten Java-valid positive held-outs in its accepted review now diverge on the shipped integration path even though the color ownership code is present. This is an attestation-base mismatch, not a color constant error. The rejected base also over-accepted a note after only note-endpoint links, rejected Java-valid composite colors, and misclassified nested mixed DESCRIPTION input. The composite-color command is now handled by the later color model; the eligibility and factory-viability failures remain part of this follow-up.",
+  "planned_model_change": "Re-port the Deployment link-owned note model onto the current integration revision from the named Java ownership and SVEK data flow, using the old rejected commits only as investigative evidence. Preserve the accepted color parser/consumer model. Add complete-factory viability for mixed DESCRIPTION inputs, enforce last eligible non-note-link selection before mutation, construct one label-plus-note block for Graphviz, derive spacing from its dimensions and endpoint decorations, and union the Java-observable margin and text primitives for painted bounds. Do not restore a rejected patch wholesale; each old behavior must be justified by the Java model and survive the old rejecting counterexamples on the current product path.",
+  "perturbation_axes": [
+    "inline versus multiline notes with omitted and explicit positions",
+    "ordinary, composite, and gradient colors with independently changed BACK and LINE channels",
+    "ordinary prior links versus only note-endpoint links versus no eligible prior link",
+    "nested mixed node, frame, database, artifact, and component leaves with later declarations",
+    "one-row, multi-row, blank-row, and empty Display labels",
+    "left-to-right versus top-to-bottom direction with inverted and ordinary links",
+    "note-only, label-plus-note, fanout, chain, and parallel-edge topology",
+    "renamed endpoints and changed label/note lengths that alter compound spacing"
+  ],
+  "acceptance": [
+    "All Java-success positive inputs named by the accepted description-link-note-color review are structurally equivalent on the current no-oracle product binary.",
+    "The three counterexamples preserved by deployment-command-factory-note-on-link review c62ee2ab agree with Java on factory, accept/error outcome, ownership, and structural output where Java succeeds.",
+    "Fresh checker inputs cover at least two independent axes and include mixed nested DESCRIPTION factory selection plus only-note-endpoint eligibility.",
+    "No link note creates an entity, quark, UID event, helper layout node, or independent SVG group.",
+    "Full parser and renderer suites, no-oracle perturbations, harness guards, and the shipped golden no-oracle ratchet pass before acceptance."
+  ],
+  "forbidden_approaches": [
+    "cherry-picking the rejected implementation as an opaque fix",
+    "special-casing historical or fresh fixture names, labels, endpoint aliases, dimensions, or coordinates",
+    "loosening comparator slack, selectors, baselines, eligibility, park lists, or error markers",
+    "representing link notes as standalone nodes or painting them after layout",
+    "reading golden or perturbation SVG data from shipping crates or applying post-hoc SVG surgery"
+  ]
+}
