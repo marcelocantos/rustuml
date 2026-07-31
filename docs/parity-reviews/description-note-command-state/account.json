@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-note-command-state",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "0021a62ad347e0b894ddb4e08a55b45c5389abf4",
+  "triggering_review": "docs/parity-reviews/command-factory-note-terminal-rejection/review-followup3.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": ["CommandFactoryNote.createMultiLine", "CommandFactoryNote.executeInternal"],
+      "lines": "112-160",
+      "role": "A completed named-note command always calls reallyCreateLeaf, even when the body Display is empty. Its body pipeline is subExtract(1, 1), expandsNewline(false), removeEmptyColumns(), then toDisplay()."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/utils/BlocLines.java",
+      "symbols": ["BlocLines.removeEmptyColumns", "BlocLines.firstColumnRemovable", "BlocLines.toDisplay"],
+      "lines": "117-120,227-257",
+      "role": "Removes only indentation columns shared by every nonempty row. Empty and whitespace-only rows remain rows and therefore remain visible Display separators."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": ["DescriptionDiagramFactory.initCommandsList"],
+      "lines": "88-128",
+      "role": "Registers named notes, note-on-link, and attached notes in one Description command inventory; bare `note : text` is absent."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnLink.java",
+      "symbols": ["CommandFactoryNoteOnLink.getRegexConcatSingleLine", "CommandFactoryNoteOnLink.getRegexConcatMultiLine", "CommandFactoryNoteOnLink.executeInternal"],
+      "lines": "66-160",
+      "role": "Accepts single- and multiline note-on-link commands after a link, attaches a CucaNote to the last link, and returns an error when no link exists."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.getCandidate"],
+      "lines": "75-180,218-234",
+      "role": "A factory remains eligible only while every input command is consumed successfully. A failed Class candidate cannot be revived by later scoring; the next registered factory is tried from the full source."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/component.rs",
+      "symbols": ["parse_component"],
+      "lines": "336-408,775-833",
+      "role": "Trims a completed body and suppresses note creation when it is empty. It also accepts bare floating notes that Description does not register."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["parse_deployment", "NoteAccum"],
+      "lines": "492-510,566-609,721-818",
+      "role": "Skips empty lines before consulting the active accumulator, losing Display rows, and lacks the Description note-on-link command despite sharing the same Java factory."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "lines": "506-1278",
+      "role": "Uses additive subtype scores. A named note and bare note can add enough Class score to select Class even after a component declaration has made that Java factory nonviable."
+    }
+  ],
+  "claimed_invariant": "Description note commands are stateful members of one ordered command inventory. A completed named-note opener creates exactly one note entity for every body cardinality, with common indentation removed and body row count preserved. Note-on-link attaches to the most recent eligible link. Any unregistered note command rejects that factory. Factory selection chooses the first factory that consumes the complete source; evidence appearing later cannot restore a candidate already rejected by an earlier command.",
+  "causal_divergence": "Rust represents named-note bodies as a trimmed String rather than Java's row-preserving Display, so Component deletes empty entities and Deployment deletes blank rows before accumulation. Rust's split Description implementations also omitted note-on-link from Deployment. Independently, detect_uml_subtype treats factory evidence as reversible scores: named and bare notes can outweigh Component after the component declaration has already invalidated Class, producing a successful Class AST for a source Java rejects.",
+  "planned_model_change": "Preserve multiline bodies as ordered rows until command completion. Remove only common ASCII space/tab indentation using the same all-nonempty-rows rule as BlocLines, retain empty rows, and always materialize a completed named note. Add Deployment's single- and multiline note-on-link command state using the last parsed connection and reject it when none exists. Remove Description's unsupported bare floating-note acceptance. In subtype selection, make Class viability a hard gate once a mixed-only leaf rejects it rather than allowing later score additions to revive it.",
+  "perturbation_axes": [
+    "zero, one, and multiple body rows",
+    "leading, internal, trailing, whitespace-only, and NBSP-only rows",
+    "uniform versus ragged space/tab indentation",
+    "Component versus Deployment-shaped Description source",
+    "root versus nested group ownership",
+    "single-line versus multiline note-on-link",
+    "note-on-link before any link versus after multiple links",
+    "named note followed by registered attached/link note versus unregistered bare note",
+    "component declaration order before versus after note commands",
+    "renamed note ids and varied link topology"
+  ],
+  "acceptance": [
+    "Every followup3 Java-valid source is accepted with the same note cardinality, body rows, ownership and link-note presence.",
+    "The followup3 Java-invalid component-plus-bare-note source is rejected without constructing a Class diagram.",
+    "Empty and blank-only named notes remain entities that later links can target.",
+    "Deployment note-on-link rejects without a preceding link and attaches to the latest link when valid.",
+    "Fresh held-out inputs vary body shape and command order independently, and an independent checker attempts to disprove the model."
+  ],
+  "forbidden_approaches": [
+    "fixture-name or label keyed branches",
+    "post-render SVG insertion or string surgery",
+    "substituting NBSP for only the reviewed blank examples",
+    "adjusting subtype weights until reviewed examples happen to route differently",
+    "silently accepting note-on-link without attaching it to the connection model"
+  ],
+  "declared_residue": [
+    "Exact Description-versus-Component/Deployment rendering geometry is covered by their separate layout mechanisms.",
+    "Composite note color grammar belongs to the shared ColorParser mechanism.",
+    "Other Description commands omitted from either split Rust parser require their own inventory analysis.",
+    "Java syntax-error SVG artwork and diagnostic wording are outside parser acceptance parity."
+  ]
+}
