@@ -176,6 +176,15 @@ pub(crate) fn resolve_color(color: &str) -> String {
         "whitesmoke" => "#F5F5F5".to_string(),
         "yellow" => "#FFFF00".to_string(),
         "yellowgreen" => "#9ACD32".to_string(),
+        // Java provenance: the final registrations in `ColorTrieNode` are
+        // PlantUML's seven ArchiMate palette aliases.
+        "business" => "#FFFFCC".to_string(),
+        "application" => "#C2F0FF".to_string(),
+        "motivation" => "#CCCCFF".to_string(),
+        "strategy" => "#F8E7C0".to_string(),
+        "technology" => "#C9FFC9".to_string(),
+        "physical" => "#97FF97".to_string(),
+        "implementation" => "#FFE0E0".to_string(),
         _ => {
             // Try as-is if it looks like a hex value
             if name.chars().all(|c| c.is_ascii_hexdigit()) {
@@ -185,6 +194,47 @@ pub(crate) fn resolve_color(color: &str) -> String {
             }
         }
     }
+}
+
+/// Resolve an HColor through Java's `HColor.toRGB` projection.
+///
+/// Legacy `HColorGradient` SVG resources discard endpoint alpha even though
+/// flat `HColor.toSvg` paint preserves it.
+pub(crate) fn resolve_color_rgb(color: &str) -> String {
+    let value = color.trim().strip_prefix('#').unwrap_or(color.trim());
+    if value.len() == 8 && value.chars().all(|character| character.is_ascii_hexdigit()) {
+        return format!("#{}", value[..6].to_ascii_uppercase());
+    }
+    resolve_color(color)
+}
+
+/// Serialize one flat or legacy-gradient HColor as SVG fill attributes.
+pub(crate) fn hcolor_fill_attributes(value: &str, gradient_defs: Option<&str>) -> String {
+    let fill = gradient_fill_or(value, gradient_defs);
+    if split_gradient_colors(value).is_some() {
+        return format!(r#"fill="{fill}""#);
+    }
+
+    let raw = value.trim().strip_prefix('#').unwrap_or(value.trim());
+    if raw.len() == 8 && raw.chars().all(|character| character.is_ascii_hexdigit()) {
+        let upper = raw.to_ascii_uppercase();
+        let alpha = u8::from_str_radix(&upper[6..], 16).expect("validated hex alpha");
+        if alpha == 0 {
+            // `HColor.toSvg` returns #00000000 and DriverPathSvg's default
+            // `WITH_FILL_NONE` policy sends it through `fixColor`.
+            return r#"fill="none""#.to_string();
+        }
+        let rgb = format!("#{}", &upper[..6]);
+        if alpha == u8::MAX {
+            return format!(r#"fill="{rgb}""#);
+        }
+        return format!(
+            r#"fill="{rgb}" fill-opacity="{:.5}""#,
+            f64::from(alpha) / 255.0
+        );
+    }
+
+    format!(r#"fill="{fill}""#)
 }
 
 fn normalize_simple_hex_color(value: &str) -> Option<String> {
@@ -2069,8 +2119,8 @@ pub(crate) fn gradient_endpoints(
 }
 
 fn resolve_gradient_id(defs: &str, c1: &str, c2: &str, policy: char) -> Option<String> {
-    let c1 = resolve_color(c1);
-    let c2 = resolve_color(c2);
+    let c1 = resolve_color_rgb(c1);
+    let c2 = resolve_color_rgb(c2);
     let (x1, x2, y1, y2) = gradient_endpoints(policy);
     let mut rest = defs;
     while let Some(start) = rest.find("<linearGradient") {
@@ -13525,6 +13575,17 @@ mod tests {
     fn legacy_plantuml_palette_preserves_non_css_values() {
         assert_eq!(resolve_color("MediumPurple"), "#9370D8");
         assert_eq!(resolve_color("PaleVioletRed"), "#D87093");
+        for (name, expected) in [
+            ("BUSINESS", "#FFFFCC"),
+            ("application", "#C2F0FF"),
+            ("Motivation", "#CCCCFF"),
+            ("strategy", "#F8E7C0"),
+            ("Technology", "#C9FFC9"),
+            ("physical", "#97FF97"),
+            ("IMPLEMENTATION", "#FFE0E0"),
+        ] {
+            assert_eq!(resolve_color(name), expected, "{name}");
+        }
     }
 
     #[test]
@@ -13537,6 +13598,36 @@ mod tests {
         assert_eq!(resolve_color("#7080907f"), "#7080907F");
         assert_eq!(resolve_color("#A0B0C0FE"), "#A0B0C0FE");
         assert_eq!(resolve_color("#D0E0F0ff"), "#D0E0F0");
+        assert_eq!(resolve_color_rgb("#10203000"), "#102030");
+        assert_eq!(resolve_color_rgb("#4050607f"), "#405060");
+        assert_eq!(resolve_color_rgb("#D0E0F0ff"), "#D0E0F0");
+    }
+
+    #[test]
+    fn hcolor_svg_fill_splits_flat_alpha_and_drops_gradient_alpha() {
+        assert_eq!(hcolor_fill_attributes("#11223300", None), r#"fill="none""#);
+        assert_eq!(
+            hcolor_fill_attributes("#4455667F", None),
+            r##"fill="#445566" fill-opacity="0.49804""##
+        );
+        assert_eq!(
+            hcolor_fill_attributes("#77889980", None),
+            r##"fill="#778899" fill-opacity="0.50196""##
+        );
+        assert_eq!(
+            hcolor_fill_attributes("#AABBCCFF", None),
+            r##"fill="#AABBCC""##
+        );
+        assert_eq!(
+            hcolor_fill_attributes("#transparent", None),
+            r#"fill="none""#
+        );
+
+        let defs = r##"<linearGradient id="alpha-gradient" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#112233"/><stop offset="100%" stop-color="#AABBCC"/></linearGradient>"##;
+        assert_eq!(
+            hcolor_fill_attributes("#11223344|#AABBCCDD", Some(defs)),
+            r##"fill="url(#alpha-gradient)""##
+        );
     }
 
     fn simple_diagram() -> SequenceDiagram {
