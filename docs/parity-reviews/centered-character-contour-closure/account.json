@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "mechanism": "centered-character-contour-closure",
+  "created": "2026-07-31",
+  "status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "482588e7",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverCenteredCharacterSvg.java",
+      "symbol": "DriverCenteredCharacterSvg.draw",
+      "lines": "50-63",
+      "role": "Obtains the complete Java2D glyph outline as a PathIterator and delegates every path segment to SvgGraphics."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": [
+        "SvgGraphics.drawPathIterator",
+        "SvgGraphics.closepath"
+      ],
+      "lines": "924-926,980-1002",
+      "role": "Maps every PathIterator.SEG_CLOSE to a literal SVG Z command before filling the glyph path."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/metrics.rs",
+      "symbol": "centered_character_path",
+      "lines": "223-369",
+      "role": "Converts ab_glyph outline curves to SVG commands but emits Z only when ab_glyph supplies an explicit closing line whose endpoint equals the contour start."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_spot_letter_G.puml",
+    "test-diagrams/golden/class/class_spot_letter_U.puml"
+  ],
+  "claimed_invariant": "Every filled glyph contour produced by Java TextLayout.getOutline is closed by one PathIterator.SEG_CLOSE, and SvgGraphics preserves it as one Z command. TrueType contours are implicitly closed even when a font decoder's curve inventory omits a final line back to the start. Therefore each Rust contour move must terminate with exactly one Z regardless of whether ab_glyph exposes that implicit edge.",
+  "causal_divergence": "The Rust converter infers closure only from an explicit line ending at contour_start. The embedded TrueType outlines for G and U end their final visible curve away from the first point because the font format supplies closure implicitly; ab_glyph does not add a synthetic closing line. Rust consequently emits paths whose numeric commands now match Java exactly but lack Java's final Z.",
+  "planned_model_change": "Treat transitions between ab_glyph contour starts and exhaustion of the final curve list as contour boundaries. Emit Z for the preceding open contour at each boundary and after the final curve. Retain the existing explicit-close handling so contours that already return to their start receive no duplicate Z. Do not inspect the character, fixture, path coordinates, or command count.",
+  "checked_derivations": [
+    {
+      "input": "test-diagrams/golden/class/class_spot_letter_G.puml",
+      "derivation": "After the measured-header centering fix, every M/L/Q coordinate is byte-identical and the sole residual is Java's trailing `Z `."
+    },
+    {
+      "input": "test-diagrams/golden/class/class_spot_letter_U.puml",
+      "derivation": "After the same independent centering fix, every numeric path coordinate is byte-identical and the sole residual is Java's trailing `Z `."
+    }
+  ],
+  "perturbation_axes": [
+    "single-contour and multi-contour glyphs",
+    "open-looking and enclosed letterforms",
+    "uppercase, lowercase, and numeric spot characters",
+    "two font sizes",
+    "shifted positive and negative glyph centers"
+  ],
+  "scope_boundary": "This mechanism owns only the preservation of implicit filled-contour closure while converting embedded-font outlines to SVG. It does not own glyph metrics, glyph centers, class header placement, SVEK entity coordinates, fill rules, comparator behavior, or corpus eligibility.",
+  "acceptance": [
+    "Every generated contour has exactly one M and one Z across fresh single-contour and multi-contour characters.",
+    "G and U evidence paths become byte-identical without character-specific logic.",
+    "Existing characters whose contours already expose an explicit closing line do not acquire duplicate Z commands.",
+    "The full no-oracle ratchet does not regress any family.",
+    "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict and held-out Java/Rust evidence at the exact implementation revision."
+  ],
+  "forbidden_approaches": [
+    "character-specific closure tables",
+    "appending Z only for G, U, or named fixtures",
+    "post-hoc mutation of complete SVG strings",
+    "coordinate or epsilon changes",
+    "fixture-derived path literals"
+  ]
+}
