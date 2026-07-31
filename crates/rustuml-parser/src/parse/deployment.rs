@@ -186,7 +186,124 @@ struct ParsedDeploymentConnection {
     arrow_at_end: bool,
     direction: Option<DeploymentLinkDirection>,
     style: DeploymentLinkStyle,
+    hidden: bool,
     length: usize,
+}
+
+fn deployment_arrow_style_is_valid(style: &str, allow_multiple: bool) -> bool {
+    let mut groups = style.split(';');
+    let Some(first) = groups.next() else {
+        return false;
+    };
+    let mut valid_group = |group: &str| {
+        !group.is_empty()
+            && group.split(',').all(|token| {
+                let token = token.trim();
+                matches!(
+                    token.to_ascii_lowercase().as_str(),
+                    "dotted"
+                        | "dashed"
+                        | "plain"
+                        | "bold"
+                        | "hidden"
+                        | "norank"
+                        | "single"
+                        | "node"
+                ) || token.strip_prefix("thickness=").is_some_and(|value| {
+                    !value.is_empty() && value.chars().all(|c| c.is_ascii_digit())
+                }) || token.strip_prefix('#').is_some_and(|value| {
+                    !value.is_empty() && value.chars().all(|c| c.is_alphanumeric() || c == '_')
+                })
+            })
+    };
+    if !valid_group(first) {
+        return false;
+    }
+    if !allow_multiple {
+        return groups.next().is_none();
+    }
+    groups.all(&mut valid_group)
+}
+
+fn deployment_arrow_end(input: &str) -> Option<usize> {
+    let bytes = input.as_bytes();
+    let mut index = 0;
+    let mut saw_shaft = false;
+    let mut saw_direction = false;
+    let mut style_count = 0;
+    while index < bytes.len() {
+        let character = bytes[index] as char;
+        if matches!(character, '-' | '.' | '~' | '=' | '<' | '>' | '|') {
+            saw_shaft |= matches!(character, '-' | '.' | '~' | '=');
+            index += 1;
+            continue;
+        }
+        if character == '[' {
+            if !saw_shaft || style_count == 2 {
+                break;
+            }
+            let relative_end = input[index + 1..].find(']')?;
+            let style_end = index + relative_end + 1;
+            let allow_multiple = style_count == 0 && !saw_direction;
+            if !deployment_arrow_style_is_valid(&input[index + 1..style_end], allow_multiple) {
+                let suffix = &input[style_end + 1..];
+                let continues_arrow = suffix.starts_with(['-', '.', '~', '=', '<', '>', '|', '['])
+                    || ["down", "up", "left", "right"]
+                        .iter()
+                        .any(|direction| suffix.starts_with(direction));
+                if continues_arrow {
+                    return None;
+                }
+                break;
+            }
+            index += relative_end + 2;
+            style_count += 1;
+            continue;
+        }
+        if saw_shaft && !saw_direction && matches!(character, 'd' | 'u' | 'l' | 'r') {
+            let tail = &input[index..];
+            let direction_length = ["down", "up", "left", "right"]
+                .iter()
+                .find(|direction| tail.starts_with(**direction))
+                .map_or(0, |direction| direction.len());
+            if direction_length > 0
+                && index + direction_length < bytes.len()
+                && matches!(
+                    bytes[index + direction_length] as char,
+                    '-' | '.' | '~' | '=' | '['
+                )
+            {
+                index += direction_length;
+                saw_direction = true;
+                continue;
+            }
+        }
+        break;
+    }
+    Some(index)
+}
+
+fn deployment_arrow_shaft(arrow: &str) -> String {
+    let mut shaft = String::with_capacity(arrow.len());
+    let mut in_style = false;
+    for character in arrow.chars() {
+        match character {
+            '[' => in_style = true,
+            ']' => in_style = false,
+            _ if !in_style => shaft.push(character),
+            _ => {}
+        }
+    }
+    shaft
+}
+
+fn deployment_arrow_has_style(arrow: &str, expected: &str) -> bool {
+    arrow
+        .split('[')
+        .skip(1)
+        .filter_map(|suffix| suffix.split_once(']').map(|(style, _)| style))
+        .flat_map(|style| style.split([',', ';']))
+        .any(|style| style.trim().eq_ignore_ascii_case(expected))
 }
 
 /// Try to parse a connection from a trimmed line.
@@ -222,14 +339,13 @@ fn try_parse_connection(
                         let tail_label = process_label(&after_open_quote[..close_quote]);
                         let after_label = after_open_quote[close_quote + 1..].trim_start();
                         // Check if what follows is an arrow.
-                        let arrow_end = after_label
-                            .find(|c: char| !matches!(c, '-' | '.' | '~' | '=' | '<' | '>' | '|'))
-                            .unwrap_or(after_label.len());
+                        let arrow_end = deployment_arrow_end(after_label)?;
                         if arrow_end >= 2 {
                             let arrow = &after_label[..arrow_end];
+                            let shaft = deployment_arrow_shaft(arrow);
                             // A valid arrow must have a shaft character.
                             // Pure `<<` is a stereotype opener, not an arrow.
-                            if arrow.chars().any(|c| matches!(c, '-' | '.' | '~' | '=')) {
+                            if shaft.chars().any(|c| matches!(c, '-' | '.' | '~' | '=')) {
                                 // keyword "label" ARROW target — use keyword as FROM.
                                 let after_arrow = after_label[arrow_end..].trim_start();
                                 let (raw_to, after_to) = parse_endpoint(after_arrow)?;
@@ -248,11 +364,12 @@ fn try_parse_connection(
                                     label,
                                     tail_label: Some(tail_label),
                                     head_label: None,
-                                    arrow_at_start: arrow.starts_with('<'),
-                                    arrow_at_end: arrow.ends_with('>'),
-                                    direction: deployment_link_direction(arrow),
-                                    style: deployment_link_style(arrow),
-                                    length: deployment_link_length(arrow),
+                                    arrow_at_start: shaft.starts_with('<'),
+                                    arrow_at_end: shaft.ends_with('>'),
+                                    direction: deployment_link_direction(&shaft),
+                                    style: deployment_link_style(&shaft),
+                                    hidden: deployment_arrow_has_style(arrow, "hidden"),
+                                    length: deployment_link_length(&shaft),
                                 });
                             }
                         }
@@ -277,47 +394,16 @@ fn try_parse_connection(
     // Parse arrow: one or more shaft/decor characters, optionally with
     // an embedded direction keyword `-down-`, `-up-`, `-left-`, `-right-`
     // (PlantUML uses these to hint layout direction).
-    let arrow_end = {
-        let bytes = after_from.as_bytes();
-        let mut i = 0;
-        while i < bytes.len() {
-            let c = bytes[i] as char;
-            if matches!(c, '-' | '.' | '~' | '=' | '<' | '>' | '|') {
-                i += 1;
-            } else if matches!(c, 'd' | 'u' | 'l' | 'r')
-                && i > 0
-                && matches!(bytes[i - 1] as char, '-' | '.' | '~' | '=')
-            {
-                // Look for `down`, `up`, `left`, `right` followed by another
-                // shaft character.
-                let rest = &after_from[i..];
-                let kw_len = ["down", "up", "left", "right"]
-                    .iter()
-                    .find(|kw| rest.starts_with(*kw))
-                    .map(|kw| kw.len())
-                    .unwrap_or(0);
-                if kw_len > 0
-                    && i + kw_len < bytes.len()
-                    && matches!(bytes[i + kw_len] as char, '-' | '.' | '~' | '=')
-                {
-                    i += kw_len;
-                } else {
-                    break;
-                }
-            } else {
-                break;
-            }
-        }
-        i
-    };
+    let arrow_end = deployment_arrow_end(after_from)?;
     if arrow_end < 2 {
         // Need at least 2 arrow characters (e.g., `--`, `->`, `..`).
         return None;
     }
     let arrow = &after_from[..arrow_end];
+    let shaft = deployment_arrow_shaft(arrow);
     // Must contain at least one shaft character.
     // Pure `<<...>>` is a stereotype, not an arrow.
-    if !arrow.chars().any(|c| matches!(c, '-' | '.' | '~' | '=')) {
+    if !shaft.chars().any(|c| matches!(c, '-' | '.' | '~' | '=')) {
         return None;
     }
     let after_arrow = after_from[arrow_end..].trim_start();
@@ -353,11 +439,12 @@ fn try_parse_connection(
         label,
         tail_label,
         head_label,
-        arrow_at_start: arrow.starts_with('<'),
-        arrow_at_end: arrow.ends_with('>'),
-        direction: deployment_link_direction(arrow),
-        style: deployment_link_style(arrow),
-        length: deployment_link_length(arrow),
+        arrow_at_start: shaft.starts_with('<'),
+        arrow_at_end: shaft.ends_with('>'),
+        direction: deployment_link_direction(&shaft),
+        style: deployment_link_style(&shaft),
+        hidden: deployment_arrow_has_style(arrow, "hidden"),
+        length: deployment_link_length(&shaft),
     })
 }
 
@@ -736,6 +823,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     arrow_at_end,
                     direction,
                     style,
+                    hidden,
                     length,
                 } = parsed;
                 let from = resolve_connection_endpoint(&raw_from);
@@ -768,6 +856,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     arrow_at_end,
                     direction,
                     style,
+                    hidden,
                     length,
                     source_line: current_line,
                 });
@@ -865,6 +954,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 arrow_at_end,
                 direction,
                 style,
+                hidden,
                 length,
             } = parsed;
             let from = resolve_connection_endpoint(&raw_from);
@@ -902,6 +992,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 arrow_at_end,
                 direction,
                 style,
+                hidden,
                 length,
                 source_line: current_line,
             });
@@ -1095,6 +1186,48 @@ mod tests {
             ends,
             vec![(false, false), (false, true), (true, false), (true, true)]
         );
+    }
+
+    #[test]
+    fn hidden_link_is_retained_as_a_paint_hidden_source_order_event() {
+        let d = parse(
+            "note \"Visible plus hidden\" as HiddenControlMemo\n\
+             node VisiblePeer\n\
+             node HiddenPeer\n\
+             HiddenControlMemo --> VisiblePeer\n\
+             HiddenControlMemo -[hidden]- HiddenPeer\n\
+             artifact AfterHidden",
+        );
+
+        assert_eq!(d.connections.len(), 2);
+        assert!(!d.connections[0].hidden);
+        assert!(d.connections[1].hidden);
+        assert_eq!(d.connections[1].from, "HiddenControlMemo");
+        assert_eq!(d.connections[1].to, "HiddenPeer");
+        assert_eq!(d.connections[1].source_line, 5);
+        assert_eq!(d.connections[1].length, 2);
+        assert_eq!(d.nodes.last().unwrap().id, "AfterHidden");
+    }
+
+    #[test]
+    fn link_style_slots_follow_command_link_element_grammar() {
+        let d = parse(
+            "node A\n\
+             node B\n\
+             A -[hidden,dashed;#red,bold]down[#blue]-> B",
+        );
+        assert_eq!(d.connections.len(), 1);
+        assert!(d.connections[0].hidden);
+        assert_eq!(
+            d.connections[0].direction,
+            Some(DeploymentLinkDirection::Down)
+        );
+
+        let unknown = parse("node A\nnode B\nA -[invented]- B");
+        assert!(unknown.connections.is_empty());
+
+        let second_slot_multiple = parse("node A\nnode B\nA -down[hidden;bold]-> B");
+        assert!(second_slot_multiple.connections.is_empty());
     }
 
     #[test]
