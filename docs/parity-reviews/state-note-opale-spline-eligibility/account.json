@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "state-note-opale-spline-eligibility",
   "created": "2026-07-31",
-  "status": "planned",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "29532452",
   "java_locations": [
@@ -91,6 +91,25 @@
     "Renderer tests, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt.",
     "An independent checker records a verdict and held-out Java/Rust evidence at the exact implementation revision."
   ],
+  "experimental_result": {
+    "implementation_revision": "this implementation commit",
+    "result": "Route-derived Opale eligibility and standalone dashed-link painting make state_notes_count_3, state_notes_count_4, state_notes_count_5, and edge_state_with_notes structurally equivalent.",
+    "headline_effect": "No-oracle product parity increases from 11153/11251 to 11157/11251: state 888/901 to 891/901 and edge-cases 750/777 to 751/777.",
+    "fresh_evidence": [
+      "renamed_attached_notes_keep_multiline_side_and_changed_count exercises renamed anchors, multiline text, both sides, and a repeated anchor",
+      "state_note_opale_uses_solved_cubic_count_and_strict_style rejects multi-cubic, strict-UML, and missing-route eligibility while accepting a one-cubic route"
+    ],
+    "verification": [
+      "cargo test -p rustuml-render --lib: 798 passed",
+      "cargo clippy -p rustuml-render --lib -- -D warnings: passed",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release: passed and ratchet updated",
+      "diff_one --no-oracle state_notes_count_3.puml: structurally equivalent",
+      "diff_one --no-oracle state_notes_count_4.puml: structurally equivalent",
+      "diff_one --no-oracle state_notes_count_5.puml: structurally equivalent",
+      "four frozen mechanical harness guards: passed"
+    ],
+    "independent_review": "Pending at the implementation revision; checker capacity was unavailable before this commit."
+  },
   "forbidden_approaches": [
     "note-count or sibling-position ladders",
     "fixture-name, state-name, or note-text conditions",

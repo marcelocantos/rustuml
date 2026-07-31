@@ -882,7 +882,6 @@ struct AttachedNoteSpec {
     link_id: String,
     anchor: String,
     right: bool,
-    opale: bool,
     width: f64,
     height: f64,
 }
@@ -892,6 +891,7 @@ struct AttachedNotePosition {
     note_index: usize,
     id: String,
     entity_id: String,
+    link_id: String,
     anchor: String,
     right: bool,
     opale: bool,
@@ -958,21 +958,6 @@ fn attached_note_specs(
                 _ => return None,
             };
             let ids = allocated_ids.note_ids[note_index].as_ref()?;
-            let matching_anchor = |candidate: &StateNote| match &candidate.kind {
-                StateNoteKind::RightOf(candidate) | StateNoteKind::LeftOf(candidate) => {
-                    candidate == anchor
-                }
-                _ => false,
-            };
-            let repeated_anchor = diagram
-                .notes
-                .iter()
-                .filter(|note| matching_anchor(note))
-                .count()
-                > 1;
-            let first_for_anchor = diagram.notes[..note_index]
-                .iter()
-                .all(|note| !matching_anchor(note));
             let (width, height) = attached_note_size(&note.text);
             Some(AttachedNoteSpec {
                 note_index,
@@ -981,10 +966,6 @@ fn attached_note_specs(
                 link_id: ids.link_id.clone(),
                 anchor: anchor.to_string(),
                 right,
-                // Java `GraphvizImageBuilder.isOpalisable/onlyOneLink`
-                // leaves the first entity image normal when an anchor has
-                // repeated note attachments; later siblings receive Opale.
-                opale: !repeated_anchor || !first_for_anchor,
                 width,
                 height,
             })
@@ -1547,6 +1528,103 @@ fn emit_attached_svek_note(
         text_y += crate::plantuml_metrics::text_height(LINK_FONT_SIZE);
     }
     svg.push_str("</g>");
+}
+
+fn attached_state_note_edge<'a>(
+    note: &AttachedNoteSpec,
+    edge_paths: &'a [EdgePath],
+) -> Option<&'a EdgePath> {
+    let (from, to) = if note.right {
+        (note.anchor.as_str(), note.id.as_str())
+    } else {
+        (note.id.as_str(), note.anchor.as_str())
+    };
+    edge_paths
+        .iter()
+        .find(|edge| edge.from == from && edge.to == to)
+}
+
+fn state_note_is_opale(edge: Option<&EdgePath>, strict_uml: bool) -> bool {
+    // Java: `svek/SvekEdge.java` (`solve`, `isOpalisable`) revokes the
+    // preliminary GraphvizImageBuilder decision when DotPath has >1 cubic.
+    !strict_uml && edge.is_some_and(|edge| !edge.points.is_empty() && edge.bezier_count <= 1)
+}
+
+fn emit_attached_state_note_links(
+    svg: &mut String,
+    diagram: &StateDiagram,
+    specs: &[AttachedNoteSpec],
+    positions: &[AttachedNotePosition],
+    edge_paths: &[EdgePath],
+    graph_origin: (f64, f64),
+    entity_id: impl Fn(&str) -> String,
+) {
+    for (spec, position) in specs.iter().zip(positions) {
+        if position.opale {
+            continue;
+        }
+        let Some(edge) = attached_state_note_edge(spec, edge_paths) else {
+            continue;
+        };
+        if edge.points.is_empty() {
+            continue;
+        }
+        let note = &diagram.notes[position.note_index];
+        let (from_name, to_name, entity_1, entity_2) = if position.right {
+            (
+                position.anchor.as_str(),
+                position.id.as_str(),
+                entity_id(&position.anchor),
+                position.entity_id.clone(),
+            )
+        } else {
+            (
+                position.id.as_str(),
+                position.anchor.as_str(),
+                position.entity_id.clone(),
+                entity_id(&position.anchor),
+            )
+        };
+        write!(svg, "<!--link {from_name} to {to_name}-->").unwrap();
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="association" data-source-line="{}" id="{}">"#,
+            note.source_line, position.link_id,
+        )
+        .unwrap();
+
+        let points = edge
+            .points
+            .iter()
+            .map(|(x, y)| {
+                (
+                    quantize_svek_coord(*x) + graph_origin.0,
+                    quantize_svek_coord(*y) + graph_origin.1,
+                )
+            })
+            .collect::<Vec<_>>();
+        let mut path = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
+        let mut index = 1;
+        while index + 2 < points.len() {
+            write!(
+                path,
+                " C{},{} {},{} {},{}",
+                fmt_f(points[index].0),
+                fmt_f(points[index].1),
+                fmt_f(points[index + 1].0),
+                fmt_f(points[index + 1].1),
+                fmt_f(points[index + 2].0),
+                fmt_f(points[index + 2].1),
+            )
+            .unwrap();
+            index += 3;
+        }
+        write!(
+            svg,
+            r#"<path d="{path}" fill="none" id="{from_name}-{to_name}" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+        )
+        .unwrap();
+    }
 }
 
 fn emit_plain_note_body(
@@ -6863,6 +6941,10 @@ pub fn render_with_oracle(
     };
     let (mut positions, mut total_width, mut total_height, title_body_width, title_body_height) =
         position_data;
+    let strict_uml = diagram.meta.skinparams.iter().any(|skinparam| {
+        skinparam.key.eq_ignore_ascii_case("style")
+            && skinparam.value.trim().eq_ignore_ascii_case("strictuml")
+    });
     let mut attached_note_positions = if use_sugiyama {
         let layout_positions = layout_positions.unwrap();
         attached_notes
@@ -6873,9 +6955,13 @@ pub fn render_with_oracle(
                     note_index: note.note_index,
                     id: note.id.clone(),
                     entity_id: note.entity_id.clone(),
+                    link_id: note.link_id.clone(),
                     anchor: note.anchor.clone(),
                     right: note.right,
-                    opale: note.opale,
+                    opale: state_note_is_opale(
+                        attached_state_note_edge(note, edge_paths),
+                        strict_uml,
+                    ),
                     x: quantize_svek_coord(position.x) + graph_body_x,
                     y: quantize_svek_coord(position.y) + graph_body_y,
                     width: note.width,
@@ -8435,6 +8521,16 @@ pub fn render_with_oracle(
 
             svg.push_str("</g>");
         }
+
+        emit_attached_state_note_links(
+            &mut svg,
+            diagram,
+            &attached_notes,
+            &attached_note_positions,
+            edge_paths,
+            (graph_body_x, graph_body_y),
+            |id| ent_id_of(id).to_string(),
+        );
     }
 
     svg.push_str("</g></svg>");
@@ -11904,13 +12000,6 @@ CobaltDecision --> [*]
                 },
             ]
         );
-        assert_eq!(
-            attached_note_specs(state_diagram, &allocated)
-                .iter()
-                .map(|note| note.opale)
-                .collect::<Vec<_>>(),
-            [false, true, true]
-        );
         let svg = crate::render_svg(&diagram);
 
         for (name, source_line, entity_id) in [
@@ -11930,6 +12019,45 @@ CobaltDecision --> [*]
         ] {
             assert!(svg.contains(text), "{text} missing from {svg}");
         }
+    }
+
+    #[test]
+    fn state_note_opale_uses_solved_cubic_count_and_strict_style() {
+        let edge = |bezier_count, points| EdgePath {
+            edge_index: 71,
+            from: "RenamedAnchor".to_string(),
+            to: "GMN29".to_string(),
+            points,
+            bezier_count,
+            has_start_arrow: false,
+            start_point: None,
+            has_end_arrow: false,
+            end_point: None,
+            label: None,
+            tail_label: None,
+            head_label: None,
+        };
+        let one_cubic = edge(
+            1,
+            vec![(5.0, 7.0), (11.0, 13.0), (17.0, 19.0), (23.0, 29.0)],
+        );
+        let two_cubics = edge(
+            2,
+            vec![
+                (5.0, 7.0),
+                (11.0, 13.0),
+                (17.0, 19.0),
+                (23.0, 29.0),
+                (31.0, 37.0),
+                (41.0, 43.0),
+                (47.0, 53.0),
+            ],
+        );
+
+        assert!(state_note_is_opale(Some(&one_cubic), false));
+        assert!(!state_note_is_opale(Some(&two_cubics), false));
+        assert!(!state_note_is_opale(Some(&one_cubic), true));
+        assert!(!state_note_is_opale(None, false));
     }
 
     #[test]
