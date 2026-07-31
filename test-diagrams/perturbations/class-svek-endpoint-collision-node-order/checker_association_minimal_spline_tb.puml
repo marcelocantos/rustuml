@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+hide empty members
+
+class NorthBank83901
+class SouthBank83903
+class CrossingLog83905
+(NorthBank83901, SouthBank83903) .. CrossingLog83905
+class LateSurvey83911
+
+NorthBank83901 "bank tail 83913" -- "survey head 83917" LateSurvey83911
+@enduml

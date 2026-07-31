@@ -1,0 +1,20 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+hide empty members
+
+package Forge84101 {
+  class DirectHammer84103
+  class DirectTongs84117
+  package InnerVault84107 {
+    class NestedAlloy84111
+    class NestedMold84113
+  }
+}
+class RootInspector84119
+
+NestedAlloy84111 "paired tail 84123" -- "paired head 84129" RootInspector84119
+DirectHammer84103 -- DirectTongs84117
+NestedMold84113 -- NestedAlloy84111
+RootInspector84119 -- Forge84101
+@enduml

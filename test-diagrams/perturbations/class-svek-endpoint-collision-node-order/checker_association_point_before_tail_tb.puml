@@ -1,0 +1,17 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+hide empty members
+
+class RailNorth83501
+class RailSouth83503
+class JunctionRecord83505
+RailNorth83501 -- RailSouth83503
+(RailNorth83501, RailSouth83503) .. JunctionRecord83505
+class LateScanner83511
+class LateArchive83513
+
+RailNorth83501 "north multiplicity 83517" -- "scanner multiplicity 83519" LateScanner83511 : inspection route
+LateArchive83513 -- JunctionRecord83505
+LateScanner83511 -- LateArchive83513
+@enduml

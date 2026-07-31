@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+hide empty members
+
+class OutsideMeter83201
+package Workshop83203 {
+  class DirectAnvil83219
+  package DeepShelf83207 {
+    class DeepGauge83211
+    class DeepSpindle83213
+  }
+  class DirectBellows83217
+}
+
+Workshop83203 -- OutsideMeter83201 : enclosure signal
+OutsideMeter83201 "reversed tail 83223" -- "reversed head 83229" DeepGauge83211 : return channel
+DirectBellows83217 o-- DirectAnvil83219
+DeepGauge83211 --|> DeepSpindle83213
+@enduml

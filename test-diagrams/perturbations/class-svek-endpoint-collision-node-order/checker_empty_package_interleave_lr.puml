@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+hide empty members
+
+package Depot83401 {
+  class DirectCrane83403
+  package EmptyLocker83405 {
+  }
+  package FilledLocker83407 {
+    class NestedCrate83411
+    class NestedSeal83413
+  }
+  class DirectForklift83417
+}
+class RootDispatch83419
+
+RootDispatch83419 "dispatch tail 83423" -- "crate head 83429" NestedCrate83411 : manifest
+RootDispatch83419 -- Depot83401
+DirectCrane83403 -- DirectForklift83417
+NestedCrate83411 -- NestedSeal83413
+@enduml
