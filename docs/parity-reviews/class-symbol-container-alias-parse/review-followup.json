@@ -18,6 +18,8 @@
   },
   "revisions": {
     "rust_revision_checked": "1c80b8b0e691700fe5fcaac9ae0fa5f7b9ccefd9",
+    "account_commit": "f75977eaf589e7bd40f5308070f0638a1811590b",
+    "implementation_commit": "1c80b8b0e691700fe5fcaac9ae0fa5f7b9ccefd9",
     "rust_tree_checked": "7b6b6280e358542273a21bd16d092c326cdc464e",
     "checker_worktree": "/tmp/rustuml-review-alias-1c80",
     "checker_worktree_ref": "detached HEAD",
