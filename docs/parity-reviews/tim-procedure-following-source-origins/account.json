@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-procedure-following-source-origins",
+  "status": "accounted_implementation_pending",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/tim/TFunctionImpl.java",
+      "symbols": [
+        "TFunctionImpl#addBody",
+        "TFunctionImpl#executeProcedureInternal"
+      ],
+      "lines": "125-141",
+      "role": "Stores procedure bodies as their original StringLocated values and executes that same located body through TContext."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/tim/TContext.java",
+      "symbols": [
+        "TContext#executeLines",
+        "TContext#addPlain",
+        "TContext#addToResultList"
+      ],
+      "lines": "344-359, 456-472",
+      "role": "Appends generated procedure lines with body locations while later top-level iterator lines retain their own independent StringLocated locations."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/preprocess/mod.rs",
+      "symbols": [
+        "PreprocessContext#try_function_call",
+        "PreprocessContext#push_content_line"
+      ],
+      "lines": "752-769, 1526-1593",
+      "role": "Preserves explicit definition-line markers on generated procedure output, but only pads after a top-level procedure call. Once expanded output is already longer than the raw source position, later unmarked lines inherit flattened vector indices instead of their original locations."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/preprocessing/preproc_complex_crud_generator.puml",
+    "test-diagrams/golden/preprocessing/preproc_complex_crud_generator.svg"
+  ],
+  "claimed_invariant": "TIM output carries per-line source ownership independent of flattened output position. Procedure-emitted plain lines retain their definition-body locations; every later ordinary top-level line retains its original diagram location regardless of how many lines prior procedure calls emitted.",
+  "causal_divergence": "The CRUD generator expands three nine-line procedure bodies. Rust correctly marks the generated class and repository content with procedure-body locations, but try_function_call only pads until output.len reaches the caller line and does not enable explicit origins for later source lines. Since expanded output already exceeds the raw position, padding is a no-op and the two final links are parsed at flattened positions 57 and 58. Java's top-level StringLocated objects remain lines 27 and 28 after removing @startuml, which the golden SVG reports. Geometry, entities, UIDs, link endpoints, paint, and labels already agree.",
+  "planned_model_change": "After a top-level procedure expansion that emits body lines, enable the existing explicit source-marker mode for all subsequent user content, just as multiline definelong, foreach, while, and include expansion already do. Keep procedure body markers unchanged. Add fresh tests with renamed entities covering zero, one, and repeated calls; calls that emit more and fewer lines than their source footprint; blank/comment lines after calls; and a later ordinary relationship whose source origin must remain stable.",
+  "perturbation_axes": [
+    "single versus repeated procedure calls",
+    "short versus long emitted procedure bodies",
+    "ordinary content immediately after a call versus after blanks and comments",
+    "renamed entities and changed call order",
+    "procedure body origins versus following caller-file origins"
+  ],
+  "scope_boundary": "This mechanism owns source-origin metadata after top-level procedure expansion. It does not change TIM text expansion, procedure body attribution, parser semantics, UIDs, layout, geometry, paint, comparator behavior, golden data, or fixture eligibility.",
+  "acceptance": [
+    "preproc_complex_crud_generator reports link source lines 27 and 28 and becomes structurally equivalent through render_svg without oracle input.",
+    "Fresh tests prove stable following-line origins across renamed single and repeated procedure expansions with different body lengths.",
+    "Procedure-emitted entities continue to use their definition-body source locations.",
+    "Existing include, loop, definelong, procedure, parser, and renderer source-origin tests remain green.",
+    "The parser and renderer suites, clippy, full no-oracle ratchet, and frozen mechanical guards pass without family regressions.",
+    "An independent checker records a verdict at the exact implementation revision and preserves Java-generated held-outs when the Java oracle is available."
+  ],
+  "forbidden_approaches": [
+    "matching CRUD labels, procedure names, call counts, expected source-line values, or fixture paths",
+    "subtracting emitted-line counts inside class rendering",
+    "rewriting SVG data-source-line or codeLine attributes after rendering",
+    "changing procedure body locations to caller locations",
+    "comparator, eligibility, park-list, or golden changes"
+  ],
+  "experimental_result": {
+    "account_revision": "pending account commit",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "pending",
+    "model_evidence": "The strict diff is confined to the final two links' data-source-line/codeLine values (expected 27/28, actual 57/58) plus tolerated subpixel path coordinates; all graph identity, paint, and topology already agree.",
+    "commands": [
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/preprocessing/preproc_complex_crud_generator.puml"
+    ],
+    "review_status": "Account recorded before implementation. Independent checker capacity is currently unavailable; this record does not self-attest acceptance."
+  }
+}
