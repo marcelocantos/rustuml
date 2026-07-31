@@ -554,7 +554,12 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                 // `CommandFactoryNoteOnEntity.executeInternal` obtains a
                 // generated GMN name, creates the note leaf, then creates its
                 // hidden Link. Each operation consumes one global UID.
-                let qualified_name = format!("GMN{next_uid}");
+                let local_name = format!("GMN{next_uid}");
+                let qualified_name = diagram.notes[index]
+                    .owner
+                    .as_deref()
+                    .map(|owner| format!("{owner}.{local_name}"))
+                    .unwrap_or(local_name);
                 next_uid += 1;
                 let entity_id = format!("ent{next_uid:04}");
                 next_uid += 1;
@@ -8892,6 +8897,39 @@ mod tests {
             !svg.contains("<polygon "),
             "the hidden note link should be embedded in the Opale outline: {svg}"
         );
+    }
+
+    #[test]
+    fn attached_note_generated_name_uses_its_declaration_context() {
+        let input = "@startuml\n\
+                     package OuterScope {\n\
+                       package InnerScope {\n\
+                         component Worker\n\
+                         note right of Worker : nested payload\n\
+                       }\n\
+                     }\n\
+                     component RootWorker\n\
+                     note right of RootWorker : root payload\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(diagram) = diagram else {
+            panic!("expected component diagram");
+        };
+        let uids = super::build_no_oracle_uid_model(&diagram);
+
+        assert!(
+            uids.note_ids[&0]
+                .qualified_name
+                .starts_with("OuterScope.InnerScope.GMN"),
+            "{}",
+            uids.note_ids[&0].qualified_name
+        );
+        assert!(
+            uids.note_ids[&1].qualified_name.starts_with("GMN"),
+            "{}",
+            uids.note_ids[&1].qualified_name
+        );
+        assert!(!uids.note_ids[&1].qualified_name.contains('.'));
     }
 
     #[test]
