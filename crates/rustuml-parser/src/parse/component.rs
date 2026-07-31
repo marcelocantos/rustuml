@@ -39,13 +39,15 @@ static RE_DESCRIPTION_BRACKET_DECL: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label].
-// FROM and TO can be [bracket], "quoted label", or \w+ identifiers.
+// FROM and TO can be [bracket], "quoted label", or the same bare code token
+// used by CommandFactoryNote.
 // Group map: 1=from-bracket 2=from-quoted 3=from-word 4=from-mult
 // 5=arrow 6=to-mult 7=to-bracket 8=to-quoted 9=to-word 10=label.
 static RE_DESCRIPTION_CONN: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r#"^(?:\[([^\]]+)\]|"([^"]+)"|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|"([^"]+)"|(\w+))(?:\s*:\s*(.+))?$"#,
-    )
+    Regex::new(&format!(
+        r#"^(?:\[([^\]]+)\]|"([^"]+)"|({code}))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|"([^"]+)"|({code}))(?:\s*:\s*(.+))?$"#,
+        code = super::NAMED_NOTE_CODE_PATTERN,
+    ))
     .unwrap()
 });
 
@@ -1849,6 +1851,44 @@ mod tests {
 
         let invalid = parse("note \"payload\" as ValidPrefix-invalid");
         assert!(invalid.notes.is_empty());
+    }
+
+    #[test]
+    fn command_links_reuse_the_complete_named_note_code_token() {
+        let d = parse(
+            "node OuterScope {\n\
+               note \"inline payload\" as Ledger.C464\n\
+               note as Métrique.Δelta_7\n\
+                 multiline payload\n\
+               endnote\n\
+               [Anchor] as Anchor\n\
+               Ledger.C464 -right-> Anchor\n\
+               Anchor <-left- Métrique.Δelta_7\n\
+             }\n\
+             Undeclared.api ..> Anchor",
+        );
+
+        assert_eq!(d.connections.len(), 3);
+        assert_eq!(
+            (d.connections[0].from.as_str(), d.connections[0].to.as_str()),
+            ("Ledger.C464", "Anchor")
+        );
+        assert_eq!(
+            (d.connections[1].from.as_str(), d.connections[1].to.as_str()),
+            ("Anchor", "Métrique.Δelta_7")
+        );
+        assert_eq!(d.connections[2].from, "Undeclared.api");
+        assert!(d.interfaces.iter().any(|item| item.id == "Undeclared.api"));
+        assert!(
+            !d.components
+                .iter()
+                .any(|item| item.id == "Ledger.C464" || item.id == "Métrique.Δelta_7")
+        );
+        assert!(
+            !d.interfaces
+                .iter()
+                .any(|item| item.id == "Ledger.C464" || item.id == "Métrique.Δelta_7")
+        );
     }
 
     #[test]
