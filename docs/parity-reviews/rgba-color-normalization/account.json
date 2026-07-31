@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "rgba-color-normalization",
-  "status": "investigating",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     {
@@ -97,5 +97,26 @@
     "rewriting rendered SVG after shape emission",
     "treating eight digits as AARRGGBB",
     "comparator, eligibility, park-list, or golden changes"
-  ]
+  ],
+  "experimental_result": {
+    "account_revision": "d2d0a57c",
+    "implementation_revision": "pending implementation commit",
+    "accepted_result": "edge_color_hex_with_alpha becomes structurally equivalent through render_svg without oracle input. The frozen shipped-path census rises from 11,164/11,251 to 11,165/11,251, with edge-cases moving from 753/777 to 754/777 and every other family unchanged.",
+    "model_evidence": "The shared resolver now implements HColorSet's one-, three-, six-, and eight-digit arities and XColor.toSvg's RRGGBBAA serialization. A direct fresh matrix covers alpha 00, 01, 7F, FE, and FF with mixed casing and unrelated RGB bytes. A renamed three-class chain confirms zero, partial, and opaque alpha all flow through ordinary entity paint independently of fixture labels and topology.",
+    "commands": [
+      "cargo test -p rustuml-render --lib rgba_entity_colors",
+      "cargo test -p rustuml-render --lib simple_hex_colors_follow_hcolor_set_arities_and_rrggbbaa_order",
+      "cargo build -p rustuml-oracle --example diff_one",
+      "target/debug/examples/diff_one --no-oracle test-diagrams/golden/edge-cases/edge_color_hex_with_alpha.puml",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-render --all-targets -- -D warnings",
+      "HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ],
+    "review_status": "Implemented and locally verified; independent adversarial review and Java-generated held-outs remain pending because checker capacity and the local Java runtime are unavailable. This record does not self-attest acceptance."
+  }
 }

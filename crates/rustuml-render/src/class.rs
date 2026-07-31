@@ -20353,6 +20353,41 @@ mod tests {
     }
 
     #[test]
+    fn rgba_entity_colors_follow_rrggbbaa_alpha_serialization_for_renamed_topologies() {
+        let input = "@startuml\n\
+            class FreshTransparent #1A2B3C00\n\
+            class FreshPartial #4D5E6F7f\n\
+            class FreshOpaque #708192ff\n\
+            FreshTransparent --> FreshPartial\n\
+            FreshPartial --> FreshOpaque\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        fn class_rect<'a>(svg: &'a str, name: &str) -> &'a str {
+            svg.split_once(&format!("<!--class {name}-->"))
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0
+        }
+
+        assert!(
+            class_rect(&svg, "FreshTransparent").contains(r#"fill="none""#),
+            "{svg}"
+        );
+        assert!(
+            class_rect(&svg, "FreshPartial").contains(r##"fill="#4D5E6F7F""##),
+            "{svg}"
+        );
+        assert!(
+            class_rect(&svg, "FreshOpaque").contains(r##"fill="#708192""##),
+            "{svg}"
+        );
+    }
+
+    #[test]
     fn legacy_double_hash_border_keeps_a_separate_background_channel() {
         let input = "@startuml\nclass FreshLedger719 #azure ##[dashed]12ABEF {\n  +entry: String\n}\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();

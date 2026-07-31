@@ -27,19 +27,8 @@ use crate::text_render::{self, TextBase};
 /// Resolve a PlantUML color string (e.g., "#blue", "#FF0000") to a CSS hex color.
 pub(crate) fn resolve_color(color: &str) -> String {
     let name = color.strip_prefix('#').unwrap_or(color);
-    // If it's already a hex color (starts with digit or uppercase hex)
-    if name.len() == 6 && name.chars().all(|c| c.is_ascii_hexdigit()) {
-        return format!("#{}", name.to_uppercase());
-    }
-    // 3-digit hex shorthand (#RGB → #RRGGBB), per PlantUML's HtmlColor parsing.
-    if name.len() == 3 && name.chars().all(|c| c.is_ascii_hexdigit()) {
-        let mut out = String::with_capacity(7);
-        out.push('#');
-        for c in name.to_uppercase().chars() {
-            out.push(c);
-            out.push(c);
-        }
-        return out;
+    if let Some(hex) = normalize_simple_hex_color(name) {
+        return hex;
     }
     // Full CSS named colors (case-insensitive).
     match name.to_lowercase().as_str() {
@@ -193,6 +182,43 @@ pub(crate) fn resolve_color(color: &str) -> String {
                 "#FFFFFF".to_string()
             }
         }
+    }
+}
+
+fn normalize_simple_hex_color(value: &str) -> Option<String> {
+    if !value.chars().all(|character| character.is_ascii_hexdigit()) {
+        return None;
+    }
+    let upper = value.to_ascii_uppercase();
+    match upper.len() {
+        // Java provenance: `HColorSet#parseSimpleColor` expands one hex nibble
+        // to the same two-digit channel in red, green, and blue.
+        1 => {
+            let channel = upper.repeat(2);
+            Some(format!("#{channel}{channel}{channel}"))
+        }
+        3 => {
+            let mut output = String::with_capacity(7);
+            output.push('#');
+            for character in upper.chars() {
+                output.push(character);
+                output.push(character);
+            }
+            Some(output)
+        }
+        6 => Some(format!("#{upper}")),
+        8 => {
+            // Java provenance: `HColorSet#parseSimpleColor` reads RRGGBBAA;
+            // `XColor#toSvg` drops opaque alpha and `SvgGraphics#fixColor`
+            // maps zero alpha to SVG paint `none`.
+            let alpha = &upper[6..8];
+            match alpha {
+                "00" => Some("none".to_string()),
+                "FF" => Some(format!("#{}", &upper[..6])),
+                _ => Some(format!("#{upper}")),
+            }
+        }
+        _ => None,
     }
 }
 
@@ -13287,6 +13313,18 @@ mod tests {
     fn legacy_plantuml_palette_preserves_non_css_values() {
         assert_eq!(resolve_color("MediumPurple"), "#9370D8");
         assert_eq!(resolve_color("PaleVioletRed"), "#D87093");
+    }
+
+    #[test]
+    fn simple_hex_colors_follow_hcolor_set_arities_and_rrggbbaa_order() {
+        assert_eq!(resolve_color("#a"), "#AAAAAA");
+        assert_eq!(resolve_color("#1bC"), "#11BBCC");
+        assert_eq!(resolve_color("#1a2B3c"), "#1A2B3C");
+        assert_eq!(resolve_color("#10203000"), "none");
+        assert_eq!(resolve_color("#40506001"), "#40506001");
+        assert_eq!(resolve_color("#7080907f"), "#7080907F");
+        assert_eq!(resolve_color("#A0B0C0FE"), "#A0B0C0FE");
+        assert_eq!(resolve_color("#D0E0F0ff"), "#D0E0F0");
     }
 
     fn simple_diagram() -> SequenceDiagram {
