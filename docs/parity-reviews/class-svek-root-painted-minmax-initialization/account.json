@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-root-painted-minmax-initialization",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "311cceed1274adca6d02ca1d262d82b7ef6c0a89",
+  "triggering_review": "docs/parity-reviews/class-svek-center-label-horizontal-painted-frontier/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["calculateDimension"],
+      "lines": "125-135",
+      "role": "Calls TextBlockUtils.getMinMax(this, stringBounder, false) and translates the complete painted graph by 6 minus its actual minimum."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": ["create", "LimitFinder"],
+      "lines": "87-99",
+      "role": "Constructs MinMaxMutable.getEmpty(initToZero); the false argument leaves both axes empty rather than inserting the origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/geom/MinMaxMutable.java",
+      "symbols": ["getEmpty"],
+      "lines": "60-75",
+      "role": "Makes the difference between an empty painted frontier and a zero-seeded frontier explicit."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["svek_layout_x_bias"],
+      "lines": "14263-14418",
+      "role": "Folds all painted candidates from 0.0 whenever diagram.together is empty, causing an invisible origin to beat positive painted minima."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["svek_layout_y_bias"],
+      "lines": "14420-14526",
+      "role": "Already folds from positive infinity and returns zero only when there are no finite painted candidates, matching Java's empty-MinMax lifecycle."
+    }
+  ],
+  "claimed_invariant": "Every non-degenerate Class SVEK result normalizes from the minimum of primitives actually painted by SvekResult. LimitFinder is initialized empty on both axes. Coordinate zero has no special status: a positive painted minimum moves left/up to six, while a negative minimum moves right/down to six. Only a genuinely empty candidate set yields no translation.",
+  "causal_divergence": "Rust's horizontal helper seeds the fold with 0.0 for ordinary root diagrams. A fresh note-only graph whose leftmost visible primitive begins five pixels inside a solved xlabel therefore reports minX=0 instead of the painted minX=5, retaining unpainted space and placing the note outline at x=11 instead of Java's x=6. Clustered diagrams happened to use an infinity seed and did not expose this branch.",
+  "planned_model_change": "Fold horizontal painted candidates from positive infinity for every Class SVEK topology, mirroring svek_layout_y_bias and Java LimitFinder(false). Return zero only when no finite candidate exists. Keep the relationship-aware painted-frontier mapping and package normalization unchanged. Add model tests with all-positive, negative, and empty candidates; do not add coordinate offsets.",
+  "perturbation_axes": [
+    "positive versus negative painted minima",
+    "root classes versus nested packages",
+    "left-to-right versus top-to-bottom direction",
+    "note-only, label-only, and no-center-label graphs",
+    "ordinary roots versus together constraints",
+    "renamed labels whose widths move the painted frontier"
+  ],
+  "scope_boundary": "This mechanism owns only initialization and empty-set semantics of Class horizontal painted-MinMax normalization. It does not own note preferred dimensions, note text padding, Graphviz label placement, routes, collision order, vertical normalization, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved note-only root perturbation normalizes its painted note path to x=6 once its independent text-padding geometry is also modeled.",
+    "Synthetic tests prove positive minima are not clamped to zero and negative minima retain their translation direction.",
+    "Existing nested-package horizontal-frontier perturbations remain unchanged or improve.",
+    "Full renderer and no-oracle suites show no new failures.",
+    "A separate checker creates fresh root/together and positive/negative frontier inputs and records a verdict."
+  ],
+  "forbidden_approaches": [
+    "subtracting five pixels for root or note diagrams",
+    "keying normalization to ORTHO, note position, fixture names, labels, or topology counts",
+    "changing Graphviz coordinates or SVG strings after rendering",
+    "changing comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
