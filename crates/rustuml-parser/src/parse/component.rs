@@ -31,6 +31,10 @@ const CONTAINER_KEYWORDS: &[&str] = &[
     "collections",
 ];
 
+// Java `CommandFactoryNote.CODE` is `[%pLN_.]+`: Unicode letters and
+// numbers plus underscore and the quark namespace separator.
+const NOTE_CODE_PATTERN: &str = r"[\p{L}\p{N}_.]+";
+
 static RE_DESCRIPTION_BRACKET_DECL: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(?:\[([^\[\]]+)\](?:\s+(?i:as)\s+([\w.]+))?|([\w.]+)\s+(?i:as)\s+\[([^\[\]]+)\])\s*$",
@@ -326,10 +330,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             .unwrap()
     });
     // Floating note: `note "text" as ID` or `note : text`
-    static RE_NOTE_INLINE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
-    static RE_NOTE_MULTI: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^note(?:\s+as\s+([\w.]+))?(?:\s+#[^\s]+)?\s*$").unwrap());
+    static RE_NOTE_INLINE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(&format!(
+            r#"^note\s+"([^"]+)"\s+as\s+({NOTE_CODE_PATTERN})(?:\s|$)"#
+        ))
+        .unwrap()
+    });
+    static RE_NOTE_MULTI: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(&format!(
+            r"^note(?:\s+as\s+({NOTE_CODE_PATTERN}))?(?:\s+#[^\s]+)?\s*$"
+        ))
+        .unwrap()
+    });
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
@@ -1775,5 +1787,26 @@ mod tests {
         assert_eq!(d.notes[0].id.as_deref(), Some("OwnedLedger"));
         assert_eq!(d.notes[0].owner.as_deref(), Some("OuterShell.InnerShell"));
         assert_eq!(d.notes[0].target, None);
+    }
+
+    #[test]
+    fn named_note_commands_share_the_complete_java_code_token() {
+        let d = parse(
+            "node OuterScope {\n\
+               note \"inline payload\" as Ledger.C464 #LightBlue\n\
+               note as Métrique.Δelta_7 #MistyRose\n\
+                 multiline payload\n\
+               end note\n\
+             }",
+        );
+
+        assert_eq!(d.notes.len(), 2);
+        assert_eq!(d.notes[0].id.as_deref(), Some("Ledger.C464"));
+        assert_eq!(d.notes[1].id.as_deref(), Some("Métrique.Δelta_7"));
+        assert_eq!(d.notes[0].owner.as_deref(), Some("OuterScope"));
+        assert_eq!(d.notes[1].owner.as_deref(), Some("OuterScope"));
+
+        let invalid = parse("note \"payload\" as ValidPrefix-invalid");
+        assert!(invalid.notes.is_empty());
     }
 }
