@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package "Unicode Review Package 1011" as ReviewPackage1011 {
+  component "Alpha Ω 1013" as Alpha1013
+  component "Beta ASCII 1017" as Beta1017
+  note "inline Ω note" as InlineMemo1011 #Azure
+  note as MultiMemo1011 #Cornsilk
+    multiline memo with accents: café
+  end note
+  Alpha1013 <-left- InlineMemo1011 : alpha owns
+  MultiMemo1011 -right-> Beta1017 : beta consumes
+  InlineMemo1011 ..> MultiMemo1011 : note bridge
+}
+@enduml

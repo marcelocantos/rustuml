@@ -1,0 +1,18 @@
+source: checker_10_single_note_note_no_opale_control.puml
+java_error: False
+rust_error: False
+java_entity_count: 2
+rust_entity_count: 2
+java_link_count: 1
+rust_link_count: 1
+java_entities:
+  ent0002 line=2 qname=FirstMemo1001
+  ent0003 line=3 qname=SecondMemo1003
+rust_entities:
+  ent0002 line=4 qname=FirstMemo1001
+  ent0003 line=4 qname=SecondMemo1003
+java_links:
+  lnk4 line=4 ent0002->ent0003 type=dependency comment=link FirstMemo1001 to SecondMemo1003
+rust_links:
+  lnk4 line=4 ent0002->ent0003 type=dependency comment=link FirstMemo1001 to SecondMemo1003
+verdict: PASS

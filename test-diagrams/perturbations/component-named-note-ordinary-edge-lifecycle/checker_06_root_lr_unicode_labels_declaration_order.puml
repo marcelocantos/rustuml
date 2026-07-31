@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+component "Récepteur Unicode 961" as Receiver961
+component "ASCII Relay 963" as Relay963
+note as UnicodeMemo961 <<Résumé>> #Lavender
+  Résumé payload Ω.
+  Declared after ordinary peers.
+end note
+Relay963 --> UnicodeMemo961 : résumé label
+UnicodeMemo961 ..> Receiver961 : handoff Ω
+Relay963 --> Receiver961 : component baseline
+@enduml

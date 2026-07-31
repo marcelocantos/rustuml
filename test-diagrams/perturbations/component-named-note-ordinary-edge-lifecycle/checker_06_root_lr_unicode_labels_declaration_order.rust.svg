@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="121px" preserveAspectRatio="none" style="width:838px;height:121px;background:#FFFFFF;" version="1.1" viewBox="0 0 838 121" width="838px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Receiver961-->
+<g class="entity" data-qualified-name="Receiver961" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="198.1221" x="626.49" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="804.6121" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="802.6121" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="802.6121" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="158.1221" x="641.49" y="40.5352">Récepteur Unicode 961</text>
+</g>
+<!--entity Relay963-->
+<g class="entity" data-qualified-name="Relay963" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="146.1143" x="7" y="19"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="133.1143" y="24"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="131.1143" y="26"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="131.1143" y="30"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.1143" x="22" y="52.5352">ASCII Relay 963</text>
+</g>
+<g class="entity" data-qualified-name="UnicodeMemo961" data-source-line="5" id="ent0004">
+<path d="M295.12,66.93 L295.12,107.5511 L504.493,107.5511 L504.493,76.93 L494.493,66.93 L295.12,66.93" fill="#E6E6FA" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M494.493,66.93 L494.493,76.93 L504.493,76.93 L494.493,66.93" fill="#E6E6FA" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="118.314" x="301.12" y="84.4984">Résumé payload Ω.</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="188.373" x="301.12" y="99.8089">Declared after ordinary peers.</text>
+</g>
+<!--link Relay963 to UnicodeMemo961-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk5">
+<path d="M153.5627,52.51 C195.3227,58.42 242.5818,65.1198 288.7518,71.6498" fill="none" id="Relay963-to-UnicodeMemo961" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="294.6927,72.49,286.3415,67.2691,289.7419,71.7898,285.2212,75.1902,294.6927,72.49" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="80.8691" x="184.117" y="53.368">résumé label</text>
+</g>
+<!--link UnicodeMemo961 to Receiver961-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0002" data-link-type="dependency" data-source-line="9" id="lnk6">
+<path d="M504.5727,68.97 C543.5027,62.11 581.7036,55.3907 620.1436,48.6207" fill="none" id="UnicodeMemo961-to-Receiver961" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="626.0527,47.58,616.4953,45.2017,621.1285,48.4472,617.8829,53.0804,626.0527,47.58" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60.3345" x="535.49" y="50.2071">handoff Ω</text>
+</g>
+<!--link Relay963 to Receiver961-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="10" id="lnk7">
+<path d="M153.4827,34.37 C163.4227,33.51 173.5127,32.76 183.1127,32.24 C366.5727,22.23 412.7627,26.8 596.4927,28.24 C606.1627,28.31 610.2432,28.3426 620.3232,28.4726" fill="none" id="Relay963-to-Receiver961" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="626.3227,28.55,617.375,24.4343,621.3231,28.4855,617.2718,32.4336,626.3227,28.55" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="127.3594" x="336.3035" y="22.5168">component baseline</text>
+</g>
+</g></svg>

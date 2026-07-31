@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+note "first note only talks to a note" as FirstMemo1001 #LightYellow
+note "second note endpoint" as SecondMemo1003 #LightBlue
+FirstMemo1001 --> SecondMemo1003 : note-note single relation
+@enduml

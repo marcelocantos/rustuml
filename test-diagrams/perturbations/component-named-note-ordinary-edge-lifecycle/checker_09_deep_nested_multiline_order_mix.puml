@@ -1,0 +1,14 @@
+@startuml
+package OuterCheck991 {
+  package InnerCheck993 {
+    note as DeepMemo991 #LightSteelBlue
+      deep nested multiline note
+      declared before peers
+    end note
+    component "Late Peer 995" as LatePeer995
+    component "Early Peer 997" as EarlyPeer997
+    LatePeer995 --> DeepMemo991 : enters
+    DeepMemo991 --> EarlyPeer997 : exits
+  }
+}
+@enduml

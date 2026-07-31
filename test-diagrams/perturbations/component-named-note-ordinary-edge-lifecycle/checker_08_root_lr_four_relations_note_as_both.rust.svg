@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="164px" preserveAspectRatio="none" style="width:716px;height:164px;background:#FFFFFF;" version="1.1" viewBox="0 0 716 164" width="716px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Router981-->
+<g class="entity" data-qualified-name="Router981" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="115.8926" x="15.09" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="110.9826" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="108.9826" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="108.9826" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75.8926" x="30.09" y="40.5352">Router 981</text>
+</g>
+<!--entity Validator983-->
+<g class="entity" data-qualified-name="Validator983" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="132.0732" x="7" y="104"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="119.0732" y="109"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="117.0732" y="111"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="117.0732" y="115"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92.0732" x="22" y="137.5352">Validator 983</text>
+</g>
+<!--entity Emitter987-->
+<g class="entity" data-qualified-name="Emitter987" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.6934" x="582.94" y="47"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="682.6334" y="52"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="680.6334" y="54"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="680.6334" y="58"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.6934" x="597.94" y="80.5352">Emitter 987</text>
+</g>
+<g class="entity" data-qualified-name="HubMemo981" data-source-line="5" id="ent0005">
+<path d="M303.07,57.59 L303.07,82.9005 L430.9391,82.9005 L430.9391,67.59 L420.9391,57.59 L303.07,57.59" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M420.9391,57.59 L420.9391,67.59 L430.9391,67.59 L420.9391,57.59" fill="#98FB98" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="106.8691" x="309.07" y="75.1584">four relation hub</text>
+</g>
+<!--link HubMemo981 to Router981-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0002" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M302.7696,78.41 C263.7896,81.68 213.0296,82.73 169.0696,73.25 C151.0196,69.35 137.6615,64.3416 121.6315,56.5916" fill="none" id="HubMemo981-to-Router981" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="116.2296,53.98,122.5913,61.4986,120.7312,56.1563,126.0734,54.2962,116.2296,53.98" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72.7188" x="185.0729" y="69.8125">source-one</text>
+</g>
+<!--link Validator983 to HubMemo981-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M139.2796,124.16 C178.4796,121.28 229.1196,115.78 273.0696,105.25 C295.0396,99.98 313.3279,93.2638 331.3479,85.6938" fill="none" id="Validator983-to-HubMemo981" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="336.8796,83.37,327.0329,83.1679,332.2699,85.3065,330.1313,90.5435,336.8796,83.37" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="101.4102" x="170.5729" y="101.8125">destination-one</text>
+</g>
+<!--link HubMemo981 to Emitter987-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8">
+<path d="M431.1596,70.25 C476.7996,70.25 532.0296,70.25 576.6996,70.25" fill="none" id="HubMemo981-to-Emitter987" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="582.6996,70.25,573.6996,66.25,577.6996,70.25,573.6996,74.25,582.6996,70.25" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="90.7397" x="461.942" y="66.8125">source-dotted</text>
+</g>
+<!--reverse link Router981 to HubMemo981-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="9" id="lnk9">
+<path d="M137.222,35.9052 C177.092,39.7452 225.4696,45.02 273.0696,52.25 C282.6596,53.7 292.7596,55.44 302.6396,57.26" fill="none" id="Router981-backto-HubMemo981" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="131.2496,35.33,139.8247,40.1744,136.2266,35.8093,140.5917,32.2112,131.2496,35.33" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102.7432" x="170.0729" y="35.8412">reversed-dotted</text>
+</g>
+</g></svg>

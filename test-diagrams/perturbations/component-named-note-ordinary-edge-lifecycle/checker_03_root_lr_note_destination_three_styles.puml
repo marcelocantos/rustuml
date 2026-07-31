@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+component "Queue Producer 931" as Producer931 #AliceBlue
+component "Worker Sink 933" as Worker933
+component "Cold Store 937" as Store937
+note "destination memo with unicode body: Δ latency" as DestMemo931 #MistyRose
+Producer931 --> DestMemo931 : opens Δ-path
+Worker933 ..> DestMemo931 : dotted witness
+DestMemo931 --> Store937 : closes
+@enduml

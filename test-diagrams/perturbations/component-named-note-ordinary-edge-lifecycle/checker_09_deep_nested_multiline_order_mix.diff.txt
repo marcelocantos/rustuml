@@ -1,0 +1,22 @@
+source: checker_09_deep_nested_multiline_order_mix.puml
+java_error: False
+rust_error: False
+java_entity_count: 3
+rust_entity_count: 3
+java_link_count: 2
+rust_link_count: 2
+java_entities:
+  ent0004 line=4 qname=OuterCheck991.InnerCheck993.DeepMemo991
+  ent0005 line=7 qname=OuterCheck991.InnerCheck993.LatePeer995
+  ent0006 line=8 qname=OuterCheck991.InnerCheck993.EarlyPeer997
+rust_entities:
+  ent0005 line=7 qname=OuterCheck991.InnerCheck993.LatePeer995
+  ent0006 line=8 qname=OuterCheck991.InnerCheck993.EarlyPeer997
+  ent0004 line=4 qname=OuterCheck991.InnerCheck993.DeepMemo991
+java_links:
+  lnk7 line=9 ent0005->ent0004 type=dependency comment=link LatePeer995 to DeepMemo991
+  lnk8 line=10 ent0004->ent0006 type=dependency comment=link DeepMemo991 to EarlyPeer997
+rust_links:
+  lnk7 line=9 ent0005->ent0004 type=dependency comment=link LatePeer995 to DeepMemo991
+  lnk8 line=10 ent0004->ent0006 type=dependency comment=link DeepMemo991 to EarlyPeer997
+verdict: PASS

@@ -1,0 +1,12 @@
+@startuml
+package "Nested Note Lab 951" as NestedLab951 {
+  component "Component Peer 953" as Peer953
+  note "inline note alpha" as AlphaMemo951 #LightCyan
+  note as BetaMemo951 #LightGoldenRodYellow
+    beta multiline note
+  end note
+  AlphaMemo951 --> BetaMemo951 : note-to-note allowed
+  Peer953 --> AlphaMemo951 : component to note
+  BetaMemo951 --> Peer953 : note back to component
+}
+@enduml

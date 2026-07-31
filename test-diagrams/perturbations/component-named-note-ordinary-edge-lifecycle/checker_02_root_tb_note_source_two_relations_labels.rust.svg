@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="184px" preserveAspectRatio="none" style="width:374px;height:184px;background:#FFFFFF;" version="1.1" viewBox="0 0 374 184" width="374px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Ingress921-->
+<g class="entity" data-qualified-name="Ingress921" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="163.6074" x="7" y="123.62"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="150.6074" y="128.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="148.6074" y="130.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="148.6074" y="134.62"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123.6074" x="22" y="157.1552">Ingress Alpha 921</text>
+</g>
+<!--entity Archive923-->
+<g class="entity" data-qualified-name="Archive923" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="154.5771" x="205.52" y="123.62"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="340.0971" y="128.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="338.0971" y="130.62"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="338.0971" y="134.62"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114.5771" x="220.52" y="157.1552">Archive Beta 923</text>
+</g>
+<g class="entity" data-qualified-name="SourceMemo921" data-source-line="5" id="ent0004">
+<path d="M48.71,6 L48.71,46.6211 L322.899,46.6211 L322.899,16 L312.899,6 L48.71,6" fill="#F0FFF0" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M312.899,6 L312.899,16 L322.899,16 L312.899,6" fill="#F0FFF0" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124.96" x="54.71" y="23.5684">Root multiline note.</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="253.189" x="54.71" y="38.8789">It owns two ordinary outgoing relations.</text>
+</g>
+<!--link SourceMemo921 to Ingress921-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0002" data-link-type="dependency" data-source-line="8" id="lnk5">
+<path d="M169.79,46.8889 C152.57,67.9289 129.0402,96.6958 110.9602,118.7858" fill="none" id="SourceMemo921-to-Ingress921" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="107.16,123.4289,115.9557,118.9977,110.3269,119.5597,109.7649,113.9308,107.16,123.4289" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#006400" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="86.4741" x="144.1113" y="90.1884">accepts batch</text>
+<text fill="#006400" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="41.4819" x="119.0366" y="67.0418">author</text>
+<text fill="#006400" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="48.6865" x="57.7389" y="112.7209">primary</text>
+</g>
+<!--link SourceMemo921 to Archive923-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0003" data-link-type="dependency" data-source-line="9" id="lnk6">
+<path d="M209.5,46.9989 C219.14,55.5889 230.04,66.0889 238.8,76.6189 C250.92,91.1889 259.3067,104.1205 267.4667,118.1705" fill="none" id="SourceMemo921-to-Archive923" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="270.48,123.3589,269.4189,113.5674,267.9689,119.0352,262.501,117.5852,270.48,123.3589" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#006400" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="82.6274" x="252.033" y="90.1884">mirrors audit</text>
+</g>
+</g></svg>

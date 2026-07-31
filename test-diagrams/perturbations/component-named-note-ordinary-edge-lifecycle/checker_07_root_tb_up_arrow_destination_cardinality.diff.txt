@@ -1,0 +1,25 @@
+source: checker_07_root_tb_up_arrow_destination_cardinality.puml
+java_error: False
+rust_error: False
+java_entity_count: 3
+rust_entity_count: 3
+java_link_count: 3
+rust_link_count: 2
+java_entities:
+  ent0002 line=1 qname=Collector971
+  ent0003 line=2 qname=Gateway973
+  ent0004 line=3 qname=UpMemo971
+rust_entities:
+  ent0002 line=1 qname=Collector971
+  ent0003 line=2 qname=Gateway973
+  ent0004 line=3 qname=UpMemo971
+java_links:
+  lnk6 line=4 ent0004->ent0002 type=dependency comment=reverse link UpMemo971 to Collector971
+  lnk8 line=6 ent0004->ent0002 type=dependency comment=link UpMemo971 to Collector971
+  lnk7 line=5 ent0003->ent0004 type=dependency comment=link Gateway973 to UpMemo971
+rust_links:
+  lnk7 line=5 ent0003->ent0004 type=dependency comment=link Gateway973 to UpMemo971
+  lnk8 line=6 ent0004->ent0002 type=dependency comment=link UpMemo971 to Collector971
+verdict: FAIL
+missing_java_links_in_rust:
+  ('lnk6', '4', 'ent0004', 'ent0002')
