@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-table-cell-sheet-padding",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "7aabc336b5d2c99d86a67b355d95479ede58663a",
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-note-sheet-padding/review.json",
+    "review_commit": "7aabc336b5d2c99d86a67b355d95479ede58663a",
+    "account_commit": "ca01f728",
+    "rejected_implementation_commit": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "reason": "The broad sheet-padding account claimed that one outer note-sheet wrapper covered structured bodies. The independent checker found that table notes remained narrower and shorter even though plain and monospace notes passed.",
+    "preserved_evidence": [
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_03_link_table_fractional_right_lr.puml",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_03_link_table_fractional_right_lr.svg",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_03_link_table_fractional_right_lr.rust.svg",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_06_standalone_table_fractional_bottom.puml",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_06_standalone_table_fractional_bottom.svg",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_06_standalone_table_fractional_bottom.rust.svg",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_09_link_table_padding0_control.puml",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_11_link_table_pair_padding0.puml"
+    ]
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeTable.java",
+      "symbols": ["StripeTable.asAtom", "StripeTable.analyzeAndAddInternal"],
+      "lines": "95-100,129-161",
+      "role": "Wraps each individual parsed table cell in its own SheetBlock1 using skinParam.getPadding(), after splitting the row into cells."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "symbols": ["SheetBlock1", "calculateDimensionSlow", "drawU"],
+      "lines": "74-94,195-215",
+      "role": "For the same-valued padding used by StripeTable, enlarges each cell by 2 * padding in both dimensions and translates that cell's atoms by padding on x and y."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomTable.java",
+      "symbols": ["calculateDimensionSlow", "initMap", "getColWidth", "getLineHeight"],
+      "lines": "90-95,169-247",
+      "role": "Takes the maximum padded cell width per column and maximum padded cell height per row, then sums columns and rows for the table dimensions."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbols": ["getCreole"],
+      "lines": "688-695",
+      "role": "Adds the separate outer Display SheetBlock1 around the complete note sheet; this wrapper does not replace StripeTable's per-cell wrappers."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["ResolvedNoteStyle", "class_note_sheet_padding"],
+      "lines": "15225-15379",
+      "role": "Carries one effective sheet_padding value for the complete note body."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["NoteTableLayout", "note_table_layout"],
+      "lines": "16666-16731",
+      "role": "Measures unpadded table cell content, takes column/row maxima, and sums them without applying sheet_padding to each cell."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["note_body_dimensions", "note_box_dims", "relationship_note_box_dims"],
+      "lines": "17052-17172",
+      "role": "Adds sheet_padding only once around the completed body, matching Display's outer SheetBlock1 but omitting StripeTable's inner wrappers."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["emit_note_table", "emit_note_body"],
+      "lines": "17175-17252,17378-17432",
+      "role": "Paints cell text at the raw cell origin after only the outer body translation; no per-cell padding affects text origins, grid tracks, or table dimensions."
+    }
+  ],
+  "invariant": "A Class note table has two distinct padding layers. Display wraps the complete Creole sheet once, and StripeTable independently wraps every cell in SheetBlock1(skinParam.getPadding()). Because AtomTable takes a maximum within each column or row and then sums those tracks, inner grid width gains 2 * padding for every populated column and inner grid height gains 2 * padding for every populated row. Each cell's content origin also moves right and down by padding inside its grid rectangle. The outer Display padding, StripeTable's fixed AtomWithMargin(table, 2, 2), and Rose note margins remain separate layers.",
+  "causal_divergence": "Rust commit 46ac174e implemented only the outer Display layer. note_table_layout measures raw cell text and emit_note_table paints at each unpadded track origin. The preserved 2-column by 3-row relationship table at Padding 2.5 isolates the missing inner layer: Java's note path is 10 pixels wider and 15 pixels taller than Rust, exactly 2 * 2.5 * 2 columns and 2 * 2.5 * 3 rows. The standalone 2-column by 3-row table at Padding 1.5 is 6 pixels wider and 9 pixels taller in Java, the same topology-scaled result. Padding-zero controls retain matching table extents apart from the independently recorded stroke and sub-millipixel serialization differences. This disproves a single-wrapper table model and supports per-cell composition without any fixture-specific constant.",
+  "planned_generative_model_change": "Represent sheet padding on each NoteTableLayout cell before column and row aggregation. Measure each cell as content width plus 2 * sheet_padding and content height plus 2 * sheet_padding; derive column widths and row heights from those padded dimensions; and paint each cell's content at its track origin plus sheet_padding on both axes. Continue to apply the existing outer note-body sheet wrapper exactly once. Preserve header font selection, right alignment, row/cell backgrounds, StripeTable's fixed two-pixel AtomWithMargin equivalent, and ragged-row track construction as independent concerns.",
+  "perturbation_axes": [
+    "one, two, and three table columns crossed with one, two, and four rows",
+    "Padding 0 crossed with positive integer and fractional Padding",
+    "relationship-owned crossed with attached and standalone named Class notes",
+    "equal-width crossed with strongly unequal-width cells and ragged rows",
+    "left-aligned crossed with right-aligned cells and header rows",
+    "plain cells crossed with inline Creole and cell/row background colors",
+    "top-to-bottom crossed with left-to-right diagram direction"
+  ],
+  "acceptance": {
+    "fresh_valid_non_corpus_inputs": [
+      {
+        "id": "fresh_relationship_three_columns_fractional",
+        "source": "@startuml\nleft to right direction\nskinparam Padding 1.25\nclass LedgerCellAlpha\nclass LedgerCellOmega\nLedgerCellAlpha --> LedgerCellOmega\nnote right on link\n|= Code |= Renamed description |= Flag |\n| 17 | a deliberately wider value | yes |\nend note\n@enduml",
+        "axes": ["relationship-owned", "three columns", "two rows", "fractional padding", "left-to-right"],
+        "required_observation": "Against its Padding 0 twin, the inner Java grid gains 7.5 pixels in width and 5 pixels in height, while every cell text origin is inset 1.25 pixels within its own track; Rust must derive the same result from cell composition."
+      },
+      {
+        "id": "fresh_standalone_two_columns_integer",
+        "source": "@startuml\nskinparam Padding 4\nnote as MatrixAuditFresh\n|= Short |= A renamed wide heading |\n| one | compact |\n| two | another renamed payload |\n| three | tail |\nend note\n@enduml",
+        "axes": ["standalone named", "two columns", "four rows", "integer padding", "unequal widths"],
+        "required_observation": "Against its Padding 0 twin, the inner Java grid gains 16 pixels in width and 32 pixels in height, independently of the separate outer sheet growth."
+      }
+    ],
+    "controls": [
+      "Fresh Padding 0 twins for every table input must preserve pre-change dimensions and text origins.",
+      "A fresh plain multiline note under the same positive Padding must receive only the existing single outer sheet inset, with no row- or column-count multiplication.",
+      "A fresh one-cell table must show one inner 2 * padding increment plus the separately measured outer Display increment, preventing accidental double application at either layer.",
+      "A fresh table with NoteBorderThickness changed but Padding fixed must retain identical track dimensions, isolating this mechanism from structured-content stroke inheritance."
+    ],
+    "checks": [
+      "Fresh Java SVGs and all inputs are preserved under test-diagrams/perturbations/class-note-table-cell-sheet-padding/ by a checker who did not implement the production change.",
+      "The checker compares grid bounds, per-cell text insets, note preferred dimensions, and complete shipped-path structural output for both fresh inputs and their controls.",
+      "The preserved predecessor table counterexamples remain executable and converge without changing their source, comparator, or artifacts.",
+      "The independent review records exact implementation and Java revisions and rejects any unexplained layout constant or topology-specific branch."
+    ]
+  },
+  "scope_boundary": "This mechanism owns only skinparam Padding as applied by StripeTable to each table cell and the resulting cell, track, and table measurement/paint model in Class notes. It does not own Display's already implemented outer sheet padding, table/tree line stroke or color, text metrics, AtomWithMargin's fixed table margin, Rose component margins, relationship routing, note placement, SVG rounding, or any non-Class renderer.",
+  "forbidden_approaches": [
+    "adding 10 by 15 pixels for the rejected relationship table or 6 by 9 pixels for the rejected standalone table",
+    "branching on row count, column count, labels, source lines, fixture paths, note positions, or rendered coordinates",
+    "folding per-cell padding into the outer Display wrapper, Rose margins, or fixed table margin",
+    "changing table text metrics or grid stroke width to conceal missing cell dimensions",
+    "post-hoc SVG rewriting or coordinate normalization",
+    "editing predecessor reviews or perturbations, baselines, comparator slack, park lists, error markers, controls, or guard allow-lists"
+  ]
+}
