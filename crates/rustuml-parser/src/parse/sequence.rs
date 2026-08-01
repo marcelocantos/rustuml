@@ -1260,7 +1260,18 @@ pub(super) fn looks_like_message(line: &str) -> bool {
                 .captures(line)
                 .and_then(|captures| captures.get(2))
         })
-        .is_some_and(|arrow| arrow.as_str().contains('-'))
+        .is_some_and(|arrow| {
+            let arrow = arrow.as_str();
+            let arrow_without_style = INLINE_ARROW_STYLE.replace(arrow, "");
+            // Java provenance: `CommandArrow.executeArg` rejects an otherwise
+            // matching command as "Illegal sequence arrow" unless one dressing
+            // supplies a head (`<`, `>`, `/`, `\\`) or a lost-message cross.
+            // A bare `A -- B` therefore falls through to ClassDiagramFactory.
+            arrow.contains('-')
+                && arrow_without_style
+                    .chars()
+                    .any(|character| matches!(character, '<' | '>' | '/' | '\\' | 'x'))
+        })
 }
 
 fn apply_inline_arrow_style(arrow: &mut Arrow, style: InlineArrowStyle) {

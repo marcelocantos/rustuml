@@ -772,6 +772,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         };
         let inside_class_leaf_body =
             class_leaf_body_depth.is_some_and(|depth| brace_depth >= depth);
+        let looks_like_sequence_message =
+            !inside_class_leaf_body && sequence::looks_like_message(trimmed);
+        if looks_like_sequence_message {
+            // Java provenance: `PSystemBuilder` tries SequenceDiagramFactory
+            // first, and `CommandArrow` owns this entire anchored line. Its
+            // endpoint captures are participant identities, so words such as
+            // Node, Component, and Queue cannot simultaneously become
+            // declaration evidence for a later UML factory.
+            scores[0] += 1;
+            continue;
+        }
         if is_allow_mixing_command(trimmed) {
             has_allowmixing = true;
         }
@@ -844,7 +855,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if !inside_class_leaf_body && component::looks_like_description_bracket_command(trimmed) {
             class_factory_rejected_by_mixed_leaf = true;
         }
-        let looks_like_sequence_message = sequence::looks_like_message(trimmed);
         let looks_like_sequence_participant = !trimmed.ends_with('{')
             && (trimmed.starts_with("participant ")
                 || trimmed.starts_with("actor ")
@@ -1227,7 +1237,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[6] += 2;
         }
         // Arrows are weak sequence indicators.
-        if trimmed.contains("->") || trimmed.contains("-->") || looks_like_sequence_message {
+        if trimmed.contains("->") || trimmed.contains("-->") {
             scores[0] += 1;
         }
         // `return` statement is sequence-diagram-specific syntax.
@@ -2402,6 +2412,64 @@ mod tests {
         let input = "@startuml\nentity Ledger\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn sequence_messages_own_reserved_endpoint_words_as_complete_commands() {
+        let sources = [
+            "Node --> Component : handoff\nComponent --> Queue\nQueue --> Node",
+            "Database <- Actor : reverse\nActor --> Storage : forward",
+            "nOdE -[#teal,dotted]> CoMpOnEnT ++ : styled\nCoMpOnEnT --> AcTiOn",
+        ];
+
+        for source in sources {
+            let source_lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            assert_eq!(
+                detect_uml_subtype(&source_lines),
+                UmlSubtype::Sequence,
+                "{source}"
+            );
+
+            let input = format!("@startuml\n{source}\n@enduml");
+            let Diagram::Sequence(diagram) = parse(&input).unwrap() else {
+                panic!("complete CommandArrow stream was not Sequence: {source}");
+            };
+            assert_eq!(
+                diagram.events.len(),
+                source.lines().count(),
+                "every whole-line message must be consumed: {source}"
+            );
+        }
+    }
+
+    #[test]
+    fn non_sequence_declarations_still_reject_sequence_factory_ownership() {
+        let cases = [
+            (
+                "class Ledger\nLedger --> Queue : class link",
+                UmlSubtype::Class,
+            ),
+            (
+                "component Gateway\nGateway --> Queue : component link",
+                UmlSubtype::Component,
+            ),
+            (
+                "node Runtime\nRuntime --> Queue : deployment link",
+                UmlSubtype::Deployment,
+            ),
+        ];
+
+        for (source, expected) in cases {
+            let source_lines = source.lines().map(str::to_string).collect::<Vec<_>>();
+            assert_eq!(detect_uml_subtype(&source_lines), expected, "{source}");
+        }
+
+        let bare_association = ["Alpha -- Beta".to_string()];
+        assert_eq!(
+            detect_uml_subtype(&bare_association),
+            UmlSubtype::Class,
+            "CommandArrow matches the text but rejects an arrow without a head"
+        );
     }
 
     #[test]
