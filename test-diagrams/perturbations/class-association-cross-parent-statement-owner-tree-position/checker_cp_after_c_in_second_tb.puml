@@ -1,0 +1,14 @@
+@startuml
+top to bottom direction
+package CheckerWest7341 {
+  class Left7343
+}
+package CheckerEast7347 {
+  class Right7351
+  class Role7357
+}
+package CheckerJoinAfter7361 {
+  (CheckerWest7341.Left7343, CheckerEast7347.Right7351) -- CheckerEast7347.Role7357
+  class JoinTail7367
+}
+@enduml

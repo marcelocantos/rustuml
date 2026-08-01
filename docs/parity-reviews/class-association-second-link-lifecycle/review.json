@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-association-second-link-lifecycle",
+  "evidence_kind": "parity",
+  "review_status": "complete",
+  "verdict": "accepted",
+  "reviewer": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "implemented_change": false,
+    "role": "attempted_disproof"
+  },
+  "reviewed_revisions": {
+    "account_commit": "17cbcd44",
+    "implementation_commit": "86a426fd4e871aea45cbaf059255714a4059975d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_dirty_status": "M CLAUDE.md",
+    "candidate_diff_one": "/private/tmp/rustuml-t14-association/target/release/examples/diff_one",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "scope_checked": {
+    "java_locations": [
+      "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java:178-207",
+      "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java:237-247",
+      "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java:303-352",
+      "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java:89-113"
+    ],
+    "rust_locations": [
+      "crates/rustuml-parser/src/diagram/class.rs:253-285",
+      "crates/rustuml-parser/src/parse/class.rs:1122-1224",
+      "crates/rustuml-render/src/class.rs:13944-14043",
+      "crates/rustuml-render/src/class.rs:15807-16008"
+    ],
+    "implementation_files": [
+      "crates/rustuml-parser/src/diagram/class.rs",
+      "crates/rustuml-parser/src/parse/class.rs",
+      "crates/rustuml-render/src/class.rs"
+    ]
+  },
+  "commands": [
+    "sed -n '160,360p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+    "sed -n '70,125p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+    "git diff 17cbcd44..86a426fd -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle --print-rust <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle <input.puml>",
+    "find test-diagrams/perturbations/class-association-second-link-lifecycle -maxdepth 1 -type f \\( -name '*.puml' -o -name '*.svg' -o -name '*.rust.svg' -o -name '*.diff' -o -name '*.exit' -o -name '*.stderr' -o -name '*.stdout' \\) -print0 | sort -z | xargs -0 shasum -a 256 > test-diagrams/perturbations/class-association-second-link-lifecycle/artifact_hashes.txt"
+  ],
+  "perturbation_directory": "test-diagrams/perturbations/class-association-second-link-lifecycle",
+  "artifact_hash_manifest": {
+    "path": "test-diagrams/perturbations/class-association-second-link-lifecycle/artifact_hashes.txt",
+    "sha256": "226b2debfde83d0800dd68d6fa93451536afb041deb0f51c36a7725a5f6e101e"
+  },
+  "fresh_inputs": [
+    {
+      "stem": "checker_second_base_len_two_reversed",
+      "axes": ["pre-existing base length two", "second endpoint order reversed", "dashed first connector", "solid second connector", "left-to-right direction"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_second_no_explicit_base_packaged",
+      "axes": ["no explicit base", "same-package ownership", "solid first connector", "dashed second connector"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_second_cross_parent_entity_aliases",
+      "axes": ["cross-parent statement ownership", "entity aliases", "second endpoint order reversed", "top-to-bottom direction", "explicit base"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_second_cross_parent_aliases",
+      "axes": ["package aliases in association endpoints", "cross-parent statement ownership"],
+      "java_exit": 200,
+      "diff_one_no_oracle_exit": 2,
+      "result": "not_applicable_java_error",
+      "finding": "PlantUML rejected the package-alias endpoint form at line 4; preserved as a failed probe, not counted for acceptance."
+    },
+    {
+      "stem": "checker_second_third_rejected_materializes_c",
+      "axes": ["third attempted association", "post-rejection C materialization"],
+      "java_exit": 200,
+      "diff_one_no_oracle_exit": 2,
+      "result": "java_rejection_control",
+      "finding": "PlantUML emits an error SVG for the third association at line 8. This confirms the rejection branch but is not a Java-success parity input."
+    }
+  ],
+  "skeptical_findings": [
+    "Java source confirms first association, second association, and third-association rejection are distinct branches. The second association mutates the first split lengths when the shared base length is one, reinserts the first connector through getInv when needed, emits a second point connector, and adds an invisible point-to-point edge.",
+    "Rust implementation records first_association, reuses the first pair orientation for the second statement, changes source live-link emissions, maps link ids through Java construction order, and suppresses painting for the invisible point-to-point relationship.",
+    "Fresh valid perturbations covering base length two, no explicit base, package ownership, cross-parent ownership, aliases, reversed endpoint order, dashed/solid connectors, and rank direction were exact.",
+    "No fixture names, perturbation names, corpus membership branches, golden reads, comparator changes, baselines, park-list edits, error-marker edits, or allow-list edits were found in the implementation diff.",
+    "The new numeric values 5 and 7 are slot counts derived from Java constructor/link creation events; no unexplained high-precision constants or coordinate offsets were introduced."
+  ],
+  "acceptance_basis": "Every Java-success fresh input in this review had diff_one --no-oracle exit 0. Java-error probes were preserved and excluded from the acceptance predicate.",
+  "residual_risk": "This review did not run Cargo or rustc by instruction; it relies on the prebuilt candidate diff_one binary and source inspection at commit 86a426fd."
+}

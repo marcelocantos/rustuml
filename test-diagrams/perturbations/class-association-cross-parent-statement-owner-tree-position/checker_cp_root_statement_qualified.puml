@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package CheckerWest7421 {
+  class Left7427
+  class Role7431
+}
+package CheckerEast7437 {
+  class Right7441
+}
+(CheckerWest7421.Left7427, CheckerEast7437.Right7441) -- CheckerWest7421.Role7431
+class RootTail7447
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+class PairA7581
+class PairB7583
+class RoleOne7587
+class RoleTwo7591
+(PairA7581, PairB7583) .. RoleOne7587
+(PairA7581, PairB7583) -- RoleTwo7591
+(PairA7581, PairB7583) .. RoleThree7597
+RoleThree7597 : field from rejected command
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+package CheckerOuter7371 {
+  package CheckerWest7373 {
+    class Left7379
+    class Role7383
+  }
+  package CheckerEast7387 {
+    class Right7391
+  }
+}
+package CheckerJoin7397 {
+  package NestedJoin7401 {
+    (CheckerOuter7371.CheckerWest7373.Left7379, CheckerOuter7371.CheckerEast7387.Right7391) .. CheckerOuter7371.CheckerWest7373.Role7383
+    class NestedTail7407
+  }
+  class AfterNested7411
+}
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+package CheckerLeft7631 {
+  class "Pair A 7637" as pairA7637
+  class "Role One 7641" as roleOne7641
+}
+package CheckerRight7647 {
+  class "Pair B 7651" as pairB7651
+  class "Role Two 7657" as roleTwo7657
+}
+package CheckerJoin7661 {
+  pairA7637 -- pairB7651 : shared base alias
+  (pairA7637, pairB7651) .. roleOne7641
+  (pairB7651, pairA7637) .. roleTwo7657
+}
+@enduml

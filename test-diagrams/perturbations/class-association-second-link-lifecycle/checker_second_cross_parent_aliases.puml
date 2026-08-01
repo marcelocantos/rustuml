@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+package CheckerLeft7541 as lp {
+  class PairA7547 as la
+  class RoleOne7551 as r1
+}
+package CheckerRight7557 as rp {
+  class PairB7561 as rb
+  class RoleTwo7567 as r2
+}
+package CheckerJoin7571 {
+  la -- rb : shared base
+  (la, rb) .. r1
+  (rb, la) .. r2
+}
+@enduml

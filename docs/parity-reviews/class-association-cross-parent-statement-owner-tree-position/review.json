@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-association-cross-parent-statement-owner-tree-position",
+  "evidence_kind": "parity",
+  "review_status": "complete",
+  "verdict": "accepted",
+  "reviewer": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "implemented_change": false,
+    "role": "attempted_disproof"
+  },
+  "reviewed_revisions": {
+    "account_commit": "17cbcd44",
+    "implementation_commit": "86a426fd4e871aea45cbaf059255714a4059975d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_dirty_status": "M CLAUDE.md",
+    "candidate_diff_one": "/private/tmp/rustuml-t14-association/target/release/examples/diff_one",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "scope_checked": {
+    "java_locations": [
+      "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java:178-235",
+      "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:348-435",
+      "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:70-103"
+    ],
+    "rust_locations": [
+      "crates/rustuml-parser/src/parse/class.rs:1122-1224",
+      "crates/rustuml-render/src/class.rs:4779-4884",
+      "crates/rustuml-render/src/class.rs:6059-6349"
+    ],
+    "implementation_files": [
+      "crates/rustuml-parser/src/diagram/class.rs",
+      "crates/rustuml-parser/src/parse/class.rs",
+      "crates/rustuml-render/src/class.rs"
+    ]
+  },
+  "commands": [
+    "sed -n '160,360p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+    "sed -n '330,460p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git diff 17cbcd44..86a426fd -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle --print-rust <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle <input.puml>",
+    "find test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position -maxdepth 1 -type f \\( -name '*.puml' -o -name '*.svg' -o -name '*.rust.svg' -o -name '*.diff' -o -name '*.exit' -o -name '*.stderr' -o -name '*.stdout' \\) -print0 | sort -z | xargs -0 shasum -a 256 > test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/artifact_hashes.txt"
+  ],
+  "perturbation_directory": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position",
+  "artifact_hash_manifest": {
+    "path": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/artifact_hashes.txt",
+    "sha256": "edad57f2ad4260e0ae191d8273e70a08c40818af0d01240eb06e48f05f6e0914"
+  },
+  "fresh_inputs": [
+    {
+      "stem": "checker_cp_after_c_in_second_tb",
+      "axes": ["statement package after endpoint packages", "associated class in second endpoint package", "top-to-bottom direction", "solid connector"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_cp_nested_statement_tail",
+      "axes": ["nested statement package", "later direct leaf in statement package", "qualified endpoint names", "dashed connector"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_cp_root_statement_qualified",
+      "axes": ["root-owned cross-parent statement", "qualified endpoint names", "left-to-right direction", "solid connector"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_cp_entity_alias_join_after_lr",
+      "axes": ["entity aliases", "statement package after endpoint packages", "left-to-right direction", "later direct leaf in statement package"],
+      "java_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "exact"
+    },
+    {
+      "stem": "checker_cp_before_alias_lr",
+      "axes": ["package aliases before declaration", "statement package before endpoint packages"],
+      "java_exit": 200,
+      "diff_one_no_oracle_exit": 2,
+      "result": "not_applicable_java_error",
+      "finding": "PlantUML rejected the syntax at line 5; preserved as a failed probe, not counted for acceptance."
+    },
+    {
+      "stem": "checker_cp_entity_alias_join_before_lr",
+      "axes": ["entity aliases before declaration", "statement package before endpoint packages"],
+      "java_exit": 200,
+      "diff_one_no_oracle_exit": 2,
+      "result": "not_applicable_java_error",
+      "finding": "PlantUML rejected aliases before declaration; preserved as a failed probe, not counted for acceptance."
+    }
+  ],
+  "skeptical_findings": [
+    "Java source confirms association-point ownership is independent of associated class C: cross-parent endpoints use quarkInContext for the statement group, and GraphvizImageBuilder emits owner-local leaves via direct-leaf traversal.",
+    "Rust implementation moved point painting to SvekNodeEmission::AssociationPoint consumption rather than C-relative emission; fresh owner-order perturbations with nested, root, qualified, and alias forms were exact.",
+    "No fixture names, perturbation names, corpus membership branches, golden reads, comparator changes, baselines, park-list edits, error-marker edits, or allow-list edits were found in the implementation diff.",
+    "The narrow scan found no new high-precision layout constants. Existing association point size reuse is unchanged; new lifecycle constants belong to the separate second-link mechanism."
+  ],
+  "acceptance_basis": "Every Java-success fresh input in this review had diff_one --no-oracle exit 0. Java-error probes were preserved and excluded from the acceptance predicate.",
+  "residual_risk": "This review did not run Cargo or rustc by instruction; it relies on the prebuilt candidate diff_one binary and source inspection at commit 86a426fd."
+}
