@@ -1,0 +1,9 @@
+@startuml
+skinparam Padding 4
+note as MatrixAuditFresh
+|= Short |= A renamed wide heading |
+| one | compact |
+| two | another renamed payload |
+| three | tail |
+end note
+@enduml

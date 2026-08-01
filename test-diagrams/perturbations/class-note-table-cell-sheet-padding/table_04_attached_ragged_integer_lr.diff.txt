@@ -1,0 +1,26 @@
+SVG structural differences:
+  [19] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "100.28"), ("y2", "100.28")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "100.28"), ("y2", "100.28")]
+  [20] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "121.5905"), ("y2", "121.5905")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "121.5905"), ("y2", "121.5905")]
+  [21] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "142.9011"), ("y2", "142.9011")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "142.9011"), ("y2", "142.9011")]
+  [22] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "164.2116"), ("y2", "164.2116")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "15"), ("x2", "347.7739"), ("y1", "164.2116"), ("y2", "164.2116")]
+  [23] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "15"), ("x2", "15"), ("y1", "100.28"), ("y2", "164.2116")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "15"), ("x2", "15"), ("y1", "100.28"), ("y2", "164.2116")]
+  [24] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "79.5"), ("x2", "79.5"), ("y1", "100.28"), ("y2", "164.2116")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "79.5"), ("x2", "79.5"), ("y1", "100.28"), ("y2", "164.2116")]
+  [25] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "297.626"), ("x2", "297.626"), ("y1", "100.28"), ("y2", "164.2116")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "297.626"), ("x2", "297.626"), ("y1", "100.28"), ("y2", "164.2116")]
+  [26] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "347.7739"), ("x2", "347.7739"), ("y1", "100.28"), ("y2", "164.2116")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "347.7739"), ("x2", "347.7739"), ("y1", "100.28"), ("y2", "164.2116")]
+

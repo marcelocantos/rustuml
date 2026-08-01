@@ -1,0 +1,12 @@
+@startuml
+skinparam Padding 2.5
+class OneCellLaterTarget
+note as OneCellEarlierNote
+| renamed one cell payload |
+end note
+class OneCellEarlierSource
+OneCellEarlierSource --> OneCellLaterTarget
+note on link
+| linked one cell 5051 |
+end note
+@enduml

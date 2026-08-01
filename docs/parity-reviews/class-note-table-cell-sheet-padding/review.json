@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-table-cell-sheet-padding",
+  "evidence_kind": "parity",
+  "created": "2026-08-01",
+  "verdict": "REJECT",
+  "maker_checker": {
+    "maker": {
+      "account_commit": "eb6835c7",
+      "implementation_commit": "f6cd5d47393b6b4ad870b7cc3c5ae36ca467bf4b",
+      "required_outer_model_commit": "7a9bbb3589b079f882099bb9378a6dd2f4b6f6bf",
+      "implementation_author": "Marcelo Cantos <marcelo.cantos@gmail.com>"
+    },
+    "checker": {
+      "identity": "OpenAI GPT-5 Codex in a separate review task",
+      "implemented_mechanism": false,
+      "edited_account_or_implementation": false
+    },
+    "distinct": true
+  },
+  "revisions": {
+    "rust_review_head": "7a9bbb3589b079f882099bb9378a6dd2f4b6f6bf",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one": "/private/tmp/rustuml-t14-table/target/release/examples/diff_one"
+  },
+  "commands": [
+    "git rev-parse --short=12 HEAD",
+    "git show --no-ext-diff --unified=80 f6cd5d47 -- crates/rustuml-render/src/class.rs",
+    "git show --no-ext-diff --unified=80 7a9bbb35 -- crates/rustuml-render/src/class.rs",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '15180,15420p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '16620,17500p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeTable.java | sed -n '80,180p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomTable.java | sed -n '80,260p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java | sed -n '688,695p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <puml>",
+    "/private/tmp/rustuml-t14-table/target/release/examples/diff_one --no-oracle <puml>",
+    "/private/tmp/rustuml-t14-table/target/release/examples/diff_one --no-oracle --print-rust <puml>"
+  ],
+  "source_model_review": {
+    "java_findings": [
+      "StripeTable.asAtom wraps every parsed cell in a SheetBlock1 using skinParam.getPadding().",
+      "StripeTable.analyzeAndAddInternal splits rows into cells and calls table.addCell(asAtom(cells, skinParam.getPadding()), cellBackColor).",
+      "SheetBlock1 expands each cell by padding on both axes and translates the cell content by left/top padding.",
+      "AtomTable measures the wrapped cell dimensions, takes maximum width per column and maximum height per row, and draws each cell at its track origin.",
+      "Display.getCreole adds a separate outer SheetBlock1 around the complete note sheet."
+    ],
+    "rust_findings": [
+      "note_table_layout adds 2 * sheet_padding to each measured cell width and height before column and row maxima are computed.",
+      "emit_note_table paints cell text at cell_left + sheet_padding and row_top + sheet_padding + row_ascent.",
+      "note_box_dims, relationship_note_box_dims, and emit_note_body apply the separate outer Display padding after the table-cell layout layer.",
+      "No label, source-line, fixture-name, row-count, column-count, or coordinate-specific branch was found in the implementation hunk."
+    ]
+  },
+  "evidence": [
+    {
+      "id": "prior_pad_03_link_table_fractional_right_lr",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_03_link_table_fractional_right_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_03_link_table_fractional_right_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_03_link_table_fractional_right_lr.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["preserved predecessor input", "fractional Padding", "relationship-owned", "two columns", "three rows", "left-to-right"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual, plus small x-coordinate drift."
+    },
+    {
+      "id": "prior_pad_06_standalone_table_fractional_bottom",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_06_standalone_table_fractional_bottom.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_06_standalone_table_fractional_bottom.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_06_standalone_table_fractional_bottom.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["preserved predecessor input", "fractional Padding", "attached standalone class note", "two columns", "three rows"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual."
+    },
+    {
+      "id": "prior_pad_09_link_table_padding0_control",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_09_link_table_padding0_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_09_link_table_padding0_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_09_link_table_padding0_control.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["preserved predecessor input", "Padding 0", "relationship-owned", "two columns", "three rows"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual, plus small coordinate drift."
+    },
+    {
+      "id": "prior_pad_11_link_table_pair_padding0",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_11_link_table_pair_padding0.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_11_link_table_pair_padding0.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/prior_pad_11_link_table_pair_padding0.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["preserved predecessor input", "Padding 0", "relationship-owned", "two columns", "three rows", "left-to-right"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual, plus small x-coordinate drift."
+    },
+    {
+      "id": "table_01_relationship_three_columns_fractional_lr",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_01_relationship_three_columns_fractional_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_01_relationship_three_columns_fractional_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_01_relationship_three_columns_fractional_lr.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["fresh", "fractional Padding", "relationship-owned", "three columns", "two rows", "left-to-right"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual, plus small x-coordinate drift."
+    },
+    {
+      "id": "table_02_standalone_two_columns_integer_tb",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_02_standalone_two_columns_integer_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_02_standalone_two_columns_integer_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_02_standalone_two_columns_integer_tb.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["fresh", "integer Padding", "standalone named note", "two columns", "four rows", "unequal widths"]
+    },
+    {
+      "id": "table_03_relationship_one_cell_fractional_order",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_03_relationship_one_cell_fractional_order.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_03_relationship_one_cell_fractional_order.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_03_relationship_one_cell_fractional_order.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["fresh", "fractional Padding", "relationship-owned", "one-cell table", "declaration order control"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual, plus small coordinate drift."
+    },
+    {
+      "id": "table_04_attached_ragged_integer_lr",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_04_attached_ragged_integer_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_04_attached_ragged_integer_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_04_attached_ragged_integer_lr.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["fresh", "integer Padding", "attached standalone class note", "ragged rows", "three columns", "left-to-right"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual."
+    },
+    {
+      "id": "table_05_padding0_multicolumn_control_tb",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_05_padding0_multicolumn_control_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_05_padding0_multicolumn_control_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_05_padding0_multicolumn_control_tb.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["fresh", "Padding 0", "relationship-owned", "three columns", "three rows", "top-to-bottom"],
+      "failure_summary": "diff_one reports table grid stroke-width 0.5 expected versus 1 actual, plus small coordinate drift."
+    },
+    {
+      "id": "table_06_plain_positive_control",
+      "source": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_06_plain_positive_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_06_plain_positive_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-table-cell-sheet-padding/table_06_plain_positive_control.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["fresh", "integer Padding", "standalone named note", "plain non-table control"]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Multiple preserved and fresh Java-valid table inputs still have nonzero no-oracle output.",
+      "evidence": "prior_pad_03, prior_pad_06, prior_pad_09, prior_pad_11, table_01, table_03, table_04, and table_05 all have diff_one.exit = 1.",
+      "rule": "The assignment requires REJECT for any nonzero valid input and does not allow out-of-scope or PASS_FOR_MECHANISM."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The common visible mismatch is table grid stroke width: Java emits stroke-width:0.5 for relationship/attached table grids while Rust emits stroke-width:1.",
+      "evidence": "Each failing table *.diff.txt records expected stroke-width:0.5 and actual stroke-width:1 for the table grid lines."
+    },
+    {
+      "severity": "informational",
+      "summary": "The direct table-cell padding model in the implementation matches the cited Java structure and does not appear fixture-shaped, but the preserved valid inputs do not meet exact shipped-path parity."
+    }
+  ],
+  "verdict_reason": "REJECT because eight Java-valid table inputs have diff_one --no-oracle exit 1. The failures are mostly table grid stroke-width differences and small coordinate drift, but the review instruction makes any nonzero valid held-out a rejecting result.",
+  "not_run": [
+    "cargo",
+    "rustc"
+  ]
+}

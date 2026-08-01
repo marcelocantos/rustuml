@@ -1,0 +1,10 @@
+@startuml
+skinparam Padding 0
+class PadPlainNorth8711
+class PadPlainSouth8719
+PadPlainNorth8711 --> PadPlainSouth8719
+note on link
+  zero padding plain link note 8711
+  unchanged width sentinel 8719
+end note
+@enduml

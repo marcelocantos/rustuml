@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-display-sheet-padding",
+  "evidence_kind": "parity",
+  "created": "2026-08-01",
+  "verdict": "REJECT",
+  "maker_checker": {
+    "maker": {
+      "account_commit": "dd6ce9c7",
+      "implementation_commit": "7a9bbb3589b079f882099bb9378a6dd2f4b6f6bf",
+      "implementation_author": "Marcelo Cantos <marcelo.cantos@gmail.com>",
+      "implementation_coauthor": "OpenAI Codex <noreply@openai.com>"
+    },
+    "checker": {
+      "identity": "OpenAI GPT-5 Codex in a separate review task",
+      "implemented_mechanism": false,
+      "edited_account_or_implementation": false
+    },
+    "distinct": true
+  },
+  "revisions": {
+    "rust_review_head": "7a9bbb3589b079f882099bb9378a6dd2f4b6f6bf",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_one": "/private/tmp/rustuml-t14-table/target/release/examples/diff_one"
+  },
+  "commands": [
+    "git rev-parse --short=12 HEAD",
+    "git show --no-ext-diff --unified=80 7a9bbb35 -- crates/rustuml-render/src/class.rs",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '15180,15420p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '16620,17500p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java | sed -n '660,710p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java | sed -n '1,240p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java | sed -n '60,130p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java | sed -n '50,100p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <puml>",
+    "/private/tmp/rustuml-t14-table/target/release/examples/diff_one --no-oracle <puml>",
+    "/private/tmp/rustuml-t14-table/target/release/examples/diff_one --no-oracle --print-rust <puml>"
+  ],
+  "source_model_review": {
+    "java_findings": [
+      "Display.getCreole creates a Sheet from the complete Display, reads spriteContainer.getPadding(), then wraps the whole sheet in SheetBlock1 before SheetBlock2.",
+      "SheetBlock1.calculateDimensionSlow expands dimensions by top plus bottom and left plus right padding, and drawU translates the complete wrapped content by left/top padding.",
+      "AbstractTextualComponent composes the Display-created text block separately from Rose note margins.",
+      "EntityImageNoteLink constructs the same Rose note component for relationship-owned notes."
+    ],
+    "rust_findings": [
+      "ResolvedNoteStyle carries one parsed global skinparam Padding value for standalone, attached, and relationship-owned Class notes.",
+      "note_box_dims and relationship_note_box_dims add 2 * sheet_padding to the complete body dimensions.",
+      "emit_note_body translates the complete note body by sheet_padding on x and y and reduces the available body width by 2 * sheet_padding.",
+      "No label, source-line, fixture-name, note-position, or branch-count conditional was found in the implementation hunk."
+    ]
+  },
+  "evidence": [
+    {
+      "id": "prior_pad_01_link_plain_padding0_tb",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_01_link_plain_padding0_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_01_link_plain_padding0_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_01_link_plain_padding0_tb.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["preserved predecessor input", "Padding 0", "relationship-owned", "plain body", "top-to-bottom"]
+    },
+    {
+      "id": "prior_pad_02_link_plain_padding4_left_tb",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_02_link_plain_padding4_left_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_02_link_plain_padding4_left_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_02_link_plain_padding4_left_tb.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["preserved predecessor input", "integer Padding", "relationship-owned", "plain body", "left note"]
+    },
+    {
+      "id": "prior_pad_05_standalone_plain_padding6_left",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_05_standalone_plain_padding6_left.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_05_standalone_plain_padding6_left.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_05_standalone_plain_padding6_left.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["preserved predecessor input", "integer Padding", "attached standalone class note", "plain body"]
+    },
+    {
+      "id": "prior_pad_08_link_mono_padding5_bottom_lr",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_08_link_mono_padding5_bottom_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_08_link_mono_padding5_bottom_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/prior_pad_08_link_mono_padding5_bottom_lr.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["preserved predecessor input", "integer Padding", "relationship-owned", "monospace body", "left-to-right"]
+    },
+    {
+      "id": "display_01_relation_plain_fractional_lr",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/display_01_relation_plain_fractional_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_01_relation_plain_fractional_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_01_relation_plain_fractional_lr.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["fresh", "fractional Padding", "relationship-owned", "plain body", "left-to-right", "renamed labels"]
+    },
+    {
+      "id": "display_02_attached_mono_integer_tb",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/display_02_attached_mono_integer_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_02_attached_mono_integer_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_02_attached_mono_integer_tb.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["fresh", "integer Padding", "attached standalone class note", "monospace body", "top-to-bottom"]
+    },
+    {
+      "id": "display_03_named_plain_padding0_order_control",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/display_03_named_plain_padding0_order_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_03_named_plain_padding0_order_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_03_named_plain_padding0_order_control.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 0,
+      "axes": ["fresh", "Padding 0", "standalone named note", "plain body", "declaration order control"]
+    },
+    {
+      "id": "display_04_structured_one_cell_fractional_control",
+      "source": "test-diagrams/perturbations/class-note-display-sheet-padding/display_04_structured_one_cell_fractional_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_04_structured_one_cell_fractional_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-note-display-sheet-padding/display_04_structured_one_cell_fractional_control.rust.svg",
+      "java_exit": 0,
+      "diff_one_exit": 1,
+      "axes": ["fresh", "fractional Padding", "attached standalone class note", "structured one-cell table"],
+      "failure_summary": "diff_one reports table grid stroke-width mismatches: Java expected stroke-width:0.5, Rust actual stroke-width:1 on all four grid lines."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "A Java-valid structured one-cell note under this mechanism's evidence directory has nonzero no-oracle output.",
+      "evidence": "display_04_structured_one_cell_fractional_control.diff_one.exit = 1; display_04_structured_one_cell_fractional_control.diff.txt records stroke-width 0.5 expected versus 1 actual.",
+      "rule": "The assignment requires REJECT for any nonzero valid input and does not allow out-of-scope or PASS_FOR_MECHANISM."
+    },
+    {
+      "severity": "informational",
+      "summary": "The plain and monospace display-sheet cases, including all preserved display-account predecessor inputs, are exact under the frozen no-oracle comparator."
+    }
+  ],
+  "verdict_reason": "REJECT because display_04_structured_one_cell_fractional_control is Java-valid and diff_one --no-oracle exits 1. The observed difference is table grid stroke width, but the review instruction forbids treating a nonzero held-out as out-of-scope for verdict purposes.",
+  "not_run": [
+    "cargo",
+    "rustc"
+  ]
+}

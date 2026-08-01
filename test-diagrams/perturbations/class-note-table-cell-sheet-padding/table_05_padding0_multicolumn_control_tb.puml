@@ -1,0 +1,11 @@
+@startuml
+skinparam Padding 0
+class TableZeroControlNorth7121
+class TableZeroControlSouth7127
+TableZeroControlNorth7121 --> TableZeroControlSouth7127
+note on link
+|= C1 |= C2 |= C3 |
+| a | bbb | ccccc |
+| renamed | zero padding | control |
+end note
+@enduml

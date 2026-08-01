@@ -1,0 +1,7 @@
+@startuml
+skinparam Padding 2
+note as TablePlainControl8123
+  plain non-table control 8123
+  should receive only display padding 8129
+end note
+@enduml

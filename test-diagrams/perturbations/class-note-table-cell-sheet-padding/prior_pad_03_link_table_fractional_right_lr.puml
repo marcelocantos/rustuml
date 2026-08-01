@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+skinparam Padding 2.5
+class PadTableWest8923
+class PadTableEast8929
+PadTableWest8923 --> PadTableEast8929 : fractional table label 8923
+note right on link
+  |= Key 8923 |= Value 8929 |
+  | alpha | fractional padding |
+  | beta | row two |
+end note
+@enduml

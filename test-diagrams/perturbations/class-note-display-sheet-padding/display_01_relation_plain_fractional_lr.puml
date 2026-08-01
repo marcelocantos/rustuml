@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam Padding 2.5
+class DisplayPadSource1041
+class DisplayPadTarget1049
+DisplayPadSource1041 --> DisplayPadTarget1049 : renamed relation order 1041
+note right on link
+  fractional display padding note 1041
+  renamed plain width sentinel 1049
+end note
+@enduml

@@ -1,0 +1,23 @@
+SVG structural differences:
+  [19] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "123.5"), ("y2", "123.5")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "123.5"), ("y2", "123.5")]
+  [20] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "141.8105"), ("y2", "141.8105")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "141.8105"), ("y2", "141.8105")]
+  [21] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "160.1211"), ("y2", "160.1211")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "160.1211"), ("y2", "160.1211")]
+  [22] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "178.4316"), ("y2", "178.4316")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "13.5"), ("x2", "259.1685"), ("y1", "178.4316"), ("y2", "178.4316")]
+  [23] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "13.5"), ("x2", "13.5"), ("y1", "123.5"), ("y2", "178.4316")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "13.5"), ("x2", "13.5"), ("y1", "123.5"), ("y2", "178.4316")]
+  [24] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "115.1299"), ("x2", "115.1299"), ("y1", "123.5"), ("y2", "178.4316")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "115.1299"), ("x2", "115.1299"), ("y1", "123.5"), ("y2", "178.4316")]
+  [25] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:0.5;"), ("x1", "259.1685"), ("x2", "259.1685"), ("y1", "123.5"), ("y2", "178.4316")]
+    actual:   [("style", "stroke:#000000;stroke-width:1;"), ("x1", "259.1685"), ("x2", "259.1685"), ("y1", "123.5"), ("y2", "178.4316")]
+

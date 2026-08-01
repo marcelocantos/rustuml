@@ -1,0 +1,8 @@
+@startuml
+skinparam Padding 6
+class PadSoloSubject9127
+note left of PadSoloSubject9127
+  standalone positive padding 9127
+  WIDE-STANDALONE-PADDING-SENTINEL-9133
+end note
+@enduml
