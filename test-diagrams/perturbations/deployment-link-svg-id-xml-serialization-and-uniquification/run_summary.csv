@@ -1,0 +1,10 @@
+stem,java_exit,diff_exit,rust_exit
+checker_collision_reordered_reverse_duplicates,0,1,0
+checker_colon_slash_styled_duplicates,0,1,0
+checker_display_alias_collision_ltr,0,1,0
+checker_nested_child_links_broad_owners,0,0,0
+checker_nested_child_links_reordered_reverse,0,1,0
+checker_xml_ampersand_raw_identity,0,1,0
+fresh_hidden_collision_suffix_allocation,0,0,0
+fresh_nested_reverse_duplicate_order,0,1,0
+fresh_xml_metacharacter_no_alias_ltr,0,1,0

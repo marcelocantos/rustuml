@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="269px" preserveAspectRatio="none" style="width:473px;height:269px;background:#FFFFFF;" version="1.1" viewBox="0 0 473 269" width="473px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Rack West-->
+<g class="cluster" data-qualified-name="rack.west" data-source-line="2" id="ent0002">
+<polygon fill="none" points="16,16,26,6,448.73,6,448.73,234,438.73,244,16,244,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="438.73" x2="448.73" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="438.73" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="438.73" x2="438.73" y1="16" y2="244"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="73.2607" x="191.7346" y="32.5352">Rack West</text>
+</g>
+<!--cluster Apps/Blue-->
+<g class="cluster" data-qualified-name="rack.west.apps.blue" data-source-line="3" id="ent0003">
+<path d="M42.5,54 L118.9619,54 A3.75,3.75 0 0 1 121.4619,56.5 L128.4619,76.4883 L422.23,76.4883 A2.5,2.5 0 0 1 424.73,78.9883 L424.73,217.5 A2.5,2.5 0 0 1 422.23,220 L42.5,220 A2.5,2.5 0 0 1 40,217.5 L40,56.5 A2.5,2.5 0 0 1 42.5,54" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="40" x2="128.4619" y1="76.4883" y2="76.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="75.4619" x="44" y="69.5352">Apps/Blue</text>
+</g>
+<!--entity Worker 01-->
+<g class="entity" data-qualified-name="rack.west.apps.blue.worker.01" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="100.1504" x="78.45" y="89.26"/>
+<polygon fill="#F1F1F1" points="161.6004,94.26,161.6004,108.26,173.6004,108.26,173.6004,100.26,167.6004,94.26,161.6004,94.26" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="167.6004" x2="167.6004" y1="94.26" y2="100.26"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="173.6004" x2="167.6004" y1="100.26" y2="100.26"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="70.1504" x="88.45" y="115.7952">Worker 01</text>
+</g>
+<g class="entity" data-qualified-name="rack.west.apps.blue.GMN5" data-source-line="6" id="ent0006">
+<path d="M56,163.69 L56,204.3111 A0,0 0 0 0 56,204.3111 L201.0586,204.3111 A0,0 0 0 0 201.0586,204.3111 L201.0586,181.69 L128.53,128.9 L201.0586,173.69 L201.0586,173.69 L191.0586,163.69 L56,163.69 A0,0 0 0 0 56,163.69" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M191.0586,163.69 L191.0586,173.69 L201.0586,173.69 L191.0586,163.69" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="97.335" x="62" y="181.2584">review left note</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="124.0586" x="62" y="196.5689">multiline width axis</text>
+</g>
+<!--entity DB 02-->
+<g class="entity" data-qualified-name="rack.west.apps.blue.db.02" data-source-line="9" id="ent0008">
+<path d="M348.06,99.26 C348.06,89.26 378.3969,89.26 378.3969,89.26 C378.3969,89.26 408.7338,89.26 408.7338,99.26 L408.7338,124.7483 C408.7338,134.7483 378.3969,134.7483 378.3969,134.7483 C378.3969,134.7483 348.06,134.7483 348.06,124.7483 L348.06,99.26" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M348.06,99.26 C348.06,109.26 378.3969,109.26 378.3969,109.26 C378.3969,109.26 408.7338,109.26 408.7338,99.26" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="40.6738" x="358.06" y="126.7952">DB 02</text>
+</g>
+<!--link worker.01 to db.02-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0008" data-link-type="dependency" data-source-line="12" id="lnk9">
+<path d="M179.09,109.6 C229.53,110.21 300.0404,111.0681 341.7404,111.5681" fill="none" id="worker.01-to-db.02" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="347.74,111.64,338.7886,107.5324,342.7404,111.5801,338.6927,115.5318,347.74,111.64" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="85.8457" x="232.06" y="106.7984">internal route</text>
+</g>
+</g></svg>

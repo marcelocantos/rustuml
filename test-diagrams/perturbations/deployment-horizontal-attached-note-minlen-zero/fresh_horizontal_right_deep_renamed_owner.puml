@@ -1,0 +1,10 @@
+@startuml
+cloud "Cloud Display" as cloud.display {
+  node "Tenant/One" as tenant.one {
+    queue endpoint.alpha as "Endpoint Alpha"
+    note right of endpoint.alpha : short right note
+  }
+}
+database store.beta as "Store Beta"
+endpoint.alpha --> store.beta : sync
+@enduml

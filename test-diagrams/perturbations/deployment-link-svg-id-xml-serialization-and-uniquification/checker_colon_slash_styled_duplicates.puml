@@ -1,0 +1,7 @@
+@startuml
+node "API:North"
+queue "queue/v2"
+"API:North" -[dotted]-> "queue/v2" : dotted route
+"API:North" -[bold]-> "queue/v2" : bold route
+note bottom on link #LightYellow : duplicate punctuation memo 4243
+@enduml

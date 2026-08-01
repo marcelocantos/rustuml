@@ -1,0 +1,6 @@
+@startuml
+queue input.root as "Input Root"
+note top of input.root : vertical control note
+node "Processor Box" as proc.box
+input.root --> proc.box : work order
+@enduml

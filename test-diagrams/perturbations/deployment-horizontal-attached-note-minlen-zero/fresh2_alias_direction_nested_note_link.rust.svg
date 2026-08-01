@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="179px" preserveAspectRatio="none" style="width:705px;height:179px;background:#FFFFFF;" version="1.1" viewBox="0 0 705 179" width="705px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Renamed Control Plane-->
+<g class="cluster" data-qualified-name="alpha-beta.root.v2" data-source-line="2" id="ent0002">
+<path d="M8.5,6 L177.4795,6 A3.75,3.75 0 0 1 179.9795,8.5 L186.9795,28.4883 L687.52,28.4883 A2.5,2.5 0 0 1 690.02,30.9883 L690.02,161.5 A2.5,2.5 0 0 1 687.52,164 L8.5,164 A2.5,2.5 0 0 1 6,161.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="186.9795" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="167.9795" x="10" y="21.5352">Renamed Control Plane</text>
+</g>
+<!--cluster Renamed Worker Group-->
+<g class="cluster" data-qualified-name="alpha-beta.root.v2.worker-group.v3" data-source-line="3" id="ent0003">
+<rect fill="none" height="91" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="342.93" x="30" y="49"/>
+<path d="M211.1719,49 L211.1719,58.4883 L201.1719,68.4883 L30,68.4883" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="171.1719" x="33" y="63.5352">Renamed Worker Group</text>
+</g>
+<!--entity Renamed Store-->
+<g class="entity" data-qualified-name="alpha-beta.root.v2.store.one" data-source-line="7" id="ent0006">
+<path d="M551.93,91.26 C551.93,81.26 612.9739,81.26 612.9739,81.26 C612.9739,81.26 674.0179,81.26 674.0179,91.26 L674.0179,116.7483 C674.0179,126.7483 612.9739,126.7483 612.9739,126.7483 C612.9739,126.7483 551.93,126.7483 551.93,116.7483 L551.93,91.26" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M551.93,91.26 C551.93,101.26 612.9739,101.26 612.9739,101.26 C612.9739,101.26 674.0179,101.26 674.0179,91.26" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="102.0879" x="561.93" y="118.7952">Renamed Store</text>
+</g>
+<!--entity Renamed Payload-->
+<g class="entity" data-qualified-name="alpha-beta.root.v2.worker-group.v3.payload.one" data-source-line="4" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="149.1572" x="207.77" y="84.26"/>
+<polygon fill="#F1F1F1" points="339.9272,89.26,339.9272,103.26,351.9272,103.26,351.9272,95.26,345.9272,89.26,339.9272,89.26" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="345.9272" x2="345.9272" y1="89.26" y2="95.26"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="351.9272" x2="345.9272" y1="95.26" y2="95.26"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119.1572" x="217.77" y="110.7952">Renamed Payload</text>
+</g>
+<g class="entity" data-qualified-name="alpha-beta.root.v2.worker-group.v3.memo.v4" data-source-line="5" id="ent0005">
+<path d="M46,91.34 L46,116.6505 A0,0 0 0 0 46,116.6505 L146.771,116.6505 A0,0 0 0 0 146.771,116.6505 L146.771,109.34 L207.33,104 L146.771,101.34 L146.771,101.34 L136.771,91.34 L46,91.34 A0,0 0 0 0 46,91.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M136.771,91.34 L136.771,101.34 L146.771,101.34 L136.771,91.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="79.771" x="52" y="108.9084">Owned audit</text>
+</g>
+<!--link payload.one to store.one-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0006" data-link-type="dependency" data-source-line="9" id="lnk7">
+<path d="M357.1,104 C415.76,104 490.82,104 545.65,104" fill="none" id="payload.one-to-store.one" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="551.65,104,542.65,100,546.65,104,542.65,108,551.65,104" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53.7139" x="429.0018" y="65.5684">promote</text>
+<path d="M393.93,74.3105 L393.93,99.3105 L516.93,99.3105 L516.93,84.3105 L506.93,74.3105 L393.93,74.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M506.93,74.3105 L506.93,84.3105 L516.93,84.3105 L506.93,74.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102.8574" x="399.93" y="91.8789">route ownership</text>
+</g>
+</g></svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="267px" preserveAspectRatio="none" style="width:176px;height:267px;background:#FFFFFF;" version="1.1" viewBox="0 0 176 267" width="176px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Input Root-->
+<g class="entity" data-qualified-name="input.root" data-source-line="1" id="ent0002">
+<path d="M43.07,92.31 L124.2458,92.31 C129.2458,92.31 129.2458,105.5541 129.2458,105.5541 C129.2458,105.5541 129.2458,118.7983 124.2458,118.7983 L43.07,118.7983 C38.07,118.7983 38.07,105.5541 38.07,105.5541 C38.07,105.5541 38.07,92.31 43.07,92.31" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M124.2458,92.31 C119.2458,92.31 119.2458,105.5541 119.2458,105.5541 C119.2458,118.7983 124.2458,118.7983 124.2458,118.7983" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="71.1758" x="43.07" y="110.8452">Input Root</text>
+</g>
+<g class="entity" data-qualified-name="GMN3" data-source-line="2" id="ent0004">
+<path d="M9.89,6 L9.89,31.3105 A0,0 0 0 0 9.89,31.3105 L79.65,31.3105 L83.65,92.02 L87.65,31.3105 L157.4178,31.3105 A0,0 0 0 0 157.4178,31.3105 L157.4178,16 L147.4178,6 L9.89,6 A0,0 0 0 0 9.89,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M147.4178,6 L147.4178,16 L157.4178,16 L147.4178,6" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="126.5278" x="15.89" y="23.5684">vertical control note</text>
+</g>
+<!--entity Processor Box-->
+<g class="entity" data-qualified-name="proc.box" data-source-line="3" id="ent0006">
+<polygon fill="#F1F1F1" points="16,205.8,26,195.8,151.3066,195.8,151.3066,232.2883,141.3066,242.2883,16,242.2883,16,205.8" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="141.3066" x2="151.3066" y1="205.8" y2="195.8"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="141.3066" y1="205.8" y2="205.8"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="141.3066" x2="141.3066" y1="205.8" y2="242.2883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="95.3066" x="31" y="229.3352">Processor Box</text>
+</g>
+<!--link input.root to proc.box-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0006" data-link-type="dependency" data-source-line="4" id="lnk7">
+<path d="M83.65,118.91 C83.65,137.39 83.65,166.53 83.65,189.62" fill="none" id="input.root-to-proc.box" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="83.65,195.62,87.65,186.62,83.65,190.62,79.65,186.62,83.65,195.62" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="69.0815" x="84.65" y="162.3684">work order</text>
+</g>
+</g></svg>

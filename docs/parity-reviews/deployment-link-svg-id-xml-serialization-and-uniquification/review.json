@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-svg-id-xml-serialization-and-uniquification",
+  "review_date": "2026-08-01",
+  "status": "ACTIVE",
+  "evidence_kind": "parity",
+  "maker": {
+    "identity": "Marcelo Cantos <marcelo.cantos@gmail.com>",
+    "account_commit": "f4bc495f20ca22f8a2f1f0fbc3eafffdfa736a4b",
+    "implementation_commit": "a7a409b770beab7c4d719ec454a909af57cf446e",
+    "implemented_mechanism": true
+  },
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop with source inspection, Java PlantUML JAR, frozen diff_one, and XML parser checks",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "rust_checkout": "/private/tmp/rustuml-t14-deployment-model-review",
+    "rust_commit_under_review": "a7a409b770beab7c4d719ec454a909af57cf446e",
+    "rust_parent": "f4bc495f20ca22f8a2f1f0fbc3eafffdfa736a4b",
+    "account_revision": "f4bc495f20ca22f8a2f1f0fbc3eafffdfa736a4b",
+    "java_checkout": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "immutable_executables": {
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one",
+      "sha256": "4b1a4022a909e866946e9dcc53eaefb6473d7bf874785ac340f8b77f7d86a0bd",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "constraints_observed": {
+    "cargo_or_rustc_run": false,
+    "production_code_edited": false,
+    "account_json_edited": false,
+    "quarantine_control_comparator_or_baseline_edited": false,
+    "only_review_and_evidence_added": true,
+    "no_push": true
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show -s --format=%H%n%P%n%an%n%ae%n%cn%n%ce%n%aI%n%cI%n%s a7a409b770beab7c4d719ec454a909af57cf446e",
+    "git log --format=%H -- docs/parity-reviews/deployment-link-svg-id-xml-serialization-and-uniquification/account.json",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Link.java | sed -n '100,125p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '810,855p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '1080,1105p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java | sed -n '840,895p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '6590,6705p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '6810,6855p'",
+    "nl -ba crates/rustuml-render/src/svg.rs | sed -n '895,915p'",
+    "git show --format= --unified=80 a7a409b770beab7c4d719ec454a909af57cf446e -- crates/rustuml-render/src/deployment.rs crates/rustuml-render/src/svg.rs | rg -n 'include_str!|include_bytes!|test-diagrams|golden|fixture|PASS_FOR_MECHANISM|source_line|\\.svg|replace\\(|post|baseline|comparator|park|allow|error-marker|label|filename|file name'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <same-stem .puml>",
+    "/private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one --no-oracle <same-stem .puml>",
+    "/private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one --no-oracle --print-rust <same-stem .puml>",
+    "python3 XML parser over generated .java.svg and .rust.svg path id attributes, writing xml_path_id_parse_summary.txt",
+    "shasum -a 256 /private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "find test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification -maxdepth 1 -type f ! -name SHA256SUMS.txt -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256 > test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/SHA256SUMS.txt"
+  ],
+  "source_review": {
+    "java_model": [
+      "Link.idCommentForSvg selects raw Entity.getName endpoints with -to-, -backto-, or association hyphen.",
+      "SvekEdge.drawU returns before ordinary path drawing for opale, invisible, and pathless edges, then draws link.commentForSvg and uses a shared ID set for path IDs that reach the draw path.",
+      "SvekEdge.uniq allocates the base ID first and then the smallest unused -N suffix.",
+      "SvgGraphics.svgPath sets the path id through DOM setAttribute; XML serialization escapes syntax while preserving the parsed raw logical ID."
+    ],
+    "rust_model": [
+      "render_no_oracle_edges now holds a shared claimed_path_ids set, calls deployment_unique_path_id in emission order, and escapes path IDs through escape_xml_attr when writing the path attribute.",
+      "deployment_connection_path_base_id uses raw DeploymentConnection endpoints and direction/decor semantics rather than UGroup qualified-name projection.",
+      "The implementation explicitly makes solved hidden edges consume an ID before skipping paint; the fresh hidden-collision held-out shows this matches the pinned Java output for that source."
+    ],
+    "fixture_shape_and_tuning_audit": [
+      "The implementation diff did not show golden SVG reads, fixture-name branches, PASS_FOR_MECHANISM markers, comparator or baseline edits, or coordinate-keyed post-render mutation.",
+      "The local XML identity channel is improved: XML parser evidence recovers raw ampersand and angle-bracket IDs from both Java and Rust generated SVGs."
+    ]
+  },
+  "evidence_directory": {
+    "path": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification",
+    "run_summary": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/run_summary.csv",
+    "xml_parse_summary": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/xml_path_id_parse_summary.txt",
+    "sha256_manifest": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/SHA256SUMS.txt",
+    "sha256_manifest_sha256": "072c7744246575a28dedda21bbb59bb5e26e22a2739740457f3fb94f0e15fe73",
+    "hashed_entries": 110
+  },
+  "strict_preserved_java_success_results": [
+    {"stem": "checker_xml_ampersand_raw_identity", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 1, "parsed_path_ids_match": true, "result": "FAIL"},
+    {"stem": "checker_colon_slash_styled_duplicates", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 1, "parsed_path_ids_match": true, "result": "FAIL"},
+    {"stem": "checker_collision_reordered_reverse_duplicates", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 1, "parsed_path_ids_match": true, "result": "FAIL"},
+    {"stem": "checker_display_alias_collision_ltr", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 1, "parsed_path_ids_match": false, "result": "FAIL"},
+    {"stem": "checker_nested_child_links_reordered_reverse", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 1, "parsed_path_ids_match": true, "result": "FAIL"},
+    {"stem": "checker_nested_child_links_broad_owners", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "parsed_path_ids_match": true, "result": "MATCH"}
+  ],
+  "fresh_held_out_results": [
+    {
+      "stem": "fresh_xml_metacharacter_no_alias_ltr",
+      "axes": ["XML metacharacters", "quoted no-alias endpoint identities", "left-to-right rank direction", "link note"],
+      "source": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/fresh_xml_metacharacter_no_alias_ltr.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/fresh_xml_metacharacter_no_alias_ltr.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-link-svg-id-xml-serialization-and-uniquification/fresh_xml_metacharacter_no_alias_ltr.rust.svg",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 1,
+      "parsed_path_ids_match": true,
+      "result": "FAIL"
+    },
+    {
+      "stem": "fresh_hidden_collision_suffix_allocation",
+      "axes": ["hidden link interleaved before painted duplicates", "collision suffix allocation", "left-to-right rank direction"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "parsed_path_ids_match": true,
+      "result": "MATCH"
+    },
+    {
+      "stem": "fresh_nested_reverse_duplicate_order",
+      "axes": ["nested ownership", "reverse links", "duplicate suffix allocation", "declaration order", "link note"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 1,
+      "parsed_path_ids_match": true,
+      "result": "FAIL"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Account-named nonzero strict controls remain nonzero",
+      "evidence": [
+        "checker_xml_ampersand_raw_identity.diff.exit = 1",
+        "checker_colon_slash_styled_duplicates.diff.exit = 1",
+        "checker_collision_reordered_reverse_duplicates.diff.exit = 1",
+        "checker_display_alias_collision_ltr.diff.exit = 1",
+        "checker_nested_child_links_reordered_reverse.diff.exit = 1"
+      ],
+      "interpretation": "The account explicitly names these as non-waivable whole-output gates and says to reject if they remain nonzero even when IDs are locally correct."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Fresh Java-valid held-outs are nonzero",
+      "evidence": [
+        "fresh_xml_metacharacter_no_alias_ltr.diff.exit = 1 with parsed raw ID Gate <A> & Relay-to-Sink > Store matching on both sides.",
+        "fresh_nested_reverse_duplicate_order.diff.exit = 1 with parsed reverse duplicate IDs matching on both sides."
+      ],
+      "interpretation": "The XML serialization and uniquification channels are locally correct for these cases, but the governing parity evidence is whole-output diff_one --no-oracle, which remains nonzero."
+    }
+  ],
+  "verdict": "REJECT",
+  "verdict_reason": "Five account-named Java-success strict controls still have diff_one --no-oracle exit 1, while the one exact control remains exact. Two fresh Java-valid held-outs are also nonzero. The account forbids accepting this mechanism while any named or fresh Java-valid gate is nonzero, regardless of locally correct parsed path IDs."
+}

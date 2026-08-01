@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node "Gate <A> & Relay"
+storage "Sink > Store"
+"Gate <A> & Relay" --> "Sink > Store" : xml metacharacter path id
+note bottom on link : raw XML identity held-out
+@enduml

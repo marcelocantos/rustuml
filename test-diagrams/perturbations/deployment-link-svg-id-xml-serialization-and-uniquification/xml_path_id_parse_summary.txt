@@ -1,0 +1,35 @@
+## checker_collision_reordered_reverse_duplicates.puml
+java: well_formed=true path_ids=['ingress.v7-backto-edge.alias', 'ingress.v7-backto-edge.alias-1', 'Archive-West-to-edge.alias']
+rust: well_formed=true path_ids=['ingress.v7-backto-edge.alias', 'ingress.v7-backto-edge.alias-1', 'Archive-West-to-edge.alias']
+
+## checker_colon_slash_styled_duplicates.puml
+java: well_formed=true path_ids=['API:North-to-queue/v2', 'API:North-to-queue/v2-1']
+rust: well_formed=true path_ids=['API:North-to-queue/v2', 'API:North-to-queue/v2-1']
+
+## checker_display_alias_collision_ltr.puml
+java: well_formed=true path_ids=['ingress.v7-to-edge.alias', 'edge.alias-to-Archive/Blue']
+rust: well_formed=true path_ids=['ingress.v7-to-edge.alias']
+
+## checker_nested_child_links_broad_owners.puml
+java: well_formed=true path_ids=['child.alpha-to-child.beta']
+rust: well_formed=true path_ids=['child.alpha-to-child.beta']
+
+## checker_nested_child_links_reordered_reverse.puml
+java: well_formed=true path_ids=['child.alpha-backto-child.beta']
+rust: well_formed=true path_ids=['child.alpha-backto-child.beta']
+
+## checker_xml_ampersand_raw_identity.puml
+java: well_formed=true path_ids=['Gate & Relay-to-Sink-3']
+rust: well_formed=true path_ids=['Gate & Relay-to-Sink-3']
+
+## fresh_hidden_collision_suffix_allocation.puml
+java: well_formed=true path_ids=['Source-to-Target-1', 'Source-to-Target-2']
+rust: well_formed=true path_ids=['Source-to-Target-1', 'Source-to-Target-2']
+
+## fresh_nested_reverse_duplicate_order.puml
+java: well_formed=true path_ids=['service.two-backto-service.one', 'service.two-backto-service.one-1']
+rust: well_formed=true path_ids=['service.two-backto-service.one', 'service.two-backto-service.one-1']
+
+## fresh_xml_metacharacter_no_alias_ltr.puml
+java: well_formed=true path_ids=['Gate <A> & Relay-to-Sink > Store']
+rust: well_formed=true path_ids=['Gate <A> & Relay-to-Sink > Store']

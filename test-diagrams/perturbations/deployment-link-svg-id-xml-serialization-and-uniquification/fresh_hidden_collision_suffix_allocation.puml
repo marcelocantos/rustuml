@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+node Source
+database Target
+Source -[hidden]-> Target
+Source --> Target : first painted
+Source --> Target : second painted
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+node "Outer One" as outer.one {
+  artifact service.one as "Service One"
+}
+node "Outer Two" as outer.two {
+  database service.two as "Service Two"
+}
+service.one -left-> service.two : first reverse
+service.one -left-> service.two : second reverse
+note left on link : reverse duplicate held-out
+@enduml

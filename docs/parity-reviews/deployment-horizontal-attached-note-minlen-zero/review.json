@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-horizontal-attached-note-minlen-zero",
+  "review_date": "2026-08-01",
+  "status": "ACTIVE",
+  "evidence_kind": "parity",
+  "maker": {
+    "identity": "Marcelo Cantos <marcelo.cantos@gmail.com>",
+    "account_commit": "f4bc495f20ca22f8a2f1f0fbc3eafffdfa736a4b",
+    "implementation_commit": "a7a409b770beab7c4d719ec454a909af57cf446e",
+    "implemented_mechanism": true
+  },
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop with source inspection, Java PlantUML JAR, frozen diff_one, and preserved artifact runs",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "rust_checkout": "/private/tmp/rustuml-t14-deployment-model-review",
+    "rust_commit_under_review": "a7a409b770beab7c4d719ec454a909af57cf446e",
+    "rust_parent": "f4bc495f20ca22f8a2f1f0fbc3eafffdfa736a4b",
+    "account_revision": "f4bc495f20ca22f8a2f1f0fbc3eafffdfa736a4b",
+    "java_checkout": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "immutable_executables": {
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one",
+      "sha256": "4b1a4022a909e866946e9dcc53eaefb6473d7bf874785ac340f8b77f7d86a0bd",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "constraints_observed": {
+    "cargo_or_rustc_run": false,
+    "production_code_edited": false,
+    "account_json_edited": false,
+    "quarantine_control_comparator_or_baseline_edited": false,
+    "only_review_and_evidence_added": true,
+    "no_push": true
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show -s --format=%H%n%P%n%an%n%ae%n%cn%n%ce%n%aI%n%cI%n%s a7a409b770beab7c4d719ec454a909af57cf446e",
+    "git log --format=%H -- docs/parity-reviews/deployment-horizontal-attached-note-minlen-zero/account.json",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '250,300p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '380,430p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '4400,4565p'",
+    "git show --format= --unified=80 a7a409b770beab7c4d719ec454a909af57cf446e -- crates/rustuml-render/src/deployment.rs crates/rustuml-render/src/svg.rs | rg -n 'include_str!|include_bytes!|test-diagrams|golden|fixture|PASS_FOR_MECHANISM|source_line|\\.svg|replace\\(|post|baseline|comparator|park|allow|error-marker|label|filename|file name'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <same-stem .puml>",
+    "/private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one --no-oracle <same-stem .puml>",
+    "/private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one --no-oracle --print-rust <same-stem .puml>",
+    "shasum -a 256 /private/tmp/rustuml-t14-deployment-models/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "find test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero -maxdepth 1 -type f ! -name SHA256SUMS.txt -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256 > test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/SHA256SUMS.txt"
+  ],
+  "source_review": {
+    "java_model": [
+      "CommandFactoryNoteOnEntity.executeInternal creates generated note leaves and dashed attachment Links. RIGHT and LEFT use LinkArg.noDisplay(1); BOTTOM and TOP use LinkArg.noDisplay(2).",
+      "SvekEdge.appendLine emits Graphviz minlen as link.getLength() - 1 when useRankSame is false, so horizontal attached notes carry minlen=0 and vertical attached notes carry minlen=1 at the pinned default."
+    ],
+    "rust_model": [
+      "render_no_oracle now keeps the same-rank constraint for LEFT/RIGHT notes and calls LayoutGraph::add_edge_with_minlen for every attached note.",
+      "deployment_attached_note_minlen maps LEFT/RIGHT to 0 and TOP/BOTTOM to 1, matching the cited Java LinkArg length minus one."
+    ],
+    "fixture_shape_and_tuning_audit": [
+      "The implementation diff did not show golden SVG reads, fixture-name branches, PASS_FOR_MECHANISM markers, comparator or baseline edits, or coordinate-keyed post-render mutation.",
+      "The minlen values are symbolic Java-derived values, not copied observed pixel gaps."
+    ]
+  },
+  "evidence_directory": {
+    "path": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero",
+    "run_summary": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/run_summary.csv",
+    "sha256_manifest": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/SHA256SUMS.txt",
+    "sha256_manifest_sha256": "ebfefe69e00309e5c6243a1a2065982cc07d1f775f91b6a5fe483f1921a427fd",
+    "hashed_entries": 109
+  },
+  "strict_preserved_java_success_results": [
+    {"stem": "fresh2_quoted_identity_deep_ownership", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "result": "MATCH"},
+    {"stem": "fresh2_alias_direction_nested_note_link", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "result": "MATCH"},
+    {"stem": "fresh2_predecessor_bare_slash_replay", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "result": "MATCH"},
+    {"stem": "bare_slash_container_quoted_child_link_note", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "result": "MATCH"},
+    {"stem": "fresh2_predecessor_display_alias_replay", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "result": "MATCH"},
+    {"stem": "display_alias_hyphen_container_notes_links", "java_exit": 0, "rust_exit": 0, "diff_one_no_oracle_exit": 0, "result": "MATCH"}
+  ],
+  "fresh_held_out_results": [
+    {
+      "stem": "fresh_horizontal_left_nested_multiline_order",
+      "axes": ["horizontal LEFT attached note", "nested ownership", "multiline note geometry", "left-to-right rank direction", "declaration order"],
+      "source": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/fresh_horizontal_left_nested_multiline_order.puml",
+      "java_svg": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/fresh_horizontal_left_nested_multiline_order.java.svg",
+      "rust_svg": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/fresh_horizontal_left_nested_multiline_order.rust.svg",
+      "diff_stdout": "test-diagrams/perturbations/deployment-horizontal-attached-note-minlen-zero/fresh_horizontal_left_nested_multiline_order.diff.stdout",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL"
+    },
+    {
+      "stem": "fresh_horizontal_right_deep_renamed_owner",
+      "axes": ["horizontal RIGHT attached note", "deep renamed owner", "alias identity", "downstream link"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "MATCH"
+    },
+    {
+      "stem": "fresh_vertical_top_root_order_control",
+      "axes": ["vertical TOP attached note", "root ownership", "declaration order control", "downstream link"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "MATCH"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Fresh horizontal nested LEFT attached-note input remains nonzero",
+      "evidence": [
+        "fresh_horizontal_left_nested_multiline_order.java.exit = 0",
+        "fresh_horizontal_left_nested_multiline_order.rust.exit = 0",
+        "fresh_horizontal_left_nested_multiline_order.diff.exit = 1",
+        "fresh_horizontal_left_nested_multiline_order.diff.stdout reports whole-canvas, cluster, note, and edge geometry mismatches."
+      ],
+      "interpretation": "The six account-named controls are exact after the implementation, but the governing gate requires fresh held-out parity too. This valid nonzero input is decisive; no PASS_FOR_MECHANISM or geometry waiver is applied."
+    }
+  ],
+  "verdict": "REJECT",
+  "verdict_reason": "All six strict preserved Java-success controls pass, but the fresh Java-valid held-out fresh_horizontal_left_nested_multiline_order has diff_one --no-oracle exit 1. The account and T14 gate make any nonzero valid input rejecting for this mechanism."
+}

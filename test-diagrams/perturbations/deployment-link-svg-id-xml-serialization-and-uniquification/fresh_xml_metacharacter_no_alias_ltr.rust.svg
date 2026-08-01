@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="105px" preserveAspectRatio="none" style="width:549px;height:105px;background:#FFFFFF;" version="1.1" viewBox="0 0 549 105" width="549px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Gate <A> & Relay-->
+<g class="entity" data-qualified-name="Gate .A. . Relay" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="16,43.76,26,33.76,177.5977,33.76,177.5977,70.2483,167.5977,80.2483,16,80.2483,16,43.76" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="167.5977" x2="177.5977" y1="43.76" y2="33.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="167.5977" y1="43.76" y2="43.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="167.5977" x2="167.5977" y1="43.76" y2="80.2483"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.5977" x="31" y="67.2952">Gate &lt;A&gt; &amp; Relay</text>
+</g>
+<!--entity Sink > Store-->
+<g class="entity" data-qualified-name="Sink . Store" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="103.3506" x="432.6" y="38.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83.3506" x="442.6" y="62.2952">Sink &gt; Store</text>
+</g>
+<!--link Gate <A> & Relay to Sink > Store-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk4">
+<path d="M177.67,57 C254.19,57 361.36,57 426.36,57" fill="none" id="Gate &lt;A&gt; &amp; Relay-to-Sink &gt; Store" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="432.36,57,423.36,53,427.36,57,423.36,61,432.36,57" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="166.3467" x="222.0939" y="18.5684">xml metacharacter path id</text>
+<path d="M212.6,27.3105 L212.6,52.3105 L397.6,52.3105 L397.6,37.3105 L387.6,27.3105 L212.6,27.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M387.6,27.3105 L387.6,37.3105 L397.6,37.3105 L387.6,27.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="164.3345" x="218.6" y="44.8789">raw XML identity held-out</text>
+</g>
+</g></svg>

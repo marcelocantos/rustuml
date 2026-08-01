@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+node "Rack West" as rack.west {
+  folder "Apps/Blue" as apps.blue {
+    artifact worker.01 as "Worker 01"
+    note left of worker.01
+      review left note
+      multiline width axis
+    end note
+    database db.02 as "DB 02"
+  }
+}
+worker.01 --> db.02 : internal route
+@enduml
