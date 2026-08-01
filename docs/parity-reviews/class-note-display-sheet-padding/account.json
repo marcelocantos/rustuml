@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-display-sheet-padding",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "6176d1fe12b85f4044c55b3c4f64ca42210a67bd",
+  "supersedes_rejected_mechanism": "class-note-sheet-padding",
+  "rejection_record": "docs/parity-reviews/class-note-sheet-padding/review.json at 7aabc336b5d2c99d86a67b355d95479ede58663a",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbols": ["Display.getCreole"],
+      "lines": "688-695",
+      "role": "Wraps the complete Creole sheet in one SheetBlock1 using spriteContainer.getPadding()."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "symbols": ["SheetBlock1.calculateDimensionSlow", "SheetBlock1.drawU"],
+      "lines": "74-94,195-215",
+      "role": "Adds twice the padding to preferred width and height and translates the complete sheet by padding on both axes."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "symbols": ["AbstractTextualComponent"],
+      "lines": "73-114",
+      "role": "Composes the Display-created padded text block with independent Rose note margins."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "symbols": ["EntityImageNoteLink"],
+      "lines": "61-78",
+      "role": "Routes relationship-owned notes through the same Rose textual component and Display sheet."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["ResolvedNoteStyle", "note_box_dims", "relationship_note_box_dims", "emit_note_body"],
+      "role": "Measures and paints note bodies with fixed Rose margins but currently has no complete-sheet Padding wrapper."
+    }
+  ],
+  "claimed_invariant": "Global skinparam Padding contributes one outer Display SheetBlock1 around the complete Class note body, regardless of note ownership. It enlarges preferred width and height by exactly 2 * padding and translates the body by padding on x and y. Rose margins, table-cell SheetBlock1 wrappers, table/tree strokes, and content metrics remain independent layers.",
+  "causal_divergence": "The current Class renderer applies fixed note margins directly to the raw body dimensions and paint origin. The rejected predecessor implementation ported this outer layer and its independent checker observed exact no-oracle matches for fresh plain and monospace relationship and attached notes at Padding 0 and positive integer values. That implementation was rejected only because its account overclaimed structured table/tree parity; the current branch therefore lacks a Java layer whose validated plain-body behavior must be restored under a narrower claim.",
+  "planned_model_change": "Resolve the last parseable global Padding value into ResolvedNoteStyle. Add 2 * padding once to standalone and relationship note preferred dimensions, and translate the complete note body by padding while reducing its available width by the same paired amount. Keep the per-cell table padding mechanism separate and do not alter tree/table strokes, Rose margins, text metrics, relationship routing, or SVG serialization.",
+  "perturbation_axes": [
+    "Padding 0 versus positive integer and fractional Padding",
+    "relationship-owned versus attached and standalone Class notes",
+    "plain multiline versus monospace/code body",
+    "left/right/top/bottom note position and top-to-bottom/left-to-right direction",
+    "one-line versus multiple-line body and narrow versus wide labels"
+  ],
+  "acceptance": [
+    "The preserved Java-success plain and monospace perturbations pad_01, pad_02, pad_05, and pad_08 remain exact under frozen diff_one --no-oracle.",
+    "Fresh renamed plain and monospace notes at Padding 0, a positive fractional value, and a positive integer value all have exact shipped-path output; Padding 0 is byte-behavior neutral.",
+    "Preferred dimensions gain exactly 2 * padding in each axis and body origins move by padding without changing Rose margins or content metrics.",
+    "The per-cell table mechanism remains separately measurable: an N-column by M-row table receives this one outer increment plus N and M inner increments, never a merged or double-counted wrapper.",
+    "An independent checker preserves all fresh Java SVGs and rejects any nonzero valid heldout, including the predecessor's structured-note failures until their separate mechanisms are also green."
+  ],
+  "scope_boundary": "This owns only the outer Display SheetBlock1 for Class note bodies. It does not own StripeTable per-cell padding, table/tree strokes or geometry, Rose component margins, text metrics, note placement, relationship routes, MinMax, or non-Class renderers.",
+  "forbidden_approaches": [
+    "special-case labels, fixtures, note positions, row/column counts, or source lines",
+    "fold outer padding into fixed Rose margins or the table-cell wrapper",
+    "change table/tree stroke widths or text metrics to conceal missing padding",
+    "post-process SVG coordinates or edit comparator, baseline, park, error, or allow-list controls"
+  ]
+}
