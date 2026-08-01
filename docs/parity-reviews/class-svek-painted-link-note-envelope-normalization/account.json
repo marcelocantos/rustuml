@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-painted-link-note-envelope-normalization",
+  "status": "accounted_before_code",
+  "implementation_revision": null,
+  "predecessor_implementation_revision": "565a957c0",
+  "rejected_review_revision": "25db21e7",
+  "rust_revision": "ae947214ca6058766dc41ff5606fd66a4649f8fa",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:calculateDimension",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:drawU",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:draw",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:constructor labelText composition and drawU",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java:calculateDimensionSlow and drawU",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java:getPreferredWidth, getPreferredHeight, and drawInternalU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:relationship_center_layout",
+    "crates/rustuml-render/src/class.rs:relationship_center_painted_min_y",
+    "crates/rustuml-render/src/class.rs:svek_layout_x_bias",
+    "crates/rustuml-render/src/class.rs:svek_layout_y_bias"
+  ],
+  "invariant": "Java normalizes a SVEK image from the extrema of shapes actually drawn, not from Graphviz's abstract label rectangle. SvekResult draws each SvekEdge into LimitFinder, then moves the complete graph by (6 - painted_min_x, 6 - painted_min_y). For a relationship-owned note, Graphviz reserves the full merged labelText dimension, including ComponentRoseNote's five-pixel component padding, but EntityImageNoteLink paints the folded polygon only after that inset. The unpainted component padding therefore influences Graphviz placement but cannot become the painted minimum used by SvekResult normalization. The same rule applies in every spline mode and note position.",
+  "causal_divergence": "The predecessor correctly feeds the merged note/label block to Graphviz's xlabel channel under ORTHO, but Rust svek_layout_x_bias treats EdgeLabelPosition.x, the top-left of the full reserved labelText rectangle, as painted ink. With a leftmost link note, that coordinate is five pixels left of ComponentRoseNote's first painted polygon point. Rust consequently normalizes the invisible rectangle edge to the SVEK margin and paints the whole graph five pixels too far right. The independent fresh counterexample at rejected review 25db21e7 shows exactly that uniform +5px shift while non-note xlabels pass, isolating normalization from routing and xlabel placement.",
+  "planned_change": "Derive relationship center-label painted bounds from the same child composition used by render_no_oracle_edges. For link notes, start the note frontier at center.note_x and use the visible note polygon dimensions; for ordinary text, use emitted glyph painted bounds; for magic arrows, use their polygon bounds. Feed only those painted extrema into the SVEK x/y normalization envelope while leaving the full center.width and center.height unchanged as Graphviz label reservation. Share this calculation between normalization and final canvas bounds so invisible component padding never becomes ink and no note-position-specific coordinate constant is introduced.",
+  "perturbation_axes": [
+    "spline mode: ORTHO versus POLYLINE and SPLINE controls",
+    "link-note position: left, right, top, and bottom",
+    "label composition: note-only, text plus note, magic arrow plus note, and multiline note",
+    "graph frontier: note is leftmost, rightmost, topmost, or interior",
+    "direction and topology: top-to-bottom versus left-to-right, parallel edges, nested packages, and renamed nodes"
+  ],
+  "scope_boundary": "This mechanism changes only the painted-envelope projection used after layout. It does not change Graphviz label dimensions, edge routes, ORTHO selection, note preferred dimensions, note chrome, comparator tolerance, baselines, fixture eligibility, or any frozen control.",
+  "acceptance": [
+    "The predecessor's fresh ORTHO link-note counterexample matches Java from source alone without changing its Graphviz route or center-label reservation",
+    "Fresh valid Java perturbations cover at least two independent axes, including a non-ORTHO control and more than one note position",
+    "Focused renderer tests prove unpainted component padding is excluded while the visible polygon and text remain in the normalization envelope",
+    "The class no-oracle ratchet does not regress and all harness guards pass",
+    "A separate checker records an accepted verdict against the exact implementation revision"
+  ],
+  "forbidden_approaches": [
+    "subtracting five pixels based on ORTHO mode, a fixture label, or a known coordinate",
+    "changing ComponentRoseNote preferred dimensions to make Graphviz place the graph differently",
+    "post-processing serialized SVG coordinates",
+    "changing comparator tolerance, baselines, park lists, syntax-error markers, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "25db21e7:test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.puml",
+    "25db21e7:test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.svg"
+  ]
+}
