@@ -11,10 +11,38 @@ use std::process::Command;
 
 const ACCOUNT_INVARIANT_FIELDS: &[&str] = &["invariant", "claimed_invariant"];
 const ACCOUNT_PLANNED_CHANGE_FIELDS: &[&str] = &["planned_change", "planned_model_change"];
-const REVIEWER_FIELDS: &[&str] = &["reviewer", "checker"];
+const REVIEWER_FIELDS: &[&str] = &["reviewer", "checker", "checker_identity"];
 const REVIEWER_IDENTITY_FIELDS: &[&str] = &["identity", "task_id", "agent"];
 const REVIEWER_MODEL_FIELDS: &[&str] = &["model", "model_tool"];
 const REVIEWER_TOOL_FIELDS: &[&str] = &["tool", "tools", "tooling"];
+const MAKER_FIELDS: &[&str] = &["maker", "implementer"];
+const TASK_ID_FIELDS: &[&str] = &["task_id", "task_identity"];
+const ACCOUNT_REVISION_FIELDS: &[&str] = &[
+    "account_commit",
+    "account_revision",
+    "account_revision_checked",
+    "rust_account_commit",
+];
+const IMPLEMENTATION_REVISION_FIELDS: &[&str] = &[
+    "implementation_commit",
+    "rust_implementation_commit",
+    "implementation_revision",
+    "rust_implementation_revision",
+    "requested_implementation_revision",
+    "evaluated_rust_revision",
+    "requested_rust_revision",
+    "rust_revision",
+    "rust_revision_checked",
+    "rust_revision_under_review",
+];
+const JAVA_REVISION_FIELDS: &[&str] = &[
+    "java_revision",
+    "java_revision_checked",
+    "java_oracle_commit",
+    "java_oracle_revision",
+    "plantuml_revision",
+    "java_commit",
+];
 const EVIDENCE_ARRAY_FIELDS: &[&str] = &[
     "perturbations",
     "generated_inputs",
@@ -26,6 +54,18 @@ const EVIDENCE_ARRAY_FIELDS: &[&str] = &[
 ];
 const SOURCE_FIELDS: &[&str] = &["source", "puml", "path", "input", "stem"];
 const GOLDEN_FIELDS: &[&str] = &["golden", "java_svg", "oracle_svg", "java", "svg"];
+const JAVA_EXIT_ARTIFACT_FIELDS: &[&str] = &[
+    "java_exit_artifact",
+    "oracle_exit_artifact",
+    "java_exit_path",
+    "oracle_exit_path",
+];
+const JAVA_EXIT_FIELDS: &[&str] = &[
+    "java_exit",
+    "oracle_exit",
+    "java_exit_code",
+    "oracle_exit_code",
+];
 const RESULT_FIELDS: &[&str] = &[
     "result",
     "semantic_result",
@@ -74,6 +114,8 @@ struct ReviewRecord {
 #[derive(Default)]
 struct EvidenceReport {
     accepted_heldouts: BTreeSet<AcceptedHeldOut>,
+    accepted_source_contents: BTreeMap<Vec<u8>, AcceptedHeldOut>,
+    accepted_golden_contents: BTreeMap<Vec<u8>, AcceptedHeldOut>,
     violations: Vec<String>,
 }
 
@@ -154,7 +196,6 @@ fn build_report(root: &Path) -> EvidenceReport {
 
         let latest = reviews.last().expect("non-empty review list");
         let latest_path = latest.path.clone();
-        let latest_verdict = latest.verdict;
         let account = accounts_by_mechanism
             .get(mechanism)
             .and_then(|accounts| (accounts.len() == 1).then(|| &accounts[0]));
@@ -164,30 +205,16 @@ fn build_report(root: &Path) -> EvidenceReport {
                 latest_path.display()
             ));
         }
-        let mut latest_can_select_positive_evidence =
-            latest_verdict == Verdict::Accepted && account.is_some();
-        if latest_verdict == Verdict::Accepted {
-            if let Some(account) = account {
-                if !validate_accepting_review_attestation(
-                    root,
-                    account,
-                    &latest.object,
-                    &latest_path,
-                    &mut report.violations,
-                ) {
-                    latest_can_select_positive_evidence = false;
-                }
-            } else {
-                latest_can_select_positive_evidence = false;
-            }
-        }
-
         for review in reviews {
+            let attestation_valid = account.is_some_and(|account| {
+                validate_review_attestation(root, account, review, &mut report.violations)
+            });
             validate_review_declared_evidence(
                 root,
                 review,
-                review.path == latest_path,
-                review.path == latest_path && latest_can_select_positive_evidence,
+                review.path == latest_path
+                    && review.verdict == Verdict::Accepted
+                    && attestation_valid,
                 &mut report,
             );
         }
@@ -270,7 +297,7 @@ fn normalize_review(path: &Path, dir: &Path, violations: &mut Vec<String>) -> Op
         return None;
     }
     let sequence = review_sequence(path).expect("caller admits only canonical review names");
-    let verdict = match normalize_verdict(object.get("verdict")) {
+    let verdict = match normalize_review_verdict(&object) {
         Ok(verdict) => verdict,
         Err(error) => {
             violations.push(format!("{}: {error}", path.display()));
@@ -293,7 +320,7 @@ fn validate_archival_review(path: &Path, violations: &mut Vec<String>) {
     let Some(object) = read_json_object(path, violations) else {
         return;
     };
-    match normalize_verdict(object.get("verdict")) {
+    match normalize_review_verdict(&object) {
         Ok(Verdict::Rejected) => {}
         Ok(Verdict::Accepted) => violations.push(format!(
             "{}: noncanonical review filenames are archival and cannot accept a mechanism",
@@ -306,13 +333,13 @@ fn validate_archival_review(path: &Path, violations: &mut Vec<String>) {
 fn validate_review_declared_evidence(
     root: &Path,
     review: &ReviewRecord,
-    is_latest: bool,
     may_select_positive_evidence: bool,
     report: &mut EvidenceReport,
 ) {
     let mut valid_passing_sources = BTreeSet::new();
-    let mut used_goldens = BTreeSet::new();
+    let mut valid_evidence_sources = BTreeSet::new();
     let mut observed_axes = BTreeSet::new();
+    let mut evidence_array_seen = false;
     let base_dir = match evidence_base_dir(&review.object) {
         Ok(base_dir) => base_dir,
         Err(error) => {
@@ -327,6 +354,7 @@ fn validate_review_declared_evidence(
         let Some(value) = review.object.get(*field) else {
             continue;
         };
+        evidence_array_seen = true;
         let Some(values) = value.as_array() else {
             report.violations.push(format!(
                 "{}: {field} must be an array",
@@ -335,11 +363,6 @@ fn validate_review_declared_evidence(
             continue;
         };
         for value in values {
-            if !(is_latest && review.verdict == Verdict::Accepted) {
-                // Rejected and superseded evidence stays preserved and auditable,
-                // but it cannot participate in acceptance selection.
-                continue;
-            }
             let Some(item) = value.as_object() else {
                 report.violations.push(format!(
                     "{}: every {field} entry must be an object",
@@ -357,7 +380,23 @@ fn validate_review_declared_evidence(
                 }
             };
 
-            let positive = match item_positive_pass(item) {
+            let result_texts = match result_texts(item) {
+                Ok(texts) if !texts.is_empty() => texts,
+                Ok(_) => {
+                    report.violations.push(format!(
+                        "{}: every canonical evidence item must declare a comparison result",
+                        review.path.display()
+                    ));
+                    continue;
+                }
+                Err(error) => {
+                    report
+                        .violations
+                        .push(format!("{}: {error}", review.path.display()));
+                    continue;
+                }
+            };
+            let positive = match positive_pass_from_texts(item, &result_texts) {
                 Ok(positive) => positive,
                 Err(error) => {
                     report
@@ -366,17 +405,41 @@ fn validate_review_declared_evidence(
                     continue;
                 }
             };
-            if !positive {
-                continue;
-            }
             let Some((source, golden)) = resolved else {
                 report.violations.push(format!(
-                    "{}: passing evidence must name a source and Java SVG",
+                    "{}: canonical evidence must name a source and Java SVG",
                     review.path.display()
                 ));
                 continue;
             };
+            let java_exit_valid =
+                match validate_zero_java_exit(root, review, item, &source, base_dir.as_deref()) {
+                    Ok(()) => true,
+                    Err(error) => {
+                        report
+                            .violations
+                            .push(format!("{}: {error}", review.path.display()));
+                        false
+                    }
+                };
+            let source_abs = root.join(&source);
             let golden_abs = root.join(&golden);
+            let Ok(source_bytes) = std::fs::read(&source_abs) else {
+                report.violations.push(format!(
+                    "{}: evidence source does not exist or is unreadable: {}",
+                    review.path.display(),
+                    source.display()
+                ));
+                continue;
+            };
+            let Ok(golden_bytes) = std::fs::read(&golden_abs) else {
+                report.violations.push(format!(
+                    "{}: Java SVG does not exist or is unreadable: {}",
+                    review.path.display(),
+                    golden.display()
+                ));
+                continue;
+            };
             let Ok(golden_text) = std::fs::read_to_string(&golden_abs) else {
                 report.violations.push(format!(
                     "{}: accepted golden does not exist or is unreadable: {}",
@@ -393,16 +456,7 @@ fn validate_review_declared_evidence(
                 ));
                 continue;
             }
-            valid_passing_sources.insert(source.clone());
-            if !used_goldens.insert(golden.clone()) {
-                report.violations.push(format!(
-                    "{}: a Java SVG may not be reused by multiple held-outs: {}",
-                    review.path.display(),
-                    golden.display()
-                ));
-                continue;
-            }
-            match non_empty_string_set(item.get("axes")) {
+            match normalized_axis_set(item.get("axes")) {
                 Ok(axes) => observed_axes.extend(axes),
                 Err(error) => {
                     report
@@ -411,30 +465,90 @@ fn validate_review_declared_evidence(
                     continue;
                 }
             }
-            if may_select_positive_evidence {
-                report.accepted_heldouts.insert(AcceptedHeldOut {
+            if may_select_positive_evidence && positive {
+                let heldout = AcceptedHeldOut {
                     mechanism: review.mechanism.clone(),
                     review_path: review.path.clone(),
-                    source,
-                    golden,
-                });
+                    source: source.clone(),
+                    golden: golden.clone(),
+                };
+                register_unique_content(
+                    &mut report.accepted_source_contents,
+                    source_bytes,
+                    &heldout,
+                    "source",
+                    &mut report.violations,
+                );
+                register_unique_content(
+                    &mut report.accepted_golden_contents,
+                    golden_bytes,
+                    &heldout,
+                    "Java SVG",
+                    &mut report.violations,
+                );
+                report.accepted_heldouts.insert(heldout);
+            }
+            if !java_exit_valid {
+                continue;
+            }
+            valid_evidence_sources.insert(source.clone());
+            if positive {
+                valid_passing_sources.insert(source);
             }
         }
     }
 
-    if is_latest && review.verdict == Verdict::Accepted {
-        if valid_passing_sources.len() < 2 {
+    if !evidence_array_seen {
+        report.violations.push(format!(
+            "{}: canonical review must preserve held-out evidence",
+            review.path.display()
+        ));
+    }
+    match review.verdict {
+        Verdict::Accepted => {
+            if valid_passing_sources.len() < 2 {
+                report.violations.push(format!(
+                    "{}: accepted canonical review must declare at least two valid Java-success passing sources",
+                    review.path.display()
+                ));
+            }
+            if observed_axes.len() < 2 {
+                report.violations.push(format!(
+                    "{}: accepted canonical review must exercise at least two normalized axes",
+                    review.path.display()
+                ));
+            }
+        }
+        Verdict::Rejected if valid_evidence_sources.is_empty() => {
             report.violations.push(format!(
-                "{}: accepted latest review must declare at least two valid Java-success passing sources",
+                "{}: rejected canonical review must preserve at least one Java-success held-out",
                 review.path.display()
             ));
         }
-        if observed_axes.len() < 2 {
-            report.violations.push(format!(
-                "{}: accepted latest review must exercise at least two distinct axes",
-                review.path.display()
-            ));
-        }
+        Verdict::Rejected => {}
+    }
+}
+
+fn register_unique_content(
+    contents: &mut BTreeMap<Vec<u8>, AcceptedHeldOut>,
+    bytes: Vec<u8>,
+    heldout: &AcceptedHeldOut,
+    kind: &str,
+    violations: &mut Vec<String>,
+) {
+    if let Some(previous) = contents.get(&bytes) {
+        violations.push(format!(
+            "{}: accepted {kind} content duplicates {} selected by {}",
+            heldout.review_path.display(),
+            if kind == "source" {
+                previous.source.display()
+            } else {
+                previous.golden.display()
+            },
+            previous.review_path.display()
+        ));
+    } else {
+        contents.insert(bytes, heldout.clone());
     }
 }
 
@@ -484,6 +598,16 @@ fn item_positive_pass(item: &serde_json::Map<String, Value>) -> Result<bool, Str
     if result_texts.is_empty() {
         return Ok(false);
     }
+    positive_pass_from_texts(item, &result_texts)
+}
+
+fn positive_pass_from_texts(
+    item: &serde_json::Map<String, Value>,
+    result_texts: &[String],
+) -> Result<bool, String> {
+    if item.get("valid").and_then(Value::as_bool) == Some(false) {
+        return Ok(false);
+    }
     let has_positive = result_texts.iter().any(|text| text_is_positive_pass(text));
     let has_negative = result_texts
         .iter()
@@ -492,6 +616,83 @@ fn item_positive_pass(item: &serde_json::Map<String, Value>) -> Result<bool, Str
         return Err("contradictory passing and failing result aliases".to_owned());
     }
     Ok(has_positive && !has_negative)
+}
+
+fn validate_zero_java_exit(
+    root: &Path,
+    review: &ReviewRecord,
+    item: &serde_json::Map<String, Value>,
+    source: &Path,
+    base_dir: Option<&str>,
+) -> Result<(), String> {
+    let mut declared_exits = BTreeSet::new();
+    for field in JAVA_EXIT_FIELDS {
+        let Some(value) = item.get(*field) else {
+            continue;
+        };
+        let exit = if let Some(exit) = value.as_i64() {
+            exit
+        } else if let Some(exit) = value
+            .as_str()
+            .and_then(|text| text.trim().parse::<i64>().ok())
+        {
+            exit
+        } else {
+            return Err(format!("{field} must be an integer exit status"));
+        };
+        declared_exits.insert(exit);
+    }
+    if declared_exits.len() > 1 {
+        return Err(format!("conflicting Java-exit aliases: {declared_exits:?}"));
+    }
+    if declared_exits.iter().any(|exit| *exit != 0) {
+        return Err(format!(
+            "Java invocation must exit zero, found {declared_exits:?}"
+        ));
+    }
+
+    let inferred = source.with_extension("java.exit");
+    let artifact = consensus_path(item, JAVA_EXIT_ARTIFACT_FIELDS, base_dir, false)?
+        .unwrap_or_else(|| inferred.clone());
+    if artifact != inferred {
+        return Err(format!(
+            "Java exit artifact must share the source stem: {} versus {}",
+            source.display(),
+            artifact.display()
+        ));
+    }
+    validate_mechanism_path(
+        root,
+        &review.mechanism,
+        &artifact,
+        "Java exit artifact",
+        "exit",
+    )?;
+    let text = std::fs::read_to_string(root.join(&artifact)).map_err(|error| {
+        format!(
+            "Java exit artifact is unreadable: {}: {error}",
+            artifact.display()
+        )
+    })?;
+    let exit = text.trim().parse::<i64>().map_err(|_| {
+        format!(
+            "Java exit artifact must contain one integer status: {}",
+            artifact.display()
+        )
+    })?;
+    if exit != 0 {
+        return Err(format!(
+            "Java exit artifact must affirm exit zero, found {exit}: {}",
+            artifact.display()
+        ));
+    }
+    if declared_exits.is_empty() {
+        return Ok(());
+    }
+    if declared_exits != BTreeSet::from([exit]) {
+        return Err("declared Java exit conflicts with preserved artifact".to_owned());
+    }
+    Ok(())
 }
 
 fn result_texts(item: &serde_json::Map<String, Value>) -> Result<Vec<String>, String> {
@@ -754,7 +955,7 @@ fn validate_mechanism_path(
     Ok(())
 }
 
-fn non_empty_string_set(value: Option<&Value>) -> Result<BTreeSet<String>, String> {
+fn normalized_axis_set(value: Option<&Value>) -> Result<BTreeSet<String>, String> {
     let Some(values) = value.and_then(Value::as_array) else {
         return Err("must be an array".to_owned());
     };
@@ -763,16 +964,33 @@ fn non_empty_string_set(value: Option<&Value>) -> Result<BTreeSet<String>, Strin
         let Some(text) = value.as_str() else {
             return Err("must contain only strings".to_owned());
         };
-        let text = text.trim();
+        let text = normalize_axis(text);
         if text.is_empty() {
             return Err("must not contain blank strings".to_owned());
         }
-        result.insert(text.to_owned());
+        result.insert(text);
     }
     if result.is_empty() {
         return Err("must contain at least one non-empty string".to_owned());
     }
     Ok(result)
+}
+
+fn normalize_axis(axis: &str) -> String {
+    let mut normalized = String::new();
+    let mut separating = false;
+    for character in axis.trim().chars() {
+        if character.is_ascii_alphanumeric() {
+            if separating && !normalized.is_empty() {
+                normalized.push('-');
+            }
+            separating = false;
+            normalized.push(character.to_ascii_lowercase());
+        } else {
+            separating = true;
+        }
+    }
+    normalized
 }
 
 fn review_sequence(path: &Path) -> Option<usize> {
@@ -804,22 +1022,63 @@ fn review_sequence(path: &Path) -> Option<usize> {
     None
 }
 
+fn normalize_review_verdict(object: &serde_json::Map<String, Value>) -> Result<Verdict, String> {
+    let mut verdicts = BTreeSet::new();
+    for field in ["verdict", "review_verdict", "decision", "status"] {
+        let Some(value) = object.get(field) else {
+            continue;
+        };
+        collect_verdicts(value, &mut verdicts).map_err(|error| format!("{field} {error}"))?;
+    }
+    if verdicts.is_empty() {
+        return Err("verdict must be present".to_owned());
+    }
+    if verdicts.len() > 1 {
+        return Err(format!("conflicting verdict aliases: {verdicts:?}"));
+    }
+    Ok(*verdicts.iter().next().expect("non-empty verdict set"))
+}
+
 fn normalize_verdict(value: Option<&Value>) -> Result<Verdict, String> {
     let Some(value) = value else {
         return Err("verdict must be present".to_owned());
     };
-    let text = if let Some(text) = value.as_str() {
-        text
-    } else if let Some(object) = value.as_object() {
-        object
-            .get("status")
-            .or_else(|| object.get("verdict"))
-            .or_else(|| object.get("result"))
-            .and_then(Value::as_str)
-            .ok_or_else(|| "object verdict must contain status/verdict/result".to_owned())?
-    } else {
-        return Err("verdict must be a string or known object verdict".to_owned());
+    let mut verdicts = BTreeSet::new();
+    collect_verdicts(value, &mut verdicts)?;
+    if verdicts.len() > 1 {
+        return Err(format!("conflicting verdict aliases: {verdicts:?}"));
+    }
+    verdicts
+        .into_iter()
+        .next()
+        .ok_or_else(|| "verdict must be present".to_owned())
+}
+
+fn collect_verdicts(value: &Value, verdicts: &mut BTreeSet<Verdict>) -> Result<(), String> {
+    if let Some(text) = value.as_str() {
+        verdicts.insert(parse_verdict(text)?);
+        return Ok(());
+    }
+    let Some(object) = value.as_object() else {
+        return Err("must be a string or known object verdict".to_owned());
     };
+    let mut found = false;
+    for field in ["status", "verdict", "result"] {
+        if let Some(value) = object.get(field) {
+            found = true;
+            let Some(text) = value.as_str() else {
+                return Err(format!("object verdict field {field} must be a string"));
+            };
+            verdicts.insert(parse_verdict(text)?);
+        }
+    }
+    if !found {
+        return Err("object verdict must contain status/verdict/result".to_owned());
+    }
+    Ok(())
+}
+
+fn parse_verdict(text: &str) -> Result<Verdict, String> {
     match text.trim().to_ascii_lowercase().as_str() {
         "accepted" | "accept" | "pass" => Ok(Verdict::Accepted),
         "rejected" | "reject" => Ok(Verdict::Rejected),
@@ -1047,7 +1306,6 @@ fn require_reviewer(
     path: &Path,
     violations: &mut Vec<String>,
 ) {
-    validate_reviewer_container_consensus(object, path, violations);
     if has_historical_reviewer_marker(object) {
         return;
     }
@@ -1070,27 +1328,53 @@ fn has_historical_reviewer_marker(object: &serde_json::Map<String, Value>) -> bo
         })
 }
 
-fn validate_accepting_review_attestation(
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+struct ActorIdentity {
+    identity: String,
+    task_id: String,
+}
+
+fn validate_review_attestation(
     root: &Path,
     account: &AccountRecord,
-    object: &serde_json::Map<String, Value>,
-    path: &Path,
+    review: &ReviewRecord,
     violations: &mut Vec<String>,
 ) -> bool {
     let start = violations.len();
-    validate_explicit_checker(object, path, violations);
-    validate_attested_revisions(root, account, object, path, violations);
-    require_commands(object, path, violations);
-    if !has_review_inputs(object) {
+    let maker = validate_explicit_actor(
+        &review.object,
+        MAKER_FIELDS,
+        "maker/implementer",
+        &review.path,
+        violations,
+    );
+    let checker = validate_explicit_checker(&review.object, &review.path, violations);
+    if let (Some(maker), Some(checker)) = (maker, checker) {
+        if maker.task_id.eq_ignore_ascii_case(&checker.task_id) {
+            violations.push(format!(
+                "{}: maker and checker task identities must be distinct",
+                review.path.display()
+            ));
+        }
+        if maker.identity.eq_ignore_ascii_case(&checker.identity) {
+            violations.push(format!(
+                "{}: maker and checker identities must be distinct",
+                review.path.display()
+            ));
+        }
+    }
+    validate_attested_revisions(root, account, review, violations);
+    require_commands(&review.object, &review.path, violations);
+    if !has_review_inputs(&review.object) {
         violations.push(format!(
-            "{}: accepted review must preserve generated inputs",
-            path.display()
+            "{}: canonical review must preserve generated inputs",
+            review.path.display()
         ));
     }
-    if !has_findings(object) {
+    if !has_findings(&review.object) {
         violations.push(format!(
-            "{}: accepted review must record findings",
-            path.display()
+            "{}: canonical review must record findings",
+            review.path.display()
         ));
     }
     violations.len() == start
@@ -1100,128 +1384,157 @@ fn validate_explicit_checker(
     object: &serde_json::Map<String, Value>,
     path: &Path,
     violations: &mut Vec<String>,
-) {
+) -> Option<ActorIdentity> {
+    let checker = validate_explicit_actor(
+        object,
+        REVIEWER_FIELDS,
+        "reviewer/checker",
+        path,
+        violations,
+    );
     let reviewers: Vec<_> = REVIEWER_FIELDS
         .iter()
         .filter_map(|field| object.get(*field).and_then(Value::as_object))
         .collect();
-    if reviewers.len() != 1 {
-        violations.push(format!(
-            "{}: accepted review must contain exactly one explicit reviewer/checker object",
-            path.display()
-        ));
-        return;
-    }
-    let reviewer = reviewers[0];
-    validate_reviewer_container_consensus(object, path, violations);
     for (label, fields) in [
-        ("identity", REVIEWER_IDENTITY_FIELDS),
         ("model", REVIEWER_MODEL_FIELDS),
         ("tool", REVIEWER_TOOL_FIELDS),
     ] {
-        if !fields.iter().any(|field| {
-            reviewer
-                .get(*field)
-                .and_then(Value::as_str)
-                .is_some_and(|text| !text.trim().is_empty())
-        }) {
+        let values: BTreeSet<_> = reviewers
+            .iter()
+            .flat_map(|reviewer| fields.iter().filter_map(|field| reviewer.get(*field)))
+            .filter_map(Value::as_str)
+            .map(str::trim)
+            .filter(|text| !text.is_empty())
+            .map(str::to_owned)
+            .collect();
+        if values.len() != 1 {
             violations.push(format!(
-                "{}: accepted review must explicitly name checker {label} in the same reviewer/checker object",
+                "{}: canonical review must explicitly and consistently name checker {label}",
                 path.display()
             ));
         }
     }
-    let independence = ["role", "independence"].iter().any(|field| {
-        reviewer
-            .get(*field)
-            .and_then(Value::as_str)
-            .is_some_and(|text| {
-                let lower = text.to_ascii_lowercase();
-                lower.contains("independent")
-                    || lower.contains("did not implement")
-                    || lower.contains("not the implementer")
-                    || lower.contains("checker")
-            })
-    }) || ["implemented_change", "implemented_mechanism"]
-        .iter()
-        .any(|field| reviewer.get(*field).and_then(Value::as_bool) == Some(false));
-    if !independence {
-        violations.push(format!(
-            "{}: accepted review must explicitly attest checker independence",
-            path.display()
-        ));
+    for reviewer in reviewers {
+        if ["implemented_change", "implemented_mechanism"]
+            .iter()
+            .any(|field| reviewer.get(*field).and_then(Value::as_bool) == Some(true))
+        {
+            violations.push(format!(
+                "{}: checker explicitly claims implementation authorship",
+                path.display()
+            ));
+        }
+        for field in ["role", "independence"] {
+            let Some(text) = reviewer.get(field).and_then(Value::as_str) else {
+                continue;
+            };
+            let normalized = text.to_ascii_lowercase();
+            if normalized.contains("checker and implementer")
+                || normalized.contains("checker/implementer")
+                || normalized.contains("checker & implementer")
+                || normalized.contains("implemented this mechanism")
+            {
+                violations.push(format!(
+                    "{}: checker explicitly claims implementation authorship",
+                    path.display()
+                ));
+            }
+        }
     }
+    checker
 }
 
-fn validate_reviewer_container_consensus(
+fn validate_explicit_actor(
     object: &serde_json::Map<String, Value>,
+    fields: &[&str],
+    label: &str,
     path: &Path,
     violations: &mut Vec<String>,
-) {
-    let mut containers = BTreeSet::new();
-    for field in ["reviewer", "checker", "checker_identity", "identity"] {
-        let Some(value) = object.get(field) else {
+) -> Option<ActorIdentity> {
+    let mut actors = BTreeSet::new();
+    let mut containers = 0;
+    for field in fields {
+        let Some(value) = object.get(*field) else {
             continue;
         };
         let Some(container) = value.as_object() else {
+            violations.push(format!(
+                "{}: {field} must be an explicit identity object",
+                path.display()
+            ));
             continue;
         };
-        containers.insert(serde_json::to_string(container).expect("JSON objects serialize"));
+        containers += 1;
+        let identity = consensus_non_empty_string(
+            container,
+            &["identity", "agent"],
+            &format!("{label} identity"),
+            path,
+            violations,
+        );
+        let task_id = consensus_non_empty_string(
+            container,
+            TASK_ID_FIELDS,
+            &format!("{label} task identity"),
+            path,
+            violations,
+        );
+        if let (Some(identity), Some(task_id)) = (identity, task_id) {
+            actors.insert(ActorIdentity { identity, task_id });
+        }
     }
-    if containers.len() > 1 {
+    if containers == 0 {
         violations.push(format!(
-            "{}: conflicting reviewer identity containers",
+            "{}: canonical review must contain an explicit {label} object",
             path.display()
         ));
+        return None;
     }
+    if actors.len() != 1 {
+        violations.push(format!(
+            "{}: conflicting or incomplete {label} identity containers",
+            path.display()
+        ));
+        return None;
+    }
+    actors.into_iter().next()
 }
 
 fn validate_attested_revisions(
     root: &Path,
     account: &AccountRecord,
-    object: &serde_json::Map<String, Value>,
-    path: &Path,
+    review: &ReviewRecord,
     violations: &mut Vec<String>,
 ) {
-    let Some(revisions) = object.get("revisions").and_then(Value::as_object) else {
+    let path = &review.path;
+    let Some(revisions) = review.object.get("revisions").and_then(Value::as_object) else {
         violations.push(format!(
-            "{}: accepted review must contain an explicit revisions object",
+            "{}: canonical review must contain an explicit revisions object",
             path.display()
         ));
         return;
     };
-    let account_commit = consensus_commit(
+    let account_commit = consensus_commit_across_review(
+        &review.object,
         revisions,
-        &[
-            "account_commit",
-            "account_revision_checked",
-            "rust_account_commit",
-        ],
+        ACCOUNT_REVISION_FIELDS,
         "account revision",
         path,
         violations,
     );
-    let implementation_commit = consensus_commit(
+    let implementation_commit = consensus_commit_across_review(
+        &review.object,
         revisions,
-        &[
-            "implementation_commit",
-            "rust_implementation_commit",
-            "implementation_revision",
-            "rust_implementation_revision",
-            "requested_implementation_revision",
-        ],
+        IMPLEMENTATION_REVISION_FIELDS,
         "Rust implementation revision",
         path,
         violations,
     );
-    let java_revision = consensus_commit(
+    let java_revision = consensus_commit_across_review(
+        &review.object,
         revisions,
-        &[
-            "java_revision",
-            "java_revision_checked",
-            "java_oracle_commit",
-            "java_oracle_revision",
-        ],
+        JAVA_REVISION_FIELDS,
         "Java revision",
         path,
         violations,
@@ -1268,39 +1581,54 @@ fn validate_attested_revisions(
             path.display()
         ));
     }
+    if git_commit_exists(root, &implementation_commit) {
+        if let Some(review_introduction) = review_blob_introduction(root, path, violations) {
+            if implementation_commit == review_introduction
+                || !git_is_ancestor(root, &implementation_commit, &review_introduction)
+            {
+                violations.push(format!(
+                    "{}: implementation revision must precede the commit introducing the active review blob ({review_introduction})",
+                    path.display()
+                ));
+            }
+        }
+    }
 }
 
-fn consensus_commit(
-    object: &serde_json::Map<String, Value>,
+fn consensus_commit_across_review(
+    review: &serde_json::Map<String, Value>,
+    revisions: &serde_json::Map<String, Value>,
     fields: &[&str],
     label: &str,
     path: &Path,
     violations: &mut Vec<String>,
 ) -> Option<String> {
     let mut commits = BTreeSet::new();
-    for field in fields {
-        let Some(value) = object.get(*field) else {
-            continue;
-        };
-        let Some(commit) = value.as_str() else {
-            violations.push(format!(
-                "{}: {label} field {field} must be a commit string",
-                path.display()
-            ));
-            continue;
-        };
-        if !is_commit(commit) {
-            violations.push(format!(
-                "{}: {label} field {field} must be a 40-character Git commit",
-                path.display()
-            ));
-            continue;
+    for (container_label, object) in [("top-level", review), ("revisions", revisions)] {
+        for field in fields {
+            let Some(value) = object.get(*field) else {
+                continue;
+            };
+            let Some(commit) = value.as_str() else {
+                violations.push(format!(
+                    "{}: {container_label} {label} field {field} must be a commit string",
+                    path.display()
+                ));
+                continue;
+            };
+            if !is_commit(commit) {
+                violations.push(format!(
+                    "{}: {container_label} {label} field {field} must be a 40-character Git commit",
+                    path.display()
+                ));
+                continue;
+            }
+            commits.insert(commit.to_ascii_lowercase());
         }
-        commits.insert(commit.to_ascii_lowercase());
     }
     if commits.is_empty() {
         violations.push(format!(
-            "{}: accepted review must explicitly name {label}",
+            "{}: canonical review must explicitly name {label}",
             path.display()
         ));
         return None;
@@ -1313,6 +1641,108 @@ fn consensus_commit(
         return None;
     }
     commits.into_iter().next()
+}
+
+fn consensus_non_empty_string(
+    object: &serde_json::Map<String, Value>,
+    fields: &[&str],
+    label: &str,
+    path: &Path,
+    violations: &mut Vec<String>,
+) -> Option<String> {
+    let mut values = BTreeSet::new();
+    for field in fields {
+        let Some(value) = object.get(*field) else {
+            continue;
+        };
+        let Some(text) = value
+            .as_str()
+            .map(str::trim)
+            .filter(|text| !text.is_empty())
+        else {
+            violations.push(format!(
+                "{}: {label} field {field} must be a non-empty string",
+                path.display()
+            ));
+            continue;
+        };
+        values.insert(text.to_owned());
+    }
+    if values.len() != 1 {
+        violations.push(format!(
+            "{}: {label} must have one conflict-closed value",
+            path.display()
+        ));
+        return None;
+    }
+    values.into_iter().next()
+}
+
+fn review_blob_introduction(
+    root: &Path,
+    path: &Path,
+    violations: &mut Vec<String>,
+) -> Option<String> {
+    let Ok(relative) = path.strip_prefix(root) else {
+        violations.push(format!(
+            "{}: review path is outside repository root",
+            path.display()
+        ));
+        return None;
+    };
+    let current_blob = git_output(root, &["hash-object", "--", &relative.to_string_lossy()]);
+    let Some(current_blob) = current_blob else {
+        violations.push(format!(
+            "{}: cannot hash active review blob",
+            path.display()
+        ));
+        return None;
+    };
+    let Some(revisions) = git_output(
+        root,
+        &[
+            "rev-list",
+            "--reverse",
+            "HEAD",
+            "--",
+            &relative.to_string_lossy(),
+        ],
+    ) else {
+        violations.push(format!(
+            "{}: cannot inspect active review history",
+            path.display()
+        ));
+        return None;
+    };
+    let Some(introduction) = revisions.lines().next() else {
+        violations.push(format!(
+            "{}: active review blob is not committed in HEAD history",
+            path.display()
+        ));
+        return None;
+    };
+    let spec = format!("{introduction}:{}", relative.to_string_lossy());
+    let introduced_blob = git_output(root, &["rev-parse", &spec]);
+    if introduced_blob.as_deref() != Some(current_blob.as_str()) {
+        violations.push(format!(
+            "{}: active canonical review blob differs from its introducing commit {introduction}; preserve it and add a sequenced review instead",
+            path.display()
+        ));
+    }
+    Some(introduction.to_owned())
+}
+
+fn git_output(root: &Path, args: &[&str]) -> Option<String> {
+    let output = Command::new("git")
+        .args(["-C"])
+        .arg(root)
+        .args(args)
+        .output()
+        .ok()?;
+    output
+        .status
+        .success()
+        .then(|| String::from_utf8_lossy(&output.stdout).trim().to_owned())
 }
 
 fn git_commit_exists(root: &Path, revision: &str) -> bool {
@@ -1485,6 +1915,12 @@ mod tests {
         assert!(normalize_verdict(Some(&json!("accepted_later"))).is_err());
         assert!(normalize_verdict(Some(&json!("rejected_with_counterexamples"))).is_err());
         assert!(normalize_verdict(Some(&json!("failed"))).is_err());
+        assert!(normalize_verdict(Some(&json!({
+            "status": "ACCEPT",
+            "verdict": "REJECT"
+        })))
+        .unwrap_err()
+        .contains("conflicting verdict aliases"));
     }
 
     #[test]
@@ -1608,6 +2044,7 @@ mod tests {
         std::fs::create_dir_all(&dir).unwrap();
         std::fs::write(dir.join("case.puml"), "@startuml\nA --> B\n@enduml\n").unwrap();
         std::fs::write(dir.join("case.svg"), "<svg>Syntax Error</svg>").unwrap();
+        std::fs::write(dir.join("case.java.exit"), "0\n").unwrap();
 
         let item = json!({
             "source": "test-diagrams/perturbations/m/case.puml",
@@ -1629,7 +2066,7 @@ mod tests {
                 .clone(),
         };
         let mut report = EvidenceReport::default();
-        validate_review_declared_evidence(&root, &review, true, true, &mut report);
+        validate_review_declared_evidence(&root, &review, true, &mut report);
         assert!(
             report
                 .violations
@@ -1682,28 +2119,8 @@ mod tests {
 
     #[test]
     fn rejected_latest_review_is_non_accepting_even_with_pass_results() {
-        let root = temp_root("rejected-latest");
-        write_account(&root, "m");
-        write_source_and_svg(&root, "m", "case_a", "<svg><text>A</text></svg>");
-        write_source_and_svg(&root, "m", "case_b", "<svg><text>B</text></svg>");
-        write_review(
-            &root,
-            "m",
-            json!({
-                "schema_version": 1,
-                "mechanism": "m",
-                "reviewer": {"identity": "checker", "model": "GPT-5", "tool": "Codex desktop"},
-                "rust_revision": "1111111111111111111111111111111111111111",
-                "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-                "commands": ["diff_one --no-oracle"],
-                "perturbations": [
-                    heldout("m", "case_a", ["label", "topology"]),
-                    heldout("m", "case_b", ["label", "direction"])
-                ],
-                "findings": ["rejecting counterexample remains"],
-                "verdict": "REJECT"
-            }),
-        );
+        let root = initialized_root("rejected-latest");
+        add_reviewed_mechanism(&root, "m", "REJECT");
 
         let report = build_report(&root);
         assert!(report.violations.is_empty(), "{:?}", report.violations);
@@ -1776,8 +2193,179 @@ mod tests {
         assert!(report.accepted_heldouts.is_empty());
         assert!(contains_violation(
             &report,
-            "conflicting reviewer identity containers"
+            "conflicting or incomplete reviewer/checker identity containers"
         ));
+    }
+
+    #[test]
+    fn conflicting_verdict_aliases_fail_closed() {
+        let fixture = accepted_fixture("conflicting-verdict-aliases");
+        mutate_review(&fixture.root, |review| {
+            review.insert(
+                "verdict".to_owned(),
+                json!({"status": "ACCEPT", "verdict": "REJECT"}),
+            );
+        });
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(&report, "conflicting verdict aliases"));
+    }
+
+    #[test]
+    fn identity_and_revision_alias_collisions_fail_closed() {
+        let fixture = accepted_fixture("identity-revision-collisions");
+        mutate_review(&fixture.root, |review| {
+            review["reviewer"]["task_id"] = review["maker"]["task_id"].clone();
+            review["reviewer"]["identity"] = review["maker"]["identity"].clone();
+            review["reviewer"]["role"] = json!("checker and implementer of this mechanism");
+            review.insert(
+                "implementation_commit".to_owned(),
+                json!("1111111111111111111111111111111111111111"),
+            );
+            review.insert(
+                "java_revision".to_owned(),
+                json!("2222222222222222222222222222222222222222"),
+            );
+        });
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "maker and checker task identities must be distinct"
+        ));
+        assert!(contains_violation(
+            &report,
+            "checker explicitly claims implementation authorship"
+        ));
+        assert!(contains_violation(
+            &report,
+            "conflicting Rust implementation revision aliases"
+        ));
+        assert!(contains_violation(
+            &report,
+            "conflicting Java revision aliases"
+        ));
+    }
+
+    #[test]
+    fn post_review_implementation_substitution_is_rejected() {
+        let fixture = accepted_fixture("post-review-substitution");
+        assert_ne!(fixture.implementation_commit, fixture.review_commit);
+        std::fs::write(fixture.root.join("unrelated.txt"), "post-review change\n").unwrap();
+        run_git(&fixture.root, &["add", "unrelated.txt"]);
+        run_git(&fixture.root, &["commit", "-q", "-m", "post-review change"]);
+        let post_review_commit = git_stdout(&fixture.root, &["rev-parse", "HEAD"]);
+        mutate_review(&fixture.root, |review| {
+            review["revisions"]["implementation_commit"] = json!(post_review_commit);
+        });
+        run_git(&fixture.root, &["add", "."]);
+        run_git(
+            &fixture.root,
+            &["commit", "-q", "-m", "substitute implementation revision"],
+        );
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "active canonical review blob differs from its introducing commit"
+        ));
+        assert!(contains_violation(
+            &report,
+            "implementation revision must precede the commit introducing"
+        ));
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn hardlinked_cross_mechanism_java_failures_and_case_only_axes_are_rejected() {
+        let fixture = accepted_fixture("hardlinked-java-failure");
+        add_reviewed_mechanism(&fixture.root, "n", "ACCEPT");
+        for stem in ["case_a", "case_b"] {
+            for extension in ["puml", "svg"] {
+                let donor = fixture
+                    .root
+                    .join(format!("test-diagrams/perturbations/m/{stem}.{extension}"));
+                let recipient = fixture
+                    .root
+                    .join(format!("test-diagrams/perturbations/n/{stem}.{extension}"));
+                std::fs::remove_file(&recipient).unwrap();
+                std::fs::hard_link(&donor, &recipient).unwrap();
+            }
+            std::fs::write(
+                fixture
+                    .root
+                    .join(format!("test-diagrams/perturbations/n/{stem}.java.exit")),
+                "1\n",
+            )
+            .unwrap();
+        }
+        let review_path = fixture.root.join("docs/parity-reviews/n/review.json");
+        let mut review: Value =
+            serde_json::from_slice(&std::fs::read(&review_path).unwrap()).unwrap();
+        let perturbations = review["perturbations"].as_array_mut().unwrap();
+        perturbations[0]["axes"] = json!(["label"]);
+        perturbations[1]["axes"] = json!(["LABEL"]);
+        perturbations[0]["java_exit"] = json!(1);
+        perturbations[1]["java_exit"] = json!(1);
+        std::fs::write(&review_path, serde_json::to_vec_pretty(&review).unwrap()).unwrap();
+        run_git(&fixture.root, &["add", "."]);
+        run_git(
+            &fixture.root,
+            &["commit", "-q", "-m", "hostile duplicate evidence"],
+        );
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "Java invocation must exit zero"
+        ));
+        assert!(contains_violation(&report, "at least two normalized axes"));
+        assert!(contains_violation(
+            &report,
+            "accepted source content duplicates"
+        ));
+        assert!(contains_violation(
+            &report,
+            "accepted Java SVG content duplicates"
+        ));
+    }
+
+    #[test]
+    fn canonical_reject_requires_the_full_attestation_contract() {
+        let fixture = accepted_fixture("incomplete-canonical-reject");
+        mutate_review(&fixture.root, |review| {
+            review.insert("verdict".to_owned(), json!("REJECT"));
+            review.remove("maker");
+            review.remove("revisions");
+            review.remove("perturbations");
+            review.remove("findings");
+        });
+        run_git(&fixture.root, &["add", "."]);
+        run_git(
+            &fixture.root,
+            &["commit", "-q", "-m", "incomplete rejection"],
+        );
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        for expected in [
+            "explicit maker/implementer object",
+            "explicit revisions object",
+            "preserve generated inputs",
+            "record findings",
+            "preserve held-out evidence",
+            "preserve at least one Java-success held-out",
+        ] {
+            assert!(
+                contains_violation(&report, expected),
+                "{expected}: {:?}",
+                report.violations
+            );
+        }
     }
 
     #[test]
@@ -1826,7 +2414,7 @@ mod tests {
             &report,
             "must not contain blank strings"
         ));
-        assert!(contains_violation(&report, "at least two distinct axes"));
+        assert!(contains_violation(&report, "at least two normalized axes"));
     }
 
     #[test]
@@ -1959,9 +2547,21 @@ mod tests {
 
     struct AcceptedFixture {
         root: PathBuf,
+        implementation_commit: String,
+        review_commit: String,
     }
 
     fn accepted_fixture(name: &str) -> AcceptedFixture {
+        let root = initialized_root(name);
+        let (implementation_commit, review_commit) = add_reviewed_mechanism(&root, "m", "ACCEPT");
+        AcceptedFixture {
+            root,
+            implementation_commit,
+            review_commit,
+        }
+    }
+
+    fn initialized_root(name: &str) -> PathBuf {
         let root = temp_root(name);
         run_git(&root, &["init", "-q"]);
         run_git(&root, &["config", "user.name", "Parity Gate Test"]);
@@ -1969,26 +2569,52 @@ mod tests {
             &root,
             &["config", "user.email", "parity-gate@example.invalid"],
         );
-        write_account(&root, "m");
-        write_source_and_svg(&root, "m", "case_a", "<svg><text>A</text></svg>");
-        write_source_and_svg(&root, "m", "case_b", "<svg><text>B</text></svg>");
-        run_git(&root, &["add", "."]);
-        run_git(&root, &["commit", "-q", "-m", "account"]);
-        let account_commit = git_stdout(&root, &["rev-parse", "HEAD"]);
+        root
+    }
 
-        std::fs::write(root.join("implementation.txt"), "model implementation\n").unwrap();
-        run_git(&root, &["add", "implementation.txt"]);
-        run_git(&root, &["commit", "-q", "-m", "implementation"]);
-        let implementation_commit = git_stdout(&root, &["rev-parse", "HEAD"]);
+    fn add_reviewed_mechanism(root: &Path, mechanism: &str, verdict: &str) -> (String, String) {
+        write_account(root, mechanism);
+        write_source_and_svg(
+            root,
+            mechanism,
+            "case_a",
+            &format!("<svg><text>{mechanism} A</text></svg>"),
+        );
+        write_source_and_svg(
+            root,
+            mechanism,
+            "case_b",
+            &format!("<svg><text>{mechanism} B</text></svg>"),
+        );
+        run_git(root, &["add", "."]);
+        run_git(
+            root,
+            &["commit", "-q", "-m", &format!("account {mechanism}")],
+        );
+        let account_commit = git_stdout(root, &["rev-parse", "HEAD"]);
+
+        let implementation_path = format!("implementation-{mechanism}.txt");
+        std::fs::write(root.join(&implementation_path), "model implementation\n").unwrap();
+        run_git(root, &["add", &implementation_path]);
+        run_git(
+            root,
+            &["commit", "-q", "-m", &format!("implementation {mechanism}")],
+        );
+        let implementation_commit = git_stdout(root, &["rev-parse", "HEAD"]);
 
         write_review(
-            &root,
-            "m",
+            root,
+            mechanism,
             json!({
                 "schema_version": 1,
-                "mechanism": "m",
+                "mechanism": mechanism,
+                "maker": {
+                    "identity": format!("maker {mechanism}"),
+                    "task_id": format!("maker-task-{mechanism}")
+                },
                 "reviewer": {
-                    "identity": "independent checker task",
+                    "identity": format!("checker {mechanism}"),
+                    "task_id": format!("checker-task-{mechanism}"),
                     "model": "GPT-5.6",
                     "tool": "Codex desktop",
                     "role": "independent checker; did not implement the change"
@@ -2000,14 +2626,20 @@ mod tests {
                 },
                 "commands": ["diff_one --no-oracle"],
                 "perturbations": [
-                    heldout("m", "case_a", ["label", "topology"]),
-                    heldout("m", "case_b", ["label", "direction"])
+                    heldout(mechanism, "case_a", ["label", "topology"]),
+                    heldout(mechanism, "case_b", ["label", "direction"])
                 ],
                 "findings": ["fresh counterexamples did not disprove the mechanism"],
-                "verdict": "ACCEPT"
+                "verdict": verdict
             }),
         );
-        AcceptedFixture { root }
+        run_git(root, &["add", "."]);
+        run_git(
+            root,
+            &["commit", "-q", "-m", &format!("review {mechanism}")],
+        );
+        let review_commit = git_stdout(root, &["rev-parse", "HEAD"]);
+        (implementation_commit, review_commit)
     }
 
     fn mutate_review(root: &Path, mutate: impl FnOnce(&mut serde_json::Map<String, Value>)) {
@@ -2093,10 +2725,11 @@ mod tests {
         std::fs::create_dir_all(&dir).unwrap();
         std::fs::write(
             dir.join(format!("{stem}.puml")),
-            "@startuml\nA --> B\n@enduml\n",
+            format!("@startuml\nA_{stem} --> B_{stem}\n@enduml\n"),
         )
         .unwrap();
         std::fs::write(dir.join(format!("{stem}.svg")), svg).unwrap();
+        std::fs::write(dir.join(format!("{stem}.java.exit")), "0\n").unwrap();
     }
 
     fn heldout<const N: usize>(mechanism: &str, stem: &str, axes: [&str; N]) -> Value {
@@ -2104,6 +2737,7 @@ mod tests {
             "source": format!("test-diagrams/perturbations/{mechanism}/{stem}.puml"),
             "golden": format!("test-diagrams/perturbations/{mechanism}/{stem}.svg"),
             "axes": axes.to_vec(),
+            "java_exit": 0,
             "result": "pass"
         })
     }
