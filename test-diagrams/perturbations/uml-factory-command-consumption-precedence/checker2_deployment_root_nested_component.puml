@@ -1,0 +1,11 @@
+@startuml
+node "Renamed Runtime" as runtime-west/prod {
+  component "Nested Shell" as Shell301 {
+    [Ingress 307] as Ingress307
+    node "Inner Node" as InnerNode311
+  }
+  database Store313
+}
+Ingress307 --> Store313
+InnerNode311 --> Store313
+@enduml

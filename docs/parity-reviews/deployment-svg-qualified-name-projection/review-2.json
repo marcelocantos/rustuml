@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-svg-qualified-name-projection",
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; frozen rustuml and diff_one binaries; pinned PlantUML JAR",
+    "date": "2026-08-01",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "rust_commit": "f0ffaa30c45c3531915727707945eecf47ee106d",
+    "rust_branch": "codex/t14-review-deployment-parser",
+    "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commit": "8b524dd6c28e690e3c9d6b887523b1d800ed1643",
+    "implementation_commit": "06a65d8d8e3ee9ffd29c64edc70f5fafdb05dc07",
+    "prior_rejection_commit": "36ac888cf337b0b71020da966a8b5cd9af367e87",
+    "parser_remediation_lineage": [
+      "3a8889258ff300b409ee8f5e03ace526ec0b1be3",
+      "e0d6a6eb4b43ec60a9574d4f49a99b31a92c2213",
+      "92b94590b8cdcfabc1988b26dc07a7dcccfba353",
+      "5509e3622a7948a8abbb93b0c01c973dfc61a135"
+    ]
+  },
+  "hashes": {
+    "frozen_rustuml_sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c",
+    "frozen_diff_one_sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_sha256": "d55a2720f6cebb8d7b05166415d7b3672fe6df473254958edb4a40a59c1b952b",
+    "prior_review_sha256": "0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757",
+    "artifact_manifest_sha256": "7996032a9c12a2d0d691e30f22c6a93627d543856c5e7f1291ddce8eba814aff"
+  },
+  "source_inspection": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/plasma/Plasma.java:52",
+        "finding": "Plasma.MAGIC_SEPARATOR is U+0001."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:57-89",
+        "finding": "Qualified names join canonical quark names through the owning parent using the Plasma separator."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java:52-72",
+        "finding": "Every metadata value passes through [^-\\w ], replacing disallowed characters and hierarchy separators with dots."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-render/src/svg.rs:8-24",
+        "finding": "translate_qualified_name is a direct ASCII character projection matching Java UGroup.fix."
+      },
+      {
+        "location": "crates/rustuml-render/src/deployment.rs:1158-1168,5429-5442",
+        "finding": "Leaf and cluster qualified names are assembled from canonical IDs and parent ownership before projection."
+      },
+      {
+        "location": "crates/rustuml-render/src/deployment.rs:6521-6536",
+        "finding": "Named-note metadata uses the same owner-plus-canonical-code projection."
+      }
+    ],
+    "implementation_lineage": "The account is the direct parent of 06a65d8d. The prior rejection is the direct child of that implementation. Its source finding explicitly cleared the projection helper and rejected the then-current parser capture. The later parser mechanism is separate history and is reviewed separately here.",
+    "fixture_shaped_logic": "No fixture label, filename, coordinate, or golden-path branch occurs in the production implementation. Matches for tenant-a, zone/prod, and Fresh* are confined to cfg(test) modules.",
+    "golden_reads_or_svg_surgery": "No include_str!, test-diagrams read, golden SVG read, or completed-SVG rewrite was added. Projection occurs while constructing metadata values.",
+    "constants": "No layout constant, threshold, metrics entry, or high-precision decimal was added. U+0001 and the accepted character set have adjacent Java-source provenance."
+  },
+  "commands": {
+    "revision_and_hash_checks": [
+      "git rev-parse HEAD",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "shasum -a 256 /private/tmp/rustuml-frozen/f0ffaa30/rustuml /private/tmp/rustuml-frozen/f0ffaa30/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/deployment-svg-qualified-name-projection/account.json docs/parity-reviews/deployment-svg-qualified-name-projection/review.json",
+      "cmp test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_batch.pre.sha256 test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_batch.post.sha256",
+      "cmp test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_replay.pre.sha256 test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_replay.post.sha256",
+      "cmp test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_existing-artifacts.before.sha256 test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_existing-artifacts.after.sha256"
+    ],
+    "source_commands": [
+      "git show --color=never --find-renames 06a65d8d",
+      "sed -n '1,130p' src/main/java/net/sourceforge/plantuml/klimt/UGroup.java",
+      "sed -n '1,125p' src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "sed -n '1,125p' src/main/java/net/sourceforge/plantuml/plasma/Plasma.java",
+      "rg -n 'include_str!|test-diagrams|golden/|read_to_string|read_to_end|\\.svg\\b|<svg|replace\\(' crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/deployment.rs crates/rustuml-render/src/svg.rs crates/rustuml-render/src/class.rs"
+    ],
+    "exact_per_input_execution": "puml=<INPUT>; stem=${puml%.puml}; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < \"$puml\" > \"$stem.java.svg\" 2> \"$stem.java.stderr\"; printf '%s\\n' \"$?\" > \"$stem.java.exit\"; cp \"$stem.java.svg\" \"$stem.svg\"; /private/tmp/rustuml-frozen/f0ffaa30/rustuml -pipe -tsvg < \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; printf '%s\\n' \"$?\" > \"$stem.rust.exit\"; /private/tmp/rustuml-frozen/f0ffaa30/diff_one --no-oracle \"$puml\" > \"$stem.diff.stdout\" 2> \"$stem.diff.stderr\"; printf '%s\\n' \"$?\" > \"$stem.diff.exit\"; /private/tmp/rustuml-frozen/f0ffaa30/rustuml --ast \"$puml\" > \"$stem.rust.ast.txt\" 2> \"$stem.rust.ast.stderr\"; printf '%s\\n' \"$?\" > \"$stem.rust.ast.exit\""
+  },
+  "inputs": [
+    {
+      "stem": "fresh2_alias_direction_nested_note_link",
+      "role": "fresh held-out",
+      "axes": ["display-first and code-first aliases", "hyphen/slash/dot identities", "two-level nesting", "renamed labels", "named-note and link ownership"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS",
+      "evidence": "Java and Rust both emit alpha-beta.root.v2, alpha-beta.root.v2.worker-group.v3, owned payload.one, owned memo.v4, and store.one metadata."
+    },
+    {
+      "stem": "fresh2_quoted_identity_deep_ownership",
+      "role": "fresh held-out",
+      "axes": ["quoted no-alias identity", "colon/slash/dot projection", "deep nesting", "attached and named notes", "multiline link note"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 1,
+      "result": "PASS_FOR_MECHANISM",
+      "evidence": "The six data-qualified-name values and inbox.v6-to-db.v8 link ID are byte-identical. diff_one reports only deployment geometry/path-coordinate differences; no identity or ownership attribute differs."
+    },
+    {
+      "stem": "fresh2_predecessor_display_alias_replay",
+      "role": "prior-rejection replay control",
+      "axes": ["hyphenated display-first owner alias", "owned node and named note", "dotted leaf aliases"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "fresh2_predecessor_bare_slash_replay",
+      "role": "prior-rejection replay control",
+      "axes": ["bare slash owner", "quoted colon child", "link-note ownership"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    }
+  ],
+  "artifact_manifest": {
+    "path": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_artifacts.sha256",
+    "entries": 70,
+    "per_input_suffixes": [".puml", ".java.svg", ".java.stderr", ".java.exit", ".svg", ".rust.svg", ".rust.stderr", ".rust.exit", ".diff.stdout", ".diff.stderr", ".diff.exit", ".rust.ast.txt", ".rust.ast.stderr", ".rust.ast.exit"],
+    "batch_evidence": ["checker2_batch.pre.*", "checker2_batch.post.*", "checker2_replay.pre.*", "checker2_replay.post.*", "checker2_existing-artifacts.before.sha256", "checker2_existing-artifacts.after.sha256"]
+  },
+  "residues": [
+    "The second held-out source retains unrelated deployment geometry divergence; metadata relevant to this mechanism is exact.",
+    "Unsupported container command families and fail-open malformed declarations do not reach this renderer projection and are rejected in deployment-container-command-identity-dispatch/review.json.",
+    "No Cargo command, harness guard, or corpus metric was run under the review constraint."
+  ],
+  "verdict": "ACCEPT",
+  "verdict_scope": "Supersedes the procedural REJECT in review.json only for deployment-svg-qualified-name-projection at f0ffaa30. It does not accept deployment container grammar or UML factory dispatch.",
+  "reason": "The prior rejection identified parser truncation/misdispatch while explicitly finding the projection helper correct. At the pinned head, both predecessor counterexamples pass diff_one --no-oracle exactly, one new multi-axis input passes exactly, and the other has byte-identical qualified-name and link identity metadata with only out-of-scope geometry differences. Source inspection finds a canonical-ID-to-UGroup projection with direct Java provenance and no fixture-shaped path."
+}

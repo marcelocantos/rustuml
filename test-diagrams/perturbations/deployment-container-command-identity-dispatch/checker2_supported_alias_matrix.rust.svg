@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="259px" preserveAspectRatio="none" style="width:242px;height:259px;background:#FFFFFF;" version="1.1" viewBox="0 0 242 259" width="242px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Renamed Release Frame-->
+<g class="cluster" data-qualified-name="release.eu-v2" data-source-line="1" id="ent0002">
+<rect fill="none" height="238.98" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="221" x="7" y="7"/>
+<path d="M191.9521,7 L191.9521,16.4883 L181.9521,26.4883 L7,26.4883" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="174.9521" x="10" y="21.5352">Renamed Release Frame</text>
+</g>
+<!--cluster Renamed Worker Pool-->
+<g class="cluster" data-qualified-name="release.eu-v2.workers-west.v3" data-source-line="2" id="ent0003">
+<path d="M33.5,50 L192.4785,50 A3.75,3.75 0 0 1 194.9785,52.5 L201.9785,72.4883 L201.5,72.4883 A2.5,2.5 0 0 1 204,74.9883 L204,137.99 A2.5,2.5 0 0 1 201.5,140.49 L33.5,140.49 A2.5,2.5 0 0 1 31,137.99 L31,52.5 A2.5,2.5 0 0 1 33.5,50" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="31" x2="201.9785" y1="72.4883" y2="72.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="157.9785" x="35" y="65.5352">Renamed Worker Pool</text>
+</g>
+<!--entity Store205-->
+<g class="entity" data-qualified-name="release.eu-v2.Store205" data-source-line="5" id="ent0005">
+<path d="M76.27,194.49 C76.27,184.49 117.001,184.49 117.001,184.49 C117.001,184.49 157.7319,184.49 157.7319,194.49 L157.7319,219.9783 C157.7319,229.9783 117.001,229.9783 117.001,229.9783 C117.001,229.9783 76.27,229.9783 76.27,219.9783 L76.27,194.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M76.27,194.49 C76.27,204.49 117.001,204.49 117.001,204.49 C117.001,204.49 157.7319,204.49 157.7319,194.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="61.4619" x="86.27" y="222.0252">Store205</text>
+</g>
+<!--entity Payload201-->
+<g class="entity" data-qualified-name="release.eu-v2.workers-west.v3.Payload201" data-source-line="3" id="ent0004">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="108.5312" x="62.73" y="85"/>
+<polygon fill="#F1F1F1" points="154.2613,90,154.2613,104,166.2613,104,166.2613,96,160.2613,90,154.2613,90" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="160.2613" x2="160.2613" y1="90" y2="96"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="166.2613" x2="160.2613" y1="96" y2="96"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="78.5313" x="72.73" y="111.5352">Payload201</text>
+</g>
+<!--link Payload201 to Store205-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency" data-source-line="7" id="lnk6">
+<path d="M117,124.65 C117,141.59 117,160.45 117,178.27" fill="none" id="Payload201-to-Store205" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="117,184.27,121,175.27,117,179.27,113,175.27,117,184.27" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

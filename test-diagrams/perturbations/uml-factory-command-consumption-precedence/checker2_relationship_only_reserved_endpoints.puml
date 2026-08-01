@@ -1,0 +1,5 @@
+@startuml
+Node --> Component : first
+Component --> Queue : second
+Queue --> Node : third
+@enduml

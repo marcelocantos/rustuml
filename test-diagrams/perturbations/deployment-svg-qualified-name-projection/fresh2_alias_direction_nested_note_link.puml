@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+folder "Renamed Control Plane" as alpha-beta/root.v2 {
+  frame worker-group/v3 as "Renamed Worker Group" {
+    artifact payload.one as "Renamed Payload"
+    note "Owned audit" as memo.v4
+  }
+  database store.one as "Renamed Store"
+}
+payload.one --> store.one : promote
+note on link: route ownership
+memo.v4 .. payload.one
+@enduml

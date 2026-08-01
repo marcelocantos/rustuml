@@ -1,0 +1,9 @@
+@startuml
+component "Renamed Shell" as Shell331 {
+  [Port 337] as Port337
+  node Node341
+}
+component Outside347
+Port337 --> Outside347
+Node341 --> Outside347
+@enduml

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="208px" preserveAspectRatio="none" style="width:288px;height:208px;background:#FFFFFF;" version="1.1" viewBox="0 0 288 208" width="288px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Shell331-->
+<g class="cluster" data-qualified-name="Shell331" data-source-line="1" id="ent0002">
+<rect fill="none" height="97.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="267" x="7" y="7"/>
+<rect fill="none" height="10" style="stroke:#181818;stroke-width:1;" width="15" x="254" y="12"/>
+<rect fill="none" height="2" style="stroke:#181818;stroke-width:1;" width="4" x="252" y="14"/>
+<rect fill="none" height="2" style="stroke:#181818;stroke-width:1;" width="4" x="252" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="105.458" x="87.771" y="33.5352">Renamed Shell</text>
+</g>
+<!--entity Port337-->
+<g class="entity" data-qualified-name="Shell331.Port337" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="98.29" x="22.855" y="42"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="101.145" y="47"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="99.145" y="49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="99.145" y="53"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58.29" x="37.855" y="75.5352">Port 337</text>
+</g>
+<!--entity Node341-->
+<g class="entity" data-qualified-name="Shell331.Node341" data-source-line="3" id="ent0004">
+<polygon fill="#F1F1F1" points="155.9443,52,165.9443,42,258.0557,42,258.0557,78.4883,248.0557,88.4883,155.9443,88.4883,155.9443,52" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="248.0557" x2="258.0557" y1="52" y2="42"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="155.9443" x2="248.0557" y1="52" y2="52"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="248.0557" x2="248.0557" y1="52" y2="88.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.1113" x="170.9443" y="75.5352">Node341</text>
+</g>
+<!--entity Outside347-->
+<g class="entity" data-qualified-name="Outside347" data-source-line="5" id="ent0005">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="119.1533" x="79.4233" y="148.4883"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="178.5767" y="153.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="176.5767" y="155.4883"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="176.5767" y="159.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.1533" x="94.4233" y="182.0235">Outside347</text>
+</g>
+<!--link Port337 to Outside347-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="6" id="lnk6">
+<path d="M86.54,88.92 C97.78,106.45 110.0222,125.5386 121.2522,143.0586" fill="none" id="Port337-to-Outside347" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="124.49,148.11,123.0008,138.3744,121.7918,143.9005,116.2657,142.6915,124.49,148.11" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link Node341 to Outside347-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M192.25,88.92 C180.84,106.45 168.3903,125.5596 157.0003,143.0796" fill="none" id="Node341-to-Outside347" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="153.73,148.11,161.9891,142.7446,156.4553,143.918,155.2819,138.3842,153.73,148.11" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

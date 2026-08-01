@@ -1,0 +1,74 @@
+UseCase(
+    UseCaseDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nrectangle \"Renamed Review Boundary\" as review/live-v5 {\n  actor Reviewer353\n  usecase \"Approve 359\" as Approve359\n  Reviewer353 --> Approve359\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        actors: [
+            Actor {
+                id: "Reviewer353",
+                label: "Reviewer353",
+                stereotype: None,
+                color: None,
+                source_line: 2,
+            },
+        ],
+        use_cases: [
+            UseCase {
+                id: "Approve359",
+                label: "Approve 359",
+                explicit_id: true,
+                stereotype: None,
+                description: [],
+                separators: [],
+                color: None,
+                source_line: 3,
+            },
+        ],
+        connections: [
+            UseCaseConnection {
+                from: "Reviewer353",
+                to: "Approve359",
+                label: None,
+                stereotype: None,
+                queue_len: 2,
+                dashed: false,
+                arrow: true,
+                extension: false,
+                arrow_at_start: false,
+                source_line: 4,
+            },
+        ],
+        packages: [
+            UseCasePackage {
+                name: "Renamed Review Boundary",
+                elements: [
+                    "Approve359",
+                ],
+                color: None,
+                kind: Rectangle,
+                source_line: 1,
+            },
+        ],
+        notes: [],
+    },
+)

@@ -1,0 +1,7 @@
+@startuml
+object Component
+object UseCase
+object Node
+Component ..|> UseCase
+UseCase ..|> Node
+@enduml

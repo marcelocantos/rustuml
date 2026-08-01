@@ -1,0 +1,21 @@
+SVG structural differences:
+  element count: expected 20, got 14
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "247px"), ("preserveAspectRatio", "none"), ("style", "width:199px;height:247px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 199 247"), ("width", "199px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "153px"), ("preserveAspectRatio", "none"), ("style", "width:147px;height:153px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 147 153"), ("width", "147px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "zone.blue"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Payload223"), ("data-source-line", "3"), ("id", "ent0002")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M6,119.49 L28.25,6 L161.75,6 L184,119.49 L161.75,232.98 L28.25,232.98 L6,119.49"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M20.18,8.5 L20.18,39.9883 A2.5,2.5 0 0 0 22.68,42.4883 L116.2113,42.4883 A2.5,2.5 0 0 0 118.7113,39.9883 L118.7113,16 L108.7113,6 L22.68,6 A2.5,2.5 0 0 0 20.18,8.5"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [5] tag mismatch: expected <text>, got <path>
+  [6] tag mismatch: expected <g>, got <text>
+  [7] tag mismatch: expected <polygon>, got <g>
+  [8] tag mismatch: expected <text>, got <rect>
+  [9] tag mismatch: expected <g>, got <path>
+  [10] tag mismatch: expected <rect>, got <text>
+  [11] tag mismatch: expected <path>, got <g>
+  [12] tag mismatch: expected <text>, got <path>
+  [13] tag mismatch: expected <g>, got <polygon>
+
