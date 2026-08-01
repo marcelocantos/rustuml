@@ -1,0 +1,29 @@
+SVG structural differences:
+  element count: expected 23, got 20
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "296px"), ("preserveAspectRatio", "none"), ("style", "width:220px;height:296px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 220 296"), ("width", "220px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "261px"), ("preserveAspectRatio", "none"), ("style", "width:136px;height:261px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 136 261"), ("width", "136px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "release.east.v2"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Payload211"), ("data-source-line", "2"), ("id", "ent0002")]
+  [4] tag mismatch: expected <polygon>, got <rect>
+  [5] tag mismatch: expected <text>, got <polygon>
+  [6] tag mismatch: expected <g>, got <line>
+  [7] tag mismatch: expected <rect>, got <line>
+  [8] tag mismatch: expected <polygon>, got <text>
+  [9] tag mismatch: expected <line>, got <g>
+  [10] tag mismatch: expected <line>, got <path>
+  [11] tag mismatch: expected <text>, got <path>
+  [12] tag mismatch: expected <g>, got <text>
+  [13] tag mismatch: expected <path>, got <g>
+  [14] <path> attr mismatch:
+    expected: [("d", "M151.1303,41 L151.1303,51 L161.1303,51 L151.1303,41"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M24.62,200.8 C24.62,190.8 62.1278,190.8 62.1278,190.8 C62.1278,190.8 99.6356,190.8 99.6356,200.8 L99.6356,226.2883 C99.6356,236.2883 62.1278,236.2883 62.1278,236.2883 C62.1278,236.2883 24.62,236.2883 24.62,226.2883 L24.62,200.8"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [15] tag mismatch: expected <text>, got <path>
+  [16] tag mismatch: expected <g>, got <text>
+  [17] tag mismatch: expected <path>, got <g>
+  [18] <path> attr mismatch:
+    expected: [("d", "M67.49,235.8 C67.49,245.8 104.9978,245.8 104.9978,245.8 C104.9978,245.8 142.5056,245.8 142.5056,235.8"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M62.13,130.96 C62.13,147.9 62.13,166.76 62.13,184.58"), ("fill", "none"), ("id", "Payload211-to-Sink217"), ("style", "stroke:#181818;stroke-width:1;")]
+  [19] tag mismatch: expected <text>, got <polygon>
+

@@ -1,0 +1,36 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "238px"), ("preserveAspectRatio", "none"), ("style", "width:231px;height:238px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 231 238"), ("width", "231px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "203px"), ("preserveAspectRatio", "none"), ("style", "width:231px;height:203px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 231 203"), ("width", "231px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "review.live-v5"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "cluster"), ("data-qualified-name", "Renamed Review Boundary"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "217.55"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:1;"), ("width", "210"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "none"), ("height", "81.06"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:1;"), ("width", "210"), ("x", "7"), ("y", "106.99")]
+  [5] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "194.7559"), ("x", "14.6221"), ("y", "22.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "194.7559"), ("x", "14.6221"), ("y", "122.5252")]
+  [6] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "review.live-v5.Reviewer353"), ("data-source-line", "2"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Renamed Review Boundary.Approve359"), ("data-source-line", "3"), ("id", "ent0004")]
+  [7] <ellipse> attr mismatch:
+    expected: [("cx", "111.9991"), ("cy", "50.5"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "112"), ("cy", "157.0207"), ("fill", "#F1F1F1"), ("rx", "63.1622"), ("ry", "15.0324"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [8] tag mismatch: expected <path>, got <text>
+  [9] tag mismatch: expected <text>, got <g>
+  [10] tag mismatch: expected <g>, got <ellipse>
+  [11] tag mismatch: expected <ellipse>, got <path>
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "87.6436"), ("x", "68.1805"), ("y", "198.2666")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "86.6182"), ("x", "68.6909"), ("y", "79.0352")]
+  [12] <text> text mismatch:
+    expected: Some("Approve 359")
+    actual:   Some("Reviewer353")
+  [14] <path> attr mismatch:
+    expected: [("d", "M112,118.91 C112,139.22 112,157.09 112,172.02"), ("fill", "none"), ("id", "Reviewer353-to-Approve359"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M112,82.42 C112,102.72 112,120.6 112,135.52"), ("fill", "none"), ("id", "Reviewer353-to-Approve359"), ("style", "stroke:#181818;stroke-width:1;")]
+  [15] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "112,178.02,116,169.02,112,173.02,108,169.02,112,178.02"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "112,141.52,116,132.52,112,136.52,108,132.52,112,141.52"), ("style", "stroke:#181818;stroke-width:1;")]
+

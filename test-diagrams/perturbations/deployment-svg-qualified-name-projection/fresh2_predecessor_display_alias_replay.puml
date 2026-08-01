@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+folder "Tenant Display" as tenant-a {
+  node "Visible/API" as api.one
+  note "owner note" as note.one
+}
+database sink.one as "Sink/One"
+api.one --> sink.one : calls
+note.one .. api.one
+@enduml

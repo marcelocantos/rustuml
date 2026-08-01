@@ -1,0 +1,15 @@
+@startuml
+cloud "Renamed Cloud: West" {
+  folder "Layer / Blue" as layer-two/eu.v5 {
+    queue inbox.v6
+    note right of inbox.v6 : attached owner
+    note "Nested Memo" as note.seven
+  }
+}
+database db.v8
+inbox.v6 --> db.v8
+note on link
+  second route
+end note
+note.seven .. inbox.v6
+@enduml

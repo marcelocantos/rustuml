@@ -1,0 +1,9 @@
+@startuml
+hexagon zone@blue as "Renamed Hex" {
+  action "Nested Action" as action/edge-v3 {
+    file Payload223
+  }
+  stack Archive227
+}
+Payload223 --> Archive227
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+rectangle "Renamed Review Boundary" as review/live-v5 {
+  actor Reviewer353
+  usecase "Approve 359" as Approve359
+  Reviewer353 --> Approve359
+}
+@enduml

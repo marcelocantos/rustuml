@@ -1,0 +1,8 @@
+@startuml
+!include <archimate/Archimate>
+rectangle "Renamed Business Ring" as business/east-v6 {
+  Business_Actor(Buyer367, "Renamed Buyer")
+  Business_Process(Flow373, "Renamed Flow")
+  Rel_Serving(Flow373, Buyer367, "serves")
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+frame release/eu-v2 as "Renamed Release Frame" {
+  folder "Renamed Worker Pool" as workers-west/v3 {
+    artifact Payload201
+  }
+  database Store205
+}
+Payload201 --> Store205
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+cloud region/new unexpected {
+  artifact Payload229
+}
+database Sink233
+Payload229 --> Sink233
+@enduml

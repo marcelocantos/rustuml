@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="153px" preserveAspectRatio="none" style="width:147px;height:153px;background:#FFFFFF;" version="1.1" viewBox="0 0 147 153" width="147px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Payload223-->
+<g class="entity" data-qualified-name="Payload223" data-source-line="3" id="ent0002">
+<path d="M20.18,8.5 L20.18,39.9883 A2.5,2.5 0 0 0 22.68,42.4883 L116.2113,42.4883 A2.5,2.5 0 0 0 118.7113,39.9883 L118.7113,16 L108.7113,6 L22.68,6 A2.5,2.5 0 0 0 20.18,8.5" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M108.7113,6 L108.7113,13.5 A2.5,2.5 0 0 0 111.2113,16 L118.7113,16" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="78.5313" x="30.18" y="29.5352">Payload223</text>
+</g>
+<!--entity Archive227-->
+<g class="entity" data-qualified-name="Archive227" data-source-line="5" id="ent0003">
+<rect fill="#F1F1F1" height="36.4883" rx="2.5" ry="2.5" style="stroke:none;stroke-width:0.5;" width="96.8975" x="21" y="102.49"/>
+<path d="M6,102.49 L18.5,102.49 A2.5,2.5 0 0 1 21,104.99 L21,136.4783 A2.5,2.5 0 0 0 23.5,138.9783 L115.3975,138.9783 A2.5,2.5 0 0 0 117.8975,136.4783 L117.8975,104.99 A2.5,2.5 0 0 1 120.3975,102.49 L132.8975,102.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="76.8975" x="31" y="126.0252">Archive227</text>
+</g>
+<!--link Payload223 to Archive227-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk4">
+<path d="M69.45,42.57 C69.45,59.52 69.45,79.18 69.45,96.19" fill="none" id="Payload223-to-Archive227" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="69.45,102.19,73.45,93.19,69.45,97.19,65.45,93.19,69.45,102.19" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>
