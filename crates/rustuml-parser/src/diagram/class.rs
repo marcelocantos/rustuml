@@ -273,6 +273,11 @@ pub struct AssociationClass {
     /// supplies the replacement split links.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub replaced_relationship: Option<Relationship>,
+    /// Index of the first association on this unordered endpoint pair. Java
+    /// gives the second point a coupled `createSecondAssociation` lifecycle
+    /// rather than running `createNew` independently a second time.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub first_association: Option<usize>,
     /// Whether the apoint→C connector is dashed (`..`) rather than solid (`--`).
     #[serde(default = "default_true")]
     pub dashed: bool,
