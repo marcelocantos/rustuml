@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-factory-command-consumption-precedence",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "89111c35",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["PSystemBuilder", "createPSystem"],
+      "lines": "124-140, 229-250",
+      "role": "Registers Sequence, Class, Activity, Description, and State factories in a fixed order and returns the first factory that successfully consumes the complete source."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbols": ["initCommandsList"],
+      "lines": "99-150",
+      "role": "Registers explicit class declarations, package/namespace containers, and class links, so package-wrapped class sources remain consumable by the earlier Class factory."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": ["initCommandsList"],
+      "lines": "84-115",
+      "role": "Registers one Description command inventory for nodes, components, databases, bracket leaves, and links after Class has failed."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "lines": "720-1538",
+      "role": "Approximates Java factory consumption with scores and booleans, then splits Java Description into Component and Deployment renderer models."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["component_backed_description_source", "has_deployment_container_evidence"],
+      "lines": "1412-1463",
+      "role": "Treats nested component/bracket commands as a global Component override and permits shared-container evidence to win when explicit Class consumption should remain viable."
+    }
+  ],
+  "claimed_invariant": "UML subtype selection follows whole-source command consumption and Java factory order, not isolated keyword ownership. A source containing explicit class declarations inside package containers remains Class whenever every line is accepted by ClassDiagramFactory. If Class rejects a mixed Description leaf, Java's unified Description factory owns the complete source; Rust's Component-versus-Deployment split must then be chosen from the whole ownership topology, with nested component syntax insufficient by itself to override deployment-oriented root nodes, databases, queues, or artifacts.",
+  "causal_divergence": "The broad Deployment container-identity repair introduced a complete-command signal into Rust's score detector. A quoted package can now push a source containing six explicit class declarations into Deployment, despite Java accepting it in the earlier Class factory. Separately, component_backed_description_source includes any nested component container or bracket leaf. In a valid Description source rooted in production/database/CDN nodes, that local syntax forces Rust's Component renderer, changing SVEK node creation order and breaking an otherwise exact mixed component/deployment golden. Both errors arise because local keyword evidence substitutes for complete-factory consumption and whole-topology ownership.",
+  "planned_model_change": "Give a viable explicit Class declaration source precedence over shared Description container evidence, mirroring ClassDiagramFactory order. Narrow the Component override to commands that establish Component ownership at the source/root level; allow nested component containers and bracket leaves inside deployment-oriented roots to be handled by the Deployment half when its whole-source score wins. Add direct subtype tests for package-wrapped classes, mixed node/component/database ownership, pure component roots, broad deployment identities, and explicit UseCase/Archimate competitors.",
+  "perturbation_axes": [
+    "factory owner: explicit Class versus unified Description versus UseCase versus Archimate",
+    "container identity: quoted ordinary, hyphenated alias, slash-bearing bare code, and simple bare code",
+    "component syntax placement: top-level leaf, nested component container, and nested bracket leaf",
+    "deployment topology: node/database roots, queue/artifact leaves, and mixed cross-container links",
+    "declaration order and nesting depth"
+  ],
+  "scope_boundary": "This mechanism owns only UML subtype/factory selection and Rust's Component-versus-Deployment split. It does not own canonical ID parsing after selection, SVEK node order inside a selected renderer, geometry, link identities, SVG metadata, painted bounds, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The package cross-connect source selects Class and returns to structural parity.",
+    "The mixed node/component/database source selects the renderer that preserves Java Description creation order and returns to structural parity.",
+    "The slash/hyphen deployment counterexamples still select Deployment with exact canonical identities.",
+    "Pure Component, UseCase, Archimate, and ordinary Class regression tests retain their current model owners.",
+    "Parser, renderer, and no-oracle metrics show no new failures, and a separate checker supplies fresh competing-factory inputs."
+  ],
+  "forbidden_approaches": [
+    "special-casing golden filenames, labels, or exact score totals",
+    "adding an unexplained score constant solely to flip either known input",
+    "changing renderer geometry to compensate for the wrong selected model",
+    "changing parser identities, comparator controls, baselines, or skip rules"
+  ]
+}
