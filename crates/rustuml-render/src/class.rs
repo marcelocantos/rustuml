@@ -5733,46 +5733,21 @@ fn render_plantuml_svg(
             .zip(relationship_edge_indices(diagram, edge_paths))
         {
             let note = relationship.link_note.as_ref();
-            let Some(center) =
-                relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)
-            else {
-                continue;
-            };
             let Some(edge) = edge_idx.and_then(|idx| edge_paths.get(idx)) else {
                 continue;
             };
             let Some(position) = edge.label else {
                 continue;
             };
-            if relationship_has_center_label(relationship) {
-                max_x = max_x.max(
-                    position.x
-                        + MARGIN
-                        + layout_x_bias
-                        + center.label_origin_x
-                        + center.label_width,
-                );
-                max_y =
-                    max_y.max(position.y + MARGIN + center.label_origin_y + center.label_height);
-                if let Some(label) = relationship.label.as_deref() {
-                    let arrow_font = relationship_arrow_font(diagram, relationship);
-                    let line = text_render::layout_no_mono_line(
-                        label.trim_matches('"'),
-                        arrow_font.size,
-                        &arrow_font.family,
-                    );
-                    max_y = max_y
-                        .max(position.y + MARGIN + center.label_text_offset_y + line.painted_max_y);
-                }
-            }
-            if note.is_some() {
-                let note_x = position.x + center.note_x + MARGIN + layout_x_bias;
-                let note_y = position.y + center.note_y + MARGIN;
-                // `SvekResult.calculateDimension` measures the rendered graph
-                // through `LimitFinder`; its `drawUPath` includes the visible
-                // `ComponentRoseNote` polygon in the final envelope.
-                max_x = max_x.max(note_x + center.note_width);
-                max_y = max_y.max(note_y + center.note_height);
+            if let Some((_, center_max_x, _, center_max_y)) = relationship_center_painted_bounds(
+                diagram,
+                relationship,
+                note,
+                position.x,
+                position.y,
+            ) {
+                max_x = max_x.max(center_max_x + MARGIN + layout_x_bias);
+                max_y = max_y.max(center_max_y + MARGIN);
             }
         }
         // Java `GraphvizImageBuilder.buildImage` selects
@@ -14564,6 +14539,24 @@ fn svek_layout_x_bias(
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
+    let edge_indices = relationship_edge_indices(diagram, edge_paths);
+    let center_label_bounds = diagram
+        .relationships
+        .iter()
+        .zip(&edge_indices)
+        .filter_map(|(relationship, edge_idx)| {
+            let edge_idx = (*edge_idx)?;
+            let edge = edge_paths.get(edge_idx)?;
+            let position = edge.label?;
+            let note = relationship.link_note.as_ref();
+            relationship_center_painted_bounds(diagram, relationship, note, position.x, position.y)
+                .map(|bounds| (edge_idx, bounds))
+        })
+        .collect::<Vec<_>>();
+    let mapped_center_edges = center_label_bounds
+        .iter()
+        .map(|(edge_idx, _)| *edge_idx)
+        .collect::<HashSet<_>>();
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
             let icon = font.visibility_icon_geom();
@@ -14614,8 +14607,16 @@ fn svek_layout_x_bias(
                 .iter()
                 .flat_map(|edge| edge.points.iter().map(|point| point.0)),
         )
+        .chain(
+            edge_paths
+                .iter()
+                .enumerate()
+                .filter(|(idx, _)| !mapped_center_edges.contains(idx))
+                .filter_map(|(_, edge)| edge.label.map(|label| label.x)),
+        )
+        .chain(center_label_bounds.iter().map(|(_, bounds)| bounds.0))
         .chain(edge_paths.iter().flat_map(|edge| {
-            [edge.label, edge.tail_label, edge.head_label]
+            [edge.tail_label, edge.head_label]
                 .into_iter()
                 .flatten()
                 .map(|label| label.x)
@@ -14671,30 +14672,23 @@ fn svek_layout_y_bias(
     let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
     let magic_arrow_polygons = class_magic_arrow_polygons(diagram, edge_paths);
     let edge_indices = relationship_edge_indices(diagram, edge_paths);
-    let mapped_center_edges = diagram
+    let center_label_bounds = diagram
         .relationships
         .iter()
         .zip(&edge_indices)
         .filter_map(|(relationship, edge_idx)| {
             let edge_idx = (*edge_idx)?;
             let edge = edge_paths.get(edge_idx)?;
-            let note = relationship.link_note.as_ref();
-            relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
-            edge.label?;
-            Some(edge_idx)
-        })
-        .collect::<HashSet<_>>();
-    let center_label_minima = diagram
-        .relationships
-        .iter()
-        .zip(&edge_indices)
-        .filter_map(|(relationship, edge_idx)| {
-            let edge = edge_idx.and_then(|idx| edge_paths.get(idx))?;
             let position = edge.label?;
             let note = relationship.link_note.as_ref();
-            relationship_center_painted_min_y(diagram, relationship, note, position.y)
+            relationship_center_painted_bounds(diagram, relationship, note, position.x, position.y)
+                .map(|bounds| (edge_idx, bounds))
         })
         .collect::<Vec<_>>();
+    let mapped_center_edges = center_label_bounds
+        .iter()
+        .map(|(edge_idx, _)| *edge_idx)
+        .collect::<HashSet<_>>();
     let min_y = positions
         .iter()
         .enumerate()
@@ -14719,7 +14713,7 @@ fn svek_layout_y_bias(
                 .iter()
                 .flat_map(|edge| edge.points.iter().map(|point| point.1)),
         )
-        .chain(center_label_minima)
+        .chain(center_label_bounds.iter().map(|(_, bounds)| bounds.2))
         .chain(
             edge_paths
                 .iter()
@@ -14750,17 +14744,21 @@ fn svek_layout_y_bias(
     }
 }
 
-/// The vertical frontier Java obtains by painting a relationship's natural
-/// center block through `LimitFinder`. Graphviz's fixed table only reserves
-/// space; it does not itself contribute a primitive to that frontier.
-fn relationship_center_painted_min_y(
+/// The frontier Java obtains by painting a relationship's natural center
+/// block through `LimitFinder`. Graphviz's fixed table reserves space but is
+/// not itself a painted primitive.
+fn relationship_center_painted_bounds(
     diagram: &ClassDiagram,
     relationship: &Relationship,
     note: Option<&ClassLinkNote>,
+    position_x: f64,
     position_y: f64,
-) -> Option<f64> {
+) -> Option<(f64, f64, f64, f64)> {
     let center = relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)?;
+    let mut min_x = f64::INFINITY;
+    let mut max_x = f64::NEG_INFINITY;
     let mut min_y = f64::INFINITY;
+    let mut max_y = f64::NEG_INFINITY;
     if let Some(label) = relationship.label.as_deref() {
         let arrow_font = relationship_arrow_font(diagram, relationship);
         let line = text_render::layout_no_mono_line(
@@ -14768,14 +14766,21 @@ fn relationship_center_painted_min_y(
             arrow_font.size,
             &arrow_font.family,
         );
+        let text_x = position_x + center.label_text_offset_x;
+        min_x = min_x.min(text_x);
+        max_x = max_x.max(text_x + line.width);
         min_y = min_y.min(position_y + center.label_text_offset_y + line.painted_min_y);
+        max_y = max_y.max(position_y + center.label_text_offset_y + line.painted_max_y);
     }
     if note.is_some() {
         // `ComponentRoseNote` has five pixels of preferred-size padding, but
         // its first visible path starts only after that leading padding.
+        min_x = min_x.min(position_x + center.note_x);
+        max_x = max_x.max(position_x + center.note_x + center.note_width);
         min_y = min_y.min(position_y + center.note_y);
+        max_y = max_y.max(position_y + center.note_y + center.note_height);
     }
-    min_y.is_finite().then_some(min_y)
+    (min_x.is_finite() && min_y.is_finite()).then_some((min_x, max_x, min_y, max_y))
 }
 
 fn class_magic_arrow_polygons(
@@ -14899,7 +14904,6 @@ struct RelationshipCenterLayout {
     label_width: f64,
     label_height: f64,
     label_origin_x: f64,
-    label_origin_y: f64,
     label_text_offset_x: f64,
     label_text_offset_y: f64,
     magic_arrow_offset_x: f64,
@@ -15060,7 +15064,6 @@ fn relationship_center_layout(
         label_width,
         label_height,
         label_origin_x,
-        label_origin_y,
         label_text_offset_x: label_origin_x + label_text_inner_x,
         label_text_offset_y: label_origin_y + label_text_inner_y,
         magic_arrow_offset_x: label_origin_x,
@@ -22063,16 +22066,25 @@ mod tests {
                 .unwrap();
         let arrow_font = relationship_arrow_font(&diagram, relationship);
         let label = relationship.label.as_deref().unwrap();
+        let position_x = 41.5;
         let position_y = 19.75;
         let line = text_render::layout_no_mono_line(label, arrow_font.size, &arrow_font.family);
+        let text_min_x = position_x + center.label_text_offset_x;
+        let note_min_x = position_x + center.note_x;
         let text_min = position_y + center.label_text_offset_y + line.painted_min_y;
         let note_min = position_y + center.note_y;
 
         assert!(text_min < position_y);
-        assert_eq!(
-            relationship_center_painted_min_y(&diagram, relationship, Some(note), position_y),
-            Some(text_min.min(note_min))
-        );
+        let bounds = relationship_center_painted_bounds(
+            &diagram,
+            relationship,
+            Some(note),
+            position_x,
+            position_y,
+        )
+        .unwrap();
+        assert_eq!(bounds.0, text_min_x.min(note_min_x));
+        assert_eq!(bounds.2, text_min.min(note_min));
     }
 
     #[test]
@@ -22090,12 +22102,19 @@ mod tests {
         };
         let relationship = &diagram.relationships[0];
         let note = relationship.link_note.as_ref().unwrap();
+        let position_x = 17.25;
         let position_y = 23.5;
 
-        assert_eq!(
-            relationship_center_painted_min_y(&diagram, relationship, Some(note), position_y),
-            Some(position_y + RELATIONSHIP_NOTE_COMPONENT_PADDING)
-        );
+        let bounds = relationship_center_painted_bounds(
+            &diagram,
+            relationship,
+            Some(note),
+            position_x,
+            position_y,
+        )
+        .unwrap();
+        assert_eq!(bounds.0, position_x + RELATIONSHIP_NOTE_COMPONENT_PADDING);
+        assert_eq!(bounds.2, position_y + RELATIONSHIP_NOTE_COMPONENT_PADDING);
     }
 
     #[test]
