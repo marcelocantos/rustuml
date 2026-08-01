@@ -1142,9 +1142,32 @@ impl ClassParser {
         let c_raw = pick(6, 7);
         let dashed = connector.starts_with('.');
 
-        let a = self.ensure_entity(&a_raw);
-        let b = self.ensure_entity(&b_raw);
+        let mut a = self.ensure_entity(&a_raw);
+        let mut b = self.ensure_entity(&b_raw);
         let c = self.ensure_entity(&c_raw);
+        let matching_associations = self
+            .association_classes
+            .iter()
+            .enumerate()
+            .filter_map(|(index, association)| {
+                ((association.a == a && association.b == b)
+                    || (association.a == b && association.b == a))
+                    .then_some(index)
+            })
+            .collect::<Vec<_>>();
+        // `AbstractClassOrObjectDiagram.associationClass` rejects a third
+        // association on the same unordered pair after the command has
+        // resolved/materialized C, but before constructing another point.
+        if matching_associations.len() > 1 {
+            return true;
+        }
+        let first_association = matching_associations.first().copied();
+        if let Some(first_index) = first_association {
+            // `createSecondAssociation` copies entity1/entity2 from the first
+            // Association, independent of the second statement's pair order.
+            a = self.association_classes[first_index].a.clone();
+            b = self.association_classes[first_index].b.clone();
+        }
         // `AbstractClassOrObjectDiagram.Association` creates the apoint below
         // the endpoints' common Quark parent. When the parents differ it calls
         // `quarkInContext`, so the statement's current group owns the point.
@@ -1176,10 +1199,13 @@ impl ClassParser {
             })
             .map(|index| self.take_relationship(index));
 
-        // Java `Association` consumes the apoint short name, point Entity,
-        // three replacement Links, and a temporary base Link only when there
-        // was no existing A-B relationship.
-        self.cpt1 += 5 + usize::from(replaced_relationship.is_none());
+        // The first association consumes the point's short name and Entity,
+        // then three createNew Links. The second consumes those two point
+        // slots, two split Links, the inverted/reinserted first connector, its
+        // own connector, and the invisible point-to-point Link. Either path
+        // also constructs a temporary base when no live A-B Link exists.
+        let constructed_slots = if first_association.is_some() { 7 } else { 5 };
+        self.cpt1 += constructed_slots + usize::from(replaced_relationship.is_none());
         self.uid_events
             .push(ClassUidEvent::Association(self.association_classes.len()));
         self.association_classes
@@ -1189,6 +1215,7 @@ impl ClassParser {
                 c,
                 owner_package,
                 replaced_relationship,
+                first_association,
                 dashed,
                 source_line: self.current_line,
             });
@@ -5058,5 +5085,33 @@ mod tests {
                 .count(),
             3
         );
+    }
+
+    #[test]
+    fn second_association_reuses_the_first_pair_orientation_and_lifecycle() {
+        let d = parse(
+            "class FreshPairA7201\n\
+             class FreshPairB7203\n\
+             class FreshRoleOne7207\n\
+             class FreshRoleTwo7211\n\
+             FreshPairA7201 -- FreshPairB7203 : shared base\n\
+             (FreshPairA7201, FreshPairB7203) .. FreshRoleOne7207\n\
+             (FreshPairB7203, FreshPairA7201) -- FreshRoleTwo7211",
+        );
+
+        assert_eq!(d.association_classes.len(), 2);
+        let first = &d.association_classes[0];
+        let second = &d.association_classes[1];
+        assert_eq!(first.first_association, None);
+        assert_eq!(second.first_association, Some(0));
+        assert_eq!((&second.a, &second.b), (&first.a, &first.b));
+        assert_eq!(
+            first
+                .replaced_relationship
+                .as_ref()
+                .and_then(|relationship| relationship.label.as_deref()),
+            Some("shared base")
+        );
+        assert!(second.replaced_relationship.is_none());
     }
 }

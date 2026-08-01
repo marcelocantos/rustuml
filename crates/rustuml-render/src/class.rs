@@ -231,6 +231,10 @@ const ASSOCIATION_POINT_SEQUENCE_SLOTS: usize = 2;
 /// `Association.createNew` always constructs the two split base links and the
 /// association-class connector.
 const ASSOCIATION_REPLACEMENT_LINK_SLOTS: usize = 3;
+/// `Association.createInSecond` constructs two split links, reinserts the
+/// first point's connector through `Link.getInv()`, then constructs the second
+/// connector and the invisible point-to-point rank constraint.
+const ASSOCIATION_SECOND_LINK_SLOTS: usize = 5;
 /// When `foundLink` returns null, `Association.createNew` first constructs one
 /// temporary A-B Link. The existing-link branch removes its base and skips it.
 const ASSOCIATION_TEMPORARY_BASE_SLOTS: usize = 1;
@@ -2698,10 +2702,7 @@ fn render_with_oracle_uid_origin(
                 association_idx,
                 replacement_idx,
             } => {
-                let replacements = association_replacement_relationships(
-                    &diagram.association_classes[association_idx],
-                    association_idx,
-                );
+                let replacements = association_replacement_relationships(diagram, association_idx);
                 add_svek_relationship_layout_edge(
                     &mut layout,
                     diagram,
@@ -5188,7 +5189,11 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
             CucaUidEvent::Association(idx) => {
                 allocation.association_starts[idx] = Some(next_id);
                 next_id += ASSOCIATION_POINT_SEQUENCE_SLOTS
-                    + ASSOCIATION_REPLACEMENT_LINK_SLOTS
+                    + if diagram.association_classes[idx].first_association.is_some() {
+                        ASSOCIATION_SECOND_LINK_SLOTS
+                    } else {
+                        ASSOCIATION_REPLACEMENT_LINK_SLOTS
+                    }
                     + usize::from(
                         diagram.association_classes[idx]
                             .replaced_relationship
@@ -6054,6 +6059,36 @@ fn render_plantuml_svg(
         let _ =
             emit_oracle_note_entity(svg, note, "#181818", "#FEFFDD", 13, "sans-serif", "#000000");
     };
+    let emit_association_point = |svg: &mut String, association_idx: usize| {
+        if let Some(point) = oracle.and_then(|oracle| oracle.apoints.get(association_idx)) {
+            write!(
+                svg,
+                r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                crate::plantuml_metrics::fmt_coord(point.cx),
+                crate::plantuml_metrics::fmt_coord(point.cy),
+                point.fill,
+                crate::plantuml_metrics::fmt_coord(point.rx),
+                crate::plantuml_metrics::fmt_coord(point.ry),
+                point.style,
+            )
+            .unwrap();
+        } else if oracle.is_none()
+            && let Some(point) = positions.get(diagram.entities.len() + association_idx)
+        {
+            let radius = ASSOCIATION_POINT_SIZE / 2.0;
+            write!(
+                svg,
+                r##"<ellipse cx="{}" cy="{}" fill="#181818" rx="{}" ry="{}" style="stroke:#181818;stroke-width:1;"/>"##,
+                crate::plantuml_metrics::fmt_coord(
+                    point.x + MARGIN + layout_x_bias + body_dx + radius
+                ),
+                crate::plantuml_metrics::fmt_coord(point.y + MARGIN + body_dy + radius),
+                crate::plantuml_metrics::fmt_coord(radius),
+                crate::plantuml_metrics::fmt_coord(radius),
+            )
+            .unwrap();
+        }
+    };
 
     // Render each entity.
     for &i in &emission_order {
@@ -6081,7 +6116,9 @@ fn render_plantuml_svg(
                         );
                     }
                 }
-                SvekNodeEmission::AssociationPoint(_) => {}
+                SvekNodeEmission::AssociationPoint(association_idx) => {
+                    emit_association_point(&mut svg, association_idx);
+                }
                 SvekNodeEmission::EmptyPackage(package_idx) => {
                     if let Some(empty) = layout_empty_packages
                         .iter()
@@ -6281,44 +6318,6 @@ fn render_plantuml_svg(
         );
 
         svg.push_str("</g>");
-
-        // Association-class anchor point: PlantUML synthesises the `apoint`
-        // pseudo-entity at the source line of the `(A, B) .. C` statement, so it
-        // sits in entity order immediately after its association class `C`. Emit
-        // the captured ellipse here so document order matches the golden.
-        for (ac_idx, ac) in diagram.association_classes.iter().enumerate() {
-            if ac.c != entity.id {
-                continue;
-            }
-            if let Some(ap) = oracle.and_then(|orc| orc.apoints.get(ac_idx)) {
-                write!(
-                    svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
-                    crate::plantuml_metrics::fmt_coord(ap.cx),
-                    crate::plantuml_metrics::fmt_coord(ap.cy),
-                    ap.fill,
-                    crate::plantuml_metrics::fmt_coord(ap.rx),
-                    crate::plantuml_metrics::fmt_coord(ap.ry),
-                    ap.style,
-                )
-                .unwrap();
-            } else if oracle.is_none()
-                && let Some(point) = positions.get(diagram.entities.len() + ac_idx)
-            {
-                let radius = ASSOCIATION_POINT_SIZE / 2.0;
-                write!(
-                    svg,
-                    r##"<ellipse cx="{}" cy="{}" fill="#181818" rx="{}" ry="{}" style="stroke:#181818;stroke-width:1;"/>"##,
-                    crate::plantuml_metrics::fmt_coord(
-                        point.x + MARGIN + layout_x_bias + body_dx + radius
-                    ),
-                    crate::plantuml_metrics::fmt_coord(point.y + MARGIN + body_dy + radius),
-                    crate::plantuml_metrics::fmt_coord(radius),
-                    crate::plantuml_metrics::fmt_coord(radius),
-                )
-                .unwrap();
-            }
-        }
     }
 
     while let Some(node) = node_emission_order.get(node_emission_cursor).copied() {
@@ -6344,7 +6343,9 @@ fn render_plantuml_svg(
                     );
                 }
             }
-            SvekNodeEmission::AssociationPoint(_) => {}
+            SvekNodeEmission::AssociationPoint(association_idx) => {
+                emit_association_point(&mut svg, association_idx);
+            }
             SvekNodeEmission::EmptyPackage(package_idx) => {
                 if let Some(empty) = layout_empty_packages
                     .iter()
@@ -12375,41 +12376,42 @@ fn render_no_oracle_association_class_links(
     layout_x_bias: f64,
 ) {
     let allocation = svek_id_allocation(diagram);
-    for (association_idx, association) in diagram.association_classes.iter().enumerate() {
-        let point_sequence = association_point_sequence(diagram, association_idx);
-        let first_link_id = point_sequence
-            + ASSOCIATION_POINT_SEQUENCE_SLOTS
-            + usize::from(association.replaced_relationship.is_none())
-                * ASSOCIATION_TEMPORARY_BASE_SLOTS;
-        for (link_idx, relationship) in
-            association_replacement_relationships(association, association_idx)
-                .into_iter()
-                .enumerate()
-        {
-            let Some(edge) = edge_paths
-                .iter()
-                .find(|edge| edge.from == relationship.from && edge.to == relationship.to)
-            else {
-                continue;
-            };
-            let path_id = relationship_svg_path_id(diagram, &relationship);
-            render_relationship_svg(
-                svg,
-                &relationship,
-                RelationshipRenderContext {
-                    diagram,
-                    note: None,
-                    package_ids: Some(&allocation.package_ids),
-                    entity_ids: Some(&allocation.entity_ids),
-                    note_ids: Some(&allocation.note_ids),
-                    cluster_positions: None,
-                },
-                edge,
-                first_link_id + link_idx,
-                layout_x_bias,
-                &path_id,
-            );
+    for (expected_edge_index, emission) in svek_live_link_order(diagram).into_iter().enumerate() {
+        let SvekLinkEmission::AssociationReplacement {
+            association_idx,
+            replacement_idx,
+        } = emission
+        else {
+            continue;
+        };
+        let relationships = association_replacement_relationships(diagram, association_idx);
+        let relationship = &relationships[replacement_idx];
+        if relationship.style.hidden {
+            continue;
         }
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.edge_index == expected_edge_index)
+        else {
+            continue;
+        };
+        let path_id = relationship_svg_path_id(diagram, relationship);
+        render_relationship_svg(
+            svg,
+            relationship,
+            RelationshipRenderContext {
+                diagram,
+                note: None,
+                package_ids: Some(&allocation.package_ids),
+                entity_ids: Some(&allocation.entity_ids),
+                note_ids: Some(&allocation.note_ids),
+                cluster_positions: None,
+            },
+            edge,
+            association_replacement_link_id(diagram, association_idx, replacement_idx),
+            layout_x_bias,
+            &path_id,
+        );
     }
 }
 
@@ -13942,6 +13944,53 @@ enum SvekLinkEmission {
     },
 }
 
+fn association_source_link_emissions(
+    diagram: &ClassDiagram,
+    association_idx: usize,
+) -> Vec<SvekLinkEmission> {
+    let association = &diagram.association_classes[association_idx];
+    if let Some(first_idx) = association.first_association {
+        return vec![
+            SvekLinkEmission::AssociationReplacement {
+                association_idx,
+                replacement_idx: 0,
+            },
+            SvekLinkEmission::AssociationReplacement {
+                association_idx,
+                replacement_idx: 1,
+            },
+            SvekLinkEmission::AssociationReplacement {
+                association_idx: first_idx,
+                replacement_idx: 2,
+            },
+            SvekLinkEmission::AssociationReplacement {
+                association_idx,
+                replacement_idx: 2,
+            },
+            SvekLinkEmission::AssociationReplacement {
+                association_idx,
+                replacement_idx: 3,
+            },
+        ];
+    }
+
+    let has_second = diagram
+        .association_classes
+        .iter()
+        .any(|candidate| candidate.first_association == Some(association_idx));
+    let replacement_count = if has_second {
+        ASSOCIATION_REPLACEMENT_LINK_SLOTS - 1
+    } else {
+        ASSOCIATION_REPLACEMENT_LINK_SLOTS
+    };
+    (0..replacement_count)
+        .map(|replacement_idx| SvekLinkEmission::AssociationReplacement {
+            association_idx,
+            replacement_idx,
+        })
+        .collect()
+}
+
 fn svek_source_live_links(diagram: &ClassDiagram) -> Vec<SvekLinkEmission> {
     if diagram.uid_events.is_empty() {
         let mut reconstructed = Vec::new();
@@ -13951,15 +14000,9 @@ fn svek_source_live_links(diagram: &ClassDiagram) -> Vec<SvekLinkEmission> {
         }));
         for (association_idx, association) in diagram.association_classes.iter().enumerate() {
             reconstructed.extend(
-                (0..ASSOCIATION_REPLACEMENT_LINK_SLOTS).map(|replacement_idx| {
-                    (
-                        association.source_line,
-                        SvekLinkEmission::AssociationReplacement {
-                            association_idx,
-                            replacement_idx,
-                        },
-                    )
-                }),
+                association_source_link_emissions(diagram, association_idx)
+                    .into_iter()
+                    .map(|emission| (association.source_line, emission)),
             );
         }
         reconstructed.extend(diagram.relationships.iter().enumerate().map(
@@ -13994,14 +14037,7 @@ fn svek_source_live_links(diagram: &ClassDiagram) -> Vec<SvekLinkEmission> {
             ClassUidEvent::Association(association_idx)
                 if diagram.association_classes.get(*association_idx).is_some() =>
             {
-                links.extend(
-                    (0..ASSOCIATION_REPLACEMENT_LINK_SLOTS).map(|replacement_idx| {
-                        SvekLinkEmission::AssociationReplacement {
-                            association_idx: *association_idx,
-                            replacement_idx,
-                        }
-                    }),
-                );
+                links.extend(association_source_link_emissions(diagram, *association_idx));
             }
             ClassUidEvent::Package(_)
             | ClassUidEvent::Entity(_)
@@ -14042,10 +14078,7 @@ fn svek_link_endpoints(diagram: &ClassDiagram, emission: SvekLinkEmission) -> (S
             association_idx,
             replacement_idx,
         } => {
-            let replacements = association_replacement_relationships(
-                &diagram.association_classes[association_idx],
-                association_idx,
-            );
+            let replacements = association_replacement_relationships(diagram, association_idx);
             let relationship = &replacements[replacement_idx];
             (relationship.from.clone(), relationship.to.clone())
         }
@@ -15772,9 +15805,15 @@ fn association_point_name(diagram: &ClassDiagram, id: &str) -> Option<String> {
 }
 
 fn association_replacement_relationships(
-    association: &AssociationClass,
+    diagram: &ClassDiagram,
     association_idx: usize,
-) -> [Relationship; 3] {
+) -> Vec<Relationship> {
+    let association = &diagram.association_classes[association_idx];
+    let is_second = association.first_association.is_some();
+    let second_idx = diagram
+        .association_classes
+        .iter()
+        .position(|candidate| candidate.first_association == Some(association_idx));
     let mut base = association
         .replaced_relationship
         .clone()
@@ -15795,8 +15834,15 @@ fn association_replacement_relationships(
             link_note: None,
             source_line: association.source_line,
         });
-    if base.style.inverted {
+    if !is_second && base.style.inverted {
         std::mem::swap(&mut base.from, &mut base.to);
+    }
+    if is_second {
+        // `createSecondAssociation` copies entity1/entity2 from the first
+        // Association. `createInSecond` does not apply existingLink.isInverted
+        // when it constructs the second split pair.
+        base.from = association.a.clone();
+        base.to = association.b.clone();
     }
     base.source_line = association.source_line;
     base.style.inverted = false;
@@ -15813,7 +15859,7 @@ fn association_replacement_relationships(
         RelationshipEnd::To | RelationshipEnd::Both => RelationshipEnd::To,
         RelationshipEnd::None | RelationshipEnd::From => RelationshipEnd::None,
     };
-    let first = Relationship {
+    let mut first = Relationship {
         from: base.from.clone(),
         to: point.clone(),
         kind: base.kind,
@@ -15825,12 +15871,12 @@ fn association_replacement_relationships(
         to_decor: None,
         decorated_end: first_decorated_end,
         dashed: base.dashed,
-        length: base.length,
+        length: if is_second { 2 } else { base.length },
         style: base.style.clone(),
         link_note: None,
         source_line: association.source_line,
     };
-    let second = Relationship {
+    let mut second = Relationship {
         from: point.clone(),
         to: base.to.clone(),
         kind: base.kind,
@@ -15842,7 +15888,7 @@ fn association_replacement_relationships(
         to_decor: base.to_decor,
         decorated_end: second_decorated_end,
         dashed: base.dashed,
-        length: base.length,
+        length: if is_second { 2 } else { base.length },
         style: base.style,
         link_note: None,
         source_line: association.source_line,
@@ -15850,14 +15896,16 @@ fn association_replacement_relationships(
 
     // Java uses a two-rank C connector only when a one-rank non-self base (or
     // a two-rank self base) would otherwise collide with the split line.
-    let connector_length = if (base.length == 1 && base.from != base.to)
+    let connector_length = if is_second {
+        1
+    } else if (base.length == 1 && base.from != base.to)
         || (base.length == 2 && base.from == base.to)
     {
         2
     } else {
         1
     };
-    let third = Relationship {
+    let mut third = Relationship {
         from: point,
         to: association.c.clone(),
         kind: RelationshipKind::Association,
@@ -15877,7 +15925,85 @@ fn association_replacement_relationships(
         link_note: None,
         source_line: association.source_line,
     };
-    [first, second, third]
+
+    if second_idx.is_some() {
+        // `createSecondAssociation` promotes a one-rank first split pair and
+        // shortens its role connector before `createInSecond` reinserts that
+        // connector in the opposite direction.
+        if base.length == 1 {
+            first.length = 2;
+            second.length = 2;
+            third.length = 1;
+        }
+        std::mem::swap(&mut third.from, &mut third.to);
+    }
+
+    let mut result = vec![first, second, third];
+    if let Some(first_idx) = association.first_association {
+        result.push(Relationship {
+            from: association_point_layout_id(first_idx),
+            to: association_point_layout_id(association_idx),
+            kind: RelationshipKind::Association,
+            label: None,
+            label_arrow: LinkArrow::None,
+            from_multiplicity: None,
+            to_multiplicity: None,
+            from_decor: None,
+            to_decor: None,
+            decorated_end: RelationshipEnd::None,
+            dashed: false,
+            length: 1,
+            style: RelationshipStyle {
+                hidden: true,
+                declaration: true,
+                ..RelationshipStyle::default()
+            },
+            link_note: None,
+            source_line: association.source_line,
+        });
+    }
+    result
+}
+
+fn association_replacement_link_id(
+    diagram: &ClassDiagram,
+    association_idx: usize,
+    replacement_idx: usize,
+) -> usize {
+    let association = &diagram.association_classes[association_idx];
+    let point_sequence = association_point_sequence(diagram, association_idx);
+    let first_link_id = point_sequence
+        + ASSOCIATION_POINT_SEQUENCE_SLOTS
+        + usize::from(association.replaced_relationship.is_none())
+            * ASSOCIATION_TEMPORARY_BASE_SLOTS;
+
+    if association.first_association.is_some() {
+        return match replacement_idx {
+            0 | 1 => first_link_id + replacement_idx,
+            // `getInv()` of the first connector is constructed after the
+            // second split pair and before this point's own connector.
+            2 => first_link_id + 3,
+            // The invisible point-to-point Link is last.
+            3 => first_link_id + 4,
+            _ => unreachable!("second association has four live relationships"),
+        };
+    }
+
+    if replacement_idx == 2
+        && let Some(second_idx) = diagram
+            .association_classes
+            .iter()
+            .position(|candidate| candidate.first_association == Some(association_idx))
+    {
+        let second = &diagram.association_classes[second_idx];
+        return association_point_sequence(diagram, second_idx)
+            + ASSOCIATION_POINT_SEQUENCE_SLOTS
+            + usize::from(second.replaced_relationship.is_none())
+                * ASSOCIATION_TEMPORARY_BASE_SLOTS
+            + 2;
+    }
+
+    first_link_id + replacement_idx
 }
 
 fn association_point_sequence(diagram: &ClassDiagram, association_idx: usize) -> usize {
@@ -21326,6 +21452,113 @@ mod tests {
             svek_node_emission_order(&diagram).last(),
             Some(&SvekNodeEmission::AssociationPoint(0))
         );
+    }
+
+    #[test]
+    fn cross_parent_association_point_paints_at_its_owner_tree_position() {
+        let input = "@startuml\n\
+                     package FreshWest7221 {\n\
+                       class FreshLeft7223\n\
+                       class FreshRole7227\n\
+                     }\n\
+                     package FreshEast7231 {\n\
+                       class FreshRight7237\n\
+                     }\n\
+                     package FreshJoin7243 {\n\
+                       (FreshWest7221.FreshLeft7223, FreshEast7231.FreshRight7237) .. FreshWest7221.FreshRole7227\n\
+                       class FreshTail7247\n\
+                     }\n\
+                     @enduml";
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected class diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+        let right = svg.find("<!--class FreshRight7237-->").unwrap();
+        let point = svg
+            .find(r##"rx="2" ry="2" style="stroke:#181818;stroke-width:1;"/>"##)
+            .unwrap();
+        let tail = svg.find("<!--class FreshTail7247-->").unwrap();
+
+        assert!(right < point && point < tail);
+    }
+
+    #[test]
+    fn second_association_projects_java_live_link_transaction() {
+        let input = "@startuml\n\
+                     class FreshPairA7253\n\
+                     class FreshPairB7259\n\
+                     class FreshRoleOne7267\n\
+                     class FreshRoleTwo7271\n\
+                     FreshPairA7253 -- FreshPairB7259 : shared base\n\
+                     (FreshPairA7253, FreshPairB7259) .. FreshRoleOne7267\n\
+                     (FreshPairB7259, FreshPairA7253) -- FreshRoleTwo7271\n\
+                     @enduml";
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected class diagram");
+        };
+
+        let first = association_replacement_relationships(&diagram, 0);
+        let second = association_replacement_relationships(&diagram, 1);
+        assert_eq!(
+            (&first[2].from, &first[2].to),
+            (
+                &diagram.association_classes[0].c,
+                &association_point_layout_id(0)
+            )
+        );
+        assert_eq!(
+            (&second[0].from, &second[0].to),
+            (
+                &diagram.association_classes[0].a,
+                &association_point_layout_id(1)
+            )
+        );
+        assert_eq!(
+            (&second[3].from, &second[3].to),
+            (
+                &association_point_layout_id(0),
+                &association_point_layout_id(1)
+            )
+        );
+        assert!(second[3].style.hidden);
+
+        assert_eq!(
+            svek_source_live_links(&diagram),
+            [
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 0
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 1
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 1,
+                    replacement_idx: 0
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 1,
+                    replacement_idx: 1
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 2
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 1,
+                    replacement_idx: 2
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 1,
+                    replacement_idx: 3
+                },
+            ]
+        );
+        assert_eq!(association_replacement_link_id(&diagram, 0, 2), 17);
+        assert_eq!(association_replacement_link_id(&diagram, 1, 0), 15);
+        assert_eq!(association_replacement_link_id(&diagram, 1, 2), 18);
+        assert_eq!(association_replacement_link_id(&diagram, 1, 3), 19);
     }
 
     #[test]
