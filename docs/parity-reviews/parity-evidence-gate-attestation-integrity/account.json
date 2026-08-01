@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-attestation-integrity",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/SourceStringReader.java",
+    "src/main/java/net/sourceforge/plantuml/error/PSystemError.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-oracle/tests/parity_evidence.rs",
+    "crates/rustuml-oracle/tests/parity_perturbations.rs"
+  ],
+  "invariant": "An accepted parity review is a conflict-closed, independently authored attestation over one immutable Rust implementation and distinct, Java-success held-out contents. Every alias for verdict or revision agrees, the evaluated implementation predates the committed review, the checker is explicitly distinct from the maker, Java execution succeeded for every selected input, and neither duplicate contents nor spelling variants of one axis can inflate the evidence count.",
+  "causal_divergence": "The f42a3906 gate normalizes aliases by taking the first recognized value and tests independence through keyword presence. It compares paths rather than evidence contents, ignores Java exit artifacts, resets duplicate tracking per review, and proves only that an implementation descends from an account. Consequently a self-described implementer, contradictory ACCEPT/REJECT and revision aliases, a post-review implementation substitution, one hardlinked failed input copied across mechanisms, and label/LABEL as two axes all satisfy the gate. Rejected records also bypass most completeness checks. PlantUML's SourceStringReader returns PSystemError for failed source, so a nonzero Java invocation cannot establish renderer parity even when a stale SVG exists.",
+  "planned_change": "Replace first-value normalization with conflict-closed extraction for every known verdict and revision alias. Require canonical accepted records to name distinct maker and checker task identities and reject an explicit same-person or same-task claim. Resolve the commit that introduced the active review blob and require the evaluated implementation to be its ancestor. Require a preserved zero Java-exit artifact for every selected held-out. Hash source and Java SVG contents and enforce global uniqueness across the active accepted corpus; normalize axis names before counting. Apply revision, identity, findings, command, and evidence completeness checks to canonical rejected reviews as well as accepted ones. Add permanent hostile mutation tests for every demonstrated false accept. Quarantine, without rewriting, active legacy acceptances whose selected held-outs are currently red; their preserved records remain auditable but non-accepting.",
+  "perturbation_axes": [
+    "independent checker identity versus explicit maker/checker identity collision",
+    "consistent verdict and revision aliases versus contradictory aliases",
+    "distinct source and Java SVG contents versus hardlinks or byte-identical copies under different paths",
+    "zero Java exit versus stale SVG paired with a failed Java invocation",
+    "implementation committed before review versus a post-review revision substitution",
+    "case-normalized distinct axes versus capitalization-only variants"
+  ],
+  "scope_boundary": "This changes the evidence trust boundary and active acceptance inventory only. It does not alter parser or renderer behavior, SVG comparison, GEOM_EPS, the park list, golden syntax classification, the frozen error-golden census, or any shipping crate. Decimal-literal baseline reconciliation is a separate provenance mechanism and is not hidden inside this change.",
+  "forbidden_approaches": [
+    "infer checker independence from the presence of words such as checker or independent",
+    "choose one value from contradictory aliases",
+    "count paths as independent when their source or Java SVG contents are identical",
+    "accept a Java SVG without affirmative zero-exit evidence from the same recorded run",
+    "rewrite an authored verdict while migrating or quarantining it",
+    "bind an acceptance to an implementation revision committed after the review artifact",
+    "relax shipped-path perturbation execution to retain a red accepted record"
+  ],
+  "acceptance": [
+    "Permanent mutation tests reject all false accepts demonstrated in parity-evidence-gate-normalization/review-2.json.",
+    "Every active canonical accepted or rejected review is complete, conflict-closed, and bound to immutable account, implementation, review, Java, and held-out evidence.",
+    "Selected held-outs have zero Java exits, globally distinct source and Java SVG contents, and at least two case-normalized axes per accepted mechanism.",
+    "No selected implementation revision postdates the commit that introduced its active review blob.",
+    "The shipped no-oracle perturbation suite is green; red legacy acceptances are preserved under inert archive names rather than rewritten.",
+    "Focused parity-evidence tests and the real parity-review-record guard pass without changing frozen parity controls."
+  ],
+  "status": "planned"
+}
