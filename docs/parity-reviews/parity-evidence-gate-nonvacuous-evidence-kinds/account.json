@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "3c7dd842e1fb0a13798a475498956c3302df54e0",
+  "supersedes_rejected_mechanism": "parity-evidence-gate-attestation-integrity",
+  "rejection_record": "docs/parity-reviews/parity-evidence-gate-attestation-integrity/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/SourceStringReader.java",
+      "symbols": ["SourceStringReader.outputImage"],
+      "role": "Defines successful Java rendering for parity heldouts; renderer evidence must retain an affirmative zero-exit invocation and a non-error SVG."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/error/PSystemError.java",
+      "symbols": ["PSystemError"],
+      "role": "Defines Java error output that cannot count as parity evidence even when an SVG file exists."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-oracle/tests/parity_evidence.rs",
+      "symbols": ["build_report", "validate_review_attestation", "validate_review_declared_evidence"],
+      "role": "Validates canonical records but currently has only one PlantUML source/Java-SVG evidence schema and permits an empty active acceptance inventory."
+    },
+    {
+      "path": "crates/rustuml-oracle/tests/parity_perturbations.rs",
+      "symbols": ["held_out_perturbations_match_java_without_oracle_layout"],
+      "role": "Executes selected accepted parity heldouts but passes when selection is empty."
+    },
+    {
+      "path": "docs/parity-reviews",
+      "symbols": ["quarantined-review*.json", "review.json", "review-N.json"],
+      "role": "Contains 144 byte-preserved quarantines, including authored ACCEPT records whose shipping implementations no longer have active attestations."
+    }
+  ],
+  "claimed_invariant": "A green evidence gate must attest a nonempty set of shipped-path parity heldouts and must never turn an authored ACCEPT into silence. Every byte-preserved quarantined ACCEPT requires a canonical active successor in the same mechanism directory whose full, conflict-closed verdict either re-accepts it on fresh Java-success evidence or rejects it explicitly. Canonical reviews declare their evidence kind: parity reviews use valid PlantUML source/Java-SVG/zero-exit heldouts and alone contribute to the executable parity corpus; gate reviews use preserved hostile mutation artifacts and command outcomes and never inflate renderer parity. Both kinds retain explicit distinct maker/checker identities, immutable revision binding, findings, commands, and a closed verdict.",
+  "causal_divergence": "At f5f1d807 the new parser closes the demonstrated alias, identity, revision, Java-exit, duplicate-content, and axis attacks, but ef67a654 renames every canonical review to an inert quarantine. The real record guard and parity perturbation test then pass with zero active canonical reviews and zero selected heldouts. Adding this gate's canonical REJECT exposes a second mismatch: validate_review_declared_evidence requires irrelevant .puml/.svg evidence for a schema/mutation mechanism, so an honest gate review cannot validate itself. One undifferentiated evidence shape therefore makes renderer evidence vacuous while making non-renderer control evidence impossible.",
+  "planned_model_change": "Add a required closed evidence_kind discriminator for new canonical reviews. Preserve the current strict PlantUML contract for parity reviews. Add a gate evidence contract that requires named immutable mutation artifacts, expected and observed outcomes, commands, hashes, and at least two normalized attack axes but cannot select AcceptedHeldOut values. Scan every quarantined review blob: if its authored verdict is ACCEPT/ACCEPTED, require a canonical active successor in that directory. Require the repository report to contain at least one fully valid active accepted parity review and at least two selected Java-success heldouts before parity_perturbations can pass. Keep all quarantine bytes unchanged. Re-review or explicitly reject every quarantined ACCEPT rather than grandfathering it. Add permanent mutations proving zero active reviews, a lone gate ACCEPT, and an orphaned quarantined ACCEPT all fail closed.",
+  "perturbation_axes": [
+    "nonempty active parity corpus versus zero canonical reviews",
+    "parity source/Java-SVG evidence versus gate mutation-artifact evidence",
+    "quarantined ACCEPT with an active successor versus an orphaned historical acceptance",
+    "canonical ACCEPT versus REJECT successor while preserving the authored quarantine bytes",
+    "one selected heldout versus two globally distinct Java-success heldouts",
+    "gate ACCEPT alone versus a genuine parity ACCEPT"
+  ],
+  "acceptance": [
+    "Permanent hostile tests reject an empty active corpus, a corpus containing only gate reviews, and every quarantined ACCEPT without a complete active same-directory successor.",
+    "An honest canonical gate review with preserved mutation artifacts validates without irrelevant PlantUML fixtures and contributes zero AcceptedHeldOut entries.",
+    "A canonical parity ACCEPT still requires at least two globally content-distinct valid Java-success exact heldouts across at least two normalized axes.",
+    "Every currently quarantined authored ACCEPT receives an independently authored canonical successor review; red shipped-path mechanisms remain explicit REJECTs and green mechanisms are re-attested at exact revisions.",
+    "The active accepted parity inventory is nonempty, parity_perturbations executes it, and every selected heldout is exact on the shipped no-oracle path.",
+    "Focused evidence tests, the real record guard, the shipped perturbation suite, and frozen harness guards pass without changing comparator, baseline, park, error, or allow-list controls."
+  ],
+  "scope_boundary": "This changes evidence-kind validation, quarantine-successor completeness, and non-vacuity only. It does not change parser/renderer behavior, SVG comparison, GEOM_EPS, baselines, the park list, syntax-error classification, the error-golden census, or shipping crates.",
+  "forbidden_approaches": [
+    "satisfying gate review schema with irrelevant PlantUML fixtures",
+    "counting a gate review as renderer parity or accepting zero selected heldouts",
+    "deleting, rewriting, or silently grandfathering quarantined ACCEPT records",
+    "using a checked-in hand-maintained allow-list of mechanisms instead of deriving obligations from preserved authored verdicts",
+    "weakening Java-success, exact diff, global uniqueness, revision, or maker/checker requirements",
+    "changing comparator, baseline, park, error, or allow-list controls"
+  ]
+}
