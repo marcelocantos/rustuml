@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-svg-id-xml-serialization-and-uniquification",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "fe026d6fc8c62b009d1e1cf5bf42353683280e9c",
+  "predecessor_rejection": {
+    "account": "docs/parity-reviews/deployment-link-svg-id-raw-endpoint-identity/account.json",
+    "review": "docs/parity-reviews/deployment-link-svg-id-raw-endpoint-identity/review.json",
+    "reason_for_successor": "The predecessor selected Java's raw endpoint identity correctly but inserted that logical value into SVG syntax without XML attribute serialization and counted duplicates from source-prefix connections rather than Java's shared set of edges that actually reach SvekEdge.drawU."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": ["idCommentForSvg", "commentForSvg"],
+      "lines": "106-120",
+      "role": "Builds the logical path identifier and comment from Entity.getName, preserving endpoint punctuation and selecting -to-, -backto-, or the undecorated hyphen channel."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": ["getName"],
+      "lines": "682-684",
+      "role": "Delegates link endpoint identity to the local raw Quark name rather than its owner-qualified or UGroup-projected name."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "symbols": ["getName", "getQualifiedName"],
+      "lines": "84-90",
+      "role": "Keeps local raw identity and qualified ownership identity as distinct model channels."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["drawU"],
+      "lines": "93-101",
+      "role": "Creates one shared ID set and visits Bibliotekon lines in paint order; only edges that continue through SvekEdge.drawU consume an ID."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["drawU", "uniq"],
+      "lines": "817-849,937,1086-1098",
+      "role": "Skips opale, invisible, and pathless edges before uniquification, then claims the raw logical ID in the shared set and appends the smallest available -N suffix."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+      "symbols": ["drawPath", "createXmlInternal", "getTransformer"],
+      "lines": "769-833,873-884",
+      "role": "Places the uniquified logical value into a DOM Element attribute with setAttribute; the XML Transformer subsequently serializes ampersand and other XML metacharacters without changing the recovered logical ID."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["render_connection"],
+      "lines": "3614-3714",
+      "role": "The oracle-assisted path selects raw endpoint candidates but formats the selected path ID directly into a raw SVG attribute."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["render_no_oracle_edges", "deployment_connection_path_base_id"],
+      "lines": "6599-6684,6816-6829",
+      "role": "The shipped path computes the correct raw base ID, counts all preceding source connections with the same base, and writes the result directly through SvgBuilder.raw. The count does not model Java's paint-eligible shared set."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["escape_xml_attr"],
+      "lines": "693-701",
+      "role": "Contains a renderer-local attribute escaper used by unrelated warning primitives, demonstrating the missing serialization operation but not yet establishing a shared SVG attribute boundary."
+    },
+    {
+      "path": "crates/rustuml-render/src/svg.rs",
+      "symbols": ["SvgBuilder::raw", "escape_xml"],
+      "lines": "457-460,901-908",
+      "role": "Raw emission performs no escaping, while the existing private helper is applied only to selected text content and cannot currently be used as an attribute serializer by deployment rendering."
+    }
+  ],
+  "claimed_invariant": "A deployment link path ID has three ordered representations. First, Link.idCommentForSvg chooses a raw logical base from the local canonical endpoint names and the effective link decoration/direction. Second, the drawing pass uniquifies that raw base against IDs already claimed by earlier paint-eligible SVEK edges, using no suffix for the first occurrence and the smallest available positive -N suffix thereafter. Third, XML serialization escapes the resulting attribute value exactly once. XML escaping is syntax, not identity: parsing Java's id=\"Gate &amp; Relay-to-Sink-3\" recovers the raw logical value Gate & Relay-to-Sink-3. UGroup qualified-name projection never participates in this channel.",
+  "causal_divergence": "The rejected Rust change correctly stopped projecting colon and slash in link identity, but render_connection and render_no_oracle_edges interpolate the logical ID into SvgBuilder.raw. An ampersand therefore becomes malformed XML instead of &amp;. In addition, no-oracle duplicate suffixes are derived by counting every earlier DeploymentConnection with the same base. Java's SvekResult instead supplies a mutable set to SvekEdge.drawU after opale, invisible, and pathless edges have returned, so only successfully painted edges claim names and the suffix depends on paint order and prior claimed IDs rather than a source-prefix count.",
+  "planned_model_change": [
+    "Represent the raw logical base, the uniquified logical ID, and the serialized XML attribute as distinct values in the deployment edge-emission flow.",
+    "Introduce or expose one shared SVG attribute-escaping boundary and apply it exactly once when emitting path IDs in both oracle-assisted and no-oracle paths. Do not pre-escape endpoint model IDs or use UGroup qualified-name projection.",
+    "Replace source-prefix duplicate counting with one mutable set shared across the no-oracle paint loop. Claim an ID only after the same hidden, opale, missing-edge, and non-painted guards that precede Java's SvekEdge.uniq call, and allocate the first unused base or base-N value in actual emission order.",
+    "Keep direction/decor selection generative: forward directed links use -to-, reversed directed links use -backto-, undecorated links use a single hyphen, and duplicate suffix allocation operates on the complete resulting raw base.",
+    "Add model tests that parse the emitted SVG and assert recovered raw IDs, well-formed XML, suffix order, and separation from projected data-qualified-name metadata."
+  ],
+  "perturbation_axes": [
+    "endpoint syntax: ampersand and XML metacharacters versus colon, slash, dot, hyphen, spaces, and Unicode punctuation",
+    "link semantics: forward, reversed, undecorated, dotted, bold, hidden, opale-consumed, and pathless links",
+    "collision topology: repeated identical links, distinct endpoint pairs whose concatenated logical bases collide, and collisions separated by skipped edges",
+    "ownership and identity form: root versus nested endpoints, quoted no-alias names, display-first aliases, code-first aliases, and duplicate visible displays",
+    "ordering: declaration order, reverse controls, and interleaving links that do and do not reach paint"
+  ],
+  "strict_preserved_java_success_acceptance": [
+    {
+      "stem": "checker_xml_ampersand_raw_identity",
+      "current_predecessor_result": "diff_one --no-oracle exit 101",
+      "requirement": "Java SVG remains well formed, Rust SVG becomes well formed, both parse to path ID Gate & Relay-to-Sink-3, and diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "checker_colon_slash_styled_duplicates",
+      "current_predecessor_result": "diff_one --no-oracle exit 1",
+      "requirement": "Raw colon/slash IDs, duplicate suffixes, styles, routes, and the complete SVG must match; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "checker_collision_reordered_reverse_duplicates",
+      "current_predecessor_result": "diff_one --no-oracle exit 1",
+      "requirement": "Reordered reverse duplicate allocation and the complete SVG must match; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "checker_display_alias_collision_ltr",
+      "current_predecessor_result": "diff_one --no-oracle exit 1",
+      "requirement": "Display/alias collision dispatch, link inventory, ID allocation, and the complete SVG must match; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "checker_nested_child_links_reordered_reverse",
+      "current_predecessor_result": "diff_one --no-oracle exit 1",
+      "requirement": "Nested local endpoint identity, reversal, owner ordering, geometry, and the complete SVG must match; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "checker_nested_child_links_broad_owners",
+      "current_predecessor_result": "diff_one --no-oracle exit 0",
+      "requirement": "The passing nested-owner control remains exact with local child path identity; diff_one --no-oracle exits 0."
+    }
+  ],
+  "acceptance_policy": "Every named Java-success source above is a non-waivable whole-output gate. Several expose adjacent parser, style, or geometry gaps in addition to ID serialization; those dependencies may land under their own pre-accounted mechanisms, but this mechanism cannot receive ACCEPT while any named diff is nonzero or be reclassified as PASS_FOR_MECHANISM.",
+  "invalid_java_controls_preserved_as_non_accepting_evidence": [
+    "checker_nested_broad_codes_duplicate_displays",
+    "checker_nested_quoted_broad_codes",
+    "checker_nested_quoted_reordered_up",
+    "checker_nested_reordered_undecorated_up"
+  ],
+  "invalid_control_policy": "The four sources above produce Java syntax-error output at the pinned oracle revision. Their sources and artifacts remain preserved for grammar investigation, but they neither satisfy acceptance nor count as product parity evidence for this mechanism.",
+  "additional_acceptance": [
+    "A separate checker creates fresh Java-valid inputs spanning at least two independent axes, including one XML metacharacter and one collision/reversal case; every fresh diff_one --no-oracle invocation exits 0.",
+    "The checker verifies XML well-formedness and compares parsed attribute values, not serialized spelling alone.",
+    "No no-oracle family regression, malformed SVG, or change to UGroup data-qualified-name projection is introduced."
+  ],
+  "forbidden_approaches": [
+    "fixture labels, filenames, source lines, golden SVG reads, or per-input branches",
+    "post-hoc mutation of completed SVG strings",
+    "projecting raw endpoint names through translate_qualified_name",
+    "escaping model identity before uniqueness or escaping an already escaped value",
+    "counting all source-prefix connections without Java's paint-eligibility semantics",
+    "coordinate constants, comparator slack, baseline edits, park-list edits, error-marker edits, or guard allow-list changes"
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-horizontal-attached-note-minlen-zero",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "fe026d6fc8c62b009d1e1cf5bf42353683280e9c",
+  "predecessor_rejection": {
+    "account": "docs/parity-reviews/deployment-svg-qualified-name-projection/account.json",
+    "review": "docs/parity-reviews/deployment-svg-qualified-name-projection/review.json",
+    "decisive_counterexample": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.puml",
+    "reason_for_successor": "All Java and Rust data-qualified-name values and the link path ID in the decisive counterexample are already identical. Its remaining nonzero diff is a nested attached-note layout failure, so extending qualified-name projection would target the wrong model."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": ["executeInternal"],
+      "lines": "258-292",
+      "role": "Creates a generated note leaf and a dashed attachment Link. RIGHT and LEFT use LinkArg.noDisplay(1); BOTTOM and TOP use LinkArg.noDisplay(2)."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["appendLine"],
+      "lines": "384-421",
+      "role": "Serializes Graphviz minlen as Link.getLength() - 1. At the pinned default useRankSame=false, a horizontal attached-note link of length 1 therefore emits minlen=0; a vertical length-2 link emits minlen=1."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": ["useRankSame"],
+      "lines": "1129-1132",
+      "role": "Establishes the pinned default branch used by SvekEdge.appendLine for these description diagrams."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": ["calculateDimensionSlow", "getTextWidth", "getTextHeight"],
+      "lines": "156-184",
+      "role": "Provides the note node dimensions that Graphviz separates from its target; the preserved Rust and Java note body dimensions already agree."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["printEntities"],
+      "lines": "229-259",
+      "role": "Recognizes the note attachment as opale after the same graph edge has participated in layout, so the edge's minlen affects cluster bounds even though SvekEdge later suppresses ordinary edge painting."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["render_no_oracle"],
+      "lines": "4400-4555",
+      "role": "Builds measured note nodes and ownership clusters. LEFT/RIGHT add a same-rank constraint and then LayoutGraph::add_edge, while TOP/BOTTOM correctly use explicit minlen=1."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": ["LayoutGraph::add_edge", "LayoutGraph::add_edge_with_minlen"],
+      "lines": "643-671",
+      "role": "add_edge leaves minlen unset, allowing Graphviz's default of 1; add_edge_with_minlen can encode Java's explicit zero without introducing a spacing constant."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.java.svg",
+      "symbols": ["preserved oracle output"],
+      "lines": "whole artifact",
+      "role": "Shows a 35.3793-pixel gap between the inbox node and its right attached-note body after the 35-pixel SVEK nodesep."
+    },
+    {
+      "path": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.rust.svg",
+      "symbols": ["preserved rejected output"],
+      "lines": "whole artifact",
+      "role": "Shows the same measured node and note widths but a 69.3793-pixel gap: one additional approximately 34-pixel separation unit propagates into the inner folder, outer cloud, canvas, nodes, edge, and note positions. These observed values diagnose the model and are not constants to copy."
+    }
+  ],
+  "claimed_invariant": "Deployment attached-note placement is represented by an ordinary measured note node and a synthetic dashed link before opale absorbs the link at paint time. The link length is semantic Graphviz input: RIGHT and LEFT are horizontal length-1 links and therefore carry minlen=0, while TOP and BOTTOM are vertical length-2 links and carry minlen=1. Ownership only determines which cluster contains the measured note and target; quoted IDs and UGroup qualified-name projection do not alter the attachment edge's rank length.",
+  "causal_divergence": "Rust correctly places the right attached note and its target on the same rank but calls LayoutGraph::add_edge, which leaves minlen unset and gives Graphviz the default minlen=1. Java's CommandFactoryNoteOnEntity creates LinkArg.noDisplay(1), and SvekEdge.appendLine emits minlen=0. In fresh2_quoted_identity_deep_ownership the extra Rust separation widens the nested folder and outer cloud, then shifts every downstream primitive. The metadata projection is already exact on both sides, so changing identities, labels, dimensions, margins, or cloud coordinates would be overfitting.",
+  "planned_model_change": [
+    "For LEFT and RIGHT deployment attached notes, preserve the current direction and same-rank ownership constraint but emit the synthetic layout edge through add_edge_with_minlen(..., 0).",
+    "Retain explicit minlen=1 for TOP and BOTTOM, deriving both values from Java LinkArg length minus one rather than a fixture or coordinate observation.",
+    "Add focused tests over left/right, top/bottom controls, root and nested ownership, note text width, declaration order, and rankdir rotation. Tests assert graph behavior and strict rendered parity rather than fixed fixture coordinates.",
+    "Leave DeploymentNode.id, parent maps, qualified-name projection, note dimensions, SVEK spacing, cluster margins, routes, and SVG post-processing unchanged."
+  ],
+  "perturbation_axes": [
+    "attachment position: left and right with top and bottom controls",
+    "ownership depth: root target, one container, and nested containers with the note sharing the target owner",
+    "identity form: quoted no-alias owner, display-first alias, dotted/slashed canonical child IDs, and renamed visible labels",
+    "note geometry: short versus multiline/wide note text while preserving the same minlen semantics",
+    "ordering and direction: note before/after sibling declarations and top-to-bottom versus left-to-right rankdir"
+  ],
+  "strict_preserved_java_success_acceptance": [
+    {
+      "stem": "fresh2_quoted_identity_deep_ownership",
+      "current_predecessor_result": "diff_one --no-oracle exit 1",
+      "requirement": "The inherited deep quoted-identity and nested-ownership counterexample must become a whole-output match; diff_one --no-oracle exits 0. No geometry residue may be classified out of scope."
+    },
+    {
+      "stem": "fresh2_alias_direction_nested_note_link",
+      "current_predecessor_result": "diff_one --no-oracle exit 0",
+      "requirement": "The passing alias, direction, nested note, and link control remains exact; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "fresh2_predecessor_bare_slash_replay",
+      "current_predecessor_result": "diff_one --no-oracle exit 0",
+      "requirement": "The passing bare slash identity control remains exact; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "bare_slash_container_quoted_child_link_note",
+      "current_predecessor_result": "legacy rejection artifact; source is byte-identical to fresh2_predecessor_bare_slash_replay",
+      "requirement": "The original preserved Java-success artifact is replayed independently and diff_one --no-oracle exits 0. Its duplicate source does not count as an additional perturbation axis."
+    },
+    {
+      "stem": "fresh2_predecessor_display_alias_replay",
+      "current_predecessor_result": "diff_one --no-oracle exit 0",
+      "requirement": "The passing display/alias replay remains exact; diff_one --no-oracle exits 0."
+    },
+    {
+      "stem": "display_alias_hyphen_container_notes_links",
+      "current_predecessor_result": "legacy rejection artifact; source is byte-identical to fresh2_predecessor_display_alias_replay",
+      "requirement": "The original preserved Java-success artifact is replayed independently and diff_one --no-oracle exits 0. Its duplicate source does not count as an additional perturbation axis."
+    }
+  ],
+  "acceptance_policy": "All six preserved Java-success artifacts are non-waivable whole-output gates; the two legacy stems are byte-identical replay aliases and are not counted as independent evidence. The implementation is rejected if any diff_one --no-oracle invocation is nonzero, even if metadata identity or the local note gap looks correct. deploy_kubernetes must remain strict no-oracle exact as part of the deployment family regression run.",
+  "additional_acceptance": [
+    "The checker verifies that Java and Rust metadata values remain byte-identical on the deep counterexample: Renamed Cloud. West, Renamed Cloud. West.layer-two.eu.v5, their owned leaves, and inbox.v6-to-db.v8.",
+    "A separate checker generates fresh Java-valid perturbations over at least two independent axes, including one horizontal nested note and one vertical control; every diff_one --no-oracle invocation exits 0.",
+    "The deployment no-oracle family and broader no-oracle ratchet show no regression."
+  ],
+  "invalid_java_controls_preserved_as_non_accepting_evidence": [],
+  "forbidden_approaches": [
+    "changing qualified-name projection or canonical IDs to move geometry",
+    "copying the observed 34-, 35.3793-, or 69.3793-pixel gaps into code",
+    "fixture labels, filenames, source-line branches, golden SVG reads, or per-input conditions",
+    "post-hoc coordinate or SVG string surgery",
+    "changing SVEK nodesep, cluster margins, note dimensions, comparator slack, baselines, park lists, error markers, or guard allow-lists"
+  ]
+}
