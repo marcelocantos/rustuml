@@ -1,0 +1,6 @@
+@startuml
+Database <- Actor : reversed read
+Storage --> Queue : persist
+Queue --> Component : deliver
+Component <- Node : callback
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+box "Reserved Lane" #LightBlue
+participant Component
+queue Queue
+end box
+Component -> Queue : dispatch
+note over Component, Queue : note payload 4211
+Queue --> Component : reply
+@enduml

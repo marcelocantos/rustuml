@@ -1,0 +1,5 @@
+@startuml
+Node --> Component : smoke handoff
+Component --> Queue : smoke enqueue
+Queue --> Node : smoke ack
+@enduml

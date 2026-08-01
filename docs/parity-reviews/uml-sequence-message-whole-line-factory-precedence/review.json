@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-sequence-message-whole-line-factory-precedence",
+  "verdict": "REJECT",
+  "review_created": "2026-08-01",
+  "checker": {
+    "identity": "Codex independent adversarial checker in current task",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop shell/apply_patch",
+    "task": "Try to disprove uml-sequence-message-whole-line-factory-precedence at exact Rust revision da7231471a26c03997d6220b55271e3a6ead1aa6 without editing implementation or account.",
+    "implemented_mechanism": false,
+    "edited_implementation_or_account": false,
+    "ran_cargo_or_rustc": false
+  },
+  "revisions": {
+    "rust_revision": "da7231471a26c03997d6220b55271e3a6ead1aa6",
+    "maker_commits": [
+      "c6161db6",
+      "da723147"
+    ],
+    "account": "docs/parity-reviews/uml-sequence-message-whole-line-factory-precedence/account.json",
+    "java_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "frozen_binaries": {
+    "/private/tmp/t14-sequence-review-bin/rustuml-da723147": {
+      "sha256": "d37d8789b15ec88408f128326383080e8a0603b924bede400bc527a6154a5ca0"
+    },
+    "/private/tmp/t14-sequence-review-bin/diff_one-da723147": {
+      "sha256": "b0e5ab131fbaa6ec383bcf88b38dca63eaebb6439916273995a7db68c5d5803a"
+    }
+  },
+  "inspection": {
+    "java_factory_model": [
+      {
+        "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+        "lines": "128-197, 203-255",
+        "finding": "SequenceDiagramFactory is registered before ClassDiagramFactory and DescriptionDiagramFactory, and the first factory returning an ok diagram owns the source."
+      },
+      {
+        "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+        "lines": "74-197",
+        "finding": "Each factory must match and execute every source command; an unconsumed line or execution error makes that factory return an error and allows later factories to try."
+      },
+      {
+        "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+        "lines": "91-121",
+        "finding": "CommandArrow accepts four endpoint forms on each side: code, quoted long name, quoted long name as code, and code as quoted long name. Codes include dots and at signs."
+      }
+    ],
+    "rust_data_flow": [
+      {
+        "path": "crates/rustuml-parser/src/parse/mod.rs",
+        "lines": "720-1585",
+        "finding": "The change introduces sequence::factory_accepts(lines) and suppresses later declaration scoring for whole-stream accepted message lines, rather than adding fixture-shaped endpoint-name branches."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/sequence.rs",
+        "lines": "23-40, 1281-1307",
+        "finding": "The Rust message regex accepts only a quoted endpoint or a bare word in ordinary CommandArrow positions, plus external-message forms. It does not model Java's inline alias endpoint alternatives, so Java-valid alias messages can make factory_accepts false."
+      }
+    ],
+    "forbidden_pattern_search": {
+      "fixture_shaped_logic": "No fixed special-case list for Node/Component/Queue was found in the inspected implementation diff.",
+      "score_tuning": "The mechanism is modeled through a parser viability probe and a one-point sequence score for accepted whole-line messages. The new failure is not a score-threshold issue; it is incomplete CommandArrow grammar parity.",
+      "unexplained_constants": "No new parity-affecting numeric constant was identified in the mechanism path beyond existing score weights and the documented one-point message score."
+    }
+  },
+  "commands": [
+    {
+      "cmd": "git rev-parse HEAD",
+      "cwd": "/private/tmp/rustuml-t14-sequence-factory",
+      "exit": 0,
+      "stdout": "da7231471a26c03997d6220b55271e3a6ead1aa6"
+    },
+    {
+      "cmd": "shasum -a 256 /private/tmp/t14-sequence-review-bin/rustuml-da723147 /private/tmp/t14-sequence-review-bin/diff_one-da723147",
+      "cwd": "/private/tmp/rustuml-t14-sequence-factory",
+      "exit": 0
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "cwd": "/private/tmp/rustuml-t14-sequence-factory",
+      "exit": 0,
+      "stdout": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "cmd": "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+      "cwd": "/private/tmp/rustuml-t14-sequence-factory",
+      "exit": 134,
+      "note": "A non-headless version probe aborted without output in this shell. All required same-stem SVG generation below succeeded with -Djava.awt.headless=true and exit 0."
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <heldout>.puml",
+      "cwd": "/private/tmp/rustuml-t14-sequence-factory",
+      "exit": 0,
+      "note": "Run once per heldout; stdout, stderr, and explicit exit are preserved as same-stem .java.stdout, .java.stderr, and .java.exit artifacts."
+    },
+    {
+      "cmd": "/private/tmp/t14-sequence-review-bin/diff_one-da723147 --no-oracle <heldout>.puml",
+      "cwd": "/private/tmp/rustuml-t14-sequence-factory",
+      "note": "Run once per heldout; stdout, stderr, and explicit exit are preserved as same-stem .diff.stdout, .diff.stderr, and .diff.exit artifacts."
+    }
+  ],
+  "heldouts": [
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/smoke_reserved_cycle",
+      "axes": ["relationship-only reserved endpoints", "order/cardinality"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/relationship_reserved_cycle",
+      "axes": ["relationship-only reserved endpoints", "order/cardinality", "reserved endpoint vocabulary"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/reverse_and_ordered_reserved",
+      "axes": ["reverse arrows", "relationship-only reserved endpoints", "order/cardinality"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/styled_activation_reserved",
+      "axes": ["inline style", "activation/deactivation suffix", "lost-message cross", "mixed case reserved endpoints"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/quoted_reserved_endpoints",
+      "axes": ["quoted endpoints", "reserved endpoint vocabulary"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/quoted_alias_endpoints",
+      "axes": ["quoted endpoint aliases", "dotted endpoint codes", "relationship-only sequence stream"],
+      "java_exit": 0,
+      "diff_exit": 1,
+      "result": "FAIL",
+      "rule_10_reject": true,
+      "finding": "Java renders a SEQUENCE diagram, while Rust renders DESCRIPTION. This directly disproves the account's endpoint-form axis for Java CommandArrow aliases."
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/common_sequence_commands_reserved",
+      "axes": ["common sequence commands", "explicit participants", "return", "activation", "reserved participant type names"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/sequence_box_note_reserved",
+      "axes": ["common sequence commands", "participant box", "note over", "reserved participant type names"],
+      "java_exit": 0,
+      "diff_exit": 1,
+      "result": "FAIL",
+      "rule_10_reject": true,
+      "finding": "Both sides render SEQUENCE, but geometry differs by a strict 5px vertical offset for the participant box/note/lifeline region. Rule 10 rejects any fresh valid Java-success input with nonzero diff."
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/component_declaration_control",
+      "axes": ["genuine component declaration rejection control", "reserved endpoint target"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/deployment_container_control",
+      "axes": ["genuine deployment/container rejection control", "quoted endpoints"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/direction_rejection_control",
+      "axes": ["direction directive rejection control", "reserved endpoints"],
+      "java_exit": 0,
+      "diff_exit": 1,
+      "result": "FAIL",
+      "rule_10_reject": true,
+      "finding": "Java renders CLASS for left-to-right plus a weak arrow, while Rust renders DESCRIPTION. This violates the account's acceptance requirement that rank-direction competitors retain their Java owner when Sequence cannot consume the complete source."
+    },
+    {
+      "stem": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/bare_association_control",
+      "axes": ["headless arrow rejection control", "class fallback"],
+      "java_exit": 0,
+      "diff_exit": 0,
+      "result": "PASS"
+    }
+  ],
+  "diff_summary": {
+    "java_success_inputs": 12,
+    "zero_diff": 9,
+    "nonzero_diff": 3,
+    "nonzero_stems": [
+      "quoted_alias_endpoints",
+      "sequence_box_note_reserved",
+      "direction_rejection_control"
+    ]
+  },
+  "verdict_rationale": "REJECT. The narrow relationship-only reserved-endpoint cases pass, and the implementation does not appear fixture-shaped, but the broader claimed Java CommandArrow/factory model does not survive fresh heldouts. Java accepts inline alias endpoints as sequence messages; Rust's viability probe rejects them and the product renders DESCRIPTION. Separately, two Java-success controls have nonzero no-oracle diffs. Under strict Rule 10, any fresh valid Java-success input with nonzero diff rejects the mechanism, regardless of whether the difference is later judged out of scope.",
+  "preserved_evidence": {
+    "directory": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/",
+    "artifact_patterns": [
+      "*.puml",
+      "*.svg",
+      "*.java.exit",
+      "*.java.stdout",
+      "*.java.stderr",
+      "*.diff.exit",
+      "*.diff.stdout",
+      "*.diff.stderr"
+    ]
+  }
+}

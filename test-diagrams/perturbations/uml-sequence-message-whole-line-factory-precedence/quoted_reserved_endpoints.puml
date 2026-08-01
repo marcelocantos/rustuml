@@ -1,0 +1,5 @@
+@startuml
+"Node" --> "Component" : quoted handoff
+"Component" --> "Queue" : quoted enqueue
+"Queue" --> "Database" : quoted persist
+@enduml

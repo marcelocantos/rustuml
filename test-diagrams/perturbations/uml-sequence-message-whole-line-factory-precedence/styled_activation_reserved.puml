@@ -1,0 +1,5 @@
+@startuml
+nOdE -[#teal,dotted]> CoMpOnEnT ++ #gold : styled start
+CoMpOnEnT -[#red,bold]> AcTiOn -- : styled finish
+AcTiOn x-- Storage : lost cleanup
+@enduml

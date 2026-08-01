@@ -1,0 +1,5 @@
+@startuml
+"Node Display" as Node.code --> "Component Display" as Component.code : alias handoff
+Component.code --> "Queue Display" as Queue.code : alias enqueue
+Queue.code --> Node.code : alias cycle
+@enduml

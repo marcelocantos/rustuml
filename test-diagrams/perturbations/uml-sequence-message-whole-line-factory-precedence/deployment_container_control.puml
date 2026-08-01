@@ -1,0 +1,7 @@
+@startuml
+node "Runtime Host" {
+  component "API Server"
+  queue "Work Queue"
+}
+"API Server" --> "Work Queue" : deployment route
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+Node --> Component : handoff 4101
+Component --> Queue : enqueue 4103
+Queue --> Node : acknowledge 4109
+Database --> Actor : audit 4111
+@enduml

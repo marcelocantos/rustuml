@@ -1,0 +1,13 @@
+@startuml
+autonumber 7
+actor Actor
+participant Node
+database Database
+collections Queue
+Actor -> Node : call
+activate Node
+Node --> Queue : store
+Queue --> Database : persist
+return done
+deactivate Node
+@enduml

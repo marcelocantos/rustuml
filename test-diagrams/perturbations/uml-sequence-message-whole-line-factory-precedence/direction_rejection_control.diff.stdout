@@ -1,0 +1,15 @@
+SVG structural differences:
+  element count: expected 21, got 13
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "70px"), ("preserveAspectRatio", "none"), ("style", "width:423px;height:70px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 423 70"), ("width", "423px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "70px"), ("preserveAspectRatio", "none"), ("style", "width:374px;height:70px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 374 70"), ("width", "374px"), ("zoomAndPan", "magnify")]
+  [4] tag mismatch: expected <rect>, got <ellipse>
+  [5] tag mismatch: expected <ellipse>, got <text>
+  [6] tag mismatch: expected <path>, got <g>
+  [7] tag mismatch: expected <text>, got <ellipse>
+  [8] tag mismatch: expected <line>, got <text>
+  [9] tag mismatch: expected <line>, got <g>
+  [10] tag mismatch: expected <g>, got <path>
+  [11] tag mismatch: expected <rect>, got <polygon>
+  [12] tag mismatch: expected <ellipse>, got <text>
+
