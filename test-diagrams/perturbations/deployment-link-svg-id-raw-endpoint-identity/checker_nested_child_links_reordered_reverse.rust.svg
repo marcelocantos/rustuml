@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="132px" preserveAspectRatio="none" style="width:731px;height:132px;background:#FFFFFF;" version="1.1" viewBox="0 0 731 132" width="731px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Western Region-->
+<g class="cluster" data-qualified-name="region-west" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,204,6,204,97.49,194,107.49,16,107.49,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="194" x2="204" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="194" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="194" x2="194" y1="16" y2="107.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="112.6084" x="49.6958" y="32.5352">Western Region</text>
+</g>
+<!--cluster Production Region-->
+<g class="cluster" data-qualified-name="region.prod" data-source-line="4" id="ent0004">
+<polygon fill="none" points="498,19,508,9,706,9,706,94.49,696,104.49,498,104.49,498,19" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="696" x2="706" y1="19" y2="9"/>
+<line style="stroke:#181818;stroke-width:1;" x1="498" x2="696" y1="19" y2="19"/>
+<line style="stroke:#181818;stroke-width:1;" x1="696" x2="696" y1="19" y2="104.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="132.5762" x="531.7119" y="35.5352">Production Region</text>
+</g>
+<!--entity Repeated Face-->
+<g class="entity" data-qualified-name="region-west.child.beta" data-source-line="2" id="ent0003">
+<path d="M51.26,56 C51.26,46 110.0002,46 110.0002,46 C110.0002,46 168.7405,46 168.7405,56 L168.7405,81.4883 C168.7405,91.4883 110.0002,91.4883 110.0002,91.4883 C110.0002,91.4883 51.26,91.4883 51.26,81.4883 L51.26,56" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M51.26,56 C51.26,66 110.0002,66 110.0002,66 C110.0002,66 168.7405,66 168.7405,56" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.4805" x="61.26" y="83.5352">Repeated Face</text>
+</g>
+<!--entity Repeated Face-->
+<g class="entity" data-qualified-name="region.prod.child.alpha" data-source-line="5" id="ent0005">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="127.4805" x="538.26" y="49"/>
+<polygon fill="#F1F1F1" points="648.7405,54,648.7405,68,660.7405,68,660.7405,60,654.7405,54,648.7405,54" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="654.7405" x2="654.7405" y1="54" y2="60"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="660.7405" x2="654.7405" y1="60" y2="60"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.4805" x="548.26" y="75.5352">Repeated Face</text>
+</g>
+<!--reverse link child.alpha to child.beta-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0003" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M532.02,68.74 C435.95,68.74 261.83,68.74 168.86,68.74" fill="none" id="child.alpha-backto-child.beta" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="538.02,68.74,529.02,64.74,533.02,68.74,529.02,72.74,538.02,68.74" style="stroke:#181818;stroke-width:1;"/>
+<path d="M191,35.74 L191,60.74 L384,60.74 L384,45.74 L374,35.74 L191,35.74" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M374,35.74 L374,45.74 L384,45.74 L374,35.74" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="172.6689" x="197" y="53.3084">nested reverse memo 4327</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="129.6509" x="390.6689" y="53.3084">nested reverse route</text>
+</g>
+</g></svg>

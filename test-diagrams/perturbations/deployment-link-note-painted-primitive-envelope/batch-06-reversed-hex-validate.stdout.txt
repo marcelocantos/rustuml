@@ -1,0 +1,4 @@
+test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_top_tb_reversed_dashed_hex.svg
+xml_exit=0
+test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_top_tb_reversed_dashed_hex.rust.svg
+xml_exit=1

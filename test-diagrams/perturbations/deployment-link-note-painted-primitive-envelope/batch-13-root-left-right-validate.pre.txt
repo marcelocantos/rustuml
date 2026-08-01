@@ -1,0 +1,8 @@
+phase=pre
+batch=note-root-left-right-svg-validation
+rust_revision=f0ffaa30c45c3531915727707945eecf47ee106d
+rust_branch=codex/t14-review-deployment-render
+java_revision=71806a23780b04a5ccde2f8ceb5121edad5eb711
+80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c  /private/tmp/rustuml-frozen/f0ffaa30/rustuml
+e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526  /private/tmp/rustuml-frozen/f0ffaa30/diff_one
+c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45  /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar

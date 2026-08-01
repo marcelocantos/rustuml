@@ -1,0 +1,10 @@
+@startuml
+node "Western Region" as region-west {
+  database child.beta as "Repeated Face"
+}
+node "Production Region" as region/prod {
+  artifact "Repeated Face" as child.alpha
+}
+child.beta -left-> child.alpha : nested reverse route
+note left on link : nested reverse memo 4327
+@enduml

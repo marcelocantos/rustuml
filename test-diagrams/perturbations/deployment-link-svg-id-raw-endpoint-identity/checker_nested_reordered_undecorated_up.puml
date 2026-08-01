@@ -1,0 +1,11 @@
+@startuml
+node "Western Region" as region-west {
+  database child.beta as "Repeated Face"
+}
+node "Production Region" as region/prod {
+  artifact "Repeated Face" as child.alpha
+}
+child.beta -- child.alpha : association route
+region/prod -up-> region-west : owner reverse
+note left on link : owner identity memo 4199
+@enduml

@@ -1,0 +1,96 @@
+[checker_bottom_tb_multiline_creole_combined]
+java: canvas=272pxx265px viewBox=0 0 272 265 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (100.88, 120.1111, 257.88, 160.1111), 'filter': None}, {'bounds': (247.88, 120.1111, 257.88, 130.1111), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'replicate', 'x': 150.4689, 'y': 96.0584, 'right': 208.5119, 'font_size': '13'}, {'text': 'phase two', 'x': 147.3522, 'y': 111.3689, 'right': 211.6286, 'font_size': '13'}, {'text': 'first', 'x': 106.88, 'y': 137.6795, 'right': 132.2262, 'font_size': '13'}, {'text': 'bold', 'x': 136.3395, 'y': 137.6795, 'right': 166.0973, 'font_size': '13'}, {'text': 'row 431', 'x': 170.2106, 'y': 137.6795, 'right': 222.3058, 'font_size': '13'}, {'text': 'second', 'x': 106.88, 'y': 152.99, 'right': 151.6437, 'font_size': '13'}, {'text': 'italic', 'x': 155.757, 'y': 152.99, 'right': 185.7306, 'font_size': '13'}, {'text': 'row O0Il', 'x': 189.8439, 'y': 152.99, 'right': 243.1007, 'font_size': '13'}]
+rust: canvas=272pxx249px viewBox=0 0 272 249 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (100.88, 104.8005, 257.88, 144.8005), 'filter': None}, {'bounds': (247.88, 104.8005, 257.88, 114.8005), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'replicate', 'x': 110.8881, 'y': 96.0584, 'right': 168.9311, 'font_size': '13'}, {'text': '\\n', 'x': 168.931, 'y': 96.0584, 'right': 183.8163, 'font_size': '13'}, {'text': 'phase two', 'x': 183.8163, 'y': 96.0584, 'right': 248.0927, 'font_size': '13'}, {'text': 'first', 'x': 106.88, 'y': 122.3689, 'right': 132.2262, 'font_size': '13'}, {'text': 'bold', 'x': 136.3395, 'y': 122.3689, 'right': 166.0973, 'font_size': '13'}, {'text': 'row 431', 'x': 170.2106, 'y': 122.3689, 'right': 222.3058, 'font_size': '13'}, {'text': 'second', 'x': 106.88, 'y': 137.6795, 'right': 151.6437, 'font_size': '13'}, {'text': 'italic', 'x': 155.757, 'y': 137.6795, 'right': 185.7306, 'font_size': '13'}, {'text': 'row O0Il', 'x': 189.8439, 'y': 137.6795, 'right': 243.1007, 'font_size': '13'}]
+
+[checker_bottom_thick_stroke_variant]
+java: canvas=215pxx180px viewBox=0 0 215 180 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (6.0, 92.0605, 167.0, 117.0605), 'filter': None}, {'bounds': (157.0, 92.0605, 167.0, 102.0605), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'width independent label', 'x': 10.7966, 'y': 83.3184, 'right': 163.1277, 'font_size': '13'}, {'text': 'thick route memo 491', 'x': 12.0, 'y': 109.6289, 'right': 152.9243, 'font_size': '13'}]
+rust: canvas=215pxx180px viewBox=0 0 215 180 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (6.0, 92.0505, 167.0, 117.0505), 'filter': None}, {'bounds': (157.0, 92.0505, 167.0, 102.0505), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'width independent label', 'x': 10.7966, 'y': 83.3084, 'right': 163.1277, 'font_size': '13'}, {'text': 'thick route memo 491', 'x': 12.0, 'y': 109.6189, 'right': 152.9243, 'font_size': '13'}]
+
+[checker_left_ltr_nested_cross_container]
+java: canvas=282pxx201px viewBox=0 0 282 201 error_page=False
+java: link=lnk5 note_paths=[{'bounds': (6.0, 73.74, 153.0, 98.74), 'filter': None}, {'bounds': (143.0, 73.74, 153.0, 83.74), 'filter': None}]
+java: link=lnk5 texts=[{'text': 'left memo', 'x': 12.0, 'y': 91.3084, 'right': 76.2573, 'font_size': '13'}, {'text': 'bold', 'x': 80.3706, 'y': 91.3084, 'right': 110.1284, 'font_size': '13'}, {'text': '457', 'x': 114.2417, 'y': 91.3084, 'right': 138.9023, 'font_size': '13'}, {'text': 'cross owner', 'x': 175.1367, 'y': 83.6531, 'right': 251.0991, 'font_size': '13'}, {'text': 'second label row', 'x': 159.9023, 'y': 98.9636, 'right': 266.3335, 'font_size': '13'}]
+rust: canvas=287pxx225px viewBox=0 0 287 225 error_page=False
+rust: link=lnk5 note_paths=[{'bounds': (-78.9953, 108.0, 68.0047, 133.0), 'filter': None}, {'bounds': (58.0047, 108.0, 68.0047, 118.0), 'filter': None}]
+rust: link=lnk5 texts=[{'text': 'left memo', 'x': -72.9953, 'y': 125.5684, 'right': -8.738, 'font_size': '13'}, {'text': 'bold', 'x': -4.6247, 'y': 125.5684, 'right': 25.1331, 'font_size': '13'}, {'text': '457', 'x': 29.2464, 'y': 125.5684, 'right': 53.907, 'font_size': '13'}, {'text': 'cross owner\\nsecond label row', 'x': 74.907, 'y': 125.5684, 'right': 272.1858, 'font_size': '13'}]
+
+[checker_left_ltr_root_combined_simple]
+java: canvas=301pxx206px viewBox=0 0 301 206 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (6.0, 74.5, 150.0, 114.5), 'filter': None}, {'bounds': (140.0, 74.5, 150.0, 84.5), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'left root memo 557', 'x': 12.0, 'y': 92.0684, 'right': 135.2969, 'font_size': '13'}, {'text': 'second row', 'x': 12.0, 'y': 107.3789, 'right': 84.1982, 'font_size': '13'}, {'text': 'bold', 'x': 88.3115, 'y': 107.3789, 'right': 118.0693, 'font_size': '13'}, {'text': 'concise handoff 563', 'x': 156.2969, 'y': 99.7236, 'right': 285.2241, 'font_size': '13'}]
+rust: canvas=300pxx206px viewBox=0 0 300 206 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (6.0, 74.49, 150.0, 114.49), 'filter': None}, {'bounds': (140.0, 74.49, 150.0, 84.49), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'left root memo 557', 'x': 12.0, 'y': 92.0584, 'right': 135.2969, 'font_size': '13'}, {'text': 'second row', 'x': 12.0, 'y': 107.3689, 'right': 84.1982, 'font_size': '13'}, {'text': 'bold', 'x': 88.3115, 'y': 107.3689, 'right': 118.0693, 'font_size': '13'}, {'text': 'concise handoff 563', 'x': 156.2969, 'y': 99.7136, 'right': 285.2241, 'font_size': '13'}]
+
+[checker_left_undecorated_multiline_note]
+java: canvas=371pxx230px viewBox=0 0 371 230 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (106.13, 87.49, 270.13, 145.49), 'filter': None}, {'bounds': (260.13, 87.49, 270.13, 97.49), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'association note 499', 'x': 112.13, 'y': 105.0584, 'right': 243.8629, 'font_size': '13'}, {'text': 'second row with', 'x': 112.13, 'y': 120.3689, 'right': 215.1461, 'font_size': '13'}, {'text': 'italics', 'x': 219.2594, 'y': 120.3689, 'right': 255.86, 'font_size': '13'}, {'text': 'third row', 'x': 112.13, 'y': 138.1462, 'right': 169.754, 'font_size': '13'}, {'text': 'sup', 'x': 173.8673, 'y': 132.7791, 'right': 191.465, 'font_size': '10'}, {'text': 'undecorated', 'x': 276.86, 'y': 113.947, 'right': 355.85020000000003, 'font_size': '13'}, {'text': 'center rows', 'x': 279.6276, 'y': 129.2576, 'right': 353.0827, 'font_size': '13'}]
+rust: canvas=459pxx230px viewBox=0 0 459 230 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (106.13, 87.49, 270.13, 145.49), 'filter': None}, {'bounds': (260.13, 87.49, 270.13, 97.49), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'association note 499', 'x': 112.13, 'y': 105.0584, 'right': 243.8629, 'font_size': '13'}, {'text': 'second row with', 'x': 112.13, 'y': 120.3689, 'right': 215.1461, 'font_size': '13'}, {'text': 'italics', 'x': 219.2594, 'y': 120.3689, 'right': 255.86, 'font_size': '13'}, {'text': 'third row', 'x': 112.13, 'y': 135.6795, 'right': 169.754, 'font_size': '13'}, {'text': 'sup', 'x': 173.8673, 'y': 130.3125, 'right': 191.465, 'font_size': '10'}, {'text': 'undecorated\\ncenter rows', 'x': 276.86, 'y': 121.6023, 'right': 444.1906, 'font_size': '13'}]
+
+[checker_right_ltr_deployment_combined_simple]
+java: canvas=359pxx188px viewBox=0 0 359 188 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (142.2827, 75.25, 344.2827, 115.25), 'filter': None}, {'bounds': (334.2827, 75.25, 344.2827, 85.25), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'concise transfer 599', 'x': 7.0, 'y': 100.4736, 'right': 136.2827, 'font_size': '13'}, {'text': 'right deployment memo 593', 'x': 148.2827, 'y': 92.8184, 'right': 329.3496, 'font_size': '13'}, {'text': 'second row', 'x': 148.2827, 'y': 108.1289, 'right': 220.48090000000002, 'font_size': '13'}, {'text': 'italic', 'x': 224.5942, 'y': 108.1289, 'right': 254.5678, 'font_size': '13'}]
+rust: canvas=358pxx187px viewBox=0 0 358 187 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (141.2827, 74.74, 343.2827, 114.74), 'filter': None}, {'bounds': (333.2827, 74.74, 343.2827, 84.74), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'concise transfer 599', 'x': 6.0, 'y': 99.9636, 'right': 135.2827, 'font_size': '13'}, {'text': 'right deployment memo 593', 'x': 147.2827, 'y': 92.3084, 'right': 328.3496, 'font_size': '13'}, {'text': 'second row', 'x': 147.2827, 'y': 107.6189, 'right': 219.48090000000002, 'font_size': '13'}, {'text': 'italic', 'x': 223.5942, 'y': 107.6189, 'right': 253.5678, 'font_size': '13'}]
+
+[checker_right_ltr_note_only_colored_creole]
+java: canvas=474pxx186px viewBox=0 0 474 186 error_page=True
+rust: canvas=167pxx138px viewBox=0 0 167 138 error_page=False
+
+[checker_right_ltr_root_combined_simple]
+java: canvas=310pxx188px viewBox=0 0 310 188 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (142.2827, 75.75, 295.2827, 115.75), 'filter': None}, {'bounds': (285.2827, 75.75, 295.2827, 85.75), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'concise transfer 587', 'x': 7.0, 'y': 100.9736, 'right': 136.2827, 'font_size': '13'}, {'text': 'right root memo 577', 'x': 148.2827, 'y': 93.3184, 'right': 281.0503, 'font_size': '13'}, {'text': 'second row', 'x': 148.2827, 'y': 108.6289, 'right': 220.48090000000002, 'font_size': '13'}, {'text': 'italic', 'x': 224.5942, 'y': 108.6289, 'right': 254.5678, 'font_size': '13'}]
+rust: canvas=161pxx138px viewBox=0 0 161 138 error_page=False
+
+[checker_right_ltr_root_note_only]
+java: canvas=194pxx188px viewBox=0 0 194 188 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (6.0, 75.75, 159.0, 115.75), 'filter': None}, {'bounds': (149.0, 75.75, 159.0, 85.75), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'right root memo 569', 'x': 12.0, 'y': 93.3184, 'right': 144.7676, 'font_size': '13'}, {'text': 'second row', 'x': 12.0, 'y': 108.6289, 'right': 84.1982, 'font_size': '13'}, {'text': 'italic', 'x': 88.3115, 'y': 108.6289, 'right': 118.2851, 'font_size': '13'}]
+rust: canvas=161pxx138px viewBox=0 0 161 138 error_page=False
+
+[checker_top_shadow_off_control]
+java: canvas=308pxx234px viewBox=0 0 308 234 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (103.12, 87.49, 293.12, 112.49), 'filter': None}, {'bounds': (283.12, 87.49, 293.12, 97.49), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'shadow control memo 479', 'x': 109.12, 'y': 105.0584, 'right': 278.3168, 'font_size': '13'}, {'text': 'shadow control label', 'x': 132.6979, 'y': 131.3689, 'right': 263.7389, 'font_size': '13'}]
+rust: canvas=308pxx234px viewBox=0 0 308 234 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (103.12, 87.49, 293.12, 112.49), 'filter': None}, {'bounds': (283.12, 87.49, 293.12, 97.49), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'shadow control memo 479', 'x': 109.12, 'y': 105.0584, 'right': 278.3168, 'font_size': '13'}, {'text': 'shadow control label', 'x': 132.6979, 'y': 131.3689, 'right': 263.7389, 'font_size': '13'}]
+
+[checker_top_shadow_on_variant]
+java: canvas=308pxx237px viewBox=0 0 308 237 error_page=False
+java: link=lnk4 note_paths=[{'bounds': (103.12, 87.49, 293.12, 112.49), 'filter': 'url(#fuirkmtm6jujd)'}, {'bounds': (283.12, 87.49, 293.12, 97.49), 'filter': None}]
+java: link=lnk4 texts=[{'text': 'shadow control memo 479', 'x': 109.12, 'y': 105.0584, 'right': 278.3168, 'font_size': '13'}, {'text': 'shadow control label', 'x': 134.1979, 'y': 134.3689, 'right': 265.2389, 'font_size': '13'}]
+rust: canvas=308pxx234px viewBox=0 0 308 234 error_page=False
+rust: link=lnk4 note_paths=[{'bounds': (103.12, 87.49, 293.12, 112.49), 'filter': None}, {'bounds': (283.12, 87.49, 293.12, 97.49), 'filter': None}]
+rust: link=lnk4 texts=[{'text': 'shadow control memo 479', 'x': 109.12, 'y': 105.0584, 'right': 278.3168, 'font_size': '13'}, {'text': 'shadow control label', 'x': 132.6979, 'y': 131.3689, 'right': 263.7389, 'font_size': '13'}]
+
+[checker_top_tb_reversed_dashed]
+java: canvas=569pxx186px viewBox=0 0 569 186 error_page=True
+rust: xml_error=no element found: line 1, column 0 error_page=False
+
+[checker_top_tb_reversed_dashed_hex]
+java: canvas=569pxx186px viewBox=0 0 569 186 error_page=True
+rust: xml_error=no element found: line 1, column 0 error_page=False
+
+[checker_top_tb_reversed_dashed_valid]
+java: canvas=331pxx252px viewBox=0 0 331 252 error_page=False
+java: link=lnk6 note_paths=[{'bounds': (84.75, 81.49, 256.75, 124.49), 'filter': None}, {'bounds': (246.75, 81.49, 256.75, 91.49), 'filter': None}]
+java: link=lnk6 texts=[{'text': 'top note row qijwm 547', 'x': 90.75, 'y': 99.0584, 'right': 242.4209, 'font_size': '13'}, {'text': 'subscript', 'x': 90.75, 'y': 118.0017, 'right': 135.584, 'font_size': '10'}, {'text': 'edge', 'x': 139.6973, 'y': 114.3689, 'right': 170.47070000000002, 'font_size': '13'}, {'text': 'reverse transfer 547', 'x': 107.082, 'y': 143.6795, 'right': 235.0888, 'font_size': '13'}]
+rust: canvas=331pxx252px viewBox=0 0 331 252 error_page=False
+rust: link=lnk6 note_paths=[{'bounds': (84.75, 81.49, 256.75, 124.49), 'filter': None}, {'bounds': (246.75, 81.49, 256.75, 91.49), 'filter': None}]
+rust: link=lnk6 texts=[{'text': 'top note row qijwm 547', 'x': 90.75, 'y': 99.0584, 'right': 242.4209, 'font_size': '13'}, {'text': 'subscript', 'x': 90.75, 'y': 118.0, 'right': 135.584, 'font_size': '10'}, {'text': 'edge', 'x': 139.6973, 'y': 114.3689, 'right': 170.47070000000002, 'font_size': '13'}, {'text': 'reverse transfer 547', 'x': 107.082, 'y': 143.6795, 'right': 235.0888, 'font_size': '13'}]
+

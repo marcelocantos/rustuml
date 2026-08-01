@@ -1,0 +1,10 @@
+@startuml
+node AssociationLeft499
+storage AssociationRight503
+AssociationLeft499 -- AssociationRight503 : undecorated\ncenter rows
+note left on link
+  association note 499
+  second row with //italics//
+  third row <sup>sup</sup>
+end note
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node "edge.alias" as ingress.v7
+node edge.alias as "Ingress Visible"
+database "Archive/Blue"
+ingress.v7 --> edge.alias : primary route
+edge.alias --> "Archive/Blue" : secondary route
+note on link : identity memo 4103
+@enduml

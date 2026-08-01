@@ -1,0 +1,101 @@
+[checker_collision_reordered_reverse_duplicates]
+java: xml_valid=True error_page=False
+java: comments=['reverse link ingress.v7 to edge.alias', 'reverse link ingress.v7 to edge.alias', 'link Archive-West to edge.alias']
+java: path_ids=['ingress.v7-backto-edge.alias', 'ingress.v7-backto-edge.alias-1', 'Archive-West-to-edge.alias']
+java: qualified_names=['edge.alias', 'ingress.v7', 'Archive-West']
+rust: xml_valid=True error_page=False
+rust: comments=['reverse link ingress.v7 to edge.alias', 'reverse link ingress.v7 to edge.alias', 'link Archive-West to edge.alias']
+rust: path_ids=['ingress.v7-backto-edge.alias', 'ingress.v7-backto-edge.alias-1', 'Archive-West-to-edge.alias']
+rust: qualified_names=['edge.alias', 'ingress.v7', 'Archive-West']
+
+[checker_colon_slash_styled_duplicates]
+java: xml_valid=True error_page=False
+java: comments=['link API:North to queue/v2', 'link API:North to queue/v2']
+java: path_ids=['API:North-to-queue/v2', 'API:North-to-queue/v2-1']
+java: qualified_names=['API.North', 'queue.v2']
+rust: xml_valid=True error_page=False
+rust: comments=['link API:North to queue/v2', 'link API:North to queue/v2']
+rust: path_ids=['API:North-to-queue/v2', 'API:North-to-queue/v2-1']
+rust: qualified_names=['API.North', 'queue.v2']
+
+[checker_display_alias_collision_ltr]
+java: xml_valid=True error_page=False
+java: comments=['link ingress.v7 to edge.alias', 'link edge.alias to Archive/Blue']
+java: path_ids=['ingress.v7-to-edge.alias', 'edge.alias-to-Archive/Blue']
+java: qualified_names=['ingress.v7', 'edge.alias', 'Archive.Blue']
+rust: xml_valid=True error_page=False
+rust: comments=['link ingress.v7 to edge.alias']
+rust: path_ids=['ingress.v7-to-edge.alias']
+rust: qualified_names=['ingress.v7', 'edge.alias']
+
+[checker_nested_broad_codes_duplicate_displays]
+java: xml_valid=True error_page=True
+java: comments=[]
+java: path_ids=[]
+java: qualified_names=[]
+rust: xml_valid=True error_page=False
+rust: comments=['link region/prod to region-west', 'link child.alpha to child.beta']
+rust: path_ids=['region/prod-to-region-west', 'child.alpha-to-child.beta']
+rust: qualified_names=['region.prod', 'region-west', 'region.prod.child.alpha', 'region-west.child.beta']
+
+[checker_nested_child_links_broad_owners]
+java: xml_valid=True error_page=False
+java: comments=['link child.alpha to child.beta']
+java: path_ids=['child.alpha-to-child.beta']
+java: qualified_names=['region.prod', 'region-west', 'region.prod.child.alpha', 'region-west.child.beta']
+rust: xml_valid=True error_page=False
+rust: comments=['link child.alpha to child.beta']
+rust: path_ids=['child.alpha-to-child.beta']
+rust: qualified_names=['region.prod', 'region-west', 'region.prod.child.alpha', 'region-west.child.beta']
+
+[checker_nested_child_links_reordered_reverse]
+java: xml_valid=True error_page=False
+java: comments=['reverse link child.alpha to child.beta']
+java: path_ids=['child.alpha-backto-child.beta']
+java: qualified_names=['region-west', 'region.prod', 'region-west.child.beta', 'region.prod.child.alpha']
+rust: xml_valid=True error_page=False
+rust: comments=['reverse link child.alpha to child.beta']
+rust: path_ids=['child.alpha-backto-child.beta']
+rust: qualified_names=['region-west', 'region.prod', 'region-west.child.beta', 'region.prod.child.alpha']
+
+[checker_nested_quoted_broad_codes]
+java: xml_valid=True error_page=True
+java: comments=[]
+java: path_ids=[]
+java: qualified_names=[]
+rust: xml_valid=True error_page=False
+rust: comments=['link region/prod to region-west', 'link child.alpha to child.beta']
+rust: path_ids=['region/prod-to-region-west', 'child.alpha-to-child.beta']
+rust: qualified_names=['region.prod', 'region-west', 'region.prod.child.alpha', 'region-west.child.beta']
+
+[checker_nested_quoted_reordered_up]
+java: xml_valid=True error_page=True
+java: comments=[]
+java: path_ids=[]
+java: qualified_names=[]
+rust: xml_valid=True error_page=False
+rust: comments=['link child.beta to child.alpha', 'reverse link region-west to region/prod']
+rust: path_ids=['child.beta-child.alpha', 'region-west-backto-region/prod']
+rust: qualified_names=['region-west', 'region.prod', 'region-west.child.beta', 'region.prod.child.alpha']
+
+[checker_nested_reordered_undecorated_up]
+java: xml_valid=True error_page=True
+java: comments=[]
+java: path_ids=[]
+java: qualified_names=[]
+rust: xml_valid=True error_page=False
+rust: comments=['link child.beta to child.alpha', 'reverse link region-west to region/prod']
+rust: path_ids=['child.beta-child.alpha', 'region-west-backto-region/prod']
+rust: qualified_names=['region-west', 'region.prod', 'region-west.child.beta', 'region.prod.child.alpha']
+
+[checker_xml_ampersand_raw_identity]
+java: xml_valid=True error_page=False
+java: comments=['link Gate & Relay to Sink-3']
+java: path_ids=['Gate & Relay-to-Sink-3']
+java: qualified_names=['Gate . Relay', 'Sink-3']
+rust: xml_valid=False error_page=False
+rust: xml_error=not well-formed (invalid token): line 16, column 73
+rust: comments=['link Gate & Relay to Sink-3']
+rust: path_ids=['Gate & Relay-to-Sink-3']
+rust: qualified_names=['Gate . Relay', 'Sink-3']
+

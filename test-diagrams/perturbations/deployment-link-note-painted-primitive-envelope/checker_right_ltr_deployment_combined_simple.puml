@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node LeftWorker593
+storage RightVault599
+LeftWorker593 -right[#4169E1,dotted]-> RightVault599 : concise transfer 599
+note right on link #FFF4CC
+  right deployment memo 593
+  second row //italic//
+end note
+@enduml

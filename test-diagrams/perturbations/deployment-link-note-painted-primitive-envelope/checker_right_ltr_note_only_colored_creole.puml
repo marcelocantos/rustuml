@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+component WestWorker461
+storage EastVault463
+WestWorker461 -right[#4169E1,dotted]-> EastVault463
+note right on link #back:FFF4CC;line.bold:DarkOrange;text:Blue
+  right **bold** row 461
+  mono ""O0Il-463"" row
+end note
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+component LeftWorker569
+storage RightVault571
+LeftWorker569 -right[#4169E1,dotted]-> RightVault571
+note right on link #FFF4CC
+  right root memo 569
+  second row //italic//
+end note
+@enduml

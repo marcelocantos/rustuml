@@ -1,0 +1,7 @@
+@startuml
+skinparam shadowing true
+node ShadowSource467
+database ShadowSink479
+ShadowSource467 --> ShadowSink479 : shadow control label
+note top on link #MistyRose : shadow control memo 479
+@enduml

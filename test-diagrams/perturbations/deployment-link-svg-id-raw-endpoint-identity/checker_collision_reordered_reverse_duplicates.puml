@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node edge.alias as "Ingress Visible"
+node "edge.alias" as ingress.v7
+queue "Archive-West"
+edge.alias -left-> ingress.v7 : first reverse
+edge.alias -left-> ingress.v7 : second reverse
+note top on link : duplicate reverse memo 4127
+"Archive-West" --> edge.alias : declaration order probe
+@enduml

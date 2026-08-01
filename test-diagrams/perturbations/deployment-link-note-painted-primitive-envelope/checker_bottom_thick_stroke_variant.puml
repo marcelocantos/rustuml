@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node ThickSource487
+queue ThickSink491
+ThickSource487 -right[#8B008B,thickness=4]-> ThickSink491 : width independent label
+note bottom on link #back:HoneyDew;line:006400 : thick route memo 491
+@enduml

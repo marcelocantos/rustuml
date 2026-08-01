@@ -1,0 +1,3 @@
+Error line 8 in file: test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/checker_nested_quoted_broad_codes.puml
+Error line 9 in file: test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/checker_nested_quoted_reordered_up.puml
+Some diagram description contains errors

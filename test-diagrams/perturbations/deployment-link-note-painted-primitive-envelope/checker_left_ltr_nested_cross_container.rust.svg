@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="225px" preserveAspectRatio="none" style="width:287px;height:225px;background:#FFFFFF;" version="1.1" viewBox="0 0 287 225" width="287px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster EnvelopeEast449-->
+<g class="cluster" data-qualified-name="EnvelopeEast449" data-source-line="2" id="ent0002">
+<polygon fill="none" points="16,16,26,6,215,6,215,92,205,102,16,102,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="205" x2="215" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="205" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="205" x2="205" y1="16" y2="102"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="123.0195" x="49.9902" y="32.5352">EnvelopeEast449</text>
+</g>
+<!--entity NestedEmitter451-->
+<g class="entity" data-qualified-name="EnvelopeEast449.NestedEmitter451" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="152.3906" x="38.8047" y="46.26"/>
+<polygon fill="#F1F1F1" points="174.1953,51.26,174.1953,65.26,186.1953,65.26,186.1953,57.26,180.1953,51.26,174.1953,51.26" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.1953" x2="180.1953" y1="51.26" y2="57.26"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="186.1953" x2="180.1953" y1="57.26" y2="57.26"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122.3906" x="48.8047" y="72.7952">NestedEmitter451</text>
+</g>
+<!--entity RootReceiver457-->
+<g class="entity" data-qualified-name="RootReceiver457" data-source-line="5" id="ent0004">
+<path d="M47.8547,165.26 C47.8547,155.26 114.9997,155.26 114.9997,155.26 C114.9997,155.26 182.1447,155.26 182.1447,165.26 L182.1447,190.7483 C182.1447,200.7483 114.9997,200.7483 114.9997,200.7483 C114.9997,200.7483 47.8547,200.7483 47.8547,190.7483 L47.8547,165.26" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M47.8547,165.26 C47.8547,175.26 114.9997,175.26 114.9997,175.26 C114.9997,175.26 182.1447,175.26 182.1447,165.26" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114.29" x="57.8547" y="192.7952">RootReceiver457</text>
+</g>
+<!--link NestedEmitter451 to RootReceiver457-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="6" id="lnk5">
+<path d="M115.0047,86.17 C115.0047,105.47 115.0047,128.55 115.0047,148.79" fill="none" id="NestedEmitter451-to-RootReceiver457" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="115.0047,154.79,119.0047,145.79,115.0047,149.79,111.0047,145.79,115.0047,154.79" style="stroke:#181818;stroke-width:1;"/>
+<path d="M-78.9953,108 L-78.9953,133 L68.0047,133 L68.0047,118 L58.0047,108 L-78.9953,108" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M58.0047,108 L58.0047,118 L68.0047,118 L58.0047,108" fill="#98FB98" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="64.2573" x="-72.9953" y="125.5684">left memo</text><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="700" lengthAdjust="spacing" textLength="29.7578" x="-4.6247" y="125.5684">bold</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24.6606" x="29.2464" y="125.5684">457</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="197.2788" x="74.907" y="125.5684">cross owner\nsecond label row</text>
+</g>
+</g></svg>

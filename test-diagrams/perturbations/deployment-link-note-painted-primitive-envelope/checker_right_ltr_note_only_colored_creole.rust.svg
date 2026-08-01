@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="138px" preserveAspectRatio="none" style="width:167px;height:138px;background:#FFFFFF;" version="1.1" viewBox="0 0 167 138" width="167px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity WestWorker461-->
+<g class="entity" data-qualified-name="WestWorker461" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="146.7227" x="7" y="78"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="133.7227" y="83"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="131.7227" y="85"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="131.7227" y="89"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.7227" x="22" y="111.5352">WestWorker461</text>
+</g>
+<!--entity EastVault463-->
+<g class="entity" data-qualified-name="EastVault463" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="109.1064" x="25.8081" y="7"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.1064" x="35.8081" y="30.5352">EastVault463</text>
+</g>
+</g></svg>

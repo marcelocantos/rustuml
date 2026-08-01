@@ -1,0 +1,4 @@
+test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_right_ltr_root_combined_simple.svg
+xml_exit=0
+test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_right_ltr_root_combined_simple.rust.svg
+xml_exit=0

@@ -1,0 +1,8 @@
+SVG structural differences:
+  [14] <path> attr mismatch:
+    expected: [("d", "M115.5,52.59 C115.5,78.03 115.5,111.85 115.5,132.61"), ("fill", "none"), ("id", "ThickSource487-to-ThickSink491"), ("style", "stroke:#8B008B;stroke-width:4;")]
+    actual:   [("d", "M115.5,52.59 C115.5,78.02 115.5,111.85 115.5,132.61"), ("fill", "none"), ("id", "ThickSource487-to-ThickSink491"), ("style", "stroke:#181818;stroke-width:1;")]
+  [15] <polygon> attr mismatch:
+    expected: [("fill", "#8B008B"), ("points", "115.5,138.61,119.5,129.61,115.5,133.61,111.5,129.61,115.5,138.61"), ("style", "stroke:#8B008B;stroke-width:4;")]
+    actual:   [("fill", "#181818"), ("points", "115.5,138.61,119.5,129.61,115.5,133.61,111.5,129.61,115.5,138.61"), ("style", "stroke:#181818;stroke-width:1;")]
+
