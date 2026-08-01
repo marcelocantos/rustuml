@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-leaf-inline-empty-body-rejection",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "fabccf22078881df558df65980c241c6e7d00ada",
+  "successor_to_rejected_mechanism": "deployment-usymbol-container-command-completeness",
+  "rejected_account": "docs/parity-reviews/deployment-usymbol-container-command-completeness/account.json",
+  "rejection_record": "docs/parity-reviews/deployment-usymbol-container-command-completeness/review.json",
+  "preserved_evidence": "test-diagrams/perturbations/deployment-usymbol-container-command-completeness",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "symbols": [
+        "CommandCreateElementFull.ALL_TYPES",
+        "CommandCreateElementFull.getRegexConcat",
+        "CommandCreateElementFull.executeArg"
+      ],
+      "lines": "75-117, 123-250",
+      "role": "The Description leaf command is start/end anchored. Its final grammar permits tags, stereotype, URL, and color, then reaches RegexLeaf.end with no opening brace, closing brace, or inline empty-body alternative. A valid leaf is therefore brace-free."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+      "symbols": [
+        "CommandPackageWithUSymbol.getRegexConcat"
+      ],
+      "lines": "75-128",
+      "role": "The separate Description container command ends with exactly one opening brace followed immediately by end-of-line. It does not accept a same-line closing brace, so `artifact X {}` is neither a leaf nor a container command."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": [
+        "DescriptionDiagramFactory.initCommandsList"
+      ],
+      "lines": "85-130",
+      "role": "Registers the braced container command and brace-free leaf command as distinct candidates. No Description command bridges them with an inline empty-body form."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": [
+        "PSystemCommandFactory.getCandidate",
+        "PSystemCommandFactory.executeFewLines",
+        "PSystemCommandFactory.createSystem"
+      ],
+      "lines": "74-197",
+      "role": "A non-payload line must match a complete registered command in each required pass. When `leaf X {}` matches neither Description command, the factory returns a syntax-error system instead of skipping or partially consuming the line."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": [
+        "PSystemBuilder.createPSystem"
+      ],
+      "lines": "203-255",
+      "role": "Factories are tried independently and only a complete non-error parse is returned. This allows syntax such as `entity Ledger {}` to remain valid when the Class factory can consume the entire source, without making it valid Description leaf syntax."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "parse_deployment_node_command::LEAF_CODE_DISPLAY",
+        "parse_deployment_node_command::LEAF_DISPLAY_CODE",
+        "parse_deployment_node_command::LEAF_QUOTED",
+        "parse_deployment_node_command::LEAF_BARE"
+      ],
+      "lines": "716-739",
+      "role": "All four Description/deployment leaf regexes end with the optional suffix `(?:\\s*\\{\\s*\\})?`, which admits the exact same-line empty body Java rejects. The adjacent comment incorrectly attributes this extension to Java CommandCreateElementFull."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "parse_deployment_node_command",
+        "parse_deployment"
+      ],
+      "lines": "681-775, 1160-1247",
+      "role": "A known Description keyword with `leaf {}` bypasses the container-only branch because it does not end in a lone opening brace, then matches a leaf regex. parse_deployment creates a successful leaf and never emits the invalid-declaration ParseError."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype",
+        "parse_with_base"
+      ],
+      "lines": "720-1200, 1936-2090",
+      "role": "Rust approximates Java factory selection with subtype evidence and then dispatches one parser. Tightening Description leaf grammar must happen after preserving valid Class syntax, not by globally banning inline class bodies."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "quoted_shared_containers_with_entity_forms_select_class",
+        "mixed_description_keyword_family_rejects_the_class_factory",
+        "allowmixing_keeps_quoted_entity_and_component_source_in_class_factory"
+      ],
+      "lines": "2408-2431, 2553-2572, 2707-2725",
+      "role": "The first and third tests correctly require `entity Ledger {}` to remain valid Class syntax when the Class factory owns the whole source. The mixed-family test currently expects Deployment success for the same Class-only syntax combined with Description-only leaves; Java has no complete factory for that source, so this expectation must become an error assertion rather than being deleted or generalized."
+    }
+  ],
+  "claimed_invariant": "Command grammar is factory-local and complete-line anchored. In a Description diagram, a leaf declaration is brace-free and a USymbol container declaration ends with one opening brace whose body and closing brace occur on later lines. A same-line empty body such as `artifact X {}` matches neither Description command and must reject the selected Description parse. The same token shape may remain valid in another language family, notably Class `entity X {}`, when that factory can consume the complete source.",
+  "causal_divergence": "Java's CommandCreateElementFull reaches end-of-line after optional leaf metadata and has no brace alternative; CommandPackageWithUSymbol requires a lone final opening brace. Therefore the four preserved `leaf {}` controls produce Java exit 200. Rust's four leaf regexes independently append an optional empty-brace suffix, so parse_deployment_node_command classifies each invalid line as a valid leaf and parse_deployment exits 0. This is a grammar invention, not permissive recovery. Removing it globally would also be wrong because Rust's subtype tests model valid Class `entity X {}` syntax; the divergence is specifically the Description leaf command boundary and complete-source factory outcome.",
+  "planned_model_change": "Remove the optional inline-empty-body suffix from all four Description leaf regexes and correct the misleading Java provenance comment. Keep the braced-container branch restricted to commands ending in one opening brace, with its existing typed DeploymentContainerSymbol inventory. When a known Description keyword line containing `{}` matches neither the container nor leaf grammar, preserve parse_deployment's fail-closed ParseError at that source line. Add table-driven parser tests pairing each preserved rejected control's leaf form (artifact, database, queue, component; quoted, bare, and aliased where relevant) with its valid brace-free sibling. Retain Class detection and parsing for wholly Class-valid `entity X {}` sources, retain the allowmixing Class tests, and change mixed_description_keyword_family_rejects_the_class_factory to assert that no successful Rust diagram is produced when the Class-only inline body is combined with Description-only commands. Do not special-case entity or any preserved fixture; express the distinction through the two command grammars and complete-source ownership.",
+  "perturbation_axes": [
+    "leaf symbol: artifact, database, queue, component, entity, file, and already-supported non-container Description leaves",
+    "identity form: bare code, quoted code, display-first alias, code-first alias, mixed case, stereotype, tags, URL, and color",
+    "body token shape: brace-free valid leaf, same-line `{}`, lone multiline `{`, unmatched `}`, and trailing tokens after a brace",
+    "factory context: pure Description, pure Class with `entity X {}`, Class with allowmixing, and mixed Class-only plus Description-only commands",
+    "position and recovery pressure: invalid first, middle, or nested line followed by otherwise valid declarations and links"
+  ],
+  "preserved_java_rejected_controls": [
+    {
+      "invalid": "fresh_nested_symbol_aliases",
+      "valid_sibling": "fresh_valid_nested_symbol_aliases",
+      "leaf_difference": "artifact Worker_6105 {} versus artifact Worker_7105"
+    },
+    {
+      "invalid": "fresh_metadata_url_tags_color",
+      "valid_sibling": "fresh_valid_metadata_url_tags_color",
+      "leaf_difference": "database AuditLog_6207 {} versus database AuditLog_7207"
+    },
+    {
+      "invalid": "fresh_keyword_endpoints_and_order",
+      "valid_sibling": "fresh_valid_keyword_endpoints_and_order",
+      "leaf_difference": "queue Queue_6309 {} versus queue Queue_7309"
+    },
+    {
+      "invalid": "fresh_quoted_broad_codes_and_nesting",
+      "valid_sibling": "fresh_valid_quoted_broad_codes_and_nesting",
+      "leaf_difference": "component API Gateway as api_gateway_6507 {} versus the brace-free api_gateway_7507 sibling"
+    }
+  ],
+  "scope_boundary": "This mechanism owns Description leaf acceptance and fail-closed rejection of same-line empty brace bodies, plus subtype/test behavior needed to preserve valid Class ownership. It does not own Action/Process/Hexagon geometry or style, container layout, link rendering, qualified names, comparator controls, baselines, park lists, syntax-error golden markers, or guard allow-lists. Exact rendering of the valid siblings remains the companion deployment-usymbol-action-process-hexagon-container-rendering mechanism; this grammar mechanism requires only that Java-success siblings remain accepted and Java-rejected controls remain rejected.",
+  "acceptance": [
+    "Each of fresh_nested_symbol_aliases, fresh_metadata_url_tags_color, fresh_keyword_endpoints_and_order, and fresh_quoted_broad_codes_and_nesting remains Java exit 200 and is rejected by the Rust CLI/parser with a nonzero exit at the offending inline-empty leaf line.",
+    "Each named fresh_valid_* sibling remains Java exit 0 and is accepted by Rust; once the companion renderer mechanism lands, each must also have diff_one --no-oracle exit 0.",
+    "Fresh table-driven controls cover at least two independent axes and prove that all four Description leaf grammar forms reject `{}` while their brace-free forms accept metadata and aliases according to Java's anchored command.",
+    "A lone final opening brace remains valid only for a keyword in CommandPackageWithUSymbol's container inventory and establishes multiline ownership; malformed braces and trailing tokens reject without rendering later lines.",
+    "Pure Class and allowmixing sources containing valid Class `entity X {}` continue to parse as Class, including quoted_shared_containers_with_entity_forms_select_class and allowmixing_keeps_quoted_entity_and_component_source_in_class_factory.",
+    "mixed_description_keyword_family_rejects_the_class_factory is changed to assert parse failure for the no-complete-factory source rather than Deployment success; the test is not removed or weakened.",
+    "An independent checker uses the exact Java and Rust revisions, adds fresh valid/rejected sibling pairs, records Java and Rust exits, and rejects any Java-rejected input accepted by Rust or Java-success input rejected by Rust."
+  ],
+  "forbidden_approaches": [
+    "special-casing preserved fixture names, IDs, labels, source lines, or the four known leaf spellings",
+    "globally banning `{}` so valid Class inline bodies stop working",
+    "silently skipping an invalid Description line and rendering later declarations",
+    "treating Java exit 200 as a render-diff success or adding the controls to a syntax-error allow-list",
+    "deleting or weakening subtype tests that expose the Class-versus-Description boundary",
+    "changing comparator slack, baselines, skip rules, park lists, syntax-error markers, or frozen controls"
+  ]
+}
