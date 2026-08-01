@@ -1,0 +1,7 @@
+@startuml
+class FreshA6901
+class FreshB6903
+(FreshA6901, FreshB6903) .. FreshRole6905
+note bottom of FreshB6903 : attached after association 6907
+FreshA6901 --> FreshRole6905 : ordinary after 6909
+@enduml

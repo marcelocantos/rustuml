@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cuca-association-event-projection",
+  "evidence_kind": "parity",
+  "review_sequence": 1,
+  "created": "2026-08-01T21:38:32+10:00",
+  "reviewer": {
+    "task_id": "codex-desktop-t14-association-event-projection-review2",
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, candidate diff_one --no-oracle",
+    "independence": "Did not implement 72aa7bc90527b60d65fdfd67c80e54108f0812be or 88867b6c03dd103825744f56d6524e6cdefb6a5f; did not edit production code, account.json, comparator settings, baselines, park lists, error markers, or allow-lists."
+  },
+  "account_commit": "2fa10c6c555906ead234ade68f8733aa04920465",
+  "implementation_commit": "88867b6c03dd103825744f56d6524e6cdefb6a5f",
+  "implementation_commits": [
+    "72aa7bc90527b60d65fdfd67c80e54108f0812be",
+    "88867b6c03dd103825744f56d6524e6cdefb6a5f"
+  ],
+  "evaluated_rust_revision": "88867b6c03dd103825744f56d6524e6cdefb6a5f",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "candidate_artifacts": {
+    "diff_one": {
+      "path": "/private/tmp/rustuml-t14-association/target/release/examples/diff_one",
+      "sha256": "af538b8983c2326906a8c37c03a583802d6e9accfcb7bb0d2875efbbd6069003",
+      "mode": "--no-oracle"
+    },
+    "plantuml_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "account_json_sha256": "1c6fab59de52e7235816067a2584536ec567f5312e4f4c51c7334631bd33fc4a"
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "sed -n '1,260p' AGENTS.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "git rev-parse --verify HEAD",
+    "git show --stat --oneline --decorate --no-renames 2fa10c6c 72aa7bc9 88867b6c",
+    "shasum -a 256 /private/tmp/rustuml-t14-association/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-cuca-association-event-projection/account.json",
+    "nl -ba crates/rustuml-parser/src/parse/class.rs | sed -n '1120,1200p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '215,240p;2460,2785p;4768,5045p;13900,14240p;15770,15895p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java | sed -n '160,350p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '210,305p;910,990p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java | sed -n '80,120p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '205,270p;345,440p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <stem>.puml",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-cuca-association-event-projection/<stem>.puml",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-association-event-projection/<stem>.puml",
+    "xmllint --noout test-diagrams/perturbations/class-cuca-association-event-projection/checker2_*.svg",
+    "xmllint --noout test-diagrams/perturbations/class-cuca-association-event-projection/checker2_*.rust.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type' test-diagrams/perturbations/class-cuca-association-event-projection -g 'checker2_*.svg'",
+    "rg -n 'checker2_|CheckTwo|MultiA6501|MultiB6503|RoleOne6505|RoleTwo6507|class-cuca-association-event-projection' crates/rustuml-parser/src crates/rustuml-render/src",
+    "git diff --check"
+  ],
+  "source_trace": {
+    "java": [
+      "Quark.java:54 and 134-154 keep each parent's children in LinkedHashMap insertion order.",
+      "AbstractClassOrObjectDiagram.Association:222-233 creates POINT_FOR_ASSOCIATION under the endpoints' common parent or quarkInContext for the statement context when parents differ.",
+      "AbstractClassOrObjectDiagram.Association.createNew:250-300 removes the selected base link and appends the two split links plus the point-to-association-class link.",
+      "AbstractClassOrObjectDiagram.Association.createSecondAssociation/createInSecond:237-247 and 303-339 mutate the first association's point-to-associated link, add a second point, add a second connector, and add an invisible point-to-point link.",
+      "CucaDiagram.getLinks/addLink/removeLink:959-983 exposes the mutable live link list; CucaDiagramFileMakerSvek.getOrderedLinks:89-113 then performs stable same-connection grouping.",
+      "GraphvizImageBuilder.buildImage/printGroups/printGroup:226-229 and 408-435 print all top-level groups before root leaves, and direct leaves before child groups inside each group."
+    ],
+    "rust": [
+      "parse/class.rs:1122-1195 records association owner_package, newest base replacement, and ClassUidEvent::Association.",
+      "class.rs:224-236 gives the association point and synthetic UID/link slot constants adjacent Java provenance.",
+      "class.rs:4797-4871 inserts AssociationPoint into the owner-local SVEK node stream from uid_events when present; the source_line fallback is only for uid_event-less reconstructed diagrams.",
+      "class.rs:4930-4942 maps association owner_package names to package indices for cluster enrollment.",
+      "class.rs:13945-14080 derives a separate source-live link projection for attached notes, ordinary relationships, and association replacement links, then applies stable same-connection grouping.",
+      "class.rs:15774-15880 builds only the three createNew-style replacement links for each AssociationClass; it has no model for Java createSecondAssociation's mutation and invisible point-to-point link."
+    ],
+    "fixture_shape_review": "Static search found no production references to the fresh checker2 labels or mechanism directory. The implementation adds Java-cited association constants and event projections rather than fixture names, corpus membership checks, comparator changes, or SVG string surgery."
+  },
+  "perturbations": [
+    {
+      "stem": "checker2_owner_local_nested_alias_note_order",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_owner_local_nested_alias_note_order.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["same-parent nested owner", "alias label", "attached note before association", "pre-existing base", "later direct leaf"],
+      "result": "pass",
+      "finding": "The owner-local nested association point, attached note link, alias labels, and later direct leaf compare exactly."
+    },
+    {
+      "stem": "checker2_cross_parent_statement_owner",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "axes": ["cross-parent endpoints", "statement package ownership", "qualified endpoints", "role in endpoint package", "later statement-package leaf"],
+      "result": "fail",
+      "finding": "Fresh Java-valid counterexample. Java paints Right6209 before apoint8 and JoinTail6213, while Rust paints apoint8 before Right6209 and has the first structural mismatch at element 29. This rejects the claimed cross-parent current-context projection."
+    },
+    {
+      "stem": "checker2_live_link_note_replacement_order",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_live_link_note_replacement_order.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["pre-existing base", "attached note before association", "ordinary relationship after association", "live-link ordering"],
+      "result": "pass",
+      "finding": "The live-link projection survives attached-note-before and ordinary-link-after ordering for this single-association shape."
+    },
+    {
+      "stem": "checker2_multiple_associations_same_pair",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 1,
+      "axes": ["multiple associations on the same endpoint pair", "pre-existing base", "same-connection grouping", "second association lifecycle"],
+      "result": "fail",
+      "finding": "Fresh Java-valid counterexample. Java's second association keeps the first role connector as RoleOne6505-apoint7, emits two association points, and adds the second connector after the second split pair; Rust emits the first connector as apoint7-RoleOne6505 before the second split pair and misses Java's createSecondAssociation ordering model."
+    },
+    {
+      "stem": "checker2_reversed_long_link_left_to_right",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_reversed_long_link_left_to_right.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["left-to-right direction", "reversed endpoint order", "long base link", "solid association connector"],
+      "result": "pass",
+      "finding": "The one-association reversed long-link case compares exactly."
+    },
+    {
+      "stem": "checker2_declaration_order_before_child",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_before_child.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["declaration-order negative control", "unrelated direct leaf before child group", "same-parent owner", "no explicit base"],
+      "result": "pass",
+      "finding": "The first half of the direct-leaf/child-group order pair compares exactly."
+    },
+    {
+      "stem": "checker2_declaration_order_after_child",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_declaration_order_after_child.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["declaration-order negative control", "unrelated direct leaf after child group", "same-parent owner", "no explicit base"],
+      "result": "pass",
+      "finding": "The second half of the order pair also compares exactly, supporting the account's rejection of a raw global source-order explanation."
+    },
+    {
+      "stem": "checker2_alias_cross_parent_root_statement",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_alias_cross_parent_root_statement.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["cross-parent endpoints", "root statement ownership", "aliases", "later root leaf"],
+      "result": "pass",
+      "finding": "A root-owned cross-parent alias variant compares exactly, narrowing the cross-parent failure to non-root statement-package ownership rather than aliases alone."
+    },
+    {
+      "stem": "checker2_no_existing_base_with_attached_note_after",
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.svg",
+      "rust_svg": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.rust.svg",
+      "diff_output": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.diff.stdout",
+      "java_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.java.exit",
+      "rust_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.rust.exit",
+      "diff_exit_file": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_no_existing_base_with_attached_note_after.diff.exit",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_exit": 0,
+      "axes": ["association-created temporary base", "attached note after association", "ordinary relationship after association", "same-parent root owner"],
+      "result": "pass",
+      "finding": "The no-existing-base single-association case compares exactly even with later note and ordinary relationship events."
+    }
+  ],
+  "artifact_hashes": {
+    "fresh_sources_sha256": {
+      "checker2_alias_cross_parent_root_statement.puml": "1b49f0cbb743bea82afbd5ed48aac25c5c02cd7c3e65273e01c4f0f16190603f",
+      "checker2_cross_parent_statement_owner.puml": "7dd5a1c616ddc1d97c45446117efd158ad190186aa461eaabbc2df8630e5f357",
+      "checker2_declaration_order_after_child.puml": "c42b0dc8f45e061483c7ecd126209d814597134a87f7a5955365336875e426b0",
+      "checker2_declaration_order_before_child.puml": "60f3e708b82d72403a7850d2909e0ccb5716afacab13047ece603da6feefd989",
+      "checker2_live_link_note_replacement_order.puml": "9c4511ebebc60550d495ae21f5f7bf64050551c60b62149e589012c2e4bb696f",
+      "checker2_multiple_associations_same_pair.puml": "97113e832f402d66c62b176dc67571ebce93e2797465a60dba06773e01c2d008",
+      "checker2_no_existing_base_with_attached_note_after.puml": "3fd6cf47862715d8e34af5c1c7c67921fe0d7574edeff184e27535d46bc5fcbf",
+      "checker2_owner_local_nested_alias_note_order.puml": "ae919fb23be5a6e3d928141bd27b6fc14c168b7731f118c01761a64b9916f559",
+      "checker2_reversed_long_link_left_to_right.puml": "e20a5eabc1a5a5aadbcf26d5727b6215f371e2dc0b127e4ca797e43332d31353"
+    },
+    "failing_diff_sha256": {
+      "checker2_cross_parent_statement_owner.diff.stdout": "60eb85889610942bbcd4d8301beeb59366b1d1e0beee54d9eca1454349e6cb39",
+      "checker2_multiple_associations_same_pair.diff.stdout": "8f92ffad5790ddb973ffce710125aa464d5252ab38c973edad287d6b5d90fcfb"
+    },
+    "passing_diff_stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb"
+  },
+  "findings": [
+    "The implementation follows the accounted model for seven single-association controls, including same-parent nested ownership, aliases, attached-note/live-link interleaving, no-existing-base temporary base creation, reversed long left-to-right links, and the declaration-order negative pair.",
+    "No fixture-shaped logic, fresh-label branches, golden reads, comparator changes, or unexplained association constants were found in the touched parser/renderer paths.",
+    "Fresh Java-valid checker2_cross_parent_statement_owner rejects the claimed cross-parent current-context projection: Java keeps the point in the statement package after the endpoint packages have rendered, while Rust paints/compares the association point before the east endpoint leaf.",
+    "Fresh Java-valid checker2_multiple_associations_same_pair rejects the broader association event projection: Java's second association uses createSecondAssociation/createInSecond semantics, including first connector inversion/reinsertion and an invisible point-to-point link; Rust independently emits three createNew-style replacements per association.",
+    "The attempted post-association implicit-refinement probe was discarded before commit because Java produced a syntax-error SVG; the committed perturbation set contains only Java-valid SVGs."
+  ],
+  "verdict": "rejected",
+  "verdict_reason": "REJECTED. The patch is not fixture-shaped and repairs several first-association projections, but two fresh valid held-outs fail on axes requested for this review. Under the T14 gate, any fresh Java-success nonzero diff rejects the mechanism. The remaining work is model work, not variable tuning: preserve the working first-association path, then account and implement Java's non-root cross-parent statement-package traversal and the createSecondAssociation/createInSecond lifecycle for multiple association classes."
+}

@@ -1,0 +1,11 @@
+@startuml
+package CheckTwoOrder6701 {
+  class Left6703
+  package Child6707 {
+    class Nested6709
+  }
+  class Unrelated6705
+  class Right6711
+  (Left6703, Right6711) .. Role6713
+}
+@enduml

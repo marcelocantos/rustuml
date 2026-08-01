@@ -1,0 +1,12 @@
+SVG structural differences:
+  [29] tag mismatch: expected <g>, got <ellipse>
+  [30] tag mismatch: expected <rect>, got <g>
+  [31] tag mismatch: expected <ellipse>, got <rect>
+  [32] tag mismatch: expected <path>, got <ellipse>
+  [33] tag mismatch: expected <text>, got <path>
+  [34] tag mismatch: expected <line>, got <text>
+  [35] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "33.52"), ("x2", "134.4839"), ("y1", "327"), ("y2", "327")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "33.5181"), ("x2", "134.4819"), ("y1", "319"), ("y2", "319")]
+  [36] tag mismatch: expected <ellipse>, got <line>
+

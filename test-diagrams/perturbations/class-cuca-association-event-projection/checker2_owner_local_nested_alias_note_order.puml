@@ -1,0 +1,13 @@
+@startuml
+package CheckTwoOwner6101 {
+  class "Alpha Node 6103" as Alpha6103
+  note right of Alpha6103 : alpha note 6105
+  package CheckTwoChild6107 {
+    class Nested6109
+  }
+  class Beta6111
+  Alpha6103 -- Beta6111 : base 6113
+  (Alpha6103, Beta6111) .. Role6117
+  class Tail6119
+}
+@enduml

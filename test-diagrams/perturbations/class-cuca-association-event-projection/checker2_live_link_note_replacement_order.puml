@@ -1,0 +1,9 @@
+@startuml
+class Source6301
+class Target6303
+class Peer6305
+Source6301 -- Target6303 : existing base 6307
+note left of Target6303 : attached before replacement 6309
+(Source6301, Target6303) .. Role6311
+Target6303 --> Peer6305 : after replacement 6313
+@enduml
