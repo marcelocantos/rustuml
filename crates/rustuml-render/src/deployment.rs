@@ -3898,6 +3898,46 @@ fn deployment_link_note_blocks(
     )
 }
 
+fn deployment_link_note_painted_bounds(
+    x: f64,
+    y: f64,
+    note: &DeploymentLinkNote,
+    label_text: Option<&str>,
+) -> DeploymentPaintBounds {
+    let note_dim = deployment_link_note_dim(note);
+    let label_size = label_text.map(|label| EdgeLabelSize {
+        width: text_render::measure(label, 13.0, false) + 2.0,
+        height: text_render::label_height(label, 13.0) + 2.0,
+    });
+    let (label_origin, note_origin) = deployment_link_note_blocks(x, y, note, note_dim, label_size);
+    let mut bounds = DeploymentPaintBounds {
+        min_x: f64::INFINITY,
+        min_y: f64::INFINITY,
+        max_x: f64::NEG_INFINITY,
+        max_y: f64::NEG_INFINITY,
+    };
+
+    // Graphviz positions the padded fixed-size table, but Java's LimitFinder
+    // sees only EntityImageNoteLink's painted component inside that table.
+    bounds.include_rect(
+        note_origin.0,
+        note_origin.1,
+        note_origin.0 + note_dim.width.floor(),
+        note_origin.1 + note_dim.height.floor(),
+    );
+    if let (Some(label), Some((label_x, label_y))) = (label_text, label_origin) {
+        let text_x = label_x + 1.0;
+        let text_y = label_y + 1.0;
+        bounds.include_rect(
+            text_x,
+            text_y,
+            text_x + text_render::measure(label, 13.0, false),
+            text_y + text_render::label_height(label, 13.0),
+        );
+    }
+    bounds
+}
+
 fn laid_out_deployment_note_indices(diagram: &DeploymentDiagram) -> Vec<usize> {
     diagram
         .notes
@@ -5962,13 +6002,8 @@ fn deployment_edge_paint_bounds(
         if let (Some(note), Some(label)) = (conn.note.as_ref(), edge.label) {
             let x = (label.x * 100.0).round() / 100.0;
             let y = (label.y * 100.0).round() / 100.0;
-            let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-                width: text_render::measure(label, 13.0, false) + 2.0,
-                height: text_render::label_height(label, 13.0) + 2.0,
-            });
-            let compound =
-                deployment_link_note_label_size(note, deployment_link_note_dim(note), label_size);
-            bounds.include_rect(x, y, x + compound.width, y + compound.height);
+            let painted = deployment_link_note_painted_bounds(x, y, note, conn.label.as_deref());
+            bounds.include_rect(painted.min_x, painted.min_y, painted.max_x, painted.max_y);
         } else if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
             // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
             // Graphviz solves their origin from an integer-truncated placeholder,
@@ -8355,6 +8390,26 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             deployment_connection_path_base_id(&diagram, &diagram.connections[0], false),
             "Ingress: Canary-to-sink.v2"
         );
+    }
+
+    #[test]
+    fn link_note_painted_bounds_exclude_fixed_table_padding() {
+        let note = DeploymentLinkNote {
+            text: "path metadata".to_string(),
+            colors: rustuml_parser::diagram::style::PlantUmlColors::default(),
+            position: DeploymentNotePosition::Bottom,
+        };
+        let note_dim = deployment_link_note_dim(&note);
+        let label_size = EdgeLabelSize {
+            width: text_render::measure("transfer", 13.0, false) + 2.0,
+            height: text_render::label_height("transfer", 13.0) + 2.0,
+        };
+        let placeholder = deployment_link_note_label_size(&note, note_dim, Some(label_size));
+        let painted = deployment_link_note_painted_bounds(0.0, 0.0, &note, Some("transfer"));
+
+        assert_eq!(painted.min_x, LINK_NOTE_PADDING);
+        assert_eq!(painted.max_x, LINK_NOTE_PADDING + note_dim.width.floor());
+        assert!(painted.max_x < placeholder.width);
     }
 
     #[test]
