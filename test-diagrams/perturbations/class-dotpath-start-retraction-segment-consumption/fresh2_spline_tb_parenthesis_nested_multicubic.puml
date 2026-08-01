@@ -1,0 +1,20 @@
+@startuml
+top to bottom direction
+skinparam linetype spline
+
+package "Outer Boundary" as OuterBoundary {
+  package "Inner Boundary" as InnerBoundary {
+    interface Face
+  }
+}
+
+class Receiver
+class DetourOne
+class DetourTwo
+class DetourThree
+
+DetourOne --> DetourTwo
+DetourTwo --> Receiver
+DetourThree --> Face
+InnerBoundary )-- Receiver : socket route with a wide label
+@enduml
