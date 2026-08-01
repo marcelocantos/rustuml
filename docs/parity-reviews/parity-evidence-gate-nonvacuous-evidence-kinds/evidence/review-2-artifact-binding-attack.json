@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "artifact_kind": "independent_reviewer_mutation_record",
+  "tool_identity": {
+    "reviewer": "Codex GPT-5 independent checker",
+    "task_id": "rustuml-t14-gate-integration-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop; apply_patch; git; prebuilt harness_guards binary"
+  },
+  "revisions": {
+    "review_base_commit": "5e4511fc757b1f3e03937ff28d0d9e7ce71c893f",
+    "account_commit": "66883f6f2b9aad89fc5215478a9be5983c9c34c9",
+    "implementation_commit": "9c886aa94a4c0bfa8192cda221730f9ba324c749",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "harness": {
+    "binary": "/private/tmp/harness_guards-gate-integration-review-b811af90db10b634",
+    "source_binary": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634",
+    "compiled_manifest_dir": "/private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle",
+    "path_redirection": "During each full-record run, /private/tmp/rustuml-t14-gate-integration was moved aside, replaced by a symlink to /private/tmp/rustuml-t14-gate-integration-review, and restored by a trap."
+  },
+  "attack_axes": [
+    "artifact immutability",
+    "git blob binding",
+    "HEAD binding"
+  ],
+  "temporary_mutation": {
+    "path": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/gate-artifact-kind-smuggling.json",
+    "change": "Changed the result string from \"PASS: mutation stopped\" to \"PASS: mutation stopped after a temporary byte edit\" without changing the declared git_blob in the active review.",
+    "restored": "The byte edit was reversed before this evidence commit."
+  },
+  "commands": [
+    {
+      "command": "apply_patch: edit evidence/gate-artifact-kind-smuggling.json result string",
+      "result": "temporary mutation applied"
+    },
+    {
+      "command": "/private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "HARNESS_RC=101"
+    },
+    {
+      "command": "apply_patch: restore evidence/gate-artifact-kind-smuggling.json result string",
+      "result": "temporary mutation restored"
+    },
+    {
+      "command": "git diff -- docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds",
+      "result": "no diff after restoration"
+    }
+  ],
+  "expected": "A gate artifact whose current bytes differ from the review-declared Git blob must fail. The check must bind both the current working-tree bytes and HEAD:<artifact> to the declared blob.",
+  "observed": "The full-record guard failed with: gate artifact hash does not match current bytes and HEAD: docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/gate-artifact-kind-smuggling.json.",
+  "result": "PASS: mutation stopped"
+}

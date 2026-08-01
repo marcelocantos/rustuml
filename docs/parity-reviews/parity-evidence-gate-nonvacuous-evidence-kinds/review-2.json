@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "evidence_kind": "gate",
+  "reviewed_at": "2026-08-01",
+  "maker": {
+    "identity": "Marcelo Cantos <marcelo.cantos@gmail.com>",
+    "task_id": "implementation commit 9c886aa94a4c0bfa8192cda221730f9ba324c749"
+  },
+  "reviewer": {
+    "identity": "Codex GPT-5 independent checker",
+    "task_id": "rustuml-t14-gate-integration-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "independent skeptical checker; did not implement the reviewed gate or author the stale predecessor review"
+  },
+  "revisions": {
+    "review_base_commit": "5e4511fc757b1f3e03937ff28d0d9e7ce71c893f",
+    "account_commit": "66883f6f2b9aad89fc5215478a9be5983c9c34c9",
+    "implementation_commit": "9c886aa94a4c0bfa8192cda221730f9ba324c749",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "review_context": {
+    "historical_review_preserved_as": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/quarantined-review-stale-pre-replay-commits.json",
+    "reason_for_successor": "The predecessor review attested pre-replay hashes 5134046a85c693be0615fb4f1113564236f8f3d2 and 75bc7176a5a6632a3e1ca4491e3f89e18506227e. The actual integration account and implementation commits are 66883f6f2b9aad89fc5215478a9be5983c9c34c9 and 9c886aa94a4c0bfa8192cda221730f9ba324c749.",
+    "harness_binary": "/private/tmp/harness_guards-gate-integration-review-b811af90db10b634",
+    "source_binary": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634",
+    "compiled_manifest_dir": "/private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle",
+    "binary_redirection_note": "Because the prebuilt binary has CARGO_MANIFEST_DIR baked in, full-record checks temporarily replaced /private/tmp/rustuml-t14-gate-integration with a symlink to this review worktree and restored it immediately afterward."
+  },
+  "commands": [
+    {
+      "command": "sed -n '1,260p' AGENTS.md",
+      "result": "PASS: local T14 parity honesty rules read before review"
+    },
+    {
+      "command": "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md && sed -n '1,460p' /Users/marcelo/.codex/skills/oracle-first/doctrine.md",
+      "result": "PASS: oracle-first rules and doctrine read before mutation review"
+    },
+    {
+      "command": "sed -n '1,260p' docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/account.json",
+      "result": "PASS: account inspected"
+    },
+    {
+      "command": "sed -n '1,3300p' crates/rustuml-oracle/tests/parity_evidence.rs",
+      "result": "PASS: evidence gate implementation inspected, including evidence_kind normalization, gate artifact path/hash binding, quarantine successor scan, and accepted held-out inventory check"
+    },
+    {
+      "command": "git show -s --format=%H 66883f6f && git show -s --format=%H 9c886aa9",
+      "result": "PASS: replayed account and implementation commits exist as 66883f6f2b9aad89fc5215478a9be5983c9c34c9 and 9c886aa94a4c0bfa8192cda221730f9ba324c749"
+    },
+    {
+      "command": "/private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_evidence::tests --nocapture",
+      "result": "PASS: 32 passed, 0 failed, 6 filtered out"
+    },
+    {
+      "command": "temporary mutation: add perturbations to gate review; redirected /private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "PASS: mutation stopped; HARNESS_RC=101; observed gate review must not declare parity evidence field perturbations"
+    },
+    {
+      "command": "temporary mutation: point gate artifact at account.json outside evidence/; redirected /private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "PASS: mutation stopped; HARNESS_RC=101; observed gate artifact must stay under docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence"
+    },
+    {
+      "command": "temporary mutation: edit evidence/gate-artifact-kind-smuggling.json bytes; redirected /private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "PASS: mutation stopped; HARNESS_RC=101; observed gate artifact hash does not match current bytes and HEAD"
+    },
+    {
+      "command": "temporary mutation: move docs/parity-reviews/class-attached-note-rankdir-position/review-2.json aside; redirected /private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "PASS: mutation stopped; HARNESS_RC=101; observed quarantined ACCEPT requires a canonical active successor review"
+    },
+    {
+      "command": "git diff -- docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds docs/parity-reviews/class-attached-note-rankdir-position/review-2.json",
+      "result": "PASS: all temporary mutations restored before authoring this successor review"
+    }
+  ],
+  "source_inspection": {
+    "evidence_kind_closure": "normalize_evidence_kind accepts only parity or gate after trimming and lowercasing; missing, object, and renderer-style values are rejected.",
+    "parity_gate_separation": "validate_review_declared_evidence dispatches on evidence_kind. Parity reviews reject gate mutations, and gate reviews reject every parity evidence field before validating only mutation artifacts.",
+    "nonempty_parity_inventory": "build_report clears selected heldouts on any violation and adds an active accepted parity inventory violation when fewer than two Java-success held-outs are selected. The gate-only acceptance unit test confirms a gate ACCEPT contributes zero held-outs.",
+    "active_canonical_selection": "review_sequence admits review.json, review-1.json, review-2.json, and numeric/followup aliases only; noncanonical review-prefixed names are archival and cannot accept a mechanism.",
+    "quarantined_accept_successor_obligation": "build_report scans quarantined-review*.json records, normalizes their authored verdicts, and requires any quarantined ACCEPT mechanism to have a canonical active successor review.",
+    "artifact_binding": "validate_gate_artifact_path requires normal relative paths under docs/parity-reviews/<mechanism>/evidence, rejects symlinks and canonical escapes, and validate_gate_artifact_blob requires a 40-character Git blob that matches both current bytes and HEAD:<artifact>."
+  },
+  "mutations": [
+    {
+      "artifact": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/review-2-evidence-kind-and-successor-attack.json",
+      "git_blob": "a2c37cc6bc8e75a0203194c0e6ddf39458ece91b",
+      "axes": [
+        "evidence-kind smuggling",
+        "active canonical successor selection",
+        "quarantined ACCEPT successor obligation"
+      ],
+      "expected": "Gate evidence must not be counted as parity evidence, and quarantined ACCEPT records must require active canonical successors.",
+      "observed": "The smuggled parity field and hidden-successor mutations both failed closed with the expected violations.",
+      "result": "PASS: mutation stopped"
+    },
+    {
+      "artifact": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/review-2-artifact-path-attack.json",
+      "git_blob": "e93111ee01d6f2e93f01ffde7f1e1bd72539f5df",
+      "axes": [
+        "artifact path containment",
+        "mechanism evidence directory binding",
+        "anti-smuggling"
+      ],
+      "expected": "Gate mutation artifacts must stay inside the mechanism evidence directory and cannot smuggle account, review, comparator, or baseline files.",
+      "observed": "The path mutation to account.json failed with the expected gate artifact must stay under evidence/ violation.",
+      "result": "PASS: mutation stopped"
+    },
+    {
+      "artifact": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/review-2-artifact-binding-attack.json",
+      "git_blob": "19988639db14cbc8b7db9eabea8c3a069133896a",
+      "axes": [
+        "artifact immutability",
+        "git blob binding",
+        "HEAD binding"
+      ],
+      "expected": "Changed gate artifact bytes must fail unless the review's declared Git blob and committed HEAD blob match the current artifact bytes.",
+      "observed": "The byte mutation failed with the expected gate artifact hash does not match current bytes and HEAD violation.",
+      "result": "PASS: mutation stopped"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "The gate discriminator is closed to parity and gate. A gate review that declares parity perturbations fails closed and does not inflate renderer parity evidence."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "Gate artifact evidence is bound to the mechanism evidence directory, the declared Git blob, current bytes, and HEAD bytes. Path smuggling and byte mutation were both caught."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "Quarantined authored ACCEPT records require an active same-directory canonical successor. Removing an accepted successor produced the expected violation."
+    },
+    {
+      "severity": "residue",
+      "status": "unrelated-integration-debt",
+      "finding": "The full repository guard at review base 5e4511fc still reports unrelated older canonical records that lack evidence_kind or use status active. This review did not edit those mechanisms, shipping code, accounts, comparator, or baselines."
+    }
+  ],
+  "residue": [
+    "This evidence_kind=gate review intentionally contributes zero AcceptedHeldOut entries.",
+    "The full guard is expected to remain red for unrelated historical record normalization debt until those records receive canonical successors or explicit rejections."
+  ],
+  "verdict": "ACCEPT",
+  "verdict_reason": "I found no mutation escape in the strengthened gate surface requested here. The closed evidence_kind split, nonempty parity-inventory rule, active canonical successor obligation, and immutable gate artifact path/hash/HEAD binding all rejected the hostile states I tried."
+}
