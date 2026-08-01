@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+class OpaleReviewInputA
+package OpaleReviewPackA {
+  class OpaleReviewFocusA
+  class OpaleReviewSupportA
+  note "named opale candidate 8621" as OpaleReviewMemoA
+  OpaleReviewMemoA .. OpaleReviewFocusA
+}
+class OpaleReviewOutputA
+OpaleReviewInputA --> OpaleReviewPackA.OpaleReviewFocusA
+OpaleReviewPackA.OpaleReviewFocusA --> OpaleReviewOutputA
+OpaleReviewPackA.OpaleReviewSupportA --> OpaleReviewOutputA
+note top of OpaleReviewPackA.OpaleReviewSupportA : attached top opale 8623
+note bottom of OpaleReviewPackA.OpaleReviewFocusA : attached bottom opale 8625
+@enduml

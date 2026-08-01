@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package DirectReviewLinkedA {
+  class DirectReviewFreeOneA
+  class DirectReviewFreeTwoA
+  class DirectReviewLinkedOneA
+  class DirectReviewLinkedTwoA
+  package DirectReviewGrandchildA {
+    class DirectReviewDeepOneA
+    class DirectReviewDeepTwoA
+  }
+  DirectReviewLinkedOneA --> DirectReviewLinkedTwoA
+}
+@enduml
