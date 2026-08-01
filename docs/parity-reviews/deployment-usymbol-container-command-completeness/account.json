@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-usymbol-container-command-completeness",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "42860e253f9dac389160fd3284fa767145649404",
+  "supersedes_rejected_mechanism": "deployment-container-command-identity-dispatch",
+  "rejection_record": "docs/parity-reviews/deployment-container-command-identity-dispatch/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+      "symbols": ["CommandPackageWithUSymbol.getRegexConcat", "CommandPackageWithUSymbol.executeArg"],
+      "lines": "68-177",
+      "role": "Defines one start/end-anchored braced-container command whose symbol inventory includes package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack. executeArg resolves the broad canonical code, maps the symbol with USymbols.fromString, enters the group with AbstractEntityDiagram.gotoGroup, and therefore establishes ownership for following commands."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbols.java",
+      "symbols": ["USymbols.fromString"],
+      "lines": "60-119",
+      "role": "Maps action, process, and hexagon to distinct USymbolAction, USymbolProcess, and USymbolHexagon instances; these keywords are not aliases for a generic node."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": ["DescriptionDiagramFactory.initCommandsList"],
+      "lines": "85-138",
+      "role": "Registers CommandPackageWithUSymbol in the Description factory command inventory before leaf and link commands."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbols": ["ClassDiagramFactory.initCommandsList"],
+      "lines": "100-170",
+      "role": "Registers the same CommandPackageWithUSymbol in the earlier Class factory. The complete source, not the container keyword alone, determines whether Class remains viable or the later Description factory owns the diagram."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.executeFewLines", "PSystemCommandFactory.getCandidate"],
+      "lines": "74-197",
+      "role": "Requires every source line in every required parser pass to match a registered command. When getCandidate finds no complete command, executeFewLines returns a syntax-error PSystemError immediately; a malformed declaration is never skipped so that later valid lines can render."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["PSystemBuilder.PSystemBuilder", "PSystemBuilder.createPSystem"],
+      "lines": "128-197, 203-255",
+      "role": "Tries factories in fixed order and returns only a non-error diagram, so success means one factory consumed the complete source."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["DEPLOYMENT_KEYWORDS", "DEPLOYMENT_CONTAINER_KEYWORDS", "node_command_from_captures", "parse_deployment_node_command"],
+      "lines": "16-55, 674-801",
+      "role": "Maintains two hand-written inventories. Both omit process, hexagon, and action, so otherwise valid anchored container regex matches are discarded before a DeploymentNodeCommand can be produced."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": ["kind_from_keyword", "parse_deployment"],
+      "lines": "106-128, 834-1347",
+      "role": "kind_from_keyword has no typed action/process/hexagon variants and defaults unknown symbols to Node. parse_deployment builds keyword_set from the incomplete inventory, pushes ownership only after a successful command, and silently reaches the end of the loop when a recognized keyword line is neither a connection nor a complete declaration."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": ["DeploymentNodeKind"],
+      "lines": "99-125",
+      "role": "The typed deployment model cannot preserve action, process, or hexagon symbol identity even if their command spellings are admitted."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype", "parse_with_base"],
+      "lines": "720-1576, 1995-2090",
+      "role": "Subtype detection consults the same incomplete deployment inventory, then parse_with_base dispatches exactly one selected Rust parser rather than trying command factories to complete-source success."
+    }
+  ],
+  "claimed_invariant": "A braced Description/Class USymbol container is one complete, end-anchored command with one authoritative symbol inventory. Every accepted symbol preserves its distinct semantic kind and canonical identity, enters the group stack at that source position, and owns following nested commands until the matching close. Once a Rust UML parser is selected, every non-payload source line must be consumed by a valid command; a line shaped as a known container command but rejected by the full anchored grammar is a syntax error, not ignorable text.",
+  "causal_divergence": "Java's CommandPackageWithUSymbol explicitly admits process, hexagon, and action and passes each symbol through USymbols.fromString before gotoGroup. Rust excludes all three from DEPLOYMENT_KEYWORDS and DEPLOYMENT_CONTAINER_KEYWORDS. Consequently parse_deployment_node_command returns None, parse_deployment never pushes those owners, and their otherwise valid children are materialized at the root; adding only the spellings would still erase their distinct symbol semantics through kind_from_keyword's generic Node fallback. Independently, a line such as `cloud region/new unexpected {` starts with a known deployment keyword but fails the anchored declaration grammar. Java PSystemCommandFactory.getCandidate finds no command and returns a syntax error for that factory, and PSystemBuilder accepts no factory that cannot consume the whole source. Rust first fails the declaration parser, then fails the connection parser, then falls through the loop without returning ParseError, allowing later valid artifact/database/link lines to produce a successful diagram.",
+  "planned_model_change": "Replace the divergent container inventories with one authoritative typed container-symbol table derived from CommandPackageWithUSymbol's exact keyword set. Use it for subtype evidence, anchored command parsing, semantic DeploymentNodeKind construction, and owner-stack updates, including distinct Action, Process, and Hexagon kinds. In parse_deployment, retain connection-command precedence for identifiers that happen to equal keywords; after all valid command classifiers have declined a known container-shaped line, return ParseError at that source line instead of ignoring it. Keep the full declaration regex end-anchored so trailing garbage cannot be partially consumed. Detailed painting for newly preserved typed symbols may require a separate renderer mechanism, but the parser must not omit or relabel them.",
+  "perturbation_axes": [
+    "container symbol: process, hexagon, action, and already-supported node/frame/cloud controls",
+    "identity form: display-first alias, code-first alias, quoted identity, bare broad code, and case variation",
+    "ownership topology: root versus nested containers, changed nesting depth, sibling order, and cross-container links",
+    "malformation: unexpected suffix, misplaced metadata, missing alias operand, and trailing text before the opening brace",
+    "recovery pressure: a malformed first or middle command followed by otherwise valid leaves and links",
+    "keyword-as-endpoint control: a valid relationship beginning with a reserved symbol word versus a declaration"
+  ],
+  "scope_boundary": "This mechanism owns the complete braced-USymbol command inventory, canonical command acceptance, typed container-kind preservation, nesting ownership, and fail-closed consumption in the selected Deployment parser. It does not own UML factory precedence between Sequence/Class/Description, leaf-command grammar, link parsing or SVG link IDs, qualified-name projection, detailed Action/Process/Hexagon geometry, layout coordinates, comparator slack, baselines, park lists, syntax-error golden markers, or guard allow-lists. Any renderer change for the three newly preserved kinds requires its own causal account and checker record.",
+  "acceptance": [
+    "Fresh valid process, hexagon, and action containers produce typed nodes with their canonical IDs, preserve parent/child ownership at multiple depths, and do not leak their children to the root.",
+    "Every symbol listed by Java CommandPackageWithUSymbol remains accepted in braced form from the same authoritative Rust inventory.",
+    "Known-keyword container lines with trailing or misplaced syntax return ParseError at the offending line even when later commands are valid.",
+    "Valid relationship commands whose endpoint identifiers equal container keywords remain relationships and are not rejected as malformed declarations.",
+    "Existing broad-identity and alias-direction container perturbations retain their current parser identity and ownership results.",
+    "An independent checker exercises at least two fresh valid axes plus malformed negative controls without editing this account."
+  ],
+  "forbidden_approaches": [
+    "special-casing checker labels, fixture names, or the three preserved counterexample files",
+    "adding process, hexagon, and action only to a scoring list while leaving parser or typed-model inventories divergent",
+    "mapping unsupported container symbols to generic Node solely to keep parsing green",
+    "accepting a command prefix and discarding unmatched trailing text",
+    "changing comparator controls, baselines, skip rules, park lists, syntax-error markers, or SVG strings"
+  ]
+}
