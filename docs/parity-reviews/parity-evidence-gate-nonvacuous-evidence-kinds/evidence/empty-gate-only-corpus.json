@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "artifact_kind": "hostile_mutation_record",
+  "mutation": "Construct an otherwise valid evidence repository with either no active review records or only a canonical gate ACCEPT, then ask build_report and parity_perturbations to select accepted renderer held-outs.",
+  "attack_axes": [
+    "empty active parity corpus",
+    "gate-only acceptance",
+    "evidence-kind separation"
+  ],
+  "commands": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+      "observed": "PASS: empty_active_corpus_fails_closed and gate_only_acceptance_cannot_satisfy_parity_nonvacuity passed inside the 32-test focused suite."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+      "observed": "FAIL as expected before renderer comparison: invalid T14 parity review evidence reports active accepted parity inventory must select at least two Java-success held-outs; found 0."
+    }
+  ],
+  "expected": "A gate ACCEPT alone must not satisfy renderer parity non-vacuity, and a zero-review corpus must fail closed before any shipped-path renderer comparison can be treated as green.",
+  "observed": "The focused unit mutations passed, and the real shipped perturbation harness stopped on invalid evidence with found 0 active parity held-outs.",
+  "result": "PASS: mutation stopped"
+}
