@@ -1,0 +1,18 @@
+Temporary checker-only mutation, applied to crates/rustuml-oracle/tests/parity_perturbations.rs and removed before commit:
+
+#[test]
+fn checker_current_active_heldout_set_is_nonempty() {
+    let root = repo_root();
+    let heldouts = parity_evidence::accepted_java_success_heldouts(&root)
+        .expect("current parity evidence must validate before counting held-outs");
+    assert!(
+        !heldouts.is_empty(),
+        "checker hostile assertion: the active accepted held-out corpus is empty"
+    );
+}
+
+Command:
+CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-target cargo test -p rustuml-oracle --test parity_perturbations checker_current_active_heldout_set_is_nonempty --release -- --nocapture
+
+Result:
+FAILED as an attack. The assertion panicked with "checker hostile assertion: the active accepted held-out corpus is empty". This proves the real parity_perturbations test currently passes without exercising any accepted held-out input.
