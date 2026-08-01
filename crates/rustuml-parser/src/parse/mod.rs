@@ -719,6 +719,7 @@ fn looks_like_sequence_only_factory_command(line: &str) -> bool {
 
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
+    let sequence_factory_owns_complete_stream = sequence::factory_accepts(lines);
 
     // `allowmixing` is a class-diagram directive: it permits mixing other
     // element kinds (state, object, etc.) into a CLASS diagram. When it appears
@@ -774,7 +775,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             class_leaf_body_depth.is_some_and(|depth| brace_depth >= depth);
         let looks_like_sequence_message =
             !inside_class_leaf_body && sequence::looks_like_message(trimmed);
-        if looks_like_sequence_message {
+        if sequence_factory_owns_complete_stream && looks_like_sequence_message {
             // Java provenance: `PSystemBuilder` tries SequenceDiagramFactory
             // first, and `CommandArrow` owns this entire anchored line. Its
             // endpoint captures are participant identities, so words such as
@@ -2469,6 +2470,22 @@ mod tests {
             detect_uml_subtype(&bare_association),
             UmlSubtype::Class,
             "CommandArrow matches the text but rejects an arrow without a head"
+        );
+
+        let nested_deployment = [
+            "cloud \"Cluster\" {",
+            "node \"Runtime\" {",
+            "component \"API Server\"",
+            "component \"Scheduler\"",
+            "\"API Server\" --> \"Scheduler\"",
+            "}",
+            "}",
+        ]
+        .map(str::to_string);
+        assert_eq!(
+            detect_uml_subtype(&nested_deployment),
+            UmlSubtype::Deployment,
+            "a valid message does not rescue a Sequence factory rejected by container commands"
         );
     }
 

@@ -62,6 +62,36 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     Ok(parser.finish())
 }
 
+/// Whether `SequenceDiagramFactory` can consume the complete command stream.
+///
+/// PlantUML selects UML factories by executing every command, in factory
+/// order. A single command absent from the Sequence inventory rejects that
+/// candidate even when later lines are valid sequence messages.
+pub(super) fn factory_accepts(lines: &[String]) -> bool {
+    let mut parser = SeqParser::new();
+
+    for (i, line) in lines.iter().enumerate() {
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+        let in_multiline = parser.note_buffer.is_some() || parser.ref_buffer.is_some();
+        if trimmed.is_empty() && !in_multiline {
+            continue;
+        }
+        let text = if in_multiline {
+            super::source_text(line)
+        } else {
+            trimmed
+        };
+        match parser.parse_line(source_line, text) {
+            Ok(true) => {}
+            Ok(false) | Err(_) => return false,
+        }
+    }
+
+    parser.note_buffer.is_none()
+        && parser.ref_buffer.is_none()
+        && parser.skinparam_block_prefix.is_none()
+}
+
 struct SeqParser {
     meta: DiagramMeta,
     participants: Vec<Participant>,
@@ -179,7 +209,7 @@ impl SeqParser {
         id
     }
 
-    fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
+    fn parse_line(&mut self, line_num: usize, line: &str) -> Result<bool, ParseError> {
         self.current_line = line_num;
 
         if let Some(prefix) = self.skinparam_block_prefix.clone() {
@@ -195,7 +225,7 @@ impl SeqParser {
                     });
                 }
             }
-            return Ok(());
+            return Ok(true);
         }
 
         // Handle multiline ref buffering.
@@ -211,7 +241,7 @@ impl SeqParser {
             } else if let Some(buf) = &mut self.ref_buffer {
                 buf.lines.push(line.trim().to_string());
             }
-            return Ok(());
+            return Ok(true);
         }
 
         // Handle multiline note buffering.
@@ -234,48 +264,48 @@ impl SeqParser {
             } else if let Some(buf) = &mut self.note_buffer {
                 buf.lines.push(line.to_string());
             }
-            return Ok(());
+            return Ok(true);
         }
 
         // Keywords that could be confused with participant names must be
         // checked before the message regex.
         if self.try_autonumber(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_return(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_activate_deactivate(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_autoactivate(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_create_destroy(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_participant_decl(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_group(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_note(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_divider(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_delay(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_space(line) {
-            return Ok(());
+            return Ok(true);
         }
         // try_box must come before try_message: "box" would otherwise be parsed
         // as a message b -[o]-> x because 'o' and 'x' are valid arrow chars.
         if self.try_box(line) {
-            return Ok(());
+            return Ok(true);
         }
         // try_meta before try_message: `title <back:cyan>...</back>` would
         // otherwise be parsed as a "title <- back" message because the
@@ -284,32 +314,34 @@ impl SeqParser {
         // keywords, so checking them first cannot conflict with anything
         // a message line is allowed to look like.
         if self.try_meta(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_pragma(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_message(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_ref(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_newpage(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_skinparam(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_hide(line) {
-            return Ok(());
+            return Ok(true);
         }
         if self.try_external_message(line) {
-            return Ok(());
+            return Ok(true);
         }
 
-        // Unknown lines are silently ignored (matches PlantUML behavior).
-        Ok(())
+        // The renderer remains permissive for an explicitly selected sequence
+        // diagram, but factory dispatch must distinguish an unconsumed command
+        // from a command owned by SequenceDiagramFactory.
+        Ok(false)
     }
 
     fn try_participant_decl(&mut self, line: &str) -> bool {
