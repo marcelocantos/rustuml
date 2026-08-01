@@ -1,152 +1,70 @@
 {
   "schema_version": 1,
   "mechanism": "deployment-svg-qualified-name-projection",
+  "status": "ACTIVE",
   "checker": {
     "identity": "OpenAI Codex independent adversarial checker",
-    "model": "GPT-5",
-    "tool": "Codex desktop exec_command/apply_patch with frozen rustuml and diff_one binaries",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop; evidence-record correction only",
     "date": "2026-08-01",
     "implemented_mechanism": false
   },
   "revisions": {
-    "account_commit": "8978bc26",
-    "rust_commit": "194f9ddac62e623823be0bf05415e9fc30513276",
-    "rust_branch": "codex/t14-deployment-svg-qname",
+    "rust_commit_under_review": "f0ffaa30c45c3531915727707945eecf47ee106d",
     "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
-    "frozen_rustuml": "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/rustuml",
-    "frozen_diff_one": "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/examples/diff_one"
+    "accept_record_commit": "f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab",
+    "correction_parent_commit": "f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab"
   },
-  "source_inspection": {
-    "java_locations": [
-      {
-        "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:57-89",
-        "finding": "Quark qualified names are canonical quark codes joined through the owning parent with Plasma's separator."
-      },
-      {
-        "path": "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java:57-72",
-        "finding": "UGroup.put applies fix(), replacing every character matched by [^-\\w ] with a dot before SVG metadata serialization."
-      },
-      {
-        "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:82-140",
-        "finding": "Container declarations ending in '{' accept broader code forms than CommandCreateElementFull: quoted display-first CODE1 is ([^#%s{}]+), bare CODE9 is ([^#%s{}%g]*). Hyphen and slash are valid canonical codes for deployment containers."
-      },
-      {
-        "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java:144-149",
-        "finding": "Named notes use diagram.quarkInContext(false, cleanId(idShort)); when declared inside a group their SVG data-qualified-name inherits the owning quark."
-      },
-      {
-        "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:842-849",
-        "finding": "Link metadata uses endpoint entity names and UIDs, so endpoint identity must survive parser alias handling."
-      }
-    ],
-    "rust_locations": [
-      {
-        "path": "crates/rustuml-parser/src/parse/deployment.rs:700-716",
-        "finding": "RE_NODE_BARE and RE_NODE_QUOTED are not end-anchored and use narrower id grammars than CommandPackageWithUSymbol. They can partially consume valid Java container codes."
-      },
-      {
-        "path": "crates/rustuml-parser/src/parse/deployment.rs:1149-1162",
-        "finding": "Quoted deployment declarations take caps[3] as the canonical id when present. For `as tenant-a`, caps[3] becomes `tenant` because the regex stops before the hyphen and the trailing text is not rejected."
-      },
-      {
-        "path": "crates/rustuml-render/src/svg.rs:8-24",
-        "finding": "The shared UGroup projection itself matches the cited Java fix rule for ASCII word, space, and hyphen. The rejection is not due to this projection helper."
-      },
-      {
-        "path": "crates/rustuml-render/src/deployment.rs:5429-5442",
-        "finding": "Deployment qnames are built from parsed node IDs and parent ownership, so any parser-side canonical-code truncation propagates into cluster, leaf, note, and link metadata."
-      }
-    ],
-    "fixture_shaped_logic": "No golden label, coordinate-keyed, or fixture-name branch was found in the inspected implementation diff. The disproof is an uncovered Java-valid alias grammar path, not evidence of fixture gaming.",
-    "unexplained_constants": "No new unexplained parity constants were identified in the inspected qname projection change."
+  "governing_gate": {
+    "rule": "Project Parity Honesty Rule 10",
+    "requirement": "A failing counterexample rejects the change and remains executable.",
+    "application": "fresh2_quoted_identity_deep_ownership is a fresh, Java-valid held-out counterexample with java_exit=0, rust_exit=0, and diff_one --no-oracle exit=1. Its nonzero comparator result is a failure under Rule 10. The prior PASS_FOR_MECHANISM classification and out-of-scope geometry interpretation cannot convert that failing counterexample into a pass."
   },
-  "commands": [
-    "git rev-parse HEAD",
-    "git show --color=never 8978bc26:docs/parity-reviews/deployment-svg-qualified-name-projection/account.json",
-    "git show --color=never --find-renames 194f9ddac62e623823be0bf05415e9fc30513276",
-    "git rev-parse HEAD # in /Users/marcelo/work/github.com/plantuml/plantuml",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.java.svg",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.java.svg",
-    "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.rust.svg",
-    "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.rust.svg",
-    "cp test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.java.svg test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.svg",
-    "cp test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.java.svg test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.svg",
-    "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.diff.txt 2>&1",
-    "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.diff.txt 2>&1",
-    "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/rustuml --ast test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.ast.txt 2>&1",
-    "/private/tmp/rustuml-t14-deployment-svg-qname/target/release/rustuml --ast test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.puml > test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.ast.txt 2>&1"
-  ],
-  "inputs": [
-    {
-      "name": "display_alias_hyphen_container_notes_links",
-      "puml": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.puml",
-      "java_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.java.svg",
-      "golden_svg_for_diff_one": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.svg",
-      "rust_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.rust.svg",
-      "diff": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.diff.txt",
-      "rust_ast": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/display_alias_hyphen_container_notes_links.ast.txt",
-      "axes": [
-        "identity form: quoted display-first container alias",
-        "characters: hyphen in canonical owner id, slash in display text, dot in child/note aliases",
-        "ownership: child node and named note inside the aliased folder",
-        "metadata: cluster, leaf, note, and link endpoint metadata"
-      ],
-      "java_metadata": [
-        "data-qualified-name=\"tenant-a\"",
-        "data-qualified-name=\"tenant-a.api.one\"",
-        "data-qualified-name=\"tenant-a.note.one\"",
-        "data-qualified-name=\"sink.one\""
-      ],
-      "rust_metadata": [
-        "data-qualified-name=\"tenant\"",
-        "data-qualified-name=\"tenant.api.one\"",
-        "data-qualified-name=\"tenant.note.one\"",
-        "data-qualified-name=\"sink.one\""
-      ],
-      "result": "FAIL",
-      "finding": "Java treats `tenant-a` as the canonical container quark code. Rust truncates it to `tenant`, and all owned metadata follows the truncated owner."
+  "decisive_counterexample": {
+    "stem": "fresh2_quoted_identity_deep_ownership",
+    "source": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.puml",
+    "java_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.java.svg",
+    "rust_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.rust.svg",
+    "diff_stdout": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.diff.stdout",
+    "diff_stderr": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.diff.stderr",
+    "diff_exit": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.diff.exit",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "diff_one_no_oracle_exit": 1,
+    "result": "FAIL"
+  },
+  "historical_records": {
+    "authored_accept": {
+      "status": "INERT_LEGACY_ACCEPTED",
+      "path": "docs/parity-reviews/deployment-svg-qualified-name-projection/legacy-accepted/review-2.8c98d7869bbfb2549fbe0f33418831c1b802405e9311d526fa1a24e3c1333aad.json",
+      "sha256": "8c98d7869bbfb2549fbe0f33418831c1b802405e9311d526fa1a24e3c1333aad",
+      "preservation": "Byte-for-byte archive of the ACCEPT authored at f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab. It is not an active verdict."
     },
-    {
-      "name": "bare_slash_container_quoted_child_link_note",
-      "puml": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.puml",
-      "java_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.java.svg",
-      "golden_svg_for_diff_one": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.svg",
-      "rust_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.rust.svg",
-      "diff": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.diff.txt",
-      "rust_ast": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/bare_slash_container_quoted_child_link_note.ast.txt",
-      "axes": [
-        "identity form: bare container code",
-        "characters: slash in owner id, colon in quoted no-alias child id, dot in queue alias",
-        "ownership: quoted child owned by a slash-containing cloud",
-        "metadata: link endpoint metadata plus note-on-link text"
-      ],
-      "java_metadata": [
-        "data-diagram-type=\"DESCRIPTION\"",
-        "data-qualified-name=\"zone.prod\"",
-        "data-qualified-name=\"zone.prod.Relay.East\"",
-        "data-qualified-name=\"front.door\"",
-        "id=\"Relay:East-to-front.door\""
-      ],
-      "rust_metadata": [
-        "data-diagram-type=\"STATE\"",
-        "no deployment data-qualified-name metadata emitted"
-      ],
-      "result": "FAIL",
-      "finding": "Java accepts `cloud zone/prod {` as a deployment container and projects the slash to `zone.prod`. Rust renders the same valid source as an empty STATE diagram, so the claimed deployment SVG qname mechanism is not robust across Java's container identity grammar."
+    "original_prior_reject": {
+      "status": "INERT_LEGACY_REJECTED",
+      "path": "docs/parity-reviews/deployment-svg-qualified-name-projection/legacy-rejected/review.0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757.json",
+      "sha256": "0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757",
+      "preservation": "Byte-for-byte archive of the original prior REJECT. It remains historical evidence and is not overwritten by this correction."
     }
-  ],
-  "diff_one": {
-    "display_alias_hyphen_container_notes_links": {
-      "exit_code": 1,
-      "summary": "SVG structural differences: expected tenant-a, tenant-a.api.one, tenant-a.note.one; actual tenant, tenant.api.one, tenant.note.one."
-    },
-    "bare_slash_container_quoted_child_link_note": {
-      "exit_code": 1,
-      "summary": "SVG structural differences: expected 23 elements in DESCRIPTION SVG; actual 3 elements in empty STATE SVG."
-    }
+  },
+  "evidence_integrity": {
+    "frozen_rustuml_sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c",
+    "frozen_diff_one_sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "artifact_manifest": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_artifacts.sha256",
+    "artifact_manifest_sha256": "7996032a9c12a2d0d691e30f22c6a93627d543856c5e7f1291ddce8eba814aff"
+  },
+  "correction_scope": {
+    "production_code_changed": false,
+    "test_artifacts_changed": false,
+    "executable_tests_rerun": false,
+    "cargo_or_rustc_run": false,
+    "record_operations": [
+      "Archive the authored ACCEPT byte-for-byte under legacy-accepted with its SHA-256 suffix.",
+      "Archive the original prior REJECT byte-for-byte under legacy-rejected with its SHA-256 suffix.",
+      "Create this sole canonical active review.json as REJECT."
+    ]
   },
   "verdict": "REJECT",
-  "reason": "The implementation projects parsed IDs correctly only after the parser has captured the right canonical quark code. Java-valid deployment container codes containing hyphen or slash are accepted by CommandPackageWithUSymbol but are truncated or missed by Rust's deployment declaration grammar. The resulting owner identity mismatch propagates into cluster, leaf, named-note, and link metadata. Both failing inputs are preserved with Java SVGs and Rust/diff evidence."
+  "reason": "The fresh Java-valid held-out fresh2_quoted_identity_deep_ownership has diff_one --no-oracle exit 1. Project Parity Honesty Rule 10 makes that failing counterexample dispositive. The prior ACCEPT violated the gate by reclassifying the failure as PASS_FOR_MECHANISM and treating its differences as out of scope; this active verdict does not reinterpret or excuse the failure."
 }
