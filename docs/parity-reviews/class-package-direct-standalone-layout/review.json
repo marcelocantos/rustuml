@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-direct-standalone-layout",
+  "evidence_kind": "parity",
+  "reviewed_at": "2026-08-01",
+  "verdict": "ACCEPT",
+  "verdict_reason": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+  "maker": {
+    "identity": "Prior T14 implementation history for class-package-direct-standalone-layout at shipped Rust revision cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "task_id": "rustuml-t14-maker-history-class-package-direct-standalone-layout",
+    "role": "Historical maker side derived from preserved implementation commits; distinct from the independent rereview checker.",
+    "implementation_commits": [
+      "10a16ee323cf2a2a21054967681eec6e43cd5b22"
+    ]
+  },
+  "checker": {
+    "identity": "Codex GPT-5 independent T14 rereview A checker",
+    "task_id": "codex-t14-rereview-a-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; Java PlantUML JAR; shipped diff_one binary",
+    "role": "Independent skeptical checker; did not implement the audited mechanisms; did not edit shipping code, accounts, quarantines, frozen controls, comparator, or baselines; did not run Cargo or rustc.",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "4fe430091e56f22963be85e0592e7b65e0511829",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "rust_implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_precedes_implementation": true,
+    "account_precedence_command": "git merge-base --is-ancestor 4fe430091e56f22963be85e0592e7b65e0511829 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_binary": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "checker_worktree": "/private/tmp/rustuml-t14-rereview-a",
+    "mechanism_implementation_commits": [
+      "10a16ee323cf2a2a21054967681eec6e43cd5b22"
+    ]
+  },
+  "account_revision": "4fe430091e56f22963be85e0592e7b65e0511829",
+  "implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "prior_records_inspected": [
+    "docs/parity-reviews/class-package-direct-standalone-layout/quarantined-review.json"
+  ],
+  "commands": [
+    "jq . docs/parity-reviews/class-package-direct-standalone-layout/account.json",
+    "find docs/parity-reviews/class-package-direct-standalone-layout -maxdepth 1 -type f | sort",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,275p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '260,330p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '705,800p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2520,2608p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14645,14795p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '735,830p'",
+    "git merge-base --is-ancestor 4fe430091e56f22963be85e0592e7b65e0511829 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_*.puml",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type|Welcome to PlantUML|Not known:' test-diagrams/perturbations/... -g 'rereview_a_*.svg'"
+  ],
+  "source_inspection": [
+    {
+      "area": "Java model named by account",
+      "locations": [
+        "net.sourceforge.plantuml.abel.Entity#leafs",
+        "net.atmp.CucaDiagram#groupsAndRoot",
+        "net.atmp.CucaDiagram#isStandalone",
+        "net.atmp.CucaDiagram#applySingleStrategy",
+        "net.sourceforge.plantuml.cucadiagram.Magma#putInSquare",
+        "net.sourceforge.plantuml.cucadiagram.SquareMaker#putInSquare"
+      ],
+      "finding": "Java applies Magma over immediate non-group children only and excludes linked leaves. Rust single_strategy_members projects direct child ownership instead of Package.entities recursive membership."
+    },
+    {
+      "area": "Rust shipped-path model named by account",
+      "locations": [
+        "crates/rustuml-parser/src/parse/class.rs::ClassParser::register_entity_path",
+        "crates/rustuml-render/src/class.rs::package_parent_indices",
+        "crates/rustuml-render/src/class.rs::innermost_entity_packages",
+        "crates/rustuml-render/src/class.rs::add_single_strategy_links",
+        "crates/rustuml-render/src/class.rs::add_square_invisible_links"
+      ],
+      "finding": "Java applies Magma over immediate non-group children only and excludes linked leaves. Rust single_strategy_members projects direct child ownership instead of Package.entities recursive membership."
+    }
+  ],
+  "prohibited_pattern_audit": {
+    "result": "PASS",
+    "finding": "Inspected account-named model locations for fixture label branches, golden reads, coordinate-keyed SVG surgery, per-fixture constants, and unexplained parity constants. No such pattern was needed to explain the accepted mechanisms; quoted-symbol dispatch is rejected on behavioral evidence rather than accepted."
+  },
+  "perturbations": [
+    {
+      "name": "rereview_a_01_nested_descendants_do_not_count_for_parent",
+      "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "nested descendants versus direct leaves",
+        "ancestor package ownership",
+        "three-leaf threshold"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.puml"
+      ]
+    },
+    {
+      "name": "rereview_a_02_lr_linked_direct_leaf_exclusion",
+      "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "linked direct leaf exclusion",
+        "left-to-right direction",
+        "descendant leaves under child package"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.puml"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "none_found",
+      "summary": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+      "evidence": [
+        "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_01_nested_descendants_do_not_count_for_parent.puml: java_exit=0, rust_exit=0, diff_exit=0",
+        "test-diagrams/perturbations/class-package-direct-standalone-layout/rereview_a_02_lr_linked_direct_leaf_exclusion.puml: java_exit=0, rust_exit=0, diff_exit=0"
+      ]
+    }
+  ],
+  "attestation": {
+    "evidence_kind": "parity",
+    "accepted_java_success_heldouts": 2,
+    "failed_java_success_heldouts": 0,
+    "all_java_exits_zero": true,
+    "all_rust_render_exits_zero": true,
+    "all_diff_exits_zero": true,
+    "cargo_or_rustc_invoked": false,
+    "shipping_code_edited": false,
+    "accounts_or_quarantines_edited": false,
+    "frozen_controls_edited": false
+  },
+  "residue": "This review validates the named heldout matrix and inspected model paths only. It does not claim global class-diagram parity outside the generated axes."
+}

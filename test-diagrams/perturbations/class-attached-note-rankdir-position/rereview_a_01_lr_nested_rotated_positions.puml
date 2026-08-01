@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+package RankdirReviewOuterA {
+  class RankdirReviewAlphaA
+  package RankdirReviewInnerA {
+    class RankdirReviewBetaA
+  }
+}
+note left of RankdirReviewAlphaA : lr source left should rotate upward 8101
+note right of RankdirReviewAlphaA : lr source right should rotate downward 8103
+note top of RankdirReviewBetaA : lr source top should rotate left 8105
+note bottom of RankdirReviewBetaA : lr source bottom should rotate right 8107
+@enduml

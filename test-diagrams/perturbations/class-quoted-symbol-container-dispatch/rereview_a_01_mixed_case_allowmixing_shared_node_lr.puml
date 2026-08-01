@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+allowmixing
+node "Dispatch Review Runtime A" {
+  entity DispatchReviewLedgerA {
+    +fieldA
+  }
+  DATABASE DispatchReviewStoreA
+}
+DispatchReviewLedgerA --> DispatchReviewStoreA
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+class CreoleReviewLeftA
+class CreoleReviewRightA
+CreoleReviewLeftA --> CreoleReviewRightA : Alpha <size:18>WideA</size> H<sub>2</sub> and X<sup>9</sup> tail 8811
+@enduml

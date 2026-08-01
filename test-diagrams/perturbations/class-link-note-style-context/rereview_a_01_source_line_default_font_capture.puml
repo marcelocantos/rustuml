@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Arial
+class LinkStyleReviewLeftA
+class LinkStyleReviewRightA
+LinkStyleReviewLeftA --> LinkStyleReviewRightA : style capture edge 8311
+skinparam defaultFontName Verdana
+note on link : captured Arial note row Wwm 8313
+@enduml

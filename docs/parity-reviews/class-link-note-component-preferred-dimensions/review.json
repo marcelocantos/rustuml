@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-note-component-preferred-dimensions",
+  "evidence_kind": "parity",
+  "reviewed_at": "2026-08-01",
+  "verdict": "ACCEPT",
+  "verdict_reason": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+  "maker": {
+    "identity": "Prior T14 implementation history for class-link-note-component-preferred-dimensions at shipped Rust revision cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "task_id": "rustuml-t14-maker-history-class-link-note-component-preferred-dimensions",
+    "role": "Historical maker side derived from preserved implementation commits; distinct from the independent rereview checker.",
+    "implementation_commits": [
+      "fe2d3e46c3986d7cf5948543b4cb400390d0f58a",
+      "9c062b57593d71d7070b0f7ed7d51d9cb020bc38"
+    ]
+  },
+  "checker": {
+    "identity": "Codex GPT-5 independent T14 rereview A checker",
+    "task_id": "codex-t14-rereview-a-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; Java PlantUML JAR; shipped diff_one binary",
+    "role": "Independent skeptical checker; did not implement the audited mechanisms; did not edit shipping code, accounts, quarantines, frozen controls, comparator, or baselines; did not run Cargo or rustc.",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "d3ee5863af6b37eea28a4f73f8229d589ca8a794",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "rust_implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_precedes_implementation": true,
+    "account_precedence_command": "git merge-base --is-ancestor d3ee5863af6b37eea28a4f73f8229d589ca8a794 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_binary": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "checker_worktree": "/private/tmp/rustuml-t14-rereview-a",
+    "mechanism_implementation_commits": [
+      "fe2d3e46c3986d7cf5948543b4cb400390d0f58a",
+      "9c062b57593d71d7070b0f7ed7d51d9cb020bc38"
+    ]
+  },
+  "account_revision": "d3ee5863af6b37eea28a4f73f8229d589ca8a794",
+  "implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "prior_records_inspected": [
+    "docs/parity-reviews/class-link-note-component-preferred-dimensions/quarantined-review-2.json",
+    "docs/parity-reviews/class-link-note-component-preferred-dimensions/quarantined-review-3.json",
+    "docs/parity-reviews/class-link-note-component-preferred-dimensions/quarantined-review.json"
+  ],
+  "commands": [
+    "jq . docs/parity-reviews/class-link-note-component-preferred-dimensions/account.json",
+    "find docs/parity-reviews/class-link-note-component-preferred-dimensions -maxdepth 1 -type f | sort",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,275p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '260,330p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '705,800p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2520,2608p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14645,14795p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '735,830p'",
+    "git merge-base --is-ancestor d3ee5863af6b37eea28a4f73f8229d589ca8a794 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_*.puml",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type|Welcome to PlantUML|Not known:' test-diagrams/perturbations/... -g 'rereview_a_*.svg'"
+  ],
+  "source_inspection": [
+    {
+      "area": "Java model named by account",
+      "locations": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+          "symbols": [
+            "SvekEdge.SvekEdge",
+            "SvekEdge.appendTable",
+            "SvekEdge.solve",
+            "SvekEdge.drawU"
+          ],
+          "lines": "279-320,423-438,497-512,734-740,944-947",
+          "role": "Merges the ordinary label and EntityImageNoteLink with mergeTB, calculates the complete fractional labelText dimension, truncates only the fixed Graphviz table width and height, then paints the original untruncated labelText at the solved table origin."
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+          "symbols": [
+            "EntityImageNoteLink.EntityImageNoteLink",
+            "EntityImageNoteLink.calculateDimensionSlow",
+            "EntityImageNoteLink.drawU"
+          ],
+          "lines": "57-82",
+          "role": "Exposes ComponentRoseNote's full preferred dimensions to the vertical merge and paints the component without becoming a graph node."
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+          "symbols": [
+            "ComponentRoseNote.getPreferredWidth",
+            "ComponentRoseNote.getPreferredHeight",
+            "ComponentRoseNote.drawInternalU"
+          ],
+          "lines": "73-122",
+          "role": "Adds Rose's five-pixel padding on every side to fractional text dimensions for preferred size, but truncates getTextWidth/getTextHeight only when constructing the visible folded polygon."
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockVertical.java",
+          "symbols": [
+            "TextBlockVertical.calculateDimensionSlow",
+            "TextBlockVertical.drawU"
+          ],
+          "lines": "65-100",
+          "role": "Uses the maximum untruncated child width as the merged width and centers each child from its own untruncated dimension."
+        }
+      ],
+      "finding": "Java composes EntityImageNoteLink with the ordinary label using untruncated preferred dimensions and truncates only Graphviz table serialization. Rust relationship_center_layout now keeps natural note dimensions before fixed-table truncation."
+    },
+    {
+      "area": "Rust shipped-path model named by account",
+      "locations": [
+        {
+          "path": "crates/rustuml-render/src/class.rs",
+          "symbols": [
+            "relationship_center_layout",
+            "render_no_oracle_relationship",
+            "note_box_dims"
+          ],
+          "lines": "13429-13470,14599-14705,16971-16984",
+          "role": "Computes the compound edge-label model, but floors note_box_dims before adding component padding and before centering the ordinary label. It then uses the same prematurely truncated width for Graphviz constraints and child paint placement."
+        },
+        {
+          "path": "crates/rustuml-layout/src/graph.rs",
+          "symbols": [
+            "edge_label_table"
+          ],
+          "lines": "2230-2240",
+          "role": "Already performs Java-compatible integer truncation at the Graphviz serialization boundary, so upstream render-model truncation is redundant and destroys paint-time fractional dimensions."
+        }
+      ],
+      "finding": "Java composes EntityImageNoteLink with the ordinary label using untruncated preferred dimensions and truncates only Graphviz table serialization. Rust relationship_center_layout now keeps natural note dimensions before fixed-table truncation."
+    }
+  ],
+  "prohibited_pattern_audit": {
+    "result": "PASS",
+    "finding": "Inspected account-named model locations for fixture label branches, golden reads, coordinate-keyed SVG surgery, per-fixture constants, and unexplained parity constants. No such pattern was needed to explain the accepted mechanisms; quoted-symbol dispatch is rejected on behavioral evidence rather than accepted."
+  },
+  "perturbations": [
+    {
+      "name": "rereview_a_01_lr_left_note_fractional_width",
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.puml",
+      "java_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "left-to-right direction",
+        "left link note",
+        "multiline fractional note dimensions"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.puml"
+      ]
+    },
+    {
+      "name": "rereview_a_02_tb_top_label_dominant_fontsize",
+      "source": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.puml",
+      "java_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "top-to-bottom direction",
+        "top link note",
+        "ordinary label wider than note",
+        "arrow font size override"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.puml"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "none_found",
+      "summary": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+      "evidence": [
+        "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_01_lr_left_note_fractional_width.puml: java_exit=0, rust_exit=0, diff_exit=0",
+        "test-diagrams/perturbations/class-link-note-component-preferred-dimensions/rereview_a_02_tb_top_label_dominant_fontsize.puml: java_exit=0, rust_exit=0, diff_exit=0"
+      ]
+    }
+  ],
+  "attestation": {
+    "evidence_kind": "parity",
+    "accepted_java_success_heldouts": 2,
+    "failed_java_success_heldouts": 0,
+    "all_java_exits_zero": true,
+    "all_rust_render_exits_zero": true,
+    "all_diff_exits_zero": true,
+    "cargo_or_rustc_invoked": false,
+    "shipping_code_edited": false,
+    "accounts_or_quarantines_edited": false,
+    "frozen_controls_edited": false
+  },
+  "residue": "This review validates the named heldout matrix and inspected model paths only. It does not claim global class-diagram parity outside the generated axes."
+}

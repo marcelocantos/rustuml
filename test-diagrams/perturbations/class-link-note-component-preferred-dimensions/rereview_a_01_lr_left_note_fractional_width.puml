@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class LinkDimReviewWestA
+class LinkDimReviewEastA
+LinkDimReviewWestA --> LinkDimReviewEastA : axis qx 8211
+note left on link
+  fractional width mix mWmi 8213
+  second row has slim iii 8215
+end note
+@enduml

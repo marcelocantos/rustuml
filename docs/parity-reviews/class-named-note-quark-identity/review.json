@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-named-note-quark-identity",
+  "evidence_kind": "parity",
+  "reviewed_at": "2026-08-01",
+  "verdict": "ACCEPT",
+  "verdict_reason": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+  "maker": {
+    "identity": "Prior T14 implementation history for class-named-note-quark-identity at shipped Rust revision cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "task_id": "rustuml-t14-maker-history-class-named-note-quark-identity",
+    "role": "Historical maker side derived from preserved implementation commits; distinct from the independent rereview checker.",
+    "implementation_commits": [
+      "842f8604e65748b95fff3cfbc6a602a81703d1d5",
+      "dbaa4a8e2563a3aa50ebf2859a0b5d43a8a2d76e"
+    ]
+  },
+  "checker": {
+    "identity": "Codex GPT-5 independent T14 rereview A checker",
+    "task_id": "codex-t14-rereview-a-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; Java PlantUML JAR; shipped diff_one binary",
+    "role": "Independent skeptical checker; did not implement the audited mechanisms; did not edit shipping code, accounts, quarantines, frozen controls, comparator, or baselines; did not run Cargo or rustc.",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "279c5a1896a39f17e7b586b188c4e6da01b02499",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "rust_implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_precedes_implementation": true,
+    "account_precedence_command": "git merge-base --is-ancestor 279c5a1896a39f17e7b586b188c4e6da01b02499 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_binary": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "checker_worktree": "/private/tmp/rustuml-t14-rereview-a",
+    "mechanism_implementation_commits": [
+      "842f8604e65748b95fff3cfbc6a602a81703d1d5",
+      "dbaa4a8e2563a3aa50ebf2859a0b5d43a8a2d76e"
+    ]
+  },
+  "account_revision": "279c5a1896a39f17e7b586b188c4e6da01b02499",
+  "implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "prior_records_inspected": [
+    "docs/parity-reviews/class-named-note-quark-identity/quarantined-review-followup.json",
+    "docs/parity-reviews/class-named-note-quark-identity/quarantined-review.json"
+  ],
+  "commands": [
+    "jq . docs/parity-reviews/class-named-note-quark-identity/account.json",
+    "find docs/parity-reviews/class-named-note-quark-identity -maxdepth 1 -type f | sort",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,275p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '260,330p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '705,800p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2520,2608p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14645,14795p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '735,830p'",
+    "git merge-base --is-ancestor 279c5a1896a39f17e7b586b188c4e6da01b02499 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_*.puml",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type|Welcome to PlantUML|Not known:' test-diagrams/perturbations/... -g 'rereview_a_*.svg'"
+  ],
+  "source_inspection": [
+    {
+      "area": "Java model named by account",
+      "locations": [
+        "net.sourceforge.plantuml.command.note.CommandFactoryNote#executeInternal",
+        "net.atmp.CucaDiagram#quarkInContext",
+        "net.atmp.CucaDiagram#quarkInContextSafe",
+        "net.atmp.CucaDiagram#reallyCreateLeaf",
+        "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg",
+        "net.sourceforge.plantuml.svek.GraphvizImageBuilder#isOpalisable",
+        "net.sourceforge.plantuml.svek.GraphvizImageBuilder#buildImage",
+        "net.sourceforge.plantuml.plasma.Quark#getName",
+        "net.sourceforge.plantuml.plasma.Quark#getQualifiedName"
+      ],
+      "finding": "Java creates named notes on Plasma quarks and later relationship endpoints reuse those quarks. Rust note_endpoint_index and note_qualified_name use Note.id to preserve canonical qualified identity."
+    },
+    {
+      "area": "Rust shipped-path model named by account",
+      "locations": [
+        "crates/rustuml-parser/src/diagram/class.rs::Note",
+        "crates/rustuml-parser/src/parse/class.rs::ClassParser",
+        "crates/rustuml-parser/src/parse/class.rs::ClassParser::push_note",
+        "crates/rustuml-parser/src/parse/class.rs::ClassParser::relationship_endpoint_path",
+        "crates/rustuml-parser/src/parse/class.rs::ClassParser::materialize_relationship_endpoint",
+        "crates/rustuml-parser/src/parse/class.rs::ClassParser::finish",
+        "crates/rustuml-render/src/class.rs::relationship_layout_id",
+        "crates/rustuml-render/src/class.rs::floating_note_opale_relationship",
+        "crates/rustuml-render/src/class.rs::no_oracle_entity_id_from"
+      ],
+      "finding": "Java creates named notes on Plasma quarks and later relationship endpoints reuse those quarks. Rust note_endpoint_index and note_qualified_name use Note.id to preserve canonical qualified identity."
+    }
+  ],
+  "prohibited_pattern_audit": {
+    "result": "PASS",
+    "finding": "Inspected account-named model locations for fixture label branches, golden reads, coordinate-keyed SVG surgery, per-fixture constants, and unexplained parity constants. No such pattern was needed to explain the accepted mechanisms; quoted-symbol dispatch is rejected on behavioral evidence rather than accepted."
+  },
+  "perturbations": [
+    {
+      "name": "rereview_a_01_namespace_separator_reopen_source_note_lr",
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "namespace separator",
+        "reopened package",
+        "note as relationship source",
+        "left-to-right direction"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.puml"
+      ]
+    },
+    {
+      "name": "rereview_a_02_duplicate_local_aliases_two_packages_tb",
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "duplicate local note aliases",
+        "two package owners",
+        "note as source",
+        "top-to-bottom direction"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.puml"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "none_found",
+      "summary": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+      "evidence": [
+        "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_01_namespace_separator_reopen_source_note_lr.puml: java_exit=0, rust_exit=0, diff_exit=0",
+        "test-diagrams/perturbations/class-named-note-quark-identity/rereview_a_02_duplicate_local_aliases_two_packages_tb.puml: java_exit=0, rust_exit=0, diff_exit=0"
+      ]
+    }
+  ],
+  "attestation": {
+    "evidence_kind": "parity",
+    "accepted_java_success_heldouts": 2,
+    "failed_java_success_heldouts": 0,
+    "all_java_exits_zero": true,
+    "all_rust_render_exits_zero": true,
+    "all_diff_exits_zero": true,
+    "cargo_or_rustc_invoked": false,
+    "shipping_code_edited": false,
+    "accounts_or_quarantines_edited": false,
+    "frozen_controls_edited": false
+  },
+  "residue": "This review validates the named heldout matrix and inspected model paths only. It does not claim global class-diagram parity outside the generated axes."
+}

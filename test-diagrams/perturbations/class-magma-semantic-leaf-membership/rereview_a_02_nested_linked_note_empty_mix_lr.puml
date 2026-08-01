@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+package MagmaReviewNestA {
+  class MagmaReviewDirectOneA
+  class MagmaReviewDirectTwoA
+  note "floating semantic note 8421" as MagmaReviewNoteA
+  package MagmaReviewEmptyInnerA {
+  }
+  MagmaReviewDirectOneA --> MagmaReviewDirectTwoA
+}
+class MagmaReviewOutsideA
+MagmaReviewOutsideA --> MagmaReviewNestA.MagmaReviewDirectOneA
+@enduml

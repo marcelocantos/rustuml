@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+skinparam defaultFontName Verdana
+skinparam NoteFontName Arial
+skinparam NoteFontSize 15
+class LinkStyleReviewTopA
+class LinkStyleReviewBottomA
+LinkStyleReviewTopA --> LinkStyleReviewBottomA : styled relation 8321
+note right on link
+  note font override row Wwm 8323
+end note
+@enduml

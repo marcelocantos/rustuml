@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+class RankdirReviewRootNorthA
+class RankdirReviewRootSouthA
+class RankdirReviewRootEastA
+note bottom of RankdirReviewRootNorthA : tb bottom remains bottom 8111
+note top of RankdirReviewRootSouthA : tb top remains top 8113
+RankdirReviewRootNorthA --> RankdirReviewRootSouthA
+note left of RankdirReviewRootEastA : tb left remains left 8115
+note right of RankdirReviewRootEastA : tb right remains right 8117
+@enduml
