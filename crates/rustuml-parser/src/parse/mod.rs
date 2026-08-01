@@ -738,6 +738,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_component_bracket_interface_decl = false;
     let mut has_component_description_command = false;
     let mut has_component_symbol_container = false;
+    let mut has_top_level_component_symbol_container = false;
     let mut has_component_leaf_keyword = false;
     let mut has_quoted_deployment_container = false;
     let mut has_broad_deployment_container_identity = false;
@@ -841,7 +842,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if !has_allowmixing
             && !trimmed.contains('{')
             && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword.as_str())
-            && (leading_keyword != "component" || looks_like_component_keyword_declaration(trimmed))
+            && looks_like_mixed_leaf_declaration(&leading_keyword, trimmed)
         {
             class_factory_rejected_by_mixed_leaf = true;
         }
@@ -1073,6 +1074,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[5] += 15;
             if trimmed.contains('{') {
                 has_component_symbol_container = true;
+                if top_level {
+                    has_top_level_component_symbol_container = true;
+                }
             } else if top_level {
                 has_top_level_component_leaf = true;
             }
@@ -1162,18 +1166,21 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // type; entity-with-body ({) is handled separately below.
         // Note: `*--` and `o--` are NOT scored for class here because they are
         // also used in object diagrams; `object` keyword presence disambiguates.
-        if trimmed.starts_with("class ")
+        let has_explicit_non_interface_class_decl = trimmed.starts_with("class ")
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("abstract ")
             || trimmed == "abstract"
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
             || trimmed.starts_with("circle ")
-            || trimmed.starts_with("diamond ")
+            || trimmed.starts_with("diamond ");
+        if has_explicit_non_interface_class_decl
             || trimmed.contains("<|--")
             || trimmed.contains("..|>")
         {
             scores[1] += 10;
+        }
+        if has_explicit_non_interface_class_decl {
             has_non_interface_class_decl = true;
             has_class_factory_decl = true;
         }
@@ -1353,6 +1360,27 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
     }
 
+    // `ClassDiagramFactory` precedes `DescriptionDiagramFactory` and consumes
+    // explicit class declarations plus package containers and class links.
+    // Preserve that whole-source success even when a shared quoted container
+    // also resembles a DESCRIPTION command.
+    if has_non_interface_class_decl
+        && !class_factory_rejected_by_mixed_leaf
+        && !has_component_bracket_interface_decl
+        && scores[9] == 0
+    {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(index, _)| index != 1)
+            .map(|(_, &score)| score)
+            .max()
+            .unwrap_or(0);
+        if scores[1] <= other_max {
+            scores[1] = other_max + 1;
+        }
+    }
+
     // CommandPackageWithUSymbol makes a quoted shared container valid for both
     // CLASS and DESCRIPTION, but not SEQUENCE. If the complete source remains
     // consumable by ClassDiagramFactory, Java's earlier class factory wins.
@@ -1418,8 +1446,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // complete container declaration as Deployment evidence.
     let component_backed_description_source = has_component_package_container
         || has_top_level_component_leaf
-        || has_component_symbol_container
-        || has_component_description_command
+        || has_top_level_component_symbol_container
+        || (has_component_description_command && !has_component_symbol_container)
         || has_component_bracket_interface_decl;
     let has_deployment_container_evidence =
         has_quoted_deployment_container || has_broad_deployment_container_identity;
@@ -1676,18 +1704,18 @@ fn looks_like_class_lollipop_command(line: &str) -> bool {
     RE.is_match(line)
 }
 
-/// `CommandCreateElementFull` only treats `component` as a declaration when
-/// the text after the keyword starts a legal name. An entity whose identifier
-/// happens to be `Component` may instead begin a relationship command.
-fn looks_like_component_keyword_declaration(line: &str) -> bool {
-    const KEYWORD: &str = "component";
-    if line.len() <= KEYWORD.len()
-        || !line[..KEYWORD.len()].eq_ignore_ascii_case(KEYWORD)
-        || !line[KEYWORD.len()..].starts_with(char::is_whitespace)
+/// `CommandCreateElementFull2` only treats a mixed-family keyword as a leaf
+/// declaration when the following token starts a legal name. An existing
+/// entity whose identifier is `UseCase`, `Component`, or another keyword may
+/// instead begin a relationship command.
+fn looks_like_mixed_leaf_declaration(keyword: &str, line: &str) -> bool {
+    if line.len() <= keyword.len()
+        || !line[..keyword.len()].eq_ignore_ascii_case(keyword)
+        || !line[keyword.len()..].starts_with(char::is_whitespace)
     {
         return false;
     }
-    line[KEYWORD.len()..]
+    line[keyword.len()..]
         .trim_start()
         .chars()
         .next()
@@ -2535,6 +2563,63 @@ mod tests {
                      }\n\
                      @enduml";
         assert!(matches!(parse(input).unwrap(), Diagram::Component(_)));
+    }
+
+    #[test]
+    fn package_wrapped_explicit_classes_keep_earlier_factory_precedence() {
+        let input = "@startuml\n\
+                     package \"Presentation Mesh\" {\n\
+                       class FreshScreen1201\n\
+                       class FreshScreenModel1207\n\
+                     }\n\
+                     package \"Service Mesh\" {\n\
+                       class FreshService1213\n\
+                       class FreshRepository1217\n\
+                     }\n\
+                     FreshScreenModel1207 --> FreshService1213\n\
+                     FreshService1213 --> FreshRepository1217\n\
+                     @enduml";
+
+        assert!(matches!(parse(input).unwrap(), Diagram::Class(_)));
+    }
+
+    #[test]
+    fn mixed_family_keyword_endpoints_do_not_become_leaf_declarations() {
+        for keyword in ["UseCase", "Component", "Node"] {
+            let input = format!(
+                "@startuml\npackage FreshScope {{\nclass {keyword}\nclass FreshTarget\n}}\n{keyword} --> FreshTarget\n@enduml"
+            );
+            assert!(
+                matches!(parse(&input).unwrap(), Diagram::Class(_)),
+                "{keyword}"
+            );
+        }
+    }
+
+    #[test]
+    fn object_realization_is_relationship_evidence_not_a_class_declaration() {
+        let input = "@startuml\nobject FreshSource\nobject FreshTarget\nFreshSource ..|> FreshTarget\n@enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Object(_)));
+    }
+
+    #[test]
+    fn deployment_roots_own_nested_component_commands_as_one_description_source() {
+        let input = "@startuml\n\
+                     node \"Runtime Host\" as RuntimeHost1223 {\n\
+                       component \"Gateway Shell\" as Gateway1229 {\n\
+                         [Fresh Ingress] as Ingress1231\n\
+                         [Fresh Auth] as Auth1237\n\
+                       }\n\
+                       database \"Local Index\" as LocalIndex1249\n\
+                     }\n\
+                     node \"Persistence Host\" as Persistence1259 {\n\
+                       database \"Fresh Store\" as Store1277\n\
+                     }\n\
+                     Gateway1229 --> Store1277\n\
+                     Gateway1229 --> LocalIndex1249\n\
+                     @enduml";
+
+        assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
     }
 
     #[test]
