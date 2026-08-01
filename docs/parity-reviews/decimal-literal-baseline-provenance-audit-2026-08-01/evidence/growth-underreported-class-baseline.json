@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mechanism": "decimal-literal-baseline-provenance-audit-2026-08-01",
+  "artifact_kind": "gate_mutation",
+  "created": "2026-08-01",
+  "review_worktree": "/private/tmp/rustuml-t14-decimal-review",
+  "guard_binary": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634",
+  "guard_embedded_repo_root": "/private/tmp/rustuml-t14-gate-integration",
+  "axes": [
+    "net literal growth",
+    "baseline under-reporting",
+    "reviewed provenance inventory"
+  ],
+  "mutation": {
+    "file": "/private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle/tests/decimal_literal_baseline.txt",
+    "temporary_change": "crates/rustuml-render/src/class.rs 385 -> 384",
+    "restored": true
+  },
+  "commands": [
+    {
+      "command": "apply_patch changing crates/rustuml-render/src/class.rs 385 to 384 in /private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle/tests/decimal_literal_baseline.txt",
+      "result": "PASS: temporary mutation applied."
+    },
+    {
+      "command": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634 decimal_literal_ratchet --exact --nocapture",
+      "result": "PASS: command exited 101 and reported stale growth: crates/rustuml-render/src/class.rs: 384 -> 385."
+    },
+    {
+      "command": "apply_patch restoring crates/rustuml-render/src/class.rs 384 to 385 in /private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle/tests/decimal_literal_baseline.txt",
+      "result": "PASS: mutation restored; git -C /private/tmp/rustuml-t14-gate-integration status --short returned clean."
+    }
+  ],
+  "expected": "The decimal-literal ratchet must reject an implementation whose baseline under-reports a reviewed growth count.",
+  "observed": "The prebuilt harness_guards binary rejected the mutation with the growth report `crates/rustuml-render/src/class.rs: 384 -> 385`.",
+  "result": "PASS"
+}

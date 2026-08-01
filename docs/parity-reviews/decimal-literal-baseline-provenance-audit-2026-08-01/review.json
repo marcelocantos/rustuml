@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "mechanism": "decimal-literal-baseline-provenance-audit-2026-08-01",
+  "evidence_kind": "gate",
+  "maker": {
+    "identity": "Marcelo Cantos <marcelo.cantos@gmail.com>",
+    "task_id": "account commit 5c69e583b79e370db33ee843531632ac43d3f7e1; implementation commit 8ed589718ac5368ddd30ec8a631fcb6988f1b16d"
+  },
+  "reviewer": {
+    "identity": "Codex GPT-5 independent checker",
+    "task_id": "codex/t14-decimal-ratchet-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "independent skeptical checker; did not author the account, implementation, guard, comparator, renderer literals, or baselines under review"
+  },
+  "revisions": {
+    "baseline_commit": "49388ae279407335f6047636d312181b0c8c22cd",
+    "account_commit": "5c69e583b79e370db33ee843531632ac43d3f7e1",
+    "implementation_commit": "8ed589718ac5368ddd30ec8a631fcb6988f1b16d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "guard_binary": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634",
+    "guard_binary_embedded_repo_root": "/private/tmp/rustuml-t14-gate-integration",
+    "review_worktree": "/private/tmp/rustuml-t14-decimal-review"
+  },
+  "commands": [
+    {
+      "command": "sed -n '1,260p' AGENTS.md",
+      "result": "PASS: read repository parity honesty rules, including decimal-literal provenance, ratchet, and maker/checker requirements."
+    },
+    {
+      "command": "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md and sed -n '1,460p' /Users/marcelo/.codex/skills/oracle-first/doctrine.md",
+      "result": "PASS: read oracle-first rules and doctrine; applied Goodhart guard and attestation separation."
+    },
+    {
+      "command": "git show --stat --oneline --decorate 5c69e583 8ed58971 49388ae2",
+      "result": "PASS: account precedes implementation; implementation commit changes one file, crates/rustuml-oracle/tests/decimal_literal_baseline.txt; baseline commit is the prior ratchet point."
+    },
+    {
+      "command": "sed -n '1,280p' crates/rustuml-oracle/tests/harness_guards.rs",
+      "result": "PASS: decimal_literal_ratchet scans every rustuml-render source file for digit-dot-three-plus-digit literals, compares exact per-file counts bidirectionally, and does not inspect provenance comments itself."
+    },
+    {
+      "command": "git diff 5c69e583..8ed58971 -- crates/rustuml-oracle/tests/decimal_literal_baseline.txt",
+      "result": "PASS: implementation changes only seven counts: class 383->385, component 48->50, deployment 43->45, plantuml_metrics 1053->1055, sequence 112->110, state 53->58, text_render 409->419."
+    },
+    {
+      "command": "python3 scanner matching count_high_precision_literals over 49388ae279407335f6047636d312181b0c8c22cd..8ed589718ac5368ddd30ec8a631fcb6988f1b16d for the seven named rustuml-render files",
+      "result": "PASS: computed counts match the baseline update; line-level diff inspection found no non-test production addition without adjacent Java or extraction provenance."
+    },
+    {
+      "command": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634 decimal_literal_ratchet --exact --nocapture",
+      "result": "PASS: unmutated prebuilt guard binary passed, 1 test, 37 filtered."
+    },
+    {
+      "command": "strings /private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634 | rg 'rustuml-t14-[^/]+/crates/rustuml-oracle|decimal_literal_baseline'",
+      "result": "PASS: binary embeds /private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle, so hostile mutations were applied and restored in that same-root checkout at implementation commit 8ed589718ac5368ddd30ec8a631fcb6988f1b16d."
+    },
+    {
+      "command": "apply_patch class baseline 385->384 in /private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle/tests/decimal_literal_baseline.txt; /private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634 decimal_literal_ratchet --exact --nocapture; apply_patch restore 384->385",
+      "result": "PASS: guard exited 101 and reported growth crates/rustuml-render/src/class.rs: 384 -> 385."
+    },
+    {
+      "command": "apply_patch sequence baseline 110->111 in /private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle/tests/decimal_literal_baseline.txt; /private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634 decimal_literal_ratchet --exact --nocapture; apply_patch restore 111->110",
+      "result": "PASS: guard exited 101 and reported decrease crates/rustuml-render/src/sequence.rs: 111 -> 110."
+    },
+    {
+      "command": "git -C /private/tmp/rustuml-t14-gate-integration status --short",
+      "result": "PASS: embedded-root checkout was clean after temporary mutations were restored."
+    }
+  ],
+  "source_inspection": {
+    "account": "The account claims an inventory-only baseline regeneration after independently reviewed source and test additions, not a renderer behavior change. It correctly treats the guard as a visibility mechanism whose provenance classification is a reviewer duty.",
+    "implementation_scope": "8ed589718ac5368ddd30ec8a631fcb6988f1b16d changes only crates/rustuml-oracle/tests/decimal_literal_baseline.txt. It does not edit rustuml-render, comparator code, no-oracle baselines, syntax-error controls, park lists, scanner logic, or allow-lists.",
+    "guard_code": "decimal_literal_ratchet remains bidirectional: unreviewed growth and unlocked decreases both fail. The scanner matches the same signature used for the baseline, including literals in tests and comments, which is why this review audits all net additions and removals rather than only production code.",
+    "binary_caveat": "The supplied binary is located under the gate-integration target directory and embeds /private/tmp/rustuml-t14-gate-integration as its repo root. That checkout was at the same implementation commit, so the hostile mutations were valid, but the final review artifacts were committed in /private/tmp/rustuml-t14-decimal-review as requested."
+  },
+  "literal_delta_audit": [
+    {
+      "file": "crates/rustuml-render/src/class.rs",
+      "count": "383 -> 385",
+      "classification": "mixed production precision correction plus test assertions",
+      "production_values": [
+        "13.53515625 at line 89 is adjacent to AWT ascent provenance for USymbolSimpleAbstract.asSmall.",
+        "14.1328125 at line 183 is adjacent to Java svek/HeaderLayout.java getDimension/drawU provenance."
+      ],
+      "test_values": [
+        "99.9092, 106.9092, and 28.4883 assert the ZeroFolder package polygon path in a unit test.",
+        "81.5977 updates a no-oracle hidden-compartment expected rectangle height.",
+        "0.0001 and the net-added 0.001 literals are tolerance assertions inside unit tests, including spot icon centering, decoration spacing, and legend placement."
+      ],
+      "removed_or_replaced": [
+        "Rounded production constants 14.1328, 20.3105, 18.668, 13.5352, and 26.5352 disappeared or were replaced by derived code.",
+        "Older test literals 81.5976, 224.4883, and two 234.4883 occurrences disappeared."
+      ],
+      "verdict": "PASS: production precision has adjacent Java/AWT provenance, and test-only values are fixture/assertion expectations rather than shipping constants."
+    },
+    {
+      "file": "crates/rustuml-render/src/component.rs",
+      "count": "48 -> 50",
+      "classification": "test-only",
+      "values": [
+        "169.7917 is a unit-test SVG root width tied to the component edge-label font-metrics account and the nearby Verdana hidden-table assertion.",
+        "0.49804 is 0x7f / 255.0, checked through the HColor SVG projection tests and the named-note color-resolution evidence."
+      ],
+      "verdict": "PASS: no production literal growth."
+    },
+    {
+      "file": "crates/rustuml-render/src/deployment.rs",
+      "count": "43 -> 45",
+      "classification": "test-only",
+      "values": [
+        "0.0001 is a unit-test tolerance for title/stereotype line spacing.",
+        "0.50196 is 0x80 / 255.0, checked through HColor SVG projection evidence."
+      ],
+      "verdict": "PASS: no production literal growth."
+    },
+    {
+      "file": "crates/rustuml-render/src/plantuml_metrics.rs",
+      "count": "1053 -> 1055",
+      "classification": "test-only extractor checks",
+      "values": [
+        "560.8641 and 626.8478 are test expectations for Times New Roman U+0518 accumulation.",
+        "The file carries PhysicalFontMetricsExtract provenance comments and the values match the documented unicode-advance review/account."
+      ],
+      "verdict": "PASS: values are checked-in derivations from the Java AWT extractor path."
+    },
+    {
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "count": "112 -> 110",
+      "classification": "real decrease despite test additions",
+      "added_values": [
+        "0.49804 and 0.50196 are test-only HColor alpha projections.",
+        "The net-added 0.001 is a unit-test tolerance for merged note spacing; the production cut_activation_segment 0.001 was already present at baseline commit 49388ae279407335f6047636d312181b0c8c22cd."
+      ],
+      "removed_values": [
+        "Production helper constants 8.4687, 8.7778, 14.6211, and 14.3467 were removed with combined footer/caption helper cleanup.",
+        "CAPTION_BASELINE_AFTER_TAIL 16.5352 was removed; current caption placement derives the baseline from family-aware ascent and keeps only the existing Java-cited bottom offsets."
+      ],
+      "verdict": "PASS: the decrease is not an accounting artifact; the guard sees 110 current occurrences and rejects a stale 111 baseline."
+    },
+    {
+      "file": "crates/rustuml-render/src/state.rs",
+      "count": "53 -> 58",
+      "classification": "test-only preserved Java SVG fragment",
+      "values": [
+        "89.8291, 7.8032, 66.0107, 174.0375, and 16.9609 are unit-test SVG expectations for dotted_alignment_alias_keeps_flat_label_painted_frontier.",
+        "The exact same Java reference values are preserved under test-diagrams/perturbations/state-flat-svek-label-skinparams/checker_lr_dotted_keys_natural_right.svg."
+      ],
+      "verdict": "PASS: no production literal growth."
+    },
+    {
+      "file": "crates/rustuml-render/src/text_render.rs",
+      "count": "409 -> 419",
+      "classification": "test-only metric expectations",
+      "values": [
+        "76.6016 is a test input width for explicit-font emission.",
+        "14.2266, 15.1016, 13.3281, 106.9805, 94.1675, 68.9722, 185.7324, 18.3984, and 14.9375 are unit-test expectations for named AWT font metrics and unicode advances.",
+        "PhysicalFontMetricsExtract and the unicode checker evidence are cited adjacent to the unicode cases and in the committed account trail."
+      ],
+      "removed_values": [
+        "Two obsolete 57.2813 test expectations were removed."
+      ],
+      "verdict": "PASS: no production literal growth."
+    }
+  ],
+  "mutations": [
+    {
+      "artifact": "docs/parity-reviews/decimal-literal-baseline-provenance-audit-2026-08-01/evidence/growth-underreported-class-baseline.json",
+      "git_blob": "0185029264a14a235f07cb36bdd2aa91ab3b4910",
+      "axes": [
+        "net literal growth",
+        "baseline under-reporting",
+        "reviewed provenance inventory"
+      ],
+      "expected": "A baseline that under-reports reviewed growth must fail closed before it can hide unreviewed decimal-literal additions.",
+      "observed": "The prebuilt harness_guards binary exited 101 and reported `crates/rustuml-render/src/class.rs: 384 -> 385` under Growth.",
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/parity-reviews/decimal-literal-baseline-provenance-audit-2026-08-01/evidence/decrease-overreported-sequence-baseline.json",
+      "git_blob": "5fb2431a300e301b14ae23e652e6c99d63272b73",
+      "axes": [
+        "net literal decrease",
+        "baseline over-reporting",
+        "bidirectional ratchet"
+      ],
+      "expected": "A baseline that fails to lock a real decrease must fail closed so future re-growth cannot hide behind stale allowance.",
+      "observed": "The prebuilt harness_guards binary exited 101 and reported `crates/rustuml-render/src/sequence.rs: 111 -> 110` under Decreases.",
+      "result": "PASS"
+    }
+  ],
+  "perturbation_artifacts": [
+    {
+      "artifact": "test-diagrams/perturbations/decimal-literal-baseline-provenance-audit-2026-08-01/growth-underreported-class-baseline.json",
+      "git_blob": "0185029264a14a235f07cb36bdd2aa91ab3b4910",
+      "note": "Byte-identical copy of the canonical docs/evidence growth mutation artifact, preserved under test-diagrams/perturbations as requested."
+    },
+    {
+      "artifact": "test-diagrams/perturbations/decimal-literal-baseline-provenance-audit-2026-08-01/decrease-overreported-sequence-baseline.json",
+      "git_blob": "5fb2431a300e301b14ae23e652e6c99d63272b73",
+      "note": "Byte-identical copy of the canonical docs/evidence decrease mutation artifact, preserved under test-diagrams/perturbations as requested."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "No unexplained production high-precision literal was introduced by the net deltas. The only production precision increase I found is in class.rs, and both values carry adjacent Java/AWT provenance."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "All other growth is test-only and traces to checked-in derivations: PhysicalFontMetricsExtract metrics, preserved Java SVG perturbations, or documented HColor alpha projection."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "The sequence count decrease is real: the scanner reports 112 at 49388ae279407335f6047636d312181b0c8c22cd and 110 at 8ed589718ac5368ddd30ec8a631fcb6988f1b16d, with hostile over-reporting rejected by the guard."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "The implementation commit changes only decimal_literal_baseline.txt and does not weaken the scanner, comparator, no-oracle baselines, or renderer source."
+    }
+  ],
+  "residue": [
+    "I did not run cargo or rustc. All executed checks used the supplied prebuilt harness_guards binary plus git, rg, sed, strings, cmp, and a read-only Python scanner for line-level inventory.",
+    "The supplied prebuilt binary cannot validate this worktree's final review artifacts because its CARGO_MANIFEST_DIR is embedded as /private/tmp/rustuml-t14-gate-integration. I therefore used it only for the requested hostile decimal-ratchet mutations and recorded that limitation."
+  ],
+  "verdict": "ACCEPT",
+  "verdict_reason": "The account was durable before implementation, the implementation is an inventory-only baseline update, every audited net literal delta has production Java/AWT provenance or test-only checked derivation, the sequence decrease is real, and both growth and decrease hostile mutations fail closed under the supplied guard binary."
+}
