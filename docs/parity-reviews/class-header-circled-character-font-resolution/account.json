@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-header-circled-character-font-resolution",
+  "created": "2026-08-01",
+  "status": "accounted_before_code",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "ead5d281f84e3358e6063e320a0dfd63cd11ac28",
+  "diagnostic_oracles": {
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "no_oracle_diff": {
+      "path": "/private/tmp/rustuml-frozen/f0ffaa30/diff_one",
+      "sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526"
+    },
+    "constraints": [
+      "No Cargo, rustc, rustfmt, or Rust build command was run.",
+      "Diagnostic sources and Java SVGs were temporary and are not acceptance artifacts.",
+      "No production source, tests, existing account or review, baseline, comparator control, or perturbation artifact was edited."
+    ]
+  },
+  "triggering_failures": [
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkblue_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkgreen_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkorange_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkred_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightblue_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightgreen_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightorange_class.puml",
+    "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightred_class.puml"
+  ],
+  "investigated_hypothesis": {
+    "claim": "The class-header spot glyph inherits the merged root.element.classDiagram.class.header FontStyle, probably bold, and Rust applies that header style only to the title text.",
+    "verdict": "rejected_but_replaced_by_a_causal_generic_mechanism",
+    "disproof": "EntityImageClassHeader resolves the title from the class.header style at lines 87-103, but getCircledCharacter independently calls SkinParamUtils.getFont with FontParam.CIRCLED_CHARACTER and a null stereotype at line 166. ClassFontStyle plain, bold, and italic controls are strict no-oracle matches and leave the spot contour on Java's default Monospaced Bold face. The reddress difference is therefore not inherited class-header boldness. It is the unconsumed dedicated circled-character font family, with a second gap in dedicated/default face and assignment precedence."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+      "symbol": "EntityImageClass constructor",
+      "lines": "89-96",
+      "role": "Constructs EntityImageClassHeader as the producer of the class header; no USymbol path produces the ordinary class spot."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClassHeader.java",
+      "symbols": [
+        "EntityImageClassHeader constructor",
+        "getCircledCharacter",
+        "spotStyleSignature",
+        "getCircledChar"
+      ],
+      "lines": "77-103,152-220,224-255",
+      "role": "Resolves title text from root.element.classDiagram.class.header, but resolves the spot font independently through FontParam.CIRCLED_CHARACTER with null stereotype. Spot signatures supply fill, border, and glyph color; the leaf type or explicit spot stereotype supplies the character."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/FontParam.java",
+      "symbol": "FontParam.CIRCLED_CHARACTER and defaults",
+      "lines": "48-61,141-175",
+      "role": "Defines the dedicated default tuple as size 17, Bold face, black, and Monospaced family."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": [
+        "getFontSize",
+        "getFontFamily",
+        "getFontFace",
+        "getFont",
+        "getCircledCharacterRadius"
+      ],
+      "lines": "410-526",
+      "role": "Builds the effective circled-character font tuple. Family is CircledCharacterFontName or Monospaced and deliberately does not inherit DefaultFontName; face is CircledCharacterFontStyle, then DefaultFontStyle, then Bold; size is CircledCharacterFontSize, then DefaultFontSize, then 17. Radius is explicit CircledCharacterRadius or integer size/3 + 6."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/CircledCharacter.java",
+      "symbol": "CircledCharacter.drawU",
+      "lines": "55-74",
+      "role": "Draws the ellipse, translates to its center, and passes the complete resolved UFont into UCenteredCharacter."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverCenteredCharacterSvg.java",
+      "symbol": "DriverCenteredCharacterSvg.draw",
+      "lines": "50-63",
+      "role": "Uses the resolved font for both UnusedSpace centering and TextLayout.getOutline, then serializes that outline as the SVG path."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UnusedSpace.java",
+      "symbol": "UnusedSpace constructor",
+      "lines": "76-131",
+      "role": "Raster-centers the selected physical family, face, size, and character on the quarter-pixel grid; the center is font-dependent as well as character-dependent."
+    },
+    {
+      "path": "src/main/resources/themes/puml-theme-reddress-{dark,light}{blue,green,orange,red}.puml",
+      "symbol": "circledCharacter skinparam block",
+      "lines": "13-19,66-70 (darkblue: 67-71)",
+      "role": "Each variant sets FONTNAME to Verdana and FONTSIZE to 11, then assigns both to CircledCharacter without overriding FontStyle. Java consequently outlines Verdana Bold 11, not the default Monospaced Bold 11."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/themes/puml-theme-reddress-{dark,light}{blue,green,orange,red}.puml",
+      "symbol": "circledCharacter skinparam block",
+      "lines": "13-19,66-70 (darkblue: 67-71)",
+      "role": "The vendored theme sources retain the same CircledCharacter FontName and FontSize declarations, so the triggering value is present before class rendering."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::parse_line grouped skinparam branch",
+        "ClassParser::parse_directive skinparam branch"
+      ],
+      "lines": "580-599,2082-2099",
+      "role": "Flattens skinparam circledCharacter { FontName/FontSize/... } into CircledCharacterFontName, CircledCharacterFontSize, and sibling metadata keys."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbol": "collapse_reassigned_skinparams",
+      "lines": "444-525",
+      "role": "Reconstructs theme execution order but retains theme-segment and user assignments as separate effective metadata entries. Consumers must therefore select the Java-effective final legacy value."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "ClassFontOverrides",
+        "ClassFontOverrides::from_diagram_entity",
+        "ClassFontOverrides::from_skinparams",
+        "render_entity_content circled-character branch"
+      ],
+      "lines": "3007-3050,3160-3395,9827-10128",
+      "role": "Stores only circled_font_size. It incorrectly seeds the class title name_family from CircledCharacterFontName, has no circled-character family or face field, chooses the first matching retained skinparam, and calls centered_character_path with only character, size, and center. Glyph fill correctly comes from root/spot style rather than CircledCharacterFontColor."
+    },
+    {
+      "path": "crates/rustuml-render/src/metrics.rs",
+      "symbol": "CIRCLED_FONT and centered_character_path",
+      "lines": "16-22,223-388",
+      "role": "Hardcodes DejaVuSansMono-Bold-Powerline for every ordinary and custom spot, including its outline and Monospaced Bold center tables. The function cannot receive a family or face."
+    }
+  ],
+  "invariant": "An ordinary class-header spot and the class title are separate font consumers. Java resolves the title from root.element.classDiagram.class.header, including entity stereotype styles. It resolves the spot glyph from the effective legacy FontParam.CIRCLED_CHARACTER tuple with no entity stereotype: family = latest CircledCharacterFontName or Monospaced (never DefaultFontName); face = latest CircledCharacterFontStyle, else latest DefaultFontStyle, else Bold; size = latest CircledCharacterFontSize, else latest DefaultFontSize, else 17. Explicit CircledCharacterRadius overrides size-derived radius. The selected family, face, size, and character jointly determine both UnusedSpace centering and TextLayout outline. Spot glyph color is independently resolved from root.element.spot.<leaf-kind>.FontColor; CircledCharacterFontColor is not consulted by EntityImageClassHeader. The same font tuple applies to default leaf letters and explicit non-sprite stereotype spot letters.",
+  "causal_divergence": "The eight reddress variants all deliver CircledCharacterFontName=Verdana and CircledCharacterFontSize=11 to Rust. Java preserves the CIRCLED_CHARACTER default Bold face and emits the Verdana Bold 11 outline. Rust consumes the size but centered_character_path always emits the embedded Monospaced Bold outline, producing the observed path-only mismatch for each class. Rust also routes CircledCharacterFontName into the class title's name_family instead of the spot, omits CircledCharacterFontStyle and DefaultFontStyle from the spot entirely, and uses a first-match metadata lookup that can let an earlier theme value defeat a later explicit skinparam. These are one missing dedicated-font-consumer model, not a theme-name rule or a class.header style gap.",
+  "diagnostic_controls": {
+    "method": "Fresh temporary valid PlantUML sources were rendered by the pinned Java JAR and compared with the immutable no-oracle diff helper. They were deleted after diagnosis and are not checker evidence.",
+    "results": [
+      "ClassFontStyle plain, bold, and italic each compared structurally equivalent. This disproves title-style inheritance by the spot.",
+      "Changing ClassFontName, ClassFontSize, and ClassFontColor changed title metrics and header height but retained the default Monospaced Bold icon contour, apart from its derived recentering.",
+      "CircledCharacterFontStyle bold compared structurally equivalent; plain and italic each differed only in the glyph path.",
+      "DefaultFontStyle plain changed Java's glyph path while Rust remained on Bold, confirming the Java fallback order.",
+      "CircledCharacterFontSize 19 compared structurally equivalent, showing that the standalone size channel is already consumed.",
+      "CircledCharacterFontColor #126B3A compared structurally equivalent and both glyphs remained black, confirming that this legacy color key does not own EntityImageClassHeader glyph paint.",
+      "CircledCharacterFontName Serif changed Java's glyph outline while Rust stayed Monospaced Bold and also incorrectly changed Rust's title font-family.",
+      "After reddress-darkblue, CircledCharacterFontName Monospaced made the entire control structurally equivalent by returning Java to Rust's fixed face.",
+      "After reddress-darkblue, CircledCharacterFontSize 19 left Rust on the theme's earlier size 11, demonstrating the first-match precedence defect.",
+      "A custom stereotype Q spot and a built-in enum E spot both reproduced the family/face mismatch, so the mechanism is not tied to C, class labels, or default stereotypes."
+    ]
+  },
+  "predecessor_theme_style_cascade_rejection": {
+    "durable_account": "docs/parity-reviews/theme-style-cascade/account.json",
+    "account_commit": "ca50f6d2e87b8cac1e0222f18b473406ffbbca06",
+    "latest_rejecting_review_commit": "d93ea3335df4d06191821053c5e5cbf2d4538448",
+    "review_path_at_commit": "docs/parity-reviews/theme-style-cascade/review-3.json",
+    "context": "The independent review rejected the broad cascade boundary for incomplete renderer consumer ownership, while finding no fixture-shaped logic. It specifically concluded that class entity/header style ownership had improved but several Java consumers still omitted channels. This account does not reopen theme expansion, selector matching, or the class.header resolver. It narrows the reddress residue to the separate legacy CIRCLED_CHARACTER consumer whose family, face, and final assignment are not projected into Rust's glyph generator."
+  },
+  "prior_rejected_precision_context": {
+    "account": "docs/parity-reviews/circled-character-double-outline-transform/account.json",
+    "finding": "The rejected f64 transform hypothesis could reproduce known paths experimentally but was not causal because the default 17/2048 ratio was exactly representable. Its recorded next hypothesis was physical font-face selection. The source trace and family/face controls here resolve that open question without changing outline precision or comparator tolerance."
+  },
+  "planned_change": "Introduce a class-header CircledCharacterFont value distinct from the class title font. Resolve its family, face, and size from the Java-effective final legacy skinparam stream with SkinParam.getFont's exact CIRCLED_CHARACTER fallback rules, including the special non-inheritance of DefaultFontName and inheritance of DefaultFontStyle/DefaultFontSize. Keep CircledCharacterRadius and spot style colors as separate channels. Remove CircledCharacterFontName from title name_family fallback. Extend the generative centered-character outline and UnusedSpace-center path to consume the resolved family and face as well as size, using a licensed embedded physical-face mapping with checked Java derivation rather than path literals. Feed the same descriptor to default class, abstract, interface, enum/entity, annotation, and explicit non-sprite stereotype letters. Preserve the sprite bypass. Do not infer font selection from theme names, title style, character identity, or observed path coordinates.",
+  "perturbation_axes": [
+    "class-header ClassFontStyle plain, bold, and italic versus independent CircledCharacterFontStyle plain, bold, bold-italic, and italic",
+    "CircledCharacterFontName Monospaced, Serif, SansSerif, and Verdana at sizes 11, 17, and 19",
+    "dedicated font settings before versus after a theme, plus repeated assignments in reversed order",
+    "DefaultFontStyle and DefaultFontSize fallback with and without dedicated overrides, and DefaultFontName as a negative inheritance control",
+    "default C plus built-in A, I, E, and @ leaf letters",
+    "explicit non-sprite stereotype letters with renamed labels and changed spot colors",
+    "ordinary, stereotype-qualified, and root spot FontColor versus inert CircledCharacterFontColor",
+    "explicit radius versus size-derived radius",
+    "single degenerated leaves versus linked SVEK classes and top-to-bottom versus left-to-right direction"
+  ],
+  "acceptance": [
+    "All eight triggering reddress class pairs pass the immutable no-oracle comparison with no non-glyph changes.",
+    "Fresh valid non-corpus controls generated after implementation prove that ClassFontStyle plain/bold/italic changes only title text while CircledCharacterFontStyle plain/bold/italic changes the spot outline independently.",
+    "Fresh family-size controls cover at least Monospaced and one proportional family at two sizes and match both Java outline topology/coordinates and Java UnusedSpace centering without family-, character-, or size-specific branches.",
+    "Fresh ordering controls put dedicated family, face, and size assignments before and after a theme and in repeated reverse order; the Java-effective final value wins in Rust.",
+    "Fresh fallback controls prove that DefaultFontStyle and DefaultFontSize apply only when their dedicated counterparts are absent, while DefaultFontName does not replace the CIRCLED_CHARACTER Monospaced default.",
+    "Fresh color controls prove that CircledCharacterFontColor remains inert for EntityImageClassHeader glyph paint while root/spot FontColor changes the glyph fill through the spot style signature.",
+    "Fresh stereotype and non-C controls include a custom spot letter and at least two built-in leaf letters, with renamed labels and changed colors, and use the same resolved font descriptor.",
+    "Fresh explicit-radius and size-derived-radius controls prove that font size affects radius only through SkinParam.getCircledCharacterRadius when no radius override exists.",
+    "Default Monospaced Bold spot controls and the accepted centered-character contour-closure and header-centering perturbations do not regress.",
+    "The class renderer suite, no-oracle product ratchet, harness guards, and parity perturbation test pass after implementation.",
+    "A separate checker that did not implement the change creates and preserves every fresh source and Java SVG, challenges font availability/fallback and assignment order, audits the exact implementation and font-asset provenance, and records an accepted verdict at the exact Java and Rust revisions."
+  ],
+  "scope_boundary": "This mechanism owns font family, face, size, effective legacy assignment, and corresponding generative outline/center selection for non-sprite class-header CircledCharacter glyphs. It owns removal of CircledCharacterFontName leakage into class title text. It does not own class.header text styling, character selection, sprite stereotypes, spot background/border/font-color style signatures, header horizontal or vertical placement, contour closure, SVG numeric precision, general text metrics, non-class Display circled characters, broad theme expansion or style-cascade semantics, layout, comparator behavior, baselines, park lists, syntax-error markers, guard allow-lists, or fixture eligibility. If exact rendering of a requested physical family cannot be achieved from a redistributable embedded face, implementation stops for an explicit licensing/model decision rather than substituting an observed path table.",
+  "forbidden_approaches": [
+    "matching reddress or any other theme name",
+    "matching fixture paths, labels, aliases, source lines, directions, entity counts, or branch counts",
+    "special-casing C, Q, E, or any observed character",
+    "making the spot inherit root.element.classDiagram.class.header FontStyle or FontName",
+    "letting CircledCharacterFontColor override the spot style's FontColor",
+    "mapping only Verdana-at-11 to a replacement path or per-theme font alias",
+    "embedding golden SVG paths, fixture-derived outlines, or coordinate tables keyed to observed cases",
+    "post-processing serialized path strings or tuning centers, offsets, scale, or rounding toward SVG deltas",
+    "fixing family selection while retaining first-match assignment order or title-font contamination",
+    "changing comparator tolerance, baselines, park lists, syntax-error markers, guard allow-lists, perturbation artifacts, or fixture eligibility"
+  ]
+}
