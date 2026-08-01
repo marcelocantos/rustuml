@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-sequence-message-whole-line-factory-precedence",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "42860e253f9dac389160fd3284fa767145649404",
+  "supersedes_rejected_mechanism": "uml-factory-command-consumption-precedence",
+  "rejection_record": "docs/parity-reviews/uml-factory-command-consumption-precedence/review.json",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["PSystemBuilder.PSystemBuilder", "PSystemBuilder.createPSystem"],
+      "lines": "128-197, 203-255",
+      "role": "Registers SequenceDiagramFactory before ClassDiagramFactory, ActivityDiagramFactory, DescriptionDiagramFactory, and StateDiagramFactory, then returns the first factory whose createSystem result is not an error or unsupported diagram."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["PSystemCommandFactory.createSystem", "PSystemCommandFactory.executeFewLines", "PSystemCommandFactory.getCandidate"],
+      "lines": "74-197",
+      "role": "Establishes factory viability by matching and executing every complete source command. A later factory is tried only after the current factory fails to consume a line or returns an execution/finalization error."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+      "symbols": ["SequenceDiagramFactory.initCommandsList"],
+      "lines": "98-135",
+      "role": "Registers CommandArrow in the first relevant UML factory's command inventory."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "symbols": ["CommandArrow.getRegexConcat", "CommandArrow.getOrCreateParticipant", "CommandArrow.executeArg"],
+      "lines": "75-174, 204-300",
+      "role": "Uses a start/end-anchored message grammar whose ordinary endpoint code class accepts identifiers such as Node, Component, and Queue. executeArg interprets those captures as participant identities, implicitly creates participants, and records a sequence message; it never reclassifies endpoint text as a Description declaration keyword."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/sequence.rs",
+      "symbols": ["MESSAGE_RE", "looks_like_message", "parse_sequence"],
+      "lines": "23-62, 1249-1264",
+      "role": "Already recognizes the rejected relationship-only lines as complete sequence messages and can parse them into a SequenceDiagram."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "lines": "720-1576",
+      "role": "Computes looks_like_sequence_message before scoring, but uses it only to suppress the bracket-component heuristic. The Deployment keyword block and Component keyword block still score the first endpoint token as if it introduced a declaration."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "lines": "994-1083, 1233-1251, 1537-1575",
+      "role": "For `Node --> Component`, `Component --> Queue`, and `Queue --> Node`, Rust adds one Sequence point per arrow, five Deployment points for each Node/Queue-leading line, and fifteen Component points for the Component-leading line. The maximum-score winner is therefore Component even though every line is a valid Sequence CommandArrow and Java stops at the earlier Sequence factory. sequence_factory_viable currently means only that no direction directive was seen, not that the complete source is consumable by Sequence."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["looks_like_mixed_leaf_declaration"],
+      "lines": "1707-1723",
+      "role": "The previous fix prevents a reserved-word relationship endpoint from falsely rejecting the Class candidate, but it does not prevent the same complete arrow line from contributing Component or Deployment declaration evidence."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["parse_with_base"],
+      "lines": "1995-2090",
+      "role": "Dispatches only the score-selected parser. Once Component wins, the already-capable Sequence parser is never attempted and reserved endpoint words are materialized under the wrong model."
+    }
+  ],
+  "claimed_invariant": "UML factory ownership is determined by complete command shape and whole-source consumption before semantic meaning is assigned to tokens inside that command. When every source line is accepted by SequenceDiagramFactory and CommandArrow, Java's first-factory order makes the diagram Sequence regardless of whether an endpoint identifier is spelled Node, Component, Queue, Database, Actor, or another word used by later factories. A keyword at a CommandArrow endpoint is participant data, not declaration evidence. Genuine declaration syntax or another command absent from the Sequence inventory must still reject Sequence and allow a later factory to own the source.",
+  "causal_divergence": "Rust correctly computes looks_like_sequence_message for each rejected line, but its subtype detector continues examining the line's leading token as an independent declaration signal. Node and Queue add Deployment score, while Component followed by whitespace adds a much larger Component score; the same lines add only weak Sequence arrow score. The final maximum-score selection therefore chooses Component. Java never performs this token-level competition: SequenceDiagramFactory is tried first, CommandArrow consumes all three complete lines, getOrCreateParticipant creates the reserved-name participants, and PSystemBuilder returns that successful SequenceDiagram without consulting DescriptionDiagramFactory. The earlier successor implementation repaired Class viability after reserved-word relationships but left this Sequence-first ownership path modeled as weighted evidence rather than complete command consumption.",
+  "planned_model_change": "Classify complete source lines into command shapes before collecting declaration evidence. A line accepted by the Sequence CommandArrow grammar must contribute message ownership and must not also contribute Component or Deployment declaration evidence from either endpoint token. Track Sequence factory viability from the complete set of source commands, including common and explicit participant commands, rather than approximating it solely as the absence of rank direction. If the whole source remains Sequence-consumable, select Sequence by Java factory order; if any genuine container/declaration or other non-Sequence command rejects that candidate, continue to the existing Class/Description ownership logic. Reuse sequence::looks_like_message or a shared parsed-message classifier so subtype detection and parse_sequence cannot drift.",
+  "perturbation_axes": [
+    "reserved endpoint vocabulary: Node, Component, Queue, Database, Actor, Storage, and non-keyword controls",
+    "message grammar: solid versus dotted arrows, reverse arrows, bidirectional dressings, labels, activation suffixes, and inline colors/styles",
+    "endpoint form: source versus target position, mixed case, quoted display names, aliases, and declaration order",
+    "whole-source viability: relationship-only messages, explicit sequence participants plus messages, and common sequence commands",
+    "factory rejection controls: genuine component/deployment containers, class-only rank direction, and mixed commands that CommandArrow cannot consume",
+    "cardinality and order: one message, longer cycles, repeated endpoints, and reordered message chains"
+  ],
+  "scope_boundary": "This mechanism owns SequenceDiagramFactory-first selection for complete Sequence command streams and suppression of later-factory declaration evidence inside a parsed message. It does not own Component-versus-Deployment selection after Sequence has genuinely failed, Class/Object command precedence, deployment container grammar, participant or message rendering geometry, lifeline layout, SVG IDs, qualified names, comparator slack, baselines, park lists, syntax-error markers, or guard allow-lists.",
+  "acceptance": [
+    "Fresh relationship-only sources with reserved-word endpoints select UmlSubtype::Sequence and parse every line as a message, independent of endpoint order and capitalization.",
+    "At least two additional CommandArrow grammar variants with reserved endpoints preserve Sequence ownership and implicit participant creation.",
+    "Adding a genuine Component or Deployment declaration that SequenceDiagramFactory cannot consume rejects the Sequence candidate and leaves the later-factory owner unchanged.",
+    "Rank-direction and existing explicit Class/Object/Description competitors retain their current owner when Sequence cannot consume the complete source.",
+    "The original explicit-Class reserved-endpoint and Object-realization perturbations remain accepted under their existing mechanisms.",
+    "An independent checker supplies fresh valid inputs across at least two axes and verifies factory ownership without editing this account."
+  ],
+  "forbidden_approaches": [
+    "special-casing Node, Component, and Queue as a fixed three-name counterexample",
+    "adding score constants or a branch-count threshold merely to make Sequence outrank Component",
+    "changing the selected Component parser or renderer to imitate Sequence output",
+    "treating every arrow-like substring as CommandArrow without the complete anchored grammar",
+    "changing comparator controls, baselines, skip rules, park lists, syntax-error markers, or SVG strings"
+  ]
+}
