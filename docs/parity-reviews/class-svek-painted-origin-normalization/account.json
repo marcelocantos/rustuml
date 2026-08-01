@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-painted-origin-normalization",
+  "status": "accounted_before_code",
+  "implementation_revision": null,
+  "predecessor_implementation_revision": "d00bb175",
+  "rejected_review_revision": "25db21e7",
+  "rust_revision": "d00bb175",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:calculateDimension",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockUtils.java:getMinMax",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:create and draw"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:svek_layout_x_bias",
+    "crates/rustuml-render/src/class.rs:svek_layout_y_bias",
+    "crates/rustuml-render/src/class.rs:relationship_center_painted_bounds"
+  ],
+  "invariant": "SvekResult calculates its translation from the minimum coordinate of the primitives actually drawn into TextBlockUtils.getMinMax(this, stringBounder, false). The false argument creates an empty LimitFinder frontier rather than one initialized to the coordinate origin. Layout-only constructs may place every painted primitive at a positive coordinate; in that case Java still moves the positive painted minimum to six. The abstract graph origin, Graphviz canvas origin, invisible together scope, and unpainted edge-label padding are never independent frontier points.",
+  "causal_divergence": "Rust svek_layout_x_bias folds all measured painted minima against an initial zero whenever the diagram has no together scope. The earlier together mechanism already switched that initializer to infinity when an invisible together cluster can precede all paint. The accepted source model is broader: any layout-only construct can create a positive painted minimum. In the preserved ORTHO link-note counterexample, Graphviz's composite xlabel begins at zero but the first ComponentRoseNote polygon begins after its five-pixel inset; nodes and routes begin later. The painted-bound projection correctly reports five, yet the synthetic zero wins the fold and leaves every rendered element five pixels too far right. Java has no such zero because LimitFinder was created with initToZero=false.",
+  "planned_change": "Initialize the horizontal painted-minimum reduction to positive infinity for every SVEK graph, matching LimitFinder(false), and return zero bias only if no finite painted primitive exists. Keep all existing node, cluster, route, endpoint-decoration, text, note, magic-arrow, and empty-symbol frontier producers unchanged. Remove the together-specific initializer branch because together is one instance of the general no-synthetic-origin rule, not a special coordinate mode.",
+  "perturbation_axes": [
+    "layout-only source of positive frontier: ORTHO external label, together scope, and ordinary graph spacing",
+    "first painted child: folded note polygon, text glyph, node rectangle, route, and endpoint decoration",
+    "frontier sign: positive, zero, and negative solved coordinates",
+    "direction and ownership: top-to-bottom, left-to-right, root, and nested package",
+    "label composition: note-only, text-only, and note plus text"
+  ],
+  "scope_boundary": "This mechanism changes only the identity element of the painted-minimum reduction. It does not alter solved coordinates, Graphviz label dimensions, SVEK routing, note padding, comparator tolerance, baselines, fixture eligibility, or frozen controls.",
+  "acceptance": [
+    "The preserved ORTHO link-note counterexample moves its first painted note path to x=6 and matches Java from source alone",
+    "Existing together perturbations and ordinary non-label class controls do not regress",
+    "Fresh valid Java perturbations exercise positive and negative painted minima across at least two independent axes",
+    "Focused class tests, no-oracle product ratchet, and harness guards pass",
+    "A separate checker records an accepted verdict against the exact implementation revision"
+  ],
+  "forbidden_approaches": [
+    "subtracting five pixels for ORTHO, notes, or the preserved input",
+    "conditioning the origin on fixture labels, note position, or a known coordinate",
+    "changing Graphviz output or serialized SVG after layout",
+    "changing comparator tolerance, baselines, park lists, syntax markers, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "25db21e7:test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.puml",
+    "25db21e7:test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.svg"
+  ]
+}
