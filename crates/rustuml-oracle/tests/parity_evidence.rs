@@ -1491,7 +1491,7 @@ fn validate_explicit_actor(
         ));
         return None;
     }
-    if actors.len() != 1 {
+    if actors.len() != 1 || actors.len() != containers {
         violations.push(format!(
             "{}: conflicting or incomplete {label} identity containers",
             path.display()
@@ -1690,7 +1690,8 @@ fn review_blob_introduction(
         ));
         return None;
     };
-    let current_blob = git_output(root, &["hash-object", "--", &relative.to_string_lossy()]);
+    let relative_text = relative.to_string_lossy();
+    let current_blob = git_output(root, &["hash-object", "--", relative_text.as_ref()]);
     let Some(current_blob) = current_blob else {
         violations.push(format!(
             "{}: cannot hash active review blob",
@@ -1705,7 +1706,7 @@ fn review_blob_introduction(
             "--reverse",
             "HEAD",
             "--",
-            &relative.to_string_lossy(),
+            relative_text.as_ref(),
         ],
     ) else {
         violations.push(format!(
@@ -1721,7 +1722,7 @@ fn review_blob_introduction(
         ));
         return None;
     };
-    let spec = format!("{introduction}:{}", relative.to_string_lossy());
+    let spec = format!("{introduction}:{relative_text}");
     let introduced_blob = git_output(root, &["rev-parse", &spec]);
     if introduced_blob.as_deref() != Some(current_blob.as_str()) {
         violations.push(format!(
@@ -2216,8 +2217,10 @@ mod tests {
     fn identity_and_revision_alias_collisions_fail_closed() {
         let fixture = accepted_fixture("identity-revision-collisions");
         mutate_review(&fixture.root, |review| {
-            review["reviewer"]["task_id"] = review["maker"]["task_id"].clone();
-            review["reviewer"]["identity"] = review["maker"]["identity"].clone();
+            let maker_task_id = review["maker"]["task_id"].clone();
+            let maker_identity = review["maker"]["identity"].clone();
+            review["reviewer"]["task_id"] = maker_task_id;
+            review["reviewer"]["identity"] = maker_identity;
             review["reviewer"]["role"] = json!("checker and implementer of this mechanism");
             review.insert(
                 "implementation_commit".to_owned(),
@@ -2531,6 +2534,22 @@ mod tests {
         assert!(report.accepted_heldouts.is_empty());
     }
 
+    #[test]
+    fn quarantined_acceptances_remain_preserved_but_inert() {
+        let root = temp_root("quarantined-acceptance");
+        let dir = root.join("docs/parity-reviews/m");
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(
+            dir.join("quarantined-review.json"),
+            serde_json::to_vec_pretty(&json!({"verdict": "ACCEPT"})).unwrap(),
+        )
+        .unwrap();
+
+        let report = build_report(&root);
+        assert!(report.violations.is_empty(), "{:?}", report.violations);
+        assert!(report.accepted_heldouts.is_empty());
+    }
+
     fn temp_root(name: &str) -> PathBuf {
         let nonce = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -2725,7 +2744,7 @@ mod tests {
         std::fs::create_dir_all(&dir).unwrap();
         std::fs::write(
             dir.join(format!("{stem}.puml")),
-            format!("@startuml\nA_{stem} --> B_{stem}\n@enduml\n"),
+            format!("@startuml\nA_{mechanism}_{stem} --> B_{mechanism}_{stem}\n@enduml\n"),
         )
         .unwrap();
         std::fs::write(dir.join(format!("{stem}.svg")), svg).unwrap();
