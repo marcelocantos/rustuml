@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-svg-qualified-name-projection",
+  "evidence_kind": "parity",
+  "maker": {
+    "identity": "Historical T14 deployment qualified-name implementer(s), not this checker",
+    "task_id": "historical-deployment-svg-qualified-name"
+  },
+  "reviewer": {
+    "identity": "OpenAI Codex GPT-5 independent skeptical checker and evidence migrator",
+    "task_id": "rustuml-t14-late-rereview-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; pinned PlantUML JAR; cc5bda77 diff_one",
+    "role": "independent checker; did not implement this mechanism",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "cdda56e9d5d3bee3649f87f9673ed5af45922233",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "candidate_source": {
+    "worktree": "/private/tmp/rustuml-t14-integration",
+    "commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "historical_records": {
+    "quarantined_reviews": [
+      "docs/parity-reviews/deployment-svg-qualified-name-projection/quarantined-legacy-review-late-qualified-name-active-reject.json",
+      "docs/parity-reviews/deployment-svg-qualified-name-projection/quarantined-review-late-rereview-schema-reject.json"
+    ],
+    "legacy_archives": [
+      "docs/parity-reviews/deployment-svg-qualified-name-projection/legacy-accepted/review-2.8c98d7869bbfb2549fbe0f33418831c1b802405e9311d526fa1a24e3c1333aad.json",
+      "docs/parity-reviews/deployment-svg-qualified-name-projection/legacy-rejected/review.0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757.json"
+    ],
+    "non_ancestral_implementation_commits": [
+      "f0ffaa30c45c3531915727707945eecf47ee106d",
+      "f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab"
+    ]
+  },
+  "source_inspection": [
+    "Java Quark stores canonical identity and joins ancestor quark names with Plasma.MAGIC_SEPARATOR before SVG emission.",
+    "Java UGroup.fix replaces every character outside ASCII word characters, space, and hyphen with a dot at metadata serialization.",
+    "The cc5bda77 deployment renderer still computes own_qname/qualified_name using label_to_id and qname_label_segment, with colon-only replacement and no shared UGroup.fix projection.",
+    "The cc5bda77 quoted display-first alias parser is still narrowed to word aliases, so dotted aliases can be truncated before metadata projection."
+  ],
+  "commands": [
+    "sed -n '50,95p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/plasma/Plasma.java",
+    "sed -n '50,95p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+    "sed -n '55,80p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/UGroup.java",
+    "sed -n '790,820p' /private/tmp/rustuml-t14-integration/crates/rustuml-render/src/deployment.rs",
+    "sed -n '1165,1238p' /private/tmp/rustuml-t14-integration/crates/rustuml-render/src/deployment.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < <input.puml> > <stem.java.svg> 2> <stem.java.stderr>; printf exit > <stem.java.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust <input.puml> > <stem.rust.svg> 2> <stem.rust.stderr>; printf exit > <stem.rust.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle <input.puml> > <stem.diff.stdout> 2> <stem.diff.stderr>; printf exit > <stem.diff.exit>",
+    "shasum -a 256 test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_*"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.puml",
+      "golden": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.java.exit",
+      "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.rust.svg",
+      "rust_exit": 0,
+      "diff_stdout": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["quoted-no-alias-identity", "punctuation-projection", "nested-ownership", "link-between-quoted-children"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "Java projects Edge: Gateway/Blue to Edge. Gateway.Blue and similarly projects child punctuation; Rust emits raw punctuation in data-qualified-name."
+    },
+    {
+      "source": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.puml",
+      "golden": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.java.exit",
+      "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.rust.svg",
+      "rust_exit": 0,
+      "diff_stdout": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["display-first-alias", "dotted-code-alias", "slash-punctuation-projection", "cross-root-link"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "Java preserves ops.root and worker.alpha as canonical codes and projects Retry/Queue/Outside: Edge metadata; Rust truncates dotted aliases to ops/worker and leaves raw punctuation elsewhere."
+    }
+  ],
+  "artifact_manifest": {
+    "path": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_artifacts.sha256",
+    "sha256": "aba108c9a4d79c283225ff2f014f1cbef5617cc165d0ea16ec8a8f9bd544216f"
+  },
+  "findings": [
+    "Both fresh valid inputs fail exactly on the account's SVG metadata projection and alias identity axes.",
+    "The candidate still derives deployment metadata from display/id heuristics rather than applying Java's UGroup.fix-compatible projection to quark qualified names."
+  ],
+  "residue": [
+    "No Cargo/rustc command, baseline update, comparator change, or product code edit was run or made."
+  ],
+  "verdict": "REJECT",
+  "reason": "Two fresh Java-valid qualified-name inputs produce diff_one --no-oracle exit 1. The candidate has not implemented Java's quark-qualified metadata projection boundary for deployment diagrams."
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-factory-command-consumption-precedence",
+  "evidence_kind": "parity",
+  "maker": {
+    "identity": "Historical T14 UML factory-precedence implementer(s), not this checker",
+    "task_id": "historical-uml-factory-command-consumption"
+  },
+  "reviewer": {
+    "identity": "OpenAI Codex GPT-5 independent skeptical checker and evidence migrator",
+    "task_id": "rustuml-t14-late-rereview-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; pinned PlantUML JAR; cc5bda77 diff_one",
+    "role": "independent checker; did not implement this mechanism",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "5e913d5a712d81393f04fd01ea31b4fe317772fb",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "candidate_source": {
+    "worktree": "/private/tmp/rustuml-t14-integration",
+    "commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "historical_records": {
+    "quarantined_reviews": [
+      "docs/parity-reviews/uml-factory-command-consumption-precedence/quarantined-review-late-factory-consumption-reject.json",
+      "docs/parity-reviews/uml-factory-command-consumption-precedence/quarantined-review-late-rereview-schema-reject.json"
+    ],
+    "non_ancestral_implementation_commits": [
+      "f0ffaa30c45c3531915727707945eecf47ee106d"
+    ],
+    "lineage_note": "The historical implementation commit exists but is not an ancestor of cc5bda77, so this review evaluates the requested candidate revision directly."
+  },
+  "source_inspection": [
+    "Java PSystemBuilder tries Sequence before Class, Activity, Description, and State and returns the first factory that consumes the complete source.",
+    "Java Sequence CommandArrow accepts ordinary endpoint identifiers, including words that are also later DESCRIPTION keywords.",
+    "The cc5bda77 Rust detector still scores local leading keywords such as Node, Queue, and Component before proving the complete source is a Sequence message stream.",
+    "The Rust detector contains targeted Java-order patches, but not a full factory-consumption simulation."
+  ],
+  "commands": [
+    "sed -n '120,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "sed -n '700,1585p' /private/tmp/rustuml-t14-integration/crates/rustuml-parser/src/parse/mod.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < <input.puml> > <stem.java.svg> 2> <stem.java.stderr>; printf exit > <stem.java.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust <input.puml> > <stem.rust.svg> 2> <stem.rust.stderr>; printf exit > <stem.rust.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle <input.puml> > <stem.diff.stdout> 2> <stem.diff.stderr>; printf exit > <stem.diff.exit>",
+    "shasum -a 256 test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_*"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.puml",
+      "golden": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.java.exit",
+      "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.rust.svg",
+      "rust_exit": 0,
+      "diff_stdout": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_reserved_endpoint_names.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["sequence-first-factory", "reserved-endpoint-names", "relationship-only-source", "capitalized-keywords"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "Java emits a SEQUENCE diagram with three lifelines; Rust emits a DESCRIPTION diagram and materializes keyword-shaped endpoints as description entities."
+    },
+    {
+      "source": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.puml",
+      "golden": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.java.exit",
+      "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.rust.svg",
+      "rust_exit": 0,
+      "diff_stdout": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_sequence_lowercase_keyword_names.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": ["sequence-first-factory", "lowercase-keyword-endpoints", "relationship-only-source", "renamed-message-labels"],
+      "result": "PASS",
+      "finding": "This lowercase endpoint variant remains structurally equivalent, showing the rejection is not a blanket sequence-message failure."
+    }
+  ],
+  "artifact_manifest": {
+    "path": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/late_artifacts.sha256",
+    "sha256": "e30583075c80e55f9c63fd3d11f6d4379a84e4f44e70fa2306ffc4e64205b710"
+  },
+  "findings": [
+    "One fresh Java-valid reserved-endpoint relationship-only source selects the wrong Rust product family and fails strict comparison.",
+    "A lowercase sibling passes, which narrows the failure to keyword/factory precedence rather than generic sequence rendering."
+  ],
+  "residue": [
+    "No Cargo/rustc command, baseline update, comparator change, or product code edit was run or made."
+  ],
+  "verdict": "REJECT",
+  "reason": "The capitalized reserved endpoint source is valid Java Sequence syntax and produces diff_one --no-oracle exit 1 because Rust selects DESCRIPTION. Under the no-waiver rule this rejects the mechanism."
+}
