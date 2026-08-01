@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-association-second-link-lifecycle",
+  "evidence_kind": "parity",
+  "review_sequence": 2,
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit 16c3caa96aec1dc9dc2aaa410b7c9f9b9f30bc70",
+    "task_id": "maker-history-class-association-successors",
+    "role": "Original mechanism implementer recorded by preserved git history; not this checker."
+  },
+  "reviewer": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "task_id": "codex/t14-association-successor-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, and prebuilt candidate diff_one --no-oracle",
+    "role": "independent checker and ancestry reattester; did not implement the mechanism",
+    "implemented_change": false,
+    "independence": "The checker did not edit shipping code, account.json, comparator logic, baselines, frozen controls, or historical evidence bytes."
+  },
+  "revisions": {
+    "account_commit": "aeed6de0746d870f71e78bbbc5ca3c1e8ceaad26",
+    "implementation_commit": "16c3caa96aec1dc9dc2aaa410b7c9f9b9f30bc70",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "historical_review_introduction": "b46cfe631c7ebb0dd8367828e3520b623f7fc097",
+  "commands": [
+    "sed -n '160,360p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+    "sed -n '70,125p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+    "git diff aeed6de0..16c3caa9 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle --print-rust <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle <input.puml>",
+    "/private/tmp/rustuml-t14-association-integration-review-harness --test-threads 1 --nocapture"
+  ],
+  "perturbation_directory": "test-diagrams/perturbations/class-association-second-link-lifecycle",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_base_len_two_reversed.puml",
+      "golden": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_base_len_two_reversed.svg",
+      "java_exit": 0,
+      "axes": ["pre-existing base length two", "reversed second endpoint order", "dashed first connector", "solid second connector", "left-to-right direction"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_no_explicit_base_packaged.puml",
+      "golden": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_no_explicit_base_packaged.svg",
+      "java_exit": 0,
+      "axes": ["no explicit base", "same-package ownership", "solid first connector", "dashed second connector"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_cross_parent_entity_aliases.puml",
+      "golden": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_cross_parent_entity_aliases.svg",
+      "java_exit": 0,
+      "axes": ["cross-parent statement ownership", "entity aliases", "reversed second endpoint order", "top-to-bottom direction", "explicit base"],
+      "result": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "inert_invalid_controls": [
+    {
+      "source": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_cross_parent_aliases.puml",
+      "java_exit": 200,
+      "reason": "PlantUML rejected package aliases in association endpoints; preserved only in the quarantined historical review and artifact directory."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-second-link-lifecycle/checker_second_third_rejected_materializes_c.puml",
+      "java_exit": 200,
+      "reason": "PlantUML emits an error SVG for the third association; preserved as a rejection control, not Java-success parity evidence."
+    }
+  ],
+  "artifact_hashes": {
+    "historical_review_sha256": "40e2c16b20f1200deecdb84f4d49ee686a5d73ae74a907cdf84518d1d0951712",
+    "artifact_manifest_path": "test-diagrams/perturbations/class-association-second-link-lifecycle/artifact_hashes.txt",
+    "artifact_manifest_sha256": "226b2debfde83d0800dd68d6fa93451536afb041deb0f51c36a7725a5f6e101e",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "findings": [
+    "Java source confirms distinct first-association, second-association, and third-association rejection branches; the second mutates the shared first-link lifecycle and adds an invisible point-to-point constraint.",
+    "Rust records the first association, reuses pair orientation for the second, projects Java construction order, and includes the invisible relationship in layout without painting it.",
+    "Three Java-success perturbations covering base length, missing base, package ownership, cross-parent ownership, aliases, endpoint reversal, connector style, and rank direction are exact.",
+    "No fixture names, corpus branches, golden reads, comparator changes, baseline changes, frozen-control edits, coordinate offsets, or unexplained high-precision constants were found.",
+    "The two Java-exit-200 probes remain preserved but are excluded from positive evidence and from the canonical perturbation inventory."
+  ],
+  "verdict": "ACCEPT"
+}

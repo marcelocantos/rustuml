@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cuca-association-event-projection",
+  "evidence_kind": "parity",
+  "review_sequence": 2,
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for replayed commits c7f0aa150f50efc86cb3f74f0c4874d0dc9802d5 and bf5c01d45c7d7e644a4506d0c693b1f7605d84fe",
+    "task_id": "maker-history-class-cuca-association-event-projection",
+    "role": "Original mechanism implementer recorded by preserved git history; not this checker."
+  },
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "task_id": "codex-desktop-t14-association-event-projection-review2",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, candidate diff_one --no-oracle, and Git ancestry inspection",
+    "role": "independent checker and ancestry reattester; did not implement the mechanism",
+    "independence": "The checker did not edit shipping code, account.json, comparator logic, baselines, frozen controls, or historical evidence bytes."
+  },
+  "revisions": {
+    "account_commit": "37e88b857a2e195024a5fca89050bca8afd28c0e",
+    "implementation_commit": "bf5c01d45c7d7e644a4506d0c693b1f7605d84fe",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "implementation_commits": [
+    "c7f0aa150f50efc86cb3f74f0c4874d0dc9802d5",
+    "bf5c01d45c7d7e644a4506d0c693b1f7605d84fe"
+  ],
+  "historical_review_introduction": "8bcfc1b88ea2353e56371ef7d00688dde168fc9a",
+  "commands": [
+    "git show --stat --oneline 37e88b85 c7f0aa15 bf5c01d4 8bcfc1b8",
+    "git diff c7f0aa15^ c7f0aa15 -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git diff bf5c01d4^ bf5c01d4 -- crates/rustuml-render/src/class.rs",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java | sed -n '160,350p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java | sed -n '80,120p'",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-association-event-projection/<stem>.puml",
+    "/private/tmp/rustuml-t14-association-integration-review-harness --test-threads 1 --nocapture"
+  ],
+  "perturbation_directory": "test-diagrams/perturbations/class-cuca-association-event-projection",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_cross_parent_statement_owner.svg",
+      "java_exit": 0,
+      "axes": [
+        "cross-parent endpoints",
+        "nested statement owner",
+        "associated class in first endpoint package",
+        "later statement-package leaf"
+      ],
+      "result": "fail: Java-success shipped-path association-point paint order diverges"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-association-event-projection/checker2_multiple_associations_same_pair.svg",
+      "java_exit": 0,
+      "axes": [
+        "two association classes on one endpoint pair",
+        "shared base relationship",
+        "distinct role classes",
+        "second-link lifecycle"
+      ],
+      "result": "fail: Java-success shipped-path second association lifecycle diverges"
+    }
+  ],
+  "artifact_hashes": {
+    "historical_review_sha256": "f5d4055f656d1dcdbfc6f864ce31060b42798083f60fe196c6c26fcbf4f023a3",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "checker2_cross_parent_statement_owner": {
+      "puml": "7dd5a1c616ddc1d97c45446117efd158ad190186aa461eaabbc2df8630e5f357",
+      "java_svg": "626d40500b992e7bdd9d4ab74f4b34bbc8f9a744a18b537b17f72040b2b2ee0d",
+      "rust_svg": "a764b9e2dba5fd5f0f5cf58ae97d45032cfd0628f8d98f24307377328b3eca52",
+      "diff": "60eb85889610942bbcd4d8301beeb59366b1d1e0beee54d9eca1454349e6cb39"
+    },
+    "checker2_multiple_associations_same_pair": {
+      "puml": "97113e832f402d66c62b176dc67571ebce93e2797465a60dba06773e01c2d008",
+      "java_svg": "469768cb29daa7f067e534bd6f5855280a61e119f3113587a96afffc1c90ebe7",
+      "rust_svg": "39b01cc7c56bcd0b791200b796edc54c580240f367064fca91d0da1550f66e3c",
+      "diff": "8f92ffad5790ddb973ffce710125aa464d5252ab38c973edad287d6b5d90fcfb"
+    }
+  },
+  "findings": [
+    "The implementation follows the accounted model for seven single-association controls, including nested ownership, aliases, live-link interleaving, temporary-base creation, reversal, and declaration-order controls.",
+    "No fixture-shaped logic, fresh-label branches, golden reads, comparator changes, or unexplained association constants were found in the touched parser and renderer paths.",
+    "The Java-valid cross-parent statement-owner heldout rejects the current-context projection because Rust paints the association point before the east endpoint leaf while Java retains it in the statement package traversal.",
+    "The Java-valid multiple-association heldout rejects the broader model because Java uses createSecondAssociation/createInSecond with connector reinsertion and an invisible point-to-point link while the predecessor emitted independent createNew replacements.",
+    "The successor mechanisms separately account for and repair those two failures; this predecessor record remains rejected."
+  ],
+  "verdict": "REJECT"
+}
