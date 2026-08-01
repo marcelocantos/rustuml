@@ -1,0 +1,9 @@
+@startuml
+class MultiA6501
+class MultiB6503
+class RoleOne6505
+class RoleTwo6507
+MultiA6501 -- MultiB6503 : base 6509
+(MultiA6501, MultiB6503) .. RoleOne6505
+(MultiA6501, MultiB6503) .. RoleTwo6507
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+package CheckTwoWest6201 {
+  class Left6203
+  class Role6205
+}
+package CheckTwoEast6207 {
+  class Right6209
+}
+package CheckTwoJoin6211 {
+  (CheckTwoWest6201.Left6203, CheckTwoEast6207.Right6209) .. CheckTwoWest6201.Role6205
+  class JoinTail6213
+}
+@enduml

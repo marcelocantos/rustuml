@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class ReverseA6601
+class ReverseB6603
+class ReverseRole6605
+ReverseB6603 ---- ReverseA6601 : long base 6607
+(ReverseB6603, ReverseA6601) -- ReverseRole6605
+@enduml

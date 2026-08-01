@@ -1,0 +1,11 @@
+@startuml
+package CheckTwoAliasWest6801 {
+  class "Left Alias 6803" as LeftAlias6803
+}
+package CheckTwoAliasEast6805 {
+  class "Right Alias 6807" as RightAlias6807
+}
+class RootRole6809
+(LeftAlias6803, RightAlias6807) .. RootRole6809
+class RootTail6811
+@enduml
