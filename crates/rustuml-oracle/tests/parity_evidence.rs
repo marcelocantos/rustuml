@@ -79,6 +79,7 @@ const RESULT_FIELDS: &[&str] = &[
     "strict",
     "diff_one",
 ];
+const GATE_EVIDENCE_FIELD: &str = "mutations";
 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct AcceptedHeldOut {
@@ -92,6 +93,12 @@ pub struct AcceptedHeldOut {
 enum Verdict {
     Accepted,
     Rejected,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum EvidenceKind {
+    Parity,
+    Gate,
 }
 
 #[derive(Debug)]
@@ -108,6 +115,7 @@ struct ReviewRecord {
     path: PathBuf,
     sequence: usize,
     verdict: Verdict,
+    evidence_kind: EvidenceKind,
     object: serde_json::Map<String, Value>,
 }
 
@@ -147,6 +155,7 @@ fn build_report(root: &Path) -> EvidenceReport {
 
     let mut accounts_by_mechanism: BTreeMap<String, Vec<AccountRecord>> = BTreeMap::new();
     let mut reviews_by_mechanism: BTreeMap<String, Vec<ReviewRecord>> = BTreeMap::new();
+    let mut quarantined_acceptances = BTreeSet::new();
 
     for entry in entries.flatten() {
         let dir = entry.path();
@@ -174,6 +183,16 @@ fn build_report(root: &Path) -> EvidenceReport {
                         .entry(review.mechanism.clone())
                         .or_default()
                         .push(review);
+                }
+            } else if name.starts_with("quarantined-review") && name.ends_with(".json") {
+                if quarantined_review_is_accepted(&path, &mut report.violations) {
+                    if let Some(mechanism) = dir
+                        .file_name()
+                        .and_then(|value| value.to_str())
+                        .map(str::to_owned)
+                    {
+                        quarantined_acceptances.insert(mechanism);
+                    }
                 }
             } else if name.starts_with("review") && name.ends_with(".json") {
                 validate_archival_review(&path, &mut report.violations);
@@ -242,6 +261,21 @@ fn build_report(root: &Path) -> EvidenceReport {
         }
     }
 
+    for mechanism in quarantined_acceptances {
+        if !reviews_by_mechanism.contains_key(&mechanism) {
+            report.violations.push(format!(
+                "docs/parity-reviews/{mechanism}: quarantined ACCEPT requires a canonical active successor review"
+            ));
+        }
+    }
+
+    if report.accepted_heldouts.len() < 2 {
+        report.violations.push(format!(
+            "active accepted parity inventory must select at least two Java-success held-outs; found {}",
+            report.accepted_heldouts.len()
+        ));
+    }
+
     if !report.violations.is_empty() {
         report.accepted_heldouts.clear();
     }
@@ -304,16 +338,46 @@ fn normalize_review(path: &Path, dir: &Path, violations: &mut Vec<String>) -> Op
             return None;
         }
     };
+    let evidence_kind = normalize_evidence_kind(object.get("evidence_kind")).map_err(|error| {
+        violations.push(format!("{}: {error}", path.display()));
+    });
     require_reviewer(&object, path, violations);
     require_commands(&object, path, violations);
+    let evidence_kind = evidence_kind.ok()?;
 
     Some(ReviewRecord {
         mechanism,
         path: path.to_path_buf(),
         sequence,
         verdict,
+        evidence_kind,
         object,
     })
+}
+
+fn normalize_evidence_kind(value: Option<&Value>) -> Result<EvidenceKind, String> {
+    let Some(value) = value.and_then(Value::as_str) else {
+        return Err("canonical review must declare evidence_kind as parity or gate".to_owned());
+    };
+    match value.trim().to_ascii_lowercase().as_str() {
+        "parity" => Ok(EvidenceKind::Parity),
+        "gate" => Ok(EvidenceKind::Gate),
+        _ => Err("canonical review evidence_kind must be exactly parity or gate".to_owned()),
+    }
+}
+
+fn quarantined_review_is_accepted(path: &Path, violations: &mut Vec<String>) -> bool {
+    let Some(object) = read_json_object(path, violations) else {
+        return false;
+    };
+    match normalize_review_verdict(&object) {
+        Ok(Verdict::Accepted) => true,
+        Ok(Verdict::Rejected) => false,
+        Err(error) => {
+            violations.push(format!("{}: {error}", path.display()));
+            false
+        }
+    }
 }
 
 fn validate_archival_review(path: &Path, violations: &mut Vec<String>) {
@@ -331,6 +395,36 @@ fn validate_archival_review(path: &Path, violations: &mut Vec<String>) {
 }
 
 fn validate_review_declared_evidence(
+    root: &Path,
+    review: &ReviewRecord,
+    may_select_positive_evidence: bool,
+    report: &mut EvidenceReport,
+) {
+    match review.evidence_kind {
+        EvidenceKind::Parity => {
+            if review.object.contains_key(GATE_EVIDENCE_FIELD) {
+                report.violations.push(format!(
+                    "{}: parity review must not declare gate mutations",
+                    review.path.display()
+                ));
+            }
+            validate_parity_evidence(root, review, may_select_positive_evidence, report)
+        }
+        EvidenceKind::Gate => {
+            for field in EVIDENCE_ARRAY_FIELDS {
+                if review.object.contains_key(*field) {
+                    report.violations.push(format!(
+                        "{}: gate review must not declare parity evidence field {field}",
+                        review.path.display()
+                    ));
+                }
+            }
+            validate_gate_evidence(root, review, report)
+        }
+    }
+}
+
+fn validate_parity_evidence(
     root: &Path,
     review: &ReviewRecord,
     may_select_positive_evidence: bool,
@@ -529,6 +623,213 @@ fn validate_review_declared_evidence(
         }
         Verdict::Rejected => {}
     }
+}
+
+fn validate_gate_evidence(root: &Path, review: &ReviewRecord, report: &mut EvidenceReport) {
+    let Some(mutations) = review
+        .object
+        .get(GATE_EVIDENCE_FIELD)
+        .and_then(Value::as_array)
+    else {
+        report.violations.push(format!(
+            "{}: gate review mutations must be a non-empty array",
+            review.path.display()
+        ));
+        return;
+    };
+    if mutations.is_empty() {
+        report.violations.push(format!(
+            "{}: gate review mutations must be a non-empty array",
+            review.path.display()
+        ));
+        return;
+    }
+
+    let mut artifacts = BTreeSet::new();
+    let mut observed_axes = BTreeSet::new();
+    let mut valid_mutations = 0;
+    for value in mutations {
+        let Some(item) = value.as_object() else {
+            report.violations.push(format!(
+                "{}: every gate mutation must be an object",
+                review.path.display()
+            ));
+            continue;
+        };
+        let Some(artifact_text) = item
+            .get("artifact")
+            .and_then(Value::as_str)
+            .map(str::trim)
+            .filter(|text| !text.is_empty())
+        else {
+            report.violations.push(format!(
+                "{}: every gate mutation must name an artifact",
+                review.path.display()
+            ));
+            continue;
+        };
+        let artifact = PathBuf::from(artifact_text);
+        if let Err(error) = validate_gate_artifact_path(root, &review.mechanism, &artifact) {
+            report
+                .violations
+                .push(format!("{}: {error}", review.path.display()));
+            continue;
+        }
+        if !artifacts.insert(artifact.clone()) {
+            report.violations.push(format!(
+                "{}: gate mutation artifact is repeated: {}",
+                review.path.display(),
+                artifact.display()
+            ));
+            continue;
+        }
+        if let Err(error) = validate_gate_artifact_blob(root, item, &artifact) {
+            report
+                .violations
+                .push(format!("{}: {error}", review.path.display()));
+            continue;
+        }
+        let mut mutation_valid = true;
+        for field in ["expected", "observed", "result"] {
+            if !item
+                .get(field)
+                .and_then(Value::as_str)
+                .is_some_and(|text| !text.trim().is_empty())
+            {
+                report.violations.push(format!(
+                    "{}: every gate mutation must declare non-empty {field}",
+                    review.path.display()
+                ));
+                mutation_valid = false;
+            }
+        }
+        if review.verdict == Verdict::Accepted {
+            let accepted = item
+                .get("result")
+                .and_then(Value::as_str)
+                .is_some_and(|text| {
+                    text_is_positive_pass(text) && !text_disqualifies_positive_pass(text)
+                });
+            if !accepted {
+                report.violations.push(format!(
+                    "{}: accepted gate review requires every mutation result to be an explicit pass",
+                    review.path.display()
+                ));
+                mutation_valid = false;
+            }
+        }
+        match normalized_axis_set(item.get("axes")) {
+            Ok(axes) => observed_axes.extend(axes),
+            Err(error) => {
+                report.violations.push(format!(
+                    "{}: gate mutation axes {error}",
+                    review.path.display()
+                ));
+                mutation_valid = false;
+            }
+        }
+        if mutation_valid {
+            valid_mutations += 1;
+        }
+    }
+
+    if valid_mutations < 2 {
+        report.violations.push(format!(
+            "{}: canonical gate review must preserve at least two immutable mutation artifacts",
+            review.path.display()
+        ));
+    }
+    if observed_axes.len() < 2 {
+        report.violations.push(format!(
+            "{}: canonical gate review must exercise at least two normalized attack axes",
+            review.path.display()
+        ));
+    }
+}
+
+fn validate_gate_artifact_path(root: &Path, mechanism: &str, path: &Path) -> Result<(), String> {
+    let relative_root = Path::new("docs/parity-reviews")
+        .join(mechanism)
+        .join("evidence");
+    if !is_normal_relative_path(path) || !path.starts_with(&relative_root) {
+        return Err(format!(
+            "gate artifact must stay under {}: {}",
+            relative_root.display(),
+            path.display()
+        ));
+    }
+    let path_text = path.to_string_lossy();
+    if !path_text
+        .bytes()
+        .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'/' | b'_' | b'-' | b'.'))
+    {
+        return Err(format!(
+            "gate artifact path contains unsupported characters: {}",
+            path.display()
+        ));
+    }
+    let absolute = root.join(path);
+    if std::fs::symlink_metadata(&absolute).is_ok_and(|metadata| metadata.file_type().is_symlink())
+    {
+        return Err(format!(
+            "gate artifact must not be a symlink: {}",
+            path.display()
+        ));
+    }
+    let reviews_root = std::fs::canonicalize(root.join("docs/parity-reviews"))
+        .map_err(|error| format!("cannot canonicalize parity review root: {error}"))?;
+    let canonical_root = std::fs::canonicalize(root.join(&relative_root)).map_err(|error| {
+        format!(
+            "cannot canonicalize gate evidence directory {}: {error}",
+            relative_root.display()
+        )
+    })?;
+    if !canonical_root.starts_with(&reviews_root) {
+        return Err(format!(
+            "gate evidence directory escapes through a symlink: {}",
+            relative_root.display()
+        ));
+    }
+    let canonical = std::fs::canonicalize(&absolute)
+        .map_err(|error| format!("gate artifact does not exist: {}: {error}", path.display()))?;
+    if !canonical.starts_with(&canonical_root) {
+        return Err(format!(
+            "gate artifact escapes the canonical mechanism evidence directory: {}",
+            path.display()
+        ));
+    }
+    Ok(())
+}
+
+fn validate_gate_artifact_blob(
+    root: &Path,
+    item: &serde_json::Map<String, Value>,
+    artifact: &Path,
+) -> Result<(), String> {
+    let Some(declared) = item.get("git_blob").and_then(Value::as_str) else {
+        return Err("every gate mutation must declare its git_blob hash".to_owned());
+    };
+    let declared = declared.trim().to_ascii_lowercase();
+    if declared.len() != 40 || !declared.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return Err("gate mutation git_blob must be a 40-character Git blob hash".to_owned());
+    }
+    let artifact_text = artifact.to_string_lossy();
+    let current = git_output(root, &["hash-object", "--", artifact_text.as_ref()])
+        .ok_or_else(|| format!("cannot hash gate artifact {}", artifact.display()))?;
+    let committed =
+        git_output(root, &["rev-parse", &format!("HEAD:{artifact_text}")]).ok_or_else(|| {
+            format!(
+                "gate artifact is not committed at HEAD: {}",
+                artifact.display()
+            )
+        })?;
+    if current != declared || committed != declared {
+        return Err(format!(
+            "gate artifact hash does not match current bytes and HEAD: {}",
+            artifact.display()
+        ));
+    }
+    Ok(())
 }
 
 fn register_unique_content(
@@ -1367,7 +1668,7 @@ fn validate_review_attestation(
     }
     validate_attested_revisions(root, account, review, violations);
     require_commands(&review.object, &review.path, violations);
-    if !has_review_inputs(&review.object) {
+    if !has_review_inputs(review.evidence_kind, &review.object) {
         violations.push(format!(
             "{}: canonical review must preserve generated inputs",
             review.path.display()
@@ -1836,13 +2137,19 @@ fn reviewer_objects<'a>(
     reviewers
 }
 
-fn has_review_inputs(object: &serde_json::Map<String, Value>) -> bool {
-    EVIDENCE_ARRAY_FIELDS.iter().any(|field| {
-        object
-            .get(*field)
+fn has_review_inputs(kind: EvidenceKind, object: &serde_json::Map<String, Value>) -> bool {
+    match kind {
+        EvidenceKind::Parity => EVIDENCE_ARRAY_FIELDS.iter().any(|field| {
+            object
+                .get(*field)
+                .and_then(Value::as_array)
+                .is_some_and(|values| !values.is_empty())
+        }),
+        EvidenceKind::Gate => object
+            .get(GATE_EVIDENCE_FIELD)
             .and_then(Value::as_array)
-            .is_some_and(|values| !values.is_empty())
-    })
+            .is_some_and(|values| !values.is_empty()),
+    }
 }
 
 fn has_findings(object: &serde_json::Map<String, Value>) -> bool {
@@ -1918,14 +2225,27 @@ mod tests {
         assert!(normalize_verdict(Some(&json!("accepted_later"))).is_err());
         assert!(normalize_verdict(Some(&json!("rejected_with_counterexamples"))).is_err());
         assert!(normalize_verdict(Some(&json!("failed"))).is_err());
-        assert!(
-            normalize_verdict(Some(&json!({
-                "status": "ACCEPT",
-                "verdict": "REJECT"
-            })))
-            .unwrap_err()
-            .contains("conflicting verdict aliases")
+        assert!(normalize_verdict(Some(&json!({
+            "status": "ACCEPT",
+            "verdict": "REJECT"
+        })))
+        .unwrap_err()
+        .contains("conflicting verdict aliases"));
+    }
+
+    #[test]
+    fn evidence_kind_normalizer_is_closed() {
+        assert_eq!(
+            normalize_evidence_kind(Some(&json!("parity"))).unwrap(),
+            EvidenceKind::Parity
         );
+        assert_eq!(
+            normalize_evidence_kind(Some(&json!("GATE"))).unwrap(),
+            EvidenceKind::Gate
+        );
+        assert!(normalize_evidence_kind(None).is_err());
+        assert!(normalize_evidence_kind(Some(&json!("renderer"))).is_err());
+        assert!(normalize_evidence_kind(Some(&json!({"kind": "gate"}))).is_err());
     }
 
     #[test]
@@ -2065,6 +2385,7 @@ mod tests {
             path: root.join("docs/parity-reviews/m/review.json"),
             sequence: 1,
             verdict: Verdict::Accepted,
+            evidence_kind: EvidenceKind::Parity,
             object: json!({"perturbations": [item]})
                 .as_object()
                 .unwrap()
@@ -2094,6 +2415,7 @@ mod tests {
             json!({
                 "schema_version": 1,
                 "mechanism": "m",
+                "evidence_kind": "parity",
                 "reviewer": {"model": "GPT-5"},
                 "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
                 "commands": ["diff_one --no-oracle"],
@@ -2128,18 +2450,24 @@ mod tests {
         add_reviewed_mechanism(&root, "m", "REJECT");
 
         let report = build_report(&root);
-        assert!(report.violations.is_empty(), "{:?}", report.violations);
         assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "active accepted parity inventory"
+        ));
     }
 
     #[test]
-    fn pending_account_without_reviews_is_complete_but_non_accepting() {
+    fn empty_active_corpus_fails_closed() {
         let root = temp_root("pending-account");
         write_account(&root, "m");
 
         let report = build_report(&root);
-        assert!(report.violations.is_empty(), "{:?}", report.violations);
         assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "active accepted parity inventory"
+        ));
     }
 
     #[test]
@@ -2149,6 +2477,63 @@ mod tests {
         let report = build_report(&fixture.root);
         assert!(report.violations.is_empty(), "{:?}", report.violations);
         assert_eq!(report.accepted_heldouts.len(), 2);
+    }
+
+    #[test]
+    fn gate_only_acceptance_cannot_satisfy_parity_nonvacuity() {
+        let root = initialized_root("gate-only");
+        add_reviewed_gate_mechanism(&root, "g", "ACCEPT");
+
+        let report = build_report(&root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "active accepted parity inventory"
+        ));
+        assert_eq!(
+            report
+                .violations
+                .iter()
+                .filter(|violation| violation.contains("gate review"))
+                .count(),
+            0,
+            "{:?}",
+            report.violations
+        );
+    }
+
+    #[test]
+    fn gate_evidence_validates_without_inflating_parity_inventory() {
+        let fixture = accepted_fixture("parity-plus-gate");
+        add_reviewed_gate_mechanism(&fixture.root, "g", "ACCEPT");
+
+        let report = build_report(&fixture.root);
+        assert!(report.violations.is_empty(), "{:?}", report.violations);
+        assert_eq!(report.accepted_heldouts.len(), 2);
+        assert!(report
+            .accepted_heldouts
+            .iter()
+            .all(|heldout| heldout.mechanism == "m"));
+    }
+
+    #[test]
+    fn changed_gate_artifact_bytes_fail_the_declared_hash() {
+        let fixture = accepted_fixture("changed-gate-artifact");
+        add_reviewed_gate_mechanism(&fixture.root, "g", "ACCEPT");
+        std::fs::write(
+            fixture
+                .root
+                .join("docs/parity-reviews/g/evidence/empty-corpus.txt"),
+            "mutated after review\n",
+        )
+        .unwrap();
+
+        let report = build_report(&fixture.root);
+        assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "gate artifact hash does not match current bytes and HEAD"
+        ));
     }
 
     #[test]
@@ -2534,12 +2919,15 @@ mod tests {
         .unwrap();
 
         let report = build_report(&root);
-        assert!(report.violations.is_empty(), "{:?}", report.violations);
         assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "active accepted parity inventory"
+        ));
     }
 
     #[test]
-    fn quarantined_acceptances_remain_preserved_but_inert() {
+    fn orphaned_quarantined_acceptance_fails_closed() {
         let root = temp_root("quarantined-acceptance");
         let dir = root.join("docs/parity-reviews/m");
         std::fs::create_dir_all(&dir).unwrap();
@@ -2550,8 +2938,27 @@ mod tests {
         .unwrap();
 
         let report = build_report(&root);
-        assert!(report.violations.is_empty(), "{:?}", report.violations);
         assert!(report.accepted_heldouts.is_empty());
+        assert!(contains_violation(
+            &report,
+            "quarantined ACCEPT requires a canonical active successor"
+        ));
+    }
+
+    #[test]
+    fn quarantined_acceptance_with_complete_successor_is_satisfied() {
+        let fixture = accepted_fixture("quarantine-successor");
+        std::fs::write(
+            fixture
+                .root
+                .join("docs/parity-reviews/m/quarantined-review.json"),
+            serde_json::to_vec_pretty(&json!({"verdict": "ACCEPT"})).unwrap(),
+        )
+        .unwrap();
+
+        let report = build_report(&fixture.root);
+        assert!(report.violations.is_empty(), "{:?}", report.violations);
+        assert_eq!(report.accepted_heldouts.len(), 2);
     }
 
     fn temp_root(name: &str) -> PathBuf {
@@ -2631,6 +3038,7 @@ mod tests {
             json!({
                 "schema_version": 1,
                 "mechanism": mechanism,
+                "evidence_kind": "parity",
                 "maker": {
                     "identity": format!("maker {mechanism}"),
                     "task_id": format!("maker-task-{mechanism}")
@@ -2653,6 +3061,103 @@ mod tests {
                     heldout(mechanism, "case_b", ["label", "direction"])
                 ],
                 "findings": ["fresh counterexamples did not disprove the mechanism"],
+                "verdict": verdict
+            }),
+        );
+        run_git(root, &["add", "."]);
+        run_git(
+            root,
+            &["commit", "-q", "-m", &format!("review {mechanism}")],
+        );
+        let review_commit = git_stdout(root, &["rev-parse", "HEAD"]);
+        (implementation_commit, review_commit)
+    }
+
+    fn add_reviewed_gate_mechanism(
+        root: &Path,
+        mechanism: &str,
+        verdict: &str,
+    ) -> (String, String) {
+        write_account(root, mechanism);
+        let evidence_dir = root
+            .join("docs/parity-reviews")
+            .join(mechanism)
+            .join("evidence");
+        std::fs::create_dir_all(&evidence_dir).unwrap();
+        std::fs::write(
+            evidence_dir.join("empty-corpus.txt"),
+            "gate rejected empty corpus\n",
+        )
+        .unwrap();
+        std::fs::write(
+            evidence_dir.join("orphaned-accept.txt"),
+            "gate rejected orphan\n",
+        )
+        .unwrap();
+        run_git(root, &["add", "."]);
+        run_git(
+            root,
+            &["commit", "-q", "-m", &format!("account {mechanism}")],
+        );
+        let account_commit = git_stdout(root, &["rev-parse", "HEAD"]);
+
+        let implementation_path = format!("implementation-{mechanism}.txt");
+        std::fs::write(root.join(&implementation_path), "gate implementation\n").unwrap();
+        run_git(root, &["add", &implementation_path]);
+        run_git(
+            root,
+            &["commit", "-q", "-m", &format!("implementation {mechanism}")],
+        );
+        let implementation_commit = git_stdout(root, &["rev-parse", "HEAD"]);
+
+        let first_artifact = format!("docs/parity-reviews/{mechanism}/evidence/empty-corpus.txt");
+        let second_artifact =
+            format!("docs/parity-reviews/{mechanism}/evidence/orphaned-accept.txt");
+        let first_blob = git_stdout(root, &["hash-object", "--", &first_artifact]);
+        let second_blob = git_stdout(root, &["hash-object", "--", &second_artifact]);
+        write_review(
+            root,
+            mechanism,
+            json!({
+                "schema_version": 1,
+                "mechanism": mechanism,
+                "evidence_kind": "gate",
+                "maker": {
+                    "identity": format!("maker {mechanism}"),
+                    "task_id": format!("maker-task-{mechanism}")
+                },
+                "reviewer": {
+                    "identity": format!("checker {mechanism}"),
+                    "task_id": format!("checker-task-{mechanism}"),
+                    "model": "GPT-5.6",
+                    "tool": "Codex desktop",
+                    "role": "independent checker; did not implement the change"
+                },
+                "revisions": {
+                    "account_commit": account_commit,
+                    "implementation_commit": implementation_commit,
+                    "java_revision": JAVA_REVISION
+                },
+                "commands": ["cargo test --test parity_evidence"],
+                "mutations": [
+                    {
+                        "artifact": first_artifact,
+                        "git_blob": first_blob,
+                        "axes": ["inventory", "evidence kind"],
+                        "expected": "empty parity corpus fails closed",
+                        "observed": "empty parity corpus failed closed",
+                        "result": "PASS"
+                    },
+                    {
+                        "artifact": second_artifact,
+                        "git_blob": second_blob,
+                        "axes": ["quarantine", "successor"],
+                        "expected": "orphaned acceptance fails closed",
+                        "observed": "orphaned acceptance failed closed",
+                        "result": "PASS"
+                    }
+                ],
+                "findings": ["hostile mutations did not bypass the gate"],
                 "verdict": verdict
             }),
         );
