@@ -1,6 +1,6 @@
 {
   "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
-  "account_commit": "036a8f6987232516e674e1bb8f5905cf4c4665c5",
+  "account_commit": "9387c6bd776a2997dc1f173759a58239eb452c4e",
   "canonical_result": "REJECT",
   "commands": [
     "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
@@ -180,7 +180,7 @@
     "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
   },
   "revisions": {
-    "account_commit": "036a8f6987232516e674e1bb8f5905cf4c4665c5",
+    "account_commit": "9387c6bd776a2997dc1f173759a58239eb452c4e",
     "implementation_commit": "22aec7a0afde9c5e8338eaba9b41a927f85933fd",
     "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
     "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
