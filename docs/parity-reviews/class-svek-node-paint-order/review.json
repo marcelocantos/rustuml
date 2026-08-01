@@ -1,0 +1,211 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "bba6f4f2208cdaf90309e454a3da5de03b4610a3",
+  "canonical_result": "ACCEPT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "ACCEPT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 2,
+    "observed_independent_axes": [
+      "LR direction",
+      "attached note owner qualification",
+      "mixed root and package-owned notes",
+      "nested package ownership",
+      "package note emission",
+      "reopened package declaration order",
+      "root-tail class ordering",
+      "top-bottom layout"
+    ],
+    "source_sha256_values": [
+      "0fdeb91f7b5454f2d0572eb7e0b42ad227d3e401031c7365918398355a5d9f62",
+      "014499258c317f5f3ec89160759ec39ae873bfc46e483c0893d573aaa2262c0a"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.exit",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.stderr",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.txt",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.java.exit",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.java.stderr",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.puml",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.exit",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.stderr",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.svg",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.svg",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.exit",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.stderr",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.txt",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.java.exit",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.java.stderr",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.puml",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.exit",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.stderr",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.svg",
+      "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The current account record for this mechanism predates the accepted implementation commit 34cc76f1, and that implementation is an ancestor of the pinned shipped binary source.",
+    "Java package/quark ownership and class diagram package emission were inspected against Rust note owner qualification and SVEK node emission ordering.",
+    "Fresh heldout rereview_b_01 varies reopened outer package order, nested package ownership, and an attached note targeting a nested class; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_02 varies LR direction, mixed root/package-owned notes, and a trailing root entity; Java succeeds and diff_one --no-oracle exits 0.",
+    "Both accepted heldouts are content-distinct Java-success inputs and exercise independent ownership/order axes."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/class-svek-node-paint-order/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review-followup-2.json",
+      "quarantined-review-followup-3.json",
+      "quarantined-review-followup.json",
+      "quarantined-review.json"
+    ]
+  },
+  "implementation_commit": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit 34cc76f1e3305d3767da2a4827793df6dd0e4531",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-class-svek-node-paint-order"
+  },
+  "mechanism": "class-svek-node-paint-order",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.puml": "0fdeb91f7b5454f2d0572eb7e0b42ad227d3e401031c7365918398355a5d9f62",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.svg": "690229647937fca8518a6716b08954782ff3c455851183769cc3a213b10580c9",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.svg": "cf9f36df6a3926778d30ce5987102a9c8fab6a0984bb9cd84d97006784097c48"
+      },
+      "axes": [
+        "reopened package declaration order",
+        "nested package ownership",
+        "attached note owner qualification",
+        "top-bottom layout"
+      ],
+      "content_distinct_sha256": "0fdeb91f7b5454f2d0572eb7e0b42ad227d3e401031c7365918398355a5d9f62",
+      "diff_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.java.exit",
+      "java_stderr": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.svg",
+      "name": "rereview_b_01_reopened_outer_attached_to_nested",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.rust.svg",
+      "source": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_01_reopened_outer_attached_to_nested.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.puml": "014499258c317f5f3ec89160759ec39ae873bfc46e483c0893d573aaa2262c0a",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.svg": "c968a35614c1793c48abff61f34e4950ae7a46a73726ac51d3d1b916529e6f73",
+        "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.svg": "e2d3546df9b640f44c36f49396070f6cc9af525c112b9a4dc68f5c1a19f7d1b4"
+      },
+      "axes": [
+        "LR direction",
+        "mixed root and package-owned notes",
+        "root-tail class ordering",
+        "package note emission"
+      ],
+      "content_distinct_sha256": "014499258c317f5f3ec89160759ec39ae873bfc46e483c0893d573aaa2262c0a",
+      "diff_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.java.exit",
+      "java_stderr": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.svg",
+      "name": "rereview_b_02_lr_mixed_owner_notes_with_root_tail",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.rust.svg",
+      "source": "test-diagrams/perturbations/class-svek-node-paint-order/rereview_b_02_lr_mixed_owner_notes_with_root_tail.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "bba6f4f2208cdaf90309e454a3da5de03b4610a3",
+    "implementation_commit": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/class-svek-node-paint-order",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/classdiagram/command/CommandPackageWithUSymbol.java",
+      "net/sourceforge/plantuml/plasma/Quark.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-parser/src/diagram/class.rs",
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "accepted"
+}

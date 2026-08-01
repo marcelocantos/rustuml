@@ -1,0 +1,10 @@
+@startuml
+package RereviewOuterB1 {
+  package RereviewSiblingB1 {
+    component TargetB1
+  }
+  package RereviewOwnerB1 {
+    note top of TargetB1 : owner sibling target B1
+  }
+}
+@enduml

@@ -1,0 +1,209 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "f75977eaf589e7bd40f5308070f0638a1811590b",
+  "canonical_result": "ACCEPT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "ACCEPT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 2,
+    "observed_independent_axes": [
+      "custom separator",
+      "dotted endpoint registration",
+      "dotted relationship target",
+      "explicit container alias",
+      "frame alias ownership",
+      "late container declaration",
+      "mixed link directions",
+      "nested package target"
+    ],
+    "source_sha256_values": [
+      "cca264ffbb844dda8e5abfc2d781dc06604fd78f42e6a110b58b6ceb00d4c7a5",
+      "254df3943bbd23a145182c6821d69935f0f7776b658ebd229424e345960036fb"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.exit",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.stderr",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.txt",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.java.exit",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.java.stderr",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.puml",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.exit",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.stderr",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.svg",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.svg",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.exit",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.stderr",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.txt",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.java.exit",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.java.stderr",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.puml",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.exit",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.stderr",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.svg",
+      "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The account record was present and predates the implementation commit; the implementation commit is an ancestor of the pinned shipped binary source.",
+    "Java CommandLinkClass quark preselection and package alias grammar were inspected against Rust dotted endpoint registration and container alias parsing.",
+    "Fresh heldout rereview_b_01 varies late frame declaration, dotted target references before/after container materialization, and a dotted relationship; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_02 varies custom package separator syntax, explicit aliases, nested package targets, and mixed relationship directions; Java succeeds and diff_one --no-oracle exits 0.",
+    "Both accepted heldouts are content-distinct Java-success inputs spanning separate parse/model axes."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/class-symbol-container-alias-parse/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review-followup.json",
+      "review-rejected-87463ba9.json"
+    ]
+  },
+  "implementation_commit": "1ff38dfd59e9fdf40a890024b549ade98e0cba41",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commits 1c80b8b0e691700fe5fcaac9ae0fa5f7b9ccefd9 and 1ff38dfd59e9fdf40a890024b549ade98e0cba41",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-class-symbol-container-alias-parse"
+  },
+  "mechanism": "class-symbol-container-alias-parse",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.puml": "cca264ffbb844dda8e5abfc2d781dc06604fd78f42e6a110b58b6ceb00d4c7a5",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.svg": "0dd8e537639b1d497b114217293dc3cf675db02e89c166a02af72dcd418b1981",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.svg": "c1d5353b5e9cffafb41f6573a8366ee7b55338fd0ca7e26ccbd2545a84417390"
+      },
+      "axes": [
+        "late container declaration",
+        "dotted endpoint registration",
+        "frame alias ownership",
+        "dotted relationship target"
+      ],
+      "content_distinct_sha256": "cca264ffbb844dda8e5abfc2d781dc06604fd78f42e6a110b58b6ceb00d4c7a5",
+      "diff_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.java.exit",
+      "java_stderr": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.svg",
+      "name": "rereview_b_01_late_frame_dotted_target",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.rust.svg",
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_01_late_frame_dotted_target.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.puml": "254df3943bbd23a145182c6821d69935f0f7776b658ebd229424e345960036fb",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.svg": "56763c2c179ed84d4eca69dbea7ab05217115047c4a523509ebe68c4ce8d042c",
+        "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.svg": "854ddde2b5e86d447468d08acd4919a7489f33ca392cade2e6a1fad5b6244306"
+      },
+      "axes": [
+        "custom separator",
+        "explicit container alias",
+        "nested package target",
+        "mixed link directions"
+      ],
+      "content_distinct_sha256": "254df3943bbd23a145182c6821d69935f0f7776b658ebd229424e345960036fb",
+      "diff_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.java.exit",
+      "java_stderr": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.svg",
+      "name": "rereview_b_02_custom_separator_alias_mix",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.rust.svg",
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/rereview_b_02_custom_separator_alias_mix.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "f75977eaf589e7bd40f5308070f0638a1811590b",
+    "implementation_commit": "1ff38dfd59e9fdf40a890024b549ade98e0cba41",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/class-symbol-container-alias-parse",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+      "net/sourceforge/plantuml/classdiagram/command/CommandPackageWithUSymbol.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-parser/src/parse/class.rs",
+      "crates/rustuml-parser/src/diagram/class.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "accepted"
+}

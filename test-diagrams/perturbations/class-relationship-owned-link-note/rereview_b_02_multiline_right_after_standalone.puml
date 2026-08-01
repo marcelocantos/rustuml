@@ -1,0 +1,10 @@
+@startuml
+class FreshOwnedGammaB1
+class FreshOwnedDeltaB1
+FreshOwnedGammaB1 ..> FreshOwnedDeltaB1 : label with words B1
+note "floating unrelated B1" as FloatingOwnedB1
+note right on link #AliceBlue
+  link owned line one B1
+  link owned line two B1
+end note
+@enduml

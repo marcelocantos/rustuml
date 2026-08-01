@@ -1,0 +1,209 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "13fcd5bd28ba09b4d932a66b8dc6194b235fca2e",
+  "canonical_result": "REJECT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "REJECT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 1,
+    "observed_independent_axes": [
+      "LR direction",
+      "escaped newline tokenization",
+      "mixed markup in center label",
+      "multiline label content",
+      "note-only frontier pressure",
+      "right label placement",
+      "top-bottom direction",
+      "vertical edge placement"
+    ],
+    "source_sha256_values": [
+      "d4c32b5806626a63ff8d477e10d858e321da66a1e11452d175897a062738b318",
+      "eb1a127d2284c0dafd1cf03fff8f959787dbd53a08884ca32c3eda29f3aabfb4"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.exit",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.stderr",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.txt",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.java.exit",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.java.stderr",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.puml",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.exit",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.stderr",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.svg",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.svg",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.exit",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.stderr",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.txt",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.java.exit",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.java.stderr",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.puml",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.exit",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.stderr",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.svg",
+      "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The account record was present and predates the implementation commit; the implementation commit is an ancestor of the pinned shipped binary source.",
+    "Java SvekEdge label placement and Display line tokenization were inspected against the Rust class renderer and display splitter at the pinned source revision.",
+    "Fresh heldout rereview_b_01 varies LR direction, note-only frontier pressure, right label placement, and multiline label content; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_02 is valid Java input but diff_one --no-oracle exits 1. The diff shows the class relationship label text expected as a split line \"value\" while Rust emits a literal \"\\nvalue\", producing wider/shorter geometry and shifted edge/class positions.",
+    "Because the user-required rule says any nonzero diff on a fresh valid input forces canonical REJECT, this mechanism is rejected for the pinned shipped binary."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/class-svek-center-label-painted-frontier/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review-2.json",
+      "quarantined-review.json"
+    ]
+  },
+  "implementation_commit": "29a46fef3bdb12a4ecc2a9eccbb3cca8151da6dc",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit 29a46fef3bdb12a4ecc2a9eccbb3cca8151da6dc",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-class-svek-center-label-painted-frontier"
+  },
+  "mechanism": "class-svek-center-label-painted-frontier",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.puml": "d4c32b5806626a63ff8d477e10d858e321da66a1e11452d175897a062738b318",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.svg": "c5d081eb9a70f8da5ec7df3526bdc2219d04eb2a2807c4b03cbd4c0f4db9a8e0",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.svg": "7ccf83168f50f78314ff0bc1ee935a82cc18b8d7c69aa1719f360f093ede0a67"
+      },
+      "axes": [
+        "LR direction",
+        "note-only frontier pressure",
+        "right label placement",
+        "multiline label content"
+      ],
+      "content_distinct_sha256": "d4c32b5806626a63ff8d477e10d858e321da66a1e11452d175897a062738b318",
+      "diff_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.java.exit",
+      "java_stderr": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.svg",
+      "name": "rereview_b_01_lr_note_only_right_multiline",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.rust.svg",
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_01_lr_note_only_right_multiline.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.txt": "33c81c9ddf5a640010936bcd99e2c0ac58c92d368f80c49187579f15baeccdb7",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.puml": "eb1a127d2284c0dafd1cf03fff8f959787dbd53a08884ca32c3eda29f3aabfb4",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.svg": "f010ea95f0e7b5164d0453693f4e37e0bb2979ba350397075ea7d8e7a2b4ad23",
+        "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.svg": "83945885e1d4558e10d789d271810083a09b003ca3b0abd9139792643ba620dc"
+      },
+      "axes": [
+        "top-bottom direction",
+        "mixed markup in center label",
+        "escaped newline tokenization",
+        "vertical edge placement"
+      ],
+      "content_distinct_sha256": "eb1a127d2284c0dafd1cf03fff8f959787dbd53a08884ca32c3eda29f3aabfb4",
+      "diff_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "diff_stderr": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.java.exit",
+      "java_stderr": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.svg",
+      "name": "rereview_b_02_tb_label_mixed_markup",
+      "result": "fail",
+      "rust_exit_artifact": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.rust.svg",
+      "source": "test-diagrams/perturbations/class-svek-center-label-painted-frontier/rereview_b_02_tb_label_mixed_markup.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "13fcd5bd28ba09b4d932a66b8dc6194b235fca2e",
+    "implementation_commit": "29a46fef3bdb12a4ecc2a9eccbb3cca8151da6dc",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/class-svek-center-label-painted-frontier",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/svek/SvekEdge.java",
+      "net/sourceforge/plantuml/klimt/creole/Display.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-render/src/class.rs",
+      "crates/rustuml-parser/src/display.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "rejected"
+}

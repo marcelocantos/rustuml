@@ -1,0 +1,8 @@
+@startuml
+class RawClassB1 {
+  + linkMemberB1 : [[https://example.com/member\npath member label B1]]\noutside member row B1
+}
+note right of RawClassB1
+  raw [[https://example.com/note\npath note label B1]] kept\noutside note row B1
+end note
+@enduml

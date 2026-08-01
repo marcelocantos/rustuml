@@ -1,0 +1,9 @@
+@startuml
+class OrdinaryBoundaryB1
+note as BoundaryNoteB1
+  first ordinary note line B1
+  end hnote
+  still payload after wrong terminator B1
+end	note
+class AfterBoundaryB1
+@enduml

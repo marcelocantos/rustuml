@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class FreshFrontierAlphaB1
+class FreshFrontierBetaB1
+FreshFrontierAlphaB1 --> FreshFrontierBetaB1
+note right on link #LightYellow
+  Painted right body one B1
+  Painted right body two B1
+end note
+@enduml

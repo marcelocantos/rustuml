@@ -1,0 +1,9 @@
+@startuml
+node GradientNodeB1
+artifact GradientArtifactB1
+note as GradientMemoB1 #Application/Technology
+  gradient memo body B1
+endnote
+GradientMemoB1 --> GradientNodeB1
+GradientArtifactB1 --> GradientMemoB1
+@enduml
