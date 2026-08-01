@@ -1,0 +1,9 @@
+@startuml
+process "Renamed Release Ring" as release+east/v2 {
+  artifact Payload211
+  note "Process memo" as Memo213
+}
+database Sink217
+Payload211 --> Sink217
+Memo213 .. Payload211
+@enduml

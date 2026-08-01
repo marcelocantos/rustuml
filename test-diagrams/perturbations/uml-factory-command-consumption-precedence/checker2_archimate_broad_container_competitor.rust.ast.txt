@@ -1,0 +1,55 @@
+Archimate(
+    ArchimateDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nrectangle \"Renamed Business Ring\" as business/east-v6 {\n  archimate_element Business Actor Buyer367 \"Renamed Buyer\"\n  archimate_element Business Process Flow373 \"Renamed Flow\"\n  archimate_rel Serving Flow373 Buyer367 \"serves\"\n}\n@enduml\n",
+            ),
+        },
+        elements: [
+            ArchimateElement {
+                id: "Buyer367",
+                label: "Renamed Buyer",
+                source_line: 2,
+                layer: Business,
+                kind: "Actor",
+            },
+            ArchimateElement {
+                id: "Flow373",
+                label: "Renamed Flow",
+                source_line: 3,
+                layer: Business,
+                kind: "Process",
+            },
+        ],
+        relations: [
+            ArchimateRelation {
+                from: "Flow373",
+                to: "Buyer367",
+                label: Some(
+                    "serves",
+                ),
+                source_line: 4,
+                kind: Serving,
+                direction: Default,
+            },
+        ],
+        groups: [],
+    },
+)

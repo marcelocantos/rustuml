@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="211px" preserveAspectRatio="none" style="width:330px;height:211px;background:#FFFFFF;" version="1.1" viewBox="0 0 330 211" width="330px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity node-->
+<g class="entity" data-qualified-name="node" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="16,16,26,6,89.8994,6,89.8994,42.4883,79.8994,52.4883,16,52.4883,16,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="79.8994" x2="89.8994" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="79.8994" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="79.8994" x2="79.8994" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="33.8994" x="31" y="39.5352">node</text>
+</g>
+<!--entity Component-->
+<g class="entity" data-qualified-name="Component" data-source-line="2" id="ent0003">
+<ellipse cx="172.95" cy="29.24" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.1807" x="133.3597" y="59.7752">Component</text>
+</g>
+<!--entity Queue-->
+<g class="entity" data-qualified-name="Queue" data-source-line="2" id="ent0004">
+<ellipse cx="172.95" cy="164.24" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43.8525" x="151.0237" y="194.7752">Queue</text>
+</g>
+<!--entity queue-->
+<g class="entity" data-qualified-name="queue" data-source-line="3" id="ent0006">
+<path d="M259.0557,16 L310.8438,16 C315.8438,16 315.8438,29.2441 315.8438,29.2441 C315.8438,29.2441 315.8438,42.4883 310.8438,42.4883 L259.0557,42.4883 C254.0557,42.4883 254.0557,29.2441 254.0557,29.2441 C254.0557,29.2441 254.0557,16 259.0557,16" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M310.8438,16 C305.8438,16 305.8438,29.2441 305.8438,29.2441 C305.8438,42.4883 310.8438,42.4883 310.8438,42.4883" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41.7881" x="259.0557" y="34.5352">queue</text>
+</g>
+<!--link Component to Queue-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="2" id="lnk5">
+<path d="M172.95,38.1642 C172.95,61.8742 172.95,126.0942 172.95,149.5342" fill="none" id="Component-to-Queue" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="172.95,155.5342,176.95,146.5342,172.95,150.5342,168.95,146.5342,172.95,155.5342" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="44.7637" x="173.9497" y="101.8125">second</text>
+</g>
+</g></svg>

@@ -1,0 +1,7 @@
+@startuml
+package "Case Domain" {
+  CLASS Service383
+  CLASS Repository389
+}
+Service383 --> Repository389
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+rectangle "Renamed Business Ring" as business/east-v6 {
+  archimate_element Business Actor Buyer367 "Renamed Buyer"
+  archimate_element Business Process Flow373 "Renamed Flow"
+  archimate_rel Serving Flow373 Buyer367 "serves"
+}
+@enduml

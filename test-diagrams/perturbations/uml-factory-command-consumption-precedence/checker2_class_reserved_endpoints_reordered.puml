@@ -1,0 +1,9 @@
+@startuml
+package "Renamed Domain" {
+  Artifact --> Queue
+  class Artifact
+  class Queue
+  class Process
+  Process ..> Artifact
+}
+@enduml

@@ -1,0 +1,36 @@
+SVG structural differences:
+  element count: expected 45, got 23
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "181px"), ("preserveAspectRatio", "none"), ("style", "width:236px;height:181px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 236 181"), ("width", "236px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "211px"), ("preserveAspectRatio", "none"), ("style", "width:330px;height:211px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 330 211"), ("width", "330px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "participant-lifeline"), ("data-entity-uid", "part1"), ("data-qualified-name", "Node"), ("data-source-line", "1"), ("id", "part1-lifeline")]
+    actual:   [("class", "entity"), ("data-qualified-name", "node"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] tag mismatch: expected <g>, got <polygon>
+  [5] tag mismatch: expected <rect>, got <line>
+  [6] <line> depth mismatch: expected 5, got 4
+  [6] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "29"), ("x2", "29"), ("y1", "36.4883"), ("y2", "144.4199")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "16"), ("x2", "79.8994"), ("y1", "16"), ("y2", "16")]
+  [7] tag mismatch: expected <g>, got <line>
+  [8] tag mismatch: expected <g>, got <text>
+  [9] tag mismatch: expected <rect>, got <g>
+  [10] tag mismatch: expected <line>, got <ellipse>
+  [11] tag mismatch: expected <g>, got <text>
+  [12] <g> depth mismatch: expected 4, got 3
+  [12] <g> attr mismatch:
+    expected: []
+    actual:   [("class", "entity"), ("data-qualified-name", "Queue"), ("data-source-line", "2"), ("id", "ent0004")]
+  [13] tag mismatch: expected <rect>, got <ellipse>
+  [14] tag mismatch: expected <line>, got <text>
+  [15] <g> attr mismatch:
+    expected: [("class", "participant participant-head"), ("data-entity-uid", "part1"), ("data-qualified-name", "Node"), ("data-source-line", "1"), ("id", "part1-head")]
+    actual:   [("class", "entity"), ("data-qualified-name", "queue"), ("data-source-line", "3"), ("id", "ent0006")]
+  [16] tag mismatch: expected <rect>, got <path>
+  [17] tag mismatch: expected <text>, got <path>
+  [18] tag mismatch: expected <g>, got <text>
+  [19] tag mismatch: expected <rect>, got <g>
+  [20] tag mismatch: expected <text>, got <path>
+  [21] tag mismatch: expected <g>, got <polygon>
+  [22] tag mismatch: expected <rect>, got <text>
+
