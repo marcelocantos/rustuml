@@ -386,6 +386,15 @@ impl ClassParser {
         }
     }
 
+    fn entity_quark_path(&self, entity_id: &str) -> Option<&[String]> {
+        self.entity_by_path.iter().find_map(|(path, &idx)| {
+            self.entities
+                .get(idx)
+                .is_some_and(|entity| entity.id == entity_id)
+                .then_some(path.as_slice())
+        })
+    }
+
     fn current_together(&self) -> Option<usize> {
         match self.scope_stack.last() {
             Some(ClassScope::Together(group_idx)) => Some(*group_idx),
@@ -1136,6 +1145,26 @@ impl ClassParser {
         let a = self.ensure_entity(&a_raw);
         let b = self.ensure_entity(&b_raw);
         let c = self.ensure_entity(&c_raw);
+        // `AbstractClassOrObjectDiagram.Association` creates the apoint below
+        // the endpoints' common Quark parent. When the parents differ it calls
+        // `quarkInContext`, so the statement's current group owns the point.
+        let a_parent = self
+            .entity_quark_path(&a)
+            .expect("an ensured association endpoint owns a Quark path")
+            .split_last()
+            .map_or_else(Vec::new, |(_, parent)| parent.to_vec());
+        let b_parent = self
+            .entity_quark_path(&b)
+            .expect("an ensured association endpoint owns a Quark path")
+            .split_last()
+            .map_or_else(Vec::new, |(_, parent)| parent.to_vec());
+        let point_owner = if a_parent == b_parent {
+            a_parent
+        } else {
+            self.current_group_path().to_vec()
+        };
+        let owner_package =
+            (!point_owner.is_empty()).then(|| self.path_id(point_owner.as_slice()));
         // Java `foundLink` searches live links from newest to oldest and
         // `Association.createNew` removes the selected base before inserting
         // its three split links.
@@ -1159,6 +1188,7 @@ impl ClassParser {
                 a,
                 b,
                 c,
+                owner_package,
                 replaced_relationship,
                 dashed,
                 source_line: self.current_line,
@@ -4995,6 +5025,39 @@ mod tests {
             d.uid_events
                 .iter()
                 .any(|event| matches!(event, ClassUidEvent::Association(0)))
+        );
+    }
+
+    #[test]
+    fn association_owner_survives_later_implicit_endpoint_refinement() {
+        let d = parse(
+            "allowmixing\n\
+             package FreshScope6899 {\n\
+               (FreshImplicit6907, FreshPeer6911) .. FreshRole6917\n\
+               component \"Renamed Implicit 6907\" as FreshImplicit6907\n\
+               actor \"Renamed Peer 6911\" as FreshPeer6911\n\
+             }",
+        );
+
+        assert_eq!(
+            d.association_classes[0].owner_package.as_deref(),
+            Some("FreshScope6899")
+        );
+        for (id, label) in [
+            ("FreshScope6899.FreshImplicit6907", "Renamed Implicit 6907"),
+            ("FreshScope6899.FreshPeer6911", "Renamed Peer 6911"),
+        ] {
+            let entity = d.entities.iter().find(|entity| entity.id == id).unwrap();
+            assert_eq!(entity.label, label);
+            assert!(entity.explicit_alias);
+            assert_eq!(entity.source_line, 3);
+        }
+        assert_eq!(
+            d.uid_events
+                .iter()
+                .filter(|event| matches!(event, ClassUidEvent::Entity(_)))
+                .count(),
+            3
         );
     }
 }

@@ -2479,6 +2479,7 @@ fn render_with_oracle_uid_origin(
     let mut floating_layout_slots = vec![None; diagram.notes.len()];
     let mut attached_layout_slots_by_note = vec![None; diagram.notes.len()];
     let mut empty_package_layout_slots = vec![None; diagram.packages.len()];
+    let mut association_layout_slots = vec![0; diagram.association_classes.len()];
     let mut next_layout_slot = 0;
     let svek_nodes = svek_node_emission_order(diagram);
     for node in svek_nodes.iter().copied() {
@@ -2516,6 +2517,14 @@ fn render_with_oracle_uid_origin(
                     floating_layout_slots[idx] = Some(next_layout_slot);
                 }
             }
+            SvekNodeEmission::AssociationPoint(idx) => {
+                layout.add_circle_node(
+                    &association_point_layout_id(idx),
+                    "",
+                    ASSOCIATION_POINT_SIZE,
+                );
+                association_layout_slots[idx] = next_layout_slot;
+            }
             SvekNodeEmission::EmptyPackage(idx) => {
                 let package = &diagram.packages[idx];
                 let (width, height) = empty_package_intrinsic_dims(diagram, package);
@@ -2524,70 +2533,6 @@ fn render_with_oracle_uid_origin(
             }
         }
         next_layout_slot += 1;
-    }
-    // `AbstractClassOrObjectDiagram.Association.createNew` replaces the A-B
-    // association with A->apoint and apoint->B links of the original length,
-    // then connects the 4px point to C. A one-length C link is horizontal in
-    // SVEK, so preserve that rank constraint here.
-    let mut association_layout_slots = Vec::with_capacity(diagram.association_classes.len());
-    for (idx, association) in diagram.association_classes.iter().enumerate() {
-        let point = association_point_layout_id(idx);
-        layout.add_circle_node(&point, "", ASSOCIATION_POINT_SIZE);
-        association_layout_slots.push(next_layout_slot);
-        next_layout_slot += 1;
-        for relationship in association_replacement_relationships(association, idx) {
-            if relationship.length == 1 {
-                layout.add_plantuml_svek_line0_edge(&relationship.from, &relationship.to);
-                layout.add_same_rank(&relationship.from, &relationship.to);
-            }
-            let label_size =
-                relationship_center_layout(diagram, &relationship, None, &diagram.meta.sprites)
-                    .map(|center| EdgeLabelSize {
-                        width: center.width,
-                        height: center.height,
-                    });
-            let endpoint_size = |label: Option<&str>| {
-                label.map(|label| {
-                    relationship_endpoint_label_block(diagram, &relationship, label).graphviz_size()
-                })
-            };
-            layout.add_edge_with_label_sizes_and_minlen(
-                &relationship.from,
-                &relationship.to,
-                label_size,
-                endpoint_size(relationship.from_multiplicity.as_deref()),
-                endpoint_size(relationship.to_multiplicity.as_deref()),
-                Some(relationship.length.saturating_sub(1)),
-            );
-        }
-    }
-    for (idx, note) in diagram.notes.iter().enumerate() {
-        let (Some(target), Some(position)) = (note.target.as_deref(), note.position) else {
-            continue;
-        };
-        let position = attached_note_layout_position(diagram.direction, position);
-        let note_id = attached_note_layout_id(idx);
-        // Java lowers the note to an ordinary Link, then `Bibliotekon`
-        // resolves a package endpoint to its empty leaf or cluster special
-        // point. Keep the semantic alias only for metadata and IDs.
-        let target_layout = relationship_layout_id(diagram, target);
-        let target_layout_id = target_layout.as_ref();
-        match position {
-            NotePosition::Left => {
-                // Java `CommandFactoryNoteOnEntity` creates left/right notes as
-                // length-one links; `Bibliotekon.lines0` emits them before nodes.
-                layout.add_plantuml_svek_line0_edge(&note_id, target_layout_id);
-                layout.add_same_rank(&note_id, target_layout_id);
-                layout.add_edge_with_minlen(&note_id, target_layout_id, None, 0);
-            }
-            NotePosition::Right => {
-                layout.add_plantuml_svek_line0_edge(target_layout_id, &note_id);
-                layout.add_same_rank(target_layout_id, &note_id);
-                layout.add_edge_with_minlen(target_layout_id, &note_id, None, 0);
-            }
-            NotePosition::Top => layout.add_edge(&note_id, target_layout_id, None),
-            NotePosition::Bottom => layout.add_edge(target_layout_id, &note_id, None),
-        }
     }
     let attached_layout_slots = attached_layout_slots_by_note
         .iter()
@@ -2655,9 +2600,11 @@ fn render_with_oracle_uid_origin(
         }
     }
     let note_owner_pkg = note_owner_packages(diagram, &package_render.innermost_pkg);
+    let association_owner_pkg = association_owner_packages(diagram);
     // Java `GraphvizImageBuilder#printGroup` adds direct leaves to the open
     // cluster in quark creation order. Keep that unified stream here: batching
-    // entities, notes, and empty child packages by kind changes dot node order.
+    // entities, notes, association points, and empty child packages by kind
+    // changes dot node order.
     for emission in svek_node_emission_order(diagram) {
         let (owner, node_id) = match emission {
             SvekNodeEmission::Entity(entity_idx) => (
@@ -2673,6 +2620,10 @@ fn render_with_oracle_uid_origin(
                 };
                 (note_owner_pkg[note_idx], node_id)
             }
+            SvekNodeEmission::AssociationPoint(association_idx) => (
+                association_owner_pkg[association_idx],
+                association_point_layout_id(association_idx),
+            ),
             SvekNodeEmission::EmptyPackage(pkg_idx) => (
                 package_render.parent_pkg[pkg_idx],
                 empty_package_layout_id(pkg_idx),
@@ -2720,49 +2671,33 @@ fn render_with_oracle_uid_origin(
             }
         }
     }
-    for rel_idx in svek_relationship_order(diagram) {
-        let rel = &diagram.relationships[rel_idx];
-        let from = relationship_layout_id(diagram, &rel.from);
-        let to = relationship_layout_id(diagram, &rel.to);
-        let touches_group_endpoint =
-            from.starts_with("__svek_group_endpoint_") || to.starts_with("__svek_group_endpoint_");
-        if rel.length == 1 {
-            // Java `Bibliotekon.addLine` stores every one-rank link in
-            // `lines0`, and `DotStringFactory.createDotString` serializes
-            // those edges before `Cluster.printCluster2` emits ordinary
-            // nodes. Preserve that lazy endpoint-creation order in SVEK.
-            layout.add_plantuml_svek_line0_edge(&from, &to);
-            // `Cluster.getRankSame` only sees ordinary SvekNode members. A
-            // group's hidden `za...` routing point is emitted by
-            // `ClusterDotString`, so Java does not put that edge in an
-            // explicit rank=same subgraph.
-            if !touches_group_endpoint {
-                layout.add_same_rank(&from, &to);
+    for emission in svek_live_link_order(diagram) {
+        match emission {
+            SvekLinkEmission::AttachedNote(note_idx) => {
+                add_svek_attached_note_layout_edge(&mut layout, diagram, note_idx);
+            }
+            SvekLinkEmission::Relationship(relationship_idx) => {
+                add_svek_relationship_layout_edge(
+                    &mut layout,
+                    diagram,
+                    &diagram.relationships[relationship_idx],
+                );
+            }
+            SvekLinkEmission::AssociationReplacement {
+                association_idx,
+                replacement_idx,
+            } => {
+                let replacements = association_replacement_relationships(
+                    &diagram.association_classes[association_idx],
+                    association_idx,
+                );
+                add_svek_relationship_layout_edge(
+                    &mut layout,
+                    diagram,
+                    &replacements[replacement_idx],
+                );
             }
         }
-        let note = rel.link_note.as_ref();
-        // `LayoutGraph` maps this renderer-owned fixed-size block to Graphviz
-        // `xlabel` when the selected routing mode is orthogonal, matching
-        // Java `SvekEdge.appendDotString` without reserving rank space.
-        let label_size =
-            relationship_center_layout(diagram, rel, note, &diagram.meta.sprites).map(|center| {
-                EdgeLabelSize {
-                    width: center.width,
-                    height: center.height,
-                }
-            });
-        let endpoint_size = |label: Option<&str>| {
-            label
-                .map(|label| relationship_endpoint_label_block(diagram, rel, label).graphviz_size())
-        };
-        layout.add_edge_with_label_sizes_and_minlen(
-            &from,
-            &to,
-            label_size,
-            endpoint_size(rel.from_multiplicity.as_deref()),
-            endpoint_size(rel.to_multiplicity.as_deref()),
-            Some(rel.length.saturating_sub(1)),
-        );
     }
     // Java `CucaDiagram.applySingleStrategy` appends Magma/SquareMaker links
     // after the source relationships. `DotStringFactory` still promotes its
@@ -2799,6 +2734,8 @@ fn render_with_oracle_uid_origin(
         .iter()
         .map(|&slot| solved_positions[slot])
         .collect::<Vec<_>>();
+    // Painting still consumes entities followed by association points. Keep
+    // this result remap separate from the owner-local collision traversal.
     result.node_positions = entity_layout_slots
         .iter()
         .chain(&association_layout_slots)
@@ -2962,7 +2899,9 @@ fn single_strategy_members(diagram: &ClassDiagram) -> (Vec<String>, Vec<Vec<Stri
             {
                 (note_owners[note_idx], floating_note_layout_id(note_idx))
             }
-            SvekNodeEmission::Note(_) | SvekNodeEmission::EmptyPackage(_) => continue,
+            SvekNodeEmission::Note(_)
+            | SvekNodeEmission::AssociationPoint(_)
+            | SvekNodeEmission::EmptyPackage(_) => continue,
         };
         if linked.contains(&layout_id) {
             continue;
@@ -3726,6 +3665,7 @@ fn class_diagram_gradients(diagram: &ClassDiagram) -> Vec<ClassGradient> {
                     register_class_gradient(source, &mut gradients, value);
                 }
             }
+            SvekNodeEmission::AssociationPoint(_) => {}
             SvekNodeEmission::EmptyPackage(_) => {}
         }
     }
@@ -3941,6 +3881,19 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
     {
         has_direct_note[package_idx] = true;
     }
+    let mut has_direct_association_point = vec![false; diagram.packages.len()];
+    for association in &diagram.association_classes {
+        let Some(owner) = association.owner_package.as_deref() else {
+            continue;
+        };
+        if let Some(package_idx) = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == owner)
+        {
+            has_direct_association_point[package_idx] = true;
+        }
+    }
 
     let roles = diagram
         .packages
@@ -3971,7 +3924,11 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
             );
             if !supports_package_rendering {
                 PackageRenderRole::Hidden
-            } else if has_direct_entity[idx] || has_direct_package[idx] || has_direct_note[idx] {
+            } else if has_direct_entity[idx]
+                || has_direct_package[idx]
+                || has_direct_note[idx]
+                || has_direct_association_point[idx]
+            {
                 // Java `Entity#isEmpty` examines direct quark children. A
                 // direct leaf or group child therefore makes this a cluster.
                 PackageRenderRole::Cluster
@@ -4800,6 +4757,7 @@ struct SvekEmissionOrder<'a> {
     parent_pkg: &'a [Option<usize>],
     innermost_pkg: &'a [Option<usize>],
     note_owner_pkg: &'a [Option<usize>],
+    association_owner_pkg: &'a [Option<usize>],
     package_roles: &'a [PackageRenderRole],
     node_order: Vec<SvekNodeEmission>,
 }
@@ -4808,6 +4766,7 @@ struct SvekEmissionOrder<'a> {
 enum SvekNodeEmission {
     Entity(usize),
     Note(usize),
+    AssociationPoint(usize),
     EmptyPackage(usize),
 }
 
@@ -4848,6 +4807,21 @@ impl SvekEmissionOrder<'_> {
                         }),
                 )
                 .collect::<Vec<_>>();
+            leaves.extend(
+                self.diagram
+                    .association_classes
+                    .iter()
+                    .enumerate()
+                    .filter(|(idx, _)| self.association_owner_pkg[*idx] == owner)
+                    .map(|(idx, association)| {
+                        (
+                            association.source_line,
+                            2_u8,
+                            idx,
+                            SvekNodeEmission::AssociationPoint(idx),
+                        )
+                    }),
+            );
             leaves.sort_by_key(|&(source_line, kind, idx, _)| (source_line, kind, idx));
             self.node_order
                 .extend(leaves.into_iter().map(|(_, _, _, node)| node));
@@ -4876,6 +4850,12 @@ impl SvekEmissionOrder<'_> {
                             .is_some_and(note_is_svek_leaf) =>
                 {
                     self.node_order.push(SvekNodeEmission::Note(*index));
+                }
+                ClassUidEvent::Association(index)
+                    if self.association_owner_pkg.get(*index).copied().flatten() == owner =>
+                {
+                    self.node_order
+                        .push(SvekNodeEmission::AssociationPoint(*index));
                 }
                 _ => {}
             }
@@ -4938,6 +4918,21 @@ fn note_owner_packages(
     owners
 }
 
+fn association_owner_packages(diagram: &ClassDiagram) -> Vec<Option<usize>> {
+    diagram
+        .association_classes
+        .iter()
+        .map(|association| {
+            association.owner_package.as_deref().and_then(|owner| {
+                diagram
+                    .packages
+                    .iter()
+                    .position(|package| package.name == owner)
+            })
+        })
+        .collect()
+}
+
 fn note_qualified_name(diagram: &ClassDiagram, note_idx: usize, leaf: &str) -> String {
     if let Some(id) = diagram
         .notes
@@ -4961,14 +4956,19 @@ fn note_qualified_name(diagram: &ClassDiagram, note_idx: usize, leaf: &str) -> S
 fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
     let package_render = package_render_model(diagram);
     let note_owner_pkg = note_owner_packages(diagram, &package_render.innermost_pkg);
+    let association_owner_pkg = association_owner_packages(diagram);
     let mut emission = SvekEmissionOrder {
         diagram,
         parent_pkg: &package_render.parent_pkg,
         innermost_pkg: &package_render.innermost_pkg,
         note_owner_pkg: &note_owner_pkg,
+        association_owner_pkg: &association_owner_pkg,
         package_roles: &package_render.roles,
         node_order: Vec::with_capacity(
-            diagram.entities.len() + diagram.notes.len() + diagram.packages.len(),
+            diagram.entities.len()
+                + diagram.notes.len()
+                + diagram.association_classes.len()
+                + diagram.packages.len(),
         ),
     };
 
@@ -5043,7 +5043,9 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         .into_iter()
         .filter_map(|node| match node {
             SvekNodeEmission::Entity(idx) => Some(idx),
-            SvekNodeEmission::Note(_) | SvekNodeEmission::EmptyPackage(_) => None,
+            SvekNodeEmission::Note(_)
+            | SvekNodeEmission::AssociationPoint(_)
+            | SvekNodeEmission::EmptyPackage(_) => None,
         })
         .collect();
 
@@ -6001,7 +6003,9 @@ fn render_plantuml_svg(
         .iter()
         .filter_map(|node| match node {
             SvekNodeEmission::Entity(idx) => Some(*idx),
-            SvekNodeEmission::Note(_) | SvekNodeEmission::EmptyPackage(_) => None,
+            SvekNodeEmission::Note(_)
+            | SvekNodeEmission::AssociationPoint(_)
+            | SvekNodeEmission::EmptyPackage(_) => None,
         })
         .collect::<Vec<_>>();
     let mut node_emission_cursor = 0;
@@ -6068,6 +6072,7 @@ fn render_plantuml_svg(
                         );
                     }
                 }
+                SvekNodeEmission::AssociationPoint(_) => {}
                 SvekNodeEmission::EmptyPackage(package_idx) => {
                     if let Some(empty) = layout_empty_packages
                         .iter()
@@ -6330,6 +6335,7 @@ fn render_plantuml_svg(
                     );
                 }
             }
+            SvekNodeEmission::AssociationPoint(_) => {}
             SvekNodeEmission::EmptyPackage(package_idx) => {
                 if let Some(empty) = layout_empty_packages
                     .iter()
@@ -13909,52 +13915,244 @@ fn relationship_edge_indices(
         .collect()
 }
 
-/// Port of `CucaDiagramFileMakerSvek.addLinkNew`: keep the first-seen order of
-/// unordered endpoint-pair groups and preserve construction order within each
-/// group. The parser and Cuca UID stream intentionally remain source ordered.
-fn svek_relationship_order(diagram: &ClassDiagram) -> Vec<usize> {
-    let same_connections = |left: usize, right: usize| {
-        let left = &diagram.relationships[left];
-        let right = &diagram.relationships[right];
-        (left.from == right.from && left.to == right.to)
-            || (left.from == right.to && left.to == right.from)
-    };
-    let mut ordered = Vec::<usize>::with_capacity(diagram.relationships.len());
-    for relationship_idx in 0..diagram.relationships.len() {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum SvekLinkEmission {
+    AttachedNote(usize),
+    Relationship(usize),
+    AssociationReplacement {
+        association_idx: usize,
+        replacement_idx: usize,
+    },
+}
+
+fn svek_source_live_links(diagram: &ClassDiagram) -> Vec<SvekLinkEmission> {
+    if diagram.uid_events.is_empty() {
+        let mut reconstructed = Vec::new();
+        reconstructed.extend(diagram.notes.iter().enumerate().filter_map(|(idx, note)| {
+            (note.target.is_some() && note.position.is_some())
+                .then_some((note.source_line, SvekLinkEmission::AttachedNote(idx)))
+        }));
+        for (association_idx, association) in diagram.association_classes.iter().enumerate() {
+            reconstructed.extend((0..ASSOCIATION_REPLACEMENT_LINK_SLOTS).map(
+                |replacement_idx| {
+                    (
+                        association.source_line,
+                        SvekLinkEmission::AssociationReplacement {
+                            association_idx,
+                            replacement_idx,
+                        },
+                    )
+                },
+            ));
+        }
+        reconstructed.extend(diagram.relationships.iter().enumerate().map(
+            |(idx, relationship)| {
+                (
+                    relationship.source_line,
+                    SvekLinkEmission::Relationship(idx),
+                )
+            },
+        ));
+        reconstructed.sort_by_key(|(source_line, _)| *source_line);
+        return reconstructed
+            .into_iter()
+            .map(|(_, emission)| emission)
+            .collect();
+    }
+
+    let mut links = Vec::new();
+    for event in &diagram.uid_events {
+        match event {
+            ClassUidEvent::Note { index, .. }
+                if diagram.notes.get(*index).is_some_and(|note| {
+                    note.target.is_some() && note.position.is_some()
+                }) =>
+            {
+                links.push(SvekLinkEmission::AttachedNote(*index));
+            }
+            ClassUidEvent::Relationship(index) if diagram.relationships.get(*index).is_some() => {
+                links.push(SvekLinkEmission::Relationship(*index));
+            }
+            ClassUidEvent::Association(association_idx)
+                if diagram.association_classes.get(*association_idx).is_some() =>
+            {
+                links.extend((0..ASSOCIATION_REPLACEMENT_LINK_SLOTS).map(|replacement_idx| {
+                    SvekLinkEmission::AssociationReplacement {
+                        association_idx: *association_idx,
+                        replacement_idx,
+                    }
+                }));
+            }
+            ClassUidEvent::Package(_)
+            | ClassUidEvent::Entity(_)
+            | ClassUidEvent::UniqueSequence
+            | ClassUidEvent::Note { .. }
+            | ClassUidEvent::Relationship(_)
+            | ClassUidEvent::DiscardedRelationship { .. }
+            | ClassUidEvent::Association(_) => {}
+        }
+    }
+    links
+}
+
+fn svek_link_endpoints(
+    diagram: &ClassDiagram,
+    emission: SvekLinkEmission,
+) -> (String, String) {
+    match emission {
+        SvekLinkEmission::AttachedNote(note_idx) => {
+            let note = &diagram.notes[note_idx];
+            let target = note
+                .target
+                .as_deref()
+                .expect("an attached note link owns a target");
+            let position = attached_note_layout_position(
+                diagram.direction,
+                note.position.expect("an attached note link owns a position"),
+            );
+            let note_id = attached_note_layout_id(note_idx);
+            match position {
+                NotePosition::Left | NotePosition::Top => (note_id, target.to_string()),
+                NotePosition::Right | NotePosition::Bottom => (target.to_string(), note_id),
+            }
+        }
+        SvekLinkEmission::Relationship(relationship_idx) => {
+            let relationship = &diagram.relationships[relationship_idx];
+            (relationship.from.clone(), relationship.to.clone())
+        }
+        SvekLinkEmission::AssociationReplacement {
+            association_idx,
+            replacement_idx,
+        } => {
+            let replacements = association_replacement_relationships(
+                &diagram.association_classes[association_idx],
+                association_idx,
+            );
+            let relationship = &replacements[replacement_idx];
+            (relationship.from.clone(), relationship.to.clone())
+        }
+    }
+}
+
+fn same_svek_connections(left: &(String, String), right: &(String, String)) -> bool {
+    (left.0 == right.0 && left.1 == right.1) || (left.0 == right.1 && left.1 == right.0)
+}
+
+/// Port of `CucaDiagramFileMakerSvek.addLinkNew`: start from the live Link
+/// list after removals and association replacements, then keep first-seen
+/// unordered endpoint-pair groups stable in construction order.
+fn svek_live_link_order(diagram: &ClassDiagram) -> Vec<SvekLinkEmission> {
+    let mut ordered = Vec::<(SvekLinkEmission, (String, String))>::new();
+    for emission in svek_source_live_links(diagram) {
+        let endpoints = svek_link_endpoints(diagram, emission);
         let Some(mut insert_at) = ordered
             .iter()
-            .position(|&other_idx| same_connections(other_idx, relationship_idx))
+            .position(|(_, other)| same_svek_connections(other, &endpoints))
         else {
-            ordered.push(relationship_idx);
+            ordered.push((emission, endpoints));
             continue;
         };
-        while insert_at < ordered.len() && same_connections(ordered[insert_at], relationship_idx) {
+        while insert_at < ordered.len()
+            && same_svek_connections(&ordered[insert_at].1, &endpoints)
+        {
             insert_at += 1;
         }
-        ordered.insert(insert_at, relationship_idx);
+        ordered.insert(insert_at, (emission, endpoints));
     }
     ordered
+        .into_iter()
+        .map(|(emission, _)| emission)
+        .collect()
+}
+
+fn svek_relationship_order(diagram: &ClassDiagram) -> Vec<usize> {
+    svek_live_link_order(diagram)
+        .into_iter()
+        .filter_map(|emission| match emission {
+            SvekLinkEmission::Relationship(idx) => Some(idx),
+            SvekLinkEmission::AttachedNote(_)
+            | SvekLinkEmission::AssociationReplacement { .. } => None,
+        })
+        .collect()
 }
 
 fn relationship_layout_edge_indices(diagram: &ClassDiagram) -> Vec<usize> {
-    // Association replacement links and attached-note links enter LayoutGraph
-    // before ordinary relationships in `render_no_oracle`.
-    let first_relationship_edge_index = diagram
-        .association_classes
-        .iter()
-        .enumerate()
-        .map(|(idx, association)| association_replacement_relationships(association, idx).len())
-        .sum::<usize>()
-        + diagram
-            .notes
-            .iter()
-            .filter(|note| note.target.is_some() && note.position.is_some())
-            .count();
     let mut edge_indices = vec![usize::MAX; diagram.relationships.len()];
-    for (offset, relationship_idx) in svek_relationship_order(diagram).into_iter().enumerate() {
-        edge_indices[relationship_idx] = first_relationship_edge_index + offset;
+    for (edge_idx, emission) in svek_live_link_order(diagram).into_iter().enumerate() {
+        if let SvekLinkEmission::Relationship(relationship_idx) = emission {
+            edge_indices[relationship_idx] = edge_idx;
+        }
     }
     edge_indices
+}
+
+fn add_svek_relationship_layout_edge(
+    layout: &mut LayoutGraph,
+    diagram: &ClassDiagram,
+    relationship: &Relationship,
+) {
+    let from = relationship_layout_id(diagram, &relationship.from);
+    let to = relationship_layout_id(diagram, &relationship.to);
+    let touches_group_endpoint =
+        from.starts_with("__svek_group_endpoint_") || to.starts_with("__svek_group_endpoint_");
+    if relationship.length == 1 {
+        // `Bibliotekon.addLine` partitions one-rank links only after
+        // `getOrderedLinks` has formed stable same-connection groups.
+        layout.add_plantuml_svek_line0_edge(&from, &to);
+        if !touches_group_endpoint {
+            layout.add_same_rank(&from, &to);
+        }
+    }
+    let note = relationship.link_note.as_ref();
+    let label_size = relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)
+        .map(|center| EdgeLabelSize {
+            width: center.width,
+            height: center.height,
+        });
+    let endpoint_size = |label: Option<&str>| {
+        label.map(|label| {
+            relationship_endpoint_label_block(diagram, relationship, label).graphviz_size()
+        })
+    };
+    layout.add_edge_with_label_sizes_and_minlen(
+        &from,
+        &to,
+        label_size,
+        endpoint_size(relationship.from_multiplicity.as_deref()),
+        endpoint_size(relationship.to_multiplicity.as_deref()),
+        Some(relationship.length.saturating_sub(1)),
+    );
+}
+
+fn add_svek_attached_note_layout_edge(
+    layout: &mut LayoutGraph,
+    diagram: &ClassDiagram,
+    note_idx: usize,
+) {
+    let note = &diagram.notes[note_idx];
+    let (Some(target), Some(position)) = (note.target.as_deref(), note.position) else {
+        return;
+    };
+    let position = attached_note_layout_position(diagram.direction, position);
+    let note_id = attached_note_layout_id(note_idx);
+    // Java lowers the note to an ordinary Link. Resolve package endpoints only
+    // after source-live ordering, when the Link enters LayoutGraph.
+    let target_layout = relationship_layout_id(diagram, target);
+    let target_layout_id = target_layout.as_ref();
+    match position {
+        NotePosition::Left => {
+            layout.add_plantuml_svek_line0_edge(&note_id, target_layout_id);
+            layout.add_same_rank(&note_id, target_layout_id);
+            layout.add_edge_with_minlen(&note_id, target_layout_id, None, 0);
+        }
+        NotePosition::Right => {
+            layout.add_plantuml_svek_line0_edge(target_layout_id, &note_id);
+            layout.add_same_rank(target_layout_id, &note_id);
+            layout.add_edge_with_minlen(target_layout_id, &note_id, None, 0);
+        }
+        NotePosition::Top => layout.add_edge(&note_id, target_layout_id, None),
+        NotePosition::Bottom => layout.add_edge(target_layout_id, &note_id, None),
+    }
 }
 
 struct RelationshipArrowFont {
@@ -14116,10 +14314,10 @@ fn svek_collision_layout_slots(
             SvekNodeEmission::Note(idx) => attached_layout_slots[idx]
                 .or(floating_layout_slots[idx])
                 .expect("SVEK note emission must own a layout slot"),
+            SvekNodeEmission::AssociationPoint(idx) => association_layout_slots[idx],
             SvekNodeEmission::EmptyPackage(idx) => empty_package_layout_slots[idx]
                 .expect("SVEK empty-package emission must own a layout slot"),
         })
-        .chain(association_layout_slots.iter().copied())
         .collect()
 }
 
@@ -17923,6 +18121,70 @@ mod tests {
     }
 
     #[test]
+    fn live_links_interleave_notes_relationships_and_association_replacements() {
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(
+            "@startuml\n\
+             class FreshLeft6947\n\
+             class FreshRight6959\n\
+             class FreshRole6961\n\
+             class FreshSignal6967\n\
+             class FreshTail6971\n\
+             FreshLeft6947 -- FreshRight6959 : removed base\n\
+             FreshSignal6967 --> FreshTail6971 : first pair\n\
+             note right of FreshSignal6967 : renamed checkpoint\n\
+             (FreshLeft6947, FreshRight6959) .. FreshRole6961\n\
+             FreshTail6971 --> FreshSignal6967 : reverse pair\n\
+             @enduml",
+        )
+        .expect("association event graph parses")
+        else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(
+            svek_source_live_links(&diagram),
+            [
+                SvekLinkEmission::Relationship(0),
+                SvekLinkEmission::AttachedNote(0),
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 0,
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 1,
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 2,
+                },
+                SvekLinkEmission::Relationship(1),
+            ]
+        );
+        assert_eq!(
+            svek_live_link_order(&diagram),
+            [
+                SvekLinkEmission::Relationship(0),
+                SvekLinkEmission::Relationship(1),
+                SvekLinkEmission::AttachedNote(0),
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 0,
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 1,
+                },
+                SvekLinkEmission::AssociationReplacement {
+                    association_idx: 0,
+                    replacement_idx: 2,
+                },
+            ]
+        );
+        assert_eq!(relationship_layout_edge_indices(&diagram), [0, 1]);
+    }
+
+    #[test]
     fn magic_arrow_frontier_uses_retracted_guide_and_polygon_overscan() {
         let Diagram::Class(diagram) = rustuml_parser::parse::parse(
             "@startuml\n\
@@ -20774,6 +21036,7 @@ mod tests {
             .map(|node| match node {
                 SvekNodeEmission::Entity(idx) => diagram.entities[idx].label.as_str(),
                 SvekNodeEmission::Note(idx) => diagram.notes[idx].alias.as_deref().unwrap_or("GMN"),
+                SvekNodeEmission::AssociationPoint(_) => "apoint",
                 SvekNodeEmission::EmptyPackage(idx) => {
                     package_display_label(&diagram.packages[idx])
                 }
@@ -20991,6 +21254,150 @@ mod tests {
     }
 
     #[test]
+    fn association_point_is_an_owner_local_nested_leaf() {
+        let input = "@startuml\n\
+                     package FreshOwner6991 {\n\
+                       class FreshDirect6997\n\
+                       package FreshChild7001 {\n\
+                         class FreshNested7013\n\
+                       }\n\
+                       class FreshLeft7019\n\
+                       class FreshRight7027\n\
+                       (FreshLeft7019, FreshRight7027) .. FreshRole7039\n\
+                       class FreshTail7043\n\
+                     }\n\
+                     @enduml";
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected class diagram");
+        };
+        assert_eq!(
+            diagram.association_classes[0].owner_package.as_deref(),
+            Some("FreshOwner6991")
+        );
+        let emissions = svek_node_emission_order(&diagram);
+        let descriptors = emissions
+            .iter()
+            .map(|emission| match emission {
+                SvekNodeEmission::Entity(idx) => diagram.entities[*idx].label.clone(),
+                SvekNodeEmission::AssociationPoint(idx) => format!("apoint:{idx}"),
+                SvekNodeEmission::Note(idx) => format!("note:{idx}"),
+                SvekNodeEmission::EmptyPackage(idx) => format!("package:{idx}"),
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            descriptors,
+            [
+                "FreshDirect6997",
+                "FreshLeft7019",
+                "FreshRight7027",
+                "FreshRole7039",
+                "apoint:0",
+                "FreshTail7043",
+                "FreshNested7013",
+            ]
+        );
+        let owner_idx = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "FreshOwner6991")
+            .unwrap();
+        assert_eq!(association_owner_packages(&diagram), [Some(owner_idx)]);
+    }
+
+    #[test]
+    fn cross_parent_association_point_keeps_the_statement_package_nonempty() {
+        let input = "@startuml\n\
+                     package FreshWest7121 {\n\
+                       class FreshLeft7127\n\
+                       class FreshRole7129\n\
+                     }\n\
+                     package FreshEast7151 {\n\
+                       class FreshRight7159\n\
+                     }\n\
+                     package FreshStatement7177 {\n\
+                       (FreshWest7121.FreshLeft7127, FreshEast7151.FreshRight7159) .. FreshWest7121.FreshRole7129\n\
+                     }\n\
+                     @enduml";
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected class diagram");
+        };
+        assert_eq!(
+            diagram.association_classes[0].owner_package.as_deref(),
+            Some("FreshStatement7177")
+        );
+        let statement_idx = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "FreshStatement7177")
+            .unwrap();
+        let package_render = package_render_model(&diagram);
+
+        assert_eq!(association_owner_packages(&diagram), [Some(statement_idx)]);
+        assert_eq!(
+            package_render.roles[statement_idx],
+            PackageRenderRole::Cluster
+        );
+        assert_eq!(
+            svek_node_emission_order(&diagram).last(),
+            Some(&SvekNodeEmission::AssociationPoint(0))
+        );
+    }
+
+    #[test]
+    fn unrelated_declaration_crossing_a_child_group_does_not_reorder_direct_leaves() {
+        let before = "@startuml\n\
+                      package FreshOwner7057 {\n\
+                        class FreshLeft7069\n\
+                        class FreshUnrelated7079\n\
+                        package FreshChild7081 {\n\
+                          class FreshNested7091\n\
+                        }\n\
+                        class FreshRight7103\n\
+                        (FreshLeft7069, FreshRight7103) .. FreshRole7109\n\
+                      }\n\
+                      @enduml";
+        let after = "@startuml\n\
+                     package FreshOwner7057 {\n\
+                       class FreshLeft7069\n\
+                       package FreshChild7081 {\n\
+                         class FreshNested7091\n\
+                       }\n\
+                       class FreshUnrelated7079\n\
+                       class FreshRight7103\n\
+                       (FreshLeft7069, FreshRight7103) .. FreshRole7109\n\
+                     }\n\
+                     @enduml";
+        let describe = |source: &str| {
+            let Diagram::Class(diagram) = rustuml_parser::parse::parse(source).unwrap() else {
+                panic!("expected class diagram");
+            };
+            svek_node_emission_order(&diagram)
+                .into_iter()
+                .map(|emission| match emission {
+                    SvekNodeEmission::Entity(idx) => diagram.entities[idx].label.clone(),
+                    SvekNodeEmission::AssociationPoint(idx) => format!("apoint:{idx}"),
+                    SvekNodeEmission::Note(idx) => format!("note:{idx}"),
+                    SvekNodeEmission::EmptyPackage(idx) => format!("package:{idx}"),
+                })
+                .collect::<Vec<_>>()
+        };
+
+        assert_eq!(describe(before), describe(after));
+        assert_eq!(
+            describe(before),
+            [
+                "FreshLeft7069",
+                "FreshUnrelated7079",
+                "FreshRight7103",
+                "FreshRole7109",
+                "apoint:0",
+                "FreshNested7091",
+            ]
+        );
+    }
+
+    #[test]
     fn attached_note_before_relationship_claims_three_shared_uid_slots() {
         let input = "@startuml\n\
             class FreshOrigin1009\n\
@@ -21105,6 +21512,7 @@ mod tests {
                 class NestedGamma\n\
               }\n\
               class DirectBeta\n\
+              (DirectDelta, DirectBeta) .. DirectRole\n\
             }\n\
             @enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -21114,8 +21522,9 @@ mod tests {
 
         // Graphviz slots are allocated in SVEK creation order even though
         // entity indices retain parser order for rendering.
-        let slots = svek_collision_layout_slots(&diagram, &[3, 0, 2, 1], &[], &[], &[], &[4]);
-        assert_eq!(slots, [0, 1, 2, 3, 4]);
+        let slots =
+            svek_collision_layout_slots(&diagram, &[5, 0, 4, 1, 2], &[], &[], &[], &[3]);
+        assert_eq!(slots, [0, 1, 2, 3, 4, 5]);
     }
 
     #[test]

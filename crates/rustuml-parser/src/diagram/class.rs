@@ -251,10 +251,10 @@ pub enum MemberKind {
 }
 
 /// An association class: `(A, B) .. C` (or `(A, B) -- C`). PlantUML synthesizes
-/// a tiny anchor point (`apoint`) on the A–B association line and draws a dashed
+/// a tiny anchor point (`apoint`) on the A-B association line and draws a dashed
 /// (`..`) or solid (`--`) connector from it to the association class `C`. The
-/// apoint's id, position, and the three connector geometries are produced by
-/// Java's layout engine and surfaced via the oracle.
+/// apoint is a real owner-local Cuca leaf even though Rust keeps its paint data
+/// in this association model rather than in `ClassEntity`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AssociationClass {
     /// First endpoint of the association line.
@@ -263,6 +263,11 @@ pub struct AssociationClass {
     pub b: String,
     /// The association class hanging off the apoint.
     pub c: String,
+    /// Package that owns Java's synthetic POINT_FOR_ASSOCIATION Quark.
+    /// Equal-parent endpoints use that common parent; cross-parent endpoints
+    /// use the package active at the association statement. `None` is root.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner_package: Option<String>,
     /// The latest pre-existing A-B link removed by Java `Association.createNew`.
     /// Its constructor UID remains in `ClassUidEvent`, while its semantic data
     /// supplies the replacement split links.
