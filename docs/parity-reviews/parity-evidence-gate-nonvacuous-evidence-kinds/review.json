@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "evidence_kind": "gate",
+  "maker": {
+    "identity": "Marcelo Cantos <marcelo.cantos@gmail.com>",
+    "task_id": "implementation commit 75bc7176a5a6632a3e1ca4491e3f89e18506227e"
+  },
+  "reviewer": {
+    "identity": "Codex GPT-5 independent checker",
+    "task_id": "codex/t14-gate-successor-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "independent skeptical checker; did not implement the reviewed change"
+  },
+  "revisions": {
+    "account_commit": "5134046a85c693be0615fb4f1113564236f8f3d2",
+    "implementation_commit": "75bc7176a5a6632a3e1ca4491e3f89e18506227e",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "commands": [
+    {
+      "command": "git show -s --format='%H%n%an <%ae>%n%ad%n%s' 5134046a",
+      "result": "PASS: account commit is 5134046a85c693be0615fb4f1113564236f8f3d2 by Marcelo Cantos, dated 2026-08-01, docs: account for non-vacuous parity evidence kinds."
+    },
+    {
+      "command": "git show -s --format='%H%n%an <%ae>%n%ad%n%s' 75bc7176a5a6632a3e1ca4491e3f89e18506227e",
+      "result": "PASS: implementation commit is 75bc7176a5a6632a3e1ca4491e3f89e18506227e by Marcelo Cantos, dated 2026-08-01, test: make parity evidence gate non-vacuous."
+    },
+    {
+      "command": "git diff --stat 5134046a..75bc7176a5a6632a3e1ca4491e3f89e18506227e",
+      "result": "PASS: implementation diff is limited to crates/rustuml-oracle/tests/parity_evidence.rs and quarantining docs/parity-reviews/parity-evidence-gate-attestation-integrity/review.json."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+      "result": "PASS: 32 passed, 0 failed."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture",
+      "result": "FAIL as expected: the aggregate guard reports only 18 pre-existing orphaned quarantined ACCEPT directories and active accepted parity inventory found 0."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+      "result": "FAIL as expected before renderer comparison: invalid T14 parity review evidence reports the same 18 orphaned quarantined ACCEPT directories and active accepted parity inventory found 0; embedded parity_evidence unit tests passed."
+    }
+  ],
+  "source_inspection": {
+    "account": "The account claims a discriminator between parity evidence and gate evidence, a nonempty active parity corpus requirement, and a successor obligation for every quarantined authored ACCEPT.",
+    "implementation": "The implementation adds EvidenceKind::Parity and EvidenceKind::Gate. Gate reviews validate only mutations under docs/parity-reviews/<mechanism>/evidence, require artifact paths to remain under that canonical directory, require 40-character Git blob hashes, compare current bytes and HEAD bytes, require expected/observed/result, require at least two valid mutation artifacts and at least two normalized axes, and never insert AcceptedHeldOut values. Parity reviews still own PlantUML source/Java SVG/zero-exit held-outs.",
+    "quarantine_path": "build_report scans quarantined-review*.json, derives authored ACCEPT via the closed verdict normalizer, and reports a violation when that mechanism directory lacks any canonical active review.",
+    "nonvacuity_path": "build_report reports active accepted parity inventory must select at least two Java-success held-outs whenever fewer than two selected parity held-outs remain after validation."
+  },
+  "mutations": [
+    {
+      "artifact": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/empty-gate-only-corpus.json",
+      "git_blob": "a9d0a6ecbcea8f3f06d03ccda70f08261c27b16b",
+      "axes": [
+        "empty active parity corpus",
+        "gate-only acceptance",
+        "evidence-kind separation"
+      ],
+      "expected": "A gate ACCEPT alone must not satisfy renderer parity non-vacuity, and a zero-review corpus must fail closed before any shipped-path renderer comparison can be treated as green.",
+      "observed": "The focused unit mutations passed, and the real shipped perturbation harness stopped on invalid evidence with found 0 active parity held-outs.",
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/orphaned-quarantined-acceptance.json",
+      "git_blob": "db220e34ed58a26dbcccc6df8959bea8b58907d0",
+      "axes": [
+        "quarantined ACCEPT",
+        "active successor requirement",
+        "historical acceptance cannot become silence"
+      ],
+      "expected": "Every quarantined authored ACCEPT without an active same-directory canonical successor must be rejected by the real guard instead of silently disappearing from the accepted corpus.",
+      "observed": "The focused mutation and real guard both rejected orphaned quarantined ACCEPT records. The real guard listed the expected 18 unrelated orphaned acceptances.",
+      "result": "PASS"
+    },
+    {
+      "artifact": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/evidence/gate-artifact-kind-smuggling.json",
+      "git_blob": "80c3c8cf16a735658d22e36877397a6cf3c76f01",
+      "axes": [
+        "artifact immutability",
+        "evidence-kind smuggling",
+        "gate evidence must not inflate parity inventory"
+      ],
+      "expected": "Gate evidence may validate a gate review but must select zero AcceptedHeldOut entries, and a changed artifact must fail the declared hash/HEAD immutability check.",
+      "observed": "The gate review remained non-inflating when paired with a valid parity review, and byte mutation of a gate artifact produced the expected hash mismatch violation.",
+      "result": "PASS"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "Empty and gate-only corpora fail closed; gate ACCEPT records do not inflate renderer parity evidence."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "Orphaned quarantined authored ACCEPT records fail closed. The real guard currently remains red for 18 older mechanisms without active successors, which is the expected backlog and not a bypass in this implementation."
+    },
+    {
+      "severity": "acceptance-critical",
+      "status": "cleared",
+      "finding": "Gate artifacts are bound by path containment plus current and HEAD Git blob hashes; byte mutation is detected."
+    },
+    {
+      "severity": "residue",
+      "status": "out_of_scope",
+      "finding": "The active accepted parity inventory is still empty because the older quarantined ACCEPT mechanisms have not been re-reviewed or rejected. This gate correctly exposes that state; it does not supply parity held-outs itself."
+    }
+  ],
+  "residue": [
+    "Aggregate harness_guards and parity_perturbations remain red until the 18 older orphaned quarantined ACCEPT mechanisms receive canonical successor reviews and at least two active Java-success parity held-outs are selected.",
+    "This review is evidence_kind gate and therefore intentionally contributes zero AcceptedHeldOut entries."
+  ],
+  "verdict": "ACCEPT",
+  "verdict_reason": "Every hostile mutation I ran was stopped by the reviewed implementation, and the remaining red surface is the explicitly expected repository-wide inventory debt rather than a bypass of parity-evidence-gate-nonvacuous-evidence-kinds."
+}
