@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node LeftSource557
+database RightSink563
+LeftSource557 -right-> RightSink563 : concise handoff 563
+note left on link #PaleGreen
+  left root memo 557
+  second row **bold**
+end note
+@enduml

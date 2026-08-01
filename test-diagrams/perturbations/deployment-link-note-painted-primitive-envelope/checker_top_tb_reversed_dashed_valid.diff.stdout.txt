@@ -1,0 +1,8 @@
+SVG structural differences:
+  [17] <path> attr mismatch:
+    expected: [("d", "M79.75,52.66 C79.75,90.95 79.75,170.25 79.75,196.59"), ("fill", "none"), ("id", "NorthArchive541-backto-SouthQueue"), ("style", "stroke:#B22222;stroke-width:1;stroke-dasharray:7,7;")]
+    actual:   [("d", "M79.75,52.66 C79.75,83.74 79.75,139.77 79.75,176.12"), ("fill", "none"), ("id", "NorthArchive541-backto-SouthQueue"), ("style", "stroke:#181818;stroke-width:1;")]
+  [18] <polygon> attr mismatch:
+    expected: [("fill", "#B22222"), ("points", "79.75,46.66,75.75,55.66,79.75,51.66,83.75,55.66,79.75,46.66"), ("style", "stroke:#B22222;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "79.75,46.66,75.75,55.66,79.75,51.66,83.75,55.66,79.75,46.66"), ("style", "stroke:#181818;stroke-width:1;")]
+

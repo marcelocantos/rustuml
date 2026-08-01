@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="180px" preserveAspectRatio="none" style="width:215px;height:180px;background:#FFFFFF;" version="1.1" viewBox="0 0 215 180" width="215px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity ThickSource487-->
+<g class="entity" data-qualified-name="ThickSource487" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="40.99,16,50.99,6,190.0164,6,190.0164,42.4883,180.0164,52.4883,40.99,52.4883,40.99,16" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.0164" x2="190.0164" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="40.99" x2="180.0164" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="180.0164" x2="180.0164" y1="16" y2="52.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109.0264" x="55.99" y="39.5352">ThickSource487</text>
+</g>
+<!--entity ThickSink491-->
+<g class="entity" data-qualified-name="ThickSink491" data-source-line="3" id="ent0003">
+<path d="M64.52,139 L166.477,139 C171.477,139 171.477,152.2441 171.477,152.2441 C171.477,152.2441 171.477,165.4883 166.477,165.4883 L64.52,165.4883 C59.52,165.4883 59.52,152.2441 59.52,152.2441 C59.52,152.2441 59.52,139 64.52,139" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M166.477,139 C161.477,139 161.477,152.2441 161.477,152.2441 C161.477,165.4883 166.477,165.4883 166.477,165.4883" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91.957" x="64.52" y="157.5352">ThickSink491</text>
+</g>
+<!--link ThickSource487 to ThickSink491-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk4">
+<path d="M115.5,52.59 C115.5,78.02 115.5,111.85 115.5,132.61" fill="none" id="ThickSource487-to-ThickSink491" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="115.5,138.61,119.5,129.61,115.5,133.61,111.5,129.61,115.5,138.61" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="152.3311" x="10.7966" y="83.3084">width independent label</text>
+<path d="M6,92.0505 L6,117.0505 L167,117.0505 L167,102.0505 L157,92.0505 L6,92.0505" fill="#F0FFF0" style="stroke:#006400;stroke-width:0.5;"/>
+<path d="M157,92.0505 L157,102.0505 L167,102.0505 L157,92.0505" fill="#F0FFF0" style="stroke:#006400;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="140.9243" x="12" y="109.6189">thick route memo 491</text>
+</g>
+</g></svg>

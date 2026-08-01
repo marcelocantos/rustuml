@@ -1,0 +1,5 @@
+SVG structural differences:
+  [21] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "415.23,52.86,415.3436,62.7082,417.3133,57.4053,422.6162,59.375,415.23,52.86"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "415.23,52.85,415.3179,62.6985,417.3014,57.4008,422.5991,59.3843,415.23,52.85"), ("style", "stroke:#181818;stroke-width:1;")]
+

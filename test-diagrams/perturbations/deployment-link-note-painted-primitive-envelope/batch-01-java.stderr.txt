@@ -1,0 +1,3 @@
+Error line 6 in file: test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_right_ltr_note_only_colored_creole.puml
+Error line 6 in file: test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_top_tb_reversed_dashed.puml
+Some diagram description contains errors

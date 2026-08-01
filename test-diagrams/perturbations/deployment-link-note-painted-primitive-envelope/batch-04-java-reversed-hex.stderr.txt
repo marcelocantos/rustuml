@@ -1,0 +1,2 @@
+Error line 6 in file: test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_top_tb_reversed_dashed_hex.puml
+Some diagram description contains errors

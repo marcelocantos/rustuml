@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+component LeftWorker577
+storage RightVault587
+LeftWorker577 -right[#4169E1,dotted]-> RightVault587 : concise transfer 587
+note right on link #FFF4CC
+  right root memo 577
+  second row //italic//
+end note
+@enduml

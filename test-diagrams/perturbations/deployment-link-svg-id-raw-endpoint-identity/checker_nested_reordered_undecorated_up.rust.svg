@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="342px" preserveAspectRatio="none" style="width:367px;height:342px;background:#FFFFFF;" version="1.1" viewBox="0 0 367 342" width="367px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Western Region-->
+<g class="cluster" data-qualified-name="region-west" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,204,6,204,113.49,194,123.49,16,123.49,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="194" x2="204" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="194" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="194" x2="194" y1="16" y2="123.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="112.6084" x="49.6958" y="32.5352">Western Region</text>
+</g>
+<!--cluster Production Region-->
+<g class="cluster" data-qualified-name="region.prod" data-source-line="4" id="ent0004">
+<polygon fill="none" points="71,216.4883,81,206.4883,279,206.4883,279,307.9783,269,317.9783,71,317.9783,71,216.4883" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="269" x2="279" y1="216.4883" y2="206.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="71" x2="269" y1="216.4883" y2="216.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="269" x2="269" y1="216.4883" y2="317.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="132.5762" x="104.7119" y="233.0235">Production Region</text>
+</g>
+<!--entity Repeated Face-->
+<g class="entity" data-qualified-name="region-west.child.beta" data-source-line="2" id="ent0003">
+<path d="M62.2582,64 C62.2582,54 120.9985,54 120.9985,54 C120.9985,54 179.7387,54 179.7387,64 L179.7387,89.4883 C179.7387,99.4883 120.9985,99.4883 120.9985,99.4883 C120.9985,99.4883 62.2582,99.4883 62.2582,89.4883 L62.2582,64" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M62.2582,64 C62.2582,74 120.9985,74 120.9985,74 C120.9985,74 179.7387,74 179.7387,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.4805" x="72.2582" y="91.5352">Repeated Face</text>
+</g>
+<!--entity Repeated Face-->
+<g class="entity" data-qualified-name="region.prod.child.alpha" data-source-line="5" id="ent0005">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="127.4805" x="127.2582" y="254.49"/>
+<polygon fill="#F1F1F1" points="237.7387,259.49,237.7387,273.49,249.7387,273.49,249.7387,265.49,243.7387,259.49,237.7387,259.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="243.7387" x2="243.7387" y1="259.49" y2="265.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="249.7387" x2="243.7387" y1="265.49" y2="265.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97.4805" x="137.2582" y="281.0252">Repeated Face</text>
+</g>
+<!--link child.beta to child.alpha-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="association" data-source-line="7" id="lnk6">
+<path d="M180.1682,99.42 C201.3582,110.39 222.9782,126.03 234.9982,147.49 C254.7882,182.8 226.9582,228.59 207.3682,254.04" fill="none" id="child.beta-child.alpha" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="108.2783" x="242.7882" y="170.0584">association route</text>
+</g>
+<!--reverse link region-west to region/prod-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="8" id="lnk8">
+<path d="M10.4873,84.5487 C9.5289,85.046 13.4769,83.0125 12.3929,83.5904 C10.2248,84.7463 7.8206,86.0602 5.2397,87.5203 C-5.0839,93.3606 -18.2336,101.5387 -30.3955,111.2875 C-54.7193,130.785 -75.0918,156.565 -61.0018,182.49 C-43.5718,214.555 -9.3843,237.0375 20.8432,251.6025 C35.957,258.885 50.0807,264.1881 60.6248,267.72 C63.2608,268.603 65.6731,269.3752 67.8212,270.04 C68.8952,270.3725 69.9032,270.678 70.8401,270.9571" fill="none" id="region-west-backto-region/prod" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="15.8166,81.7921,5.985,82.3741,11.3755,84.0892,9.6604,89.4798,15.8166,81.7921" style="stroke:#181818;stroke-width:1;"/>
+<path d="M-56.0018,152.49 L-56.0018,177.49 L134.9982,177.49 L134.9982,162.49 L124.9982,152.49 L-56.0018,152.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M124.9982,152.49 L124.9982,162.49 L134.9982,162.49 L124.9982,152.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="170.8789" x="-50.0018" y="170.0584">owner identity memo 4199</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="88.4673" x="141.8772" y="170.0584">owner reverse</text>
+</g>
+</g></svg>

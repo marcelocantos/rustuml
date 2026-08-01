@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="105px" preserveAspectRatio="none" style="width:513px;height:105px;background:#FFFFFF;" version="1.1" viewBox="0 0 513 105" width="513px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Gate & Relay-->
+<g class="entity" data-qualified-name="Gate . Relay" data-source-line="2" id="ent0002">
+<polygon fill="#F1F1F1" points="16,43.76,26,33.76,141.251,33.76,141.251,70.2483,131.251,80.2483,16,80.2483,16,43.76" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="131.251" x2="141.251" y1="43.76" y2="33.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="16" x2="131.251" y1="43.76" y2="43.76"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="131.251" x2="131.251" y1="43.76" y2="80.2483"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.251" x="31" y="67.2952">Gate &amp; Relay</text>
+</g>
+<!--entity Sink-3-->
+<g class="entity" data-qualified-name="Sink-3" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="36.4883" rx="35" ry="35" style="stroke:#181818;stroke-width:0.5;" width="65.4111" x="434.25" y="38.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45.4111" x="444.25" y="62.2952">Sink-3</text>
+</g>
+<!--link Gate & Relay to Sink-3-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk4">
+<path d="M141.7,57 C225.09,57 364.22,57 428.16,57" fill="none" id="Gate & Relay-to-Sink-3" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="434.16,57,425.16,53,429.16,57,425.16,61,434.16,57" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="150.7886" x="212.5374" y="18.5684">escaped attribute probe</text>
+<path d="M176.25,27.3105 L176.25,52.3105 L399.25,52.3105 L399.25,37.3105 L389.25,27.3105 L176.25,27.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M389.25,27.3105 L389.25,37.3105 L399.25,37.3105 L389.25,27.3105" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="202.3633" x="182.25" y="44.8789">ampersand identity memo 4211</text>
+</g>
+</g></svg>

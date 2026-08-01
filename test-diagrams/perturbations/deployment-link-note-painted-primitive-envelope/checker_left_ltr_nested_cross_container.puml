@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+node EnvelopeEast449 {
+  artifact NestedEmitter451
+}
+database RootReceiver457
+NestedEmitter451 -right[#2E8B57,thickness=3]-> RootReceiver457 : cross owner\nsecond label row
+note left on link #PaleGreen : left memo **bold** 457
+@enduml

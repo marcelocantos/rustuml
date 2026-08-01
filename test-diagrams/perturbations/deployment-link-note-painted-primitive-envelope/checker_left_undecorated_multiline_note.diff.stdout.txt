@@ -1,0 +1,18 @@
+SVG structural differences:
+  element count: expected 23, got 22
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "230px"), ("preserveAspectRatio", "none"), ("style", "width:371px;height:230px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 371 230"), ("width", "371px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "230px"), ("preserveAspectRatio", "none"), ("style", "width:459px;height:230px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 459 230"), ("width", "459px"), ("zoomAndPan", "magnify")]
+  [19] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "57.624"), ("x", "112.13"), ("y", "138.1462")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "57.624"), ("x", "112.13"), ("y", "135.6795")]
+  [20] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "17.5977"), ("x", "173.8673"), ("y", "132.7791")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "17.5977"), ("x", "173.8673"), ("y", "130.3125")]
+  [21] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "78.9902"), ("x", "276.86"), ("y", "113.947")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "167.3306"), ("x", "276.86"), ("y", "121.6023")]
+  [21] <text> text mismatch:
+    expected: Some("undecorated")
+    actual:   Some("undecorated\\ncenter rows")
+

@@ -1,0 +1,8 @@
+test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/checker_nested_quoted_broad_codes.svg
+xml_exit=0
+test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/checker_nested_quoted_broad_codes.rust.svg
+xml_exit=0
+test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/checker_nested_quoted_reordered_up.svg
+xml_exit=0
+test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/checker_nested_quoted_reordered_up.rust.svg
+xml_exit=0

@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-svg-id-raw-endpoint-identity",
+  "review_date": "2026-08-01",
+  "checker": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop with source inspection, frozen executables, Java PlantUML JAR, xmllint, and uv-run XML tracing",
+    "implemented_mechanism": false
+  },
+  "verdict": "REJECT",
+  "verdict_gate": "Parity Honesty Rule 10 is absolute for this review: any fresh held-out whose frozen diff_one --no-oracle exit is nonzero rejects the mechanism. No mechanism-only pass classification or scope waiver was applied.",
+  "verdict_reason": "Multiple fresh valid held-outs returned nonzero from diff_one --no-oracle. The strongest direct counterexample, checker_xml_ampersand_raw_identity.puml, proves that Rust writes the raw Java endpoint identity into an SVG id attribute without XML escaping: Java emits id=\"Gate &amp; Relay-to-Sink-3\", Rust emits malformed id=\"Gate & Relay-to-Sink-3\", xmllint rejects the Rust SVG, and diff_one exits 101 while parsing it.",
+  "revisions": {
+    "rust_checkout": "/private/tmp/rustuml-review-deployment-render",
+    "rust_branch": "codex/t14-review-deployment-render",
+    "rust_reviewed_revision": "f0ffaa30c45c3531915727707945eecf47ee106d",
+    "java_checkout": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commit": "d365641b7bc17ef9fd39fce38e457f3eba627048",
+    "implementation_commit": "0818fe983f2439f0081767202887ebd4b3ca9b19",
+    "account_precedes_implementation": true
+  },
+  "immutable_executables": {
+    "rustuml": {
+      "path": "/private/tmp/rustuml-frozen/f0ffaa30/rustuml",
+      "sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-frozen/f0ffaa30/diff_one",
+      "sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
+      "required_mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "constraints_observed": {
+    "cargo_or_rustc_run": false,
+    "production_code_edited": false,
+    "account_json_edited": false,
+    "prior_review_or_rejection_artifacts_edited": false,
+    "baselines_or_comparator_controls_edited": false,
+    "park_error_guard_or_allowlist_files_edited": false,
+    "frozen_binaries_only_for_rust_execution": true
+  },
+  "commands": [
+    "git rev-parse HEAD && git branch --show-current",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-frozen/f0ffaa30/rustuml /private/tmp/rustuml-frozen/f0ffaa30/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "git merge-base --is-ancestor d365641b7bc17ef9fd39fce38e457f3eba627048 0818fe983f2439f0081767202887ebd4b3ca9b19",
+    "git show d365641b7bc17ef9fd39fce38e457f3eba627048:docs/parity-reviews/deployment-link-svg-id-raw-endpoint-identity/account.json",
+    "git show 0818fe983f2439f0081767202887ebd4b3ca9b19 -- crates/rustuml-render/src/deployment.rs",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Link.java | sed -n '90,130p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Entity.java | sed -n '670,700p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/plasma/Quark.java | sed -n '45,95p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/UGroup.java | sed -n '35,90p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '3610,3695p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '6800,6840p'",
+    "rg -n 'include_str!|include_bytes!|test-diagrams|golden|\\.svg|replace\\(|source_line|match .*len|\\.len\\(\\).*=>|svg\\.raw|format!' over the implementation diff",
+    "rg -n 'Gate & Relay|duplicate reverse memo 4127|identity memo 4103|nested reverse memo 4327' crates",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg each checker_*.puml source, preserving same-stem .svg plus batch stdout/stderr/exit",
+    "/private/tmp/rustuml-frozen/f0ffaa30/rustuml -tsvg each checker_*.puml source, preserving same-stem .rust.svg plus .rust.stderr.txt and .rust.exit.txt",
+    "xmllint --noout each generated Java and Rust SVG, preserving batch-03, batch-06, and batch-09 validation stdout/stderr/exit",
+    "/private/tmp/rustuml-frozen/f0ffaa30/diff_one --no-oracle each checker_*.puml source, preserving .diff.stdout.txt, .diff.stderr.txt, and .diff.exit.txt",
+    "env UV_CACHE_DIR=/private/tmp/uv-cache uv run python test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/trace_identity.py",
+    "find test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity -maxdepth 1 -type f ! -name SHA256SUMS.txt -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256 > test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/SHA256SUMS.txt"
+  ],
+  "source_review": {
+    "java_model": [
+      "Link.idCommentForSvg at Link.java:106-114 selects entity1/entity2 getName() and the to/backto/association delimiter; Link.commentForSvg at lines 116-120 uses the same raw local names.",
+      "Entity.getName at Entity.java:682-684 delegates to Quark.getName. Quark.java:84-90 keeps getName() as the local raw quark name and getQualifiedName() as a separate nested identity.",
+      "UGroup.put at UGroup.java:57-72 projects non-word punctuation to dots only in the group metadata channel. It does not redefine Link.idCommentForSvg identity.",
+      "The Java SVG serializer escapes attribute syntax after the raw model identity is chosen, as shown by the ampersand counterexample's serialized &amp; and XML parser's recovered raw value."
+    ],
+    "rust_model": [
+      "The implementation commit removes own_qname projection and derives oracle candidates, comments, and no-oracle path base IDs from DeploymentConnection.from/to. That causal change matches Java's raw endpoint-name selection.",
+      "render_connection at deployment.rs:3671 and the no-oracle link emitter use SvgBuilder.raw formatting. The raw identity value is therefore inserted directly into XML syntax instead of passing through an attribute escaper.",
+      "The frozen output proves the ID is model-produced rather than post-hoc surgery: path IDs and link comments arise during render emission, duplicate IDs are uniquified by the normal ID path, and no generated SVG is read back or rewritten."
+    ],
+    "fixture_shape_and_tuning_audit": [
+      "No golden-data reads, include_str/include_bytes fixture embedding, checker label branches, fixture names, per-branch-count constant ladders, coordinate-keyed rewrites, comparator changes, or post-render SVG mutation were found in the implementation diff.",
+      "The identity implementation adds no parity-affecting numeric constant. Candidate selection is endpoint/order/type shaped and source-line fallback was pre-existing.",
+      "Use of svg.raw is ordinary direct emission, not post-hoc surgery, but it is also the immediate cause of the unescaped attribute counterexample."
+    ]
+  },
+  "inputs": [
+    {
+      "stem": "checker_display_alias_collision_ltr",
+      "axes": ["left-to-right", "display/alias collision", "display-first and code-first declarations", "declaration order", "link note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: nonzero held-out; Java emits two links while frozen Rust emits one and dispatches a different diagram shape. Rule 10 rejects without an exclusion."
+    },
+    {
+      "stem": "checker_collision_reordered_reverse_duplicates",
+      "axes": ["left-to-right", "reordered declarations", "raw display/alias collision", "two duplicate reversed links", "top link note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: nonzero held-out; comments and IDs including duplicate suffixes match, but the structural comparator reports arrow geometry mismatch. Rule 10 rejects without an exclusion."
+    },
+    {
+      "stem": "checker_colon_slash_styled_duplicates",
+      "axes": ["colon and slash raw names", "duplicate links", "dotted and bold styles", "bottom colored note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: nonzero held-out; raw IDs API:North-to-queue/v2 and suffix -1 match, while route style/geometry differs. Rule 10 rejects without an exclusion."
+    },
+    {
+      "stem": "checker_nested_broad_codes_duplicate_displays",
+      "axes": ["nested owners", "slash owner code", "duplicate child displays", "owner and child links"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: Java emits a syntax-error SVG for the slash owner endpoint; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_nested_quoted_broad_codes",
+      "axes": ["nested owners", "quoted slash owner endpoint", "duplicate child displays", "child link"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: quoting does not make the Java owner-link syntax valid; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_nested_quoted_reordered_up",
+      "axes": ["nested owners", "quoted slash owner", "reordered declarations", "association", "up reversed link", "left note"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: Java emits an error SVG; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_nested_reordered_undecorated_up",
+      "axes": ["nested owners", "slash owner", "reordered declarations", "association", "up reversed link", "left note"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: Java emits an error SVG; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_nested_child_links_broad_owners",
+      "axes": ["valid nested child endpoints", "slash and hyphen owner names", "dots in child aliases", "duplicate child displays", "right note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 0,
+      "result": "MATCH: frozen comparator exit 0; both path IDs use child.alpha-to-child.beta rather than resolved owner-qualified layout identity."
+    },
+    {
+      "stem": "checker_nested_child_links_reordered_reverse",
+      "axes": ["valid nested child endpoints", "reordered owners", "duplicate child displays", "left reversed link", "left note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: nonzero held-out; both path IDs use child.alpha-backto-child.beta, but full SVG structure and geometry differ. Rule 10 rejects without an exclusion."
+    },
+    {
+      "stem": "checker_xml_ampersand_raw_identity",
+      "axes": ["renamed display endpoint", "ampersand XML metacharacter", "hyphen endpoint", "left-to-right", "bottom note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 101,
+      "result": "FAIL: direct in-invariant counterexample. Java serializes a well-formed escaped ID; Rust serializes malformed XML and diff_one panics after reporting a malformed entity reference at 16:73."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Raw endpoint identity is not safely serialized as SVG attribute data",
+      "evidence": [
+        "checker_xml_ampersand_raw_identity.svg contains id=\"Gate &amp; Relay-to-Sink-3\" and is well-formed XML.",
+        "checker_xml_ampersand_raw_identity.rust.svg contains id=\"Gate & Relay-to-Sink-3\" and xmllint reports xmlParseEntityRef: no name.",
+        "checker_xml_ampersand_raw_identity.diff.stderr.txt reports failed to parse SVG: malformed entity reference at 16:73; .diff.exit.txt is 101.",
+        "identity-trace-attempt-2.stdout.txt records java xml_valid=true, rust xml_valid=false, and the same recovered raw identity on both sides."
+      ],
+      "cause": "The model change correctly switches identity selection from projected names to raw connection endpoint names, but direct svg.raw attribute formatting omits the serializer step that Java applies after selecting that raw identity."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Additional valid fresh held-outs are nonzero under the governing comparator",
+      "evidence": [
+        "checker_display_alias_collision_ltr.diff.exit.txt = 1",
+        "checker_collision_reordered_reverse_duplicates.diff.exit.txt = 1",
+        "checker_colon_slash_styled_duplicates.diff.exit.txt = 1",
+        "checker_nested_child_links_reordered_reverse.diff.exit.txt = 1"
+      ],
+      "cause": "The preserved diffs expose full-render differences under the requested collision, style, order, and reversal axes. Rule 10 makes each nonzero result independently rejecting; none was removed or reclassified."
+    }
+  ],
+  "residues": [
+    "The valid nested broad-owner control with child endpoints is comparator-clean and the XML trace confirms raw local path identity rather than owner-qualified layout identity.",
+    "Other valid inputs retain matching comments/path IDs while differing in parser dispatch, route geometry, or style. These are recorded as rejecting nonzero held-outs, not described as out of scope.",
+    "Four exploratory owner-link forms are invalid in the pinned Java oracle. Their sources and all outputs remain preserved, but the rejection rests on multiple valid inputs.",
+    "No Cargo, rustc, no-oracle bypass, comparator modification, baseline update, fixture exemption, or artifact deletion was used."
+  ],
+  "hash_evidence": {
+    "account_json": {
+      "path": "docs/parity-reviews/deployment-link-svg-id-raw-endpoint-identity/account.json",
+      "sha256": "0f27ff72166500ca6efd1a33c74146c7ea174f628f7acde0a8996d1957176b7c"
+    },
+    "batch_brackets": "Every Java render, frozen Rust render, XML validation, diff_one run, and trace attempt is bracketed by batch-*.pre.txt and batch-*.post.txt evidence containing the Rust revision, branch, Java revision, and all three immutable hashes. Failed shell and uv trace attempts are retained alongside successful retries.",
+    "artifact_manifest": {
+      "path": "test-diagrams/perturbations/deployment-link-svg-id-raw-endpoint-identity/SHA256SUMS.txt",
+      "sha256": "34ca0648f95f8e2b0743936c6c7471f0b06fa4ed911f95c04123c497fedb5b0a",
+      "hashed_entries": 137,
+      "directory_file_count_including_manifest": 138,
+      "contents": "All ten sources, same-stem Java SVGs, Rust SVGs, Rust stderr/exit files, diff stdout/stderr/exit files, revision/hash pre/post evidence, XML validation evidence, both trace attempts, and trace_identity.py."
+    }
+  }
+}

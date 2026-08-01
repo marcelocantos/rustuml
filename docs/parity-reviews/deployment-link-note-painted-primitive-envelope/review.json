@@ -1,0 +1,268 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-note-painted-primitive-envelope",
+  "review_date": "2026-08-01",
+  "checker": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop with source inspection, frozen executables, Java PlantUML JAR, xmllint, and uv-run SVG geometry tracing",
+    "implemented_mechanism": false
+  },
+  "verdict": "REJECT",
+  "verdict_gate": "Parity Honesty Rule 10 is absolute for this review: any fresh held-out whose frozen diff_one --no-oracle exit is nonzero rejects the mechanism. Geometry classification does not create a scope waiver, and no mechanism-only pass classification was applied.",
+  "verdict_reason": "Fresh valid held-outs across top, bottom, left, and right notes returned nonzero from diff_one --no-oracle. The shadow on/off pair directly falsifies the painted-envelope claim: Java's ComponentRoseNote preferred dimension includes deltaShadow, shifts the merged label, paints a shadow filter, and grows the canvas from 234 to 237px; frozen Rust renders the on variant identically to shadow-off at 234px. Multiline center labels and nested negative note bounds provide additional valid nonzero counterexamples.",
+  "revisions": {
+    "rust_checkout": "/private/tmp/rustuml-review-deployment-render",
+    "rust_branch": "codex/t14-review-deployment-render",
+    "rust_reviewed_revision": "f0ffaa30c45c3531915727707945eecf47ee106d",
+    "java_checkout": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commit": "0050e4e588a67d3af2051db898900f3016a18cb9",
+    "implementation_commit": "89111c356c5344502cf8f9e2c903edd54c0be78c",
+    "account_precedes_implementation": true
+  },
+  "immutable_executables": {
+    "rustuml": {
+      "path": "/private/tmp/rustuml-frozen/f0ffaa30/rustuml",
+      "sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-frozen/f0ffaa30/diff_one",
+      "sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
+      "required_mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "constraints_observed": {
+    "cargo_or_rustc_run": false,
+    "production_code_edited": false,
+    "account_json_edited": false,
+    "prior_review_or_rejection_artifacts_edited": false,
+    "baselines_or_comparator_controls_edited": false,
+    "park_error_guard_or_allowlist_files_edited": false,
+    "frozen_binaries_only_for_rust_execution": true
+  },
+  "commands": [
+    "git rev-parse HEAD && git branch --show-current",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /private/tmp/rustuml-frozen/f0ffaa30/rustuml /private/tmp/rustuml-frozen/f0ffaa30/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "git merge-base --is-ancestor 0050e4e588a67d3af2051db898900f3016a18cb9 89111c356c5344502cf8f9e2c903edd54c0be78c",
+    "git show 0050e4e588a67d3af2051db898900f3016a18cb9:docs/parity-reviews/deployment-link-note-painted-primitive-envelope/account.json",
+    "git show 89111c356c5344502cf8f9e2c903edd54c0be78c -- crates/rustuml-render/src/deployment.rs",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '270,325p;425,510p;930,955p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java | sed -n '55,85p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java | sed -n '70,95p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java | sed -n '135,225p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java | sed -n '120,155p'",
+    "nl -ba crates/rustuml-render/src/deployment.rs | sed -n '3790,3940p;4640,4750p;5660,5720p;5924,6042p'",
+    "rg -n 'include_str!|include_bytes!|test-diagrams|golden|\\.svg|replace\\(|source_line|match .*len|\\.len\\(\\).*=>|svg\\.raw|format!|[0-9]+\\.[0-9]{3,}' over the implementation diff",
+    "rg -n 'shadow control memo 479|left root memo 557|qijwm 547|association note 499|right deployment memo 593' crates",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg each checker_*.puml source, preserving same-stem .svg plus batch stdout/stderr/exit",
+    "/private/tmp/rustuml-frozen/f0ffaa30/rustuml -tsvg each checker_*.puml source, preserving same-stem .rust.svg plus .rust.stderr.txt and .rust.exit.txt",
+    "xmllint --noout each generated Java and Rust SVG, preserving validation stdout/stderr/exit for every batch",
+    "/private/tmp/rustuml-frozen/f0ffaa30/diff_one --no-oracle each checker_*.puml source, preserving .diff.stdout.txt, .diff.stderr.txt, and .diff.exit.txt",
+    "env UV_CACHE_DIR=/private/tmp/uv-cache uv run python test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/trace_geometry.py",
+    "find test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope -maxdepth 1 -type f ! -name SHA256SUMS.txt -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256 > test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/SHA256SUMS.txt"
+  ],
+  "source_review": {
+    "java_model": [
+      "SvekEdge.java:279-318 creates labelOnly, creates EntityImageNoteLink for a link note, then merges note and label with mergeLR or mergeTB according to left/right/top/bottom position.",
+      "SvekEdge.java:433-436 computes the merged TextBlock dimension; appendTable at lines 497-506 truncates it to integer fixed-size Graphviz table dimensions. SvekEdge.drawU at lines 944-947 paints the original merged labelText at the solved table origin.",
+      "EntityImageNoteLink.java:69-77 reports the ComponentRoseNote preferred dimension and paints that component. ComponentRoseNote.java:78-85 adds two-sided padding and symbolContext.getDeltaShadow to both preferred width and height.",
+      "LimitFinder.java:155-210 measures actual path, polygon, rectangle, image, ellipse, and text primitives. Rectangle bounds include deltaShadow*2; UPath bounds themselves use path extrema. SvekResult.java:130-135 translates the global painted minimum to six and returns painted span plus fifteen."
+    ],
+    "rust_model": [
+      "deployment_link_note_painted_bounds reconstructs merged note/label origins, includes the floored note rectangle, and includes measured center-label text instead of the whole fixed Graphviz placeholder. deployment_edge_paint_bounds unions this with route and endpoint-label primitives.",
+      "The implementation is causal and pre-render: bounds are computed from the parsed model, measured text, solved layout, and painted primitives before canvas framing. No Java SVG or golden SVG is read and no emitted SVG is rewritten.",
+      "deployment_link_note_dim delegates only to deployment_note_text_dim. It has no shadow contribution, and render_deployment_link_note emits no filter or shadow primitive. The frozen shadow-on output is byte-structurally equivalent to shadow-off in all traced note geometry and remains 234px high.",
+      "deployment_body_x_frame and deployment_body_y_frame return None whenever cluster IDs exist. cluster_frame then establishes the origin without edge_paint_bounds minima, while total width/height only max-expand with edge maxima. A negative link-note minimum can therefore remain clipped in nested diagrams."
+    ],
+    "fixture_shape_and_tuning_audit": [
+      "No golden-data reads, include_str/include_bytes fixture embedding, checker label branches, fixture names, per-branch-count constant ladders, coordinate-keyed rewrites, comparator changes, or post-render SVG mutation were found in the implementation diff.",
+      "The change is primitive/type/position shaped and adds no high-precision decimal. Its floor, +1 text origin, +2 label envelope, and position branches are plausibly traceable to Java integer tables and one-pixel text margins, but the new helper's adjacent comment does not cite exact Java source lines for every parity-affecting literal and branch.",
+      "The implementation does not tune by note text, branch count, source line, coordinate signature, or fixture stem."
+    ]
+  },
+  "inputs": [
+    {
+      "stem": "checker_bottom_tb_multiline_creole_combined",
+      "axes": ["bottom note", "top-to-bottom", "multiline center label", "multiline note", "bold and italic creole", "renamed endpoints"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: Java canvas is 272x265 and paints the center label on two lines; Rust canvas is 272x249 and paints a literal \\n segment on one line, moving the note and following geometry upward."
+    },
+    {
+      "stem": "checker_bottom_thick_stroke_variant",
+      "axes": ["bottom note", "left-to-right", "4px route", "colored route", "colored note", "renamed endpoints"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: canvases match at 215x180 and note positions differ by only 0.01px, but route stroke/style differs and the governing comparator is nonzero."
+    },
+    {
+      "stem": "checker_left_ltr_nested_cross_container",
+      "axes": ["left note", "left-to-right", "nested-to-root edge", "multiline center label", "3px colored route", "bold creole"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: Java note painted minimum is x=6 on a 282x201 canvas; Rust note painted minimum is x=-78.9953 on a 287x225 canvas and is clipped."
+    },
+    {
+      "stem": "checker_left_ltr_root_combined_simple",
+      "axes": ["left note", "left-to-right", "root endpoints", "multiline note", "center label", "bold creole"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 0,
+      "result": "MATCH: frozen comparator exit 0; root left merged-note envelope survives renamed multiline input."
+    },
+    {
+      "stem": "checker_left_undecorated_multiline_note",
+      "axes": ["left note", "top-to-bottom", "undecorated association", "multiline center label", "three-line note", "italic and superscript creole"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: note paths agree, but Java paints the center label on two lines within a 371px canvas while Rust paints a literal \\n in one 167.3306px run and grows the canvas to 459px."
+    },
+    {
+      "stem": "checker_right_ltr_note_only_colored_creole",
+      "axes": ["right note", "left-to-right", "note-only edge label", "composite color syntax", "bold and monospace creole"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: pinned Java emits a No such color error page; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_top_shadow_off_control",
+      "axes": ["top note", "top-to-bottom", "shadowing false", "center label", "renamed endpoints"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 0,
+      "result": "MATCH: frozen comparator exit 0 at 308x234; establishes the shadow-off control geometry."
+    },
+    {
+      "stem": "checker_top_shadow_on_variant",
+      "axes": ["top note", "top-to-bottom", "shadowing true", "center label", "same renamed endpoints as control"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: Java grows to 308x237, paints a filter, and shifts the center label +1.5x/+3y; Rust remains the 308x234 shadow-off rendering with no filter or shift."
+    },
+    {
+      "stem": "checker_top_tb_reversed_dashed",
+      "axes": ["top note", "top-to-bottom", "reversed up edge", "dashed colored route", "composite note line style", "subscript creole"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: Java emits an error page and Rust emits no SVG; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_top_tb_reversed_dashed_hex",
+      "axes": ["top note", "top-to-bottom", "reversed up edge", "dashed colored route", "hex composite note line style", "subscript creole"],
+      "java_valid": false,
+      "diff_one_no_oracle_exit": 2,
+      "result": "EXPLORATORY FAILURE PRESERVED: Java emits an error page and Rust emits no SVG; this input is not needed for rejection."
+    },
+    {
+      "stem": "checker_top_tb_reversed_dashed_valid",
+      "axes": ["top note", "top-to-bottom", "reversed up edge", "dashed colored route", "two-line note", "subscript creole"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: canvas and note geometry agree at 331x252, but route/style structure differs and the governing comparator is nonzero."
+    },
+    {
+      "stem": "checker_right_ltr_root_note_only",
+      "axes": ["right note", "left-to-right", "component-first mixed endpoint declarations", "note-only link label", "multiline creole"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: Java emits the right link note; Rust dispatch output omits the link and note. Rule 10 rejects without an exclusion."
+    },
+    {
+      "stem": "checker_right_ltr_root_combined_simple",
+      "axes": ["right note", "left-to-right", "component-first mixed endpoint declarations", "center label", "multiline creole"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: Java emits the merged right note and center label; Rust dispatch output omits the link and note. Rule 10 rejects without an exclusion."
+    },
+    {
+      "stem": "checker_right_ltr_deployment_combined_simple",
+      "axes": ["right note", "left-to-right", "deployment node first", "dotted colored route", "center label", "multiline italic note"],
+      "java_valid": true,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL: note dimensions agree at 202x40 but Rust shifts the entire merged block by -1x/-0.51y and produces a 358x187 canvas versus Java 359x188."
+    }
+  ],
+  "geometry_trace": {
+    "method": "trace_geometry.py parses each same-stem Java and Rust SVG, records root canvas/viewBox/error status, locates each link group, computes bounds from the folded-note path coordinates, records filter attributes, and derives text right edges using x plus serialized textLength. It does not alter outputs or comparator behavior.",
+    "direct_note_envelope_failures": [
+      "Shadow pair: Java shadow-off and Rust shadow-off are identical at 308x234. Java shadow-on retains the base note path at x=103.12..293.12/y=87.49..112.49, adds a filter, shifts the center label from (132.6979,131.3689) to (134.1979,134.3689), and grows canvas height to 237. Rust shadow-on remains filterless at the off coordinates and 234 height.",
+      "Bottom multiline pair: Java's two center-label baselines are y=96.0584 and 111.3689; Rust emits replicate, literal \\n, and phase two on one y=96.0584 baseline. The Rust note begins y=104.8005 instead of Java y=120.1111 and the canvas loses 16px.",
+      "Left undecorated pair: folded-note paths match exactly, but Java's center label occupies two lines and a 371px canvas; Rust's one literal-\\n run reaches x=444.1906 and forces a 459px canvas."
+    ],
+    "global_frame_traces": [
+      "Nested left cross-container: Java's folded note is entirely visible at x=6..153; Rust computes x=-78.9953..68.0047. Source inspection traces this to cluster_frame winning origin selection while body x/y frames return None in the presence of clusters; edge bounds only max-expand total dimensions afterward.",
+      "Right Deployment root: the folded-note local size is identical, but Rust applies a global -1x/-0.51y shift and returns a canvas one pixel smaller in each dimension.",
+      "These global-frame classifications satisfy the requested geometry distinction, but Rule 10 treats their nonzero held-outs as rejecting evidence. They are not excluded from the verdict."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "title": "Shadow-inclusive ComponentRoseNote bounds are absent",
+      "evidence": [
+        "checker_top_shadow_off_control.diff.exit.txt = 0",
+        "checker_top_shadow_on_variant.diff.exit.txt = 1",
+        "geometry-trace-attempt-2.stdout.txt records Java 308x237 with a filter and shifted center label, versus Rust 308x234 with no filter and off-control coordinates.",
+        "ComponentRoseNote.java:78-85 includes symbolContext.getDeltaShadow in both preferred dimensions; deployment_link_note_dim has no shadow input or contribution."
+      ],
+      "cause": "Rust's model measures and paints only the base folded note. It does not represent Java's shadow-inflated preferred dimensions or shadow primitive, so merged-note placement and the LimitFinder envelope diverge when shadowing is enabled."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Multiline center labels do not participate as Java text blocks",
+      "evidence": [
+        "checker_bottom_tb_multiline_creole_combined.diff.exit.txt = 1",
+        "checker_left_undecorated_multiline_note.diff.exit.txt = 1",
+        "geometry traces show Java line-separated text and Rust literal \\n text runs, with 16px height loss in the bottom case and 88px width growth in the left case."
+      ],
+      "cause": "The no-oracle center-label measurement/emission path treats the parsed escaped newline as one measured string rather than Java's multi-line Display/TextBlock, changing both the merged placeholder and actual painted primitive envelope."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Nested edge minima do not drive the global LimitFinder origin",
+      "evidence": [
+        "checker_left_ltr_nested_cross_container.diff.exit.txt = 1",
+        "Java note minX is 6; Rust note minX is -78.9953 and visibly outside the SVG viewBox.",
+        "deployment_body_x_frame and deployment_body_y_frame return None with clusters, while edge_paint_bounds only max-expands total dimensions after cluster_frame establishes margins."
+      ],
+      "cause": "Rust separates cluster framing from edge painted minima, unlike Java's one global LimitFinder pass over clusters, entities, links, labels, and notes."
+    },
+    {
+      "severity": "rejecting",
+      "title": "Further valid direction/style/dispatch perturbations are nonzero",
+      "evidence": [
+        "checker_bottom_thick_stroke_variant.diff.exit.txt = 1",
+        "checker_top_tb_reversed_dashed_valid.diff.exit.txt = 1",
+        "checker_right_ltr_root_note_only.diff.exit.txt = 1",
+        "checker_right_ltr_root_combined_simple.diff.exit.txt = 1",
+        "checker_right_ltr_deployment_combined_simple.diff.exit.txt = 1"
+      ],
+      "cause": "The preserved full-render diffs cover stroke width/style, reversed arrow orientation, component-first dispatch, and right-position global framing. Rule 10 makes each nonzero independently rejecting."
+    }
+  ],
+  "residues": [
+    "Root left merged notes and the shadow-off top control are comparator-clean, demonstrating that the helper can match a narrow base case.",
+    "The valid reversed top note has matching note paths, text, canvas, and viewBox but remains comparator-nonzero due route/style output; it is rejecting evidence, not an out-of-scope exception.",
+    "Three exploratory color-style forms are invalid in the pinned Java oracle. Their sources and every generated/error artifact remain preserved, but rejection rests on eleven valid inputs with nine nonzero results.",
+    "The source model is not fixture-shaped and does not perform SVG surgery, but mechanism-shaped implementation is insufficient when fresh no-oracle held-outs are nonzero.",
+    "No Cargo, rustc, no-oracle bypass, comparator modification, baseline update, fixture exemption, or artifact deletion was used."
+  ],
+  "hash_evidence": {
+    "account_json": {
+      "path": "docs/parity-reviews/deployment-link-note-painted-primitive-envelope/account.json",
+      "sha256": "1d514f8eb43068ae9d1ad3eadc205c1caaff08b59a06c88cbc92c8e91ca507e5"
+    },
+    "batch_brackets": "Every Java render, frozen Rust render, XML validation, diff_one run, and trace attempt is bracketed by batch-*.pre.txt and batch-*.post.txt evidence containing the Rust revision, branch, Java revision, and all three immutable hashes. The failed first uv trace and successful UV_CACHE_DIR retry are both retained.",
+    "artifact_manifest": {
+      "path": "test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/SHA256SUMS.txt",
+      "sha256": "fc9502467cd6a0e45afa583261440ce3004c3a77284b03330661f9a96944164a",
+      "hashed_entries": 215,
+      "directory_file_count_including_manifest": 216,
+      "contents": "All fourteen sources, same-stem Java SVGs, Rust SVGs, Rust stderr/exit files, diff stdout/stderr/exit files, revision/hash pre/post evidence, XML validation evidence, both trace attempts, and trace_geometry.py."
+    }
+  }
+}

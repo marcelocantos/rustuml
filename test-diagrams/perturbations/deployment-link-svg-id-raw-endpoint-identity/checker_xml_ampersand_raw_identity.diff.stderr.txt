@@ -1,0 +1,4 @@
+
+thread 'main' (328224626) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:
+called `Result::unwrap()` on an `Err` value: "failed to parse SVG: malformed entity reference at 16:73"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

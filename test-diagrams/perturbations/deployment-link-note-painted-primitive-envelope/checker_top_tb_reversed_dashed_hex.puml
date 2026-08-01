@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+artifact NorthArchive521
+queue SouthQueue523
+SouthQueue -up[#B22222,dashed]-> NorthArchive521 : reverse transfer 523
+note top on link #back:Lavender;line.dashed:006400
+  top note row qijwm 523
+  <sub>subscript</sub> edge
+end note
+@enduml

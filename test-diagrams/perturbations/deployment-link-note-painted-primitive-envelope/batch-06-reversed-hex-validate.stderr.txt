@@ -1,0 +1,3 @@
+test-diagrams/perturbations/deployment-link-note-painted-primitive-envelope/checker_top_tb_reversed_dashed_hex.rust.svg:1: parser error : Document is empty
+
+^

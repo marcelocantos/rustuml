@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="294px" preserveAspectRatio="none" style="width:431px;height:294px;background:#FFFFFF;" version="1.1" viewBox="0 0 431 294" width="431px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Production Region-->
+<g class="cluster" data-qualified-name="region.prod" data-source-line="1" id="ent0002">
+<polygon fill="none" points="16,16,26,6,224,6,224,91.49,214,101.49,16,101.49,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="214" x2="224" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="214" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="214" x2="214" y1="16" y2="101.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="132.5762" x="49.7119" y="32.5352">Production Region</text>
+</g>
+<!--cluster Western Region-->
+<g class="cluster" data-qualified-name="region-west" data-source-line="4" id="ent0004">
+<polygon fill="none" points="27,178.4883,37,168.4883,215,168.4883,215,259.9783,205,269.9783,27,269.9783,27,178.4883" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="205" x2="215" y1="178.4883" y2="168.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="27" x2="205" y1="178.4883" y2="178.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="205" x2="205" y1="178.4883" y2="269.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="112.6084" x="60.6958" y="195.0234">Western Region</text>
+</g>
+<!--entity Shared Console-->
+<g class="entity" data-qualified-name="region.prod.child.alpha" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="135.2871" x="40.36" y="46"/>
+<polygon fill="#F1F1F1" points="158.6471,51,158.6471,65,170.6471,65,170.6471,57,164.6471,51,158.6471,51" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="164.6471" x2="164.6471" y1="51" y2="57"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="170.6471" x2="164.6471" y1="57" y2="57"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105.2871" x="50.36" y="72.5352">Shared Console</text>
+</g>
+<!--entity Shared Console-->
+<g class="entity" data-qualified-name="region-west.child.beta" data-source-line="5" id="ent0005">
+<path d="M45.36,218.49 C45.36,208.49 108.0036,208.49 108.0036,208.49 C108.0036,208.49 170.6471,208.49 170.6471,218.49 L170.6471,243.9783 C170.6471,253.9783 108.0036,253.9783 108.0036,253.9783 C108.0036,253.9783 45.36,253.9783 45.36,243.9783 L45.36,218.49" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M45.36,218.49 C45.36,228.49 108.0036,228.49 108.0036,228.49 C108.0036,228.49 170.6471,228.49 170.6471,218.49" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105.2871" x="55.36" y="246.0252">Shared Console</text>
+</g>
+<!--link child.alpha to child.beta-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="7" id="lnk6">
+<path d="M108,85.82 C108,116.31 108,169.88 108,202.16" fill="none" id="child.alpha-to-child.beta" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="108,208.16,112,199.16,108,203.16,104,199.16,108,208.16" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="106.8882" x="109" y="140.0584">nested leaf route</text>
+<path d="M221.8882,122.49 L221.8882,147.49 L416.8882,147.49 L416.8882,132.49 L406.8882,122.49 L221.8882,122.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M406.8882,122.49 L406.8882,132.49 L416.8882,132.49 L406.8882,122.49" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="174.4717" x="227.8882" y="140.0584">nested identity memo 4297</text>
+</g>
+</g></svg>

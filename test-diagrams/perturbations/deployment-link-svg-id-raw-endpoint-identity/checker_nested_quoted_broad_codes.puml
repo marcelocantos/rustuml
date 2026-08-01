@@ -1,0 +1,11 @@
+@startuml
+node "Production Region" as region/prod {
+  artifact "Shared Console" as child.alpha
+}
+node "Western Region" as region-west {
+  database child.beta as "Shared Console"
+}
+"region/prod" --> region-west : quoted owner route
+child.alpha ..> child.beta : leaf route
+note right on link : nested identity memo 4271
+@enduml

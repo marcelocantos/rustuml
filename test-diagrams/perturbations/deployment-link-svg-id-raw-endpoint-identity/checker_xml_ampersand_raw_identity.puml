@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node "Gate & Relay"
+storage "Sink-3"
+"Gate & Relay" --> "Sink-3" : escaped attribute probe
+note bottom on link : ampersand identity memo 4211
+@enduml
