@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-external-note-padding-origin-ownership",
+  "status": "accounted_before_code",
+  "implementation_revision": null,
+  "predecessor_implementation_revisions": [
+    "efb42c1b",
+    "ffbf5e99"
+  ],
+  "supersedes_unimplemented_hypothesis": "df24c0ea",
+  "rejected_review_revision": "25db21e7",
+  "rust_revision": "df24c0ea",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:constructor labelText composition and drawU",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java:drawU",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java:drawInternalU",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs:relationship_center_layout",
+    "crates/rustuml-render/src/class.rs:relationship_center_painted_bounds",
+    "crates/rustuml-render/src/class.rs:svek_layout_x_bias"
+  ],
+  "invariant": "A solved edge-label rectangle may begin at Graphviz x=0 while its first rendered child begins later. SvekResult normalization follows the rendered child stream. When a relationship note owns the composite block's leading horizontal frontier, EntityImageNoteLink paints ComponentRoseNote only after Rose's five-pixel component padding; that padding is layout reservation, not ink. Conversely, an ordinary label or another painted child that owns the composite origin retains its own frontier behavior. Ownership is determined from SvekEdge's mergeLR/mergeTB child geometry and the rendered child bounds, not from spline mode or a numeric correction.",
+  "causal_divergence": "Rust historically seeded svek_layout_x_bias with x=0 for ordinary graphs. That seed correctly preserves several existing ordinary-label and package surfaces whose complete Java paint stream still owns the solved origin, but it incorrectly becomes a primitive when the sole owner of Graphviz x=0 is a relationship-note component's unpainted leading padding. Replacing the seed globally with infinity fixed the preserved note case but caused fresh regressions, including review2_xlabel_class_lr_crossing_endpoint, proving that positive Rust-projected minima alone do not justify deleting the origin. The missing distinction is which child owns the solved origin: the rejecting note case has a note polygon at x=5 and its centered text child later; the ordinary-label control has no leading note-padding owner.",
+  "planned_change": "Keep the existing zero seed by default and keep the established infinity seed for together scopes. For center labels solved at the graph origin, inspect the relationship_center_layout child projection. Suppress the synthetic zero only when every center block at that origin has a relationship note, the note polygon is the leftmost painted child, and its note_x is strictly after the solved block origin. Then reduce all actual node, cluster, route, label, note, and decoration minima from infinity. If any ordinary label or other child owns the origin, retain the current zero seed. Do not subtract the padding value from coordinates; choose the correct frontier owner and let the existing painted bounds supply its position.",
+  "perturbation_axes": [
+    "origin owner: note-leading composite versus ordinary text-leading composite",
+    "note position: left, right, top, and bottom with relative note/label widths varied",
+    "spline mode: ORTHO, POLYLINE, and SPLINE",
+    "frontier competition: one origin label, multiple origin labels, node or route at nonpositive x, and nested package",
+    "content: note-only, note plus short label, note plus wider label, multiline note, and renamed controls"
+  ],
+  "scope_boundary": "This mechanism selects the horizontal frontier identity for an origin-owned relationship-note composite. It does not change the five-pixel padding, any coordinate, Graphviz label dimensions, routes, note chrome, general together behavior, comparator tolerance, baselines, fixture eligibility, or frozen controls.",
+  "acceptance": [
+    "The preserved ORTHO link-note counterexample matches Java from source alone",
+    "Every previously passing held-out from class-ortho-external-label-placement remains passing, including the ordinary-label origin control",
+    "Fresh valid Java inputs vary note position and relative child widths under at least two spline modes",
+    "Focused class tests, no-oracle product ratchet, and harness guards pass",
+    "A separate checker records an accepted verdict against the exact implementation revision"
+  ],
+  "forbidden_approaches": [
+    "subtracting five pixels from ORTHO or note coordinates",
+    "keying on labels, fixture paths, exact canvas sizes, or branch counts",
+    "removing the origin seed for unrelated graphs after the fresh regression disproved that model",
+    "changing Graphviz output, serialized SVG, comparator controls, baselines, or fixture eligibility"
+  ],
+  "evidence_inputs": [
+    "25db21e7:test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.puml",
+    "25db21e7:test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.puml"
+  ]
+}
