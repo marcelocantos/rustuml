@@ -691,10 +691,7 @@ fn emit_generated_deprecated_handwritten_warning(
 }
 
 fn escape_xml_attr(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
+    crate::svg::escape_xml_attr(s)
 }
 
 fn escape_xml_text(s: &str) -> String {
@@ -3707,7 +3704,9 @@ fn render_connection(
         let id_attr = if handwritten {
             String::new()
         } else {
-            format!(r#" id="{expected_id}""#)
+            // `SvgGraphics.drawPath` supplies the logical ID to a DOM
+            // attribute; XML serialization escapes it exactly once.
+            format!(r#" id="{}""#, escape_xml_attr(&expected_id))
         };
         svg.raw(&format!(
             r#"<path{code_line_attr} d="{d}" fill="none"{id_attr} style="{path_style}"/>"#,
@@ -4547,12 +4546,15 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             DeploymentNotePosition::Left | DeploymentNotePosition::Right
         ) {
             layout.add_same_rank(from, to);
-            layout.add_edge(from, to, None);
-        } else {
-            // `CommandFactoryNoteOnEntity.executeInternal` uses
-            // `LinkArg.noDisplay(2)` for vertical note links.
-            layout.add_edge_with_minlen(from, to, None, 1);
         }
+        // `CommandFactoryNoteOnEntity.executeInternal` chooses LinkArg lengths
+        // 1 (horizontal) and 2 (vertical); `SvekEdge.appendLine` emits length-1.
+        layout.add_edge_with_minlen(
+            from,
+            to,
+            None,
+            deployment_attached_note_minlen(note.position),
+        );
     }
     for conn in &diagram.connections {
         let (layout_from, layout_to, reversed) =
@@ -6596,10 +6598,10 @@ fn render_no_oracle_edges(
     gradient_defs: Option<&str>,
     handwritten: bool,
 ) {
+    // `SvekResult.drawU` shares this set across paint-eligible SVEK edges;
+    // `SvekEdge.drawU` claims a logical ID only after its early-return guards.
+    let mut claimed_path_ids = HashSet::new();
     for (i, conn) in diagram.connections.iter().enumerate() {
-        if conn.hidden {
-            continue;
-        }
         // Java `SvekEdge.drawU` returns before opening the link group after
         // GraphvizImageBuilder hands an eligible edge to EntityImageNote.
         if opale_connection_indices.contains(&i) {
@@ -6610,6 +6612,15 @@ fn render_no_oracle_edges(
         else {
             continue;
         };
+        if conn.hidden {
+            // `SvekResult.drawU` applies UHidden but still calls drawU, so a
+            // solved bracket-hidden edge consumes its logical ID without paint.
+            let _ = deployment_unique_path_id(
+                deployment_connection_path_base_id(diagram, conn, reversed),
+                &mut claimed_path_ids,
+            );
+            continue;
+        }
         let entity_1_id = if reversed { &conn.to } else { &conn.from };
         let entity_2_id = if reversed { &conn.from } else { &conn.to };
         let Some(ent1) = id_for_node.get(entity_1_id) else {
@@ -6671,18 +6682,10 @@ fn render_no_oracle_edges(
             },
         );
         if let Some(d) = edge_path_d(&points) {
-            let mut path_id = deployment_connection_path_base_id(diagram, conn, reversed);
-            let duplicate_index = diagram.connections[..i]
-                .iter()
-                .filter(|previous| {
-                    let (_, _, previous_reversed) = deployment_connection_layout(previous);
-                    deployment_connection_path_base_id(diagram, previous, previous_reversed)
-                        == path_id
-                })
-                .count();
-            if duplicate_index > 0 {
-                write!(path_id, "-{duplicate_index}").unwrap();
-            }
+            let path_id = deployment_unique_path_id(
+                deployment_connection_path_base_id(diagram, conn, reversed),
+                &mut claimed_path_ids,
+            );
             // Java `SvekEdge.drawU` applies the stroke returned by
             // `LinkType.getStroke3`; `LinkStyle` defines these dash patterns.
             let path_style = match conn.style {
@@ -6702,7 +6705,8 @@ fn render_no_oracle_edges(
                 ));
             } else {
                 svg.raw(&format!(
-                    r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
+                    r#"<path d="{d}" fill="none" id="{}" style="{path_style}"/>"#,
+                    escape_xml_attr(&path_id),
                 ));
             }
         }
@@ -6826,6 +6830,26 @@ fn deployment_connection_path_base_id(
         format!("{to_name}-backto-{from_name}")
     } else {
         format!("{from_name}-to-{to_name}")
+    }
+}
+
+fn deployment_unique_path_id(base: String, claimed: &mut HashSet<String>) -> String {
+    if claimed.insert(base.clone()) {
+        return base;
+    }
+    for suffix in 1usize.. {
+        let candidate = format!("{base}-{suffix}");
+        if claimed.insert(candidate.clone()) {
+            return candidate;
+        }
+    }
+    unreachable!("usize suffix space is finite but cannot be exhausted in memory")
+}
+
+fn deployment_attached_note_minlen(position: DeploymentNotePosition) -> usize {
+    match position {
+        DeploymentNotePosition::Left | DeploymentNotePosition::Right => 0,
+        DeploymentNotePosition::Top | DeploymentNotePosition::Bottom => 1,
     }
 }
 
@@ -8389,6 +8413,91 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert_eq!(
             deployment_connection_path_base_id(&diagram, &diagram.connections[0], false),
             "Ingress: Canary-to-sink.v2"
+        );
+    }
+
+    #[test]
+    fn link_path_ids_use_java_shared_set_uniquification() {
+        let mut claimed = HashSet::new();
+        assert_eq!(
+            deployment_unique_path_id("Relay-to-Sink".to_owned(), &mut claimed),
+            "Relay-to-Sink"
+        );
+        assert_eq!(
+            deployment_unique_path_id("Relay-to-Sink".to_owned(), &mut claimed),
+            "Relay-to-Sink-1"
+        );
+        assert_eq!(
+            deployment_unique_path_id("Relay-to-Sink-1".to_owned(), &mut claimed),
+            "Relay-to-Sink-1-1"
+        );
+        assert_eq!(
+            deployment_unique_path_id("Relay-to-Sink".to_owned(), &mut claimed),
+            "Relay-to-Sink-2"
+        );
+    }
+
+    #[test]
+    fn solved_paint_hidden_edge_consumes_its_path_id() {
+        let source = "@startuml\n\
+                      node Relay\n\
+                      database Sink\n\
+                      Relay -[hidden]-> Sink\n\
+                      Relay --> Sink\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(!svg.contains(r#"id="Relay-to-Sink""#), "{svg}");
+        assert!(svg.contains(r#"id="Relay-to-Sink-1""#), "{svg}");
+    }
+
+    #[test]
+    fn link_path_ids_are_serialized_as_xml_attributes_once() {
+        assert_eq!(
+            escape_xml_attr("Gate & Relay-to-\"Sink\""),
+            "Gate &amp; Relay-to-&quot;Sink&quot;"
+        );
+        assert_eq!(escape_xml_attr("Gate &amp; Relay"), "Gate &amp;amp; Relay");
+    }
+
+    #[test]
+    fn no_oracle_link_path_serializes_raw_ampersand_identity() {
+        let source = "@startuml\n\
+                      node \"Gate & Relay\"\n\
+                      database Sink\n\
+                      \"Gate & Relay\" --> Sink\n\
+                      @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"id="Gate &amp; Relay-to-Sink""#), "{svg}");
+        assert!(!svg.contains(r#"id="Gate & Relay-to-Sink""#), "{svg}");
+    }
+
+    #[test]
+    fn attached_note_minlen_is_linkarg_length_minus_one() {
+        assert_eq!(
+            deployment_attached_note_minlen(DeploymentNotePosition::Left),
+            0
+        );
+        assert_eq!(
+            deployment_attached_note_minlen(DeploymentNotePosition::Right),
+            0
+        );
+        assert_eq!(
+            deployment_attached_note_minlen(DeploymentNotePosition::Top),
+            1
+        );
+        assert_eq!(
+            deployment_attached_note_minlen(DeploymentNotePosition::Bottom),
+            1
         );
     }
 

@@ -898,11 +898,15 @@ impl SvgBuilder {
     }
 }
 
-fn escape_xml(s: &str) -> String {
+pub(crate) fn escape_xml_attr(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
         .replace('>', "&gt;")
         .replace('"', "&quot;")
+}
+
+fn escape_xml(s: &str) -> String {
+    escape_xml_attr(s)
         // Encode guillemets as numeric entities to match PlantUML SVG output.
         .replace('\u{00ab}', "&#171;")
         .replace('\u{00bb}', "&#187;")
