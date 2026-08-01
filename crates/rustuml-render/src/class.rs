@@ -2545,8 +2545,9 @@ fn render_with_oracle_uid_origin(
         next_layout_slot += 1;
     }
     let attached_layout_slots = attached_layout_slots_by_note
-        .into_iter()
+        .iter()
         .flatten()
+        .copied()
         .collect::<Vec<_>>();
     for (idx, pkg) in diagram.packages.iter().enumerate() {
         if package_render.roles[idx] != PackageRenderRole::Cluster {
@@ -2805,6 +2806,10 @@ fn render_with_oracle_uid_origin(
             pos.x += note_dx;
             pos.y += note_dy;
         }
+        for pos in &mut collision_node_positions {
+            pos.x += note_dx;
+            pos.y += note_dy;
+        }
         for cluster in &mut result.cluster_positions {
             cluster.x += note_dx;
             cluster.y += note_dy;
@@ -2831,7 +2836,7 @@ fn render_with_oracle_uid_origin(
             }
         }
     }
-    resolve_endpoint_label_collisions(diagram, &result.node_positions, &mut result.edge_paths);
+    resolve_endpoint_label_collisions(diagram, &collision_node_positions, &mut result.edge_paths);
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
     render_plantuml_svg(
