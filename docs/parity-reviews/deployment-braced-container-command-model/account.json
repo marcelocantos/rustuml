@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-braced-container-command-model",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-128,135-159",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:73-127,141-235",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-123"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/deployment.rs:72-103",
+    "crates/rustuml-parser/src/parse/deployment.rs:16-38,89-143,698-720,1049-1186",
+    "crates/rustuml-parser/src/parse/mod.rs:720-752,1000-1058"
+  ],
+  "claimed_invariant": "A braced DESCRIPTION declaration is consumed by a container command that is distinct from the leaf command. The container command recognizes package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack; preserves a broad non-whitespace canonical code excluding quote, hash, and braces; keeps display text separate; consumes through the opening brace and end of line; and owns subsequent children until the matching close brace.",
+  "causal_divergence": "Rust routes leaves and braced containers through the same unanchored RE_NODE_BARE and RE_NODE_QUOTED patterns and through a smaller DEPLOYMENT_KEYWORDS inventory. Consequently process, hexagon, and action are not commands at all; slash and hyphen container codes are either rejected or prefix-truncated; dotted display-first aliases are truncated by the quoted alias capture; and the parser never pushes the intended owner onto its stack. The resulting root promotion and layout differences in both preserved counterexamples are downstream effects of a missing command/model boundary, not coordinate errors.",
+  "planned_model_change": "Add an explicit parsed deployment declaration type and a complete, end-anchored braced-container recognizer modeled on CommandPackageWithUSymbol. Extend DeploymentNodeKind only where the renderer needs symbol identity, and extend the deployment command inventory with hexagon, action, and process. Run the container recognizer before the leaf recognizer, preserve canonical code and display direction for Java's container syntax families, and use the same recognizer as subtype evidence instead of scoring a keyword-shaped prefix. Leave the narrower leaf grammar and its semantics separate.",
+  "perturbation_axes": [
+    "container symbol: process versus hexagon versus action versus an existing shared symbol",
+    "identity grammar: slash, hyphen, dot, underscore, and renamed broad-code aliases",
+    "alias direction: display-first alias, code-first quoted display, bare alias, and no alias",
+    "ownership topology: one child, multiple children, nested containers, and links escaping a container",
+    "command completeness: valid end-of-line opening brace versus trailing junk that must not prefix-match"
+  ],
+  "predecessor_rejections": [
+    {
+      "record": "docs/parity-reviews/deployment-container-command-identity-dispatch/review.json",
+      "record_commit": "82c5f14405798acbe423bc600f5aa32f9f4567fa",
+      "verdict": "REJECT",
+      "preserved_inputs": [
+        "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.puml",
+        "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.puml"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Both preserved Java-success predecessor inputs produce byte-level no-oracle parity without fixture-specific branches.",
+    "Focused parser/model tests prove the complete command inventory, broad canonical identity, display separation, ownership, and rejection of partial/trailing captures.",
+    "Fresh valid inputs not present in the golden corpus exercise at least two independent axes, including renamed identities and changed nesting or alias direction, and every Java-success input exits zero under diff_one --no-oracle.",
+    "The independent checker can trace every behavior to the cited Java command model; any fresh Java-success nonzero diff rejects the implementation."
+  ],
+  "forbidden_approaches": [
+    "coordinate tuning or SVG surgery",
+    "fixture-label or source-line conditionals",
+    "widening the leaf command merely to make container fixtures parse",
+    "accepting a declaration prefix while ignoring trailing syntax"
+  ],
+  "status": "planned"
+}

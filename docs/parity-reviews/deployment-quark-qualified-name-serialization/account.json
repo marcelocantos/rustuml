@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-quark-qualified-name-serialization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:135-150",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:141-145,213-235",
+    "src/main/java/net/sourceforge/plantuml/plasma/Plasma.java:50-89",
+    "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:50-89",
+    "src/main/java/net/sourceforge/plantuml/klimt/UGroup.java:57-72",
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:336",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java:288-296"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/deployment.rs:72-103",
+    "crates/rustuml-parser/src/parse/deployment.rs:40-77,698-713,1109-1183",
+    "crates/rustuml-render/src/class.rs:1757-1773",
+    "crates/rustuml-render/src/deployment.rs:248-287,804-812,825-965,1175-1198,5461-5490",
+    "crates/rustuml-render/src/svg.rs:1-38"
+  ],
+  "claimed_invariant": "Deployment model identity is the cleaned canonical quark code and is independent of visible display text. A qualified name is the ordered ancestor quark-code path joined by Plasma's separator. Only at SVG group metadata serialization does UGroup.fix replace each character outside ASCII word characters, space, and hyphen with a dot; hierarchy separators and punctuation therefore project uniformly while dots, underscores, spaces, and hyphens survive.",
+  "causal_divergence": "Rust stores canonical id and visible label but then discards that distinction in metadata helpers: own_qname and qualified_name recompute label_to_id to guess whether an alias existed, qname_label_segment replaces only colons, and deployment_qnames repeats the same heuristic. The quoted display-first parser also limits aliases to word characters, so dotted canonical codes are truncated before rendering. Thus punctuation-bearing no-alias identities remain raw and explicit dotted aliases lose suffixes. Geometry and paint-order differences in one predecessor input are secondary consequences of corrupted model identity and ownership.",
+  "planned_model_change": "Treat DeploymentNode.id as the sole canonical quark segment, preserve broad explicit container aliases in the parser, build qualified paths from parent ownership plus canonical segments, and apply one shared UGroup.fix-compatible helper at the metadata boundary. Remove label-derived identity heuristics from every deployment qualified-name path while leaving visible labels untouched. Use that same projected map for oracle lookup, no-oracle layout records, clusters, leaves, and metadata consumers.",
+  "perturbation_axes": [
+    "identity form: quoted no-alias versus explicit display-first alias versus bare canonical code",
+    "punctuation class: colon, slash, parentheses, dot, underscore, hyphen, space, and non-ASCII code points",
+    "ownership depth: root, one-level container, and nested container paths",
+    "display independence: renamed display with stable alias and stable display with changed alias",
+    "consumer: cluster metadata, leaf metadata, links, and no-oracle layout lookup"
+  ],
+  "predecessor_rejections": [
+    {
+      "record": "docs/parity-reviews/deployment-svg-qualified-name-projection/review.json",
+      "record_commit": "82c5f14405798acbe423bc600f5aa32f9f4567fa",
+      "verdict": "REJECT",
+      "preserved_inputs": [
+        "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_quoted_punctuation_depth.puml",
+        "test-diagrams/perturbations/deployment-svg-qualified-name-projection/late_qname_display_alias_projection.puml"
+      ]
+    }
+  ],
+  "acceptance": [
+    "Both preserved Java-success predecessor inputs produce byte-level no-oracle parity without changing visible labels to fit metadata.",
+    "Focused parser and renderer tests prove canonical/display separation, ancestor path construction, and the exact UGroup.fix ASCII projection boundary.",
+    "Fresh valid inputs not present in the golden corpus exercise at least two independent axes, including renamed display/alias identities and changed ownership depth, and every Java-success input exits zero under diff_one --no-oracle.",
+    "The independent checker can trace metadata to canonical quark identity at the cited Java revision; any fresh Java-success nonzero diff rejects the implementation."
+  ],
+  "forbidden_approaches": [
+    "special-casing colon, Kubernetes, or predecessor labels",
+    "deriving canonical identity from label equality or label_to_id",
+    "post-hoc replacement over completed SVG",
+    "coordinate or layout-constant tuning"
+  ],
+  "status": "planned"
+}
