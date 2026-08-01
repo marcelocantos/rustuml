@@ -1,0 +1,337 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cuca-association-event-projection",
+  "created": "2026-08-01",
+  "status": "accounted_before_implementation",
+  "implementation_status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "61cb9f0f947f38d04e94f5d5003d02186bf3abb1",
+  "predecessor_rejection": {
+    "mechanism": "class-svek-endpoint-collision-node-order",
+    "account_path": "docs/parity-reviews/class-svek-endpoint-collision-node-order/account.json",
+    "account_commit": "65c69099ce4f8043b5cd3f006bb82848364f261c",
+    "implementation_commit": "29be84de25e3903d66b47504522e63f45b9ac668",
+    "review_path": "docs/parity-reviews/class-svek-endpoint-collision-node-order/review.json",
+    "review_commit": "61cb9f0f947f38d04e94f5d5003d02186bf3abb1",
+    "verdict": "rejected",
+    "evidence_summary": "The independent checker generated thirteen fresh valid inputs. Four passed and nine failed. The passing ordinary note, empty-package, and root controls confirm that the predecessor corrected the intended ordinary SVEK collision traversal. The failures divide into three broad association-point graph divergences, three small ordinary endpoint-label residuals including a declaration-order pair that is invariant within each implementation, one reversed center-label placement divergence, one spline/package-envelope divergence, and one removed-entity lifecycle divergence. That heterogeneous result rejects the predecessor as a complete explanation and does not justify one replacement mechanism for all nine failures."
+  },
+  "hypothesis_disposition": {
+    "starting_hypothesis": "Rust appends association-point and lollipop synthetic entities after a collision event stream, whereas Java source-interleaves every CucaDiagram entity, quark, note, group, and relationship event in one global order.",
+    "verdict": "refined_and_narrowed",
+    "finding": "Java does not feed SVEK one global source-event stream. It derives an owner-local node projection from insertion-ordered Quark children and a separate mutable live-link projection from CucaDiagram.links. GraphvizImageBuilder traverses all top-level groups before root leaves and, inside each group, direct leaves before child groups. Rust already projects declarations, implicit endpoints, named and attached note leaves, empty packages, and lollipop leaves through the corresponding owner-local node order. Rust lollipops are ordinary ClassEntity plus Relationship records and are not appended after the node stream. The observed omission is AssociationClass: its point is retained only in a side table without its Java Quark parent, then its layout node and replacement edges are emitted in renderer-wide batches. The successor mechanism therefore owns association events crossing the existing node and live-link projections, not a generic global event stream."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "symbols": [
+        "Quark.children",
+        "Quark.child",
+        "Quark.getDirectChild",
+        "Quark.getChildren"
+      ],
+      "lines": "48-65, 110-155",
+      "role": "Each parent's children are a LinkedHashMap. First quark creation fixes owner-local sibling order; later data attachment or refinement does not move the quark."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.reallyCreateLeaf",
+        "CucaDiagram.quarkInContextSafe",
+        "CucaDiagram.eventuallyBuildPhantomGroups",
+        "CucaDiagram.gotoGroup",
+        "CucaDiagram.leafs",
+        "CucaDiagram.addLink",
+        "CucaDiagram.removeLink"
+      ],
+      "lines": "219-287, 324-363, 919-930, 959-983",
+      "role": "Resolves or creates owner-local quarks, attaches leaf/group data without changing quark position, materializes phantom groups from registered quarks, and maintains the separate mutable source-construction list of live links."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": [
+        "Entity.leafs",
+        "Entity.groups"
+      ],
+      "lines": "645-663",
+      "role": "Filters one parent's insertion-ordered Quark children into separate direct-leaf and child-group views."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+      "symbols": [
+        "CommandCreateClass.executeArg"
+      ],
+      "lines": "118-180",
+      "role": "Creates a declaration on a current-context quark or refines the Entity already attached to that quark; refinement does not create a second node-order event."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java",
+      "symbols": [
+        "CommandCreateElementFull2.executeArg"
+      ],
+      "lines": "150-223",
+      "role": "Uses unique existing-quark reuse for mixed class-like declarations and mutates display/style in place when the quark already owns data."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+      "symbols": [
+        "CommandLinkClass.executeArg"
+      ],
+      "lines": "165-250",
+      "role": "Resolves both endpoint quarks before materializing either missing endpoint, then appends the constructed Link to CucaDiagram.links."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java",
+      "symbols": [
+        "CommandPackage.executeArg"
+      ],
+      "lines": "70-220",
+      "role": "Creates or reuses a group quark and enters it through CucaDiagram.gotoGroup; package identity therefore shares the same owner-local quark tree."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "symbols": [
+        "CommandFactoryNote.executeInternal"
+      ],
+      "lines": "141-163",
+      "role": "Creates a named floating note as a real NOTE leaf on a current-context quark."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+      "symbols": [
+        "CommandFactoryNoteOnEntity.executeInternal"
+      ],
+      "lines": "224-292",
+      "role": "At the note statement, creates a GMN sequence, a real NOTE leaf in the current group, and a note Link appended to the live link list."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkLollipop.java",
+      "symbols": [
+        "CommandLinkLollipop.executeArg"
+      ],
+      "lines": "114-216",
+      "role": "At the lollipop statement, consumes a sequence, creates a real LOLLIPOP leaf through quarkInContext, and appends an ordinary Link. It is not a post-SVEK synthetic-node batch."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "symbols": [
+        "AbstractClassOrObjectDiagram.associationClass",
+        "AbstractClassOrObjectDiagram.Association.Association",
+        "AbstractClassOrObjectDiagram.Association.createNew"
+      ],
+      "lines": "178-235, 250-301",
+      "role": "Creates POINT_FOR_ASSOCIATION as a real leaf at the association statement. Equal-parent endpoints place it under that parent; cross-parent endpoints place it in the current context. createNew removes the selected live base link when present and appends the three replacement links at that point in construction order."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+      "symbols": [
+        "CucaDiagramFileMakerSvek.getOrderedLinks",
+        "CucaDiagramFileMakerSvek.addLinkNew"
+      ],
+      "lines": "89-113",
+      "role": "Projects the current live-link list into stable same-connections groups without erasing source construction order inside a group."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": [
+        "GraphvizImageBuilder.buildImage",
+        "GraphvizImageBuilder.printEntities",
+        "GraphvizImageBuilder.printGroup",
+        "GraphvizImageBuilder.getUnpackagedEntities"
+      ],
+      "lines": "209-263, 348-364, 399-435",
+      "role": "Builds SVEK nodes by traversing top-level groups before root leaves and direct leaves before child groups, then builds edges from the separately ordered live-link projection."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": [
+        "Bibliotekon.nodeMap",
+        "Bibliotekon.createNode",
+        "Bibliotekon.addLine",
+        "Bibliotekon.allNodes"
+      ],
+      "lines": "50-114, 182-184",
+      "role": "Preserves SVEK node creation in a LinkedHashMap for collision traversal and partitions one-rank lines from longer lines while retaining their relative insertion order."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": [
+        "DotStringFactory.createDotString",
+        "DotStringFactory.solve"
+      ],
+      "lines": "112-200, 440-449",
+      "role": "Serializes one-rank lines before ordinary nodes and longer lines afterward, then runs each edge's collision mutation across Bibliotekon.allNodes in node creation order."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/diagram/class.rs",
+      "symbols": [
+        "ClassUidEvent",
+        "ClassEntity",
+        "EntityKind",
+        "AssociationClass"
+      ],
+      "lines": "80-97, 132-216, 253-277",
+      "role": "The model records ordinary entity, note, relationship, and association timing, but AssociationClass stores endpoints and a removed base relationship without the synthetic point's owner package or a real node entry. Lollipop kinds are ordinary ClassEntity variants."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::register_quark_path",
+        "ClassParser::resolve_quark_path",
+        "ClassParser::materialize_phantom_packages",
+        "ClassParser::create_entity_at_path",
+        "ClassParser::relationship_endpoint_path",
+        "ClassParser::materialize_relationship_endpoint"
+      ],
+      "lines": "283-375, 405-541",
+      "role": "Maintains creation-ordered quark paths, mirrors current/unique lookup, records entity events, materializes phantom packages, and resolves both implicit relationship endpoint paths before creating missing entities."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::push_note",
+        "ClassParser::try_entity_decl",
+        "ClassParser::try_package",
+        "ClassParser::try_note"
+      ],
+      "lines": "215-245, 835-985, 1482-1739, 1820-1955",
+      "role": "Records owner-local note and declaration events, reuses and refines existing entity identities without moving their first creation event, and retains package ownership for ordinary SVEK leaves."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::try_association_class",
+        "ClassParser::try_relationship",
+        "ClassParser::try_lollipop_relationship"
+      ],
+      "lines": "1110-1443",
+      "role": "Association parsing removes the newest matching ordinary relationship and records only an Association event plus a side-table row. Ordinary and lollipop links use the normal Relationship event path; the lollipop synthetic endpoint is created as an ordinary owner-local entity."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "render_no_oracle",
+        "SvekNodeEmission",
+        "SvekEmissionOrder.collect_direct_leaves",
+        "SvekEmissionOrder.collect_package",
+        "svek_node_emission_order"
+      ],
+      "lines": "2460-2825, 4807-4993",
+      "role": "Uses the Java-like owner-local traversal for entities, notes, and empty packages, but SvekNodeEmission has no association-point variant. render_no_oracle appends every association point after that node projection and omits it from cluster membership."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "svek_relationship_order",
+        "relationship_layout_edge_indices",
+        "association_replacement_relationships"
+      ],
+      "lines": "13912-13957, 15495-15622",
+      "role": "Stably groups only diagram.relationships by endpoint pair. Association replacement edges are generated separately and are globally prefixed before attached-note and ordinary relationship edges instead of occupying the Association event's position in the live-link projection."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "svek_collision_layout_slots",
+        "resolve_endpoint_label_collisions"
+      ],
+      "lines": "14104-14162",
+      "role": "Builds collision traversal from the ordinary SVEK node projection, then explicitly chains all association slots at the end."
+    }
+  ],
+  "event_order_trace": [
+    {
+      "event": "explicit declaration",
+      "java": "The declaration command resolves or creates its owner-local Quark; reallyCreateLeaf attaches Entity data only when absent.",
+      "rust": "resolve_quark_path plus create_entity_at_path records the path and Entity event only on first materialization.",
+      "finding": "Aligned for ordering: the first quark/entity creation fixes the node position."
+    },
+    {
+      "event": "implicit relationship endpoint",
+      "java": "CommandLinkClass resolves both endpoint quarks before it constructs either missing class leaf, then appends the Link.",
+      "rust": "try_relationship registers both endpoint paths before materialize_relationship_endpoint and pushes the relationship afterward.",
+      "finding": "Aligned for the predecessor's node and relationship cases."
+    },
+    {
+      "event": "package or group",
+      "java": "Package/group data occupies a Quark in the same tree; SVEK traverses direct leaves before child groups and all top-level groups before root leaves.",
+      "rust": "Package events and package paths drive collect_package, which emits direct leaves before child packages and root leaves last.",
+      "finding": "Aligned after earlier package-order work; this projection is deliberately not raw global source order."
+    },
+    {
+      "event": "named or attached note",
+      "java": "Both are real NOTE leaves created at the note statement; attached notes also append a Link at that statement.",
+      "rust": "ClassUidEvent::Note carries owner information and SvekNodeEmission::Note inserts the node owner-locally; its attached link is still emitted from a renderer-side batch.",
+      "finding": "Node ordering is aligned in the preserved passing controls. Link ordering must join the shared live-link projection when crossed with association events."
+    },
+    {
+      "event": "association point",
+      "java": "Association creates a real POINT_FOR_ASSOCIATION leaf at the statement under the endpoints' common parent or, for cross-parent endpoints, under the current group. It then mutates the live-link list by removing a selected base and appending three replacements.",
+      "rust": "ClassUidEvent::Association records timing, but AssociationClass loses point ownership. render_no_oracle appends all points after ordinary nodes, leaves them outside owner clusters, and prefixes all replacement edges.",
+      "finding": "Causal divergence demonstrated by all three broad association counterexamples."
+    },
+    {
+      "event": "lollipop synthetic endpoint",
+      "java": "CommandLinkLollipop creates a real lollipop leaf and ordinary Link at the statement.",
+      "rust": "try_lollipop_relationship creates EntityKind::LollipopFull or LollipopHalf through create_entity_at_path and then pushes an ordinary Relationship.",
+      "finding": "The append hypothesis is disproved. A separate untested ownership discrepancy remains when an unqualified owner uniquely resolves from another package: Java constructs the synthetic name in the command's current context, while Rust replaces the resolved owner's leaf in owner_path. It did not cause the preserved rejection and requires its own account and held-out evidence before any change."
+    },
+    {
+      "event": "alias declaration or later refinement",
+      "java": "The alias selects the backing Quark; a later declaration that resolves to existing data mutates type, display, or style without reinserting the Quark.",
+      "rust": "explicit_alias selects the canonical path, and try_entity_decl mutates an existing ClassEntity while retaining its first Entity event and owner.",
+      "finding": "Aligned for node ordering; declaration text order and first identity-creation order are not interchangeable."
+    },
+    {
+      "event": "relationship",
+      "java": "CucaDiagram.links is a mutable construction-order list. getOrderedLinks stably groups equal endpoint pairs, and Bibliotekon then partitions length-one lines from longer lines for DOT serialization.",
+      "rust": "Ordinary and lollipop relationships are stably grouped, but association replacements and attached-note links are emitted in independent leading batches.",
+      "finding": "Association replacements must be inserted into one source-live link projection before same-connections grouping and length partitioning. This is separate from node/collision traversal."
+    }
+  ],
+  "claimed_invariant": "A class association statement contributes to two distinct Java-derived projections at the statement's semantic position. Its POINT_FOR_ASSOCIATION is a real leaf owned by the endpoints' common Quark parent, or by the current group when the endpoints have different parents; within that owner it participates in the same direct-leaf insertion order, SVEK node creation, cluster membership, and Bibliotekon collision traversal as every other leaf. Independently, removal of the selected base link and insertion of the three replacement links update the source-construction order of the live CucaDiagram link list before stable same-connections grouping and the length-one/longer DOT partition. Moving unrelated source text changes either projection only when it changes first quark creation, point ownership, or live-link construction order; there is no single global order shared by nodes and links.",
+  "causal_divergence": "Rust has enough timing information in ClassUidEvent::Association but projects it only into UID allocation. AssociationClass does not retain the point's Java owner. SvekNodeEmission therefore cannot place the point among its owner's direct leaves, render_no_oracle appends every point after all entity/note/empty-package nodes, cluster assembly never enrolls it, and svek_collision_layout_slots chains its layout slot last. The same renderer loop emits every association replacement edge before all attached-note and ordinary edges, even though Java inserts those links when the association statement executes and later reorders only by stable same-connections grouping and length class. This changes DOT graph ownership and serialization before endpoint-label collision code runs, which explains the broad root and nested association layouts in the rejection. It cannot explain the six non-association residuals.",
+  "predecessor_failure_analysis": {
+    "why_the_old_nested_case_improved": "The predecessor changed endpoint-label collision traversal from Rust storage order to the existing Java-like SVEK node projection for ordinary entities, notes, and empty packages. Its old nested case depended on that noncommutative node walk, so the correction addressed the named cause without changing Graphviz topology.",
+    "why_nine_of_thirteen_fresh_inputs_failed": "The nine failures are not one cluster. Three association inputs exposed this account's missing point owner/node/link projection. Three ordinary endpoint-label failures retained only small coordinate residuals, one reversed input retained an independent center-label plus endpoint-label divergence, one spline input changed the package/canvas envelope, and one removal input retained a removed leaf in Java but not Rust. Treating those residuals as one collision-order mechanism would repeat the predecessor's overclaim.",
+    "isolated_declaration_order_pair": "Moving the unrelated direct declaration across the child-group declaration produced identical Java output within the pair and identical Rust output within the pair, while the same small Java-versus-Rust endpoint-label offset remained. GraphvizImageBuilder's direct-leaves-before-child-groups traversal and Rust collect_package both erase that source permutation from node order. The pair therefore disproves declaration placement as the cause of its residual and supplies a negative control for this successor."
+  },
+  "planned_model_change": "Record each association point's semantic owner when parsing: the common owner package of A and B when equal, otherwise the current package/root context, matching AbstractClassOrObjectDiagram.Association. Extend the owner-local SVEK node projection with an AssociationPoint emission at ClassUidEvent::Association and use that single projection for LayoutGraph node registration, cluster enrollment, and collision-slot traversal. Separately derive a live-link event projection from ClassUidEvent: skip discarded ordinary base links, emit attached-note links at their Note events, emit ordinary and lollipop links at Relationship events, and emit an association's three replacements at its Association event; then apply the existing stable same-connections ordering and length-one/longer serialization rules. Preserve renderer result-slot remapping as an output concern. Do not change collision arithmetic, Graphviz constants, endpoint-label dimensions, or unrelated lifecycle/envelope behavior.",
+  "ownership_boundary": {
+    "parser_model": "Owns first quark/entity creation timing, package/current-context ownership, association point ownership, discarded-base lifecycle, and semantic link-construction events.",
+    "renderer_projection": "Owns the Java SVEK traversal of owner-local nodes, cluster membership, stable live-link ordering, line-length partition, and mapping solved association positions back to renderer structures.",
+    "outside_scope": "Ordinary endpoint-label arithmetic or precision, reversed center-label placement, spline/package envelope normalization, removed-entity lifecycle, the untested cross-package lollipop-owner discrepancy, second-association semantics, comparator policy, baselines, and controls. Each requires separate causal evidence before production changes."
+  },
+  "perturbation_axes": [
+    "association statement before versus after an unrelated direct leaf in the same owner",
+    "root ownership versus nested same-parent ownership versus cross-parent current-context ownership",
+    "pre-existing A-B base relationship versus association-created temporary base relationship",
+    "association event before versus after an attached note link and an ordinary relationship",
+    "endpoint declaration before the relationship versus implicit endpoint creation followed by later declaration refinement",
+    "aliased endpoints versus unaliased endpoints while preserving the same semantic owner",
+    "top-to-bottom versus left-to-right rank direction",
+    "association endpoint reversal and one-rank versus longer base links"
+  ],
+  "acceptance": [
+    "Before implementation, an independent checker creates fresh valid PlantUML inputs that are not in the golden corpus and crosses at least two independent axes from this account; every input and same-stem Java SVG is preserved under the successor mechanism's perturbation directory.",
+    "Fresh same-parent nested inputs demonstrate that the point is emitted among direct leaves of the owning package, enrolled in that package's cluster, and visited at that owner-local position during endpoint-label collision traversal.",
+    "Fresh cross-parent inputs demonstrate that the point is owned by the source statement's current group or root context rather than copied from either endpoint's package.",
+    "Fresh live-link inputs cross association placement with an attached note, an ordinary relationship, an existing versus absent base link, and a one-rank versus longer link; the projected order matches Java after stable same-connections grouping and length partitioning.",
+    "Fresh renamed-label, alias, implicit-endpoint-then-refinement, endpoint-reversal, and both-rank-direction variants preserve the same mechanism without branches keyed to text or corpus identity.",
+    "A fresh negative declaration-order pair that only moves an unrelated direct leaf across a child-group declaration remains invariant in both implementations, preventing the rejected global source-order claim from returning.",
+    "Fresh ordinary lollipop controls remain on the existing Entity plus Relationship path and are not appended or special-cased by this mechanism.",
+    "The three preserved broad association counterexamples no longer diverge in graph ownership or event projection. Preserved passing ordinary controls do not regress. The six rejected non-association residuals are reported unchanged or handled only by separately accounted mechanisms.",
+    "The no-oracle perturbation test, frozen no-oracle baseline ratchet, strict regression tier, and mechanical harness guards pass at the implementation revision, and a separate checker records its exact commands, inputs, revisions, findings, and verdict."
+  ],
+  "forbidden_approaches": [
+    "fixture names, fixture label text, source-line identities, corpus membership, or expected pass counts as behavior inputs",
+    "score tuning, comparator slack changes, baseline weakening, park-list changes, error-golden changes, or control edits",
+    "coordinate sorting, coordinate thresholds, per-package or per-branch-count constant ladders, or unexplained layout constants",
+    "post-hoc SVG string surgery or replay of golden/oracle geometry in shipping crates",
+    "appending all association points after the ordinary SVEK node projection or prefixing all association edges before the live-link projection",
+    "replacing Java's owner-local node traversal and separate live-link construction order with one global source-line sort",
+    "changing lollipop ownership, ordinary endpoint-label collision arithmetic, center-label placement, spline envelopes, or entity-removal behavior inside this mechanism without a separate pre-implementation causal account"
+  ]
+}
