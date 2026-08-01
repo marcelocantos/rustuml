@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam linetype spline
+
+class Component
+class Owner
+class GuideOne
+class GuideTwo
+class GuideThree
+
+GuideOne --> GuideTwo
+GuideTwo --> GuideThree
+Owner --* Component : reversed composition endpoint
+@enduml

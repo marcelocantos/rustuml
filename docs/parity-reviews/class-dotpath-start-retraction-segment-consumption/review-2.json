@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dotpath-start-retraction-segment-consumption",
+  "review_type": "independent_adversarial_checker_rerun",
+  "supersedes": {
+    "record": "review.json",
+    "commit": "487ab5732ec91f707b5ac2a657592b0d60274007",
+    "scope": "procedural verdict only",
+    "preservation": "The original rejection and binary-contamination evidence remain byte-for-byte unchanged. This record replaces only its conclusion after rerunning against immutable per-commit binaries."
+  },
+  "verdict": "accepted",
+  "verdict_reason": "The Rust implementation is a direct behavioral match for Java DotPath.moveStartPoint, including equality consumption, the size-greater-than-one guard, at-most-one removal with three cubics, residual vector subtraction, coincident-control fallback, and fully degenerate first-cubic behavior. Six of eight fresh valid PlantUML perturbations pass diff_one structurally. The two nonzero fresh diffs preserve the target route's segment count and retraction geometry and expose already-separate global-frame translation or relationship-ID/subpixel serialization residue. No source-level or executable model counterexample was found, and immutable binary hashes remained constant before and after every run.",
+  "reviewer": {
+    "identity": "OpenAI Codex GPT-5",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop agent",
+    "role": "independent adversarial checker",
+    "implemented_change": false,
+    "edited_production_code": false,
+    "edited_account": false,
+    "edited_prior_review_or_rejection": false,
+    "ran_cargo_or_rustc": false
+  },
+  "timestamps": {
+    "review_recorded_utc": "2026-07-31T23:07:31Z"
+  },
+  "revisions": {
+    "rust_worktree": "/private/tmp/rustuml-t14-class-dotpath-retraction",
+    "rust_branch": "codex/t14-class-dotpath-retraction",
+    "checker_started_from": "487ab5732ec91f707b5ac2a657592b0d60274007",
+    "account_commit": "8d0fd64cae883c5f786c71c85904f4254b173ad7",
+    "implementation_commit": "e8d50060a375458ad358a135dd104bca13fad0f0",
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_status": "dirty: modified CLAUDE.md only, unrelated to PlantUML source"
+  },
+  "binary_identity": {
+    "plantuml_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "rustuml": {
+      "path": "/private/tmp/rustuml-frozen/e8d50060/rustuml",
+      "sha256_before_every_run": "d211745456776fc03d72516bbf08d92991486ca3daa64567a38667586b95bad5",
+      "sha256_after_every_run": "d211745456776fc03d72516bbf08d92991486ca3daa64567a38667586b95bad5"
+    },
+    "diff_one": {
+      "path": "/private/tmp/rustuml-frozen/e8d50060/diff_one",
+      "sha256_before_every_run": "e2f843bbe440ae03f6bb55cc89b3b66e4ce04a9f52dbc6ffa44aefa2e653ac85",
+      "sha256_after_every_run": "e2f843bbe440ae03f6bb55cc89b3b66e4ce04a9f52dbc6ffa44aefa2e653ac85"
+    },
+    "per_run_records": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/*.binary-{before,after}.sha256 and *.review2.binary-{before,after}.sha256",
+    "verification": "Every before file is byte-identical to its same-stem after file."
+  },
+  "commands": [
+    "git show 8d0fd64c:docs/parity-reviews/class-dotpath-start-retraction-segment-consumption/account.json",
+    "git show --format=fuller --find-renames e8d50060 -- crates/rustuml-render/src/class.rs",
+    "sed -n '520,710p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '180,325p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+    "sed -n '1,90p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/geom/XCubicCurve2D.java",
+    "shasum -a 256 /private/tmp/rustuml-frozen/e8d50060/rustuml /private/tmp/rustuml-frozen/e8d50060/diff_one",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <fresh-input.puml>",
+    "/private/tmp/rustuml-frozen/e8d50060/rustuml -tsvg <input.puml> > <input.rust.svg>",
+    "/private/tmp/rustuml-frozen/e8d50060/diff_one --no-oracle <input.puml> > <input.diff.txt> 2> <input.diff.stderr>",
+    "javac -cp /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -d /private/tmp/dotpath-boundary-probe-classes test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/DotPathBoundaryProbe.java",
+    "java -cp /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar:/private/tmp/dotpath-boundary-probe-classes DotPathBoundaryProbe > test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/dotpath-boundary-probe.txt",
+    "cmp <same-stem.binary-before.sha256> <same-stem.binary-after.sha256>"
+  ],
+  "source_trace_findings": [
+    {
+      "location": "Java SvekEdge.getExtremitySimplier and solveLine",
+      "finding": "For SIMPLIER links, Java derives the start angle from DotPath, creates the decoration, and moves the path start by the decoration's provenance-owned length along that angle."
+    },
+    {
+      "location": "Java DotPath.moveStartPoint",
+      "finding": "Java consumes only when more than one cubic exists and movement magnitude is greater than or equal to the first endpoint chord. It removes exactly one cubic, subtracts the vector between the first and second cubic starts, and applies the residual to the surviving start and first control."
+    },
+    {
+      "location": "Java DotPath.getStartTangeante and XCubicCurve2D.getLength",
+      "finding": "The tangent uses first-control displacement with first-endpoint fallback, while the threshold is endpoint chord length. A fully degenerate tangent reaches atan2(0,0), yielding Java's zero-angle positive-x movement."
+    },
+    {
+      "location": "Rust crates/rustuml-render/src/class.rs shortened_endpoint_points and dotpath_start_unit_tangent at e8d50060",
+      "finding": "The Rust point stream uses one start followed by triples per cubic. len >= 7 is exactly Java's more-than-one-cubic guard; draining the first three entries removes exactly one cubic while retaining its endpoint as the surviving start. shift minus first_chord is Java's residual vector, and the control/endpoint/positive-x tangent fallbacks match Java."
+    }
+  ],
+  "boundary_probe": {
+    "source": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/DotPathBoundaryProbe.java",
+    "output": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/dotpath-boundary-probe.txt",
+    "results": [
+      "equal-two: a movement exactly equal to the 4px chord consumes the first cubic",
+      "below-two: 3.999px does not consume the 4px chord",
+      "single-large: an 8px movement cannot consume the only cubic",
+      "three-large-consumes-one: a 20px movement leaves two of three cubics, proving at-most-one removal",
+      "oblique-residual: the residual is vector subtraction, not scalar subtraction along the surviving chord",
+      "control-at-endpoint: a noncoincident first control remains the tangent even when it equals the endpoint",
+      "fully-degenerate-first: Java consumes the zero-length first cubic and applies positive-x movement"
+    ],
+    "checker_mapping_to_rust": "Each result was compared to the e8d50060 control flow and point indexing. No divergent boundary was found."
+  },
+  "fresh_perturbations": [
+    {
+      "stem": "fresh2_ortho_lr_extends_nested_residual",
+      "axes": ["EXTENDS start decoration", "ORTHO", "left-to-right", "two nesting levels", "wide label", "multi-cubic residual"],
+      "diff_one_exit": 0,
+      "result": "structural pass; the post-retraction route contains two cubics and matches Java"
+    },
+    {
+      "stem": "fresh2_ortho_tb_extends_shallow_consume",
+      "axes": ["EXTENDS start decoration", "ORTHO", "top-to-bottom", "one package", "deeper multi-cubic route"],
+      "diff_one_exit": 0,
+      "result": "structural pass; the post-retraction route contains four cubics and matches Java"
+    },
+    {
+      "stem": "fresh2_ortho_lr_dependency_short_no_consume",
+      "axes": ["dependency arrow", "ORTHO", "left-to-right", "short retraction", "multi-cubic no-consume"],
+      "diff_one_exit": 0,
+      "result": "structural pass; the shorter decoration retains the leading cubic as Java does"
+    },
+    {
+      "stem": "fresh2_ortho_tb_aggregation_package_residual",
+      "axes": ["aggregation start decoration", "ORTHO", "top-to-bottom", "package endpoint", "wide relationship label", "four-cubic residual"],
+      "diff_one_exit": 1,
+      "result": "not a mechanism counterexample; Java and Rust emit the same four-cubic target route and decoration geometry after a common approximately 0.996px x translation. The diff is the known root painted-minimum/frame translation debt on the older e8d50060 base."
+    },
+    {
+      "stem": "fresh2_spline_lr_composition_reversed",
+      "axes": ["composition decoration", "spline", "left-to-right", "reversed endpoint", "single cubic"],
+      "diff_one_exit": 0,
+      "result": "structural pass; reversed end placement does not trigger erroneous start consumption"
+    },
+    {
+      "stem": "fresh2_spline_tb_parenthesis_nested_multicubic",
+      "axes": ["parenthesis start decoration", "spline", "top-to-bottom", "two nesting levels", "wide label", "four cubics"],
+      "diff_one_exit": 1,
+      "result": "not a mechanism counterexample; both sides emit four cubics with corresponding retracted controls. Residue is InnerBoundary-backto-Receiver versus InnerBoundary-to-Receiver plus subpixel serialization differences already outside this mechanism."
+    },
+    {
+      "stem": "fresh2_ortho_lr_parenthesis_reversed_nested",
+      "axes": ["parenthesis decoration", "ORTHO", "left-to-right", "reversed endpoint", "package endpoint", "three cubics"],
+      "diff_one_exit": 0,
+      "result": "structural pass; reversed decoration and package topology match Java"
+    },
+    {
+      "stem": "fresh2_spline_lr_extends_long_chain",
+      "axes": ["EXTENDS start decoration", "spline", "left-to-right", "long declaration chain", "wide label", "three cubics"],
+      "diff_one_exit": 0,
+      "result": "structural pass across a longer spline route"
+    }
+  ],
+  "rerun_prior_perturbations": [
+    {
+      "stem": "ortho_lr_inheritance_package_consume",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "ortho_lr_dependency_ordinary_no_consume",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "ortho_tb_dependency_ordinary_no_consume",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "spline_lr_aggregation_ordinary_retraction",
+      "diff_one_exit": 0
+    },
+    {
+      "stem": "spline_tb_parenthesis_package_consume",
+      "diff_one_exit": 1,
+      "result": "same preserved non-mechanism relationship-ID/subpixel residue as the prior review"
+    }
+  ],
+  "forbidden_pattern_audit": {
+    "fixture_or_label_conditionals_found": false,
+    "golden_data_use_found": false,
+    "post_hoc_svg_surgery_found": false,
+    "branch_count_constant_ladder_found": false,
+    "comparator_or_baseline_or_park_or_error_marker_changes_found": false,
+    "unexplained_new_numeric_constants_found": false,
+    "notes": "The implementation changes only generic Class path-start point-stream handling and model-level tests. Decoration lengths remain separately provenance-cited."
+  },
+  "counterexamples": [],
+  "residue": [
+    "The e8d50060 base predates the independently reviewed root painted-minimum fix, so one fresh aggregation diagram has a uniform global x translation unrelated to start retraction.",
+    "Parenthesis package relationships retain an existing backto/to SVG ID mismatch and small serialization differences unrelated to segment consumption.",
+    "The source-level equality and degenerate cases are preserved as a pinned-JAR Java probe because Graphviz does not offer source syntax for requesting an exact first-cubic chord length."
+  ],
+  "artifacts": {
+    "directory": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption",
+    "sha256_manifest": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/review2-artifact-sha256.txt",
+    "preservation": "All fresh valid PlantUML sources, same-stem Java SVGs, Rust SVGs, diff stdout/stderr/exit files, and per-run binary hashes are checked in whether passing or failing. Prior review artifacts are unchanged; reruns use review2 suffixes."
+  }
+}

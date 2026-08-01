@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+package "Nested Receiver" as NestedReceiver {
+  interface Port
+}
+
+class Sender
+class NorthGuide
+class SouthGuide
+class RemoteGuide
+
+NorthGuide --> RemoteGuide
+SouthGuide --> RemoteGuide
+Sender --( NestedReceiver : reversed socket endpoint
+Port --> NorthGuide
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+package "Outer Source" as OuterSource {
+  package "Inner Source" as InnerSource {
+    class Seed
+  }
+}
+
+class "A target with a deliberately wide label" as WideTarget
+class BendNorth
+class BendSouth
+class FarAnchor
+
+Seed --> BendNorth
+BendNorth --> BendSouth
+BendSouth --> FarAnchor
+InnerSource <|-- WideTarget
+@enduml

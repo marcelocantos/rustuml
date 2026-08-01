@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+class DependencySource
+class DependencyTarget
+class UpperOne
+class UpperTwo
+class LowerOne
+class LowerTwo
+
+UpperOne --> UpperTwo
+LowerOne --> LowerTwo
+DependencySource --> UpperOne
+LowerTwo --> DependencyTarget
+DependencySource <-- DependencyTarget
+@enduml

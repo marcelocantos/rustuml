@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam linetype spline
+
+package "Source Hierarchy" as SourceHierarchy {
+  class Origin
+}
+
+class Destination
+class ChainOne
+class ChainTwo
+class ChainThree
+class ChainFour
+
+Origin --> ChainOne
+ChainOne --> ChainTwo
+ChainTwo --> ChainThree
+ChainThree --> ChainFour
+SourceHierarchy <|-- Destination : inheritance across a long chain
+@enduml

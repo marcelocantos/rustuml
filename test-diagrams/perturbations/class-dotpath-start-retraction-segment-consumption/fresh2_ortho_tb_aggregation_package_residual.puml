@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+
+package "Aggregate Source" as AggregateSource {
+  class Part
+}
+
+class Whole
+class GuideAlpha
+class GuideBeta
+class GuideGamma
+
+Part --> GuideAlpha
+GuideAlpha --> GuideBeta
+GuideGamma --> GuideBeta
+AggregateSource o-- Whole : broad aggregation label
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+
+package "Short Source" as ShortSource {
+  class Seed
+}
+
+class Target
+class LeftGuide
+class RightGuide
+class LowerGuide
+
+LeftGuide --> LowerGuide
+RightGuide --> LowerGuide
+Seed --> LeftGuide
+ShortSource <|-- Target
+@enduml
