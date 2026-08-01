@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-rankdir-class-factory-fallback-ownership",
+  "status": "accounted_before_implementation",
+  "phase": "planned",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "063e49a80a42f976a466e13412df484f20ac33dd",
+  "triggering_rejection": {
+    "mechanism": "uml-sequence-message-whole-line-factory-precedence",
+    "record": "docs/parity-reviews/uml-sequence-message-whole-line-factory-precedence/review.json",
+    "preserved_counterexample": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/direction_rejection_control.puml"
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": [
+        "PSystemBuilder.PSystemBuilder",
+        "PSystemBuilder.createPSystem",
+        "PSystemBuilder.isOk"
+      ],
+      "lines": "128-197, 203-271",
+      "role": "Registers SequenceDiagramFactory, then ClassDiagramFactory, then ActivityDiagramFactory, then DescriptionDiagramFactory, and returns the first non-error result. Later factories never compete by weighted token evidence with an earlier fully viable factory."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": [
+        "PSystemCommandFactory.createSystem",
+        "PSystemCommandFactory.executeFewLines",
+        "PSystemCommandFactory.getCandidate"
+      ],
+      "lines": "74-197",
+      "role": "Tests each factory against the complete command stream. The rank-direction command rejects Sequence because it has no matching command there, then the same source is retried from the start by Class."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+      "symbols": [
+        "SequenceDiagramFactory.initCommandsList"
+      ],
+      "lines": "98-156",
+      "role": "Does not register CommandRankDir, so `left to right direction` makes the Sequence candidate fail before its otherwise message-shaped relationship can own the source."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbols": [
+        "ClassDiagramFactory.initCommandsList"
+      ],
+      "lines": "100-165",
+      "role": "Registers CommandRankDir and CommandLinkClass in the earlier Class factory, making the complete preserved stream Class-consumable."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandRankDir.java",
+      "symbols": [
+        "CommandRankDir.getRegexConcat",
+        "CommandRankDir.executeArg"
+      ],
+      "lines": "47-67",
+      "role": "Consumes left-to-right or top-to-bottom direction and writes the selected Rankdir into the diagram SkinParam."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+      "symbols": [
+        "CommandLinkClass.getRegexConcat",
+        "CommandLinkClass.executeArg"
+      ],
+      "lines": "72-220",
+      "role": "Consumes a weak named-endpoint arrow such as `Node --> Component`, creates missing endpoints as LeafType.CLASS, and records the Class link. Endpoint words do not invoke Description declarations because this complete command is already owned by CommandLinkClass."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "symbols": [
+        "DescriptionDiagramFactory.initCommandsList"
+      ],
+      "lines": "85-137",
+      "role": "Also registers CommandRankDir and a relationship command, but appears after Class and is never reached when the complete source succeeds under Class."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype"
+      ],
+      "lines": "720-785, 908-918, 996-1070, 1395-1406, 1448-1527",
+      "role": "Marks rank direction and excludes Sequence, but still scores the first token of the relationship as declaration evidence. In the preserved line, leading `Node` matches DEPLOYMENT_KEYWORDS and adds Deployment score. The Class fallback for weak graph arrows runs only when Deployment score is zero, and the direction-specific Class repair also requires every non-Sequence score to be zero, so neither can restore Java's earlier Class owner."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "parse_with_base"
+      ],
+      "lines": "1968-2042",
+      "role": "Dispatches the score winner to deployment::parse_deployment, whose renderer emits the DESCRIPTION envelope. It never asks whether class::parse_class can consume the complete source first."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::parse_line",
+        "ClassParser::try_relationship"
+      ],
+      "lines": "738-803, 1169-1307",
+      "role": "Already consumes both rank-direction commands and the preserved weak relationship, materializing missing endpoints and setting ClassLayoutDirection. The wrong result occurs before this capable parser is selected."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "DEPLOYMENT_KEYWORDS",
+        "parse_deployment"
+      ],
+      "lines": "14-94, 383-829",
+      "role": "Receives the source solely because the leading endpoint token was interpreted as a deployment declaration signal, even though the complete line is a relationship command and Java's earlier Class factory already owns it."
+    }
+  ],
+  "claimed_invariant": "For ordinary `@startuml`, rank direction is a command-level factory discriminator, not a weighted hint. Sequence fails because it lacks CommandRankDir. The source is then retried under Class, and if CommandRankDir plus CommandLinkClass consume the complete stream, Class owns it because ClassDiagramFactory precedes DescriptionDiagramFactory. A word such as Node, Queue, Component, Database, or Cloud occurring as a CommandLinkClass endpoint remains endpoint data and cannot independently promote a later Description-backed Rust subtype. Description owns the source only when Class fails to consume some complete command.",
+  "causal_divergence": "For `left to right direction` plus `Node --> Component`, Rust correctly marks Sequence nonviable. It then assigns Deployment score to the relationship because its first lexical token is `Node`. That nonzero score disables both existing Class fallback guards, so maximum-score selection chooses UmlSubtype::Deployment and the product emits DESCRIPTION. Java instead rejects Sequence on CommandRankDir, restarts the stream under ClassDiagramFactory, consumes CommandRankDir and CommandLinkClass, creates Node and Component as class leaves, and returns CLASS before DescriptionDiagramFactory is considered. The divergence is loss of ordered whole-factory viability after Sequence rejection, not insufficient Class score.",
+  "planned_model_change": "Model the relevant fallback as ordered complete-command viability. After Sequence rejects rank direction, probe whether the Class command model can consume the complete stream, using a shared non-mutating classifier or a parse result that distinguishes consumed commands from ignored/invalid ones. If Class is viable, select Class before applying Component/Deployment/UseCase splits that represent Java's later Description factory. Treat a parsed Class relationship as one command so endpoint tokens cannot also become Description declaration evidence. Only when Class is genuinely nonviable should the existing later-family logic choose a DESCRIPTION-backed Rust model. Preserve rankdir in the selected Class AST and preserve explicit later-family syntax that Java Class rejects.",
+  "perturbation_axes": [
+    "rank direction: left-to-right, top-to-bottom, repeated directives, and last-directive-wins order",
+    "relationship endpoint vocabulary: ordinary names and words shared with Description declarations including Node, Queue, Component, Database, Cloud, Rectangle, and Actor",
+    "relationship grammar: solid, dotted, undecorated association, dependency, reverse direction, labels, multiplicities, colors, and direction modifiers",
+    "topology and order: one edge, chains, cycles, reordered endpoints, and relationships before versus after rankdir",
+    "Class viability: implicit endpoints, explicit class/interface declarations, packages, notes, and genuine Class command errors",
+    "later-factory controls: bracket components, use cases, deployment containers, and Description-only leaves that ClassDiagramFactory cannot consume"
+  ],
+  "scope_boundary": "This mechanism owns ordered Class-before-Description fallback for rankdir-bearing UML sources after Sequence rejects the complete stream. It does not own ordinary Sequence CommandArrow endpoint grammar, general Description model unification, rendering geometry within Class or DESCRIPTION, Graphviz rank placement after the correct AST is selected, syntax-error policy, comparator slack, baselines, park lists, syntax-error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved Java-success counterexample `direction_rejection_control.puml` produces a zero byte-level no-oracle diff and both products emit data-diagram-type CLASS.",
+    "Fresh rankdir plus weak Class relationship inputs with ordinary and Description-keyword endpoint names all select Class and produce zero byte-level no-oracle diffs whenever Java exits zero.",
+    "Fresh Class grammar variants prove endpoint words inside a consumed CommandLinkClass never become independent later-factory declarations.",
+    "Fresh valid Description/component/deployment/use-case controls that ClassDiagramFactory cannot consume retain Java's later owner; malformed or mutually unconsumable sources retain Java's error behavior.",
+    "Parser-focused tests assert whole-stream Class viability and exact AST dispatch, including both rank directions and reordered commands, without numeric score tuning.",
+    "An independent checker at the exact implementation revision generates at least two fresh independent axes, requires Java exit zero, preserves all artifacts, and records REJECT for any nonzero no-oracle diff."
+  ],
+  "forbidden_approaches": [
+    "adding Class score points or lowering Deployment/Component weights until the preserved fixture happens to win",
+    "special-casing Node, Component, the preserved label, or the presence of exactly one arrow",
+    "forcing every rankdir source to Class without proving complete Class command consumption",
+    "changing the deployment/component renderer to emit CLASS for a wrongly selected AST",
+    "post-processing the SVG diagram type or coordinates",
+    "changing comparator controls, baselines, skip rules, park lists, syntax-error markers, or guard allow-lists"
+  ]
+}

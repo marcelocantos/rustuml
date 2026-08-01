@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-participant-englober-note-vertical-frontier",
+  "status": "accounted_before_implementation",
+  "phase": "planned",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "063e49a80a42f976a466e13412df484f20ac33dd",
+  "triggering_rejection": {
+    "mechanism": "uml-sequence-message-whole-line-factory-precedence",
+    "record": "docs/parity-reviews/uml-sequence-message-whole-line-factory-precedence/review.json",
+    "preserved_counterexample": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/sequence_box_note_reserved.puml"
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java",
+      "symbols": [
+        "CommandBoxStart.getRegexConcat",
+        "CommandBoxStart.executeArg"
+      ],
+      "lines": "58-102",
+      "role": "Creates a ParticipantEnglober from the box title and color. Participant kind is not part of the box-title command or its vertical sizing input."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java",
+      "symbols": [
+        "SequenceDiagram.getSequenceDiagramPngMaker",
+        "SequenceDiagram.modeTeoz"
+      ],
+      "lines": "282-303",
+      "role": "Selects SequenceDiagramFileMakerPuma2 for the preserved source because no Teoz pragma is active."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/SequenceDiagramFileMakerPuma2.java",
+      "symbols": [
+        "SequenceDiagramFileMakerPuma2.SequenceDiagramFileMakerPuma2"
+      ],
+      "lines": "64-100",
+      "role": "Adds participants with their englobers, adds events in source order, and delegates all vertical measurement and painting to DrawableSetInitializer and DrawableSet."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSet.java",
+      "symbols": [
+        "DrawableSet.getHeadAndEngloberHeight",
+        "DrawableSet.drawDolls",
+        "DrawableSet.drawHeadTailU"
+      ],
+      "lines": "166-185, 302-313, 361-421",
+      "role": "Computes each participant's initial vertical frontier as participant head height plus the preferred height of its englober component, takes the maximum for the shared head frontier, paints the englober frame/title, then paints all heads, lifelines, and events from that same frontier. No branch examines ParticipantType."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+      "symbols": [
+        "DrawableSetInitializer.createDrawableSet",
+        "DrawableSetInitializer.prepareNote",
+        "DrawableSetInitializer.createNoteBox"
+      ],
+      "lines": "119-200, 430-465",
+      "role": "Seeds FrontierStackImpl with DrawableSet.getHeadHeight, stores that value as topStartingY, then advances the same freeY frontier through messages and notes. A note's startingY and every later painted ordinate therefore inherit the complete englober height exactly once."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseEnglober.java",
+      "symbols": [
+        "ComponentRoseEnglober.ComponentRoseEnglober",
+        "ComponentRoseEnglober.getPreferredHeight",
+        "ComponentRoseEnglober.drawBackgroundInternalU"
+      ],
+      "lines": "51-87",
+      "role": "Builds the box title component with one pixel of vertical text margin and reports `getTextHeight + 3`. Because AbstractTextualComponent.getTextHeight already adds two vertical margin pixels, a nonempty title contributes pure text height plus five pixels independent of enclosed participant shapes."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+      "symbols": [
+        "AbstractTextualComponent.AbstractTextualComponent",
+        "AbstractTextualComponent.getTextHeight"
+      ],
+      "lines": "54-115",
+      "role": "Defines the englober text block's vertical measurement as its pure calculated text height plus twice marginY, supplying the first two pixels of ComponentRoseEnglober's five-pixel non-text contribution."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ParticipantBox.java",
+      "symbols": [
+        "ParticipantBox.getHeadHeight",
+        "ParticipantBox.drawHeadTailU"
+      ],
+      "lines": "102-115, 122-160",
+      "role": "Measures and paints each participant head relative to DrawableSet.topStartingY. Shape-specific head dimensions affect bottom alignment, but do not alter the englober title contribution."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "symbols": [
+        "FactorySequenceNoteOverSeveralCommand.getRegexConcatSingleLine",
+        "FactorySequenceNoteOverSeveralCommand.executeInternal"
+      ],
+      "lines": "95-130, 156-187",
+      "role": "Creates a Note over two participants and appends it to the same sequence event stream; the note does not define a separate absolute origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/NoteBox.java",
+      "symbols": [
+        "NoteBox.NoteBox",
+        "NoteBox.getPreferredHeight",
+        "NoteBox.drawInternalU"
+      ],
+      "lines": "52-117",
+      "role": "Paints the note at the startingY supplied by the shared frontier and advances by the note component's preferred height. It preserves the englober-induced translation rather than compensating for participant kind."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "BOX_TITLE_HEAD_GAP",
+        "render_with_oracle"
+      ],
+      "lines": "2262-2277, 6578-6628",
+      "role": "Computes a global box title band, but contains an explicit queue-dependent exception: when every titled box contains a Queue participant, `all_titled_boxes_have_queue` sets title_gap to zero instead of BOX_TITLE_HEAD_GAP. This removes five pixels from the shared head band solely because of participant kind."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "render_with_oracle"
+      ],
+      "lines": "6663-6671, 8164-8186, 8295-8512",
+      "role": "Adds box_band_h to head_box_y, derives lifeline_top from that head ordinate, initializes the event y cursor at lifeline_top, and stores message/note positions from that cursor. Removing five pixels from box_band_h therefore translates participant heads, lifelines, both messages, the note, footboxes, and canvas height upward by five pixels while leaving their relative dimensions unchanged."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "symbols": [
+        "render_with_oracle"
+      ],
+      "lines": "10427-10524, 10691-10821, 12250-12890",
+      "role": "Paints the named box at a fixed frame top, then paints participant heads and the over-several note from the previously computed shared ordinates. In the preserved output the frame/title x/y and all local dimensions already match; only the queue-triggered five-pixel frontier subtraction shifts the remaining vertical region."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/sequence.rs",
+      "symbols": [
+        "ParticipantBox",
+        "Participant",
+        "Note"
+      ],
+      "lines": "24-40, 43-65, 203-242",
+      "role": "Keeps participant boxes, participant kinds, and notes as distinct model objects. The renderer can therefore derive englober height from title/style while using participant kind only for head shape, matching Java's separation."
+    }
+  ],
+  "claimed_invariant": "In the classic Puma sequence renderer, a nonempty participant-box title contributes the preferred height of one ComponentRoseEnglober to the common initial participant frontier. That preferred height is the title text block's measured height plus two one-pixel vertical text margins plus three additional component pixels, for a total of pure title text height plus five. The contribution is independent of whether enclosed participants are participant, queue, actor, database, or mixed shapes. Participant shape affects only its own head height and bottom alignment. Messages and NoteBox events start from the common frontier, so the complete downstream painted sequence region moves together when the title component height changes; the note has no compensating participant-kind rule.",
+  "causal_divergence": "Rust's named-box model normally adds BOX_TITLE_HEAD_GAP to the measured title height, but an ad hoc `all_titled_boxes_have_queue` predicate removes that five-pixel contribution when every titled box includes a queue. The preserved `sequence_box_note_reserved` source has one titled box containing Participant and Queue, so the predicate fires. Rust paints the box frame and title at Java's coordinates but starts both participant heads at y=20.3105 instead of 25.3105. Because head_box_y seeds lifeline_top and event_y_positions, the lifelines, dispatch message, over-several note, reply, tails, frame bottom, and canvas bottom are all exactly five pixels high while their local widths/heights remain equal. Java ComponentRoseEnglober has no ParticipantType branch; its text-height-plus-five preferred height is always included by DrawableSet.getHeadAndEngloberHeight.",
+  "planned_model_change": "Replace the queue-clearing heuristic with a Java-shaped englober preferred-height calculation. For each nonempty titled participant box, measure the title using the existing box-title font/style metrics and add the ComponentRoseEnglober vertical margins once, independent of member kinds; use the maximum required englober band for the shared head frontier, as DrawableSet.getHeadHeight does. Keep untitled-box behavior, Teoz-specific positioning, participant-shape bottom alignment, and note-local preferred-height logic separate. Derive participant heads, lifelines, messages, notes, tails, box bottom, and canvas from the corrected shared frontier rather than adding five pixels at individual paint sites.",
+  "perturbation_axes": [
+    "box membership: participant-only, queue-only, mixed participant/queue, actor/queue, database/queue, and no-queue controls",
+    "box topology: one box, multiple titled boxes with different member kinds, nested/adjacent membership where valid, and participants outside boxes",
+    "title metrics: renamed short/long titles, empty titles, multiline or styled titles where Java accepts them, and box colors",
+    "event content: messages only, note-over-one, note-over-several, multiline notes, reversed message order, and no-note controls",
+    "participant shapes and order: queue first versus last, mixed head heights, reordered declarations, and repeated member counts",
+    "renderer mode and chrome: classic Puma versus explicit Teoz control, shown versus hidden footbox, headers/titles, and padding/style controls"
+  ],
+  "scope_boundary": "This mechanism owns the classic sequence participant-englober preferred-height contribution and propagation of that common vertical frontier into participant heads, lifelines, messages, notes, tails, box frame bottom, and canvas height. It does not own note text/component local dimensions, horizontal note constraints, participant head shape geometry, factory selection, CommandArrow endpoint grammar, Teoz's separate PlayingSpace/Dolls model except as a non-regression control, SVG comparator behavior, baselines, park lists, syntax-error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved Java-success counterexample `sequence_box_note_reserved.puml` produces a zero byte-level no-oracle diff; the five-pixel discrepancy disappears through the shared englober frontier rather than coordinate edits at each element.",
+    "Fresh valid titled-box inputs spanning queue-only, mixed, and non-queue members all produce zero byte-level no-oracle diffs and prove title-band height is independent of participant kind.",
+    "Fresh note-over-one, note-over-several, message-only, and no-note inputs prove all downstream elements inherit one corrected frontier while their local dimensions and relative spacings remain unchanged.",
+    "Untitled boxes, unboxed sequences, Teoz controls, hidden-footbox cases, and multiple-box cases retain Java behavior with no new no-oracle differences.",
+    "Renderer-focused tests assert the generative relation between measured englober height, head_box_y, lifeline_top, event positions, tail position, frame bottom, and canvas height without fixture coordinates.",
+    "An independent checker at the exact implementation revision generates at least two fresh independent axes, requires Java exit zero, preserves all artifacts, and records REJECT for any nonzero no-oracle diff."
+  ],
+  "forbidden_approaches": [
+    "adding five pixels only when a label, participant id, note payload, or exact participant combination matches the preserved fixture",
+    "patching participant, message, note, lifeline, tail, frame, and canvas coordinates independently",
+    "retaining a queue-specific title-gap branch without Java source provenance",
+    "using the expected SVG or oracle layout in the shipped path",
+    "post-processing emitted SVG coordinates or dimensions",
+    "changing comparator controls, baselines, skip rules, park lists, syntax-error markers, or guard allow-lists"
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-arrow-ordinary-endpoint-alias-grammar",
+  "status": "accounted_before_implementation",
+  "phase": "planned",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "063e49a80a42f976a466e13412df484f20ac33dd",
+  "triggering_rejection": {
+    "mechanism": "uml-sequence-message-whole-line-factory-precedence",
+    "record": "docs/parity-reviews/uml-sequence-message-whole-line-factory-precedence/review.json",
+    "preserved_counterexample": "test-diagrams/perturbations/uml-sequence-message-whole-line-factory-precedence/quoted_alias_endpoints.puml"
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "symbols": [
+        "CommandArrow.getRegexConcat",
+        "CommandArrow.getOrCreateParticipant"
+      ],
+      "lines": "87-174",
+      "role": "Defines the ordinary message endpoint grammar symmetrically for PART1 and PART2. Each side accepts a code `[%pLN_.@]+`, a quoted long name, a quoted long name followed by `as` and a code, or a code followed by `as` and a quoted long name. getOrCreateParticipant projects every alternative to one participant code plus one display value before creating or reusing the participant."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+      "symbols": [
+        "SequenceDiagramFactory.initCommandsList"
+      ],
+      "lines": "98-125",
+      "role": "Registers CommandArrow in the first relevant UML factory, so every line matching the complete endpoint-and-arrow grammar participates in Sequence factory viability."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": [
+        "PSystemCommandFactory.createSystem",
+        "PSystemCommandFactory.executeFewLines",
+        "PSystemCommandFactory.getCandidate"
+      ],
+      "lines": "74-197",
+      "role": "Requires one registered command to consume each complete line. A Java-valid CommandArrow endpoint form therefore keeps Sequence viable; it is not optional token syntax considered after factory selection."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/sequence.rs",
+      "symbols": [
+        "MESSAGE_RE",
+        "SeqParser::try_message",
+        "looks_like_message"
+      ],
+      "lines": "23-28, 435-485, 1281-1307",
+      "role": "Uses one regex capture per endpoint, restricted to a quoted string or `\\w+`. It cannot consume either inline `as` ordering and excludes dots and at signs from bare codes. try_message then merely unquotes each capture and uses the same string as both participant id and implicit label, so the Rust message model cannot represent Java's distinct code/display projection for inline aliases."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/sequence.rs",
+      "symbols": [
+        "sequence::factory_accepts"
+      ],
+      "lines": "65-93",
+      "role": "Runs the same SeqParser over the whole command stream. Because try_message cannot consume Java's alias endpoint forms, the entire Sequence factory candidate is rejected before subtype ownership is chosen."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/sequence.rs",
+      "symbols": [
+        "Participant",
+        "Message"
+      ],
+      "lines": "43-65, 80-96",
+      "role": "Already stores participant identity and display label separately and messages refer to participant ids, so the AST can carry the Java code/display result once endpoint parsing produces it."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype",
+        "parse_with_base"
+      ],
+      "lines": "720-785, 1488-1527, 1968-2017",
+      "role": "Uses sequence::factory_accepts and sequence::looks_like_message as ownership inputs, then dispatches only the selected parser. Incomplete endpoint grammar therefore changes both factory selection and the materialized diagram, producing DESCRIPTION for the preserved Java SEQUENCE source."
+    }
+  ],
+  "claimed_invariant": "An ordinary Sequence CommandArrow endpoint is a parsed value with separate participant code and display text. The four Java alternatives are semantically equivalent endpoint constructors on both sides of the arrow: bare code maps code and display to that code; quoted long name maps code and display to the unquoted name; `\"Long Name\" as code` maps code to `code` and display to `Long Name`; and `code as \"Long Name\"` maps the same pair in the opposite lexical order. Codes admit Unicode letters/numbers plus underscore, dot, and at sign. This complete endpoint grammar must be shared by Sequence factory viability and actual message parsing, so every Java-valid form selects Sequence and creates/reuses participants by code rather than by display text.",
+  "causal_divergence": "The preserved `quoted_alias_endpoints` source is accepted by Java CommandArrow on all three lines: each inline alias yields participant codes `Node.code`, `Component.code`, and `Queue.code`, while the quoted strings become their displayed names. Rust MESSAGE_RE has no `as` alternatives and its bare branch is only `\\w+`; SeqParser::try_message therefore returns false on the first line, factory_accepts rejects Sequence, and later UML scoring selects a DESCRIPTION-backed model. This is not a reserved-word score imbalance. It is an incomplete ordinary endpoint parser coupled to a model path that conflates lexical endpoint text with both id and label.",
+  "planned_model_change": "Introduce one anchored ordinary-message endpoint parser that returns a typed `{ code, display }` value for all four Java CommandArrow alternatives, including dotted and at-sign codes. Compose the full message grammar from two such endpoints and the existing arrow/style/activation/message-tail grammar. Use that same parsed result for looks_like_message, factory_accepts, and SeqParser::try_message; ensure participants by `code`, retain `display` when implicitly creating them, and preserve an existing participant's declaration-owned display on reuse according to the current participant model. Keep external-message endpoint grammar separate because Java handles it through CommandExoArrow rather than CommandArrow.",
+  "perturbation_axes": [
+    "endpoint ordering: quoted-long-name AS code versus code AS quoted-long-name, independently on source and target",
+    "code alphabet: simple, dotted, at-sign, mixed Unicode letter/number, and underscore codes",
+    "identity/display reuse: aliases introduced by a message, aliases reused by later messages, and aliases predeclared with a different declaration order",
+    "arrow grammar: forward, reverse, dotted, bidirectional, styled, activation-suffixed, and labelled messages",
+    "endpoint position and cardinality: alias on only one side, both sides, self-message, cycles, and multicast controls",
+    "factory controls: syntactically similar class/description relationships and malformed alias forms that Java CommandArrow rejects"
+  ],
+  "scope_boundary": "This mechanism owns ordinary CommandArrow endpoint parsing, typed code/display projection, implicit participant identity, and use of that parser by Sequence factory viability. It does not own explicit participant-declaration grammar, external-message commands, general Class-versus-Description fallback after Sequence genuinely rejects a line, participant layout, note geometry, SVG serialization, comparator slack, baselines, park lists, syntax-error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved Java-success counterexample `quoted_alias_endpoints.puml` produces a zero byte-level no-oracle diff; Java and Rust both emit SEQUENCE and the participant ids/displays follow CommandArrow's code/display projection.",
+    "Fresh valid inputs cover both inline alias orderings, aliases on both endpoint positions, and dotted plus at-sign codes; every Java-success input has a zero byte-level no-oracle diff.",
+    "Fresh reuse inputs prove that code, not display text, is participant identity across reordered and repeated messages without duplicating participants or overwriting declaration-owned presentation incorrectly.",
+    "Fresh malformed and non-CommandArrow controls remain rejected by Sequence exactly when Java rejects them, allowing the same later UML factory owner or syntax result.",
+    "Parser-focused tests prove one shared endpoint parser drives actual messages, looks_like_message, and factory_accepts rather than three drifting recognizers.",
+    "An independent checker at the exact implementation revision generates at least two fresh independent axes, requires Java exit zero, preserves all artifacts, and records REJECT for any nonzero no-oracle diff."
+  ],
+  "forbidden_approaches": [
+    "special-casing the labels, codes, reserved words, or three lines in quoted_alias_endpoints",
+    "adding subtype score weights so Sequence wins without accepting and materializing the Java endpoint grammar",
+    "stripping `as` text ad hoc without preserving separate code and display values",
+    "loosening the endpoint regex to an unstructured catch-all that accepts Java-invalid commands",
+    "post-processing SVG ids, labels, diagram type, or coordinates",
+    "changing comparator controls, baselines, skip rules, park lists, syntax-error markers, or guard allow-lists"
+  ]
+}
