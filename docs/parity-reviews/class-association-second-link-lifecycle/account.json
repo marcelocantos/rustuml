@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-association-second-link-lifecycle",
+  "created": "2026-08-01",
+  "status": "accounted_before_implementation",
+  "implementation_status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "88867b6c03dd103825744f56d6524e6cdefb6a5f",
+  "predecessor_rejection": {
+    "mechanism": "class-cuca-association-event-projection",
+    "account_commit": "2fa10c6c555906ead234ade68f8733aa04920465",
+    "implementation_commit": "88867b6c03dd103825744f56d6524e6cdefb6a5f",
+    "review_commit": "9b0f69c5a349af8fdb6ba21aaaa40df804e7876b",
+    "review_path": "docs/parity-reviews/class-cuca-association-event-projection/review.json",
+    "counterexample": "checker2_multiple_associations_same_pair",
+    "verdict": "rejected"
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "symbols": ["associationClass", "getExistingAssociatedPoints", "Association.sameCouple"],
+      "lines": "178-207, 343-352",
+      "role": "Selects createNew for the first unordered endpoint pair, createSecondAssociation plus createInSecond for the second, and rejects a third association on the same pair."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "symbols": ["Association.createSecondAssociation"],
+      "lines": "237-247",
+      "role": "Shares the original base-link model with the second point and, for a one-rank base, changes the first split pair to length two while keeping the first role connector at length one."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "symbols": ["Association.createInSecond"],
+      "lines": "303-341",
+      "role": "Creates a length-two second split pair, removes/inverts/re-adds the first point-to-role connector when necessary, adds the second point-to-role connector, then adds an invisible length-one edge from the first point to the second."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+      "symbols": ["getOrderedLinks", "addLinkNew"],
+      "lines": "89-113",
+      "role": "Projects the resulting mutable live-link list with stable unordered endpoint-pair grouping; reinsertion and the invisible constraint therefore affect serialization and layout."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/diagram/class.rs",
+      "symbols": ["AssociationClass"],
+      "lines": "253-285",
+      "role": "Stores each association independently and has no first/second pair relation or shared base-link lifecycle."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": ["ClassParser::try_association_class"],
+      "lines": "1122-1196",
+      "role": "Removes the latest A-B relationship for every association statement and appends an independent AssociationClass, rather than selecting Java's second-association path."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["association_replacement_relationships", "svek_source_live_links", "svek_live_link_order"],
+      "lines": "13945-14080, 15774-15886",
+      "role": "Always synthesizes three createNew-style links per point and cannot represent first-link reinsertion, changed first lengths, the second point connector, or the invisible point-to-point edge."
+    }
+  ],
+  "claimed_invariant": "At most two association classes may attach to an unordered endpoint pair. The second statement is a transaction over both points and the shared original base: it mutates the first association's link lengths, may invert and reinsert its role connector, creates a length-two second split pair and a length-one second role connector, and adds an invisible first-point-to-second-point rank constraint. Live-link construction order after those mutations, not three independent links per statement, determines SVEK serialization and layout.",
+  "causal_divergence": "Rust treats the second statement as another createNew. It removes no first split link because those links exist only as renderer projections, retains the first point-to-role orientation/order, emits another independent three-link set, and has no invisible point-to-point constraint. This changes both link identities/order and Graphviz topology in checker2_multiple_associations_same_pair. The single-association controls pass because Java never enters createSecondAssociation/createInSecond for them.",
+  "planned_model_change": "Represent whether an AssociationClass is the first or second point for an unordered endpoint pair and retain the shared base/first association index. Parse the second statement without independently consuming a new base relationship; reject a third as Java does. Project the complete post-transaction live-link model: update first split lengths when required, invert and reinsert the first role connector when Java does, emit the second length-two split pair and length-one role connector, and include the invisible first-point-to-second-point edge in layout while suppressing its SVG paint. Derive UID consumption and SVG IDs from the same constructor/inversion sequence. Do not alter single-association geometry or generic relationship ordering.",
+  "perturbation_axes": [
+    "pre-existing base length one versus length two versus no explicit base",
+    "second statement endpoint order same as versus reversed from the first",
+    "dashed versus solid role connectors",
+    "root ownership versus same-package ownership versus cross-parent statement ownership",
+    "top-to-bottom versus left-to-right direction",
+    "second association followed by a third attempted association",
+    "aliases versus qualified endpoint names"
+  ],
+  "acceptance": [
+    "An independent checker creates fresh valid inputs crossing at least two listed axes and preserves every source, Java SVG, Rust SVG, command result, and diff under test-diagrams/perturbations/class-association-second-link-lifecycle/.",
+    "Every fresh Java-success input is byte-exact through diff_one --no-oracle; any nonzero fresh diff rejects the change.",
+    "The preserved checker2_multiple_associations_same_pair counterexample becomes exact through the modeled lifecycle, with the first connector orientation/order and invisible rank constraint matching Java.",
+    "Fresh one-association controls remain exact and a fresh third-association case matches Java's rejection/consumption behavior without fixture-specific branches.",
+    "Parser, renderer, perturbation, baseline-ratchet, and harness-guard tests pass at the reviewed implementation revision."
+  ],
+  "forbidden_approaches": [
+    "branches keyed to fixture names, labels, pair counts from the golden corpus, source lines, or expected pass counts",
+    "coordinate offsets, per-branch-count layout constants, SVG post-processing, or golden/oracle reads from shipping crates",
+    "modeling the invisible edge as a painted SVG relationship or omitting it from layout because it is not painted",
+    "changing generic Graphviz constants, relationship ordering, comparator slack, baselines, park lists, error markers, or allow-lists inside this mechanism"
+  ]
+}

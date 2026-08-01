@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-association-cross-parent-statement-owner-tree-position",
+  "created": "2026-08-01",
+  "status": "accounted_before_implementation",
+  "implementation_status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "88867b6c03dd103825744f56d6524e6cdefb6a5f",
+  "predecessor_rejection": {
+    "mechanism": "class-cuca-association-event-projection",
+    "account_commit": "2fa10c6c555906ead234ade68f8733aa04920465",
+    "implementation_commit": "88867b6c03dd103825744f56d6524e6cdefb6a5f",
+    "review_commit": "9b0f69c5a349af8fdb6ba21aaaa40df804e7876b",
+    "review_path": "docs/parity-reviews/class-cuca-association-event-projection/review.json",
+    "counterexample": "checker2_cross_parent_statement_owner",
+    "verdict": "rejected"
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "symbols": ["Association.Association"],
+      "lines": "222-235",
+      "role": "Creates POINT_FOR_ASSOCIATION under the endpoints' common Quark parent, or through quarkInContext when their parents differ. The latter puts the point in the association statement's current group."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbols": ["GraphvizImageBuilder.printGroups", "GraphvizImageBuilder.printGroup", "GraphvizImageBuilder.getUnpackagedEntities"],
+      "lines": "348-364, 399-435",
+      "role": "Creates SVEK nodes by traversing top-level groups before root leaves and each group's direct leaves before child groups."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["SvekResult.drawU"],
+      "lines": "70-103",
+      "role": "Paints Bibliotekon's insertion-ordered allNodes stream; an association point is not painted relative to its associated class."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": ["ClassParser::try_association_class"],
+      "lines": "1122-1196",
+      "role": "Already records the cross-parent point owner as the current group, matching Java."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["SvekEmissionOrder.collect_direct_leaves", "SvekEmissionOrder.collect_package", "association_owner_packages", "svek_node_emission_order"],
+      "lines": "4797-4993",
+      "role": "Already places AssociationPoint in the correct owner-local SVEK node stream."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["render_plantuml_svg"],
+      "lines": "6240-6360",
+      "role": "Ignores AssociationPoint while consuming the node stream and instead paints every point immediately after entity C, which is wrong when C and the point have different owners."
+    }
+  ],
+  "claimed_invariant": "Association-point paint order is the same owner-local SVEK node order used for layout and collision traversal. The point's associated class C does not determine its paint position. With cross-parent endpoints, a point owned by a later statement package paints after earlier top-level packages even when C belongs to an earlier endpoint package.",
+  "causal_divergence": "The predecessor correctly records and lays out the point in the statement package, but render_plantuml_svg emits its ellipse in the entity-C loop. In checker2_cross_parent_statement_owner, C is in the first package while the point is in the third, so Rust paints the point before the east-package class; Java paints the east package first and reaches the point only in the third package's direct-leaf traversal. Root-owned and same-parent cases can accidentally pass because C and the point occur at compatible positions.",
+  "planned_model_change": "Remove entity-C-relative association-point painting. When render_plantuml_svg consumes SvekNodeEmission::AssociationPoint, paint that point from the solved association layout slot (or the corresponding oracle point on the strict path). Keep ownership, geometry, layout graph construction, link order, and point styling unchanged.",
+  "perturbation_axes": [
+    "statement package before versus after both endpoint packages",
+    "associated class C in the first endpoint package versus the second endpoint package",
+    "qualified endpoint names versus aliases",
+    "later direct leaf in the statement package versus no later leaf",
+    "top-to-bottom versus left-to-right direction"
+  ],
+  "acceptance": [
+    "An independent checker creates fresh valid inputs crossing at least two listed axes and preserves every source, Java SVG, Rust SVG, command result, and diff under test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/.",
+    "Every fresh Java-success input is byte-exact through diff_one --no-oracle; any nonzero fresh diff rejects the change.",
+    "The preserved checker2_cross_parent_statement_owner counterexample becomes exact without changing point coordinates, layout constants, comparator policy, or baselines.",
+    "Fresh root-owned and same-parent controls remain exact, proving that paint order follows one node stream rather than a cross-parent special case.",
+    "Parser, renderer, perturbation, baseline-ratchet, and harness-guard tests pass at the reviewed implementation revision."
+  ],
+  "forbidden_approaches": [
+    "branches keyed to fixture names, labels, package counts, source lines, or corpus membership",
+    "coordinate sorting, coordinate thresholds, point-position offsets, SVG post-processing, or golden reads",
+    "changing point ownership or layout topology when the recorded owner and layout stream are already correct",
+    "changing second-association lifecycle, link ordering, comparator slack, baselines, park lists, error markers, or allow-lists inside this mechanism"
+  ]
+}
