@@ -1,0 +1,5 @@
+@startuml
+database -> collections : scan
+collections -> entity : hydrate
+entity -> control : validate
+@enduml

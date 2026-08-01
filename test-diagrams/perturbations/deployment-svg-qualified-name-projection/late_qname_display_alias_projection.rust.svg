@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="218px" preserveAspectRatio="none" style="width:484px;height:218px;background:#FFFFFF;" version="1.1" viewBox="0 0 484 218" width="484px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Ops Zone-->
+<g class="cluster" data-qualified-name="ops" data-source-line="1" id="ent0002">
+<path d="M8.5,105.9883 L78.1943,105.9883 A3.75,3.75 0 0 1 80.6943,108.4883 L87.6943,128.4766 L322.5,128.4766 A2.5,2.5 0 0 1 325,130.9766 L325,200.9783 A2.5,2.5 0 0 1 322.5,203.4783 L8.5,203.4783 A2.5,2.5 0 0 1 6,200.9783 L6,108.4883 A2.5,2.5 0 0 1 8.5,105.9883" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="87.6943" y1="128.4766" y2="128.4766"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="68.6943" x="10" y="121.5234">Ops Zone</text>
+</g>
+<!--entity Display: Worker-->
+<g class="entity" data-qualified-name="ops.worker" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="21.78,150.9917,31.78,140.9917,168.2292,140.9917,168.2292,177.48,158.2292,187.48,21.78,187.48,21.78,150.9917" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="158.2292" x2="168.2292" y1="150.9917" y2="140.9917"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="21.78" x2="158.2292" y1="150.9917" y2="150.9917"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="158.2292" x2="158.2292" y1="150.9917" y2="187.48"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="106.4492" x="36.78" y="174.5269">Display: Worker</text>
+</g>
+<!--entity Retry/Queue-->
+<g class="entity" data-qualified-name="ops.Retry/Queue" data-source-line="3" id="ent0004">
+<path d="M207.94,150.9917 L304.066,150.9917 C309.066,150.9917 309.066,164.2359 309.066,164.2359 C309.066,164.2359 309.066,177.48 304.066,177.48 L207.94,177.48 C202.94,177.48 202.94,164.2359 202.94,164.2359 C202.94,164.2359 202.94,150.9917 207.94,150.9917" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M304.066,150.9917 C299.066,150.9917 299.066,164.2359 299.066,164.2359 C299.066,177.48 304.066,177.48 304.066,177.48" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86.126" x="207.94" y="169.5269">Retry/Queue</text>
+</g>
+<!--entity worker.alpha-->
+<g class="entity" data-qualified-name="worker.alpha" data-source-line="4" id="ent0005">
+<ellipse cx="256.0028" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="88.2656" x="211.87" y="44.5352">worker.alpha</text>
+</g>
+<!--entity Outside: Edge-->
+<g class="entity" data-qualified-name="Outside: Edge" data-source-line="6" id="ent0007">
+<path d="M352.7287,150.4038 C356.7271,144.3716 363.3516,143.5326 367.4417,150.2984 C369.6993,144.1336 375.4937,141.2649 380.4595,147.4419 C383.9276,142.0237 389.4832,141.5932 393.1383,147.2274 C398.2679,140.5674 403.1601,139.6571 407.9411,147.5812 C411.4816,140.8369 417.3783,141.0318 421.2816,147.2066 C426.1865,142.6347 430.0851,142.9264 433.1703,149.2011 C438.2416,143.1156 442.7671,141.0743 448.102,148.9186 C453.4163,143.3871 458.3298,144.5057 461.6656,151.1269 C468.1471,154.8922 469.1623,160.5617 462.4548,165.0734 C468.552,169.913 468.4593,175.2598 462.2362,179.918 C458.5864,187.6554 451.6074,187.8921 447.6421,180.2167 C443.6966,187.6499 439.6281,187.293 434.6412,181.2192 C431.2864,187.8627 424.2722,188.175 419.8753,182.4648 C416.4897,188.2615 412.1967,188.8577 407.4022,184.1355 C401.8544,189.2278 397.2514,189.0892 393.5483,182.0321 C389.6766,188.1698 384.5944,189.713 379.9196,182.8757 C375.1161,189.7491 368.9581,188.6736 365.9215,181.157 C362.2025,186.9011 356.6013,187.8879 353.1149,180.9227 C342.8216,178.7876 340.9458,173.0057 345.9169,164.272 C341.3797,156.8509 343.9697,151.2941 352.7287,150.4038" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="94.3838" x="358.81" y="169.5269">Outside: Edge</text>
+</g>
+<!--entity ops.root-->
+<g class="entity" data-qualified-name="ops.root" data-source-line="7" id="ent0008">
+<ellipse cx="406.0008" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57.1416" x="377.43" y="44.5352">ops.root</text>
+</g>
+<!--link worker.alpha to Retry/Queue-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0004" data-link-type="dependency" data-source-line="4" id="lnk6">
+<path d="M256,22.9517 C256,42.0017 256,84.7517 256,144.6417" fill="none" id="worker.alpha-to-Retry/Queue" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="256,150.6417,260,141.6417,256,145.6417,252,141.6417,256,150.6417" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62.4736" x="257" y="86.5601">schedules</text>
+</g>
+<!--link ops.root to Outside: Edge-->
+<g class="link" data-entity-1="ent0008" data-entity-2="ent0007" data-link-type="dependency" data-source-line="7" id="lnk9">
+<path d="M406,22.9517 C406,42.0017 406,84.7517 406,135.0217" fill="none" id="ops.root-to-Outside: Edge" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="406,141.0217,410,132.0217,406,136.0217,402,132.0217,406,141.0217" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="60.5122" x="407" y="86.5601">publishes</text>
+</g>
+</g></svg>

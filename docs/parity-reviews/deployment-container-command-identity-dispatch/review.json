@@ -1,140 +1,111 @@
 {
   "schema_version": 1,
   "mechanism": "deployment-container-command-identity-dispatch",
-  "checker": {
-    "identity": "OpenAI Codex independent adversarial checker",
+  "evidence_kind": "parity",
+  "maker": {
+    "identity": "Historical T14 deployment parser implementer(s), not this checker",
+    "task_id": "historical-deployment-container-command-identity"
+  },
+  "reviewer": {
+    "identity": "OpenAI Codex GPT-5 independent skeptical checker and evidence migrator",
+    "task_id": "rustuml-t14-late-rereview-2026-08-01",
     "model": "GPT-5 Codex",
-    "tool": "Codex desktop exec_command/apply_patch; frozen rustuml and diff_one binaries; pinned PlantUML JAR",
-    "date": "2026-08-01",
+    "tool": "Codex desktop exec_command/apply_patch; pinned PlantUML JAR; cc5bda77 diff_one",
+    "role": "independent checker; did not implement this mechanism",
     "implemented_mechanism": false
   },
   "revisions": {
-    "rust_commit": "f0ffaa30c45c3531915727707945eecf47ee106d",
-    "rust_branch": "codex/t14-review-deployment-parser",
-    "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-    "account_commit": "3a8889258ff300b409ee8f5e03ace526ec0b1be3",
-    "implementation_commits": [
+    "account_commit": "b1bf9f333ae3067ff412b406c1ca14478441c034",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "candidate_source": {
+    "worktree": "/private/tmp/rustuml-t14-integration",
+    "commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "rustuml_binary": "not present in the requested integration target; Rust SVGs were emitted with diff_one --print-rust",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "historical_records": {
+    "quarantined_reviews": [
+      "docs/parity-reviews/deployment-container-command-identity-dispatch/quarantined-review-late-container-command-identity-reject.json"
+    ],
+    "non_ancestral_implementation_commits": [
       "e0d6a6eb4b43ec60a9574d4f49a99b31a92c2213",
       "92b94590b8cdcfabc1988b26dc07a7dcccfba353",
-      "5509e3622a7948a8abbb93b0c01c973dfc61a135"
-    ]
-  },
-  "hashes": {
-    "frozen_rustuml_sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c",
-    "frozen_diff_one_sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
-    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
-    "account_sha256": "8558c2262bfc5f0915fb70a33f2d5e5070cfebc2f714a91aa0613af7fe154b7a",
-    "artifact_manifest_sha256": "2a2e96c46b310ca0eaddb00c32d411558839b349bf711299026d7dc5c6d57e2e"
-  },
-  "source_inspection": {
-    "java": [
-      {
-        "location": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:75-140",
-        "finding": "The complete braced command is end-anchored, accepts display-first, code-first, bare, and quoted identities, and registers package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack. CODE1/CODE9 exclude only hash, whitespace, braces, and quotes."
-      },
-      {
-        "location": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:75-136",
-        "finding": "Leaf declarations use the separate narrower CODE grammar, confirming that container widening must not be shared with leaves."
-      },
-      {
-        "location": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:124-140,229-250",
-        "finding": "A factory succeeds only after consuming the complete source; a malformed container line cannot be silently ignored."
-      }
+      "5509e3622a7948a8abbb93b0c01c973dfc61a135",
+      "f0ffaa30c45c3531915727707945eecf47ee106d"
     ],
-    "rust": [
-      {
-        "location": "crates/rustuml-parser/src/parse/deployment.rs:20-54",
-        "finding": "DEPLOYMENT_CONTAINER_KEYWORDS omits the Java-valid hexagon, action, and process container symbols."
-      },
-      {
-        "location": "crates/rustuml-parser/src/parse/deployment.rs:719-802",
-        "finding": "The supported container regexes are end-anchored and correctly preserve broad canonical codes and alias direction."
-      },
-      {
-        "location": "crates/rustuml-parser/src/parse/deployment.rs:1218-1280",
-        "finding": "When a deployment-keyword line fails parse_deployment_node_command and is not a link, parse_deployment falls through without an error. Later valid lines still render, violating whole-source consumption."
-      },
-      {
-        "location": "crates/rustuml-parser/src/parse/mod.rs:996-1079,1447-1494",
-        "finding": "Dispatch recognizes only the Rust container inventory; missing symbols can be ignored while nested deployment-only leaves still select Deployment."
-      }
-    ],
-    "implementation_lineage": "The account is the direct parent of e0d6a6eb. 92b94590 and 5509e362 are immediate follow-ups that scope Description factory evidence; all are present at the pinned head.",
-    "fixture_shaped_logic": "No production branch contains checker labels or fixture filenames. tenant-a, zone/prod, and Fresh* occurrences are confined to cfg(test) inputs.",
-    "golden_reads_or_svg_surgery": "No golden read, include_str!, comparator change, or SVG rewrite was added.",
-    "constants_and_scores": "No layout constants or high-precision values were added. The broad-identity dispatch signal is source-shaped, but its symbol inventory is incomplete."
+    "lineage_note": "The historical implementation commits exist in this repository but are not ancestors of the requested cc5bda77 candidate, so they are preserved as context rather than attested as the implementation under review."
   },
-  "commands": {
-    "revision_and_hash_checks": [
-      "git rev-parse HEAD",
-      "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
-      "shasum -a 256 /private/tmp/rustuml-frozen/f0ffaa30/rustuml /private/tmp/rustuml-frozen/f0ffaa30/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/deployment-container-command-identity-dispatch/account.json",
-      "cmp test-diagrams/perturbations/deployment-container-command-identity-dispatch/checker2_batch.pre.sha256 test-diagrams/perturbations/deployment-container-command-identity-dispatch/checker2_batch.post.sha256"
-    ],
-    "source_commands": [
-      "git show --color=never --find-renames e0d6a6eb",
-      "git show --color=never 92b94590",
-      "git show --color=never 5509e362",
-      "sed -n '1,240p' src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
-      "sed -n '1,280p' src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
-      "sed -n '640,835p' crates/rustuml-parser/src/parse/deployment.rs",
-      "sed -n '830,1355p' crates/rustuml-parser/src/parse/deployment.rs"
-    ],
-    "exact_per_input_execution": "puml=<INPUT>; stem=${puml%.puml}; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < \"$puml\" > \"$stem.java.svg\" 2> \"$stem.java.stderr\"; printf '%s\\n' \"$?\" > \"$stem.java.exit\"; cp \"$stem.java.svg\" \"$stem.svg\"; /private/tmp/rustuml-frozen/f0ffaa30/rustuml -pipe -tsvg < \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; printf '%s\\n' \"$?\" > \"$stem.rust.exit\"; /private/tmp/rustuml-frozen/f0ffaa30/diff_one --no-oracle \"$puml\" > \"$stem.diff.stdout\" 2> \"$stem.diff.stderr\"; printf '%s\\n' \"$?\" > \"$stem.diff.exit\"; /private/tmp/rustuml-frozen/f0ffaa30/rustuml --ast \"$puml\" > \"$stem.rust.ast.txt\" 2> \"$stem.rust.ast.stderr\"; printf '%s\\n' \"$?\" > \"$stem.rust.ast.exit\""
-  },
-  "inputs": [
+  "source_inspection": [
+    "Java CommandPackageWithUSymbol accepts braced package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack declarations with broad non-whitespace codes and complete-line consumption.",
+    "Java CommandCreateElementFull is a separate leaf grammar, so broad braced-container identity cannot be implemented by widening leaves.",
+    "The cc5bda77 deployment parser still uses DEPLOYMENT_KEYWORDS without hexagon, action, or process, and the node regexes remain unanchored narrow forms.",
+    "The cc5bda77 parser falls through when a deployment-looking declaration is not consumed, so valid children can be emitted as roots after a missed container."
+  ],
+  "commands": [
+    "cat AGENTS.md",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "cat crates/rustuml-oracle/tests/parity_evidence.rs",
+    "sed -n '70,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "sed -n '70,240p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+    "sed -n '680,840p' /private/tmp/rustuml-t14-integration/crates/rustuml-parser/src/parse/deployment.rs",
+    "sed -n '1085,1305p' /private/tmp/rustuml-t14-integration/crates/rustuml-parser/src/parse/deployment.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < <input.puml> > <stem.java.svg> 2> <stem.java.stderr>; printf exit > <stem.java.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust <input.puml> > <stem.rust.svg> 2> <stem.rust.stderr>; printf exit > <stem.rust.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle <input.puml> > <stem.diff.stdout> 2> <stem.diff.stderr>; printf exit > <stem.diff.exit>",
+    "shasum -a 256 test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_*"
+  ],
+  "perturbations": [
     {
-      "stem": "checker2_supported_alias_matrix",
-      "valid_plantuml": true,
-      "axes": ["code-first and display-first aliases", "slash/hyphen identities", "deeper nesting", "renamed labels"],
+      "stem": "late_container_process_alias_matrix",
+      "source": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.puml",
+      "golden": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.java.exit",
       "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.rust.svg",
       "rust_exit": 0,
-      "diff_one_no_oracle_exit": 0,
-      "result": "PASS",
-      "finding": "Supported frame/folder forms preserve canonical IDs and exact output."
+      "diff_stdout": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_process_alias_matrix.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["process-container-symbol", "display-first-broad-code", "owned-children", "root-link-from-child"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "Java creates a proc-west.42 cluster and owns runner_one/retry.queue beneath it; Rust omits the process container and emits runner_one as the first root entity."
     },
     {
-      "stem": "checker2_process_container_broad_code",
-      "valid_plantuml": true,
-      "axes": ["process symbol", "display-first plus/slash identity", "owned note", "competing Class versus Description consumption"],
+      "stem": "late_container_hexagon_action_nested",
+      "source": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.puml",
+      "golden": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.java.exit",
       "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.rust.svg",
       "rust_exit": 0,
-      "diff_one_no_oracle_exit": 1,
-      "result": "FAIL_IN_SCOPE",
-      "finding": "Java emits cluster release.east.v2 and owns Payload211/Memo213 beneath it. Rust omits the process container and parses both as roots."
-    },
-    {
-      "stem": "checker2_hexagon_action_nested_codes",
-      "valid_plantuml": true,
-      "axes": ["hexagon and action symbols", "code-first at-sign identity", "nested slash/hyphen identity", "changed branch depth"],
-      "java_exit": 0,
-      "rust_exit": 0,
-      "diff_one_no_oracle_exit": 1,
-      "result": "FAIL_IN_SCOPE",
-      "finding": "Java emits zone.blue and zone.blue.action.edge-v3 ownership. Rust omits both valid containers and emits Payload223/Archive227 as roots."
-    },
-    {
-      "stem": "checker2_malformed_suffix_negative",
-      "valid_plantuml": false,
-      "role": "negative full-line-consumption probe; not counted toward the fresh-valid-input minimum",
-      "axes": ["malformed suffix", "later valid deployment leaves"],
-      "java_exit": 200,
-      "rust_exit": 0,
-      "diff_one_no_oracle_exit": 2,
-      "result": "FAIL_IN_SCOPE",
-      "finding": "Java rejects line 1. Rust silently ignores the malformed cloud declaration and renders the later artifact/database/link; diff_one skips because the Java SVG correctly records a syntax error."
+      "diff_stdout": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_container_hexagon_action_nested.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["hexagon-container-symbol", "action-nested-container", "hyphenated-bare-code", "left-to-right-direction"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "Java emits a zone-main hexagon cluster and nested action.step group; Rust misses both braced containers and promotes payload_txt/edge_cloud/link structure."
     }
   ],
   "artifact_manifest": {
-    "path": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/checker2_artifacts.sha256",
-    "entries": 62,
-    "per_input_suffixes": [".puml", ".java.svg", ".java.stderr", ".java.exit", ".svg", ".rust.svg", ".rust.stderr", ".rust.exit", ".diff.stdout", ".diff.stderr", ".diff.exit", ".rust.ast.txt", ".rust.ast.stderr", ".rust.ast.exit"],
-    "batch_evidence": ["checker2_batch.pre.*", "checker2_batch.post.*"]
+    "path": "test-diagrams/perturbations/deployment-container-command-identity-dispatch/late_artifacts.sha256",
+    "sha256": "48ac7754da4b37c5c30e74584986e8f172505a784c46a9c82c3133d9c6ddbbc1"
   },
-  "residues": [
-    "URL, color, tag, and stereotype permutations were not exhaustively crossed after multiple direct grammar failures.",
-    "No Cargo command, harness guard, or corpus metric was run under the review constraint."
+  "findings": [
+    "Both fresh valid inputs disprove the current candidate under the mechanism's own symbol-inventory, broad-code, and ownership axes.",
+    "No waiver is applied for layout or metadata fallout; project instructions make any Java-success nonzero diff decisive."
+  ],
+  "residue": [
+    "No Cargo/rustc command, baseline update, comparator change, or product code edit was run or made.",
+    "The requested integration target did not contain a rustuml CLI binary, so Rust SVG artifacts were generated via diff_one --print-rust from the same cc5bda77 binary."
   ],
   "verdict": "REJECT",
-  "reason": "The implementation handles its selected container forms but does not implement CommandPackageWithUSymbol's complete symbol inventory and does not enforce complete-source rejection. Two fresh Java-valid counterexamples lose canonical container ownership for process, hexagon, and action, and a malformed suffix is accepted fail-open by ignoring the line. These failures are directly inside the claimed grammar, identity, nesting, competing-factory, and full-line-consumption invariant."
+  "reason": "Two fresh Java-valid deployment container inputs produce diff_one --no-oracle exit 1. The candidate still lacks CommandPackageWithUSymbol's complete container symbol inventory and broad braced identity consumption."
 }

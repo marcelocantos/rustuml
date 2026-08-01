@@ -1,0 +1,5 @@
+@startuml
+Node -> Queue : dispatch
+Queue -> Component : stage
+Component -> Node : ack
+@enduml

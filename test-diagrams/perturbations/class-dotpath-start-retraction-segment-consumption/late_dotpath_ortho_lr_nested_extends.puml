@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+package "Review Source" as ReviewSource {
+  package "Inner Review Source" as InnerReviewSource {
+    class SeedAlpha
+  }
+}
+
+class "Wide Review Target" as WideReviewTarget
+class GuideNorthLate
+class GuideSouthLate
+class FarGuideLate
+
+SeedAlpha --> GuideNorthLate
+GuideNorthLate --> GuideSouthLate
+GuideSouthLate --> FarGuideLate
+InnerReviewSource <|-- WideReviewTarget
+@enduml

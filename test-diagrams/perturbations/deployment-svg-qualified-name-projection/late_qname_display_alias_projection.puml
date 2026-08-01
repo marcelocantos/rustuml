@@ -1,0 +1,9 @@
+@startuml
+folder "Ops Zone" as ops.root {
+  node "Display: Worker" as worker.alpha
+  queue "Retry/Queue"
+  worker.alpha --> "Retry/Queue" : schedules
+}
+cloud "Outside: Edge"
+ops.root --> "Outside: Edge" : publishes
+@enduml

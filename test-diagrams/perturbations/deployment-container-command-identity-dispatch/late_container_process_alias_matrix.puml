@@ -1,0 +1,9 @@
+@startuml
+process "Batch Orchestrator" as proc-west/42 {
+  artifact "Runner One" as runner_one
+  queue "Retry Queue" as retry.queue
+  runner_one --> retry.queue : resubmit
+}
+database ledger_store
+runner_one --> ledger_store : writes
+@enduml

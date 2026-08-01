@@ -1,0 +1,11 @@
+SVG structural differences:
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "Edge. Gateway.Blue"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "cluster"), ("data-qualified-name", "Edge: Gateway/Blue"), ("data-source-line", "1"), ("id", "ent0002")]
+  [9] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Edge. Gateway.Blue.Worker. One.Two"), ("data-source-line", "2"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Edge: Gateway/Blue.Worker: One/Two"), ("data-source-line", "2"), ("id", "ent0003")]
+  [15] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Edge. Gateway.Blue.Audit.Store."), ("data-source-line", "3"), ("id", "ent0004")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Edge: Gateway/Blue.Audit(Store)"), ("data-source-line", "3"), ("id", "ent0004")]
+

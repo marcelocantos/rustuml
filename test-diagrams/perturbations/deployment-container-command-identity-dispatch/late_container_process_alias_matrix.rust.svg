@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="200px" preserveAspectRatio="none" style="width:320px;height:200px;background:#FFFFFF;" version="1.1" viewBox="0 0 320 200" width="320px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Runner One-->
+<g class="entity" data-qualified-name="runner_one" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="110.2402" x="56.89" y="7"/>
+<polygon fill="#F1F1F1" points="150.1302,12,150.1302,26,162.1302,26,162.1302,18,156.1302,12,150.1302,12" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="156.1302" x2="156.1302" y1="12" y2="18"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="162.1302" x2="156.1302" y1="18" y2="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="80.2402" x="66.89" y="33.5352">Runner One</text>
+</g>
+<!--entity Retry Queue-->
+<g class="entity" data-qualified-name="retry" data-source-line="3" id="ent0003">
+<path d="M207.41,13.5 L300.6239,13.5 C305.6239,13.5 305.6239,26.7441 305.6239,26.7441 C305.6239,26.7441 305.6239,39.9883 300.6239,39.9883 L207.41,39.9883 C202.41,39.9883 202.41,26.7441 202.41,26.7441 C202.41,26.7441 202.41,13.5 207.41,13.5" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M300.6239,13.5 C295.6239,13.5 295.6239,26.7441 295.6239,26.7441 C295.6239,39.9883 300.6239,39.9883 300.6239,39.9883" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83.2139" x="207.41" y="32.0352">Retry Queue</text>
+</g>
+<!--entity retry.queue-->
+<g class="entity" data-qualified-name="retry.queue" data-source-line="4" id="ent0004">
+<ellipse cx="45.0127" cy="152.4783" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="78.0254" x="6" y="183.0134">retry.queue</text>
+</g>
+<!--entity ledger_store-->
+<g class="entity" data-qualified-name="ledger_store" data-source-line="6" id="ent0006">
+<path d="M126.8,139.73 C126.8,129.73 179.0085,129.73 179.0085,129.73 C179.0085,129.73 231.217,129.73 231.217,139.73 L231.217,165.2183 C231.217,175.2183 179.0085,175.2183 179.0085,175.2183 C179.0085,175.2183 126.8,175.2183 126.8,165.2183 L126.8,139.73" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M126.8,139.73 C126.8,149.73 179.0085,149.73 179.0085,149.73 C179.0085,149.73 231.217,149.73 231.217,139.73" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84.417" x="136.8" y="167.2652">ledger_store</text>
+</g>
+<!--link runner_one to retry.queue-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M97.55,46.63 C91.15,55.45 83.77,66.23 78.01,76.49 C69.65,91.37 64.1698,103.2341 58.2698,117.5241" fill="none" id="runner_one-to-retry.queue" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="55.98,123.07,63.1119,116.2777,57.8881,118.4484,55.7174,113.2246,55.98,123.07" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="56.1958" x="79.01" y="90.0584">resubmit</text>
+</g>
+<!--link runner_one to ledger_store-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0006" data-link-type="dependency" data-source-line="7" id="lnk7">
+<path d="M123.1,46.62 C128.32,55.62 134.58,66.56 140.01,76.49 C149.66,94.13 157.4184,109.0179 165.0884,124.0179" fill="none" id="runner_one-to-ledger_store" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="167.82,129.36,167.284,119.5257,165.5437,124.9082,160.1612,123.1679,167.82,129.36" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="37.8257" x="149.79" y="90.0584">writes</text>
+</g>
+</g></svg>
