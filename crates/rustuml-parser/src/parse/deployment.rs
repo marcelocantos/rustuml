@@ -681,7 +681,8 @@ fn node_command_from_captures(
 fn parse_deployment_node_command(line: &str) -> Option<DeploymentNodeCommand> {
     // Java `CommandPackageWithUSymbol#getRegexConcat` accepts broad quark
     // codes for braced containers and anchors the complete command. The leaf
-    // command has a narrower identifier grammar and is independently anchored.
+    // `CommandCreateElementFull` grammar is independently anchored, uses a
+    // narrower identifier alphabet, and retains its optional inline `{}` body.
     static CONTAINER_DISPLAY_CODE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
             r#"^(?P<keyword>\w+)\s+\"(?P<display>[^\"]+)\"(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+(?P<code>[^#\s{}\"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
@@ -714,25 +715,25 @@ fn parse_deployment_node_command(line: &str) -> Option<DeploymentNodeCommand> {
     });
     static LEAF_CODE_DISPLAY: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_.]+)\s+(?i:as)\s+\"(?P<display>[^\"]+)\"(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_.]+)\s+(?i:as)\s+\"(?P<display>[^\"]+)\"(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?(?:\s*\{\s*\})?\s*$"#,
         )
         .unwrap()
     });
     static LEAF_DISPLAY_CODE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?P<keyword>\w+)\s+\"(?P<display>[^\"]+)\"\s+(?i:as)\s+(?P<code>[\p{L}\p{N}_.]+)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+            r#"^(?P<keyword>\w+)\s+\"(?P<display>[^\"]+)\"\s+(?i:as)\s+(?P<code>[\p{L}\p{N}_.]+)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?(?:\s*\{\s*\})?\s*$"#,
         )
         .unwrap()
     });
     static LEAF_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?P<keyword>\w+)\s+(?P<code>\"[^\"]+\")(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+            r#"^(?P<keyword>\w+)\s+(?P<code>\"[^\"]+\")(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?(?:\s*\{\s*\})?\s*$"#,
         )
         .unwrap()
     });
     static LEAF_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_][\p{L}\p{N}_.]*)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_][\p{L}\p{N}_.]*)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?(?:\s*\{\s*\})?\s*$"#,
         )
         .unwrap()
     });
