@@ -717,7 +717,29 @@ fn looks_like_sequence_only_factory_command(line: &str) -> bool {
         || matches!(line.as_str(), "footbox" | "hide footbox" | "show footbox")
 }
 
+fn sequence_factory_consumes_message_stream(lines: &[String]) -> bool {
+    // Java provenance: `PSystemBuilder` tries `SequenceDiagramFactory` first,
+    // and `PSystemCommandFactory` accepts it when `CommandArrow` consumes every
+    // substantive line. Endpoint codes remain CommandArrow data even when they
+    // spell commands owned by a later factory.
+    let mut saw_message = false;
+    let all_consumed = lines.iter().all(|line| {
+        let line = source_text(line).trim();
+        if line.is_empty() {
+            return true;
+        }
+        let consumed = sequence::looks_like_message(line);
+        saw_message |= consumed;
+        consumed
+    });
+    all_consumed && saw_message
+}
+
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+    if sequence_factory_consumes_message_stream(lines) {
+        return UmlSubtype::Sequence;
+    }
+
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     // `allowmixing` is a class-diagram directive: it permits mixing other
@@ -2395,6 +2417,31 @@ mod tests {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn complete_message_stream_precedes_later_factory_keywords() {
+        let lines = |source: &str| source.lines().map(str::to_string).collect::<Vec<_>>();
+
+        for source in [
+            "Database -> Storage : enqueue\nStorage --> Artifact : persist\nArtifact -> Database : confirm",
+            "NODE -[#blue,dashed]> queue : dispatch\nqueue <-- Component : retry",
+            "Cloud -> Cloud : heartbeat\nCloud -> Agent ++ : wake",
+        ] {
+            let source = lines(source);
+            assert!(sequence_factory_consumes_message_stream(&source), "{source:?}");
+            assert_eq!(detect_uml_subtype(&source), UmlSubtype::Sequence);
+        }
+    }
+
+    #[test]
+    fn genuine_non_sequence_command_rejects_complete_message_consumption() {
+        let source = ["class Node", "Node -> Queue : dispatch"]
+            .map(str::to_string)
+            .to_vec();
+
+        assert!(!sequence_factory_consumes_message_stream(&source));
+        assert_eq!(detect_uml_subtype(&source), UmlSubtype::Class);
     }
 
     #[test]
