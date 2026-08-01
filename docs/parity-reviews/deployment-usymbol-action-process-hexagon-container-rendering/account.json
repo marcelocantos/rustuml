@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-usymbol-action-process-hexagon-container-rendering",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "fabccf22078881df558df65980c241c6e7d00ada",
+  "successor_to_rejected_mechanism": "deployment-usymbol-container-command-completeness",
+  "rejected_account": "docs/parity-reviews/deployment-usymbol-container-command-completeness/account.json",
+  "rejection_record": "docs/parity-reviews/deployment-usymbol-container-command-completeness/review.json",
+  "preserved_evidence": "test-diagrams/perturbations/deployment-usymbol-container-command-completeness",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+      "symbols": [
+        "CommandPackageWithUSymbol.getRegexConcat",
+        "CommandPackageWithUSymbol.executeArg"
+      ],
+      "lines": "75-128, 135-177",
+      "role": "The anchored braced-container command admits action, process, and hexagon, resolves the exact USymbol through USymbols.fromString, and passes it to AbstractEntityDiagram.gotoGroup. The selected symbol is therefore semantic group state, not parser-only metadata."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbols.java",
+      "symbols": [
+        "USymbols.ACTION",
+        "USymbols.HEXAGON",
+        "USymbols.PROCESS",
+        "USymbols.fromString(String, ActorStyle, ComponentStyle, PackageStyle)"
+      ],
+      "lines": "60, 82, 89, 98-119",
+      "role": "The registry maps the three command spellings to distinct USymbolAction, USymbolHexagon, and USymbolProcess objects and preserves case-insensitive lookup."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolAction.java",
+      "symbols": [
+        "USymbolAction.getSNames",
+        "USymbolAction.drawAction",
+        "USymbolAction.asBig"
+      ],
+      "lines": "57-69, 116-143",
+      "role": "The action style name is SName.action. Big containers paint a five-point right-chevron polygon using the solved width and height, then place title and stereotype in that painted envelope."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolProcess.java",
+      "symbols": [
+        "USymbolProcess.getSNames",
+        "USymbolProcess.drawProcess",
+        "USymbolProcess.asBig"
+      ],
+      "lines": "57-70, 117-144",
+      "role": "The process style name is SName.process. Big containers paint a six-point process polygon with opposing ten-pixel side notches, then place title and stereotype against the same solved dimensions."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolHexagon.java",
+      "symbols": [
+        "USymbolHexagon.getSNames",
+        "USymbolHexagon.drawRect",
+        "USymbolHexagon.asBig"
+      ],
+      "lines": "53-56, 85-105, 108-147",
+      "role": "The hexagon style name is SName.hexagon. Big containers paint a closed six-sided UPath whose horizontal inset is width/8, apply shadow from Fashion, and honor title/stereotype alignment inside the solved envelope."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java",
+      "symbols": [
+        "ClusterHeader.ClusterHeader",
+        "ClusterHeader.getSignature",
+        "ClusterHeader.getStereoBlockWithoutLegend"
+      ],
+      "lines": "71-96, 151-169, 184-213",
+      "role": "Cluster measurement and title/stereotype font resolution include Entity.getUSymbol(). Its SNames participate in both the composite-title and group stereotype style signatures before Graphviz receives the title table dimensions."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java",
+      "symbols": [
+        "ClusterDotString.printInternal"
+      ],
+      "lines": "114-136",
+      "role": "The measured ClusterHeader title width and height are serialized into the Graphviz cluster label table, so symbol-specific style and text measurement affect nesting and solved cluster geometry before paint."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "symbols": [
+        "Cluster.getDefaultStyleDefinition",
+        "Cluster.drawU",
+        "Cluster.getStyle"
+      ],
+      "lines": "286-296, 298-385, 387-393",
+      "role": "The group's USymbol SNames select the style signature. drawU resolves line/fill/stroke/shadow/corners and constructs ClusterDecoration with the same USymbol and solved rectangle."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+      "symbols": [
+        "ClusterDecoration.drawU",
+        "ClusterDecoration.getTextBlock"
+      ],
+      "lines": "72-95",
+      "role": "Painting calls symbol.asBig with the solved cluster width/height and a Fashion carrying fill, border, shadow, stroke, and corner style."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+      "symbols": [
+        "DeploymentNode.container_symbol",
+        "DeploymentContainerSymbol",
+        "DeploymentContainerSymbol.renderer_kind"
+      ],
+      "lines": "76-85, 135-205",
+      "role": "The parser model records the exact container symbol, but renderer_kind immediately projects Hexagon, Action, and Process to DeploymentNodeKind::Node."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/deployment.rs",
+      "symbols": [
+        "node_command_from_captures",
+        "parse_deployment_node_command",
+        "parse_deployment"
+      ],
+      "lines": "644-775, 1160-1247",
+      "role": "The command parser retains container_symbol on DeploymentNode while separately storing the lossy renderer_kind projection in node.kind. Ownership is correct, but downstream geometry receives the projected kind."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "render_no_oracle",
+        "deployment_node_dim",
+        "deployment_layout_node_size",
+        "deployment_cluster_local_painted_bounds",
+        "deployment_local_painted_x_bounds"
+      ],
+      "lines": "4418-4999, 5490-5610, 5923-5998, 6257-6343",
+      "role": "No-oracle measurement, Graphviz node/cluster sizing, painted-envelope calculation, and canvas framing consume DeploymentNodeKind. render_no_oracle gives generic Node the node supplement and never consults container_symbol for the three distinct Java shapes."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": [
+        "skin_keyword",
+        "skin_background_fills",
+        "skin_border_colors",
+        "emit_clusters_dfs",
+        "emit_cluster_shape",
+        "emit_cluster_label"
+      ],
+      "lines": "568-807, 827-918, 1268-1334, 2354-2749",
+      "role": "Cluster style lookup, shape emission, and title/stereotype placement are all selected from node.kind. Because Action, Process, and Hexagon arrive as Node, Rust applies node styling and paints the generic node polygon even though node.container_symbol still holds the exact identity."
+    }
+  ],
+  "claimed_invariant": "A braced Description USymbol remains the same typed symbol from command execution through group ownership, style-signature selection, text and stereotype measurement, Graphviz cluster sizing, painted-envelope framing, and final SVG primitives. Action, process, and hexagon are not visual aliases for node: each has its own style SName and width/height-derived path, and nested groups use those same typed envelopes at every depth.",
+  "causal_divergence": "Java stores the USymbol selected by CommandPackageWithUSymbol on the group and later reads that same object in ClusterHeader, Cluster, ClusterDecoration, and USymbol.asBig. Rust now parses and stores DeploymentContainerSymbol correctly, but DeploymentContainerSymbol.renderer_kind collapses Action, Process, and Hexagon to DeploymentNodeKind::Node. Every no-oracle renderer stage then ignores container_symbol: title-table supplements, skinparam/style keys, painted bounds, cluster shape, and text placement are derived from generic Node. This explains the preserved evidence's node polygons, extra node decoration primitives, wrong title/stereotype ordering and vertical offsets, and changed nested cluster/layout envelopes. Parser metadata alone cannot repair the output because the semantic identity is discarded at the renderer boundary.",
+  "planned_model_change": "Make DeploymentContainerSymbol an active renderer input for every container-only stage instead of translating it to a generic node and forgetting it. Preserve DeploymentNodeKind for leaf compatibility, but derive a renderer-facing container symbol model from node.container_symbol for cluster title supplements, style-key selection, Graphviz cluster measurement, local painted bounds, and paint dispatch. Port the Java generative paths: Action uses the five-point width-10 right-chevron polygon, Process uses the six-point width-10 opposing-notch polygon, and Hexagon uses a closed path with width/8 horizontal inset and Java shadow behavior. Resolve fill, line, stroke, shadow, title font/alignment, and stereotype font/alignment from symbol-specific style identities before measurement and use the same resolved model during paint. Thread the model recursively through nested groups; do not infer shape from labels, coordinates, child count, or fixture structure. Existing container symbols remain controls and must not regress while the three previously collapsed symbols become distinct.",
+  "perturbation_axes": [
+    "symbol identity: action versus process versus hexagon, with node/frame/stack/queue/package siblings as controls",
+    "topology: root container, nested container, mixed sibling order, multiple nesting depths, and links crossing container boundaries",
+    "identity syntax: display-first alias, code-first alias, quoted broad code, bare code, mixed case, and keyword-looking relationship endpoints",
+    "style: explicit fill, symbol skinparam/style line and background colors, stereotype, title alignment, stereotype alignment, shadow, and URL wrapper",
+    "content sizing: short and long titles, absent and present stereotype, empty and populated bodies, and child labels that change solved width/height",
+    "layout direction and declaration order: top-to-bottom versus left-to-right and reordered but semantically equivalent siblings"
+  ],
+  "preserved_java_success_heldouts": [
+    "fresh_all_inventory_siblings",
+    "fresh_valid_nested_symbol_aliases",
+    "fresh_valid_metadata_url_tags_color",
+    "fresh_valid_keyword_endpoints_and_order",
+    "fresh_valid_quoted_broad_codes_and_nesting"
+  ],
+  "scope_boundary": "This mechanism owns renderer consumption of typed DeploymentContainerSymbol for Action, Process, and Hexagon, including symbol-specific style provenance, measurement, layout envelopes, nesting, and paint. It does not own Description leaf acceptance of inline empty brace bodies; that is the separate description-leaf-inline-empty-body-rejection mechanism. It also does not own comparator controls, qualified-name rewriting, link-ID surgery, frozen baselines, park lists, syntax-error markers, or unrelated leaf symbol geometry. All five preserved Java-success heldouts are nevertheless mandatory regression checks: a residual nonzero diff rejects this mechanism rather than being declared out of scope.",
+  "acceptance": [
+    "At the implementation revision, each of the five preserved Java-success heldouts named in preserved_java_success_heldouts has Java exit 0 and diff_one --no-oracle exit 0; any nonzero diff rejects the change under Rule 10.",
+    "Fresh heldouts independently vary at least two axes and demonstrate distinct Action, Process, and Hexagon primitives, symbol-specific style selection, and exact nesting/layout behavior without reusing preserved sources.",
+    "Action, Process, and Hexagon retain their typed identity from the AST through measurement and paint; no renderer stage obtains their shape or style by projecting them to generic Node.",
+    "Nested and root forms use one generative implementation whose dimensions drive Graphviz input, painted bounds, canvas framing, and SVG output consistently.",
+    "Existing package/node/frame/stack/queue and the remaining Java USymbol inventory stay exact on preserved and fresh sibling controls.",
+    "The separate preserved Java-rejected inline-empty-body controls remain rejected by Rust after the companion grammar mechanism lands; this renderer mechanism must not make invalid syntax renderable.",
+    "An independent checker inspects the exact Java and Rust revisions, creates fresh valid perturbations across at least two axes, records Java exits and strict no-oracle diffs, and rejects on any Java-success nonzero diff."
+  ],
+  "forbidden_approaches": [
+    "matching fixture labels, aliases, source filenames, source-line numbers, preserved SVG coordinates, element counts, or known child counts",
+    "tuning width, height, offsets, or path points to the five heldouts without adjacent Java method provenance and a shared generative derivation",
+    "retaining container_symbol as dead metadata while switching only one paint branch",
+    "post-hoc SVG string rewriting or coordinate-specific primitive replacement",
+    "mapping Action, Process, or Hexagon to generic Node at any measurement, style, layout, bounds, or paint boundary",
+    "weakening comparator slack, baselines, skip rules, park lists, syntax-error markers, guard allow-lists, or Rule 10 acceptance"
+  ]
+}
