@@ -1,0 +1,10 @@
+@startuml
+package CheckerAssocPkg7521 {
+  class PairA7523
+  class PairB7527
+  class RoleOne7531
+  class RoleTwo7537
+  (PairA7523, PairB7527) -- RoleOne7531
+  (PairA7523, PairB7527) .. RoleTwo7537
+}
+@enduml

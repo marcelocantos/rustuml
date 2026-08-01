@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package CheckerJoinBefore7311 {
+  (wa.Left7317, ea.Right7323) .. rb.Role7331
+  class JoinTail7337
+}
+package CheckerWest7313 as wa {
+  class Left7317
+}
+package CheckerEast7319 as ea {
+  class Right7323
+  class Role7331 as rb
+}
+@enduml

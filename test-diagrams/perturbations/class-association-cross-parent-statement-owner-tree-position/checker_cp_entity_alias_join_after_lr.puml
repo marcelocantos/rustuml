@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package CheckerAliasWest7671 {
+  class "Left Alias 7677" as leftAlias7677
+}
+package CheckerAliasEast7681 {
+  class "Right Alias 7687" as rightAlias7687
+  class "Role Alias 7691" as roleAlias7691
+}
+package CheckerAliasJoin7697 {
+  (leftAlias7677, rightAlias7687) .. roleAlias7691
+  class JoinTail7701
+}
+@enduml

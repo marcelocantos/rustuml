@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+class PairA7501
+class PairB7503
+class RoleOne7507
+class RoleTwo7511
+PairA7501 --- PairB7503 : base length two
+(PairA7501, PairB7503) .. RoleOne7507
+(PairB7503, PairA7501) -- RoleTwo7511
+@enduml
