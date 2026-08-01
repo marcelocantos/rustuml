@@ -15300,6 +15300,7 @@ struct ResolvedNoteStyle {
     bold: bool,
     italic: bool,
     alignment: NoteTextAlignment,
+    sheet_padding: f64,
 }
 
 #[derive(Clone, Copy)]
@@ -15307,6 +15308,17 @@ enum NoteTextAlignment {
     Left,
     Center,
     Right,
+}
+
+fn class_note_sheet_padding(diagram: &ClassDiagram) -> f64 {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .filter(|skinparam| skinparam.key.eq_ignore_ascii_case("padding"))
+        .filter_map(|skinparam| skinparam.value.trim().parse::<f64>().ok())
+        .next_back()
+        .unwrap_or(0.0)
 }
 
 impl ResolvedNoteStyle {
@@ -15364,6 +15376,7 @@ impl ResolvedNoteStyle {
             bold: font_style.contains("bold"),
             italic: font_style.contains("italic"),
             alignment,
+            sheet_padding: class_note_sheet_padding(diagram),
         }
     }
 
@@ -15430,6 +15443,7 @@ impl ResolvedNoteStyle {
             bold: font_style.contains("bold"),
             italic: font_style.contains("italic"),
             alignment,
+            sheet_padding: class_note_sheet_padding(diagram),
         }
     }
 
@@ -16753,18 +16767,22 @@ fn note_table_layout(lines: &[&str], style: &ResolvedNoteStyle) -> Option<NoteTa
         let mut row_ascent = 0.0_f64;
         for (column, cell) in row.cells.iter().enumerate() {
             let content = note_table_cell_content(cell);
+            // Java `StripeTable.asAtom` wraps every cell in `SheetBlock1`
+            // before `AtomTable` computes its row and column maxima.
             let width = text_render::measure_with_family(
                 &content,
                 style.font_size as f64,
                 style.bold || cell.is_header,
                 &style.font_family,
-            );
+            ) + style.sheet_padding * 2.0;
             column_widths[column] = column_widths[column].max(width);
-            row_height = row_height.max(text_render::label_height_with_family(
-                &content,
-                style.font_size as f64,
-                &style.font_family,
-            ));
+            row_height = row_height.max(
+                text_render::label_height_with_family(
+                    &content,
+                    style.font_size as f64,
+                    &style.font_family,
+                ) + style.sheet_padding * 2.0,
+            );
             row_ascent = row_ascent.max(text_render::label_ascent_with_family(
                 &content,
                 style.font_size as f64,
@@ -17259,8 +17277,8 @@ fn emit_note_table(
                 svg,
                 &content,
                 &TextBase {
-                    x: cell_left,
-                    y: row_top + table.row_ascents[row_index],
+                    x: cell_left + style.sheet_padding,
+                    y: row_top + style.sheet_padding + table.row_ascents[row_index],
                     font_size: style.font_size,
                     font_family: &style.font_family,
                     fill: &style.font_color,
@@ -21777,6 +21795,95 @@ mod tests {
             svg.matches(r#"style="stroke:#000000;stroke-width:1;""#)
                 .count(),
             7
+        );
+    }
+
+    #[test]
+    fn note_table_sheet_padding_scales_with_populated_tracks() {
+        let layout = |padding: f64| {
+            let input = format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 note as MatrixAuditFresh\n\
+                 |= Code |= Renamed description |= Flag |\n\
+                 | 17 | a deliberately wider value | yes |\n\
+                 end note\n\
+                 @enduml"
+            );
+            let Diagram::Class(diagram) = rustuml_parser::parse::parse(&input).unwrap() else {
+                panic!("expected class diagram");
+            };
+            let note = &diagram.notes[0];
+            let style = ResolvedNoteStyle::for_note(&diagram, note);
+            let lines = note.lines.iter().map(String::as_str).collect::<Vec<_>>();
+            note_table_layout(&lines, &style).unwrap()
+        };
+        let unpadded = layout(0.0);
+        let padded = layout(1.25);
+        let assert_close = |actual: f64, expected: f64| {
+            assert!((actual - expected).abs() < 1e-9, "{actual} != {expected}");
+        };
+
+        assert_eq!(padded.column_widths.len(), 3);
+        assert_eq!(padded.row_heights.len(), 2);
+        assert_close(padded.width - unpadded.width, 7.5);
+        assert_close(
+            padded.row_heights.iter().sum::<f64>() - unpadded.row_heights.iter().sum::<f64>(),
+            5.0,
+        );
+        for (padded_width, unpadded_width) in
+            padded.column_widths.iter().zip(&unpadded.column_widths)
+        {
+            assert_close(padded_width - unpadded_width, 2.5);
+        }
+    }
+
+    #[test]
+    fn note_table_sheet_padding_insets_cells_without_changing_padding_zero() {
+        let layout_and_style = |padding: f64| {
+            let input = format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 note as RaggedAuditFresh\n\
+                 |= Short |= A renamed wide heading |\n\
+                 | one | compact |\n\
+                 | two | another renamed payload |\n\
+                 | three | tail |\n\
+                 end note\n\
+                 @enduml"
+            );
+            let Diagram::Class(diagram) = rustuml_parser::parse::parse(&input).unwrap() else {
+                panic!("expected class diagram");
+            };
+            let note = &diagram.notes[0];
+            let style = ResolvedNoteStyle::for_note(&diagram, note);
+            let lines = note.lines.iter().map(String::as_str).collect::<Vec<_>>();
+            (note_table_layout(&lines, &style).unwrap(), style)
+        };
+        let (unpadded, unpadded_style) = layout_and_style(0.0);
+        let (padded, padded_style) = layout_and_style(4.0);
+        let assert_close = |actual: f64, expected: f64| {
+            assert!((actual - expected).abs() < 1e-9, "{actual} != {expected}");
+        };
+
+        assert_close(padded.width - unpadded.width, 16.0);
+        assert_close(
+            padded.row_heights.iter().sum::<f64>() - unpadded.row_heights.iter().sum::<f64>(),
+            32.0,
+        );
+
+        let first_text_x = |table: &NoteTableLayout, style: &ResolvedNoteStyle| {
+            let mut svg = String::new();
+            emit_note_table(&mut svg, table, 0.0, 0.0, style);
+            let text_end = svg.find('>').expect("table text element");
+            attr_value(&svg[..text_end], " x")
+                .expect("table text x")
+                .parse::<f64>()
+                .unwrap()
+        };
+        assert_close(
+            first_text_x(&padded, &padded_style) - first_text_x(&unpadded, &unpadded_style),
+            4.0,
         );
     }
 
