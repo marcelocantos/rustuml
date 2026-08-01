@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-table-tree-stroke-inheritance",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "17daaa04555a44294593197f4f618285d2135e77",
+  "source_audit_rust_revision": "7aabc336b5d2c99d86a67b355d95479ede58663a",
+  "name_refinement": {
+    "original_claim": "class-note-content-stroke-inheritance",
+    "refined_mechanism": "class-note-table-tree-stroke-inheritance",
+    "reason": "Java's relevant inherited primitives are AtomTable grid lines and AtomTree/Skeleton2 branches. Creole horizontal separators use a different UHorizontalLine/defaultStroke path, and Rust already models the styled stroke for attached entity-note trees."
+  },
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-note-sheet-padding/review.json",
+    "review_commit": "7aabc336b5d2c99d86a67b355d95479ede58663a",
+    "account_commit": "ca01f728",
+    "rejected_implementation_commit": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "reason": "The independent checker found 0.5-width Java table grids and relationship-note tree skeletons where Rust emitted width 1.0, including Padding 0 controls that isolate the defect from sheet padding.",
+    "preserved_evidence": [
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_03_link_table_fractional_right_lr.diff.txt",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_04_link_tree_padding3_top_tb.diff.txt",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_06_standalone_table_fractional_bottom.diff.txt",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_09_link_table_padding0_control.diff.txt",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_10_link_tree_padding0_control.diff.txt",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_11_link_table_pair_padding0.diff.txt",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_12_link_tree_pair_padding0.diff.txt"
+    ]
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomTable.java",
+      "symbols": ["drawU"],
+      "lines": "102-155",
+      "role": "Applies only the table line color before drawing ULine grid primitives; it never applies a UStroke, so the active UGraphic stroke is inherited."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomTree.java",
+      "symbols": ["drawU"],
+      "lines": "79-91",
+      "role": "Passes the incoming UGraphic, changed only by the tree line color, to Skeleton2; the skeleton therefore inherits the caller's stroke."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/salt/element/Skeleton2.java",
+      "symbols": ["Entry.drawHline", "Entry.drawVline", "draw"],
+      "lines": "61-95",
+      "role": "Draws URectangle and ULine primitives without applying a stroke of its own."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java",
+      "symbols": ["drawInternalU"],
+      "lines": "98-131",
+      "role": "Applies symbolContext to the UGraphic before both note chrome and the Display text block; table/tree atoms inside relationship-owned notes receive the note style stroke."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/Fashion.java",
+      "symbols": ["apply", "applyStroke"],
+      "lines": "67-87",
+      "role": "Establishes that applying ComponentRoseNote's symbolContext applies its UStroke as well as colors."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "symbols": ["EntityImageNoteLink", "drawU"],
+      "lines": "61-77",
+      "role": "Builds relationship-owned notes as Rose note components and delegates drawing to ComponentRoseNote."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": ["drawU", "drawNormal", "applyStroke"],
+      "lines": "230-262,274-295",
+      "role": "Applies the style stroke before Opale content for attached notes, but drawNormal deliberately paints the ordinary text block on the unstroked UGraphic after using a stroked copy only for the outline."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/Opale.java",
+      "symbols": ["drawU"],
+      "lines": "105-127",
+      "role": "Applies its supplied note stroke and draws the text block through that same UGraphic, so attached-note table/tree primitives inherit the styled stroke."
+    },
+    {
+      "path": "src/main/resources/skin/plantuml.skin",
+      "symbols": ["note style"],
+      "lines": "311-315",
+      "role": "Defines the default note LineThickness as 0.5; themes and skinparams may resolve another value."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["DEFAULT_NOTE_CONTENT_STROKE_WIDTH", "ResolvedNoteStyle"],
+      "lines": "220-223,15225-15379",
+      "role": "Carries both the default 1.0 graphics stroke and the resolved style border_width, but does not represent which drawing context reaches each structured atom."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["render_relationship_note"],
+      "lines": "16325-16393",
+      "role": "Paints relationship-note chrome with style.border_width, then passes false to emit_note_body, causing relationship tree content to select the unrelated default 1.0 stroke."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["emit_note_table"],
+      "lines": "17175-17252",
+      "role": "Serializes every table grid line with stroke-width:1 regardless of note path or resolved style."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["emit_note_tree", "emit_note_body"],
+      "lines": "17254-17335,17378-17432",
+      "role": "Can paint a supplied tree stroke, but selects border_width only for attached entity notes and DEFAULT_NOTE_CONTENT_STROKE_WIDTH for relationship-owned and ordinary standalone notes."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["render_note_at", "render_single_named_note"],
+      "lines": "15781-15791,16468-16478",
+      "role": "Shows the existing partial context proxy: target plus position selects the styled tree stroke for attached notes, while an ordinary named note keeps the default content stroke."
+    }
+  ],
+  "invariant": "AtomTable and AtomTree/Skeleton2 own their line color but not their stroke. Their ULine and URectangle primitives inherit the UStroke active at the point the note text block is drawn. In a relationship-owned EntityImageNoteLink, ComponentRoseNote applies the note Fashion, including its resolved line thickness, before drawing Display; the default is 0.5 and style may change it. An attached EntityImageNote rendered through Opale likewise draws its text block after applying the resolved note stroke. By contrast, EntityImageNote.drawNormal uses a stroked copy only for the outline and draws its ordinary standalone text block on the incoming default UGraphic, normally width 1.0. Stroke inheritance is therefore primitive-wide and render-context-sensitive, not one universal structured-content constant. Line color remains the AtomTable/AtomTree font color and is not inherited from the note border.",
+  "causal_divergence": "Rust collapses this drawing-state model in two ways. emit_note_table always writes width 1.0, even when ComponentRoseNote or Opale would supply a styled stroke. emit_note_tree has a partial context branch: attached entity notes receive style.border_width, but render_relationship_note passes false and receives the default 1.0 even though Java's ComponentRoseNote supplies the styled stroke. The preserved relationship table and tree controls at Padding 0 have matching primitive topology and dimensions but consistently show Java width 0.5 versus Rust width 1.0, proving that sheet padding is not causal. The preserved attached standalone tree passes, which disproves the original claim that all Rust structured lines are hardcoded and confirms that the missing state is the precise Java caller context.",
+  "planned_generative_model_change": "Replace the attached_entity_note boolean as a stroke proxy with an explicit note-content graphics context resolved by the rendering path. The context selects either the incoming default UGraphic stroke for EntityImageNote.drawNormal or the resolved note style stroke for Opale and ComponentRoseNote paths. Pass that one resolved stroke width to both emit_note_table and emit_note_tree. Keep primitive line color sourced from the note font configuration, keep backgrounds stroke-free, and keep UHorizontalLine separator behavior outside this model. Relationship-owned notes must select the styled context; ordinary standalone named notes must retain the default context even when their outline thickness is customized.",
+  "perturbation_axes": [
+    "table grid crossed with tree skeleton primitives",
+    "relationship-owned ComponentRoseNote crossed with attached Opale and ordinary drawNormal notes",
+    "default 0.5 note thickness crossed with custom fractional and integer NoteBorderThickness",
+    "default black crossed with distinct NoteFontColor and NoteBorderColor",
+    "Padding 0 crossed with positive Padding",
+    "top, bottom, left, and right note positions",
+    "top-to-bottom crossed with left-to-right direction"
+  ],
+  "acceptance": {
+    "fresh_valid_non_corpus_inputs": [
+      {
+        "id": "fresh_relationship_styled_table_and_tree",
+        "source": "@startuml\nskinparam NoteBorderThickness 2.75\nskinparam NoteBorderColor #AA2244\nskinparam NoteFontColor #225588\nclass StrokeSourceFresh\nclass StrokeMiddleFresh\nclass StrokeTargetFresh\nStrokeSourceFresh --> StrokeMiddleFresh\nnote on link\n|= Key |= Renamed value |\n| alpha | table branch |\nend note\nStrokeMiddleFresh --> StrokeTargetFresh\nnote top on link\n|_ root fresh\n  |_ child fresh\nend note\n@enduml",
+        "axes": ["relationship-owned", "table and tree", "custom fractional thickness", "distinct border/font colors"],
+        "required_observation": "Both grid and skeleton primitives use width 2.75 while retaining the font-derived line color; the note outline also uses 2.75 through its independent chrome path."
+      },
+      {
+        "id": "fresh_attached_opale_styled_structures",
+        "source": "@startuml\nleft to right direction\nskinparam NoteBorderThickness 3\nclass StyledTreeOwnerFresh\nnote right of StyledTreeOwnerFresh\n|_ root renamed\n  |_ nested renamed\nend note\nclass StyledTableOwnerFresh\nnote bottom of StyledTableOwnerFresh\n|= Left |= Right |\n| one | two |\nend note\n@enduml",
+        "axes": ["attached Opale", "table and tree", "integer thickness", "left-to-right"],
+        "required_observation": "Both structured bodies inherit width 3 from Opale's styled UGraphic rather than from a table- or tree-specific constant."
+      }
+    ],
+    "controls": [
+      "Fresh ordinary named table and tree notes with NoteBorderThickness 3 must keep content primitives at the incoming default width 1.0 while their outlines use width 3.",
+      "Padding 0 and positive-Padding twins must select the same stroke width, isolating this mechanism from table cell and outer sheet padding.",
+      "Distinct NoteFontColor and NoteBorderColor must prove that only stroke width follows the drawing context; table/tree line color remains font-derived.",
+      "A plain-text note and a Creole horizontal separator under the same styles must remain unchanged because they are not AtomTable or AtomTree/Skeleton2 primitives."
+    ],
+    "checks": [
+      "A checker who did not implement the production change generates and preserves the fresh sources and Java SVGs under test-diagrams/perturbations/class-note-table-tree-stroke-inheritance/.",
+      "The checker inspects relationship-owned, attached, and ordinary standalone note paths at the exact implementation revision and compares primitive stroke widths and colors as well as complete structural output.",
+      "The preserved Padding 0 table/tree counterexamples converge without changing their inputs, expected SVGs, or comparator.",
+      "The independent review rejects a blanket replacement of every width 1.0 structured primitive with border_width because Java drawNormal is a required negative control."
+    ]
+  },
+  "scope_boundary": "This mechanism owns stroke-width propagation for AtomTable grid and AtomTree/Skeleton2 primitives inside Class notes. It does not own table cell sheet padding, tree level or connector geometry, table/tree line color, cell backgrounds, Creole horizontal separators, note chrome, text metrics, SVG coordinate rounding, non-Class renderers, or style-cascade parsing itself.",
+  "forbidden_approaches": [
+    "changing all structured content to 0.5 or to style.border_width without preserving the EntityImageNote.drawNormal default-stroke control",
+    "special-casing table or tree fixture labels, note positions, Padding values, source lines, paths, or rendered coordinates",
+    "using note border color for table/tree lines when Java keeps the font-derived line color",
+    "altering sheet padding, table dimensions, tree levels, or connector coordinates to hide stroke mismatches",
+    "post-hoc SVG style rewriting",
+    "editing predecessor reviews or perturbations, baselines, comparator slack, park lists, error markers, controls, or guard allow-lists"
+  ]
+}
