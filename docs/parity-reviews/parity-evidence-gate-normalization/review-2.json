@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-normalization",
+  "reviewed_at": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex final independent adversarial checker, task 019ee369-54e2-7203-afce-ddde7bfe1723",
+    "role": "Final checker only; did not implement the account, gate, follow-ups, migrations, quarantines, or f42a3906 metadata bindings.",
+    "model": "OpenAI Codex (GPT-5)",
+    "tool": "Codex desktop; git, jq, rg, shasum, awk, Cargo, and rustc",
+    "independence": "I did not author or edit any reviewed gate, migration, account, prior review, artifact, baseline, comparator control, park/error list, or allow-list. I added and removed one temporary checker-only mutation test after finding bypasses; it did not alter the reviewed subject or close the bypasses."
+  },
+  "revisions": {
+    "reviewed_branch": "codex/t14-review-gate",
+    "reviewed_head": "f42a39064e57bd1918537727c3db45e4204178d3",
+    "gate_account_original": "6eee27f34945ebd4240c81ebe1229f657bd00e62",
+    "gate_account_cherry_pick": "fb2867f64b8aa0ecc61655d6af11e097956aa0b9",
+    "initial_gate_original": "4749c977e9375eaa097d64c2facb4a0b384c3a86",
+    "initial_gate_cherry_pick": "cc52acb1c20d0cecf0c2fe73448e561f143d24f2",
+    "first_reject_original": "3d94b5251571ccdbdb1e9b9080defdba58bfba1e",
+    "first_reject_cherry_pick": "3a98b06abaf32365794cd2d6c1d257d38f4ffd9a",
+    "trust_boundary_followup_original": "51e06723f33ce773e3a6509221f38675c68116a7",
+    "trust_boundary_followup_cherry_pick": "4b9344b216fd8fcace4bdb5671f45acfce208eda",
+    "canonical_second_reject": "a15de74f55bbe77966a363508cb47546e9c582ba",
+    "legacy_normalization": "7251323eb6ce0bccc09fbda34d10d6f19f0dcb95",
+    "legacy_migration": "c2c0b9358c23a5688cdd6dfb2338f8f68d776aa6",
+    "legacy_quarantine": "814d5e2d4f88a028666b04cc04095dbc316e926a",
+    "class_evidence_original": "eba0554329c4255503bf042da9670a4555deff0e",
+    "class_evidence_original_parent": "388e22e710a63cc44a8a5222f2525a41c5405ff8",
+    "class_evidence_cherry_pick": "0a2a8f8741280c74c57fc15d8457d4175c432fe1",
+    "class_metadata_bindings": "f42a39064e57bd1918537727c3db45e4204178d3",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "commands": [
+    "git status --short --branch; git rev-parse HEAD; git branch --show-current",
+    "git log --follow --reverse --format='%H %aI %an %ae %s' -- <account/review/gate path>",
+    "git rev-list --first-parent --reverse fb2867f64b8aa0ecc61655d6af11e097956aa0b9^..HEAD",
+    "git show --format=fuller --find-renames --find-copies <lineage commit>",
+    "git cat-file -e <revision>^{commit}",
+    "git merge-base --is-ancestor <account revision> <implementation revision>",
+    "git rev-parse <revision>:<account-or-review-path>",
+    "git diff-tree --no-commit-id --name-status -r -M <migration revision>",
+    "git diff --name-status 0a2a8f8741280c74c57fc15d8457d4175c432fe1..f42a39064e57bd1918537727c3db45e4204178d3 -- <frozen paths>",
+    "shasum -a 256 <accounts, reviews, archives, fresh sources, Java SVGs, and diff artifacts>",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711^{commit}",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/SourceStringReader.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/error/PSystemError.java",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test parity_evidence_review2_mutations --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test harness_guards decimal_literal_ratchet --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen --release -- --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-t14-deployment-qname-projection-v2/target cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates --release -- --nocapture"
+  ],
+  "lineage_audit": {
+    "order": "PASS: the current first-parent chain is account fb2867f6, initial gate cc52acb1, first REJECT 3a98b06a, trust-boundary follow-up 4b9344b2, canonical second REJECT a15de74f, normalization 7251323e, migration c2c0b935, quarantine 814d5e2d, and class bindings f42a3906. The corresponding original account, initial gate, first rejection, and follow-up commits also exist and have the required original ancestry.",
+    "original_to_cherry_pick_blob_identity": {
+      "account_json": "PASS: 6eee27f3 and fb2867f6 contain the same account.json blob.",
+      "initial_parity_evidence_rs": "PASS: 4749c977 and cc52acb1 contain the same parity_evidence.rs blob.",
+      "first_reject_review_json": "PASS: 3d94b525 and 3a98b06a contain the same first-REJECT review.json blob.",
+      "followup_parity_evidence_rs": "PASS: 51e06723 and 4b9344b2 contain the same hardened parity_evidence.rs blob."
+    },
+    "canonical_prior_reject": {
+      "path": "docs/parity-reviews/parity-evidence-gate-normalization/review.json",
+      "verdict": "REJECT",
+      "git_blob": "c9bdc1980300b1944f7f9932f7d7d33d923bb439",
+      "sha256_before_this_review": "b081ac38b934b70a80a32978f5f3a6b992ba468a6571d40ca1ebbd5abbc2de16",
+      "preservation": "PASS: the current blob equals the blob committed by a15de74f and this review does not edit it."
+    },
+    "preserved_first_reject": {
+      "path": "docs/parity-reviews/parity-evidence-gate-normalization/review-rejected-3d94b525.json",
+      "verdict": "REJECT",
+      "git_blob": "ebcb446e16a400e9f36c885648ac1ac4673b3c15",
+      "sha256": "0813d882fd306ea9c83d684c93825ad614a7b606049e1e8b87cb8ca95bc62348",
+      "preservation": "PASS: it is byte-identical to review.json at 3a98b06a and remains archival and inert."
+    }
+  },
+  "source_findings": {
+    "closed_attacks": [
+      "Lexical parent traversal and absolute paths are rejected.",
+      "Direct source/SVG symlinks escaping a mechanism are rejected by metadata and canonical containment.",
+      "Lexical cross-mechanism paths and non-same-stem Java SVGs are rejected.",
+      "Known source/golden and evidence-directory aliases are conflict-closed.",
+      "Blank exact axes and exact duplicate axes do not satisfy the two-axis count.",
+      "Known contradictory held-out pass/fail result aliases are rejected.",
+      "Accepted records require one reviewer/checker object plus identity/model/tool and an independence-shaped string.",
+      "Accepted Rust account and implementation revisions must exist, differ, match the committed account blob, and have account-before-implementation ancestry.",
+      "Noncanonical accepted review filenames fail; rejected archives remain inert."
+    ],
+    "false_accept_surfaces": [
+      {
+        "title": "Checker independence is substring-shaped rather than identity-bound",
+        "locations": [
+          "crates/rustuml-oracle/tests/parity_evidence.rs:1134",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:1143"
+        ],
+        "finding": "A reviewer role saying 'checker and implementer of this mechanism' satisfies independence because the text contains 'checker'. The gate never compares checker identity with maker/auditor identities or commit authorship."
+      },
+      {
+        "title": "Revision and verdict aliases are not globally conflict-closed or review-bound",
+        "locations": [
+          "crates/rustuml-oracle/tests/parity_evidence.rs:807",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:1179",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:1273"
+        ],
+        "finding": "An object verdict with status=ACCEPT and verdict=REJECT accepts the first field. Only aliases inside revisions are compared; contradictory top-level account/implementation/evaluated revisions are ignored. The implementation need only descend from the account, so a commit made after the authored review can be substituted. Java is checked only as a matching 40-hex string, not as an external PlantUML commit."
+      },
+      {
+        "title": "One physical input can satisfy two-input/two-axis acceptance and be reused across mechanisms",
+        "locations": [
+          "crates/rustuml-oracle/tests/parity_evidence.rs:313",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:396",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:425",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:757"
+        ],
+        "finding": "Source and golden uniqueness are path-based, used_goldens resets per review, inode/content identity is never compared, and axes are case-sensitive free text. Hardlinks or copied identical content under local same-stem paths can count as multiple held-outs; 'label' and 'LABEL' count as two axes."
+      },
+      {
+        "title": "Java process failure metadata is ignored",
+        "locations": [
+          "crates/rustuml-oracle/tests/parity_evidence.rs:497",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:515"
+        ],
+        "finding": "java_exit/oracle_exit and preserved .java.exit artifacts are not consulted. A stale non-error SVG plus result=pass and java_exit=1 selects as Java-success evidence."
+      },
+      {
+        "title": "Rejected canonical records receive weaker completeness checks",
+        "locations": [
+          "crates/rustuml-oracle/tests/parity_evidence.rs:169",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:1045",
+          "crates/rustuml-oracle/tests/parity_evidence.rs:1073"
+        ],
+        "finding": "Exact revisions, explicit identity/model/tool, independence, findings, and evidence validation are enforced only for accepted latest reviews. A rejected latest review can suppress an earlier acceptance while carrying only a weak historical reviewer marker and commands."
+      }
+    ]
+  },
+  "migration_audit": {
+    "archival_preservation": "PASS: c2c0b935 and 814d5e2d use similarity-100 renames for rejected and legacy-accepted records. All 35 content-hash-suffixed migrated archives match their filename prefix. The parity-gate first rejection is the documented exception named by commit 3d94b525; its separately recorded SHA-256 matches.",
+    "active_accepted_records": "PARTIAL: all eleven documented account commits exist, their current account blobs match, and every account is an ancestor of its claimed implementation. However, seven records gained exact account_commit values absent from the original checker artifact. Four had a checker-recorded account content hash that permits objective reconstruction; component-attached-note-contextual-identity and class-symbol-container-alias-parse had only an account path, while class-attached-note-rankdir-position replaced a nonexistent checker-authored hash with a real commit. display-raw-newline-tokenization also gained a checker tool field after authorship. These edits are not separated into independently identified provenance-auditor containers, so the gate treats migration claims as original checker attestations.",
+    "authored_verdicts": "PASS: no authored ACCEPT/ACCEPTED/REJECT verdict text was changed by the migration and quarantined ACCEPT records retain their original bytes under legacy-accepted names.",
+    "live_product_result": "REJECT: two migrated accepted mechanisms still select six held-outs that fail the current shipped no-oracle renderer at f42a3906."
+  },
+  "class_binding_audit": {
+    "records": [
+      "class-link-note-component-preferred-dimensions/review-3.json",
+      "class-link-note-style-context/review.json",
+      "class-relationship-creole-line-layout/review.json",
+      "class-relationship-owned-link-note/review.json",
+      "class-svek-center-label-painted-frontier/review-2.json"
+    ],
+    "result": "PASS on repository-verifiable metadata: every account blob matches its named commit; every account precedes the evaluated revision; all named implementation commits exist, descend from the account, and precede 388e22e7; eba05543 exists with parent 388e22e7; each pre-f42 review blob equals its eba05543 and 0a2a8f87 copy; all ten fresh source hashes, account SHA-256 values, Java/Rust/diff zero exits, and passing diff-text hashes match; no fresh source/SVG content is duplicated across the five mechanisms; eba05543 adds only checker reviews and perturbation artifacts.",
+    "identity_residue": "Git proves artifact and ancestry consistency, not the original checker's claimed model or human identity. f42a3906 records that limitation without strengthening the authored verdict."
+  },
+  "corpus_audit": {
+    "current_content_reuse": "No duplicate source-plus-Java-SVG content pair was found among the current canonical accepted-record candidate set, and no tracked hardlinks are present. This does not make the gate sound because the mutation demonstrates that such reuse is accepted.",
+    "java_revision": "PASS for current records: the local PlantUML repository is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711, the commit exists, and both account-cited Java source paths exist at that revision.",
+    "shipped_path_failures": [
+      "test-diagrams/perturbations/command-factory-note-color-resolution/followup2/component_inline_alias_alpha_valid.puml",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/followup2/component_multiline_gradient_dedup_valid.puml",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_aliased_nested_multiple_uid_order.puml",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_multiple_notes_uid_order_ltr.puml",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_nested_owner_root_target.puml",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/checker_root_owner_nested_target.puml"
+    ]
+  },
+  "adversarial_attacks": [
+    {
+      "mutation": "self-identified implementer; conflicting verdict object; conflicting top-level revisions; active implementation revision from a post-review unrelated commit; nonexistent Java revision",
+      "result": "FALSE ACCEPT: two held-outs selected with zero violations"
+    },
+    {
+      "mutation": "one source/SVG inode hardlinked to four local same-stem paths across two mechanisms; java_exit=1 on every item; axes differ only as label/LABEL",
+      "result": "FALSE ACCEPT: four held-outs selected with zero violations"
+    },
+    {
+      "mutation": "parent traversal, absolute paths, direct symlink escape, lexical cross-mechanism path, non-same-stem golden, blank axes, known result contradiction, fabricated Rust commits, hidden revisions, and open-ended noncanonical review name",
+      "result": "PASS: existing focused mutations reject these cases"
+    }
+  ],
+  "frozen_surface_audit": {
+    "result": "PASS for unchanged definitions; FAIL for standing decimal state",
+    "unchanged_git_blobs": {
+      "golden_error_classifier": "55aa7430c28a4e80941da6a25a203e50957df61f",
+      "comparator": "139bbb52936cf957a3020cebbab7f91d083c12b0",
+      "decimal_literal_baseline": "4638fbc98b41b3c712c9715d7702aaebe3134cab",
+      "ulp_park_list": "d8f2b48e49d4bcf51592016f87a7b30a883fe2cb",
+      "no_oracle_baseline": "5a8892c233ce21f7d5884f759d2cff1c8ec58447"
+    },
+    "constants": "GEOM_EPS remains 0.02, the golden embedding allow-list remains empty, the park list remains empty, and EXPECTED_ERROR_GOLDENS remains 1,199.",
+    "decimal_ratchet": {
+      "implementation": "Bidirectional and baseline blob unchanged.",
+      "growth": [
+        "crates/rustuml-render/src/class.rs: 383 -> 385",
+        "crates/rustuml-render/src/component.rs: 48 -> 50",
+        "crates/rustuml-render/src/deployment.rs: 43 -> 45",
+        "crates/rustuml-render/src/plantuml_metrics.rs: 1053 -> 1055",
+        "crates/rustuml-render/src/state.rs: 53 -> 58",
+        "crates/rustuml-render/src/text_render.rs: 409 -> 419"
+      ],
+      "decrease": [
+        "crates/rustuml-render/src/sequence.rs: 112 -> 110"
+      ],
+      "result": "FAIL: drift remains deliberately unratcheted at f42a3906."
+    },
+    "error_census": "The classifier and 1,199 constant are unchanged. Runtime census verification was unavailable because this worktree's golden submodule is not populated; the focused test explicitly skipped."
+  },
+  "test_outcomes": {
+    "focused_parity_evidence": "PASS: 21 passed, 0 failed.",
+    "real_parity_review_record_guard": "PASS: 1 passed, 0 failed, 26 filtered out.",
+    "temporary_false_accept_mutations": "PASS as an attack, therefore gate FAIL: final run 23 passed, including both tests asserting current false acceptance. Two earlier checker-harness iterations failed before adjudication: one compile error from serializing a const-generic array and one setup panic from inserting absent JSON keys; both were corrected in the temporary test only, then the test file was removed.",
+    "shipped_no_oracle_perturbations": "FAIL: 21 tests passed and held_out_perturbations_match_java_without_oracle_layout failed on six selected sources.",
+    "decimal_literal_ratchet": "FAIL: 0 passed, 1 failed.",
+    "comparator_and_park_guard": "PASS: 1 passed, 0 failed.",
+    "golden_embedding_guard": "PASS: 1 passed, 0 failed.",
+    "error_golden_census": "SKIPPED BY TEST: reported pass only because the golden submodule is absent.",
+    "execution_note": "An initial parity_evidence Cargo invocation without the required CARGO_TARGET_DIR was terminated before completion and was not used as evidence. Every completed Cargo/rustc run used /private/tmp/rustuml-t14-deployment-qname-projection-v2/target, with one process at a time."
+  },
+  "findings": [
+    {
+      "severity": "critical",
+      "title": "The gate accepts fabricated, contradictory, and non-independent attestations",
+      "evidence": "The first temporary mutation selected two held-outs despite a self-described implementer, ACCEPT plus REJECT verdict object, conflicting revision aliases, a post-review active revision, and a nonexistent Java revision."
+    },
+    {
+      "severity": "critical",
+      "title": "One failed Java input can be multiplied into cross-mechanism acceptance",
+      "evidence": "The second mutation selected four paths backed by one hardlinked source/SVG pair across two mechanisms, ignored java_exit=1, and counted label/LABEL as two axes."
+    },
+    {
+      "severity": "critical",
+      "title": "The migrated accepted corpus is red on the shipped path",
+      "evidence": "parity_perturbations reports six live divergences in command-factory-note-color-resolution and component-attached-note-contextual-identity."
+    },
+    {
+      "severity": "high",
+      "title": "Historical normalization can be mistaken for original checker provenance",
+      "evidence": "Several active accepted reviews gained account/tool/revision fields after authorship without a separate auditor identity; two account commits had neither exact revision nor current account hash in the original checker artifact."
+    },
+    {
+      "severity": "high",
+      "title": "The bidirectional decimal ratchet remains red",
+      "evidence": "Six growth entries and one decrease entry remain outside the unchanged baseline."
+    }
+  ],
+  "residue": [
+    "The golden submodule was not populated, so the 1,199 runtime census could not be independently recounted.",
+    "Git cannot cryptographically establish model identity or whether an attested checker was operated by the same human as an implementer; the gate must at least reject explicit same-implementer claims and bind auditable task/commit identities.",
+    "The temporary mutation tests were removed to obey checker-only delivery. The bypasses have no permanent regression tests at this head.",
+    "The five f42a3906 metadata bindings are internally and Git-consistent, but that does not cure the gate-wide false accepts or the six red migrated held-outs.",
+    "No production code, account, prior review, preserved rejection, artifact, baseline, comparator control, park/error list, allow-list, or unrelated record was edited."
+  ],
+  "verdict": "REJECT",
+  "verdict_reason": "f42a3906 cannot satisfy the T14 parity-evidence gate. The focused schema suite and real metadata guard are green, but the gate admits demonstrated fabricated/non-independent provenance and duplicate Java-failure evidence, the migrated selected corpus still has six shipped-path divergences, and the bidirectional decimal ratchet remains red. These are independent soundness and landability failures."
+}
