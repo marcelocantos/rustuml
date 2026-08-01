@@ -1,0 +1,26 @@
+SVG structural differences:
+  [47] <path> attr mismatch:
+    expected: [("codeLine", "15"), ("d", "M169.9,149 C197,149 224.52,149 253.8,149"), ("fill", "none"), ("id", "SeedAlpha-to-GuideNorthLate"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "15"), ("d", "M169.8769,145.9202 C196.8286,147.4673 224.3195,149.0453 253.5295,150.722"), ("fill", "none"), ("id", "SeedAlpha-to-GuideNorthLate"), ("style", "stroke:#181818;stroke-width:1;")]
+  [48] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "259.8,149,250.8,145,254.8,149,250.8,153,259.8,149"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "259.5197,151.0659,250.7637,146.5567,254.5279,150.7793,250.3052,154.5435,259.5197,151.0659"), ("style", "stroke:#181818;stroke-width:1;")]
+  [50] <path> attr mismatch:
+    expected: [("codeLine", "16"), ("d", "M398.53,155 C421.74,155 441.6,155 464.82,155"), ("fill", "none"), ("id", "GuideNorthLate-to-GuideSouthLate"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "16"), ("d", "M398.58,155 C421.71,155 441.52,155 464.65,155"), ("fill", "none"), ("id", "GuideNorthLate-to-GuideSouthLate"), ("style", "stroke:#181818;stroke-width:1;")]
+  [51] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "470.82,155,461.82,151,465.82,155,461.82,159,470.82,155"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "470.65,155,461.65,151,465.65,155,461.65,159,470.65,155"), ("style", "stroke:#181818;stroke-width:1;")]
+  [53] <path> attr mismatch:
+    expected: [("codeLine", "17"), ("d", "M609.84,155 C629.28,155 644.25,155 663.15,155"), ("fill", "none"), ("id", "GuideSouthLate-to-FarGuideLate"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "17"), ("d", "M609.84,155 C629.31,155 644.34,155 663.23,155"), ("fill", "none"), ("id", "GuideSouthLate-to-FarGuideLate"), ("style", "stroke:#181818;stroke-width:1;")]
+  [54] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "669.15,155,660.15,151,664.15,155,660.15,159,669.15,155"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "669.23,155,660.23,151,664.23,155,660.23,159,669.23,155"), ("style", "stroke:#181818;stroke-width:1;")]
+  [56] <path> attr mismatch:
+    expected: [("codeLine", "18"), ("d", "M217.3457,84 C217.7826,84 200.8749,84 201.3129,84 C202.1888,84 203.0669,84 203.9469,84 C218.0263,84 232.5875,84 246.58,84"), ("fill", "none"), ("id", "InnerReviewSource-backto-WideReviewTarget"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "18"), ("d", "M217.0636,78.3712 C217.9557,78.32 202.2161,79.2235 203.1126,79.172 C217.4571,78.3486 232.3355,77.4946 246.6095,76.6752"), ("fill", "none"), ("id", "InnerReviewSource-backto-WideReviewTarget"), ("style", "stroke:#181818;stroke-width:1;")]
+  [57] <polygon> attr mismatch:
+    expected: [("fill", "none"), ("points", "199.3457,84,217.3457,90,217.3457,78,199.3457,84"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "none"), ("points", "199.0932,79.4027,217.4075,84.3613,216.7198,72.3811,199.0932,79.4027"), ("style", "stroke:#181818;stroke-width:1;")]
+

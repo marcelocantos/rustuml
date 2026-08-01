@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "mechanism": "uml-factory-command-consumption-precedence",
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; frozen rustuml and diff_one binaries; pinned PlantUML JAR",
+    "date": "2026-08-01",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "rust_commit": "f0ffaa30c45c3531915727707945eecf47ee106d",
+    "rust_branch": "codex/t14-review-deployment-parser",
+    "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_commit": "9be7843e892bbff88eedeeffbc5b8ad11349524d",
+    "implementation_commit": "f0ffaa30c45c3531915727707945eecf47ee106d",
+    "rust_revision_before_change": "89111c356c5344502cf8f9e2c903edd54c0be78c"
+  },
+  "hashes": {
+    "frozen_rustuml_sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c",
+    "frozen_diff_one_sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_sha256": "ad81e42e29612de95d49edaef430bd53c0184775ed78f17879600d0b4b98f929",
+    "artifact_manifest_sha256": "75122409352686589d1ee790c25c1f8ee45980f0609f733c0e10e9e831e5e90c"
+  },
+  "source_inspection": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:124-140,229-250",
+        "finding": "Factories are tried in fixed order and the first factory that consumes the complete source wins: Sequence, Class, Activity, Description, then State among the relevant candidates."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java:111",
+        "finding": "Sequence registers CommandArrow."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java:75-145",
+        "finding": "The end-anchored message grammar accepts ordinary identifier endpoints, including Node, Component, and Queue, and implicitly creates participants."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:99-150",
+        "finding": "Explicit class/object declarations, package containers, and class links remain owned by the earlier Class factory when every command is consumable."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:73-130",
+        "finding": "Component, deployment, use-case, and Archimate command competitors share one later Description factory."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:720-1318",
+        "finding": "detect_uml_subtype approximates complete-factory consumption with scores and local booleans."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:996-1079",
+        "finding": "Lines whose first token is Node or Queue receive Deployment declaration score, and a line beginning Component plus whitespace receives Component declaration score, before establishing that the complete line is a relationship command."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:840-850,1704-1724",
+        "finding": "f0ffaa30's looks_like_mixed_leaf_declaration correctly stops reserved-word relationship endpoints from rejecting a viable Class candidate, but it does not protect the Sequence-first relationship-only case from Deployment/Component scoring."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:1320-1567",
+        "finding": "Generic other_max + 1 adjustments encode earlier-factory precedence for selected cases, but no whole-source command-consumption model prevents the reserved-endpoint false declaration."
+      }
+    ],
+    "implementation_lineage": "The account is the direct parent of f0ffaa30, satisfying the pre-implementation account gate.",
+    "fixture_shaped_logic": "No production condition uses golden names, checker labels, filenames, coordinates, or exact score totals. Fresh* and numbered identifiers occur only in cfg(test) inputs.",
+    "golden_reads_or_svg_surgery": "No golden read, include_str!, renderer geometry change, comparator control, or SVG rewrite was introduced.",
+    "constants_and_scores": "No layout or high-precision constant was added. other_max + 1 is a generic winner tie-break with Java factory-order provenance, not a per-fixture score, but the counterexample shows that the surrounding score model remains incomplete."
+  },
+  "commands": {
+    "revision_and_hash_checks": [
+      "git rev-parse HEAD",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "shasum -a 256 /private/tmp/rustuml-frozen/f0ffaa30/rustuml /private/tmp/rustuml-frozen/f0ffaa30/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/uml-factory-command-consumption-precedence/account.json",
+      "cmp test-diagrams/perturbations/uml-factory-command-consumption-precedence/checker2_batch.pre.sha256 test-diagrams/perturbations/uml-factory-command-consumption-precedence/checker2_batch.post.sha256",
+      "cmp test-diagrams/perturbations/uml-factory-command-consumption-precedence/checker2_followup.pre.sha256 test-diagrams/perturbations/uml-factory-command-consumption-precedence/checker2_followup.post.sha256"
+    ],
+    "source_commands": [
+      "git show --color=never --find-renames f0ffaa30",
+      "sed -n '100,270p' src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "sed -n '60,170p' src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "sed -n '80,190p' src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "sed -n '1,220p' src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "sed -n '700,1585p' crates/rustuml-parser/src/parse/mod.rs"
+    ],
+    "exact_per_input_execution": "puml=<INPUT>; stem=${puml%.puml}; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < \"$puml\" > \"$stem.java.svg\" 2> \"$stem.java.stderr\"; printf '%s\\n' \"$?\" > \"$stem.java.exit\"; cp \"$stem.java.svg\" \"$stem.svg\"; /private/tmp/rustuml-frozen/f0ffaa30/rustuml -pipe -tsvg < \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; printf '%s\\n' \"$?\" > \"$stem.rust.exit\"; /private/tmp/rustuml-frozen/f0ffaa30/diff_one --no-oracle \"$puml\" > \"$stem.diff.stdout\" 2> \"$stem.diff.stderr\"; printf '%s\\n' \"$?\" > \"$stem.diff.exit\"; /private/tmp/rustuml-frozen/f0ffaa30/rustuml --ast \"$puml\" > \"$stem.rust.ast.txt\" 2> \"$stem.rust.ast.stderr\"; printf '%s\\n' \"$?\" > \"$stem.rust.ast.exit\""
+  },
+  "inputs": [
+    {
+      "stem": "checker2_class_reserved_endpoints_reordered",
+      "valid_plantuml": true,
+      "axes": ["explicit Class", "reserved-word endpoints", "relationship-before-declaration order", "package nesting", "renamed inputs"],
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "checker2_object_reserved_realizations",
+      "valid_plantuml": true,
+      "axes": ["Object owner", "realization arrows", "Component/UseCase/Node endpoint names", "declaration order"],
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "checker2_relationship_only_reserved_endpoints",
+      "valid_plantuml": true,
+      "axes": ["relationship-only source", "Sequence versus Component/Deployment factory order", "Node/Component/Queue reserved endpoints", "renamed labels"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 1,
+      "result": "FAIL_IN_SCOPE",
+      "finding": "Java consumes all three lines as Sequence CommandArrow messages and emits data-diagram-type SEQUENCE. Rust dispatches Component, mis-materializes Node/Queue declarations and Component/Queue interfaces, and retains only one of the three relationships."
+    },
+    {
+      "stem": "checker2_deployment_root_nested_component",
+      "valid_plantuml": true,
+      "axes": ["Deployment root ownership", "broad slash/hyphen alias", "nested Component container", "nested bracket and node leaves", "changed depth"],
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "checker2_component_root_nested_shared",
+      "valid_plantuml": true,
+      "axes": ["Component root ownership", "nested bracket and node commands", "cross-root links", "renamed inputs"],
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    },
+    {
+      "stem": "checker2_usecase_broad_boundary_competitor",
+      "valid_plantuml": true,
+      "axes": ["UseCase competitor", "broad rectangle alias", "nested actor/usecase/link"],
+      "diff_one_no_oracle_exit": 1,
+      "result": "PASS_FOR_FACTORY_SELECTION",
+      "finding": "Rust AST selects UseCase as claimed. The SVG differences are use-case package canonical-ID/member ownership and geometry, explicitly outside this mechanism's factory-selection boundary."
+    },
+    {
+      "stem": "checker2_archimate_broad_container_competitor",
+      "valid_plantuml": false,
+      "role": "preserved invalid direct-expanded-command probe; not counted toward valid perturbations",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 2,
+      "result": "INVALID_PROBE_PRESERVED"
+    },
+    {
+      "stem": "checker2_archimate_valid_competitor",
+      "valid_plantuml": true,
+      "axes": ["Archimate stdlib expansion", "broad rectangle alias", "nested renamed elements and relation"],
+      "java_exit": 0,
+      "rust_exit": 0,
+      "diff_one_no_oracle_exit": 1,
+      "result": "PASS_FOR_FACTORY_SELECTION",
+      "finding": "Rust AST selects Archimate. The SVG difference is failure to retain the enclosing rectangle in the Archimate model, outside subtype selection."
+    },
+    {
+      "stem": "checker2_mixed_case_explicit_class",
+      "valid_plantuml": true,
+      "axes": ["mixed-case explicit Class commands", "package nesting", "renamed declarations"],
+      "diff_one_no_oracle_exit": 0,
+      "result": "PASS"
+    }
+  ],
+  "artifact_manifest": {
+    "path": "test-diagrams/perturbations/uml-factory-command-consumption-precedence/checker2_artifacts.sha256",
+    "entries": 138,
+    "per_input_suffixes": [".puml", ".java.svg", ".java.stderr", ".java.exit", ".svg", ".rust.svg", ".rust.stderr", ".rust.exit", ".diff.stdout", ".diff.stderr", ".diff.exit", ".rust.ast.txt", ".rust.ast.stderr", ".rust.ast.exit"],
+    "batch_evidence": ["checker2_batch.pre.*", "checker2_batch.post.*", "checker2_followup.pre.*", "checker2_followup.post.*"]
+  },
+  "residues": [
+    "The UseCase and valid Archimate competitors select the claimed Rust subtype but retain unrelated parser/model divergences documented in their artifacts.",
+    "The detector remains a score approximation rather than a complete command-consumption simulation; the preserved counterexample demonstrates one concrete false owner.",
+    "No Cargo command, harness guard, or corpus metric was run under the review constraint."
+  ],
+  "verdict": "REJECT",
+  "reason": "f0ffaa30 repairs explicit-Class, Object-realization, and Component-versus-Deployment cases, but it does not preserve complete-source factory order for a relationship-only source whose endpoint names are reserved diagram keywords. Java's earlier Sequence factory consumes the complete source; Rust scores endpoint tokens as Component/Deployment declarations and selects Component. This is a fresh valid counterexample directly within the claimed reserved-endpoint, relationship-only, complete-consumption, and factory-precedence invariant."
+}

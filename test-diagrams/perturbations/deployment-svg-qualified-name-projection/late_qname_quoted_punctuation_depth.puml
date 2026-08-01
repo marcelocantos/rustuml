@@ -1,0 +1,7 @@
+@startuml
+node "Edge: Gateway/Blue" {
+  artifact "Worker: One/Two"
+  database "Audit(Store)"
+  "Worker: One/Two" --> "Audit(Store)" : stores
+}
+@enduml

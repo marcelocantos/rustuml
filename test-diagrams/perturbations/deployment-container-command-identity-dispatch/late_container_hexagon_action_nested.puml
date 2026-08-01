@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+hexagon zone-main {
+  action action.step {
+    file payload_txt
+  }
+  payload_txt --> action.step : enters
+}
+cloud "Shared Edge" as edge_cloud
+payload_txt --> edge_cloud : exports
+@enduml

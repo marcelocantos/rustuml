@@ -1,0 +1,31 @@
+SVG structural differences:
+  element count: expected 45, got 23
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "181px"), ("preserveAspectRatio", "none"), ("style", "width:250px;height:181px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 250 181"), ("width", "250px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "77px"), ("preserveAspectRatio", "none"), ("style", "width:319px;height:77px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 319 77"), ("width", "319px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "participant-lifeline"), ("data-entity-uid", "part1"), ("data-qualified-name", "Node"), ("data-source-line", "1"), ("id", "part1-lifeline")]
+    actual:   [("class", "entity"), ("data-qualified-name", "node"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] tag mismatch: expected <g>, got <polygon>
+  [5] tag mismatch: expected <rect>, got <line>
+  [6] <line> depth mismatch: expected 5, got 4
+  [6] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "29"), ("x2", "29"), ("y1", "36.4883"), ("y2", "144.4199")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "134.0503"), ("x2", "197.9497"), ("y1", "16"), ("y2", "16")]
+  [7] tag mismatch: expected <g>, got <line>
+  [8] tag mismatch: expected <g>, got <text>
+  [9] tag mismatch: expected <rect>, got <g>
+  [10] tag mismatch: expected <line>, got <path>
+  [11] tag mismatch: expected <g>, got <path>
+  [12] tag mismatch: expected <g>, got <text>
+  [13] tag mismatch: expected <rect>, got <g>
+  [14] tag mismatch: expected <line>, got <ellipse>
+  [15] tag mismatch: expected <g>, got <text>
+  [16] tag mismatch: expected <rect>, got <g>
+  [17] tag mismatch: expected <text>, got <ellipse>
+  [18] tag mismatch: expected <g>, got <text>
+  [19] tag mismatch: expected <rect>, got <g>
+  [20] tag mismatch: expected <text>, got <path>
+  [21] tag mismatch: expected <g>, got <polygon>
+  [22] tag mismatch: expected <rect>, got <text>
+

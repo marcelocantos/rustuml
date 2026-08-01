@@ -1,154 +1,102 @@
 {
   "schema_version": 1,
   "mechanism": "class-dotpath-start-retraction-segment-consumption",
-  "review_type": "independent_adversarial_checker",
-  "verdict": "rejected",
-  "verdict_reason": "The source-level mechanism audit found no counterexample, and the preserved early product SVGs support the claim, but the requested frozen Rust binaries were overwritten during review. Because executable identity changed while evidence was being generated, this checker does not accept the change. Rerun with stable e8d50060 binaries or explicit permission to rebuild is required.",
-  "reviewer": {
-    "identity": "GPT-5 Codex",
-    "role": "independent adversarial checker",
-    "implemented_change": false,
-    "edited_production_code": false,
-    "edited_account": false,
-    "ran_cargo_or_rustc": false
+  "evidence_kind": "parity",
+  "maker": {
+    "identity": "Historical T14 class DotPath implementer(s), not this checker",
+    "task_id": "historical-class-dotpath-start-retraction"
   },
-  "timestamps": {
-    "review_started_utc": "2026-07-31T22:20:00Z",
-    "review_recorded_utc": "2026-07-31T22:45:30Z"
+  "reviewer": {
+    "identity": "OpenAI Codex GPT-5 independent skeptical checker and evidence migrator",
+    "task_id": "rustuml-t14-late-rereview-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; pinned PlantUML JAR; cc5bda77 diff_one",
+    "role": "independent checker; did not implement this mechanism",
+    "implemented_mechanism": false
   },
   "revisions": {
-    "rust_worktree": "/private/tmp/rustuml-t14-class-dotpath-retraction",
-    "rust_branch": "codex/t14-class-dotpath-retraction",
-    "rust_head": "e8d50060a375458ad358a135dd104bca13fad0f0",
-    "account_commit": "8d0fd64c",
-    "implementation_commit": "e8d50060",
-    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
-    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
-    "java_worktree_status": "dirty: modified CLAUDE.md only, unrelated to PlantUML source"
+    "account_commit": "926af5c5a8343112ca07765b0c24b2b44bc2ccb8",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
   },
-  "binary_identity": {
-    "plantuml_jar": {
-      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
-      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
-    },
-    "initial_requested_rustuml_observation": {
-      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml",
-      "sha256": "d211745456776fc03d72516bbf08d92991486ca3daa64567a38667586b95bad5",
-      "note": "Observed before the first evidence batch was generated."
-    },
-    "initial_requested_diff_one_observation": {
-      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one",
-      "sha256": "ee5cb243127f045524dabb00e5504f3cc862d5c214a09b98288cef99adf65cf8",
-      "note": "Observed before the first evidence batch was generated."
-    },
-    "post_overwrite_rustuml": {
-      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml",
-      "sha256": "07c5cadd202782713600039c22f1e88b84584619774456ae8bbe640c788f385c",
-      "mtime": "2026-08-01 08:45:30 +1000"
-    },
-    "post_overwrite_diff_one": {
-      "path": "/private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one",
-      "sha256": "ad4351991f36728379bffb827309ce4d8ef7d405fd029ed686859cd705faa3da",
-      "mtime": "2026-08-01 08:44:28 +1000"
-    }
+  "candidate_source": {
+    "worktree": "/private/tmp/rustuml-t14-integration",
+    "commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
   },
+  "historical_records": {
+    "quarantined_reviews": [
+      "docs/parity-reviews/class-dotpath-start-retraction-segment-consumption/quarantined-review-late-binary-contamination-reject.json",
+      "docs/parity-reviews/class-dotpath-start-retraction-segment-consumption/quarantined-review-late-dotpath-accepted.json"
+    ],
+    "non_ancestral_implementation_commits": [
+      "e8d50060a375458ad358a135dd104bca13fad0f0"
+    ],
+    "lineage_note": "The accepted historical review is preserved immutably but was not schema-closed and its implementation commit is not an ancestor of cc5bda77."
+  },
+  "source_inspection": [
+    "Java SvekEdge.getExtremitySimplier calls DotPath.moveStartPoint for start decorations using the decoration length along the solved start tangent.",
+    "Java DotPath.moveStartPoint consumes at most one leading cubic when more than one cubic remains and the requested movement is at least the first endpoint-chord length.",
+    "The cc5bda77 class renderer contains Java-shaped start handling in shortened_endpoint_points, including first-chord consumption, residual movement, and start-tangent fallback.",
+    "The no-waiver gate evaluates shipped product equivalence, not only source-level submechanism shape."
+  ],
   "commands": [
-    "git show 8d0fd64c:docs/parity-reviews/class-dotpath-start-retraction-segment-consumption/account.json",
-    "git show e8d50060 -- crates/rustuml-render/src/class.rs",
-    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '520,710p'",
-    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java | sed -n '180,325p'",
-    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/geom/XCubicCurve2D.java | sed -n '1,90p'",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/*.puml",
-    "/private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml -tsvg <fixture.puml> > <fixture.rust.svg>",
-    "/private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one --no-oracle <fixture.puml> > <fixture.diff.txt> 2> <fixture.diff.stderr>",
-    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /private/tmp/rustuml-t14-ortho-er-migration/target/release/rustuml /private/tmp/rustuml-t14-ortho-er-migration/target/release/examples/diff_one"
+    "sed -n '520,710p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '190,325p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+    "sed -n '45,60p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/geom/XCubicCurve2D.java",
+    "sed -n '14898,14970p' /private/tmp/rustuml-t14-integration/crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < <input.puml> > <stem.java.svg> 2> <stem.java.stderr>; printf exit > <stem.java.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust <input.puml> > <stem.rust.svg> 2> <stem.rust.stderr>; printf exit > <stem.rust.exit>",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle <input.puml> > <stem.diff.stdout> 2> <stem.diff.stderr>; printf exit > <stem.diff.exit>",
+    "shasum -a 256 test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_*"
   ],
-  "source_trace_findings": [
+  "perturbations": [
     {
-      "location": "Java SvekEdge.java:532-555,672-678",
-      "finding": "The SIMPLIER path creates the endpoint extremity and calls dotPath.moveStartPoint for start decorations with an angle-derived movement whose magnitude is extremity.getDecorationLength()."
+      "stem": "late_dotpath_ortho_lr_nested_extends",
+      "source": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.puml",
+      "golden": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.java.exit",
+      "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.rust.svg",
+      "rust_exit": 0,
+      "diff_stdout": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_lr_nested_extends.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["extends-start-decoration", "ortho-routing", "left-to-right-direction", "nested-package-endpoint"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "The product SVG differs on multiple paths including the target InnerReviewSource-backto-WideReviewTarget route and arrow polygon."
     },
     {
-      "location": "Java DotPath.java:206-215",
-      "finding": "moveStartPoint consumes at most one leading cubic when there is another cubic and the requested movement magnitude is at least the first cubic's XCubicCurve2D.getLength(). It then applies the residual to the surviving start point and first control."
-    },
-    {
-      "location": "Java DotPath.java:305-313 and XCubicCurve2D.java:52-56",
-      "finding": "The start tangent falls back from coincident first control to the first cubic endpoint chord, and getLength is endpoint chord length, not Bezier arc length."
-    },
-    {
-      "location": "Rust crates/rustuml-render/src/class.rs:14844-14897",
-      "finding": "The implementation mirrors the Java one-segment consumption shape: derive start tangent with endpoint fallback, test start_len against the first endpoint chord, drain exactly one cubic's three leading control entries, and apply residual movement to the new start/control."
+      "stem": "late_dotpath_ortho_tb_dependency_short",
+      "source": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.puml",
+      "golden": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.java.svg",
+      "java_exit_artifact": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.java.exit",
+      "java_exit": 0,
+      "rust_svg": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.rust.svg",
+      "rust_exit": 0,
+      "diff_stdout": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.diff.stdout",
+      "diff_stderr": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.diff.stderr",
+      "diff_exit_artifact": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_dotpath_ortho_tb_dependency_short.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": ["dependency-start-decoration", "ortho-routing", "top-to-bottom-direction", "short-no-consume-shape"],
+      "result": "REJECT: Java-success fresh input diverged under diff_one --no-oracle",
+      "finding": "The product SVG differs on ordinary guide edges and the LateDependencySource-backto-LateDependencyTarget route."
     }
   ],
-  "forbidden_pattern_audit": {
-    "fixture_or_label_conditionals_found": false,
-    "golden_data_use_found": false,
-    "comparator_or_baseline_or_park_or_error_marker_changes_found": false,
-    "unexplained_new_numeric_constants_found": false,
-    "notes": "The implementation diff adds no new parity constants. It reuses endpoint decoration lengths already present with Java provenance comments and adds only algorithmic control flow in shortened_endpoint_points."
+  "artifact_manifest": {
+    "path": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/late_artifacts.sha256",
+    "sha256": "c206f06c2ce78147f094e9b3c703afd0f4c3255d38db048712b9ab891deedebd"
   },
-  "perturbation_evidence": {
-    "directory": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption",
-    "summary_file": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/path-summary.json",
-    "summary_sha256": "2a7a2f8783b5e0cc4c82dd14e0177f75530cdbf44ca7ba14816fe4a0c766795d",
-    "binary_contamination_file": "test-diagrams/perturbations/class-dotpath-start-retraction-segment-consumption/binary-contamination.txt",
-    "binary_contamination_sha256": "d1baf7850e73fc47f84ead45763cc0814da44fd6fdf19d60d31d03b4f3df91a6",
-    "fixtures": [
-      {
-        "stem": "ortho_lr_inheritance_package_consume",
-        "axes": ["ORTHO", "left-to-right", "inheritance start decoration", "package source endpoint", "leading-cubic consumption"],
-        "java_svg_sha256": "658bd8bdc5bb725a207b402013b86136a7bcd3de15d63f346407f5724dee62c7",
-        "preserved_rust_svg_sha256": "7d507a32c3795f489c504b02ca0496c76a7456ddbdb1fa1a37a5818a420ec3e9",
-        "post_overwrite_rustuml_svg_sha256": "42b0225476c66599bca6f3ec069124ab6d247a8d02fab9a14e159780e12d2d54",
-        "finding": "The preserved early Rust SVG matches Java for SourceBox-backto-TargetNode with four cubic segments and identical path data. The post-overwrite rustuml render reintroduces an extra leading cubic, proving the binary path was contaminated."
-      },
-      {
-        "stem": "ortho_lr_dependency_ordinary_no_consume",
-        "axes": ["ORTHO", "left-to-right", "dependency start decoration", "ordinary endpoints", "multi-cubic no-consume threshold"],
-        "java_svg_sha256": "73d7df0cd7d213b1c01ee206c1668a66b0540df3a0234d803199777657e1dc48",
-        "preserved_rust_svg_sha256": "ad81d64713596069056c2ba8d4ff1c710f810bf4edc353353cfdfac2e596bd86",
-        "finding": "The target path has three cubics and a first visible chord of about 30.5px, so a 6px dependency start retraction must not consume it. Preserved Rust and Java segment counts match."
-      },
-      {
-        "stem": "ortho_tb_dependency_ordinary_no_consume",
-        "axes": ["ORTHO", "top-to-bottom", "dependency start decoration", "ordinary endpoints", "single-cubic no-consume guard"],
-        "java_svg_sha256": "cfa9de8976101a01b965f11c05bcd1e769a6442a549f635253d9c6219ff8ea3d",
-        "preserved_rust_svg_sha256": "4988a4a97b3dabf2d09f354e3c942d1a124c608d27bca88c763d858223aa5b83",
-        "finding": "The path has one cubic, so Java's beziers.size() > 1 guard forbids segment consumption. Preserved Rust and Java path data match."
-      },
-      {
-        "stem": "spline_lr_aggregation_ordinary_retraction",
-        "axes": ["spline", "left-to-right", "aggregation start decoration", "ordinary endpoints"],
-        "java_svg_sha256": "9a30f891bc183643d954bfc79411ffc04539153c46751b022ef04d6975bff04c",
-        "preserved_rust_svg_sha256": "2a8b73607d12cda9db365ed2dd0a8dff07f50ac661842fc011330f4de20eef6f",
-        "finding": "This covers aggregation start-decoration retraction under spline routing. The final path is one cubic, so it is decoration coverage rather than segment-consumption proof; preserved Rust and Java path data match."
-      },
-      {
-        "stem": "spline_tb_parenthesis_package_consume",
-        "axes": ["spline", "top-to-bottom", "parenthesis start decoration", "package source endpoint", "multi-cubic package route"],
-        "java_svg_sha256": "4af253323f4e689e66ca46c9c2353606796346874ff8df1ec6f4a95d65e9f351",
-        "preserved_rust_svg_sha256": "fb40ac541e724a8ea60e1518e0ff56fc1c5fbf8caa1b6121b93959180196b781",
-        "finding": "The target Java path id is ParentEndpoint-backto-ReceiverTwo while Rust emits ParentEndpoint-to-ReceiverTwo. Path segment count is five on both sides and max preserved point delta is about 0.0034px. This is an unrelated ID/serialization residue, not a start-retraction counterexample."
-      }
-    ]
-  },
-  "counterexamples": [
-    {
-      "kind": "invalid_harness_counterexample",
-      "fixture": "ortho_lr_inheritance_package_consume",
-      "description": "After the target binary overwrite, rerendering the same input produced an extra leading cubic for SourceBox-backto-TargetNode. Because the executable hash no longer matches the initially observed requested binary, this rejects the evidence batch rather than the e8d50060 source mechanism."
-    }
+  "findings": [
+    "The source-level cc5bda77 DotPath routine appears Java-shaped, but both fresh valid product probes have diff_one --no-oracle exit 1.",
+    "Under the user's no-waiver instruction, these nonzero product diffs reject the mechanism even if a narrower submechanism explanation could be attempted."
   ],
   "residue": [
-    "The requested shared target binaries were mutable and changed during review. The checker did not run Cargo/rustc, so it could not restore an e8d50060-compatible diff_one/rustuml pair.",
-    "The parenthesis/package perturbation exposes an existing relationship SVG id mismatch unrelated to shaft retraction: Java ParentEndpoint-backto-ReceiverTwo versus Rust ParentEndpoint-to-ReceiverTwo.",
-    "A clean acceptance requires regenerating the same perturbation evidence with stable pinned binaries and then updating this review or replacing it with an accepted reviewer record."
+    "No Cargo/rustc command, baseline update, comparator change, or product code edit was run or made.",
+    "This review intentionally does not relabel product diffs as out of scope."
   ],
-  "scope_changes_made_by_checker": [
-    "Added fresh perturbation inputs and same-stem Java SVGs.",
-    "Added preserved Rust SVG artifacts from the initially observed target path.",
-    "Added diff_one reports; these are retained but marked contaminated after binary overwrite.",
-    "Added path-summary.json, binary-contamination.txt, and this review.json."
-  ]
+  "verdict": "REJECT",
+  "reason": "The quarantined accepted dotpath record now has a canonical successor, and the successor is REJECT: both fresh Java-valid DotPath probes produce diff_one --no-oracle exit 1."
 }

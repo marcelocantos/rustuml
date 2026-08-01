@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-svg-qualified-name-projection",
+  "status": "ACTIVE",
+  "checker": {
+    "identity": "OpenAI Codex independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop; evidence-record correction only",
+    "date": "2026-08-01",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "rust_commit_under_review": "f0ffaa30c45c3531915727707945eecf47ee106d",
+    "java_commit": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "accept_record_commit": "f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab",
+    "correction_parent_commit": "f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab"
+  },
+  "governing_gate": {
+    "rule": "Project Parity Honesty Rule 10",
+    "requirement": "A failing counterexample rejects the change and remains executable.",
+    "application": "fresh2_quoted_identity_deep_ownership is a fresh, Java-valid held-out counterexample with java_exit=0, rust_exit=0, and diff_one --no-oracle exit=1. Its nonzero comparator result is a failure under Rule 10. The prior PASS_FOR_MECHANISM classification and out-of-scope geometry interpretation cannot convert that failing counterexample into a pass."
+  },
+  "decisive_counterexample": {
+    "stem": "fresh2_quoted_identity_deep_ownership",
+    "source": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.puml",
+    "java_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.java.svg",
+    "rust_svg": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.rust.svg",
+    "diff_stdout": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.diff.stdout",
+    "diff_stderr": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.diff.stderr",
+    "diff_exit": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/fresh2_quoted_identity_deep_ownership.diff.exit",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "diff_one_no_oracle_exit": 1,
+    "result": "FAIL"
+  },
+  "historical_records": {
+    "authored_accept": {
+      "status": "INERT_LEGACY_ACCEPTED",
+      "path": "docs/parity-reviews/deployment-svg-qualified-name-projection/legacy-accepted/review-2.8c98d7869bbfb2549fbe0f33418831c1b802405e9311d526fa1a24e3c1333aad.json",
+      "sha256": "8c98d7869bbfb2549fbe0f33418831c1b802405e9311d526fa1a24e3c1333aad",
+      "preservation": "Byte-for-byte archive of the ACCEPT authored at f16bab4163d1b2f5a505f23a23a1ec37bc2b0dab. It is not an active verdict."
+    },
+    "original_prior_reject": {
+      "status": "INERT_LEGACY_REJECTED",
+      "path": "docs/parity-reviews/deployment-svg-qualified-name-projection/legacy-rejected/review.0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757.json",
+      "sha256": "0cdbabae57063f517aae9fa7b79234b2bf87c65ccaefcc91e65a274590a89757",
+      "preservation": "Byte-for-byte archive of the original prior REJECT. It remains historical evidence and is not overwritten by this correction."
+    }
+  },
+  "evidence_integrity": {
+    "frozen_rustuml_sha256": "80261bb41b8402435aa987bd2eafaa198f09fb61565f7592fdfba30285cba33c",
+    "frozen_diff_one_sha256": "e361b82c300ac6d76211a2442644d13c998fb073581583af4b9a813fb78d9526",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "artifact_manifest": "test-diagrams/perturbations/deployment-svg-qualified-name-projection/checker2_artifacts.sha256",
+    "artifact_manifest_sha256": "7996032a9c12a2d0d691e30f22c6a93627d543856c5e7f1291ddce8eba814aff"
+  },
+  "correction_scope": {
+    "production_code_changed": false,
+    "test_artifacts_changed": false,
+    "executable_tests_rerun": false,
+    "cargo_or_rustc_run": false,
+    "record_operations": [
+      "Archive the authored ACCEPT byte-for-byte under legacy-accepted with its SHA-256 suffix.",
+      "Archive the original prior REJECT byte-for-byte under legacy-rejected with its SHA-256 suffix.",
+      "Create this sole canonical active review.json as REJECT."
+    ]
+  },
+  "verdict": "REJECT",
+  "reason": "The fresh Java-valid held-out fresh2_quoted_identity_deep_ownership has diff_one --no-oracle exit 1. Project Parity Honesty Rule 10 makes that failing counterexample dispositive. The prior ACCEPT violated the gate by reclassifying the failure as PASS_FOR_MECHANISM and treating its differences as out of scope; this active verdict does not reinterpret or excuse the failure."
+}

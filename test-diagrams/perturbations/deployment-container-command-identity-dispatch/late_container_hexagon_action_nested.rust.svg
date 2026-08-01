@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="141px" preserveAspectRatio="none" style="width:346px;height:141px;background:#FFFFFF;" version="1.1" viewBox="0 0 346 141" width="346px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity payload_txt-->
+<g class="entity" data-qualified-name="payload_txt" data-source-line="4" id="ent0002">
+<path d="M6,42.2517 L6,73.74 A2.5,2.5 0 0 0 8.5,76.24 L102.6055,76.24 A2.5,2.5 0 0 0 105.1055,73.74 L105.1055,49.7517 L95.1055,39.7517 L8.5,39.7517 A2.5,2.5 0 0 0 6,42.2517" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M95.1055,39.7517 L95.1055,47.2517 A2.5,2.5 0 0 0 97.6055,49.7517 L105.1055,49.7517" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79.1055" x="16" y="63.2869">payload_txt</text>
+</g>
+<!--entity action.step-->
+<g class="entity" data-qualified-name="action.step" data-source-line="6" id="ent0003">
+<ellipse cx="271.9338" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74.8877" x="234.49" y="44.5352">action.step</text>
+</g>
+<!--entity Shared Edge-->
+<g class="entity" data-qualified-name="edge_cloud" data-source-line="8" id="ent0005">
+<path d="M224.3257,86.5626 C227.5534,81.5195 233.1321,81.7588 236.0699,86.8971 C239.1408,80.2641 243.8475,80.3316 248.1939,85.5975 C251.6681,78.6201 257.065,79.4177 261.5046,84.535 C264.3847,78.9608 270.2692,78.3676 273.9791,83.5748 C277.3291,78.5283 282.8255,79.0906 284.9875,84.7916 C288.9283,79.507 294.4798,79.9355 297.9316,85.3815 C301.7095,79.948 306.5818,79.6678 310.3107,85.4357 C315.0928,80.8864 318.5241,81.8292 320.8288,87.8914 C328.9201,91.1806 331.4631,95.664 324.928,102.9379 C329.1666,109.0566 329.5964,113.5576 321.293,116.2521 C318.075,123.3108 314.2838,124.3613 308.8214,118.4024 C306.082,124.1506 300.9317,123.9509 297.6827,118.9296 C294.7649,124.9679 289.8755,125.0209 285.923,120.0331 C283.1928,126.0768 277.3061,126.6327 273.1505,121.6904 C268.4638,126.8842 263.7138,125.8685 260.3949,120.099 C256.9096,125.3041 252.5964,125.8699 248.7691,120.4741 C244.8752,125.6135 238.8024,125.603 236.1732,119.1053 C232.5295,123.7743 226.4668,124.3115 224.2717,117.5914 C214.8061,116.3725 210.9044,111.0376 216.5837,102.236 C211.3691,93.4396 213.7982,87.5831 224.3257,86.5626" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83.6582" x="230.11" y="106.2869">Shared Edge</text>
+</g>
+<!--link payload_txt to action.step-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="6" id="lnk4">
+<path d="M105.47,47.9617 C141.8,40.5017 185.0925,31.6179 220.3725,24.3779" fill="none" id="payload_txt-to-action.step" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="226.25,23.1717,216.6296,21.0626,221.3521,24.1768,218.2378,28.8993,226.25,23.1717" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="39.3618" x="140.61" y="28.6301">enters</text>
+</g>
+<!--link payload_txt to edge_cloud-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="dependency" data-source-line="9" id="lnk6">
+<path d="M105.57,68.0217 C115.35,70.0117 125.55,72.0817 135.11,74.0017 C161.27,79.2617 184.3945,83.8752 208.8645,88.7252" fill="none" id="payload_txt-to-edge_cloud" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="214.75,89.8917,206.6994,84.2183,209.8454,88.9196,205.1441,92.0656,214.75,89.8917" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="48.1914" x="136.11" y="70.5701">exports</text>
+</g>
+</g></svg>
