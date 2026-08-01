@@ -88,7 +88,7 @@ pub struct AcceptedHeldOut {
     pub golden: PathBuf,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum Verdict {
     Accepted,
     Rejected,
@@ -465,7 +465,7 @@ fn validate_review_declared_evidence(
                     continue;
                 }
             }
-            if may_select_positive_evidence && positive {
+            if review.verdict == Verdict::Accepted && positive {
                 let heldout = AcceptedHeldOut {
                     mechanism: review.mechanism.clone(),
                     review_path: review.path.clone(),
@@ -486,7 +486,9 @@ fn validate_review_declared_evidence(
                     "Java SVG",
                     &mut report.violations,
                 );
-                report.accepted_heldouts.insert(heldout);
+                if may_select_positive_evidence {
+                    report.accepted_heldouts.insert(heldout);
+                }
             }
             if !java_exit_valid {
                 continue;
@@ -1916,12 +1918,14 @@ mod tests {
         assert!(normalize_verdict(Some(&json!("accepted_later"))).is_err());
         assert!(normalize_verdict(Some(&json!("rejected_with_counterexamples"))).is_err());
         assert!(normalize_verdict(Some(&json!("failed"))).is_err());
-        assert!(normalize_verdict(Some(&json!({
-            "status": "ACCEPT",
-            "verdict": "REJECT"
-        })))
-        .unwrap_err()
-        .contains("conflicting verdict aliases"));
+        assert!(
+            normalize_verdict(Some(&json!({
+                "status": "ACCEPT",
+                "verdict": "REJECT"
+            })))
+            .unwrap_err()
+            .contains("conflicting verdict aliases")
+        );
     }
 
     #[test]
