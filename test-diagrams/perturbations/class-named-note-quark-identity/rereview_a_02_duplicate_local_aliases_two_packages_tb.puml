@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+package NoteQuarkReviewWestA {
+  class NoteQuarkReviewWestLeafA
+  note "west local body 8521" as SharedReviewMemoA
+  SharedReviewMemoA .. NoteQuarkReviewWestLeafA
+}
+package NoteQuarkReviewEastA {
+  class NoteQuarkReviewEastLeafA
+  note "east local body 8523" as SharedReviewMemoA
+  SharedReviewMemoA .. NoteQuarkReviewEastLeafA
+}
+@enduml

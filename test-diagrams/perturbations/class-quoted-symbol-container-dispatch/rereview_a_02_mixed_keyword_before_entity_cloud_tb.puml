@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+FrAmE "Dispatch Review Frame A" {
+  EnTiTy DispatchReviewContractA {
+    +operationA()
+  }
+  InTeRfAcE DispatchReviewPortA
+}
+@enduml

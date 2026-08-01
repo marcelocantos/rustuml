@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontSize 13
+class LinkDimReviewNorthA
+class LinkDimReviewSouthA
+LinkDimReviewNorthA -down-> LinkDimReviewSouthA : <size:16>wide label Wwm 8221</size> tail xx 8223
+note top on link : tiny xi 8225
+@enduml

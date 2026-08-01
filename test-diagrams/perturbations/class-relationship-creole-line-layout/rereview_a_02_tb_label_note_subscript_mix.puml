@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontName Arial
+class CreoleReviewTopA
+class CreoleReviewBottomA
+CreoleReviewTopA -down-> CreoleReviewBottomA : base <sub>lowA</sub> <sup>highA</sup> 8821
+note right on link : note beside creole label 8823
+@enduml

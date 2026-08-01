@@ -1,0 +1,11 @@
+@startuml
+package DirectReviewOuterA {
+  class DirectReviewOuterOneA
+  class DirectReviewOuterTwoA
+  package DirectReviewChildA {
+    class DirectReviewChildOneA
+    class DirectReviewChildTwoA
+    class DirectReviewChildThreeA
+  }
+}
+@enduml

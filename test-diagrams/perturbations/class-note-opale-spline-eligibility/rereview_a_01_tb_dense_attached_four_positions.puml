@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+class OpaleReviewNorthA
+class OpaleReviewWestA
+class OpaleReviewCoreA
+class OpaleReviewEastA
+class OpaleReviewSouthA
+class OpaleReviewTailA
+OpaleReviewNorthA --> OpaleReviewCoreA
+OpaleReviewWestA --> OpaleReviewCoreA
+OpaleReviewCoreA --> OpaleReviewSouthA
+OpaleReviewEastA --> OpaleReviewTailA
+OpaleReviewCoreA --> OpaleReviewTailA
+note left of OpaleReviewCoreA : dense left opale 8611
+note right of OpaleReviewCoreA : dense right opale 8613
+note top of OpaleReviewCoreA : dense top opale 8615
+note bottom of OpaleReviewCoreA : dense bottom opale 8617
+@enduml

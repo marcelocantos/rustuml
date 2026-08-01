@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-attached-note-rankdir-position",
+  "evidence_kind": "parity",
+  "reviewed_at": "2026-08-01",
+  "verdict": "ACCEPT",
+  "verdict_reason": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+  "maker": {
+    "identity": "Prior T14 implementation history for class-attached-note-rankdir-position at shipped Rust revision cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "task_id": "rustuml-t14-maker-history-class-attached-note-rankdir-position",
+    "role": "Historical maker side derived from preserved implementation commits; distinct from the independent rereview checker.",
+    "implementation_commits": [
+      "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d"
+    ]
+  },
+  "checker": {
+    "identity": "Codex GPT-5 independent T14 rereview A checker",
+    "task_id": "codex-t14-rereview-a-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; Java PlantUML JAR; shipped diff_one binary",
+    "role": "Independent skeptical checker; did not implement the audited mechanisms; did not edit shipping code, accounts, quarantines, frozen controls, comparator, or baselines; did not run Cargo or rustc.",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "85513d6429cf7dfe88e554b31737bd37e79ac704",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "rust_implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_precedes_implementation": true,
+    "account_precedence_command": "git merge-base --is-ancestor 85513d6429cf7dfe88e554b31737bd37e79ac704 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_binary": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "checker_worktree": "/private/tmp/rustuml-t14-rereview-a",
+    "mechanism_implementation_commits": [
+      "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d"
+    ]
+  },
+  "account_revision": "85513d6429cf7dfe88e554b31737bd37e79ac704",
+  "implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "prior_records_inspected": [
+    "docs/parity-reviews/class-attached-note-rankdir-position/quarantined-review.json"
+  ],
+  "commands": [
+    "jq . docs/parity-reviews/class-attached-note-rankdir-position/account.json",
+    "find docs/parity-reviews/class-attached-note-rankdir-position -maxdepth 1 -type f | sort",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,275p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '260,330p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '705,800p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2520,2608p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14645,14795p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '735,830p'",
+    "git merge-base --is-ancestor 85513d6429cf7dfe88e554b31737bd37e79ac704 cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_*.puml",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type|Welcome to PlantUML|Not known:' test-diagrams/perturbations/... -g 'rereview_a_*.svg'"
+  ],
+  "source_inspection": [
+    {
+      "area": "Java model named by account",
+      "locations": [
+        "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java:executeInternal",
+        "src/main/java/net/sourceforge/plantuml/utils/Position.java:withRankdir",
+        "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java:addLine",
+        "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:rankSame"
+      ],
+      "finding": "Java CommandFactoryNoteOnEntity applies Position.withRankdir before constructing the note Link; Rust has attached_note_layout_position and uses it before adding SVEK edges. The inspected model is direction-based, not fixture-label based."
+    },
+    {
+      "area": "Rust shipped-path model named by account",
+      "locations": [
+        "crates/rustuml-parser/src/diagram/class.rs::NotePosition",
+        "crates/rustuml-render/src/class.rs::render_with_oracle_uid_origin",
+        "crates/rustuml-render/src/class.rs::render_plantuml_svg",
+        "crates/rustuml-render/src/class.rs::render_svek_note_emission"
+      ],
+      "finding": "Java CommandFactoryNoteOnEntity applies Position.withRankdir before constructing the note Link; Rust has attached_note_layout_position and uses it before adding SVEK edges. The inspected model is direction-based, not fixture-label based."
+    }
+  ],
+  "prohibited_pattern_audit": {
+    "result": "PASS",
+    "finding": "Inspected account-named model locations for fixture label branches, golden reads, coordinate-keyed SVG surgery, per-fixture constants, and unexplained parity constants. No such pattern was needed to explain the accepted mechanisms; quoted-symbol dispatch is rejected on behavioral evidence rather than accepted."
+  },
+  "perturbations": [
+    {
+      "name": "rereview_a_01_lr_nested_rotated_positions",
+      "source": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "left-to-right rank direction",
+        "nested package-owned target",
+        "all four attached note source positions"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.puml"
+      ]
+    },
+    {
+      "name": "rereview_a_02_tb_reordered_root_positions",
+      "source": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "top-to-bottom rank direction",
+        "root target ownership",
+        "interleaved declaration order"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.puml"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "none_found",
+      "summary": "ACCEPT. Source inspection did not find fixture-shaped logic or an unexplained constant in the inspected model path, Java rendered both fresh heldouts successfully, and every fresh heldout matched exactly through the shipped diff_one --no-oracle path.",
+      "evidence": [
+        "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_01_lr_nested_rotated_positions.puml: java_exit=0, rust_exit=0, diff_exit=0",
+        "test-diagrams/perturbations/class-attached-note-rankdir-position/rereview_a_02_tb_reordered_root_positions.puml: java_exit=0, rust_exit=0, diff_exit=0"
+      ]
+    }
+  ],
+  "attestation": {
+    "evidence_kind": "parity",
+    "accepted_java_success_heldouts": 2,
+    "failed_java_success_heldouts": 0,
+    "all_java_exits_zero": true,
+    "all_rust_render_exits_zero": true,
+    "all_diff_exits_zero": true,
+    "cargo_or_rustc_invoked": false,
+    "shipping_code_edited": false,
+    "accounts_or_quarantines_edited": false,
+    "frozen_controls_edited": false
+  },
+  "residue": "This review validates the named heldout matrix and inspected model paths only. It does not claim global class-diagram parity outside the generated axes."
+}

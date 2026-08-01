@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-symbol-container-dispatch",
+  "evidence_kind": "parity",
+  "reviewed_at": "2026-08-01",
+  "verdict": "REJECT",
+  "verdict_reason": "REJECT. A fresh Java-success heldout with allowmixing, a quoted node container, and uppercase DATABASE diverges on the shipped no-oracle path: Java renders DispatchReviewStoreA as a database/cylinder with width 497px while Rust renders it as a class rectangle with width 509px. The preserved diff_one --no-oracle result exits 1, so the mechanism is rejected by the requested rule.",
+  "maker": {
+    "identity": "Prior T14 implementation history for class-quoted-symbol-container-dispatch at shipped Rust revision cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "task_id": "rustuml-t14-maker-history-class-quoted-symbol-container-dispatch",
+    "role": "Historical maker side derived from preserved implementation commits; distinct from the independent rereview checker.",
+    "implementation_commits": [
+      "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+      "40394d6771f600ce520b3adc6267049e7c5f1155"
+    ]
+  },
+  "checker": {
+    "identity": "Codex GPT-5 independent T14 rereview A checker",
+    "task_id": "codex-t14-rereview-a-2026-08-01",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop exec_command/apply_patch; Java PlantUML JAR; shipped diff_one binary",
+    "role": "Independent skeptical checker; did not implement the audited mechanisms; did not edit shipping code, accounts, quarantines, frozen controls, comparator, or baselines; did not run Cargo or rustc.",
+    "implemented_mechanism": false
+  },
+  "revisions": {
+    "account_commit": "6ffe53bbd0b1fcae5eade40d41577af48f7555da",
+    "implementation_commit": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "rust_implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_precedes_implementation": true,
+    "account_precedence_command": "git merge-base --is-ancestor 6ffe53bbd0b1fcae5eade40d41577af48f7555da cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java_repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_binary": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+    "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "checker_worktree": "/private/tmp/rustuml-t14-rereview-a",
+    "mechanism_implementation_commits": [
+      "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+      "40394d6771f600ce520b3adc6267049e7c5f1155"
+    ]
+  },
+  "account_revision": "6ffe53bbd0b1fcae5eade40d41577af48f7555da",
+  "implementation_revision": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "prior_records_inspected": [
+    "docs/parity-reviews/class-quoted-symbol-container-dispatch/quarantined-review-followup-4.json",
+    "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-rejected-16ce5244.json",
+    "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-rejected-4467575c.json",
+    "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-rejected-69d166ec.json",
+    "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-rejected-70faf074.json"
+  ],
+  "commands": [
+    "jq . docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
+    "find docs/parity-reviews/class-quoted-symbol-container-dispatch -maxdepth 1 -type f | sort",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,275p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '260,330p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '705,800p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2520,2608p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '14645,14795p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '735,830p'",
+    "git merge-base --is-ancestor 6ffe53bbd0b1fcae5eade40d41577af48f7555da cc5bda77bb0e0d79b59170db3d26b93741de007d",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_*.puml",
+    "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_*.puml",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class |Assumed diagram type|Welcome to PlantUML|Not known:' test-diagrams/perturbations/... -g 'rereview_a_*.svg'"
+  ],
+  "source_inspection": [
+    {
+      "area": "Java model named by account",
+      "locations": [
+        "src/main/java/net/sourceforge/plantuml/core/DiagramType.java:69-88,195-199 DiagramType#findStartTypes/getTypes",
+        "src/main/java/net/sourceforge/plantuml/core/UmlSource.java:142-144 UmlSource#getDiagramTypes",
+        "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:128-197,203-255 PSystemBuilder constructor/createPSystem",
+        "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:74-109,135-195,218-235 PSystemCommandFactory#createSystem/executeFewLines/getCandidate/isMultilineCommandOk",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java:98-156 SequenceDiagramFactory#initCommandsList",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java:79-84 CommandParticipant#getRegexType",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java:52-69 CommandParticipantA#getRegexConcat",
+        "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:100-171 ClassDiagramFactory#initCommandsList",
+        "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:80-110 CommandCreateClass#getRegexConcat",
+        "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClassMultilines.java:91-130,142-230 CommandCreateClassMultilines constructor/getRegexConcat/executeNow",
+        "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-129,135-178 CommandPackageWithUSymbol#getRegexConcat/executeArg",
+        "src/main/java/net/sourceforge/plantuml/command/CommandEndPackage.java:45-64 CommandEndPackage#getRegexConcat/executeArg",
+        "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138 DescriptionDiagramFactory#initCommandsList",
+        "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:73-138 CommandCreateElementFull#ALL_TYPES/getRegexConcat",
+        "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java:69-167 CommandCreateElementFull2#getRegexConcat/executeArg",
+        "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java:92-118 Pattern2#compileInternal"
+      ],
+      "finding": "Java command regexes are case-insensitive and class-vs-description selection depends on factory viability, allowmixing, and shared quoted containers. Rust detect_uml_subtype contains case-folded mixed-only keyword detection, but the fresh allowmixing/database heldout still diverges on the rendered element model."
+    },
+    {
+      "area": "Rust shipped-path model named by account",
+      "locations": [
+        "crates/rustuml-parser/src/parse/mod.rs:317-883 detect_uml_subtype",
+        "crates/rustuml-parser/src/parse/mod.rs:465-527 quoted/deployment container evidence",
+        "crates/rustuml-parser/src/parse/mod.rs:612-670 class declaration evidence",
+        "crates/rustuml-parser/src/parse/mod.rs:751-822 quoted-container promotion and tie-breaks",
+        "crates/rustuml-parser/src/parse/mod.rs:1141-1218 parse_with_base subtype-to-parser dispatch",
+        "crates/rustuml-parser/src/parse/class.rs:524-701 ClassParser#parse_line",
+        "crates/rustuml-parser/src/parse/class.rs:704-880 ClassParser#try_entity_decl",
+        "crates/rustuml-parser/src/parse/class.rs:1246-1393 ClassParser#try_package",
+        "crates/rustuml-parser/src/parse/deployment.rs:15-37 DEPLOYMENT_KEYWORDS",
+        "crates/rustuml-parser/src/parse/deployment.rs:415-429 RE_NODE_BARE/RE_NODE_QUOTED",
+        "crates/rustuml-parser/src/parse/deployment.rs:725-791 deployment node/container parsing"
+      ],
+      "finding": "Java command regexes are case-insensitive and class-vs-description selection depends on factory viability, allowmixing, and shared quoted containers. Rust detect_uml_subtype contains case-folded mixed-only keyword detection, but the fresh allowmixing/database heldout still diverges on the rendered element model."
+    }
+  ],
+  "prohibited_pattern_audit": {
+    "result": "REJECTING counterexample found before any acceptance claim",
+    "finding": "Inspected account-named model locations for fixture label branches, golden reads, coordinate-keyed SVG surgery, per-fixture constants, and unexplained parity constants. No such pattern was needed to explain the accepted mechanisms; quoted-symbol dispatch is rejected on behavioral evidence rather than accepted."
+  },
+  "perturbations": [
+    {
+      "name": "rereview_a_01_mixed_case_allowmixing_shared_node_lr",
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.diff.stderr",
+      "diff_exit": 1,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "axes": [
+        "allowmixing before mixed-only leaf",
+        "uppercase mixed keyword",
+        "quoted shared node container",
+        "left-to-right direction"
+      ],
+      "result": "FAIL: diff_one --no-oracle exited nonzero; Java-success heldout diverges on the shipped no-oracle path.",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.puml"
+      ]
+    },
+    {
+      "name": "rereview_a_02_mixed_keyword_before_entity_cloud_tb",
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.svg",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.java.exit",
+      "java_stdout": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.java.stdout",
+      "java_stderr": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.java.stderr",
+      "rust_svg": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.rust.svg",
+      "rust_exit": 0,
+      "rust_exit_artifact": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.rust.exit",
+      "rust_stderr": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.rust.stderr",
+      "diff_output": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.diff.txt",
+      "diff_stderr": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.diff.stderr",
+      "diff_exit": 0,
+      "diff_exit_artifact": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "axes": [
+        "mixed-case class-native keywords",
+        "quoted shared frame container",
+        "top-to-bottom direction",
+        "entity body plus interface leaf"
+      ],
+      "result": "PASS: diff_one --no-oracle exact structural match (exit 0).",
+      "commands": [
+        "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.puml",
+        "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.puml"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "blocking",
+      "summary": "REJECT. A fresh Java-success heldout with allowmixing, a quoted node container, and uppercase DATABASE diverges on the shipped no-oracle path: Java renders DispatchReviewStoreA as a database/cylinder with width 497px while Rust renders it as a class rectangle with width 509px. The preserved diff_one --no-oracle result exits 1, so the mechanism is rejected by the requested rule.",
+      "evidence": [
+        "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_01_mixed_case_allowmixing_shared_node_lr.puml: java_exit=0, rust_exit=0, diff_exit=1",
+        "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/rereview_a_02_mixed_keyword_before_entity_cloud_tb.puml: java_exit=0, rust_exit=0, diff_exit=0"
+      ]
+    }
+  ],
+  "attestation": {
+    "evidence_kind": "parity",
+    "accepted_java_success_heldouts": 1,
+    "failed_java_success_heldouts": 1,
+    "all_java_exits_zero": true,
+    "all_rust_render_exits_zero": true,
+    "all_diff_exits_zero": false,
+    "cargo_or_rustc_invoked": false,
+    "shipping_code_edited": false,
+    "accounts_or_quarantines_edited": false,
+    "frozen_controls_edited": false
+  },
+  "residue": "This review validates the named heldout matrix and inspected model paths only. It does not claim global class-diagram parity outside the generated axes."
+}
