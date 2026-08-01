@@ -1,0 +1,259 @@
+{
+  "schema_version": 2,
+  "evidence_kind": "parity",
+  "mechanism": "class-dot-ortho-er-migration",
+  "account": "docs/parity-reviews/class-dot-ortho-er-migration/account.json",
+  "review_record": "docs/parity-reviews/class-dot-ortho-er-migration/review-2.json",
+  "reviewed_at": "2026-08-01T21:39:04+10:00",
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, frozen prebuilt diff_one candidate",
+    "independence": "Did not implement c3191b5f or 565efee5. Did not edit shipping code, accounts, comparator, baselines, park lists, syntax-error markers, or allow-lists. Added only checker perturbation evidence plus this review record in /private/tmp/rustuml-t14-ortho-review2."
+  },
+  "revisions": {
+    "account_commit": "ad17697d",
+    "implementation_commit": "c3191b5f",
+    "successor_context_commit": "565efee5",
+    "prior_rejected_review_commit": "ffa3f0d8",
+    "prior_rejected_review": "docs/parity-reviews/class-dot-ortho-er-migration/review.json",
+    "evaluated_rust_revision": "858464bf11dd0d563cef4b27582e50338ceaf642",
+    "evaluated_rust_tree": "f9b098cf7271197fe24644fccda266f30b0306aa",
+    "checker_worktree_path": "/private/tmp/rustuml-t14-ortho-review2",
+    "checker_worktree_branch": "codex/t14-ortho-xlabel-review-v2",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "comparator": {
+    "path": "/private/tmp/rustuml-t14-ortho/target/release/examples/diff_one",
+    "sha256": "5c74b1f5006104b39f4afe323f7f048e8dfd2c927bc09badfe617711a7ba0c77",
+    "mode": "--no-oracle",
+    "rebuilt": false,
+    "cargo_or_rustc_run": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "reported_version": "PlantUML version 1.2026.3beta6 / 71806a2 [2026-06-18 16:03:22 UTC]",
+    "java_worktree_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_dirty_note": "Only CLAUDE.md was dirty in the Java checkout; Java source files and the pinned JAR were not edited."
+  },
+  "commands": [
+    "cat AGENTS.md",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "git show --stat --oneline c3191b5f",
+    "git show --stat --oneline 565efee5",
+    "git diff ad17697d..c3191b5f -- crates/rustuml-layout/build.rs crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs",
+    "git diff 65a957c0..565efee5 -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs vendor/graphviz/lib/rustuml_helpers.c vendor/graphviz/lib/rustuml_helpers.h",
+    "rg -n \"getDotSplines|DotSplines\" src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "rg -n \"splines=|forcelabels|DotSplines|appendLine|xlabel|taillabel|headlabel|manageCollision\" src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "rg -n \"EDGETYPE_ORTHO|orthoEdges|#ifdef ORTHO|xlabel|xlp|placeLabels|addXLabel\" vendor/graphviz/lib/dotgen/dotsplines.c vendor/graphviz/lib/ortho/ortho.c vendor/graphviz/lib/common/postproc.c vendor/graphviz/lib/rustuml_helpers.c vendor/graphviz/lib/rustuml_helpers.h",
+    "rg -n \"SplineRouting|xlabel_key|forcelabels|edge_label_position|ED_xlabel|synthesize_ortho|ORTHO_XLABEL|linetype|include_str|golden|perturbations|fixture|review_\" crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs crates/rustuml-layout/build.rs vendor/graphviz/lib/rustuml_helpers.c vendor/graphviz/lib/rustuml_helpers.h",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <review2 input>",
+    "/private/tmp/rustuml-t14-ortho/target/release/examples/diff_one --no-oracle --print-rust <review2 input>",
+    "/private/tmp/rustuml-t14-ortho/target/release/examples/diff_one --no-oracle <review2 input>",
+    "rg -n \"RouteHub101|ReviewOuter201|Shipment307|LedgerShelf401|ResetSource503|LabelHub601|NoteAnchor701|Account809|XLabelOuter901|LabelReset1009\" test-diagrams/golden docs/parity-reviews",
+    "find test-diagrams/perturbations/class-dot-ortho-er-migration test-diagrams/perturbations/class-ortho-external-label-placement -maxdepth 1 -name 'review2_*.svg' -print0 | xargs -0 xmllint --noout",
+    "shasum -a 256 /private/tmp/rustuml-t14-ortho/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "find test-diagrams/perturbations/class-dot-ortho-er-migration test-diagrams/perturbations/class-ortho-external-label-placement -maxdepth 1 -name 'review2_*' -type f | sort | xargs shasum -a 256"
+  ],
+  "source_inspection": {
+    "java": [
+      "SkinParam.getDotSplines maps effective linetype polyline/ortho to DotSplines.POLYLINE/DotSplines.ORTHO.",
+      "DotStringFactory.createDotString serializes splines=ortho and forcelabels=true for DotSplines.ORTHO before SVEK edges are emitted.",
+      "SvekEdge.appendLine sends center label/note blocks through xlabel under DotSplines.ORTHO while preserving taillabel/headlabel channels.",
+      "DotStringFactory.solve then calls alignEdgesAtLabelNodes for ORTHO before manageCollision, so the Java ORTHO surface includes a post-solve label-node alignment hook in addition to Graphviz routing.",
+      "Vendored Graphviz dispatches EDGETYPE_ORTHO through orthoEdges only when ORTHO is compiled."
+    ],
+    "rust": [
+      "crates/rustuml-layout/build.rs defines ORTHO for the vendored Graphviz build.",
+      "crates/rustuml-layout/src/graph.rs models SplineRouting::Ortho, serializes splines=ortho and forcelabels=true, maps center label sizes to xlabel for ORTHO, and reads ED_xlabel through edge_label_position kind 3.",
+      "crates/rustuml-render/src/class.rs selects SplineRouting::Ortho from the latest case-insensitive linetype value and no longer calls synthesize_ortho_edge_labels.",
+      "vendor/graphviz/lib/rustuml_helpers.c exposes ED_xlabel through rustuml_edge_label_box kind 3.",
+      "No Rust analogue for Java DotStringFactory.alignEdgesAtLabelNodes was found in the inspected renderer/layout paths."
+    ],
+    "fixture_shape_review": "Implementation diffs c3191b5f and 565efee5 contain no held-out names, corpus directory branches, golden/perturbation reads, include_str/include_bytes fixture embedding, or post-hoc SVG coordinate surgery in the touched production paths. The old ORTHO_ER_VERTICAL_ROUTE_DELTAS constant was removed rather than expanded.",
+    "freshness": "The fresh review2 identifiers were absent from test-diagrams/golden and docs/parity-reviews before considering the newly generated artifacts."
+  },
+  "fresh_perturbations": [
+    {
+      "name": "review2_class_lr_last_ortho_fanout",
+      "source": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.puml",
+        "sha256": "14a21ca5962f0e9ab0d030c01d86309c3722ef34a17529cde77bc50bdaf4747c"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.svg",
+        "svg_sha256": "28058fc7168f486279fd573845fa969bf06da8fa7fdbbb4546842af2021fb944",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.java.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.rust.svg",
+        "svg_sha256": "8625f0e2812e332bc204817c98d3757b499247c892c203fe0aa385218fb8c827",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_lr_last_ortho_fanout.diff.stderr"
+      },
+      "axes": ["ordinary Class", "left-to-right direction", "linetype spline then mixed-case ortho", "fanout and chain topology", "center and endpoint labels", "renamed identifiers"],
+      "result": "pass"
+    },
+    {
+      "name": "review2_class_nested_tb_package_note",
+      "source": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.puml",
+        "sha256": "b27f9b9a219274b31c7b1441bfa7ccfb4be905e2c915d54359f62b93f841f05c"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.svg",
+        "svg_sha256": "9b887d74428de29dd3d72204cc7eb6b083a76ee48a8bde7686d2fed8ae725de4",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.java.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.rust.svg",
+        "svg_sha256": "272e407a63ec5d1b9feb806f5acc26066733a904f3df06f0cc2b4c4211b2ac3e",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.diff.txt",
+        "sha256": "b0fc465ecf4393d302acb19b4a56961408c02f896e9365b79efa3f3079cbd1f8",
+        "exit": 1,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_nested_tb_package_note.diff.stderr"
+      },
+      "axes": ["ordinary Class", "top-to-bottom direction", "nested packages", "package endpoint relationship", "aggregation and inheritance decorations", "link-note composite label", "uppercase linetype", "renamed identifiers"],
+      "result": "fail",
+      "finding": "Java succeeds and Rust succeeds, but strict diff is nonzero. The canvas is 571x335 in Java versus 576x334 in Rust; package envelopes, class boxes, routes, center labels, and the note polygon are shifted by about +5px on X with small Y/height residue. This disproves exact parity for the claimed nested-package/link-note ORTHO migration surface."
+    },
+    {
+      "name": "review2_class_tb_last_spline_control",
+      "source": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.puml",
+        "sha256": "249365ad41476b17c9ac281b897413d6b1d2159c91124a03436f9b9265915c1d"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.svg",
+        "svg_sha256": "5e2abaa90af27fb58d0ae8f4bb04b1f28adb4ee89e5485da215277a6a9ba6b6d",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.java.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.rust.svg",
+        "svg_sha256": "ee629a377ff3422a2213381aff8d27882693fb99fa770610884573c9946cc970",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_class_tb_last_spline_control.diff.stderr"
+      },
+      "axes": ["ordinary Class", "top-to-bottom direction", "linetype ortho then spline", "last declaration resets away from ORTHO", "renamed identifiers"],
+      "result": "pass"
+    },
+    {
+      "name": "review2_er_lr_nested_package_order",
+      "source": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.puml",
+        "sha256": "59315e59a8ec955f604e21ea66ec5bbc80c04f8ff9ea8ba5bdbdf6357a2a4cb1"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.svg",
+        "svg_sha256": "43d3cc4453abbb0f8281d7c3b02947bc9ebb192cdf70ce0b1fa8decb3934e507",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.java.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.rust.svg",
+        "svg_sha256": "bf5543e8f76e9ad9246fc158d757bff440d8fc851490b5f072f02a18c1df8f16",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_lr_nested_package_order.diff.stderr"
+      },
+      "axes": ["ER crow-foot", "left-to-right direction", "nested package", "declaration order differs from relationship order", "linetype spline then mixed-case ortho", "renamed identifiers"],
+      "result": "pass"
+    },
+    {
+      "name": "review2_er_tb_crowfoot_reordered",
+      "source": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.puml",
+        "sha256": "57fde099a10f1c4d14e9b7d3ffed3f21f1c87c0820867c264f2d71bf0554cd57"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.svg",
+        "svg_sha256": "b973bc75cef0ede6d72cd1fed91e26c637248c07375c1e5c2d08475a2c47df54",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.java.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.rust.svg",
+        "svg_sha256": "05d7dff6501496440813b40536297cb562bdec6df36bccf767f03404bd029448",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-dot-ortho-er-migration/review2_er_tb_crowfoot_reordered.diff.stderr"
+      },
+      "axes": ["ER crow-foot", "top-to-bottom direction", "linetype polyline then ortho", "declaration order differs from topology", "multiple endpoint decorations", "renamed identifiers"],
+      "result": "pass"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 5,
+    "fresh_valid_java_success": 5,
+    "fresh_java_syntax_errors": 0,
+    "rust_success": 5,
+    "strict_passes": 4,
+    "strict_failures": 1
+  },
+  "findings": [
+    {
+      "severity": "supporting",
+      "summary": "The graph-level ORTHO selector is now real rather than synthetic for several heldouts.",
+      "evidence": "The fresh LR Class fanout, TB last-spline control, LR nested ER, and TB reordered ER heldouts all pass strict no-oracle comparison. This supports the linetype precedence, ORTHO Graphviz routing, and ER route-delta removal parts of the account at the evaluated revision."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "A fresh nested package plus link-note Class heldout still differs byte/structure-wise from Java.",
+      "evidence": "review2_class_nested_tb_package_note has java_exit=0, rust_exit=0, diff_exit=1. The diff shows a 571x335 Java canvas versus a 576x334 Rust canvas, with package envelopes, class boxes, routes, labels, and the note polygon shifted by about +5px on X. This is within the claimed axes of nested clusters, relationship labels, and link-note relationships."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped implementation logic was found.",
+      "evidence": "Searches of the implementation diffs found no heldout labels, fixture paths, golden reads, include_str/include_bytes uses, corpus-directory switches, or output surgery. The rejection is an incomplete model surface, not evidence of fixture-name overfitting."
+    }
+  ],
+  "verdict": "REJECTED",
+  "result": "reject",
+  "verdict_reason": "REJECTED. The current candidate substantially repairs the earlier ORTHO routing rejection, including ordinary Class and ER heldouts, but a fresh Java-success nested package/link-note Class perturbation still fails strict no-oracle comparison. Under the strengthened T14 rule, any fresh valid nonzero diff rejects the mechanism; the route/xlabel model is not yet complete for the claimed nested package and link-note surface."
+}

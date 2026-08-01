@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+hide empty members
+
+class LabelHub601
+class LabelNorth607
+class LabelSouth611
+class LabelEast613
+class LabelWest617
+
+LabelHub601 "tail one" -- "head one" LabelNorth607 : primary center label
+LabelHub601 -- LabelSouth611 : secondary center label
+LabelNorth607 -- LabelEast613 : crossing label lane
+LabelSouth611 -- LabelWest617 : opposite label lane
+LabelWest617 <|-- LabelEast613
+@enduml

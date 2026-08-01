@@ -1,0 +1,23 @@
+@startuml
+top to bottom direction
+skinparam linetype ORTHO
+hide empty members
+
+package ReviewOuter201 {
+  class AlphaNode203
+  package ReviewInner205 {
+    class BetaNode207
+    class GammaNode211
+  }
+  class DeltaNode223
+}
+class RootNode227
+
+RootNode227 -- ReviewOuter201 : package edge label
+BetaNode207 "tail marker" -- "head marker" RootNode227 : nested center label
+AlphaNode203 o-- DeltaNode223 : aggregate route
+GammaNode211 <|-- BetaNode207
+note on link
+  nested note checks ortho label routing
+end note
+@enduml

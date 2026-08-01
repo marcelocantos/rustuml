@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+skinparam linetype ortho
+skinparam linetype spline
+hide empty members
+
+class ResetSource503
+class ResetLeft509
+class ResetRight521
+class ResetSink523
+
+ResetSource503 -- ResetLeft509 : left reset label
+ResetSource503 -- ResetRight521 : right reset label
+ResetLeft509 -- ResetSink523 : left sink label
+ResetRight521 -- ResetSink523 : right sink label
+@enduml

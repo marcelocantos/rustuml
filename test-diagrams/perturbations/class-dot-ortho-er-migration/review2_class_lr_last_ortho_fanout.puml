@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam linetype spline
+skinparam linetype OrThO
+hide empty members
+
+class RouteHub101
+class IntakeNode103
+class AuditNode107
+class ArchiveNode109
+class ResultNode113
+class EscalationNode127
+
+RouteHub101 "owner side" -- "intake side" IntakeNode103 : dispatch lane label
+RouteHub101 -- AuditNode107 : audit lane label
+IntakeNode103 -- ArchiveNode109 : archive handoff
+AuditNode107 -- ResultNode113 : result lane label
+ArchiveNode109 <|-- ResultNode113
+EscalationNode127 o-- ResultNode113 : escalation aggregate
+@enduml

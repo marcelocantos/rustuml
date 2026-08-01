@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+skinparam linetype spline
+skinparam linetype OrThO
+hide empty members
+
+package LedgerShelf401 {
+  entity Payment409
+  package FulfilmentShelf403 {
+    entity Parcel407
+  }
+  entity Invoice405
+  entity Ledger411
+
+  Payment409 }o--|| Ledger411 : posts ledger
+  Invoice405 ||--o{ Payment409 : paid by
+  Payment409 ||--o{ Parcel407 : releases parcel
+}
+entity Customer413
+Customer413 ||--o{ Invoice405 : receives invoice
+@enduml

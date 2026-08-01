@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+skinparam linetype spline
+hide empty members
+
+class LabelReset1009
+class LabelResetPeer1013
+class LabelResetSink1019
+
+LabelReset1009 -- LabelResetPeer1013 : reset peer label
+LabelResetPeer1013 -- LabelResetSink1019 : reset sink label
+@enduml

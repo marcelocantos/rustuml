@@ -1,0 +1,253 @@
+{
+  "schema_version": 2,
+  "evidence_kind": "parity",
+  "mechanism": "class-ortho-external-label-placement",
+  "account": "docs/parity-reviews/class-ortho-external-label-placement/account.json",
+  "review_record": "docs/parity-reviews/class-ortho-external-label-placement/review.json",
+  "reviewed_at": "2026-08-01T21:39:04+10:00",
+  "reviewer": {
+    "identity": "independent skeptical checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, frozen prebuilt diff_one candidate",
+    "independence": "Did not implement 565efee5. Did not edit shipping code, accounts, comparator, baselines, park lists, syntax-error markers, or allow-lists. Added only checker perturbation evidence plus this review record in /private/tmp/rustuml-t14-ortho-review2."
+  },
+  "revisions": {
+    "account_commit": "65a957c0",
+    "implementation_commit": "565efee5",
+    "depends_on_mechanism": "class-dot-ortho-er-migration",
+    "evaluated_rust_revision": "858464bf11dd0d563cef4b27582e50338ceaf642",
+    "evaluated_rust_tree": "f9b098cf7271197fe24644fccda266f30b0306aa",
+    "checker_worktree_path": "/private/tmp/rustuml-t14-ortho-review2",
+    "checker_worktree_branch": "codex/t14-ortho-xlabel-review-v2",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "comparator": {
+    "path": "/private/tmp/rustuml-t14-ortho/target/release/examples/diff_one",
+    "sha256": "5c74b1f5006104b39f4afe323f7f048e8dfd2c927bc09badfe617711a7ba0c77",
+    "mode": "--no-oracle",
+    "rebuilt": false,
+    "cargo_or_rustc_run": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "reported_version": "PlantUML version 1.2026.3beta6 / 71806a2 [2026-06-18 16:03:22 UTC]",
+    "java_worktree_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_dirty_note": "Only CLAUDE.md was dirty in the Java checkout; Java source files and the pinned JAR were not edited."
+  },
+  "commands": [
+    "cat AGENTS.md",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "cat docs/parity-reviews/class-ortho-external-label-placement/account.json",
+    "git show --stat --oneline 565efee5",
+    "git diff 65a957c0..565efee5 -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs vendor/graphviz/lib/rustuml_helpers.c vendor/graphviz/lib/rustuml_helpers.h",
+    "rg -n \"splines=|forcelabels|DotSplines|appendLine|xlabel|taillabel|headlabel|manageCollision\" src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "rg -n \"addXLabel|placeLabels|edgeMidpoint|centerPt|ED_xlabel\" vendor/graphviz/lib/common/postproc.c vendor/graphviz/lib/dotgen/dotsplines.c vendor/graphviz/lib/ortho/ortho.c",
+    "rg -n \"SplineRouting|xlabel_key|forcelabels|edge_label_position|ED_xlabel|synthesize_ortho|ORTHO_XLABEL|linetype|include_str|golden|perturbations|fixture|review_\" crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs crates/rustuml-layout/build.rs vendor/graphviz/lib/rustuml_helpers.c vendor/graphviz/lib/rustuml_helpers.h",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg <review2 input>",
+    "/private/tmp/rustuml-t14-ortho/target/release/examples/diff_one --no-oracle --print-rust <review2 input>",
+    "/private/tmp/rustuml-t14-ortho/target/release/examples/diff_one --no-oracle <review2 input>",
+    "rg -n \"RouteHub101|ReviewOuter201|Shipment307|LedgerShelf401|ResetSource503|LabelHub601|NoteAnchor701|Account809|XLabelOuter901|LabelReset1009\" test-diagrams/golden docs/parity-reviews",
+    "find test-diagrams/perturbations/class-dot-ortho-er-migration test-diagrams/perturbations/class-ortho-external-label-placement -maxdepth 1 -name 'review2_*.svg' -print0 | xargs -0 xmllint --noout",
+    "shasum -a 256 /private/tmp/rustuml-t14-ortho/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "find test-diagrams/perturbations/class-dot-ortho-er-migration test-diagrams/perturbations/class-ortho-external-label-placement -maxdepth 1 -name 'review2_*' -type f | sort | xargs shasum -a 256"
+  ],
+  "source_inspection": {
+    "java": [
+      "SvekEdge.appendLine sends the same renderer-owned center label/note block through xlabel under DotSplines.ORTHO.",
+      "SvekEdge.appendTable truncates the fixed-size block dimensions to integer width/height before Graphviz sees the external label.",
+      "Graphviz postproc.addXLabels seeds edge xlabels from edgeMidpoint, runs placeLabels, and writes the solved center point back to ED_xlabel.",
+      "DotStringFactory.solve calls alignEdgesAtLabelNodes for ORTHO before manageCollision, which broadens the post-solve model beyond raw xlabel extraction."
+    ],
+    "rust": [
+      "crates/rustuml-render/src/class.rs now always passes relationship_center_layout size into LayoutGraph, including link-note composite center blocks.",
+      "crates/rustuml-layout/src/graph.rs maps center label sizes to xlabel for SplineRouting::Ortho and reads ED_xlabel through rustuml_edge_label_box kind 3.",
+      "crates/rustuml-render/src/class.rs renders relationship notes and label text from edge_path.label plus layout_x_bias/MARGIN.",
+      "svek_layout_x_bias includes edge label boxes and relationship geometry but has no special horizontal analogue of relationship_center_painted_min_y for note-bearing center blocks."
+    ],
+    "fixture_shape_review": "Implementation diff 565efee5 contains no held-out names, corpus directory branches, golden/perturbation reads, include_str/include_bytes fixture embedding, high-precision parity constants, or post-hoc SVG coordinate surgery in touched production paths.",
+    "freshness": "The fresh review2 identifiers were absent from test-diagrams/golden and docs/parity-reviews before considering the newly generated artifacts."
+  },
+  "fresh_perturbations": [
+    {
+      "name": "review2_xlabel_class_lr_crossing_endpoint",
+      "source": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.puml",
+        "sha256": "ce0e85b233804b94f67e5fb485632a649bebdfd137eac36bce244cb949668ece"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.svg",
+        "svg_sha256": "199b86c2766e7c1a60e1bf8b2095f6373d3b5587cb2af6b9697d57b0435f0e50",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.java.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.rust.svg",
+        "svg_sha256": "007ca325b16c486be1da5add62b5afee1c94f2fa205ba7b30cdec9a1064363e1",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_crossing_endpoint.diff.stderr"
+      },
+      "axes": ["ordinary Class", "left-to-right direction", "crossing/fanout topology", "center labels", "endpoint labels", "renamed identifiers"],
+      "result": "pass"
+    },
+    {
+      "name": "review2_xlabel_class_tb_link_note",
+      "source": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.puml",
+        "sha256": "dac530f1fc161f7c1c64e71258fc5282d41f873fcca4f860b220c03fa35b8bd9"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.svg",
+        "svg_sha256": "e148c704ab5d62fe1b7bef71daeae9d6c86ead9460d1c5b7e0b1368413cbf7c4",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.java.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.rust.svg",
+        "svg_sha256": "0f86c38d4a41a31c5aacc7538a594a90046d48527161da2b7894accca35e8d86",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.diff.txt",
+        "sha256": "cbbe2ec55beb7e5cd3b1be03817767a64b22de7328b7d84a0dbfc3af4ab584c2",
+        "exit": 1,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_tb_link_note.diff.stderr"
+      },
+      "axes": ["ordinary Class", "top-to-bottom direction", "link-note composite center block", "multiple ordinary labels", "aggregation decoration", "renamed identifiers"],
+      "result": "fail",
+      "finding": "Java succeeds and Rust succeeds, but strict diff is nonzero. The canvas is 382x238 in Java versus 387x237 in Rust; class boxes, paths, center labels, and the note polygon are shifted about +5px on X. This rejects the link-note composite portion of the external-xlabel claim."
+    },
+    {
+      "name": "review2_xlabel_er_tb_parallel",
+      "source": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.puml",
+        "sha256": "c41c24138f8d0d7a68d258fe019f2d5fcc91c6f7c59d78918718debfac4fcef6"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.svg",
+        "svg_sha256": "a6d0a93ced1087438e9c337c31036335b768fc43a39f13f60c0ce4a4e781bee3",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.java.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.rust.svg",
+        "svg_sha256": "527edd4d79d83af09aa614c0f1d35852b9c2e0330b46ee6cdad953099eaa8987",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_er_tb_parallel.diff.stderr"
+      },
+      "axes": ["ER crow-foot", "top-to-bottom direction", "parallel/fanout topology", "linetype polyline then ortho", "center labels", "renamed identifiers"],
+      "result": "pass"
+    },
+    {
+      "name": "review2_xlabel_package_lr_declaration_order",
+      "source": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.puml",
+        "sha256": "a67cf04bb069b1d14685cb59ca3a4837480469fa650a64402f3b0a303c5f8d6c"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.svg",
+        "svg_sha256": "87142b28f5e250608010464e2065fd9805db6becb38c8212d991837c1819cddf",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.java.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.rust.svg",
+        "svg_sha256": "bcb06664ade32d940d395cfe10f6adaac797079863a20e8fa190f44b58764389",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_package_lr_declaration_order.diff.stderr"
+      },
+      "axes": ["ordinary Class", "left-to-right direction", "nested package", "declaration order differs from relationship order", "endpoint labels", "center labels", "uppercase linetype"],
+      "result": "pass"
+    },
+    {
+      "name": "review2_xlabel_class_lr_last_spline_control",
+      "source": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.puml",
+        "sha256": "f4399ecc67db8fcdee33d80f1665401337f5ec56608d49c1585fb80cece663e5"
+      },
+      "java": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.svg",
+        "svg_sha256": "94e24989cab02925224bd5e3389a28e6df2c6f992381f41af646081e23c685c5",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.java.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.java.stderr"
+      },
+      "rust": {
+        "svg": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.rust.svg",
+        "svg_sha256": "dedf9990b3bbf63c2744e2ef593bb820a37161304ee24b1ea5824a72d87375ff",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.rust.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.rust.stderr"
+      },
+      "diff": {
+        "path": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.diff.txt",
+        "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "exit": 0,
+        "exit_file": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.diff.exit",
+        "stderr": "test-diagrams/perturbations/class-ortho-external-label-placement/review2_xlabel_class_lr_last_spline_control.diff.stderr"
+      },
+      "axes": ["ordinary Class", "left-to-right direction", "linetype ortho then spline", "last declaration resets away from ORTHO", "renamed identifiers"],
+      "result": "pass"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 5,
+    "fresh_valid_java_success": 5,
+    "fresh_java_syntax_errors": 0,
+    "rust_success": 5,
+    "strict_passes": 4,
+    "strict_failures": 1
+  },
+  "findings": [
+    {
+      "severity": "supporting",
+      "summary": "The external-xlabel channel works for several non-note surfaces.",
+      "evidence": "Fresh ordinary Class LR crossing/endpoint labels, ER TB parallel labels, nested package LR declaration-order labels, and the last-spline control all pass strict no-oracle comparison."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "A fresh link-note composite center block still differs from Java.",
+      "evidence": "review2_xlabel_class_tb_link_note has java_exit=0, rust_exit=0, diff_exit=1. The failure is a consistent +5px horizontal frontier/canvas shift across nodes, paths, labels, and the note polygon, with Rust canvas 387x237 versus Java 382x238. The account explicitly includes center text plus link-note composite center blocks, so this is rejecting evidence for the claimed invariant."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped shipping logic or unexplained production constants were found in 565efee5.",
+      "evidence": "The production diff replaces the synthetic midpoint heuristic with Graphviz xlabel serialization/extraction and removes ORTHO_XLABEL_VERTICAL_INSET. I found no heldout labels, fixture paths, output surgery, or golden reads in the touched paths."
+    }
+  ],
+  "verdict": "REJECTED",
+  "result": "reject",
+  "verdict_reason": "REJECTED. The implementation correctly moves ordinary ORTHO center labels through Graphviz xlabels in several fresh cases, but a fresh valid top-to-bottom link-note composite case fails strict comparison. Because T14 forbids mechanism-only waivers and any Java-success nonzero diff rejects, the external-label placement mechanism is incomplete."
+}

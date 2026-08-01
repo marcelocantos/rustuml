@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam linetype ORTHO
+hide empty members
+
+package XLabelOuter901 {
+  class LateDeclared917
+  package XLabelInner907 {
+    class InnerB911
+    class InnerA909
+  }
+  class EarlyDeclared903
+}
+class ExternalNode919
+
+InnerB911 -- ExternalNode919 : inner outbound label
+EarlyDeclared903 "early tail" -- "external head" ExternalNode919 : endpoint label route
+LateDeclared917 -- InnerA909 : local center label
+ExternalNode919 o-- LateDeclared917 : aggregate return label
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam linetype OrThO
+hide empty members
+
+class NoteAnchor701
+class NoteTarget703
+class NotePeer709
+class NoteSink719
+
+NoteAnchor701 -- NoteTarget703 : composite label
+note on link
+  external label note body
+end note
+NoteAnchor701 -- NotePeer709 : peer label
+NotePeer709 -- NoteSink719 : sink label
+NoteTarget703 o-- NoteSink719 : aggregate label
+@enduml

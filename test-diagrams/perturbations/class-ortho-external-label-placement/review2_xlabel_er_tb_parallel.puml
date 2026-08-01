@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam linetype polyline
+skinparam linetype ortho
+hide empty members
+
+entity Account809
+entity Booking811
+entity Ticket821
+entity Segment823
+entity Audit827
+
+Account809 ||--o{ Booking811 : creates booking
+Booking811 ||--|{ Ticket821 : owns ticket
+Booking811 ||--o{ Segment823 : spans segment
+Ticket821 }o--|| Audit827 : audit trail
+Segment823 }|--|| Audit827 : checked by
+@enduml

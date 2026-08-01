@@ -1,0 +1,19 @@
+@startuml
+top to bottom direction
+skinparam linetype polyline
+skinparam linetype ortho
+hide empty members
+
+entity Shipment307
+entity Product311
+entity Order301
+entity OrderLine303
+entity Customer313
+entity Invoice317
+
+Customer313 ||--o{ Order301 : renamed places
+Order301 ||--|{ OrderLine303 : owns renamed lines
+OrderLine303 }o--|| Product311 : references sku
+Order301 }|--o{ Shipment307 : ships through
+Invoice317 ||--|| Order301 : billed order
+@enduml
