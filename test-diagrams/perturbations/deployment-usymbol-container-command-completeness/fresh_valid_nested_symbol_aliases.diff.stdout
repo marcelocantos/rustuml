@@ -1,0 +1,48 @@
+SVG structural differences:
+  element count: expected 30, got 39
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "371px"), ("preserveAspectRatio", "none"), ("style", "width:474px;height:371px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 474 371"), ("width", "474px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "396px"), ("preserveAspectRatio", "none"), ("style", "width:474px;height:396px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 474 396"), ("width", "474px"), ("zoomAndPan", "magnify")]
+  [4] <polygon> attr mismatch:
+    expected: [("fill", "#ADD8E6"), ("points", "16,6,310,6,320,181.105,310,356.21,16,356.21,26,181.105"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#ADD8E6"), ("points", "16,16,26,6,320,6,320,361.21,310,371.21,16,371.21,16,16"), ("style", "stroke:#181818;stroke-width:1;")]
+  [5] tag mismatch: expected <text>, got <line>
+  [6] tag mismatch: expected <g>, got <line>
+  [7] tag mismatch: expected <path>, got <line>
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "78.2852"), ("x", "124.8574"), ("y", "72.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "115.2334"), ("x", "106.3833"), ("y", "32.5352")]
+  [8] <text> text mismatch:
+    expected: Some("«Boundary»")
+    actual:   Some("Telemetry Mesh")
+  [9] tag mismatch: expected <text>, got <g>
+  [10] tag mismatch: expected <g>, got <polygon>
+  [11] tag mismatch: expected <polygon>, got <line>
+  [12] tag mismatch: expected <text>, got <line>
+  [13] tag mismatch: expected <g>, got <line>
+  [14] tag mismatch: expected <rect>, got <text>
+  [15] tag mismatch: expected <polygon>, got <text>
+  [16] tag mismatch: expected <line>, got <g>
+  [17] tag mismatch: expected <line>, got <polygon>
+  [18] tag mismatch: expected <text>, got <line>
+  [19] tag mismatch: expected <g>, got <line>
+  [20] tag mismatch: expected <rect>, got <line>
+  [21] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "96.2568"), ("x", "353.87"), ("y", "253.7552")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "82.0176"), ("x", "118.9912"), ("y", "160.5352")]
+  [21] <text> text mismatch:
+    expected: Some("Sentinel_7107")
+    actual:   Some("Retry Stage")
+  [22] <g> attr mismatch:
+    expected: [("class", "link"), ("data-entity-1", "ent0003"), ("data-entity-2", "ent0002"), ("data-link-type", "dependency"), ("data-source-line", "9"), ("id", "lnk7")]
+    actual:   [("class", "entity"), ("data-qualified-name", "proc_7101.zone_east_7102.retry_7103.Worker_7105"), ("data-source-line", "5"), ("id", "ent0006")]
+  [23] tag mismatch: expected <path>, got <rect>
+  [24] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "385.6,230.02,382.3492,220.7231,382.175,226.3773,376.5209,226.203,385.6,230.02"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#F1F1F1"), ("points", "207.2158,248.72,207.2158,262.72,219.2158,262.72,219.2158,254.72,213.2158,248.72,207.2158,248.72"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [25] tag mismatch: expected <text>, got <line>
+  [26] tag mismatch: expected <g>, got <line>
+  [27] tag mismatch: expected <path>, got <text>
+  [28] tag mismatch: expected <polygon>, got <g>
+  [29] tag mismatch: expected <text>, got <rect>
+

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="396px" preserveAspectRatio="none" style="width:474px;height:396px;background:#FFFFFF;" version="1.1" viewBox="0 0 474 396" width="474px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Telemetry Mesh-->
+<g class="cluster" data-qualified-name="proc_7101" data-source-line="2" id="ent0003">
+<polygon fill="#ADD8E6" points="16,16,26,6,320,6,320,361.21,310,371.21,16,371.21,16,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="310" x2="320" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="310" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="310" x2="310" y1="16" y2="371.21"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="115.2334" x="106.3833" y="32.5352">Telemetry Mesh</text>
+</g>
+<!--cluster Zone East-->
+<g class="cluster" data-qualified-name="proc_7101.zone_east_7102" data-source-line="3" id="ent0004">
+<polygon fill="none" points="48,72,58,62,280,62,280,329.21,270,339.21,48,339.21,48,72" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="270" x2="280" y1="72" y2="62"/>
+<line style="stroke:#181818;stroke-width:1;" x1="48" x2="270" y1="72" y2="72"/>
+<line style="stroke:#181818;stroke-width:1;" x1="270" x2="270" y1="72" y2="339.21"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-style="italic" lengthAdjust="spacing" textLength="78.2852" x="120.8574" y="88.5352">«Boundary»</text>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="70.2051" x="124.8975" y="105.0234">Zone East</text>
+</g>
+<!--cluster Retry Stage-->
+<g class="cluster" data-qualified-name="proc_7101.zone_east_7102.retry_7103" data-source-line="4" id="ent0005">
+<polygon fill="none" points="80,144,90,134,248,134,248,297.21,238,307.21,80,307.21,80,144" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="238" x2="248" y1="144" y2="134"/>
+<line style="stroke:#181818;stroke-width:1;" x1="80" x2="238" y1="144" y2="144"/>
+<line style="stroke:#181818;stroke-width:1;" x1="238" x2="238" y1="144" y2="307.21"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="82.0176" x="118.9912" y="160.5352">Retry Stage</text>
+</g>
+<!--entity Worker_7105-->
+<g class="entity" data-qualified-name="proc_7101.zone_east_7102.retry_7103.Worker_7105" data-source-line="5" id="ent0006">
+<rect fill="#F1F1F1" height="39.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="120.4258" x="103.79" y="243.72"/>
+<polygon fill="#F1F1F1" points="207.2158,248.72,207.2158,262.72,219.2158,262.72,219.2158,254.72,213.2158,248.72,207.2158,248.72" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="213.2158" x2="213.2158" y1="248.72" y2="254.72"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="219.2158" x2="213.2158" y1="254.72" y2="254.72"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.4258" x="113.79" y="270.2552">Worker_7105</text>
+</g>
+<!--entity Sentinel_7107-->
+<g class="entity" data-qualified-name="Sentinel_7107" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="36.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="116.2568" x="343.87" y="245.22"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="96.2568" x="353.87" y="268.7552">Sentinel_7107</text>
+</g>
+<!--link proc_7101 to Sentinel_7107-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="9" id="lnk7">
+<path d="M320.2053,175.4463 C320.2796,175.5253 320.3542,175.6047 320.4292,175.6845 C320.5793,175.8442 320.731,176.0056 320.8843,176.1688 C321.191,176.4951 321.5043,176.8283 321.8237,177.1683 C326.9356,182.6072 333.655,189.7556 341.0325,197.6037 C355.7875,213.3 369.065,227.4237 381.49,240.6387" fill="none" id="proc_7101-to-Sentinel_7107" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="385.6,245.01,382.3492,235.7131,382.175,241.3673,376.5209,241.193,385.6,245.01" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="34.6265" x="355.3" y="210.2884">emits</text>
+</g>
+<!--link retry_7103 to Worker_7105-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency" data-source-line="10" id="lnk8">
+<path d="M164,166.99 C164,170.94 164,210.54 164,237.26" fill="none" id="retry_7103-to-Worker_7105" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="164,243.26,168,234.26,164,238.26,160,234.26,164,243.26" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="32.6968" x="165" y="210.2884">owns</text>
+</g>
+</g></svg>

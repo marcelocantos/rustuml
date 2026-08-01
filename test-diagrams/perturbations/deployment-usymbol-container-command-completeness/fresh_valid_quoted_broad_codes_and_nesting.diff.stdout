@@ -1,0 +1,41 @@
+SVG structural differences:
+  element count: expected 30, got 39
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "406px"), ("preserveAspectRatio", "none"), ("style", "width:614px;height:406px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 614 406"), ("width", "614px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "431px"), ("preserveAspectRatio", "none"), ("style", "width:614px;height:431px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 614 431"), ("width", "614px"), ("zoomAndPan", "magnify")]
+  [4] <polygon> attr mismatch:
+    expected: [("fill", "none"), ("points", "231.62,6,579.62,6,589.62,198.545,579.62,391.09,231.62,391.09"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "none"), ("points", "231.6157,16,241.6157,6,589.6157,6,589.6157,396.09,579.6157,406.09,231.6157,406.09,231.6157,16"), ("style", "stroke:#181818;stroke-width:1;")]
+  [5] tag mismatch: expected <text>, got <line>
+  [6] tag mismatch: expected <g>, got <line>
+  [7] tag mismatch: expected <polygon>, got <line>
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "138.7217"), ("x", "337.2592"), ("y", "80.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "136.5068"), ("x", "338.3623"), ("y", "32.5352")]
+  [8] <text> text mismatch:
+    expected: Some("batch-worker/blue")
+    actual:   Some("human review lane")
+  [9] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "human review lane.batch-worker.blue.zone.alpha"), ("data-source-line", "4"), ("id", "ent0005")]
+    actual:   [("class", "cluster"), ("data-qualified-name", "human review lane.batch-worker/blue"), ("data-source-line", "3"), ("id", "ent0004")]
+  [10] tag mismatch: expected <path>, got <polygon>
+  [11] tag mismatch: expected <text>, got <line>
+  [12] tag mismatch: expected <g>, got <line>
+  [13] tag mismatch: expected <rect>, got <line>
+  [14] tag mismatch: expected <rect>, got <text>
+  [15] tag mismatch: expected <rect>, got <g>
+  [16] tag mismatch: expected <rect>, got <polygon>
+  [17] tag mismatch: expected <text>, got <line>
+  [18] tag mismatch: expected <g>, got <line>
+  [19] tag mismatch: expected <rect>, got <line>
+  [20] tag mismatch: expected <path>, got <text>
+  [21] tag mismatch: expected <text>, got <g>
+  [22] tag mismatch: expected <g>, got <rect>
+  [23] tag mismatch: expected <path>, got <rect>
+  [24] tag mismatch: expected <polygon>, got <rect>
+  [25] tag mismatch: expected <text>, got <rect>
+  [26] tag mismatch: expected <g>, got <text>
+  [27] tag mismatch: expected <path>, got <g>
+  [28] tag mismatch: expected <polygon>, got <rect>
+  [29] tag mismatch: expected <text>, got <path>
+

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="431px" preserveAspectRatio="none" style="width:614px;height:431px;background:#FFFFFF;" version="1.1" viewBox="0 0 614 431" width="614px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster human review lane-->
+<g class="cluster" data-qualified-name="human review lane" data-source-line="2" id="ent0003">
+<polygon fill="none" points="231.6157,16,241.6157,6,589.6157,6,589.6157,396.09,579.6157,406.09,231.6157,406.09,231.6157,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="579.6157" x2="589.6157" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="231.6157" x2="579.6157" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="579.6157" x2="579.6157" y1="16" y2="406.09"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="136.5068" x="338.3623" y="32.5352">human review lane</text>
+</g>
+<!--cluster batch-worker/blue-->
+<g class="cluster" data-qualified-name="human review lane.batch-worker/blue" data-source-line="3" id="ent0004">
+<polygon fill="none" points="271.6157,80,281.6157,70,541.6157,70,541.6157,356.09,531.6157,366.09,271.6157,366.09,271.6157,80" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="531.6157" x2="541.6157" y1="80" y2="70"/>
+<line style="stroke:#181818;stroke-width:1;" x1="271.6157" x2="531.6157" y1="80" y2="80"/>
+<line style="stroke:#181818;stroke-width:1;" x1="531.6157" x2="531.6157" y1="80" y2="366.09"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="138.7217" x="333.2549" y="96.5352">batch-worker/blue</text>
+</g>
+<!--cluster zone.alpha-->
+<g class="cluster" data-qualified-name="human review lane.batch-worker/blue.zone.alpha" data-source-line="4" id="ent0005">
+<polygon fill="none" points="311.6157,217.6042,321.6157,207.6042,501.6157,207.6042,501.6157,316.0942,491.6157,326.0942,311.6157,326.0942,311.6157,217.6042" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="491.6157" x2="501.6157" y1="217.6042" y2="207.6042"/>
+<line style="stroke:#181818;stroke-width:1;" x1="311.6157" x2="491.6157" y1="217.6042" y2="217.6042"/>
+<line style="stroke:#181818;stroke-width:1;" x1="491.6157" x2="491.6157" y1="217.6042" y2="326.0942"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="77.5537" x="363.8389" y="234.1393">zone.alpha</text>
+</g>
+<!--entity API Gateway-->
+<g class="entity" data-qualified-name="human review lane.batch-worker/blue.zone.alpha.api_gateway_6507" data-source-line="5" id="ent0006">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="122.5781" x="355.33" y="255.6"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="457.9081" y="260.6"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="455.9081" y="262.6"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="455.9081" y="266.6"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="82.5781" x="370.33" y="289.1352">API Gateway</text>
+</g>
+<!--entity DeploymentBias_6500-->
+<g class="entity" data-qualified-name="DeploymentBias_6500" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="36.4883" rx="2.5" ry="2.5" style="stroke:none;stroke-width:0.5;" width="171.2314" x="21" y="84.12"/>
+<path d="M6,84.12 L18.5,84.12 A2.5,2.5 0 0 1 21,86.62 L21,118.1083 A2.5,2.5 0 0 0 23.5,120.6083 L189.7314,120.6083 A2.5,2.5 0 0 0 192.2314,118.1083 L192.2314,86.62 A2.5,2.5 0 0 1 194.7314,84.12 L207.2314,84.12" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="151.2314" x="31" y="107.6552">DeploymentBias_6500</text>
+</g>
+<!--link human review lane to api_gateway_6507-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0006" data-link-type="dependency" data-source-line="9" id="lnk7">
+<path d="M581.5,103.49 C577.64,107.56 485.7226,204.7706 442.0326,250.9706" fill="none" id="human review lane-to-api_gateway_6507" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="437.91,255.33,447.0001,251.5393,441.3455,251.6972,441.1876,246.0425,437.91,255.33" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="57.4463" x="533.86" y="164.1684">approves</text>
+</g>
+<!--link batch-worker/blue to zone.alpha-->
+<g class="link" data-entity-1="ent0004" data-entity-2="ent0005" data-link-type="dependency" data-source-line="10" id="lnk8">
+<path d="M319.54,103.43 C317.96,104.76 292.55,126.56 284.62,150.6 C275.57,178.015 283.905,209.27 294.705,233.9437 C300.105,246.2806 306.1213,256.9722 310.8888,264.7158 C311.0377,264.9578 311.1855,265.1969 311.332,265.4331 C311.4052,265.5512 308.3074,260.5748 308.38,260.6914" fill="none" id="batch-worker/blue-to-zone.alpha" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="311.5508,265.7852,310.1905,256.0307,308.9085,261.5403,303.3988,260.2583,311.5508,265.7852" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="43.3228" x="285.62" y="164.1684">scopes</text>
+</g>
+</g></svg>

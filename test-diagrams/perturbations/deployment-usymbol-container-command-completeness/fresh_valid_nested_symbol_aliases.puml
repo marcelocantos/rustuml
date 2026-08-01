@@ -1,0 +1,12 @@
+@startuml
+agent Sentinel_7107
+PrOcEsS "Telemetry Mesh" as proc_7101 #LightBlue {
+  HEXAGON zone_east_7102 as "Zone East" <<Boundary>> {
+    action "Retry Stage" as retry_7103 {
+      artifact Worker_7105
+    }
+  }
+}
+proc_7101 --> Sentinel_7107 : emits
+retry_7103 --> Worker_7105 : owns
+@enduml

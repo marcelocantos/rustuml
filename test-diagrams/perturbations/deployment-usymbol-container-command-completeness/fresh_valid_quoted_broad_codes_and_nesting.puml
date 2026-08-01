@@ -1,0 +1,12 @@
+@startuml
+stack DeploymentBias_7500
+action "human review lane" {
+  process "batch-worker/blue" {
+    hexagon "zone.alpha" {
+      component "API Gateway" as api_gateway_7507
+    }
+  }
+}
+"human review lane" --> api_gateway_7507 : approves
+"batch-worker/blue" --> "zone.alpha" : scopes
+@enduml

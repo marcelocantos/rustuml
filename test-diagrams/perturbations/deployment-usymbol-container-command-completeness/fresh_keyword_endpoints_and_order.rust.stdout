@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="263px" preserveAspectRatio="none" style="width:527px;height:263px;background:#FFFFFF;" version="1.1" viewBox="0 0 527 263" width="527px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Runtime Host-->
+<g class="cluster" data-qualified-name="runtime_6305" data-source-line="5" id="ent0009">
+<polygon fill="none" points="300.1919,16,310.1919,6,502.1919,6,502.1919,228.09,492.1919,238.09,300.1919,238.09,300.1919,16" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="492.1919" x2="502.1919" y1="16" y2="6"/>
+<line style="stroke:#181818;stroke-width:1;" x1="300.1919" x2="492.1919" y1="16" y2="16"/>
+<line style="stroke:#181818;stroke-width:1;" x1="492.1919" x2="492.1919" y1="16" y2="238.09"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="98.123" x="348.1304" y="32.5352">Runtime Host</text>
+</g>
+<!--cluster Work Stack-->
+<g class="cluster" data-qualified-name="runtime_6305.stack_6307" data-source-line="6" id="ent0010">
+<rect fill="none" height="77.49" rx="2.5" ry="2.5" style="stroke:none;stroke-width:1;" width="108" x="347.1919" y="62"/>
+<path d="M332.1919,62 L344.6919,62 A2.5,2.5 0 0 1 347.1919,64.5 L347.1919,136.99 A2.5,2.5 0 0 0 349.6919,139.49 L452.6919,139.49 A2.5,2.5 0 0 0 455.1919,136.99 L455.1919,64.5 A2.5,2.5 0 0 1 457.6919,62 L470.1919,62" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="79.6455" x="361.3691" y="88.5352">Work Stack</text>
+</g>
+<!--entity Queue_6309-->
+<g class="entity" data-qualified-name="runtime_6305.stack_6307.Queue_6309" data-source-line="7" id="ent0011">
+<path d="M353.06,97 L449.3227,97 C454.3227,97 454.3227,110.2441 454.3227,110.2441 C454.3227,110.2441 454.3227,123.4883 449.3227,123.4883 L353.06,123.4883 C348.06,123.4883 348.06,110.2441 348.06,110.2441 C348.06,110.2441 348.06,97 353.06,97" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M449.3227,97 C444.3227,97 444.3227,110.2441 444.3227,110.2441 C444.3227,123.4883 449.3227,123.4883 449.3227,123.4883" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="86.2627" x="353.06" y="115.5352">Queue_6309</text>
+</g>
+<!--entity Anchor_6301-->
+<g class="entity" data-qualified-name="Anchor_6301" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="22.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="110.9453" x="80.72" y="218.49"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="90.9453" x="90.72" y="235.0252">Anchor_6301</text>
+</g>
+<!--entity process-->
+<g class="entity" data-qualified-name="process" data-source-line="2" id="ent0003">
+<ellipse cx="32.1919" cy="110.2483" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="52.3838" x="6" y="140.7834">process</text>
+</g>
+<!--entity action-->
+<g class="entity" data-qualified-name="action" data-source-line="3" id="ent0005">
+<ellipse cx="136.1968" cy="110.2483" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41.4736" x="115.46" y="140.7834">action</text>
+</g>
+<!--entity hexagon-->
+<g class="entity" data-qualified-name="hexagon" data-source-line="4" id="ent0007">
+<ellipse cx="237.1916" cy="110.2483" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="58.8232" x="207.78" y="140.7834">hexagon</text>
+</g>
+<!--link process to Anchor_6301-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0002" data-link-type="dependency" data-source-line="2" id="lnk4">
+<path d="M38.93,139.45 C43.84,155.29 51.84,174.6 64.19,188.49 C75.9,201.65 87.5196,208.9632 102.0996,215.6032" fill="none" id="process-to-Anchor_6301" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="107.56,218.09,101.0272,210.7196,103.0097,216.0177,97.7116,218.0001,107.56,218.09" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="62.4736" x="65.19" y="185.0584">schedules</text>
+</g>
+<!--link action to Anchor_6301-->
+<g class="link" data-entity-1="ent0005" data-entity-2="ent0002" data-link-type="dependency" data-source-line="3" id="lnk6">
+<path d="M136.19,119.19 C136.19,138.24 136.19,183.25 136.19,212.18" fill="none" id="action-to-Anchor_6301" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="136.19,218.18,140.19,209.18,136.19,213.18,132.19,209.18,136.19,218.18" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="40.3711" x="137.19" y="185.0584">retries</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="78.6602" x="40.3052" y="117.5154">many retries</text>
+</g>
+<!--link hexagon to Anchor_6301-->
+<g class="link" data-entity-1="ent0007" data-entity-2="ent0002" data-link-type="dependency" data-source-line="4" id="lnk8">
+<path d="M221.42,139.55 C212.19,154.87 199.71,173.63 186.19,188.49 C175.84,199.86 166.9857,207.1593 156.5357,214.6993" fill="none" id="hexagon-to-Anchor_6301" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/>
+<polygon fill="#181818" points="151.67,218.21,161.309,216.1877,155.7247,215.2844,156.628,209.7001,151.67,218.21" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="37.375" x="200.07" y="185.0584">zones</text>
+</g>
+<!--link Queue_6309 to runtime_6305-->
+<g class="link" data-entity-1="ent0011" data-entity-2="ent0009" data-link-type="dependency" data-source-line="10" id="lnk12">
+<path d="M401.19,123.82 C401.19,153.65 401.19,220.41 401.19,222.68" fill="none" id="Queue_6309-to-runtime_6305" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="401.19,228.68,405.19,219.68,401.19,223.68,397.19,219.68,401.19,228.68" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="39.1333" x="402.19" y="185.0584">drains</text>
+</g>
+</g></svg>

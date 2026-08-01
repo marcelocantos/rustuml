@@ -1,0 +1,40 @@
+@startuml
+agent ForceDeployment_6400
+package Pkg_6401 {
+}
+rectangle Rect_6402 {
+}
+hexagon Hex_6403 {
+}
+node Node_6404 {
+}
+artifact Artifact_6405 {
+}
+folder Folder_6406 {
+}
+file File_6407 {
+}
+frame Frame_6408 {
+}
+cloud Cloud_6409 {
+}
+action Action_6410 {
+}
+process Process_6411 {
+}
+database Database_6412 {
+}
+storage Storage_6413 {
+}
+component Component_6414 {
+}
+card Card_6415 {
+}
+queue Queue_6416 {
+}
+stack Stack_6417 {
+}
+ForceDeployment_6400 --> Pkg_6401
+Action_6410 --> Process_6411
+Hex_6403 --> Stack_6417
+@enduml

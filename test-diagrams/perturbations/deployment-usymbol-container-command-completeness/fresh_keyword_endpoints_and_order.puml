@@ -1,0 +1,12 @@
+@startuml
+card Anchor_6301
+process --> Anchor_6301 : schedules
+action "many retries" --> Anchor_6301 : retries
+hexagon ..> Anchor_6301 : zones
+node "Runtime Host" as runtime_6305 {
+  stack "Work Stack" as stack_6307 {
+    queue Queue_6309 {}
+  }
+}
+Queue_6309 --> runtime_6305 : drains
+@enduml

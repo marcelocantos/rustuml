@@ -1,0 +1,126 @@
+SVG structural differences:
+  element count: expected 82, got 91
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "174px"), ("preserveAspectRatio", "none"), ("style", "width:2315px;height:174px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 2315 174"), ("width", "2315px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "287px"), ("preserveAspectRatio", "none"), ("style", "width:1135px;height:287px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 1135 287"), ("width", "1135px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M43.72,120.49 L127.3421,120.49 A3.75,3.75 0 0 1 129.8421,122.99 L136.8421,142.9783 L151.3421,142.9783 A2.5,2.5 0 0 1 153.8421,145.4783 L153.8421,157.4783 A2.5,2.5 0 0 1 151.3421,159.9783 L43.72,159.9783 A2.5,2.5 0 0 1 41.22,157.4783 L41.22,122.99 A2.5,2.5 0 0 1 43.72,120.49"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M43.72,123.99 L127.3421,123.99 A3.75,3.75 0 0 1 129.8421,126.49 L136.8421,146.4783 L151.3421,146.4783 A2.5,2.5 0 0 1 153.8421,148.9783 L153.8421,160.9783 A2.5,2.5 0 0 1 151.3421,163.4783 L43.72,163.4783 A2.5,2.5 0 0 1 41.22,160.9783 L41.22,126.49 A2.5,2.5 0 0 1 43.72,123.99"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "41.22"), ("x2", "136.8421"), ("y1", "142.9783"), ("y2", "142.9783")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "41.22"), ("x2", "136.8421"), ("y1", "146.4783"), ("y2", "146.4783")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "70.6221"), ("x", "51.22"), ("y", "137.0252")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "70.6221"), ("x", "51.22"), ("y", "140.5252")]
+  [11] <polygon> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("points", "487.62,33.25,453.08,20,383.99,20,349.45,33.25,383.99,46.49,453.08,46.49,487.62,33.25"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("fill", "#F1F1F1"), ("points", "822.99,20,832.99,10,932.074,10,932.074,46.4883,922.074,56.4883,822.99,56.4883,822.99,20"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [12] tag mismatch: expected <text>, got <line>
+  [13] tag mismatch: expected <g>, got <line>
+  [14] tag mismatch: expected <polygon>, got <line>
+  [15] tag mismatch: expected <line>, got <text>
+  [16] tag mismatch: expected <line>, got <g>
+  [17] tag mismatch: expected <line>, got <polygon>
+  [18] tag mismatch: expected <text>, got <line>
+  [19] tag mismatch: expected <g>, got <line>
+  [20] tag mismatch: expected <rect>, got <line>
+  [21] tag mismatch: expected <polygon>, got <text>
+  [22] tag mismatch: expected <line>, got <g>
+  [23] tag mismatch: expected <line>, got <rect>
+  [24] tag mismatch: expected <text>, got <polygon>
+  [25] tag mismatch: expected <g>, got <line>
+  [26] tag mismatch: expected <path>, got <line>
+  [27] tag mismatch: expected <line>, got <text>
+  [28] tag mismatch: expected <text>, got <g>
+  [29] tag mismatch: expected <g>, got <path>
+  [30] tag mismatch: expected <path>, got <line>
+  [31] tag mismatch: expected <path>, got <text>
+  [32] tag mismatch: expected <text>, got <g>
+  [33] tag mismatch: expected <g>, got <path>
+  [34] tag mismatch: expected <rect>, got <path>
+  [35] tag mismatch: expected <path>, got <text>
+  [36] tag mismatch: expected <text>, got <g>
+  [37] tag mismatch: expected <g>, got <rect>
+  [38] <path> attr mismatch:
+    expected: [("d", "M1271.2527,19.7563 C1274.6225,13.4959 1279.0473,13.6583 1283.672,18.3307 C1286.6316,11.906 1291.0974,10.5004 1295.8598,16.5726 C1299.454,9.731 1304.842,10.3564 1308.373,16.633 C1311.8467,11.2808 1316.2153,10.8219 1320.5808,15.5534 C1323.9123,10.7053 1328.8046,10.7543 1330.9221,16.7149 C1334.94,11.0784 1340.8983,12.3768 1343.1072,18.5771 C1347.24,12.899 1352.7441,11.7987 1356.7992,18.6619 C1359.7146,14.7827 1364.478,14.2675 1366.7854,19.3401 C1376.4038,19.4304 1380.3141,26.0608 1375.5856,34.4866 C1380.5464,43.4346 1376.1765,47.2794 1367.64,48.6617 C1365.3626,54.7389 1360.0907,54.4281 1356.4163,50.1803 C1353.775,55.1982 1348.2215,55.7386 1344.7019,51.2642 C1340.6594,57.8427 1336.1988,56.7358 1332.0705,51.3549 C1328.1022,58.3979 1322.3462,57.468 1318.7258,51.011 C1314.8281,56.3028 1311.2486,56.2429 1307.125,51.2661 C1302.6452,56.4603 1297.4334,56.3524 1294.5363,49.5986 C1291.855,54.9226 1287.1763,55.4085 1283.5229,50.6616 C1278.8566,56.8856 1273.5369,56.2324 1270.5587,49.0313 C1262.5497,46.4412 1262.3085,39.3286 1268.6261,34.7937 C1261.9176,28.3717 1263.8207,23.7084 1271.2527,19.7563"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M387.8254,120.49 L387.8254,125.49 L380.8254,132.49 L346.41,132.49"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [39] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "82.2432"), ("x", "1277.41"), ("y", "38.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "84.2461"), ("x", "361.41"), ("y", "154.0252")]
+  [39] <text> text mismatch:
+    expected: Some("Cloud_6409")
+    actual:   Some("Frame_6408")
+  [40] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Action_6410"), ("data-source-line", "20"), ("id", "ent0012")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Cloud_6409"), ("data-source-line", "18"), ("id", "ent0011")]
+  [41] tag mismatch: expected <polygon>, got <path>
+  [42] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "85.8115"), ("x", "1419.63"), ("y", "38.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "82.2432"), ("x", "520.41"), ("y", "149.0252")]
+  [42] <text> text mismatch:
+    expected: Some("Action_6410")
+    actual:   Some("Cloud_6409")
+  [43] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Process_6411"), ("data-source-line", "22"), ("id", "ent0013")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Action_6410"), ("data-source-line", "20"), ("id", "ent0012")]
+  [44] <polygon> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("points", "1400.67,121.99,1524.3907,121.99,1534.3907,140.2341,1524.3907,158.4783,1400.67,158.4783,1410.67,140.2341"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("fill", "#F1F1F1"), ("points", "980.63,20,990.63,10,1106.4415,10,1106.4415,46.4883,1096.4415,56.4883,980.63,56.4883,980.63,20"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [45] tag mismatch: expected <text>, got <line>
+  [46] tag mismatch: expected <g>, got <line>
+  [47] tag mismatch: expected <path>, got <line>
+  [48] tag mismatch: expected <path>, got <text>
+  [49] tag mismatch: expected <text>, got <g>
+  [50] tag mismatch: expected <g>, got <polygon>
+  [51] tag mismatch: expected <rect>, got <line>
+  [52] tag mismatch: expected <text>, got <line>
+  [53] tag mismatch: expected <g>, got <line>
+  [54] tag mismatch: expected <rect>, got <text>
+  [55] tag mismatch: expected <rect>, got <g>
+  [56] tag mismatch: expected <rect>, got <path>
+  [57] tag mismatch: expected <rect>, got <path>
+  [58] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "121.5908"), ("x", "1883.74"), ("y", "43.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "105.0752"), ("x", "663"), ("y", "158.5252")]
+  [58] <text> text mismatch:
+    expected: Some("Component_6414")
+    actual:   Some("Database_6412")
+  [59] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Card_6415"), ("data-source-line", "30"), ("id", "ent0017")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Storage_6413"), ("data-source-line", "26"), ("id", "ent0015")]
+  [60] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "22.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "94.3682"), ("x", "2065.35"), ("y", "22")]
+    actual:   [("fill", "#F1F1F1"), ("height", "36.4883"), ("rx", "35"), ("ry", "35"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "113.7754"), ("x", "211.65"), ("y", "231.98")]
+  [61] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "74.3682"), ("x", "2075.35"), ("y", "38.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "93.7754"), ("x", "221.65"), ("y", "255.5152")]
+  [61] <text> text mismatch:
+    expected: Some("Card_6415")
+    actual:   Some("Storage_6413")
+  [62] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Queue_6416"), ("data-source-line", "32"), ("id", "ent0018")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Component_6414"), ("data-source-line", "28"), ("id", "ent0016")]
+  [63] tag mismatch: expected <path>, got <rect>
+  [64] tag mismatch: expected <path>, got <rect>
+  [65] tag mismatch: expected <text>, got <rect>
+  [66] tag mismatch: expected <g>, got <rect>
+  [67] tag mismatch: expected <rect>, got <text>
+  [68] tag mismatch: expected <path>, got <g>
+  [69] tag mismatch: expected <text>, got <rect>
+  [70] tag mismatch: expected <g>, got <text>
+  [71] tag mismatch: expected <rect>, got <g>
+  [72] tag mismatch: expected <text>, got <path>
+  [73] tag mismatch: expected <g>, got <path>
+  [74] tag mismatch: expected <path>, got <text>
+  [75] tag mismatch: expected <polygon>, got <g>
+  [76] tag mismatch: expected <g>, got <rect>
+  [77] <path> attr mismatch:
+    expected: [("d", "M1467.53,51.58 C1467.53,70.92 1467.53,96.03 1467.53,115.52"), ("fill", "none"), ("id", "Action_6410-to-Process_6411"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M813.4,125.49 L825.9,125.49 A2.5,2.5 0 0 1 828.4,127.99 L828.4,159.4783 A2.5,2.5 0 0 0 830.9,161.9783 L924.1715,161.9783 A2.5,2.5 0 0 0 926.6715,159.4783 L926.6715,127.99 A2.5,2.5 0 0 1 929.1715,125.49 L941.6715,125.49"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [78] tag mismatch: expected <polygon>, got <text>
+  [79] <g> attr mismatch:
+    expected: [("class", "link"), ("data-entity-1", "ent0005"), ("data-entity-2", "ent0019"), ("data-link-type", "dependency"), ("data-source-line", "38"), ("id", "lnk22")]
+    actual:   [("class", "entity"), ("data-qualified-name", "ForceDeployment_6400"), ("data-source-line", "1"), ("id", "ent0002")]
+  [80] tag mismatch: expected <path>, got <rect>
+  [81] tag mismatch: expected <polygon>, got <text>
+

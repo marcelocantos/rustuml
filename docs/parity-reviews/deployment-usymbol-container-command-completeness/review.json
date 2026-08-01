@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-usymbol-container-command-completeness",
+  "verdict": "REJECT",
+  "review_created": "2026-08-01",
+  "checker": {
+    "task_identity": "independent adversarial checker for deployment-usymbol-container-command-completeness",
+    "model": "GPT-5 Codex",
+    "tooling": "Codex desktop shell plus frozen RustUML/diff_one binaries; no Cargo or rustc",
+    "distinct_from_maker": true,
+    "maker_commits": [
+      "93dc7c6a",
+      "b83502c7"
+    ]
+  },
+  "account": "docs/parity-reviews/deployment-usymbol-container-command-completeness/account.json",
+  "revisions": {
+    "rust_revision": "b83502c755691824ab657f076a5ca53ccbfb8884",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "frozen_binaries": {
+    "rustuml": {
+      "path": "/private/tmp/t14-usymbol-review-bin/rustuml-b83502c7",
+      "sha256": "58a0cffeb2a43d9e19b994dd5ed31ac522cb5b98a4ab8dc3e70a641ffac2022b"
+    },
+    "diff_one": {
+      "path": "/private/tmp/t14-usymbol-review-bin/diff_one-b83502c7",
+      "sha256": "f99dc3cf3134f44175f128fb05c4a2064983c48efdaa4ad66b15e96a9cd0af27"
+    }
+  },
+  "source_inspection": {
+    "java": [
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+        "lines": "75-128,152-158",
+        "finding": "Java accepts one anchored braced USymbol command with package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack, then passes the exact symbol to USymbols.fromString before gotoGroup."
+      },
+      {
+        "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbols.java",
+        "lines": "60,82,89,98-119",
+        "finding": "USymbols.fromString maps action, hexagon, and process to distinct USymbolAction, USymbolHexagon, and USymbolProcess identities."
+      }
+    ],
+    "rust": [
+      {
+        "path": "crates/rustuml-parser/src/diagram/deployment.rs",
+        "lines": "135-205",
+        "finding": "Rust records the complete command-symbol inventory in DeploymentContainerSymbol, but DeploymentContainerSymbol::renderer_kind projects Hexagon, Action, and Process to DeploymentNodeKind::Node."
+      },
+      {
+        "path": "crates/rustuml-parser/src/parse/deployment.rs",
+        "lines": "681-775,1216-1247",
+        "finding": "The parser now recognizes braced command keywords and fails closed when a braced line does not match the anchored grammar, but it stores the renderer kind projection on each node."
+      },
+      {
+        "path": "crates/rustuml-render/src/deployment.rs",
+        "finding": "The deployment renderer was searched for container_symbol, DeploymentContainerSymbol, Action, Process, and Hexagon consumption. No renderer path consumes container_symbol, so no-oracle output cannot preserve the Java USymbol painting for action/process/hexagon containers."
+      }
+    ]
+  },
+  "commands": [
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git rev-parse HEAD",
+    "shasum -a 256 /private/tmp/t14-usymbol-review-bin/rustuml-b83502c7 /private/tmp/t14-usymbol-review-bin/diff_one-b83502c7",
+    "for puml in test-diagrams/perturbations/deployment-usymbol-container-command-completeness/*.puml; do stem=${puml%.puml}; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$puml\" > \"$stem.java.stdout\" 2> \"$stem.java.stderr\"; rc=$?; printf '%s\\n' \"$rc\" > \"$stem.java.exit\"; done",
+    "for puml in test-diagrams/perturbations/deployment-usymbol-container-command-completeness/*.puml; do stem=${puml%.puml}; /private/tmp/t14-usymbol-review-bin/diff_one-b83502c7 --no-oracle \"$puml\" > \"$stem.diff.stdout\" 2> \"$stem.diff.stderr\"; rc=$?; printf '%s\\n' \"$rc\" > \"$stem.diff.exit\"; done",
+    "for puml in test-diagrams/perturbations/deployment-usymbol-container-command-completeness/*.puml; do stem=${puml%.puml}; /private/tmp/t14-usymbol-review-bin/rustuml-b83502c7 -tsvg \"$puml\" > \"$stem.rust.stdout\" 2> \"$stem.rust.stderr\"; rc=$?; printf '%s\\n' \"$rc\" > \"$stem.rust.exit\"; done",
+    "shasum -a 256 test-diagrams/perturbations/deployment-usymbol-container-command-completeness/* > test-diagrams/perturbations/deployment-usymbol-container-command-completeness/evidence.sha256"
+  ],
+  "evidence": {
+    "directory": "test-diagrams/perturbations/deployment-usymbol-container-command-completeness",
+    "sha256_manifest": "test-diagrams/perturbations/deployment-usymbol-container-command-completeness/evidence.sha256",
+    "java_success_rule10_heldouts": [
+      {
+        "name": "fresh_all_inventory_siblings",
+        "axes": ["complete Java USymbol inventory", "sibling declaration order", "cross-symbol links"],
+        "java_exit": 0,
+        "diff_exit": 1,
+        "result": "nonzero_diff"
+      },
+      {
+        "name": "fresh_valid_nested_symbol_aliases",
+        "axes": ["mixed-case action/process/hexagon symbols", "display-first and code-first aliases", "nested ownership", "color and stereotype"],
+        "java_exit": 0,
+        "diff_exit": 1,
+        "result": "nonzero_diff"
+      },
+      {
+        "name": "fresh_valid_metadata_url_tags_color",
+        "axes": ["tags", "stereotypes", "URLs", "colors", "nested action/process ownership"],
+        "java_exit": 0,
+        "diff_exit": 1,
+        "result": "nonzero_diff"
+      },
+      {
+        "name": "fresh_valid_keyword_endpoints_and_order",
+        "axes": ["keyword-looking relationship endpoints", "declaration order", "nested stack/queue controls"],
+        "java_exit": 0,
+        "diff_exit": 1,
+        "result": "nonzero_diff"
+      },
+      {
+        "name": "fresh_valid_quoted_broad_codes_and_nesting",
+        "axes": ["quoted broad codes containing spaces, slash, and dot", "action/process/hexagon nesting", "relationships to quoted identities"],
+        "java_exit": 0,
+        "diff_exit": 1,
+        "result": "nonzero_diff"
+      }
+    ],
+    "java_rejected_controls": [
+      {
+        "name": "fresh_nested_symbol_aliases",
+        "java_exit": 200,
+        "diff_exit": 2,
+        "rust_exit": 0,
+        "finding": "Java rejects the inline empty leaf body at line 6; frozen Rust accepts the same source."
+      },
+      {
+        "name": "fresh_metadata_url_tags_color",
+        "java_exit": 200,
+        "diff_exit": 2,
+        "rust_exit": 0,
+        "finding": "Java rejects the inline empty leaf body at line 5; frozen Rust accepts the same source."
+      },
+      {
+        "name": "fresh_keyword_endpoints_and_order",
+        "java_exit": 200,
+        "diff_exit": 2,
+        "rust_exit": 0,
+        "finding": "Java rejects the inline empty leaf body at line 8; frozen Rust accepts the same source."
+      },
+      {
+        "name": "fresh_quoted_broad_codes_and_nesting",
+        "java_exit": 200,
+        "diff_exit": 2,
+        "rust_exit": 0,
+        "finding": "Java rejects the inline empty leaf body at line 6; frozen Rust accepts the same source."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "rule": "Rule 10",
+      "finding": "Every fresh valid Java-success heldout has diff_one --no-oracle exit 1. Rule 10 says any such nonzero diff rejects the parity change with no out-of-scope exemption."
+    },
+    {
+      "severity": "rejecting",
+      "rule": "model-completeness",
+      "finding": "The implementation preserves action/process/hexagon command identity only as parser metadata, while the product renderer still paints them through DeploymentNodeKind::Node. This does not match Java's USymbolAction, USymbolProcess, or USymbolHexagon rendering path."
+    },
+    {
+      "severity": "rejecting",
+      "rule": "fail-closed",
+      "finding": "The b83502c7 inline-empty-leaf behavior is not supported by the Java oracle for the fresh controls: Java exits 200 while the frozen Rust binary exits 0 on all four controls."
+    }
+  ],
+  "not_run": [
+    "Cargo",
+    "rustc",
+    "implementation edits",
+    "account edits",
+    "baseline or frozen-control edits"
+  ]
+}

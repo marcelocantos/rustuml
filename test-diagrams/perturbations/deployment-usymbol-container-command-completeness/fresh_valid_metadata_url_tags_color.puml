@@ -1,0 +1,10 @@
+@startuml
+file Manifest_7201
+action "Approve Release" as approve_7203 $ops <<HumanGate>> [[https://example.invalid/approve{Approval docs}]] #PaleGreen {
+  process build_7205 as "Build Worker" $ci <<Batch>> [[https://example.invalid/build]] #MistyRose {
+    database AuditLog_7207
+  }
+}
+approve_7203 --> Manifest_7201 : records
+build_7205 --> AuditLog_7207 : writes
+@enduml
