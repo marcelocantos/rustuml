@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-command-arrow-whole-source-precedence",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "82c5f14405798acbe423bc600f5aa32f9f4567fa",
+  "predecessor_rejection": {
+    "mechanism": "uml-factory-command-consumption-precedence",
+    "review": "docs/parity-reviews/uml-factory-command-consumption-precedence/review.json",
+    "review_commit": "82c5f14405798acbe423bc600f5aa32f9f4567fa",
+    "verdict": "REJECT",
+    "finding": "A relationship-only source whose capitalized endpoint codes are also DESCRIPTION command keywords selects Rust DESCRIPTION, while a lowercase sibling selects Sequence and is exact."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+      "symbols": ["PSystemBuilder", "createPSystem"],
+      "lines": "128-135, 230-242",
+      "role": "Registers SequenceDiagramFactory before ClassDiagramFactory and DescriptionDiagramFactory, then returns the first factory that produces a non-error diagram."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "symbols": ["createSystem", "executeFewLines", "getCandidate"],
+      "lines": "75-109, 135-158, 173-190",
+      "role": "Consumes the source command by command; one unrecognized or failed command rejects the candidate factory, so a successful complete Sequence consumption prevents later factories from participating."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java",
+      "symbols": ["initCommandsList"],
+      "lines": "98-114",
+      "role": "Registers CommandArrow in the first UML command factory."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+      "symbols": ["getRegexConcat"],
+      "lines": "87-130",
+      "role": "Matches message endpoints as general participant codes or quoted names; DESCRIPTION words such as Node, Queue, and Component are not excluded from endpoint positions."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": ["detect_uml_subtype"],
+      "lines": "686-720, 754-1294, 1484-1515",
+      "role": "Recognizes message lines but awards each only a weak Sequence score, then allows case-insensitive DESCRIPTION leading-keyword scores to select Component or Deployment."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/sequence.rs",
+      "symbols": ["looks_like_message", "parse_sequence"],
+      "lines": "45-60, 1249-1264",
+      "role": "Already provides the generative message grammar used by the sequence parser and accepts the rejected source's endpoint spellings."
+    }
+  ],
+  "claimed_invariant": "When every substantive preprocessed source line is accepted by the Sequence CommandArrow grammar and at least one message is present, Java's first UML factory consumes the complete source and wins regardless of whether endpoint codes lexically coincide with commands owned by later factories. Endpoint spelling is data inside CommandArrow, not evidence that a later command factory owns the line.",
+  "causal_divergence": "Rust classifies each line twice at incompatible granularities: sequence::looks_like_message correctly recognizes the complete line as CommandArrow-shaped, but detect_uml_subtype also treats its leading endpoint token as a case-insensitive DESCRIPTION declaration keyword. The later-family declaration weights exceed the weak per-arrow Sequence score, so keyword-shaped participant data overrides a complete successful Sequence factory consumption. Lowercase endpoint siblings happen to avoid those declaration scores, which explains the observed case-dependent family switch without implying that Java dispatch itself is case-sensitive.",
+  "planned_model_change": "Before weighted fallback selection, determine whether the entire substantive source is a non-empty stream of lines consumed by the existing sequence::looks_like_message grammar. If so, return Sequence to model PSystemBuilder's first-success rule. Keep weighted detection for mixed command inventories until their complete-consumption models are ported; do not add endpoint keyword lists, casing branches, score constants, or fixture-derived exceptions.",
+  "perturbation_axes": [
+    "endpoint lexical class: later-factory keywords, ordinary identifiers, quoted labels, and mixed capitalization",
+    "message topology: cycle, chain, repeated endpoints, and self-message",
+    "arrow grammar: forward, reverse, dotted, styled, and activation-decorated messages",
+    "message payload: absent labels, renamed labels, punctuation, and whitespace variation",
+    "source ownership competitor: pure message stream versus a stream containing a genuine non-Sequence command"
+  ],
+  "scope_boundary": "This successor changes only first-factory selection for sources wholly consumed as Sequence message commands. It does not broaden the message grammar, make unknown lines silently count as consumed, alter sequence rendering, reinterpret explicit declarations, tune geometry, or change comparator, baseline, golden, park, syntax-error, or guard controls.",
+  "acceptance": [
+    "The predecessor's capitalized reserved-endpoint source and lowercase sibling both select Sequence through the same whole-source rule.",
+    "Focused parser tests cover renamed later-factory keyword endpoints, capitalization changes, topology changes, arrow-style changes, and a genuine competing command that prevents the pure-message fast path.",
+    "A separate checker supplies fresh Java-valid inputs over at least two independent perturbation axes and every fresh input passes strict diff_one --no-oracle byte comparison; any nonzero fresh diff rejects this successor.",
+    "Focused parser tests, the parser library suite, product no-oracle metrics, parity perturbations, and harness guards pass without comparator or baseline changes."
+  ],
+  "forbidden_approaches": [
+    "special-casing Node, Queue, Component, endpoint capitalization, fixture labels, or source filenames",
+    "raising a Sequence score until the known source happens to win",
+    "treating a partially recognized or mixed-command source as complete Sequence consumption",
+    "changing sequence geometry, renderer output, comparator controls, baselines, golden data, park lists, error markers, or guard allow-lists"
+  ]
+}
