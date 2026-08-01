@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "artifact_kind": "hostile_mutation_record",
+  "mutation": "Attempt to use gate evidence as renderer parity evidence, then mutate the preserved gate artifact bytes after the review declares their Git blob hash.",
+  "attack_axes": [
+    "artifact immutability",
+    "evidence-kind smuggling",
+    "gate evidence must not inflate parity inventory"
+  ],
+  "commands": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+      "observed": "PASS: gate_evidence_validates_without_inflating_parity_inventory and changed_gate_artifact_bytes_fail_the_declared_hash passed inside the 32-test focused suite."
+    }
+  ],
+  "expected": "Gate evidence may validate a gate review but must select zero AcceptedHeldOut entries, and a changed artifact must fail the declared hash/HEAD immutability check.",
+  "observed": "The gate review remained non-inflating when paired with a valid parity review, and byte mutation of a gate artifact produced the expected hash mismatch violation.",
+  "result": "PASS: mutation stopped"
+}

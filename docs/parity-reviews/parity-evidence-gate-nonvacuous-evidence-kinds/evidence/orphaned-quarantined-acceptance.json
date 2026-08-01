@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "artifact_kind": "hostile_mutation_record",
+  "mutation": "Preserve a byte-level quarantined review whose authored verdict is ACCEPT but omit any active canonical same-directory successor review.",
+  "attack_axes": [
+    "quarantined ACCEPT",
+    "active successor requirement",
+    "historical acceptance cannot become silence"
+  ],
+  "commands": [
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+      "observed": "PASS: orphaned_quarantined_acceptance_fails_closed passed inside the 32-test focused suite."
+    },
+    {
+      "command": "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-review/target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture",
+      "observed": "FAIL as expected: the real repository reports exactly 18 quarantined ACCEPT directories requiring canonical active successor reviews, plus the empty parity inventory violation."
+    }
+  ],
+  "expected": "Every quarantined authored ACCEPT without an active same-directory canonical successor must be rejected by the real guard instead of silently disappearing from the accepted corpus.",
+  "observed": "The focused mutation and real guard both rejected orphaned quarantined ACCEPT records. The real guard listed the expected 18 unrelated orphaned acceptances.",
+  "result": "PASS: mutation stopped"
+}
