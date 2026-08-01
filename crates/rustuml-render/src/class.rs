@@ -17242,8 +17242,8 @@ fn note_box_dims(
     let style = ResolvedNoteStyle::for_note(diagram, note);
     let (body_width, body_height) = note_body_dimensions(&note.lines, sprites, &style);
     (
-        body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
-        body_height + NOTE_PAD_Y * 2.0,
+        body_width + style.sheet_padding * 2.0 + NOTE_PAD_X + NOTE_PAD_RIGHT,
+        body_height + style.sheet_padding * 2.0 + NOTE_PAD_Y * 2.0,
     )
 }
 
@@ -17256,8 +17256,8 @@ fn relationship_note_box_dims(
     let style = ResolvedNoteStyle::for_link_note(diagram, relationship, note);
     let (body_width, body_height) = note_body_dimensions(&note.lines, sprites, &style);
     (
-        body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
-        body_height + NOTE_PAD_Y * 2.0,
+        body_width + style.sheet_padding * 2.0 + NOTE_PAD_X + NOTE_PAD_RIGHT,
+        body_height + style.sheet_padding * 2.0 + NOTE_PAD_Y * 2.0,
     )
 }
 
@@ -17475,6 +17475,11 @@ fn emit_note_body(
     sprites: &HashMap<String, SpriteData>,
     style: &ResolvedNoteStyle,
 ) {
+    // Java `Display.getCreole` wraps the complete sheet in one outer
+    // `SheetBlock1` before Rose note margins are applied.
+    let x = x + style.sheet_padding;
+    let y = y + style.sheet_padding;
+    let width = width - style.sheet_padding * 2.0;
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(lines) {
         if let Some(code) = note_code_lines(&block.lines) {
@@ -21852,6 +21857,39 @@ mod tests {
             padded.column_widths.iter().zip(&unpadded.column_widths)
         {
             assert_close(padded_width - unpadded_width, 2.5);
+        }
+    }
+
+    #[test]
+    fn class_note_display_sheet_padding_wraps_plain_and_monospace_bodies() {
+        let dimensions = |padding: f64, body: &str| {
+            let input = format!(
+                "@startuml\n\
+                 skinparam Padding {padding}\n\
+                 class PaddingSource7411\n\
+                 class PaddingTarget7417\n\
+                 PaddingSource7411 -- PaddingTarget7417\n\
+                 note on link\n\
+                 {body}\n\
+                 end note\n\
+                 @enduml"
+            );
+            let Diagram::Class(diagram) = rustuml_parser::parse::parse(&input).unwrap() else {
+                panic!("expected class diagram");
+            };
+            let relationship = &diagram.relationships[0];
+            let note = relationship.link_note.as_ref().unwrap();
+            relationship_note_box_dims(&diagram, relationship, note, &diagram.meta.sprites)
+        };
+
+        for body in [
+            "renamed plain sheet content",
+            "<code>renamed mono sheet</code>",
+        ] {
+            let unpadded = dimensions(0.0, body);
+            let padded = dimensions(3.0, body);
+            assert_eq!(padded.0 - unpadded.0, 6.0);
+            assert_eq!(padded.1 - unpadded.1, 6.0);
         }
     }
 
