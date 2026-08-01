@@ -1760,16 +1760,7 @@ fn sprite_surface_rgb(color: &str) -> [u8; 3] {
 /// this includes ASCII punctuation *and* all non-ASCII characters (CJK,
 /// accented Latin, etc.), so e.g. `Ärger` → `.rger` and `客户端` → `...`.
 pub(crate) fn translate_qualified_name(label: &str) -> String {
-    label
-        .chars()
-        .map(|c| {
-            if c.is_ascii_alphanumeric() || c == '.' || c == '_' || c == ' ' || c == '-' {
-                c
-            } else {
-                '.'
-            }
-        })
-        .collect()
+    crate::svg::project_qualified_name(label)
 }
 
 /// Build an entity's `data-qualified-name`: the containing-package prefix

@@ -119,6 +119,9 @@ pub enum DeploymentNodeKind {
     File,
     Package,
     Stack,
+    Hexagon,
+    Action,
+    Process,
     /// An entity referenced only via a connection (never declared with an
     /// explicit keyword). PlantUML renders these as a bare default circle.
     Default,

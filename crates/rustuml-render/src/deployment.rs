@@ -284,7 +284,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             }
             cur_id = pid.clone();
         }
-        qname_for_id.insert(n.id.clone(), q);
+        qname_for_id.insert(n.id.clone(), crate::svg::project_qualified_name(&q));
     }
 
     // Merge nodes and connections by source_line; assign IDs sequentially.
@@ -588,6 +588,9 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
         File => "file",
         Package => "package",
         Stack => "stack",
+        Hexagon => "hexagon",
+        Action => "action",
+        Process => "process",
         Default => "",
     }
 }
@@ -743,6 +746,9 @@ fn skin_background_fills(
         File,
         Package,
         Stack,
+        Hexagon,
+        Action,
+        Process,
     ];
     let mut map = HashMap::new();
     for &kind in KINDS {
@@ -786,6 +792,9 @@ fn skin_border_colors(
         File,
         Package,
         Stack,
+        Hexagon,
+        Action,
+        Process,
     ];
     let mut map = HashMap::new();
     for &kind in KINDS {
@@ -803,12 +812,7 @@ fn skin_border_colors(
 
 /// Compute the "own" qualified-name (last segment) for a node.
 fn own_qname(node: &DeploymentNode) -> String {
-    let derived = label_to_id(&node.label);
-    if derived == node.id && node.id != node.label {
-        qname_label_segment(&node.label)
-    } else {
-        node.id.clone()
-    }
+    node.id.clone()
 }
 
 struct OracleRenderContext<'a> {
@@ -1173,28 +1177,11 @@ fn stereotype_refs_sprite(
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
-    // Heuristic: when the parser's `id` was derived from the label
-    // (no explicit alias), the qualified-name uses the label.
-    // When an alias was used, the qualified-name uses the id.
-    let derived = label_to_id(&node.label);
-    let own = if derived == node.id && node.id != node.label {
-        // Quoted-form, no alias: id was auto-derived. Use label.
-        qname_label_segment(&node.label)
-    } else if node.id == node.label {
-        // Bare form: id == label. Either works.
-        node.id.clone()
-    } else {
-        // Alias used. Use the explicit id.
-        node.id.clone()
-    };
+    let own = crate::svg::project_qualified_name(&node.id);
     match parent_qname {
         Some(p) => format!("{p}.{own}"),
         None => own,
     }
-}
-
-fn qname_label_segment(label: &str) -> String {
-    label.replace(':', ".")
 }
 
 /// Resolve a raw `#color` token (the parser strips the leading `#`, so we
@@ -1208,22 +1195,6 @@ fn resolve_fill(raw: &str) -> String {
     } else {
         // Not a recognised name — treat the token as a bare hex value.
         format!("#{normalized}")
-    }
-}
-
-fn label_to_id(label: &str) -> String {
-    let mut id = String::new();
-    for ch in label.chars() {
-        if ch.is_alphanumeric() || ch == '_' {
-            id.push(ch);
-        } else if ch == ' ' || ch == '-' || ch == '.' {
-            id.push('_');
-        }
-    }
-    if id.is_empty() {
-        label.replace(|c: char| !c.is_alphanumeric(), "_")
-    } else {
-        id
     }
 }
 
@@ -1260,6 +1231,29 @@ fn emit_entity_shape(
         Storage => emit_storage(svg, x, y, w, h, fill, stroke),
         Database => emit_database(svg, x, y, w, h, fill, stroke, label),
         Queue => emit_queue(svg, x, y, w, h, fill, stroke),
+        Action => emit_action_process_shape(
+            svg,
+            x,
+            y,
+            w,
+            h,
+            fill,
+            stroke,
+            DESCRIPTION_LEAF_STROKE_WIDTH,
+            false,
+        ),
+        Process => emit_action_process_shape(
+            svg,
+            x,
+            y,
+            w,
+            h,
+            fill,
+            stroke,
+            DESCRIPTION_LEAF_STROKE_WIDTH,
+            true,
+        ),
+        Hexagon => emit_hexagon_shape(svg, x, y, w, h, fill, stroke, DESCRIPTION_LEAF_STROKE_WIDTH),
         _ => emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 0.5),
     }
 }
@@ -1308,6 +1302,38 @@ fn emit_cluster_shape(
         Folder => emit_folder_cluster(svg, x, y, w, h, fill, label, round_corner),
         Package => emit_package_cluster(svg, x, y, w, h, fill, label),
         Stack => emit_stack_cluster(svg, x, y, w, h, fill, round_corner),
+        Action => emit_action_process_shape(
+            svg,
+            x,
+            y,
+            w,
+            h,
+            fill,
+            stroke,
+            DESCRIPTION_CLUSTER_STROKE_WIDTH,
+            false,
+        ),
+        Process => emit_action_process_shape(
+            svg,
+            x,
+            y,
+            w,
+            h,
+            fill,
+            stroke,
+            DESCRIPTION_CLUSTER_STROKE_WIDTH,
+            true,
+        ),
+        Hexagon => emit_hexagon_shape(
+            svg,
+            x,
+            y,
+            w,
+            h,
+            fill,
+            stroke,
+            DESCRIPTION_CLUSTER_STROKE_WIDTH,
+        ),
         _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
@@ -1369,6 +1395,92 @@ fn emit_plain_rect_cluster(
     round_corner: f64,
 ) {
     emit_rounded_rect_with_round_corner(svg, x, y, w, h, fill, stroke, round_corner, 1.0);
+}
+
+// Java `USymbolAction.drawAction` and `USymbolProcess.drawProcess` use a
+// ten-pixel shoulder at both right-hand corners.
+const ACTION_PROCESS_SHOULDER: f64 = 10_f64;
+// Java `USymbolHexagon.drawRect` places its sloped corners at width / 8.
+const HEXAGON_SLOPE_DIVISOR: f64 = 8_f64;
+const SHAPE_MIDPOINT_DIVISOR: f64 = 2_f64;
+const DESCRIPTION_LEAF_STROKE_WIDTH: f64 = 1_f64 / 2_f64;
+const DESCRIPTION_CLUSTER_STROKE_WIDTH: f64 = 1_f64;
+const DESCRIPTION_CLUSTER_TITLE_Y: f64 = 2_f64;
+const ACTION_LEFT_MARGIN: f64 = 10_f64;
+const PROCESS_LEFT_MARGIN: f64 = 20_f64;
+const ACTION_PROCESS_TOP_MARGIN: f64 = 10_f64;
+const HEXAGON_TOP_MARGIN: f64 = 5_f64;
+const ACTION_HORIZONTAL_MARGIN: f64 = 30_f64;
+const PROCESS_HORIZONTAL_MARGIN: f64 = 40_f64;
+const ACTION_PROCESS_VERTICAL_MARGIN: f64 = 20_f64;
+const HEXAGON_VERTICAL_MARGIN: f64 = 10_f64;
+const HEXAGON_TEXT_WIDTH_MULTIPLIER: f64 = 2_f64;
+const POLYGON_LIMIT_FINDER_X_EXPANSION: f64 = 10_f64;
+
+#[allow(clippy::too_many_arguments)]
+fn emit_action_process_shape(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+    process: bool,
+) {
+    let mut vertices = vec![
+        (x, y),
+        (x + w - ACTION_PROCESS_SHOULDER, y),
+        (x + w, y + h / SHAPE_MIDPOINT_DIVISOR),
+        (x + w - ACTION_PROCESS_SHOULDER, y + h),
+        (x, y + h),
+    ];
+    if process {
+        vertices.push((x + ACTION_PROCESS_SHOULDER, y + h / SHAPE_MIDPOINT_DIVISOR));
+    }
+    let points = vertices
+        .iter()
+        .map(|(px, py)| format!("{},{}", fc(*px), fc(*py)))
+        .collect::<Vec<_>>()
+        .join(",");
+    svg.raw(&format!(
+        r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
+    ));
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_hexagon_shape(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+) {
+    let slope = w / HEXAGON_SLOPE_DIVISOR;
+    let d = format!(
+        "M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{}",
+        fc(x),
+        fc(y + h / SHAPE_MIDPOINT_DIVISOR),
+        fc(x + slope),
+        fc(y),
+        fc(x + w - slope),
+        fc(y),
+        fc(x + w),
+        fc(y + h / SHAPE_MIDPOINT_DIVISOR),
+        fc(x + w - slope),
+        fc(y + h),
+        fc(x + slope),
+        fc(y + h),
+        fc(x),
+        fc(y + h / SHAPE_MIDPOINT_DIVISOR),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
+    ));
 }
 
 // ---- Node ("tag" polygon) -------------------------------------------------
@@ -2684,7 +2796,9 @@ fn cluster_title_baseline_offset(kind: DeploymentNodeKind) -> f64 {
         // `USymbolStorage.asBig` places the title at y=7.
         Storage => ASCENT_14 + 7.0,
         // Card-like clusters place the title at y=2.
-        Artifact | Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
+        Artifact | Card | Rectangle | Agent | Frame | Action | Process | Hexagon => {
+            ASCENT_14 + DESCRIPTION_CLUSTER_TITLE_Y
+        }
         _ => ASCENT_14 + 13.0,
     }
 }
@@ -2743,6 +2857,20 @@ fn entity_text_geom(kind: DeploymentNodeKind, _w: f64, _label: &str) -> (f64, f6
         Artifact => (10.0, TEXT_PAD_ARTIFACT, false),
         Card => (10.0, TEXT_PAD_CARD, false),
         Rectangle | Agent | File | Storage => (10.0, TEXT_PAD_RECTLIKE, false),
+        // Java `USymbolAction.getMargin` is (10,20,10,10), while
+        // `USymbolProcess.getMargin` is (20,20,10,10).
+        Action => (
+            ACTION_LEFT_MARGIN,
+            ACTION_PROCESS_TOP_MARGIN + ASCENT_14,
+            false,
+        ),
+        Process => (
+            PROCESS_LEFT_MARGIN,
+            ACTION_PROCESS_TOP_MARGIN + ASCENT_14,
+            false,
+        ),
+        // `USymbolHexagon.asSmall` doubles text width and paints at y=5.
+        Hexagon => (0_f64, HEXAGON_TOP_MARGIN + ASCENT_14, false),
         // Folder label sits below the tab band (tab height 21 + ascent + 7).
         Folder => (10.0, ASCENT_14 + 28.0, false),
         // Queue is shorter vertically: ascent + 5.
@@ -5484,7 +5612,7 @@ fn deployment_qnames(
                 break;
             }
         }
-        qnames.insert(node.id.clone(), qname);
+        qnames.insert(node.id.clone(), crate::svg::project_qualified_name(&qname));
     }
     qnames
 }
@@ -5562,6 +5690,13 @@ fn deployment_node_dim(
         DeploymentNodeKind::Queue => label_width.max(stereo_width) + 20.0,
         // `USymbolStack.asSmall` adds `Margin(25, 25, 10, 10)`.
         DeploymentNodeKind::Stack => label_width.max(stereo_width) + 50.0,
+        // Java `USymbolAction` and `USymbolProcess` add their exact margins
+        // around the merged stereotype/label block.
+        DeploymentNodeKind::Action => label_width.max(stereo_width) + ACTION_HORIZONTAL_MARGIN,
+        DeploymentNodeKind::Process => label_width.max(stereo_width) + PROCESS_HORIZONTAL_MARGIN,
+        DeploymentNodeKind::Hexagon => {
+            HEXAGON_TEXT_WIDTH_MULTIPLIER * label_width.max(stereo_width)
+        }
         _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
     };
     let height = match node.kind {
@@ -5603,6 +5738,12 @@ fn deployment_node_dim(
             line_count as f64 * TEXT_LINE_H + label_height_extra + 13.0 + 10.0
         }
         DeploymentNodeKind::Queue => line_count as f64 * TEXT_LINE_H + label_height_extra + 10.0,
+        DeploymentNodeKind::Action | DeploymentNodeKind::Process => {
+            line_count as f64 * TEXT_LINE_H + label_height_extra + ACTION_PROCESS_VERTICAL_MARGIN
+        }
+        DeploymentNodeKind::Hexagon => {
+            line_count as f64 * TEXT_LINE_H + label_height_extra + HEXAGON_VERTICAL_MARGIN
+        }
         _ => {
             base_top_pad
                 + (line_count.saturating_sub(1)) as f64 * TEXT_LINE_H
@@ -5781,7 +5922,7 @@ fn deployment_local_painted_y_bounds(
         // The stack combines an inset `URectangle` (minimum Y at -1) with
         // a full-height `UPath` (maximum Y at the declared height).
         Stack => (-1.0, dim.height),
-        Folder | Queue | File | Package => (0.0, dim.height),
+        Action | Process | Hexagon | Folder | Queue | File | Package => (0_f64, dim.height),
     }
 }
 
@@ -5943,6 +6084,15 @@ fn deployment_cluster_local_painted_bounds(
         // `USymbolStack.drawQueue` paints a full-width UPath, while its inset
         // `URectangle` extends the top LimitFinder bound by one.
         Stack => (0.0, -1.0, width, height),
+        // `USymbolAction` and `USymbolProcess` use UPolygon; LimitFinder
+        // expands polygon X extrema by ten pixels. Hexagon uses UPath.
+        Action | Process => (
+            -POLYGON_LIMIT_FINDER_X_EXPANSION,
+            0_f64,
+            width + POLYGON_LIMIT_FINDER_X_EXPANSION,
+            height,
+        ),
+        Hexagon => (0_f64, 0_f64, width, height),
         _ => return None,
     })
 }
@@ -6337,7 +6487,11 @@ fn deployment_local_painted_x_bounds(node: &DeploymentNode, dim: &DeploymentNode
         // `USymbolDatabase.drawDatabase` places `UEmpty(10, 10)` at the
         // lower-right corner so `LimitFinder` extends past the cylinder.
         Database => (0.0, dim.width + 10.0),
-        Frame | Folder | Queue | File | Package | Stack => (0.0, dim.width),
+        Action | Process => (
+            -POLYGON_LIMIT_FINDER_X_EXPANSION,
+            dim.width + POLYGON_LIMIT_FINDER_X_EXPANSION,
+        ),
+        Hexagon | Frame | Folder | Queue | File | Package | Stack => (0_f64, dim.width),
         _ => (-1.0, dim.width - 1.0),
     }
 }
@@ -7256,6 +7410,21 @@ fn edge_path_d(points: &[(f64, f64)]) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn deployment_qnames_use_canonical_ids_not_visible_labels() {
+        let lines = [
+            r#"folder "Visible Root" as root.alpha {"#.to_string(),
+            r#"node "Visible Worker" as worker.beta"#.to_string(),
+            "}".to_string(),
+        ];
+        let diagram = rustuml_parser::parse::deployment::parse_deployment(&lines).unwrap();
+        let parent_of = deployment_parent_map(&diagram);
+        let qnames = deployment_qnames(&diagram, &parent_of);
+
+        assert_eq!(qnames["root.alpha"], "root.alpha");
+        assert_eq!(qnames["worker.beta"], "root.alpha.worker.beta");
+    }
 
     fn root_numeric_attr(svg: &str, name: &str) -> f64 {
         let root = svg.split_once('>').map_or(svg, |(root, _)| root);

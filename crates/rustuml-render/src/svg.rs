@@ -5,6 +5,21 @@
 
 use std::fmt::Write;
 
+/// Java `UGroup.fix` projects metadata values through `[^-\w ] -> .` before
+/// SVG serialization. Java's default `\w` is ASCII word characters here.
+pub(crate) fn project_qualified_name(value: &str) -> String {
+    value
+        .chars()
+        .map(|ch| {
+            if ch.is_ascii_alphanumeric() || ch == '_' || ch == '-' || ch == ' ' {
+                ch
+            } else {
+                '.'
+            }
+        })
+        .collect()
+}
+
 pub(crate) fn normalize_svg_link_title(title: &str) -> String {
     let mut normalized = String::with_capacity(title.len());
     let mut rest = title;
@@ -1072,5 +1087,13 @@ mod tests {
         let output = svg.finalize();
         // Unknown icon produces no path, but text still renders.
         assert!(output.contains("Text"), "expected text in: {output}");
+    }
+
+    #[test]
+    fn qualified_name_projection_matches_java_ugroup_fix() {
+        assert_eq!(
+            project_qualified_name("Root: α/Worker.One_(Blue)-9"),
+            "Root. ..Worker.One_.Blue.-9"
+        );
     }
 }

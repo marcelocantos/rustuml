@@ -1006,10 +1006,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // deployment signal.  `node`, `cloud`, `database`, `component`,
             // `frame`, `folder`, `rectangle` are shared with component diagrams,
             // so only keywords that are unique to deployment get the extra boost.
-            const DEPLOY_EXCLUSIVE: &[&str] =
-                &["artifact", "storage", "card", "stack", "file", "agent"];
+            const DEPLOY_EXCLUSIVE: &[&str] = &[
+                "artifact", "storage", "card", "stack", "file", "agent", "hexagon", "action",
+                "process",
+            ];
+            let complete_deployment_container =
+                deployment::looks_like_deployment_container_command(trimmed);
             let is_deploy_exclusive_container =
-                trimmed.contains('{') && DEPLOY_EXCLUSIVE.contains(&kw);
+                complete_deployment_container && DEPLOY_EXCLUSIVE.contains(&kw);
             // A deployment keyword with a QUOTED label and a `{` brace is a
             // strong deployment signal: component diagrams consistently use bare
             // identifiers for their containers; quoted names only appear in
@@ -1027,7 +1031,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 && matches!(kw, "card" | "stack" | "file" | "agent")
                 && kw_end < trimmed.len()
                 && deployment_keyword_arg;
-            let is_quoted_container = trimmed.contains('{')
+            let is_quoted_container = complete_deployment_container
                 && after_kw.starts_with('"')
                 && kw != "package"
                 && kw != "actor"
@@ -3342,6 +3346,17 @@ cloud "Kubernetes Cluster" {
 @enduml"#;
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn complete_description_container_commands_select_deployment() {
+        for source in [
+            "process \"Scheduler\" as scheduler-west/7 {\n  artifact Worker\n}",
+            "hexagon zone-main {\n  action action.step {\n    file Payload\n  }\n}",
+        ] {
+            let diagram = parse(&format!("@startuml\n{source}\n@enduml")).unwrap();
+            assert!(matches!(diagram, Diagram::Deployment(_)), "{source}");
+        }
     }
 
     #[test]
