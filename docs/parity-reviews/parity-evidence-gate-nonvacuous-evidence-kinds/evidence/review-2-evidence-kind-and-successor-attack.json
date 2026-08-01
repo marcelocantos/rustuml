@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-nonvacuous-evidence-kinds",
+  "artifact_kind": "independent_reviewer_mutation_record",
+  "tool_identity": {
+    "reviewer": "Codex GPT-5 independent checker",
+    "task_id": "rustuml-t14-gate-integration-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop; apply_patch; git; prebuilt harness_guards binary"
+  },
+  "revisions": {
+    "review_base_commit": "5e4511fc757b1f3e03937ff28d0d9e7ce71c893f",
+    "account_commit": "66883f6f2b9aad89fc5215478a9be5983c9c34c9",
+    "implementation_commit": "9c886aa94a4c0bfa8192cda221730f9ba324c749",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "harness": {
+    "binary": "/private/tmp/harness_guards-gate-integration-review-b811af90db10b634",
+    "source_binary": "/private/tmp/rustuml-t14-gate-integration/target/release/deps/harness_guards-b811af90db10b634",
+    "compiled_manifest_dir": "/private/tmp/rustuml-t14-gate-integration/crates/rustuml-oracle",
+    "path_redirection": "During each full-record run, /private/tmp/rustuml-t14-gate-integration was moved aside, replaced by a symlink to /private/tmp/rustuml-t14-gate-integration-review, and restored by a trap."
+  },
+  "attack_axes": [
+    "evidence-kind smuggling",
+    "active canonical successor selection",
+    "quarantined ACCEPT successor obligation"
+  ],
+  "temporary_mutations": [
+    {
+      "path": "docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds/review.json",
+      "change": "Added a parity perturbations array to a gate review.",
+      "observed": "The full-record guard failed with: gate review must not declare parity evidence field perturbations.",
+      "restored": "The perturbations field was removed before this evidence commit."
+    },
+    {
+      "path": "docs/parity-reviews/class-attached-note-rankdir-position/review-2.json",
+      "change": "Temporarily moved the active successor review to review-2.json.__codex_hidden.",
+      "observed": "The full-record guard failed with: docs/parity-reviews/class-attached-note-rankdir-position: quarantined ACCEPT requires a canonical active successor review.",
+      "restored": "The active successor review was moved back before this evidence commit."
+    }
+  ],
+  "commands": [
+    {
+      "command": "/private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_evidence::tests --nocapture",
+      "result": "PASS: 32 passed, 0 failed, 6 filtered out"
+    },
+    {
+      "command": "apply_patch: add a parity perturbations field to the gate review; then run /private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "HARNESS_RC=101; gate review must not declare parity evidence field perturbations"
+    },
+    {
+      "command": "mv class-attached-note-rankdir-position/review-2.json aside; then run /private/tmp/harness_guards-gate-integration-review-b811af90db10b634 parity_review_records_are_complete --nocapture",
+      "result": "HARNESS_RC=101; quarantined ACCEPT requires a canonical active successor review"
+    },
+    {
+      "command": "git diff -- docs/parity-reviews/parity-evidence-gate-nonvacuous-evidence-kinds docs/parity-reviews/class-attached-note-rankdir-position/review-2.json",
+      "result": "no diff after restoration"
+    }
+  ],
+  "expected": "Gate evidence must never be interpreted as parity held-out evidence, and a byte-preserved quarantined ACCEPT must require an active canonical successor selected by the closed review filename grammar.",
+  "observed": "The isolated mutation suite passed all 32 parity evidence tests. The real-checkout smuggling mutation and successor-removal mutation both produced the expected guard failures.",
+  "result": "PASS: mutation stopped"
+}
