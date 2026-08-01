@@ -1,0 +1,210 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "b93fbb83e7b34f5f2be228824de415332d476a15",
+  "canonical_result": "ACCEPT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "ACCEPT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 2,
+    "observed_independent_axes": [
+      "URL token adjacency",
+      "URL tooltip token",
+      "class family",
+      "escaped newline outside URL",
+      "member display text",
+      "message and note consumers",
+      "ordinary note display text",
+      "sequence family"
+    ],
+    "source_sha256_values": [
+      "f81b0221e4047bb0c642b7e49471e649dc846b772bce9076b706a8c2348022b4",
+      "70414f181d265a7a34cff39fb25133f2eff8b168b17d3c87759251c3a3b16bdb"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.exit",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.stderr",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.txt",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.java.exit",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.java.stderr",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.puml",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.exit",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.stderr",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.svg",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.svg",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.exit",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.stderr",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.txt",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.java.exit",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.java.stderr",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.puml",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.exit",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.stderr",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.svg",
+      "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The account record was present and predates the implementation commit; the implementation commit is an ancestor of the pinned shipped binary source.",
+    "Java raw/newline tokenization and URL handling were inspected in Display, UrlBuilder, and command URL parsing; Rust display splitting and render consumers were inspected at the pinned revision.",
+    "Fresh heldout rereview_b_01 varies sequence diagram URL tooltip handling, escaped newline splits outside the URL token, and message/note text consumers; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_02 varies class member text, ordinary class note text, raw URL token, and escaped newline splits adjacent to the URL; Java succeeds and diff_one --no-oracle exits 0.",
+    "Both accepted heldouts are content-distinct Java-success inputs across URL/raw-display and non-URL display axes."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/display-raw-newline-tokenization/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review.json"
+    ]
+  },
+  "implementation_commit": "b9b5e3805458481c8e595247a18229c511aa52c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit b9b5e3805458481c8e595247a18229c511aa52c3",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-display-raw-newline-tokenization"
+  },
+  "mechanism": "display-raw-newline-tokenization",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.puml": "f81b0221e4047bb0c642b7e49471e649dc846b772bce9076b706a8c2348022b4",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.svg": "e22f483f63ab7dd11385a13ed7af845a534541e6c15040beef9bcd660107a04e",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.svg": "dcfec41fbfe0a725686cae06a5b2076a17253240cc2c986df22265ea40aa6eca"
+      },
+      "axes": [
+        "sequence family",
+        "URL tooltip token",
+        "escaped newline outside URL",
+        "message and note consumers"
+      ],
+      "content_distinct_sha256": "f81b0221e4047bb0c642b7e49471e649dc846b772bce9076b706a8c2348022b4",
+      "diff_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.java.exit",
+      "java_stderr": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.svg",
+      "name": "rereview_b_01_sequence_url_tooltip_outside_split",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.rust.svg",
+      "source": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_01_sequence_url_tooltip_outside_split.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.puml": "70414f181d265a7a34cff39fb25133f2eff8b168b17d3c87759251c3a3b16bdb",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.svg": "ca53a3095c7bf31dc8381bfe3e0187fb83db67ec7f46d504f407fe9e0efc9b8f",
+        "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.svg": "b7baa9b03a11703ca7c52d0c45db646870d067df4d2e0d4eb2eef7defcaf905a"
+      },
+      "axes": [
+        "class family",
+        "member display text",
+        "ordinary note display text",
+        "URL token adjacency"
+      ],
+      "content_distinct_sha256": "70414f181d265a7a34cff39fb25133f2eff8b168b17d3c87759251c3a3b16bdb",
+      "diff_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.java.exit",
+      "java_stderr": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.svg",
+      "name": "rereview_b_02_class_member_note_raw_url_split",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.rust.svg",
+      "source": "test-diagrams/perturbations/display-raw-newline-tokenization/rereview_b_02_class_member_note_raw_url_split.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "b93fbb83e7b34f5f2be228824de415332d476a15",
+    "implementation_commit": "b9b5e3805458481c8e595247a18229c511aa52c3",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/display-raw-newline-tokenization",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/klimt/creole/Display.java",
+      "net/sourceforge/plantuml/klimt/url/UrlBuilder.java",
+      "net/sourceforge/plantuml/command/CommandCreoleUrl.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-parser/src/display.rs",
+      "crates/rustuml-render/src/sequence.rs",
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "accepted"
+}

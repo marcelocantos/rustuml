@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="105px" preserveAspectRatio="none" style="width:537px;height:105px;background:#FFFFFF;" version="1.1" viewBox="0 0 537 105" width="537px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity PaletteAnchorB1-->
+<g class="entity" data-qualified-name="PaletteAnchorB1" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="159.8887" x="363.67" y="25.41"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="503.5587" y="30.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="501.5587" y="32.41"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="501.5587" y="36.41"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119.8887" x="378.67" y="58.9452">Palette Anchor B1</text>
+</g>
+<g class="entity" data-qualified-name="PaletteBusinessB1" data-source-line="3" id="ent0003">
+<path d="M6,6 L6,31.3105 A0,0 0 0 0 6,31.3105 L127.6738,31.3105 A0,0 0 0 0 127.6738,31.3105 L127.6738,27.47 L363.29,42.3 L127.6738,19.47 L127.6738,16 L117.6738,6 L6,6 A0,0 0 0 0 6,6" fill="#FFFFCC" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M117.6738,6 L117.6738,16 L127.6738,16 L117.6738,6" fill="#FFFFCC" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="100.6738" x="12" y="23.5684">business tint B1</text>
+</g>
+<g class="entity" data-qualified-name="PaletteAlphaB1" data-source-line="4" id="ent0004">
+<path d="M16.9,66 L16.9,91.3105 A0,0 0 0 0 16.9,91.3105 L116.7696,91.3105 A0,0 0 0 0 116.7696,91.3105 L116.7696,84 L363.29,61.18 L116.7696,76 L116.7696,76 L106.7696,66 L16.9,66 A0,0 0 0 0 16.9,66" fill="#112233" fill-opacity="0.50196" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M106.7696,66 L106.7696,76 L116.7696,76 L106.7696,66" fill="#112233" fill-opacity="0.50196" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="78.8696" x="22.9" y="83.5684">alpha flat B1</text>
+</g>
+</g></svg>

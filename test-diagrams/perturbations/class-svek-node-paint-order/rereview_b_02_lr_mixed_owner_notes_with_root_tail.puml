@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+package FreshOrderBoxB1 {
+  note "floating owner note B1" as FreshOrderMemoB1
+  class FreshOrderLeafB1
+  note left of FreshOrderLeafB1 : attached owner note B1
+}
+class FreshLooseOrderB1
+@enduml

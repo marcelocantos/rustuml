@@ -1,0 +1,5 @@
+@startuml
+participant "Raw Client B1" as RawClientB1
+participant "Raw Server B1" as RawServerB1
+RawClientB1 -> RawServerB1 : before [[https://example.com/rereview-b/a\nb {tooltip\nkept} raw label B1]] after\noutside row B1
+@enduml

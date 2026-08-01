@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="306px" preserveAspectRatio="none" style="width:740px;height:306px;background:#FFFFFF;" version="1.1" viewBox="0 0 740 306" width="740px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster OuterAttachB1-->
+<g class="cluster" data-qualified-name="OuterAttachB1" data-source-line="4" id="ent0006">
+<path d="M8.5,6 L129.71,6 A3.75,3.75 0 0 1 132.21,8.5 L139.21,28.4883 L722.6728,28.4883 A2.5,2.5 0 0 1 725.1728,30.9883 L725.1728,167.5 A2.5,2.5 0 0 1 722.6728,170 L8.5,170 A2.5,2.5 0 0 1 6,167.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="6" x2="139.21" y1="28.4883" y2="28.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="120.21" x="10" y="21.5352">Outer display B1</text>
+</g>
+<!--cluster InnerAttachB1-->
+<g class="cluster" data-qualified-name="OuterAttachB1.InnerAttachB1" data-source-line="5" id="ent0007">
+<path d="M32.5,49 L150.3467,49 A3.75,3.75 0 0 1 152.8467,51.5 L159.8467,71.4883 L698.6728,71.4883 A2.5,2.5 0 0 1 701.1728,73.9883 L701.1728,143.5 A2.5,2.5 0 0 1 698.6728,146 L32.5,146 A2.5,2.5 0 0 1 30,143.5 L30,51.5 A2.5,2.5 0 0 1 32.5,49" fill="none" style="stroke:#000000;stroke-width:1.5;"/>
+<line style="stroke:#000000;stroke-width:1.5;" x1="30" x2="159.8467" y1="71.4883" y2="71.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="116.8467" x="34" y="64.5352">Inner display B1</text>
+</g>
+<!--entity NestedAttachB1-->
+<g class="entity" data-qualified-name="OuterAttachB1.InnerAttachB1.NestedAttachB1" data-source-line="6" id="ent0008">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="147.7549" x="301.73" y="83.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="429.4849" y="88.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="427.4849" y="90.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="427.4849" y="94.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107.7549" x="316.73" y="117.2952">NestedAttachB1</text>
+</g>
+<!--entity RootAttachB1-->
+<g class="entity" data-qualified-name="RootAttachB1" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="131.916" x="77.91" y="185.76"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="189.826" y="190.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="187.826" y="192.76"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="187.826" y="196.76"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91.916" x="92.91" y="219.2952">RootAttachB1</text>
+</g>
+<g class="entity" data-qualified-name="GMN3" data-source-line="3" id="ent0004">
+<path d="M81.21,267.34 L81.21,267.34 L143.87,232.55 L81.21,275.34 L81.21,292.6505 A0,0 0 0 0 81.21,292.6505 L206.521,292.6505 A0,0 0 0 0 206.521,292.6505 L206.521,277.34 L196.521,267.34 L81.21,267.34 A0,0 0 0 0 81.21,267.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M196.521,267.34 L196.521,277.34 L206.521,277.34 L196.521,267.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="104.311" x="87.21" y="284.9084">root attached B1</text>
+</g>
+<g class="entity" data-qualified-name="OuterAttachB1.InnerAttachB1.GMN9" data-source-line="8" id="ent0010">
+<path d="M46,86.69 L46,127.3111 A0,0 0 0 0 46,127.3111 L237.96,127.3111 L301.56,107 L245.96,127.3111 L241.7319,127.3111 A0,0 0 0 0 241.7319,127.3111 L241.7319,96.69 L231.7319,86.69 L46,86.69 A0,0 0 0 0 46,86.69" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M231.7319,86.69 L231.7319,96.69 L241.7319,96.69 L231.7319,86.69" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="174.7319" x="52" y="104.2584">nested attached B1 line one</text>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="174.3003" x="52" y="119.5689">nested attached B1 line two</text>
+</g>
+<g class="entity" data-qualified-name="OuterAttachB1.InnerAttachB1.GMN12" data-source-line="11" id="ent0013">
+<path d="M509.49,94.34 L509.49,119.6505 A0,0 0 0 0 509.49,119.6505 L685.176,119.6505 A0,0 0 0 0 685.176,119.6505 L685.176,104.34 L675.176,94.34 L517.49,94.34 L449.77,107 L509.49,94.34 L509.49,94.34 A0,0 0 0 0 509.49,94.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M675.176,94.34 L675.176,104.34 L685.176,104.34 L675.176,94.34" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="154.686" x="515.49" y="111.9084">nested attached B1 third</text>
+</g>
+</g></svg>

@@ -1,0 +1,10 @@
+@startuml
+package FreshOuterOrderB1 {
+  class FreshNestedOrderB1
+}
+package FreshOuterOrderB1 {
+  note top of FreshNestedOrderB1 : outer-owned attached note B1
+  class FreshSiblingOrderB1
+}
+class FreshRootTailOrderB1
+@enduml

@@ -1,0 +1,208 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "948ac3ac4419fdb080a1622c989dca0f879c634a",
+  "canonical_result": "REJECT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "REJECT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 1,
+    "observed_independent_axes": [
+      "alias target in nested package",
+      "attached note target resolution",
+      "deep package geometry",
+      "multiple attached note UID order",
+      "nested owner context",
+      "package/root coexistence",
+      "root versus nested note interleaving",
+      "sibling component names"
+    ],
+    "source_sha256_values": [
+      "98354d8e428405158cb5174e9dec479763dd2bd994e9b65ce6a4bc4adbf688a5",
+      "94aa060a7417bb1b3a5a656391acf8b270bc461f3e76785f9771811f04052c24"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.exit",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.stderr",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.txt",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.java.exit",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.java.stderr",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.puml",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.exit",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.stderr",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.svg",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.svg",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.exit",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.stderr",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.txt",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.java.exit",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.java.stderr",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.puml",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.exit",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.stderr",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.svg",
+      "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The account record was present and predates the implementation commit; the implementation commit is an ancestor of the pinned shipped binary source.",
+    "Java contextual entity identity for attached notes was inspected through quark ownership and note-on-entity command behavior; Rust parser/render component note UID and owner logic were inspected at the pinned revision.",
+    "Fresh heldout rereview_b_01 varies sibling target names, nested owner context, and package/root coexistence; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_02 is valid Java input but diff_one --no-oracle exits 1. The diff shows DESCRIPTION-wide geometry/order divergence and entity identity/order mismatch: Java expects nested GMN qualified under OuterAttachB1.InnerAttachB1 while Rust emits RootAttachB1 at the corresponding slot and later mismatches nested note text.",
+    "Because the user-required rule says any nonzero diff on a fresh valid input forces canonical REJECT, this mechanism is rejected for the pinned shipped binary."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/component-attached-note-contextual-identity/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review.json"
+    ]
+  },
+  "implementation_commit": "8e3293558e45963ebd57d910370fbfa8d3660da3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit 8e3293558e45963ebd57d910370fbfa8d3660da3",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-component-attached-note-contextual-identity"
+  },
+  "mechanism": "component-attached-note-contextual-identity",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.puml": "98354d8e428405158cb5174e9dec479763dd2bd994e9b65ce6a4bc4adbf688a5",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.svg": "7ed655857bdc37b8da85b25b41846c25f83d1b666b53e44f839f896829936e49",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.svg": "1f48d870fbfa9d12e56d05017832c24a1612f620f03d919220788536dac6af2e"
+      },
+      "axes": [
+        "sibling component names",
+        "nested owner context",
+        "package/root coexistence",
+        "attached note target resolution"
+      ],
+      "content_distinct_sha256": "98354d8e428405158cb5174e9dec479763dd2bd994e9b65ce6a4bc4adbf688a5",
+      "diff_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.java.exit",
+      "java_stderr": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.svg",
+      "name": "rereview_b_01_sibling_target_nested_owner",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.rust.svg",
+      "source": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_01_sibling_target_nested_owner.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.txt": "2fbd94523f98a0a7ec71ab84976e888a4f26e420febe923878a3c6b2425a17d5",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.puml": "94aa060a7417bb1b3a5a656391acf8b270bc461f3e76785f9771811f04052c24",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.svg": "25dfd6a6ab025ac9cd38e23beac217e0523a2313aadc7841b019d1b71944f1af",
+        "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.svg": "191a9d527d65087f42e0d3cfa832027445b4f523b97e84e3ce3d0006cab65421"
+      },
+      "axes": [
+        "alias target in nested package",
+        "multiple attached note UID order",
+        "root versus nested note interleaving",
+        "deep package geometry"
+      ],
+      "content_distinct_sha256": "94aa060a7417bb1b3a5a656391acf8b270bc461f3e76785f9771811f04052c24",
+      "diff_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "diff_stderr": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.java.exit",
+      "java_stderr": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.svg",
+      "name": "rereview_b_02_alias_nested_multiple_uid_order",
+      "result": "fail",
+      "rust_exit_artifact": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.rust.svg",
+      "source": "test-diagrams/perturbations/component-attached-note-contextual-identity/rereview_b_02_alias_nested_multiple_uid_order.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "948ac3ac4419fdb080a1622c989dca0f879c634a",
+    "implementation_commit": "8e3293558e45963ebd57d910370fbfa8d3660da3",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/component-attached-note-contextual-identity",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/abel/Quark.java",
+      "net/sourceforge/plantuml/descdiagram/command/CommandFactoryNoteOnEntity.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-render/src/component.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "rejected"
+}

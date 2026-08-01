@@ -1,0 +1,5 @@
+@startuml
+class FreshFrontierGammaB1
+class FreshFrontierDeltaB1
+FreshFrontierGammaB1 --> FreshFrontierDeltaB1 : **Bold B1**\nvalue <sub>low</sub> and <sup>high</sup>
+@enduml
