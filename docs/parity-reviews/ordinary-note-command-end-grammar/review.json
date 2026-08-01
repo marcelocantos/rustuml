@@ -1,0 +1,209 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "04e70e40dad8f344aedebba317eedfb8b259f3fc",
+  "canonical_result": "ACCEPT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "ACCEPT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 2,
+    "observed_independent_axes": [
+      "class family",
+      "cross-family closer payload",
+      "hnote/rnote closer policy",
+      "message parsing after note",
+      "post-note entity parsing",
+      "sequence family",
+      "tab-separated valid terminator",
+      "wrong-family terminator payload"
+    ],
+    "source_sha256_values": [
+      "40fda852950b2652c41ae08c50f47c5aa1aa9504fcf0d4f2c034e9ee82c4f016",
+      "6cbdc6db3e3596b5d468a9ea9f2623e493f1ae39bddfe21d58ce1cdb641ed067"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.exit",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.stderr",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.txt",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.java.exit",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.java.stderr",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.puml",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.exit",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.stderr",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.svg",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.svg",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.exit",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.stderr",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.txt",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.java.exit",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.java.stderr",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.puml",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.exit",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.stderr",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.svg",
+      "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The account record was present and predates the implementation commit; the implementation commit is an ancestor of the pinned shipped binary source.",
+    "Java ordinary multiline note terminator behavior was inspected in command factory and sequence note command code; Rust ordinary-note and family-specific terminator handling were inspected at the pinned revision.",
+    "Fresh heldout rereview_b_01 varies class-family ordinary note grammar, a wrong-family closing token retained as payload, and tab-separated valid terminator; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_02 varies sequence-family hnote/rnote closers, cross-family closing token as payload, and subsequent sequence messages; Java succeeds and diff_one --no-oracle exits 0.",
+    "Both accepted heldouts are content-distinct Java-success inputs spanning class and sequence grammar axes."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/ordinary-note-command-end-grammar/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review.json"
+    ]
+  },
+  "implementation_commit": "15980239c9971d79752cc3914b844f7376d167c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit 15980239c9971d79752cc3914b844f7376d167c2",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-ordinary-note-command-end-grammar"
+  },
+  "mechanism": "ordinary-note-command-end-grammar",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.puml": "40fda852950b2652c41ae08c50f47c5aa1aa9504fcf0d4f2c034e9ee82c4f016",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.svg": "8ed3eb3e88a66bf97081ce144fd1d04b79e5a26afe62da346f2ff2ecbb06f4ec",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.svg": "bc8ec577f8c80b829bbcb2d911d27cc8849fdd77994d841a5a49550d5f544f6c"
+      },
+      "axes": [
+        "class family",
+        "wrong-family terminator payload",
+        "tab-separated valid terminator",
+        "post-note entity parsing"
+      ],
+      "content_distinct_sha256": "40fda852950b2652c41ae08c50f47c5aa1aa9504fcf0d4f2c034e9ee82c4f016",
+      "diff_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.java.exit",
+      "java_stderr": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.svg",
+      "name": "rereview_b_01_class_wrong_family_tab_close",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.rust.svg",
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_01_class_wrong_family_tab_close.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.puml": "6cbdc6db3e3596b5d468a9ea9f2623e493f1ae39bddfe21d58ce1cdb641ed067",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.svg": "51f6b0c89aa007a73afa9305f9e1feceb197d8952c071da6b71bff8341c25b6c",
+        "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.svg": "67eb38311a14afb4d90f2a3ad4ed35f6aea8688b3f46888cd4f71bc0a06d888b"
+      },
+      "axes": [
+        "sequence family",
+        "hnote/rnote closer policy",
+        "cross-family closer payload",
+        "message parsing after note"
+      ],
+      "content_distinct_sha256": "6cbdc6db3e3596b5d468a9ea9f2623e493f1ae39bddfe21d58ce1cdb641ed067",
+      "diff_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.java.exit",
+      "java_stderr": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.svg",
+      "name": "rereview_b_02_sequence_cross_family_close",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.rust.svg",
+      "source": "test-diagrams/perturbations/ordinary-note-command-end-grammar/rereview_b_02_sequence_cross_family_close.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "04e70e40dad8f344aedebba317eedfb8b259f3fc",
+    "implementation_commit": "15980239c9971d79752cc3914b844f7376d167c2",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/ordinary-note-command-end-grammar",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+      "net/sourceforge/plantuml/command/CommandMultilines2.java",
+      "net/sourceforge/plantuml/sequencediagram/command/FactorySequenceNoteCommand.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/parse/sequence.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "accepted"
+}

@@ -1,0 +1,9 @@
+@startuml
+class RequesterB1
+RequesterB1 --> RootB1.FeatureB1.SubB1.LeafB1
+frame RootB1.FeatureB1 as "Feature Root B1" {
+  folder SubB1 {
+    class LeafB1
+  }
+}
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam fontName Courier New
+state "Generic Inert B1" as GenericB1
+state "Second Generic B1" as SecondGenericB1
+GenericB1 --> SecondGenericB1 : generic fontName should not apply B1
+@enduml

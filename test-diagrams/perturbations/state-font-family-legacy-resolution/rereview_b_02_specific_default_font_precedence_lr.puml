@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam defaultFontName Courier New
+skinparam stateFontName Verdana
+skinparam stateArrowFontName Arial
+state "Specific Node B1" as SpecificNodeB1
+state "Specific Target B1" as SpecificTargetB1
+SpecificNodeB1 --> SpecificTargetB1 : arrow family B1
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant SeqLeftB1
+participant SeqRightB1
+hnote over SeqLeftB1
+  sequence hnote body B1
+end rnote
+SeqLeftB1 -> SeqRightB1 : after sequence family close B1
+@enduml

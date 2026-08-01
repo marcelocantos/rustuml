@@ -1,0 +1,212 @@
+{
+  "acceptance_rule": "ACCEPT requires at least two globally content-distinct Java-success heldouts with diff_one --no-oracle exit 0 spanning at least two relevant independent axes. Any nonzero diff on any fresh valid input forces canonical REJECT.",
+  "account_commit": "036a8f6987232516e674e1bb8f5905cf4c4665c5",
+  "canonical_result": "REJECT",
+  "commands": [
+    "Read oracle-first skill: sed -n 1,240p /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "Read Rust rules: sed -n 1,220p /Users/marcelo/.claude/rust.md",
+    "Inspect T14 frontier: bullseye_frontier(cwd=/private/tmp/rustuml-t14-rereview-b)",
+    "Run convergence scan without Cargo/rustc: bullseye_convergence(cwd=/private/tmp/rustuml-t14-rereview-b, target_ids=[\"T14.6\"], skip_invariants=true)",
+    "Inspect account/quarantined records: sed -n 1,220p docs/parity-reviews/<mechanism>/account.json and sed -n 1,220p docs/parity-reviews/<mechanism>/*review*.json",
+    "Inspect Java model at 71806a23780b04a5ccde2f8ceb5121edad5eb711 with git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:<path>",
+    "Inspect Rust model at cc5bda77bb0e0d79b59170db3d26b93741de007d with git show cc5bda77bb0e0d79b59170db3d26b93741de007d:<path>",
+    "Render Java SVG: java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg -pipe < \"$puml\" > \"$stem.svg\" 2> \"$stem.java.stderr\"; preserve exit in \"$stem.java.exit\"",
+    "Render Rust shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle --print-rust \"$puml\" > \"$stem.rust.svg\" 2> \"$stem.rust.stderr\"; preserve exit in \"$stem.rust.exit\"",
+    "Compare shipped path: /private/tmp/rustuml-t14-integration/target/release/examples/diff_one --no-oracle \"$puml\" > \"$stem.diff.txt\" 2> \"$stem.diff.stderr\"; preserve exit in \"$stem.diff.exit\"",
+    "Check Java validity/error markers: rg -n \"ERROR|Syntax Error|Cannot|Not known\" test-diagrams/perturbations -g \"*.svg\" -g \"*.stderr\"",
+    "No Cargo, rustc, comparator, baseline, shipping-code, account, or quarantine edits were run or made during this rereview."
+  ],
+  "decision": "REJECT",
+  "distinctness": {
+    "all_sources_content_distinct": true,
+    "globally_content_distinct_exact_java_success_heldouts": 1,
+    "observed_independent_axes": [
+      "8-digit RGBA note color",
+      "ArchiMate element",
+      "alias-to-alias link coexistence",
+      "component family",
+      "deployment family",
+      "gradient note color",
+      "multiline note body",
+      "named note link coexistence"
+    ],
+    "source_sha256_values": [
+      "f4c803a489379efb078f0402a5cd25a951053e35234133b30956761562bafb65",
+      "bafdec448c7c41c4705447916aadf4acdd012e77fda11380a4d93def6d097c50"
+    ]
+  },
+  "evidence": {
+    "preserved_artifacts": [
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.exit",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.stderr",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.txt",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.java.exit",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.java.stderr",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.puml",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.exit",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.stderr",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.svg",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.svg",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.exit",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.stderr",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.txt",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.java.exit",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.java.stderr",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.puml",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.exit",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.stderr",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.svg",
+      "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.svg"
+    ],
+    "tooling": {
+      "diff_one": "/private/tmp/rustuml-t14-integration/target/release/examples/diff_one",
+      "diff_one_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+      "diff_one_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d",
+      "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    }
+  },
+  "evidence_kind": "parity",
+  "findings": [
+    "The account record was present and predates the implementation commit; the implementation commit is an ancestor of the pinned shipped binary source.",
+    "Java note command color parsing was inspected through CommandFactoryNote, ColorParser, and HColorSet; Rust note color handling was inspected in parser and component/deployment renderers.",
+    "Fresh heldout rereview_b_02 varies deployment diagram family, multiline note, and gradient color; Java succeeds and diff_one --no-oracle exits 0.",
+    "Fresh heldout rereview_b_01 is valid Java input but diff_one --no-oracle exits 1. The diff confirms the alpha color is parsed in both outputs, but the component note body/fold and callout geometry diverge: Java has a detached named note shape while Rust emits an attached-callout path and different fold stroke width.",
+    "Because the user-required rule says any nonzero diff on a fresh valid input forces canonical REJECT and forbids out-of-scope exceptions, this mechanism is rejected for the pinned shipped binary."
+  ],
+  "history_checks": {
+    "account_file_inspected": "docs/parity-reviews/command-factory-note-color-resolution/account.json",
+    "account_precedes_implementation": true,
+    "implementation_reaches_pinned_binary_source": true,
+    "prior_quarantined_reviews_inspected": [
+      "quarantined-review-followup2.json",
+      "review-rejected-4d246925.json",
+      "review-rejected-e413e0c2.json"
+    ]
+  },
+  "implementation_commit": "22aec7a0afde9c5e8338eaba9b41a927f85933fd",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commits 7366619c3595e16a2a5525d61d12494260a19950 and 22aec7a0afde9c5e8338eaba9b41a927f85933fd",
+    "role": "Original mechanism implementer or mechanism author as recorded by preserved git history.",
+    "task_id": "maker-history-command-factory-note-color-resolution"
+  },
+  "mechanism": "command-factory-note-color-resolution",
+  "perturbations": [
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.txt": "937a7006b213790545fc3158adf8e1e892071a14eab9fa2362ac86cd7a0a7428",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.puml": "f4c803a489379efb078f0402a5cd25a951053e35234133b30956761562bafb65",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.svg": "bb4b5f4809d7def48922917969efc15d9b256d2d2531ef795fec21254fe4a5b1",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.svg": "110745405c3b81f693128ccee1796a505ae880d31b6816d486fd99710b4347e3"
+      },
+      "axes": [
+        "component family",
+        "ArchiMate element",
+        "8-digit RGBA note color",
+        "named note link coexistence"
+      ],
+      "content_distinct_sha256": "f4c803a489379efb078f0402a5cd25a951053e35234133b30956761562bafb65",
+      "diff_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.exit",
+      "diff_one_no_oracle_status": 1,
+      "diff_stderr": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.java.exit",
+      "java_stderr": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.svg",
+      "name": "rereview_b_01_component_archimate_rgba_valid",
+      "result": "fail",
+      "rust_exit_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.rust.svg",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_01_component_archimate_rgba_valid.puml"
+    },
+    {
+      "artifact_sha256": {
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.java.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.java.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.puml": "bafdec448c7c41c4705447916aadf4acdd012e77fda11380a4d93def6d097c50",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.svg": "dcbfe01bddd3ac95b0679ee8e6f5cc5e67bb2f4093676d93a0b22516db4db88d",
+        "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.svg": "bc088f25eb493c7df708eca55c262a317fdeaf18da44c444a6562dbe39a54b40"
+      },
+      "axes": [
+        "deployment family",
+        "gradient note color",
+        "multiline note body",
+        "alias-to-alias link coexistence"
+      ],
+      "content_distinct_sha256": "bafdec448c7c41c4705447916aadf4acdd012e77fda11380a4d93def6d097c50",
+      "diff_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.txt",
+      "diff_exit_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.exit",
+      "diff_one_no_oracle_status": 0,
+      "diff_stderr": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.diff.stderr",
+      "java_exit": 0,
+      "java_exit_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.java.exit",
+      "java_stderr": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.java.stderr",
+      "java_success": true,
+      "java_svg": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.svg",
+      "name": "rereview_b_02_deployment_multiline_gradient_valid",
+      "result": "pass",
+      "rust_exit_artifact": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.exit",
+      "rust_print_exit": 0,
+      "rust_stderr": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.stderr",
+      "rust_svg": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.rust.svg",
+      "source": "test-diagrams/perturbations/command-factory-note-color-resolution/rereview_b_02_deployment_multiline_gradient_valid.puml"
+    }
+  ],
+  "review_kind": "independent-skeptical-rereview-b",
+  "reviewed_on": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex independent skeptical rereviewer, GPT-5 Codex, 2026-08-01",
+    "independence": "This checker did not implement the mechanism, did not edit shipping code, and did not edit accounts, quarantines, comparator, frozen controls, or baselines.",
+    "model": "GPT-5 Codex",
+    "role": "Independent checker/rereviewer.",
+    "task_id": "rustuml-t14-rereview-b-2026-08-01",
+    "tool": "Codex desktop, Java PlantUML JAR, pinned diff_one shipped-path binary"
+  },
+  "revisions": {
+    "account_commit": "036a8f6987232516e674e1bb8f5905cf4c4665c5",
+    "implementation_commit": "22aec7a0afde9c5e8338eaba9b41a927f85933fd",
+    "java_jar_path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "pinned_diff_one_binary_sha256": "37eb179c9465dfa89d83be8534e7c95e81a5de45c763fdec49d620781f7a9075",
+    "pinned_diff_one_binary_source": "cc5bda77bb0e0d79b59170db3d26b93741de007d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "accounts_or_quarantines_edited": false,
+    "cargo_or_rustc_run": false,
+    "fresh_perturbation_directory": "test-diagrams/perturbations/command-factory-note-color-resolution",
+    "frozen_controls_comparator_or_baselines_edited": false,
+    "java_model_paths_inspected": [
+      "net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+      "net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "net/sourceforge/plantuml/klimt/color/HColorSet.java"
+    ],
+    "java_worktree": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "rust_model_paths_inspected": [
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-render/src/component.rs",
+      "crates/rustuml-render/src/deployment.rs"
+    ],
+    "rust_worktree": "/private/tmp/rustuml-t14-rereview-b",
+    "shipping_code_edited": false
+  },
+  "verdict": "rejected"
+}

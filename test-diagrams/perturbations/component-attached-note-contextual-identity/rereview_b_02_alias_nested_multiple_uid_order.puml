@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+component RootAttachB1
+note right of RootAttachB1 : root attached B1
+package "Outer display B1" as OuterAttachB1 {
+  package "Inner display B1" as InnerAttachB1 {
+    component NestedAttachB1
+    note top of NestedAttachB1
+      nested attached B1 line one
+      nested attached B1 line two
+    end note
+    note bottom of NestedAttachB1 : nested attached B1 third
+  }
+}
+@enduml

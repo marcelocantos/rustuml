@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class FreshOwnedAlphaB1
+class FreshOwnedBetaB1
+FreshOwnedAlphaB1 --> FreshOwnedBetaB1 : first center label B1
+note bottom on link #MistyRose : obsolete note text B1
+note left on link #HoneyDew : replacement note row B1\nsecond replacement row B1
+@enduml

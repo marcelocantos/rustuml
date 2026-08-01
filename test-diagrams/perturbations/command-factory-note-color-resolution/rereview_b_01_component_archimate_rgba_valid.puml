@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+component "Palette Anchor B1" as PaletteAnchorB1
+note "business tint B1" as PaletteBusinessB1 #bUsInEsS
+note "alpha flat B1" as PaletteAlphaB1 #11223380
+PaletteBusinessB1 --> PaletteAnchorB1 : palette alias stays paintable
+PaletteAlphaB1 ..> PaletteAnchorB1 : alpha token stays paintable
+@enduml
