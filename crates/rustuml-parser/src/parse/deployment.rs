@@ -3,7 +3,6 @@
 
 //! Deployment diagram parser.
 
-use std::collections::HashSet;
 use std::sync::LazyLock;
 
 use regex::Regex;
@@ -13,29 +12,23 @@ use crate::diagram::deployment::*;
 use crate::diagram::style::{PlantUmlColorType, PlantUmlColors};
 use crate::diagram::{DiagramMeta, LegendHorizontalAlignment, LegendVerticalAlignment};
 
-/// All keywords that introduce a deployment diagram element.
-pub const DEPLOYMENT_KEYWORDS: &[&str] = &[
-    "node",
-    "artifact",
-    "cloud",
-    "database",
-    "storage",
-    "frame",
-    "folder",
+/// Leaf-only symbols accepted by Java description commands. Braced container
+/// symbols come from `DeploymentContainerSymbol::COMMAND_SYMBOLS`.
+const DEPLOYMENT_LEAF_ONLY_KEYWORDS: &[&str] = &[
     "actor",
-    "queue",
-    "component",
-    "rectangle",
     "agent",
     "boundary",
-    "card",
     "collections",
     "control",
     "entity",
-    "file",
-    "package",
-    "stack",
 ];
+
+pub(super) fn is_deployment_keyword(keyword: &str) -> bool {
+    DeploymentContainerSymbol::from_command_keyword(keyword).is_some()
+        || DEPLOYMENT_LEAF_ONLY_KEYWORDS
+            .iter()
+            .any(|candidate| keyword.eq_ignore_ascii_case(candidate))
+}
 
 /// Convert a quoted label like "Application Server" to a stable ID:
 /// replace whitespace/dots/hyphens with underscores, strip remaining
@@ -87,26 +80,16 @@ fn deployment_identity_exists(
 }
 
 fn kind_from_keyword(keyword: &str) -> DeploymentNodeKind {
+    if let Some(symbol) = DeploymentContainerSymbol::from_command_keyword(keyword) {
+        return symbol.renderer_kind();
+    }
     match keyword {
-        "artifact" => DeploymentNodeKind::Artifact,
-        "cloud" => DeploymentNodeKind::Cloud,
-        "database" => DeploymentNodeKind::Database,
-        "storage" => DeploymentNodeKind::Storage,
-        "frame" => DeploymentNodeKind::Frame,
-        "folder" => DeploymentNodeKind::Folder,
         "actor" => DeploymentNodeKind::Actor,
-        "queue" => DeploymentNodeKind::Queue,
-        "component" => DeploymentNodeKind::Component,
-        "rectangle" => DeploymentNodeKind::Rectangle,
         "agent" => DeploymentNodeKind::Agent,
         "boundary" => DeploymentNodeKind::Boundary,
-        "card" => DeploymentNodeKind::Card,
         "collections" => DeploymentNodeKind::Collections,
         "control" => DeploymentNodeKind::Control,
         "entity" => DeploymentNodeKind::Entity,
-        "file" => DeploymentNodeKind::File,
-        "package" => DeploymentNodeKind::Package,
-        "stack" => DeploymentNodeKind::Stack,
         _ => DeploymentNodeKind::Node,
     }
 }
@@ -118,6 +101,7 @@ fn push_node(
     id: String,
     label: String,
     kind: DeploymentNodeKind,
+    container_symbol: Option<DeploymentContainerSymbol>,
     stereotype: Option<String>,
     color: Option<String>,
     declared_container: bool,
@@ -130,6 +114,7 @@ fn push_node(
             id,
             label,
             kind,
+            container_symbol,
             stereotype,
             color,
             declared_container,
@@ -315,10 +300,7 @@ fn deployment_arrow_has_style(arrow: &str, expected: &str) -> bool {
 ///
 /// The arrow is any combination of `-`, `.`, `~`, `=`, `<`, `>`, `|`
 /// characters (2+ chars).
-fn try_parse_connection(
-    trimmed: &str,
-    keyword_set: &HashSet<&str>,
-) -> Option<ParsedDeploymentConnection> {
+fn try_parse_connection(trimmed: &str) -> Option<ParsedDeploymentConnection> {
     let rest = trimmed;
 
     // Check if the line starts with a deployment keyword followed by a quoted label
@@ -331,7 +313,7 @@ fn try_parse_connection(
             .unwrap_or(rest.len());
         if kw_end < rest.len() {
             let kw = &rest[..kw_end];
-            if keyword_set.contains(kw.to_ascii_lowercase().as_str()) {
+            if is_deployment_keyword(kw) {
                 let after_kw = rest[kw_end..].trim_start();
                 if let Some(after_open_quote) = after_kw.strip_prefix('"') {
                     // `CommandLinkElement` parses the quoted text between the
@@ -651,6 +633,146 @@ struct LinkNoteAccum {
     lines: Vec<String>,
 }
 
+#[derive(Debug, PartialEq, Eq)]
+struct DeploymentNodeCommand {
+    id: String,
+    label: String,
+    kind: DeploymentNodeKind,
+    container_symbol: Option<DeploymentContainerSymbol>,
+    stereotype: Option<String>,
+    color: Option<String>,
+    declared_container: bool,
+}
+
+fn node_command_from_captures(
+    captures: regex::Captures<'_>,
+    container_symbol: Option<DeploymentContainerSymbol>,
+) -> Option<DeploymentNodeCommand> {
+    let keyword = captures.name("keyword")?.as_str().to_ascii_lowercase();
+    if container_symbol.is_none() && !is_deployment_keyword(&keyword) {
+        return None;
+    }
+
+    let raw_code = captures.name("code")?.as_str();
+    let id = raw_code.trim_matches('"').to_string();
+    let label = captures
+        .name("display")
+        .map(|value| process_label(value.as_str()))
+        .unwrap_or_else(|| process_label(&id));
+    let stereotype = captures
+        .name("pre_stereotype")
+        .or_else(|| captures.name("stereotype"))
+        .map(|value| value.as_str().trim().to_string());
+    let color = captures
+        .name("color")
+        .map(|value| value.as_str().to_string());
+
+    Some(DeploymentNodeCommand {
+        id,
+        label,
+        kind: container_symbol.map_or_else(|| kind_from_keyword(&keyword), |s| s.renderer_kind()),
+        container_symbol,
+        stereotype,
+        color,
+        declared_container: container_symbol.is_some(),
+    })
+}
+
+fn parse_deployment_node_command(line: &str) -> Option<DeploymentNodeCommand> {
+    // Java `CommandPackageWithUSymbol#getRegexConcat` accepts broad quark
+    // codes for braced containers and anchors the complete command. The leaf
+    // command has a narrower identifier grammar and is independently anchored.
+    static CONTAINER_DISPLAY_CODE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+\"(?P<display>[^\"]+)\"(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+(?P<code>[^#\s{}\"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_CODE_DISPLAY: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[^#\s{}\"]+)(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+\"(?P<display>[^\"]+)\"(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_DISPLAY_CODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<display>[^#\s{}\"]+)(?:\s+<<(?P<pre_stereotype>[^>]+)>>)?\s+(?i:as)\s+(?P<code>[^#\s{}\"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>\"[^\"]+\")(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static CONTAINER_BARE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[^#\s{}\"]+)(?:\s+\$[^\s{}]+)*(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+\$[^\s{}]+)*(?:\s+\[\[[^\r\n]*\]\])?(?:\s+#(?P<color>[^\s{}]+))?\s*\{\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_CODE_DISPLAY: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_.]+)\s+(?i:as)\s+\"(?P<display>[^\"]+)\"(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_DISPLAY_CODE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+\"(?P<display>[^\"]+)\"\s+(?i:as)\s+(?P<code>[\p{L}\p{N}_.]+)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>\"[^\"]+\")(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    static LEAF_BARE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^(?P<keyword>\w+)\s+(?P<code>[\p{L}\p{N}_][\p{L}\p{N}_.]*)(?:\s+<<(?P<stereotype>[^>]+)>>)?(?:\s+#(?P<color>\w+))?\s*$"#,
+        )
+        .unwrap()
+    });
+
+    if line.trim_end().ends_with('{') {
+        let keyword = line.split_whitespace().next()?;
+        let symbol = DeploymentContainerSymbol::from_command_keyword(keyword)?;
+        for pattern in [
+            &*CONTAINER_DISPLAY_CODE,
+            &*CONTAINER_CODE_DISPLAY,
+            &*CONTAINER_DISPLAY_CODE_BARE,
+            &*CONTAINER_QUOTED,
+            &*CONTAINER_BARE,
+        ] {
+            if let Some(command) = pattern
+                .captures(line)
+                .and_then(|captures| node_command_from_captures(captures, Some(symbol)))
+            {
+                return Some(command);
+            }
+        }
+        return None;
+    }
+
+    for pattern in [
+        &*LEAF_CODE_DISPLAY,
+        &*LEAF_DISPLAY_CODE,
+        &*LEAF_QUOTED,
+        &*LEAF_BARE,
+    ] {
+        if let Some(command) = pattern
+            .captures(line)
+            .and_then(|captures| node_command_from_captures(captures, None))
+        {
+            return Some(command);
+        }
+    }
+    None
+}
+
 fn deployment_link_note_text(lines: &[String]) -> String {
     // Java `CommandFactoryNoteOnLink.createMultiLine` calls
     // `BlocLines.removeEmptyColumns`: remove only the leading columns shared
@@ -694,24 +816,6 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     // Skinparam block accumulator. When inside `skinparam node { ... }`,
     // nested `Key Value` lines are flattened to `nodeKey` = `Value`.
     let mut skinparam_block_prefix: Option<String> = None;
-
-    let keyword_set: HashSet<&str> = DEPLOYMENT_KEYWORDS.iter().copied().collect();
-
-    // keyword id [as "label"] [<<stereo>>] [#color] [{]
-    static RE_NODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(
-            r#"^(\w+)\s+(\w[\w.]*)(?:\s+(?i:as)\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
-        )
-        .unwrap()
-    });
-
-    // keyword "label" [as id] [<<stereo>>] [#color] [{]
-    static RE_NODE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(
-            r#"^(\w+)\s+"([^"]+)"(?:\s+(?i:as)\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
-        )
-        .unwrap()
-    });
 
     // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
     static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
@@ -906,6 +1010,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 id.clone(),
                 label,
                 DeploymentNodeKind::Component,
+                None,
                 stereotype,
                 color,
                 false,
@@ -1051,10 +1156,10 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             .unwrap_or("")
             .to_ascii_lowercase();
 
-        if keyword_set.contains(first_word.as_str()) {
+        if is_deployment_keyword(&first_word) {
             // Check if this is a connection line (keyword "label" --> ...)
             // before treating it as a pure node declaration.
-            if let Some(parsed) = try_parse_connection(trimmed, &keyword_set) {
+            if let Some(parsed) = try_parse_connection(trimmed) {
                 let ParsedDeploymentConnection {
                     raw_from,
                     raw_to,
@@ -1079,6 +1184,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             id: id.clone(),
                             label: lbl.clone(),
                             kind: DeploymentNodeKind::Default,
+                            container_symbol: None,
                             stereotype: None,
                             color: None,
                             declared_container: false,
@@ -1106,87 +1212,42 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 continue;
             }
 
-            // Try bare form first: keyword id [as "label"]
-            if let Some(caps) = RE_NODE_BARE.captures(trimmed) {
-                // Pattern2.compileInternal applies CASE_INSENSITIVE to
-                // CommandCreateElementFull and CommandPackageWithUSymbol.
-                let keyword = caps[1].to_ascii_lowercase();
-                if keyword_set.contains(keyword.as_str()) {
-                    let raw_id = caps[2].to_string();
-                    let label = caps
-                        .get(3)
-                        .map(|m| m.as_str().to_string())
-                        .unwrap_or_else(|| raw_id.clone());
-                    let id = raw_id;
-                    let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
-                    let color = caps.get(5).map(|m| m.as_str().to_string());
-                    let kind = kind_from_keyword(&keyword);
-                    let declared_container = trimmed.contains('{');
-
-                    let created = push_node(
-                        &mut nodes,
-                        &mut next_quark_order,
-                        id.clone(),
-                        label,
-                        kind,
-                        stereotype,
-                        color,
-                        declared_container,
-                        current_line,
-                    );
-                    if created && let Some(parent_id) = stack.last().cloned() {
-                        add_child(&mut nodes, &parent_id, &id);
-                    }
-                    if trimmed.contains('{') {
-                        stack.push(id);
-                    }
-                    continue;
+            if let Some(mut command) = parse_deployment_node_command(trimmed) {
+                if command.id.is_empty() {
+                    command.id = format!("##{}", next_quark_order + 1);
                 }
+                if command.label.is_empty() {
+                    command.label = command.id.clone();
+                }
+                let created = push_node(
+                    &mut nodes,
+                    &mut next_quark_order,
+                    command.id.clone(),
+                    command.label,
+                    command.kind,
+                    command.container_symbol,
+                    command.stereotype,
+                    command.color,
+                    command.declared_container,
+                    current_line,
+                );
+                if created && let Some(parent_id) = stack.last().cloned() {
+                    add_child(&mut nodes, &parent_id, &command.id);
+                }
+                if command.declared_container {
+                    stack.push(command.id);
+                }
+                continue;
             }
 
-            // Try quoted form: keyword "label" [as id]
-            if let Some(caps) = RE_NODE_QUOTED.captures(trimmed) {
-                let keyword = caps[1].to_ascii_lowercase();
-                if keyword_set.contains(keyword.as_str()) {
-                    // Process `\n` escape sequences in quoted labels.
-                    let raw_label = caps[2].to_string();
-                    let label = process_label(&raw_label);
-                    let id = caps
-                        .get(3)
-                        .map(|m| m.as_str().to_string())
-                        // `CommandCreateElementFull` treats quoted CODE1 as
-                        // the quark code and applies newline expansion only to
-                        // the later Display value.
-                        .unwrap_or(raw_label);
-                    let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
-                    let color = caps.get(5).map(|m| m.as_str().to_string());
-                    let kind = kind_from_keyword(&keyword);
-                    let declared_container = trimmed.contains('{');
-
-                    let created = push_node(
-                        &mut nodes,
-                        &mut next_quark_order,
-                        id.clone(),
-                        label,
-                        kind,
-                        stereotype,
-                        color,
-                        declared_container,
-                        current_line,
-                    );
-                    if created && let Some(parent_id) = stack.last().cloned() {
-                        add_child(&mut nodes, &parent_id, &id);
-                    }
-                    if trimmed.contains('{') {
-                        stack.push(id);
-                    }
-                    continue;
-                }
-            }
+            return Err(ParseError {
+                line: current_line,
+                message: "invalid deployment element declaration".to_string(),
+            });
         }
 
         // Connection line (bare identifiers or quoted labels).
-        if let Some(parsed) = try_parse_connection(trimmed, &keyword_set) {
+        if let Some(parsed) = try_parse_connection(trimmed) {
             let ParsedDeploymentConnection {
                 raw_from,
                 raw_to,
@@ -1215,6 +1276,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         // plain endpoint as `LeafType.STILL_UNKNOWN`, not as
                         // an explicitly declared `node` symbol.
                         kind: DeploymentNodeKind::Default,
+                        container_symbol: None,
                         stereotype: None,
                         color: None,
                         declared_container: false,
@@ -1290,6 +1352,116 @@ mod tests {
         assert!(d.nodes.iter().any(|n| n.id == "WebServer"));
         assert!(d.nodes.iter().any(|n| n.id == "DB"));
         assert_eq!(d.connections.len(), 1);
+    }
+
+    #[test]
+    fn every_java_usymbol_container_enters_and_owns_its_children() {
+        let mut source = String::new();
+        for (index, (keyword, _)) in DeploymentContainerSymbol::COMMAND_SYMBOLS
+            .iter()
+            .enumerate()
+        {
+            source.push_str(&format!(
+                "{keyword} Container{index} {{\nartifact Child{index}\n}}\n"
+            ));
+        }
+
+        let diagram = parse(&source);
+        for (index, (_, expected_symbol)) in DeploymentContainerSymbol::COMMAND_SYMBOLS
+            .iter()
+            .enumerate()
+        {
+            let container = diagram
+                .nodes
+                .iter()
+                .find(|node| node.id == format!("Container{index}"))
+                .unwrap_or_else(|| panic!("missing container {index}"));
+            assert_eq!(container.container_symbol, Some(*expected_symbol));
+            assert_eq!(container.children, [format!("Child{index}")]);
+        }
+    }
+
+    #[test]
+    fn action_process_and_hexagon_preserve_symbol_identity_and_nested_ownership() {
+        let diagram = parse(
+            "PrOcEsS \"Telemetry Mesh\" as proc_v7 {\n\
+               HEXAGON zone-east as \"Zone East\" {\n\
+                 action \"Retry Stage\" as retry_11 {\n\
+                   artifact Worker_17\n\
+                 }\n\
+               }\n\
+             }",
+        );
+
+        let process = diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == "proc_v7")
+            .unwrap();
+        assert_eq!(process.label, "Telemetry Mesh");
+        assert_eq!(
+            process.container_symbol,
+            Some(DeploymentContainerSymbol::Process)
+        );
+        assert_eq!(process.children, ["zone-east"]);
+
+        let hexagon = diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == "zone-east")
+            .unwrap();
+        assert_eq!(hexagon.label, "Zone East");
+        assert_eq!(
+            hexagon.container_symbol,
+            Some(DeploymentContainerSymbol::Hexagon)
+        );
+        assert_eq!(hexagon.children, ["retry_11"]);
+
+        let action = diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == "retry_11")
+            .unwrap();
+        assert_eq!(action.label, "Retry Stage");
+        assert_eq!(
+            action.container_symbol,
+            Some(DeploymentContainerSymbol::Action)
+        );
+        assert_eq!(action.children, ["Worker_17"]);
+    }
+
+    #[test]
+    fn malformed_usymbol_container_commands_fail_closed_before_later_lines() {
+        for (invalid, expected_line) in [
+            ("process \"Broken\" as {", 1),
+            ("node ValidRoot {\nhexagon region extra unexpected {", 2),
+            ("action retry_19 { trailing\nartifact Later_23", 1),
+            ("cloud region/new unexpected {\ndatabase Later_29", 1),
+        ] {
+            let lines = invalid.lines().map(str::to_string).collect::<Vec<_>>();
+            let error = parse_deployment(&lines).unwrap_err();
+            assert_eq!(error.line, expected_line, "{invalid}");
+            assert_eq!(error.message, "invalid deployment element declaration");
+        }
+    }
+
+    #[test]
+    fn usymbol_keywords_at_relationship_start_remain_endpoints() {
+        let diagram = parse(
+            "node Target_31\n\
+             process --> Target_31 : schedules\n\
+             action \"many_37\" --> Target_31 : retries\n\
+             hexagon ..> Target_31",
+        );
+
+        assert_eq!(diagram.connections.len(), 3);
+        assert_eq!(diagram.connections[0].from, "process");
+        assert_eq!(diagram.connections[1].from, "action");
+        assert_eq!(
+            diagram.connections[1].tail_label.as_deref(),
+            Some("many_37")
+        );
+        assert_eq!(diagram.connections[2].from, "hexagon");
     }
 
     #[test]

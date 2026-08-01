@@ -77,6 +77,11 @@ pub struct DeploymentNode {
     pub id: String,
     pub label: String,
     pub kind: DeploymentNodeKind,
+    /// The exact `CommandPackageWithUSymbol` symbol selected by a braced
+    /// container declaration. This remains separate from `kind`, which is the
+    /// renderer's currently supported shape projection.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub container_symbol: Option<DeploymentContainerSymbol>,
     pub stereotype: Option<String>,
     /// Explicit background colour from a trailing `#color` token (raw, e.g.
     /// `Pink`, `LightBlue`, or `#FF8888`). The renderer resolves named
@@ -122,6 +127,82 @@ pub enum DeploymentNodeKind {
     /// An entity referenced only via a connection (never declared with an
     /// explicit keyword). PlantUML renders these as a bare default circle.
     Default,
+}
+
+/// Complete symbol inventory accepted by Java
+/// `CommandPackageWithUSymbol#getRegexConcat`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DeploymentContainerSymbol {
+    Package,
+    Rectangle,
+    Hexagon,
+    Node,
+    Artifact,
+    Folder,
+    File,
+    Frame,
+    Cloud,
+    Action,
+    Process,
+    Database,
+    Storage,
+    Component,
+    Card,
+    Queue,
+    Stack,
+}
+
+impl DeploymentContainerSymbol {
+    pub const COMMAND_SYMBOLS: [(&'static str, Self); 17] = [
+        ("package", Self::Package),
+        ("rectangle", Self::Rectangle),
+        ("hexagon", Self::Hexagon),
+        ("node", Self::Node),
+        ("artifact", Self::Artifact),
+        ("folder", Self::Folder),
+        ("file", Self::File),
+        ("frame", Self::Frame),
+        ("cloud", Self::Cloud),
+        ("action", Self::Action),
+        ("process", Self::Process),
+        ("database", Self::Database),
+        ("storage", Self::Storage),
+        ("component", Self::Component),
+        ("card", Self::Card),
+        ("queue", Self::Queue),
+        ("stack", Self::Stack),
+    ];
+
+    pub fn from_command_keyword(keyword: &str) -> Option<Self> {
+        Self::COMMAND_SYMBOLS
+            .iter()
+            .find_map(|(candidate, symbol)| {
+                keyword.eq_ignore_ascii_case(candidate).then_some(*symbol)
+            })
+    }
+
+    /// Existing renderer projection. Action, process, and hexagon stay
+    /// distinguishable in `DeploymentNode::container_symbol`; choosing their
+    /// concrete painting belongs to a renderer mechanism.
+    pub fn renderer_kind(self) -> DeploymentNodeKind {
+        match self {
+            Self::Package => DeploymentNodeKind::Package,
+            Self::Rectangle => DeploymentNodeKind::Rectangle,
+            Self::Hexagon | Self::Action | Self::Process => DeploymentNodeKind::Node,
+            Self::Node => DeploymentNodeKind::Node,
+            Self::Artifact => DeploymentNodeKind::Artifact,
+            Self::Folder => DeploymentNodeKind::Folder,
+            Self::File => DeploymentNodeKind::File,
+            Self::Frame => DeploymentNodeKind::Frame,
+            Self::Cloud => DeploymentNodeKind::Cloud,
+            Self::Database => DeploymentNodeKind::Database,
+            Self::Storage => DeploymentNodeKind::Storage,
+            Self::Component => DeploymentNodeKind::Component,
+            Self::Card => DeploymentNodeKind::Card,
+            Self::Queue => DeploymentNodeKind::Queue,
+            Self::Stack => DeploymentNodeKind::Stack,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

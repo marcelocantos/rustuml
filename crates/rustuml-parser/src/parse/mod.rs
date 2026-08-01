@@ -1032,10 +1032,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 && kw != "package"
                 && kw != "actor"
                 && kw != "rectangle"
-                && deployment::DEPLOYMENT_KEYWORDS.contains(&kw);
+                && deployment::is_deployment_keyword(kw);
             if !package_with_brace
                 && kw != "actor"
-                && deployment::DEPLOYMENT_KEYWORDS.contains(&kw)
+                && deployment::is_deployment_keyword(kw)
                 && kw_end < trimmed.len()
                 && deployment_keyword_arg
             {
