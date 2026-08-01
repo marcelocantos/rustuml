@@ -867,6 +867,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             class_factory_rejected_by_mixed_leaf = true;
         }
         let looks_like_sequence_message = sequence::looks_like_message(trimmed);
+        if looks_like_sequence_message {
+            // `PSystemBuilder` tries Sequence first, and `CommandArrow` owns
+            // this complete line. Endpoint codes are participant data even
+            // when they spell commands registered by a later factory.
+            scores[0] += 1;
+            continue;
+        }
         let looks_like_sequence_participant = !trimmed.ends_with('{')
             && (trimmed.starts_with("participant ")
                 || trimmed.starts_with("actor ")
@@ -2429,8 +2436,24 @@ mod tests {
             "Cloud -> Cloud : heartbeat\nCloud -> Agent ++ : wake",
         ] {
             let source = lines(source);
-            assert!(sequence_factory_consumes_message_stream(&source), "{source:?}");
+            assert!(
+                sequence_factory_consumes_message_stream(&source),
+                "{source:?}"
+            );
             assert_eq!(detect_uml_subtype(&source), UmlSubtype::Sequence);
+        }
+    }
+
+    #[test]
+    fn explicit_participants_keep_reserved_endpoint_messages_in_sequence() {
+        let lines = |source: &str| source.lines().map(str::to_string).collect::<Vec<_>>();
+
+        for source in [
+            "participant FreshClient7401\nFreshClient7401 -> Component : dispatch\nComponent -> Node : relay",
+            "database FreshStore7411\nNode --> FreshStore7411 : persist\nFreshStore7411 --> Queue : confirm",
+            "actor FreshCaller7421\nFreshCaller7421 -> Cloud : request\nCloud -> FreshCaller7421 : response",
+        ] {
+            assert_eq!(detect_uml_subtype(&lines(source)), UmlSubtype::Sequence);
         }
     }
 
