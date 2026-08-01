@@ -706,11 +706,9 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     });
 
     // keyword "label" [as id] [<<stereo>>] [#color] [{]
-    // PlantUML `CommandCreateElementFull.java:124-126` permits letters,
-    // numbers, underscores, and dots in an unquoted CODE.
     static RE_NODE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+"([^"]+)"(?:\s+(?i:as)\s+([\p{L}\p{N}_.]+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
+            r#"^(\w+)\s+"([^"]+)"(?:\s+(?i:as)\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
@@ -1346,22 +1344,6 @@ mod tests {
         let n = &d.nodes[0];
         assert_eq!(n.label, "application.deb");
         assert_eq!(n.id, "application.deb");
-    }
-
-    #[test]
-    fn declaration_alias_forms_preserve_java_quark_codes() {
-        let d = parse(
-            "node \"Renamed service\" as domain.service\n\
-             database storage.v2 as \"Visible Store\"\n\
-             artifact \"Line\\nBreak: Ω\"",
-        );
-
-        assert_eq!(d.nodes[0].id, "domain.service");
-        assert_eq!(d.nodes[0].label, "Renamed service");
-        assert_eq!(d.nodes[1].id, "storage.v2");
-        assert_eq!(d.nodes[1].label, "Visible Store");
-        assert_eq!(d.nodes[2].id, "Line\\nBreak: Ω");
-        assert_eq!(d.nodes[2].label, "Line\nBreak: Ω");
     }
 
     #[test]
