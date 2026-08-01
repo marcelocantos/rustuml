@@ -14880,7 +14880,9 @@ struct RelationshipCenterLayout {
     /// Natural `TextBlockVertical` dimensions used when painting children.
     width: f64,
     height: f64,
+    #[cfg(test)]
     label_width: f64,
+    #[cfg(test)]
     label_height: f64,
     label_origin_x: f64,
     label_text_offset_x: f64,
@@ -15040,7 +15042,9 @@ fn relationship_center_layout(
     Some(RelationshipCenterLayout {
         width,
         height,
+        #[cfg(test)]
         label_width,
+        #[cfg(test)]
         label_height,
         label_origin_x,
         label_text_offset_x: label_origin_x + label_text_inner_x,
