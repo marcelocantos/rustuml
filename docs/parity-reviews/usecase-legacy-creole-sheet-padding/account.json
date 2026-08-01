@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "mechanism": "usecase-legacy-creole-sheet-padding",
+  "created": "2026-08-01",
+  "status": "accounted_before_implementation",
+  "implementation_status": "planned",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "82c5f14405798acbe423bc600f5aa32f9f4567fa",
+  "observed_cluster": [
+    "preprocessing/preproc_theme_cerulean_usecase",
+    "preprocessing/preproc_theme_minty_usecase",
+    "preprocessing/preproc_theme_superhero_usecase",
+    "preprocessing/preproc_theme_united_usecase"
+  ],
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbols": ["SkinParam.getPadding"],
+      "lines": "1102-1105",
+      "role": "Resolves legacy skinparam Padding as the ISkinSimple global Creole padding value."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbols": ["Display.getCreole"],
+      "lines": "686-697",
+      "role": "Passes spriteContainer.getPadding() into every SheetBlock1 created for a Display, independently of element style properties."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java",
+      "symbols": ["SheetBlock1.SheetBlock1", "SheetBlock1.calculateDimensionSlow", "SheetBlock1.drawU"],
+      "lines": "70-90, 196-210",
+      "role": "Stores equal top/right/bottom/left padding, enlarges the text-block dimension by both opposite sides, and translates painted atoms by left/top padding."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java",
+      "symbols": ["USymbolSimpleAbstract.asSmall"],
+      "lines": "52-92",
+      "role": "Measures the padded actor label/stereotype blocks when merging them with the fixed stickman and paints each padded block at its merged position."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolUsecase.java",
+      "symbols": ["USymbolUsecase.asSmall"],
+      "lines": "95-123",
+      "role": "Merges padded stereotype/body text and passes the resulting dimensions and translated paint footprint into TextBlockInEllipse."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockInEllipse.java",
+      "symbols": ["TextBlockInEllipse.TextBlockInEllipse", "TextBlockInEllipse.drawU"],
+      "lines": "51-75",
+      "role": "Computes ellipse alpha from the padded block dimensions while fitting the circle around the translated painted footprint, then applies the footprint-center translation when painting text."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/usecase.rs",
+      "symbols": ["SkinColors::from_meta", "SkinColors::for_actor", "SkinColors::for_use_case"],
+      "lines": "225-470",
+      "role": "Resolves legacy and style-derived usecase colors/fonts/strokes but carries no global Creole sheet-padding value."
+    },
+    {
+      "path": "crates/rustuml-render/src/usecase.rs",
+      "symbols": ["actor_dim", "use_case_dim", "use_case_ellipse_radii"],
+      "lines": "1200-1605",
+      "role": "Measures raw painted text as the actor/usecase text block. It therefore omits the symmetric dimension growth and top/left paint translation that Java SheetBlock1 contributes."
+    },
+    {
+      "path": "crates/rustuml-render/src/usecase.rs",
+      "symbols": ["render_actor", "render_use_case"],
+      "lines": "2780-3120",
+      "role": "Paints labels from raw glyph positions; without the sheet-padding model, actor baselines and ellipse footprint centers remain too early."
+    }
+  ],
+  "claimed_invariant": "Legacy skinparam Padding is a global Creole SheetBlock1 concern, not an actor/usecase symbol style. Every actor label, usecase body, and visible stereotype Display is measured as raw content plus equal padding on all four sides, and its painted atoms are translated by the left/top padding. Actor merging consumes the padded block dimensions; usecase ellipse alpha consumes the padded dimensions while Footprint consumes the translated painted atoms. The entire result is subsequently scaled by dpi/96 like every other SVG coordinate. Element-style Padding and Shadowing remain inert when USymbolUsecase does not consume them.",
+  "causal_divergence": "All four failing themes set defaultFontSize 12, dpi 100, and legacy skinparam Padding 5. Rust scales the final output and resolves the theme fonts correctly, but actor_dim and use_case_dim treat the raw Verdana glyph block as the complete Display. The actor label is therefore painted one top-padding too early and its layout node is short by two paddings. TextBlockInEllipse computes alpha from an unpadded width/height pair and fits a wider, flatter oval, changing both Graphviz node dimensions and the downstream layout. The shared 5 value is input data from the themes, not a layout constant or shadow offset.",
+  "planned_model_change": "Carry the final legacy skinparam Padding value in the usecase skin model as a nonnegative Creole sheet padding. In actor_dim, keep raw painted text widths for SVG positioning but use padded label/stereotype block widths and heights for USymbolSimpleAbstract merging, and add the top padding to the painted baseline. In use_case_dim, enlarge the merged Display dimensions by both sides, translate footprint atom coordinates by left/top padding, and retain raw glyph widths for emitted text. Do not read element-style Padding for this field and do not alter generic SVG scaling, Graphviz constants, or theme-specific data.",
+  "perturbation_axes": [
+    "legacy skinparam Padding values zero, nonzero integer, and nonzero decimal",
+    "dpi 96 versus 100 versus another nondefault value",
+    "short versus long actor and usecase labels",
+    "Verdana versus another named font versus logical sans-serif",
+    "plain labels versus visible actor/usecase stereotypes",
+    "legacy skinparam Padding versus element-style usecase Padding negative control",
+    "root leaves versus package-owned usecases"
+  ],
+  "acceptance": [
+    "An independent checker creates fresh valid PlantUML inputs crossing at least two listed axes and preserves source, same-stem Java SVG, Rust SVG, exits, commands, and diff outputs under test-diagrams/perturbations/usecase-legacy-creole-sheet-padding/.",
+    "Every fresh Java-success input is byte-exact through diff_one --no-oracle; any nonzero fresh diff rejects the mechanism.",
+    "The four observed themed-usecase cases become exact without branches keyed to theme names, padding value 5, labels, source lines, or corpus membership.",
+    "Fresh element-style Padding/Shadowing negative controls remain invariant, proving that the implementation has not conflated style padding with legacy Creole sheet padding.",
+    "Usecase unit tests, no-oracle perturbations, baseline ratchet, and harness guards pass at the reviewed implementation revision."
+  ],
+  "forbidden_approaches": [
+    "theme-name, fixture-name, label-text, source-line, corpus-membership, or expected-count conditionals",
+    "a hardcoded five-pixel offset, DPI-specific coordinate table, ellipse-radii tuning, or post-hoc SVG surgery",
+    "treating element-style Padding as legacy SheetBlock1 padding or making inert usecase Shadowing affect dimensions",
+    "changing font metrics, Graphviz spacing, comparator slack, baselines, park lists, error markers, or allow-lists inside this mechanism"
+  ]
+}
