@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-tree-skeleton-level-model",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "be0365b2ac7149d3e4c2a9010e248c6b571aedaf",
+  "source_audit_rust_revision": "7aabc336b5d2c99d86a67b355d95479ede58663a",
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-note-sheet-padding/review.json",
+    "review_commit": "7aabc336b5d2c99d86a67b355d95479ede58663a",
+    "account_commit": "ca01f728",
+    "rejected_implementation_commit": "46ac174e76e39127bde6ed75eaefc9b8295901e0",
+    "reason": "The independent checker preserved tree perturbations but rejected them on stroke width. Those inputs vary underscore count while keeping the same effective leading indentation, so they do not exercise Java's hierarchy model.",
+    "preserved_evidence": [
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_04_link_tree_padding3_top_tb.puml",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_04_link_tree_padding3_top_tb.svg",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_04_link_tree_padding3_top_tb.rust.svg",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_07_standalone_tree_padding2_right_lr.puml",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_10_link_tree_padding0_control.puml",
+      "test-diagrams/perturbations/class-note-sheet-padding/pad_12_link_tree_pair_padding0.puml"
+    ],
+    "evidence_limit": "The Java SVG for pad_04 visibly paints '_ branch 9013' and '__ leaf 9019' at the same skeleton x position as the root. This proves that extra underscores are retained text, not deeper Java levels. Rust reaches similar geometry only because its parser removes all underscores as depth, note_tree_text adds them back as text, and emit_note_tree ignores depth for branch x."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CreoleParser.java",
+      "symbols": ["createStripes"],
+      "lines": "91-102",
+      "role": "Uses a trimmed line only to recognize continuation of an existing tree, then passes the original line to StripeTree.analyzeAndAdd so indentation remains available."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Parser.java",
+      "symbols": ["isTreeStart"],
+      "lines": "61-63",
+      "role": "Recognizes the single |_ tree marker; repeated underscores are not a depth grammar here."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeTree.java",
+      "symbols": ["analyzeAndAdd", "computeLevel"],
+      "lines": "78-107",
+      "role": "Removes leading whitespace plus exactly one |_ marker from displayed text, computes level from each leading pair of spaces or tab, and stores text and level separately in AtomTree."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomTree.java",
+      "symbols": ["calculateDimensionSlow", "drawU"],
+      "lines": "61-91",
+      "role": "Measures each row at Skeleton2.getXEndForLevel(level) plus a fixed two-pixel margin and paints text at that level-dependent x before adding the row center to Skeleton2."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/salt/element/Skeleton2.java",
+      "symbols": ["Entry.drawHline", "Entry.drawVline", "draw", "getMotherOrSister", "getXStartForLevel", "getXEndForLevel"],
+      "lines": "46-103",
+      "role": "Uses an eight-pixel x step per level, paints an eight-pixel horizontal branch plus a 2x2 terminal marker, and starts each vertical segment at the nearest prior row whose level is the same or exactly one shallower, falling back to y=0."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeTable.java",
+      "symbols": ["asAtom"],
+      "lines": "95-100",
+      "role": "Wraps each tree row's StripeSimple in SheetBlock1 with padding zero, so tree depth geometry is not multiplied by global table-cell Padding."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/creole.rs",
+      "symbols": ["TreeNode", "parse_line"],
+      "lines": "571-625",
+      "role": "Trims the original line, counts consecutive underscores after | as depth, removes all counted underscores from text, and therefore discards Java's whitespace-derived level."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["note_tree_rows", "note_tree_text", "note_tree_text_offset"],
+      "lines": "16733-16759",
+      "role": "Trims each line before parsing, reconstructs removed underscores as visible text for depth greater than one, and uses a mostly fixed text offset instead of level-dependent Skeleton2 x geometry."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["note_body_dimensions"],
+      "lines": "17052-17094",
+      "role": "Measures tree width from the reconstructed text plus fixed offsets rather than from Skeleton2.getXEndForLevel(level) plus the row cell width."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["emit_note_tree"],
+      "lines": "17254-17335",
+      "role": "Uses one fixed trunk_x and branch_right for every level and starts each vertical segment at the immediately previous row center, regardless of mother/sister ancestry."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": ["attached_note_tree_inherits_opale_stroke", "standalone_note_tree_uses_default_graphics_stroke"],
+      "lines": "21844-21886",
+      "role": "Current tests encode |_ / |__ / |___ as increasing depth and assert reconstructed underscore labels, mirroring the accidental preserved-fixture equivalence rather than Java's whitespace model."
+    }
+  ],
+  "invariant": "A Java Creole tree row has two independent lexical properties. Its level starts at one and increments once for every leading pair of spaces or every leading tab before the |_ marker. Its displayed text removes leading whitespace and exactly one |_ marker; any additional underscores remain ordinary visible text. AtomTree places each row at 2 + Skeleton2.getXEndForLevel(level), where Skeleton2 starts the horizontal branch at 8 * level and ends it eight pixels later. Each vertical connector starts at the nearest earlier row with the same level or level - 1, not necessarily the immediately previous row; if no such row exists it starts at the tree origin. Tree preferred width uses the same level-dependent x end plus row width, so measurement and paint share one hierarchy model.",
+  "causal_divergence": "Rust erases leading whitespace before tree parsing, treats underscore count as depth, removes all marker underscores, then reconstructs depth - 1 underscores as display text. Measurement uses fixed offsets, and painting draws all branches on one fixed trunk with each vertical beginning at the prior row center. The preserved predecessor trees do not expose this because every row has the same effective leading indentation while the source uses one, two, and three underscores. Java therefore renders a flat skeleton with literal '', '_', and '__' text prefixes; Rust recreates those same prefixes from its false levels and ignores those levels for connector x. Fresh rows whose hierarchy is expressed by spaces or tabs, or whose level sequence returns from a grandchild to an earlier sibling, will diverge in text x, preferred width, branch x, and vertical ancestry even after the independent stroke mismatch is fixed.",
+  "hypothesis_validation": {
+    "attempted_disproof": [
+      "Checked whether Parser.isTreeStart or CreoleParser converted repeated underscores into levels; it recognizes only |_ and passes the original continuation line onward.",
+      "Checked whether StripeTree.computeLevel inspected underscores; it inspects only leading pairs of spaces and tabs.",
+      "Checked whether AtomTree flattened levels before painting; it passes every stored level to Skeleton2 for both dimensions and drawing.",
+      "Checked whether Skeleton2 connected to the immediately previous row; getMotherOrSister scans backward until it finds the same level or one level shallower.",
+      "Checked the preserved Java SVGs; their extra underscores are visible text and their branch x positions are flat, so those artifacts cannot validate nested hierarchy."
+    ],
+    "conclusion": "supported with the claimed mechanism name; the predecessor tree artifacts are retained as flat/literal-underscore controls rather than treated as evidence of nested parity"
+  },
+  "planned_generative_model_change": "Parse Class note tree rows from their original untrimmed strings. Compute level with StripeTree's ordered leading-whitespace loop, remove only leading whitespace plus the first |_ marker from display text, and preserve any remaining underscores. Store level and display text independently. Replace fixed tree offsets with a small Skeleton2-equivalent model shared by measurement and paint: x start is 8 * level, x end is start + 8, row text starts two pixels after x end, preferred width is the maximum of that text origin plus measured row width, and each vertical starts at the y center of the nearest prior same-level or level-minus-one row or at zero. Remove underscore reconstruction and fixed-trunk/previous-row behavior rather than adding exceptions around them.",
+  "perturbation_axes": [
+    "zero, two, and four leading spaces crossed with zero, one, and two leading tabs",
+    "flat rows crossed with parent-child-grandchild and sibling-return level sequences",
+    "one |_ marker crossed with extra literal underscores after the first marker",
+    "nearest prior mother crossed with nearest prior sister and no-ancestor fallback",
+    "short crossed with renamed long labels at shallow and deep levels",
+    "standalone named crossed with attached and relationship-owned Class notes",
+    "top-to-bottom crossed with left-to-right diagram direction"
+  ],
+  "acceptance": {
+    "fresh_valid_non_corpus_inputs": [
+      {
+        "id": "fresh_space_nested_mother_sister_sequence",
+        "source": "@startuml\nnote as SpaceTreeFresh\n|_ root alpha\n  |_ child beta\n    |_ grandchild gamma\n  |_ sibling delta\n|_ root peer epsilon\nend note\n@enduml",
+        "axes": ["space indentation", "levels 1-2-3-2-1", "mother and sister lookup", "standalone named"],
+        "required_observation": "Java and Rust agree on five level-dependent branch/text x positions and on vertical origins: the level-2 sibling connects from the prior level-2 row rather than the immediately preceding level-3 row, and the final level-1 peer connects from the prior level-1 row."
+      },
+      {
+        "id": "fresh_tab_levels_with_literal_underscores",
+        "source": "@startuml\nleft to right direction\nclass TabTreeOwnerFresh\nnote right of TabTreeOwnerFresh\n|_ root renamed\n\t|_ tab child renamed\n\t\t|__ tab grandchild literal underscore\n\t|___ tab sibling two literal underscores\nend note\n@enduml",
+        "axes": ["tab indentation", "levels 1-2-3-2", "extra literal underscores", "attached note", "left-to-right"],
+        "required_observation": "One and two tabs change skeleton level exactly like two and four spaces, while |__ and |___ remove only the first underscore and visibly retain one and two underscores without changing level."
+      },
+      {
+        "id": "fresh_relationship_level_jump_and_fallback",
+        "source": "@startuml\nclass TreeLinkSourceFresh\nclass TreeLinkTargetFresh\nTreeLinkSourceFresh --> TreeLinkTargetFresh\nnote top on link\n|_ root fresh\n    |_ level three without level two\n  |_ later level two\nend note\n@enduml",
+        "axes": ["relationship-owned", "level jump", "no-ancestor fallback", "later parent"],
+        "required_observation": "The jumped level-3 row has no prior same-level or level-2 row and its vertical begins at the tree origin; the later level-2 row finds the level-1 root."
+      }
+    ],
+    "controls": [
+      "Fresh flat rows with identical leading indentation but |_ / |__ / |___ markers must remain at one skeleton level and retain zero, one, and two literal underscores, matching the preserved predecessor shape.",
+      "Space- and tab-indented twins with the same logical level sequence must produce the same Skeleton2 geometry and preferred dimensions.",
+      "Padding 0 and positive-Padding twins must retain identical relative tree hierarchy geometry after removing the independent outer translation.",
+      "Default and custom NoteBorderThickness twins must retain identical connector coordinates, isolating hierarchy from the separate stroke-inheritance mechanism.",
+      "Indented table rows and ordinary text must not be reclassified as tree hierarchy."
+    ],
+    "checks": [
+      "A checker who did not implement the production change generates fresh Java references and preserves every input and Java SVG under test-diagrams/perturbations/class-note-tree-skeleton-level-model/.",
+      "The checker compares parsed level/display-text pairs, preferred width, per-row text x, horizontal branch x, marker x, vertical start/end ancestry, and complete shipped-path structural output.",
+      "The checker includes a renamed-label variant and at least one deeper or differently ordered level sequence not used by the implementer.",
+      "The preserved predecessor tree perturbations remain executable as flat/literal-underscore controls and converge after the separately accounted stroke fix without being rewritten.",
+      "The independent review inspects the exact implementation revision and rejects depth/count ladders, fixed-trunk remnants, or connector branches keyed to observed SVG coordinates."
+    ]
+  },
+  "scope_boundary": "This mechanism owns Class note Creole tree lexical level/text separation, Skeleton2 level-dependent dimensions, and mother/sister connector geometry. It does not own tree or table stroke width/color, sheet or cell padding, text metrics, note placement/routing, non-tree Creole constructs, source-block note parsing outside preservation of body-line whitespace, SVG rounding, or non-Class renderers.",
+  "forbidden_approaches": [
+    "continuing to derive hierarchy from underscore count or reconstructing removed underscores from a depth field",
+    "keeping one fixed trunk x or connecting every row to the immediately previous row",
+    "adding branches keyed to level sequence length, labels, source lines, fixture paths, note ownership, diagram direction, or rendered coordinates",
+    "tuning the eight-pixel level step, two-pixel row margin, or connector ancestry from SVG deltas without the cited Java model",
+    "changing stroke width or padding to conceal hierarchy differences",
+    "post-hoc SVG coordinate rewriting",
+    "editing predecessor reviews or perturbations, baselines, comparator slack, park lists, error markers, controls, or guard allow-lists"
+  ]
+}
