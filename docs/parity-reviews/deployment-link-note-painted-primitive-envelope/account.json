@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "mechanism": "deployment-link-note-painted-primitive-envelope",
+  "status": "accounted_before_implementation",
+  "created": "2026-08-01",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "0818fe98",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": ["SvekEdge", "getLabelText", "drawU"],
+      "lines": "270-319, 728-755, 937-949",
+      "role": "Builds a padded fixed-size merged label/note table for Graphviz placement, but later paints the center-label and note child blocks rather than that placeholder table."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNoteLink.java",
+      "symbols": ["calculateDimension", "drawU"],
+      "lines": "49-83",
+      "role": "Measures and paints the actual note component at its preferred dimensions."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": ["calculateDimension"],
+      "lines": "123-137",
+      "role": "Computes the final canvas from LimitFinder over primitives SvekEdge actually paints, not from Graphviz's invisible label placeholder."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": ["LimitFinder"],
+      "lines": "72-110",
+      "role": "Accumulates only drawing operations that reach the UGraphic."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_link_note_label_size", "deployment_link_note_blocks"],
+      "lines": "3809-3901",
+      "role": "Correctly distinguishes the padded merged Graphviz placeholder from the child origins used to paint the note and center label."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbols": ["deployment_edge_paint_bounds", "deployment_body_x_frame"],
+      "lines": "5900-6008",
+      "role": "Incorrectly includes the complete padded placeholder rectangle in the painted envelope, adding unused right/bottom padding to the final canvas."
+    }
+  ],
+  "claimed_invariant": "A Deployment link note and center label use one padded fixed-size compound block only as a Graphviz layout input. The painted envelope is the union of the actual note component rectangle and actual center-label text block at the child origins selected by the merge direction. Padding that exists solely around or between placeholder cells cannot expand SvekResult's LimitFinder canvas.",
+  "causal_divergence": "Rust's deployment_edge_paint_bounds currently includes the full deployment_link_note_label_size rectangle from the solved label origin. For the preserved bottom-note probe, the Graphviz table is six pixels wider than the rightmost painted note primitive because its fixed cell contains unused padding and integer/fractional preferred-size slack. Java's LimitFinder never sees that placeholder, producing a 202px canvas; Rust counts it and produces 208px even though all emitted child geometry otherwise agrees.",
+  "planned_model_change": "Compute a link-note painted-bounds rectangle from deployment_link_note_blocks, the note component's preferred painted dimensions, and the center label's emitted text dimensions. Feed that union to deployment_edge_paint_bounds while retaining deployment_link_note_label_size unchanged as Graphviz input. Add a unit test proving placeholder padding can exceed the painted maximum without changing child placement.",
+  "perturbation_axes": [
+    "note position: top, bottom, left, and right",
+    "center label: absent, short, long, and multiline",
+    "note body: short, multiline, fractional preferred width, and explicit color/style",
+    "ownership: root links, nested-to-root links, and cluster-adjacent links",
+    "link direction: forward, reversed, and undecorated"
+  ],
+  "scope_boundary": "This mechanism owns only painted-envelope measurement of Deployment link-note/center-label compounds after Graphviz solves their origin. It does not own Graphviz placeholder dimensions, node or edge ordering, routes, coordinate serialization, link IDs, endpoint-label collision, parser identity, container placement, comparator slack, baselines, park lists, error markers, or guard allow-lists.",
+  "acceptance": [
+    "The preserved slash-container link-note probe has Java's 202px canvas without changing any child path or text coordinates.",
+    "A model test distinguishes the padded Graphviz placeholder from the actual painted maximum.",
+    "Inputs with no link note or with ordinary center labels remain unchanged.",
+    "Renderer and no-oracle family metrics show no new failures.",
+    "A separate checker generates fresh valid link-note compounds over at least two independent axes and records a verdict."
+  ],
+  "forbidden_approaches": [
+    "subtracting six pixels or keying behavior to the preserved fixture",
+    "changing Graphviz layout size to force the final canvas",
+    "rounding or translating emitted SVG strings after rendering",
+    "changing parser identity, link IDs, routes, or comparator controls"
+  ]
+}
