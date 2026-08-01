@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "mechanism": "parity-evidence-gate-attestation-integrity",
+  "reviewed_at": "2026-08-01",
+  "reviewer": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "role": "Independent checker only; did not implement maker commits de313a2c, ef67a654, or f5f1d807.",
+    "model": "OpenAI GPT-5",
+    "tool": "Codex desktop; git, rg, awk, shasum, Cargo, rustc",
+    "independence": "I did not edit the gate implementation, account, prior records, quarantines, frozen controls, baselines, or shipping crates. I added one temporary checker-only mutation test, ran it, and removed it before committing this review."
+  },
+  "maker": {
+    "identity": "Maker of commits de313a2c330832de682d2af8bca3c24498ef5e37, ef67a654ff16b1402d6544be149eb329cbf80c45, and f5f1d807ef9853d42122bc47a58cd243af14e76f",
+    "task_id": "maker-commits-de313a2c-ef67a654-f5f1d807"
+  },
+  "revisions": {
+    "reviewed_branch": "codex/t14-gate-normalization",
+    "account_commit": "cfdfd78bd4a16b8a88c9ac0bc336e1b000b8b988",
+    "implementation_commit": "f5f1d807ef9853d42122bc47a58cd243af14e76f",
+    "rust_revision_under_review": "f5f1d807ef9853d42122bc47a58cd243af14e76f",
+    "maker_commits": [
+      "de313a2c330832de682d2af8bca3c24498ef5e37",
+      "ef67a654ff16b1402d6544be149eb329cbf80c45",
+      "f5f1d807ef9853d42122bc47a58cd243af14e76f"
+    ],
+    "prior_canonical_rejection": "docs/parity-reviews/parity-evidence-gate-normalization/quarantined-review-2.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_worktree_head": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "hashes": {
+    "account_sha256": "5cb35ba324134a2abc438f3031cee94be98f38bb25cafae7009b4a87379bfea7",
+    "prior_rejection_quarantined_review_2_sha256": "d4b79ceaeaa52b38def49abb639370f34aedef82b4ea29261ca162c0c57ae1c1",
+    "parity_evidence_rs_sha256": "542e676ac22aa5a08afdb87425288bc1946a928d9d0081203ece39aa009c2f8b",
+    "parity_perturbations_rs_sha256_after_temp_test_removed": "827e62cfe7dc4db3883e1de3f169ce089af81c0dd86af2db2e8443fd56196a60",
+    "harness_guards_rs_sha256": "4ec24ce71c2af71729815cdfe51e8f1ed4fcb5d87b38b0630d806ab777ba294e"
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git status --short",
+    "git log --oneline --decorate -8",
+    "git diff --stat cfdfd78b..HEAD",
+    "git diff --name-status cfdfd78b..HEAD",
+    "git diff --find-renames --summary cfdfd78b..HEAD",
+    "git diff f5f1d807^..f5f1d807 -- crates/rustuml-oracle/tests/parity_evidence.rs",
+    "git ls-files docs/parity-reviews",
+    "git ls-files docs/parity-reviews | awk -F/ '$NF ~ /^review(-[0-9]+)?[.]json$/ {c++} END {print c+0}'",
+    "git ls-files docs/parity-reviews | awk -F/ '$NF ~ /^quarantined-review/ {c++} END {print c+0}'",
+    "git diff --name-status cfdfd78b..HEAD | awk '$1==\"R100\" {c++} END {print c+0}'",
+    "shasum -a 256 docs/parity-reviews/parity-evidence-gate-attestation-integrity/account.json docs/parity-reviews/parity-evidence-gate-normalization/quarantined-review-2.json crates/rustuml-oracle/tests/parity_evidence.rs crates/rustuml-oracle/tests/parity_perturbations.rs crates/rustuml-oracle/tests/harness_guards.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711^{commit}",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/SourceStringReader.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml cat-file -e 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/error/PSystemError.java",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-target cargo test -p rustuml-oracle --test parity_evidence --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "temporary mutation: CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-target cargo test -p rustuml-oracle --test parity_perturbations checker_current_active_heldout_set_is_nonempty --release -- --nocapture",
+    "post-review-record check: CARGO_TARGET_DIR=/private/tmp/rustuml-t14-gate-target cargo test -p rustuml-oracle --test harness_guards parity_review_records_are_complete --release -- --nocapture"
+  ],
+  "process_guard": {
+    "requested_check": "Confirm no other Cargo process was active before running focused Cargo tests.",
+    "result": "Could not inspect the process table in this sandbox: pgrep reported sysmond unavailable and ps was operation-not-permitted. This reviewer launched Cargo invocations sequentially and waited for each to finish before starting the next."
+  },
+  "counts": {
+    "r100_quarantine_renames_from_account_to_head": 144,
+    "current_quarantined_review_records": 144,
+    "current_active_canonical_review_json_or_review_n_json_records_before_this_review": 0,
+    "current_noncanonical_review_prefixed_records": 40,
+    "current_legacy_accepted_archives": 14,
+    "current_account_json_records": 163
+  },
+  "test_outcomes_before_recording_this_review": {
+    "parity_evidence": "PASS: 27 passed, 0 failed.",
+    "harness_guards_parity_review_records_are_complete": "PASS: 1 passed, 0 failed, 32 filtered out.",
+    "parity_perturbations": "PASS: 28 passed, 0 failed.",
+    "checker_current_active_heldout_set_is_nonempty": "FAIL as an attack: 0 passed, 1 failed; the active accepted held-out corpus is empty."
+  },
+  "test_outcomes_after_recording_this_review_before_commit": {
+    "harness_guards_parity_review_records_are_complete": "FAIL as expected: the uncommitted review blob is not yet in HEAD history, and the durable schema errors are that this gate review preserves non-PlantUML mutation evidence rather than canonical PlantUML generated inputs, held-out evidence, and Java-success held-outs."
+  },
+  "source_audit": {
+    "closed_surfaces": [
+      "Verdict aliases are conflict-closed across top-level verdict, review_verdict, decision, and status.",
+      "Account, implementation, and Java revision aliases are conflict-closed across top-level and revisions objects.",
+      "The account commit must exist, match the active account blob, and precede the implementation commit.",
+      "The implementation commit must exist and precede the commit introducing an active review blob.",
+      "Maker and checker identities and task identifiers must be explicit and distinct.",
+      "Explicit checker implementation-authorship claims are rejected.",
+      "Canonical rejected reviews now receive the attestation and evidence-completeness contract.",
+      "Java exit aliases and preserved .java.exit artifacts must affirm zero.",
+      "Accepted source and Java SVG content are globally de-duplicated before attestation selection.",
+      "Axis labels are case/spacing/punctuation normalized before counting."
+    ],
+    "residual_surfaces": [
+      "The gate has no non-vacuity invariant for the active accepted corpus. Zero active accepted mechanisms and zero selected held-outs pass the real record guard and the perturbation suite.",
+      "The review schema is hard-wired to PlantUML source/Java-SVG held-outs, so this gate review cannot satisfy its own canonical review schema without adding irrelevant PlantUML evidence.",
+      "Quarantining all 144 legacy canonical records removes every active acceptance. That is a defensible freeze, but not an acceptance of any parity implementation previously covered by those records.",
+      "Shipping implementation commits that only had quarantined ACCEPT records are now unaccepted by the active gate until new active reviews are authored.",
+      "Review-blob introduction binding only applies to active canonical review filenames. The 144 quarantined records are intentionally inert and no longer attest acceptance.",
+      "Java commit existence was checked only in the external PlantUML repository; the gate itself validates equality with the account Java revision but not external Java commit existence."
+    ]
+  },
+  "quarantine_audit": {
+    "rename_identity": "PASS: git reports 144 R100 renames from canonical review names to quarantined-review names between cfdfd78b and f5f1d807.",
+    "active_corpus": "REJECT: there were zero active canonical review.json or review-N.json records before this review was added.",
+    "accepted_corpus": "REJECT: accepted_java_success_heldouts validates but returns an empty set, so the shipped no-oracle perturbation suite currently has no accepted held-outs to exercise.",
+    "legacy_acceptance_status": "The quarantined records are byte-preserved but inert. They remain audit artifacts, not active acceptance evidence."
+  },
+  "adversarial_mutations": [
+    {
+      "name": "current active held-out set must be nonempty",
+      "artifact": "docs/parity-reviews/parity-evidence-gate-attestation-integrity/evidence/vacuity-mutation.txt",
+      "expected_for_sound_gate": "Pass with at least one active accepted held-out, or fail the production gate before perturbation execution.",
+      "actual": "Failed: active accepted held-out corpus is empty while parity_perturbations itself passes."
+    }
+  ],
+  "schema_self_attestation": {
+    "can_this_gate_review_satisfy_the_schema": false,
+    "reason": "The canonical schema requires preserved PlantUML source and Java SVG held-outs, including Java-success evidence. This review is a gate/schema audit with non-PlantUML mutation evidence. Adding irrelevant PlantUML samples would make the record look compliant without attesting the reviewed mechanism.",
+    "expected_consequence": "After this review.json is committed, parity_review_records_are_complete should reject this review until the gate grows a non-PlantUML gate-review evidence schema or this review is intentionally treated as an inert archive."
+  },
+  "findings": [
+    {
+      "severity": "critical",
+      "title": "The active accepted corpus is vacuous after quarantining 144 records.",
+      "evidence": "There are zero active canonical review.json or review-N.json records before this review. The real parity_perturbations test passes, while a temporary checker-only nonempty assertion fails because accepted_java_success_heldouts returns an empty set.",
+      "impact": "The gate can report green while exercising no accepted held-out perturbations, so it cannot accept T14 parity fixes at f5f1d807."
+    },
+    {
+      "severity": "critical",
+      "title": "Previously accepted shipping implementations are no longer actively reviewed.",
+      "evidence": "All 144 canonical legacy records were renamed with R100 identity to quarantined-review names. The gate intentionally treats quarantined ACCEPT records as inert.",
+      "impact": "This may be the right safety move, but it means mechanisms whose only ACCEPT record was quarantined must be re-reviewed before they can count toward T14."
+    },
+    {
+      "severity": "high",
+      "title": "The gate cannot attest its own gate review under its current schema.",
+      "evidence": "The schema requires PlantUML source and Java SVG held-outs. This review's relevant evidence is non-PlantUML schema/mutation evidence, preserved under the mechanism review directory.",
+      "impact": "A canonical review.json for this mechanism necessarily breaks the current record guard unless irrelevant PlantUML evidence is invented."
+    },
+    {
+      "severity": "medium",
+      "title": "External Java commit existence is outside the gate's machine check.",
+      "evidence": "This reviewer verified the PlantUML worktree head, the Java commit, SourceStringReader.java, and PSystemError.java manually with git -C. The Rust gate checks agreement with the account revision but not the external repository.",
+      "impact": "A nonexistent Java revision in a future account/review pair could still need a separate external provenance guard."
+    }
+  ],
+  "non_findings": [
+    "The specific false-accept classes from the prior canonical rejection are materially closed in unit tests: maker/checker collision, verdict/revision aliases, post-review implementation substitution, Java exit failure, duplicate source/SVG contents, case-only axes, cross-mechanism paths, symlinks, hidden revisions, and canonical REJECT incompleteness.",
+    "The 144 quarantines are byte-preserving R100 renames according to git.",
+    "The local PlantUML worktree is at 71806a23780b04a5ccde2f8ceb5121edad5eb711 and the account-cited Java source files exist at that revision."
+  ],
+  "verdict": "REJECT",
+  "verdict_reason": "The implementation hardens the attestation parser against the prior mutation classes, but it also leaves the active accepted corpus empty and lets the shipped perturbation suite pass over zero held-outs. That is a vacuous gate, not an acceptance gate. The gate also cannot record this non-PlantUML gate review under its own canonical schema without irrelevant PlantUML evidence."
+}
