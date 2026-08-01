@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-association-cross-parent-statement-owner-tree-position",
+  "evidence_kind": "parity",
+  "review_sequence": 2,
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for commit 16c3caa96aec1dc9dc2aaa410b7c9f9b9f30bc70",
+    "task_id": "maker-history-class-association-successors",
+    "role": "Original mechanism implementer recorded by preserved git history; not this checker."
+  },
+  "reviewer": {
+    "identity": "Codex GPT-5 independent skeptical checker",
+    "task_id": "codex/t14-association-successor-review",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, and prebuilt candidate diff_one --no-oracle",
+    "role": "independent checker and ancestry reattester; did not implement the mechanism",
+    "implemented_change": false,
+    "independence": "The checker did not edit shipping code, account.json, comparator logic, baselines, frozen controls, or historical evidence bytes."
+  },
+  "revisions": {
+    "account_commit": "aeed6de0746d870f71e78bbbc5ca3c1e8ceaad26",
+    "implementation_commit": "16c3caa96aec1dc9dc2aaa410b7c9f9b9f30bc70",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "historical_review_introduction": "b46cfe631c7ebb0dd8367828e3520b623f7fc097",
+  "commands": [
+    "sed -n '160,360p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+    "sed -n '330,460p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git diff aeed6de0..16c3caa9 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle --print-rust <input.puml>",
+    "/private/tmp/rustuml-t14-association/target/release/examples/diff_one --no-oracle <input.puml>",
+    "/private/tmp/rustuml-t14-association-integration-review-harness --test-threads 1 --nocapture"
+  ],
+  "perturbation_directory": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_after_c_in_second_tb.puml",
+      "golden": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_after_c_in_second_tb.svg",
+      "java_exit": 0,
+      "axes": ["statement package after endpoint packages", "associated class in second endpoint package", "top-to-bottom direction", "solid connector"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_nested_statement_tail.puml",
+      "golden": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_nested_statement_tail.svg",
+      "java_exit": 0,
+      "axes": ["nested statement package", "later direct leaf", "qualified endpoint names", "dashed connector"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_root_statement_qualified.puml",
+      "golden": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_root_statement_qualified.svg",
+      "java_exit": 0,
+      "axes": ["root-owned cross-parent statement", "qualified endpoint names", "left-to-right direction", "solid connector"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_entity_alias_join_after_lr.puml",
+      "golden": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_entity_alias_join_after_lr.svg",
+      "java_exit": 0,
+      "axes": ["entity aliases", "statement package after endpoint packages", "left-to-right direction", "later direct leaf"],
+      "result": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "inert_invalid_controls": [
+    {
+      "source": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_before_alias_lr.puml",
+      "java_exit": 200,
+      "reason": "PlantUML rejected package aliases before declaration; preserved only in the quarantined historical review and artifact directory."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/checker_cp_entity_alias_join_before_lr.puml",
+      "java_exit": 200,
+      "reason": "PlantUML rejected entity aliases before declaration; preserved only in the quarantined historical review and artifact directory."
+    }
+  ],
+  "artifact_hashes": {
+    "historical_review_sha256": "f50805076be7c42725d0f6ef7239716d54891de0083682313ede648b88d8ef98",
+    "artifact_manifest_path": "test-diagrams/perturbations/class-association-cross-parent-statement-owner-tree-position/artifact_hashes.txt",
+    "artifact_manifest_sha256": "edad57f2ad4260e0ae191d8273e70a08c40818af0d01240eb06e48f05f6e0914",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "findings": [
+    "Java source confirms that cross-parent association points belong to the statement context and paint through GraphvizImageBuilder's owner-local node traversal, independent of associated class C.",
+    "Rust consumes AssociationPoint in the owner-local SVEK stream instead of painting it relative to C; nested, root, qualified-name, and entity-alias Java-success perturbations are exact.",
+    "No fixture names, corpus branches, golden reads, comparator changes, baseline changes, frozen-control edits, or unexplained high-precision constants were found in the implementation diff.",
+    "The two Java-exit-200 probes are invalid syntax controls. They remain preserved but are excluded from positive evidence and from the canonical perturbation inventory."
+  ],
+  "verdict": "ACCEPT"
+}

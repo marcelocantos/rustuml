@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-endpoint-collision-node-order",
+  "evidence_kind": "parity",
+  "review_sequence": 2,
+  "maker": {
+    "identity": "Prior mechanism implementer recorded in git history for replayed commit bf5c01d45c7d7e644a4506d0c693b1f7605d84fe",
+    "task_id": "maker-history-class-svek-endpoint-collision-node-order",
+    "role": "Original mechanism implementer recorded by preserved git history; not this checker."
+  },
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-endpoint-collision-checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, immutable diff_one --no-oracle, and Git ancestry inspection",
+    "role": "independent checker and ancestry reattester; did not implement the mechanism",
+    "independence": "The checker did not edit shipping code, account.json, comparator logic, baselines, frozen controls, or historical evidence bytes."
+  },
+  "revisions": {
+    "account_commit": "d9a64853c0bcaa4ba57cc3b89259813061658ea7",
+    "implementation_commit": "bf5c01d45c7d7e644a4506d0c693b1f7605d84fe",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "historical_provenance": {
+    "original_account_commit": "65c69099ce4f8043b5cd3f006bb82848364f261c",
+    "original_candidate_commit": "29be84de25e3903d66b47504522e63f45b9ac668",
+    "replayed_account_commit": "d9a64853c0bcaa4ba57cc3b89259813061658ea7",
+    "replayed_collision_implementation_commit": "bf5c01d45c7d7e644a4506d0c693b1f7605d84fe",
+    "historical_review_introduction": "9a77897964fe5668e357d8c720fadb553588189a",
+    "note": "The original candidate commit is not on the replayed ancestry. The canonical revision binds the committed replayed account to the downstream replayed collision implementation; the original identities remain archival provenance only."
+  },
+  "commands": [
+    "git log --graph --decorate --oneline --all --boundary --max-count=80 ae947214^@",
+    "git show -s --format='%H %P %s %T' d9a64853 29be84de bf5c01d4 9a778979",
+    "git show --format=fuller --find-renames 29be84de -- crates/rustuml-render/src/class.rs",
+    "git diff bf5c01d4^ bf5c01d4 -- crates/rustuml-render/src/class.rs",
+    "shasum -a 256 docs/parity-reviews/class-svek-endpoint-collision-node-order/quarantined-review-9a778979.json test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.puml test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.svg test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.rust.svg test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.diff.txt",
+    "/private/tmp/rustuml-t14-association-integration-review-harness --test-threads 1 --nocapture"
+  ],
+  "perturbation_directory": "test-diagrams/perturbations/class-svek-endpoint-collision-node-order",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.puml",
+      "golden": "test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_nested_direct_before_group_tb.svg",
+      "java_exit": 0,
+      "axes": [
+        "direct leaf declared after a nested package",
+        "tail and head labels",
+        "top-to-bottom direction",
+        "orthogonal routing"
+      ],
+      "result": "fail: Java-success shipped-path endpoint label mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_order_pair_group_gap_tb.puml",
+      "golden": "test-diagrams/perturbations/class-svek-endpoint-collision-node-order/checker_order_pair_group_gap_tb.svg",
+      "java_exit": 0,
+      "axes": [
+        "direct leaf after nested group",
+        "paired declaration-order control",
+        "top-to-bottom direction",
+        "orthogonal routing"
+      ],
+      "result": "fail: Java-success shipped-path paired-tail endpoint mismatch"
+    }
+  ],
+  "artifact_hashes": {
+    "historical_review_sha256": "5e823b3b96e16d29d2b2023803a29540894bf7f3f0404e4b74f58c018943c0ae",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "checker_nested_direct_before_group_tb": {
+      "puml": "286534e844dc3bb92d8358323ac658ce4442061863db5e0d637070512d8a655b",
+      "java_svg": "5452502e7dd5a0703a6059533178e4cf1ad5d0a5f45f368d34fe34b7a845c148",
+      "rust_svg": "562637b2db40337ff3a0dd6d34f737345185f2d2505b91062ed0fb99df7bc711",
+      "diff": "bad0fad83abf4b21d78c170c4489a8ecf12c21bff2be595e8d72d4689389f9b8"
+    },
+    "checker_order_pair_group_gap_tb": {
+      "puml": "78b5bea22c657a35993139868b7baff34eabee47d8cffd66f50d0b18ef5ae2ad",
+      "java_svg": "7c7e1e099d0c1583fcaac64bd9839df42ad43dd79a61b541f7164be584ab24cb",
+      "rust_svg": "566ed1baae0ab7b763e72f3fee61f01108658eeb269a96a259fa90e9ec45e86c",
+      "diff": "f7bb2893c2db1b658539035f0decfa0660ad60df084afb7fd23894afe323dafb"
+    }
+  },
+  "findings": [
+    "Java GraphvizImageBuilder creates direct leaves before child groups, Bibliotekon preserves that insertion order, and SvekEdge.manageCollision mutates endpoint labels sequentially across that stream.",
+    "The historical checker found no fixture labels, golden reads, SVG surgery, coordinate-keyed conditionals, unexplained parity constants, comparator changes, or frozen-control changes.",
+    "Two independent Java-valid endpoint-label perturbations remain nonzero on the shipped comparison path, so the mechanism remains rejected without waiver or reinterpretation.",
+    "The historical evidence also exposed a separate association-point ownership/event-projection gap; that broader model work was subsequently accounted and implemented on the replayed ancestry."
+  ],
+  "verdict": "REJECT"
+}
