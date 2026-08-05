@@ -8,3 +8,6 @@
 
 pub mod graph;
 mod graphviz_ffi;
+
+#[cfg(feature = "diagnostics")]
+pub use graph::{LayoutDiagnostics, capture_layout_diagnostics};

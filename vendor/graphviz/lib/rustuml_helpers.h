@@ -65,6 +65,11 @@ int rustuml_parse_text_span_dimensions(const char *text,
 // Returns 1 when a record node opted into PlantUML text-span dimensions.
 int rustuml_node_uses_text_span_dimensions(Agnode_t *node);
 
+// Serialize a graph with cgraph's canonical writer. The caller owns the
+// returned NUL-terminated buffer and releases it with rustuml_free_string.
+char *rustuml_graph_to_dot(Agraph_t *g, size_t *length);
+void rustuml_free_string(char *value);
+
 #ifdef __cplusplus
 }
 #endif

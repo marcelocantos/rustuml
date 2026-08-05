@@ -1137,15 +1137,18 @@ name = "rustuml-oracle"
 version = "0.7.0"
 dependencies = [
  "anyhow",
+ "libc",
  "num_cpus",
  "proptest",
  "rayon",
  "roxmltree 0.20.0",
+ "rustuml-layout",
  "rustuml-parser",
  "rustuml-render",
  "serde",
  "serde_json",
  "ureq",
+ "wait-timeout",
 ]
 
 [[package]]

@@ -9,6 +9,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -141,6 +142,48 @@ int rustuml_node_uses_text_span_dimensions(Agnode_t *node) {
         return 0;
     value = agget(node, (char *)attribute);
     return value && strcmp(value, "true") == 0;
+}
+
+char *rustuml_graph_to_dot(Agraph_t *g, size_t *length) {
+    FILE *stream;
+    long end;
+    char *buffer;
+
+    if (!g || !length)
+        return NULL;
+    *length = 0;
+    stream = tmpfile();
+    if (!stream)
+        return NULL;
+    if (agwrite(g, stream) != 0 || fflush(stream) != 0 ||
+        fseek(stream, 0, SEEK_END) != 0) {
+        fclose(stream);
+        return NULL;
+    }
+    end = ftell(stream);
+    if (end < 0 || (unsigned long)end > SIZE_MAX - 1 ||
+        fseek(stream, 0, SEEK_SET) != 0) {
+        fclose(stream);
+        return NULL;
+    }
+    buffer = malloc((size_t)end + 1);
+    if (!buffer) {
+        fclose(stream);
+        return NULL;
+    }
+    if (fread(buffer, 1, (size_t)end, stream) != (size_t)end) {
+        free(buffer);
+        fclose(stream);
+        return NULL;
+    }
+    buffer[end] = '\0';
+    *length = (size_t)end;
+    fclose(stream);
+    return buffer;
+}
+
+void rustuml_free_string(char *value) {
+    free(value);
 }
 
 int rustuml_make_fixed_html_table_label(textlabel_t *label) {

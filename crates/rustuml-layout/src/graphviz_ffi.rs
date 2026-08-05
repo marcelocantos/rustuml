@@ -13,6 +13,9 @@
 
 use std::os::raw::{c_char, c_int, c_void};
 
+#[cfg(feature = "diagnostics")]
+use std::ffi::CStr;
+
 // ── Opaque Graphviz types ──
 
 /// Graphviz context handle (opaque).
@@ -161,6 +164,27 @@ unsafe extern "C" {
 
     /// Returns nonzero for a node opted into PlantUML text-span dimensions.
     pub fn rustuml_node_uses_text_span_dimensions(node: *mut Agnode_t) -> c_int;
+
+    #[cfg(feature = "diagnostics")]
+    fn rustuml_graph_to_dot(g: *mut Agraph_t, length: *mut usize) -> *mut c_char;
+
+    #[cfg(feature = "diagnostics")]
+    fn rustuml_free_string(value: *mut c_char);
+}
+
+#[cfg(feature = "diagnostics")]
+pub(crate) unsafe fn graph_to_dot(g: *mut Agraph_t) -> Option<String> {
+    let mut length = 0;
+    let value = unsafe { rustuml_graph_to_dot(g, &mut length) };
+    if value.is_null() {
+        return None;
+    }
+    let dot = unsafe { CStr::from_ptr(value) }
+        .to_string_lossy()
+        .into_owned();
+    unsafe { rustuml_free_string(value) };
+    debug_assert_eq!(dot.len(), length);
+    Some(dot)
 }
 
 #[cfg(test)]

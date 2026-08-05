@@ -12,11 +12,82 @@ use std::os::raw::c_void;
 use std::sync::{Mutex, mpsc};
 use std::time::Duration;
 
+#[cfg(feature = "diagnostics")]
+use std::{cell::RefCell, sync::Arc};
+
 use crate::graphviz_ffi;
 
 /// Graphviz uses global state and is not thread-safe.
 /// All layout operations must be serialized.
 static GRAPHVIZ_LOCK: Mutex<()> = Mutex::new(());
+
+/// Exact Graphviz request and solved graph captured around one layout call.
+#[cfg(feature = "diagnostics")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct LayoutDiagnostic {
+    pub request_dot: String,
+    pub solved_dot: String,
+}
+
+#[cfg(feature = "diagnostics")]
+#[derive(Debug, Default)]
+struct DiagnosticState {
+    layouts: Vec<LayoutDiagnostic>,
+    timed_out: usize,
+    failed: usize,
+}
+
+#[cfg(feature = "diagnostics")]
+#[derive(Debug, Default)]
+pub struct LayoutDiagnostics {
+    pub layouts: Vec<LayoutDiagnostic>,
+    pub timed_out: usize,
+    pub failed: usize,
+}
+
+#[cfg(feature = "diagnostics")]
+type DiagnosticSink = Arc<Mutex<DiagnosticState>>;
+
+#[cfg(feature = "diagnostics")]
+thread_local! {
+    static ACTIVE_DIAGNOSTIC_SINK: RefCell<Option<DiagnosticSink>> = const { RefCell::new(None) };
+}
+
+/// Capture every Graphviz layout invoked while `operation` constructs and
+/// renders a diagram. The sink is copied into each `LayoutGraph`, so it follows
+/// production timeout workers without relying on worker-local state.
+#[cfg(feature = "diagnostics")]
+pub fn capture_layout_diagnostics<T>(operation: impl FnOnce() -> T) -> (T, LayoutDiagnostics) {
+    struct Restore(Option<DiagnosticSink>);
+
+    impl Drop for Restore {
+        fn drop(&mut self) {
+            ACTIVE_DIAGNOSTIC_SINK.with(|active| {
+                active.replace(self.0.take());
+            });
+        }
+    }
+
+    let sink = Arc::new(Mutex::new(DiagnosticState::default()));
+    let previous = ACTIVE_DIAGNOSTIC_SINK.with(|active| active.replace(Some(sink.clone())));
+    let restore = Restore(previous);
+    let value = operation();
+    drop(restore);
+    let state = std::mem::take(&mut *sink.lock().unwrap_or_else(|error| error.into_inner()));
+    (
+        value,
+        LayoutDiagnostics {
+            layouts: state.layouts,
+            timed_out: state.timed_out,
+            failed: state.failed,
+        },
+    )
+}
+
+#[cfg(feature = "diagnostics")]
+fn active_diagnostic_sink() -> Option<DiagnosticSink> {
+    ACTIVE_DIAGNOSTIC_SINK.with(|active| active.borrow().clone())
+}
 
 const DOT_POINTS_PER_INCH: f64 = 72.0;
 const SVEK_STATE_BORDER_IMAGE_SIZE: f64 = 12.0;
@@ -171,6 +242,8 @@ pub struct LayoutGraph {
     together: Vec<TogetherSpec>,
     edges: Vec<EdgeSpec>,
     same_rank_pairs: Vec<(String, String)>,
+    #[cfg(feature = "diagnostics")]
+    diagnostic_sink: Option<DiagnosticSink>,
 }
 
 impl LayoutGraph {
@@ -189,6 +262,8 @@ impl LayoutGraph {
             together: Vec::new(),
             edges: Vec::new(),
             same_rank_pairs: Vec::new(),
+            #[cfg(feature = "diagnostics")]
+            diagnostic_sink: active_diagnostic_sink(),
         }
     }
 
@@ -861,10 +936,27 @@ impl LayoutGraph {
     /// Returns `None` if layout exceeds the timeout or panics.
     pub fn layout_full(self, timeout: Duration) -> Option<LayoutResult> {
         let (tx, rx) = mpsc::channel();
+        #[cfg(feature = "diagnostics")]
+        let diagnostic_sink = self.diagnostic_sink.clone();
         std::thread::spawn(move || {
             let _ = tx.send(self.layout_full_no_timeout());
         });
-        rx.recv_timeout(timeout).ok()
+        match rx.recv_timeout(timeout) {
+            Ok(result) => Some(result),
+            Err(error) => {
+                #[cfg(feature = "diagnostics")]
+                if let Some(sink) = diagnostic_sink {
+                    let mut state = sink.lock().unwrap_or_else(|error| error.into_inner());
+                    match error {
+                        mpsc::RecvTimeoutError::Timeout => state.timed_out += 1,
+                        mpsc::RecvTimeoutError::Disconnected => state.failed += 1,
+                    }
+                }
+                #[cfg(not(feature = "diagnostics"))]
+                let _ = error;
+                None
+            }
+        }
     }
 
     /// Runs layout and returns only node positions (backwards compatibility).
@@ -1517,9 +1609,30 @@ impl LayoutGraph {
             }
         }
 
+        #[cfg(feature = "diagnostics")]
+        let request_dot = self
+            .diagnostic_sink
+            .as_ref()
+            .and_then(|_| graphviz_ffi::graph_to_dot(g));
+
         // Run layout.
         let engine = CString::new("dot").unwrap();
         graphviz_ffi::gvLayout(gvc, g, engine.as_ptr());
+
+        #[cfg(feature = "diagnostics")]
+        if let (Some(sink), Some(request_dot), Some(solved_dot)) = (
+            self.diagnostic_sink.as_ref(),
+            request_dot,
+            graphviz_ffi::graph_to_dot(g),
+        ) {
+            sink.lock()
+                .unwrap_or_else(|error| error.into_inner())
+                .layouts
+                .push(LayoutDiagnostic {
+                    request_dot,
+                    solved_dot,
+                });
+        }
 
         // Extract node positions.
         let mut node_positions = Vec::with_capacity(self.nodes.len());
