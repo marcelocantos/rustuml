@@ -2225,12 +2225,14 @@ mod tests {
         assert!(normalize_verdict(Some(&json!("accepted_later"))).is_err());
         assert!(normalize_verdict(Some(&json!("rejected_with_counterexamples"))).is_err());
         assert!(normalize_verdict(Some(&json!("failed"))).is_err());
-        assert!(normalize_verdict(Some(&json!({
-            "status": "ACCEPT",
-            "verdict": "REJECT"
-        })))
-        .unwrap_err()
-        .contains("conflicting verdict aliases"));
+        assert!(
+            normalize_verdict(Some(&json!({
+                "status": "ACCEPT",
+                "verdict": "REJECT"
+            })))
+            .unwrap_err()
+            .contains("conflicting verdict aliases")
+        );
     }
 
     #[test]
@@ -2510,10 +2512,12 @@ mod tests {
         let report = build_report(&fixture.root);
         assert!(report.violations.is_empty(), "{:?}", report.violations);
         assert_eq!(report.accepted_heldouts.len(), 2);
-        assert!(report
-            .accepted_heldouts
-            .iter()
-            .all(|heldout| heldout.mechanism == "m"));
+        assert!(
+            report
+                .accepted_heldouts
+                .iter()
+                .all(|heldout| heldout.mechanism == "m")
+        );
     }
 
     #[test]
