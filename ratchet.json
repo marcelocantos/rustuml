@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "baseline": "test-diagrams/ratchet-baseline.json",
+  "corpus": "test-diagrams/golden",
+  "reference": "test-diagrams/golden",
+  "corpus_pattern": "**/*.puml",
+  "out": "target/ratchet-out",
+  "produce": "target/release/ratchet_gate produce --corpus {corpus} --out {out} --bin target/release/rustuml",
+  "score": "target/release/ratchet_gate score --corpus {corpus} --ref {ref} --out {out}",
+  "universe": "target/release/ratchet_gate universe --corpus {corpus}",
+  "tolerance": {
+    "default": 0
+  },
+  "embed_guard": {
+    "sources": [
+      "crates/rustuml/src/**/*.rs",
+      "crates/rustuml-parser/src/**/*.rs",
+      "crates/rustuml-render/src/**/*.rs",
+      "crates/rustuml-layout/src/**/*.rs",
+      "crates/rustuml-math/src/**/*.rs"
+    ],
+    "forbidden": [
+      "^(?!\\s*//).*test-diagrams",
+      "include_str!\\s*\\(\\s*\"[^\"]*golden",
+      "include_bytes!\\s*\\(\\s*\"[^\"]*golden"
+    ]
+  }
+}

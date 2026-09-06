@@ -51,6 +51,12 @@ jobs:
         run: cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture
       - name: Harness honesty guards (🎯T14.1)
         run: cargo test -p rustuml-oracle --test harness_guards --release
+      # The tiers above render in-process. This one runs the binary a user
+      # runs, recounts the denominator from the corpus tree, poisons the
+      # outputs to prove the scorer compares, and fails on a regression OR an
+      # unlocked improvement. See tools/ratchet/UPSTREAM.md.
+      - name: Shipped-binary product ratchet (🎯T14)
+        run: make ratchet
 
   test-oracle:
     name: Oracle Tests

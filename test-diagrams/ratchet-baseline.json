@@ -1,0 +1,177 @@
+{
+  "metrics": {
+    "activity": {
+      "corpus": 1497,
+      "pass": 1299,
+      "universe": 1299
+    },
+    "archimate": {
+      "corpus": 50,
+      "pass": 48,
+      "universe": 48
+    },
+    "chart": {
+      "corpus": 25,
+      "pass": 25,
+      "universe": 25
+    },
+    "class": {
+      "corpus": 2140,
+      "pass": 1943,
+      "universe": 1971
+    },
+    "combo": {
+      "corpus": 380,
+      "pass": 318,
+      "universe": 327
+    },
+    "component": {
+      "corpus": 680,
+      "pass": 663,
+      "universe": 663
+    },
+    "creole": {
+      "corpus": 642,
+      "pass": 639,
+      "universe": 639
+    },
+    "deployment": {
+      "corpus": 517,
+      "pass": 494,
+      "universe": 495
+    },
+    "dot": {
+      "corpus": 25,
+      "pass": 25,
+      "universe": 25
+    },
+    "ebnf": {
+      "corpus": 25,
+      "pass": 25,
+      "universe": 25
+    },
+    "edge-cases": {
+      "corpus": 822,
+      "pass": 721,
+      "universe": 777
+    },
+    "er": {
+      "corpus": 170,
+      "pass": 153,
+      "universe": 157
+    },
+    "gantt": {
+      "corpus": 143,
+      "pass": 114,
+      "universe": 114
+    },
+    "git": {
+      "corpus": 25,
+      "pass": 25,
+      "universe": 25
+    },
+    "json-yaml": {
+      "corpus": 169,
+      "pass": 147,
+      "universe": 147
+    },
+    "links": {
+      "corpus": 50,
+      "pass": 50,
+      "universe": 50
+    },
+    "math": {
+      "corpus": 50,
+      "pass": 50,
+      "universe": 50
+    },
+    "mindmap": {
+      "corpus": 158,
+      "pass": 157,
+      "universe": 157
+    },
+    "multi-diagram": {
+      "corpus": 55,
+      "pass": 53,
+      "universe": 53
+    },
+    "nwdiag": {
+      "corpus": 99,
+      "pass": 89,
+      "universe": 89
+    },
+    "object": {
+      "corpus": 217,
+      "pass": 155,
+      "universe": 155
+    },
+    "preprocessing": {
+      "corpus": 394,
+      "pass": 274,
+      "universe": 307
+    },
+    "regex": {
+      "corpus": 50,
+      "pass": 45,
+      "universe": 45
+    },
+    "rendering": {
+      "corpus": 100,
+      "pass": 85,
+      "universe": 98
+    },
+    "salt": {
+      "corpus": 115,
+      "pass": 103,
+      "universe": 103
+    },
+    "sequence": {
+      "corpus": 1521,
+      "pass": 1411,
+      "universe": 1411
+    },
+    "skinparam": {
+      "corpus": 525,
+      "pass": 403,
+      "universe": 410
+    },
+    "sprites": {
+      "corpus": 50,
+      "pass": 49,
+      "universe": 49
+    },
+    "state": {
+      "corpus": 1085,
+      "pass": 887,
+      "universe": 901
+    },
+    "timing": {
+      "corpus": 160,
+      "pass": 141,
+      "universe": 141
+    },
+    "type-detection": {
+      "corpus": 50,
+      "pass": 42,
+      "universe": 42
+    },
+    "usecase": {
+      "corpus": 322,
+      "pass": 315,
+      "universe": 315
+    },
+    "wbs": {
+      "corpus": 139,
+      "pass": 138,
+      "universe": 138
+    }
+  },
+  "provenance": {
+    "command": "tools/ratchet/ratchet.py --config ratchet.json lock --reason bootstrap: first lock of the SHIPPED-BINARY product-parity number (11,086/11,251 eligible goldens). The pre-existing no_oracle_baseline.txt ratchets an in-process library tier that reads 11,088; the two differ by one deployment and one edge-cases golden, so the binary's number had never been gated. --mechanism target/release/rustuml -tsvg <golden.puml> (crates/rustuml/src/main.rs, OutputMode::Svg -> rustuml_render::render_svg_with_theme) scored by rustuml_oracle::compare::compare_svg_strict; eligibility from harness::{golden_has_syntax_error, has_supported_start_keyword, is_ditaa} over the pinned rustuml-golden submodule",
+    "locked_at": "2026-09-06T09:52:08+00:00",
+    "mechanism": "target/release/rustuml -tsvg <golden.puml> (crates/rustuml/src/main.rs, OutputMode::Svg -> rustuml_render::render_svg_with_theme) scored by rustuml_oracle::compare::compare_svg_strict; eligibility from harness::{golden_has_syntax_error, has_supported_start_keyword, is_ditaa} over the pinned rustuml-golden submodule",
+    "metrics_sha256": "d4e0a3a3a26e024b5e892b2d839d5655b12e605103f025001c4595f4c31f6929",
+    "reason": "bootstrap: first lock of the SHIPPED-BINARY product-parity number (11,086/11,251 eligible goldens). The pre-existing no_oracle_baseline.txt ratchets an in-process library tier that reads 11,088; the two differ by one deployment and one edge-cases golden, so the binary's number had never been gated."
+  },
+  "schema": 1
+}
