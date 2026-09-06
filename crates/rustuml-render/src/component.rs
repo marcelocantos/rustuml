@@ -6,6 +6,7 @@
 //! Produces SVG output that matches PlantUML's component diagram rendering.
 //! PlantUML renders component diagrams as diagram type "DESCRIPTION".
 
+use rustuml_layout::fallback;
 use std::fmt::Write;
 
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
@@ -443,7 +444,13 @@ pub fn render_with_oracle(
         for conn in &diagram.connections {
             layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
         }
-        layout.layout_full(std::time::Duration::from_secs(5))
+        match layout.layout_full(fallback::budget()) {
+            Ok(r) => Some(r),
+            Err(failure) => {
+                fallback::record("component diagram", failure);
+                None
+            }
+        }
     } else {
         None
     };

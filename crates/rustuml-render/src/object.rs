@@ -9,6 +9,7 @@
 //! `<?plantuml?>` processing instruction) so it can pass strict-XML comparison
 //! against the golden corpus.
 
+use rustuml_layout::fallback;
 use std::fmt::Write;
 
 use rustuml_layout::graph::{Direction, LayoutGraph};
@@ -27,6 +28,9 @@ use crate::text_render::{self, TextBase};
 
 /// Margin from SVG edge to entity boxes.
 const MARGIN: f64 = 7.0;
+/// Vertical pitch between objects when there are no laid-out positions to
+/// use, so they are stacked in one column instead of overlapping.
+const STACKED_FALLBACK_PITCH: f64 = 100.0;
 /// Name baseline y relative to rect top (no stereotype).
 const NAME_BASELINE_Y: f64 = 15.5352;
 /// Header separator y relative to rect top (no stereotype).
@@ -290,7 +294,7 @@ fn oracle_positions(
             dims[i].height = r.height;
             positions.push((r.x, r.y));
         } else {
-            positions.push((MARGIN, MARGIN + (i as f64) * 100.0));
+            positions.push((MARGIN, MARGIN + (i as f64) * STACKED_FALLBACK_PITCH));
         }
     }
     positions
@@ -306,15 +310,18 @@ fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)>
         let to_base = link.to.split("::").next().unwrap_or(&link.to);
         layout.add_edge(from_base, to_base, link.label.as_deref());
     }
-    match layout.layout_full(std::time::Duration::from_secs(5)) {
-        Some(r) => r
+    match layout.layout_full(fallback::budget()) {
+        Ok(r) => r
             .node_positions
             .iter()
             .map(|p| (p.x + MARGIN, p.y + MARGIN))
             .collect(),
-        None => (0..diagram.objects.len())
-            .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
-            .collect(),
+        Err(failure) => {
+            fallback::record("object diagram", failure);
+            (0..diagram.objects.len())
+                .map(|i| (MARGIN, MARGIN + (i as f64) * STACKED_FALLBACK_PITCH))
+                .collect()
+        }
     }
 }
 

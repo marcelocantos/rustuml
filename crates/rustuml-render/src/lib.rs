@@ -71,6 +71,7 @@ pub mod usecase;
 pub mod wbs;
 
 use layout_oracle::OracleLayout;
+use rustuml_layout::fallback;
 use rustuml_parser::diagram::Diagram;
 use style::Theme;
 
@@ -95,7 +96,46 @@ pub fn render_svg(diagram: &Diagram) -> String {
 
 /// Render a parsed diagram to SVG with a specific theme.
 /// Skinparams from the diagram's metadata override the theme.
+///
+/// If layout did not finish and a renderer fell back to a grid, the
+/// returned SVG carries a comment saying so, immediately after the
+/// opening `<svg>` tag, and a warning has already gone to stderr. A
+/// grid-arranged diagram is not the diagram the user asked for, so it
+/// must never come back unlabelled.
 pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
+    let mark = fallback::mark();
+    let svg = render_svg_with_theme_inner(diagram, theme);
+    annotate_layout_fallbacks(svg, &fallback::notices_since(mark))
+}
+
+/// Inserts one XML comment per layout fallback just after the opening
+/// `<svg …>` tag. Returns `svg` untouched when there were none, which is
+/// every diagram whose layout finished.
+fn annotate_layout_fallbacks(svg: String, notices: &[String]) -> String {
+    if notices.is_empty() {
+        return svg;
+    }
+    let Some(open_tag_end) = svg.find("<svg").and_then(|start| {
+        svg[start..]
+            .find('>')
+            .map(|offset| start + offset + '>'.len_utf8())
+    }) else {
+        return svg;
+    };
+    let mut annotated = String::with_capacity(svg.len() + notices.len() * 64);
+    annotated.push_str(&svg[..open_tag_end]);
+    for notice in notices {
+        // Comments cannot contain "--"; a notice is our own text, but a
+        // diagram kind reaches it from the caller, so be sure.
+        annotated.push_str("\n<!-- rustuml: ");
+        annotated.push_str(&notice.replace("--", "-"));
+        annotated.push_str(" -->");
+    }
+    annotated.push_str(&svg[open_tag_end..]);
+    annotated
+}
+
+fn render_svg_with_theme_inner(diagram: &Diagram, theme: &Theme) -> String {
     // Apply inline skinparam overrides from any diagram type.
     let meta_params = &diagram.meta().skinparams;
     let effective_theme = if meta_params.is_empty() {
@@ -448,5 +488,61 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Board(b) => board::render(b, theme),
         Diagram::Ebnf(e) => ebnf::render(e, theme),
         Diagram::Archimate(a) => archimate::render(a, theme),
+    }
+}
+
+#[cfg(test)]
+mod layout_fallback_tests {
+    use super::*;
+    use std::time::Duration;
+
+    const CLASS_SOURCE: &str = "@startuml\nclass A\nclass B\nA --> B\n@enduml\n";
+
+    fn render(source: &str) -> String {
+        let diagram = rustuml_parser::parse::parse_auto(source).expect("fixture parses");
+        render_svg_with_theme(&diagram, &Theme::default())
+    }
+
+    /// A diagram whose layout finishes carries no notice, so the annotation
+    /// costs nothing on the overwhelmingly common path.
+    #[test]
+    fn successful_layout_is_not_annotated() {
+        fallback::set_budget_override(None);
+        let svg = render(CLASS_SOURCE);
+        assert!(!svg.contains("rustuml: class diagram"), "{svg:.400}");
+    }
+
+    /// The defect this pins: before, a layout that ran out of budget was
+    /// swapped for a grid arrangement with nothing anywhere saying so, and
+    /// the user got a wrong diagram rather than a slow one. The fallback is
+    /// still a fallback, but it is now labelled in the artifact itself.
+    #[test]
+    fn exhausted_budget_is_labelled_in_the_svg() {
+        fallback::set_budget_override(Some(Duration::ZERO));
+        let svg = render(CLASS_SOURCE);
+        fallback::set_budget_override(None);
+
+        let notice_at = svg
+            .find("<!-- rustuml: class diagram:")
+            .expect("layout fallback must be labelled in the SVG");
+        let svg_tag_at = svg.find("<svg").expect("SVG has an opening tag");
+        assert!(notice_at > svg_tag_at, "notice must follow the <svg> tag");
+        assert!(svg.contains("exceeded the 0 ms budget"), "{svg:.400}");
+        assert!(svg.contains("grid fallback"), "{svg:.400}");
+        // Still a usable document, not a truncated one.
+        assert!(svg.trim_end().ends_with("</svg>"));
+    }
+
+    /// The comment must not break XML: a notice containing a double hyphen
+    /// would terminate the comment early.
+    #[test]
+    fn annotation_never_emits_a_double_hyphen() {
+        let svg = annotate_layout_fallbacks(
+            "<svg width=\"1\">x</svg>".to_string(),
+            &["a -- b".to_string()],
+        );
+        let body = svg.split("<!-- ").nth(1).expect("a comment was inserted");
+        let inner = body.split(" -->").next().expect("the comment is closed");
+        assert!(!inner.contains("--"), "{inner}");
     }
 }

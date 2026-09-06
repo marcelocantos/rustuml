@@ -12,6 +12,7 @@ use std::os::raw::c_void;
 use std::sync::{LazyLock, Mutex, mpsc};
 use std::time::Duration;
 
+use crate::fallback::LayoutFailure;
 use crate::graphviz_ffi;
 
 /// Graphviz uses global state and is not thread-safe.
@@ -101,8 +102,8 @@ impl LayoutGraph {
             .push((from.to_string(), to.to_string(), label.map(String::from)));
     }
 
-    /// Runs Graphviz dot layout and returns full results (positions + edge paths).
-    /// Returns `None` if layout exceeds the timeout or panics.
+    /// Runs Graphviz dot layout and returns full results (positions + edge
+    /// paths), or the reason it did not.
     ///
     /// Layouts run on one long-lived worker thread (see [`layout_worker`])
     /// rather than a thread spawned per call: Graphviz is serialised by
@@ -111,16 +112,23 @@ impl LayoutGraph {
     /// `docs/perf/baseline.md`). A job that outlives `timeout` keeps
     /// running on the worker, exactly as an abandoned spawned thread did
     /// while holding the lock; its result is dropped on arrival.
-    pub fn layout_full(self, timeout: Duration) -> Option<LayoutResult> {
+    pub fn layout_full(self, timeout: Duration) -> Result<LayoutResult, LayoutFailure> {
+        let nodes = self.nodes.len();
         let (reply, rx) = mpsc::channel();
-        layout_worker()
+        if layout_worker()
             .send(LayoutJob { graph: self, reply })
-            .ok()?;
-        rx.recv_timeout(timeout).ok()
+            .is_err()
+        {
+            return Err(LayoutFailure::Panicked { nodes });
+        }
+        rx.recv_timeout(timeout).map_err(|e| match e {
+            mpsc::RecvTimeoutError::Timeout => LayoutFailure::TimedOut { nodes, timeout },
+            mpsc::RecvTimeoutError::Disconnected => LayoutFailure::Panicked { nodes },
+        })
     }
 
-    /// Runs layout and returns only node positions (backwards compatibility).
-    pub fn layout_positions(self, timeout: Duration) -> Option<Vec<NodePosition>> {
+    /// Runs layout and returns only node positions.
+    pub fn layout_positions(self, timeout: Duration) -> Result<Vec<NodePosition>, LayoutFailure> {
         self.layout_full(timeout)
             .map(|result| result.node_positions)
     }
@@ -504,17 +512,35 @@ mod tests {
     }
 
     #[test]
-    fn layout_with_timeout() {
+    fn layout_within_budget_succeeds() {
         let mut g = LayoutGraph::new(Direction::TopToBottom);
         g.add_node("a", "Alice", 100.0, 40.0);
         g.add_node("b", "Bob", 100.0, 40.0);
         g.add_edge("a", "b", Some("hello"));
 
-        let result = g.layout_full(Duration::from_secs(5));
-        assert!(result.is_some(), "layout should complete within timeout");
-        let result = result.unwrap();
+        let result = g
+            .layout_full(crate::fallback::DEFAULT_BUDGET)
+            .expect("layout should complete within the budget");
         assert_eq!(result.node_positions.len(), 2);
         assert_eq!(result.edge_paths.len(), 1);
+    }
+
+    /// An exhausted budget must be distinguishable from a Graphviz panic
+    /// and must carry the node count, because that is what the caller
+    /// reports to the user.
+    #[test]
+    fn exhausted_budget_names_its_reason_and_size() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        g.add_node("a", "Alice", 100.0, 40.0);
+        g.add_node("b", "Bob", 100.0, 40.0);
+
+        match g.layout_full(Duration::ZERO) {
+            Err(LayoutFailure::TimedOut { nodes, timeout }) => {
+                assert_eq!(nodes, 2);
+                assert_eq!(timeout, Duration::ZERO);
+            }
+            other => panic!("expected a timeout, got {other:?}"),
+        }
     }
 
     #[test]

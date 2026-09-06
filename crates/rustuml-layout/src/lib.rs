@@ -6,5 +6,6 @@
 //! Uses vendored Graphviz (dot algorithm) for layout with proper edge
 //! routing via cubic bezier splines.
 
+pub mod fallback;
 pub mod graph;
 mod graphviz_ffi;

@@ -12,6 +12,7 @@
 //! - Visibility modifier markers with `data-visibility-modifier` attributes
 //! - Inline `style` attributes for strokes (not `stroke="..."` attributes)
 
+use rustuml_layout::fallback;
 use std::collections::HashMap;
 use std::fmt::Write;
 
@@ -1501,9 +1502,10 @@ pub fn render_with_oracle(
         layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
     }
 
-    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
-        Some(r) => r,
-        None => {
+    let result = match layout.layout_full(fallback::budget()) {
+        Ok(r) => r,
+        Err(failure) => {
+            fallback::record("class diagram", failure);
             return render_grid_fallback(diagram, cs);
         }
     };

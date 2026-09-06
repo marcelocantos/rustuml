@@ -6,6 +6,7 @@
 //! Produces PlantUML-compatible SVG output with matching element structure,
 //! attributes, and styling.
 
+use rustuml_layout::fallback;
 use std::fmt::Write;
 
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
@@ -918,7 +919,13 @@ pub fn render_with_oracle(
             let to = map_id(&t.to, false);
             layout.add_edge(&from, &to, t.label.as_deref());
         }
-        layout.layout_full(std::time::Duration::from_secs(5))
+        match layout.layout_full(fallback::budget()) {
+            Ok(r) => Some(r),
+            Err(failure) => {
+                fallback::record("state diagram", failure);
+                None
+            }
+        }
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);

@@ -7,6 +7,7 @@
 //! then renders nodes with appropriate shapes, edges with styles,
 //! and cluster boxes around grouped nodes.
 
+use rustuml_layout::fallback;
 use std::collections::HashMap;
 
 use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
@@ -127,9 +128,12 @@ fn render_fallback(diagram: &DotDiagram, _theme: &Theme) -> String {
     }
 
     // Run layout with timeout.
-    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
-        Some(r) => r,
-        None => return render_grid(diagram, &all_nodes, &node_dims, &all_edges),
+    let result = match layout.layout_full(fallback::budget()) {
+        Ok(r) => r,
+        Err(failure) => {
+            fallback::record("dot diagram", failure);
+            return render_grid(diagram, &all_nodes, &node_dims, &all_edges);
+        }
     };
 
     render_with_positions(
