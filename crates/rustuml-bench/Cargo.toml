@@ -1,0 +1,32 @@
+[package]
+name = "rustuml-bench"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Runtime performance harness for RustUML: corpus runner, perf ratchet, criterion benches"
+publish = false
+
+# No unit tests in this crate: `cargo test --workspace` must not pull
+# criterion into the test build.
+[lib]
+test = false
+bench = false
+
+[[bin]]
+name = "rustuml-bench"
+path = "src/main.rs"
+test = false
+bench = false
+
+[[bench]]
+name = "corpus"
+harness = false
+
+[dependencies]
+rayon = "1"
+rustuml-layout = { path = "../rustuml-layout" }
+rustuml-parser = { path = "../rustuml-parser" }
+rustuml-render = { path = "../rustuml-render" }
+
+[dev-dependencies]
+criterion = { version = "0.8", default-features = false, features = ["cargo_bench_support"] }

@@ -1,8 +1,14 @@
 [workspace]
-members = ["crates/rustuml", "crates/rustuml-layout", "crates/rustuml-math", "crates/rustuml-oracle", "crates/rustuml-parser", "crates/rustuml-render"]
+members = ["crates/rustuml", "crates/rustuml-bench", "crates/rustuml-layout", "crates/rustuml-math", "crates/rustuml-oracle", "crates/rustuml-parser", "crates/rustuml-render"]
 resolver = "2"
 
 [workspace.package]
 version = "0.7.0"
 edition = "2024"
 license = "Apache-2.0"
+
+# Release codegen plus line tables, for `sample`/`samply` on the bench
+# binaries: `cargo build --profile profiling -p rustuml-bench`.
+[profile.profiling]
+inherits = "release"
+debug = "line-tables-only"
