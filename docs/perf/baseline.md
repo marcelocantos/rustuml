@@ -44,60 +44,93 @@ for.
 <!-- perf-baseline:begin -->
 | family | files | allocs | bytes | parse_us | render_us |
 |---|---:|---:|---:|---:|---:|
-| activity | 6 | 13424 | 918060 | 125 | 872 |
-| archimate | 6 | 3611 | 217676 | 147 | 78 |
-| chart | 6 | 7525 | 429207 | 120 | 201 |
-| class | 6 | 8750 | 479189 | 160 | 554 |
-| combo | 6 | 388271 | 294368629 | 404 | 28734 |
-| component | 6 | 4837 | 296389 | 86 | 340 |
-| creole | 6 | 6484 | 274133 | 66 | 336 |
-| deployment | 6 | 2743 | 110914 | 93 | 16 |
-| ebnf | 6 | 12124 | 813967 | 70 | 828 |
-| edge-cases | 6 | 58844 | 3240233 | 865 | 2490 |
-| er | 6 | 32096 | 1778475 | 542 | 1807 |
-| gantt | 6 | 26254 | 1411862 | 173 | 1222 |
+| activity | 6 | 12583 | 911993 | 116 | 694 |
+| archimate | 6 | 3611 | 217676 | 144 | 76 |
+| chart | 6 | 7075 | 425884 | 105 | 134 |
+| class | 6 | 8632 | 477377 | 138 | 376 |
+| combo | 6 | 141176 | 33185001 | 352 | 10268 |
+| component | 6 | 4597 | 294020 | 98 | 287 |
+| creole | 6 | 6394 | 273018 | 60 | 295 |
+| deployment | 6 | 2743 | 110914 | 92 | 15 |
+| ebnf | 6 | 8489 | 786047 | 60 | 321 |
+| edge-cases | 6 | 57990 | 3232658 | 835 | 2196 |
+| er | 6 | 31705 | 1774614 | 454 | 1465 |
+| gantt | 6 | 21226 | 1374653 | 179 | 666 |
 | git | 6 | 2110 | 73353 | 44 | 15 |
-| json-yaml | 6 | 3114 | 295139 | 49 | 83 |
-| links | 6 | 7293 | 406790 | 149 | 488 |
-| math | 6 | 1532 | 71661 | 17 | 34 |
-| mindmap | 6 | 6366 | 294097 | 63 | 210 |
-| multi-diagram | 6 | 6225 | 279310 | 118 | 264 |
-| nwdiag | 6 | 9870 | 523165 | 245 | 292 |
-| object | 6 | 5492 | 304340 | 131 | 449 |
-| preprocessing | 6 | 75725 | 4082733 | 2663 | 545 |
-| regex | 6 | 3825 | 162825 | 19 | 173 |
-| rendering | 6 | 8353 | 421222 | 143 | 726 |
-| salt | 6 | 5459 | 272654 | 74 | 156 |
-| sequence | 6 | 11898 | 623330 | 163 | 344 |
-| skinparam | 6 | 9994 | 588148 | 153 | 514 |
-| sprites | 6 | 2199 | 104428 | 67 | 99 |
-| state | 6 | 8835 | 641091 | 125 | 1222 |
-| timing | 6 | 11768 | 525036 | 237 | 454 |
-| type-detection | 6 | 8181 | 451380 | 114 | 614 |
-| usecase | 6 | 6590 | 328458 | 154 | 139 |
-| wbs | 6 | 4385 | 200648 | 63 | 134 |
-| TOTAL | 192 | 764177 | 314988542 | 7642 | 44433 |
+| json-yaml | 6 | 2816 | 293026 | 50 | 49 |
+| links | 6 | 7213 | 405243 | 124 | 353 |
+| math | 6 | 1502 | 71441 | 17 | 29 |
+| mindmap | 6 | 5783 | 289689 | 61 | 129 |
+| multi-diagram | 6 | 6106 | 278318 | 92 | 177 |
+| nwdiag | 6 | 8942 | 516189 | 222 | 140 |
+| object | 6 | 5358 | 302415 | 127 | 333 |
+| preprocessing | 6 | 75369 | 4080098 | 2673 | 516 |
+| regex | 6 | 3179 | 158319 | 18 | 96 |
+| rendering | 6 | 8196 | 419279 | 161 | 655 |
+| salt | 6 | 5122 | 270325 | 71 | 108 |
+| sequence | 6 | 11740 | 622179 | 182 | 358 |
+| skinparam | 6 | 9614 | 585225 | 153 | 438 |
+| sprites | 6 | 2116 | 103684 | 54 | 55 |
+| state | 6 | 7896 | 632950 | 141 | 1109 |
+| timing | 6 | 9918 | 511016 | 212 | 205 |
+| type-detection | 6 | 7068 | 442502 | 108 | 358 |
+| usecase | 6 | 6414 | 327211 | 151 | 109 |
+| wbs | 6 | 3888 | 197014 | 58 | 71 |
+| TOTAL | 192 | 496571 | 53643331 | 7352 | 22096 |
 <!-- perf-baseline:end -->
 
 ## Whole-corpus throughput (informational)
 
-`rustuml-bench run --serial`, three rounds, same load conditions as
-above:
+`rustuml-bench run --serial` over all 12,449 files, binaries alternated
+three rounds each so that the load drift hits both sides equally:
 
-| Round | Wall | Files/s |
+| Round | Before | After |
 |---|---|---|
-| 1 | 5.40 s | 2305 |
-| 2 | 5.20 s | 2396 |
-| 3 | 7.15 s | 1742 |
+| 1 | 5.40 s (2305 files/s) | 4.01 s (3102 files/s) |
+| 2 | 5.20 s (2396 files/s) | 4.49 s (2771 files/s) |
+| 3 | 7.15 s (1742 files/s) | 5.59 s (2228 files/s) |
 
-12,449 files, 12,373 rendered, 76 parse failures, 0 panics, 71.8 MB of
-SVG. Per-family render totals, serial: `dot` 2444 ms (25 files, external
-`dot` process), `activity` 1142 ms (1497 files), `state` 334 ms (1085),
-`class` 189 ms (2140), `preprocessing` 150 ms render plus 291 ms parse
-(394).
+Both binaries render 12,373 of 12,449 files, fail to parse the same 76,
+panic on none, and emit 71.8 MB of SVG.
+
+Per-family render totals, serial, before the fixes: `dot` 2444 ms (25
+files, external `dot` process), `activity` 1142 ms (1497 files), `state`
+334 ms (1085), `class` 189 ms (2140), `preprocessing` 150 ms render plus
+291 ms parse (394).
+
+## Profile findings and fixes (2026-09-06)
+
+Profiled with `sample` on the `profiling` build (release codegen plus
+line tables), driven by `rustuml-bench profile <family> --iters N`.
+
+| Family | Share of render | Mechanism | Fix |
+|---|---|---|---|
+| activity | 53 % | `compress::attr_val`/`set_attr`/`rewrite_attr` compiled a fresh `Regex` per attribute per element | thread-local compiled-regex cache keyed by pattern |
+| class / state | 48 % / 31 % | `LayoutGraph::layout_full` spawned an OS thread per layout, though Graphviz is serialised behind one lock anyway | one persistent layout worker thread fed by a channel |
+| all | 7–10 % | `fmt_coord` formatted through `format!("{:.4}")`, hitting the exact float formatter (Grisu falling back to Dragon) | integer tick split, proven byte-identical by `fmt_coord_matches_float_formatter` |
+
+Effect on the ratchet sample: 764,177 → 496,571 allocations (−35 %) and
+315 MB → 53.6 MB (−83 %). The `combo` family carries most of the bytes;
+its 294 MB → 33 MB is the regex cache no longer rebuilding an automaton
+per attribute on the largest diagrams in the corpus.
+
+## Output equivalence
+
+These are meant to be pure performance changes, and `fmt_coord` in
+particular decides the digits in every SVG coordinate. Two checks:
+
+- `cargo test -p rustuml-oracle --test golden_pairs` renders the corpus
+  and compares against the checked-in golden SVGs. Before and after:
+  12,550 total, 11,250 passed, 1 failed (a `deployment` XML diff that
+  predates this branch), 1,299 skipped, 0 panics. Identical on both.
+- `fmt_coord_matches_float_formatter` asserts the new integer split
+  against the old float formatter over 200,000 pseudo-random magnitudes
+  from 1e-5 to 1e7 in both signs, plus every 1e-4 tick boundary in
+  [0, 2) nudged seven ways.
 
 ## History
 
 | Date | Change | TOTAL allocs | TOTAL bytes | TOTAL render_us |
 |---|---|---|---|---|
 | 2026-09-06 | harness added, pre-fix lock | 764177 | 314988542 | 44433 |
+| 2026-09-06 | regex cache, layout worker, `fmt_coord` integer split | 496571 | 53643331 | 22096 |

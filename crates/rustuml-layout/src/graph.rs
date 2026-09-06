@@ -9,7 +9,7 @@
 use std::collections::HashMap;
 use std::ffi::CString;
 use std::os::raw::c_void;
-use std::sync::{Mutex, mpsc};
+use std::sync::{LazyLock, Mutex, mpsc};
 use std::time::Duration;
 
 use crate::graphviz_ffi;
@@ -17,6 +17,38 @@ use crate::graphviz_ffi;
 /// Graphviz uses global state and is not thread-safe.
 /// All layout operations must be serialized.
 static GRAPHVIZ_LOCK: Mutex<()> = Mutex::new(());
+
+/// One queued layout request for the worker thread.
+struct LayoutJob {
+    graph: LayoutGraph,
+    reply: mpsc::Sender<LayoutResult>,
+}
+
+/// The single Graphviz worker thread, started on first use. Jobs run in
+/// arrival order; a panic inside one job is contained so the worker (and
+/// every later caller) survives — the caller of the panicking job sees a
+/// closed reply channel and gets `None`, as with the old per-call thread.
+fn layout_worker() -> &'static mpsc::Sender<LayoutJob> {
+    static WORKER: LazyLock<mpsc::Sender<LayoutJob>> = LazyLock::new(|| {
+        let (tx, rx) = mpsc::channel::<LayoutJob>();
+        std::thread::Builder::new()
+            .name("rustuml-layout".into())
+            .spawn(move || {
+                for job in rx {
+                    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        job.graph.layout_full_no_timeout()
+                    }));
+                    if let Ok(result) = result {
+                        // The caller may have timed out and gone away.
+                        let _ = job.reply.send(result);
+                    }
+                }
+            })
+            .expect("spawn rustuml-layout worker thread");
+        tx
+    });
+    &WORKER
+}
 
 /// Direction of the graph layout.
 #[derive(Clone, Copy, Debug, Default)]
@@ -71,11 +103,19 @@ impl LayoutGraph {
 
     /// Runs Graphviz dot layout and returns full results (positions + edge paths).
     /// Returns `None` if layout exceeds the timeout or panics.
+    ///
+    /// Layouts run on one long-lived worker thread (see [`layout_worker`])
+    /// rather than a thread spawned per call: Graphviz is serialised by
+    /// `GRAPHVIZ_LOCK` anyway, and per-call spawn plus stack setup was
+    /// 30-48% of class/state render time (profiled 2026-09-06,
+    /// `docs/perf/baseline.md`). A job that outlives `timeout` keeps
+    /// running on the worker, exactly as an abandoned spawned thread did
+    /// while holding the lock; its result is dropped on arrival.
     pub fn layout_full(self, timeout: Duration) -> Option<LayoutResult> {
-        let (tx, rx) = mpsc::channel();
-        std::thread::spawn(move || {
-            let _ = tx.send(self.layout_full_no_timeout());
-        });
+        let (reply, rx) = mpsc::channel();
+        layout_worker()
+            .send(LayoutJob { graph: self, reply })
+            .ok()?;
         rx.recv_timeout(timeout).ok()
     }
 

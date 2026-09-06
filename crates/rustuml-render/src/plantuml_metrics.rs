@@ -386,6 +386,16 @@ fn guillemet_width(table: &[f64; 95]) -> f64 {
     }
 }
 
+/// Decimal places PlantUML emits for SVG coordinates (`%.4f`).
+const COORD_DECIMALS: usize = 4;
+/// `10^COORD_DECIMALS` as the rounding scale.
+const COORD_SCALE: f64 = 10000.0;
+const COORD_TICKS_PER_UNIT: u64 = 10_000;
+/// Below this tick count the integer split in `fmt_coord` is exact: the
+/// f64 quotient `ticks / 10000.0` is within a tiny fraction of a tick of
+/// the true value, so 4-place rounding recovers `ticks` exactly.
+const COORD_INTEGER_FORMAT_LIMIT: f64 = 1e15;
+
 /// Format a coordinate value matching PlantUML's decimal formatting.
 ///
 /// PlantUML's SvgGraphics emits SVG coordinates via
@@ -410,16 +420,39 @@ pub fn fmt_coord(v: f64) -> String {
         return format!("{v}");
     }
     // HALF_UP at 4 decimals: scale, add ±0.5, floor.
-    let scaled = v * 10000.0;
+    let scaled = v * COORD_SCALE;
     let rounded = if scaled >= 0.0 {
         (scaled + 0.5).floor()
     } else {
         -((-scaled + 0.5).floor())
     };
-    let s = format!("{:.4}", rounded / 10000.0);
-    let s = s.trim_end_matches('0');
-    let s = s.trim_end_matches('.');
-    s.to_string()
+    if rounded.abs() >= COORD_INTEGER_FORMAT_LIMIT {
+        // Out of the range where the integer split below is exact; keep the
+        // general float formatter.
+        let s = format!("{:.4}", rounded / COORD_SCALE);
+        return s.trim_end_matches('0').trim_end_matches('.').to_string();
+    }
+    // `rounded` is an integer count of 1e-4 ticks, so the decimal string is
+    // an integer split, no float formatting needed. This is byte-identical
+    // to `format!("{:.4}", rounded / 10000.0)` followed by zero-stripping
+    // (see `fmt_coord_matches_float_formatter`), but avoids the exact-mode
+    // float formatter (Grisu falling back to Dragon), which was 7-10% of
+    // render time across families (profiled 2026-09-06, `docs/perf/baseline.md`).
+    // `-0.0` (a tiny negative rounded up to zero) formats as "-0", as the
+    // float formatter did.
+    let sign = if rounded.is_sign_negative() { "-" } else { "" };
+    let magnitude = (rounded as i64).unsigned_abs();
+    let whole = magnitude / COORD_TICKS_PER_UNIT;
+    let mut frac = magnitude % COORD_TICKS_PER_UNIT;
+    if frac == 0 {
+        return format!("{sign}{whole}");
+    }
+    let mut digits = COORD_DECIMALS;
+    while frac.is_multiple_of(10) {
+        frac /= 10;
+        digits -= 1;
+    }
+    format!("{sign}{whole}.{frac:0digits$}")
 }
 
 thread_local! {
@@ -1620,5 +1653,40 @@ mod tests {
         assert_eq!(fmt_coord(16.0), "16");
         assert_eq!(fmt_coord(81.86718750), "81.8672");
         assert_eq!(fmt_coord(35.548828125), "35.5488");
+    }
+
+    /// The pre-2026-09 implementation, kept as the reference for the
+    /// integer-split fast path.
+    fn fmt_coord_via_float_formatter(v: f64) -> String {
+        let scaled = v * 10000.0;
+        let rounded = if scaled >= 0.0 {
+            (scaled + 0.5).floor()
+        } else {
+            -((-scaled + 0.5).floor())
+        };
+        let s = format!("{:.4}", rounded / 10000.0);
+        s.trim_end_matches('0').trim_end_matches('.').to_string()
+    }
+
+    #[test]
+    fn fmt_coord_matches_float_formatter() {
+        // Deterministic LCG sweep over magnitudes 1e-5 .. 1e7, both signs,
+        // plus every 1e-4 tick boundary neighbourhood in [0, 2).
+        let mut state: u64 = 0x9E37_79B9_7F4A_7C15;
+        for _ in 0..200_000 {
+            state = state
+                .wrapping_mul(6364136223846793005)
+                .wrapping_add(1442695040888963407);
+            let mantissa = (state >> 11) as f64 / (1u64 << 53) as f64;
+            let exponent = ((state >> 3) % 13) as i32 - 5;
+            let v = mantissa * 10f64.powi(exponent) * if state & 1 == 0 { 1.0 } else { -1.0 };
+            assert_eq!(fmt_coord(v), fmt_coord_via_float_formatter(v), "v={v:e}");
+        }
+        for ticks in 0..20_000 {
+            for nudge in [-1e-9, -1e-12, 0.0, 1e-12, 1e-9, 0.5e-4, -0.5e-4] {
+                let v = ticks as f64 / 10000.0 + nudge;
+                assert_eq!(fmt_coord(v), fmt_coord_via_float_formatter(v), "v={v:e}");
+            }
+        }
     }
 }

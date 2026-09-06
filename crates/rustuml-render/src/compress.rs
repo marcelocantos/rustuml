@@ -596,6 +596,30 @@ use crate::plantuml_metrics::fmt_coord;
 use regex::Regex;
 use std::sync::OnceLock;
 
+thread_local! {
+    /// Compiled attribute regexes keyed by pattern. `attr_val`/`set_attr`/
+    /// `rewrite_attr` build their pattern from the attribute name and run
+    /// once per element per axis; compiling on every call made
+    /// `Regex::new` 53% of activity-diagram render time (profiled 2026-09-06,
+    /// `docs/perf/baseline.md`). The attribute-name set is tiny, so the
+    /// cache stays a handful of entries. `Regex` is an `Arc` internally, so
+    /// the clone handed out is cheap.
+    static ATTR_REGEX_CACHE: std::cell::RefCell<std::collections::HashMap<String, Regex>> =
+        std::cell::RefCell::new(std::collections::HashMap::new());
+}
+
+/// Compile `pattern` once per thread and reuse it.
+fn cached_regex(pattern: &str) -> Regex {
+    ATTR_REGEX_CACHE.with(|cache| {
+        if let Some(rx) = cache.borrow().get(pattern) {
+            return rx.clone();
+        }
+        let rx = Regex::new(pattern).unwrap();
+        cache.borrow_mut().insert(pattern.to_string(), rx.clone());
+        rx
+    })
+}
+
 /// Whole-diagram compression of a rendered activity diagram. Returns the
 /// transformed `(shapes, connectors)` buffers and the `(x, y)` transforms so the
 /// caller can remap the canvas dimensions (`x_tf.transform(width)` etc.).
@@ -902,8 +926,7 @@ fn rewrite_axis(svg: &str, mode: CompressionMode, tf: &CompressionTransform) -> 
 
 /// Replace a single numeric attribute `name="V"` with `name="tf(V)"`.
 fn rewrite_attr(el: &str, name: &str, tf: &CompressionTransform) -> String {
-    let pat = format!(r#"{name}="([-\d.]+)""#);
-    let rx = Regex::new(&pat).unwrap();
+    let rx = cached_regex(&format!(r#"{name}="([-\d.]+)""#));
     rx.replace(el, |c: &regex::Captures| {
         format!(r#"{}="{}""#, name, fmt_coord(tf.transform(num(&c[1]))))
     })
@@ -942,12 +965,12 @@ fn rewrite_center_radius(
 }
 
 fn attr_val(el: &str, name: &str) -> Option<f64> {
-    let rx = Regex::new(&format!(r#"\b{name}="([-\d.]+)""#)).unwrap();
+    let rx = cached_regex(&format!(r#"\b{name}="([-\d.]+)""#));
     rx.captures(el).map(|c| num(&c[1]))
 }
 
 fn set_attr(el: &str, name: &str, v: f64) -> String {
-    let rx = Regex::new(&format!(r#"(\b{name}=")[-\d.]+(")"#)).unwrap();
+    let rx = cached_regex(&format!(r#"(\b{name}=")[-\d.]+(")"#));
     rx.replace(el, |c: &regex::Captures| {
         format!("{}{}{}", &c[1], fmt_coord(v), &c[2])
     })
