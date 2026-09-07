@@ -76,6 +76,36 @@ change (12,550 total, 11,250 passed, 1 pre-existing `deployment` XML diff,
 0 panics). Graphviz drives layout for class, state, component and
 deployment diagrams, so an archive built wrongly would show up there.
 
+### Checked 2026-09-07 — the `cc` finding does not generalise
+
+Two follow-up questions, both answered no.
+
+**Does any other owned repo have the same anti-pattern?** No.
+`rustuml-layout` is the only crate across every Rust project under
+`~/work/github.com` whose own manifest build-depends on `cc`. The other
+owned Rust repos with a `build.rs` do not compile C at all: bullseye's
+stamps git provenance, pageflip's adds a macOS rpath. There is nothing
+else to apply the fix to.
+
+**Does feature unification carry `parallel` to third-party C build
+scripts in the graph?** It reaches them, but it does not pay.
+`libquickjs-sys` also build-depends on `cc` through its `bundled`
+feature, and cargo unifies the feature across build-dependencies, so its
+QuickJS compile does get the parallel driver. Building `rustuml-math`
+from clean, alternating worktrees three rounds:
+
+| Round | With `parallel` | Without |
+|---|---|---|
+| 1 | 12.33 s | 8.96 s |
+| 2 | 9.54 s | 8.92 s |
+| 3 | 8.91 s | 12.65 s |
+
+Overlapping ranges, no trend. The mechanism explains it: QuickJS is
+essentially one very large translation unit, `quickjs.c`, so spreading
+files across cores has almost nothing to spread. The Graphviz build
+script gains because it has about a hundred files; QuickJS does not
+because it has one that matters.
+
 ### Deferred — `rustuml-render` is a 92,790-line crate (Medium, high risk)
 
 Cargo's compilation unit is the crate, so every edit anywhere in
