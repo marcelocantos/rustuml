@@ -114,6 +114,52 @@ Effect on the ratchet sample: 764,177 → 496,571 allocations (−35 %) and
 its 294 MB → 33 MB is the regex cache no longer rebuilding an automaton
 per attribute on the largest diagrams in the corpus.
 
+## The layout curve, and why the budget is not the fix (2026-09-07)
+
+Graphviz layout time is superlinear in node count, and the criterion
+`layout/200` bench exceeds the 5 s budget. That prompted 🎯T18. What the
+investigation actually found:
+
+**The cost is not monotonic in node count.** Repeating each size three
+times back to back in one process, on the synthetic tree-plus-cross-edge
+graph the bench uses:
+
+| Nodes | Edges | Seconds (three runs) |
+|---|---|---|
+| 150 | 293 | 5.39, 7.19, 7.82 |
+| 175 | 348 | 1.54, 1.44, 1.44 |
+| 200 | 397 | 30.28, 28.18, 21.62 |
+
+175 nodes is five times faster than 150, reproducibly. So **no node count
+predicts whether a layout will finish**, and neither a pre-emptive size
+guard nor a size-scaled budget can be founded on one. That is the case
+for a budget with a loud fallback, which is what was built.
+
+**All of the cost is structure, not size.** The same generator with the
+cross-edges removed lays out a 300-node tree in 5 ms. The blow-up comes
+entirely from the long-range back-edges, which make the graph dense and
+cyclic.
+
+**Where the time goes.** `sample` on the `profiling` build, 200 nodes:
+9,530 of 9,856 samples are inside `dot_position`, and within it `rank2`
+and `enter_edge` — Graphviz's network simplex for x-coordinate
+assignment. Nothing in rustuml's own wrapper appears; edge construction
+is a hash lookup per edge.
+
+**Graphviz's documented effort limits did not move it.** `mclimit` was
+swept over 0.01, 0.1, 0.5 and 1, and `nslimit` over 0.1, 0.5, 1 and 2.
+Neither produced a trend at any size; the smallest `nslimit` values
+measured slower, not faster. These runs were taken at load average 90–120
+and are individually noisy, so the honest statement is that no effect was
+found, not that none exists.
+
+**No real diagram is anywhere near this.** Instrumenting every
+`layout_full` call across the whole golden corpus: 5,612 layouts, of
+which 5,422 are 10 nodes or fewer, 157 are 11–25, 33 are 26–50, and the
+largest is 50. The 200-node case is untested territory rather than a
+regression, which is why the silent-degradation fix was done first and
+unconditionally and the curve was left as 🎯T18.
+
 ## Output equivalence
 
 These are meant to be pure performance changes, and `fmt_coord` in
