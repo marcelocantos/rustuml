@@ -13,8 +13,14 @@ fmt:
 clippy:
 	@cargo clippy --workspace --quiet -- -D warnings && echo "✓ clippy"
 
+# Capture-and-propagate: a pipeline's status is its last stage, so
+# `cargo test | grep` reported grep's (the phrase "test result" appears
+# on pass AND fail). Make recipes do not inherit pipefail.
 test:
-	@cargo test --workspace --lib --quiet 2>&1 | grep "test result" && echo "✓ tests"
+	@out=$$(cargo test --workspace --lib --quiet 2>&1); rc=$$?; \
+		printf '%s\n' "$$out" | grep "test result" || true; \
+		if [ $$rc -ne 0 ]; then echo "✗ tests"; exit $$rc; fi; \
+		echo "✓ tests"
 
 clean-tree:
 	@test -z "$$(git status --porcelain)" && echo "✓ clean tree" || \
