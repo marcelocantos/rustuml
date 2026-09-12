@@ -4,6 +4,11 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 
+[features]
+# Development-only layout injection used by rustuml-oracle. The CLI crate
+# must not enable this — product render never takes an oracle.
+oracle-layout = []
+
 [dependencies]
 ab_glyph = "0.2"
 regex = "1"
