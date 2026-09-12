@@ -32,6 +32,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --lib
+      - run: cargo test -p rustuml --test pipe_mode
+      - run: cargo test -p rustuml-parser --test error_paths
+      - run: cargo test -p rustuml-render --test oracle_layout_feature
 
   test-oracle:
     name: Oracle Tests
