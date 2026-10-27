@@ -442,7 +442,10 @@ impl SeqParser {
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
             let to = self.ensure_participant(&caps[3]);
-            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            let activation = caps
+                .get(4)
+                .map(|m| parse_activation(m.as_str()))
+                .or_else(|| self.autoactivation_for(&arrow));
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
@@ -461,7 +464,10 @@ impl SeqParser {
             let mut arrow = parse_arrow(&arrow_str);
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
-            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            let activation = caps
+                .get(4)
+                .map(|m| parse_activation(m.as_str()))
+                .or_else(|| self.autoactivation_for(&arrow));
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
@@ -1743,6 +1749,31 @@ mod tests {
         } else {
             panic!("expected message");
         }
+    }
+
+    #[test]
+    fn autoactivate_applies_to_external_messages() {
+        let d = parse(
+            "autoactivate on\n[-> A : incoming call\nA -->] : outgoing return\n\
+             ]-> B : incoming from right\nB -->[ : outgoing to left",
+        );
+        let changes = d
+            .events
+            .iter()
+            .map(|event| match event {
+                Event::Message(message) => message.activation,
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            changes,
+            vec![
+                Some(ActivationChange::Activate),
+                Some(ActivationChange::Deactivate),
+                Some(ActivationChange::Activate),
+                Some(ActivationChange::Deactivate),
+            ]
+        );
     }
 
     #[test]

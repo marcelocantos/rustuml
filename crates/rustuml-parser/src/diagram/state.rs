@@ -10,9 +10,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct StateDiagram {
     pub meta: DiagramMeta,
+    #[serde(default)]
+    pub direction: StateLayoutDirection,
     pub states: Vec<State>,
     pub transitions: Vec<Transition>,
     pub notes: Vec<StateNote>,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub enum StateLayoutDirection {
+    #[default]
+    TopToBottom,
+    LeftToRight,
 }
 
 const TRANSITION_COLOR_KEY: &str = "__stateTransitionColor";

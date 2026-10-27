@@ -188,6 +188,7 @@ mod tests {
     fn make_diagram(states: Vec<State>, transitions: Vec<Transition>) -> StateDiagram {
         StateDiagram {
             meta: DiagramMeta::default(),
+            direction: StateLayoutDirection::TopToBottom,
             states,
             transitions,
             notes: vec![],

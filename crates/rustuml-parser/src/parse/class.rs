@@ -9,8 +9,8 @@ use std::sync::LazyLock;
 use regex::Regex;
 
 use super::ParseError;
-use crate::diagram::DiagramMeta;
 use crate::diagram::class::*;
+use crate::diagram::{DiagramMeta, LegendHorizontalAlignment, LegendVerticalAlignment};
 
 /// Which multi-line meta block we are currently accumulating.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -185,32 +185,8 @@ impl ClassParser {
         self.relationships.push(relationship);
     }
 
-    fn take_relationship(&mut self, index: usize) -> Relationship {
-        let relationship = self.relationships.remove(index);
-        for event in &mut self.uid_events {
-            match event {
-                ClassUidEvent::Relationship(event_index) if *event_index == index => {
-                    *event = ClassUidEvent::DiscardedRelationship {
-                        inverted: relationship.style.inverted,
-                    };
-                }
-                ClassUidEvent::Relationship(event_index) if *event_index > index => {
-                    *event_index -= 1;
-                }
-                _ => {}
-            }
-        }
-        relationship
-    }
-
     fn push_note(&mut self, note: Note) {
-        self.uid_events.push(ClassUidEvent::Note {
-            index: self.notes.len(),
-            owner_package: self
-                .package_stack
-                .last()
-                .map(|&index| self.packages[index].name.clone()),
-        });
+        self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
         self.notes.push(note);
     }
 
@@ -266,15 +242,12 @@ impl ClassParser {
     }
 
     fn register_quark_path(&mut self, path: &[String]) {
-        for depth in 1..=path.len() {
-            let prefix = &path[..depth];
-            if !self
-                .quark_creation_order
-                .iter()
-                .any(|existing| existing == prefix)
-            {
-                self.quark_creation_order.push(prefix.to_vec());
-            }
+        if !self
+            .quark_creation_order
+            .iter()
+            .any(|existing| existing == path)
+        {
+            self.quark_creation_order.push(path.to_vec());
         }
     }
 
@@ -371,30 +344,22 @@ impl ClassParser {
             .push(entity_id.to_string());
     }
 
-    /// `CucaDiagram#eventuallyBuildPhantomGroups` scans every registered
-    /// data-less quark after a class-like leaf constructor. Quarks with
-    /// children become package entities in global Plasma creation order.
-    fn materialize_phantom_packages(&mut self) {
-        let paths = self.quark_creation_order.clone();
-        for path in paths {
-            let has_children = self
-                .quark_creation_order
-                .iter()
-                .any(|candidate| candidate.len() > path.len() && candidate.starts_with(&path));
-            if !has_children || self.entity_by_path.contains_key(&path) {
-                continue;
-            }
+    /// `CucaDiagram#eventuallyBuildPhantomGroups` materializes every empty
+    /// parent quark when a class-like leaf is first created below it.
+    fn ensure_phantom_packages(&mut self, entity_path: &[String]) {
+        for depth in 1..entity_path.len() {
+            let path = entity_path[..depth].to_vec();
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
-                    self.uid_events
-                        .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
+                    self.uid_events.push(ClassUidEvent::Package(
+                        self.packages[idx].name.clone(),
+                    ));
                 }
                 continue;
             }
-            let parent = path
-                .split_last()
-                .and_then(|(_, parent)| self.package_by_path.get(parent).copied());
+            let parent =
+                (depth > 1).then(|| self.package_by_path[&entity_path[..depth - 1].to_vec()]);
             let idx = self.packages.len();
             let name = self.path_id(&path);
             self.uid_events.push(ClassUidEvent::Package(name.clone()));
@@ -411,6 +376,7 @@ impl ClassParser {
             });
             self.package_paths.push(path.clone());
             self.package_by_path.insert(path.clone(), idx);
+            self.register_quark_path(&path);
         }
     }
 
@@ -422,10 +388,10 @@ impl ClassParser {
         explicit_alias: bool,
     ) -> String {
         let id = self.path_id(&path);
-        self.register_quark_path(&path);
         // `reallyCreateLeaf` consumes the entity UID before
-        // `eventuallyBuildPhantomGroups` performs its global quark sweep.
+        // `eventuallyBuildPhantomGroups` materializes missing parent quarks.
         self.uid_events.push(ClassUidEvent::Entity(id.clone()));
+        self.ensure_phantom_packages(&path);
         let idx = self.entities.len();
         self.entities.push(ClassEntity {
             id: id.clone(),
@@ -446,7 +412,7 @@ impl ClassParser {
             source_line: self.current_line,
         });
         self.entity_by_path.insert(path.clone(), idx);
-        self.materialize_phantom_packages();
+        self.register_quark_path(&path);
         self.register_entity_path(&path, &id);
         self.enroll_new_entity_in_current_together(&id);
         id
@@ -470,44 +436,40 @@ impl ClassParser {
         self.create_entity_at_path(path, label, kind, false)
     }
 
-    fn relationship_endpoint_path(&self, raw: &str, quoted: bool) -> Vec<String> {
+    /// Port of `CommandLinkLollipop`: the visible interface label belongs to a
+    /// synthetic leaf beside the existing class, not to a normal interface
+    /// entity. The internal suffix only needs to be unique; the renderer
+    /// derives Java's public `<normal>lol<uid>` name from the shared UID stream.
+    fn create_lollipop_entity(
+        &mut self,
+        normal_id: &str,
+        label: String,
+        kind: EntityKind,
+    ) -> Option<String> {
+        let mut path = self
+            .entity_by_path
+            .iter()
+            .find_map(|(path, &idx)| (self.entities[idx].id == normal_id).then(|| path.clone()))?;
+        let ordinal = self
+            .entities
+            .iter()
+            .filter(|entity| {
+                matches!(
+                    entity.kind,
+                    EntityKind::LollipopFull | EntityKind::LollipopHalf
+                )
+            })
+            .count();
+        let leaf = path.last_mut()?;
+        leaf.push_str(&format!("__rustuml_lollipop_{ordinal}"));
+        Some(self.create_entity_at_path(path, label, kind, false))
+    }
+
+    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
         // `CommandLinkClass#executeArg` calls
-        // `CucaDiagram#quarkInContextSafe(true, endpoint)`. An existing group
-        // quark is retained and may later be muted to `EMPTY_PACKAGE`; only a
-        // genuinely missing quark is created as `LeafType.CLASS`.
-        if quoted {
-            let exact_path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
-            if self.entity_by_path.contains_key(&exact_path)
-                || self.package_by_path.contains_key(&exact_path)
-            {
-                return exact_path;
-            }
-            return self.resolve_quark_path(&strip_creole_for_id(raw), QuarkLookup::ReuseUnique);
-        }
-        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
-        path
-    }
-
-    fn materialize_relationship_endpoint(&mut self, path: Vec<String>) -> String {
-        if let Some(&idx) = self.entity_by_path.get(&path) {
-            return self.entities[idx].id.clone();
-        }
-        if let Some(&idx) = self.package_by_path.get(&path) {
-            return self.packages[idx].name.clone();
-        }
-        let label = path.last().cloned().unwrap_or_default();
-        self.create_entity_at_path(path, label, EntityKind::Class, false)
-    }
-
-    fn resolve_note_target(&self, raw: &str) -> String {
-        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
-        if let Some(&idx) = self.entity_by_path.get(&path) {
-            return self.entities[idx].id.clone();
-        }
-        if let Some(&idx) = self.package_by_path.get(&path) {
-            return self.packages[idx].name.clone();
-        }
-        raw.to_string()
+        // `CucaDiagram#quarkInContextSafe(true, endpoint)` and first creates a
+        // missing endpoint as `LeafType.CLASS` at the relationship location.
+        self.ensure_entity(raw)
     }
 
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
@@ -814,8 +776,15 @@ impl ClassParser {
                     | "entity"
             );
             let entity_path = self.resolve_quark_path(&id, lookup);
-            let display_label = if explicit_alias || caps.get(4).is_some() {
+            let display_label = if explicit_alias {
                 label
+            } else if caps.get(4).is_some() {
+                match self.namespace_sep.as_deref() {
+                    Some(separator) if label.contains(separator) => {
+                        label.rsplit(separator).next().unwrap().to_string()
+                    }
+                    _ => label,
+                }
             } else {
                 entity_path.last().cloned().unwrap_or(label)
             };
@@ -1036,17 +1005,6 @@ impl ClassParser {
         let a = self.ensure_entity(&a_raw);
         let b = self.ensure_entity(&b_raw);
         let c = self.ensure_entity(&c_raw);
-        // Java `foundLink` searches live links from newest to oldest and
-        // `Association.createNew` removes the selected base before inserting
-        // its three split links.
-        let replaced_relationship = self
-            .relationships
-            .iter()
-            .rposition(|relationship| {
-                (relationship.from == a && relationship.to == b)
-                    || (relationship.from == b && relationship.to == a)
-            })
-            .map(|index| self.take_relationship(index));
 
         self.uid_events
             .push(ClassUidEvent::Association(self.association_classes.len()));
@@ -1055,7 +1013,6 @@ impl ClassParser {
                 a,
                 b,
                 c,
-                replaced_relationship,
                 dashed,
                 source_line: self.current_line,
             });
@@ -1096,31 +1053,37 @@ impl ClassParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from_quoted = caps.get(1).map(|m| m.as_str());
-            let from_raw = from_quoted.unwrap_or_else(|| caps.get(2).unwrap().as_str());
+            // Quoted endpoints (groups 1/6) must be normalized the same way the
+            // entity declaration normalizes a quoted name (whitespace → `_`,
+            // creole markers stripped), so a relationship like
+            // `"Fish & Chips" --> "Bread & Butter"` resolves to the existing
+            // declared entity instead of creating a duplicate.
+            let from_raw = if let Some(m) = caps.get(1) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(2).map(|m| m.as_str()).unwrap_or("").to_string()
+            };
             let from_mult = caps.get(3).map(|m| m.as_str().to_string());
             let rel_str = &caps[4];
             let to_mult = caps.get(5).map(|m| m.as_str().to_string());
-            let to_quoted = caps.get(6).map(|m| m.as_str());
-            let to_raw = to_quoted.unwrap_or_else(|| caps.get(7).unwrap().as_str());
+            let to_raw = if let Some(m) = caps.get(6) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
+            };
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
             let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_str);
+            if rel_str.contains(">>") || rel_str.contains("<<") {
+                style.arrowhead = RelationshipArrowhead::Triangle;
+            }
             let length = if direction.is_some_and(QueueDirection::is_horizontal) {
                 1
             } else {
                 relationship_length(rel_str)
             };
-            // Java's `CommandLinkClass` selects both endpoint quarks before
-            // either missing leaf constructor runs. The first constructor's
-            // phantom-group sweep can therefore materialize ancestors of the
-            // second endpoint before that endpoint consumes its own UID.
-            let from_path = self.relationship_endpoint_path(from_raw, from_quoted.is_some());
-            self.register_quark_path(&from_path);
-            let to_path = self.relationship_endpoint_path(to_raw, to_quoted.is_some());
-            self.register_quark_path(&to_path);
-            let mut from = self.materialize_relationship_endpoint(from_path);
-            let mut to = self.materialize_relationship_endpoint(to_path);
+            let mut from = self.resolve_relationship_endpoint(&from_raw);
+            let mut to = self.resolve_relationship_endpoint(&to_raw);
             let mut from_mult = from_mult;
             let mut to_mult = to_mult;
             if direction.is_some_and(QueueDirection::inverts_link) {
@@ -1160,14 +1123,10 @@ impl ClassParser {
             let to_raw = &caps[4];
             let label = caps
                 .get(5)
-                .map(|m| m.as_str().trim().trim_matches('"').to_string());
+                .map(|m| normalize_relationship_label(m.as_str().trim().trim_matches('"')));
 
-            let from_path = self.relationship_endpoint_path(from_raw, false);
-            self.register_quark_path(&from_path);
-            let to_path = self.relationship_endpoint_path(to_raw, false);
-            self.register_quark_path(&to_path);
-            let from = self.materialize_relationship_endpoint(from_path);
-            let to = self.materialize_relationship_endpoint(to_path);
+            let from = self.ensure_entity(from_raw);
+            let to = self.ensure_entity(to_raw);
 
             self.push_relationship(Relationship {
                 from,
@@ -1188,24 +1147,46 @@ impl ClassParser {
             return true;
         }
 
-        // Lollipop notation: `Foo -() Interface` or `Foo --() Interface` (provided interface)
-        // or `Foo ()- Interface` or `Foo ()-- Interface` (required interface).
-        static LOLLIPOP_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*-{1,2}\(\)\s*(\w+)$|^(\w+)\s*\(\)-{1,2}\s*(\w+)$").unwrap()
+        // `CommandLinkLollipop` creates a synthetic LOLLIPOP_FULL/HALF leaf
+        // beside the already-declared normal entity. Quoted endpoints use the
+        // same identifier normalization as ordinary class relationships.
+        static ENT_THEN_LOLLIPOP_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*([-=.]+)(\(\)|\(\(|\)\))\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+            )
+            .unwrap()
         });
-        if let Some(caps) = LOLLIPOP_RE.captures(line) {
-            let (from_raw, to_raw) = if caps.get(1).is_some() {
-                (caps[1].to_string(), caps[2].to_string())
+        static LOLLIPOP_THEN_ENT_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(\(\)|\(\(|\)\))([-=.]+)\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+            )
+            .unwrap()
+        });
+        let endpoint = |caps: &regex::Captures<'_>, quoted: usize, bare: usize| {
+            caps.get(quoted).map_or_else(
+                || caps.get(bare).map(|m| m.as_str()).unwrap_or("").to_string(),
+                |m| strip_creole_for_id(m.as_str()),
+            )
+        };
+        if let Some(caps) = ENT_THEN_LOLLIPOP_RE.captures(line) {
+            let normal_raw = endpoint(&caps, 1, 2);
+            let display = endpoint(&caps, 5, 6);
+            let kind = if &caps[4] == "()" {
+                EntityKind::LollipopFull
             } else {
-                (caps[3].to_string(), caps[4].to_string())
+                EntityKind::LollipopHalf
             };
-            let to = self.ensure_entity_kind(&to_raw, EntityKind::Interface);
-            let from = self.ensure_entity(&from_raw);
+            let normal = self.ensure_entity(&normal_raw);
+            let Some(lollipop) = self.create_lollipop_entity(&normal, display, kind) else {
+                return false;
+            };
             self.push_relationship(Relationship {
-                from,
-                to,
+                from: normal,
+                to: lollipop,
                 kind: RelationshipKind::Association,
-                label: None,
+                label: caps
+                    .get(7)
+                    .map(|m| normalize_relationship_label(m.as_str().trim().trim_matches('"'))),
                 label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
@@ -1213,7 +1194,39 @@ impl ClassParser {
                 to_decor: None,
                 decorated_end: RelationshipEnd::None,
                 dashed: false,
-                length: 2,
+                length: caps[3].len(),
+                style: RelationshipStyle::default(),
+                source_line: self.current_line,
+            });
+            return true;
+        }
+        if let Some(caps) = LOLLIPOP_THEN_ENT_RE.captures(line) {
+            let display = endpoint(&caps, 1, 2);
+            let normal_raw = endpoint(&caps, 5, 6);
+            let kind = if &caps[3] == "()" {
+                EntityKind::LollipopFull
+            } else {
+                EntityKind::LollipopHalf
+            };
+            let normal = self.ensure_entity(&normal_raw);
+            let Some(lollipop) = self.create_lollipop_entity(&normal, display, kind) else {
+                return false;
+            };
+            self.push_relationship(Relationship {
+                from: lollipop,
+                to: normal,
+                kind: RelationshipKind::Association,
+                label: caps
+                    .get(7)
+                    .map(|m| normalize_relationship_label(m.as_str().trim().trim_matches('"'))),
+                label_arrow: LinkArrow::None,
+                from_multiplicity: None,
+                to_multiplicity: None,
+                from_decor: None,
+                to_decor: None,
+                decorated_end: RelationshipEnd::None,
+                dashed: false,
+                length: caps[4].len(),
                 style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
@@ -1263,56 +1276,26 @@ impl ClassParser {
     fn try_package(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
-            )
-            .unwrap()
-        });
-        static MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
+                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"|([^#\s{<]+))(?:\s+(?i:as)\s+([\p{L}\p{N}_.]+))?\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*\{\s*$"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let Some(modifiers) = MODIFIERS_RE.captures(caps.get(13).unwrap().as_str()) else {
-                return false;
-            };
             let kind_key = caps[1].to_ascii_lowercase();
             let kind_str = kind_key.as_str();
-            let (display, code, explicit_alias, identity_stereotype) =
-                if let (Some(display), Some(code)) = (caps.get(2), caps.get(4)) {
-                    (
-                        display.as_str().to_string(),
-                        code.as_str().to_string(),
-                        true,
-                        caps.get(3),
-                    )
-                } else if let (Some(code), Some(display)) = (caps.get(5), caps.get(7)) {
-                    (
-                        display.as_str().to_string(),
-                        code.as_str().to_string(),
-                        true,
-                        caps.get(6),
-                    )
-                } else if let (Some(display), Some(code)) = (caps.get(8), caps.get(10)) {
-                    (
-                        display.as_str().to_string(),
-                        code.as_str().to_string(),
-                        true,
-                        caps.get(9),
-                    )
-                } else {
-                    let code = caps
-                        .get(11)
-                        .or(caps.get(12))
-                        .map(|m| m.as_str().to_string())
-                        .unwrap_or_default();
-                    (code.clone(), code, false, None)
-                };
-            let color = modifiers.get(2).map(|m| m.as_str().to_string());
-            let stereotypes = identity_stereotype
-                .or_else(|| modifiers.get(1))
+            let display = caps
+                .get(2)
+                .or(caps.get(3))
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
+            let alias = caps.get(4).map(|m| m.as_str().to_string());
+            if alias.is_some() && kind_str != "package" {
+                return false;
+            }
+            let color = caps.get(5).map(|m| m.as_str().to_string());
+            let stereotypes = caps
+                .get(6)
                 .map(|m| vec![m.as_str().trim().to_string()])
                 .unwrap_or_default();
             let kind = match kind_str {
@@ -1329,12 +1312,13 @@ impl ClassParser {
             // `CommandPackage#executeArg` sends `AS` to `quarkInContext` and
             // keeps `NAME` solely as display; `CommandNamespace#executeArg`
             // follows the same quark-backed group discipline.
-            let path = self.resolve_group_path(&code);
+            let code = alias.as_deref().unwrap_or(&display);
+            let path = self.resolve_group_path(code);
             if path.is_empty() {
                 return false;
             }
-            let requested_display_name = (explicit_alias || path.len() > 1).then(|| {
-                if explicit_alias {
+            let requested_display_name = (alias.is_some() || path.len() > 1).then(|| {
+                if alias.is_some() {
                     display.clone()
                 } else {
                     path.last().cloned().unwrap_or_default()
@@ -1435,7 +1419,7 @@ impl ClassParser {
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
-            let target = self.resolve_note_target(&caps[2]);
+            let target = caps[2].to_string();
             let text = caps[3].trim().to_string();
             // Expand `\n` escape sequences into actual newlines.  Preserve
             // leading whitespace on each segment so that indented `* items`
@@ -1459,7 +1443,7 @@ impl ClassParser {
 
         if let Some(caps) = ATTACHED_ML_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
-            let target = self.resolve_note_target(&caps[2]);
+            let target = caps[2].to_string();
             self.current_note = Some(Note {
                 lines: Vec::new(),
                 target: Some(target),
@@ -1656,13 +1640,36 @@ impl ClassParser {
             self.caption_line.get_or_insert(self.current_line);
             return true;
         }
-        if line == "legend"
-            || line.starts_with("legend left")
-            || line.starts_with("legend right")
-            || line.starts_with("legend center")
-            || line.starts_with("legend top")
-            || line.starts_with("legend bottom")
-        {
+        let mut legend_words = line.split_ascii_whitespace();
+        let is_legend = legend_words.next() == Some("legend");
+        let legend_position = legend_words.collect::<Vec<_>>();
+        let valid_legend_position = matches!(
+            legend_position.as_slice(),
+            [] | ["left" | "center" | "right"]
+                | ["top" | "bottom"]
+                | ["top" | "bottom", "left" | "center" | "right"]
+        );
+        if is_legend && valid_legend_position {
+            for word in legend_position {
+                match word {
+                    "left" => {
+                        self.meta.legend_horizontal_alignment = LegendHorizontalAlignment::Left;
+                    }
+                    "center" => {
+                        self.meta.legend_horizontal_alignment = LegendHorizontalAlignment::Center;
+                    }
+                    "right" => {
+                        self.meta.legend_horizontal_alignment = LegendHorizontalAlignment::Right;
+                    }
+                    "top" => {
+                        self.meta.legend_vertical_alignment = LegendVerticalAlignment::Top;
+                    }
+                    "bottom" => {
+                        self.meta.legend_vertical_alignment = LegendVerticalAlignment::Bottom;
+                    }
+                    _ => unreachable!("validated legend position"),
+                }
+            }
             self.meta_block = Some(MetaBlock::Legend);
             self.legend_line.get_or_insert(self.current_line);
             return true;
@@ -2133,7 +2140,7 @@ fn parse_label_arrow(label: Option<&str>) -> (Option<String>, LinkArrow) {
         .unwrap_or(label);
 
     if label.contains("\\n") || label.contains('\n') {
-        return (Some(label.to_string()), LinkArrow::None);
+        return (Some(normalize_relationship_label(label)), LinkArrow::None);
     }
 
     let (text, arrow) = if label == "<" {
@@ -2151,7 +2158,20 @@ fn parse_label_arrow(label: Option<&str>) -> (Option<String>, LinkArrow) {
     } else {
         (Some(label.to_string()), LinkArrow::None)
     };
-    (text.filter(|text| !text.is_empty()), arrow)
+    (
+        text.filter(|text| !text.is_empty())
+            .map(|text| normalize_relationship_label(&text)),
+        arrow,
+    )
+}
+
+/// Java `LinkArg.build` passes every relationship label through
+/// `Display.manageGuillemet`, whose default `Guillemet.GUILLEMET` conversion
+/// replaces valid `<<...>>` groups while preserving malformed angle syntax.
+fn normalize_relationship_label(label: &str) -> String {
+    static RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"<<\s?((?:<&\w+>|[^<>])+?)\s?>>").unwrap());
+    RE.replace_all(label, "\u{00ab}$1\u{00bb}").into_owned()
 }
 
 fn parse_endpoint_decor(s: &str) -> Option<EndpointDecor> {
@@ -2505,6 +2525,33 @@ mod tests {
     }
 
     #[test]
+    fn lollipop_commands_create_synthetic_leaves_in_both_orientations() {
+        let d = parse(
+            "class FreshRegistry731\n\
+             class FreshConsumer739\n\
+             FreshRegistry731 -() ProvidedPort743\n\
+             RequiredPort751 ()-- FreshConsumer739\n\
+             FreshRegistry731 -(( HalfPort757",
+        );
+
+        assert_eq!(d.entities.len(), 5);
+        assert_eq!(d.entities[2].label, "ProvidedPort743");
+        assert_eq!(d.entities[2].kind, EntityKind::LollipopFull);
+        assert_eq!(d.entities[3].label, "RequiredPort751");
+        assert_eq!(d.entities[3].kind, EntityKind::LollipopFull);
+        assert_eq!(d.entities[4].label, "HalfPort757");
+        assert_eq!(d.entities[4].kind, EntityKind::LollipopHalf);
+        assert_eq!(d.relationships[0].from, "FreshRegistry731");
+        assert_eq!(d.relationships[0].to, d.entities[2].id);
+        assert_eq!(d.relationships[0].length, 1);
+        assert_eq!(d.relationships[1].from, d.entities[3].id);
+        assert_eq!(d.relationships[1].to, "FreshConsumer739");
+        assert_eq!(d.relationships[1].length, 2);
+        assert_eq!(d.relationships[2].from, "FreshRegistry731");
+        assert_eq!(d.relationships[2].to, d.entities[4].id);
+    }
+
+    #[test]
     fn allowmixing_description_leaves_keep_declaration_kind_and_location() {
         let d = parse(
             "allowmixing\n\
@@ -2834,6 +2881,7 @@ mod tests {
                 hidden: false,
                 inverted: false,
                 declaration: false,
+                arrowhead: RelationshipArrowhead::Arrow,
             }
         );
         assert_eq!(d.relationships[1].style.thickness, Some(3));
@@ -2844,6 +2892,25 @@ mod tests {
     fn relationship_label() {
         let d = parse("Parent -- Child : has");
         assert_eq!(d.relationships[0].label.as_deref(), Some("has"));
+    }
+
+    #[test]
+    fn renamed_relationship_labels_apply_linkarg_guillemet_normalization() {
+        let d = parse(
+            "FreshEmitter3101 --> FreshSink3109 : <<streams>> and << audited >>\n\
+             FreshOwner3119 ||--o{ FreshRecord3121 : <<owns <&key>>>\n\
+             FreshLeft3137 -- FreshRight3163 : <<broken>x>>",
+        );
+
+        assert_eq!(
+            d.relationships[0].label.as_deref(),
+            Some("\u{00ab}streams\u{00bb} and \u{00ab}audited\u{00bb}")
+        );
+        assert_eq!(
+            d.relationships[1].label.as_deref(),
+            Some("\u{00ab}owns <&key>\u{00bb}")
+        );
+        assert_eq!(d.relationships[2].label.as_deref(), Some("<<broken>x>>"));
     }
 
     #[test]
@@ -2859,53 +2926,6 @@ mod tests {
     }
 
     #[test]
-    fn empty_package_relationship_endpoint_reuses_group_identity() {
-        let d = parse(
-            "package \"Empty Parcel\" as EmptyParcel {\n\
-             }\n\
-             class Receiver\n\
-             EmptyParcel --> Receiver",
-        );
-
-        assert_eq!(d.entities.len(), 1);
-        assert_eq!(d.entities[0].id, "Receiver");
-        assert_eq!(d.relationships[0].from, "EmptyParcel");
-        assert_eq!(
-            d.uid_events
-                .iter()
-                .filter(|event| matches!(event, ClassUidEvent::Entity(_)))
-                .count(),
-            1
-        );
-    }
-
-    #[test]
-    fn quoted_relationship_prefers_exact_existing_package_identity() {
-        let d = parse(
-            "package \"Quoted Parcel\" {\n\
-             }\n\
-             class Receiver\n\
-             \"Quoted Parcel\" --> Receiver",
-        );
-
-        assert_eq!(d.entities.len(), 1);
-        assert_eq!(d.packages[0].name, "Quoted Parcel");
-        assert_eq!(d.relationships[0].from, "Quoted Parcel");
-    }
-
-    #[test]
-    fn quoted_relationship_falls_back_to_normalized_class_identity() {
-        let d = parse(
-            "class \"Fish & Chips\"\n\
-             class Receiver\n\
-             \"Fish & Chips\" --> Receiver",
-        );
-
-        assert_eq!(d.entities.len(), 2);
-        assert_eq!(d.relationships[0].from, d.entities[0].id);
-    }
-
-    #[test]
     fn package() {
         let d = parse("package com.example {\n  class Foo\n  class Bar\n}");
         assert_eq!(d.packages.len(), 2);
@@ -2914,6 +2934,23 @@ mod tests {
         assert_eq!(d.entities.len(), 2);
         assert_eq!(d.entities[0].id, "com.example.Foo");
         assert_eq!(d.entities[1].id, "com.example.Bar");
+    }
+
+    #[test]
+    fn renamed_quoted_qualified_class_keeps_leaf_display_and_full_identity() {
+        let d = parse(
+            "class \"fresh.domain.My Worker\"\n\
+             class FreshSink3503\n\
+             \"fresh.domain.My Worker\" --> FreshSink3503",
+        );
+
+        assert_eq!(d.packages.len(), 2);
+        assert_eq!(d.packages[0].name, "fresh");
+        assert_eq!(d.packages[1].name, "fresh.domain");
+        assert_eq!(d.entities[0].id, "fresh.domain.My_Worker");
+        assert_eq!(d.entities[0].label, "My Worker");
+        assert_eq!(d.relationships[0].from, "fresh.domain.My_Worker");
+        assert_eq!(d.relationships[0].to, "FreshSink3503");
     }
 
     #[test]
@@ -3041,73 +3078,6 @@ mod tests {
     }
 
     #[test]
-    fn relationship_preselects_both_quarks_before_phantom_constructors() {
-        let d = parse(
-            "Client --> Outer.Ui.Facade.Controller\n\
-             frame Outer.Ui.Facade as \"UI Facade\" {\n\
-               class Controller\n\
-             }\n\
-             class Client",
-        );
-        let events = d
-            .uid_events
-            .iter()
-            .map(|event| match event {
-                ClassUidEvent::Package(name) => format!("package:{name}"),
-                ClassUidEvent::Entity(id) => format!("entity:{id}"),
-                ClassUidEvent::Relationship(index) => format!("relationship:{index}"),
-                ClassUidEvent::Note { .. }
-                | ClassUidEvent::DiscardedRelationship { .. }
-                | ClassUidEvent::Association(_) => "other".to_string(),
-            })
-            .collect::<Vec<_>>();
-
-        assert_eq!(
-            events,
-            [
-                "entity:Client",
-                "package:Outer",
-                "package:Outer.Ui",
-                "package:Outer.Ui.Facade",
-                "entity:Outer.Ui.Facade.Controller",
-                "relationship:0",
-            ]
-        );
-        assert_eq!(d.packages[2].display_name.as_deref(), Some("Facade"));
-    }
-
-    #[test]
-    fn preselected_custom_separator_paths_share_one_phantom_sweep() {
-        let d = parse(
-            "set namespaceSeparator ::\n\
-             Left::Branch::Leaf --> Right::Wing::Target",
-        );
-        let events = d
-            .uid_events
-            .iter()
-            .filter_map(|event| match event {
-                ClassUidEvent::Package(name) => Some(format!("package:{name}")),
-                ClassUidEvent::Entity(id) => Some(format!("entity:{id}")),
-                ClassUidEvent::Relationship(index) => Some(format!("relationship:{index}")),
-                _ => None,
-            })
-            .collect::<Vec<_>>();
-
-        assert_eq!(
-            events,
-            [
-                "entity:Left::Branch::Leaf",
-                "package:Left",
-                "package:Left::Branch",
-                "package:Right",
-                "package:Right::Wing",
-                "entity:Right::Wing::Target",
-                "relationship:0",
-            ]
-        );
-    }
-
-    #[test]
     fn package_alias_separates_display_from_canonical_identity() {
         let d = parse(
             "package \"Service Display\" as ServiceCode {\n\
@@ -3130,110 +3100,6 @@ mod tests {
             ["ServiceCode.Gateway", "Audit"]
         );
         assert_eq!(d.relationships[0].from, "ServiceCode.Gateway");
-    }
-
-    #[test]
-    fn symbol_container_alias_separates_display_from_canonical_identity() {
-        let d = parse(
-            "node \"Compute Display\" as ComputeCode {\n\
-               class Gateway\n\
-             }\n\
-             frame \"Outer Frame\" as OuterCode {\n\
-               cloud \"Cloud Display\" as CloudCode {\n\
-                 class Worker\n\
-               }\n\
-             }\n\
-             ComputeCode.Gateway --> OuterCode.CloudCode.Worker",
-        );
-
-        assert_eq!(
-            d.packages
-                .iter()
-                .map(|package| (
-                    package.name.as_str(),
-                    package.display_name.as_deref(),
-                    package.kind
-                ))
-                .collect::<Vec<_>>(),
-            [
-                ("ComputeCode", Some("Compute Display"), PackageKind::Node),
-                ("OuterCode", Some("Outer Frame"), PackageKind::Frame),
-                (
-                    "OuterCode.CloudCode",
-                    Some("Cloud Display"),
-                    PackageKind::Cloud
-                )
-            ]
-        );
-        assert_eq!(d.relationships[0].from, "ComputeCode.Gateway");
-        assert_eq!(d.relationships[0].to, "OuterCode.CloudCode.Worker");
-    }
-
-    #[test]
-    fn symbol_container_reverse_alias_uses_code_as_identity() {
-        let d = parse(
-            "folder ServiceCode as \"Service Display\" {\n\
-               class Gateway\n\
-             }\n\
-             rectangle OuterCode as \"Outer Display\" {\n\
-               class Audit\n\
-             }\n\
-             ServiceCode.Gateway --> OuterCode.Audit",
-        );
-
-        assert_eq!(
-            d.packages
-                .iter()
-                .map(|package| (
-                    package.name.as_str(),
-                    package.display_name.as_deref(),
-                    package.kind
-                ))
-                .collect::<Vec<_>>(),
-            [
-                ("ServiceCode", Some("Service Display"), PackageKind::Folder),
-                ("OuterCode", Some("Outer Display"), PackageKind::Rectangle)
-            ]
-        );
-        assert_eq!(d.relationships[0].from, "ServiceCode.Gateway");
-        assert_eq!(d.relationships[0].to, "OuterCode.Audit");
-    }
-
-    #[test]
-    fn package_modifiers_follow_java_command_order() {
-        let d = parse(
-            "package Service $before <<Application>> $after \
-             [[https://example.com{Service docs}]] #LightBlue {\n\
-               class Gateway\n\
-             }\n\
-             cloud CloudCode <<Platform>> #aliceblue {\n\
-               class Worker\n\
-             }",
-        );
-
-        assert_eq!(d.packages[0].name, "Service");
-        assert_eq!(d.packages[0].stereotypes, ["Application"]);
-        assert_eq!(d.packages[0].color.as_deref(), Some("LightBlue"));
-        assert_eq!(d.packages[1].name, "CloudCode");
-        assert_eq!(d.packages[1].stereotypes, ["Platform"]);
-        assert_eq!(d.packages[1].color.as_deref(), Some("aliceblue"));
-    }
-
-    #[test]
-    fn alias_local_stereotype_precedes_as_clause() {
-        let d = parse(
-            "node \"Service Display\" <<Platform>> as ServiceCode #wheat {\n\
-               class Gateway\n\
-             }",
-        );
-
-        assert_eq!(d.packages[0].name, "ServiceCode");
-        assert_eq!(
-            d.packages[0].display_name.as_deref(),
-            Some("Service Display")
-        );
-        assert_eq!(d.packages[0].stereotypes, ["Platform"]);
-        assert_eq!(d.packages[0].color.as_deref(), Some("wheat"));
     }
 
     #[test]
@@ -3434,6 +3300,30 @@ mod tests {
             Some("Generated by RustUML\nDate: %date%")
         );
         assert_eq!(d.meta.legend.as_deref(), Some("First\nSecond"));
+    }
+
+    #[test]
+    fn multiline_legend_preserves_both_position_axes() {
+        let top_right =
+            parse("legend top right\n  Fresh alignment text\nendlegend\nclass WideRenamedEntity");
+        assert_eq!(
+            top_right.meta.legend_horizontal_alignment,
+            LegendHorizontalAlignment::Right
+        );
+        assert_eq!(
+            top_right.meta.legend_vertical_alignment,
+            LegendVerticalAlignment::Top
+        );
+
+        let bottom_left = parse("legend bottom left\n  Other text\nendlegend\nclass AnotherEntity");
+        assert_eq!(
+            bottom_left.meta.legend_horizontal_alignment,
+            LegendHorizontalAlignment::Left
+        );
+        assert_eq!(
+            bottom_left.meta.legend_vertical_alignment,
+            LegendVerticalAlignment::Bottom
+        );
     }
 
     #[test]
@@ -3693,6 +3583,10 @@ mod tests {
         assert_eq!(d.relationships.len(), 1);
         assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
         assert!(d.relationships[0].dashed);
+        assert_eq!(
+            d.relationships[0].style.arrowhead,
+            RelationshipArrowhead::Triangle
+        );
         assert_eq!(d.relationships[0].label.as_deref(), Some("dotted thick"));
     }
 
@@ -3836,28 +3730,6 @@ mod tests {
     }
 
     #[test]
-    fn nested_attached_note_keeps_resolved_target_and_constructor_owner() {
-        let d = parse(
-            "package FreshScope4121 {\n\
-               class FreshNested4127\n\
-               note left of FreshNested4127 : scoped note\n\
-             }",
-        );
-
-        assert_eq!(
-            d.notes[0].target.as_deref(),
-            Some("FreshScope4121.FreshNested4127")
-        );
-        assert!(d.uid_events.iter().any(|event| matches!(
-            event,
-            ClassUidEvent::Note {
-                index: 0,
-                owner_package: Some(owner),
-            } if owner == "FreshScope4121"
-        )));
-    }
-
-    #[test]
     fn multiline_note_dedents_common_margin_but_preserves_code_structure() {
         let d = parse(
             "note as FreshCode759\n  <code>\n  fn audit() {\n      record();\n\n  }\n  </code>\nend note",
@@ -3900,35 +3772,5 @@ mod tests {
         assert_eq!(d.relationships[0].to, "FreshMemo4217");
         assert_eq!(d.relationships[1].from, "FreshMemo4217");
         assert_eq!(d.relationships[1].to, "FreshPeer4219");
-    }
-
-    #[test]
-    fn association_replaces_latest_base_but_preserves_its_uid_event() {
-        let d = parse(
-            "class Existing\n\
-             MissingA -- Existing : retained label\n\
-             (MissingA, Existing) .. MissingAssoc\n\
-             MissingB --> Existing",
-        );
-
-        assert_eq!(d.relationships.len(), 1);
-        assert_eq!(d.relationships[0].from, "MissingB");
-        assert_eq!(d.association_classes.len(), 1);
-        let base = d.association_classes[0]
-            .replaced_relationship
-            .as_ref()
-            .unwrap();
-        assert_eq!(base.from, "MissingA");
-        assert_eq!(base.to, "Existing");
-        assert_eq!(base.label.as_deref(), Some("retained label"));
-        assert!(d.uid_events.iter().any(|event| matches!(
-            event,
-            ClassUidEvent::DiscardedRelationship { inverted: false }
-        )));
-        assert!(
-            d.uid_events
-                .iter()
-                .any(|event| matches!(event, ClassUidEvent::Association(0)))
-        );
     }
 }

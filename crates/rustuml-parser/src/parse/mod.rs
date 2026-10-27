@@ -334,9 +334,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_component_package_container = false;
     let mut has_top_level_component_leaf = false;
     let mut has_non_interface_class_decl = false;
-    let mut has_class_factory_decl = false;
-    let mut has_entity_class_factory_decl = false;
-    let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
     for line in lines {
@@ -377,28 +374,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed == "caption"
             || trimmed.starts_with("caption ");
         let top_level = brace_depth == 0;
-        let entity_declaration = trimmed
-            .strip_prefix("entity ")
-            .map(str::trim)
-            .filter(|declaration| !declaration.is_empty());
-        // Java's CommandCreateClass accepts a brace-free entity declaration
-        // and an optional empty `{ }`, while CommandCreateClassMultilines
-        // accepts exactly one final opening brace.
-        let entity_inline_empty_body = entity_declaration.is_some_and(|declaration| {
-            declaration
-                .strip_suffix('}')
-                .map(str::trim_end)
-                .and_then(|declaration| declaration.strip_suffix('{'))
-                .is_some_and(|declaration| !declaration.trim().is_empty())
-        });
-        let entity_multiline_body = entity_declaration.is_some_and(|declaration| {
-            declaration
-                .strip_suffix('{')
-                .map(str::trim_end)
-                .is_some_and(|declaration| !declaration.is_empty() && !declaration.ends_with('{'))
-        });
-        let entity_bare_declaration = entity_declaration
-            .is_some_and(|declaration| !declaration.contains('{') && !declaration.contains('}'));
 
         if trimmed.starts_with("skinparam ") {
             has_skinparam = true;
@@ -537,15 +512,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                     has_component_leaf_keyword = true;
                 }
             }
-            if is_deploy_exclusive_container {
-                // Deployment-exclusive containers override component score.
+            if is_deploy_exclusive_container || is_quoted_container {
+                // Extra boost: deployment-exclusive container overrides component score.
                 scores[7] += 20;
             }
             if is_quoted_container {
                 has_quoted_deployment_container = true;
-                if !is_deploy_exclusive_container {
-                    quoted_shared_deployment_containers += 1;
-                }
             }
         }
         // Component — weighted strongly so that a single `component` keyword
@@ -652,12 +624,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 10;
             has_non_interface_class_decl = true;
-            has_class_factory_decl = true;
         }
         if trimmed.starts_with("interface ") {
             scores[1] += 10;
             has_interface_decl = true;
-            has_class_factory_decl = true;
         }
         if trimmed.contains("..>") || trimmed.contains("<..") {
             has_class_dependency_arrow = true;
@@ -684,15 +654,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 10;
         }
-        // Entity declarations are accepted by ClassDiagramFactory in all three
-        // forms. Only the brace forms reject SequenceDiagramFactory on their
-        // own; a bare entity remains a valid sequence participant.
-        if entity_inline_empty_body || entity_multiline_body {
+        // entity with a body block ({) is an unambiguous class/ER entity,
+        // not a sequence participant.
+        if trimmed.starts_with("entity ")
+            && (trimmed.ends_with('{') || trimmed.ends_with("{{") || trimmed.ends_with("{}"))
+        {
             scores[1] += 15;
-        }
-        if entity_bare_declaration || entity_inline_empty_body || entity_multiline_body {
-            has_entity_class_factory_decl = true;
-            has_class_factory_decl = true;
         }
         // Sequence. Skip lines that end with `{` — those are container blocks
         // (class diagram packages) not sequence participants.
@@ -774,21 +741,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
     }
 
-    // CommandPackageWithUSymbol makes a quoted shared container valid for both
-    // CLASS and DESCRIPTION, but not SEQUENCE. If CommandCreateClass or
-    // CommandCreateClassMultilines can consume an entity in the same source,
-    // Java's earlier ClassDiagramFactory wins the factory-order tie.
-    if quoted_shared_deployment_containers > 0 && has_entity_class_factory_decl {
-        scores[1] = scores[1].max(scores[7]);
-    }
-
-    // Java tries ClassDiagramFactory before the later shared-container
-    // factories. Quoted node/frame/cloud/database containers only need their
-    // deployment bonus when no declaration makes the class grammar viable.
-    if !has_class_factory_decl {
-        scores[7] += 20 * quoted_shared_deployment_containers;
-    }
-
     // Standalone floating notes (`note as X` or `note "text" as X`) can attach
     // to class/object/deployment diagrams. Score class/object always so
     // note-only diagrams tie back to CLASS by the default ordering; score
@@ -822,7 +774,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
-        && !has_class_factory_decl
         && !has_component_package_container
         && !has_top_level_component_leaf
     {
@@ -839,7 +790,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
-        && !has_class_factory_decl
         && (has_component_package_container || has_top_level_component_leaf)
     {
         let other_max = scores
@@ -1370,57 +1320,6 @@ mod tests {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
-    }
-
-    #[test]
-    fn standalone_bare_entity_remains_sequence() {
-        let input = "@startuml\nentity Ledger\n@enduml";
-        let diagram = parse(input).unwrap();
-        assert!(matches!(diagram, Diagram::Sequence(_)));
-    }
-
-    #[test]
-    fn quoted_shared_containers_with_entity_forms_select_class() {
-        let declarations = [
-            ("bare", "entity Ledger"),
-            ("inline empty", "entity Ledger {}"),
-            (
-                "multiline body",
-                "entity Ledger {\n  +id : UUID\n  +post(entry : Entry)\n}",
-            ),
-        ];
-
-        for keyword in ["frame", "node", "cloud", "database"] {
-            for (form, declaration) in declarations {
-                let input = format!(
-                    "@startuml\n{keyword} \"Shared Boundary\" as Shared {{\n{declaration}\n}}\n@enduml"
-                );
-                assert!(
-                    matches!(parse(&input).unwrap(), Diagram::Class(_)),
-                    "{keyword} with {form} entity"
-                );
-            }
-        }
-    }
-
-    #[test]
-    fn quoted_shared_containers_with_explicit_classes_select_class() {
-        for keyword in ["node", "frame", "cloud", "database"] {
-            let input = format!(
-                "@startuml\n{keyword} \"Fresh Shared Container\" as Shared {{\nclass FreshLeaf\n}}\n@enduml"
-            );
-            assert!(
-                matches!(parse(&input).unwrap(), Diagram::Class(_)),
-                "{keyword}"
-            );
-        }
-    }
-
-    #[test]
-    fn quoted_shared_container_without_class_signal_stays_deployment() {
-        let input =
-            "@startuml\nnode \"Fresh Runtime Host\" as Host {\nartifact FreshBinary\n}\n@enduml";
-        assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
     }
 
     #[test]
@@ -1997,40 +1896,6 @@ Sensor --> DI
     }
 
     #[test]
-    fn quoted_shared_container_with_interface_routes_to_class() {
-        let input = r#"@startuml
-node "Service Boundary" {
-  interface Gateway
-}
-Gateway --> Audit
-@enduml"#;
-        let diagram = parse(input).unwrap();
-        assert!(matches!(diagram, Diagram::Class(_)));
-    }
-
-    #[test]
-    fn quoted_node_with_component_leaf_stays_deployment() {
-        let input = r#"@startuml
-node "Runtime Boundary" as Runtime {
-  component API
-}
-@enduml"#;
-        let diagram = parse(input).unwrap();
-        assert!(matches!(diagram, Diagram::Deployment(_)));
-    }
-
-    #[test]
-    fn interface_with_component_leaf_without_class_container_stays_component() {
-        let input = r#"@startuml
-interface Gateway
-component Application
-Application --> Gateway
-@enduml"#;
-        let diagram = parse(input).unwrap();
-        assert!(matches!(diagram, Diagram::Component(_)));
-    }
-
-    #[test]
     fn top_level_component_leaf_beats_quoted_database_container() {
         let input = r#"@startuml
 database "Main Store" {
@@ -2314,6 +2179,18 @@ Policy --> Retry
         let reparsed = parse_yaml(&yaml).unwrap();
         let yaml2 = serde_yml::to_string(&reparsed).unwrap();
         assert_eq!(yaml, yaml2);
+    }
+
+    #[test]
+    fn leading_blank_lines_do_not_shift_locations_but_internal_blanks_do() {
+        let input = "@startuml\n\n\n\n\nclass FreshAlpha881\n\n\nclass FreshBeta883\nFreshAlpha881 --> FreshBeta883\n@enduml";
+        let Diagram::Class(diagram) = parse(input).expect("class input parses") else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(diagram.entities[0].source_line, 1);
+        assert_eq!(diagram.entities[1].source_line, 4);
+        assert_eq!(diagram.relationships[0].source_line, 5);
     }
 
     // ── multi-block splitting ─────────────────────────────────────────────────

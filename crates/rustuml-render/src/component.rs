@@ -9,8 +9,8 @@
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, GraphSpacing,
-    LayoutGraph,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, EdgeRouting,
+    GraphSpacing, LayoutGraph,
 };
 use rustuml_parser::diagram::component::*;
 use rustuml_parser::diagram::style::StyleScheme;
@@ -32,6 +32,26 @@ enum ComponentLineStyle {
     Solid,
     Dashed,
     Dotted,
+}
+
+fn component_edge_routing(diagram: &ComponentDiagram) -> EdgeRouting {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| skinparam.key.eq_ignore_ascii_case("linetype"))
+        .map(|skinparam| skinparam.value.trim())
+        .map(|value| {
+            if value.eq_ignore_ascii_case("ortho") {
+                EdgeRouting::Ortho
+            } else if value.eq_ignore_ascii_case("polyline") {
+                EdgeRouting::Polyline
+            } else {
+                EdgeRouting::Spline
+            }
+        })
+        .unwrap_or_default()
 }
 
 impl ComponentLineStyle {
@@ -1651,6 +1671,7 @@ pub fn render_with_oracle(
             ComponentLayoutDirection::LeftToRight => Direction::LeftToRight,
         };
         let mut layout = LayoutGraph::new(layout_direction)
+            .with_edge_routing(component_edge_routing(diagram))
             .with_spacing_pixels(
                 component_node_sep,
                 GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
@@ -8383,6 +8404,27 @@ mod tests {
         assert!(
             numeric_attr(root, "width") > numeric_attr(root, "height"),
             "left-to-right rank direction must make a four-node chain wider than tall: {svg}"
+        );
+    }
+
+    #[test]
+    fn component_linetype_uses_latest_case_insensitive_routing_value() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam LINETYPE OrThO\n\
+             component FreshRouteAlpha683\n\
+             component FreshRouteBeta691\n\
+             FreshRouteAlpha683 --> FreshRouteBeta691\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::Component(diagram) = parsed else {
+            panic!("expected component diagram");
+        };
+
+        assert_eq!(
+            super::component_edge_routing(&diagram),
+            rustuml_layout::graph::EdgeRouting::Ortho
         );
     }
 

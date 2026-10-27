@@ -275,7 +275,8 @@ fn docs_name_the_product_truth_metric_and_error_skips() {
     let baseline = read_baseline();
     let total_pass: usize = baseline.values().map(|(pass, _)| pass).sum();
     let total_eligible: usize = baseline.values().map(|(_, eligible)| eligible).sum();
-    assert_eq!((total_pass, total_eligible), (7_625, 11_251));
+    assert_eq!((total_pass, total_eligible), (11_175, 11_251));
+    let percentage = format!("{:.1}%", total_pass as f64 / total_eligible as f64 * 100.0);
 
     let readme = std::fs::read_to_string(repo_root().join("README.md")).expect("read README");
     let stability =
@@ -292,8 +293,12 @@ fn docs_name_the_product_truth_metric_and_error_skips() {
             "{name} must identify no-oracle as the product metric"
         );
         assert!(
-            text.contains("7,625/11,251"),
+            text.contains("11,175/11,251"),
             "{name} must carry the current no-oracle total from the baseline"
+        );
+        assert!(
+            text.contains(&percentage),
+            "{name} must carry the current no-oracle percentage from the baseline"
         );
         assert!(
             text.contains("11,130/11,251"),

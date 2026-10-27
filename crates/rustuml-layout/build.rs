@@ -34,7 +34,11 @@ fn main() {
     build
         .warnings(false) // Graphviz code has many warnings; suppress them
         .extra_warnings(false)
-        .opt_level(2);
+        .opt_level(2)
+        // Graphviz's own build enables this when lib/ortho is linked.
+        // `dotgen/dotsplines.c` otherwise compiles out the `orthoEdges`
+        // dispatcher and silently routes `splines=ortho` as ordinary splines.
+        .define("ORTHO", None);
 
     // Include paths — order matters.
     // "config.h" and "graphviz_version.h" and "builddate.h" live in include/

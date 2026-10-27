@@ -114,6 +114,7 @@ struct NoteBuffer {
 
 struct StateParser {
     meta: DiagramMeta,
+    direction: StateLayoutDirection,
     states: Vec<State>,
     transitions: Vec<Transition>,
     notes: Vec<StateNote>,
@@ -152,6 +153,7 @@ impl StateParser {
     fn new() -> Self {
         Self {
             meta: DiagramMeta::default(),
+            direction: StateLayoutDirection::TopToBottom,
             states: Vec::new(),
             transitions: Vec::new(),
             notes: Vec::new(),
@@ -335,6 +337,7 @@ impl StateParser {
     fn finish(self) -> StateDiagram {
         StateDiagram {
             meta: self.meta,
+            direction: self.direction,
             states: self.states,
             transitions: self.transitions,
             notes: self.notes,
@@ -417,6 +420,15 @@ impl StateParser {
                 }
                 buf.text.push_str(line);
             }
+            return Ok(());
+        }
+
+        if line.eq_ignore_ascii_case("left to right direction") {
+            self.direction = StateLayoutDirection::LeftToRight;
+            return Ok(());
+        }
+        if line.eq_ignore_ascii_case("top to bottom direction") {
+            self.direction = StateLayoutDirection::TopToBottom;
             return Ok(());
         }
 
@@ -965,6 +977,24 @@ mod tests {
                 .and_then(|state| state.parent.as_deref()),
             Some("ParallelHarbor.CONC2"),
         );
+    }
+
+    #[test]
+    fn direction_commands_update_state_layout_direction() {
+        let left_to_right = parse(
+            "left to right direction\n\
+             [*] --> FreshCopperRelay\n\
+             FreshCopperRelay --> [*]",
+        );
+        assert_eq!(left_to_right.direction, StateLayoutDirection::LeftToRight);
+
+        let reset = parse(
+            "left to right direction\n\
+             top to bottom direction\n\
+             [*] --> FreshAzureRelay\n\
+             FreshAzureRelay --> [*]",
+        );
+        assert_eq!(reset.direction, StateLayoutDirection::TopToBottom);
     }
 
     #[test]

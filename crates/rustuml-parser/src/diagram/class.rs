@@ -78,14 +78,8 @@ pub struct ClassDiagram {
 pub enum ClassUidEvent {
     Package(String),
     Entity(String),
-    Note {
-        index: usize,
-        owner_package: Option<String>,
-    },
+    Note(usize),
     Relationship(usize),
-    DiscardedRelationship {
-        inverted: bool,
-    },
     Association(usize),
 }
 
@@ -196,6 +190,10 @@ pub enum EntityKind {
     State,
     Circle,
     Diamond,
+    /// Synthetic class-diagram endpoint created by `Class -() Interface`.
+    LollipopFull,
+    /// Open semicircle endpoint created by the `((` / `))` lollipop forms.
+    LollipopHalf,
     Actor,
     UseCase,
     Component,
@@ -253,11 +251,6 @@ pub struct AssociationClass {
     pub b: String,
     /// The association class hanging off the apoint.
     pub c: String,
-    /// The latest pre-existing A-B link removed by Java `Association.createNew`.
-    /// Its constructor UID remains in `ClassUidEvent`, while its semantic data
-    /// supplies the replacement split links.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub replaced_relationship: Option<Relationship>,
     /// Whether the apoint→C connector is dashed (`..`) rather than solid (`--`).
     #[serde(default = "default_true")]
     pub dashed: bool,
@@ -341,12 +334,22 @@ pub struct RelationshipStyle {
     /// entity/source provenance but no SVG path `codeLine` attribute.
     #[serde(default)]
     pub declaration: bool,
+    /// Endpoint arrow decoration selected by PlantUML `LinkDecor`.
+    #[serde(default)]
+    pub arrowhead: RelationshipArrowhead,
 }
 
 impl RelationshipStyle {
     fn is_default(&self) -> bool {
         self == &Self::default()
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum RelationshipArrowhead {
+    #[default]
+    Arrow,
+    Triangle,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

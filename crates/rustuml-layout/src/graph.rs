@@ -40,6 +40,15 @@ pub enum Direction {
     LeftToRight,
 }
 
+/// Graphviz edge-routing mode selected by PlantUML's `DotSplines`.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum EdgeRouting {
+    #[default]
+    Spline,
+    Polyline,
+    Ortho,
+}
+
 /// Graph-level spacing inputs for Graphviz dot, expressed in pixels.
 #[derive(Clone, Copy, Debug)]
 pub struct GraphSpacing {
@@ -152,6 +161,7 @@ impl GraphSpacing {
 /// A graph builder that produces laid-out node positions and edge paths.
 pub struct LayoutGraph {
     direction: Direction,
+    edge_routing: EdgeRouting,
     spacing: Option<GraphSpacing>,
     plantuml_svek_node_order: bool,
     plantuml_svek_inverted_starts: Vec<String>,
@@ -169,6 +179,7 @@ impl LayoutGraph {
     pub fn new(direction: Direction) -> Self {
         Self {
             direction,
+            edge_routing: EdgeRouting::Spline,
             spacing: None,
             plantuml_svek_node_order: false,
             plantuml_svek_inverted_starts: Vec::new(),
@@ -180,6 +191,15 @@ impl LayoutGraph {
             edges: Vec::new(),
             same_rank_pairs: Vec::new(),
         }
+    }
+
+    /// Selects Graphviz's graph-level `splines` mode.
+    ///
+    /// PlantUML `DotStringFactory.createDotString` emits `splines=polyline`
+    /// or `splines=ortho;forcelabels=true` from `SkinParam.getDotSplines`.
+    pub fn with_edge_routing(mut self, edge_routing: EdgeRouting) -> Self {
+        self.edge_routing = edge_routing;
+        self
     }
 
     /// Sets graph-level dot spacing in pixels.
@@ -915,6 +935,31 @@ impl LayoutGraph {
                 value.as_ptr(),
                 empty.as_ptr(),
             );
+        }
+        match self.edge_routing {
+            EdgeRouting::Spline => {}
+            EdgeRouting::Polyline => {
+                let key = CString::new("splines").unwrap();
+                let value = CString::new("polyline").unwrap();
+                graphviz_ffi::agsafeset(
+                    g as *mut c_void,
+                    key.as_ptr(),
+                    value.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            EdgeRouting::Ortho => {
+                for (key, value) in [("splines", "ortho"), ("forcelabels", "true")] {
+                    let key = CString::new(key).unwrap();
+                    let value = CString::new(value).unwrap();
+                    graphviz_ffi::agsafeset(
+                        g as *mut c_void,
+                        key.as_ptr(),
+                        value.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                }
+            }
         }
 
         if let Some(spacing) = self.spacing {
@@ -2392,6 +2437,30 @@ mod tests {
             result.node_positions[0].y,
             result.node_positions[1].y
         );
+    }
+
+    #[test]
+    fn ortho_edge_routing_reaches_graphviz_as_a_graph_attribute() {
+        let solve = |routing| {
+            let mut graph = LayoutGraph::new(Direction::TopToBottom)
+                .with_plantuml_svek_spacing()
+                .with_edge_routing(routing);
+            for id in ["FreshRouteAlpha", "FreshRouteBeta", "FreshRouteGamma"] {
+                graph.add_node(id, "", 50.0, 50.0);
+            }
+            graph.add_edge("FreshRouteAlpha", "FreshRouteBeta", None);
+            graph.add_edge("FreshRouteBeta", "FreshRouteGamma", None);
+            graph.add_edge("FreshRouteAlpha", "FreshRouteGamma", None);
+            graph.layout_full_no_timeout().edge_paths[2].points.clone()
+        };
+        let spline = solve(EdgeRouting::Spline);
+        let ortho = solve(EdgeRouting::Ortho);
+
+        assert_ne!(spline, ortho);
+        assert!(ortho.windows(2).all(|pair| {
+            (pair[0].0 - pair[1].0).abs() < f64::EPSILON
+                || (pair[0].1 - pair[1].1).abs() < f64::EPSILON
+        }));
     }
 
     #[test]
