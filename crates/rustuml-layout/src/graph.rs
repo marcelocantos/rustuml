@@ -40,6 +40,15 @@ pub enum Direction {
     LeftToRight,
 }
 
+/// Graphviz edge-routing mode selected by PlantUML's `DotSplines`.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum EdgeRouting {
+    #[default]
+    Spline,
+    Polyline,
+    Ortho,
+}
+
 /// Graph-level spacing inputs for Graphviz dot, expressed in pixels.
 #[derive(Clone, Copy, Debug)]
 pub struct GraphSpacing {
@@ -152,6 +161,7 @@ impl GraphSpacing {
 /// A graph builder that produces laid-out node positions and edge paths.
 pub struct LayoutGraph {
     direction: Direction,
+    edge_routing: EdgeRouting,
     spacing: Option<GraphSpacing>,
     plantuml_svek_node_order: bool,
     plantuml_svek_inverted_starts: Vec<String>,
@@ -169,6 +179,7 @@ impl LayoutGraph {
     pub fn new(direction: Direction) -> Self {
         Self {
             direction,
+            edge_routing: EdgeRouting::Spline,
             spacing: None,
             plantuml_svek_node_order: false,
             plantuml_svek_inverted_starts: Vec::new(),
@@ -180,6 +191,15 @@ impl LayoutGraph {
             edges: Vec::new(),
             same_rank_pairs: Vec::new(),
         }
+    }
+
+    /// Selects Graphviz's graph-level `splines` mode.
+    ///
+    /// PlantUML `DotStringFactory.createDotString` emits `splines=polyline`
+    /// or `splines=ortho;forcelabels=true` from `SkinParam.getDotSplines`.
+    pub fn with_edge_routing(mut self, edge_routing: EdgeRouting) -> Self {
+        self.edge_routing = edge_routing;
+        self
     }
 
     /// Sets graph-level dot spacing in pixels.
@@ -916,6 +936,31 @@ impl LayoutGraph {
                 empty.as_ptr(),
             );
         }
+        match self.edge_routing {
+            EdgeRouting::Spline => {}
+            EdgeRouting::Polyline => {
+                let key = CString::new("splines").unwrap();
+                let value = CString::new("polyline").unwrap();
+                graphviz_ffi::agsafeset(
+                    g as *mut c_void,
+                    key.as_ptr(),
+                    value.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            EdgeRouting::Ortho => {
+                for (key, value) in [("splines", "ortho"), ("forcelabels", "true")] {
+                    let key = CString::new(key).unwrap();
+                    let value = CString::new(value).unwrap();
+                    graphviz_ffi::agsafeset(
+                        g as *mut c_void,
+                        key.as_ptr(),
+                        value.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                }
+            }
+        }
 
         if let Some(spacing) = self.spacing {
             let nodesep_key = CString::new("nodesep").unwrap();
@@ -1530,14 +1575,12 @@ impl LayoutGraph {
             while !e.is_null() {
                 let spl_count = graphviz_ffi::rustuml_edge_spl_count(e);
                 let mut points = Vec::new();
-                let mut bezier_count = 0;
 
                 for i in 0..spl_count {
                     // Max 256 points per bezier curve (generous).
                     let mut buf = vec![0.0f64; 256 * 2];
                     let n_pts =
                         graphviz_ffi::rustuml_edge_bezier_points(e, i, buf.as_mut_ptr(), 256);
-                    bezier_count += n_pts.saturating_sub(1) / 3;
                     for j in 0..n_pts {
                         points.push((buf[j * 2], buf[j * 2 + 1]));
                     }
@@ -1568,7 +1611,6 @@ impl LayoutGraph {
                         from,
                         to,
                         points,
-                        bezier_count,
                         has_start_arrow: sflag != 0,
                         start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
                         has_end_arrow: eflag != 0,
@@ -2350,9 +2392,6 @@ pub struct EdgePath {
     /// Cubic bezier control points: groups of 4 (start, cp1, cp2, end).
     /// For multi-segment splines, segments share endpoints.
     pub points: Vec<(f64, f64)>,
-    /// Number of cubic Bezier segments before their control points are
-    /// flattened into `points`.
-    pub bezier_count: usize,
     /// Whether this edge has a start arrowhead.
     pub has_start_arrow: bool,
     /// Arrow anchor at start (if present).
@@ -2401,6 +2440,30 @@ mod tests {
     }
 
     #[test]
+    fn ortho_edge_routing_reaches_graphviz_as_a_graph_attribute() {
+        let solve = |routing| {
+            let mut graph = LayoutGraph::new(Direction::TopToBottom)
+                .with_plantuml_svek_spacing()
+                .with_edge_routing(routing);
+            for id in ["FreshRouteAlpha", "FreshRouteBeta", "FreshRouteGamma"] {
+                graph.add_node(id, "", 50.0, 50.0);
+            }
+            graph.add_edge("FreshRouteAlpha", "FreshRouteBeta", None);
+            graph.add_edge("FreshRouteBeta", "FreshRouteGamma", None);
+            graph.add_edge("FreshRouteAlpha", "FreshRouteGamma", None);
+            graph.layout_full_no_timeout().edge_paths[2].points.clone()
+        };
+        let spline = solve(EdgeRouting::Spline);
+        let ortho = solve(EdgeRouting::Ortho);
+
+        assert_ne!(spline, ortho);
+        assert!(ortho.windows(2).all(|pair| {
+            (pair[0].0 - pair[1].0).abs() < f64::EPSILON
+                || (pair[0].1 - pair[1].1).abs() < f64::EPSILON
+        }));
+    }
+
+    #[test]
     fn edge_has_spline_points() {
         let mut g = LayoutGraph::new(Direction::TopToBottom);
         g.add_node("a", "Alice", 100.0, 40.0);
@@ -2410,7 +2473,6 @@ mod tests {
         let result = g.layout_full_no_timeout();
         assert_eq!(result.edge_paths.len(), 1);
         let path = &result.edge_paths[0];
-        assert_eq!(path.bezier_count, 1);
         assert!(
             !path.points.is_empty(),
             "edge should have spline control points"

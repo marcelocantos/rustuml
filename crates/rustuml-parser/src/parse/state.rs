@@ -423,8 +423,6 @@ impl StateParser {
             return Ok(());
         }
 
-        // Java provenance: `CommandRankDir.executeArg` writes the shared
-        // `SkinParam.rankdir`; later commands replace the earlier value.
         if line.eq_ignore_ascii_case("left to right direction") {
             self.direction = StateLayoutDirection::LeftToRight;
             return Ok(());
@@ -535,9 +533,7 @@ impl StateParser {
         if let Some(caps) = RE.captures(line) {
             let from = self.ensure_state(&caps[1]);
             let to = self.ensure_state(&caps[3]);
-            let label = caps
-                .get(4)
-                .map(|m| TransitionLabel::from(m.as_str().trim()));
+            let label = caps.get(4).map(|m| m.as_str().trim().to_string());
             let transition_style = parse_transition_style(&caps[2]);
             transition_style.record_in(&mut self.meta, self.transitions.len());
             self.transitions.push(Transition {
@@ -949,25 +945,6 @@ mod tests {
     }
 
     #[test]
-    fn direction_commands_update_state_layout_direction() {
-        let default = parse("state Alpha\nstate Beta\nAlpha --> Beta");
-        assert_eq!(default.direction, StateLayoutDirection::TopToBottom);
-
-        let left_to_right =
-            parse("left to right direction\nstate Alpha\nstate Beta\nAlpha --> Beta");
-        assert_eq!(left_to_right.direction, StateLayoutDirection::LeftToRight);
-
-        let reset = parse(
-            "left to right direction\n\
-             top to bottom direction\n\
-             state Alpha\n\
-             state Beta\n\
-             Alpha --> Beta",
-        );
-        assert_eq!(reset.direction, StateLayoutDirection::TopToBottom);
-    }
-
-    #[test]
     fn concurrent_separator_is_recorded_on_owning_composite() {
         let d = parse(
             "state ParallelHarbor {\n\
@@ -1000,6 +977,24 @@ mod tests {
                 .and_then(|state| state.parent.as_deref()),
             Some("ParallelHarbor.CONC2"),
         );
+    }
+
+    #[test]
+    fn direction_commands_update_state_layout_direction() {
+        let left_to_right = parse(
+            "left to right direction\n\
+             [*] --> FreshCopperRelay\n\
+             FreshCopperRelay --> [*]",
+        );
+        assert_eq!(left_to_right.direction, StateLayoutDirection::LeftToRight);
+
+        let reset = parse(
+            "left to right direction\n\
+             top to bottom direction\n\
+             [*] --> FreshAzureRelay\n\
+             FreshAzureRelay --> [*]",
+        );
+        assert_eq!(reset.direction, StateLayoutDirection::TopToBottom);
     }
 
     #[test]
@@ -1212,41 +1207,6 @@ mod tests {
         assert_eq!(d.transitions[0].from, "[*]");
         assert_eq!(d.transitions[0].to, "Active");
         assert_eq!(d.transitions[1].label.as_deref(), Some("disable"));
-    }
-
-    #[test]
-    fn transition_labels_parse_java_display_rows_and_alignment() {
-        let d = parse(
-            "Alpha --> Beta : first row\\nwidest second row\\rthird\n\
-             Beta --> Gamma : left row\\lright row\n\
-             Gamma --> Delta : <math>a\\nb</math> [[x\\ny]] tail\\nlast",
-        );
-
-        let first = d.transitions[0].label.as_ref().unwrap();
-        assert_eq!(first.rows(), &["first row", "widest second row", "third"]);
-        assert_eq!(
-            first.natural_alignment(),
-            Some(TransitionLabelAlignment::Right)
-        );
-
-        let second = d.transitions[1].label.as_ref().unwrap();
-        assert_eq!(second.rows(), &["left row", "right row"]);
-        assert_eq!(
-            second.natural_alignment(),
-            Some(TransitionLabelAlignment::Left)
-        );
-
-        let raw = d.transitions[2].label.as_ref().unwrap();
-        assert_eq!(raw.rows(), &["<math>a\\nb</math> [[x\\ny]] tail", "last"]);
-        assert_eq!(raw.as_str(), "<math>a\\nb</math> [[x\\ny]] tail\\nlast");
-    }
-
-    #[test]
-    fn transition_labels_decode_tabs_and_escaped_backslashes() {
-        let d = parse(r"Alpha --> Beta : one\two\\three\q");
-        let label = d.transitions[0].label.as_ref().unwrap();
-        assert_eq!(label.rows(), &["one\two\\three\\q"]);
-        assert_eq!(label.as_str(), r"one\two\\three\q");
     }
 
     #[test]

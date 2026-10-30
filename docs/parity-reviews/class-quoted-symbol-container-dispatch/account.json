@@ -3,111 +3,34 @@
   "mechanism": "class-quoted-symbol-container-dispatch",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
-    "src/main/java/net/sourceforge/plantuml/core/DiagramType.java:69-88,195-199 DiagramType#findStartTypes/getTypes",
-    "src/main/java/net/sourceforge/plantuml/core/UmlSource.java:142-144 UmlSource#getDiagramTypes",
-    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:128-197,203-255 PSystemBuilder constructor/createPSystem",
-    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:74-109,135-195,218-235 PSystemCommandFactory#createSystem/executeFewLines/getCandidate/isMultilineCommandOk",
-    "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagramFactory.java:98-156 SequenceDiagramFactory#initCommandsList",
-    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java:79-84 CommandParticipant#getRegexType",
-    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java:52-69 CommandParticipantA#getRegexConcat",
-    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:100-171 ClassDiagramFactory#initCommandsList",
-    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:80-110 CommandCreateClass#getRegexConcat",
-    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClassMultilines.java:91-130,142-230 CommandCreateClassMultilines constructor/getRegexConcat/executeNow",
-    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-129,135-178 CommandPackageWithUSymbol#getRegexConcat/executeArg",
-    "src/main/java/net/sourceforge/plantuml/command/CommandEndPackage.java:45-64 CommandEndPackage#getRegexConcat/executeArg",
-    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138 DescriptionDiagramFactory#initCommandsList",
-    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:73-138 CommandCreateElementFull#ALL_TYPES/getRegexConcat",
-    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java:69-167 CommandCreateElementFull2#getRegexConcat/executeArg",
-    "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java:92-118 Pattern2#compileInternal"
+    "net.sourceforge.plantuml.core.UmlSource#getDiagramTypes",
+    "net.sourceforge.plantuml.classdiagram.ClassDiagramFactory#createCommands",
+    "net.sourceforge.plantuml.command.CommandPackage",
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol",
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateClass"
   ],
   "rust_locations": [
-    "crates/rustuml-parser/src/parse/mod.rs:317-883 detect_uml_subtype",
-    "crates/rustuml-parser/src/parse/mod.rs:465-527 quoted/deployment container evidence",
-    "crates/rustuml-parser/src/parse/mod.rs:612-670 class declaration evidence",
-    "crates/rustuml-parser/src/parse/mod.rs:751-822 quoted-container promotion and tie-breaks",
-    "crates/rustuml-parser/src/parse/mod.rs:1141-1218 parse_with_base subtype-to-parser dispatch",
-    "crates/rustuml-parser/src/parse/class.rs:524-701 ClassParser#parse_line",
-    "crates/rustuml-parser/src/parse/class.rs:704-880 ClassParser#try_entity_decl",
-    "crates/rustuml-parser/src/parse/class.rs:1246-1393 ClassParser#try_package",
-    "crates/rustuml-parser/src/parse/deployment.rs:15-37 DEPLOYMENT_KEYWORDS",
-    "crates/rustuml-parser/src/parse/deployment.rs:415-429 RE_NODE_BARE/RE_NODE_QUOTED",
-    "crates/rustuml-parser/src/parse/deployment.rs:725-791 deployment node/container parsing"
+    "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/deployment.rs::DEPLOYMENT_KEYWORDS"
   ],
-  "factory_selection": {
-    "mechanism": "For generic @startuml, DiagramType supplies all legacy UML candidates. PSystemBuilder tries factories in registration order, including SequenceDiagramFactory, ClassDiagramFactory, ActivityDiagramFactory, then DescriptionDiagramFactory. Each PSystemCommandFactory starts an empty diagram and must consume the complete source through its ordered command list; a syntax/execution error rejects that factory, and PSystemBuilder returns the first complete successful parse. Java does not select a factory by scoring isolated keywords.",
-    "quoted_container_flow": "A quoted frame/node/cloud/database opening with a final brace is accepted in both CLASS and DESCRIPTION by the same CommandPackageWithUSymbol. Its matching outer close is CommandEndPackage. The container alone therefore does not distinguish those factories; the commands that consume its contents and the earlier full-source factory order do.",
-    "declaration_forms": [
-      {
-        "source_form": "entity Ledger",
-        "commands": [
-          "SequenceDiagramFactory: CommandParticipantA",
-          "ClassDiagramFactory: CommandCreateClass",
-          "DescriptionDiagramFactory: CommandCreateElementFull"
-        ],
-        "selection_consequence": "As a complete standalone source this is SEQUENCE because SequenceDiagramFactory is first. Inside a quoted symbol container, the sequence factory cannot consume the container, while the class factory consumes both lines and precedes the description factory, so the complete source is CLASS."
-      },
-      {
-        "source_form": "entity Ledger {}",
-        "commands": [
-          "ClassDiagramFactory: CommandCreateClass optional inline empty braces"
-        ],
-        "selection_consequence": "The braces prevent CommandParticipantA and CommandCreateElementFull from matching, so CLASS is the first successful factory."
-      },
-      {
-        "source_form": "entity Ledger { ...member lines... }",
-        "commands": [
-          "ClassDiagramFactory: CommandCreateClassMultilines consumes the opening, body, and entity-closing brace as one multiline step"
-        ],
-        "selection_consequence": "This is stronger class-factory evidence than the bare declaration. Description's CommandCreateElementMultilines is multiline display syntax, not a brace-delimited entity member body, and CommandCreateElementFull does not accept the opening brace. In a quoted outer container, the remaining outer close is consumed by CommandEndPackage, so ClassDiagramFactory completes first."
-      }
-    ],
-    "observed_java_types": {
-      "standalone_bare_entity": "SEQUENCE",
-      "standalone_entity_body": "CLASS",
-      "quoted_frame_with_bare_entity": "CLASS",
-      "quoted_frame_with_entity_body": "CLASS",
-      "standalone_inline_empty_entity": "CLASS"
-    }
-  },
-  "invariant": "Factory selection is the first complete successful Java grammar, not a declaration score. A quoted shared symbol container is accepted by both the class and description factories. With a bare entity, sequence participation remains possible only if every other line is sequence-valid; the quoted container invalidates that earlier factory, after which ClassDiagramFactory wins through CommandPackageWithUSymbol plus CommandCreateClass before DescriptionDiagramFactory can use CommandCreateElementFull. With entity {} or entity { members }, the declaration itself is class-specific through CommandCreateClass or CommandCreateClassMultilines. ClassDiagramFactory also registers CommandCreateElementFull2 for the complete CommandCreateElementFull.ALL_TYPES set plus state, but NORMAL_KEYWORD execution returns an error unless CommandAllowMixing has already set allowmixing. Native CommandCreateClass forms such as entity, interface, and circle are consumed earlier and do not reach that gate. Every other ordinary description keyword leaf rejects the class candidate at its source position when allowmixing is still false; a later allowmixing cannot revive the discarded factory. Therefore quoted shared containers containing only class-native forms select CLASS, while any earlier mixed-only leaf falls through to DESCRIPTION and a preceding allowmixing retains CLASS viability.",
-  "causal_divergence": "Commit 1f243f89 introduced a whole-source viability flag but encoded only one observed token; commit 1b1b575c broadened it to CommandCreateElementFull.ALL_TYPES plus state and made rejection source-ordered. The independent follow-up-3 checker found the residual model error: Rust compares the first token literally against a lowercase family table, while every Java command regex is compiled case-insensitively by Pattern2.compileInternal. Uppercase DATABASE, QUEUE, and BOUNDARY therefore reach CommandCreateElementFull2 and reject ClassDiagramFactory in Java, but Rust misses them and incorrectly keeps the class candidate viable. This is command-regex case semantics, not a need for dispatch weights or per-keyword exceptions.",
-  "planned_change": "Retain the source-ordered ClassDiagramFactory viability state from 1b1b575c. Normalize the leading command token with ASCII case folding before testing membership in the Java-derived CommandCreateElementFull.ALL_TYPES-plus-state family, matching Pattern2.compileInternal's case-insensitive command regexes. Keep native CommandCreateClass forms entity, interface, and circle outside the mixed-only family and preserve the rule that only an already-executed allowmixing permits a subsequent mixed leaf. Add parser controls for uppercase and mixed-case database, queue, boundary, and allowmixing spellings, then rerun all preserved follow-up-3 inputs without changing unrelated score weights.",
+  "invariant": "Java tries UML factories in order and the class factory accepts ordinary package blocks, quoted symbol-container commands through CommandPackageWithUSymbol, class declarations, and class relationships in one source. CommandCreateClass includes interface alongside class, enum, annotation, record, and the other class-family declaration keywords. A quoted node/frame/cloud container is therefore not a deployment discriminator when any explicit class-factory declaration makes the complete source valid for ClassDiagramFactory. Deployment-only containers remain deployment signals when no class-factory declaration establishes the earlier grammar.",
+  "causal_divergence": "Rust now prevents late quoted-container promotion only for non-interface class declarations. Interface declarations receive a class score but do not set that guard, so valid interface-only sources with quoted node/cloud containers are promoted to DESCRIPTION even though Java's earlier ClassDiagramFactory accepts them. The non-interface controls pass, isolating the incomplete declaration-family predicate.",
+  "planned_change": "Replace the non-interface-only guard with an explicit class-factory-declaration predicate set by every declaration accepted through Java CommandCreateClass, including interface. Use that predicate consistently for the quoted-deployment and component-container tie-breaks while preserving interface-plus-component-leaf behavior when there is no quoted class-container source.",
   "perturbation_axes": [
-    "declaration form: bare entity, inline entity {}, and multiline entity { field/method body }, each both standalone and inside the same quoted shared container",
-    "earlier-factory viability: standalone bare entity expected SEQUENCE versus the identical declaration under a quoted frame/node/cloud expected CLASS",
-    "container grammar: quoted frame, node, cloud, and database, with display-only and display-as-alias forms",
-    "scope/brace structure: top-level container, nested ordinary package plus shared container, and entity body closure followed by the outer CommandEndPackage closure",
-    "body content: empty body, field-only body, method-only body, and mixed compartments",
-    "competing grammar controls: quoted node with ordinary component, database, artifact, actor, rectangle, queue, or state leaf remains DESCRIPTION, while native entity/interface/circle forms remain CLASS",
-    "source order: allowmixing before the first mixed-only leaf retains CLASS, while allowmixing after that leaf cannot revive the rejected factory",
-    "source order and layout direction: declaration before/after sibling class evidence crossed with top-to-bottom/left-to-right",
-    "command-regex case semantics: lowercase, uppercase, and mixed-case spellings across multiple mixed-only keyword families"
+    "quoted node crossed with frame and cloud",
+    "ordinary package sibling present crossed with absent",
+    "top-level crossed with nested shared containers",
+    "class declarations crossed with deployment-only artifact/storage declarations",
+    "top-to-bottom crossed with left-to-right direction",
+    "inside links crossed with links leaving the container"
   ],
   "rejected_attempt": {
-    "implementation_commit": "1f243f89acaf0d1304e1266e42b13c9f008e0903",
-    "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-followup-2.json",
-    "review_commit": "511a5e78",
-    "result": "Rejected because whole-source viability recognized only component. Fresh ordinary database leaves route DESCRIPTION in Java but CLASS in Rust across quoted shared containers."
+    "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "review_commit": "28a85f6f",
+    "result": "Rejected by valid quoted node/cloud interface-only controls because the dispatch guard excluded interface declarations."
   },
-  "prior_rejections": [
-    {
-      "implementation_commit": "1ff38dfd59e9fdf40a890024b549ade98e0cba41",
-      "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-followup.json",
-      "review_commit": "b5b568e9",
-      "result": "Rejected because entity evidence was treated as global class-factory viability. Fresh quoted node and cloud sources containing an ordinary component leaf route DESCRIPTION in Java but CLASS in Rust when allowmixing is absent."
-    },
-    {
-      "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
-      "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
-      "review_commit": "22cbd4904308b7b60102377be464a2782f05c4ca",
-      "result": "Rejected because quoted shared containers with an entity { ... } body still route DESCRIPTION. The implementation repaired interface evidence but did not model CommandCreateClassMultilines or entity declaration forms."
-    },
-    {
-      "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
-      "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
-      "review_commit": "28a85f6f371ed4410669e43199b3e5a37859a809",
-      "result": "Rejected by valid quoted node/cloud interface-only controls because the dispatch guard excluded interface declarations."
-    },
+  "predecessor_rejections": [
     {
       "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
       "review_commit": "63d978e7",

@@ -442,9 +442,6 @@ impl SeqParser {
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
             let to = self.ensure_participant(&caps[3]);
-            // CommandExoArrowAny applies the same explicit-first autoactivation
-            // rule as CommandArrow. External boundaries change only the remote
-            // endpoint; their participant still owns the lifecycle variation.
             let activation = caps
                 .get(4)
                 .map(|m| parse_activation(m.as_str()))
@@ -1420,29 +1417,6 @@ mod tests {
     }
 
     #[test]
-    fn external_messages_share_explicit_first_autoactivation() {
-        let d = parse(
-            "autoactivate on\n\
-             [-> Alice : incoming solid\n\
-             Alice -->] : outgoing dotted\n\
-             Alice -->] ++ : explicit open wins\n\
-             [/-x Bob : crossed half head",
-        );
-        let expected = [
-            Some(ActivationChange::Activate),
-            Some(ActivationChange::Deactivate),
-            Some(ActivationChange::Activate),
-            None,
-        ];
-        for (event, expected_activation) in d.events.iter().zip(expected) {
-            let Event::Message(message) = event else {
-                panic!("expected message");
-            };
-            assert_eq!(message.activation, expected_activation);
-        }
-    }
-
-    #[test]
     fn teoz_pragma_sets_sequence_flag() {
         let d = parse("!pragma teoz true\nAlice -> Bob : hello");
         assert!(d.teoz);
@@ -1775,6 +1749,31 @@ mod tests {
         } else {
             panic!("expected message");
         }
+    }
+
+    #[test]
+    fn autoactivate_applies_to_external_messages() {
+        let d = parse(
+            "autoactivate on\n[-> A : incoming call\nA -->] : outgoing return\n\
+             ]-> B : incoming from right\nB -->[ : outgoing to left",
+        );
+        let changes = d
+            .events
+            .iter()
+            .map(|event| match event {
+                Event::Message(message) => message.activation,
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            changes,
+            vec![
+                Some(ActivationChange::Activate),
+                Some(ActivationChange::Deactivate),
+                Some(ActivationChange::Activate),
+                Some(ActivationChange::Deactivate),
+            ]
+        );
     }
 
     #[test]

@@ -93,7 +93,8 @@ fn preprocess_full_inner(
     let identity_base_dir = base_dir.clone();
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-    let mut lines = ctx.process(input);
+    let input_lines = source_identity_input_lines(input);
+    let mut lines = ctx.process_lines(&input_lines);
     let expanded_theme_source = expanded_theme_seed_source(input, &ctx.theme_seed_expansions);
     if let Some(seed_source) = &expanded_theme_source {
         ctx.theme_tail.push(format!(

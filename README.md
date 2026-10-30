@@ -7,8 +7,8 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 7,625/11,251 eligible SVG
-goldens currently pass when rendered through the same path as the CLI (67.8%).
+claims are based on the no-oracle product tier: 11,175/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (99.3%).
 The strict oracle-assisted tier passes 11,130/11,251 eligible SVG goldens and
 remains a regression net, not the headline product metric. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
@@ -21,21 +21,21 @@ The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
 <!-- no-oracle-status:start -->
 | Type | Tag | Baseline family | No-oracle product status |
 |------|-----|-----------------|--------------------------|
-| Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
-| Class | `@startuml` | `class` | 1,501/1,971 (76.2%, partial) |
-| Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
-| Activity (new syntax) | `@startuml` | `activity` | 1,267/1,299 (97.5%, partial) |
-| State | `@startuml` | `state` | 1/901 (0.1%, partial) |
-| Component | `@startuml` | `component` | 479/663 (72.2%, partial) |
-| Deployment | `@startuml` | `deployment` | 276/495 (55.8%, partial) |
-| Use Case | `@startuml` | `usecase` | 86/315 (27.3%, partial) |
-| Object | `@startuml` | `object` | 48/155 (31.0%, partial) |
+| Sequence | `@startuml` | `sequence` | 1,411/1,411 (100.0%, exact) |
+| Class | `@startuml` | `class` | 1,962/1,971 (99.5%, partial) |
+| Archimate | `@startuml` | `archimate` | 48/48 (100.0%, exact) |
+| Activity (new syntax) | `@startuml` | `activity` | 1,299/1,299 (100.0%, exact) |
+| State | `@startuml` | `state` | 895/901 (99.3%, partial) |
+| Component | `@startuml` | `component` | 663/663 (100.0%, exact) |
+| Deployment | `@startuml` | `deployment` | 495/495 (100.0%, exact) |
+| Use Case | `@startuml` | `usecase` | 315/315 (100.0%, exact) |
+| Object | `@startuml` | `object` | 155/155 (100.0%, exact) |
 | Timing | `@startuml` | `timing` | 141/141 (100.0%, exact) |
-| ER (crow's foot) | `@startuml` | `er` | 1/157 (0.6%, partial) |
+| ER (crow's foot) | `@startuml` | `er` | 153/157 (97.5%, partial) |
 | Gantt | `@startgantt` | `gantt` | 114/114 (100.0%, exact) |
 | Mindmap | `@startmindmap` | `mindmap` | 157/157 (100.0%, exact) |
 | WBS | `@startwbs` | `wbs` | 138/138 (100.0%, exact) |
-| JSON/YAML | `@startjson` / `@startyaml` | `json-yaml` | 56/147 (38.1%, partial) |
+| JSON/YAML | `@startjson` / `@startyaml` | `json-yaml` | 147/147 (100.0%, exact) |
 | Salt (wireframes) | `@startsalt` | `salt` | 103/103 (100.0%, exact) |
 | Network (nwdiag) | `@startnwdiag` | `nwdiag` | 89/89 (100.0%, exact) |
 | Regex (railroad) | `@startregex` | `regex` | 45/45 (100.0%, exact) |

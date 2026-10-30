@@ -20,9 +20,6 @@ pub enum NotePosition {
 pub struct Note {
     /// Note content lines (may contain Creole/HTML markup).
     pub lines: Vec<String>,
-    /// Canonical quark identity for a named floating note.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
     /// Entity this note is attached to, if any.
     pub target: Option<String>,
     /// Position relative to target entity.
@@ -81,14 +78,8 @@ pub struct ClassDiagram {
 pub enum ClassUidEvent {
     Package(String),
     Entity(String),
-    Note {
-        index: usize,
-        owner_package: Option<String>,
-    },
+    Note(usize),
     Relationship(usize),
-    DiscardedRelationship {
-        inverted: bool,
-    },
     Association(usize),
 }
 
@@ -199,12 +190,15 @@ pub enum EntityKind {
     State,
     Circle,
     Diamond,
+    /// Synthetic class-diagram endpoint created by `Class -() Interface`.
+    LollipopFull,
+    /// Open semicircle endpoint created by the `((` / `))` lollipop forms.
+    LollipopHalf,
     Actor,
     UseCase,
     Component,
     Database,
     Queue,
-    Boundary,
     Node,
     Rectangle,
 }
@@ -257,11 +251,6 @@ pub struct AssociationClass {
     pub b: String,
     /// The association class hanging off the apoint.
     pub c: String,
-    /// The latest pre-existing A-B link removed by Java `Association.createNew`.
-    /// Its constructor UID remains in `ClassUidEvent`, while its semantic data
-    /// supplies the replacement split links.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub replaced_relationship: Option<Relationship>,
     /// Whether the apoint→C connector is dashed (`..`) rather than solid (`--`).
     #[serde(default = "default_true")]
     pub dashed: bool,
@@ -345,12 +334,22 @@ pub struct RelationshipStyle {
     /// entity/source provenance but no SVG path `codeLine` attribute.
     #[serde(default)]
     pub declaration: bool,
+    /// Endpoint arrow decoration selected by PlantUML `LinkDecor`.
+    #[serde(default)]
+    pub arrowhead: RelationshipArrowhead,
 }
 
 impl RelationshipStyle {
     fn is_default(&self) -> bool {
         self == &Self::default()
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum RelationshipArrowhead {
+    #[default]
+    Arrow,
+    Triangle,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -387,7 +386,6 @@ pub enum EndpointDecor {
     CircleLine,
     DoubleLine,
     LineCrowFoot,
-    Parenthesis,
 }
 
 /// Container type for grouping entities in a class diagram.
@@ -396,53 +394,12 @@ pub enum PackageKind {
     #[default]
     Package,
     Namespace,
-    Action,
-    Artifact,
-    Card,
     Cloud,
-    Component,
-    ComponentUml1,
     Database,
-    File,
     Folder,
     Frame,
-    Hexagon,
     Rectangle,
     Node,
-    Process,
-    Queue,
-    Stack,
-    Storage,
-}
-
-impl PackageKind {
-    /// Complete symbol-command projection registered by Java
-    /// `CommandPackageWithUSymbol#getRegexConcat`.
-    pub const COMMAND_SYMBOLS: [(&'static str, Self); 17] = [
-        ("package", Self::Package),
-        ("rectangle", Self::Rectangle),
-        ("hexagon", Self::Hexagon),
-        ("node", Self::Node),
-        ("artifact", Self::Artifact),
-        ("folder", Self::Folder),
-        ("file", Self::File),
-        ("frame", Self::Frame),
-        ("cloud", Self::Cloud),
-        ("action", Self::Action),
-        ("process", Self::Process),
-        ("database", Self::Database),
-        ("storage", Self::Storage),
-        ("component", Self::Component),
-        ("card", Self::Card),
-        ("queue", Self::Queue),
-        ("stack", Self::Stack),
-    ];
-
-    pub fn from_command_symbol(keyword: &str) -> Option<Self> {
-        Self::COMMAND_SYMBOLS
-            .iter()
-            .find_map(|(candidate, kind)| keyword.eq_ignore_ascii_case(candidate).then_some(*kind))
-    }
 }
 
 /// A package/namespace/container grouping entities.
@@ -452,12 +409,6 @@ pub struct Package {
     pub kind: PackageKind,
     /// Optional background color (CSS name or hex without leading `#`).
     pub color: Option<String>,
-    /// Resolved package URL from the declaration's `[[...]]` modifier.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub url: Option<String>,
-    /// Optional brace tooltip from the package URL modifier.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub url_tooltip: Option<String>,
     pub entities: Vec<String>,
     /// Parent package index, when this package was declared inside another
     /// package/namespace block.
@@ -469,11 +420,6 @@ pub struct Package {
     /// Stereotypes applied to this package (e.g. `<<Application>>`).
     #[serde(default)]
     pub stereotypes: Vec<String>,
-    /// True when `CommandPackageWithUSymbol` supplied the shape keyword.
-    /// Ordinary package/namespace commands instead derive an optional symbol
-    /// from their single stereotype capture.
-    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
-    pub symbol_from_keyword: bool,
     /// Display label override (used for auto-created namespace packages where `name`
     /// is the full qualified path but we only want to show the short last segment).
     #[serde(default, skip_serializing_if = "Option::is_none")]

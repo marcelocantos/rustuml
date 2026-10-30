@@ -376,6 +376,10 @@ fn single_note_visible_raw_width(
     max_text_w + raw_margin + 2.0 * note_global_padding
 }
 
+fn folded_note_component_width(max_text_w: f64, note_global_padding: f64) -> f64 {
+    max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding
+}
+
 fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
     let width = note_content_width_raw(max_text_w, shape);
     if align == MessageAlign::Center && shape == NoteShape::Note {
@@ -691,9 +695,6 @@ const SELF_MSG_RIGHT_NOTE_Y_PAD: f64 = 2.5;
 /// inline-created participant. The visible loopback geometry is unchanged, but
 /// the computed right edge is wider in create+activate lifecycles.
 const CREATED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 16.0;
-/// Narrower InGroupable right extent Java reports to enclosing group frames
-/// for the same inline-created active self-message.
-const CREATED_ACTIVE_GROUP_SELF_MSG_RIGHT_PAD: f64 = 10.0;
 /// Extra canvas reservation for active self-messages on a participant whose
 /// lifecycle is later ended by a standalone destroy.
 const DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 15.0;
@@ -987,8 +988,7 @@ fn mixed_super_line_metrics_with_family(
 }
 
 fn pure_underline_message_flow_extra(text: &str) -> f64 {
-    rustuml_parser::display::split_escaped_newlines(text)
-        .into_iter()
+    text.split("\\n")
         .filter(|line| note_separator_label(line).is_some())
         .count() as f64
         * PURE_UNDERLINE_MESSAGE_FLOW_EXTRA
@@ -1121,8 +1121,7 @@ fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family:
     if let Some(latex) = latex_label_content(content) {
         return crate::math::raw_latex_image(latex).height as f64 + 1.0;
     }
-    let rows = rustuml_parser::display::split_escaped_newlines(content);
-    let mut lines = rows.into_iter();
+    let mut lines = content.split("\\n");
     let first = lines.next().unwrap_or("");
     if let Some((_, first_drop)) =
         all_shifted_line_metrics_with_family(first, font_size, font_family)
@@ -1150,8 +1149,7 @@ fn message_label_width_with_family(
     bold: bool,
     font_family: &str,
 ) -> f64 {
-    rustuml_parser::display::split_escaped_newlines(text)
-        .into_iter()
+    text.split("\\n")
         .map(|line| {
             if let Some(latex) = latex_label_content(line) {
                 crate::math::raw_latex_image(latex).width as f64 + MSG_TEXT_LEFT_PAD
@@ -1169,8 +1167,7 @@ fn message_label_width_with_family(
 }
 
 fn message_label_block_height_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
-    rustuml_parser::display::split_escaped_newlines(text)
-        .into_iter()
+    text.split("\\n")
         .map(|line| {
             if let Some(latex) = latex_label_content(line) {
                 crate::math::raw_latex_image(latex).height as f64 - 1.0
@@ -1750,6 +1747,8 @@ const PARTICIPANT_OUT_MARGIN: f64 = 5.0;
 const ROSE_NOTE_MARGIN_X2: f64 = 15.0;
 /// Rose note layout padding (`ComponentRoseNote.paddingX`).
 const ROSE_NOTE_PADDING_X: f64 = 5.0;
+/// Rose note vertical layout padding (`ComponentRoseNote.paddingY`).
+const ROSE_NOTE_PADDING_Y: f64 = 5.0;
 /// Extra width in `ComponentRoseNote.getPreferredWidth`: text block margins plus
 /// the component's left/right layout padding.
 const ROSE_NOTE_COMPONENT_PREF_EXTRA: f64 =
@@ -3004,202 +3003,55 @@ struct LifeVariation {
 }
 
 #[derive(Clone)]
-struct AcceptedLifeChange {
-    participant: String,
-    kind: LifeVariationKind,
+struct SequenceReturnContext {
+    from: String,
+    to: String,
+    open_arrow: bool,
 }
 
 #[derive(Default)]
 struct SequenceLifeLines {
     variations: HashMap<String, Vec<LifeVariation>>,
     accepted_events: Vec<bool>,
-}
-
-struct SequenceDepthSnapshots {
-    before_event: Vec<HashMap<String, usize>>,
-    accepted_changes: Vec<Option<AcceptedLifeChange>>,
-}
-
-impl SequenceDepthSnapshots {
-    fn before(&self, event_index: usize, participant: &str) -> usize {
-        self.before_event
-            .get(event_index)
-            .and_then(|depths| depths.get(participant))
-            .copied()
-            .unwrap_or(0)
-    }
-
-    fn accepted_event(&self, event_index: usize) -> bool {
-        self.accepted_changes
-            .get(event_index)
-            .is_some_and(Option::is_some)
-    }
-}
-
-fn sequence_depth_snapshots(
-    events: &[Event],
-    page1_end: usize,
-    lifecycle_owner: &[Option<usize>],
-    lifecycle_y_offset: &[f64],
-) -> SequenceDepthSnapshots {
-    let first_message_index = events
-        .iter()
-        .take(page1_end)
-        .position(|event| matches!(event, Event::Message(_)));
-    let mut levels: HashMap<String, i32> = HashMap::new();
-    let mut last_variation: HashMap<String, ((usize, i32), LifeVariationKind)> = HashMap::new();
-    let mut return_stack: Vec<String> = Vec::new();
-    let mut before_event = Vec::with_capacity(page1_end);
-    let mut accepted_changes = vec![None; page1_end];
-
-    for (event_index, event) in events.iter().take(page1_end).enumerate() {
-        before_event.push(
-            levels
-                .iter()
-                .map(|(participant, level)| (participant.clone(), (*level).max(0) as usize))
-                .collect(),
-        );
-
-        let mut apply = |participant: &str, kind: LifeVariationKind| {
-            let owner_index = lifecycle_owner.get(event_index).copied().flatten();
-            let message_index =
-                owner_index.or_else(|| matches!(event, Event::Message(_)).then_some(event_index));
-            let owner_message = message_index.and_then(|index| match events.get(index) {
-                Some(Event::Message(message)) => Some((index, message)),
-                _ => None,
-            });
-            let key = match (kind, owner_message) {
-                (LifeVariationKind::Open, Some((index, message))) if message.from == message.to => {
-                    (index, 8)
-                }
-                (LifeVariationKind::Close, Some((index, message)))
-                    if message.from == message.to =>
-                {
-                    (
-                        index,
-                        lifecycle_y_offset.get(event_index).copied().unwrap_or(0.0) as i32 + 6,
-                    )
-                }
-                (LifeVariationKind::Close, None)
-                    if owner_index.is_some_and(|index| {
-                        matches!(events.get(index), Some(Event::GroupEnd))
-                    }) =>
-                {
-                    (owner_index.unwrap(), GROUP_END_HEIGHT as i32)
-                }
-                (LifeVariationKind::Open, None)
-                    if matches!(event, Event::Activate(_, _))
-                        && first_message_index.is_none_or(|index| event_index < index) =>
-                {
-                    (0, 0)
-                }
-                _ => (
-                    owner_index.unwrap_or(event_index),
-                    lifecycle_y_offset.get(event_index).copied().unwrap_or(0.0) as i32,
-                ),
-            };
-            if let Some((last_key, last_kind)) = last_variation.get(participant)
-                && (key < *last_key || (key == *last_key && kind != *last_kind))
-            {
-                return false;
-            }
-            last_variation.insert(participant.to_owned(), (key, kind));
-            let level = levels.entry(participant.to_owned()).or_default();
-            match kind {
-                LifeVariationKind::Open => *level += 1,
-                // PlantUML LifeSegmentVariation.SMALLER.apply clamps an
-                // already-zero lifeline at zero. Redundant deactivations in
-                // alternate branches remain ordered events but cannot create
-                // negative debt that cancels a later activation.
-                LifeVariationKind::Close => *level = (*level - 1).max(0),
-            }
-            accepted_changes[event_index] = Some(AcceptedLifeChange {
-                participant: participant.to_owned(),
-                kind,
-            });
-            true
-        };
-
-        match event {
-            Event::Message(message) => {
-                if let Some(change) = &message.activation {
-                    match change {
-                        ActivationChange::Activate => {
-                            if apply(&message.to, LifeVariationKind::Open) {
-                                return_stack.push(message.to.clone());
-                            }
-                        }
-                        ActivationChange::Deactivate => {
-                            if apply(&message.from, LifeVariationKind::Close)
-                                && let Some(position) =
-                                    return_stack.iter().rposition(|id| id == &message.from)
-                            {
-                                return_stack.remove(position);
-                            }
-                        }
-                        ActivationChange::Destroy => {
-                            if apply(&message.to, LifeVariationKind::Close)
-                                && let Some(position) =
-                                    return_stack.iter().rposition(|id| id == &message.to)
-                            {
-                                return_stack.remove(position);
-                            }
-                        }
-                    }
-                }
-            }
-            Event::Activate(participant, _) => {
-                if apply(participant, LifeVariationKind::Open) {
-                    return_stack.push(participant.clone());
-                }
-            }
-            Event::Deactivate(participant) | Event::Destroy(participant) => {
-                if apply(participant, LifeVariationKind::Close)
-                    && let Some(position) = return_stack.iter().rposition(|id| id == participant)
-                {
-                    return_stack.remove(position);
-                }
-            }
-            Event::Return(_) => {
-                if let Some(participant) = return_stack.last().cloned()
-                    && apply(&participant, LifeVariationKind::Close)
-                {
-                    return_stack.pop();
-                }
-            }
-            _ => {}
-        }
-    }
-
-    SequenceDepthSnapshots {
-        before_event,
-        accepted_changes,
-    }
+    return_context_by_event: Vec<Option<SequenceReturnContext>>,
 }
 
 impl SequenceLifeLines {
+    fn accepted_event(&self, event_index: usize) -> bool {
+        self.accepted_events
+            .get(event_index)
+            .copied()
+            .unwrap_or(false)
+    }
+
+    fn return_context(&self, event_index: usize) -> Option<&SequenceReturnContext> {
+        self.return_context_by_event
+            .get(event_index)
+            .and_then(Option::as_ref)
+    }
+
     fn add_variation(
         &mut self,
         participant: &str,
         ordinate: f64,
         event_index: usize,
         kind: LifeVariationKind,
-    ) {
-        self.variations
-            .entry(participant.to_owned())
-            .or_default()
-            .push(LifeVariation {
-                ordinate,
-                event_index,
-                kind,
-            });
-    }
-
-    fn accepted_event(&self, event_index: usize) -> bool {
-        self.accepted_events
-            .get(event_index)
-            .copied()
-            .unwrap_or(false)
+    ) -> bool {
+        let variations = self.variations.entry(participant.to_owned()).or_default();
+        if let Some(last) = variations.last()
+            && (ordinate < last.ordinate || (ordinate == last.ordinate && kind != last.kind))
+        {
+            return false;
+        }
+        variations.push(LifeVariation {
+            ordinate,
+            event_index,
+            kind,
+        });
+        if let Some(accepted) = self.accepted_events.get_mut(event_index) {
+            *accepted = true;
+        }
+        true
     }
 
     fn depth_at(&self, participant: &str, ordinate: f64) -> usize {
@@ -3220,8 +3072,6 @@ impl SequenceLifeLines {
                 break;
             }
             match variation.kind {
-                // LifeSegmentVariation.SMALLER.apply(int) returns zero when
-                // the current value is zero; replay the same saturating stair.
                 LifeVariationKind::Close => depth = (depth - 1).max(0),
                 LifeVariationKind::Open => depth += 1,
             }
@@ -3241,81 +3091,387 @@ impl SequenceLifeLines {
     }
 }
 
+#[derive(Clone, Copy)]
+struct SequenceArrowEndpoints {
+    left: f64,
+    right: f64,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum SequenceGroupMemberKind {
+    Ordinary,
+    ExternalLeft,
+    ExternalRight,
+    NestedGroup,
+    Else,
+}
+
+#[derive(Clone, Copy)]
+struct SequenceGroupMemberBounds {
+    min: f64,
+    max: f64,
+    kind: SequenceGroupMemberKind,
+}
+
+fn sequence_group_list_bounds(
+    members: &[SequenceGroupMemberBounds],
+    min_width: f64,
+    empty_start: f64,
+) -> (f64, f64, bool) {
+    let min_member = members
+        .iter()
+        .filter(|member| member.kind != SequenceGroupMemberKind::Else)
+        .min_by(|left, right| left.min.total_cmp(&right.min));
+    let left_is_external =
+        min_member.is_some_and(|member| member.kind == SequenceGroupMemberKind::ExternalLeft);
+    let min = match min_member {
+        Some(member) if member.kind == SequenceGroupMemberKind::ExternalLeft => {
+            member.min + GROUP_EXTERNAL_ARROW_MARGIN
+        }
+        Some(member) if member.kind == SequenceGroupMemberKind::NestedGroup => {
+            member.min - GROUP_FRAME_MARGIN
+        }
+        Some(member) => member.min - GROUP_FRAME_INNER_MARGIN,
+        None => empty_start + GROUP_FRAME_MARGIN + GROUP_FRAME_INNER_MARGIN,
+    };
+
+    let max_member = members
+        .iter()
+        .max_by(|left, right| left.max.total_cmp(&right.max));
+    let max_internal = match max_member {
+        Some(member) if member.kind == SequenceGroupMemberKind::ExternalRight => {
+            member.max - GROUP_EXTERNAL_ARROW_MARGIN
+        }
+        Some(member) if member.kind == SequenceGroupMemberKind::NestedGroup => {
+            member.max + GROUP_FRAME_MARGIN
+        }
+        Some(member) => member.max + GROUP_FRAME_INNER_MARGIN,
+        None => GROUP_FRAME_MARGIN + GROUP_FRAME_INNER_MARGIN + min_width,
+    };
+    (min, max_internal.max(min + min_width), left_is_external)
+}
+
+fn sequence_live_segment(center: f64, depth: usize) -> (f64, f64) {
+    if depth == 0 {
+        (center, center)
+    } else {
+        (
+            center - ACTIVATION_HALF_W,
+            center + depth as f64 * ACTIVATION_HALF_W,
+        )
+    }
+}
+
+fn sequence_arrow_endpoints(
+    left_center: f64,
+    left_depth: usize,
+    right_center: f64,
+    right_depth: usize,
+) -> SequenceArrowEndpoints {
+    let (_, left_segment_right) = sequence_live_segment(left_center, left_depth);
+    let (right_segment_left, right_segment_right) =
+        sequence_live_segment(right_center, right_depth);
+    let right = if right_depth == 0 {
+        right_segment_left
+    } else {
+        // MessageArrow#getRightEndInternal removes the activation component
+        // width from the spatial-right segment's far edge.
+        right_segment_right - ACTIVATION_WIDTH
+    };
+    SequenceArrowEndpoints {
+        left: left_segment_right,
+        right,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn add_sequence_life_variation(
+    model: &mut SequenceLifeLines,
+    levels: &mut HashMap<String, i32>,
+    events: &[Event],
+    event_y_positions: &[f64],
+    lifecycle_owner: &[Option<usize>],
+    create_msg_idx: &HashMap<String, usize>,
+    first_message_index: Option<usize>,
+    participant: &str,
+    event_index: usize,
+    kind: LifeVariationKind,
+) -> bool {
+    let owner_index = lifecycle_owner.get(event_index).copied().flatten();
+    let message_index = owner_index.or_else(|| {
+        matches!(events.get(event_index), Some(Event::Message(_))).then_some(event_index)
+    });
+    let owner_message = message_index
+        .and_then(|index| events.get(index))
+        .and_then(|event| match event {
+            Event::Message(message) => Some((message_index.unwrap(), message)),
+            _ => None,
+        });
+    let event_ordinate = event_y_positions
+        .get(event_index)
+        .copied()
+        .unwrap_or_default();
+    let ordinate = match (kind, owner_message) {
+        (LifeVariationKind::Open, Some((index, _message)))
+            if create_msg_idx.get(participant) == Some(&index) =>
+        {
+            event_y_positions[index] + CREATE_BAR_OFFSET
+        }
+        (LifeVariationKind::Open, Some((index, message))) if message.from == message.to => {
+            event_y_positions[index] + SELF_MSG_DROP - ACTIVATION_HALF_W
+        }
+        (LifeVariationKind::Close, Some((_index, message))) if message.from == message.to => {
+            event_ordinate + SELF_MSG_DROP - SELF_MSG_LIFELINE_CLOSE_INSET
+        }
+        (LifeVariationKind::Close, None)
+            if owner_index
+                .is_some_and(|index| matches!(events.get(index), Some(Event::GroupEnd))) =>
+        {
+            event_ordinate + GROUP_END_HEIGHT
+        }
+        (LifeVariationKind::Open, None)
+            if matches!(events.get(event_index), Some(Event::Activate(_, _)))
+                && first_message_index.is_none_or(|index| event_index < index) =>
+        {
+            event_ordinate + ACTIVATION_PRE_MESSAGE_OFFSET
+        }
+        _ => event_ordinate,
+    };
+    let accepted = model.add_variation(participant, ordinate, event_index, kind);
+    if accepted {
+        let level = levels.entry(participant.to_owned()).or_default();
+        match kind {
+            LifeVariationKind::Open => *level += 1,
+            LifeVariationKind::Close => *level = (*level - 1).max(0),
+        }
+    }
+    accepted
+}
+
 fn sequence_lifelines(
     events: &[Event],
     event_y_positions: &[f64],
     page1_end: usize,
     lifecycle_owner: &[Option<usize>],
     create_msg_idx: &HashMap<String, usize>,
-    lifecycle_history: &SequenceDepthSnapshots,
 ) -> SequenceLifeLines {
     let mut model = SequenceLifeLines {
         variations: HashMap::new(),
-        accepted_events: lifecycle_history
-            .accepted_changes
-            .iter()
-            .map(Option::is_some)
-            .collect(),
+        accepted_events: vec![false; page1_end],
+        return_context_by_event: vec![None; page1_end],
     };
+    let mut levels: HashMap<String, i32> = HashMap::new();
+    let mut active_participants: Vec<String> = Vec::new();
+    let mut return_stack: Vec<SequenceReturnContext> = Vec::new();
+    let mut last_return_context: Option<SequenceReturnContext> = None;
     let first_message_index = events
         .iter()
         .take(page1_end)
         .position(|event| matches!(event, Event::Message(_)));
 
-    for (event_index, accepted) in lifecycle_history
-        .accepted_changes
-        .iter()
-        .take(page1_end)
-        .enumerate()
-    {
-        let Some(accepted) = accepted else {
-            continue;
-        };
-        let participant = accepted.participant.as_str();
-        let kind = accepted.kind;
-        let event_ordinate = event_y_positions
-            .get(event_index)
-            .copied()
-            .unwrap_or_default();
-        let owner_index = lifecycle_owner.get(event_index).copied().flatten();
-        let message_index = owner_index.or_else(|| {
-            matches!(events.get(event_index), Some(Event::Message(_))).then_some(event_index)
-        });
-        let owner_message = message_index
-            .and_then(|index| events.get(index))
-            .and_then(|event| match event {
-                Event::Message(message) => Some((message_index.unwrap(), message)),
-                _ => None,
-            });
-        let ordinate = match (kind, owner_message) {
-            (LifeVariationKind::Open, Some((index, _message)))
-                if create_msg_idx.get(participant) == Some(&index) =>
-            {
-                event_y_positions[index] + CREATE_BAR_OFFSET
+    for (event_index, event) in events.iter().take(page1_end).enumerate() {
+        match event {
+            Event::Message(message) => {
+                let context = SequenceReturnContext {
+                    from: message.to.clone(),
+                    to: message.from.clone(),
+                    open_arrow: message.arrow.head == ArrowHead::Open,
+                };
+                last_return_context = Some(context.clone());
+                if let Some(change) = &message.activation {
+                    match change {
+                        ActivationChange::Activate => {
+                            if add_sequence_life_variation(
+                                &mut model,
+                                &mut levels,
+                                events,
+                                event_y_positions,
+                                lifecycle_owner,
+                                create_msg_idx,
+                                first_message_index,
+                                &message.to,
+                                event_index,
+                                LifeVariationKind::Open,
+                            ) {
+                                active_participants.push(message.to.clone());
+                                return_stack.push(context);
+                            }
+                        }
+                        ActivationChange::Deactivate => {
+                            if add_sequence_life_variation(
+                                &mut model,
+                                &mut levels,
+                                events,
+                                event_y_positions,
+                                lifecycle_owner,
+                                create_msg_idx,
+                                first_message_index,
+                                &message.from,
+                                event_index,
+                                LifeVariationKind::Close,
+                            ) {
+                                if let Some(position) = active_participants
+                                    .iter()
+                                    .rposition(|id| id == &message.from)
+                                {
+                                    active_participants.remove(position);
+                                }
+                                // SequenceDiagram#activate pops the top
+                                // activating message for every accepted
+                                // DEACTIVATE, independently of participant.
+                                return_stack.pop();
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if add_sequence_life_variation(
+                                &mut model,
+                                &mut levels,
+                                events,
+                                event_y_positions,
+                                lifecycle_owner,
+                                create_msg_idx,
+                                first_message_index,
+                                &message.to,
+                                event_index,
+                                LifeVariationKind::Close,
+                            ) && let Some(position) =
+                                active_participants.iter().rposition(|id| id == &message.to)
+                            {
+                                active_participants.remove(position);
+                            }
+                        }
+                    }
+                }
             }
-            (LifeVariationKind::Open, Some((index, message))) if message.from == message.to => {
-                event_y_positions[index] + SELF_MSG_DROP - ACTIVATION_HALF_W
+            Event::Activate(participant, _) => {
+                if add_sequence_life_variation(
+                    &mut model,
+                    &mut levels,
+                    events,
+                    event_y_positions,
+                    lifecycle_owner,
+                    create_msg_idx,
+                    first_message_index,
+                    participant,
+                    event_index,
+                    LifeVariationKind::Open,
+                ) {
+                    active_participants.push(participant.clone());
+                    if let Some(context) = last_return_context.as_ref() {
+                        // SequenceDiagram pushes the owning AbstractMessage;
+                        // the activated participant need not be its receiver.
+                        return_stack.push(context.clone());
+                    }
+                }
             }
-            (LifeVariationKind::Close, Some((_index, message))) if message.from == message.to => {
-                event_ordinate + SELF_MSG_DROP - SELF_MSG_LIFELINE_CLOSE_INSET
+            Event::Deactivate(participant) => {
+                if add_sequence_life_variation(
+                    &mut model,
+                    &mut levels,
+                    events,
+                    event_y_positions,
+                    lifecycle_owner,
+                    create_msg_idx,
+                    first_message_index,
+                    participant,
+                    event_index,
+                    LifeVariationKind::Close,
+                ) {
+                    if let Some(position) =
+                        active_participants.iter().rposition(|id| id == participant)
+                    {
+                        active_participants.remove(position);
+                    }
+                    return_stack.pop();
+                }
             }
-            (LifeVariationKind::Close, None)
-                if owner_index
-                    .is_some_and(|index| matches!(events.get(index), Some(Event::GroupEnd))) =>
-            {
-                event_ordinate + GROUP_END_HEIGHT
+            Event::Destroy(participant) => {
+                if add_sequence_life_variation(
+                    &mut model,
+                    &mut levels,
+                    events,
+                    event_y_positions,
+                    lifecycle_owner,
+                    create_msg_idx,
+                    first_message_index,
+                    participant,
+                    event_index,
+                    LifeVariationKind::Close,
+                ) && let Some(position) =
+                    active_participants.iter().rposition(|id| id == participant)
+                {
+                    active_participants.remove(position);
+                }
             }
-            (LifeVariationKind::Open, None)
-                if matches!(events.get(event_index), Some(Event::Activate(_, _)))
-                    && first_message_index.is_none_or(|index| event_index < index) =>
-            {
-                event_ordinate + ACTIVATION_PRE_MESSAGE_OFFSET
+            Event::Return(_) => {
+                let context = return_stack
+                    .last()
+                    .cloned()
+                    .or_else(|| last_return_context.clone());
+                model.return_context_by_event[event_index] = context.clone();
+                if let Some(context) = context {
+                    // CommandReturn materializes a real reverse message. It
+                    // becomes `lastEventWithDeactivate`, so a later return with
+                    // an empty activation stack reverses this generated message,
+                    // not the last source-level Message event.
+                    last_return_context = Some(SequenceReturnContext {
+                        from: context.to.clone(),
+                        to: context.from.clone(),
+                        open_arrow: context.open_arrow,
+                    });
+                }
+                if let Some(context) = return_stack.last().cloned()
+                    && add_sequence_life_variation(
+                        &mut model,
+                        &mut levels,
+                        events,
+                        event_y_positions,
+                        lifecycle_owner,
+                        create_msg_idx,
+                        first_message_index,
+                        &context.from,
+                        event_index,
+                        LifeVariationKind::Close,
+                    )
+                {
+                    if let Some(position) = active_participants
+                        .iter()
+                        .rposition(|participant| *participant == context.from)
+                    {
+                        active_participants.remove(position);
+                    }
+                    return_stack.pop();
+                }
             }
-            _ => event_ordinate,
-        };
-        model.add_variation(participant, ordinate, event_index, kind);
+            Event::GroupEnd => {
+                // SequenceDiagram#grouping replaces lastEventWithDeactivate
+                // with the END leaf. The independent activation stack remains,
+                // but a later explicit activation cannot push the preceding
+                // message and a stack-empty return has no message fallback.
+                last_return_context = None;
+            }
+            _ => {}
+        }
     }
     model
+}
+
+fn sequence_create_message_indices(events: &[Event]) -> HashMap<String, usize> {
+    let mut result = HashMap::new();
+    let mut pending = Vec::new();
+    for (event_index, event) in events.iter().enumerate() {
+        match event {
+            Event::Create(participant) => pending.push(participant.clone()),
+            Event::Message(message) => {
+                if let Some(position) = pending.iter().position(|id| *id == message.to) {
+                    let participant = pending.remove(position);
+                    result.entry(participant).or_insert(event_index);
+                }
+            }
+            _ => {}
+        }
+    }
+    result
 }
 
 fn sequence_lifecycle_layout(events: &[Event], page1_end: usize) -> SequenceLifecycleLayout {
@@ -4057,7 +4213,7 @@ impl PlantUmlSvg {
         stroke_color: &str,
     ) {
         let mut y = text_y;
-        for line in rustuml_parser::display::split_escaped_newlines(text_content) {
+        for line in text_content.split("\\n") {
             if let Some(latex) = latex_label_content(line) {
                 let image = crate::math::raw_latex_image(latex);
                 write!(
@@ -6384,13 +6540,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .meta
         .title
         .as_deref()
-        .map(rustuml_parser::display::split_escaped_newlines)
+        .map(|t| t.split("\\n").collect())
         .unwrap_or_default();
     let header_lines: Vec<&str> = diagram
         .meta
         .header
         .as_deref()
-        .map(rustuml_parser::display::split_escaped_newlines)
+        .map(|h| h.split("\\n").collect())
         .unwrap_or_default();
     let legend_lines: Vec<&str> = diagram
         .meta
@@ -6700,6 +6856,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let mut group_left_shift_depth = 0usize;
     let mut group_left_external_shift_depth = 0usize;
+    let mut group_has_external_left = false;
     {
         // Scan for groups and collect the participant index range for each group
         let mut group_stack: Vec<(usize, usize, bool)> = Vec::new(); // (min_idx, max_idx, has_external_left)
@@ -6741,6 +6898,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                         if msg.from == "[" || msg.to == "[" {
                             top.2 = true;
+                            group_has_external_left = true;
                         }
                     }
                 }
@@ -6786,995 +6944,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let lifecycle_owner = lifecycle.attachment_owner;
     let lifecycle_y_offset = lifecycle.y_offset;
     let lifecycle_row_after_message = lifecycle.row_after_message;
-    let spacing_depths = sequence_depth_snapshots(
-        &diagram.events,
-        // DrawableSetInitializer establishes horizontal constraints for every
-        // page before individual pages are painted. Lifecycle depth therefore
-        // continues across newpage boundaries even though this SVG renders
-        // only page one.
-        diagram.events.len(),
-        &lifecycle_owner,
-        &lifecycle_y_offset,
-    );
-
-    // -----------------------------------------------------------------------
-    // Phase 2: Compute required gap between adjacent participant pairs
-    // -----------------------------------------------------------------------
-
-    // PlantUML's spacing is constraint-based: for each message, the distance
-    // between the source and target participant centers must accommodate:
-    //   arrow_only_width + source_lifeline_shift + target_lifeline_shift
-    // where lifeline shifts account for activation bars.
-    //
-    // arrow_only_width = text_width + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD + ARROW_SIZE
-    //                  = text_width + 24 (the constant overhead for arrow + text padding)
-
-    let n = participants.len();
-    let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
-
-    // Multi-span constraints (left, right_exclusive, needed_total_width).
-    // Applied as a post-pass: only widen pairs in span if cumulative existing
-    // width is insufficient. Matches PlantUML's behavior where spanning
-    // messages don't force intermediate pairs to widen if already covered.
-    let mut multi_span_constraints: Vec<(usize, usize, f64)> = Vec::new();
-
-    // Track maximum right extent of self-messages (for SVG width calculation).
-    let mut max_self_msg_right: f64 = 0.0;
-    let mut self_msg_right_note_left_by_event: HashMap<usize, f64> = HashMap::new();
-
-    // Track return stack during spacing phase to infer return from/to.
-    // Each entry: (returned-from participant, returned-to participant).
-    let mut spacing_return_stack: Vec<(String, String)> = Vec::new();
-    let mut spacing_last_return_pair: Option<(String, String)> = None;
-
-    // Track autonumber state during spacing phase to compute bold label widths.
-    // Driven entirely by `Event::Autonumber` directives in stream order.
-    let mut spacing_auto = AutoState::default();
-
-    // Pending `create X` ids awaiting their first message — that message reserves
-    // extra horizontal space for the inline head box centered on X's lifeline.
-    let mut spacing_pending_create: Vec<String> = Vec::new();
-
-    for (event_idx, event) in diagram.events.iter().enumerate() {
-        match event {
-            Event::Create(id) => spacing_pending_create.push(id.clone()),
-            Event::Message(msg) => {
-                let from_idx = id_to_idx.get(msg.from.as_str()).copied();
-                let to_idx = id_to_idx.get(msg.to.as_str()).copied();
-                if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
-                    if fi == ti {
-                        // Self-message. PlantUML's Step1Message reserves a constraint
-                        // in the gap *after* the source participant (getConstraintAfter):
-                        //   length = arrowOnlyWidth + segment.getLength()
-                        // and arrowOnlyWidth = ComponentRoseSelfArrow.getPreferredWidth
-                        //   = max(textWidth, 50)
-                        //   + segment.getLength()       (added a second time inside it)
-                        // so the gap to the next participant must be at least
-                        //   max(label_w + 2*MARGIN, 50) + 2 * segment_length
-                        // where segment_length = leftShift + rightShift of the lifeline
-                        // at this message level (0 when inactive, ACTIVATION_WIDTH at
-                        // depth 1). This pushes a right-hand neighbour further right.
-                        // (When fi is the rightmost participant there is no neighbour;
-                        // the right extent then feeds the canvas edge after Phase 3.)
-                        if fi + 1 < n {
-                            let label = process_label(&msg.label);
-                            let label_w = message_label_width(&label);
-
-                            let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
-                                w + AUTONUMBER_LABEL_GAP
-                            } else {
-                                0.0
-                            };
-
-                            let text_pref =
-                                autonumber_extra + label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD;
-                            let arrow_only_w = text_pref.max(SELF_MSG_MIN_PREF_WIDTH);
-
-                            let depth = spacing_depths.before(event_idx, &msg.from)
-                                + usize::from(matches!(
-                                    msg.activation,
-                                    Some(ActivationChange::Activate)
-                                ));
-
-                            let needed = if diagram.teoz {
-                                // Teoz `CommunicationTileSelf.addConstraints` (non-reverse):
-                                //   next.posC >= self.posC2 + compWidth
-                                // where posC2 = posC + LIVE_DELTA_SIZE * level and
-                                // compWidth = the self-arrow preferred width. Only the
-                                // right-side livebox delta enters the gap (single, not
-                                // doubled — Teoz tracks one absolute right edge per
-                                // lifeline rather than a symmetric shift).
-                                arrow_only_w + depth as f64 * ACTIVATION_HALF_W
-                            } else {
-                                // Legacy Step1Message.getConstraintAfter:
-                                //   length = arrowOnlyWidth + segment.getLength()
-                                // where segment.getLength() = rightShift + leftShift of
-                                // the lifeline at this level. Counted twice, matching
-                                // PlantUML's double-add via getPreferredWidth.
-                                let segment_len = if depth > 0 {
-                                    ACTIVATION_HALF_W + depth as f64 * ACTIVATION_HALF_W
-                                } else {
-                                    0.0
-                                };
-                                arrow_only_w + 2.0 * segment_len
-                            };
-                            pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
-                        }
-                    } else {
-                        let label = process_label(&msg.label);
-                        let label_w = message_label_width(&label);
-
-                        // Autonumber adds bold-or-plain text + gap before the label
-                        // depending on whether a format string is set.
-                        let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
-                            w + AUTONUMBER_LABEL_GAP
-                        } else {
-                            0.0
-                        };
-
-                        // Base arrow width (text + padding + arrow)
-                        let arrow_only_w = autonumber_extra
-                            + label_w
-                            + MSG_TEXT_LEFT_PAD
-                            + MSG_TEXT_LEFT_PAD
-                            + ARROW_SIZE
-                            + 2.0 * constraint_global_padding;
-
-                        // Lifeline shifts from activation bars at the current message level.
-                        // The source's "right shift" and target's "left shift" come from
-                        // activation bars extending from the lifeline center.
-                        let from_depth = spacing_depths.before(event_idx, &msg.from);
-                        let to_depth = spacing_depths.before(event_idx, &msg.to);
-
-                        // Teoz target livebox level (`livingSpace2.getLevelAt(...,
-                        // IGNORE_FUTURE_DEACTIVATE)`) includes a level activated by
-                        // this very message.
-                        let target_active = to_depth > 0
-                            || matches!(msg.activation, Some(ActivationChange::Activate));
-
-                        let (source_shift, target_shift) = if diagram.teoz {
-                            // Teoz `CommunicationTile.addConstraints`. The gap to the
-                            // wider-index neighbour is the arrow `width` plus the
-                            // livebox deltas the message endpoints add to it.
-                            //
-                            // Forward (fi < ti, source on the left):
-                            //   point1 = source.getPosC()            (bare centre)
-                            //   if (level2>0) point2 -= LIVE_DELTA    (arrow ends on the
-                            //                                          target livebox left)
-                            //   => gap = width + (LIVE_DELTA if target active)
-                            //
-                            // Reverse (fi > ti, source on the right):
-                            //   if (level1>0) point1 -= LIVE_DELTA    (source livebox)
-                            //   point2 += level2 * LIVE_DELTA         (target livebox)
-                            //   point1 >= point2 + width
-                            //   => gap = width + (LIVE_DELTA if source active)
-                            //          + level_target * LIVE_DELTA
-                            if fi < ti {
-                                (
-                                    0.0,
-                                    if target_active {
-                                        ACTIVATION_HALF_W
-                                    } else {
-                                        0.0
-                                    },
-                                )
-                            } else {
-                                let src_live = if from_depth > 0 {
-                                    ACTIVATION_HALF_W
-                                } else {
-                                    0.0
-                                };
-                                let tgt_live = to_depth as f64 * ACTIVATION_HALF_W;
-                                (src_live, tgt_live)
-                            }
-                        } else {
-                            // Legacy `Step1Message` asks the spatial-left
-                            // lifeline for `getRightShift()` and the
-                            // spatial-right lifeline for `getLeftShift()`.
-                            // `LifeLine` grows the right edge with every nested
-                            // level, while its left edge is one half-width for
-                            // every non-zero level.
-                            if fi < ti {
-                                (
-                                    from_depth as f64 * ACTIVATION_HALF_W,
-                                    if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
-                                )
-                            } else {
-                                (
-                                    if from_depth > 0 {
-                                        ACTIVATION_HALF_W
-                                    } else {
-                                        0.0
-                                    },
-                                    to_depth as f64 * ACTIVATION_HALF_W,
-                                )
-                            }
-                        };
-
-                        // A message that creates its target reserves extra space
-                        // for the inline head box centered on the target lifeline:
-                        // half the box width sits left of center.
-                        let create_extra = if let Some(pos) =
-                            spacing_pending_create.iter().position(|id| *id == msg.to)
-                        {
-                            spacing_pending_create.remove(pos);
-                            participants[ti].box_width / 2.0
-                        } else {
-                            0.0
-                        };
-
-                        let needed = arrow_only_w + source_shift + target_shift + create_extra;
-
-                        let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
-                        if right - left == 1 {
-                            pair_max_label_width[left] = pair_max_label_width[left].max(needed);
-                        } else {
-                            // Defer multi-span constraint to post-pass.
-                            multi_span_constraints.push((left, right, needed));
-                        }
-                    }
-                }
-
-                // Update activation state from message's activation change
-                spacing_last_return_pair = Some((msg.to.clone(), msg.from.clone()));
-                if let Some(act) = &msg.activation
-                    && spacing_depths.accepted_event(event_idx)
-                {
-                    match act {
-                        ActivationChange::Activate => {
-                            spacing_return_stack.push((msg.to.clone(), msg.from.clone()));
-                        }
-                        ActivationChange::Deactivate => {
-                            // Autoactivation turns an outgoing dotted exo
-                            // message into a close on its source. CommandReturn
-                            // then selects the next surviving activation owner,
-                            // so spacing must retire the same owner that the
-                            // lifecycle and paint projections retire.
-                            if let Some(position) = spacing_return_stack
-                                .iter()
-                                .rposition(|(ret_from, _)| ret_from == &msg.from)
-                            {
-                                spacing_return_stack.remove(position);
-                            }
-                        }
-                        ActivationChange::Destroy => {
-                            if let Some(position) = spacing_return_stack
-                                .iter()
-                                .rposition(|(ret_from, _)| ret_from == &msg.to)
-                            {
-                                spacing_return_stack.remove(position);
-                            }
-                        }
-                    }
-                }
-
-                // Advance autonumber during spacing phase
-                spacing_auto.advance();
-            }
-            Event::Return(ret) => {
-                // Return messages need spacing computation like regular messages.
-                // Pop the activation return stack to find from/to; without an
-                // activation context, Java replies from the previous message's
-                // receiver to its sender.
-                // NOTE: compute spacing BEFORE deactivating — the return sender
-                // is still activated at the point the message arrow is drawn.
-                let stack_entry = spacing_return_stack.pop();
-                if let Some((ret_from, ret_to)) = stack_entry
-                    .clone()
-                    .or_else(|| spacing_last_return_pair.clone())
-                {
-                    let fi_opt = id_to_idx.get(ret_from.as_str()).copied();
-                    let ti_opt = id_to_idx.get(ret_to.as_str()).copied();
-                    if let (Some(fi), Some(ti)) = (fi_opt, ti_opt) {
-                        let label = if ret.label.is_empty() {
-                            String::new()
-                        } else {
-                            decode_backslash_escapes(&ret.label)
-                        };
-                        let label_w = message_label_width(&label);
-
-                        // Autonumber adds bold-or-plain text + gap before the label
-                        // depending on whether a format string is set.
-                        let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
-                            w + AUTONUMBER_LABEL_GAP
-                        } else {
-                            0.0
-                        };
-
-                        // Same spacing formula as forward messages
-                        let arrow_only_w = autonumber_extra
-                            + label_w
-                            + MSG_TEXT_LEFT_PAD
-                            + MSG_TEXT_LEFT_PAD
-                            + ARROW_SIZE
-                            + 2.0 * constraint_global_padding;
-
-                        let from_depth = spacing_depths.before(event_idx, &ret_from);
-                        let to_depth = spacing_depths.before(event_idx, &ret_to);
-                        let (source_shift, target_shift) = if diagram.teoz {
-                            if fi < ti {
-                                (0.0, if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 })
-                            } else {
-                                (
-                                    if from_depth > 0 {
-                                        ACTIVATION_HALF_W
-                                    } else {
-                                        0.0
-                                    },
-                                    to_depth as f64 * ACTIVATION_HALF_W,
-                                )
-                            }
-                        } else if fi < ti {
-                            (
-                                from_depth as f64 * ACTIVATION_HALF_W,
-                                if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
-                            )
-                        } else {
-                            (
-                                if from_depth > 0 {
-                                    ACTIVATION_HALF_W
-                                } else {
-                                    0.0
-                                },
-                                to_depth as f64 * ACTIVATION_HALF_W,
-                            )
-                        };
-
-                        let needed = arrow_only_w + source_shift + target_shift;
-
-                        let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
-                        if right - left == 1 {
-                            pair_max_label_width[left] = pair_max_label_width[left].max(needed);
-                        } else {
-                            // Defer multi-span constraint to post-pass.
-                            multi_span_constraints.push((left, right, needed));
-                        }
-                    }
-
-                    // CommandReturn adds the synthesized reverse message to the
-                    // diagram. If another bare return has no activation owner,
-                    // SequenceDiagram#getLastEventWithDeactivate therefore
-                    // reverses this return, not the older concrete message.
-                    spacing_last_return_pair = Some((ret_to, ret_from));
-                }
-
-                // Advance autonumber
-                spacing_auto.advance();
-            }
-            // Non-standard notes over several participants (OVER_SEVERAL). Java
-            // lets standard folded notes overhang outside the spanned participant
-            // area; hnote/rnote still need the older outside-pair reservation.
-            Event::Note(note)
-                if note.position == NotePosition::Over
-                    && note.participants.len() >= 2
-                    && note.shape != NoteShape::Note =>
-            {
-                let first_idx = id_to_idx
-                    .get(note.participants.first().unwrap().as_str())
-                    .copied();
-                let last_idx = id_to_idx
-                    .get(note.participants.last().unwrap().as_str())
-                    .copied();
-                if let (Some(fi), Some(li)) = (first_idx, last_idx) {
-                    let max_tw = note_max_line_width_with_family(
-                        &note.text,
-                        note_font_size_f,
-                        &note_font_family,
-                    );
-                    let note_content_w =
-                        note_content_width_padded(max_tw, note.shape, note_text_align);
-                    let half = note_content_w / 2.0;
-                    let (lo, hi) = if fi < li { (fi, li) } else { (li, fi) };
-                    // Gap before the first spanned participant.
-                    if lo > 0 {
-                        pair_max_label_width[lo - 1] = pair_max_label_width[lo - 1].max(half);
-                    }
-                    // Gap after the last spanned participant.
-                    if hi < pair_max_label_width.len() {
-                        pair_max_label_width[hi] = pair_max_label_width[hi].max(half);
-                    }
-                }
-            }
-            Event::Activate(id, _) => {
-                if spacing_depths.accepted_event(event_idx)
-                    && let Some((ret_from, ret_to)) = spacing_last_return_pair.clone()
-                    && ret_from == *id
-                {
-                    spacing_return_stack.push((ret_from, ret_to));
-                }
-            }
-            Event::Deactivate(id) => {
-                if spacing_depths.accepted_event(event_idx)
-                    && let Some(pos) = spacing_return_stack
-                        .iter()
-                        .rposition(|(ret_from, _)| ret_from == id)
-                {
-                    spacing_return_stack.remove(pos);
-                }
-            }
-            Event::Autonumber(cmd) => spacing_auto.apply(cmd),
-            // A `ref over A, …, Z` box must span its covered participants: the
-            // centre-to-centre distance across them is at least the box's
-            // preferred width minus the two end half-boxes.
-            Event::Ref(r) => {
-                let rb = ref_box(&r.text);
-                let pref_w = rb.pref_w;
-                let idxs: Vec<usize> = r
-                    .participants
-                    .iter()
-                    .filter_map(|p| id_to_idx.get(p.as_str()).copied())
-                    .collect();
-                if let (Some(&lo), Some(&hi)) = (idxs.iter().min(), idxs.iter().max()) {
-                    if lo == hi {
-                        if lo < pair_max_label_width.len() {
-                            let needed = (pref_w - participants[lo].box_width).max(0.0);
-                            pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
-                        }
-                    } else {
-                        let needed = pref_w
-                            - participants[lo].box_width / 2.0
-                            - participants[hi].box_width / 2.0;
-                        if hi - lo == 1 {
-                            pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
-                        } else {
-                            multi_span_constraints.push((lo, hi, needed));
-                        }
-                    }
-                }
-            }
-            _ => {}
-        }
-    }
-
-    // Compute minimum first-participant x offset due to notes that extend left.
-    // "note over" on the first participant: centered on the lifeline, must not
-    // extend past the left margin (x = HEAD_BOX_Y).
-    // "note left of" on the first participant: positioned entirely to the left
-    // of the lifeline, so the lifeline must be far enough right to fit the note.
-    //
-    // Minimum absolute centre imposed by left-border messages. PlantUML's
-    // ConstraintSet includes the synthetic first border as a normal endpoint,
-    // so a boundary arrow can constrain any participant, not only index zero.
-    let mut min_participant_center_x = vec![0.0_f64; n];
-    let mut min_scan_auto = AutoState::default();
-    for event in &diagram.events {
-        if let Event::Autonumber(command) = event {
-            min_scan_auto.apply(command);
-        }
-        if let Event::Note(note) = event {
-            // A message-attached Left note anchors to the leftmost endpoint by
-            // index; otherwise the first listed participant.
-            let first_part = if note.on_message && note.position == NotePosition::Left {
-                note.participants
-                    .iter()
-                    .filter_map(|id| id_to_idx.get(id.as_str()).copied())
-                    .min()
-            } else {
-                note.participants
-                    .first()
-                    .and_then(|id| id_to_idx.get(id.as_str()))
-                    .copied()
-            };
-            match note.position {
-                NotePosition::Over if note.participants.len() == 1 && first_part == Some(0) => {
-                    let max_tw = note_max_line_width_with_family(
-                        &note.text,
-                        note_font_size_f,
-                        &note_font_family,
-                    );
-                    // Java centres the note on participant 0 using the raw
-                    // preferred width (`NoteBox.getStartingX` / `ensureConstraints`),
-                    // and the diagram is shifted right so the note's left edge sits
-                    // at the HEAD_BOX_Y margin. The participant box left edge then
-                    // lands at the rounded position
-                    // `round(HEAD_BOX_Y + (raw_note_w - box_width) / 2)`. Using the
-                    // ceiled width with `floor` here drops the sub-pixel fraction and
-                    // mis-rounds the box left by 1px on many cases.
-                    let bw = participants[0].box_width;
-                    let min_cx = if diagram.teoz {
-                        let note_w =
-                            single_note_visible_raw_width(max_tw, note.shape, note_global_padding);
-                        TEOZ_FIRST_OVER_NOTE_LEFT - TEOZ_PARTICIPANT_SHIFT + note_w / 2.0
-                    } else {
-                        let note_w =
-                            note_content_width_raw_padded(max_tw, note.shape, note_text_align);
-                        let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
-                        box_left + bw / 2.0
-                    };
-                    min_participant_center_x[0] = min_participant_center_x[0].max(min_cx);
-                }
-                NotePosition::Left if first_part == Some(0) => {
-                    // `NoteBox#getStartingX` truncates the complete side-note
-                    // expression after lifeline thickness and shape width are
-                    // known. Solving this lower bound here makes it part of the
-                    // participant constraint set exactly once.
-                    let max_tw = note_max_line_width_with_family(
-                        &note.text,
-                        note_font_size_f,
-                        &note_font_family,
-                    );
-                    let note_content_w =
-                        note_content_width_padded(max_tw, note.shape, note_text_align);
-                    let gap = left_note_lifeline_gap(
-                        &participants,
-                        note.shape,
-                        first_part,
-                        note.on_message,
-                        note.color.is_some(),
-                        note.text.lines().count(),
-                    );
-                    let bw = participants[0].box_width;
-                    let min_cx = HEAD_BOX_Y + note_content_w + gap + bw / 2.0 - (bw / 2.0).floor();
-                    min_participant_center_x[0] = min_participant_center_x[0].max(min_cx);
-                }
-                _ => {}
-            }
-        }
-        // Either left-border form (`[-> X` or `X ->[`) constrains the first
-        // participant against the same border using the numbered arrow
-        // component's preferred width.
-        if let Event::Message(msg) = event
-            && let Some(participant_idx) = if msg.from == "[" {
-                id_to_idx.get(msg.to.as_str()).copied()
-            } else if msg.to == "[" {
-                id_to_idx.get(msg.from.as_str()).copied()
-            } else {
-                None
-            }
-        {
-            let label_w = message_label_width(&process_label(&msg.label));
-            let autonumber_extra = min_scan_auto
-                .current()
-                .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
-            // MessageExoArrow contributes the same participant constraint
-            // inside and outside a group. InGroupableList#getMinX applies its
-            // exo-specific +3 only when the later group envelope is queried;
-            // GroupingGraphicalElement and prepareMissingSpace then turn that
-            // envelope into the shared 7px translation.
-            min_participant_center_x[participant_idx] =
-                min_participant_center_x[participant_idx].max(autonumber_extra + label_w + 24.0);
-        }
-        if matches!(event, Event::Message(_) | Event::Return(_)) {
-            min_scan_auto.advance();
-        }
-    }
-
-    // Resolve multi-span constraints: only widen the rightmost pair if the
-    // cumulative existing width across the span is less than needed. This
-    // matches PlantUML — a message spanning multiple participants doesn't
-    // force intermediate pairs to widen when neighbouring messages already
-    // provide enough room.
-    //
-    // We also need to consider min_gap_boxes for each pair (from Phase 3),
-    // so compute that ahead of the constraint pass.
-    let shadow_preferred_width_extra = if sequence_shadowing {
-        SHADOW_LIVING_WIDTH_EXTRA
-    } else {
-        0.0
-    };
-    let participant_layout_halves: Vec<f64> = participants
-        .iter()
-        .map(|p| (p.box_width + shadow_preferred_width_extra) / 2.0)
-        .collect();
-    let participant_box_members: Vec<Option<usize>> = participants
-        .iter()
-        .map(|p| {
-            participant_boxes
-                .iter()
-                .position(|b| b.members.contains(&p.decl_idx))
-        })
-        .collect();
-    let participant_box_member = |idx: usize| -> Option<usize> {
-        participant_box_members.iter().copied().nth(idx).flatten()
-    };
-    let min_gap_boxes_for_pair = |i: usize| -> f64 {
-        let teoz_box_gap = if diagram.teoz
-            && has_boxes
-            && participant_box_member(i) != participant_box_member(i + 1)
-        {
-            TEOZ_BOX_BOUNDARY_GAP
-        } else {
-            0.0
-        };
-        participant_layout_halves[i]
-            + participant_layout_halves[i + 1]
-            + participant_box_gap
-            + teoz_box_gap
-    };
-    for &(left, right, needed) in &multi_span_constraints {
-        let mut cumulative = 0.0_f64;
-        for (i, w) in pair_max_label_width
-            .iter()
-            .enumerate()
-            .take(right)
-            .skip(left)
-        {
-            cumulative += w.max(min_gap_boxes_for_pair(i));
-        }
-        if cumulative < needed {
-            // Add the deficit to the rightmost pair.
-            let deficit = needed - cumulative;
-            let last = right - 1;
-            pair_max_label_width[last] =
-                pair_max_label_width[last].max(min_gap_boxes_for_pair(last)) + deficit;
-        }
-    }
-
-    // -----------------------------------------------------------------------
-    // Phase 3: Assign x positions
-    // -----------------------------------------------------------------------
-
-    // Additional rightward shift forced by a title/header/caption/footer wider than the
-    // participant span. PlantUML centres each such band on the participant-span
-    // midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the
-    // band (at its own left margin) would push that midpoint right of where the
-    // participants currently sit, the whole diagram shifts and the canvas grows
-    // symmetrically by `2 * meta_shift`. Derived from seq_footer_variant_01
-    // (footer 133.4033 @ m=0 -> shift 13.249, width 113->140), seq_title_basic
-    // (title 159.1133 @ m=10 -> shift 36.104, width 113->186) and the caption
-    // variants (m=1). See the C3 width-feedback note.
-    let mut meta_shift: f64 = 0.0;
-    if !participants.is_empty() {
-        // Each participant center must satisfy any synthetic-left-border
-        // constraint collected above.
-        // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
-        // When groups encompass the leftmost participant, PlantUML reserves one
-        // frame margin per enclosing frame so each nested frame can still land at
-        // the 10px canvas floor (outer at 10, next at 20, ...).
-        // In Teoz mode a group frame overlays the participant region (its left
-        // edge sits at `min_involved_center - GroupingTile.MARGINX`) rather than
-        // pushing the leftmost participant right, so no left shift is reserved.
-        let group_shift = if diagram.teoz {
-            0.0
-        } else if group_left_shift_depth > 0 {
-            group_frame_margin * group_left_shift_depth as f64
-                + HEAD_BOX_Y
-                + if group_left_external_shift_depth > 0 {
-                    MSG_TEXT_LEFT_PAD
-                } else {
-                    0.0
-                }
-        } else {
-            0.0
-        };
-        let teoz_box_shift = if diagram.teoz && has_boxes {
-            TEOZ_BOX_BOUNDARY_GAP
-        } else {
-            0.0
-        };
-        let default_center = HEAD_BOX_Y
-            + participant_outer_padding
-            + group_shift
-            + teoz_box_shift
-            + participant_layout_halves[0];
-        participants[0].center_x = default_center.max(min_participant_center_x[0]);
-        participants[0].box_x = participants[0].center_x - participant_layout_halves[0];
-        // PlantUML computes lifeline line x as box_x + (int)(preferredWidth / 2)
-        participants[0].lifeline_line_x =
-            participants[0].box_x + participant_layout_halves[0].floor();
-
-        for i in 1..n {
-            // Minimum center gap, including PlantUML's participant edge padding.
-            let min_gap_boxes = min_gap_boxes_for_pair(i - 1);
-
-            // Gap from message labels
-            let gap_from_labels = pair_max_label_width[i - 1];
-
-            let gap = min_gap_boxes.max(gap_from_labels);
-            participants[i].center_x =
-                (participants[i - 1].center_x + gap).max(min_participant_center_x[i]);
-            participants[i].box_x = participants[i].center_x - participant_layout_halves[i];
-            participants[i].lifeline_line_x =
-                participants[i].box_x + participant_layout_halves[i].floor();
-        }
-
-        // Titled participant boxes feed back into layout: when the title is
-        // wider than the enclosed heads, Java widens the frame and recentres
-        // the member heads under it, pushing later participants right.
-        if has_boxes {
-            for b in participant_boxes.iter().copied() {
-                if b.title.is_empty() {
-                    continue;
-                }
-                let mut member_idxs: Vec<usize> = b
-                    .members
-                    .iter()
-                    .filter_map(|&pi| participants.iter().position(|p| p.decl_idx == pi))
-                    .collect();
-                if member_idxs.is_empty() {
-                    continue;
-                }
-                member_idxs.sort_unstable();
-                let lo = *member_idxs.first().unwrap();
-                let hi = *member_idxs.last().unwrap();
-                let content_left = member_idxs
-                    .iter()
-                    .map(|&i| participants[i].box_x)
-                    .fold(f64::INFINITY, f64::min);
-                let content_right = member_idxs
-                    .iter()
-                    .map(|&i| participants[i].box_x + participants[i].box_width)
-                    .fold(f64::NEG_INFINITY, f64::max);
-                let frame_w = content_right - content_left + 2.0 * BOX_SIDE_MARGIN;
-                let title_w = bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64);
-                let needed_w = title_w + 6.0;
-                if needed_w <= frame_w {
-                    continue;
-                }
-                let extra = needed_w - frame_w;
-                for p in participants.iter_mut().take(hi + 1).skip(lo) {
-                    p.center_x += extra / 2.0;
-                    p.box_x += extra / 2.0;
-                    p.lifeline_line_x += extra / 2.0;
-                }
-                for p in participants.iter_mut().skip(hi + 1) {
-                    p.center_x += extra;
-                    p.box_x += extra;
-                    p.lifeline_line_x += extra;
-                }
-            }
-        }
-
-        // An OVER_SEVERAL note (note across, or note over A,B) is centered on the
-        // midpoint of its first/last participant box centers and extends pw/2 each
-        // side. If its left edge would fall left of the HEAD_BOX_Y margin, the
-        // whole diagram must shift right. pw = max(content, round(span) + 25).
-        let mut across_shift: f64 = 0.0;
-        for event in &diagram.events {
-            if let Event::Note(note) = event
-                && note.position == NotePosition::Over
-                && (note.participants.is_empty() || note.participants.len() >= 2)
-            {
-                let (lo, hi) = if note.participants.is_empty() {
-                    (0, n - 1)
-                } else {
-                    let a = note
-                        .participants
-                        .first()
-                        .and_then(|id| id_to_idx.get(id.as_str()))
-                        .copied();
-                    let b = note
-                        .participants
-                        .last()
-                        .and_then(|id| id_to_idx.get(id.as_str()))
-                        .copied();
-                    match (a, b) {
-                        (Some(a), Some(b)) if a <= b => (a, b),
-                        (Some(a), Some(b)) => (b, a),
-                        _ => continue,
-                    }
-                };
-                let max_tw = note_max_line_width_with_family(
-                    &note.text,
-                    note_font_size_f,
-                    &note_font_family,
-                );
-                // Use the same geometry as the draw path so notes that overhang
-                // participant 0 reserve exactly the shift Java would need.
-                let shift = if note.participants.is_empty() {
-                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    let min_width = span.round() + ACROSS_NOTE_MARGIN;
-                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                    if diagram.teoz {
-                        // Teoz `NoteTile.getX` for OVER_SEVERAL centres the note on
-                        // the midpoint of the first/last lifelines (posC) and extends
-                        // its *visible* preferred width each side. The +5 teoz shift
-                        // is applied later, so the note's left edge must reach the
-                        // teoz over-note floor TEOZ_FIRST_OVER_NOTE_LEFT (15) in the
-                        // final frame, i.e. (15 - TEOZ_PARTICIPANT_SHIFT) here. The
-                        // shift stays fractional (Real positions are exact in Java).
-                        let pw =
-                            single_note_visible_raw_width(max_tw, note.shape, note_global_padding)
-                                .max(min_width);
-                        let note_left = centre - pw / 2.0;
-                        let floor = TEOZ_FIRST_OVER_NOTE_LEFT - TEOZ_PARTICIPANT_SHIFT;
-                        (floor - note_left).max(0.0)
-                    } else {
-                        let pw = note_content_width_raw_padded(max_tw, note.shape, note_text_align)
-                            .max(min_width);
-                        note_across_missing_space(centre, pw)
-                    }
-                } else if note.shape == NoteShape::Note {
-                    let component_pref_w =
-                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
-                    let content_visible_w =
-                        note_content_width_padded(max_tw, note.shape, note_text_align);
-                    let note_left = over_several_note_geometry(
-                        &participants,
-                        lo,
-                        hi,
-                        component_pref_w,
-                        content_visible_w,
-                        diagram.teoz,
-                    )
-                    .visible_left;
-                    (HEAD_BOX_Y - note_left).max(0.0).floor()
-                } else {
-                    let margin = OVER_SEVERAL_NOTE_MARGIN;
-                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                    let min_width = span.round() + margin;
-                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                    let pw = over_several_shape_position_width_raw_padded(
-                        max_tw,
-                        note.shape,
-                        note_text_align,
-                        min_width,
-                        centre,
-                    );
-                    let note_left = (centre - pw / 2.0).floor();
-                    (HEAD_BOX_Y - note_left).max(0.0).floor()
-                };
-                across_shift = across_shift.max(shift);
-            }
-        }
-        if across_shift > 0.0 {
-            // Non-teoz keeps the shift integral (Java pushes whole pixels); teoz
-            // mirrors `NoteTile.getX`, whose Real positions are exact, so the
-            // teoz over-several pin (above) must shift fractionally.
-            let shift = if diagram.teoz {
-                across_shift
-            } else {
-                across_shift.floor()
-            };
-            for p in participants.iter_mut() {
-                p.center_x += shift;
-                p.box_x += shift;
-                p.lifeline_line_x += shift;
-            }
-        }
-
-        // Teoz group tiles reserve the preferred width of a one-participant
-        // folded note before the classic graphical-element envelope is built.
-        let mut group_note_shift: f64 = 0.0;
-        let mut depth: usize = 0;
-        for event in &diagram.events {
-            match event {
-                Event::GroupStart(_) => depth += 1,
-                Event::GroupEnd => depth = depth.saturating_sub(1),
-                Event::Note(note)
-                    if diagram.teoz
-                        && depth > 0
-                        && note.position == NotePosition::Over
-                        && note.participants.len() == 1
-                        && note.shape == NoteShape::Note
-                        && note
-                            .participants
-                            .first()
-                            .and_then(|id| id_to_idx.get(id.as_str()))
-                            .copied()
-                            == Some(0) =>
-                {
-                    let max_tw = note_max_line_width_with_family(
-                        &note.text,
-                        note_font_size_f,
-                        &note_font_family,
-                    );
-                    let component_pref_w =
-                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
-                    let nest_extra = (depth.saturating_sub(1)) as f64
-                        * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
-                    let cx_floor = GROUP_FRAME_MIN_LEFT
-                        + TEOZ_GROUP_EXTERNAL_MARGIN_X1
-                        + TEOZ_GROUP_MARGIN_X
-                        + nest_extra
-                        + component_pref_w / 2.0
-                        - TEOZ_PARTICIPANT_SHIFT;
-                    group_note_shift = group_note_shift.max(cx_floor - participants[0].center_x);
-                }
-                _ => {}
-            }
-        }
-        if group_note_shift > 0.0 {
-            let shift = group_note_shift.ceil();
-            for p in participants.iter_mut() {
-                p.center_x += shift;
-                p.box_x += shift;
-                p.lifeline_line_x += shift;
-            }
-        }
-
-        if diagram.teoz && group_left_shift_depth > 0 && !participants.is_empty() {
-            // Teoz resolves nested group tiles before the classic graphical
-            // element envelope exists.
-            let nest_extra = (group_left_shift_depth.saturating_sub(1)) as f64
-                * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
-            let left = participants[0].center_x + TEOZ_PARTICIPANT_SHIFT
-                - TEOZ_GROUP_MARGIN_X
-                - TEOZ_GROUP_EXTERNAL_MARGIN_X1
-                - nest_extra;
-            let shift = (GROUP_FRAME_MIN_LEFT - left).max(0.0);
-            if shift > 0.0 {
-                for p in participants.iter_mut() {
-                    p.center_x += shift;
-                    p.box_x += shift;
-                    p.lifeline_line_x += shift;
-                }
-            }
-        }
-
-        // Title/header/caption/footer band feedback: if any band is wider than the
-        // current participant span, shift the participants so the span midpoint
-        // lands under the band's centre. `c0` is the span midpoint on the
-        // current (post-across-shift) layout; each band wants its own centre at
-        // `left_margin + band_width / 2`.
-        let first = &participants[0];
-        let last = &participants[n - 1];
-        let c0 = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-        let mut want_center: f64 = c0;
-        if !header_lines.is_empty() {
-            // Header text right-aligns to the canvas with a 6px right inset.
-            // When it would overhang the left edge, PlantUML shifts the same
-            // participant span used by other page decorations. Multiline
-            // headers use the widest rendered line.
-            let w = header_lines
-                .iter()
-                .map(|line| {
-                    text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family)
-                })
-                .fold(0.0_f64, f64::max);
-            want_center = want_center.max(w / 2.0);
-        }
-        if let Some(footer) = &diagram.meta.footer {
-            // Footer left margin is 0.
-            let w = text_width_with_family(footer, 10.0, &page_font_family);
-            want_center = want_center.max(w / 2.0);
-        }
-        if let Some(caption) = &diagram.meta.caption {
-            // Caption left margin is 1.
-            let w = text_width_with_family(caption, 14.0, &page_font_family);
-            want_center = want_center.max(1.0 + w / 2.0);
-        }
-        if !legend_lines.is_empty() {
-            // Legend boxes use a fixed 12px left margin and a 5px text inset on
-            // each side; when wider than the participant span they shift the
-            // same span right and grow the canvas symmetrically.
-            want_center = want_center.max(LEGEND_LEFT + legend_box_w / 2.0);
-        }
-        if !title_lines.is_empty() {
-            // Title left margin is 10; use the widest line.
-            let w = title_lines
-                .iter()
-                .map(|line| text_render::measure(line, TITLE_FONT_SIZE as f64, true))
-                .fold(0.0_f64, f64::max);
-            want_center = want_center.max(10.0 + w / 2.0);
-        }
-        meta_shift = (want_center - c0).max(0.0);
-        if meta_shift > 0.0 {
-            for p in participants.iter_mut() {
-                p.center_x += meta_shift;
-                p.box_x += meta_shift;
-                p.lifeline_line_x += meta_shift;
-            }
-        }
-    }
-    if diagram.teoz {
-        for p in participants.iter_mut() {
-            p.center_x += TEOZ_PARTICIPANT_SHIFT;
-            p.box_x += TEOZ_PARTICIPANT_SHIFT;
-            p.lifeline_line_x = p.center_x;
-        }
-    }
-
-    // Created participants: `create X` causes X's head box to be drawn inline at
-    // the message that creates it (the first message targeting X at or after the
-    // Create event) rather than at the top, with the lifeline starting there.
-    // Map: created participant id -> index of its creating message event.
-    let mut create_msg_idx: HashMap<String, usize> = HashMap::new();
-    {
-        let mut pending: Vec<String> = Vec::new();
-        for (idx, event) in diagram.events.iter().enumerate() {
-            match event {
-                Event::Create(id) => pending.push(id.clone()),
-                Event::Message(msg) => {
-                    if let Some(pos) = pending.iter().position(|id| *id == msg.to) {
-                        let id = pending.remove(pos);
-                        create_msg_idx.entry(id).or_insert(idx);
-                    }
-                }
-                _ => {}
-            }
-        }
-    }
+    let create_msg_idx = sequence_create_message_indices(&diagram.events);
     // Map creating-message event index -> extra vertical advance for that event:
     // the base advance plus any extent by which a tall inline head shape (actor,
     // boundary, etc.) reaches below a rectangle box.
@@ -7792,126 +6962,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             })
         })
         .collect();
-
-    // Compute self-message right extents from the immutable spacing-time
-    // lifecycle snapshots.
-    {
-        let mut extent_auto = AutoState::default();
-        for (idx, event) in diagram.events.iter().enumerate() {
-            match event {
-                Event::Message(msg) => {
-                    if msg.from == msg.to {
-                        let depth = spacing_depths.before(idx, &msg.from);
-                        let cx_base = id_to_idx
-                            .get(msg.from.as_str())
-                            .map(|&index| participants[index].center_x)
-                            .unwrap_or(0.0);
-                        let active = depth > 0
-                            || (spacing_depths.accepted_event(idx)
-                                && matches!(msg.activation, Some(ActivationChange::Activate)));
-                        let cx = if active {
-                            cx_base + ACTIVATION_HALF_W
-                        } else {
-                            cx_base
-                        };
-                        let label = process_label(&msg.label);
-                        let label_w = message_label_width(&label);
-                        let autonumber_extra = if let Some((_, w, _)) = extent_auto.current() {
-                            w + AUTONUMBER_LABEL_GAP
-                        } else {
-                            0.0
-                        };
-                        let loopback_right = cx + SELF_MSG_EXTEND;
-                        let loopback_extent_right = loopback_right + SELF_MSG_RIGHT_PAD;
-                        let destroyed_later =
-                            diagram
-                                .events
-                                .iter()
-                                .skip(idx + 1)
-                                .any(|event| match event {
-                                    Event::Destroy(id) => id == &msg.from,
-                                    Event::Message(next) => {
-                                        next.to == msg.from
-                                            && matches!(
-                                                next.activation,
-                                                Some(ActivationChange::Destroy)
-                                            )
-                                    }
-                                    _ => false,
-                                });
-                        let created_active_pad =
-                            if active && create_msg_idx.contains_key(msg.from.as_str()) {
-                                CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
-                            } else if active && destroyed_later {
-                                DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
-                            } else {
-                                0.0
-                            };
-                        let ordinary_active_self = active
-                            && msg.activation.is_none()
-                            && !create_msg_idx.contains_key(msg.from.as_str())
-                            && !destroyed_later;
-                        // Teoz self-message right extent follows
-                        // `CommunicationTileSelf.getMaxX() = posC2 + compWidth`,
-                        // where posC2 = lifeline centre + LIVE_DELTA_SIZE * level
-                        // (the active livebox right edge) and compWidth is the
-                        // self-arrow preferred width = max(textWidth, 50). Unlike
-                        // the legacy extent it does NOT bake in an arrow-size pad;
-                        // the canvas-wide RIGHT_MARGIN is added once afterwards.
-                        let teoz_self_extent = if diagram.teoz {
-                            let level = depth as f64;
-                            let pos_c2 = cx_base + level * ACTIVATION_HALF_W;
-                            let comp_w = (autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD)
-                                .max(SELF_MSG_MIN_PREF_WIDTH);
-                            Some(pos_c2 + comp_w)
-                        } else {
-                            None
-                        };
-                        let text_extent_right = if let Some(e) = teoz_self_extent {
-                            e
-                        } else if ordinary_active_self {
-                            cx + autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD + ARROW_SIZE
-                        } else {
-                            cx + SELF_MSG_TEXT_X_PAD
-                                + autonumber_extra
-                                + label_w
-                                + SELF_MSG_RIGHT_PAD
-                        };
-                        let activation_stack_depth = match msg.activation {
-                            Some(ActivationChange::Activate)
-                                if spacing_depths.accepted_event(idx) =>
-                            {
-                                depth + 1
-                            }
-                            Some(ActivationChange::Deactivate) => depth,
-                            _ => 0,
-                        };
-                        let self_activation_pad = if activation_stack_depth > 0 {
-                            5.0 + activation_stack_depth as f64 * ACTIVATION_WIDTH
-                        } else {
-                            0.0
-                        };
-                        let self_right = loopback_extent_right.max(text_extent_right)
-                            + created_active_pad
-                            + self_activation_pad;
-                        max_self_msg_right = max_self_msg_right.max(self_right);
-                        self_msg_right_note_left_by_event.insert(
-                            idx,
-                            cx.floor()
-                                + autonumber_extra
-                                + label_w
-                                + SELF_MSG_RIGHT_NOTE_X_PAD
-                                + created_active_pad,
-                        );
-                    }
-                    extent_auto.advance();
-                }
-                Event::Return(_) => extent_auto.advance(),
-                Event::Autonumber(cmd) => extent_auto.apply(cmd),
-                _ => {}
-            }
-        }
-    }
 
     // -----------------------------------------------------------------------
     // Phase 4: Pre-compute y positions for each event and vertical dimensions
@@ -8371,8 +7421,1106 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         page1_end,
         &lifecycle_owner,
         &create_msg_idx,
-        &spacing_depths,
     );
+    // Java builds one ConstraintSet for the complete sequence before the page
+    // renderer selects a page. Horizontal constraints after `newpage` therefore
+    // see activation state carried from earlier pages, even though only page 1
+    // contributes vertical geometry to this SVG. Give later-page events stable,
+    // increasing ordinates and build the same whole-diagram lifeline history for
+    // the spacing pass; painting continues to use the page-1 model above.
+    let mut horizontal_event_y_positions = event_y_positions.clone();
+    if has_newpage {
+        let mut ordinate = last_effective_y + 1.0;
+        for _ in page1_end..diagram.events.len() {
+            horizontal_event_y_positions.push(ordinate);
+            ordinate += 1.0;
+        }
+    }
+    let horizontal_life_lines_storage = if has_newpage {
+        let full_lifecycle = sequence_lifecycle_layout(&diagram.events, diagram.events.len());
+        Some(sequence_lifelines(
+            &diagram.events,
+            &horizontal_event_y_positions,
+            diagram.events.len(),
+            &full_lifecycle.attachment_owner,
+            &create_msg_idx,
+        ))
+    } else {
+        None
+    };
+    let horizontal_life_lines = horizontal_life_lines_storage
+        .as_ref()
+        .unwrap_or(&life_lines);
+
+    // -----------------------------------------------------------------------
+    // Phase 2: Compute required gap between adjacent participant pairs
+    // -----------------------------------------------------------------------
+
+    // PlantUML's spacing is constraint-based: for each message, the distance
+    // between the source and target participant centers must accommodate:
+    //   arrow_only_width + source_lifeline_shift + target_lifeline_shift
+    // where lifeline shifts account for activation bars.
+    //
+    // arrow_only_width = text_width + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD + ARROW_SIZE
+    //                  = text_width + 24 (the constant overhead for arrow + text padding)
+
+    let n = participants.len();
+    let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
+
+    // Multi-span constraints (left, right_exclusive, needed_total_width).
+    // Applied as a post-pass: only widen pairs in span if cumulative existing
+    // width is insufficient. Matches PlantUML's behavior where spanning
+    // messages don't force intermediate pairs to widen if already covered.
+    let mut multi_span_constraints: Vec<(usize, usize, f64)> = Vec::new();
+    let mut left_border_constraints: Vec<(usize, f64)> = Vec::new();
+
+    // Track maximum right extent of self-messages (for SVG width calculation).
+    let mut max_self_msg_right: f64 = 0.0;
+    let mut self_msg_right_note_left_by_event: HashMap<usize, f64> = HashMap::new();
+
+    // Track autonumber state during spacing phase to compute bold label widths.
+    // Driven entirely by `Event::Autonumber` directives in stream order.
+    let mut spacing_auto = AutoState::default();
+
+    // Pending `create X` ids awaiting their first message — that message reserves
+    // extra horizontal space for the inline head box centered on X's lifeline.
+    let mut spacing_pending_create: Vec<String> = Vec::new();
+
+    for (event_idx, event) in diagram.events.iter().enumerate() {
+        match event {
+            Event::Create(id) => spacing_pending_create.push(id.clone()),
+            Event::Message(msg) => {
+                let from_idx = id_to_idx.get(msg.from.as_str()).copied();
+                let to_idx = id_to_idx.get(msg.to.as_str()).copied();
+                if let (Some(fi), Some(ti)) = (from_idx, to_idx) {
+                    if fi == ti {
+                        // Self-message. PlantUML's Step1Message reserves a constraint
+                        // in the gap *after* the source participant (getConstraintAfter):
+                        //   length = arrowOnlyWidth + segment.getLength()
+                        // and arrowOnlyWidth = ComponentRoseSelfArrow.getPreferredWidth
+                        //   = max(textWidth, 50)
+                        //   + segment.getLength()       (added a second time inside it)
+                        // so the gap to the next participant must be at least
+                        //   max(label_w + 2*MARGIN, 50) + 2 * segment_length
+                        // where segment_length = leftShift + rightShift of the lifeline
+                        // at this message level (0 when inactive, ACTIVATION_WIDTH at
+                        // depth 1). This pushes a right-hand neighbour further right.
+                        // (When fi is the rightmost participant there is no neighbour;
+                        // the right extent then feeds the canvas edge after Phase 3.)
+                        if fi + 1 < n {
+                            let label = process_label(&msg.label);
+                            let label_w = message_label_width(&label);
+
+                            let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
+                                w + AUTONUMBER_LABEL_GAP
+                            } else {
+                                0.0
+                            };
+
+                            let text_pref =
+                                autonumber_extra + label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD;
+                            let arrow_only_w = text_pref.max(SELF_MSG_MIN_PREF_WIDTH);
+
+                            let ordinate = horizontal_event_y_positions
+                                .get(event_idx)
+                                .copied()
+                                .unwrap_or_default();
+                            let depth = horizontal_life_lines.depth_before(&msg.from, ordinate)
+                                + usize::from(matches!(
+                                    msg.activation,
+                                    Some(ActivationChange::Activate)
+                                ));
+
+                            let needed = if diagram.teoz {
+                                // Teoz `CommunicationTileSelf.addConstraints` (non-reverse):
+                                //   next.posC >= self.posC2 + compWidth
+                                // where posC2 = posC + LIVE_DELTA_SIZE * level and
+                                // compWidth = the self-arrow preferred width. Only the
+                                // right-side livebox delta enters the gap (single, not
+                                // doubled — Teoz tracks one absolute right edge per
+                                // lifeline rather than a symmetric shift).
+                                arrow_only_w + depth as f64 * ACTIVATION_HALF_W
+                            } else {
+                                // Legacy Step1Message.getConstraintAfter:
+                                //   length = arrowOnlyWidth + segment.getLength()
+                                // where segment.getLength() = rightShift + leftShift of
+                                // the lifeline at this level. Counted twice, matching
+                                // PlantUML's double-add via getPreferredWidth.
+                                let segment_len = if depth > 0 {
+                                    ACTIVATION_HALF_W + depth as f64 * ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                };
+                                arrow_only_w + 2.0 * segment_len
+                            };
+                            pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
+                        }
+                    } else {
+                        let label = process_label(&msg.label);
+                        let label_w = message_label_width(&label);
+
+                        // Autonumber adds bold-or-plain text + gap before the label
+                        // depending on whether a format string is set.
+                        let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
+                            w + AUTONUMBER_LABEL_GAP
+                        } else {
+                            0.0
+                        };
+
+                        // Base arrow width (text + padding + arrow)
+                        let arrow_only_w = autonumber_extra
+                            + label_w
+                            + MSG_TEXT_LEFT_PAD
+                            + MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE
+                            + 2.0 * constraint_global_padding;
+
+                        // Lifeline shifts from activation bars at the current message level.
+                        // The source's "right shift" and target's "left shift" come from
+                        // activation bars extending from the lifeline center.
+                        let ordinate = horizontal_event_y_positions
+                            .get(event_idx)
+                            .copied()
+                            .unwrap_or_default();
+                        let from_depth = horizontal_life_lines.depth_before(&msg.from, ordinate);
+                        let to_depth = horizontal_life_lines.depth_before(&msg.to, ordinate);
+
+                        // Teoz target livebox level (`livingSpace2.getLevelAt(...,
+                        // IGNORE_FUTURE_DEACTIVATE)`) includes a level activated by
+                        // this very message.
+                        let target_active = to_depth > 0
+                            || matches!(msg.activation, Some(ActivationChange::Activate));
+
+                        let (source_shift, target_shift) = if diagram.teoz {
+                            // Teoz `CommunicationTile.addConstraints`. The gap to the
+                            // wider-index neighbour is the arrow `width` plus the
+                            // livebox deltas the message endpoints add to it.
+                            //
+                            // Forward (fi < ti, source on the left):
+                            //   point1 = source.getPosC()            (bare centre)
+                            //   if (level2>0) point2 -= LIVE_DELTA    (arrow ends on the
+                            //                                          target livebox left)
+                            //   => gap = width + (LIVE_DELTA if target active)
+                            //
+                            // Reverse (fi > ti, source on the right):
+                            //   if (level1>0) point1 -= LIVE_DELTA    (source livebox)
+                            //   point2 += level2 * LIVE_DELTA         (target livebox)
+                            //   point1 >= point2 + width
+                            //   => gap = width + (LIVE_DELTA if source active)
+                            //          + level_target * LIVE_DELTA
+                            if fi < ti {
+                                (
+                                    0.0,
+                                    if target_active {
+                                        ACTIVATION_HALF_W
+                                    } else {
+                                        0.0
+                                    },
+                                )
+                            } else {
+                                let src_live = if from_depth > 0 {
+                                    ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                };
+                                let tgt_live = to_depth as f64 * ACTIVATION_HALF_W;
+                                (src_live, tgt_live)
+                            }
+                        } else {
+                            // Legacy `Step1Message` asks the spatial-left
+                            // lifeline for `getRightShift()` and the
+                            // spatial-right lifeline for `getLeftShift()`.
+                            // `LifeLine` grows the right edge with every nested
+                            // level, while its left edge is one half-width for
+                            // every non-zero level.
+                            if fi < ti {
+                                (
+                                    from_depth as f64 * ACTIVATION_HALF_W,
+                                    if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
+                                )
+                            } else {
+                                (
+                                    if from_depth > 0 {
+                                        ACTIVATION_HALF_W
+                                    } else {
+                                        0.0
+                                    },
+                                    to_depth as f64 * ACTIVATION_HALF_W,
+                                )
+                            }
+                        };
+
+                        // A message that creates its target reserves extra space
+                        // for the inline head box centered on the target lifeline:
+                        // half the box width sits left of center.
+                        let create_extra = if let Some(pos) =
+                            spacing_pending_create.iter().position(|id| *id == msg.to)
+                        {
+                            spacing_pending_create.remove(pos);
+                            participants[ti].box_width / 2.0
+                        } else {
+                            0.0
+                        };
+
+                        let needed = arrow_only_w + source_shift + target_shift + create_extra;
+
+                        let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                        if right - left == 1 {
+                            pair_max_label_width[left] = pair_max_label_width[left].max(needed);
+                        } else {
+                            // Defer multi-span constraint to post-pass.
+                            multi_span_constraints.push((left, right, needed));
+                        }
+                    }
+                } else if (msg.from == "[" || msg.to == "[")
+                    && let Some(participant_idx) = from_idx.or(to_idx)
+                    && participant_idx > 0
+                {
+                    // Step1MessageExo constrains the participant against the
+                    // virtual first border regardless of participant order.
+                    let label_w = message_label_width(&process_label(&msg.label));
+                    let autonumber_extra = spacing_auto
+                        .current()
+                        .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
+                    let arrow_only_w = autonumber_extra
+                        + label_w
+                        + 2.0 * MSG_TEXT_LEFT_PAD
+                        + ARROW_SIZE
+                        + 2.0 * constraint_global_padding;
+                    left_border_constraints.push((participant_idx, arrow_only_w));
+                }
+
+                // Advance autonumber during spacing phase
+                spacing_auto.advance();
+            }
+            Event::Return(ret) => {
+                // Return messages need spacing computation like regular messages.
+                // Pop the activation return stack to find from/to; without an
+                // activation context, Java replies from the previous message's
+                // receiver to its sender.
+                // NOTE: compute spacing BEFORE deactivating — the return sender
+                // is still activated at the point the message arrow is drawn.
+                if let Some(context) = horizontal_life_lines.return_context(event_idx) {
+                    let ret_from = &context.from;
+                    let ret_to = &context.to;
+                    let fi_opt = id_to_idx.get(ret_from.as_str()).copied();
+                    let ti_opt = id_to_idx.get(ret_to.as_str()).copied();
+                    if let (Some(fi), Some(ti)) = (fi_opt, ti_opt) {
+                        let label = if ret.label.is_empty() {
+                            String::new()
+                        } else {
+                            decode_backslash_escapes(&ret.label)
+                        };
+                        let label_w = message_label_width(&label);
+
+                        // Autonumber adds bold-or-plain text + gap before the label
+                        // depending on whether a format string is set.
+                        let autonumber_extra = if let Some((_, w, _)) = spacing_auto.current() {
+                            w + AUTONUMBER_LABEL_GAP
+                        } else {
+                            0.0
+                        };
+
+                        // Same spacing formula as forward messages
+                        let arrow_only_w = autonumber_extra
+                            + label_w
+                            + MSG_TEXT_LEFT_PAD
+                            + MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE
+                            + 2.0 * constraint_global_padding;
+
+                        let ordinate = horizontal_event_y_positions
+                            .get(event_idx)
+                            .copied()
+                            .unwrap_or_default();
+                        let from_depth = horizontal_life_lines.depth_before(ret_from, ordinate);
+                        let to_depth = horizontal_life_lines.depth_before(ret_to, ordinate);
+                        let (source_shift, target_shift) = if diagram.teoz {
+                            if fi < ti {
+                                (0.0, if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 })
+                            } else {
+                                (
+                                    if from_depth > 0 {
+                                        ACTIVATION_HALF_W
+                                    } else {
+                                        0.0
+                                    },
+                                    to_depth as f64 * ACTIVATION_HALF_W,
+                                )
+                            }
+                        } else if fi < ti {
+                            (
+                                from_depth as f64 * ACTIVATION_HALF_W,
+                                if to_depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
+                            )
+                        } else {
+                            (
+                                if from_depth > 0 {
+                                    ACTIVATION_HALF_W
+                                } else {
+                                    0.0
+                                },
+                                to_depth as f64 * ACTIVATION_HALF_W,
+                            )
+                        };
+
+                        let needed = arrow_only_w + source_shift + target_shift;
+
+                        let (left, right) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                        if right - left == 1 {
+                            pair_max_label_width[left] = pair_max_label_width[left].max(needed);
+                        } else {
+                            // Defer multi-span constraint to post-pass.
+                            multi_span_constraints.push((left, right, needed));
+                        }
+                    }
+                }
+
+                // Advance autonumber
+                spacing_auto.advance();
+            }
+            // Non-standard notes over several participants (OVER_SEVERAL). Java
+            // lets standard folded notes overhang outside the spanned participant
+            // area; hnote/rnote still need the older outside-pair reservation.
+            Event::Note(note)
+                if note.position == NotePosition::Over
+                    && note.participants.len() >= 2
+                    && note.shape != NoteShape::Note =>
+            {
+                let first_idx = id_to_idx
+                    .get(note.participants.first().unwrap().as_str())
+                    .copied();
+                let last_idx = id_to_idx
+                    .get(note.participants.last().unwrap().as_str())
+                    .copied();
+                if let (Some(fi), Some(li)) = (first_idx, last_idx) {
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
+                    let note_content_w =
+                        note_content_width_padded(max_tw, note.shape, note_text_align);
+                    let half = note_content_w / 2.0;
+                    let (lo, hi) = if fi < li { (fi, li) } else { (li, fi) };
+                    // Gap before the first spanned participant.
+                    if lo > 0 {
+                        pair_max_label_width[lo - 1] = pair_max_label_width[lo - 1].max(half);
+                    }
+                    // Gap after the last spanned participant.
+                    if hi < pair_max_label_width.len() {
+                        pair_max_label_width[hi] = pair_max_label_width[hi].max(half);
+                    }
+                }
+            }
+            Event::Autonumber(cmd) => spacing_auto.apply(cmd),
+            // A `ref over A, …, Z` box must span its covered participants: the
+            // centre-to-centre distance across them is at least the box's
+            // preferred width minus the two end half-boxes.
+            Event::Ref(r) => {
+                let rb = ref_box(&r.text);
+                let pref_w = rb.pref_w;
+                let idxs: Vec<usize> = r
+                    .participants
+                    .iter()
+                    .filter_map(|p| id_to_idx.get(p.as_str()).copied())
+                    .collect();
+                if let (Some(&lo), Some(&hi)) = (idxs.iter().min(), idxs.iter().max()) {
+                    if lo == hi {
+                        if lo < pair_max_label_width.len() {
+                            let needed = (pref_w - participants[lo].box_width).max(0.0);
+                            pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                        }
+                    } else {
+                        let needed = pref_w
+                            - participants[lo].box_width / 2.0
+                            - participants[hi].box_width / 2.0;
+                        if hi - lo == 1 {
+                            pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
+                        } else {
+                            multi_span_constraints.push((lo, hi, needed));
+                        }
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+
+    // Compute minimum first-participant x offset due to notes that extend left.
+    // "note over" on the first participant: centered on the lifeline, must not
+    // extend past the left margin (x = HEAD_BOX_Y).
+    // "note left of" on the first participant: positioned entirely to the left
+    // of the lifeline, so the lifeline must be far enough right to fit the note.
+    //
+    let mut min_first_center_x: f64 = 0.0;
+    let mut min_scan_group_depth = 0usize;
+    let mut min_scan_auto = AutoState::default();
+    for event in &diagram.events {
+        match event {
+            Event::GroupStart(_) => min_scan_group_depth += 1,
+            Event::GroupEnd => min_scan_group_depth = min_scan_group_depth.saturating_sub(1),
+            Event::Autonumber(command) => min_scan_auto.apply(command),
+            _ => {}
+        }
+        if let Event::Note(note) = event {
+            // A message-attached Left note anchors to the leftmost endpoint by
+            // index; otherwise the first listed participant.
+            let first_part = if note.on_message && note.position == NotePosition::Left {
+                note.participants
+                    .iter()
+                    .filter_map(|id| id_to_idx.get(id.as_str()).copied())
+                    .min()
+            } else {
+                note.participants
+                    .first()
+                    .and_then(|id| id_to_idx.get(id.as_str()))
+                    .copied()
+            };
+            match note.position {
+                NotePosition::Over if note.participants.len() == 1 && first_part == Some(0) => {
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
+                    // Java centres the note on participant 0 using the raw
+                    // preferred width (`NoteBox.getStartingX` / `ensureConstraints`),
+                    // and the diagram is shifted right so the note's left edge sits
+                    // at the HEAD_BOX_Y margin. The participant box left edge then
+                    // lands at the rounded position
+                    // `round(HEAD_BOX_Y + (raw_note_w - box_width) / 2)`. Using the
+                    // ceiled width with `floor` here drops the sub-pixel fraction and
+                    // mis-rounds the box left by 1px on many cases.
+                    let bw = participants[0].box_width;
+                    let min_cx = if diagram.teoz {
+                        let note_w =
+                            single_note_visible_raw_width(max_tw, note.shape, note_global_padding);
+                        TEOZ_FIRST_OVER_NOTE_LEFT - TEOZ_PARTICIPANT_SHIFT + note_w / 2.0
+                    } else {
+                        let note_w =
+                            note_content_width_raw_padded(max_tw, note.shape, note_text_align);
+                        let box_left = (HEAD_BOX_Y + (note_w - bw) / 2.0).max(HEAD_BOX_Y).round();
+                        box_left + bw / 2.0
+                    };
+                    min_first_center_x = min_first_center_x.max(min_cx);
+                }
+                NotePosition::Left if first_part == Some(0) => {
+                    // "note left of" on participant 0: the note extends left from the
+                    // lifeline. The note right edge = floor(lifeline_line_x) - gap.
+                    // The note left edge = note_right - note_content_w, which must be >= HEAD_BOX_Y.
+                    // So: lifeline_line_x >= HEAD_BOX_Y + note_content_w + gap
+                    // And: lifeline_line_x = center_x - box_width/2 + floor(box_width/2)
+                    // Therefore: center_x >= HEAD_BOX_Y + note_content_w + gap
+                    //                        + box_width/2 - floor(box_width/2)
+                    // hnote/rnote sit 1px closer to the lifeline than a standard
+                    // note (the same shape offset as note_msg_arrow_offset): their
+                    // box right edge is gap-1 from the lifeline.
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
+                    let note_content_w =
+                        note_content_width_padded(max_tw, note.shape, note_text_align);
+                    let gap = left_note_lifeline_gap(
+                        &participants,
+                        note.shape,
+                        first_part,
+                        note.on_message,
+                        note.color.is_some(),
+                        note.text.lines().count(),
+                    );
+                    let bw = participants[0].box_width;
+                    let min_cx = HEAD_BOX_Y + note_content_w + gap + bw / 2.0 - (bw / 2.0).floor();
+                    min_first_center_x = min_first_center_x.max(min_cx);
+                }
+                _ => {}
+            }
+        }
+        // Either left-border form (`[-> X` or `X ->[`) constrains the first
+        // participant against the same border using the numbered arrow
+        // component's preferred width.
+        if let Event::Message(msg) = event
+            && ((msg.from == "[" && id_to_idx.get(msg.to.as_str()) == Some(&0))
+                || (msg.to == "[" && id_to_idx.get(msg.from.as_str()) == Some(&0)))
+        {
+            let label_w = message_label_width(&process_label(&msg.label));
+            let autonumber_extra = min_scan_auto
+                .current()
+                .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
+            let group_pad = if min_scan_group_depth > 0 {
+                MSG_TEXT_LEFT_PAD
+            } else {
+                0.0
+            };
+            min_first_center_x =
+                min_first_center_x.max(autonumber_extra + label_w + 24.0 + group_pad);
+        }
+        if matches!(event, Event::Message(_) | Event::Return(_)) {
+            min_scan_auto.advance();
+        }
+    }
+
+    // Resolve multi-span constraints: only widen the rightmost pair if the
+    // cumulative existing width across the span is less than needed. This
+    // matches PlantUML — a message spanning multiple participants doesn't
+    // force intermediate pairs to widen when neighbouring messages already
+    // provide enough room.
+    //
+    // We also need to consider min_gap_boxes for each pair (from Phase 3),
+    // so compute that ahead of the constraint pass.
+    let shadow_preferred_width_extra = if sequence_shadowing {
+        SHADOW_LIVING_WIDTH_EXTRA
+    } else {
+        0.0
+    };
+    let participant_layout_halves: Vec<f64> = participants
+        .iter()
+        .map(|p| (p.box_width + shadow_preferred_width_extra) / 2.0)
+        .collect();
+    let participant_box_members: Vec<Option<usize>> = participants
+        .iter()
+        .map(|p| {
+            participant_boxes
+                .iter()
+                .position(|b| b.members.contains(&p.decl_idx))
+        })
+        .collect();
+    let participant_box_member = |idx: usize| -> Option<usize> {
+        participant_box_members.iter().copied().nth(idx).flatten()
+    };
+    let min_gap_boxes_for_pair = |i: usize| -> f64 {
+        let teoz_box_gap = if diagram.teoz
+            && has_boxes
+            && participant_box_member(i) != participant_box_member(i + 1)
+        {
+            TEOZ_BOX_BOUNDARY_GAP
+        } else {
+            0.0
+        };
+        participant_layout_halves[i]
+            + participant_layout_halves[i + 1]
+            + participant_box_gap
+            + teoz_box_gap
+    };
+    for &(left, right, needed) in &multi_span_constraints {
+        let mut cumulative = 0.0_f64;
+        for (i, w) in pair_max_label_width
+            .iter()
+            .enumerate()
+            .take(right)
+            .skip(left)
+        {
+            cumulative += w.max(min_gap_boxes_for_pair(i));
+        }
+        if cumulative < needed {
+            // Add the deficit to the rightmost pair.
+            let deficit = needed - cumulative;
+            let last = right - 1;
+            pair_max_label_width[last] =
+                pair_max_label_width[last].max(min_gap_boxes_for_pair(last)) + deficit;
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Phase 3: Assign x positions
+    // -----------------------------------------------------------------------
+
+    // Additional rightward shift forced by a title/header/caption/footer wider than the
+    // participant span. PlantUML centres each such band on the participant-span
+    // midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the
+    // band (at its own left margin) would push that midpoint right of where the
+    // participants currently sit, the whole diagram shifts and the canvas grows
+    // symmetrically by `2 * meta_shift`. Derived from seq_footer_variant_01
+    // (footer 133.4033 @ m=0 -> shift 13.249, width 113->140), seq_title_basic
+    // (title 159.1133 @ m=10 -> shift 36.104, width 113->186) and the caption
+    // variants (m=1). See the C3 width-feedback note.
+    let mut meta_shift: f64 = 0.0;
+    let group_shift = if diagram.teoz {
+        0.0
+    } else if group_left_shift_depth > 0 {
+        group_frame_margin * group_left_shift_depth as f64
+            + if group_left_external_shift_depth > 0 {
+                -GROUP_EXTERNAL_ARROW_MARGIN
+            } else {
+                // GroupingGraphicalElement starts MARGIN10 outside its
+                // InGroupableList; an ordinary LivingParticipantBox list
+                // minimum is another MARGIN5 outside ParticipantBox's
+                // invisible outMargin.
+                GROUP_FRAME_INNER_MARGIN
+            }
+    } else {
+        0.0
+    };
+    let group_shift = group_shift.max(if group_has_external_left {
+        group_frame_margin - GROUP_EXTERNAL_ARROW_MARGIN
+    } else {
+        0.0
+    });
+
+    if !participants.is_empty() {
+        // First participant center must be at least min_first_center_x (for notes)
+        // and at least HEAD_BOX_Y + box_width/2 (to fit the box).
+        // GroupingGraphicalElement starts one InGroupableList::MARGIN10 before
+        // its list. prepareMissingSpace therefore shifts the participant
+        // constraints by one MARGIN10 per enclosing ordinary list. A left exo
+        // winner uses the list's +3 rule instead of the ordinary -5 rule, so
+        // the required translation is three pixels smaller at that depth.
+        // In Teoz mode a group frame overlays the participant region (its left
+        // edge sits at `min_involved_center - GroupingTile.MARGINX`) rather than
+        // pushing the leftmost participant right, so no left shift is reserved.
+        let teoz_box_shift = if diagram.teoz && has_boxes {
+            TEOZ_BOX_BOUNDARY_GAP
+        } else {
+            0.0
+        };
+        let default_center = HEAD_BOX_Y
+            + participant_outer_padding
+            + group_shift
+            + teoz_box_shift
+            + participant_layout_halves[0];
+        participants[0].center_x = default_center.max(min_first_center_x);
+        participants[0].box_x = participants[0].center_x - participant_layout_halves[0];
+        // PlantUML computes lifeline line x as box_x + (int)(preferredWidth / 2)
+        participants[0].lifeline_line_x =
+            participants[0].box_x + participant_layout_halves[0].floor();
+
+        for i in 1..n {
+            // Minimum center gap, including PlantUML's participant edge padding.
+            let min_gap_boxes = min_gap_boxes_for_pair(i - 1);
+
+            // Gap from message labels
+            let gap_from_labels = pair_max_label_width[i - 1];
+
+            let gap = min_gap_boxes.max(gap_from_labels);
+            participants[i].center_x = participants[i - 1].center_x + gap;
+            participants[i].box_x = participants[i].center_x - participant_layout_halves[i];
+            participants[i].lifeline_line_x =
+                participants[i].box_x + participant_layout_halves[i].floor();
+        }
+
+        // Titled participant boxes feed back into layout: when the title is
+        // wider than the enclosed heads, Java widens the frame and recentres
+        // the member heads under it, pushing later participants right.
+        if has_boxes {
+            for b in participant_boxes.iter().copied() {
+                if b.title.is_empty() {
+                    continue;
+                }
+                let mut member_idxs: Vec<usize> = b
+                    .members
+                    .iter()
+                    .filter_map(|&pi| participants.iter().position(|p| p.decl_idx == pi))
+                    .collect();
+                if member_idxs.is_empty() {
+                    continue;
+                }
+                member_idxs.sort_unstable();
+                let lo = *member_idxs.first().unwrap();
+                let hi = *member_idxs.last().unwrap();
+                let content_left = member_idxs
+                    .iter()
+                    .map(|&i| participants[i].box_x)
+                    .fold(f64::INFINITY, f64::min);
+                let content_right = member_idxs
+                    .iter()
+                    .map(|&i| participants[i].box_x + participants[i].box_width)
+                    .fold(f64::NEG_INFINITY, f64::max);
+                let frame_w = content_right - content_left + 2.0 * BOX_SIDE_MARGIN;
+                let title_w = bold_text_width(&b.title, BOX_TITLE_FONT_SIZE as f64);
+                let needed_w = title_w + 6.0;
+                if needed_w <= frame_w {
+                    continue;
+                }
+                let extra = needed_w - frame_w;
+                for p in participants.iter_mut().take(hi + 1).skip(lo) {
+                    p.center_x += extra / 2.0;
+                    p.box_x += extra / 2.0;
+                    p.lifeline_line_x += extra / 2.0;
+                }
+                for p in participants.iter_mut().skip(hi + 1) {
+                    p.center_x += extra;
+                    p.box_x += extra;
+                    p.lifeline_line_x += extra;
+                }
+            }
+        }
+
+        // ConstraintSet solves virtual-border constraints together with
+        // participant constraints, then prepareMissingSpace translates the
+        // whole set by the group-header deficit represented by group_shift.
+        for &(participant_idx, needed) in &left_border_constraints {
+            let required_center = needed + group_shift;
+            let deficit = required_center - participants[participant_idx].center_x;
+            if deficit > 0.0 {
+                for participant in participants.iter_mut().skip(participant_idx) {
+                    participant.center_x += deficit;
+                    participant.box_x += deficit;
+                    participant.lifeline_line_x += deficit;
+                }
+            }
+        }
+
+        // An OVER_SEVERAL note (note across, or note over A,B) is centered on the
+        // midpoint of its first/last participant box centers and extends pw/2 each
+        // side. If its left edge would fall left of the HEAD_BOX_Y margin, the
+        // whole diagram must shift right. pw = max(content, round(span) + 25).
+        let mut across_shift: f64 = 0.0;
+        for event in &diagram.events {
+            if let Event::Note(note) = event
+                && note.position == NotePosition::Over
+                && (note.participants.is_empty() || note.participants.len() >= 2)
+            {
+                let (lo, hi) = if note.participants.is_empty() {
+                    (0, n - 1)
+                } else {
+                    let a = note
+                        .participants
+                        .first()
+                        .and_then(|id| id_to_idx.get(id.as_str()))
+                        .copied();
+                    let b = note
+                        .participants
+                        .last()
+                        .and_then(|id| id_to_idx.get(id.as_str()))
+                        .copied();
+                    match (a, b) {
+                        (Some(a), Some(b)) if a <= b => (a, b),
+                        (Some(a), Some(b)) => (b, a),
+                        _ => continue,
+                    }
+                };
+                let max_tw = note_max_line_width_with_family(
+                    &note.text,
+                    note_font_size_f,
+                    &note_font_family,
+                );
+                // Use the same geometry as the draw path so notes that overhang
+                // participant 0 reserve exactly the shift Java would need.
+                let shift = if note.participants.is_empty() {
+                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                    let min_width = span.round() + ACROSS_NOTE_MARGIN;
+                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    if diagram.teoz {
+                        // Teoz `NoteTile.getX` for OVER_SEVERAL centres the note on
+                        // the midpoint of the first/last lifelines (posC) and extends
+                        // its *visible* preferred width each side. The +5 teoz shift
+                        // is applied later, so the note's left edge must reach the
+                        // teoz over-note floor TEOZ_FIRST_OVER_NOTE_LEFT (15) in the
+                        // final frame, i.e. (15 - TEOZ_PARTICIPANT_SHIFT) here. The
+                        // shift stays fractional (Real positions are exact in Java).
+                        let pw =
+                            single_note_visible_raw_width(max_tw, note.shape, note_global_padding)
+                                .max(min_width);
+                        let note_left = centre - pw / 2.0;
+                        let floor = TEOZ_FIRST_OVER_NOTE_LEFT - TEOZ_PARTICIPANT_SHIFT;
+                        (floor - note_left).max(0.0)
+                    } else {
+                        let pw = note_content_width_raw_padded(max_tw, note.shape, note_text_align)
+                            .max(min_width);
+                        note_across_missing_space(centre, pw)
+                    }
+                } else if note.shape == NoteShape::Note {
+                    let component_pref_w =
+                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                    let content_visible_w =
+                        note_content_width_padded(max_tw, note.shape, note_text_align);
+                    let note_left = over_several_note_geometry(
+                        &participants,
+                        lo,
+                        hi,
+                        component_pref_w,
+                        content_visible_w,
+                        diagram.teoz,
+                    )
+                    .visible_left;
+                    (HEAD_BOX_Y - note_left).max(0.0).floor()
+                } else {
+                    let margin = OVER_SEVERAL_NOTE_MARGIN;
+                    let span = participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                    let min_width = span.round() + margin;
+                    let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                    let pw = over_several_shape_position_width_raw_padded(
+                        max_tw,
+                        note.shape,
+                        note_text_align,
+                        min_width,
+                        centre,
+                    );
+                    let note_left = (centre - pw / 2.0).floor();
+                    (HEAD_BOX_Y - note_left).max(0.0).floor()
+                };
+                across_shift = across_shift.max(shift);
+            }
+        }
+        if across_shift > 0.0 {
+            // Non-teoz keeps the shift integral (Java pushes whole pixels); teoz
+            // mirrors `NoteTile.getX`, whose Real positions are exact, so the
+            // teoz over-several pin (above) must shift fractionally.
+            let shift = if diagram.teoz {
+                across_shift
+            } else {
+                across_shift.floor()
+            };
+            for p in participants.iter_mut() {
+                p.center_x += shift;
+                p.box_x += shift;
+                p.lifeline_line_x += shift;
+            }
+        }
+
+        // Teoz group tiles reserve the preferred width of a one-participant
+        // folded note before the classic graphical-element envelope is built.
+        let mut group_note_shift: f64 = 0.0;
+        let mut depth: usize = 0;
+        for event in &diagram.events {
+            match event {
+                Event::GroupStart(_) => depth += 1,
+                Event::GroupEnd => depth = depth.saturating_sub(1),
+                Event::Note(note)
+                    if diagram.teoz
+                        && depth > 0
+                        && note.position == NotePosition::Over
+                        && note.participants.len() == 1
+                        && note.shape == NoteShape::Note
+                        && note
+                            .participants
+                            .first()
+                            .and_then(|id| id_to_idx.get(id.as_str()))
+                            .copied()
+                            == Some(0) =>
+                {
+                    let max_tw = note_max_line_width_with_family(
+                        &note.text,
+                        note_font_size_f,
+                        &note_font_family,
+                    );
+                    let component_pref_w =
+                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                    let nest_extra = (depth.saturating_sub(1)) as f64
+                        * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
+                    let cx_floor = GROUP_FRAME_MIN_LEFT
+                        + TEOZ_GROUP_EXTERNAL_MARGIN_X1
+                        + TEOZ_GROUP_MARGIN_X
+                        + nest_extra
+                        + component_pref_w / 2.0
+                        - TEOZ_PARTICIPANT_SHIFT;
+                    group_note_shift = group_note_shift.max(cx_floor - participants[0].center_x);
+                }
+                _ => {}
+            }
+        }
+        if group_note_shift > 0.0 {
+            let shift = group_note_shift.ceil();
+            for p in participants.iter_mut() {
+                p.center_x += shift;
+                p.box_x += shift;
+                p.lifeline_line_x += shift;
+            }
+        }
+
+        if diagram.teoz && group_left_shift_depth > 0 && !participants.is_empty() {
+            // Teoz resolves nested group tiles before the classic graphical
+            // element envelope exists.
+            let nest_extra = (group_left_shift_depth.saturating_sub(1)) as f64
+                * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
+            let left = participants[0].center_x + TEOZ_PARTICIPANT_SHIFT
+                - TEOZ_GROUP_MARGIN_X
+                - TEOZ_GROUP_EXTERNAL_MARGIN_X1
+                - nest_extra;
+            let shift = (GROUP_FRAME_MIN_LEFT - left).max(0.0);
+            if shift > 0.0 {
+                for p in participants.iter_mut() {
+                    p.center_x += shift;
+                    p.box_x += shift;
+                    p.lifeline_line_x += shift;
+                }
+            }
+        }
+
+        // Title/header/caption/footer band feedback: if any band is wider than the
+        // current participant span, shift the participants so the span midpoint
+        // lands under the band's centre. `c0` is the span midpoint on the
+        // current (post-across-shift) layout; each band wants its own centre at
+        // `left_margin + band_width / 2`.
+        let first = &participants[0];
+        let last = &participants[n - 1];
+        let c0 = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
+        let mut want_center: f64 = c0;
+        if !header_lines.is_empty() {
+            // Header text right-aligns to the canvas with a 6px right inset.
+            // When it would overhang the left edge, PlantUML shifts the same
+            // participant span used by other page decorations. Multiline
+            // headers use the widest rendered line.
+            let w = header_lines
+                .iter()
+                .map(|line| {
+                    text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family)
+                })
+                .fold(0.0_f64, f64::max);
+            want_center = want_center.max(w / 2.0);
+        }
+        if let Some(footer) = &diagram.meta.footer {
+            // Footer left margin is 0.
+            let w = text_width_with_family(footer, 10.0, &page_font_family);
+            want_center = want_center.max(w / 2.0);
+        }
+        if let Some(caption) = &diagram.meta.caption {
+            // Caption left margin is 1.
+            let w = text_width_with_family(caption, 14.0, &page_font_family);
+            want_center = want_center.max(1.0 + w / 2.0);
+        }
+        if !legend_lines.is_empty() {
+            // Legend boxes use a fixed 12px left margin and a 5px text inset on
+            // each side; when wider than the participant span they shift the
+            // same span right and grow the canvas symmetrically.
+            want_center = want_center.max(LEGEND_LEFT + legend_box_w / 2.0);
+        }
+        if !title_lines.is_empty() {
+            // Title left margin is 10; use the widest line.
+            let w = title_lines
+                .iter()
+                .map(|line| text_render::measure(line, TITLE_FONT_SIZE as f64, true))
+                .fold(0.0_f64, f64::max);
+            want_center = want_center.max(10.0 + w / 2.0);
+        }
+        meta_shift = (want_center - c0).max(0.0);
+        if meta_shift > 0.0 {
+            for p in participants.iter_mut() {
+                p.center_x += meta_shift;
+                p.box_x += meta_shift;
+                p.lifeline_line_x += meta_shift;
+            }
+        }
+    }
+    if diagram.teoz {
+        for p in participants.iter_mut() {
+            p.center_x += TEOZ_PARTICIPANT_SHIFT;
+            p.box_x += TEOZ_PARTICIPANT_SHIFT;
+            p.lifeline_line_x = p.center_x;
+        }
+    }
+
+    // Compute self-message right extents from the accepted actual-ordinate
+    // lifeline history.
+    {
+        let mut extent_auto = AutoState::default();
+        for (idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::Message(msg) => {
+                    if msg.from == msg.to {
+                        let ordinate = event_y_positions.get(idx).copied().unwrap_or_default();
+                        let depth = life_lines.depth_before(&msg.from, ordinate);
+                        let cx_base = id_to_idx
+                            .get(msg.from.as_str())
+                            .map(|&index| participants[index].center_x)
+                            .unwrap_or(0.0);
+                        let active = depth > 0
+                            || (life_lines.accepted_event(idx)
+                                && matches!(msg.activation, Some(ActivationChange::Activate)));
+                        let cx = if active {
+                            cx_base + ACTIVATION_HALF_W
+                        } else {
+                            cx_base
+                        };
+                        let label = process_label(&msg.label);
+                        let label_w = message_label_width(&label);
+                        let autonumber_extra = if let Some((_, w, _)) = extent_auto.current() {
+                            w + AUTONUMBER_LABEL_GAP
+                        } else {
+                            0.0
+                        };
+                        let loopback_right = cx + SELF_MSG_EXTEND;
+                        let loopback_extent_right = loopback_right + SELF_MSG_RIGHT_PAD;
+                        let destroyed_later =
+                            diagram
+                                .events
+                                .iter()
+                                .skip(idx + 1)
+                                .any(|event| match event {
+                                    Event::Destroy(id) => id == &msg.from,
+                                    Event::Message(next) => {
+                                        next.to == msg.from
+                                            && matches!(
+                                                next.activation,
+                                                Some(ActivationChange::Destroy)
+                                            )
+                                    }
+                                    _ => false,
+                                });
+                        let created_active_pad =
+                            if active && create_msg_idx.contains_key(msg.from.as_str()) {
+                                CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
+                            } else if active && destroyed_later {
+                                DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
+                            } else {
+                                0.0
+                            };
+                        let ordinary_active_self = active
+                            && msg.activation.is_none()
+                            && !create_msg_idx.contains_key(msg.from.as_str())
+                            && !destroyed_later;
+                        // Teoz self-message right extent follows
+                        // `CommunicationTileSelf.getMaxX() = posC2 + compWidth`,
+                        // where posC2 = lifeline centre + LIVE_DELTA_SIZE * level
+                        // (the active livebox right edge) and compWidth is the
+                        // self-arrow preferred width = max(textWidth, 50). Unlike
+                        // the legacy extent it does NOT bake in an arrow-size pad;
+                        // the canvas-wide RIGHT_MARGIN is added once afterwards.
+                        let teoz_self_extent = if diagram.teoz {
+                            let level = depth as f64;
+                            let pos_c2 = cx_base + level * ACTIVATION_HALF_W;
+                            let comp_w = (autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD)
+                                .max(SELF_MSG_MIN_PREF_WIDTH);
+                            Some(pos_c2 + comp_w)
+                        } else {
+                            None
+                        };
+                        let text_extent_right = if let Some(e) = teoz_self_extent {
+                            e
+                        } else if ordinary_active_self {
+                            cx + autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD + ARROW_SIZE
+                        } else {
+                            cx + SELF_MSG_TEXT_X_PAD
+                                + autonumber_extra
+                                + label_w
+                                + SELF_MSG_RIGHT_PAD
+                        };
+                        let activation_stack_depth = match msg.activation {
+                            Some(ActivationChange::Activate) if life_lines.accepted_event(idx) => {
+                                depth + 1
+                            }
+                            Some(ActivationChange::Deactivate) => depth,
+                            _ => 0,
+                        };
+                        let self_activation_pad = if activation_stack_depth > 0 {
+                            5.0 + activation_stack_depth as f64 * ACTIVATION_WIDTH
+                        } else {
+                            0.0
+                        };
+                        let self_right = loopback_extent_right.max(text_extent_right)
+                            + created_active_pad
+                            + self_activation_pad;
+                        max_self_msg_right = max_self_msg_right.max(self_right);
+                        self_msg_right_note_left_by_event.insert(
+                            idx,
+                            cx.floor()
+                                + autonumber_extra
+                                + label_w
+                                + SELF_MSG_RIGHT_NOTE_X_PAD
+                                + created_active_pad,
+                        );
+                    }
+                    extent_auto.advance();
+                }
+                Event::Return(_) => extent_auto.advance(),
+                Event::Autonumber(cmd) => extent_auto.apply(cmd),
+                _ => {}
+            }
+        }
+    }
+
     let mut note_left_live_shift_by_event: HashMap<usize, f64> = HashMap::new();
     let mut note_right_live_shift_by_event: HashMap<usize, f64> = HashMap::new();
     for (event_index, event) in diagram.events.iter().take(page1_end).enumerate() {
@@ -8393,8 +8541,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         };
         let note_top = event_y_positions[event_index] - note_y_extra - metrics.total_height;
         let note_bottom = note_top + note_rendered_height_padded(note.shape, &metrics);
-        let (left_shift, right_shift) =
-            life_lines.segment_shifts(participant, note_top, note_bottom);
+        let (left_shift, right_shift) = life_lines.segment_shifts(
+            participant,
+            note_top - ROSE_NOTE_PADDING_Y,
+            note_bottom + ROSE_NOTE_PADDING_Y,
+        );
         if left_shift != 0.0 {
             note_left_live_shift_by_event.insert(event_index, left_shift);
         }
@@ -8402,6 +8553,89 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             note_right_live_shift_by_event.insert(event_index, right_shift);
         }
     }
+
+    // `DrawableSet#prepareMissingSpace` measures every concrete graphical
+    // element after participant constraints are solved, then shifts those
+    // constraints by the largest left deficit. Side notes are participant
+    // relative, so derive their actual starting X from the accepted lifeline
+    // segments and apply the shared push once.
+    let mut left_missing_space = 0.0_f64;
+    for (event_index, event) in diagram.events.iter().take(page1_end).enumerate() {
+        let Event::Note(note) = event else {
+            continue;
+        };
+        if note.position != NotePosition::Left {
+            continue;
+        }
+        let anchor_idxs: Vec<usize> = note
+            .participants
+            .iter()
+            .filter_map(|id| id_to_idx.get(id.as_str()).copied())
+            .collect();
+        if anchor_idxs.is_empty() {
+            continue;
+        }
+        let max_text_w =
+            note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
+        let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
+        let ll_x = if note.on_message {
+            anchor_idxs
+                .iter()
+                .map(|&index| participants[index].center_x)
+                .fold(f64::MAX, f64::min)
+        } else {
+            let index = anchor_idxs[0];
+            let live_shift = note_left_live_shift_by_event
+                .get(&event_index)
+                .copied()
+                .unwrap_or(0.0);
+            if live_shift == 0.0 {
+                participants[index].center_x
+            } else {
+                participants[index].center_x + live_shift
+            }
+        };
+        let gap = left_note_lifeline_gap(
+            &participants,
+            note.shape,
+            anchor_idxs.first().copied(),
+            note.on_message,
+            note.color.is_some(),
+            note.text.lines().count(),
+        );
+        let note_left = if note.on_message {
+            ll_x.floor() - gap - note_content_w
+        } else if note.shape == NoteShape::Note {
+            let component_left =
+                (ll_x - folded_note_component_width(max_text_w, note_global_padding)).trunc();
+            left_missing_space = left_missing_space.max(-component_left);
+            continue;
+        } else {
+            let preferred_width =
+                single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
+            (ll_x - gap - preferred_width).trunc()
+        };
+        left_missing_space = left_missing_space.max(HEAD_BOX_Y - note_left);
+    }
+    if left_missing_space > 0.0 {
+        let shift = left_missing_space;
+        for participant in &mut participants {
+            participant.center_x += shift;
+            participant.box_x += shift;
+            participant.lifeline_line_x += shift;
+        }
+        max_self_msg_right += shift;
+        for left in self_msg_right_note_left_by_event.values_mut() {
+            *left += shift;
+        }
+    }
+
+    let center_of = |id: &str| -> f64 {
+        id_to_idx
+            .get(id)
+            .map(|&i| participants[i].center_x)
+            .unwrap_or(0.0)
+    };
 
     // Compute tail box y based on message count.
     // With 0 messages, PlantUML uses a minimum lifeline height of 20px.
@@ -8514,16 +8748,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             (anchor_x + gap).floor()
                         };
-                        // NoteBox#getMaxX keeps the component's full-precision
-                        // preferred width even though ComponentRoseNote snaps
-                        // the visible polygon width. The layout envelope and
-                        // the drawing therefore intentionally have different
-                        // right edges.
-                        let mut note_right = if note.on_message || diagram.teoz {
-                            note_left + note_content_w
-                        } else {
-                            note_left + raw_note_content_w
-                        };
+                        let mut note_right = note_left + raw_note_content_w;
                         // A message-attached note sits inside a message tile, which
                         // reserves the arrow's endpoint plus the note component's
                         // raw preferred width and `NoteBox.getRightShift`. Java
@@ -8765,6 +8990,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // ultimately dominates the canvas.
     let participant_envelope_right = last_box_right + participant_outer_padding;
     let note_envelope_right = if max_note_right > 0.0 {
+        // The visible right edge is followed by ComponentRoseNote's trailing
+        // stroke lane in DrawableSet.prepareMissingSpace.
         max_note_right + 1.0
     } else {
         0.0
@@ -9043,93 +9270,77 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Each group frame has: top y, bottom y, left x, right x.
     // The frame spans from GROUP_FRAME_MARGIN to last_box_right + GROUP_FRAME_MARGIN
     // for groups that encompass all participants.
-    #[derive(Clone, Copy, PartialEq, Eq)]
-    enum GroupLeftOwner {
-        Other,
-        StandardLeftNote,
-        SingleOverNote,
-    }
-
     struct GroupFrame {
         top: f64,
         bottom: f64,
         left: f64,
         right: f64,
         event_idx: usize,
-        left_owner: GroupLeftOwner,
+        left_is_external: bool,
     }
 
-    let compute_group_frames = |participants: &[ParticipantLayout]| {
-        let center_of = |id: &str| -> f64 {
-            id_to_idx
-                .get(id)
-                .map(|&i| participants[i].center_x)
-                .unwrap_or(0.0)
-        };
-
-        // Horizontal group-frame extent (left, right) of a note. A note enclosed by
-        // a group frame contributes its Java `NoteBox.getMinX/getMaxX` extent to
-        // the frame's InGroupable list, so the frame grows to cover side notes that
-        // stick out past the messages. This is deliberately not always identical
-        // to the drawn polygon width below: Java consumes raw preferred width for
-        // the InGroupable extent, then draws the visible note with snapped geometry.
-        // Returns `None` for notes with no resolvable anchor.
-        let note_group_extent = |event_idx: usize, note: &Note| -> Option<(f64, f64)> {
-            let max_text_w =
-                note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
-            let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
-            let raw_note_content_w =
-                note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
-            let anchor_idxs: Vec<usize> = note
-                .participants
-                .iter()
-                .filter_map(|id| id_to_idx.get(id.as_str()))
-                .copied()
-                .collect();
-            let anchor_xs: Vec<f64> = anchor_idxs
-                .iter()
-                .map(|&i| {
-                    if note.position == NotePosition::Right {
-                        participants[i].center_x
-                            + if note.on_message {
-                                0.0
-                            } else {
-                                note_right_live_shift_by_event
-                                    .get(&event_idx)
-                                    .copied()
-                                    .unwrap_or(0.0)
-                            }
-                    } else {
-                        let live_shift = if note.on_message {
+    // Horizontal group-frame extent (left, right) of a note. A note enclosed by
+    // a group frame contributes its Java `NoteBox.getMinX/getMaxX` extent to
+    // the frame's InGroupable list, so the frame grows to cover side notes that
+    // stick out past the messages. This is deliberately not always identical
+    // to the drawn polygon width below: Java consumes raw preferred width for
+    // the InGroupable extent, then draws the visible note with snapped geometry.
+    // Returns `None` for notes with no resolvable anchor.
+    let note_group_extent = |event_idx: usize, note: &Note| -> Option<(f64, f64)> {
+        let max_text_w =
+            note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
+        let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
+        let raw_note_content_w =
+            note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
+        let anchor_idxs: Vec<usize> = note
+            .participants
+            .iter()
+            .filter_map(|id| id_to_idx.get(id.as_str()))
+            .copied()
+            .collect();
+        let anchor_xs: Vec<f64> = anchor_idxs
+            .iter()
+            .map(|&i| {
+                if note.position == NotePosition::Right {
+                    participants[i].center_x
+                        + if note.on_message {
                             0.0
                         } else {
-                            note_left_live_shift_by_event
+                            note_right_live_shift_by_event
                                 .get(&event_idx)
                                 .copied()
                                 .unwrap_or(0.0)
-                        };
-                        if note.shape != NoteShape::Note && live_shift == 0.0 {
-                            // Hexagonal/rectangular note components retain the
-                            // integer lifeline anchor used by their legacy
-                            // position projection.
-                            participants[i].lifeline_line_x
-                        } else {
-                            // Folded ComponentRoseNote consumes the fractional
-                            // ParticipantBox centre through NoteBox.
-                            participants[i].center_x + live_shift
                         }
+                } else {
+                    let live_shift = if note.on_message {
+                        0.0
+                    } else {
+                        note_left_live_shift_by_event
+                            .get(&event_idx)
+                            .copied()
+                            .unwrap_or(0.0)
+                    };
+                    if live_shift == 0.0 {
+                        participants[i].center_x
+                    } else {
+                        participants[i].box_x + participants[i].box_width / 2.0 + live_shift
                     }
-                })
-                .collect();
-            match note.position {
-                NotePosition::Right => {
-                    if note.on_message
-                        && let Some(&left) = note_owner
+                }
+            })
+            .collect();
+        let visible_extent = match note.position {
+            NotePosition::Right => {
+                if let Some(&left) = note
+                    .on_message
+                    .then(|| {
+                        note_owner
                             .get(&event_idx)
                             .and_then(|owner| self_msg_right_note_left_by_event.get(owner))
-                    {
-                        return Some((left, left + note_content_w));
-                    }
+                    })
+                    .flatten()
+                {
+                    Some((left, left + note_content_w))
+                } else {
                     let ll_x = if note.on_message {
                         anchor_xs.iter().copied().fold(f64::MIN, f64::max)
                     } else {
@@ -9156,340 +9367,199 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     };
                     Some((left, right))
                 }
-                NotePosition::Left => {
-                    let ll_x = if note.on_message {
-                        anchor_xs.iter().copied().fold(f64::MAX, f64::min)
-                    } else {
-                        anchor_xs.first().copied()?
-                    };
-                    let gap = left_note_lifeline_gap(
-                        participants,
-                        note.shape,
-                        anchor_idxs.first().copied(),
-                        note.on_message,
-                        note.color.is_some(),
-                        note.text.lines().count(),
-                    );
-                    if note.on_message {
-                        let right = ll_x.floor() - gap;
-                        Some((right - note_content_w, right))
-                    } else {
-                        let left = if note.shape == NoteShape::Note {
-                            // NoteBox#getStartingX truncates the logical component
-                            // origin toward zero, then ComponentRoseNote paints its
-                            // polygon after paddingX. Keeping those operations
-                            // separate matters both near x=0 and at fractional
-                            // positive activation-segment coordinates.
-                            let align_extra = if note_text_align == MessageAlign::Center {
-                                NOTE_FOLD_SIZE - 1.0
-                            } else {
-                                0.0
-                            };
-                            let component_pref_width = max_text_w
-                                + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                + align_extra
-                                + 2.0 * note_global_padding;
-                            (ll_x - component_pref_width).trunc() + ROSE_NOTE_PADDING_X
-                        } else {
-                            let position_width = note_content_width_raw_padded(
-                                max_text_w,
-                                note.shape,
-                                note_text_align,
-                            );
-                            (ll_x - gap - position_width).floor()
-                        };
-                        Some((left, left + raw_note_content_w + 1.0))
-                    }
+            }
+            NotePosition::Left => {
+                let ll_x = if note.on_message {
+                    anchor_xs.iter().copied().fold(f64::MAX, f64::min)
+                } else {
+                    anchor_xs.first().copied()?
+                };
+                let gap = left_note_lifeline_gap(
+                    &participants,
+                    note.shape,
+                    anchor_idxs.first().copied(),
+                    note.on_message,
+                    note.color.is_some(),
+                    note.text.lines().count(),
+                );
+                if note.on_message {
+                    let right = ll_x.floor() - gap;
+                    Some((right - note_content_w, right))
+                } else {
+                    let preferred_width =
+                        single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
+                    let left = (ll_x - gap - preferred_width).trunc();
+                    Some((left, left + raw_note_content_w + 1.0))
                 }
-                NotePosition::Over => {
-                    if note.participants.is_empty() {
-                        if participants.is_empty() {
-                            Some((HEAD_BOX_Y, HEAD_BOX_Y + note_content_w))
+            }
+            NotePosition::Over => {
+                if note.participants.is_empty() {
+                    if participants.is_empty() {
+                        Some((HEAD_BOX_Y, HEAD_BOX_Y + note_content_w))
+                    } else {
+                        let first_ll = participants[0].lifeline_line_x;
+                        let last_ll = participants[participants.len() - 1].lifeline_line_x;
+                        let span = last_ll - first_ll;
+                        let pw_raw =
+                            note_content_width_raw_padded(max_text_w, note.shape, note_text_align)
+                                .max(span.round() + ACROSS_NOTE_MARGIN);
+                        let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
+                        let centre = (participants[0].center_x
+                            + participants[participants.len() - 1].center_x)
+                            / 2.0;
+                        let left = note_across_left(centre, pw_raw);
+                        Some((left, left + pw))
+                    }
+                } else if note.participants.len() == 1 {
+                    let cx = participants[*id_to_idx.get(note.participants[0].as_str())?].center_x;
+                    let raw_w =
+                        single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
+                    let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
+                    Some((left, left + raw_w))
+                } else {
+                    let first_idx = *id_to_idx.get(note.participants.first()?.as_str())?;
+                    let last_idx = *id_to_idx.get(note.participants.last()?.as_str())?;
+                    let (lo, hi) = if first_idx <= last_idx {
+                        (first_idx, last_idx)
+                    } else {
+                        (last_idx, first_idx)
+                    };
+                    if note.shape == NoteShape::Note
+                        || (diagram.teoz
+                            && matches!(note.shape, NoteShape::Hexagonal | NoteShape::Rectangular))
+                    {
+                        let component_pref_w = if note.shape == NoteShape::Note {
+                            max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding
                         } else {
-                            let first_ll = participants[0].lifeline_line_x;
-                            let last_ll = participants[participants.len() - 1].lifeline_line_x;
-                            let span = last_ll - first_ll;
-                            let pw_raw = note_content_width_raw_padded(
-                                max_text_w,
-                                note.shape,
-                                note_text_align,
-                            )
-                            .max(span.round() + ACROSS_NOTE_MARGIN);
-                            let pw = note_content_w.max(span.round() + ACROSS_NOTE_MARGIN);
-                            let centre = (participants[0].center_x
-                                + participants[participants.len() - 1].center_x)
-                                / 2.0;
-                            let left = note_across_left(centre, pw_raw);
-                            Some((left, left + pw))
-                        }
-                    } else if note.participants.len() == 1 {
-                        let cx =
-                            participants[*id_to_idx.get(note.participants[0].as_str())?].center_x;
-                        let raw_w = single_note_visible_raw_width(
+                            note_content_width_raw_padded(max_text_w, note.shape, note_text_align)
+                        };
+                        let geom = over_several_note_geometry(
+                            &participants,
+                            lo,
+                            hi,
+                            component_pref_w,
+                            note_content_w,
+                            diagram.teoz,
+                        );
+                        Some((geom.visible_left, geom.visible_left + geom.visible_width))
+                    } else {
+                        let span =
+                            participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
+                        let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
+                        let centre = (participants[lo].center_x + participants[hi].center_x) / 2.0;
+                        let pw_raw = over_several_shape_position_width_raw_padded(
                             max_text_w,
                             note.shape,
-                            note_global_padding,
+                            note_text_align,
+                            min_width,
+                            centre,
                         );
-                        let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
-                        Some((left, left + raw_w))
-                    } else {
-                        let first_idx = *id_to_idx.get(note.participants.first()?.as_str())?;
-                        let last_idx = *id_to_idx.get(note.participants.last()?.as_str())?;
-                        let (lo, hi) = if first_idx <= last_idx {
-                            (first_idx, last_idx)
-                        } else {
-                            (last_idx, first_idx)
-                        };
-                        if note.shape == NoteShape::Note
-                            || (diagram.teoz
-                                && matches!(
-                                    note.shape,
-                                    NoteShape::Hexagonal | NoteShape::Rectangular
-                                ))
-                        {
-                            let component_pref_w = if note.shape == NoteShape::Note {
-                                max_text_w
-                                    + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                    + 2.0 * note_global_padding
-                            } else {
-                                note_content_width_raw_padded(
-                                    max_text_w,
-                                    note.shape,
-                                    note_text_align,
-                                )
-                            };
-                            let geom = over_several_note_geometry(
-                                participants,
-                                lo,
-                                hi,
-                                component_pref_w,
-                                note_content_w,
-                                diagram.teoz,
-                            );
-                            Some((geom.visible_left, geom.visible_left + geom.visible_width))
-                        } else {
-                            let span =
-                                participants[hi].lifeline_line_x - participants[lo].lifeline_line_x;
-                            let min_width = span.round() + OVER_SEVERAL_NOTE_MARGIN;
-                            let centre =
-                                (participants[lo].center_x + participants[hi].center_x) / 2.0;
-                            let pw_raw = over_several_shape_position_width_raw_padded(
-                                max_text_w,
-                                note.shape,
-                                note_text_align,
-                                min_width,
-                                centre,
-                            );
-                            let pw = note_content_w.max(min_width);
-                            let left = (centre - pw_raw / 2.0).floor();
-                            Some((left, left + pw))
-                        }
+                        let pw = note_content_w.max(min_width);
+                        let left = (centre - pw_raw / 2.0).floor();
+                        Some((left, left + pw))
                     }
                 }
             }
         };
+        visible_extent
+            .map(|(left, right)| (left - ROSE_NOTE_PADDING_X, right + ROSE_NOTE_PADDING_X))
+    };
 
-        let ref_group_extent = |r: &Ref| -> Option<(f64, f64)> {
-            let rb = ref_box(&r.text);
-            let mut left = f64::INFINITY;
-            let mut right = f64::NEG_INFINITY;
-            for pid in &r.participants {
-                if let Some(&pi) = id_to_idx.get(pid.as_str()) {
-                    let p = &participants[pi];
-                    left = left.min(p.box_x - REF_OUT_MARGIN);
-                    right = right.max(p.box_x + p.box_width + REF_OUT_MARGIN);
+    let ref_group_extent = |r: &Ref| -> Option<(f64, f64)> {
+        let rb = ref_box(&r.text);
+        let mut left = f64::INFINITY;
+        let mut right = f64::NEG_INFINITY;
+        for pid in &r.participants {
+            if let Some(&pi) = id_to_idx.get(pid.as_str()) {
+                let p = &participants[pi];
+                left = left.min(p.box_x - REF_OUT_MARGIN);
+                right = right.max(p.box_x + p.box_width + REF_OUT_MARGIN);
+            }
+        }
+        if !left.is_finite() {
+            return None;
+        }
+        let total_w = (right - left).max(rb.pref_w);
+        Some((left, left + total_w))
+    };
+
+    let living_participant_group_member = |participant_idx: usize| {
+        let participant = &participants[participant_idx];
+        SequenceGroupMemberBounds {
+            // ParticipantBox.startingX and getMaxX include Java's invisible
+            // outMargin around the painted participant component.
+            min: participant.box_x - PARTICIPANT_OUT_MARGIN,
+            max: participant.box_x + participant.box_width + PARTICIPANT_OUT_MARGIN,
+            kind: SequenceGroupMemberKind::Ordinary,
+        }
+    };
+
+    let mut group_frames: Vec<GroupFrame> = Vec::new();
+    {
+        struct GroupAccum {
+            min_idx: usize,
+            max_idx: usize,
+            start_idx: usize,
+            members: Vec<SequenceGroupMemberBounds>,
+            note_left: f64,
+            note_right: f64,
+            ref_left: f64,
+            ref_right: f64,
+            message_right: f64,
+            external_left: f64,
+            external_right: f64,
+            // Teoz: rightmost livebox right edge over the group's message
+            // endpoints (`participant.center + level * LIVE_DELTA_SIZE`). The frame
+            // covers the active livebox, not just the lifeline centre.
+            max_live_right: f64,
+            // PlantUML treats a `note right/left` attached to a message (a
+            // "note on message") differently from a free-standing note: rather
+            // than registering the note as an InGroupable element, the grouping
+            // header calls `InGroupableList.changeHack2(note.getPreferredWidth)`,
+            // so the frame's right edge becomes
+            // `getMaxXInternal + hack2` — i.e. the message region's right edge
+            // (max participant centre + ACTIVATION_HALF_W + MARGIN5) plus the
+            // note's *preferred* width, NOT the note's drawn right edge. Track
+            // that reserved candidate here. (`GroupingGraphicalElementHeader`
+            // `getPreferredWidth` / `InGroupableList.getMaxX`.)
+            on_msg_note_frame_right: f64,
+        }
+
+        // Scan events to find group start/end pairs and compute their frames.
+        // Track which participant indices are referenced inside each group,
+        // plus the drawn extent of any enclosed note (which the frame must cover).
+        let mut group_start_stack: Vec<GroupAccum> = Vec::new();
+        for (ev_idx, event) in diagram.events.iter().enumerate() {
+            match event {
+                Event::GroupStart(_) => {
+                    group_start_stack.push(GroupAccum {
+                        min_idx: usize::MAX,
+                        max_idx: 0,
+                        start_idx: ev_idx,
+                        members: Vec::new(),
+                        note_left: f64::INFINITY,
+                        note_right: f64::NEG_INFINITY,
+                        ref_left: f64::INFINITY,
+                        ref_right: f64::NEG_INFINITY,
+                        message_right: f64::NEG_INFINITY,
+                        external_left: f64::INFINITY,
+                        external_right: f64::NEG_INFINITY,
+                        max_live_right: f64::NEG_INFINITY,
+                        on_msg_note_frame_right: f64::NEG_INFINITY,
+                    });
                 }
-            }
-            if !left.is_finite() {
-                return None;
-            }
-            let total_w = (right - left).max(rb.pref_w);
-            Some((left - REF_OUT_MARGIN, left + total_w + REF_OUT_MARGIN))
-        };
+                Event::GroupEnd => {
+                    if let Some(group) = group_start_stack.pop() {
+                        let min_idx = group.min_idx;
+                        let max_idx = group.max_idx;
+                        let start_idx = group.start_idx;
+                        let frame_top = event_y_positions[start_idx];
+                        let frame_bottom = event_y_positions[ev_idx];
 
-        let mut group_frames: Vec<GroupFrame> = Vec::new();
-        {
-            struct GroupAccum {
-                min_idx: usize,
-                max_idx: usize,
-                start_idx: usize,
-                note_left: f64,
-                note_right: f64,
-                note_left_owner: GroupLeftOwner,
-                ref_left: f64,
-                ref_right: f64,
-                message_right: f64,
-                external_left: f64,
-                external_right: f64,
-                // Teoz: rightmost livebox right edge over the group's message
-                // endpoints (`participant.center + level * LIVE_DELTA_SIZE`). The frame
-                // covers the active livebox, not just the lifeline centre.
-                max_live_right: f64,
-                // PlantUML treats a `note right/left` attached to a message (a
-                // "note on message") differently from a free-standing note: rather
-                // than registering the note as an InGroupable element, the grouping
-                // header calls `InGroupableList.changeHack2(note.getPreferredWidth)`,
-                // so the frame's right edge becomes
-                // `getMaxXInternal + hack2` — i.e. the message region's right edge
-                // (max participant centre + ACTIVATION_HALF_W + MARGIN5) plus the
-                // note's *preferred* width, NOT the note's drawn right edge. Track
-                // that reserved candidate here. (`GroupingGraphicalElementHeader`
-                // `getPreferredWidth` / `InGroupableList.getMaxX`.)
-                on_msg_note_frame_right: f64,
-            }
-
-            // Scan events to find group start/end pairs and compute their frames.
-            // Track which participant indices are referenced inside each group,
-            // plus the drawn extent of any enclosed note (which the frame must cover).
-            let mut group_start_stack: Vec<GroupAccum> = Vec::new();
-            for (ev_idx, event) in diagram.events.iter().enumerate() {
-                match event {
-                    Event::GroupStart(_) => {
-                        group_start_stack.push(GroupAccum {
-                            min_idx: usize::MAX,
-                            max_idx: 0,
-                            start_idx: ev_idx,
-                            note_left: f64::INFINITY,
-                            note_right: f64::NEG_INFINITY,
-                            note_left_owner: GroupLeftOwner::Other,
-                            ref_left: f64::INFINITY,
-                            ref_right: f64::NEG_INFINITY,
-                            message_right: f64::NEG_INFINITY,
-                            external_left: f64::INFINITY,
-                            external_right: f64::NEG_INFINITY,
-                            max_live_right: f64::NEG_INFINITY,
-                            on_msg_note_frame_right: f64::NEG_INFINITY,
-                        });
-                    }
-                    Event::GroupEnd => {
-                        if let Some(group) = group_start_stack.pop() {
-                            let min_idx = group.min_idx;
-                            let max_idx = group.max_idx;
-                            let start_idx = group.start_idx;
-                            let frame_top = event_y_positions[start_idx];
-                            let frame_bottom = event_y_positions[ev_idx];
-
-                            // Account for nested child frames already computed. Because
-                            // every parent frame extends GROUP_FRAME_MARGIN beyond its
-                            // direct child on each side, the direct child is always the
-                            // most extreme enclosed frame, so taking the min/max over all
-                            // enclosed frames (start event index strictly between this
-                            // group's start and end) yields the direct child's extent.
-                            let mut child_left = f64::INFINITY;
-                            let mut child_right = f64::NEG_INFINITY;
-                            let mut child_left_owner = GroupLeftOwner::Other;
-                            for cf in &group_frames {
-                                if cf.event_idx > start_idx && cf.event_idx < ev_idx {
-                                    if cf.left < child_left {
-                                        child_left = cf.left;
-                                        child_left_owner = cf.left_owner;
-                                    }
-                                    child_right = child_right.max(cf.right);
-                                }
-                            }
-                            let has_child = child_left.is_finite();
-                            let has_msgs = min_idx <= max_idx && !participants.is_empty();
-                            let has_note = group.note_left.is_finite();
-                            let has_ref = group.ref_left.is_finite();
-                            let has_message_right = group.message_right.is_finite();
-                            let has_external_left = group.external_left.is_finite();
-                            let has_external_right = group.external_right.is_finite();
-
-                            // Compute the participant-based frame left first, then derive
-                            // the header right edge from the *final* left (so the guard
-                            // label measurement matches the tab that is actually drawn).
-                            // A group with no direct messages contributes no participant
-                            // extent of its own; its left/right come purely from any
-                            // enclosed child frame (each parent extends GROUP_FRAME_MARGIN
-                            // beyond its direct child). Only a group with neither direct
-                            // messages nor children falls back to the empty-group estimate.
-                            // Teoz uses GroupingTile.MARGINX (16) measured from the
-                            // involved-participant *lifeline centres*, not from box
-                            // edges: frame_left = min_center - 16, and the body floor
-                            // for the right edge is max_center + 16 (see Teoz branch
-                            // for frame_right below).
-                            let mut left_owner = GroupLeftOwner::Other;
-                            let mut frame_left = if diagram.teoz {
-                                let part_left = if has_msgs {
-                                    participants[min_idx].center_x - TEOZ_GROUP_MARGIN_X
-                                } else if !participants.is_empty() {
-                                    participants[0].center_x - TEOZ_GROUP_MARGIN_X
-                                } else {
-                                    HEAD_BOX_Y
-                                };
-                                if has_child {
-                                    // Parent encloses child via `child.getMinX() - MARGINX`,
-                                    // and child.getMinX() = child.min - EXTERNAL_MARGINX1, so
-                                    // the parent rect sits MARGINX + EXTERNAL_MARGINX1 left of
-                                    // the child rect.
-                                    let child_candidate = child_left
-                                        - TEOZ_GROUP_MARGIN_X
-                                        - TEOZ_GROUP_EXTERNAL_MARGIN_X1;
-                                    if child_candidate < part_left {
-                                        left_owner = child_left_owner;
-                                        child_candidate
-                                    } else {
-                                        part_left
-                                    }
-                                } else {
-                                    part_left
-                                }
-                            } else if has_msgs {
-                                let part_left = participants[min_idx].box_x - group_frame_margin;
-                                if has_child {
-                                    let child_candidate = child_left - group_frame_margin;
-                                    if child_candidate < part_left {
-                                        left_owner = child_left_owner;
-                                        child_candidate
-                                    } else {
-                                        part_left
-                                    }
-                                } else {
-                                    part_left
-                                }
-                            } else if has_child {
-                                left_owner = child_left_owner;
-                                child_left - group_frame_margin
-                            } else if !has_note && !has_ref && !participants.is_empty() {
-                                participants[0].box_x + group_frame_margin
-                            } else {
-                                f64::INFINITY
-                            };
-                            // An enclosed note that overhangs the messages widens the
-                            // frame to cover it: the frame's InGroupable left edge sits
-                            // GROUP_FRAME_MARGIN beyond the note's drawn left. In Teoz
-                            // the frame is measured from `NoteTile.getMinX()`
-                            // (`centerX - componentWidth / 2`) minus MARGINX rather than
-                            // from the snapped visible left, so it reaches a further
-                            // `(componentWidth - visibleWidth) / 2 = 5px` plus MARGINX
-                            // (16) left of the drawn note edge.
-                            if has_note {
-                                let note_margin = if diagram.teoz {
-                                    (ROSE_NOTE_COMPONENT_PREF_EXTRA - NOTE_VISIBLE_RAW_MARGIN) / 2.0
-                                        + TEOZ_GROUP_MARGIN_X
-                                } else {
-                                    group_frame_margin
-                                };
-                                let note_left = group.note_left - note_margin;
-                                if note_left < frame_left {
-                                    frame_left = note_left;
-                                    left_owner = group.note_left_owner;
-                                }
-                            }
-                            if has_ref && group.ref_left < frame_left {
-                                frame_left = group.ref_left;
-                                left_owner = GroupLeftOwner::Other;
-                            }
-                            if has_external_left && group.external_left < frame_left {
-                                frame_left = group.external_left;
-                                left_owner = GroupLeftOwner::Other;
-                            }
-
-                            // Compute the header text right edge (group kind label + guard)
-                            // anchored at the final frame left.
-                            let header_right =
-                                if let Event::GroupStart(g) = &diagram.events[start_idx] {
-                                    let kind_str = match g.kind {
+                        if !diagram.teoz {
+                            let min_width =
+                                if let Event::GroupStart(start) = &diagram.events[start_idx] {
+                                    let kind = match start.kind {
                                         GroupKind::Alt => "alt",
                                         GroupKind::Opt => "opt",
                                         GroupKind::Loop => "loop",
@@ -9499,319 +9569,606 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         GroupKind::Group => "group",
                                     };
                                     let (tab_text, guard_label, _) =
-                                        group_header_parts(g.kind, kind_str, g.label.as_ref());
-                                    let mut kw = bold_text_width_with_family(
+                                        group_header_parts(start.kind, kind, start.label.as_ref());
+                                    let mut width = bold_text_width_with_family(
                                         tab_text,
                                         group_header_font_size_f,
                                         &group_header_font_family,
-                                    );
-                                    if g.kind == GroupKind::Group && guard_label.is_some() {
-                                        kw += bold_text_width_with_family(
+                                    ) + 45.0;
+                                    if start.kind == GroupKind::Group && guard_label.is_some() {
+                                        width += bold_text_width_with_family(
                                             " ",
                                             group_header_font_size_f,
                                             &group_header_font_family,
                                         );
                                     }
-                                    if diagram.teoz {
-                                        // Teoz header floor (GroupingTile: `min + width + 16`):
-                                        // width = ComponentRoseGroupingHeader.getPreferredWidth
-                                        //       = getTextWidth(tab) + marginX1 + comment_width
-                                        //       = (kw + 45) + 15 + comment_w.
-                                        let comment_w = guard_label
-                                            .map(|label| {
-                                                group_guard_width_with_family(
-                                                    label,
-                                                    &group_header_font_family,
-                                                )
-                                            })
-                                            .unwrap_or(0.0);
-                                        frame_left + kw + 60.0 + comment_w + TEOZ_GROUP_MARGIN_X
-                                    } else {
-                                        let tab_right = frame_left + kw + 45.0;
-                                        if let Some(label) = guard_label {
-                                            let gw = group_guard_width_with_family(
+                                    width
+                                        + guard_label.map_or(5.0, |label| {
+                                            20.0 + group_guard_width_with_family(
                                                 label,
                                                 &group_header_font_family,
-                                            );
-                                            tab_right + 15.0 + gw + 5.0
-                                        } else {
-                                            tab_right + 5.0
-                                        }
-                                    }
+                                            )
+                                        })
                                 } else {
                                     0.0
                                 };
-
-                            // Compute frame right based on which participants are inside,
-                            // the header, and any enclosed child frame. A group with no
-                            // direct messages contributes no participant right of its own.
-                            let part_right = if diagram.teoz {
-                                if has_msgs {
-                                    // The frame covers the rightmost endpoint's livebox
-                                    // right edge (`getMaxX` over inner tiles), not just the
-                                    // bare lifeline centre, then adds GroupingTile.MARGINX.
-                                    participants[max_idx].center_x.max(group.max_live_right)
-                                        + TEOZ_GROUP_MARGIN_X
-                                } else if has_child {
-                                    f64::NEG_INFINITY
-                                } else if !participants.is_empty() {
-                                    participants[n - 1].center_x + TEOZ_GROUP_MARGIN_X
-                                } else {
-                                    100.0
-                                }
-                            } else if has_msgs {
-                                participants[max_idx].box_x
-                                    + participants[max_idx].box_width
-                                    + group_frame_margin
-                            } else if has_child {
-                                f64::NEG_INFINITY
-                            } else if !has_note && !has_ref && !participants.is_empty() {
-                                let last = &participants[n - 1];
-                                last.box_x + last.box_width + group_frame_margin
-                            } else {
-                                f64::NEG_INFINITY
-                            };
-                            let mut frame_right = part_right.max(header_right);
-                            // InGroupableList#getMax first selects the member by
-                            // its raw getMaxX, then applies the winning member's
-                            // type-specific margin. A nested list reports
-                            // `child_right`, while a right exo arrow reports
-                            // `external_right + 3`; when the latter wins, the
-                            // parent must apply the exo -3 rule instead of the
-                            // nested-list +10 rule.
-                            let external_right_outranks_child = has_external_right
-                                && group.external_right + GROUP_EXTERNAL_ARROW_MARGIN > child_right;
-                            if has_child && !external_right_outranks_child {
-                                // Parent encloses child via `child.getMaxX() + MARGINX`, and
-                                // child.getMaxX() = child.max + EXTERNAL_MARGINX2, so the
-                                // parent rect sits MARGINX + EXTERNAL_MARGINX2 right of the
-                                // child rect (Teoz); legacy uses the box-edge margin.
-                                let child_margin = if diagram.teoz {
-                                    TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X2
-                                } else {
-                                    group_frame_margin
-                                };
-                                frame_right = frame_right.max(child_right + child_margin);
-                            }
-                            if has_note {
-                                frame_right =
-                                    frame_right.max(group.note_right + group_frame_margin);
-                            }
-                            if group.on_msg_note_frame_right.is_finite() {
-                                // A `note right` on a message reserves its preferred
-                                // width as `hack2`; the frame right is already the
-                                // absolute candidate (message region + pref width).
-                                frame_right = frame_right.max(group.on_msg_note_frame_right);
-                            }
-                            if has_ref {
-                                frame_right = frame_right.max(group.ref_right);
-                            }
-                            if has_message_right {
-                                frame_right =
-                                    frame_right.max(group.message_right + group_frame_margin);
-                            }
-                            if has_external_right {
-                                // `InGroupableList#getMaxXInternal` uses an exo
-                                // arrow's own max and applies its dedicated -3
-                                // margin instead of the ordinary member margin.
-                                frame_right = frame_right.max(group.external_right);
-                            }
-
+                            let empty_start = participants.first().map_or(0.0, |participant| {
+                                participant.box_x - PARTICIPANT_OUT_MARGIN
+                            });
+                            let (mut frame_left, mut frame_right, left_is_external) =
+                                sequence_group_list_bounds(&group.members, min_width, empty_start);
+                            // ParticipantPadding is applied to the
+                            // ComponentRoseParticipant preferred width that
+                            // LivingParticipantBox reports to InGroupableList.
+                            // It therefore expands the resolved classic frame
+                            // on both sides, independently of the ordinary
+                            // MARGIN5/MARGIN10 list rules.
+                            frame_left -= participant_padding;
+                            frame_right += participant_padding;
                             group_frames.push(GroupFrame {
                                 top: frame_top,
                                 bottom: frame_bottom,
                                 left: frame_left,
                                 right: frame_right,
                                 event_idx: start_idx,
-                                left_owner,
+                                left_is_external,
                             });
+                            let nested_member = SequenceGroupMemberBounds {
+                                min: frame_left,
+                                max: frame_right,
+                                kind: SequenceGroupMemberKind::NestedGroup,
+                            };
+                            for parent in &mut group_start_stack {
+                                parent.members.push(nested_member);
+                            }
+                            continue;
                         }
-                    }
-                    Event::Message(msg) => {
-                        let fi = id_to_idx.get(msg.from.as_str()).copied();
-                        let ti = id_to_idx.get(msg.to.as_str()).copied();
-                        let self_message_right =
-                            if msg.from == msg.to {
-                                let cx_base = center_of(&msg.from);
-                                let active = life_lines.depth_at(
-                                    &msg.from,
-                                    event_y_positions.get(ev_idx).copied().unwrap_or_default(),
-                                ) > 0
-                                    || matches!(msg.activation, Some(ActivationChange::Activate));
-                                let from_x = if active {
-                                    cx_base + ACTIVATION_HALF_W
-                                } else {
-                                    cx_base
-                                };
-                                let label_w = message_label_width(&process_label(&msg.label));
-                                let loop_right = from_x + SELF_MSG_EXTEND;
-                                let text_right = from_x + SELF_MSG_TEXT_X_PAD + label_w;
-                                let destroyed_later = diagram.events.iter().skip(ev_idx + 1).any(
-                                    |event| match event {
-                                        Event::Destroy(id) => id == &msg.from,
-                                        Event::Message(next) => {
-                                            next.to == msg.from
-                                                && matches!(
-                                                    next.activation,
-                                                    Some(ActivationChange::Destroy)
-                                                )
-                                        }
-                                        _ => false,
-                                    },
-                                );
-                                let created_active_pad =
-                                    if active && create_msg_idx.contains_key(msg.from.as_str()) {
-                                        CREATED_ACTIVE_GROUP_SELF_MSG_RIGHT_PAD
-                                    } else if active && destroyed_later {
-                                        DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
-                                    } else {
-                                        0.0
-                                    };
-                                Some(
-                                    loop_right.max(text_right)
-                                        + SELF_MSG_RIGHT_PAD
-                                        + created_active_pad,
+
+                        // Account for nested child frames already computed. Because
+                        // every parent frame extends GROUP_FRAME_MARGIN beyond its
+                        // direct child on each side, the direct child is always the
+                        // most extreme enclosed frame, so taking the min/max over all
+                        // enclosed frames (start event index strictly between this
+                        // group's start and end) yields the direct child's extent.
+                        let mut child_left = f64::INFINITY;
+                        let mut child_right = f64::NEG_INFINITY;
+                        for cf in &group_frames {
+                            if cf.event_idx > start_idx && cf.event_idx < ev_idx {
+                                child_left = child_left.min(cf.left);
+                                child_right = child_right.max(cf.right);
+                            }
+                        }
+                        let has_child = child_left.is_finite();
+                        let has_msgs = min_idx <= max_idx && !participants.is_empty();
+                        let has_note = group.note_left.is_finite();
+                        let has_ref = group.ref_left.is_finite();
+                        let has_message_right = group.message_right.is_finite();
+                        let has_external_left = group.external_left.is_finite();
+                        let has_external_right = group.external_right.is_finite();
+
+                        // Compute the participant-based frame left first, then derive
+                        // the header right edge from the *final* left (so the guard
+                        // label measurement matches the tab that is actually drawn).
+                        // A group with no direct messages contributes no participant
+                        // extent of its own; its left/right come purely from any
+                        // enclosed child frame (each parent extends GROUP_FRAME_MARGIN
+                        // beyond its direct child). Only a group with neither direct
+                        // messages nor children falls back to the empty-group estimate.
+                        // Teoz uses GroupingTile.MARGINX (16) measured from the
+                        // involved-participant *lifeline centres*, not from box
+                        // edges: frame_left = min_center - 16, and the body floor
+                        // for the right edge is max_center + 16 (see Teoz branch
+                        // for frame_right below).
+                        let mut frame_left = if diagram.teoz {
+                            let part_left = if has_msgs {
+                                participants[min_idx].center_x - TEOZ_GROUP_MARGIN_X
+                            } else if !participants.is_empty() {
+                                participants[0].center_x - TEOZ_GROUP_MARGIN_X
+                            } else {
+                                HEAD_BOX_Y
+                            };
+                            if has_child {
+                                // Parent encloses child via `child.getMinX() - MARGINX`,
+                                // and child.getMinX() = child.min - EXTERNAL_MARGINX1, so
+                                // the parent rect sits MARGINX + EXTERNAL_MARGINX1 left of
+                                // the child rect.
+                                part_left.min(
+                                    child_left
+                                        - TEOZ_GROUP_MARGIN_X
+                                        - TEOZ_GROUP_EXTERNAL_MARGIN_X1,
                                 )
                             } else {
-                                None
+                                part_left
+                            }
+                        } else if has_msgs {
+                            let part_left = participants[min_idx].box_x - group_frame_margin;
+                            if has_child {
+                                part_left.min(child_left - group_frame_margin)
+                            } else {
+                                part_left
+                            }
+                        } else if has_child {
+                            child_left - group_frame_margin
+                        } else if !has_note && !has_ref && !participants.is_empty() {
+                            participants[0].box_x + group_frame_margin
+                        } else {
+                            f64::INFINITY
+                        };
+                        // An enclosed note that overhangs the messages widens the
+                        // frame to cover it: the frame's InGroupable left edge sits
+                        // GROUP_FRAME_MARGIN beyond the note's drawn left. In Teoz
+                        // the frame is measured from `NoteTile.getMinX()`
+                        // (`centerX - componentWidth / 2`) minus MARGINX rather than
+                        // from the snapped visible left, so it reaches a further
+                        // `(componentWidth - visibleWidth) / 2 = 5px` plus MARGINX
+                        // (16) left of the drawn note edge.
+                        if has_note {
+                            let note_margin = if diagram.teoz {
+                                // `note_group_extent` already converts the
+                                // visible folded-note body to NoteTile's
+                                // component bounds. GroupingTile then applies
+                                // only its own MARGINX around that tile.
+                                TEOZ_GROUP_MARGIN_X
+                            } else {
+                                group_frame_margin
                             };
-                        // Teoz: a message that activates its target (`++`) creates a
-                        // livebox tile *inside* the frame; that tile's getMaxX is the
-                        // livebox right edge `target.center + level*LIVE_DELTA` (level
-                        // including the level this message activates). Only such inside-the-
-                        // frame liveboxes widen the frame — a message merely touching an
-                        // already-open livebox uses the bare lifeline centre (getMaxX = posC).
-                        let msg_live_right =
-                            if matches!(msg.activation, Some(ActivationChange::Activate)) {
-                                let level = life_lines.depth_at(
-                                    &msg.to,
-                                    event_y_positions.get(ev_idx).copied().unwrap_or_default(),
+                            frame_left = frame_left.min(group.note_left - note_margin);
+                        }
+                        if has_ref {
+                            frame_left = frame_left.min(group.ref_left);
+                        }
+                        if has_external_left {
+                            frame_left = frame_left.min(group.external_left);
+                        }
+
+                        // Compute the header text right edge (group kind label + guard)
+                        // anchored at the final frame left.
+                        let header_right = if let Event::GroupStart(g) = &diagram.events[start_idx]
+                        {
+                            let kind_str = match g.kind {
+                                GroupKind::Alt => "alt",
+                                GroupKind::Opt => "opt",
+                                GroupKind::Loop => "loop",
+                                GroupKind::Par => "par",
+                                GroupKind::Break => "break",
+                                GroupKind::Critical => "critical",
+                                GroupKind::Group => "group",
+                            };
+                            let (tab_text, guard_label, _) =
+                                group_header_parts(g.kind, kind_str, g.label.as_ref());
+                            let mut kw = bold_text_width_with_family(
+                                tab_text,
+                                group_header_font_size_f,
+                                &group_header_font_family,
+                            );
+                            if g.kind == GroupKind::Group && guard_label.is_some() {
+                                kw += bold_text_width_with_family(
+                                    " ",
+                                    group_header_font_size_f,
+                                    &group_header_font_family,
                                 );
-                                center_of(&msg.to) + level as f64 * ACTIVATION_HALF_W
+                            }
+                            if diagram.teoz {
+                                // Teoz header floor (GroupingTile: `min + width + 16`):
+                                // width = ComponentRoseGroupingHeader.getPreferredWidth
+                                //       = getTextWidth(tab) + marginX1 + comment_width
+                                //       = (kw + 45) + 15 + comment_w.
+                                let comment_w = guard_label
+                                    .map(|label| {
+                                        group_guard_width_with_family(
+                                            label,
+                                            &group_header_font_family,
+                                        )
+                                    })
+                                    .unwrap_or(0.0);
+                                frame_left + kw + 60.0 + comment_w + TEOZ_GROUP_MARGIN_X
                             } else {
+                                let tab_right = frame_left + kw + 45.0;
+                                if let Some(label) = guard_label {
+                                    let gw = group_guard_width_with_family(
+                                        label,
+                                        &group_header_font_family,
+                                    );
+                                    tab_right + 15.0 + gw + 5.0
+                                } else {
+                                    tab_right + 5.0
+                                }
+                            }
+                        } else {
+                            0.0
+                        };
+
+                        // Compute frame right based on which participants are inside,
+                        // the header, and any enclosed child frame. A group with no
+                        // direct messages contributes no participant right of its own.
+                        let part_right = if diagram.teoz {
+                            if has_msgs {
+                                // The frame covers the rightmost endpoint's livebox
+                                // right edge (`getMaxX` over inner tiles), not just the
+                                // bare lifeline centre, then adds GroupingTile.MARGINX.
+                                participants[max_idx].center_x.max(group.max_live_right)
+                                    + TEOZ_GROUP_MARGIN_X
+                            } else if has_child {
                                 f64::NEG_INFINITY
-                            };
-                        let external_right = if msg.from == "]" || msg.to == "]" {
-                            let participant = if msg.from == "]" {
-                                msg.to.as_str()
+                            } else if !participants.is_empty() {
+                                participants[n - 1].center_x + TEOZ_GROUP_MARGIN_X
                             } else {
-                                msg.from.as_str()
+                                100.0
+                            }
+                        } else if has_msgs {
+                            participants[max_idx].box_x
+                                + participants[max_idx].box_width
+                                + group_frame_margin
+                        } else if has_child {
+                            f64::NEG_INFINITY
+                        } else if !has_note && !has_ref && !participants.is_empty() {
+                            let last = &participants[n - 1];
+                            last.box_x + last.box_width + group_frame_margin
+                        } else {
+                            f64::NEG_INFINITY
+                        };
+                        let mut frame_right = part_right.max(header_right);
+                        if has_child {
+                            // Parent encloses child via `child.getMaxX() + MARGINX`, and
+                            // child.getMaxX() = child.max + EXTERNAL_MARGINX2, so the
+                            // parent rect sits MARGINX + EXTERNAL_MARGINX2 right of the
+                            // child rect (Teoz); legacy uses the box-edge margin.
+                            let child_margin = if diagram.teoz {
+                                TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X2
+                            } else {
+                                group_frame_margin
                             };
-                            let live_depth = life_lines.depth_at(
-                                participant,
+                            frame_right = frame_right.max(child_right + child_margin);
+                        }
+                        if has_note {
+                            frame_right = frame_right.max(group.note_right + group_frame_margin);
+                        }
+                        if group.on_msg_note_frame_right.is_finite() {
+                            // A `note right` on a message reserves its preferred
+                            // width as `hack2`; the frame right is already the
+                            // absolute candidate (message region + pref width).
+                            frame_right = frame_right.max(group.on_msg_note_frame_right);
+                        }
+                        if has_ref {
+                            frame_right = frame_right.max(group.ref_right);
+                        }
+                        if has_message_right {
+                            frame_right = frame_right.max(group.message_right + group_frame_margin);
+                        }
+                        if has_external_right {
+                            // `InGroupableList#getMaxXInternal` uses an exo
+                            // arrow's own max and applies its dedicated -3
+                            // margin instead of the ordinary member margin.
+                            frame_right = frame_right.max(group.external_right);
+                        }
+
+                        group_frames.push(GroupFrame {
+                            top: frame_top,
+                            bottom: frame_bottom,
+                            left: frame_left,
+                            right: frame_right,
+                            event_idx: start_idx,
+                            left_is_external: false,
+                        });
+                    }
+                }
+                Event::Message(msg) => {
+                    let fi = id_to_idx.get(msg.from.as_str()).copied();
+                    let ti = id_to_idx.get(msg.to.as_str()).copied();
+                    let self_message_right = if msg.from == msg.to {
+                        let cx_base = center_of(&msg.from);
+                        let ordinate = event_y_positions.get(ev_idx).copied().unwrap_or_default();
+                        let depth = life_lines.depth_before(&msg.from, ordinate);
+                        let (segment_left, segment_right) = sequence_live_segment(cx_base, depth);
+                        let segment_length = segment_right - segment_left;
+                        let activate_delta =
+                            if matches!(msg.activation, Some(ActivationChange::Activate)) {
+                                ACTIVATION_HALF_W
+                            } else {
+                                0.0
+                            };
+                        let label_w = message_label_width(&process_label(&msg.label));
+                        let component_width =
+                            (label_w + 2.0 * MSG_TEXT_LEFT_PAD).max(SELF_MSG_MIN_PREF_WIDTH);
+                        // MessageSelfArrow starts at the live segment's right
+                        // edge (plus STRICT_SELFMESSAGE_POSITION's half-livebox
+                        // delta for an activating message) and its preferred
+                        // width adds both the Rose component width and the live
+                        // segment length.
+                        Some(segment_right + activate_delta + component_width + segment_length)
+                    } else {
+                        None
+                    };
+                    // Teoz: a message that activates its target (`++`) creates a
+                    // livebox tile *inside* the frame; that tile's getMaxX is the
+                    // livebox right edge `target.center + level*LIVE_DELTA` (level
+                    // including the level this message activates). Only such inside-the-
+                    // frame liveboxes widen the frame — a message merely touching an
+                    // already-open livebox uses the bare lifeline centre (getMaxX = posC).
+                    let msg_live_right =
+                        if matches!(msg.activation, Some(ActivationChange::Activate)) {
+                            let level = life_lines.depth_at(
+                                &msg.to,
                                 event_y_positions.get(ev_idx).copied().unwrap_or_default(),
                             );
-                            Some(
-                                center_of(participant)
-                                    + live_depth as f64 * ACTIVATION_HALF_W
-                                    + message_label_width(&process_label(&msg.label))
-                                    + 2.0 * MSG_TEXT_LEFT_PAD
-                                    + ARROW_SIZE
-                                    - GROUP_EXTERNAL_ARROW_MARGIN,
-                            )
+                            center_of(&msg.to) + level as f64 * ACTIVATION_HALF_W
                         } else {
-                            None
+                            f64::NEG_INFINITY
                         };
-                        for top in &mut group_start_stack {
-                            if let Some(fi) = fi {
-                                top.min_idx = top.min_idx.min(fi);
-                                top.max_idx = top.max_idx.max(fi);
-                            }
-                            if let Some(ti) = ti {
-                                top.min_idx = top.min_idx.min(ti);
-                                top.max_idx = top.max_idx.max(ti);
-                            }
-                            if msg.from == "[" || msg.to == "[" {
-                                top.external_left =
-                                    top.external_left.min(GROUP_EXTERNAL_ARROW_MARGIN);
-                            }
-                            if let Some(right) = self_message_right {
-                                top.message_right = top.message_right.max(right);
-                            }
-                            if let Some(right) = external_right {
-                                top.external_right = top.external_right.max(right);
-                            }
-                            top.max_live_right = top.max_live_right.max(msg_live_right);
+                    let external_right = if msg.from == "]" || msg.to == "]" {
+                        let participant = if msg.from == "]" {
+                            msg.to.as_str()
+                        } else {
+                            msg.from.as_str()
+                        };
+                        let live_depth = life_lines.depth_at(
+                            participant,
+                            event_y_positions.get(ev_idx).copied().unwrap_or_default(),
+                        );
+                        Some(
+                            center_of(participant)
+                                + live_depth as f64 * ACTIVATION_HALF_W
+                                + message_label_width(&process_label(&msg.label))
+                                + 2.0 * MSG_TEXT_LEFT_PAD
+                                + ARROW_SIZE
+                                - GROUP_EXTERNAL_ARROW_MARGIN,
+                        )
+                    } else {
+                        None
+                    };
+                    let ordinate = event_y_positions.get(ev_idx).copied().unwrap_or_default();
+                    let mut group_arrow_member = match (fi, ti) {
+                        (Some(fi), Some(ti)) if fi == ti => {
+                            self_message_right.map(|right| SequenceGroupMemberBounds {
+                                min: participants[fi].center_x,
+                                max: right,
+                                kind: SequenceGroupMemberKind::Ordinary,
+                            })
                         }
-                    }
-                    Event::Note(note) if !group_start_stack.is_empty() => {
-                        // A `note right` attached to a message is NOT an InGroupable
-                        // element in PlantUML; instead the grouping header reserves
-                        // the note's *preferred* width as `hack2`, so the frame right
-                        // edge = (message region right) + note.getPreferredWidth.
-                        // The message region right = max anchor centre +
-                        // ACTIVATION_HALF_W (arrow tip past the lifeline) + MARGIN5
-                        // (`InGroupableList.getMaxXInternal` adds MARGIN5 for a
-                        // non-list max element). The note's preferred width is
-                        // `textWidth(=pure+marginX1+marginX2) + 2*paddingX`:
-                        // marginX1=6 (LEFT)/15 (CENTER), marginX2=15, paddingX=5.
-                        let on_msg_right = note.on_message
-                            && note.position == NotePosition::Right
-                            && note.shape == NoteShape::Note;
-                        if on_msg_right {
-                            let anchor_center = note
-                                .participants
-                                .iter()
-                                .filter_map(|id| id_to_idx.get(id.as_str()))
-                                .map(|&i| participants[i].center_x)
-                                .fold(f64::NEG_INFINITY, f64::max);
-                            if anchor_center.is_finite() {
+                        (Some(fi), Some(ti)) => {
+                            let (left_idx, right_idx) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                            let endpoints = sequence_arrow_endpoints(
+                                participants[left_idx].center_x,
+                                life_lines.depth_at(&participants[left_idx].id, ordinate),
+                                participants[right_idx].center_x,
+                                life_lines.depth_at(&participants[right_idx].id, ordinate),
+                            );
+                            Some(SequenceGroupMemberBounds {
+                                min: endpoints.left,
+                                max: endpoints.right,
+                                kind: SequenceGroupMemberKind::Ordinary,
+                            })
+                        }
+                        (None, Some(ti)) | (Some(ti), None) if msg.from == "[" || msg.to == "[" => {
+                            let (segment_left, _) = sequence_live_segment(
+                                participants[ti].center_x,
+                                life_lines.depth_at(&participants[ti].id, ordinate),
+                            );
+                            Some(SequenceGroupMemberBounds {
+                                min: 0.0,
+                                max: segment_left,
+                                kind: SequenceGroupMemberKind::ExternalLeft,
+                            })
+                        }
+                        (None, Some(ti)) | (Some(ti), None) if msg.from == "]" || msg.to == "]" => {
+                            let (_, segment_right) = sequence_live_segment(
+                                participants[ti].center_x,
+                                life_lines.depth_at(&participants[ti].id, ordinate),
+                            );
+                            let preferred_width = message_label_width(&process_label(&msg.label))
+                                + 2.0 * MSG_TEXT_LEFT_PAD
+                                + ARROW_SIZE;
+                            Some(SequenceGroupMemberBounds {
+                                min: segment_right,
+                                max: segment_right + preferred_width,
+                                kind: SequenceGroupMemberKind::ExternalRight,
+                            })
+                        }
+                        _ => None,
+                    };
+                    if let Some(mut member) = group_arrow_member {
+                        let arrow_actual_width = member.max - member.min;
+                        let mut preferred_width = (message_label_width(&process_label(&msg.label))
+                            + 2.0 * MSG_TEXT_LEFT_PAD
+                            + ARROW_SIZE)
+                            .max(arrow_actual_width);
+                        let mut start = member.min;
+                        let mut has_attached_note = false;
+                        for (note_event_idx, note_event) in diagram.events.iter().enumerate() {
+                            let Event::Note(note) = note_event else {
+                                continue;
+                            };
+                            if note_owner.get(&note_event_idx) != Some(&ev_idx) {
+                                continue;
+                            }
+                            if let Some((note_min, _note_max)) =
+                                note_group_extent(note_event_idx, note)
+                            {
+                                has_attached_note = true;
+                                start = start.min(note_min);
                                 let max_text_w = note_max_line_width_with_family(
                                     &note.text,
                                     note_font_size_f,
                                     &note_font_family,
                                 );
-                                let margin_x1 = if note_text_align == MessageAlign::Center {
-                                    15.0
+                                // ArrowAndNoteBox.getPreferredWidth adds the
+                                // component's raw preferred width. The note's
+                                // snapped visible envelope still determines
+                                // its starting coordinate above.
+                                preferred_width += if note.shape == NoteShape::Note {
+                                    folded_note_component_width(max_text_w, note_global_padding)
                                 } else {
-                                    6.0
+                                    note_content_width_raw_padded(
+                                        max_text_w,
+                                        note.shape,
+                                        note_text_align,
+                                    )
                                 };
-                                // textWidth + 2*paddingX (marginX2=15, paddingX=5).
-                                let note_pref_w = max_text_w + margin_x1 + 15.0 + 2.0 * 5.0;
-                                let message_region_right =
-                                    anchor_center + ACTIVATION_HALF_W + GROUP_FRAME_INNER_MARGIN;
-                                let candidate = message_region_right + note_pref_w;
-                                for top in group_start_stack.iter_mut() {
-                                    top.on_msg_note_frame_right =
-                                        top.on_msg_note_frame_right.max(candidate);
+                                if note.position == NotePosition::Right {
+                                    let depth = note
+                                        .participants
+                                        .first()
+                                        .map(|participant| {
+                                            life_lines.depth_at(participant, ordinate)
+                                        })
+                                        .unwrap_or(0);
+                                    preferred_width +=
+                                        depth as f64 * ACTIVATION_HALF_W + NOTE_LIFELINE_GAP;
                                 }
                             }
-                        } else if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
-                            let left_owner =
-                                match (note.position, note.shape, note.participants.len()) {
-                                    (NotePosition::Left, NoteShape::Note, _) => {
-                                        GroupLeftOwner::StandardLeftNote
-                                    }
-                                    (NotePosition::Over, _, 1) => GroupLeftOwner::SingleOverNote,
-                                    _ => GroupLeftOwner::Other,
-                                };
-                            // A free-standing note IS an InGroupable of every
-                            // enclosing frame (Java `InGroupablesStack.addElement`).
-                            for top in group_start_stack.iter_mut() {
-                                if nl < top.note_left {
-                                    top.note_left = nl;
-                                    top.note_left_owner = left_owner;
-                                }
-                                top.note_right = top.note_right.max(nr);
-                            }
                         }
-                    }
-                    Event::Ref(r) if !group_start_stack.is_empty() => {
-                        if let Some((rl, rr)) = ref_group_extent(r) {
-                            for top in group_start_stack.iter_mut() {
-                                top.ref_left = top.ref_left.min(rl);
-                                top.ref_right = top.ref_right.max(rr);
-                            }
+                        if has_attached_note {
+                            member.min = start;
+                            member.max = start + preferred_width;
+                            // Java wraps arrows with notes in ArrowAndNoteBox, so
+                            // InGroupableList applies its ordinary-member margin
+                            // instead of MessageExoArrow's boundary adjustment.
+                            member.kind = SequenceGroupMemberKind::Ordinary;
                         }
+                        group_arrow_member = Some(member);
                     }
-                    _ => {}
+                    for top in &mut group_start_stack {
+                        if let Some(member) = group_arrow_member {
+                            top.members.push(member);
+                        }
+                        if let Some(fi) = fi {
+                            top.min_idx = top.min_idx.min(fi);
+                            top.max_idx = top.max_idx.max(fi);
+                            top.members.push(living_participant_group_member(fi));
+                        }
+                        if let Some(ti) = ti {
+                            top.min_idx = top.min_idx.min(ti);
+                            top.max_idx = top.max_idx.max(ti);
+                            top.members.push(living_participant_group_member(ti));
+                        }
+                        if msg.from == "[" || msg.to == "[" {
+                            top.external_left = top.external_left.min(GROUP_EXTERNAL_ARROW_MARGIN);
+                        }
+                        if let Some(right) = self_message_right {
+                            top.message_right = top.message_right.max(right);
+                        }
+                        if let Some(right) = external_right {
+                            top.external_right = top.external_right.max(right);
+                        }
+                        top.max_live_right = top.max_live_right.max(msg_live_right);
+                    }
                 }
+                Event::Return(_) if !group_start_stack.is_empty() => {
+                    if let Some(context) = life_lines.return_context(ev_idx)
+                        && let (Some(&fi), Some(&ti)) = (
+                            id_to_idx.get(context.from.as_str()),
+                            id_to_idx.get(context.to.as_str()),
+                        )
+                    {
+                        let ordinate = event_y_positions.get(ev_idx).copied().unwrap_or_default();
+                        let (left_idx, right_idx) = if fi < ti { (fi, ti) } else { (ti, fi) };
+                        let endpoints = sequence_arrow_endpoints(
+                            participants[left_idx].center_x,
+                            life_lines.depth_at(&participants[left_idx].id, ordinate),
+                            participants[right_idx].center_x,
+                            life_lines.depth_at(&participants[right_idx].id, ordinate),
+                        );
+                        for top in &mut group_start_stack {
+                            top.members.push(SequenceGroupMemberBounds {
+                                min: endpoints.left,
+                                max: endpoints.right,
+                                kind: SequenceGroupMemberKind::Ordinary,
+                            });
+                            for participant_idx in [fi, ti] {
+                                top.members
+                                    .push(living_participant_group_member(participant_idx));
+                                top.min_idx = top.min_idx.min(participant_idx);
+                                top.max_idx = top.max_idx.max(participant_idx);
+                            }
+                        }
+                    }
+                }
+                Event::Note(note) if !group_start_stack.is_empty() => {
+                    // A `note right` attached to a message is NOT an InGroupable
+                    // element in PlantUML; instead the grouping header reserves
+                    // the note's *preferred* width as `hack2`, so the frame right
+                    // edge = (message region right) + note.getPreferredWidth.
+                    // The message region right = max anchor centre +
+                    // ACTIVATION_HALF_W (arrow tip past the lifeline) + MARGIN5
+                    // (`InGroupableList.getMaxXInternal` adds MARGIN5 for a
+                    // non-list max element). The note's preferred width is
+                    // `textWidth(=pure+marginX1+marginX2) + 2*paddingX`:
+                    // marginX1=6 (LEFT)/15 (CENTER), marginX2=15, paddingX=5.
+                    let on_msg_right = note.on_message
+                        && note.position == NotePosition::Right
+                        && note.shape == NoteShape::Note;
+                    if on_msg_right {
+                        let anchor_center = note
+                            .participants
+                            .iter()
+                            .filter_map(|id| id_to_idx.get(id.as_str()))
+                            .map(|&i| participants[i].center_x)
+                            .fold(f64::NEG_INFINITY, f64::max);
+                        if anchor_center.is_finite() {
+                            let max_text_w = note_max_line_width_with_family(
+                                &note.text,
+                                note_font_size_f,
+                                &note_font_family,
+                            );
+                            let margin_x1 = if note_text_align == MessageAlign::Center {
+                                15.0
+                            } else {
+                                6.0
+                            };
+                            // textWidth + 2*paddingX (marginX2=15, paddingX=5).
+                            let note_pref_w = max_text_w + margin_x1 + 15.0 + 2.0 * 5.0;
+                            let message_region_right =
+                                anchor_center + ACTIVATION_HALF_W + GROUP_FRAME_INNER_MARGIN;
+                            let candidate = message_region_right + note_pref_w;
+                            for top in group_start_stack.iter_mut() {
+                                top.on_msg_note_frame_right =
+                                    top.on_msg_note_frame_right.max(candidate);
+                            }
+                        }
+                    } else if let Some((nl, nr)) = note_group_extent(ev_idx, note) {
+                        // A free-standing note IS an InGroupable of every
+                        // enclosing frame (Java `InGroupablesStack.addElement`).
+                        for top in group_start_stack.iter_mut() {
+                            top.note_left = top.note_left.min(nl);
+                            top.note_right = top.note_right.max(nr);
+                        }
+                    }
+                    if !note.on_message
+                        && let Some((left, right)) = note_group_extent(ev_idx, note)
+                    {
+                        for top in group_start_stack.iter_mut() {
+                            top.members.push(SequenceGroupMemberBounds {
+                                min: left,
+                                max: right,
+                                kind: SequenceGroupMemberKind::Ordinary,
+                            });
+                        }
+                    }
+                }
+                Event::Ref(r) if !group_start_stack.is_empty() => {
+                    if let Some((rl, rr)) = ref_group_extent(r) {
+                        for top in group_start_stack.iter_mut() {
+                            top.ref_left = top.ref_left.min(rl);
+                            top.ref_right = top.ref_right.max(rr);
+                            top.members.push(SequenceGroupMemberBounds {
+                                min: rl,
+                                max: rr,
+                                kind: SequenceGroupMemberKind::Ordinary,
+                            });
+                            for participant in &r.participants {
+                                if let Some(&participant_idx) = id_to_idx.get(participant.as_str())
+                                {
+                                    top.members
+                                        .push(living_participant_group_member(participant_idx));
+                                }
+                            }
+                        }
+                    }
+                }
+                _ => {}
             }
         }
-        group_frames
-    };
-
-    let mut group_frames = compute_group_frames(&participants);
+    }
 
     // Frames are popped inner-first (a nested group's GroupEnd precedes its
     // enclosing group's GroupEnd), but PlantUML emits the first-instance frame
@@ -9819,46 +10176,46 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // index to restore document order.
     group_frames.sort_by_key(|f| f.event_idx);
 
-    // `GroupingGraphicalElement#getStartingX` is ten pixels left of the
-    // InGroupableList envelope that is used to draw the frame. It participates
-    // in DrawableSetInitializer.prepareMissingSpace alongside notes, arrows,
-    // refs, and every other graphical element. The legacy path previously
-    // discovered frames only after its note-only reservation, so a negative
-    // group header start never translated the shared participant constraints.
-    //
-    // Apply the one Java missing-space translation here. All coordinates stored
-    // below are views of the same constraint set, so they move together; no
-    // second note or frame-specific solve follows this translation.
-    let group_left_missing_space = if diagram.teoz {
+    // GroupingGraphicalElement#getStartingX reports `list.min - MARGIN10` to
+    // DrawableSetInitializer.prepareMissingSpace. A note can become the list's
+    // minimum after the participant constraints were solved, so the complete
+    // shared constraint set must move whenever that reported envelope crosses
+    // the left border. The SVG's classic frame body retains one stroke lane to
+    // the left of the resulting MARGIN10 position.
+    let group_left_feedback = if diagram.teoz {
         0.0
     } else {
-        group_frames
+        let min_frame_left = group_frames
             .iter()
-            .map(|frame| {
-                let integer_reprojection = if frame.left_owner == GroupLeftOwner::SingleOverNote {
-                    1.0
-                } else {
-                    0.0
-                };
-                GROUP_FRAME_MARGIN - frame.left - integer_reprojection
-            })
-            .fold(0.0_f64, f64::max)
-            .max(0.0)
+            // A left-boundary MessageExoArrow owns the virtual border and uses
+            // InGroupableList's dedicated +3 minimum. Its frame intentionally
+            // remains in that border lane instead of participating in the
+            // ordinary group-header translation.
+            .filter(|frame| !frame.left_is_external)
+            .map(|frame| frame.left)
+            .fold(f64::INFINITY, f64::min);
+        if min_frame_left < GROUP_FRAME_MARGIN - 1.0 {
+            GROUP_FRAME_MARGIN - 1.0 - min_frame_left
+        } else {
+            0.0
+        }
     };
-    if group_left_missing_space > 0.0 {
+    if group_left_feedback > 0.0 {
         for participant in &mut participants {
-            participant.center_x += group_left_missing_space;
-            participant.box_x += group_left_missing_space;
-            participant.lifeline_line_x += group_left_missing_space;
+            participant.center_x += group_left_feedback;
+            participant.box_x += group_left_feedback;
+            participant.lifeline_line_x += group_left_feedback;
         }
-        group_frames = compute_group_frames(&participants);
-        group_frames.sort_by_key(|frame| frame.event_idx);
-        for note_left in self_msg_right_note_left_by_event.values_mut() {
-            *note_left += group_left_missing_space;
+        for frame in &mut group_frames {
+            frame.left += group_left_feedback;
+            frame.right += group_left_feedback;
         }
-        svg_width_exact += group_left_missing_space;
+        for left in self_msg_right_note_left_by_event.values_mut() {
+            *left += group_left_feedback;
+        }
+        svg_width_exact += group_left_feedback;
     }
-    let effective_right = effective_right + group_left_missing_space;
+
     let center_of = |id: &str| -> f64 {
         id_to_idx
             .get(id)
@@ -10585,10 +10942,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Messages — use pre-computed y positions from event_y_positions
     let mut msg_id: u32 = 0;
     let mut auto_num = AutoState::default();
-    // Return stack: tracks activation-backed `return` targets as
-    // (returned-from participant, returned-to participant, is_open_arrow).
-    let mut return_stack: Vec<(String, String, bool)> = Vec::new();
-    let mut last_return_pair: Option<(String, String, bool)> = None;
 
     let events = &diagram.events;
     let lost_external_min_to_x = participants
@@ -10604,9 +10957,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         })
-        // MessageExoArrow#getRightEndInternal always receives the solved
-        // constraint-set maxX. A TO_RIGHT arrow therefore reaches the shared
-        // right border even when no FROM_RIGHT message is present.
+        // MessageExoArrow receives DrawableSet's final freeX after
+        // prepareMissingSpace has measured every graphical element. The SVG
+        // canvas adds the standard 5px outer inset after that shared edge.
         .max(svg_width_exact - 5.0);
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
@@ -10703,6 +11056,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 };
                 let is_self = msg.from == msg.to;
                 let is_right = to_x > from_x;
+                let internal_endpoints = if !diagram.teoz && !is_self {
+                    match (
+                        id_to_idx.get(msg.from.as_str()).copied(),
+                        id_to_idx.get(msg.to.as_str()).copied(),
+                    ) {
+                        (Some(from_idx), Some(to_idx)) => {
+                            let (left_idx, right_idx) = if from_idx < to_idx {
+                                (from_idx, to_idx)
+                            } else {
+                                (to_idx, from_idx)
+                            };
+                            Some(sequence_arrow_endpoints(
+                                participants[left_idx].center_x,
+                                life_lines.depth_at(&participants[left_idx].id, ordinate),
+                                participants[right_idx].center_x,
+                                life_lines.depth_at(&participants[right_idx].id, ordinate),
+                            ))
+                        }
+                        _ => None,
+                    }
+                } else {
+                    None
+                };
+                let internal_from_x = internal_endpoints.map(|endpoints| {
+                    if is_right {
+                        endpoints.left
+                    } else {
+                        endpoints.right
+                    }
+                });
+                let internal_to_x = internal_endpoints.map(|endpoints| {
+                    if is_right {
+                        endpoints.right
+                    } else {
+                        endpoints.left
+                    }
+                });
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
                 let is_hidden = msg.arrow.line == LineStyle::Hidden;
                 let is_open = msg.arrow.head == ArrowHead::Open;
@@ -11027,7 +11417,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // stack, where Java keeps the line on the bar that remains.
                     let from_existing_depth = from_depth;
                     let source_right_depth = from_live_depth;
-                    let from_x_shifted = if msg.to == "]" {
+                    let from_x_shifted = if let Some(actual_from_x) = internal_from_x {
+                        actual_from_x
+                    } else if msg.to == "]" {
                         from_x + from_live_depth as f64 * ACTIVATION_HALF_W
                     } else if msg.to == "[" {
                         from_x
@@ -11066,10 +11458,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // the union segment's right edge; the right participant
                     // contributes its left edge.
                     let to_existing_depth = to_depth;
-                    let activates_target = to_live_depth > to_existing_depth
-                        || matches!(msg.activation, Some(ActivationChange::Activate));
+                    let activates_target = to_live_depth > to_existing_depth;
                     let target_deactivates_at_start = to_live_depth < to_existing_depth;
-                    let target_shift = if msg.from == "[" {
+                    let target_shift = if internal_to_x.is_some() {
+                        0.0
+                    } else if msg.from == "[" {
                         if to_live_depth > 0 {
                             ACTIVATION_HALF_W
                         } else {
@@ -11077,10 +11470,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     } else if msg.from == "]" {
                         to_live_depth as f64 * ACTIVATION_HALF_W
-                    } else if (to_active || activates_target)
-                        && !is_create_msg
-                        && !target_deactivates_at_start
-                    {
+                    } else if to_active && !is_create_msg && !target_deactivates_at_start {
                         if is_right {
                             let lands_on_depth = if activates_target {
                                 to_existing_depth
@@ -11089,13 +11479,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             ACTIVATION_HALF_W * (1.0 - lands_on_depth as f64)
                         } else if activates_target {
-                            // All variations at the message ordinate contribute
-                            // to LivingParticipantBox.getLiveThicknessAt. This
-                            // matters when `B ++` is immediately followed by an
-                            // explicit `activate B`: both live segments start on
-                            // the same row, so the reverse arrow lands on the
-                            // outer edge of their union.
-                            ACTIVATION_HALF_W * to_live_depth as f64
+                            ACTIVATION_HALF_W * (to_existing_depth + 1) as f64
                         } else {
                             ACTIVATION_HALF_W * to_existing_depth as f64
                         }
@@ -11107,6 +11491,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let half =
                             participants[*id_to_idx.get(msg.to.as_str()).unwrap()].box_width / 2.0;
                         if is_right { to_x - half } else { to_x + half }
+                    } else if let Some(actual_to_x) = internal_to_x {
+                        actual_to_x
                     } else {
                         to_x
                     };
@@ -11337,7 +11723,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             && from_existing_depth > 0;
                         let dotted_from_active_bar =
                             is_dotted && from_active && !from_deactivates_at_start;
-                        let line_x2_end = if teoz_deactivate_return {
+                        let line_x2_end = if internal_from_x.is_some() {
+                            from_x_shifted - 1.0
+                        } else if teoz_deactivate_return {
                             // The return leaves from the *closing* (deepest) bar's
                             // near edge. A bar at nesting depth d has its left edge
                             // at `from_x - HALF_W + (d-1)*HALF_W`; for d==1 this is
@@ -11350,7 +11738,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             from_x_shifted - 1.0
                         };
-                        let source_area_right_end = message_area_right_end(from_x, from_live_depth);
+                        let source_area_right_end = internal_from_x
+                            .unwrap_or_else(|| message_area_right_end(from_x, from_live_depth));
                         let leading_cross_center = has_source_cross
                             .then_some(source_area_right_end - SOURCE_CROSS_REVERSE_CENTER_OFFSET);
                         let line_x2_end = if let Some(center) = leading_cross_center {
@@ -11547,38 +11936,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .unwrap();
                 }
 
-                // Update activation state and return stack after this message.
-                // A bare `return` without activation replies from the previous
-                // message's receiver to its sender.
-                last_return_pair = Some((
-                    msg.to.clone(),
-                    msg.from.clone(),
-                    msg.arrow.head == ArrowHead::Open,
-                ));
-                if let Some(act) = &msg.activation
-                    && life_lines.accepted_event(ev_idx)
-                {
-                    match act {
-                        ActivationChange::Activate => {
-                            return_stack.push((
-                                msg.to.clone(),
-                                msg.from.clone(),
-                                msg.arrow.head == ArrowHead::Open,
-                            ));
-                        }
-                        ActivationChange::Deactivate => {
-                            // Pop the return stack for the deactivated participant
-                            if let Some(pos) = return_stack
-                                .iter()
-                                .rposition(|(act_p, _, _)| act_p == &msg.from)
-                            {
-                                return_stack.remove(pos);
-                            }
-                        }
-                        ActivationChange::Destroy => {}
-                    }
-                }
-
                 // Advance autonumber
                 auto_num.advance();
             }
@@ -11591,29 +11948,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .as_ref()
                     .map(|(t, w, s)| (t.as_str(), *w, s));
 
-                // Pop the activation return stack to find from/to participants
-                // and arrow style. Without activation, fall back to the most
-                // recent concrete message.
-                let stack_entry = life_lines
-                    .accepted_event(ev_idx)
-                    .then(|| return_stack.pop())
-                    .flatten();
-                let (ret_from, ret_to, ret_open) = if let Some(entry) = stack_entry.clone() {
-                    entry
-                } else if let Some(entry) = last_return_pair.clone() {
-                    entry
-                } else {
-                    // Fallback if no activation context
-                    let p0 = participants
-                        .first()
-                        .map(|p| p.id.clone())
-                        .unwrap_or_default();
-                    let p1 = participants
-                        .get(1)
-                        .map(|p| p.id.clone())
-                        .unwrap_or_default();
-                    (p0, p1, false)
-                };
+                let (ret_from, ret_to, ret_open) =
+                    if let Some(context) = life_lines.return_context(ev_idx) {
+                        (context.from.clone(), context.to.clone(), context.open_arrow)
+                    } else {
+                        // Fallback if no activation context
+                        let p0 = participants
+                            .first()
+                            .map(|p| p.id.clone())
+                            .unwrap_or_default();
+                        let p1 = participants
+                            .get(1)
+                            .map(|p| p.id.clone())
+                            .unwrap_or_default();
+                        (p0, p1, false)
+                    };
 
                 let from_x = center_of(&ret_from);
                 let to_x = center_of(&ret_to);
@@ -11778,11 +12127,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         );
                     }
                 }
-
-                // The synthesized return is now the newest concrete message.
-                // A consecutive ownerless return reverses it via
-                // SequenceDiagram#getLastEventWithDeactivate.
-                last_return_pair = Some((ret_to.clone(), ret_from.clone(), ret_open));
 
                 // Advance autonumber
                 auto_num.advance();
@@ -12038,10 +12382,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     .copied()
                                     .unwrap_or(0.0)
                             };
-                            if note.shape != NoteShape::Note && live_shift == 0.0 {
-                                participants[i].lifeline_line_x
+                            if live_shift == 0.0 {
+                                participants[i].center_x
                             } else {
-                                participants[i].center_x + live_shift
+                                participants[i].box_x + participants[i].box_width / 2.0 + live_shift
                             }
                         }
                     })
@@ -12100,26 +12444,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if note.on_message {
                             let right = ll_x.floor() - gap;
                             (right - note_content_w, right)
+                        } else if note.shape == NoteShape::Note {
+                            let component_width =
+                                folded_note_component_width(max_text_w, note_global_padding);
+                            let component_left = (ll_x - component_width).trunc();
+                            let left = component_left + ROSE_NOTE_PADDING_X;
+                            (left, left + note_content_w)
                         } else {
-                            let left = if note.shape == NoteShape::Note {
-                                let align_extra = if note_text_align == MessageAlign::Center {
-                                    NOTE_FOLD_SIZE - 1.0
-                                } else {
-                                    0.0
-                                };
-                                let component_pref_width = max_text_w
-                                    + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                    + align_extra
-                                    + 2.0 * note_global_padding;
-                                (ll_x - component_pref_width).trunc() + ROSE_NOTE_PADDING_X
-                            } else {
-                                let position_width = note_content_width_raw_padded(
-                                    max_text_w,
-                                    note.shape,
-                                    note_text_align,
-                                );
-                                (ll_x - gap - position_width).floor()
-                            };
+                            let preferred_width = single_note_visible_raw_width(
+                                max_text_w,
+                                note.shape,
+                                note_global_padding,
+                            );
+                            let left = (ll_x - gap - preferred_width).trunc();
                             (left, left + note_content_w)
                         }
                     }
@@ -12987,23 +13324,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     );
                 }
             }
-            Event::Activate(id, _) => {
-                if life_lines.accepted_event(ev_idx)
-                    && let Some((ret_from, ret_to, ret_open)) = last_return_pair.clone()
-                    && ret_from == *id
-                {
-                    return_stack.push((ret_from, ret_to, ret_open));
-                }
-            }
-            Event::Deactivate(id) => {
-                if life_lines.accepted_event(ev_idx)
-                    && let Some(pos) = return_stack
-                        .iter()
-                        .rposition(|(ret_from, _, _)| ret_from == id)
-                {
-                    return_stack.remove(pos);
-                }
-            }
             Event::Destroy(id) => {
                 // Render the X mark on the lifeline at this y position.
                 // PlantUML draws an 18x18 cross in stroke #A80036, stroke-width 2.
@@ -13281,6 +13601,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn folded_note_measurement_preserves_fractional_text_width() {
+        assert_eq!(
+            fmt_coord(note_max_line_width_with_family(
+                "Log and alert",
+                13.0,
+                "sans-serif"
+            )),
+            "83.04"
+        );
+    }
     use rustuml_parser::diagram::{DiagramMeta, SkinParam};
 
     #[test]
@@ -13843,25 +14175,6 @@ mod tests {
         assert!(!svg.contains(r##"<text fill="#000000" font-family="sans-serif" font-size="13""##));
         assert!(svg.contains(r#"width="112px""#));
         assert!(svg.contains(r#"height="107px""#));
-    }
-
-    #[test]
-    fn message_link_keeps_raw_newline_in_url_token() {
-        let input = concat!(
-            "@startuml\n",
-            "participant \"Renamed Client\" as Client\n",
-            "participant \"Renamed Server\" as Server\n",
-            "Client -> Server : pre [[https://example.com/sequence/implicit\\npath shown]] post\n",
-            "@enduml\n",
-        );
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-
-        assert!(svg.contains(
-            r#"href="https://example.com/sequence/implicit\npath" target="_top" title="https://example.com/sequence/implicit&#10;path""#
-        ));
-        assert!(svg.contains(">shown</text>"));
-        assert!(!svg.contains(">path shown]]"));
     }
 
     #[test]

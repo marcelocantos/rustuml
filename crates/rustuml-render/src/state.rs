@@ -9,8 +9,8 @@
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, GraphSpacing,
-    LayoutGraph, LayoutResult, NodePosition, svek_state_border_geometry,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, EdgeRouting,
+    GraphSpacing, LayoutGraph, LayoutResult, NodePosition, svek_state_border_geometry,
 };
 use rustuml_parser::diagram::state::*;
 
@@ -23,34 +23,6 @@ use crate::style::Theme;
 use crate::style_cascade::{StyleBoxSides, StyleCascade, StyleSignature};
 use crate::text_render::{self, TextBase};
 use rustuml_parser::diagram::style::StyleScheme;
-
-#[derive(Debug, Clone, PartialEq, Eq)]
-enum StatePaint {
-    Solid(String),
-    Transparent,
-    Gradient {
-        color1: String,
-        color2: String,
-        policy: char,
-    },
-}
-
-impl StatePaint {
-    fn from_raw(value: &str) -> Self {
-        let value = value.trim();
-        if value.eq_ignore_ascii_case("transparent") || value.eq_ignore_ascii_case("none") {
-            return Self::Transparent;
-        }
-        if let Some((raw1, raw2, policy)) = split_state_gradient(value) {
-            return Self::Gradient {
-                color1: crate::sequence::resolve_color(raw1),
-                color2: crate::sequence::resolve_color(raw2),
-                policy,
-            };
-        }
-        Self::Solid(crate::sequence::resolve_color(value))
-    }
-}
 
 #[derive(Debug)]
 struct StateGradient {
@@ -73,56 +45,75 @@ fn split_state_gradient(value: &str) -> Option<(&str, &str, char)> {
     None
 }
 
-#[derive(Debug)]
-struct StateGradientRegistry {
-    source: String,
-    gradients: Vec<StateGradient>,
+fn resolve_state_paint(value: &str) -> String {
+    split_state_gradient(value).map_or_else(
+        || crate::sequence::resolve_color(value),
+        |(color1, color2, policy)| {
+            format!(
+                "{}{policy}{}",
+                crate::sequence::resolve_color(color1),
+                crate::sequence::resolve_color(color2)
+            )
+        },
+    )
 }
 
-impl StateGradientRegistry {
-    fn new(diagram: &StateDiagram) -> Self {
-        Self {
-            source: diagram.meta.source.clone().unwrap_or_default(),
-            gradients: Vec::new(),
-        }
-    }
-
-    fn use_paint(&mut self, paint: &StatePaint) -> String {
-        match paint {
-            StatePaint::Solid(color) => color.clone(),
-            StatePaint::Transparent => "none".to_string(),
-            StatePaint::Gradient {
-                color1,
-                color2,
-                policy,
-            } => {
-                if let Some(gradient) = self.gradients.iter().find(|gradient| {
-                    gradient.color1 == *color1
-                        && gradient.color2 == *color2
-                        && gradient.policy == *policy
-                }) {
-                    return format!("url(#{})", gradient.id);
-                }
-                let id =
-                    crate::filter_registry::gradient_id_for(&self.source, self.gradients.len());
-                self.gradients.push(StateGradient {
-                    color1: color1.clone(),
-                    color2: color2.clone(),
-                    policy: *policy,
-                    id: id.clone(),
-                });
-                format!("url(#{id})")
-            }
-        }
-    }
-
-    fn use_raw(&mut self, value: &str) -> String {
-        self.use_paint(&StatePaint::from_raw(value))
+fn resolve_pseudo_state_color(value: &str) -> String {
+    if value.trim().eq_ignore_ascii_case("transparent") {
+        "none".to_string()
+    } else {
+        crate::sequence::resolve_color(value)
     }
 }
 
-fn emit_state_gradient_defs(svg: &mut String, registry: &StateGradientRegistry) {
-    for gradient in &registry.gradients {
+fn state_gradients(diagram: &StateDiagram) -> Vec<StateGradient> {
+    let source = diagram.meta.source.as_deref().unwrap_or("");
+    let skin = StateSkin::from_diagram(diagram);
+    let mut gradients: Vec<StateGradient> = Vec::new();
+    for state in &diagram.states {
+        let rendered_style = autonomous_state_style(diagram, &skin, Some(state));
+        let effective_fill = state
+            .fill
+            .as_deref()
+            .map(resolve_state_paint)
+            .unwrap_or(rendered_style.fill);
+        let Some((raw1, raw2, policy)) = split_state_gradient(&effective_fill) else {
+            continue;
+        };
+        let color1 = crate::sequence::resolve_color(raw1);
+        let color2 = crate::sequence::resolve_color(raw2);
+        if gradients.iter().any(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        }) {
+            continue;
+        }
+        let id = crate::filter_registry::gradient_id_for(source, gradients.len());
+        gradients.push(StateGradient {
+            color1,
+            color2,
+            policy,
+            id,
+        });
+    }
+    gradients
+}
+
+fn state_gradient_fill(value: &str, gradients: &[StateGradient]) -> String {
+    let Some((raw1, raw2, policy)) = split_state_gradient(value) else {
+        return crate::sequence::resolve_color(value);
+    };
+    let color1 = crate::sequence::resolve_color(raw1);
+    let color2 = crate::sequence::resolve_color(raw2);
+    gradients
+        .iter()
+        .find(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        })
+        .map_or(color1, |gradient| format!("url(#{})", gradient.id))
+}
+
+fn emit_state_gradient_defs(svg: &mut String, gradients: &[StateGradient]) {
+    for gradient in gradients {
         // Java provenance: `SvgGraphics.createSvgGradient` maps the
         // HColorGradient separator policy to these four endpoint pairs. The
         // DOM serializer emits attributes alphabetically.
@@ -139,19 +130,6 @@ fn emit_state_gradient_defs(svg: &mut String, registry: &StateGradientRegistry) 
         )
         .unwrap();
     }
-}
-
-fn state_defs(registry: &StateGradientRegistry, shadow_filter_id: Option<&str>) -> String {
-    if registry.gradients.is_empty() && shadow_filter_id.is_none() {
-        return "<defs/>".to_string();
-    }
-    let mut defs = String::from("<defs>");
-    emit_state_gradient_defs(&mut defs, registry);
-    if let Some(id) = shadow_filter_id {
-        defs.push_str(&crate::filter_registry::shadow_filter_def(id));
-    }
-    defs.push_str("</defs>");
-    defs
 }
 
 // --- PlantUML state diagram constants ---
@@ -564,6 +542,15 @@ fn layout_node_size(
             StateLayoutShape::Circle,
         );
     }
+    if is_history_marker(id) {
+        // Java `EntityImageStateHistory` uses `ShapeType.CIRCLE` for both
+        // anonymous `[H]`/`[H*]` markers and explicitly named history states.
+        return (
+            END_OUTER_RADIUS * 2.0,
+            END_OUTER_RADIUS * 2.0,
+            StateLayoutShape::Circle,
+        );
+    }
     if let Some(position) = state_def.map(StateEntityPosition::of)
         && !position.is_normal()
     {
@@ -591,9 +578,8 @@ fn autonomous_layout_node_size(
     skin: &StateSkin,
     id: &str,
     state_def: Option<&State>,
-    hide_empty_desc: bool,
 ) -> (f64, f64, StateLayoutShape) {
-    let (_, _, shape) = layout_node_size(id, state_def, hide_empty_desc);
+    let (_, _, shape) = layout_node_size(id, state_def, false);
     if shape != StateLayoutShape::Box
         || state_def.is_some_and(|state| {
             matches!(
@@ -602,7 +588,7 @@ fn autonomous_layout_node_size(
             )
         })
     {
-        return layout_node_size(id, state_def, hide_empty_desc);
+        return layout_node_size(id, state_def, false);
     }
 
     let style = autonomous_state_style(diagram, skin, state_def);
@@ -618,25 +604,14 @@ fn autonomous_layout_node_size(
         .iter()
         .map(|description| style.attribute.height(description))
         .sum::<f64>();
-    let title_block_width = title_width + 2.0 * style.padding;
-    let attribute_block_width = attribute_width + 2.0 * style.padding;
-    let title_block_height = title_height + 2.0 * style.padding;
-    let attribute_block_height = attribute_height + 2.0 * style.padding;
-    if hide_empty_desc && descriptions.is_empty() {
-        (
-            (title_block_width + 10.0).max(STATE_MIN_WIDTH),
-            (title_block_height + 10.0).max(STATE_EMPTY_BOX_HEIGHT),
-            shape,
-        )
-    } else {
-        (
-            (title_block_width.max(attribute_block_width) + STATE_DIMENSION_PADDING)
-                .max(STATE_MIN_WIDTH),
-            (title_block_height + attribute_block_height + STATE_DIMENSION_PADDING)
-                .max(STATE_BOX_HEIGHT),
-            shape,
-        )
-    }
+    let global_padding = state_global_padding(diagram);
+    (
+        (title_width.max(attribute_width) + STATE_DIMENSION_PADDING + 2.0 * global_padding)
+            .max(STATE_MIN_WIDTH),
+        (title_height + attribute_height + STATE_DIMENSION_PADDING + 4.0 * global_padding)
+            .max(STATE_BOX_HEIGHT),
+        shape,
+    )
 }
 
 struct StateNodeFont<'a> {
@@ -645,8 +620,6 @@ struct StateNodeFont<'a> {
     name: Option<&'a str>,
     monospace: bool,
     bold: bool,
-    italic: bool,
-    padding: f64,
 }
 
 fn layout_node_size_with_font(
@@ -654,6 +627,7 @@ fn layout_node_size_with_font(
     state_def: Option<&State>,
     hide_empty_desc: bool,
     font: &StateNodeFont<'_>,
+    global_padding: f64,
 ) -> (f64, f64, StateLayoutShape) {
     let (_, _, shape) = layout_node_size(id, state_def, hide_empty_desc);
     if shape != StateLayoutShape::Box
@@ -670,14 +644,8 @@ fn layout_node_size_with_font(
     let label = state_def.map_or(id, |state| state.label.as_str());
     let descriptions = state_def.map_or(&[][..], |state| state.descriptions.as_slice());
     let family = font.name.unwrap_or("sans-serif");
-    let title_width = state_text_width_with_family(
-        label,
-        font.name_size,
-        font.bold,
-        font.italic,
-        font.name,
-        font.monospace,
-    );
+    let title_width =
+        state_text_width_with_family(label, font.name_size, font.bold, font.name, font.monospace);
     let fields_width = descriptions
         .iter()
         .map(|description| {
@@ -685,7 +653,6 @@ fn layout_node_size_with_font(
                 description,
                 font.desc_size,
                 font.bold,
-                font.italic,
                 font.name,
                 font.monospace,
             )
@@ -703,25 +670,45 @@ fn layout_node_size_with_font(
     // title and fields, adds 2*MARGIN + 2*MARGIN_LINE, then applies the 50px
     // minimum. `EntityImageStateEmptyDescription` adds only 2*MARGIN and uses
     // a 40px minimum.
-    let (width, height, minimum_height) = if hide_empty_desc && descriptions.is_empty() {
-        (
-            title_width + 2.0 * font.padding + 10.0,
-            title_height + 2.0 * font.padding + 10.0,
-            STATE_EMPTY_BOX_HEIGHT,
-        )
-    } else {
-        (
-            (title_width + 2.0 * font.padding).max(fields_width + 2.0 * font.padding)
-                + STATE_DIMENSION_PADDING,
-            title_height + fields_height + 4.0 * font.padding + STATE_DIMENSION_PADDING,
-            STATE_BOX_HEIGHT,
-        )
-    };
+    let (width_padding, height_padding, minimum_height) =
+        if hide_empty_desc && descriptions.is_empty() {
+            (
+                10.0 + 2.0 * global_padding,
+                10.0 + 2.0 * global_padding,
+                STATE_EMPTY_BOX_HEIGHT,
+            )
+        } else {
+            (
+                STATE_DIMENSION_PADDING + 2.0 * global_padding,
+                STATE_DIMENSION_PADDING + 4.0 * global_padding,
+                STATE_BOX_HEIGHT,
+            )
+        };
     (
-        width.max(STATE_MIN_WIDTH),
-        height.max(minimum_height),
+        (title_width.max(fields_width) + width_padding).max(STATE_MIN_WIDTH),
+        (title_height + fields_height + height_padding).max(minimum_height),
         shape,
     )
+}
+
+fn ordinary_edge_label_size(
+    label: &str,
+    arrow_font: &StateArrowFont,
+    global_padding: f64,
+) -> EdgeLabelSize {
+    let margin = 1.0 + global_padding;
+    EdgeLabelSize {
+        // Java provenance: `SvekEdge.addVisibilityModifier` gives ordinary
+        // center labels one pixel of margin on every side. Global `padding`
+        // is carried by the label's style and expands that same block.
+        width: text_render::measure_with_family(
+            label,
+            arrow_font.size as f64,
+            arrow_font.bold,
+            &arrow_font.family,
+        ) + 2.0 * margin,
+        height: arrow_font.label_height(label) + 2.0 * margin,
+    }
 }
 
 /// Register a State entity with Graphviz using PlantUML's SVEK shape.
@@ -761,6 +748,33 @@ fn add_state_layout_node(
             }
         }
     }
+}
+
+fn state_graph_direction(diagram: &StateDiagram) -> Direction {
+    match diagram.direction {
+        StateLayoutDirection::TopToBottom => Direction::TopToBottom,
+        StateLayoutDirection::LeftToRight => Direction::LeftToRight,
+    }
+}
+
+fn state_edge_routing(diagram: &StateDiagram) -> EdgeRouting {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| skinparam.key.eq_ignore_ascii_case("linetype"))
+        .map(|skinparam| skinparam.value.trim())
+        .map(|value| {
+            if value.eq_ignore_ascii_case("ortho") {
+                EdgeRouting::Ortho
+            } else if value.eq_ignore_ascii_case("polyline") {
+                EdgeRouting::Polyline
+            } else {
+                EdgeRouting::Spline
+            }
+        })
+        .unwrap_or_default()
 }
 
 /// Return the vertical translation applied by `SvekResult.calculateDimension`.
@@ -958,21 +972,14 @@ fn attached_note_specs(
                 _ => return None,
             };
             let ids = allocated_ids.note_ids[note_index].as_ref()?;
-            let matching_anchor = |candidate: &StateNote| match &candidate.kind {
-                StateNoteKind::RightOf(candidate) | StateNoteKind::LeftOf(candidate) => {
-                    candidate == anchor
-                }
+            let matching_anchor_side = |candidate: &StateNote| match &candidate.kind {
+                StateNoteKind::RightOf(candidate) => right && candidate == anchor,
+                StateNoteKind::LeftOf(candidate) => !right && candidate == anchor,
                 _ => false,
             };
-            let repeated_anchor = diagram
-                .notes
+            let last_for_anchor = diagram.notes[note_index + 1..]
                 .iter()
-                .filter(|note| matching_anchor(note))
-                .count()
-                > 1;
-            let first_for_anchor = diagram.notes[..note_index]
-                .iter()
-                .all(|note| !matching_anchor(note));
+                .all(|note| !matching_anchor_side(note));
             let (width, height) = attached_note_size(&note.text);
             Some(AttachedNoteSpec {
                 note_index,
@@ -982,9 +989,10 @@ fn attached_note_specs(
                 anchor: anchor.to_string(),
                 right,
                 // Java `GraphvizImageBuilder.isOpalisable/onlyOneLink`
-                // leaves the first entity image normal when an anchor has
-                // repeated note attachments; later siblings receive Opale.
-                opale: !repeated_anchor || !first_for_anchor,
+                // leaves earlier competing note images normal when an
+                // anchor-side pair is repeated; opposite sides own independent
+                // callout edges.
+                opale: last_for_anchor,
                 width,
                 height,
             })
@@ -1043,161 +1051,6 @@ fn link_note_component_size(note: &StateNote) -> EdgeLabelSize {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum StateLabelAlignment {
-    Left,
-    Center,
-    Right,
-}
-
-struct StateTransitionLabelBlock {
-    row_widths: Vec<f64>,
-    row_heights: Vec<f64>,
-    width: f64,
-    height: f64,
-    alignment: StateLabelAlignment,
-}
-
-impl StateTransitionLabelBlock {
-    fn paint_row(row: &str) -> &str {
-        // Java provenance: `StripeSimple.getAtoms()` inserts one ordinary-space
-        // `AtomText` when a Display row produced no Creole atoms. `SheetBlock1`
-        // then uses that retained atom for measurement, alignment, and drawing.
-        if row.is_empty() { " " } else { row }
-    }
-
-    fn measure(label: &TransitionLabel, arrow_font: &StateArrowFont) -> Self {
-        let row_widths = label
-            .rows()
-            .iter()
-            .map(|row| {
-                text_render::measure_with_family_and_face(
-                    Self::paint_row(row),
-                    arrow_font.size as f64,
-                    arrow_font.bold,
-                    arrow_font.italic,
-                    &arrow_font.family,
-                )
-            })
-            .collect::<Vec<_>>();
-        let row_heights = label
-            .rows()
-            .iter()
-            .map(|row| {
-                text_render::label_height_with_family(
-                    Self::paint_row(row),
-                    arrow_font.size as f64,
-                    &arrow_font.family,
-                )
-            })
-            .collect::<Vec<_>>();
-        let width = row_widths.iter().copied().fold(0.0, f64::max);
-        let height = row_heights.iter().sum();
-        let alignment = match label.natural_alignment() {
-            Some(TransitionLabelAlignment::Left) => StateLabelAlignment::Left,
-            Some(TransitionLabelAlignment::Right) => StateLabelAlignment::Right,
-            None => arrow_font.alignment,
-        };
-        Self {
-            row_widths,
-            row_heights,
-            width,
-            height,
-            alignment,
-        }
-    }
-
-    fn row_x(&self, block_x: f64, row_index: usize) -> f64 {
-        let remaining = self.width - self.row_widths[row_index];
-        block_x
-            + match self.alignment {
-                StateLabelAlignment::Left => 0.0,
-                StateLabelAlignment::Center => remaining / 2.0,
-                StateLabelAlignment::Right => remaining,
-            }
-    }
-
-    fn first_baseline_ascent(&self, label: &TransitionLabel, arrow_font: &StateArrowFont) -> f64 {
-        text_render::label_first_baseline_ascent_with_family(
-            Self::paint_row(&label.rows()[0]),
-            arrow_font.size as f64,
-            &arrow_font.family,
-        )
-    }
-
-    fn emit(
-        &self,
-        svg: &mut String,
-        label: &TransitionLabel,
-        block_x: f64,
-        block_y: f64,
-        arrow_font: &StateArrowFont,
-    ) {
-        let mut row_top = block_y;
-        for (row_index, row) in label.rows().iter().enumerate() {
-            let row = Self::paint_row(row);
-            let baseline = row_top
-                + text_render::label_first_baseline_ascent_with_family(
-                    row,
-                    arrow_font.size as f64,
-                    &arrow_font.family,
-                );
-            text_render::emit_text(
-                svg,
-                row,
-                &TextBase {
-                    x: self.row_x(block_x, row_index),
-                    y: baseline,
-                    font_size: arrow_font.size,
-                    font_family: &arrow_font.family,
-                    fill: &arrow_font.color,
-                    bold: arrow_font.bold,
-                    italic: arrow_font.italic,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-            row_top += self.row_heights[row_index];
-        }
-    }
-
-    fn painted_y_range(
-        &self,
-        label: &TransitionLabel,
-        block_y: f64,
-        arrow_font: &StateArrowFont,
-    ) -> (f64, f64) {
-        let mut row_top = block_y;
-        let mut min_y = f64::INFINITY;
-        let mut max_y = f64::NEG_INFINITY;
-        for (row_index, row) in label.rows().iter().enumerate() {
-            let row = Self::paint_row(row);
-            let baseline = row_top
-                + text_render::label_first_baseline_ascent_with_family(
-                    row,
-                    arrow_font.size as f64,
-                    &arrow_font.family,
-                );
-            min_y = min_y.min(baseline - self.row_heights[row_index] + LIMIT_FINDER_TEXT_ADJUST);
-            max_y = max_y.max(baseline + LIMIT_FINDER_TEXT_ADJUST);
-            row_top += self.row_heights[row_index];
-        }
-        (min_y, max_y)
-    }
-}
-
-fn ordinary_edge_label_size(label: &TransitionLabel, arrow_font: &StateArrowFont) -> EdgeLabelSize {
-    let inset = SVEK_EDGE_LABEL_MARGIN + arrow_font.padding;
-    let block = StateTransitionLabelBlock::measure(label, arrow_font);
-    EdgeLabelSize {
-        // Java provenance: `Display#create0` contributes the live SkinParam
-        // padding, then `SvekEdge#addVisibilityModifier` wraps that block in
-        // one independent pixel of margin on every side.
-        width: block.width + 2.0 * inset,
-        height: block.height + 2.0 * inset,
-    }
-}
-
 /// Arrow-decoration clearance used by Java SVEK when Graphviz routes a
 /// labeled edge back to the same state.
 ///
@@ -1234,11 +1087,13 @@ fn emit_link_label_composition(
     note: Option<(&StateNote, StateNotePosition)>,
     label_origin: (f64, f64),
     arrow_font: &StateArrowFont,
+    global_padding: f64,
 ) {
+    let label_margin = 1.0 + global_padding;
     let ordinary_size = transition
         .label
-        .as_ref()
-        .map(|label| ordinary_edge_label_size(label, arrow_font));
+        .as_deref()
+        .map(|label| ordinary_edge_label_size(label, arrow_font, global_padding));
     let note_size = note.map(|(note, _)| link_note_component_size(note));
 
     let (ordinary_offset, note_offset) = match (ordinary_size, note_size, note.map(|(_, p)| p)) {
@@ -1265,17 +1120,24 @@ fn emit_link_label_composition(
 
     let emit_label = |svg: &mut String| {
         let (Some(label), Some((offset_x, offset_y))) =
-            (transition.label.as_ref(), ordinary_offset)
+            (transition.label.as_deref(), ordinary_offset)
         else {
             return;
         };
-        let block = StateTransitionLabelBlock::measure(label, arrow_font);
-        block.emit(
+        text_render::emit_text(
             svg,
             label,
-            label_origin.0 + offset_x + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding,
-            label_origin.1 + offset_y + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding,
-            arrow_font,
+            &TextBase {
+                x: label_origin.0 + offset_x + label_margin,
+                y: label_origin.1 + offset_y + label_margin + arrow_font.label_ascent(label),
+                font_size: arrow_font.size,
+                font_family: &arrow_font.family,
+                fill: &arrow_font.color,
+                bold: arrow_font.bold,
+                italic: arrow_font.italic,
+                underline: false,
+                skip_underline: false,
+            },
         );
     };
     let emit_note = |svg: &mut String| {
@@ -1311,11 +1173,13 @@ fn link_label_painted_max(
     note: Option<(&StateNote, StateNotePosition)>,
     label_origin: (f64, f64),
     arrow_font: &StateArrowFont,
+    global_padding: f64,
 ) -> (f64, f64) {
+    let label_margin = 1.0 + global_padding;
     let ordinary_size = transition
         .label
-        .as_ref()
-        .map(|label| ordinary_edge_label_size(label, arrow_font));
+        .as_deref()
+        .map(|label| ordinary_edge_label_size(label, arrow_font, global_padding));
     let note_size = note.map(|(note, _)| link_note_component_size(note));
     let (ordinary_offset, note_offset) = match (ordinary_size, note_size, note.map(|(_, p)| p)) {
         (Some(label), Some(note), Some(StateNotePosition::Left)) => (
@@ -1342,13 +1206,20 @@ fn link_label_painted_max(
     let mut max_x = label_origin.0;
     let mut max_y = label_origin.1;
     if let (Some(label), Some((offset_x, offset_y)), Some(size)) =
-        (transition.label.as_ref(), ordinary_offset, ordinary_size)
+        (transition.label.as_deref(), ordinary_offset, ordinary_size)
     {
-        let block = StateTransitionLabelBlock::measure(label, arrow_font);
         max_x = max_x.max(
-            label_origin.0 + offset_x + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding + block.width,
+            label_origin.0
+                + offset_x
+                + label_margin
+                + text_render::measure_with_family(
+                    label,
+                    arrow_font.size as f64,
+                    arrow_font.bold,
+                    &arrow_font.family,
+                ),
         );
-        max_y = max_y.max(label_origin.1 + offset_y + size.height - 1.0);
+        max_y = max_y.max(label_origin.1 + offset_y + size.height - label_margin);
     }
     if let (Some((note, _)), Some((offset_x, offset_y))) = (note, note_offset) {
         let (body_width, body_height) = attached_note_size(&note.text);
@@ -1671,7 +1542,6 @@ fn state_text_width_with_family(
     text: &str,
     font_size: f64,
     bold: bool,
-    italic: bool,
     font_name: Option<&str>,
     monospace: bool,
 ) -> f64 {
@@ -1684,7 +1554,7 @@ fn state_text_width_with_family(
         {
             arial_text_width(text, font_size, bold)
         } else {
-            text_render::measure_with_family_and_face(text, font_size, bold, italic, font_name)
+            text_render::measure_with_family(text, font_size, bold, font_name)
         }
     } else {
         text_render::measure(text, font_size, bold)
@@ -2125,6 +1995,14 @@ struct StateSkin {
     arrow_color: String,
     /// Resolved transition shaft and arrowhead stroke width.
     arrow_thickness: f64,
+    /// Root style line colour from modern themes, used by pseudo-state chrome.
+    root_line_color: Option<String>,
+    /// Effective `circle.start` background and line colours.
+    start_fill: String,
+    start_stroke: String,
+    /// Effective `circle.end` line and inner-circle background colours.
+    end_stroke: String,
+    end_inner_fill: String,
     /// Final `root.document` background, when explicitly styled.
     document_background: Option<String>,
     /// Final `root.document` margin.
@@ -2163,9 +2041,9 @@ impl StateSkin {
             .or_else(|| color("stateFontColor"))
             .or_else(|| color("defaultFontColor"))
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
-        // Preserve gradients until the SVG driver selects a primitive paint.
-        let state_fill =
-            find("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
+        let state_fill = find("stateBackgroundColor")
+            .map(|value| resolve_state_paint(&value))
+            .unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
         // Java provenance: `SkinParam.cleanForKeySlow` normalizes both
         // `stateArrowColor` and `ArrowColor` to the same arrow style property,
         // so `SkinParam.setParam` makes the later source declaration win.
@@ -2194,6 +2072,11 @@ impl StateSkin {
             state_fill,
             arrow_color,
             arrow_thickness,
+            root_line_color,
+            start_fill: PSEUDO_COLOR.to_string(),
+            start_stroke: PSEUDO_COLOR.to_string(),
+            end_stroke: PSEUDO_COLOR.to_string(),
+            end_inner_fill: PSEUDO_COLOR.to_string(),
             document_background: None,
             document_margin: None,
         };
@@ -2203,16 +2086,23 @@ impl StateSkin {
             StyleSignature::from_selectors(["root", "element", "stateDiagram", "state"]);
         let arrow_signature =
             StyleSignature::from_selectors(["root", "element", "stateDiagram", "arrow"]);
+        let start_signature =
+            StyleSignature::from_selectors(["root", "element", "stateDiagram", "circle", "start"]);
+        let end_signature =
+            StyleSignature::from_selectors(["root", "element", "stateDiagram", "circle", "end"]);
         let document_signature = StyleSignature::from_selectors(["root", "document"]);
         let state_style = cascade.resolve(&state_signature, StyleScheme::Regular);
         let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
+        let start_style = cascade.resolve(&start_signature, StyleScheme::Regular);
+        let end_style = cascade.resolve(&end_signature, StyleScheme::Regular);
         let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
         if let Some(value) = state_style.property("backgroundColor") {
-            skin.state_fill = value.trim().to_string();
+            skin.state_fill = resolve_state_paint(value);
         }
         if let Some(value) = state_style.property("lineColor") {
             let color = crate::sequence::resolve_color(value);
-            skin.stroke = color;
+            skin.stroke = color.clone();
+            skin.root_line_color = Some(color);
         }
         if let Some(value) = state_style.property("lineThickness")
             && let Ok(value) = value.parse::<f64>()
@@ -2230,138 +2120,29 @@ impl StateSkin {
         {
             skin.arrow_thickness = value;
         }
+        // Java provenance: `EntityImageCircleStart` and
+        // `EntityImageCircleEnd` merge these complete signatures before
+        // `CircleStart/End.drawU` independently read background and line
+        // colours. This preserves source-order differences between legacy
+        // activity colour conversions and later `<style>` declarations.
+        if let Some(value) = start_style.property("backgroundColor") {
+            skin.start_fill = resolve_pseudo_state_color(value);
+        }
+        if let Some(value) = start_style.property("lineColor") {
+            skin.start_stroke = resolve_pseudo_state_color(value);
+        }
+        if let Some(value) = end_style.property("lineColor") {
+            skin.end_stroke = resolve_pseudo_state_color(value);
+        }
+        if let Some(value) = end_style.property("backgroundColor") {
+            skin.end_inner_fill = resolve_pseudo_state_color(value);
+        }
         skin.document_background = document_style
             .property("backgroundColor")
             .map(crate::sequence::resolve_color);
         skin.document_margin = document_style.box_sides("margin");
         skin
     }
-}
-
-#[derive(Clone, Copy)]
-enum StatePseudoImage {
-    Start,
-    End,
-    Choice,
-    Bar,
-    History,
-}
-
-#[derive(Clone)]
-struct StatePseudoStyle {
-    fill: StatePaint,
-    stroke: StatePaint,
-    line_thickness: f64,
-    shadow: f64,
-}
-
-fn state_shadow_value(value: &str, fallback: f64) -> f64 {
-    match value.trim().to_ascii_lowercase().as_str() {
-        "true" | "yes" => 3.0,
-        "false" | "no" => 0.0,
-        _ => value.trim().parse::<f64>().unwrap_or(fallback).max(0.0),
-    }
-}
-
-fn state_pseudostate_style(
-    diagram: &StateDiagram,
-    image: StatePseudoImage,
-    stereotype: Option<&str>,
-) -> StatePseudoStyle {
-    // Java image selection owns these signatures. In particular, state
-    // choices and bars deliberately consume activity-diagram styles, while
-    // history consumes the state-diagram diamond style.
-    let (selectors, mut style) = match image {
-        StatePseudoImage::Start => (
-            &["root", "element", "stateDiagram", "circle", "start"][..],
-            StatePseudoStyle {
-                fill: StatePaint::from_raw(PSEUDO_COLOR),
-                stroke: StatePaint::from_raw(PSEUDO_COLOR),
-                line_thickness: 1.0,
-                shadow: 0.0,
-            },
-        ),
-        StatePseudoImage::End => (
-            &["root", "element", "stateDiagram", "circle", "end"][..],
-            StatePseudoStyle {
-                fill: StatePaint::from_raw(PSEUDO_COLOR),
-                stroke: StatePaint::from_raw(PSEUDO_COLOR),
-                line_thickness: 1.0,
-                shadow: 0.0,
-            },
-        ),
-        StatePseudoImage::Choice => (
-            &["root", "element", "activityDiagram", "activity", "diamond"][..],
-            StatePseudoStyle {
-                fill: StatePaint::from_raw(DEFAULT_STATE_FILL),
-                stroke: StatePaint::from_raw(DEFAULT_STROKE_COLOR),
-                line_thickness: 0.5,
-                shadow: 0.0,
-            },
-        ),
-        StatePseudoImage::Bar => (
-            &["root", "element", "activityDiagram", "activityBar"][..],
-            StatePseudoStyle {
-                fill: StatePaint::from_raw(BAR_COLOR),
-                stroke: StatePaint::Transparent,
-                line_thickness: 1.0,
-                shadow: 0.0,
-            },
-        ),
-        StatePseudoImage::History => (
-            &["root", "element", "stateDiagram", "diamond"][..],
-            StatePseudoStyle {
-                fill: StatePaint::from_raw(DEFAULT_STATE_FILL),
-                stroke: StatePaint::from_raw(DEFAULT_STROKE_COLOR),
-                line_thickness: 0.5,
-                shadow: 0.0,
-            },
-        ),
-    };
-    let mut signature = StyleSignature::from_selectors(selectors);
-    if matches!(image, StatePseudoImage::Bar)
-        && let Some(stereotype) = stereotype
-    {
-        signature = signature.with_stereotype(stereotype);
-    }
-    let resolved =
-        StyleCascade::new(&diagram.meta.style_program).resolve(&signature, StyleScheme::Regular);
-    if let Some(value) = resolved.property("backgroundColor") {
-        style.fill = StatePaint::from_raw(value);
-    }
-    if let Some(value) = resolved.property("lineColor") {
-        style.stroke = StatePaint::from_raw(value);
-    }
-    if let Some(value) = resolved.property("lineThickness")
-        && let Ok(value) = value.parse::<f64>()
-    {
-        style.line_thickness = value;
-    }
-    if let Some(value) = resolved.property("shadowing") {
-        style.shadow = state_shadow_value(value, style.shadow);
-    }
-    style
-}
-
-fn state_pseudostates_have_shadow(diagram: &StateDiagram) -> bool {
-    [
-        StatePseudoImage::Start,
-        StatePseudoImage::End,
-        StatePseudoImage::Choice,
-        StatePseudoImage::History,
-    ]
-    .into_iter()
-    .any(|image| state_pseudostate_style(diagram, image, None).shadow > 0.0)
-        || diagram.states.iter().any(|state| {
-            matches!(state.kind, StateKind::Fork | StateKind::Join)
-                && state_pseudostate_style(
-                    diagram,
-                    StatePseudoImage::Bar,
-                    state.stereotype.as_deref(),
-                )
-                .shadow
-                    > 0.0
-        })
 }
 
 #[derive(Clone)]
@@ -2379,7 +2160,6 @@ impl AutonomousTextStyle {
             text,
             self.size,
             self.bold,
-            self.italic,
             Some(&self.family),
             is_state_monospace_family(&self.family),
         )
@@ -2412,80 +2192,12 @@ impl AutonomousTextStyle {
     }
 }
 
-fn state_skinparam_preferred_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
-    keys.iter().find_map(|key| {
-        let key = rustuml_parser::parse::canonical_skinparam_key(key);
-        diagram
-            .meta
-            .skinparams
-            .iter()
-            .rev()
-            .find(|skinparam| rustuml_parser::parse::canonical_skinparam_key(&skinparam.key) == key)
-            .map(|skinparam| skinparam.value.trim().to_string())
-    })
-}
-
-fn state_history_text_style(diagram: &StateDiagram, state: Option<&State>) -> AutonomousTextStyle {
-    let stereotype = state.and_then(|state| state.stereotype.as_deref());
-    let stereotype_value = |attribute: &str| {
-        stereotype.and_then(|stereotype| stereotype_state_value(diagram, stereotype, attribute))
-    };
-    let color = stereotype_value("FontColor")
-        .or_else(|| {
-            state_skinparam_preferred_value(diagram, &["stateFontColor", "defaultFontColor"])
-        })
-        .map(|value| crate::sequence::resolve_color(&value))
-        .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
-    let family = stereotype_value("FontName")
-        .or_else(|| state_skinparam_preferred_value(diagram, &["stateFontName", "defaultFontName"]))
-        .map(|value| canonical_state_font_family(&value))
-        .filter(|value| !value.is_empty())
-        .unwrap_or_else(|| "sans-serif".to_string());
-    let size = stereotype_value("FontSize")
-        .or_else(|| state_skinparam_preferred_value(diagram, &["stateFontSize", "defaultFontSize"]))
-        .and_then(|value| value.parse::<f64>().ok())
-        .unwrap_or(STATE_FONT_SIZE);
-    let face = stereotype_value("FontStyle")
-        .or_else(|| {
-            state_skinparam_preferred_value(diagram, &["stateFontStyle", "defaultFontStyle"])
-        })
-        .unwrap_or_default()
-        .to_ascii_lowercase();
-    let (bold, italic) = match face.trim() {
-        "bold" | "bolder" => (true, false),
-        "italic" => (false, true),
-        "plain" | "normal" | "lighter" => (false, false),
-        value => (
-            value
-                .parse::<u16>()
-                .ok()
-                .is_some_and(|weight| weight >= 700),
-            false,
-        ),
-    };
-    AutonomousTextStyle {
-        color,
-        family,
-        size,
-        bold,
-        italic,
-    }
-}
-
-fn state_history_label_baseline(style: &AutonomousTextStyle, label: &str, center_y: f64) -> f64 {
-    // Java centers the complete FontParam.STATE display block in the 22px
-    // ellipse, so the baseline follows the selected family's own ascent and
-    // height rather than a sans-serif constant.
-    center_y - style.height(label) / 2.0 + style.ascent(label)
-}
-
 #[derive(Clone)]
 struct AutonomousStateStyle {
     fill: String,
     stroke: String,
     border_thickness: String,
     shadow: f64,
-    padding: f64,
     title: AutonomousTextStyle,
     attribute: AutonomousTextStyle,
 }
@@ -2498,38 +2210,23 @@ fn is_state_monospace_family(family: &str) -> bool {
 }
 
 fn state_skinparam_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
-    let keys = keys
-        .iter()
-        .map(|key| rustuml_parser::parse::canonical_skinparam_key(key))
-        .collect::<Vec<_>>();
     diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|skinparam| {
-            let skinparam_key = rustuml_parser::parse::canonical_skinparam_key(&skinparam.key);
-            keys.iter().any(|key| skinparam_key == key.as_str())
+            keys.iter()
+                .any(|key| skinparam.key.eq_ignore_ascii_case(key))
         })
         .map(|skinparam| skinparam.value.trim().to_string())
 }
 
-fn state_text_block_padding(diagram: &StateDiagram) -> f64 {
-    // Java provenance: `SkinParam#getPadding` supplies the live legacy
-    // `Padding` value to both `Display#getCreole` calls in
-    // `EntityImageState`; each resulting `SheetBlock1` pads all four sides.
+fn state_global_padding(diagram: &StateDiagram) -> f64 {
     state_skinparam_value(diagram, &["padding"])
         .and_then(|value| value.parse::<f64>().ok())
-        .filter(|value| value.is_finite() && *value >= 0.0)
         .unwrap_or(0.0)
-}
-
-fn state_hides_empty_description(diagram: &StateDiagram) -> bool {
-    diagram.meta.skinparams.iter().any(|skinparam| {
-        skinparam.key.eq_ignore_ascii_case("hideEmptyDescription")
-            || (skinparam.key.eq_ignore_ascii_case("hide")
-                && skinparam.value.eq_ignore_ascii_case("empty description"))
-    })
+        .max(0.0)
 }
 
 fn autonomous_state_style(
@@ -2560,6 +2257,8 @@ fn autonomous_state_style(
     };
     let stereo_color =
         |attrs: &[&str]| stereo_value(attrs).map(|value| crate::sequence::resolve_color(&value));
+    let stereo_paint =
+        |attrs: &[&str]| stereo_value(attrs).map(|value| resolve_state_paint(&value));
     let global_value = |keys: &[&str]| state_skinparam_value(diagram, keys);
     let font_family = |stereo_attrs: &[&str], global_keys: &[&str]| {
         stereo_value(stereo_attrs)
@@ -2615,11 +2314,21 @@ fn autonomous_state_style(
 
     let title_family = font_family(
         &["AttributeFontName", "FontName"],
-        &["stateAttributeFontName", "stateFontName", "defaultFontName"],
+        &[
+            "stateAttributeFontName",
+            "stateFontName",
+            "defaultFontName",
+            "fontName",
+        ],
     );
     let attribute_family = font_family(
         &["AttributeFontName", "FontName"],
-        &["stateAttributeFontName", "stateFontName", "defaultFontName"],
+        &[
+            "stateAttributeFontName",
+            "stateFontName",
+            "defaultFontName",
+            "fontName",
+        ],
     );
     let title_size = font_size(
         &["AttributeFontSize", "FontSize"],
@@ -2641,14 +2350,13 @@ fn autonomous_state_style(
     );
 
     let mut style = AutonomousStateStyle {
-        fill: stereo_value(&["BackgroundColor"]).unwrap_or_else(|| skin.state_fill.clone()),
+        fill: stereo_paint(&["BackgroundColor"]).unwrap_or_else(|| skin.state_fill.clone()),
         stroke: stereo_color(&["BorderColor"]).unwrap_or_else(|| skin.stroke.clone()),
         border_thickness: stereo_value(&["BorderThickness"])
             .and_then(|value| value.parse::<f64>().ok())
             .map(fmt_f)
             .unwrap_or_else(|| skin.border_thickness.clone()),
         shadow,
-        padding: state_text_block_padding(diagram),
         title: AutonomousTextStyle {
             color: stereo_color(&["AttributeFontColor", "FontColor"])
                 .unwrap_or_else(|| skin.text_color.clone()),
@@ -2680,7 +2388,7 @@ fn autonomous_state_style(
     let header_style = cascade.resolve(&header_signature, StyleScheme::Regular);
 
     if let Some(value) = state_style.property("backgroundColor") {
-        style.fill = value.trim().to_string();
+        style.fill = resolve_state_paint(value);
     }
     if let Some(value) = state_style.property("lineColor") {
         style.stroke = crate::sequence::resolve_color(value);
@@ -2754,52 +2462,49 @@ struct StateArrowFont {
     size: u32,
     bold: bool,
     italic: bool,
-    padding: f64,
-    alignment: StateLabelAlignment,
 }
 
 impl StateArrowFont {
+    fn label_height(&self, label: &str) -> f64 {
+        text_render::label_height_with_family(label, self.size as f64, &self.family)
+    }
+
+    fn label_ascent(&self, label: &str) -> f64 {
+        text_render::label_ascent_with_family(label, self.size as f64, &self.family)
+    }
+
     fn from_skinparams(diagram: &StateDiagram) -> Self {
         let find = |keys: &[&str]| {
-            let keys = keys
+            diagram
+                .meta
+                .skinparams
                 .iter()
-                .map(|key| rustuml_parser::parse::canonical_skinparam_key(key))
-                .collect::<Vec<_>>();
-            diagram.meta.skinparams.iter().rev().find(|sp| {
-                let key = rustuml_parser::parse::canonical_skinparam_key(&sp.key);
-                keys.iter().any(|expected| key == expected.as_str())
-            })
+                .rev()
+                .find(|sp| keys.iter().any(|key| sp.key.eq_ignore_ascii_case(key)))
         };
         let color = find(&["stateArrowFontColor", "arrowFontColor"])
             .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
-        let family = find(&["stateArrowFontName", "arrowFontName", "defaultFontName"])
-            .map(|sp| canonical_state_font_family(sp.value.trim()))
-            .unwrap_or_else(|| "sans-serif".to_string());
+        let family = find(&[
+            "stateArrowFontName",
+            "arrowFontName",
+            "defaultFontName",
+            "fontName",
+        ])
+        .map(|sp| canonical_state_font_family(sp.value.trim()))
+        .unwrap_or_else(|| "sans-serif".to_string());
         let size = find(&["stateArrowFontSize", "arrowFontSize", "defaultFontSize"])
             .and_then(|sp| sp.value.trim().parse::<u32>().ok())
             .unwrap_or(LINK_FONT_SIZE as u32);
         let style = find(&["stateArrowFontStyle", "arrowFontStyle"])
             .map(|sp| sp.value.to_ascii_lowercase())
             .unwrap_or_default();
-        let parse_alignment = |value: &str| match value.trim().to_ascii_lowercase().as_str() {
-            "left" => Some(StateLabelAlignment::Left),
-            "center" | "centre" => Some(StateLabelAlignment::Center),
-            "right" => Some(StateLabelAlignment::Right),
-            _ => None,
-        };
-        let alignment = find(&["stateMessageAlignment"])
-            .and_then(|sp| parse_alignment(&sp.value))
-            .or_else(|| find(&["defaultTextAlignment"]).and_then(|sp| parse_alignment(&sp.value)))
-            .unwrap_or(StateLabelAlignment::Center);
         Self {
             color,
             family,
             size,
             bold: style.contains("bold"),
             italic: style.contains("italic"),
-            padding: state_text_block_padding(diagram),
-            alignment,
         }
     }
 
@@ -2933,7 +2638,6 @@ struct AutonomousRenderContext<'a> {
     allocated_ids: &'a StateSvgIds,
     skin: &'a StateSkin,
     shadow_filter_id: Option<String>,
-    paint_registry: std::cell::RefCell<StateGradientRegistry>,
 }
 
 fn autonomous_shadow_attr(context: &AutonomousRenderContext<'_>, shadow: f64) -> String {
@@ -2943,14 +2647,6 @@ fn autonomous_shadow_attr(context: &AutonomousRenderContext<'_>, shadow: f64) ->
         .filter(|_| shadow > 0.0)
         .map(|id| format!(r#" filter="url(#{id})""#))
         .unwrap_or_default()
-}
-
-fn autonomous_paint(context: &AutonomousRenderContext<'_>, paint: &StatePaint) -> String {
-    context.paint_registry.borrow_mut().use_paint(paint)
-}
-
-fn autonomous_raw_paint(context: &AutonomousRenderContext<'_>, value: &str) -> String {
-    context.paint_registry.borrow_mut().use_raw(value)
 }
 
 fn endpoint_parent_scope<'a>(
@@ -3048,16 +2744,25 @@ fn state_edge_label_margin(transition: &Transition) -> f64 {
     }
 }
 
+fn resolved_state_edge_label_margin(diagram: &StateDiagram, transition: &Transition) -> f64 {
+    state_edge_label_margin(transition) + state_global_padding(diagram)
+}
+
 fn svek_edge_label_box_size(
+    diagram: &StateDiagram,
     transition: &Transition,
-    label: &TransitionLabel,
+    label: &str,
     arrow_font: &StateArrowFont,
 ) -> EdgeLabelSize {
-    let margin = state_edge_label_margin(transition) + arrow_font.padding;
-    let block = StateTransitionLabelBlock::measure(label, arrow_font);
+    let margin = resolved_state_edge_label_margin(diagram, transition);
     EdgeLabelSize {
-        width: block.width + 2.0 * margin,
-        height: block.height + 2.0 * margin,
+        width: text_render::measure_with_family(
+            label,
+            arrow_font.size as f64,
+            arrow_font.bold,
+            &arrow_font.family,
+        ) + 2.0 * margin,
+        height: arrow_font.label_height(label) + 2.0 * margin,
     }
 }
 
@@ -3167,10 +2872,9 @@ fn autonomous_scope_painted_bounds(
             } else {
                 "H"
             };
-            let text_style = state_history_text_style(diagram, Some(state));
-            let text_width = text_style.width(label);
-            let baseline = state_history_label_baseline(&text_style, label, y + height / 2.0);
-            let text_height = text_style.height(label);
+            let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
+            let baseline = y + height / 2.0 + HISTORY_LABEL_BASELINE_OFFSET;
+            let text_height = text_render::label_height(label, STATE_FONT_SIZE);
             bounds.include(
                 x + width / 2.0 - text_width / 2.0,
                 baseline - text_height + LIMIT_FINDER_TEXT_ADJUST,
@@ -3246,30 +2950,31 @@ fn autonomous_scope_painted_bounds(
         bounds.include(arrow_min_x - POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_min_y);
         bounds.include(arrow_max_x + POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_max_y);
 
-        if let Some(label) = transition.label.as_ref()
+        if let Some(label) = transition.label.as_deref()
             && let Some(label_position) = edge.label
         {
             let transition_font = StateArrowFont::for_transition(diagram, transition);
-            let label_margin = state_edge_label_margin(transition) + transition_font.padding;
+            let label_margin = resolved_state_edge_label_margin(diagram, transition);
             let x = quantize_svek_coord(label_position.x) + label_margin;
-            let y = quantize_svek_coord(label_position.y) + label_margin;
-            let block = StateTransitionLabelBlock::measure(label, &transition_font);
-            let (min_y, max_y) = block.painted_y_range(label, y, &transition_font);
-            bounds.include(x, min_y);
-            bounds.include(x + block.width + label_margin, max_y);
+            let baseline = quantize_svek_coord(label_position.y)
+                + label_margin
+                + transition_font.label_ascent(label);
+            let width = text_render::measure_with_family(
+                label,
+                transition_font.size as f64,
+                transition_font.bold,
+                &transition_font.family,
+            );
+            let height = transition_font.label_height(label);
+            bounds.include(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
+            bounds.include(
+                x + width + label_margin,
+                baseline + LIMIT_FINDER_TEXT_ADJUST,
+            );
         }
     }
 
     bounds.is_finite().then_some(bounds)
-}
-
-fn state_layout_direction(diagram: &StateDiagram) -> Direction {
-    // Java provenance: every root and `GroupMakerState` inner
-    // `DotStringFactory` reads the same diagram `SkinParam.rankdir`.
-    match diagram.direction {
-        StateLayoutDirection::TopToBottom => Direction::TopToBottom,
-        StateLayoutDirection::LeftToRight => Direction::LeftToRight,
-    }
 }
 
 fn layout_autonomous_scope(
@@ -3280,7 +2985,8 @@ fn layout_autonomous_scope(
     live_clusters: &[&State],
     spacing: Option<GraphSpacing>,
 ) -> Option<AutonomousScopeLayout> {
-    let mut layout = LayoutGraph::new(state_layout_direction(diagram));
+    let mut layout = LayoutGraph::new(state_graph_direction(diagram))
+        .with_edge_routing(state_edge_routing(diagram));
     if let Some(spacing) = spacing {
         layout = layout.with_spacing(spacing);
     }
@@ -3353,8 +3059,8 @@ fn layout_autonomous_scope(
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
         let transition_font = StateArrowFont::for_transition(diagram, transition);
-        let label_size = transition.label.as_ref().map(|label| {
-            let mut size = svek_edge_label_box_size(transition, label, &transition_font);
+        let label_size = transition.label.as_deref().map(|label| {
+            let mut size = svek_edge_label_box_size(diagram, transition, label, &transition_font);
             size.height = size.height.floor();
             size
         });
@@ -3465,13 +3171,12 @@ fn layout_autonomous_scope(
 /// `skinparam nodesep` or `skinparam ranksep` value.
 fn autonomous_outer_spacing(diagram: &StateDiagram) -> GraphSpacing {
     let explicit_nonzero = |key: &str| {
-        let key = rustuml_parser::parse::canonical_skinparam_key(key);
         diagram
             .meta
             .skinparams
             .iter()
             .rev()
-            .find(|skinparam| rustuml_parser::parse::canonical_skinparam_key(&skinparam.key) == key)
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
             .and_then(|skinparam| {
                 let value = skinparam.value.trim();
                 (!value.is_empty() && value.bytes().all(|byte| byte.is_ascii_digit()))
@@ -3500,9 +3205,8 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
             rest = &rest[start + 2 + end + 2..];
         }
         canonical.push_str(rest);
-        let canonical = rustuml_parser::parse::canonical_skinparam_key(&canonical);
         matches!(
-            canonical.as_str(),
+            canonical.to_ascii_lowercase().as_str(),
             "nodesep"
                 | "ranksep"
                 | "statebackgroundcolor"
@@ -3521,37 +3225,19 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
                 | "statearrowfontsize"
                 | "statearrowfontname"
                 | "statearrowfontstyle"
-                | "statemessagealignment"
                 | "statestartcolor"
                 | "stateendcolor"
                 | "stateshadowing"
                 | "defaultfontcolor"
                 | "defaultfontsize"
                 | "defaultfontname"
-                | "defaulttextalignment"
+                | "fontname"
                 | "arrowcolor"
                 | "arrowfontsize"
                 | "arrowfontname"
                 | "arrowfontstyle"
                 | "arrowthickness"
                 | "shadowing"
-        )
-    })
-}
-
-fn has_only_flat_label_skinparams(diagram: &StateDiagram) -> bool {
-    diagram.meta.skinparams.iter().all(|skinparam| {
-        let key = rustuml_parser::parse::canonical_skinparam_key(&skinparam.key);
-        matches!(
-            key.as_str(),
-            "arrowfontcolor"
-                | "arrowfontsize"
-                | "defaultfontsize"
-                | "arrowfontname"
-                | "defaultfontname"
-                | "arrowfontstyle"
-                | "statemessagealignment"
-                | "defaulttextalignment"
         )
     })
 }
@@ -3688,7 +3374,6 @@ fn build_state_group_outcome<'a>(
     }
 
     let skin = StateSkin::from_diagram(diagram);
-    let hide_empty_desc = state_hides_empty_description(diagram);
     let mut children = Vec::new();
     let mut regions = Vec::with_capacity(region_scopes.len());
     for (scope, outcomes) in region_outcomes {
@@ -3756,7 +3441,7 @@ fn build_state_group_outcome<'a>(
                 } else {
                     let state = diagram.states.iter().find(|state| state.id == *id);
                     let (width, height, shape) =
-                        autonomous_layout_node_size(diagram, &skin, id, state, hide_empty_desc);
+                        autonomous_layout_node_size(diagram, &skin, id, state);
                     (id.clone(), width, height, shape)
                 }
             })
@@ -3769,13 +3454,9 @@ fn build_state_group_outcome<'a>(
             // CONCURRENT_STATE before its concurrent-image branch.
             let empty_style = autonomous_state_style(diagram, &skin, None);
             let empty_label = "\u{00a0}";
-            let empty_width = (empty_style.title.width(empty_label)
-                + 2.0 * empty_style.padding
-                + STATE_DIMENSION_PADDING)
+            let empty_width = (empty_style.title.width(empty_label) + STATE_DIMENSION_PADDING)
                 .max(STATE_MIN_WIDTH);
-            let empty_height = (empty_style.title.height(empty_label)
-                + 4.0 * empty_style.padding
-                + STATE_DIMENSION_PADDING)
+            let empty_height = (empty_style.title.height(empty_label) + STATE_DIMENSION_PADDING)
                 .max(STATE_BOX_HEIGHT);
             AutonomousScopeLayout {
                 ids: vec![scope.clone()],
@@ -3958,7 +3639,6 @@ fn build_autonomous_composite<'a>(
         })
     });
     let skin = StateSkin::from_diagram(diagram);
-    let hide_empty_desc = state_hides_empty_description(diagram);
     let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
         .iter()
         .map(|id| {
@@ -3982,7 +3662,7 @@ fn build_autonomous_composite<'a>(
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (node_width, node_height, shape) =
-                    autonomous_layout_node_size(diagram, &skin, id, state, hide_empty_desc);
+                    autonomous_layout_node_size(diagram, &skin, id, state);
                 (id.clone(), node_width, node_height, shape)
             }
         })
@@ -3995,9 +3675,14 @@ fn build_autonomous_composite<'a>(
         &live_clusters,
         Some(autonomous_outer_spacing(diagram)),
     )?;
-    let mut outer = normalize_autonomous_scope(outer);
-    outer.width += CUCA_POSITIVE_AXIS_MARGIN;
-    outer.height += CUCA_POSITIVE_AXIS_MARGIN;
+    let outer = if live_clusters.is_empty() {
+        outer
+    } else {
+        let mut outer = normalize_autonomous_scope(outer);
+        outer.width += CUCA_POSITIVE_AXIS_MARGIN;
+        outer.height += CUCA_POSITIVE_AXIS_MARGIN;
+        outer
+    };
 
     Some((composites, live_clusters, outer))
 }
@@ -4059,6 +3744,8 @@ fn emit_autonomous_scope_entities(
     skip_composites: bool,
 ) {
     let (offset_x, offset_y) = offset;
+    let default_style = autonomous_state_style(context.diagram, context.skin, None);
+    let default_shadow_attr = autonomous_shadow_attr(context, default_style.shadow);
     for (id, cx, cy, width, height) in &scope.positions {
         let layout_cy = *cy;
         let cx = cx + offset_x;
@@ -4066,34 +3753,23 @@ fn emit_autonomous_scope_entities(
         if let Some(qualified_name) = autonomous_pseudo_name(id) {
             let source_line = autonomous_pseudo_source_line(context.diagram, id);
             if id.starts_with("__start__") {
-                let style = state_pseudostate_style(context.diagram, StatePseudoImage::Start, None);
-                let fill = autonomous_paint(context, &style.fill);
-                let stroke = autonomous_paint(context, &style.stroke);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
             } else {
-                let style = state_pseudostate_style(context.diagram, StatePseudoImage::End, None);
-                let fill = autonomous_paint(context, &style.fill);
-                let stroke = autonomous_paint(context, &style.stroke);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
             }
@@ -4110,59 +3786,52 @@ fn emit_autonomous_scope_entities(
         let entity_position = StateEntityPosition::of(state);
         match state.kind {
             StateKind::Initial => {
-                let style = state_pseudostate_style(context.diagram, StatePseudoImage::Start, None);
-                let fill = state.fill.as_deref().map_or_else(
-                    || autonomous_paint(context, &style.fill),
-                    |fill| autonomous_raw_paint(context, fill),
-                );
-                let stroke = autonomous_paint(context, &style.stroke);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     escape_attr(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
                 continue;
             }
             StateKind::Final => {
-                let style = state_pseudostate_style(context.diagram, StatePseudoImage::End, None);
-                let fill = state.fill.as_deref().map_or_else(
-                    || autonomous_paint(context, &style.fill),
-                    |fill| autonomous_raw_paint(context, fill),
-                );
-                let stroke = autonomous_paint(context, &style.stroke);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     escape_attr(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
                 continue;
             }
             StateKind::Choice => {
-                let style =
-                    state_pseudostate_style(context.diagram, StatePseudoImage::Choice, None);
-                let fill = autonomous_paint(context, &style.fill);
-                let stroke = autonomous_paint(context, &style.stroke);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| context.skin.state_fill.clone());
                 write!(
                     svg,
-                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}"{shadow_attr} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
+                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
                     escape_attr(&state.id),
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
@@ -4175,22 +3844,20 @@ fn emit_autonomous_scope_entities(
                     fmt_f(cy),
                     fmt_f(cx),
                     fmt_f(cy - CHOICE_SIZE),
-                    fmt_f(style.line_thickness),
+                    context.skin.stroke,
                 )
                 .unwrap();
                 continue;
             }
             StateKind::Fork | StateKind::Join => {
-                let style = state_pseudostate_style(
-                    context.diagram,
-                    StatePseudoImage::Bar,
-                    state.stereotype.as_deref(),
-                );
-                let fill = autonomous_paint(context, &style.fill);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| BAR_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<rect fill="{fill}"{shadow_attr} height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                    r#"<rect fill="{fill}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
                     fmt_f(*height),
                     fmt_f(*width),
                     fmt_f(cx - width / 2.0),
@@ -4205,37 +3872,40 @@ fn emit_autonomous_scope_entities(
                 } else {
                     "H"
                 };
-                let style =
-                    state_pseudostate_style(context.diagram, StatePseudoImage::History, None);
-                let fill = autonomous_paint(context, &style.fill);
-                let stroke = autonomous_paint(context, &style.stroke);
-                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| context.skin.state_fill.clone());
                 write!(
                     svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                    r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
                     fmt_f(cx),
                     fmt_f(cy),
-                    fmt_f(style.line_thickness),
+                    context.skin.stroke,
                 )
                 .unwrap();
-                let text_style = state_history_text_style(context.diagram, Some(state));
-                let text_width = text_style.width(label);
-                text_style.emit(
+                let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
+                write!(
                     svg,
-                    label,
-                    cx - text_width / 2.0,
-                    state_history_label_baseline(&text_style, label, cy),
-                );
+                    r#"<text fill="{}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                    context.skin.text_color,
+                    fmt_f(text_width),
+                    fmt_f(cx - text_width / 2.0),
+                    fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
+                )
+                .unwrap();
                 continue;
             }
             StateKind::EntryPoint | StateKind::ExitPoint | StateKind::Normal
                 if !entity_position.is_normal() =>
             {
                 let style = autonomous_state_style(context.diagram, context.skin, Some(state));
-                let fill = state.fill.as_deref().map_or_else(
-                    || autonomous_raw_paint(context, &style.fill),
-                    |fill| autonomous_raw_paint(context, fill),
-                );
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| style.fill.clone());
                 let (image_width, image_height) = entity_position.dimensions();
                 let label_width = style.title.width(&state.label);
                 let label_height = style.title.height(&state.label);
@@ -4334,10 +4004,11 @@ fn emit_autonomous_scope_entities(
         let box_y = cy - height / 2.0;
         let style = autonomous_state_style(context.diagram, context.skin, Some(state));
         let shadow_attr = autonomous_shadow_attr(context, style.shadow);
-        let fill = state.fill.as_deref().map_or_else(
-            || autonomous_raw_paint(context, &style.fill),
-            |fill| autonomous_raw_paint(context, fill),
-        );
+        let fill = state
+            .fill
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| style.fill.clone());
         let stroke = state
             .stroke
             .as_deref()
@@ -4349,7 +4020,7 @@ fn emit_autonomous_scope_entities(
             Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
             _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
         };
-        let divider_y = box_y + 5.0 + style.title.height(&state.label) + 2.0 * style.padding + 5.0;
+        let divider_y = box_y + 5.0 + style.title.height(&state.label) + 5.0;
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -4370,16 +4041,15 @@ fn emit_autonomous_scope_entities(
             svg,
             &state.label,
             cx - text_width / 2.0,
-            box_y + 5.0 + style.padding + style.title.ascent(&state.label),
+            box_y + 5.0 + style.title.ascent(&state.label),
         );
         for (index, description) in state.descriptions.iter().enumerate() {
             style.attribute.emit(
                 svg,
                 description,
-                box_x + 5.0 + style.padding,
+                box_x + 5.0,
                 divider_y
                     + 5.0
-                    + style.padding
                     + style.attribute.ascent(description)
                     + state.descriptions[..index]
                         .iter()
@@ -4559,9 +4229,8 @@ fn emit_autonomous_scope_links(
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
 
             if let Some(label) = &transition.label {
-                let label_margin = state_edge_label_margin(transition) + arrow_font.padding;
-                let block = StateTransitionLabelBlock::measure(label, &arrow_font);
-                let (label_x, label_top) = edge_path
+                let label_margin = resolved_state_edge_label_margin(context.diagram, transition);
+                let (label_x, label_y) = edge_path
                     .label
                     .map(|position| {
                         (
@@ -4572,7 +4241,8 @@ fn emit_autonomous_scope_links(
                             quantize_svek_coord(position.y)
                                 + scope.origin_y
                                 + offset_y
-                                + label_margin,
+                                + label_margin
+                                + arrow_font.label_ascent(label),
                         )
                     })
                     .unwrap_or_else(|| {
@@ -4580,12 +4250,25 @@ fn emit_autonomous_scope_links(
                         let last = points[points.len() - 1];
                         (
                             (first.0 + last.0) / 2.0 + label_margin,
-                            (first.1 + last.1) / 2.0
-                                - block.first_baseline_ascent(label, &arrow_font),
+                            (first.1 + last.1) / 2.0,
                         )
                     });
                 let mut text = String::new();
-                block.emit(&mut text, label, label_x, label_top, &arrow_font);
+                text_render::emit_text(
+                    &mut text,
+                    label,
+                    &TextBase {
+                        x: label_x,
+                        y: label_y,
+                        font_size: arrow_font.size,
+                        font_family: &arrow_font.family,
+                        fill: &arrow_font.color,
+                        bold: arrow_font.bold,
+                        italic: arrow_font.italic,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
                 svg.push_str(&text);
             }
         }
@@ -4621,12 +4304,12 @@ fn emit_autonomous_empty_concurrent_state(
     let (width, height) = size;
     let style = autonomous_state_style(context.diagram, context.skin, None);
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
-    let fill = autonomous_raw_paint(context, &style.fill);
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         escape_attr(id),
         autonomous_entity_id(context.entity_ids, id),
+        style.fill,
         fmt_f(height),
         style.stroke,
         style.border_thickness,
@@ -4666,10 +4349,12 @@ fn emit_autonomous_composite(
     let title_divider_y = box_y + 5.0 + style.title.height(&composite.state.label) + 5.0;
     let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
     let right = box_x + composite.width;
-    let header_fill = composite.state.fill.as_deref().map_or_else(
-        || autonomous_raw_paint(context, &style.fill),
-        |fill| autonomous_raw_paint(context, fill),
-    );
+    let header_fill = composite
+        .state
+        .fill
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| style.fill.clone());
     let stroke = composite
         .state
         .stroke
@@ -4871,23 +4556,25 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
             || diagram
                 .states
                 .iter()
-                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)
-            || state_pseudostates_have_shadow(diagram))
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0))
         .then(|| {
             crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
         }),
-        paint_registry: std::cell::RefCell::new(StateGradientRegistry::new(diagram)),
     };
     let width = outer.width.ceil() as i64;
     let height = outer.height.ceil() as i64;
     let mut svg = String::with_capacity(4096);
+    let defs = context
+        .shadow_filter_id
+        .as_deref()
+        .map(crate::filter_registry::shadow_filter_def)
+        .map(|content| format!("<defs>{content}</defs>"))
+        .unwrap_or_else(|| "<defs/>".to_string());
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>{defs}<g>"#,
     )
     .unwrap();
-    let defs_insert_at = svg.len();
-    svg.push_str("<g>");
 
     for live_cluster in &live_clusters {
         let cluster = outer
@@ -4943,11 +4630,6 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     }
     emit_autonomous_scope_links(&mut svg, &context, &outer, (0.0, 0.0));
     svg.push_str("</g></svg>");
-    let defs = state_defs(
-        &context.paint_registry.borrow(),
-        context.shadow_filter_id.as_deref(),
-    );
-    svg.insert_str(defs_insert_at, &defs);
     Some(svg)
 }
 
@@ -5229,7 +4911,8 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let transition_indices = plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
     let ids = collect_autonomous_scope_ids(diagram, &transition_indices, |_| true);
-    let mut layout = LayoutGraph::new(state_layout_direction(diagram))
+    let mut layout = LayoutGraph::new(state_graph_direction(diagram))
+        .with_edge_routing(state_edge_routing(diagram))
         .with_plantuml_svek_spacing()
         .with_plantuml_svek_node_order();
     let node_sizes = ids
@@ -5306,10 +4989,14 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         if transition.arrow.is_horizontal() {
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
-        let label_size = transition.label.as_ref().map(|label| {
-            let mut size = svek_edge_label_box_size(transition, label, &arrow_font);
-            size.height = size.height.floor();
-            size
+        let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
+            width: text_render::measure_with_family(
+                label,
+                arrow_font.size as f64,
+                arrow_font.bold,
+                &arrow_font.family,
+            ) + 2.0,
+            height: (arrow_font.label_height(label) + 2.0).floor(),
         });
         let border_port = |endpoint: &str| {
             diagram
@@ -5589,7 +5276,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     }
     for transition_index in &transition_indices {
         let transition = &diagram.transitions[*transition_index];
-        let Some(label) = transition.label.as_ref() else {
+        let Some(label) = transition.label.as_deref() else {
             continue;
         };
         let Some(layout_edge_index) = transition_layout_edges.get(transition_index) else {
@@ -5603,13 +5290,18 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         else {
             continue;
         };
-        let margin = state_edge_label_margin(transition) + arrow_font.padding;
+        let margin = resolved_state_edge_label_margin(diagram, transition);
         let x = quantize_svek_coord(position.x) + margin;
-        let y = quantize_svek_coord(position.y) + margin;
-        let block = StateTransitionLabelBlock::measure(label, &arrow_font);
-        let (min_y, max_y) = block.painted_y_range(label, y, &arrow_font);
-        include_point(x, min_y);
-        include_point(x + block.width + margin, max_y);
+        let baseline = quantize_svek_coord(position.y) + margin + arrow_font.label_ascent(label);
+        let width = text_render::measure_with_family(
+            label,
+            arrow_font.size as f64,
+            arrow_font.bold,
+            &arrow_font.family,
+        );
+        let height = arrow_font.label_height(label);
+        include_point(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
+        include_point(x + width + margin, baseline + LIMIT_FINDER_TEXT_ADJUST);
     }
     if !painted_min_x.is_finite()
         || !painted_min_y.is_finite()
@@ -5663,23 +5355,25 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             || diagram
                 .states
                 .iter()
-                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)
-            || state_pseudostates_have_shadow(diagram))
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0))
         .then(|| {
             crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
         }),
-        paint_registry: std::cell::RefCell::new(StateGradientRegistry::new(diagram)),
     };
     let width = scope.width.ceil() as i64;
     let height = scope.height.ceil() as i64;
     let mut svg = String::with_capacity(4096);
+    let defs = context
+        .shadow_filter_id
+        .as_deref()
+        .map(crate::filter_registry::shadow_filter_def)
+        .map(|content| format!("<defs>{content}</defs>"))
+        .unwrap_or_else(|| "<defs/>".to_string());
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>{defs}<g>"#,
     )
     .unwrap();
-    let defs_insert_at = svg.len();
-    svg.push_str("<g>");
 
     for composite in &composites {
         let cluster = result
@@ -5732,11 +5426,6 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     );
     emit_autonomous_scope_links(&mut svg, &context, &scope, (0.0, 0.0));
     svg.push_str("</g></svg>");
-    let defs = state_defs(
-        &context.paint_registry.borrow(),
-        context.shadow_filter_id.as_deref(),
-    );
-    svg.insert_str(defs_insert_at, &defs);
     Some(svg)
 }
 
@@ -5755,7 +5444,6 @@ fn emit_root_state_cluster(
     let divider_y = y + CLUSTER_HEADER_DIVIDER_OFFSET;
     let style = autonomous_state_style(context.diagram, context.skin, Some(composite));
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
-    let fill = autonomous_raw_paint(context, &style.fill);
     write!(
         svg,
         r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
@@ -5794,7 +5482,7 @@ fn emit_root_state_cluster(
         fmt_f(y + STATE_RX),
         fmt_f(x + STATE_RX),
         fmt_f(y),
-        fill,
+        style.fill,
         fmt_f(height),
         style.stroke,
         style.border_thickness,
@@ -5989,6 +5677,7 @@ pub fn render_with_oracle(
     // the module-level `DEFAULT_*` constants.
     let skin = StateSkin::from_diagram(diagram);
     let arrow_font = StateArrowFont::from_diagram(diagram);
+    let global_padding = state_global_padding(diagram);
     // `skinparam backgroundColor <c>` paints the whole canvas: it sets the
     // SVG root `background:` and emits a full-size `<rect>` just inside the
     // root `<g>`. PlantUML keeps the default `#FFFFFF` when unset.
@@ -5999,7 +5688,9 @@ pub fn render_with_oracle(
         .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
         .map(|sp| sp.value.trim().to_string());
-    let bg_raw = skin.document_background.as_ref().cloned().or(skinparam_bg);
+    // Legacy skinparams are converted into style declarations at their source
+    // epoch, after the theme's root/document defaults.
+    let bg_raw = skinparam_bg.or_else(|| skin.document_background.clone());
     let bg_is_transparent = bg_raw
         .as_deref()
         .is_some_and(|v| v.eq_ignore_ascii_case("transparent"));
@@ -6025,6 +5716,12 @@ pub fn render_with_oracle(
     let STROKE_COLOR: &str = skin.stroke.as_str();
     #[allow(non_snake_case)]
     let TEXT_COLOR: &str = skin.text_color.as_str();
+    #[allow(non_snake_case)]
+    let STATE_FILL: &str = skin.state_fill.as_str();
+    let start_fill = skin.start_fill.as_str();
+    let start_stroke = skin.start_stroke.as_str();
+    let end_stroke = skin.end_stroke.as_str();
+    let end_inner_fill = skin.end_inner_fill.as_str();
 
     // Resolve the state-box font size. PlantUML applies `skinparam stateFontSize`,
     // `stateAttributeFontSize`, or the global `defaultFontSize` uniformly to both
@@ -6048,7 +5745,7 @@ pub fn render_with_oracle(
     let state_desc_font_size = state_font_override.unwrap_or(DESC_FONT_SIZE);
 
     // Resolve the state-node label font name and style. PlantUML applies
-    // `skinparam stateFontName` (or the global `defaultFontName`)
+    // `skinparam stateFontName` (or the global `defaultFontName`/`fontName`)
     // and `stateFontStyle` to the state name and description lines. A monospace font name
     // (Courier et al.) also switches the width metric to the fixed-advance
     // mono table — the emitted `font-family` then carries the user-supplied
@@ -6063,6 +5760,7 @@ pub fn render_with_oracle(
         .find(|sp| {
             sp.key.eq_ignore_ascii_case("stateFontName")
                 || sp.key.eq_ignore_ascii_case("defaultFontName")
+                || sp.key.eq_ignore_ascii_case("fontName")
         })
         .map(|sp| canonical_state_font_family(sp.value.trim()))
         .filter(|v| !v.is_empty());
@@ -6089,21 +5787,21 @@ pub fn render_with_oracle(
         .map(|sp| sp.value.to_ascii_lowercase())
         .unwrap_or_default();
     let state_font_bold = state_font_style.contains("bold");
-    let state_font_italic = state_font_style.contains("italic");
-    let state_padding = state_text_block_padding(diagram);
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
     // Check for `hide empty description` directive.
-    let hide_empty_desc = state_hides_empty_description(diagram);
+    let hide_empty_desc = diagram.meta.skinparams.iter().any(|sp| {
+        sp.key.eq_ignore_ascii_case("hideEmptyDescription")
+            || (sp.key.eq_ignore_ascii_case("hide")
+                && sp.value.eq_ignore_ascii_case("empty description"))
+    });
     let state_node_font = StateNodeFont {
         name_size: state_name_font_size,
         desc_size: state_desc_font_size,
         name: state_font_name.as_deref(),
         monospace: state_name_is_mono,
         bold: state_font_bold,
-        italic: state_font_italic,
-        padding: state_padding,
     };
 
     // Collect ordered unique entity IDs in PlantUML's render order.
@@ -6267,9 +5965,15 @@ pub fn render_with_oracle(
     };
     let state_node_size = |id: &str, state_def: Option<&State>| {
         if oracle.is_none() && !diagram.meta.style_program.is_empty() {
-            autonomous_layout_node_size(diagram, &skin, id, state_def, hide_empty_desc)
+            autonomous_layout_node_size(diagram, &skin, id, state_def)
         } else {
-            layout_node_size_with_font(id, state_def, hide_empty_desc, &state_node_font)
+            layout_node_size_with_font(
+                id,
+                state_def,
+                hide_empty_desc,
+                &state_node_font,
+                global_padding,
+            )
         }
     };
 
@@ -6294,8 +5998,9 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else {
-        let mut layout =
-            LayoutGraph::new(state_layout_direction(diagram)).with_plantuml_svek_spacing();
+        let mut layout = LayoutGraph::new(state_graph_direction(diagram))
+            .with_edge_routing(state_edge_routing(diagram))
+            .with_spacing(autonomous_outer_spacing(diagram));
         for id in &layout_node_ids {
             if let Some(note) = floating_notes.iter().find(|note| note.alias == *id) {
                 layout.add_node(id, "", note.width, note.height);
@@ -6327,8 +6032,8 @@ pub fn render_with_oracle(
             let transition_font = StateArrowFont::for_transition(diagram, t);
             let ordinary_label_size = t
                 .label
-                .as_ref()
-                .map(|label| svek_edge_label_box_size(t, label, &transition_font));
+                .as_deref()
+                .map(|label| svek_edge_label_box_size(diagram, t, label, &transition_font));
             let label_size = compose_link_label_size(
                 ordinary_label_size,
                 link_note_for_transition(diagram, transition_index),
@@ -6361,7 +6066,7 @@ pub fn render_with_oracle(
     };
 
     let has_complete_flat_painter_model = diagram.meta.title.is_none()
-        && has_only_flat_label_skinparams(diagram)
+        && has_only_autonomous_layout_skinparams(diagram)
         && diagram.notes.is_empty()
         && diagram.states.iter().all(|state| !state.composite);
     let flat_painted_bounds = layout_result.as_ref().and_then(|result| {
@@ -6475,9 +6180,9 @@ pub fn render_with_oracle(
 
             if let Some(label_origin) = edge.label
                 && let Some(label_size) = compose_link_label_size(
-                    transition.label.as_ref().map(|label| {
+                    transition.label.as_deref().map(|label| {
                         let transition_font = StateArrowFont::for_transition(diagram, transition);
-                        svek_edge_label_box_size(transition, label, &transition_font)
+                        svek_edge_label_box_size(diagram, transition, label, &transition_font)
                     }),
                     link_note_for_transition(diagram, transition_index),
                 )
@@ -6486,16 +6191,6 @@ pub fn render_with_oracle(
                 let y = quantize_svek_coord(label_origin.y);
                 bounds.include(x, y);
                 bounds.include(x + label_size.width, y + label_size.height);
-                if let Some(label) = transition.label.as_ref() {
-                    let transition_font = StateArrowFont::for_transition(diagram, transition);
-                    let label_margin =
-                        state_edge_label_margin(transition) + transition_font.padding;
-                    let block = StateTransitionLabelBlock::measure(label, &transition_font);
-                    let (min_y, max_y) =
-                        block.painted_y_range(label, y + label_margin, &transition_font);
-                    bounds.include(x + label_margin, min_y);
-                    bounds.include(x + label_margin + block.width, max_y);
-                }
             }
         }
         bounds.is_finite().then_some(bounds)
@@ -6748,6 +6443,7 @@ pub fn render_with_oracle(
                         note,
                         (quantize_svek_coord(label.x), quantize_svek_coord(label.y)),
                         &arrow_font,
+                        global_padding,
                     );
                     max_x = max_x.max(painted.0);
                     painted_max_x = painted_max_x.max(painted.0);
@@ -6782,9 +6478,10 @@ pub fn render_with_oracle(
                         let Some(label_position) = edge.label else {
                             continue;
                         };
-                        let label = transition.label.as_ref().unwrap();
+                        let label = transition.label.as_deref().unwrap();
                         let transition_font = StateArrowFont::for_transition(diagram, transition);
-                        let label_size = ordinary_edge_label_size(label, &transition_font);
+                        let label_size =
+                            ordinary_edge_label_size(label, &transition_font, global_padding);
                         let label_right = quantize_svek_coord(label_position.x)
                             + label_size.width
                             + SELF_EDGE_ARROW_MARGIN;
@@ -6810,17 +6507,20 @@ pub fn render_with_oracle(
                         .and_then(|edge| edge.label) else {
                             continue;
                         };
-                        let label = transition.label.as_ref().unwrap();
+                        let label = transition.label.as_deref().unwrap();
                         let transition_font = StateArrowFont::for_transition(diagram, transition);
                         let label_right = quantize_svek_coord(label_position.x)
-                            + ordinary_edge_label_size(label, &transition_font).width;
+                            + ordinary_edge_label_size(label, &transition_font, global_padding)
+                                .width;
                         max_x = max_x.max(label_right);
                         painted_max_x = painted_max_x.max(label_right);
                     }
                     max_x = max_x.max(result.width);
                     painted_max_x = painted_max_x.max(result.width);
+                    // Graphviz's `result.height` includes the fixed-size HTML
+                    // label marker. `SvekResult.calculateDimension` measures
+                    // the actual node, edge and label painters instead.
                     max_y = max_y.max(result.height);
-                    painted_max_y = painted_max_y.max(result.height);
                 }
             }
         }
@@ -6833,8 +6533,14 @@ pub fn render_with_oracle(
         } else {
             let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
             let title_tw = graph_body_x + painted_max_x + right_note_space + SVEK_TRAILING_PAD;
-            let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
-            let title_th = graph_body_y + painted_max_y + SVEK_TRAILING_PAD;
+            // Java provenance: `SvekResult.calculateDimension` measures the
+            // painters through `LimitFinder`, then `SvgGraphics.ensureVisible`
+            // converts the positive frontier with `(int) (dimension + 1)`.
+            // This keeps an integral ellipse frontier's trailing pixel while
+            // truncating fractional frontiers such as 402.98 to 403.
+            debug_assert!(painted_max_y <= max_y + f64::EPSILON);
+            let th = svg_ensure_visible_dimension(graph_body_y + painted_max_y + SVEK_TRAILING_PAD);
+            let title_th = th;
             (positions, tw, th, title_tw, title_th)
         }
     } else {
@@ -6959,18 +6665,35 @@ pub fn render_with_oracle(
             ))
     };
 
-    // --- Build SVG ---
-    let w = total_width.ceil() as i64;
-    let h = total_height.ceil() as i64;
-    let mut paint_registry = StateGradientRegistry::new(diagram);
-    let generated_shadow_filter_id = (oracle.is_none()
-        && (autonomous_state_style(diagram, &skin, None).shadow > 0.0
+    // Java `EntityImageStateCommon`, `CircleStart`, and `CircleEnd` pass the
+    // resolved style shadow to each shape. `LimitFinder` sees the painted
+    // shadow frontier at twice that delta, while `SvgGraphics.manageShadow`
+    // lazily creates one source-seeded filter shared by all shadowed shapes.
+    let flat_default_shadow = autonomous_state_style(diagram, &skin, None).shadow;
+    let flat_shadow_filter_id = (oracle.is_none()
+        && (flat_default_shadow > 0.0
             || diagram
                 .states
                 .iter()
-                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)
-            || state_pseudostates_have_shadow(diagram)))
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)))
     .then(|| crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or("")));
+    if oracle.is_none() && flat_default_shadow > 0.0 {
+        total_width += flat_default_shadow * 2.0;
+        total_height += flat_default_shadow * 2.0;
+    }
+
+    // --- Build SVG ---
+    // Java provenance: `LimitFinder.drawRectangle` lets the explicit
+    // full-canvas background reach the positive X frontier, after which
+    // `SvgGraphics.ensureVisible` applies `(int) (dimension + 1)`. The same
+    // rectangle stops one pixel inside its Y extent.
+    let w = if has_explicit_background {
+        svg_ensure_visible_dimension(total_width) as i64
+    } else {
+        total_width.ceil() as i64
+    };
+    let h = total_height.ceil() as i64;
+    let gradients = state_gradients(diagram);
 
     let mut svg = String::with_capacity(4096);
     let root_style = if bg_is_transparent {
@@ -6985,25 +6708,41 @@ pub fn render_with_oracle(
     .unwrap();
 
     svg.push_str("<?plantuml ?>");
-    let defs_insert_at = svg.len();
+    // Emit any `<defs>` the oracle captured verbatim (e.g. the
+    // `<linearGradient>` PlantUML generates for `state X #c1/c2` fills). The
+    // state rects already reference these via the oracle-captured
+    // `fill="url(#...)"`, so the ids must be kept live in `<defs>`.
+    match oracle.map(|o| o.defs_inner_xml.as_str()) {
+        Some(defs) if !defs.is_empty() => {
+            svg.push_str("<defs>");
+            svg.push_str(defs);
+            svg.push_str("</defs>");
+        }
+        _ if gradients.is_empty() && flat_shadow_filter_id.is_none() => svg.push_str("<defs/>"),
+        _ => {
+            svg.push_str("<defs>");
+            emit_state_gradient_defs(&mut svg, &gradients);
+            if let Some(filter_id) = flat_shadow_filter_id.as_deref() {
+                svg.push_str(&crate::filter_registry::shadow_filter_def(filter_id));
+            }
+            svg.push_str("</defs>");
+        }
+    }
     svg.push_str("<g>");
 
-    // `skinparam shadowing true` adds a `filter="url(#...)"` drop-shadow to
-    // every shape. The filter def is in the captured `defs_inner_xml`; its id
-    // is global to the diagram, so recover it from the first entity rect that
-    // carries one and echo it after `fill="…"` on each shape.
-    let oracle_shadow_attr: Option<String> = oracle
+    // Oracle mode reuses the captured filter reference. The no-oracle path
+    // derives the same source-seeded id and only applies it where the resolved
+    // default style has a positive shadow.
+    let default_shadow_attr: String = oracle
         .and_then(|orc| orc.entities.values().find_map(|r| r.rect_filter.as_deref()))
-        .map(|f| format!(r#" filter="{f}""#));
-    let shadow_attr_for = |shadow: f64| {
-        oracle_shadow_attr.clone().unwrap_or_else(|| {
-            generated_shadow_filter_id
+        .map(|f| format!(r#" filter="{f}""#))
+        .or_else(|| {
+            flat_shadow_filter_id
                 .as_deref()
-                .filter(|_| shadow > 0.0)
+                .filter(|_| flat_default_shadow > 0.0)
                 .map(|id| format!(r#" filter="url(#{id})""#))
-                .unwrap_or_default()
         })
-    };
+        .unwrap_or_default();
 
     if has_explicit_background && bg_color != "#FFFFFF" {
         write!(
@@ -7196,16 +6935,11 @@ pub fn render_with_oracle(
             if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
-                let style = state_pseudostate_style(diagram, StatePseudoImage::Start, None);
-                let start_fill = paint_registry.use_paint(&style.fill);
-                let start_stroke = paint_registry.use_paint(&style.stroke);
-                let shadow_attr = shadow_attr_for(style.shadow);
                 write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:{};"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:1;"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
-                        fmt_f(style.line_thickness),
                     )
                 .unwrap();
             }
@@ -7229,30 +6963,22 @@ pub fn render_with_oracle(
             if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
-                let style = state_pseudostate_style(diagram, StatePseudoImage::End, None);
-                let end_stroke = paint_registry.use_paint(&style.stroke);
-                let shadow_attr = shadow_attr_for(style.shadow);
                 write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{end_stroke};stroke-width:{};"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
-                        fmt_f(style.line_thickness),
                     )
                 .unwrap();
             }
             if let Some(polygon) = orc_rect.and_then(|r| r.icon_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
-                let style = state_pseudostate_style(diagram, StatePseudoImage::End, None);
-                let end_inner_fill = paint_registry.use_paint(&style.fill);
-                let end_stroke = paint_registry.use_paint(&style.stroke);
                 write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:{};"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
-                        fmt_f(style.line_thickness),
                     )
                 .unwrap();
             }
@@ -7268,27 +6994,23 @@ pub fn render_with_oracle(
                     })
                 })
                 .unwrap_or((*cx, *cy));
-            let style = state_pseudostate_style(diagram, StatePseudoImage::History, None);
-            let fill = paint_registry.use_paint(&style.fill);
-            let stroke = paint_registry.use_paint(&style.stroke);
-            let shadow_attr = shadow_attr_for(style.shadow);
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{h_radius}" ry="{h_radius}" style="stroke:{stroke};stroke-width:{};"/>"#,
-                fmt_f(px),
-                fmt_f(py),
-                fmt_f(style.line_thickness),
+                r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                fmt_f(px), fmt_f(py),
             )
             .unwrap();
             let label = history_marker_label(id);
-            let text_style = state_history_text_style(diagram, None);
-            let text_width = text_style.width(label);
-            text_style.emit(
-                &mut svg,
-                label,
-                px - text_width / 2.0,
-                state_history_label_baseline(&text_style, label, py),
-            );
+            let tw = text_render::measure(label, STATE_FONT_SIZE, false);
+            let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
+            write!(
+                svg,
+                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                fmt_f(tw),
+                fmt_f(px - tw / 2.0),
+                fmt_f(text_y),
+            )
+            .unwrap();
         } else {
             let state_def = find_state(id);
             match state_def.map(|s| s.kind) {
@@ -7300,18 +7022,14 @@ pub fn render_with_oracle(
                     // entity's `Colors` to `CircleStart`, whose `drawU`
                     // resolves `BackGroundColor` through that entity-aware
                     // color set before falling back to the merged style.
-                    let style = state_pseudostate_style(diagram, StatePseudoImage::Start, None);
-                    let fill_color = oracle
+                    let parser_fill = state_def
+                        .and_then(|state| state.fill.as_deref())
+                        .map(crate::sequence::resolve_color);
+                    let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
-                        .unwrap_or_else(|| {
-                            match state_def.and_then(|state| state.fill.as_deref()) {
-                                Some(fill) => paint_registry.use_raw(fill),
-                                None => paint_registry.use_paint(&style.fill),
-                            }
-                        });
-                    let stroke = paint_registry.use_paint(&style.stroke);
-                    let shadow_attr = shadow_attr_for(style.shadow);
+                        .or(parser_fill)
+                        .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                     write!(
                         svg,
                         r#"<g class="start_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
@@ -7324,10 +7042,9 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="{fill_color}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
                             fmt_f(*cy),
-                            fmt_f(style.line_thickness),
                         )
                         .unwrap();
                     }
@@ -7341,18 +7058,14 @@ pub fn render_with_oracle(
                     // entity's `Colors` to `CircleEnd`, whose `drawU` uses
                     // the entity-aware `BackGroundColor` for the inner
                     // ellipse while retaining the style's line color.
-                    let style = state_pseudostate_style(diagram, StatePseudoImage::End, None);
-                    let inner_fill = oracle
+                    let parser_fill = state_def
+                        .and_then(|state| state.fill.as_deref())
+                        .map(crate::sequence::resolve_color);
+                    let inner_fill: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
-                        .unwrap_or_else(|| {
-                            match state_def.and_then(|state| state.fill.as_deref()) {
-                                Some(fill) => paint_registry.use_raw(fill),
-                                None => paint_registry.use_paint(&style.fill),
-                            }
-                        });
-                    let stroke = paint_registry.use_paint(&style.stroke);
-                    let shadow_attr = shadow_attr_for(style.shadow);
+                        .or(parser_fill)
+                        .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                     write!(
                         svg,
                         r#"<g class="end_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
@@ -7365,10 +7078,9 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
                             fmt_f(*cy),
-                            fmt_f(style.line_thickness),
                         )
                         .unwrap();
                     }
@@ -7377,10 +7089,9 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
                             fmt_f(*cx),
                             fmt_f(*cy),
-                            fmt_f(style.line_thickness),
                         )
                         .unwrap();
                     }
@@ -7400,22 +7111,19 @@ pub fn render_with_oracle(
                     let right = cx + CHOICE_SIZE;
                     let bottom = cy + CHOICE_SIZE;
                     let left = cx - CHOICE_SIZE;
-                    let style = state_pseudostate_style(diagram, StatePseudoImage::Choice, None);
+                    // Resolve fill from oracle (recovers `#color` skinparam) or default.
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
-                        .unwrap_or_else(|| paint_registry.use_paint(&style.fill));
-                    let stroke = paint_registry.use_paint(&style.stroke);
-                    let shadow_attr = shadow_attr_for(style.shadow);
+                        .unwrap_or_else(|| STATE_FILL.to_string());
                     write!(
                         svg,
-                        r#"<polygon fill="{fill_color}"{shadow_attr} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                        r#"<polygon fill="{fill_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
                         fmt_f(*cx), fmt_f(top),
                         fmt_f(right), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(bottom),
                         fmt_f(left), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(top),
-                        fmt_f(style.line_thickness),
                     )
                     .unwrap();
                     svg.push_str("</g>");
@@ -7435,16 +7143,9 @@ pub fn render_with_oracle(
                             BAR_HEIGHT,
                         )
                     };
-                    let style = state_pseudostate_style(
-                        diagram,
-                        StatePseudoImage::Bar,
-                        state_def.and_then(|state| state.stereotype.as_deref()),
-                    );
-                    let fill = paint_registry.use_paint(&style.fill);
-                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<rect fill="{fill}"{shadow_attr} height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                        r#"<rect fill="{BAR_COLOR}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
                         fmt_f(bh_bar),
                         fmt_f(bw_bar),
                         fmt_f(bx),
@@ -7474,26 +7175,26 @@ pub fn render_with_oracle(
                             })
                         })
                         .unwrap_or((*cx, *cy));
-                    let style = state_pseudostate_style(diagram, StatePseudoImage::History, None);
-                    let fill = paint_registry.use_paint(&style.fill);
-                    let stroke = paint_registry.use_paint(&style.stroke);
-                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{h_radius}" ry="{h_radius}" style="stroke:{stroke};stroke-width:{};"/>"#,
-                        fmt_f(px),
-                        fmt_f(py),
-                        fmt_f(style.line_thickness),
+                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(px), fmt_f(py),
                     )
                     .unwrap();
-                    let text_style = state_history_text_style(diagram, state_def);
-                    let text_width = text_style.width("H");
-                    text_style.emit(
-                        &mut svg,
-                        "H",
-                        px - text_width / 2.0,
-                        state_history_label_baseline(&text_style, "H", py),
-                    );
+                    let tw = text_render::measure("H", STATE_FONT_SIZE, false);
+                    // PlantUML's actual text baseline is empirically at
+                    // py + HISTORY_LABEL_BASELINE_OFFSET for the 14pt
+                    // sans-serif "H" glyph; the
+                    // analytic "py + font_size/3" form misses by ~1px.
+                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
+                    write!(
+                        svg,
+                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H</text>"#,
+                        fmt_f(tw),
+                        fmt_f(px - tw / 2.0),
+                        fmt_f(text_y),
+                    )
+                    .unwrap();
                 }
                 Some(StateKind::DeepHistory) => {
                     // Deep history pseudo-state — same bare-pair output as
@@ -7514,26 +7215,22 @@ pub fn render_with_oracle(
                             })
                         })
                         .unwrap_or((*cx, *cy));
-                    let style = state_pseudostate_style(diagram, StatePseudoImage::History, None);
-                    let fill = paint_registry.use_paint(&style.fill);
-                    let stroke = paint_registry.use_paint(&style.stroke);
-                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{h_radius}" ry="{h_radius}" style="stroke:{stroke};stroke-width:{};"/>"#,
-                        fmt_f(px),
-                        fmt_f(py),
-                        fmt_f(style.line_thickness),
+                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        fmt_f(px), fmt_f(py),
                     )
                     .unwrap();
-                    let text_style = state_history_text_style(diagram, state_def);
-                    let text_width = text_style.width("H*");
-                    text_style.emit(
-                        &mut svg,
-                        "H*",
-                        px - text_width / 2.0,
-                        state_history_label_baseline(&text_style, "H*", py),
-                    );
+                    let tw = text_render::measure("H*", STATE_FONT_SIZE, false);
+                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
+                    write!(
+                        svg,
+                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H*</text>"#,
+                        fmt_f(tw),
+                        fmt_f(px - tw / 2.0),
+                        fmt_f(text_y),
+                    )
+                    .unwrap();
                 }
                 _ => {
                     // Normal state box.
@@ -7542,6 +7239,20 @@ pub fn render_with_oracle(
                     let rendered_style = autonomous_state_style(diagram, &skin, state_def);
                     let title_style = &rendered_style.title;
                     let attribute_style = &rendered_style.attribute;
+                    let state_shadow_attr = oracle
+                        .and_then(|orc| {
+                            orc.entities
+                                .get(id.as_str())
+                                .and_then(|rect| rect.rect_filter.as_deref())
+                        })
+                        .map(|filter| format!(r#" filter="{filter}""#))
+                        .or_else(|| {
+                            flat_shadow_filter_id
+                                .as_deref()
+                                .filter(|_| rendered_style.shadow > 0.0)
+                                .map(|filter_id| format!(r#" filter="url(#{filter_id})""#))
+                        })
+                        .unwrap_or_default();
 
                     let box_x = cx - bw / 2.0;
                     let box_y = cy - bh / 2.0;
@@ -7552,13 +7263,12 @@ pub fn render_with_oracle(
                     // path; oracle wins when both exist.
                     let parser_fill = state_def
                         .and_then(|s| s.fill.as_deref())
-                        .map(|fill| paint_registry.use_raw(fill));
+                        .map(|fill| state_gradient_fill(fill, &gradients));
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
                         .or(parser_fill)
-                        .unwrap_or_else(|| paint_registry.use_raw(&rendered_style.fill));
-                    let shadow_attr = shadow_attr_for(rendered_style.shadow);
+                        .unwrap_or_else(|| state_gradient_fill(&rendered_style.fill, &gradients));
 
                     // Border style: `state X ##color` sets stroke colour;
                     // `##[dashed]color` adds a dash pattern; `##[bold]`
@@ -7600,7 +7310,7 @@ pub fn render_with_oracle(
                         } else {
                             write!(
                                 svg,
-                                r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                r#"<rect fill="{fill_color}"{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                                 fmt_f(*bh),
                                 fmt_f(*bw),
                                 fmt_f(box_x),
@@ -7613,7 +7323,6 @@ pub fn render_with_oracle(
                             label,
                             title_style.size,
                             title_style.bold,
-                            title_style.italic,
                             Some(&title_style.family),
                             is_state_monospace_family(&title_style.family),
                         );
@@ -7680,7 +7389,7 @@ pub fn render_with_oracle(
                         } else {
                             write!(
                                 svg,
-                                r#"<rect fill="{fill_color}"{shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+                                r#"<rect fill="{fill_color}"{state_shadow_attr} height="{}" rx="{rx_s}" ry="{rx_s}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
                                 fmt_f(*bh),
                                 fmt_f(*bw),
                                 fmt_f(box_x),
@@ -7699,7 +7408,7 @@ pub fn render_with_oracle(
                             .unwrap_or_else(|| {
                                 box_y
                                     + 10.0
-                                    + 2.0 * state_padding
+                                    + 2.0 * global_padding
                                     + text_render::label_height_with_family(
                                         label,
                                         title_style.size,
@@ -7732,7 +7441,6 @@ pub fn render_with_oracle(
                             label,
                             title_style.size,
                             title_style.bold,
-                            title_style.italic,
                             Some(&title_style.family),
                             is_state_monospace_family(&title_style.family),
                         );
@@ -7748,7 +7456,7 @@ pub fn render_with_oracle(
                             .unwrap_or_else(|| {
                                 box_y
                                     + 5.0
-                                    + state_padding
+                                    + global_padding
                                     + text_render::label_ascent_with_family(
                                         label,
                                         title_style.size,
@@ -7825,7 +7533,7 @@ pub fn render_with_oracle(
                             )
                         };
                         for (j, desc) in descriptions.iter().enumerate() {
-                            let desc_x = box_x + 5.0 + state_padding;
+                            let desc_x = box_x + 5.0 + global_padding;
                             let desc_y = orc_rect
                                 .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
                                 .unwrap_or_else(|| {
@@ -7839,7 +7547,7 @@ pub fn render_with_oracle(
                                     // baseline.
                                     div_y
                                         + STATE_FIELD_TOP_PADDING
-                                        + state_padding
+                                        + global_padding
                                         + text_render::label_first_baseline_ascent_with_family(
                                             desc,
                                             attribute_style.size,
@@ -7869,7 +7577,6 @@ pub fn render_with_oracle(
                                     &content,
                                     attribute_style.size,
                                     attribute_style.bold,
-                                    attribute_style.italic,
                                     Some(&attribute_style.family),
                                     is_state_monospace_family(&attribute_style.family),
                                 );
@@ -7963,12 +7670,13 @@ pub fn render_with_oracle(
     // Named floating notes (`as FN1`) were already emitted up front, keyed by
     // their alias rather than a `GMN*` name — skip them here so the 1:1 GMN
     // pairing stays aligned with the remaining (anchored / anonymous) notes.
-    for (note_idx, note) in diagram
+    for (gmn_index, (note_idx, note)) in diagram
         .notes
         .iter()
+        .enumerate()
         .filter(|n| {
             !matches!(
-                &n.kind,
+                &n.1.kind,
                 // Named floating notes are pass-one entities; `note on link`
                 // shapes are emitted inside their owning link group. Neither
                 // has a standalone `GMN*` entity.
@@ -7977,7 +7685,7 @@ pub fn render_with_oracle(
         })
         .enumerate()
     {
-        if let Some((gmn_name, rect)) = oracle_gmns.get(note_idx) {
+        if let Some((gmn_name, rect)) = oracle_gmns.get(gmn_index) {
             // Oracle path: replay the captured path strings verbatim and
             // place text using the captured y positions.
             let entity_id = rect
@@ -8242,8 +7950,20 @@ pub fn render_with_oracle(
             let transition_arrow_font = StateArrowFont::for_transition(diagram, t);
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
-            let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
-            let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
+            let from_name = if t.from == "[*]" {
+                "*start*"
+            } else if is_history_marker(&t.from) {
+                "*historical*"
+            } else {
+                &t.from
+            };
+            let to_name = if t.to == "[*]" {
+                "*end*"
+            } else if is_history_marker(&t.to) {
+                "*historical*"
+            } else {
+                &t.to
+            };
             let solved_reversed = t.arrow.reverses_solved_endpoints();
             let arrow_at_start = t.arrow.arrow_at_start();
             let (edge_from_layout, edge_to_layout, edge_from_name, edge_to_name) =
@@ -8384,7 +8104,8 @@ pub fn render_with_oracle(
                             ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0)
                         });
                     if edge_from_layout == edge_to_layout {
-                        let inset = state_edge_label_margin(t) - SVEK_EDGE_LABEL_MARGIN;
+                        let inset =
+                            resolved_state_edge_label_margin(diagram, t) - SVEK_EDGE_LABEL_MARGIN;
                         label_origin.0 += inset;
                         label_origin.1 += inset;
                     }
@@ -8394,6 +8115,7 @@ pub fn render_with_oracle(
                         link_note,
                         label_origin,
                         &transition_arrow_font,
+                        global_padding,
                     );
                 }
             } else {
@@ -8425,20 +8147,91 @@ pub fn render_with_oracle(
                         link_note,
                         (from_cx.max(to_cx), (start_y + end_y) / 2.0),
                         &transition_arrow_font,
+                        global_padding,
                     );
                 }
             }
 
             svg.push_str("</g>");
         }
+
+        // `GraphvizImageBuilder` marks only links owned by an
+        // `EntityImageNote` as Opale. When several notes share an anchor,
+        // `onlyOneLink` leaves the first competing note ordinary: its routed
+        // edge remains visible as a dashed association after the state
+        // transitions, while later siblings consume their edges as callouts.
+        for position in attached_note_positions
+            .iter()
+            .filter(|position| !position.opale)
+        {
+            let Some(spec) = attached_notes
+                .iter()
+                .find(|spec| spec.note_index == position.note_index)
+            else {
+                continue;
+            };
+            let (from, to) = if spec.right {
+                (spec.anchor.as_str(), spec.id.as_str())
+            } else {
+                (spec.id.as_str(), spec.anchor.as_str())
+            };
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == from && edge.to == to)
+            else {
+                continue;
+            };
+            if edge.points.is_empty() {
+                continue;
+            }
+            let endpoint_id = |endpoint: &str| {
+                if endpoint == spec.id {
+                    spec.entity_id.as_str()
+                } else {
+                    ent_id_of(endpoint)
+                }
+            };
+            let mut points = edge.points.iter().map(|(x, y)| {
+                (
+                    quantize_svek_coord(*x) + graph_body_x,
+                    quantize_svek_coord(*y) + graph_body_y,
+                )
+            });
+            let Some(first) = points.next() else {
+                continue;
+            };
+            let mut d = format!("M{},{}", fmt_f(first.0), fmt_f(first.1));
+            let remaining = points.collect::<Vec<_>>();
+            let mut index = 0;
+            while index + 2 < remaining.len() {
+                write!(
+                    d,
+                    " C{},{} {},{} {},{}",
+                    fmt_f(remaining[index].0),
+                    fmt_f(remaining[index].1),
+                    fmt_f(remaining[index + 1].0),
+                    fmt_f(remaining[index + 1].1),
+                    fmt_f(remaining[index + 2].0),
+                    fmt_f(remaining[index + 2].1),
+                )
+                .unwrap();
+                index += 3;
+            }
+            let note = &diagram.notes[position.note_index];
+            write!(
+                svg,
+                r#"<!--link {from} to {to}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="{}"><path d="{d}" fill="none" id="{from}-{to}" style="stroke:{};stroke-width:1;stroke-dasharray:7,7;"/></g>"#,
+                endpoint_id(from),
+                endpoint_id(to),
+                note.source_line,
+                spec.link_id,
+                skin.stroke,
+            )
+            .unwrap();
+        }
     }
 
     svg.push_str("</g></svg>");
-    let defs = match oracle.map(|oracle| oracle.defs_inner_xml.as_str()) {
-        Some(contents) if !contents.is_empty() => format!("<defs>{contents}</defs>"),
-        _ => state_defs(&paint_registry, generated_shadow_filter_id.as_deref()),
-    };
-    svg.insert_str(defs_insert_at, &defs);
     svg
 }
 
@@ -8820,6 +8613,7 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             sp.key.eq_ignore_ascii_case("stateArrowFontName")
                 || sp.key.eq_ignore_ascii_case("arrowFontName")
                 || sp.key.eq_ignore_ascii_case("defaultFontName")
+                || sp.key.eq_ignore_ascii_case("fontName")
         })
         .map(|sp| canonical_state_font_family(sp.value.trim()))
         .unwrap_or_else(|| "sans-serif".to_string());
@@ -11288,25 +11082,106 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn generic_font_name_is_not_a_legacy_state_font_input() {
+    fn state_arrow_family_metrics_drive_rank_and_baseline() {
         let input = concat!(
             "@startuml\n",
-            "top to bottom direction\n",
-            "skinparam fontName Courier New\n",
-            "skinparam defaultFontSize 14\n",
-            "state \"Wide Courier State\" as Wide\n",
-            "state \"Narrow State\" as Narrow\n",
-            "Wide --> Narrow : node and arrow fonts share defaults\\nsecond line\n",
+            "skinparam stateArrowFontName Verdana\n",
+            "skinparam stateArrowFontSize 11\n",
+            "[*] --> FreshIdle\n",
+            "FreshIdle --> FreshActive : renamed start\n",
+            "FreshActive --> [*]\n",
             "@enduml\n",
         );
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
 
-        // `SkinParam.getFontFamily` consults FontParam-specific keys and then
-        // `defaultFontName`; an unrelated raw `fontName` key is inert.
-        assert!(!svg.contains(r#"font-family="Courier New""#), "{svg}");
-        assert!(svg.contains(r#"font-family="sans-serif""#), "{svg}");
-        assert!(svg.contains(r#"viewBox="0 0 343 215""#), "{svg}");
+        // PlantUML 1.2026.3beta6 passes the complete FontConfiguration into
+        // SvekEdge's label block before Graphviz rank allocation.
+        assert!(svg.contains(r#"viewBox="0 0 151 359""#), "{svg}");
+        assert!(
+            svg.contains(r#"textLength="78.4878" x="57.01" y="179.0591""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn global_padding_drives_state_and_edge_label_blocks() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam padding 7\n",
+            "[*] --> FreshAlpha7517\n",
+            "FreshAlpha7517 --> FreshBeta7523 : renamed event 7529\n",
+            "FreshBeta7523 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // PlantUML 1.2026.3beta6: EntityImageState applies global padding to
+        // its title/body sheets, and SvekEdge applies it around the label.
+        assert!(svg.contains(r#"viewBox="0 0 241 403""#), "{svg}");
+        assert!(
+            svg.contains(r#"height="64.4883" rx="12.5" ry="12.5""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"textLength="130.6221" x="87.6" y="202.0584""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn pseudo_state_colors_follow_circle_style_signatures() {
+        let input = concat!(
+            "@startuml\n",
+            "<style>\n",
+            "root {\n",
+            "  BackgroundColor transparent\n",
+            "  LineColor #667788\n",
+            "}\n",
+            "</style>\n",
+            "skinparam activityStartColor #112233\n",
+            "skinparam activityEndColor #445566\n",
+            "[*] --> FreshCircleProbe\n",
+            "FreshCircleProbe --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // PlantUML 1.2026.3beta6: `EntityImageCircleStart/End` resolve
+        // root.element.stateDiagram.circle.{start,end}; the legacy activity
+        // colours override only their mapped properties.
+        assert!(svg.contains(
+            r##"fill="#112233" rx="10" ry="10" style="stroke:#667788;stroke-width:1;""##
+        ));
+        assert!(
+            svg.contains(r##"fill="none" rx="11" ry="11" style="stroke:#445566;stroke-width:1;""##)
+        );
+        assert!(
+            svg.contains(r##"fill="none" rx="6" ry="6" style="stroke:#445566;stroke-width:1;""##)
+        );
+    }
+
+    #[test]
+    fn explicit_background_exposes_the_positive_canvas_frontier() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam backgroundColor #A1B2C3\n",
+            "state \"Q\" as FreshCanvasProbe8231\n",
+            "[*] --> FreshCanvasProbe8231\n",
+            "FreshCanvasProbe8231 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // PlantUML 1.2026.3beta6 exposes the background rectangle's positive
+        // X frontier through SvgGraphics.ensureVisible.
+        assert!(svg.contains(r#"viewBox="0 0 72 232""#), "{svg}");
+        assert!(svg.contains(
+            r##"<rect fill="#A1B2C3" height="232" style="stroke:none;stroke-width:1;" width="72" x="0" y="0"/>"##
+        ));
     }
 
     #[test]
@@ -11540,289 +11415,6 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn state_text_block_padding_expands_intrinsic_blocks_before_layout() {
-        let parsed = rustuml_parser::parse::parse(
-            "@startuml\n\
-             state PaddedStateWithLongLabel : detailed body line\n\
-             state HiddenStateWithLongLabel\n\
-             @enduml",
-        )
-        .unwrap();
-        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
-            panic!("expected state diagram");
-        };
-        let padded = diagram
-            .states
-            .iter()
-            .find(|state| state.id == "PaddedStateWithLongLabel")
-            .unwrap();
-        let hidden = diagram
-            .states
-            .iter()
-            .find(|state| state.id == "HiddenStateWithLongLabel")
-            .unwrap();
-        let font = |padding| StateNodeFont {
-            name_size: 24.0,
-            desc_size: 18.0,
-            name: None,
-            monospace: false,
-            bold: false,
-            italic: false,
-            padding,
-        };
-
-        let padded_five = layout_node_size_with_font(&padded.id, Some(padded), false, &font(5.0));
-        let padded_eight = layout_node_size_with_font(&padded.id, Some(padded), false, &font(8.0));
-        assert!((padded_eight.0 - padded_five.0 - 6.0).abs() < f64::EPSILON);
-        assert!((padded_eight.1 - padded_five.1 - 12.0).abs() < f64::EPSILON);
-
-        let hidden_five = layout_node_size_with_font(&hidden.id, Some(hidden), true, &font(5.0));
-        let hidden_eight = layout_node_size_with_font(&hidden.id, Some(hidden), true, &font(8.0));
-        assert!((hidden_eight.0 - hidden_five.0 - 6.0).abs() < f64::EPSILON);
-        assert!((hidden_eight.1 - hidden_five.1 - 6.0).abs() < f64::EPSILON);
-    }
-
-    #[test]
-    fn transition_label_baseline_uses_the_resolved_arrow_font_family() {
-        let font = |family: &str| StateArrowFont {
-            color: DEFAULT_TEXT_COLOR.to_string(),
-            family: family.to_string(),
-            size: 12,
-            bold: false,
-            italic: false,
-            padding: 0.0,
-            alignment: StateLabelAlignment::Center,
-        };
-
-        let label = TransitionLabel::from("transition");
-        let verdana_font = font("Verdana");
-        let generic_font = font("sans-serif");
-        let verdana = StateTransitionLabelBlock::measure(&label, &verdana_font)
-            .first_baseline_ascent(&label, &verdana_font);
-        let generic = StateTransitionLabelBlock::measure(&label, &generic_font)
-            .first_baseline_ascent(&label, &generic_font);
-        assert_eq!(
-            verdana,
-            text_render::label_first_baseline_ascent_with_family("transition", 12.0, "Verdana")
-        );
-        assert_ne!(verdana, generic);
-    }
-
-    #[test]
-    fn transition_display_block_measures_and_aligns_each_row() {
-        let font = StateArrowFont {
-            color: DEFAULT_TEXT_COLOR.to_string(),
-            family: "Courier New".to_string(),
-            size: 12,
-            bold: false,
-            italic: true,
-            padding: 0.0,
-            alignment: StateLabelAlignment::Center,
-        };
-        let label = TransitionLabel::from("short\\nsubstantially longer");
-        let block = StateTransitionLabelBlock::measure(&label, &font);
-        let short_width = text_render::measure_with_family("short", 12.0, false, "Courier New");
-        let long_width =
-            text_render::measure_with_family("substantially longer", 12.0, false, "Courier New");
-
-        assert_eq!(block.width, long_width);
-        assert_eq!(
-            block.height,
-            text_render::label_height_with_family("short", 12.0, "Courier New")
-                + text_render::label_height_with_family(
-                    "substantially longer",
-                    12.0,
-                    "Courier New"
-                )
-        );
-        assert_eq!(
-            block.row_x(20.0, 0),
-            20.0 + (long_width - short_width) / 2.0
-        );
-        assert_eq!(block.row_x(20.0, 1), 20.0);
-    }
-
-    #[test]
-    fn transition_display_natural_alignment_overrides_state_message_alignment() {
-        let parsed = rustuml_parser::parse::parse(
-            "@startuml\n\
-             skinparam stateMessageAlignment right\n\
-             state Alpha\n\
-             state Beta\n\
-             Alpha --> Beta : narrow\\lwidest row\n\
-             @enduml",
-        )
-        .unwrap();
-        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
-            panic!("expected state diagram");
-        };
-        let transition = &diagram.transitions[0];
-        let font = StateArrowFont::for_transition(&diagram, transition);
-        let block = StateTransitionLabelBlock::measure(transition.label.as_ref().unwrap(), &font);
-
-        assert_eq!(font.alignment, StateLabelAlignment::Right);
-        assert_eq!(block.alignment, StateLabelAlignment::Left);
-        assert_eq!(block.row_x(31.0, 0), 31.0);
-    }
-
-    #[test]
-    fn dotted_alignment_alias_keeps_flat_label_painted_frontier() {
-        let input = concat!(
-            "@startuml\n",
-            "left to right direction\n",
-            "skinparam State.Arrow_Font.Name Courier New\n",
-            "skinparam State.Arrow_Font.Size 11\n",
-            "skinparam State.Message_Alignment left\n",
-            "skinparam default.text.align right\n",
-            "state \"First Relay\" as First\n",
-            "state \"Second Relay\" as Second\n",
-            "First --> Second : prefix row\\rnatural right row\n",
-            "@enduml\n",
-        );
-        let diagram = rustuml_parser::parse::parse(input).unwrap();
-        let svg = crate::render_svg(&diagram);
-
-        assert!(svg.contains(r#"width="89.8291" x="7" y="7.8032""#), "{svg}");
-        assert!(svg.contains(
-            r#"font-family="Courier New" font-size="11" lengthAdjust="spacing" textLength="66.0107" x="174.0375" y="16.9609""#
-        ));
-    }
-
-    #[test]
-    fn transition_display_emits_separate_text_rows() {
-        let diagram = rustuml_parser::parse::parse(
-            "@startuml\n\
-             state Envelope {\n\
-               [*] --> Idle : boot pass\\nsecond line\n\
-             }\n\
-             @enduml",
-        )
-        .unwrap();
-        let svg = crate::render_svg(&diagram);
-
-        assert!(svg.contains(">boot pass</text>"), "{svg}");
-        assert!(svg.contains(">second line</text>"), "{svg}");
-        assert!(!svg.contains(r">boot pass\nsecond line</text>"), "{svg}");
-    }
-
-    #[test]
-    fn transition_display_empty_row_retains_space_atom() {
-        let font = StateArrowFont {
-            color: DEFAULT_TEXT_COLOR.to_string(),
-            family: "Verdana".to_string(),
-            size: 14,
-            bold: false,
-            italic: false,
-            padding: 0.0,
-            alignment: StateLabelAlignment::Right,
-        };
-        let label = TransitionLabel::from("first expansive row\\n\\nfin\\r");
-        let block = StateTransitionLabelBlock::measure(&label, &font);
-        let empty_row_width = text_render::measure_with_family(" ", 14.0, false, "Verdana");
-
-        assert!(empty_row_width > 0.0);
-        assert_eq!(block.row_widths[1], empty_row_width);
-        assert_eq!(block.row_x(40.0, 1), 40.0 + block.width - empty_row_width);
-
-        let mut svg = String::new();
-        block.emit(&mut svg, &label, 40.0, 20.0, &font);
-        assert!(svg.contains(">&#160;</text>"), "{svg}");
-    }
-
-    #[test]
-    fn state_rank_direction_drives_flat_and_nested_layouts() {
-        fn dimensions(svg: &str) -> (f64, f64) {
-            let values = svg
-                .split_once(r#"viewBox="0 0 "#)
-                .unwrap()
-                .1
-                .split_once('"')
-                .unwrap()
-                .0
-                .split_whitespace()
-                .map(|value| value.parse::<f64>().unwrap())
-                .collect::<Vec<_>>();
-            (values[0], values[1])
-        }
-
-        let flat_body = "state Copper\n\
-                         state Violet\n\
-                         state Amber\n\
-                         state Silver\n\
-                         [*] --> Copper\n\
-                         Copper --> Violet\n\
-                         Violet --> Amber\n\
-                         Amber --> Silver\n\
-                         Silver --> [*]";
-        let flat_tb = rustuml_parser::parse::parse(&format!(
-            "@startuml\ntop to bottom direction\n{flat_body}\n@enduml"
-        ))
-        .unwrap();
-        let flat_lr = rustuml_parser::parse::parse(&format!(
-            "@startuml\nleft to right direction\n{flat_body}\n@enduml"
-        ))
-        .unwrap();
-        let (flat_tb_width, flat_tb_height) = dimensions(&crate::render_svg(&flat_tb));
-        let (flat_lr_width, flat_lr_height) = dimensions(&crate::render_svg(&flat_lr));
-        assert!(flat_tb_height > flat_tb_width);
-        assert!(flat_lr_width > flat_lr_height);
-
-        let nested_body = "state \"Outer Ledger\" as OuterLedger {\n\
-                             state \"Draft Lane\" as DraftLane\n\
-                             state \"Audit Lane\" as AuditLane\n\
-                             [*] --> DraftLane\n\
-                             DraftLane --> AuditLane : renamed row\n\
-                             AuditLane --> [*]\n\
-                           }";
-        let nested_tb = rustuml_parser::parse::parse(&format!(
-            "@startuml\ntop to bottom direction\n{nested_body}\n@enduml"
-        ))
-        .unwrap();
-        let nested_lr = rustuml_parser::parse::parse(&format!(
-            "@startuml\nleft to right direction\n{nested_body}\n@enduml"
-        ))
-        .unwrap();
-        let (nested_tb_width, nested_tb_height) = dimensions(&crate::render_svg(&nested_tb));
-        let (nested_lr_width, nested_lr_height) = dimensions(&crate::render_svg(&nested_lr));
-        assert!(nested_tb_height > nested_tb_width);
-        assert!(nested_lr_width > nested_lr_height);
-    }
-
-    #[test]
-    fn autonomous_lr_root_normalizes_ellipse_painted_minimum() {
-        let parsed = rustuml_parser::parse::parse(
-            "@startuml\n\
-             left to right direction\n\
-             state \"Outer Model\" as OuterModel {\n\
-               state \"Inner Start\" as InnerStart\n\
-               state \"Inner Finish\" as InnerFinish\n\
-               [*] --> InnerStart\n\
-               InnerStart --> InnerFinish\n\
-               InnerFinish --> [*]\n\
-             }\n\
-             [*] --> OuterModel\n\
-             OuterModel --> [*]\n\
-             @enduml",
-        )
-        .unwrap();
-        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
-            panic!("expected state diagram");
-        };
-        let (_, _, outer) = build_autonomous_composite(&diagram).unwrap();
-        let (_, center_x, _, _, _) = outer
-            .positions
-            .iter()
-            .find(|(id, ..)| id == "__start__")
-            .unwrap();
-        assert_eq!(center_x - START_RADIUS, SVEK_PAINTED_ORIGIN);
-        let bounds = outer.painted_bounds.unwrap();
-        assert_eq!(
-            outer.width,
-            bounds.max_x - bounds.min_x + SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN
-        );
-    }
-
-    #[test]
     fn note_right_of_state_renders_text() {
         let input = "@startuml\n[*] --> A\nA --> [*]\nnote right of A : Note 1\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -11926,6 +11518,78 @@ CobaltDecision --> [*]
         ] {
             assert!(svg.contains(text), "{text} missing from {svg}");
         }
+        assert_eq!(svg.matches(r#"data-link-type="association""#).count(), 1);
+        assert!(svg.contains(r#"id="CopperRelay-GMN2""#), "{svg}");
+        assert!(svg.contains(r#"id="lnk4""#), "{svg}");
+    }
+
+    #[test]
+    fn last_of_three_shared_anchor_notes_owns_the_opale_edge() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> FreshSharedAnchor881\n",
+            "note right of FreshSharedAnchor881 : first renamed memo\n",
+            "note right of FreshSharedAnchor881 : second renamed memo\n",
+            "note right of FreshSharedAnchor881 : final renamed memo\n",
+            "FreshSharedAnchor881 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(state_diagram) = &diagram else {
+            panic!("expected state diagram");
+        };
+        let allocated = allocate_state_svg_ids(
+            state_diagram,
+            &[
+                "__start__".to_string(),
+                "FreshSharedAnchor881".to_string(),
+                "__end__".to_string(),
+            ],
+        );
+
+        assert_eq!(
+            attached_note_specs(state_diagram, &allocated)
+                .iter()
+                .map(|note| note.opale)
+                .collect::<Vec<_>>(),
+            [false, false, true]
+        );
+        let svg = crate::render_svg(&diagram);
+        assert_eq!(svg.matches(r#"data-link-type="association""#).count(), 2);
+    }
+
+    #[test]
+    fn opposite_side_notes_own_independent_opale_edges() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> FreshOppositeAnchor919\n",
+            "note right of FreshOppositeAnchor919 : renamed eastern memo\n",
+            "note left of FreshOppositeAnchor919 : renamed western memo\n",
+            "FreshOppositeAnchor919 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(state_diagram) = &diagram else {
+            panic!("expected state diagram");
+        };
+        let allocated = allocate_state_svg_ids(
+            state_diagram,
+            &[
+                "__start__".to_string(),
+                "FreshOppositeAnchor919".to_string(),
+                "__end__".to_string(),
+            ],
+        );
+
+        assert_eq!(
+            attached_note_specs(state_diagram, &allocated)
+                .iter()
+                .map(|note| note.opale)
+                .collect::<Vec<_>>(),
+            [true, true]
+        );
+        let svg = crate::render_svg(&diagram);
+        assert_eq!(svg.matches(r#"data-link-type="association""#).count(), 0);
     }
 
     #[test]
@@ -12063,6 +11727,29 @@ CobaltDecision --> [*]
                 );
             }
         }
+    }
+
+    #[test]
+    fn attached_note_after_link_note_keeps_its_solved_identity() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> FreshAlpha811\n",
+            "note left of FreshAlpha811 : first renamed memo\n",
+            "FreshAlpha811 --> FreshBeta821 : renamed event\n",
+            "note on link\n",
+            "  fresh link memo\n",
+            "end note\n",
+            "note right of FreshBeta821 : trailing renamed memo\n",
+            "FreshBeta821 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-qualified-name="GMN5" data-source-line="7" id="ent0006""#));
+        assert!(!svg.contains("data-qualified-name=\"GMN000"));
+        assert!(svg.contains(">fresh link memo</text>"));
+        assert!(svg.contains(">trailing renamed memo</text>"));
     }
 
     #[test]
@@ -12492,91 +12179,6 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn autonomous_composites_accept_state_label_alignment_params() {
-        for alignment_param in [
-            "skinparam stateMessageAlignment right",
-            "skinparam defaultTextAlignment left",
-        ] {
-            let parsed = rustuml_parser::parse::parse(&format!(
-                "@startuml\n\
-                 left to right direction\n\
-                 {alignment_param}\n\
-                 state \"Outer Ledger\" as OuterLedger {{\n\
-                   state \"Draft Lane\" as DraftLane\n\
-                   state \"Audit Lane\" as AuditLane\n\
-                   [*] --> DraftLane\n\
-                   DraftLane --> AuditLane : head\\nlonger aligned row\n\
-                   AuditLane --> [*]\n\
-                 }}\n\
-                 @enduml"
-            ))
-            .unwrap();
-            let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
-                panic!("expected state diagram");
-            };
-
-            assert!(has_only_autonomous_layout_skinparams(&diagram));
-            assert!(build_autonomous_composite(&diagram).is_some());
-            let svg = render(&diagram, &Theme::default());
-            assert!(svg.contains("<path"), "{alignment_param}: {svg}");
-            assert!(
-                svg.contains(r#"data-qualified-name="OuterLedger..start.OuterLedger""#),
-                "{alignment_param}: {svg}"
-            );
-            assert!(
-                !svg.contains(r#"data-qualified-name="[*]OuterLedger""#),
-                "{alignment_param}: {svg}"
-            );
-        }
-    }
-
-    #[test]
-    fn flat_painted_envelope_accepts_only_modeled_label_skinparams() {
-        let accepted = rustuml_parser::parse::parse(
-            "@startuml\n\
-             left to right direction\n\
-             skinparam StateArrowFontName Courier New\n\
-             skinparam StateArrowFontSize 12\n\
-             skinparam StateArrowFontStyle bold\n\
-             skinparam StateArrowFontColor #123456\n\
-             skinparam StateMessageAlignment right\n\
-             state \"Renamed Alpha\" as Alpha\n\
-             state \"Renamed Beta\" as Beta\n\
-             Alpha --> Beta : first row\\nsecond row\n\
-             @enduml",
-        )
-        .unwrap();
-        let rustuml_parser::diagram::Diagram::State(accepted) = accepted else {
-            panic!("expected state diagram");
-        };
-        assert!(has_only_flat_label_skinparams(&accepted));
-
-        for unsupported in [
-            "skinparam StateShadowing 4",
-            "skinparam Padding 3",
-            "skinparam NodeSep 70",
-            "skinparam UnknownStatePainter value",
-        ] {
-            let parsed = rustuml_parser::parse::parse(&format!(
-                "@startuml\n\
-                 {unsupported}\n\
-                 state \"Renamed Alpha\" as Alpha\n\
-                 state \"Renamed Beta\" as Beta\n\
-                 Alpha --> Beta : held out label\n\
-                 @enduml"
-            ))
-            .unwrap();
-            let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
-                panic!("expected state diagram");
-            };
-            assert!(
-                !has_only_flat_label_skinparams(&diagram),
-                "{unsupported} must remain on the conservative fallback"
-            );
-        }
-    }
-
-    #[test]
     fn autonomous_outer_spacing_rejects_nondigit_values_like_java() {
         let parsed = rustuml_parser::parse::parse(
             "@startuml\n\
@@ -12603,6 +12205,104 @@ CobaltDecision --> [*]
             spacing.rank_sep_px,
             GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px
         );
+    }
+
+    #[test]
+    fn flat_state_layout_consumes_resolved_ranksep() {
+        let source = |ranksep: u32| {
+            format!(
+                "@startuml\n\
+                 skinparam ranksep {ranksep}\n\
+                 [*] --> CopperRelay701\n\
+                 CopperRelay701 --> AzureDepot709 : fresh event 719\n\
+                 AzureDepot709 --> QuartzArchive727\n\
+                 QuartzArchive727 --> [*]\n\
+                 @enduml"
+            )
+        };
+        let height = |svg: &str| {
+            svg.split_once(r#"viewBox="0 0 "#)
+                .and_then(|(_, tail)| tail.split_once('"'))
+                .and_then(|(dimensions, _)| dimensions.split_whitespace().nth(1))
+                .and_then(|height| height.parse::<u32>().ok())
+                .expect("numeric SVG viewBox height")
+        };
+
+        let compact = crate::render_svg(&rustuml_parser::parse::parse(&source(37)).unwrap());
+        let spacious = crate::render_svg(&rustuml_parser::parse::parse(&source(83)).unwrap());
+
+        assert!(height(&compact) < height(&spacious));
+    }
+
+    #[test]
+    fn renamed_branching_state_graph_respects_left_to_right_direction() {
+        let input = concat!(
+            "@startuml\n",
+            "left to right direction\n",
+            "[*] --> FreshIdle631\n",
+            "FreshIdle631 --> FreshWorking641 : start renamed work\n",
+            "FreshWorking641 --> FreshDone643 : finish renamed work\n",
+            "FreshWorking641 --> FreshFailed647 : fail renamed work\n",
+            "FreshFailed647 --> FreshIdle631 : retry renamed work\n",
+            "FreshDone643 --> [*]\n",
+            "@enduml\n",
+        );
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(input).unwrap());
+        let dimensions = svg
+            .split_once(r#"viewBox="0 0 "#)
+            .and_then(|(_, tail)| tail.split_once('"'))
+            .map(|(value, _)| value)
+            .expect("SVG viewBox");
+        let mut dimensions = dimensions
+            .split_whitespace()
+            .map(|value| value.parse::<u32>().unwrap());
+        let width = dimensions.next().unwrap();
+        let height = dimensions.next().unwrap();
+
+        assert!(width > height);
+    }
+
+    #[test]
+    fn state_linetype_uses_latest_case_insensitive_routing_value() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam LINETYPE OrThO\n\
+             skinparam linetype polyline\n\
+             [*] --> FreshRouteAlpha661\n\
+             FreshRouteAlpha661 --> FreshRouteBeta673\n\
+             FreshRouteBeta673 --> [*]\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+
+        assert_eq!(state_edge_routing(&diagram), EdgeRouting::Polyline);
+    }
+
+    #[test]
+    fn bare_history_markers_use_circle_geometry_and_historical_link_identity() {
+        for marker in ["[H]", "[H*]"] {
+            assert_eq!(
+                layout_node_size(marker, None, false),
+                (
+                    END_OUTER_RADIUS * 2.0,
+                    END_OUTER_RADIUS * 2.0,
+                    StateLayoutShape::Circle,
+                )
+            );
+        }
+
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> FreshHistoryAlpha751\n",
+            "FreshHistoryAlpha751 --> FreshHistoryBeta757 : renamed event\n",
+            "FreshHistoryBeta757 --> [H] : renamed return\n",
+            "@enduml\n",
+        );
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(input).unwrap());
+        assert!(svg.contains(r#"id="FreshHistoryBeta757-to-*historical*""#));
     }
 
     #[test]
@@ -12786,156 +12486,29 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn pseudostate_images_resolve_their_java_owned_style_signatures() {
+    fn global_state_gradient_is_registered_from_effective_paint() {
         let input = concat!(
             "@startuml\n",
-            "skinparam backgroundColor #ABCDEF\n",
-            "skinparam stateStartColor #101010\n",
-            "skinparam stateEndColor #202020\n",
-            "skinparam activityStartColor #123456\n",
-            "skinparam activityEndColor #654321\n",
-            "skinparam activityDiamondBackgroundColor #112233\n",
-            "skinparam activityDiamondBorderColor #445566\n",
-            "skinparam activityBarColor #778899\n",
-            "state Decision <<choice>>\n",
-            "state Split <<fork>>\n",
-            "state Recall <<history>>\n",
-            "[*] --> Decision\n",
-            "Decision --> Split\n",
-            "Split --> Recall\n",
+            "skinparam stateBackgroundColor #123456-#ABCDEF\n",
+            "[*] --> FreshGradient7411\n",
+            "FreshGradient7411 --> FreshGradient7417\n",
+            "FreshGradient7417 --> [*]\n",
             "@enduml\n",
         );
-        let parsed = rustuml_parser::parse::parse(input).unwrap();
-        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
-            panic!("expected state diagram");
-        };
-        let start = state_pseudostate_style(diagram, StatePseudoImage::Start, None);
-        let end = state_pseudostate_style(diagram, StatePseudoImage::End, None);
-        let choice = state_pseudostate_style(diagram, StatePseudoImage::Choice, None);
-        let history = state_pseudostate_style(diagram, StatePseudoImage::History, None);
-        let split = diagram
-            .states
-            .iter()
-            .find(|state| state.kind == StateKind::Fork)
-            .unwrap();
-        let bar =
-            state_pseudostate_style(diagram, StatePseudoImage::Bar, split.stereotype.as_deref());
-
-        assert_eq!(start.fill, StatePaint::Solid("#123456".to_string()));
-        assert_eq!(start.stroke, StatePaint::Solid(PSEUDO_COLOR.to_string()));
-        assert_eq!(end.fill, StatePaint::Solid(PSEUDO_COLOR.to_string()));
-        assert_eq!(end.stroke, StatePaint::Solid("#654321".to_string()));
-        assert_eq!(choice.fill, StatePaint::Solid("#112233".to_string()));
-        assert_eq!(choice.stroke, StatePaint::Solid("#445566".to_string()));
-        assert_eq!(history.fill, choice.fill);
-        assert_eq!(history.stroke, choice.stroke);
-        assert_eq!(bar.fill, StatePaint::Solid("#778899".to_string()));
-    }
-
-    #[test]
-    fn pseudostate_style_projection_is_shared_by_flat_and_autonomous_paths() {
-        let styles = concat!(
-            "skinparam activityDiamondBackgroundColor #13579B\n",
-            "skinparam activityDiamondBorderColor #2468AC\n",
-            "skinparam activityBarColor #3579BD\n",
-        );
-        let graph = concat!(
-            "state Decision <<choice>> #AA0000\n",
-            "state Split <<fork>> #00AA00\n",
-            "state Recall <<history>> #0000AA\n",
-            "[*] --> Decision\n",
-            "Decision --> Split\n",
-            "Split --> Recall\n",
-            "Recall --> [*]\n",
-        );
-        let flat_input = format!("@startuml\n{styles}{graph}@enduml\n");
-        let flat = rustuml_parser::parse::parse(&flat_input).unwrap();
-        let rustuml_parser::diagram::Diagram::State(flat) = &flat else {
-            panic!("expected state diagram");
-        };
-        let flat_svg = render(flat, &Theme::default());
-
-        let nested_input =
-            format!("@startuml\n{styles}state Envelope {{\n{graph}}}\n[*] --> Envelope\n@enduml\n");
-        let nested = rustuml_parser::parse::parse(&nested_input).unwrap();
-        let rustuml_parser::diagram::Diagram::State(nested) = &nested else {
-            panic!("expected state diagram");
-        };
-        let nested_svg = render(nested, &Theme::default());
-
-        for svg in [&flat_svg, &nested_svg] {
-            assert!(svg.contains(r##"fill="#13579B""##));
-            assert!(svg.contains(r##"stroke:#2468AC;"##));
-            assert!(svg.contains(r##"fill="#3579BD""##));
-            assert!(!svg.contains(r##"fill="#AA0000""##));
-            assert!(!svg.contains(r##"fill="#00AA00""##));
-            assert!(!svg.contains(r##"fill="#0000AA""##));
-        }
-    }
-
-    #[test]
-    fn diamond_gradient_is_typed_and_reused_by_choice_and_history() {
-        let input = concat!(
-            "@startuml\n",
-            "skinparam activityDiamondBackgroundColor #010203-#A0B0C0\n",
-            "state Decision <<choice>>\n",
-            "state Recall <<history>>\n",
-            "[*] --> Decision\n",
-            "Decision --> Recall\n",
-            "@enduml\n",
-        );
-        let parsed = rustuml_parser::parse::parse(input).unwrap();
-        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
-            panic!("expected state diagram");
-        };
-        let choice = state_pseudostate_style(diagram, StatePseudoImage::Choice, None);
-        let history = state_pseudostate_style(diagram, StatePseudoImage::History, None);
-        let mut registry = StateGradientRegistry::new(diagram);
-
-        let choice_fill = registry.use_paint(&choice.fill);
-        let history_fill = registry.use_paint(&history.fill);
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
         let gradient_id = crate::filter_registry::gradient_id_for(input, 0);
+        let svg = crate::render_svg(&diagram);
 
-        assert_eq!(choice_fill, format!("url(#{gradient_id})"));
-        assert_eq!(history_fill, choice_fill);
-        assert_eq!(registry.gradients.len(), 1);
-        let mut defs = String::new();
-        emit_state_gradient_defs(&mut defs, &registry);
-        assert!(defs.contains(r#"x1="50%" x2="50%" y1="0%" y2="100%""#));
-        assert!(defs.contains(r##"stop-color="#010203""##));
-        assert!(defs.contains(r##"stop-color="#A0B0C0""##));
-    }
-
-    #[test]
-    fn history_uses_state_font_channel_instead_of_attribute_font_channel() {
-        let input = concat!(
-            "@startuml\n",
-            "skinparam defaultFontName Verdana\n",
-            "skinparam stateFontColor #2468AC\n",
-            "skinparam stateAttributeFontColor #CC5500\n",
-            "skinparam stateFontSize 17\n",
-            "skinparam stateAttributeFontSize 9\n",
-            "state Recall <<history>>\n",
-            "[*] --> Recall\n",
-            "@enduml\n",
-        );
-        let parsed = rustuml_parser::parse::parse(input).unwrap();
-        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
-            panic!("expected state diagram");
-        };
-        let history = diagram
-            .states
-            .iter()
-            .find(|state| state.kind == StateKind::History)
-            .unwrap();
-        let style = state_history_text_style(diagram, Some(history));
-
-        assert_eq!(style.color, "#2468AC");
-        assert_eq!(style.family, "Verdana");
-        assert_eq!(style.size, 17.0);
-        assert_ne!(
-            state_history_label_baseline(&style, "H", 50.0),
-            50.0 + HISTORY_LABEL_BASELINE_OFFSET
+        // CommandSkinParam stores one HColorGradient in the state style;
+        // SvgGraphics.createSvgGradient registers it on the first state body.
+        assert!(svg.contains(&format!(
+            r##"<linearGradient id="{gradient_id}" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#123456"/><stop offset="100%" stop-color="#ABCDEF"/></linearGradient>"##
+        )));
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{gradient_id})""#))
+                .count(),
+            2,
+            "{svg}"
         );
     }
 
@@ -12959,6 +12532,52 @@ CobaltDecision --> [*]
         assert!(svg.contains(r##"data-qualified-name="ArchiveVault91""##));
         assert!(svg.contains(r##"<g class="end_entity""##));
         assert!(svg.contains(r##"fill="#A1B2C3" rx="6" ry="6""##));
+    }
+
+    #[test]
+    fn numeric_state_shadow_drives_filter_and_painted_envelope() {
+        let control = concat!(
+            "@startuml\n",
+            "[*] --> FreshShadowRelay941\n",
+            "FreshShadowRelay941 --> FreshShadowArchive947\n",
+            "FreshShadowArchive947 --> [*]\n",
+            "@enduml\n",
+        );
+        let shadowed = concat!(
+            "@startuml\n",
+            "skinparam stateShadowing 4\n",
+            "[*] --> FreshShadowRelay941\n",
+            "FreshShadowRelay941 --> FreshShadowArchive947\n",
+            "FreshShadowArchive947 --> [*]\n",
+            "@enduml\n",
+        );
+        let control_svg = crate::render_svg(&rustuml_parser::parse::parse(control).unwrap());
+        let shadowed_svg = crate::render_svg(&rustuml_parser::parse::parse(shadowed).unwrap());
+        let dimensions = |svg: &str| {
+            let view_box = svg
+                .split_once(r#"viewBox="0 0 "#)
+                .and_then(|(_, tail)| tail.split_once('"'))
+                .map(|(value, _)| value)
+                .unwrap();
+            let mut parts = view_box.split_whitespace();
+            (
+                parts.next().unwrap().parse::<i64>().unwrap(),
+                parts.next().unwrap().parse::<i64>().unwrap(),
+            )
+        };
+        let (control_width, control_height) = dimensions(&control_svg);
+        let (shadow_width, shadow_height) = dimensions(&shadowed_svg);
+        let filter_id = crate::filter_registry::shadow_id_for(shadowed);
+
+        assert_eq!(shadow_width, control_width + 8);
+        assert_eq!(shadow_height, control_height + 8);
+        assert!(shadowed_svg.contains(&crate::filter_registry::shadow_filter_def(&filter_id)));
+        assert_eq!(
+            shadowed_svg
+                .matches(&format!(r#"filter="url(#{filter_id})""#))
+                .count(),
+            4
+        );
     }
 
     #[test]
