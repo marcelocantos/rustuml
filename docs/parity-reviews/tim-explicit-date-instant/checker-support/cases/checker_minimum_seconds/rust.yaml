@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1901-12-14 07:45:52 Sat" as Clockminimumseconds
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Clockminimumseconds
+  entities:
+  - id: Clockminimumseconds
+    label: '1901-12-14 07:45:52 Sat'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

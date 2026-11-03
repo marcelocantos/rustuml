@@ -1,0 +1,6 @@
+SVG structural differences:
+  [9] tag mismatch: expected <polygon>, got <rect>
+  [10] tag mismatch: expected <polygon>, got <ellipse>
+  [13] tag mismatch: expected <path>, got <line>
+  [14] tag mismatch: expected <path>, got <line>
+

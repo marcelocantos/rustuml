@@ -1,0 +1,7 @@
+@startuml
+!define TOKEN amber
+!$TOKEN = "violet"
+!$bare = %get_variable_value("TOKEN")
+!$dollar = %get_variable_value("$TOKEN")
+class "$bare / $dollar" as Legacy
+@enduml

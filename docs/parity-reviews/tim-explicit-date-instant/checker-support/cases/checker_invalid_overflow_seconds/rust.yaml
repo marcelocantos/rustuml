@@ -1,0 +1,13 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "" as InvalidClock
+      @enduml
+  direction: TopToBottom
+  entities: []
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

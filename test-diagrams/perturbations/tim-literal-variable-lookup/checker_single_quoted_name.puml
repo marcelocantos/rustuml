@@ -1,0 +1,6 @@
+@startuml
+!$birch = "silver"
+!$present = %variable_exists('$birch')
+!$value = %get_variable_value('$birch')
+class "$present / $value" as SingleQuoted
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!$count = 0
+!procedure $choose()
+!$count = $count + 1
+!theme cerulean
+!endprocedure
+$choose()
+class "Executions $count" as ZirconRecord
+@enduml

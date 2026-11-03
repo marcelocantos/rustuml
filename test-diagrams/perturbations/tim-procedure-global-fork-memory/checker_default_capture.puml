@@ -1,0 +1,8 @@
+@startuml
+!$seed = "first"
+!procedure $emit($label = $seed)
+class "$label" as Captured
+!endprocedure
+!$seed = "second"
+$emit()
+@enduml

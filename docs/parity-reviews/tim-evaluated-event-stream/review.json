@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-evaluated-event-stream",
+  "reviewer": {
+    "task_id": "t3/adversarial-reader-contract-review:t3-d2205b7f",
+    "model": "gpt-6-astra / high / inherited Codex (intentional); independent checker; no children"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test pipe_mode --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/check.py isolated",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/replay_maker.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-checker-d2205b7f/target/release/rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-checker-d2205b7f/probe compare SOURCE.svg RUST.svg",
+    "uv run --no-project python docs/parity-reviews/tim-evaluated-event-stream/checker-support/reader_contract.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/provenance.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-explicit-date-instant/checker-support/timezones.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-explicit-date-instant/checker-support/error_controls.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/prepared_builtin.py"
+  ],
+  "findings": [
+    "REJECTED: call_function returns events but eval_function_call discards them and inline expansion filters to Plain. checker_return_function_theme_event loses the executed cerulean theme in identity and shipped SVG. Java TContext.executeLines/executeTheme appends it to resultList even during return-function evaluation.",
+    "checker_selector_nested_theme_event has matching SVG but wrong identity (first theme lost); product comparator equality alone does not establish the claimed single evaluated stream.",
+    "checker_diagnostic_side_effect renders Calls 0 instead of Java Calls 1: try_silent_directive consumes !log without evaluating its argument, unlike TContext.executeLog/EaterLog.analyze.",
+    "The three frozen source/SVG pairs exactly reproduce the historical GET decoder contract. Actual DiagramSourceCompressor.decompress removes outer body blanks before SourceStringReader. Fresh pipe/file/POST and candidate retain them. Both the exact parser assertion and a renamed input yield GET origins 1/4/5 versus raw reader 5/8/9. See checker-support/provenance-results.json for exact bytes, hashes, commands and output comparisons.",
+    "All five relevant valid maker failures are executable here: repeated palettes (two), handwritten, sequence continuation and activity style. They remain negative evidence, independent of source correctness.",
+    "No source-reader contract was selected or reference/assertion/baseline changed. Product remains 11179/11251, assisted 10497/11251, guards red. Fix event sinks and diagnostic execution, then obtain explicit reader-policy sign-off and new independent review.",
+    "The maker account uses claimed_invariant/planned_model_change instead of required invariant/planned_change; unchanged schema guard rejects it. Account editing is outside checker ownership."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.svg",
+      "axes": [
+        "subblock mutation plus sprite pixels",
+        "dynamic theme and inactive ordering"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.svg",
+      "axes": [
+        "leading/internal blank counts and comments",
+        "inactive/active themes and renamed topology"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.svg",
+      "axes": [
+        "long-comment closing line with content",
+        "theme plus two renamed classes"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.svg",
+      "axes": [
+        "nonempty whitespace versus blank identity",
+        "theme and renamed entity"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.svg",
+      "axes": [
+        "theme ordering and inactive load",
+        "computed selector variables and renamed label"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.svg",
+      "axes": [
+        "loop cardinality and renaming",
+        "sprite placement and apostrophe content"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "kind": "retained valid failure",
+      "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed.puml",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "kind": "retained valid failure",
+      "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "kind": "retained valid failure",
+      "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "kind": "retained valid failure",
+      "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "kind": "retained valid failure",
+      "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.svg",
+      "axes": [
+        "four leading and two internal blanks",
+        "renamed classes and relationship"
+      ],
+      "kind": "fresh checker reader control",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.svg",
+      "axes": [
+        "theme event in return-valued function",
+        "global mutation and renamed label"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.svg",
+      "axes": [
+        "nested theme event during selector evaluation",
+        "active theme ordering and renamed entity"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.svg",
+      "axes": [
+        "diagnostic function side effect",
+        "theme identity and renamed counter"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.svg",
+      "axes": [
+        "exact frozen parser assertion bytes",
+        "leading versus internal source lines"
+      ],
+      "kind": "parser assertion contract control",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    }
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "9102a45ed27188abf9f0db7784daed490a48ec1c",
+  "parent_commit": "bb2bdb67d5efc780de2c04f788dbbe8d53b54196",
+  "followup_commits": [
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "maker_evidence_commit": "d2d571de0ca551cfd93223d577539eff7c366afe",
+  "combined_dependencies": [
+    "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+    "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+    "1ee250f0fafdc62fa9f348b64d12fe4363790d6c",
+    "e2503bd4c282841abee982fd6063658975f25f69",
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "New canonical SVGs use raw Java CLI -pipe -tsvg; historical frozen main corpus retains its GET-transcoder contract. No reference policy choice is authorized by this review.",
+  "evidence": "docs/parity-reviews/tim-evaluated-event-stream/checker-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; main tiers, parser assertion, held-outs and guards remain red"
+}

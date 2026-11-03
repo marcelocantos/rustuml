@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "2038-01-19 14:14:07 Tue" as Clockmaximumseconds
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Clockmaximumseconds
+  entities:
+  - id: Clockmaximumseconds
+    label: '2038-01-19 14:14:07 Tue'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

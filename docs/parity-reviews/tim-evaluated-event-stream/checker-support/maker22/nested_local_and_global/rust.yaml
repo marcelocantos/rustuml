@@ -1,0 +1,40 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "Inner outer $private" as InnerRecord
+      class "Outer parameter secret" as OuterRecord
+      class "Global outer" as GlobalRecord
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity InnerRecord
+  - !Entity OuterRecord
+  - !Entity GlobalRecord
+  entities:
+  - id: InnerRecord
+    label: Inner outer $private
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  - id: OuterRecord
+    label: Outer parameter secret
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  - id: GlobalRecord
+    label: Global outer
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 11
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

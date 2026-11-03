@@ -1,0 +1,9 @@
+@startuml
+!$count = 0
+!$where = "docs/parity-reviews/tim-evaluated-event-stream/maker-inputs/themes"
+!function $palette()
+!return "saffron"
+!endfunction
+!theme $palette() from $where
+class "Count $count" as SpinelRecord
+@enduml

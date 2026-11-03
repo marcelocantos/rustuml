@@ -1,0 +1,10 @@
+@startuml
+!$calls = 0
+!function $configure()
+!$calls = $calls + 1
+!theme cerulean
+!return "configured"
+!endfunction
+!$label = $configure()
+class "$label $calls" as ReturnTheme
+@enduml

@@ -1,0 +1,679 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.svg",
+    "axes": [
+      "subblock mutation plus sprite pixels",
+      "dynamic theme and inactive ordering"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.svg",
+    "axes": [
+      "leading/internal blank counts and comments",
+      "inactive/active themes and renamed topology"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.svg",
+    "axes": [
+      "long-comment closing line with content",
+      "theme plus two renamed classes"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.svg",
+    "axes": [
+      "nonempty whitespace versus blank identity",
+      "theme and renamed entity"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.svg",
+    "axes": [
+      "theme ordering and inactive load",
+      "computed selector variables and renamed label"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.svg",
+    "axes": [
+      "loop cardinality and renaming",
+      "sprite placement and apostrophe content"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.puml",
+    "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.svg",
+    "axes": [
+      "nested sibling frame and renamed parameter",
+      "undef override and fresh-local leakage"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.svg",
+    "axes": [
+      "new global eclipses auto-local",
+      "nested call and removal reveals auto-local"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.svg",
+    "axes": [
+      "parameter versus explicit global mutation",
+      "local leakage and renamed output"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.puml",
+    "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.svg",
+    "axes": [
+      "early return inside nested conditional",
+      "caller control state and two arguments"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.puml",
+    "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.svg",
+    "axes": [
+      "foreach caller state",
+      "global side effect and local privacy"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+    "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.svg",
+    "axes": [
+      "default captured at definition versus call",
+      "renamed global mutation and parameter binding"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.puml",
+    "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.svg",
+    "axes": [
+      "literal concatenation name expression",
+      "exists and get operations with renamed variable"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.puml",
+    "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.svg",
+    "axes": [
+      "single versus double quoted token",
+      "exists/get with renamed payload"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_prefix_collision.puml",
+    "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_prefix_collision.svg",
+    "axes": [
+      "legacy versus dollar namespace",
+      "same-name collision and renamed colors"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_nested_literal_scope.puml",
+    "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_nested_literal_scope.svg",
+    "axes": [
+      "nested sibling scope and shadowing",
+      "literal lookup and missing local"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_variable_computed_name.puml",
+    "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_variable_computed_name.svg",
+    "axes": [
+      "name stored in variable",
+      "conditional and getter with renamed key"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_undef_scope.puml",
+    "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_undef_scope.svg",
+    "axes": [
+      "legacy define removal across call",
+      "local versus global existence"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.svg",
+    "axes": [
+      "signed instant/expression or boundary",
+      "format tokens/timezone at explicit instant"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.svg",
+    "axes": [
+      "preserved maker failure replay",
+      "fresh pinned CLI reference"
+    ],
+    "kind": "retained valid failure",
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed.puml",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.svg",
+    "axes": [
+      "preserved maker failure replay",
+      "fresh pinned CLI reference"
+    ],
+    "kind": "retained valid failure",
+    "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.svg",
+    "axes": [
+      "preserved maker failure replay",
+      "fresh pinned CLI reference"
+    ],
+    "kind": "retained valid failure",
+    "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.svg",
+    "axes": [
+      "preserved maker failure replay",
+      "fresh pinned CLI reference"
+    ],
+    "kind": "retained valid failure",
+    "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.svg",
+    "axes": [
+      "preserved maker failure replay",
+      "fresh pinned CLI reference"
+    ],
+    "kind": "retained valid failure",
+    "original_source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.svg",
+    "axes": [
+      "four leading and two internal blanks",
+      "renamed classes and relationship"
+    ],
+    "kind": "fresh checker reader control",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.svg",
+    "axes": [
+      "theme event in return-valued function",
+      "global mutation and renamed label"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.svg",
+    "axes": [
+      "nested theme event during selector evaluation",
+      "active theme ordering and renamed entity"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.svg",
+    "axes": [
+      "diagnostic function side effect",
+      "theme identity and renamed counter"
+    ],
+    "kind": "fresh checker",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.svg",
+    "axes": [
+      "instant straddles DST transition",
+      "host timezone versus fixed debug offset"
+    ],
+    "kind": "fresh checker timezone control",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.svg",
+    "axes": [
+      "instant straddles DST transition",
+      "host timezone versus fixed debug offset"
+    ],
+    "kind": "fresh checker timezone control",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.svg",
+    "axes": [
+      "instant straddles DST transition",
+      "host timezone versus fixed debug offset"
+    ],
+    "kind": "fresh checker timezone control",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.svg",
+    "axes": [
+      "instant straddles DST transition",
+      "host timezone versus fixed debug offset"
+    ],
+    "kind": "fresh checker timezone control",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.svg",
+    "axes": [
+      "explicit date argument error",
+      "Java rejection versus silent Rust output"
+    ],
+    "kind": "deliberately invalid checker control",
+    "java_exit": 1,
+    "java_source_exit": 1,
+    "cli_exit": 0,
+    "comparison_exit": 3,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.svg",
+    "axes": [
+      "explicit date argument error",
+      "Java rejection versus silent Rust output"
+    ],
+    "kind": "deliberately invalid checker control",
+    "java_exit": 200,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.puml",
+    "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.svg",
+    "axes": [
+      "exact frozen parser assertion bytes",
+      "leading versus internal source lines"
+    ],
+    "kind": "parser assertion contract control",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "metadata_exit": 0,
+    "source_equal": true
+  }
+]

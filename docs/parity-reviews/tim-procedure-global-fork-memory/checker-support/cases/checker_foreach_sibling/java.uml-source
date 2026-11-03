@@ -1,0 +1,6 @@
+@startuml
+class "Oak 1" as Tree1
+class "Elm 2" as Tree2
+class "Yew 3" as Tree3
+class "total 3 $secret" as Total
+@enduml

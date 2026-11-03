@@ -1,0 +1,5 @@
+@startuml
+!$instant = 951782400 + 86400
+!$stamp = %date("yyyy-MM-dd HH:mm:ss", $instant)
+class "$stamp" as Clockleapexpression
+@enduml

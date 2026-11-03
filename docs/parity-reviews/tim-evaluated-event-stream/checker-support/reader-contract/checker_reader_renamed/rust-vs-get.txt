@@ -1,0 +1,14 @@
+SVG structural differences:
+  [3] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "ReaderCedar"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "ReaderCedar"), ("data-source-line", "5"), ("id", "ent0002")]
+  [10] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "ReaderLarch"), ("data-source-line", "4"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "ReaderLarch"), ("data-source-line", "8"), ("id", "ent0003")]
+  [17] <g> attr mismatch:
+    expected: [("class", "link"), ("data-entity-1", "ent0002"), ("data-entity-2", "ent0003"), ("data-link-type", "dependency"), ("data-source-line", "5"), ("id", "lnk4")]
+    actual:   [("class", "link"), ("data-entity-1", "ent0002"), ("data-entity-2", "ent0003"), ("data-link-type", "dependency"), ("data-source-line", "9"), ("id", "lnk4")]
+  [18] <path> attr mismatch:
+    expected: [("codeLine", "5"), ("d", "M66.24,55.26 C66.24,72.94 66.24,91.13 66.24,108.79"), ("fill", "none"), ("id", "ReaderCedar-to-ReaderLarch"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "9"), ("d", "M66.24,55.26 C66.24,72.94 66.24,91.13 66.24,108.79"), ("fill", "none"), ("id", "ReaderCedar-to-ReaderLarch"), ("style", "stroke:#181818;stroke-width:1;")]
+

@@ -1,0 +1,80 @@
+{
+  "ready": true,
+  "created_at": "2026-11-03T06:36:51.763621+00:00",
+  "source": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "clean": true
+  },
+  "jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "version": "1.2026.3beta6",
+    "historical_checker_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "historical_binary_reproduced": false,
+    "hash_note": "Upstream Gradle injects wall-clock CompilationInfo and git.properties build metadata; rebuilt JAR is not historical-byte-identical."
+  },
+  "java": {
+    "executable": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "version": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+    "headless": true
+  },
+  "graphviz": {
+    "executable": "/opt/homebrew/bin/dot",
+    "version": "dot - graphviz version 16.1.0 (20260904.0139)"
+  },
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "environment": {
+    "JAVA_HOME": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home",
+    "PATH_prefix": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin",
+    "PLANTUML_JAR": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+  },
+  "stdlib": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib",
+    "revision": "747d1eae809cde20675976d67e3eb84dc0021a0c",
+    "tupadr3_version": "3.0.0",
+    "tupadr3_bundle_sha1_markers": {
+      "info.sha1": "9e084a1a40cc1a03da15319bcc9e9b330f48f6aa",
+      "puml.sha1": "a19d01af7b2341028354f509705093769f0d1f03",
+      "sprite.sha1": "658f814fe7fd80ebbbff1be859cbe9e4adbdf3e1"
+    },
+    "provenance": "All three committed tupadr3 output hash markers exactly equal the Java source bundle hash markers. This is not an assertion about every stdlib library."
+  },
+  "golden": {
+    "revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "svg_files": 12554,
+    "version_processing_instructions": {
+      "1.2026.3beta6": 12428,
+      "absent": 126
+    },
+    "error_page_full_version": "1.2026.3beta6 / 71806a2 [2026-03-21 13:49:45 UTC]",
+    "full_version_occurrences": 1115
+  },
+  "smoke": {
+    "input": "test-diagrams/golden/deployment/deploy_sprite_server.puml",
+    "output": "/tmp/rustuml-foundation-deploy-java.svg",
+    "valid_svg": true,
+    "parsed_svg_matches_preserved_golden": true
+  },
+  "caveats": [
+    "Use the absolute Java executable or supplied JAVA_HOME/PATH; the default jenv 21 shim currently fails.",
+    "macOS host fonts and Graphviz 16.1.0 are not proven identical to the historical font/Graphviz environment.",
+    "Do not regenerate or overwrite preserved reference SVGs.",
+    "Other workers must treat both reference checkouts as read-only."
+  ],
+  "fonts": {
+    "diagnostic_log": "/tmp/rustuml-foundation-fonts.log",
+    "awt_sample": [
+      "SansSerif -> SansSerif / SansSerif; AppServer advance=69.125",
+      "Arial -> Arial / ArialMT; AppServer advance=66.14453125",
+      "Serif -> Serif / Serif; AppServer advance=60.6484375",
+      "Times New Roman -> Times New Roman / TimesNewRomanPSMT; AppServer advance=60.6484375",
+      "Monospaced -> Monospaced / Monospaced; AppServer advance=75.8583984375",
+      "Courier -> Monospaced / Monospaced; AppServer advance=75.8583984375",
+      "Courier New -> Courier New / CourierNewPSMT; AppServer advance=75.6123046875"
+    ],
+    "historical_profile_reproduced": false
+  }
+}

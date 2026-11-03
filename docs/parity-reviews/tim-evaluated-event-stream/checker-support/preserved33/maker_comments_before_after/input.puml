@@ -1,0 +1,11 @@
+@startuml
+' renamed prelude
+!theme cerulean
+/' a block
+   before the declaration
+'/
+class HarborLedger {
+  +token: String
+}
+' renamed epilogue
+@enduml

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "amber / violet" as Legacy
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Legacy
+  entities:
+  - id: Legacy
+    label: amber / violet
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "2000-01-01 years day" as Clockformatliteral
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Clockformatliteral
+  entities:
+  - id: Clockformatliteral
+    label: '2000-01-01 years day'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
