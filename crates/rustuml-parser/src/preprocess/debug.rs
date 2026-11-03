@@ -29,6 +29,7 @@ pub struct TzSpec {
     pub offset_secs: i32,
     /// Display name (e.g. "UTC", "AEDT", "+0530").
     pub name: String,
+    pub long_name: String,
 }
 
 impl RenderClock {
@@ -56,6 +57,9 @@ impl RenderClock {
                 minutes / 60,
                 minutes % 60
             );
+        }
+        if self.timezone_override && tz.offset_secs != 0 {
+            tz.long_name = tz.name.clone();
         }
         tz
     }
@@ -127,7 +131,12 @@ fn parse_tz(s: &str) -> Option<TzSpec> {
     } else {
         name_part.to_string()
     };
-    Some(TzSpec { offset_secs, name })
+    let long_name = display_names(&name, false).map_or_else(|| name.clone(), |n| n.1);
+    Some(TzSpec {
+        offset_secs,
+        name,
+        long_name,
+    })
 }
 
 /// Parse `±HHMM` or `±HH:MM` into seconds.
@@ -166,6 +175,7 @@ fn system_tz_at(epoch_ms: i64) -> TzSpec {
         return TzSpec {
             offset_secs: 0,
             name: "UTC".to_string(),
+            long_name: "Coordinated Universal Time".to_string(),
         };
     }
     let name = if tm.tm_zone.is_null() {
@@ -175,9 +185,22 @@ fn system_tz_at(epoch_ms: i64) -> TzSpec {
             .to_string_lossy()
             .into_owned()
     };
+    // TimeZone.getDisplayName needs an ID and daylight state, not an ambiguous
+    // abbreviation. TZ wins; Darwin/Linux expose the local ID via this symlink.
+    let zone = std::env::var("TZ").ok().or_else(|| {
+        std::fs::read_link("/etc/localtime").ok().and_then(|p| {
+            p.to_str()
+                .and_then(|s| s.split_once("zoneinfo/").map(|(_, id)| id.to_string()))
+        })
+    });
+    let names = zone
+        .as_deref()
+        .and_then(|id| display_names(id.trim_start_matches(':'), tm.tm_isdst > 0));
+    let (name, long_name) = names.unwrap_or_else(|| (name.clone(), name));
     TzSpec {
         offset_secs: tm.tm_gmtoff as i32,
         name,
+        long_name,
     }
 }
 
@@ -186,7 +209,23 @@ fn system_tz_at(_epoch_ms: i64) -> TzSpec {
     TzSpec {
         offset_secs: 0,
         name: "UTC".to_string(),
+        long_name: "Coordinated Universal Time".to_string(),
     }
+}
+
+// Complete en_AU data derived from JDK21 TimeZone.getAvailableIDs and
+// getDisplayName(false/true, SHORT/LONG). Generator, runtime differences and
+// SHA256 are in docs/parity-reviews/tim-zone-display-width/. No runtime JVM.
+fn display_names(id: &str, daylight: bool) -> Option<(String, String)> {
+    static NAMES: std::sync::LazyLock<std::collections::HashMap<String, [String; 4]>> =
+        std::sync::LazyLock::new(|| {
+            serde_json::from_str(include_str!("zone_names.json"))
+                .expect("checked-in JDK timezone name data")
+        });
+    let names = NAMES.get(id)?;
+    // TimeZone SHORT/LONG for standard occupies 0/1, daylight occupies 2/3.
+    let offset = if daylight { 2 } else { 0 };
+    Some((names[offset].clone(), names[offset + 1].clone()))
 }
 
 #[cfg(test)]

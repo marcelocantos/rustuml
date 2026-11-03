@@ -149,7 +149,7 @@ pub(super) fn format(epoch_ms: i64, tz: &TzSpec, pattern: &str) -> Result<String
             }),
             'a' => result.push_str(if hour < 12 { "AM" } else { "PM" }),
             'G' => result.push_str("AD"),
-            'z' => result.push_str(&tz.name),
+            'z' => result.push_str(if width < 4 { &tz.name } else { &tz.long_name }),
             'Z' | 'X' => {
                 if ch == 'X' && width > 3 {
                     return Err("Bad date pattern: X must have one to three letters".into());

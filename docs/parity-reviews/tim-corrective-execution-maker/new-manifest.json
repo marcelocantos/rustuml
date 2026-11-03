@@ -1,0 +1,93 @@
+[
+  {
+    "source": "/tmp/rustuml-tim3/new/kind_nested_procedure.puml",
+    "mechanism": "tim-function-execution-kind",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/kind_theme_repeated.puml",
+    "mechanism": "tim-function-execution-kind",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_binding.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_lookup_json.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_json_scalar.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_set_global.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_wrap_quotient.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/eager_and_or.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/literal_truth.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/first_error_arguments.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/first_error_logical.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/sub_caller_relative.puml",
+    "mechanism": "tim-external-sub-selection",
+    "negative": false
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/sub_selected_fatal.puml",
+    "mechanism": "tim-external-sub-selection",
+    "negative": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/zone_tokyo_width.puml",
+    "mechanism": "tim-zone-display-width",
+    "negative": false,
+    "zone": "Asia/Tokyo",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/zone_new_york_summer.puml",
+    "mechanism": "tim-zone-display-width",
+    "negative": false,
+    "zone": "America/New_York",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/zone_utc_width.puml",
+    "mechanism": "tim-zone-display-width",
+    "negative": false,
+    "zone": "UTC",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/boolean_value_kinds.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false
+  }
+]

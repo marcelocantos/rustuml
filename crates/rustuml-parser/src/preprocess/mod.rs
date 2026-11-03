@@ -290,15 +290,16 @@ pub fn preprocess_full_with_base(input: &str, base_dir: &Path) -> PreprocessOutp
 #[derive(Clone, Debug)]
 enum Value {
     Str(String),
-    Int(i64),
+    Int(i32),
     Float(f64),
-    Bool(bool),
+    Json(serde_json::Value),
 }
 
 impl Value {
     fn to_display(&self) -> String {
         match self {
             Value::Str(s) => s.clone(),
+            Value::Json(v) => v.as_str().map_or_else(|| v.to_string(), str::to_string),
             Value::Int(n) => n.to_string(),
             Value::Float(f) => {
                 // Avoid trailing zeros but keep at least one decimal if float
@@ -308,13 +309,6 @@ impl Value {
                     format!("{f}")
                 }
             }
-            Value::Bool(b) => {
-                if *b {
-                    "true".to_string()
-                } else {
-                    "false".to_string()
-                }
-            }
         }
     }
 
@@ -322,40 +316,33 @@ impl Value {
         match self {
             Value::Int(n) => *n as f64,
             Value::Float(f) => *f,
-            Value::Bool(b) => {
-                if *b {
-                    1.0
-                } else {
-                    0.0
-                }
-            }
             Value::Str(s) => s.parse::<f64>().unwrap_or(0.0),
+            Value::Json(_) => 0.0,
         }
     }
 
     fn is_numeric(&self) -> bool {
         match self {
             Value::Int(_) | Value::Float(_) => true,
-            Value::Str(s) => s.parse::<f64>().is_ok(),
-            Value::Bool(_) => true,
+            Value::Str(_) | Value::Json(_) => false,
         }
     }
 
-    fn from_str_auto(s: &str) -> Value {
-        let s = s.trim();
-        if s == "true" {
-            return Value::Bool(true);
+    // TValue.toBoolean: only integer zero is false; text/JSON use display length.
+    fn truth(&self) -> bool {
+        match self {
+            Self::Int(n) => *n != 0,
+            Self::Float(n) => *n != 0.0, // Existing Rust float extension.
+            _ => !self.to_display().is_empty(),
         }
-        if s == "false" {
-            return Value::Bool(false);
+    }
+
+    fn java_int(&self) -> i32 {
+        // TValue.toInt returns its integer field (zero for strings and JSON).
+        match self {
+            Self::Int(n) => *n,
+            _ => 0,
         }
-        if let Ok(n) = s.parse::<i64>() {
-            return Value::Int(n);
-        }
-        if let Ok(f) = s.parse::<f64>() {
-            return Value::Float(f);
-        }
-        Value::Str(s.to_string())
     }
 }
 
@@ -510,9 +497,9 @@ fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
 
 struct PreprocessContext {
     /// `!$var = value` style variables.
-    defines: HashMap<String, String>,
+    defines: HashMap<String, Value>,
     /// `!define TOKEN value` style macros.
-    token_defines: HashMap<String, String>,
+    token_defines: HashMap<String, Value>,
     /// `!definelong TOKEN(params)` style multi-line macros.
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
@@ -559,6 +546,7 @@ struct PreprocessContext {
     error: Option<PreprocessError>,
     expression_events: Vec<EvaluatedEvent>,
     text_consumed: bool,
+    execution_kind: FunctionKind,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -568,8 +556,8 @@ const MAX_WHILE_ITERATIONS: usize = 10000;
 // names. A global introduced later takes precedence over an automatic local.
 #[derive(Default)]
 struct LocalMemory {
-    overrides: HashMap<String, String>,
-    locals: HashMap<String, String>,
+    overrides: HashMap<String, Value>,
+    locals: HashMap<String, Value>,
 }
 
 struct CondState {
@@ -579,7 +567,7 @@ struct CondState {
 
 struct ForEachState {
     var_name: String,
-    values: Vec<String>,
+    values: Vec<Value>,
     body_lines: Vec<BufferedLine>,
 }
 
@@ -595,8 +583,17 @@ struct BufferedLine {
     source_line: usize,
 }
 
+// TContext.executeOneLineNotSafe chooses simulatePlain only for return functions.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum FunctionKind {
+    Procedure,
+    Return,
+    Legacy,
+}
+
 #[derive(Clone)]
 struct FunctionDef {
+    kind: FunctionKind,
     params: Vec<FuncParam>,
     body: Vec<BufferedLine>,
 }
@@ -647,6 +644,7 @@ impl PreprocessContext {
             error: None,
             expression_events: Vec::new(),
             text_consumed: false,
+            execution_kind: FunctionKind::Procedure,
         }
     }
 
@@ -722,7 +720,7 @@ impl PreprocessContext {
         self.current_source_line = saved_source_line;
     }
 
-    fn get_var(&self, name: &str) -> Option<&String> {
+    fn get_var(&self, name: &str) -> Option<&Value> {
         // TMemoryLocal.getVariable and forkFromGlobal: sibling calls see the
         // global memory, never their caller's overrides or fresh local names.
         let local = self.local_vars.last();
@@ -732,24 +730,30 @@ impl PreprocessContext {
             .or_else(|| local.and_then(|scope| scope.locals.get(name)))
     }
 
-    fn set_var(&mut self, name: &str, value: &str) {
+    fn set_var(&mut self, name: &str, value: &Value) {
+        if self.error.is_some() {
+            return;
+        }
         // TMemoryLocal.putVariable: override, existing global, then new local.
         if let Some(scope) = self.local_vars.last_mut() {
             if scope.overrides.contains_key(name) {
-                scope.overrides.insert(name.to_string(), value.to_string());
+                scope.overrides.insert(name.to_string(), value.clone());
                 return;
             }
             if !self.defines.contains_key(name) {
-                scope.locals.insert(name.to_string(), value.to_string());
+                scope.locals.insert(name.to_string(), value.clone());
                 return;
             }
         }
-        self.defines.insert(name.to_string(), value.to_string());
+        self.defines.insert(name.to_string(), value.clone());
     }
 
-    fn set_local_var(&mut self, name: &str, value: &str) {
+    fn set_local_var(&mut self, name: &str, value: &Value) {
+        if self.error.is_some() {
+            return;
+        }
         if let Some(scope) = self.local_vars.last_mut() {
-            scope.overrides.insert(name.to_string(), value.to_string());
+            scope.overrides.insert(name.to_string(), value.clone());
         } else {
             self.set_var(name, value);
         }
@@ -778,10 +782,22 @@ impl PreprocessContext {
         let mut output = Vec::new();
 
         let saved_source_line = self.current_source_line;
+        let saved_override = self.source_line_override;
+        let saved_mark = self.mark_source_lines;
         for (idx, &line) in lines.iter().enumerate() {
             self.current_source_line = idx + 1;
+            if self.include_depth > 0 {
+                // ReadLineReader gives each included file its own zero-based
+                // LineLocation; a caller's buffered override must not leak in.
+                self.source_line_override = Some(idx);
+                self.mark_source_lines = true;
+            }
             self.process_one_line(line, &mut output);
         }
+        if self.include_depth > 0 {
+            self.mark_source_lines = saved_mark;
+        }
+        self.source_line_override = saved_override;
         self.current_source_line = saved_source_line;
 
         output
@@ -1054,7 +1070,7 @@ impl PreprocessContext {
             // input file (parsers skip blank lines themselves on the `trim().is_empty()`
             // check, but the index advances). PlantUML's `data-source-line` counts
             // blank lines but excludes the dropped `@startuml`.
-            if self.text_consumed {
+            if self.text_consumed || self.execution_kind == FunctionKind::Return {
                 return;
             }
             for expanded_line in line_to_process.split('\n') {
@@ -1146,7 +1162,7 @@ impl PreprocessContext {
             if self.is_active() {
                 let name = caps[1].to_string();
                 let value = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
-                self.token_defines.insert(name, value);
+                self.token_defines.insert(name, Value::Str(value));
             }
             return true;
         }
@@ -1155,14 +1171,14 @@ impl PreprocessContext {
                 let name = caps[1].to_string();
                 let raw_value = caps[2].trim();
                 let value = self.eval_expr_to_value(raw_value);
-                self.set_var(&name, &value.to_display());
+                self.set_var(&name, &value);
             }
             return true;
         }
         if let Some(caps) = RE_LEGACY_VAR.captures(line) {
             if self.is_active() {
                 self.token_defines
-                    .insert(caps[1].to_string(), caps[2].trim().to_string());
+                    .insert(caps[1].to_string(), Value::Str(caps[2].trim().to_string()));
             }
             return true;
         }
@@ -1176,7 +1192,10 @@ impl PreprocessContext {
         if let Some(caps) = RE.captures(line) {
             if self.is_active() {
                 let name = &caps[2];
-                let value = self.eval_expr_to_value(caps[3].trim()).to_display();
+                let value = self.eval_expr_to_value(caps[3].trim());
+                if self.error.is_some() {
+                    return true;
+                }
                 if &caps[1] == "global" {
                     self.defines.insert(name.to_string(), value);
                 } else {
@@ -1311,6 +1330,11 @@ impl PreprocessContext {
                     source_line,
                 };
                 if let Some(func) = self.functions.get_mut(func_name) {
+                    // Keep the pre-existing no-return !function extension explicit.
+                    // Every valid Java return function contains a !return directive.
+                    if trimmed.starts_with("!return ") && func.kind == FunctionKind::Legacy {
+                        func.kind = FunctionKind::Return;
+                    }
                     func.body.push(buffered);
                 }
             }
@@ -1329,6 +1353,7 @@ impl PreprocessContext {
             self.functions.insert(
                 name,
                 FunctionDef {
+                    kind: FunctionKind::Return,
                     params,
                     body: vec![BufferedLine {
                         text: format!("!return {}", &caps[3]),
@@ -1353,6 +1378,11 @@ impl PreprocessContext {
             self.functions.insert(
                 name.clone(),
                 FunctionDef {
+                    kind: if trimmed.starts_with("!procedure") {
+                        FunctionKind::Procedure
+                    } else {
+                        FunctionKind::Legacy
+                    },
                     params,
                     body: Vec::new(),
                 },
@@ -1392,6 +1422,9 @@ impl PreprocessContext {
         name: &str,
         args: &[String],
     ) -> (Option<Value>, Vec<EvaluatedEvent>) {
+        if self.error.is_some() {
+            return (None, Vec::new());
+        }
         let func = match self.functions.get(name) {
             Some(f) => f.clone(),
             None => return (None, Vec::new()),
@@ -1399,19 +1432,33 @@ impl PreprocessContext {
 
         // TFunctionImpl.getNewMemory binds evaluated arguments in a new
         // sibling frame without temporarily changing global variables.
-        let mut scope = LocalMemory::default();
-        for (i, param) in func.params.iter().enumerate() {
-            let value = if let Some(arg) = args.get(i) {
-                self.eval_expr_to_value(arg).to_display()
+        let mut positional = Vec::new();
+        let mut named = HashMap::new();
+        for arg in args {
+            if self.error.is_some() {
+                return (None, Vec::new());
+            }
+            if let Some((key, expr)) = named_argument(arg) {
+                let value = self.eval_expr_to_value(expr);
+                named.insert(key.trim_start_matches('$').to_string(), value);
             } else {
-                param
-                    .default
-                    .as_ref()
-                    .map(Value::to_display)
-                    .unwrap_or_default()
-            };
+                positional.push(self.eval_expr_to_value(arg));
+            }
+        }
+        if self.error.is_some() {
+            return (None, Vec::new());
+        }
+        let mut positional = positional.into_iter();
+        let mut scope = LocalMemory::default();
+        for param in &func.params {
+            let value = named
+                .remove(&param.name)
+                .or_else(|| positional.next())
+                .or_else(|| param.default.clone())
+                .unwrap_or_else(|| Value::Str(String::new()));
             scope.overrides.insert(param.name.clone(), value);
         }
+        let outer_kind = std::mem::replace(&mut self.execution_kind, func.kind);
         self.local_vars.push(scope);
         // ExecutionContexts belongs to TMemory too; an early return from a
         // nested conditional must not leave that conditional in the caller.
@@ -1448,6 +1495,7 @@ impl PreprocessContext {
         self.while_stack = outer_whiles;
         self.foreach_stack = outer_foreaches;
 
+        self.execution_kind = outer_kind;
         (return_value, output_lines)
     }
 
@@ -1499,7 +1547,7 @@ impl PreprocessContext {
             output.extend(lines);
             if let Some(value) = ret {
                 let value = value.to_display();
-                if !value.is_empty() {
+                if !value.is_empty() && self.execution_kind != FunctionKind::Return {
                     self.push_content_line(output, value);
                 }
             }
@@ -1535,9 +1583,9 @@ impl PreprocessContext {
             let var_name = caps[1].to_string();
             let values_str = &caps[2];
 
-            let values: Vec<String> = values_str
-                .split(',')
-                .map(|v| v.trim().trim_matches('"').trim_matches('\'').to_string())
+            let values = split_builtin_args(values_str)
+                .into_iter()
+                .map(|v| self.eval_expr_to_value(v))
                 .collect();
 
             self.foreach_stack.push(ForEachState {
@@ -1684,7 +1732,14 @@ impl PreprocessContext {
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
                 self.include_depth += 1;
+                let saved_base = self
+                    .base_dir
+                    .replace(file_path.parent().unwrap_or(Path::new(".")).to_path_buf());
+                let saved_kind =
+                    std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
                 let lines = self.process(&content);
+                self.execution_kind = saved_kind;
+                self.base_dir = saved_base;
                 self.include_depth -= 1;
                 Some(lines)
             }
@@ -1705,7 +1760,10 @@ impl PreprocessContext {
         match std::fs::read_to_string(&resolved) {
             Ok(content) => {
                 self.include_depth += 1;
+                let saved_kind =
+                    std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
                 let lines = self.process(&content);
+                self.execution_kind = saved_kind;
                 self.include_depth -= 1;
                 Some(lines)
             }
@@ -1737,25 +1795,69 @@ impl PreprocessContext {
 
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
-                // Parse the file to extract subs.
-                let mut temp_ctx = PreprocessContext::new(
-                    self.base_dir.clone(),
-                    self.mark_function_body_source_lines,
-                );
-                temp_ctx.include_depth = self.include_depth + 1;
-                temp_ctx.preserve_teoz_pragma = self.preserve_teoz_pragma;
-                let _ = temp_ctx.process(&content);
-                // Now extract the named sub.
-                if let Some(sub_lines) = temp_ctx.subs.get(sub_name) {
-                    let mut output = Vec::new();
-                    for line in sub_lines {
-                        self.process_buffered_line(line, &mut output);
+                // Sub.fromFile selects raw StringLocated lines, not an executed
+                // temporary context. Repeated matching blocks append; unselected
+                // prelude/tail never executes (including errors and mutations).
+                let mut selected = Vec::new();
+                let mut found = false;
+                let mut skip = false;
+                let mut comment = false;
+                for (index, text) in content.lines().enumerate() {
+                    let trimmed = text.trim();
+                    // TContext uses UncommentReadLine before Sub.fromFile.
+                    if comment {
+                        if trimmed.ends_with("'/") {
+                            comment = false;
+                        }
+                        continue;
                     }
-                    self.mark_source_lines = true;
-                    Some(output)
-                } else {
-                    Some(vec![])
+                    if trimmed.starts_with("/'") {
+                        if !trimmed.contains("'/") {
+                            comment = true;
+                            continue;
+                        }
+                        if trimmed.ends_with("'/") {
+                            continue;
+                        }
+                    }
+                    if trimmed.starts_with('\'') {
+                        continue;
+                    }
+                    let clean = remove_inner_comment(text);
+                    let trimmed = clean.trim();
+                    if let Some(name) = trimmed.strip_prefix("!startsub ") {
+                        if name.trim() == sub_name {
+                            found = true;
+                            skip = false;
+                        }
+                        continue;
+                    }
+                    if trimmed == "!endsub" && found {
+                        skip = true;
+                    }
+                    if found && !skip {
+                        selected.push(BufferedLine {
+                            text: clean,
+                            raw_source_line: index + 1,
+                            source_line: index,
+                        });
+                    }
                 }
+                let saved_base = self
+                    .base_dir
+                    .replace(file_path.parent().unwrap_or(Path::new(".")).to_path_buf());
+                let saved_kind =
+                    std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
+                self.include_depth += 1;
+                let mut output = Vec::new();
+                for line in &selected {
+                    self.process_buffered_line(line, &mut output);
+                }
+                self.include_depth -= 1;
+                self.base_dir = saved_base;
+                self.execution_kind = saved_kind;
+                self.mark_source_lines = true;
+                Some(output)
             }
             Err(_) => Some(vec![]),
         }
@@ -1799,7 +1901,9 @@ impl PreprocessContext {
             let saved_mark = self.mark_function_body_source_lines;
             self.mark_function_body_source_lines = false;
             self.include_depth += 1;
+            let saved_kind = std::mem::replace(&mut self.execution_kind, FunctionKind::Procedure);
             let body = self.process(themes::strip_front_matter(&source));
+            self.execution_kind = saved_kind;
             self.include_depth -= 1;
             self.mark_function_body_source_lines = saved_mark;
             output.push(EvaluatedEvent::Theme {
@@ -1942,6 +2046,9 @@ impl PreprocessContext {
 
     /// Evaluate an expression string to a Value.
     fn eval_expr_to_value(&mut self, expression: &str) -> Value {
+        if self.error.is_some() {
+            return Value::Str(String::new());
+        }
         let expr = expression.trim();
         // TokenType.QUOTED_STRING / Eater.addUpTo: both quote forms are
         // literal; backslash is not an escape and contents are not interpolated.
@@ -1954,27 +2061,43 @@ impl PreprocessContext {
         if expr.starts_with('(') && find_matching_paren(expr) == Some(expr.len() - 1) {
             return self.eval_expr_to_value(&expr[1..expr.len() - 1]);
         }
-        for ops in [&['+', '-'][..], &['*', '/', '%'][..]] {
+        // TokenOperator precedence; ReversePolishInterpretor evaluates both
+        // operand tokens before applying an operator, including logical ones.
+        for ops in [
+            &["||"][..],
+            &["&&"][..],
+            &["==", "!="][..],
+            &["<=", ">=", "<", ">"][..],
+            &["+", "-"][..],
+            &["*", "/", "%"][..],
+        ] {
             if let Some((position, op)) = ops
                 .iter()
-                .filter_map(|op| find_top_level_op_pos(expr, *op).map(|position| (position, *op)))
-                .max_by_key(|(position, _)| *position)
+                .filter_map(|op| {
+                    let pos = if matches!(*op, "+" | "-" | "*" | "/" | "%") {
+                        find_top_level_op_pos(expr, op.chars().next().unwrap())
+                    } else {
+                        find_top_level_comparison(expr, op)
+                    };
+                    pos.map(|pos| (pos, *op))
+                })
+                .max_by_key(|(pos, _)| *pos)
             {
                 let left = self.eval_expr_to_value(&expr[..position]);
-                let right = self.eval_expr_to_value(&expr[position + 1..]);
-                if op == '+' && (matches!(left, Value::Str(_)) || matches!(right, Value::Str(_))) {
-                    return Value::Str(format!("{}{}", left.to_display(), right.to_display()));
+                let right = self.eval_expr_to_value(&expr[position + op.len()..]);
+                if self.error.is_some() {
+                    return Value::Str(String::new());
                 }
-                let (a, b) = (left.to_number(), right.to_number());
-                return number_value(match op {
-                    '+' => a + b,
-                    '-' => a - b,
-                    '*' => a * b,
-                    '/' if b != 0.0 => a / b,
-                    '%' if b != 0.0 => a % b,
-                    _ => 0.0,
-                });
+                return self.apply_operator(left, right, op);
             }
+        }
+        if let Some(rest) = expr.strip_prefix('!') {
+            return Value::Int(i32::from(!self.eval_expr_to_value(rest).truth()));
+        }
+        if matches!(expr.chars().next(), Some('{' | '['))
+            && let Ok(json) = serde_json::from_str(expr)
+        {
+            return Value::Json(json);
         }
         if let Some(open) = expr.find('(')
             && find_matching_paren_from(expr, open) == Some(expr.len() - 1)
@@ -1982,7 +2105,7 @@ impl PreprocessContext {
             let name = expr[..open].trim();
             let args = &expr[open + 1..expr.len() - 1];
             if let Some(name) = name.strip_prefix('%') {
-                return Value::from_str_auto(&self.eval_builtin_with_expr_args(name, args));
+                return self.eval_builtin_with_expr_args(name, args);
             }
             let name = name.trim_start_matches('$');
             if self.functions.contains_key(name) {
@@ -1990,21 +2113,31 @@ impl PreprocessContext {
             }
         }
         if let Some(name) = expr.strip_prefix('$')
-            && let Some(value) = self.get_var(name).or_else(|| self.token_defines.get(name))
+            && let Some(value) = self.get_var(name)
         {
-            return Value::from_str_auto(value);
+            return value.clone();
+        }
+        if let Some(name) = expr.strip_prefix('$')
+            && let Some(value) = self.token_defines.get(name)
+        {
+            return value.clone();
         }
         if let Some(value) = self.token_defines.get(expr) {
-            return Value::Str(value.clone());
+            return value.clone();
         }
-        if expr == "true" {
-            return Value::Bool(true);
-        }
-        if expr == "false" {
-            return Value::Bool(false);
-        }
-        if let Ok(number) = expr.parse::<i64>() {
-            return Value::Int(number);
+        if !expr.is_empty()
+            && expr
+                .trim_start_matches('-')
+                .chars()
+                .all(|c| c.is_ascii_digit())
+        {
+            return match expr.parse::<i32>() {
+                Ok(number) => Value::Int(number),
+                Err(_) => {
+                    self.fail("Integer literal outside signed 32-bit range".into());
+                    Value::Str(String::new())
+                }
+            };
         }
         if let Ok(number) = expr.parse::<f64>() {
             return Value::Float(number);
@@ -2017,110 +2150,80 @@ impl PreprocessContext {
     // ------------------------------------------------------------------
 
     fn eval_bool(&mut self, expr: &str) -> bool {
-        let expr = expr.trim();
+        self.eval_expr_to_value(expr).truth()
+    }
 
-        // Strip outer parens.
-        if expr.starts_with('(') && expr.ends_with(')') {
-            let inner = &expr[1..expr.len() - 1];
-            // Check if parens are balanced (i.e., they truly wrap the whole expression).
-            if parens_balanced(inner) {
-                return self.eval_bool(inner);
-            }
-        }
-
-        // ||
-        if let Some(pos) = find_top_level_logical_op(expr, "||") {
-            let left = &expr[..pos];
-            let right = &expr[pos + 2..];
-            return self.eval_bool(left) || self.eval_bool(right);
-        }
-
-        // &&
-        if let Some(pos) = find_top_level_logical_op(expr, "&&") {
-            let left = &expr[..pos];
-            let right = &expr[pos + 2..];
-            return self.eval_bool(left) && self.eval_bool(right);
-        }
-
-        // Negation: !expr (but not != which is comparison).
-        if let Some(rest) = expr.strip_prefix('!') {
-            let rest = rest.trim();
-            if !rest.is_empty() && !rest.starts_with('=') {
-                return !self.eval_bool(rest);
-            }
-        }
-
-        // Comparison operators: ==, !=, <=, >=, <, >
-        for &op in &["==", "!=", "<=", ">=", "<", ">"] {
-            if let Some(pos) = find_top_level_comparison(expr, op) {
-                let left = expr[..pos].trim();
-                let right = expr[pos + op.len()..].trim();
-                return self.eval_comparison(left, right, op);
-            }
-        }
-
-        // %true / %false
-        if expr == "%true" || expr == "%true()" || expr == "true" {
-            return true;
-        }
-        if expr == "%false" || expr == "%false()" || expr == "false" {
-            return false;
-        }
-
-        // Numeric: non-zero is true.
-        if let Ok(n) = expr.parse::<f64>() {
-            return n != 0.0;
-        }
-
-        // Try evaluating as an expression (handles function calls, variable substitution).
-        let val = self.eval_expr_to_value(expr);
-        match val {
-            Value::Bool(b) => b,
-            Value::Int(n) => n != 0,
-            Value::Float(f) => f != 0.0,
-            Value::Str(ref s) => {
-                // If the expression changed after evaluation, re-evaluate as bool.
-                if s.trim() != expr {
-                    let s_clone = s.clone();
-                    return self.eval_bool(&s_clone);
-                }
-                // Non-empty string is true.
-                !s.is_empty()
-            }
+    fn fail(&mut self, message: String) {
+        // EaterException unwinds the Java evaluator: the first diagnostic wins.
+        if self.error.is_none() {
+            self.error = Some(PreprocessError {
+                line: self
+                    .source_line_override
+                    .unwrap_or_else(|| self.current_diagram_source_line()),
+                message,
+            });
         }
     }
 
-    fn eval_comparison(&mut self, left: &str, right: &str, op: &str) -> bool {
-        let lval = self.eval_expr_to_value(left);
-        let rval = self.eval_expr_to_value(right);
-
-        // If both are numeric, compare numerically.
-        if lval.is_numeric() && rval.is_numeric() {
-            let l = lval.to_number();
-            let r = rval.to_number();
-            return match op {
-                "==" => (l - r).abs() < 1e-10,
-                "!=" => (l - r).abs() >= 1e-10,
-                "<" => l < r,
-                ">" => l > r,
-                "<=" => l <= r,
-                ">=" => l >= r,
-                _ => false,
-            };
-        }
-
-        // String comparison.
-        let l = lval.to_display();
-        let r = rval.to_display();
+    fn apply_operator(&mut self, left: Value, right: Value, op: &str) -> Value {
         match op {
-            "==" => l == r,
-            "!=" => l != r,
-            "<" => l < r,
-            ">" => l > r,
-            "<=" => l <= r,
-            ">=" => l >= r,
-            _ => false,
+            "||" => return Value::Int(i32::from(left.truth() || right.truth())),
+            "&&" => return Value::Int(i32::from(left.truth() && right.truth())),
+            "==" | "!=" | "<" | ">" | "<=" | ">=" => {
+                let order = if let (Value::Int(a), Value::Int(b)) = (&left, &right) {
+                    a.cmp(b)
+                } else {
+                    // String.compareTo compares UTF-16 code units.
+                    left.to_display()
+                        .encode_utf16()
+                        .cmp(right.to_display().encode_utf16())
+                };
+                return Value::Int(i32::from(match op {
+                    "==" => order.is_eq(),
+                    "!=" => !order.is_eq(),
+                    "<" => order.is_lt(),
+                    ">" => order.is_gt(),
+                    "<=" => !order.is_gt(),
+                    _ => !order.is_lt(),
+                }));
+            }
+            _ => {}
         }
+        if let (Value::Int(a), Value::Int(b)) = (&left, &right) {
+            // TValue.add/minus/multiply/dividedBy operate on signed Java int.
+            return Value::Int(match op {
+                "+" => a.wrapping_add(*b),
+                "-" => a.wrapping_sub(*b),
+                "*" => a.wrapping_mul(*b),
+                "/" | "%" if *b == 0 => {
+                    self.fail("Division by zero".into());
+                    0
+                }
+                "/" => a.wrapping_div(*b),
+                "%" => a.wrapping_rem(*b),
+                _ => unreachable!(),
+            });
+        }
+        // Retain the existing Rust float extension; never cast JSON into int.
+        if (matches!(left, Value::Float(_)) || matches!(right, Value::Float(_)))
+            && left.is_numeric()
+            && right.is_numeric()
+        {
+            let (a, b) = (left.to_number(), right.to_number());
+            return Value::Float(match op {
+                "+" => a + b,
+                "-" => a - b,
+                "*" => a * b,
+                "/" => a / b,
+                _ => a % b,
+            });
+        }
+        let separator = if matches!(op, "+" | "-") { "" } else { op };
+        Value::Str(format!(
+            "{}{separator}{}",
+            left.to_display(),
+            right.to_display()
+        ))
     }
 
     // ------------------------------------------------------------------
@@ -2130,7 +2233,7 @@ impl PreprocessContext {
     fn substitute_vars(&mut self, line: &str) -> String {
         let mut result = String::new();
         let mut offset = 0;
-        while offset < line.len() {
+        while offset < line.len() && self.error.is_none() {
             let ch = line[offset..].chars().next().unwrap();
             if ch == '<'
                 && line[offset..].starts_with("<$")
@@ -2152,7 +2255,9 @@ impl PreprocessContext {
                 {
                     if ch == '%' {
                         result.push_str(
-                            &self.eval_builtin_with_expr_args(name, &line[name_end + 1..close]),
+                            &self
+                                .eval_builtin_with_expr_args(name, &line[name_end + 1..close])
+                                .to_display(),
                         );
                     } else {
                         let args = parse_call_args(&line[name_end + 1..close]);
@@ -2189,9 +2294,12 @@ impl PreprocessContext {
                     continue;
                 }
                 if ch == '$'
-                    && let Some(value) = self.get_var(name).or_else(|| self.token_defines.get(name))
+                    && let Some(value) = self
+                        .get_var(name)
+                        .map(Value::to_display)
+                        .or_else(|| self.token_defines.get(name).map(Value::to_display))
                 {
-                    result.push_str(value);
+                    result.push_str(&value);
                     offset = name_end;
                     continue;
                 }
@@ -2219,7 +2327,7 @@ impl PreprocessContext {
                         }
                         let word: String = chars[word_start..i].iter().collect();
                         if let Some(replacement) = self.token_defines.get(&word) {
-                            out.push_str(replacement);
+                            out.push_str(&replacement.to_display());
                             changed = true;
                         } else {
                             out.push_str(&word);
@@ -2322,36 +2430,81 @@ impl PreprocessContext {
     /// common problem where pre-substituted variable values contain commas
     /// (e.g. `%strlen($str)` with `$str = "Hello, World!"` should pass the
     /// full 13-character string, not split on the comma).
-    fn eval_builtin_with_expr_args(&mut self, func: &str, args_raw: &str) -> String {
-        if args_raw.trim().is_empty() {
-            return self.eval_one_builtin_from_values(func, &[]);
+    fn eval_builtin_with_expr_args(&mut self, func: &str, args_raw: &str) -> Value {
+        if self.error.is_some() {
+            return Value::Str(String::new());
         }
-
-        // Split on top-level commas in the raw arg string (before substitution).
-        let raw_parts = split_builtin_args(args_raw);
-        // Evaluate each argument as an expression.
-        let evaluated: Vec<String> = raw_parts
-            .iter()
-            .map(|a| {
-                let a = a.trim();
-                let val = self.eval_expr_to_value(a);
-                val.to_display()
-            })
-            .collect();
-        let refs: Vec<&str> = evaluated.iter().map(|s| s.as_str()).collect();
-        self.eval_one_builtin_from_values(func, &refs)
-    }
-
-    /// Core builtin dispatcher taking pre-evaluated string arguments.
-    fn eval_one_builtin_from_values(&mut self, func: &str, args: &[&str]) -> String {
-        self.eval_one_builtin_args(func, args)
+        let mut values = Vec::new();
+        if !args_raw.trim().is_empty() {
+            for part in split_builtin_args(args_raw) {
+                values.push(self.eval_expr_to_value(part));
+                if self.error.is_some() {
+                    return Value::Str(String::new());
+                }
+            }
+        }
+        let args: Vec<String> = values.iter().map(Value::to_display).collect();
+        let refs: Vec<&str> = args.iter().map(String::as_str).collect();
+        // Builtin contracts return TValue, not source text to be tokenized again.
+        match func {
+            // LogicalNot.executeReturnFunction uses TValue.toBoolean directly.
+            "not" => return Value::Int(i32::from(!values.first().is_some_and(Value::truth))),
+            "get_variable_value" => {
+                let name = refs.first().copied().unwrap_or("");
+                return name
+                    .strip_prefix('$')
+                    .and_then(|n| self.get_var(n))
+                    .cloned()
+                    .or_else(|| self.token_defines.get(name).cloned())
+                    .unwrap_or_else(|| Value::Str(String::new()));
+            }
+            "set_variable_value" if values.len() >= 2 => {
+                if let Some(name) = args[0].strip_prefix('$') {
+                    self.defines.insert(name.to_string(), values[1].clone());
+                } else {
+                    self.token_defines
+                        .insert(args[0].clone(), values[1].clone());
+                }
+                return Value::Str(String::new());
+            }
+            "str2json" => {
+                return serde_json::from_str(refs.first().copied().unwrap_or(""))
+                    .map(Value::Json)
+                    .unwrap_or_else(|_| Value::Str(String::new()));
+            }
+            "size" => {
+                return Value::Int(match values.first() {
+                    Some(Value::Json(serde_json::Value::Array(a))) => a.len() as i32,
+                    Some(Value::Json(serde_json::Value::Object(a))) => a.len() as i32,
+                    Some(Value::Str(s)) => s.encode_utf16().count() as i32,
+                    _ => 0,
+                });
+            }
+            "date" if values.len() >= 2 => {
+                // DateFunction uses TValue.toInt, not parsing its display text.
+                let seconds = values[1].java_int().to_string();
+                return Value::Str(self.eval_one_builtin_args(func, &[refs[0], &seconds]));
+            }
+            _ => {}
+        }
+        let text = self.eval_one_builtin_args(func, &refs);
+        match func {
+            // Each corresponding tim/builtin implementation returns fromInt/fromBoolean.
+            "strlen" | "strpos" | "true" | "false" | "intval" | "hex2dec" | "variable_exists" => {
+                Value::Int(text.parse().unwrap_or(0))
+            }
+            "is_dark" | "is_light" | "is_defined" | "function_exists" | "file_exists"
+            | "feature" => Value::Int(i32::from(text == "true" || text == "1")),
+            "float" => Value::Float(text.parse().unwrap_or(0.0)), // Existing Rust extension.
+            _ => Value::Str(text),
+        }
     }
 
     fn eval_one_builtin_args(&mut self, func: &str, args: &[&str]) -> String {
         match func {
             "strlen" => args
                 .first()
-                .map_or("0".to_string(), |s| s.len().to_string()),
+                .map_or("0".to_string(), |s| s.encode_utf16().count().to_string()),
             "substr" => {
                 let s = args.first().copied().unwrap_or("");
                 let start: usize = args.get(1).and_then(|v| v.parse().ok()).unwrap_or(0);
@@ -2386,10 +2539,7 @@ impl PreprocessContext {
                 // to a signed Java int (seconds), then multiplies by 1000L.
                 let epoch_ms = if let Some(seconds) = args.get(1) {
                     let Ok(seconds) = seconds.parse::<i32>() else {
-                        self.error = Some(PreprocessError {
-                            line: self.current_diagram_source_line(),
-                            message: "Date seconds outside signed 32-bit range".into(),
-                        });
+                        self.fail("Date seconds outside signed 32-bit range".into());
                         return String::new();
                     };
                     i64::from(seconds) * 1000
@@ -2400,10 +2550,7 @@ impl PreprocessContext {
                 match date_format::format(epoch_ms, &tz, args[0]) {
                     Ok(formatted) => formatted,
                     Err(message) => {
-                        self.error = Some(PreprocessError {
-                            line: self.current_diagram_source_line(),
-                            message,
-                        });
+                        self.fail(message);
                         String::new()
                     }
                 }
@@ -2429,15 +2576,6 @@ impl PreprocessContext {
                 .first()
                 .and_then(|s| s.parse::<f64>().ok())
                 .map_or("0".to_string(), |n| format!("{}", n as i64)),
-            "not" => {
-                let val = args.first().copied().unwrap_or("false");
-                if val == "true" || val == "1" {
-                    "false"
-                } else {
-                    "true"
-                }
-                .to_string()
-            }
             "chr" => {
                 let code: u32 = args.first().and_then(|s| s.parse().ok()).unwrap_or(0);
                 char::from_u32(code).map_or(String::new(), |c| c.to_string())
@@ -2534,18 +2672,6 @@ impl PreprocessContext {
                     "false"
                 }
                 .to_string()
-            }
-            "get_variable_value" => {
-                let name = args.first().copied().unwrap_or("");
-                name.strip_prefix('$')
-                    .and_then(|name| self.get_var(name).cloned())
-                    .or_else(|| self.token_defines.get(name).cloned())
-                    .unwrap_or_default()
-            }
-            "set_variable_value" => {
-                // In expression context we can't mutate; handled specially.
-                // Return empty.
-                String::new()
             }
             "filename" => {
                 // PlantUML's `%filename()` returns the source file name (basename
@@ -2679,12 +2805,21 @@ fn format_java_date(epoch_ms: i64, tz: &TzSpec) -> String {
     )
 }
 
-fn number_value(f: f64) -> Value {
-    if f == (f as i64) as f64 && f.abs() < i64::MAX as f64 {
-        Value::Int(f as i64)
-    } else {
-        Value::Float(f)
-    }
+// EaterFunctionCall / TFunctionImpl.getNewMemory: named values are separate
+// from the positional queue, and quoted equality text is not an assignment.
+fn named_argument(text: &str) -> Option<(&str, &str)> {
+    let (index, _, _) = syntax_positions(text).into_iter().find(|(i, c, d)| {
+        *d == 0
+            && *c == '='
+            && !text[*i..].starts_with("==")
+            && !text[..*i].ends_with(['!', '<', '>', '='])
+    })?;
+    let name = text[..index].trim();
+    (!name.is_empty()
+        && name
+            .chars()
+            .all(|c| c.is_alphanumeric() || matches!(c, '$' | '_')))
+    .then_some((name, text[index + 1..].trim()))
 }
 
 fn parse_call_args(args_str: &str) -> Vec<String> {
@@ -2710,10 +2845,10 @@ fn syntax_positions(text: &str) -> Vec<(usize, char, i32)> {
             quote = Some(ch);
         } else {
             result.push((index, ch, depth));
-            if ch == '(' {
+            if matches!(ch, '(' | '[' | '{') {
                 depth += 1;
             }
-            if ch == ')' {
+            if matches!(ch, ')' | ']' | '}') {
                 depth -= 1;
             }
         }
@@ -2773,18 +2908,10 @@ fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
         .next_back()
 }
 
-fn find_top_level_logical_op(expr: &str, op: &str) -> Option<usize> {
-    syntax_positions(expr)
-        .into_iter()
-        .filter(|(index, _, depth)| *depth == 0 && expr[*index..].starts_with(op))
-        .map(|(index, _, _)| index)
-        .next_back()
-}
-
 fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
     syntax_positions(expr)
         .into_iter()
-        .find(|(index, _, depth)| {
+        .filter(|(index, _, depth)| {
             if *depth != 0 || !expr[*index..].starts_with(op) {
                 return false;
             }
@@ -2797,6 +2924,7 @@ fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
             true
         })
         .map(|(index, _, _)| index)
+        .next_back()
 }
 
 fn eval_defined_expression(expression: &str, truth: impl FnMut(&str) -> bool) -> Option<bool> {
@@ -2890,24 +3018,6 @@ where
     }
 }
 
-fn parens_balanced(text: &str) -> bool {
-    let positions = syntax_positions(text);
-    !positions
-        .iter()
-        .any(|(_, ch, depth)| *ch == ')' && *depth <= 0)
-        && positions.last().is_none_or(|(_, ch, depth)| {
-            depth
-                + if *ch == '(' {
-                    1
-                } else if *ch == ')' {
-                    -1
-                } else {
-                    0
-                }
-                == 0
-        })
-}
-
 /// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
 ///
 /// The `rest` parameter is the text after `sprite $` (name included).
@@ -2963,6 +3073,107 @@ mod tests {
             .into_iter()
             .filter(|l| !l.is_empty())
             .collect()
+    }
+
+    #[test]
+    fn typed_arguments_and_lookup_do_not_reinfer_strings() {
+        let source = r#"@startuml
+!$seed = "007"
+!function $suffix($a=$seed, $b=7)
+!return $a + $b
+!endfunction
+!$seed = "changed"
+!$value = $suffix($b=2)
+!$other = %get_variable_value("$value") + 3
+class "$other" as Typed
+@enduml"#;
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"00723\" as Typed\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn return_plain_simulates_nested_calls_but_procedures_emit() {
+        let source = r#"@startuml
+!$count=0
+!procedure $emit()
+class Nested
+!endprocedure
+!function $value()
+!$count=$count+1
+class Phantom
+$emit()
+!return "kept"
+!endfunction
+!$label=$value()
+class "$label $count" as Actual
+@enduml"#;
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass Nested\nclass \"kept 1\" as Actual\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn integer_arithmetic_wraps_but_literal_overflow_is_fatal() {
+        let mut ctx = PreprocessContext::new(None, false);
+        assert!(matches!(
+            ctx.eval_expr_to_value("2147483647 + 1"),
+            Value::Int(i32::MIN)
+        ));
+        assert!(matches!(
+            ctx.eval_expr_to_value("(-2147483647 - 1) - 1"),
+            Value::Int(i32::MAX)
+        ));
+        assert!(matches!(ctx.eval_expr_to_value("7 / 2"), Value::Int(3)));
+        assert!(matches!(
+            ctx.eval_expr_to_value("%str2json(\"1.5\")"),
+            Value::Json(_)
+        ));
+        ctx.eval_expr_to_value("2147483648");
+        assert!(ctx.error.is_some());
+    }
+
+    #[test]
+    fn eager_operands_do_not_execute_literal_values() {
+        let source = r#"@startuml
+!$count=0
+!function $tick()
+!$count=$count+1
+!return 1
+!endfunction
+!$v=(1 || $tick()) && (0 || "$tick()")
+class "$count / $v" as Actual
+@enduml"#;
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"1 / 1\" as Actual\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn first_error_stops_later_arguments_and_mutations() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.process("@startuml\n!$n=0\n!function $tick()\n!$n=$n+1\n!return 1\n!endfunction");
+        ctx.eval_expr_to_value("%substr(%date(\"QQ\",0),$tick(),%date(\"XXXX\",0))");
+        assert!(
+            ctx.error
+                .as_ref()
+                .unwrap()
+                .message
+                .contains("unsupported letter Q")
+        );
+        assert!(matches!(ctx.get_var("n"), Some(Value::Int(0))));
+        ctx.eval_expr_to_value("%set_variable_value(\"$n\",9)");
+        assert!(matches!(ctx.get_var("n"), Some(Value::Int(0))));
+        assert!(
+            ctx.error
+                .as_ref()
+                .unwrap()
+                .message
+                .contains("unsupported letter Q")
+        );
     }
 
     #[test]
@@ -3140,6 +3351,7 @@ $inspect("payload")
         let mut ctx = PreprocessContext::new(None, false);
         ctx.render_clock.tz = TzSpec {
             name: "UTC".to_string(),
+            long_name: "Coordinated Universal Time".to_string(),
             offset_secs: 0,
         };
         // Check the formatter independently of the host zone and current year.
@@ -3818,11 +4030,11 @@ $record(SaffronArchive)\n\
     }
 
     #[test]
-    fn builtin_feature_returns_false() {
-        // All features are unsupported; always returns "false".
+    fn builtin_feature_returns_numeric_false() {
+        // Feature.executeReturnFunction returns TValue.fromInt(0) for this key.
         let input = "@startuml\n!$f = %feature(\"dark-mode\")\nnote : $f\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["note : false"]);
+        assert_eq!(lines, vec!["note : 0"]);
     }
 
     #[test]
