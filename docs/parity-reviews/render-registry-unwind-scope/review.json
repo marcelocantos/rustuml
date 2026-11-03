@@ -1,0 +1,352 @@
+{
+  "schema_version": 1,
+  "mechanism": "render-registry-unwind-scope",
+  "reviewer": {
+    "task_id": "t3-bd87b5c2 / t3/review-render-registry-unwind-scope",
+    "model": "gpt-6-astra (inherited Codex, high reasoning effort)",
+    "role": "independent checker; no implementation work or children"
+  },
+  "account_commit": "c6ba01b4453825dd6ec85f849964716ad5fcd961",
+  "implementation_commit": "43f6e7b82c52c6b4ce989926e33f84eec84bcc38",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "original_and_tested_hashes": {
+    "baseline": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+    "local_account": "42ebcd1d581f9b61424a16ef1382c2d31a9f3779",
+    "candidate": "069c05ceb37c5ed8149eb504e7b82d09fea0fd4e",
+    "candidate_tree": "9c860b34b5f79f2affa1a096a7ff48779fef2eb0",
+    "maker_packet_read_only_context": "b1bb1cfab38dc44c60950f56229f05b7604dcd93",
+    "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "stdlib_revision": "747d1eae809cde20675976d67e3eb84dc0021a0c"
+  },
+  "reference": {
+    "java_executable": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "historical_byte_identical": false,
+    "historical_font_graphviz_equivalence_proven": false
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/rustuml-registry-checker-bd87/target",
+    "CARGO_BUILD_JOBS": "4",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "GOLDEN_FILTER": "unset",
+    "HARNESS_WRITE_BASELINES": "unset",
+    "cwd": "repository root except built-in cargo tests and explicitly named crate-cwd probe"
+  },
+  "commands": [
+    "git -c protocol.file.allow=always submodule update --init test-diagrams/golden",
+    "CARGO_TARGET_DIR=/tmp/rustuml-registry-checker-bd87/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "uv run --no-project docs/parity-reviews/render-registry-unwind-scope/checker.py generate . /tmp/rustuml-campaign-reference.json",
+    "CARGO_TARGET_DIR=/tmp/rustuml-registry-checker-bd87/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --message-format=json (at baseline and candidate; separate logs)",
+    "uv run --no-project docs/parity-reviews/render-registry-unwind-scope/checker.py compile /tmp/rustuml-registry-checker-bd87/baseline-build.jsonl /tmp/rustuml-registry-checker-bd87/baseline-checker",
+    "/tmp/rustuml-registry-checker-bd87/baseline-checker recovery . /tmp/rustuml-registry-checker-bd87/baseline-rustuml",
+    "/tmp/rustuml-registry-checker-bd87/baseline-checker corpus test-diagrams/perturbations /tmp/rustuml-registry-checker-bd87/baseline-rustuml",
+    "git cherry-pick c6ba01b4453825dd6ec85f849964716ad5fcd961",
+    "git cherry-pick 43f6e7b82c52c6b4ce989926e33f84eec84bcc38",
+    "uv run --no-project docs/parity-reviews/render-registry-unwind-scope/checker.py compile /tmp/rustuml-registry-checker-bd87/candidate-build.jsonl /tmp/rustuml-registry-checker-bd87/candidate-checker",
+    "/tmp/rustuml-registry-checker-bd87/candidate-checker recovery . /tmp/rustuml-registry-checker-bd87/target/release/rustuml",
+    "/tmp/rustuml-registry-checker-bd87/candidate-checker corpus test-diagrams/perturbations /tmp/rustuml-registry-checker-bd87/target/release/rustuml",
+    "CARGO_TARGET_DIR=/tmp/rustuml-registry-checker-bd87/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-render --lib -- --test-threads=4",
+    "CARGO_TARGET_DIR=/tmp/rustuml-registry-checker-bd87/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --no-fail-fast -- --nocapture",
+    "From crates/rustuml-oracle: /tmp/rustuml-registry-checker-bd87/candidate-checker corpus /Users/marcelo/.t3/worktrees/rustuml/t3-bd87b5c2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity /tmp/rustuml-registry-checker-bd87/target/release/rustuml",
+    "CARGO_TARGET_DIR=/tmp/rustuml-registry-checker-bd87/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-oracle --test harness_guards -- --nocapture"
+  ],
+  "findings": [
+    "Accepted only the registry resource-lifetime invariant. The production diff contains exactly 13 added lines in filter_registry.rs, plus 66 focused test lines. No later sequence model or geometry changes are present.",
+    "Pinned Java provenance verified: UGraphicSvg.build line 88 creates a new SvgGraphics; SvgGraphics.filterBackColor is an instance field at line 740; getIdFilterBackColor/getFilterBackColor at lines 742-766 allocate per-instance colors. Rust adapts this ownership to CURRENT. Cleanup at scope exit corrects that lifetime without changing the color or geometry model.",
+    "Installation follows the non-reentrancy assertion. The assertion Ref temporary ends before assignment; FilterRegistry::for_source is evaluated before installation. RegistryScope is constructed only after successful installation. A rejected nested call cannot construct its own guard or execute its body.",
+    "Normal return moves the actual collected registry and body result to the caller; guard destruction then takes None. The independent normal-transfer test compares all definitions to separately accumulated filters, checks color alias deduplication, verifies the returned Arc pointer identity, and starts a fresh empty scope.",
+    "Three caught nested rejections retain outer source-derived IDs and previously collected filters. An uncaught nested rejection removes outer state and permits a new registry. Both retain the exact non-reentrancy panic. A deliberate body panic with existing filters preserves a non-string Arc payload by pointer identity and leaves CURRENT empty.",
+    "RefCell/double-panic audit: CURRENT is private and accessed only by with_registry and id_for_current. No client can retain a Ref/RefMut or run client callbacks under a slot borrow. id_for_current returns an owned String. normalize_back_color/normalize_color only perform string/table operations; any borrow from such a call is released before the outer guard unwinds. Registry fields are String and Vec<(String,String)> with no custom destructors or allocation in cleanup. No reachable double panic was found for the current clients.",
+    "Client inventory: lib.rs render_under_filter_registry wraps normal/themed/scaled and optional oracle paths; text_render.rs emit_span is the only stateful id_for_current client. Board/state/component/class/sequence/activity use pure seed, gradient, shadow or finalization utilities, not retained CURRENT references. No new fixture-label condition, geometry constant, catch/suppression, or comparator change is present.",
+    "Both existing valid checker_live_stack_2 and checker_live_stack_3 still produce the original index-out-of-bounds panic at sequence.rs:8022, len 2 and index 18446744073709551615. Fresh CLI processes exit 101. Repeated same-thread failure/recovery rounds preserve that panic and pass 24/24 subsequent control comparisons against both clean CLI bytes and pinned Java. Baseline fails all 24 recoveries and substitutes registry non-reentrancy for the second initiating attempt.",
+    "Four independent lifecycle checks pass on candidate. Baseline normal transfer and caught nesting pass; body-panic cleanup and uncaught-nesting cleanup fail. The baseline driver initially returned 0 despite JSON failures. Candidate main was made fail-closed before execution without changing test assertions or render/comparison operations. Baseline failure claims rely on recorded failed checks, not its exit status.",
+    "Original 907 cases from repository-root cwd: candidate has 372 pass, 525 SVG mismatches, 8 invalid references, and 2 initiating panics. All 897 successful renders equal isolated CLI bytes. Baseline had 110 pass, 378 mismatches, 8 invalid references, and 411 panics. The 409 collateral reentrancy failures disappear. Isolated CLI comparison records are identical before and after for every case.",
+    "The unchanged built-in full suite runs 913 sources: old 907 plus new 6. It reports 377 pass, 526 mismatches, 8 invalid references and 2 panics. Its exact failure set differs from the root-cwd independent replay only on the existing checker_include_theme source: its relative docs/... include resolves from cwd, and Cargo runs from crates/rustuml-oracle. A targeted replay of all 33 theme cases at crate cwd reproduces exactly that single status change. No fixture, include or harness was altered.",
+    "Both full corpus tiers retain integration metrics: product 11181/11251; assisted 10497/11251, with 754 failures, 1299 skipped and zero assisted panics. Product remains red on prior unlocked class/preprocessing/rendering gains. Assisted and full perturbation suites remain red. These are not acceptance for T14 or the campaign.",
+    "All six fresh controls are valid pinned-Java references and pass the unchanged strict comparator. Ordinary and background-color SVGs span activity and sequence, changed labels/source seeds, message topology/direction, multiple colors and alias reuse. Existing failed sequence inputs are failure triggers only, never successful controls or waived references.",
+    "Unchanged honesty guards finish 4/6: decimal_literal_ratchet and parity_review_records_are_complete remain red on existing residue. No guard diagnostic names render-registry-unwind-scope. This review satisfies the unchanged schema; the global guards are not accepted or waived."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_background.puml",
+      "golden": "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_background.svg",
+      "axes": [
+        "changed labels and source seeds",
+        "activity or sequence topology and message direction",
+        "ordinary text versus multiple background colors and alias reuse"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_plain.puml",
+      "golden": "test-diagrams/perturbations/render-registry-unwind-scope/checker_activity_plain.svg",
+      "axes": [
+        "changed labels and source seeds",
+        "activity or sequence topology and message direction",
+        "ordinary text versus multiple background colors and alias reuse"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_background.puml",
+      "golden": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_background.svg",
+      "axes": [
+        "changed labels and source seeds",
+        "activity or sequence topology and message direction",
+        "ordinary text versus multiple background colors and alias reuse"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_plain.puml",
+      "golden": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_plain.svg",
+      "axes": [
+        "changed labels and source seeds",
+        "activity or sequence topology and message direction",
+        "ordinary text versus multiple background colors and alias reuse"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reused_color.puml",
+      "golden": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reused_color.svg",
+      "axes": [
+        "changed labels and source seeds",
+        "activity or sequence topology and message direction",
+        "ordinary text versus multiple background colors and alias reuse"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reverse.puml",
+      "golden": "test-diagrams/perturbations/render-registry-unwind-scope/checker_sequence_reverse.svg",
+      "axes": [
+        "changed labels and source seeds",
+        "activity or sequence topology and message direction",
+        "ordinary text versus multiple background colors and alias reuse"
+      ],
+      "result": "pass"
+    }
+  ],
+  "cleanup_results": {
+    "independent_checks": {
+      "passed": 4,
+      "total": 4
+    },
+    "post_panic_controls": {
+      "passed": 24,
+      "total": 24
+    },
+    "fresh_java_controls": {
+      "passed": 6,
+      "total": 6
+    },
+    "renderer_tests": {
+      "passed": 775,
+      "failed": 0
+    },
+    "candidate_recovery_exit": 0,
+    "candidate_corpus_exit": 1,
+    "full_tiers_exit": 101,
+    "details": "results.json",
+    "summary": {
+      "baseline_old907_repo_cwd": {
+        "in_process": {
+          "mismatch": 378,
+          "pass": 110,
+          "invalid_reference": 8,
+          "panic": 411
+        },
+        "cli": {
+          "mismatch": 525,
+          "pass": 372,
+          "invalid_reference": 8,
+          "process_failure": 2
+        }
+      },
+      "candidate_old907_repo_cwd": {
+        "in_process": {
+          "mismatch": 525,
+          "pass": 372,
+          "invalid_reference": 8,
+          "panic": 2
+        },
+        "cli": {
+          "mismatch": 525,
+          "pass": 372,
+          "invalid_reference": 8,
+          "process_failure": 2
+        }
+      },
+      "candidate_fresh6": {
+        "in_process": {
+          "pass": 6
+        },
+        "cli": {
+          "pass": 6
+        }
+      },
+      "builtin_full913_crate_cwd": {
+        "pass": 377,
+        "mismatch": 526,
+        "invalid_reference": 8,
+        "panic": 2,
+        "failure_count": 536
+      },
+      "builtin_old907_crate_cwd": {
+        "pass": 371,
+        "mismatch": 526,
+        "invalid_reference": 8,
+        "panic": 2
+      },
+      "cwd_dependency": {
+        "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+        "repo_root": "pass",
+        "crate_directory": "mismatch",
+        "reason": "Relative !include docs/... is resolved from cwd; cargo test uses crates/rustuml-oracle, independent CLI/replay uses repo root. Targeted 33-theme-case replay from crate cwd reproduces exactly this one status change."
+      },
+      "isolated_cli_comparison_changes": 0,
+      "candidate_old907_successful_outputs_byte_equal_cli": 897,
+      "candidate_fresh6_outputs_byte_equal_cli": 6,
+      "baseline_reporting_note": "The first baseline checker reported failures in JSON but exited 0. Before candidate execution, main was made fail-closed; assertions and render/comparison operations stayed unchanged. Baseline red evidence is its recorded failed checks and panic rows, not exit status."
+    }
+  },
+  "global_status": {
+    "accepted": false,
+    "product": {
+      "passed": 11181,
+      "eligible": 11251,
+      "gate": "red: pre-existing unlocked gains"
+    },
+    "assisted": {
+      "passed": 10497,
+      "eligible": 11251,
+      "failures": 754,
+      "skips": 1299,
+      "gate": "red"
+    },
+    "builtin_old907": {
+      "pass": 371,
+      "mismatch": 526,
+      "invalid_reference": 8,
+      "panic": 2
+    },
+    "builtin_fresh6": {
+      "pass": 6
+    },
+    "builtin_full913_gate": "red",
+    "guards": {
+      "passed": 4,
+      "failed": 2,
+      "failures": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "gate": "red",
+      "this_mechanism_violations": 0,
+      "exit_code": 101
+    }
+  },
+  "journey_scope": {
+    "exception": "In-process library resource lifetime requires a same-thread client after catch_unwind; fresh CLI subprocesses cannot detect leaked TLS. Real CLI/Java controls complement those lifecycle checks. No live provider or service is part of RustUML.",
+    "standing_enforcement": "Maker registry tests are wired into the existing library gate. All six new controls are discovered by the existing perturbation gate. checker.rs is additional independent executable evidence; README.md records reproduction."
+  },
+  "residue": [
+    "Global red suites preclude acceptance of T14 or the campaign. No other sequence mechanism is attested.",
+    "panic=abort, process termination, allocation abort, unsafe access to private state, and a user destructor panicking during unwind cannot guarantee cleanup and are outside this scope.",
+    "Historical JAR byte equality and font/Graphviz equivalence remain unproven.",
+    "Eight old invalid Java references remain failures; the cwd-dependent old include fixture remains unchanged."
+  ],
+  "verdict": "accepted",
+  "evidence_files": {
+    "results.json": {
+      "sha256": "7997cbd56e0de5a447d42b3674ac6da85e88fabc5291dcbdc1b23befd098e072"
+    },
+    "checker.rs": {
+      "sha256": "a504be4723ab78d79f1c8fa733889ffa9f7ca5b7549058477955e83fcde7316c"
+    },
+    "checker.py": {
+      "sha256": "20d88939f6c771f383a00777f2f6a4c33ef86329a47e1741560914f69d9d3c68"
+    }
+  },
+  "scratch_log_provenance": {
+    "baseline-build.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/baseline-build.log",
+      "sha256": "3bbf0dab3e4d344a548c20302154bed6ad5cae77b379d6198a4168256ac7886c",
+      "bytes": 5311
+    },
+    "baseline-corpus.json": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/baseline-corpus.json",
+      "sha256": "24959578fd690328863ce8fbd5895607b8f2414a65175da4d3649371142a6de6",
+      "bytes": 5897701
+    },
+    "baseline-corpus.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/baseline-corpus.log",
+      "sha256": "a6756ab33e526a79dc9aaa0d40f5a3848a3491e72f4fe4f91bcd3c764572679b",
+      "bytes": 57482
+    },
+    "baseline-recovery.json": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/baseline-recovery.json",
+      "sha256": "7448829dc817404c4465f790258b8108d8737ccede11937e2f3f872c86bcf914",
+      "bytes": 7464
+    },
+    "baseline-recovery.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/baseline-recovery.log",
+      "sha256": "e9c418a7d72519c71b23f68ed956390087a15df23cc59f4631afb605790a9d2b",
+      "bytes": 5328
+    },
+    "candidate-build.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/candidate-build.log",
+      "sha256": "095eb88a3ac287457b887f451c10df23c8a905e6c8d9053dec6b66d723dc5222",
+      "bytes": 373
+    },
+    "candidate-corpus.json": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/candidate-corpus.json",
+      "sha256": "f0a9a7006c39b09aeb1f0c0d7b39547930f2781f1a22bf7bc767caf2e9755a5e",
+      "bytes": 6756433
+    },
+    "candidate-corpus.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/candidate-corpus.log",
+      "sha256": "37631e2d25c94f65659f364f1d1cecfaaf0fe2b3878d1289ad7b6644e2d02699",
+      "bytes": 5866
+    },
+    "candidate-recovery.json": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/candidate-recovery.json",
+      "sha256": "44a6e49f649ab595efff697dd707c372318fb97bc6b2fd2eb34bda64c3d3ec8d",
+      "bytes": 13572
+    },
+    "candidate-recovery.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/candidate-recovery.log",
+      "sha256": "0732277a39b3ee2df8bbe1b8498b81ed3bb95dfc57ade335e18e3d6fae27aa42",
+      "bytes": 1480
+    },
+    "renderer-tests.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/renderer-tests.log",
+      "sha256": "286fc256de7e445fa7efb11e84094b57ee9cf24a32fe18ca0d90d82398897091",
+      "bytes": 56309
+    },
+    "full-tiers.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/full-tiers.log",
+      "sha256": "1d15ca525d97089a17ec1ce39645a926dbe633aa4e77e9c9ab5c3d29be1b0b00",
+      "bytes": 2974075
+    },
+    "crate-cwd-theme.json": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/crate-cwd-theme.json",
+      "sha256": "a365fe884073e5119dd5946811f5f46d617c54c1f383a6a6a72ed7f96993703c",
+      "bytes": 126367
+    },
+    "crate-cwd-theme.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/crate-cwd-theme.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "guards.log": {
+      "scratch_path": "/tmp/rustuml-registry-checker-bd87/guards.log",
+      "sha256": "4c144c615a07e518fe9ea3b6c81eae8181731a31533e598044f7d8c4bd721a66",
+      "bytes": 123332
+    }
+  },
+  "persistent_evidence_note": "results.json preserves per-source statuses and source/reference hashes for all 913 cases, full focused lifecycle reports and targeted cwd-probe results. Scratch logs are supplementary and may expire."
+}
