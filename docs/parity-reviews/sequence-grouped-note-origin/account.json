@@ -19,7 +19,6 @@
     "crates/rustuml-render/src/sequence.rs:render, note_group_extent and group_left_feedback near 9284-9465 and 10179-10217",
     "crates/rustuml-render/src/sequence.rs:render, folded LEFT note painting near 12446-12452"
   ],
-  "claimed_invariant": "A legacy folded participant note enclosed by groups contributes its raw component origin, truncated toward zero in the untranslated participant constraint solution, to the same left-deficit calculation as its enclosing headers. For a note at group depth d, the enclosing header contribution is component origin minus MARGIN5 minus d*MARGIN10. Participant translation is applied once for that contribution; painted note and group bounds are evaluated from the resulting participant locations, not translated snapshots of integer-rounded bounds.",
   "causal_divergence": "Rust first reserves the ceiled painted width of a left note, adds participant-based group_shift, then measures a note-only deficit and finally translates frozen group bounds. Truncation is not translation-invariant across zero. Measuring an already-reserved note loses both the original fractional participant constraint and the negative-to-positive truncation change. Both preserved ordered-drawable counterexamples have matching vertical lifecycle/return geometry but shifted horizontal anchors and narrowed frames. The older checker already rejected these inputs before b3eb1bcb; b3eb1bcb changes their projection further but did not originate their failure. The visible Serif case is a separate predeclared shared physical-font-metrics gap.",
   "planned_model_change": [
     "Keep grouped folded participant LEFT notes out of the early painted-width reservation; retain independent participant and external-arrow constraints.",
@@ -40,5 +39,17 @@
     "Run formatter, clippy and guards, reporting known repository-wide failures without weakening gates",
     "Parent dispatches an independent adversarial checker; implementer never authors review.json"
   ],
-  "journey_exception": "This renderer is a deterministic in-process CLI transformation with no provider/backend wire. The existing strict source-to-SVG product-path corpus and preserved perturbation harness are the behavior oracle; a local CLI pipe smoke additionally exercises process entry. Independent fresh Java counterexamples remain required for acceptance."
+  "journey_exception": "This renderer is a deterministic in-process CLI transformation with no provider/backend wire. The existing strict source-to-SVG product-path corpus and preserved perturbation harness are the behavior oracle; a local CLI pipe smoke additionally exercises process entry. Independent fresh Java counterexamples remain required for acceptance.",
+  "invariant": "A legacy folded participant note enclosed by groups contributes its raw component origin, truncated toward zero in the untranslated participant constraint solution, to the same left-deficit calculation as its enclosing headers. For a note at group depth d, the enclosing header contribution is component origin minus MARGIN5 minus d*MARGIN10. Participant translation is applied once for that contribution; painted note and group bounds are evaluated from the resulting participant locations, not translated snapshots of integer-rounded bounds.",
+  "planned_change": "Keep grouped folded participant LEFT notes out of the early painted-width reservation; retain independent participant and external-arrow constraints. Measure their component origins in the participant constraint coordinate system before group translation, using the existing accepted live-segment shifts. Include the recursively enclosing headers' MARGIN5/MARGIN10 contribution in the note deficit rather than adding a later translation to a rounded snapshot. Keep the correction local to legacy grouped folded participant LEFT notes. Preserve the existing broader group, note shape, Teoz, lifecycle, return, and font behavior; report any failing counterexample rather than expand this packet into a rewrite.",
+  "historical_diagnostic_after_implementation": {
+    "method": "Temporarily restored only b3eb1bcb^:crates/rustuml-render/src/sequence.rs in this isolated checkout, rebuilt diff_one, tested the three preserved sources, then restored the candidate bytes and rebuilt. Parser production changes in b3eb1bcb for sequence are comment-only; its other sequence parser changes are tests. This is a renderer-reversal diagnostic, not a claim to have tested the entire historical tree.",
+    "pre_integration_renderer_revision": "b02add36",
+    "results": {
+      "checker_renamed_nested_lifecycle_left": "pass",
+      "checker_renamed_deep_group_return_order": "pass",
+      "review4_chrome_visible_physical_font": "fail"
+    },
+    "conclusion": "The earlier rejected f0272d0e had the failures; 93aa179c18595e10b7846144a7b3357e0d5b2c4e subsequently corrected these inputs. b3eb1bcb reintroduced the two grouped-note failures by replacing that projection. The original account identified their earlier existence but did not yet establish this intervening recovery. The separate Serif failure predates b3eb1bcb."
+  }
 }

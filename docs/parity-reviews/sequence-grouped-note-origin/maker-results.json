@@ -1,0 +1,98 @@
+{
+  "kind": "implementation-worker observations; not an independent checker attestation",
+  "account_commit": "4532f693c4e94f01db72fe6655d51851ec94132a",
+  "base_revision": "716813f43f1453fe9e96bea4a10d1e07b42be08f",
+  "production_source_sha256": "31a632dbce0cb53d8e4d5a6500c87d2a2d2746745c22f8467ab25bc839bfbddd",
+  "scope": "Only crates/rustuml-render/src/sequence.rs production code and its unit tests changed. No parser, comparator, baseline, references, checker records, or target changes.",
+  "environment": {
+    "cargo_target_dir": "/tmp/rustuml-sequence-target",
+    "cargo_build_jobs": 4,
+    "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "java_manifest": "/tmp/rustuml-campaign-reference.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053"
+  },
+  "sequence_corpus": {
+    "command": "uv run python /tmp/rustuml-sequence-evidence/check_cluster.py before (and after); invokes release/examples/diff_one on every sequence source with and without --no-oracle",
+    "product_before": [
+      1411,
+      1411
+    ],
+    "product_after": [
+      1411,
+      1411
+    ],
+    "assisted_before": [
+      1411,
+      1411
+    ],
+    "assisted_after": [
+      1411,
+      1411
+    ],
+    "source_pairs": 1521,
+    "java_error_skips": 110
+  },
+  "preserved_sequence_perturbations": {
+    "source_glob": "test-diagrams/perturbations/sequence-*/*.puml",
+    "product_before": [
+      78,
+      81
+    ],
+    "product_after": [
+      80,
+      81
+    ],
+    "assisted_before": [
+      78,
+      81
+    ],
+    "assisted_after": [
+      80,
+      81
+    ],
+    "fixed": [
+      "sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left",
+      "sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order"
+    ],
+    "remaining": "sequence-inline-arrow-style/review4_chrome_visible_physical_font"
+  },
+  "fresh_java": {
+    "new_inputs": 56,
+    "regenerated_original_counterexamples": 2,
+    "passed": 58,
+    "failed": 0,
+    "invalid": 0,
+    "command": "absolute Java executable from manifest, -Djava.awt.headless=true -jar pinned.jar -tsvg -pipe; release/examples/diff_one --no-oracle input.puml",
+    "axes": [
+      "label width and line count",
+      "group depths 1 through 3 and group/opt nesting",
+      "initial activation versus inactive lifeline",
+      "external left ingress versus ordinary participant constraints",
+      "first versus second participant note anchor",
+      "competing right note and nested return ownership"
+    ],
+    "evidence_directory": "/tmp/rustuml-sequence-evidence/fresh",
+    "evidence_summaries": [
+      "/tmp/rustuml-sequence-evidence/fresh-after.json",
+      "/tmp/rustuml-sequence-evidence/fresh-expanded.json"
+    ],
+    "caveat": "Maker-generated inputs are not the independent checker held-outs. JAR is source-pinned, not historical-byte-identical; host font/Graphviz equivalence is unproven. Existing references were not overwritten."
+  },
+  "checks": {
+    "cargo check --workspace": "pass; pre-existing parser dead-code warning",
+    "cargo test --release -p rustuml-render -p rustuml-parser --lib sequence": "pass: 56 parser and 43 renderer tests (99 total); new renderer test covers six depth/activation combinations",
+    "cargo test --release -p rustuml-oracle --test harness_guards": "4 pass, 2 fail: decimal_literal_ratchet and parity_review_records_are_complete; new account awaits independent review",
+    "cargo fmt --check": "fails in unowned parse/class.rs and render/class.rs; rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs passes",
+    "cargo clippy --workspace -- -D warnings": "fails on existing parse/component.rs dead code and parse/salt.rs question_mark lint",
+    "CLI": "cargo build --release -p rustuml; rustuml -pipe -tsvg for both repaired preserved inputs produces the same parsed XML as the strict-tested render path",
+    "git diff --check": "pass",
+    "cargo clippy -p rustuml-render --no-deps -- -D warnings": "fails with 21 pre-existing render-crate diagnostics, including unchanged sequence chunks_exact, late initialization and arrow formatting borrows; no new changed-line diagnostics. See /tmp/rustuml-sequence-render-clippy.log."
+  },
+  "history": "Renderer-only reversal to b3eb1bcb^ passes the two grouped-note failures and still fails Serif. b3eb1bcb reintroduced the grouped-note regressions after intervening 93aa179c repairs; see account historical diagnostic.",
+  "remaining_work": [
+    "Parent schedules independent adversarial checker; no acceptance claim is made.",
+    "Shared text_render::metric_family maps Serif to Sans; fixing that needs a separate font provenance/metrics packet outside this worker ownership.",
+    "Global suites remain red. The parent-reported restored-stdlib baseline is product 11181/11251, assisted 10497/11251, perturbations 349/810. This worker measured sequence subsets only and does not claim a fresh aggregate result."
+  ]
+}
