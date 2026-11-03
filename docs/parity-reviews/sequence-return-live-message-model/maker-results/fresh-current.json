@@ -1,0 +1,362 @@
+[
+  {
+    "source": "fallback_18.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "fallback_19.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_0.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_1.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"113.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"114.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [70] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"107.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"113.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"114.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [70] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"107.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_10.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [61] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"276.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"277.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [68] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"281.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"282.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n  [75] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"286.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"287.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n  [92] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"280.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"281.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n  [99] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"275.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"276.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n  [106] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"270.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"271.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [61] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"276.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"277.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [68] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"281.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"282.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n  [75] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"286.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"287.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n  [92] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"280.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"281.4795\"), (\"x2\", \"328.4795\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n  [99] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"275.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"276.4795\"), (\"x2\", \"323.4795\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n  [106] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"270.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"271.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_11.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_12.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_13.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"25.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"26.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [70] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"19.77\"), (\"x2\", \"67.77\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"20.77\"), (\"x2\", \"67.77\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"25.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"26.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [70] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"19.77\"), (\"x2\", \"67.77\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"20.77\"), (\"x2\", \"67.77\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_14.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_15.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_16.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [61] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"25.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"26.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [68] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"30.77\"), (\"x2\", \"72.77\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"31.77\"), (\"x2\", \"72.77\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n  [75] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.77\"), (\"x2\", \"77.77\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"36.77\"), (\"x2\", \"77.77\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n  [92] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"29.77\"), (\"x2\", \"77.77\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"30.77\"), (\"x2\", \"77.77\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n  [99] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"24.77\"), (\"x2\", \"72.77\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"25.77\"), (\"x2\", \"72.77\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n  [106] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"19.77\"), (\"x2\", \"67.77\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"20.77\"), (\"x2\", \"67.77\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [61] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"25.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"26.77\"), (\"x2\", \"67.77\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [68] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"30.77\"), (\"x2\", \"72.77\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"31.77\"), (\"x2\", \"72.77\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n  [75] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.77\"), (\"x2\", \"77.77\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"36.77\"), (\"x2\", \"77.77\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n  [92] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"29.77\"), (\"x2\", \"77.77\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"30.77\"), (\"x2\", \"77.77\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n  [99] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"24.77\"), (\"x2\", \"72.77\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"25.77\"), (\"x2\", \"72.77\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n  [106] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"19.77\"), (\"x2\", \"67.77\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"20.77\"), (\"x2\", \"67.77\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_17.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_2.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_3.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_4.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [61] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"113.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"114.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [68] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"118.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"119.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n  [75] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"123.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"124.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n  [92] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"117.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"118.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n  [99] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"112.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"113.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n  [106] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"107.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [61] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"113.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"114.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [68] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"118.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"119.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"147.4199\"), (\"y2\", \"147.4199\")]\n  [75] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"123.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"124.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"189.7305\"), (\"y2\", \"189.7305\")]\n  [92] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"117.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"118.9116\"), (\"x2\", \"165.9116\"), (\"y1\", \"300.6621\"), (\"y2\", \"300.6621\")]\n  [99] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"112.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"113.9116\"), (\"x2\", \"160.9116\"), (\"y1\", \"342.9727\"), (\"y2\", \"342.9727\")]\n  [106] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"107.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.9116\"), (\"x2\", \"155.9116\"), (\"y1\", \"385.2832\"), (\"y2\", \"385.2832\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_5.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_6.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_7.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"276.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"277.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [70] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"270.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"271.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [53] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"276.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"277.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"105.1094\"), (\"y2\", \"105.1094\")]\n  [70] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"270.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"271.4795\"), (\"x2\", \"318.4795\"), (\"y1\", \"216.041\"), (\"y2\", \"216.041\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_8.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "return_9.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  }
+]

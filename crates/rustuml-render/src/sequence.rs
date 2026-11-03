@@ -7482,14 +7482,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     // CommandReturn#executeArg materializes a Message, including self returns.
     // Resolve ownership first, then feed those events through the existing
-    // self-message geometry rather than treating equal endpoints as a span.
+    // message geometry. In particular, MessageArrow samples both live segments
+    // for constraints and endpoints; a separate return path loses their depth.
+    // Non-self Teoz and MessageExo use different models and remain separate.
     // Keep source identity/event indices; this is a render-local model. Every
     // restart replaces at least one Return, so this lowering cannot cycle.
     let mut lowered = None;
     for (index, event) in diagram.events.iter().enumerate() {
         if let Event::Return(ret) = event
             && let Some(context) = horizontal_life_lines.return_context(index)
-            && context.from == context.to
+            && (context.from == context.to
+                || (!diagram.teoz
+                    && id_to_idx.contains_key(context.from.as_str())
+                    && id_to_idx.contains_key(context.to.as_str())))
         {
             let normalized = lowered.get_or_insert_with(|| diagram.clone());
             let mut arrow = context.arrow.clone();
@@ -13850,6 +13855,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn returns_share_message_constraints_live_endpoints_and_arrow_configuration() {
+        for declarations in [
+            "participant Caller\nparticipant Server\nparticipant Delegate\n",
+            "participant Delegate\nparticipant Server\nparticipant Caller\n",
+        ] {
+            for depth in 1..=3 {
+                for arrow in ["->", "->>", "-[#purple]>"] {
+                    let dotted = arrow.replacen('-', "--", 1);
+                    let calls = format!(
+                        "Caller {arrow} Server ++ : enter\n{}Server {arrow} Delegate ++ : work\n",
+                        format!("Server {arrow} Server ++ : recur\n").repeat(depth)
+                    );
+                    let returns = format!(
+                        "return delegated result with wide label\n{}return complete\n",
+                        "return local\n".repeat(depth)
+                    );
+                    let explicit = format!(
+                        "Delegate {dotted} Server -- : delegated result with wide label\n{}Server {dotted} Caller -- : complete\n",
+                        format!("Server {dotted} Server -- : local\n").repeat(depth)
+                    );
+                    let actual = rustuml_parser::parse::parse(&format!(
+                        "@startuml\n{declarations}{calls}{returns}@enduml\n"
+                    ))
+                    .unwrap();
+                    let mut reference = rustuml_parser::parse::parse(&format!(
+                        "@startuml\n{declarations}{calls}{explicit}@enduml\n"
+                    ))
+                    .unwrap();
+                    reference.meta_mut().source = actual.meta().source.clone();
+                    assert_eq!(crate::render_svg(&actual), crate::render_svg(&reference));
+                }
+            }
+        }
+    }
 
     #[test]
     fn self_returns_share_explicit_self_message_geometry_and_ownership() {
