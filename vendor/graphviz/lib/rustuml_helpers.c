@@ -143,7 +143,127 @@ int rustuml_node_uses_text_span_dimensions(Agnode_t *node) {
     return value && strcmp(value, "true") == 0;
 }
 
+/* SvekNode.appendLabelHtml emits empty fixed cells with zero table margins.
+ * This static subset follows htmllex.doInt (truncate dimensions),
+ * htmltable.size_html_tbl (column/row maxima), and pos_html_cell (center
+ * fixed cells in their allocated row/column). No text metrics or Expat needed.
+ * Unsupported attributes/content return to Graphviz's ordinary HTML parser.
+ */
+static int rustuml_make_empty_grid_label(textlabel_t *label) {
+    const char *prefix = "<TABLE BORDER=\"0\" CELLBORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\">";
+    if (!label || !label->text || strncmp(label->text, prefix, strlen(prefix)))
+        return 0;
+    htmllabel_t *html = calloc(1, sizeof(*html));
+    htmltbl_t *table = calloc(1, sizeof(*table));
+    if (!html || !table) { free(html); free(table); return 0; }
+    html->kind = HTML_TBL;
+    html->u.tbl = table;
+    size_t count = 0;
+    const char *cursor = label->text + strlen(prefix);
+    while (!strncmp(cursor, "<TR>", 4)) {
+        cursor += 4;
+        size_t col = 0;
+        while (!strncmp(cursor, "<TD", 3)) {
+            if (table->row_count == UINT16_MAX || col == UINT16_MAX)
+                goto unsupported;
+            cursor += 3;
+            htmlcell_t *cell = calloc(1, sizeof(*cell));
+            htmlcell_t **cells = realloc(table->cells, (count + 2) * sizeof(*cells));
+            if (!cell || !cells) {
+                free(cell);
+                if (cells) table->cells = cells;
+                goto unsupported;
+            }
+            table->cells = cells;
+            table->cells[count++] = cell;
+            table->cells[count] = NULL;
+            cell->parent = table;
+            cell->row = (uint16_t)table->row_count;
+            cell->col = (uint16_t)col++;
+            cell->rowspan = cell->colspan = 1;
+            while (*cursor == ' ') {
+                cursor++;
+                const char *value = strchr(cursor, '=');
+                if (!value || value[1] != '"') goto unsupported;
+                size_t keylen = (size_t)(value - cursor);
+                value += 2;
+                const char *end = strchr(value, '"');
+                if (!end) goto unsupported;
+                if ((keylen == 5 && !strncmp(cursor, "WIDTH", 5)) ||
+                    (keylen == 6 && !strncmp(cursor, "HEIGHT", 6))) {
+                    char *parsed_end;
+                    errno = 0;
+                    double number = strtod(value, &parsed_end);
+                    if (errno || parsed_end != end || !isfinite(number) ||
+                        number < 0 || number > USHRT_MAX) goto unsupported;
+                    if (keylen == 5) cell->data.width = (unsigned short)number;
+                    else cell->data.height = (unsigned short)number;
+                } else if (keylen == 9 && !strncmp(cursor, "FIXEDSIZE", 9)) {
+                    if (end - value != 4 || strncmp(value, "TRUE", 4)) goto unsupported;
+                    cell->data.flags |= FIXED_FLAG;
+                } else if (keylen == 4 && !strncmp(cursor, "PORT", 4)) {
+                    if (cell->data.port) goto unsupported;
+                    cell->data.port = malloc((size_t)(end - value) + 1);
+                    if (!cell->data.port) goto unsupported;
+                    memcpy(cell->data.port, value, (size_t)(end - value));
+                    cell->data.port[end - value] = '\0';
+                } else if (!(keylen == 7 && !strncmp(cursor, "BGCOLOR", 7))) {
+                    goto unsupported;
+                }
+                cursor = end + 1;
+            }
+            if (strncmp(cursor, "></TD>", 6)) goto unsupported;
+            cursor += 6;
+        }
+        if (!col || strncmp(cursor, "</TR>", 5)) goto unsupported;
+        if (table->row_count && table->column_count != col) goto unsupported;
+        table->column_count = col;
+        table->row_count++;
+        cursor += 5;
+    }
+    if (!count || strcmp(cursor, "</TABLE>")) goto unsupported;
+    table->widths = calloc(table->column_count + 1, sizeof(double));
+    table->heights = calloc(table->row_count + 1, sizeof(double));
+    if (!table->widths || !table->heights) goto unsupported;
+    for (size_t i = 0; i < count; i++) {
+        htmlcell_t *cell = table->cells[i];
+        table->widths[cell->col] = fmax(table->widths[cell->col], cell->data.width);
+        table->heights[cell->row] = fmax(table->heights[cell->row], cell->data.height);
+    }
+    double width = 0, height = 0;
+    for (size_t i = 0; i < table->column_count; i++) width += table->widths[i];
+    for (size_t i = 0; i < table->row_count; i++) height += table->heights[i];
+    table->data.box = (boxf){{-width / 2, -height / 2}, {width / 2, height / 2}};
+    for (size_t i = 0; i < count; i++) {
+        htmlcell_t *cell = table->cells[i];
+        double x = -width / 2, y = height / 2;
+        for (size_t c = 0; c < cell->col; c++) x += table->widths[c];
+        for (size_t r = 0; r < cell->row; r++) y -= table->heights[r];
+        double w = table->widths[cell->col], h = table->heights[cell->row];
+        if (cell->data.flags & FIXED_FLAG) {
+            x += (w - cell->data.width) / 2;
+            y -= (h - cell->data.height) / 2;
+            w = cell->data.width; h = cell->data.height;
+        }
+        cell->data.box = (boxf){{x, y - h}, {x + w, y}};
+        cell->data.sides = (cell->col == 0 ? LEFT : 0)
+            | (cell->col + 1 == table->column_count ? RIGHT : 0)
+            | (cell->row == 0 ? TOP : 0)
+            | (cell->row + 1 == table->row_count ? BOTTOM : 0);
+    }
+    label->dimen = (pointf){width, height};
+    label->space = (pointf){0, 0};
+    label->u.html = html;
+    return 1;
+unsupported:
+    // Graphviz free_html_tbl expects a terminated cell array.
+    if (!table->cells) { free(table); free(html); return 0; }
+    free_html_label(html, 1);
+    return 0;
+}
+
 int rustuml_make_fixed_html_table_label(textlabel_t *label) {
+    if (rustuml_make_empty_grid_label(label)) return 1;
     static const char *const prefix = "<TABLE BGCOLOR=\"#00000";
     static const char *const body = "\"><TR><TD></TD></TR></TABLE>";
     static const char *const row_table_prefix =

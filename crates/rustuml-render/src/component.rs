@@ -1959,12 +1959,11 @@ pub fn render_with_oracle(
             cluster.y += component_document_margin.top;
         }
     }
+    // SvekNode.appendLabelHtml's symmetric shield grid centers port h.
+    // Native html_port now owns that cell; no rounded-table compensation.
     for (position, interface) in iface_positions.iter_mut().zip(&diagram.interfaces) {
-        if let Some((shield_x, _)) = component_interface_shield(diagram, interface) {
-            // Java's three fixed table cells round independently. When the
-            // left shield cell receives the remainder, the painted `h` cell
-            // is one point right of the combined table envelope.
-            position.0 = round_svek_input_coord(position.0 + shield_x.round() - shield_x.floor());
+        if component_interface_shield(diagram, interface).is_some() {
+            position.0 = round_svek_input_coord(position.0);
             position.1 = round_svek_input_coord(position.1);
         }
     }
@@ -5266,8 +5265,13 @@ fn component_svek_translation(
             // image margin, so `SvekResult.calculateDimension` sees the
             // interface's painted minimum one pixel inside the image origin.
             } else if component_interface_shield(diagram, interface).is_some() {
+                // EntityImageDescription.drawU paints the hidden description
+                // beneath the circle. LimitFinder must include that text, not
+                // just the center cell of SvekNode's unpainted shield.
+                let text_width = text_render::measure(&interface.label, FONT_SIZE, false);
                 (
-                    (position.width - IFACE_NODE_SIZE) / 2.0 + IFACE_MARGIN,
+                    ((position.width - text_width) / 2.0)
+                        .min((position.width - IFACE_NODE_SIZE) / 2.0 + IFACE_MARGIN),
                     (position.height - IFACE_NODE_SIZE) / 2.0 + IFACE_MARGIN,
                 )
             } else {
@@ -8711,8 +8715,8 @@ mod tests {
     }
 
     #[test]
-    fn shield_center_offsets_follow_display_metrics_not_aliases_or_owners() {
-        fn offsets(grouped: bool) -> Vec<f64> {
+    fn shield_reservation_follows_display_metrics_not_aliases_or_owners() {
+        fn shields(grouped: bool) -> Vec<(f64, f64)> {
             let wrapper = if grouped {
                 ("component RenamedShell9701 {\n", "}\n")
             } else {
@@ -8737,16 +8741,14 @@ mod tests {
             diagram
                 .interfaces
                 .iter()
-                .map(|interface| {
-                    let (shield_x, _) =
-                        super::component_interface_shield(&diagram, interface).unwrap();
-                    shield_x.round() - shield_x.floor()
-                })
+                .map(|interface| super::component_interface_shield(&diagram, interface).unwrap())
                 .collect()
         }
 
-        assert_eq!(offsets(false), [1.0, 0.0]);
-        assert_eq!(offsets(true), [1.0, 0.0]);
+        let root = shields(false);
+        assert_eq!(root, shields(true));
+        assert!(root[1].0 > root[0].0, "wider display reserves more shield");
+        assert_eq!(root[0].1, root[1].1);
     }
 
     #[test]
