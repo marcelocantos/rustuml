@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-code-identity",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "maker proposal, not accepted",
+  "java_locations": [
+    "command/NameAndCodeParser.java#nameAndCodeForClassWithGeneric,codeForClass",
+    "net/atmp/CucaDiagram.java#cleanId,quarkInContextSafe",
+    "classdiagram/command/CommandLinkClass.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#strip_creole_for_id,try_entity_decl,try_relationship,try_note"
+  ],
+  "invariant": "Quoted CODE retains spaces and markup characters as identity; only surrounding quotes are removed. Display rendering and SVG qualified-name escaping happen later. The same canonical code is used for declaration, relationship and note lookup.",
+  "causal_divergence": "strip_creole_for_id strips Creole and HTML and replaces whitespace with underscores before constructing quarks. Explicit note target lookup now exposes the mismatch: quoted Air Probe is declared as Air_Probe but Java cleanId only removes quotes.",
+  "planned_model_change": "Replace the shared quoted-code transformation with quote-unwrapped identity preservation, for declarations and relation endpoints; keep display rendering/escaping unchanged. Continue using existing quark resolution for note targets.",
+  "perturbation_axes": [
+    "quoted identifiers with spaces/markup versus explicit aliases",
+    "note and relationship references inside nested containers",
+    "identity collisions between spaced and underscore codes"
+  ],
+  "verification": "Fresh Java/CLI pair including quoted-note and collision/relationship cases; both main tiers and preserved perturbations. No independent acceptance claim."
+}
