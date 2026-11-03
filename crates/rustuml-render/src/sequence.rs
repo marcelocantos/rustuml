@@ -684,9 +684,6 @@ const SELF_MSG_DROP: f64 = 13.0;
 const SELF_MSG_LIFELINE_CLOSE_INSET: f64 = 7.0;
 /// Text x offset from center_x for self-messages.
 const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
-/// Bare `note right` attached to a self-message places the note top at
-/// `arrow_y - first_line_height + this`.
-const SELF_MSG_RIGHT_NOTE_Y_PAD: f64 = 2.5;
 /// Minimum preferred width a self-message reserves in the gap to the next
 /// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns
 /// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.
@@ -3124,12 +3121,25 @@ struct SequenceSelfArrow {
 }
 
 impl SequenceSelfArrow {
-    fn new(depth: usize, padded_text_width: f64, activates: bool, deactivates: bool) -> Self {
+    fn new(
+        depth: usize,
+        padded_text_width: f64,
+        activates: bool,
+        deactivates: bool,
+        reverse: bool,
+    ) -> Self {
         let (left, right) = sequence_live_segment(0.0, depth);
         let activation_delta = if activates { ACTIVATION_HALF_W } else { 0.0 };
+        let width = padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH) + right - left;
         Self {
-            start: right + activation_delta,
-            width: padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH) + right - left,
+            // MessageSelfArrow#getStartingX, account a519af2d: reverse uses
+            // pos2 minus full preferred width, independently of deltaX.
+            start: if reverse {
+                right - width
+            } else {
+                right + activation_delta
+            },
+            width,
             segment_length: right - left,
             // Step1Message#createMessageSelfArrow independently adds the two
             // lifecycle deltas, then supplies deltaY as Area.deltaX1.
@@ -7204,7 +7214,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note_font_size_f,
                             &note_font_family,
                         );
-                        let self_message_right_note = note.position == NotePosition::Right
+                        let legacy_self_note = !diagram.teoz
+                            && note.shape == NoteShape::Note
                             && matches!(
                                 diagram.events.get(owner),
                                 Some(Event::Message(msg)) if msg.from == msg.to
@@ -7219,8 +7230,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                        let extra = if self_message_right_note {
-                            0.0
+                        let extra = if legacy_self_note {
+                            // ArrowAndNoteBox centers the arrow within max(Ha,Hn).
+                            // Rose self: text + marginY*2 + deltaY + loop + paddingY*2.
+                            let arrow_height = owner_text_height
+                                + 2.0
+                                + ARROW_HALF_H
+                                + SELF_MSG_DROP
+                                + 2.0 * ARROW_HALF_H
+                                + 2.0 * global_padding;
+                            // Rose note: text + marginY*2 + paddingY*2 + shadow.
+                            let note_height = metrics.total_height
+                                + 4.0 * ROSE_NOTE_PADDING_Y
+                                + 2.0 * note_global_padding
+                                + note_shadow_delta;
+                            (note_height - arrow_height).max(0.0) / 2.0
                         } else {
                             note_msg_extra_base(note.shape)
                                 + note_msg_text_tail(&metrics)
@@ -7399,13 +7423,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // Position note_top so the arrow sits at
                         // note_top + NOTE_MSG_ARROW_OFFSET + (lines-1)*MSG_TEXT_HEIGHT/2.
                         let arrow_y = event_y_positions.get(owner).copied().unwrap_or(y);
-                        let self_message_right_note = note.position == NotePosition::Right
+                        let legacy_self_note = !diagram.teoz
+                            && note.shape == NoteShape::Note
                             && matches!(
                                 diagram.events.get(owner),
                                 Some(Event::Message(msg)) if msg.from == msg.to
                             );
-                        let note_top = if self_message_right_note {
-                            arrow_y - metrics.first_height + SELF_MSG_RIGHT_NOTE_Y_PAD
+                        let note_top = if legacy_self_note {
+                            let (_, text_height) =
+                                event_message_text_height(&diagram.events[owner]);
+                            let arrow_height = text_height
+                                + 2.0
+                                + ARROW_HALF_H
+                                + SELF_MSG_DROP
+                                + 2.0 * ARROW_HALF_H
+                                + 2.0 * global_padding;
+                            let note_height = metrics.total_height
+                                + 4.0 * ROSE_NOTE_PADDING_Y
+                                + 2.0 * note_global_padding
+                                + note_shadow_delta;
+                            // ArrowAndNoteBox constructor centers both children.
+                            // Undo the arrow's padded start-point offset, then
+                            // apply the relative centering and note paint padding.
+                            arrow_y - (text_height + 2.0 + ARROW_HALF_H + 2.0 * global_padding)
+                                + (arrow_height - note_height) / 2.0
+                                + ROSE_NOTE_PADDING_Y
                         } else {
                             let separator_attach_adjust = note
                                 .text
@@ -7666,6 +7708,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let n = participants.len();
     let mut pair_max_label_width = vec![0.0_f64; n.saturating_sub(1)];
+    let mut self_constraint_before_first = 0.0_f64;
 
     // Multi-span constraints (left, right_exclusive, needed_total_width).
     // Applied as a post-pass: only widen pairs in span if cumulative existing
@@ -7707,7 +7750,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // depth 1). This pushes a right-hand neighbour further right.
                         // (When fi is the rightmost participant there is no neighbour;
                         // the right extent then feeds the canvas edge after Phase 3.)
-                        if fi + 1 < n {
+                        let reverse = msg.arrow.direction == ArrowDirection::RightToLeft;
+                        if reverse || fi + 1 < n {
                             let label = process_label(&msg.label);
                             let label_w = message_label_width(&label);
 
@@ -7757,10 +7801,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 // where segment.getLength() = rightShift + leftShift of
                                 // the lifeline at this level. Counted twice, matching
                                 // PlantUML's double-add via getPreferredWidth.
-                                SequenceSelfArrow::new(depth, text_pref, false, false)
+                                SequenceSelfArrow::new(depth, text_pref, false, false, reverse)
                                     .constraint_after()
                             };
-                            pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
+                            // Step1Message#prepareMessage selects ConstraintBefore
+                            // for reverse self arrows; ConstraintSet's first border
+                            // is a real participant at x=0, not an absent neighbour.
+                            if reverse {
+                                if fi == 0 {
+                                    if !diagram.teoz {
+                                        self_constraint_before_first =
+                                            self_constraint_before_first.max(needed);
+                                    }
+                                } else {
+                                    pair_max_label_width[fi - 1] =
+                                        pair_max_label_width[fi - 1].max(needed);
+                                }
+                            } else {
+                                pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
+                            }
                         }
                     } else {
                         let label = process_label(&msg.label);
@@ -8069,7 +8128,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             .events
             .iter()
             .any(|event| matches!(event, Event::GroupStart(_)));
-    let mut min_first_center_x: f64 = 0.0;
+    let mut min_first_center_x = self_constraint_before_first;
     let mut min_scan_group_depth = 0usize;
     let mut min_scan_auto = AutoState::default();
     for event in &diagram.events {
@@ -8531,6 +8590,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             padded_text_width,
                             activates,
                             state.has_deactivate,
+                            msg.arrow.direction == ArrowDirection::RightToLeft,
                         );
                         self_arrow_by_event.insert(idx, model);
                         let self_right = if diagram.teoz {
@@ -8538,12 +8598,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             cx_base
                                 + horizontal_life_lines.max_depth(&msg.from) as f64
                                     * ACTIVATION_HALF_W
-                                + padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH)
+                                + if msg.arrow.direction == ArrowDirection::RightToLeft {
+                                    0.0
+                                } else {
+                                    padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH)
+                                }
                         } else {
                             // ConstraintSet has a real last-border constraint even
                             // without a following participant. prepareMissingSpace
                             // then compares that border with MessageSelfArrow.maxX.
-                            let border = if id_to_idx.get(&msg.from) == Some(&(n - 1)) {
+                            let border = if msg.arrow.direction != ArrowDirection::RightToLeft
+                                && id_to_idx.get(&msg.from) == Some(&(n - 1))
+                            {
                                 model.constraint_after()
                             } else {
                                 0.0
@@ -9962,6 +10028,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             };
             min_tile = min_tile.min(origin);
+        }
+        // CommunicationTileSelf#getMinX: reverse tile starts left of the
+        // center by preferred component width and an active half-live width.
+        for (&event_index, model) in &self_arrow_by_event {
+            if let Event::Message(message) = &diagram.events[event_index]
+                && message.arrow.direction == ArrowDirection::RightToLeft
+                && let Some(&index) = id_to_idx.get(message.from.as_str())
+            {
+                let depth = horizontal_life_lines
+                    .depth_before(&message.from, horizontal_event_y_positions[event_index]);
+                min_tile = min_tile.min(
+                    participants[index].center_x
+                        - (model.width - model.segment_length)
+                        - if depth > 0 { ACTIVATION_HALF_W } else { 0.0 },
+                );
+            }
         }
         let shift = HEAD_BOX_Y + TEOZ_PARTICIPANT_SHIFT - min_tile;
         for participant in &mut participants {
@@ -11794,6 +11876,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Self-message: U-shaped loopback. When the participant is
                     // activated, the loop starts from the activation bar's right
                     // edge (lifeline center + ACTIVATION_HALF_W).
+                    let reverse = msg.arrow.direction == ArrowDirection::RightToLeft;
                     let existing_depth = from_depth;
                     let self_final_depth = life_lines
                         .depth_at(&msg.from, ordinate + SELF_MSG_DROP - ACTIVATION_HALF_W);
@@ -11802,6 +11885,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         matches!(msg.activation, Some(ActivationChange::Deactivate));
                     let active_anchor = if !diagram.teoz {
                         from_x + self_arrow_by_event[&ev_idx].start
+                    } else if reverse {
+                        let model = self_arrow_by_event[&ev_idx];
+                        from_x
+                            - (model.width - model.segment_length)
+                            - if existing_depth > 0 {
+                                ACTIVATION_HALF_W
+                            } else {
+                                0.0
+                            }
                     } else if activates_self {
                         from_x + (existing_depth + 1) as f64 * ACTIVATION_HALF_W
                     } else if deactivates_self && existing_depth > 0 {
@@ -11817,7 +11909,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         from_x
                     };
-                    let start_x = if !diagram.teoz {
+                    let mut start_x = if !diagram.teoz {
                         // ComponentRoseSelfArrow#drawRightSide: x1 = min(deltaY, 0).
                         active_anchor + self_arrow_by_event[&ev_idx].component_delta_y.min(0.0)
                     } else if activates_self {
@@ -11831,7 +11923,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         msg_y + self_arrow_by_event[&ev_idx].component_delta_y
                     };
-                    let special_return_tip = if !diagram.teoz {
+                    let mut special_return_tip = if !diagram.teoz {
                         // ComponentRoseSelfArrow#drawRightSide: x2 is -deltaY
                         // when positive, otherwise one; ASYNC adjusts the stroke later.
                         let delta = self_arrow_by_event[&ev_idx].component_delta_y;
@@ -11843,7 +11935,51 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         None
                     };
-                    let loop_right = active_anchor + SELF_MSG_EXTEND;
+                    let mut loop_right = active_anchor + SELF_MSG_EXTEND;
+                    let mut reverse_return_stroke = None;
+                    if reverse {
+                        // ComponentRoseSelfArrow#drawLeftSide, account a519af2d.
+                        // Its prefTextWidth is the component width, not the
+                        // MessageSelfArrow area width (which adds live thickness).
+                        let model = self_arrow_by_event[&ev_idx];
+                        let pref = model.width - model.segment_length;
+                        let level = existing_depth;
+                        let delta = if diagram.teoz {
+                            (i32::from(deactivates_self) - i32::from(activates_self)) as f64
+                                * ACTIVATION_HALF_W
+                        } else {
+                            model.component_delta_y
+                        };
+                        let indent = level as f64 * ACTIVATION_HALF_W;
+                        let (mut x1, mut x2) = (0.0, 1.0);
+                        if delta < 0.0 {
+                            x2 += if level > 0 {
+                                -indent
+                            } else {
+                                ACTIVATION_HALF_W
+                            };
+                        } else if delta > 0.0 {
+                            if level > 1 {
+                                x1 += ACTIVATION_HALF_W - indent;
+                            }
+                            if level == 1 {
+                                x2 -= ACTIVATION_HALF_W;
+                            }
+                        } else if level > 1 {
+                            x1 -= indent - ACTIVATION_HALF_W;
+                            x2 -= indent - ACTIVATION_HALF_W;
+                        }
+                        let full_normal = !is_open && !is_cross && head_half.is_none();
+                        let extra_line = if full_normal { 1.0 } else { 0.0 };
+                        start_x = active_anchor + pref - (x1 + 1.0);
+                        loop_right = active_anchor + pref - SELF_MSG_EXTEND;
+                        reverse_return_stroke = Some(active_anchor + pref - x2 - extra_line);
+                        if full_normal || is_open || (head_half.is_some() && thin_head) {
+                            x2 += 1.0;
+                        }
+                        special_return_tip = Some(active_anchor + pref - x2);
+                    }
+                    let head_direction = if reverse { -1.0 } else { 1.0 };
                     let loop_bottom = draw_y + SELF_MSG_DROP;
                     let text_x = active_anchor + SELF_MSG_TEXT_X_PAD + global_padding;
                     let text_y_pos = draw_y
@@ -11870,8 +12006,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &arrow_color,
                         loop_thickness,
                         line_style,
-                        fmt_coord(start_x),
-                        fmt_coord(loop_right),
+                        fmt_coord(if reverse { loop_right } else { start_x }),
+                        fmt_coord(if reverse { start_x } else { loop_right }),
                         fmt_coord(draw_y),
                         fmt_coord(draw_y),
                     )
@@ -11894,7 +12030,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Line 3: horizontal left (from loop right back toward lifeline)
                     // For filled arrows, the return line starts 1px right of center
                     // For open arrows, the return line starts at center
-                    let return_left = if is_cross {
+                    let return_left = if let Some(endpoint) = reverse_return_stroke {
+                        endpoint
+                    } else if is_cross {
                         // A self `->x` return segment does not meet the
                         // lifeline. Java places a 10px cross to the right of
                         // the self-loop anchor and starts the segment slightly
@@ -11920,8 +12058,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &arrow_color,
                         loop_thickness,
                         line_style,
-                        fmt_coord(return_left),
-                        fmt_coord(loop_right),
+                        fmt_coord(if reverse { loop_right } else { return_left }),
+                        fmt_coord(if reverse { return_left } else { loop_right }),
                         fmt_coord(loop_bottom),
                         fmt_coord(loop_bottom),
                     )
@@ -11966,7 +12104,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                                 &arrow_color,
                                 fmt_coord(tip_x),
-                                fmt_coord(tip_x + ARROW_SIZE),
+                                fmt_coord(tip_x + head_direction * ARROW_SIZE),
                                 fmt_coord(loop_bottom),
                                 fmt_coord(wing_y),
                             )
@@ -11983,11 +12121,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{}",
-                                fmt_coord(tip_x + ARROW_SIZE),
+                                fmt_coord(tip_x + head_direction * ARROW_SIZE),
                                 fmt_coord(loop_bottom),
                                 fmt_coord(tip_x),
                                 fmt_coord(loop_bottom),
-                                fmt_coord(tip_x + ARROW_SIZE),
+                                fmt_coord(tip_x + head_direction * ARROW_SIZE),
                                 fmt_coord(wing_y),
                             );
                             write!(
@@ -12005,7 +12143,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                             &arrow_color,
                             fmt_coord(tip_x),
-                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(tip_x + head_direction * ARROW_SIZE),
                             fmt_coord(loop_bottom),
                             fmt_coord(loop_bottom - ARROW_HALF_H),
                         )
@@ -12015,7 +12153,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             r##"<line style="stroke:{};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
                             &arrow_color,
                             fmt_coord(tip_x),
-                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(tip_x + head_direction * ARROW_SIZE),
                             fmt_coord(loop_bottom),
                             fmt_coord(loop_bottom + ARROW_HALF_H),
                         )
@@ -12025,13 +12163,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let tip_x = special_return_tip.unwrap_or(active_anchor + 1.0);
                         let arrow_pts = format!(
                             "{},{},{},{},{},{},{},{}",
-                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(tip_x + head_direction * ARROW_SIZE),
                             fmt_coord(loop_bottom - ARROW_HALF_H),
                             fmt_coord(tip_x),
                             fmt_coord(loop_bottom),
-                            fmt_coord(tip_x + ARROW_SIZE),
+                            fmt_coord(tip_x + head_direction * ARROW_SIZE),
                             fmt_coord(loop_bottom + ARROW_HALF_H),
-                            fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
+                            fmt_coord(tip_x + head_direction * (ARROW_SIZE - FILLED_ARROW_NOTCH)),
                             fmt_coord(loop_bottom),
                         );
                         write!(
