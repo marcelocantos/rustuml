@@ -1,0 +1,157 @@
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:72:15
+   |
+72 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 1.15s
+     Running tests/golden_no_oracle.rs (/tmp/rustuml-seq-recovery/target/release/deps/golden_no_oracle-901d5e92a3796558)
+
+running 1 test
+running 12550 golden pairs (no-oracle tier)...
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.xp2, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.exit1, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.xp2, port P unrecognized
+Warning: Unable to reclaim box space in spline routing for edge "PCCT" -> "VPIFC". Something is probably seriously wrong.
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+
+golden_no_oracle: 11181/11251 eligible pairs pass per family:
+  activity          1299/1299
+  archimate           48/48
+  chart               25/25
+  class             1963/1971
+  combo              318/327
+  component          663/663
+  creole             639/639
+  deployment         495/495
+  dot                 25/25
+  ebnf                25/25
+  edge-cases         760/777
+  er                 153/157
+  gantt              114/114
+  git                 25/25
+  json-yaml          147/147
+  links               50/50
+  math                50/50
+  mindmap            157/157
+  multi-diagram       53/53
+  nwdiag              89/89
+  object             155/155
+  preprocessing      285/307
+  regex               45/45
+  rendering           95/98
+  salt               103/103
+  sequence          1411/1411
+  skinparam          409/410
+  sprites             49/49
+  state              895/901
+  timing             141/141
+  type-detection      42/42
+  usecase            315/315
+  wbs                138/138
+  wire                 0/0
+
+thread 'golden_no_oracle' (586852423) panicked at crates/rustuml-oracle/tests/golden_no_oracle.rs:219:5:
+no-oracle progress not locked in (or corpus changed) — rerun with HARNESS_WRITE_BASELINES=1 and commit the baseline:
+  class: pass 1962 -> 1963 (eligible 1971 -> 1971)
+  preprocessing: pass 284 -> 285 (eligible 307 -> 307)
+  rendering: pass 91 -> 95 (eligible 98 -> 98)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test golden_no_oracle ... FAILED
+
+failures:
+
+failures:
+    golden_no_oracle
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.70s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_no_oracle`
+     Running tests/golden_pairs.rs (/tmp/rustuml-seq-recovery/target/release/deps/golden_pairs-88a993b69eca84e7)
+
+running 1 test
+running 12550 golden pairs...
+
+golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped
+  panics: 0, xml diff: 754, other: 0
+  parked (numeric-only, allow-listed): 0 (max dev 0.0000)
+  park candidates (numeric-only, NOT yet parked, still counted as failures): 746 (max dev 441.8783) → see golden_ulp_candidates.txt
+  skip breakdown: parse=0, golden_error=1199, unsupported_kw=0, other=100
+  per-directory failures:
+      437 class
+      113 combo
+       81 edge-cases
+       52 er
+       28 preprocessing
+       17 rendering
+        7 deployment
+        7 state
+        4 creole
+        4 skinparam
+        3 component
+        1 type-detection
+test golden_pairs ... FAILED
+
+failures:
+
+failures:
+    golden_pairs
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.15s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`
+error: 2 targets failed:
+    `-p rustuml-oracle --test golden_no_oracle`
+    `-p rustuml-oracle --test golden_pairs`
