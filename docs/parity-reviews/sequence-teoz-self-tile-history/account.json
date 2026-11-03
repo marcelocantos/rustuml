@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-self-tile-history",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram/teoz/CommunicationTileSelf.java#callbackY_internal,drawU,addConstraints,getMaxX",
+    "sequencediagram/teoz/LivingSpace.java#getPosC2,getLevelAt",
+    "sequencediagram/teoz/LiveBoxes.java#getMaxPosition,getLevelAtInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::add_sequence_life_variation,sequence_lifelines,self spacing/envelopes/painter"
+  ],
+  "invariant": "Teoz self tiles open at the component end point and close at its start point, with no legacy deltaY translation. Their paint uses IGNORE_FUTURE_ACTIVATE and CONSIDERE_FUTURE_DEACTIVATE levels; horizontal maxX uses LivingSpace.posC2, whose offset is the maximum accepted level across history, plus component width. Legacy MessageSelfArrow uses a different segment model.",
+  "causal_divergence": "Rust applies the legacy five-unit self activation/deactivation ordinate offsets to Teoz, and uses current depth rather than posC2 maximum for self tile bounds. Padded recursion cases therefore expose incorrect livebox lengths and frame widths despite correct legacy results.",
+  "planned_change": "Pass the engine model explicitly to lifecycle ordinate construction, retain Teoz start/end callbacks and paint ordinates, and use maximum accepted history depth for Teoz constraint and envelope consumers. Keep full return lowering but select tile-specific live history modes.",
+  "perturbation_axes": [
+    "self recursion levels with return ownership",
+    "declaration order, nested groups, note positions and long component labels"
+  ],
+  "acceptance": "Maker candidate only; all failures remain active and require independent checking."
+}
