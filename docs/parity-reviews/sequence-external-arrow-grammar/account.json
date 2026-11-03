@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-external-arrow-grammar",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": ["sequencediagram/command/CommandExoArrowLeft.java#getMessageExoType", "sequencediagram/command/CommandExoArrowRight.java#getMessageExoType", "sequencediagram/command/CommandExoArrowAny.java#executeArg", "sequencediagram/MessageExo.java#getParticipant1,getParticipant2", "sequencediagram/command/CommandReturn.java#executeArg"],
+  "rust_locations": ["crates/rustuml-parser/src/parse/sequence.rs::try_external_message", "crates/rustuml-render/src/sequence.rs::sequence_lifelines", "crates/rustuml-render/src/sequence.rs::render return lowering"],
+  "invariant": "Boundary token selects the physical border; arrow dressing and its textual side select sender versus receiver independently. Both external endpoints in Java refer to the one real participant for lifecycle changes; reversing an external return reverses the border direction and retains that participant's lifecycle ownership.",
+  "causal_divergence": "Rust identifies incoming versus outgoing from which regex matched, overwrites arrow direction, and never swaps endpoints. Thus [<- I is interpreted as [-> I. After endpoint normalization, ordinary lifecycle code still targets the virtual boundary for outgoing activation or incoming deactivation, while Java always activates/deactivates the real participant. The separate Return painter also lacks MessageExo reversal geometry.",
+  "planned_change": "Normalize semantic from/to using parsed dressing while preserving the boundary token. Resolve lifecycle target to the real participant for external messages, including return ownership. Feed legacy resolved external returns through the existing MessageExo rendering path with inherited dotted style. Preserve ordinary-message semantics, source identity and event indices.",
+  "perturbation_axes": ["Left/right physical border, boundary-first/last syntax and reversed direction", "Filled/open heads, solid/dotted line and explicit/automatic lifecycle changes", "Active and inactive participants plus return reversal"],
+  "verification_plan": ["Parser endpoint and activation tests", "Fresh pinned Java SVGs and real CLI comparisons", "All previous 874 heldouts and 78 fresh inputs, both main tiers"],
+  "acceptance": "Maker candidate; independent checker required. No historical review or baseline mutation."
+}
