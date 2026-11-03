@@ -1,0 +1,4 @@
+@startuml
+entity "Mooring light" as Beacon #LightBlue
+Beacon -> Beacon : echo
+@enduml

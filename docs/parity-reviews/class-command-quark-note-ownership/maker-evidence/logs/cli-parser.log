@@ -1,0 +1,47 @@
+   Compiling rustuml-parser v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/crates/rustuml-parser)
+   Compiling rustuml v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/crates/rustuml)
+    Finished `release` profile [optimized] target(s) in 3.98s
+     Running tests/pipe_mode.rs (/tmp/rustuml-cff-target/release/deps/pipe_mode-ee8d2a3db6788ede)
+
+running 13 tests
+test help_agent_discloses_no_oracle_product_metric ... ok
+test pipe_with_empty_input ... ok
+test pipe_svg_class_diagram ... ok
+test pipe_yaml_output ... ok
+test pipe_ascii_text_output ... ok
+test pipe_with_modern_theme ... ok
+test pipe_svg_sequence_diagram ... ok
+test pipe_png_output ... ok
+test pipe_with_invalid_input_terminates ... ok
+test pipe_with_skinparams_in_input ... ok
+test pipe_pdf_output ... ok
+test pipe_flag_equivalent_to_dash_input ... ok
+test pipe_multiple_invocations_do_not_hang ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.69s
+
+     Running tests/error_paths.rs (/tmp/rustuml-cff-target/release/deps/error_paths-44afceb2bb7d5e27)
+
+running 19 tests
+test invalid_json ... ok
+test json_with_missing_fields ... ok
+test empty_input ... ok
+test just_startuml ... ok
+test invalid_yaml ... ok
+test yaml_with_missing_fields ... ok
+test unsupported_diagram_type ... ok
+test empty_class_body ... ok
+test class_with_no_members ... ok
+test preprocessor_unclosed_ifdef ... ok
+test very_long_line ... ok
+test no_start_tag ... ok
+test unicode_everywhere ... ok
+test preprocessor_extra_endif ... ok
+test unclosed_note ... ok
+test unclosed_group ... ok
+test deeply_nested_groups ... ok
+test many_participants ... ok
+test malformed_arrow ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

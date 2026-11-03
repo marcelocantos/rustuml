@@ -1,0 +1,35 @@
+[
+  {
+    "command": [
+      "/tmp/rustuml-cff3/raw_dot",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/docs/parity-reviews/class-command-grammar-closure/checker-support/java-trace/package_target/svek.dot"
+    ],
+    "exit": 0,
+    "dot_sha256": "0b39e457340b5034af135e139c65298fd7df735229de49abe6152979d6e208c1",
+    "helper_sha256": "38858a27dda92edc2840139bad5e3b003eb1e96775932adceff9b8779678c419",
+    "source": "docs/parity-reviews/class-command-grammar-closure/checker-support/scripts/checker2740_raw_dot.rs",
+    "scope": "Unchanged exact Java DOT through the new static native layout; no Java launched. Static layout source unchanged since 2c778f1d."
+  },
+  {
+    "command": [
+      "/tmp/rustuml-cff3/raw_dot",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/docs/parity-reviews/class-command-grammar-closure/checker-support/java-trace/group_lr/svek.dot"
+    ],
+    "exit": 0,
+    "dot_sha256": "f9182a2b30a66514910eeed44bbe0a48f45c914a9d0a7cf41c5fa811aa4675f7",
+    "helper_sha256": "38858a27dda92edc2840139bad5e3b003eb1e96775932adceff9b8779678c419",
+    "source": "docs/parity-reviews/class-command-grammar-closure/checker-support/scripts/checker2740_raw_dot.rs",
+    "scope": "Unchanged exact Java DOT through the new static native layout; no Java launched. Static layout source unchanged since 2c778f1d."
+  },
+  {
+    "command": [
+      "/tmp/rustuml-cff3/raw_dot",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/docs/parity-reviews/class-command-grammar-closure/checker-support/java-trace/shield/svek.dot"
+    ],
+    "exit": 0,
+    "dot_sha256": "d3e98894641c9009d74036db021e1d34ed3217c819c4593493e5279d4b406a0d",
+    "helper_sha256": "38858a27dda92edc2840139bad5e3b003eb1e96775932adceff9b8779678c419",
+    "source": "docs/parity-reviews/class-command-grammar-closure/checker-support/scripts/checker2740_raw_dot.rs",
+    "scope": "Unchanged exact Java DOT through the new static native layout; no Java launched. Static layout source unchanged since 2c778f1d."
+  }
+]

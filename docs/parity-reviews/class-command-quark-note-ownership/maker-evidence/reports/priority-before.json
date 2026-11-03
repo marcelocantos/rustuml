@@ -1,0 +1,173 @@
+{
+  "binary_sha256": "d15366cb2213eafab81e3546428ebfb6c922335acdef108e0ad05597a5e7172c",
+  "counts": {
+    "mismatch": 1,
+    "pass": 3
+  },
+  "results": [
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/priority-fresh/entity_body.puml",
+      "relative": "entity_body.puml",
+      "source_sha256": "c01ff0c94d531c973556c2a677f1bcd5d1ebf934f784b4cd8eecf1066a2a9fa3",
+      "java_sha256": "35badae811ce5a0ce42af868edee392ba9b1a0ce5c75539e2f37b081de5abde6",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/priority-fresh/entity_body.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/priority-fresh/entity_body.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/priority-fresh/entity_body.svg",
+          "/tmp/rustuml-cff3/priority-before/outputs/fresh24/entity_body/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "a8519534c6f927d632910895e67e16b26bf686351f00dd0306af442c17ad21d3",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "552c59ec9d1153c4d49b3e8734f89fe4f845e089376201fec6353713d3b1399f",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "d209253d3765e5e2bb8aad354736e65fc9ea600f8cc3cd0f8b6d9dcf6b27a863",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/priority-before/outputs/fresh24/entity_body"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/priority-fresh/entity_nested.puml",
+      "relative": "entity_nested.puml",
+      "source_sha256": "0cf981bc5351f5c8994075ea00b5647839c042565608c9e1a79735efde3cfa00",
+      "java_sha256": "f671aa03ca1bc5fbc7a61b4a14f5268f6acbeb0f7f78706e8cb4bd91e2e51c59",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/priority-fresh/entity_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/priority-fresh/entity_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/priority-fresh/entity_nested.svg",
+          "/tmp/rustuml-cff3/priority-before/outputs/fresh24/entity_nested/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "ad25444daed78c202591c4aa62dc4a4180c42bfd1e7b69e3fd42cbc55b4c096f",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "416efe3f24006049b1afe2eabcce93938b6ed74776afbc77121021ad4dc4e1b0",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/priority-before/outputs/fresh24/entity_nested"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/priority-fresh/entity_self.puml",
+      "relative": "entity_self.puml",
+      "source_sha256": "b44bd7e54766b3a5d38805f5489b28945bfe793ee64beeffc1291b8c7e9a8704",
+      "java_sha256": "be0904d5bf42d8749bac5992b0da7ed0b7a8b7a5cc22674e1e2d07a93007f699",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/priority-fresh/entity_self.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/priority-fresh/entity_self.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/priority-fresh/entity_self.svg",
+          "/tmp/rustuml-cff3/priority-before/outputs/fresh24/entity_self/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "8119d94417f1ff408ac20f50c4ed7c2d7f0d012516867cf541b0aca962bde35e",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "2ed26e9102ea6594a2dd37e742a345945a15f94cfe56a2b1d3cc2126819acf42",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/priority-before/outputs/fresh24/entity_self"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/priority-fresh/root_record_peer.puml",
+      "relative": "root_record_peer.puml",
+      "source_sha256": "27f7a04e84903709a44fc6ab8dcbe8374bfcf372645df95c57c3d7b4251119a7",
+      "java_sha256": "dc61662f87427309980ab1b3266e015e8bb50f9876c927c854142f06b0252205",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/priority-fresh/root_record_peer.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/priority-fresh/root_record_peer.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/priority-fresh/root_record_peer.svg",
+          "/tmp/rustuml-cff3/priority-before/outputs/fresh24/root_record_peer/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "3484eefcba567243e3736e9db7f489eb3d8622d89b252f463e7607109f22991a",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "4a550186b89e7279395f4fbd05369ae5b1f88f06f48d28b14d350cbf2967cf17",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/priority-before/outputs/fresh24/root_record_peer"
+    }
+  ]
+}

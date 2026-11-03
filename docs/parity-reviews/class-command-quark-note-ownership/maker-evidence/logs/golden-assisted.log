@@ -1,0 +1,34 @@
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 0.82s
+     Running tests/golden_pairs.rs (/tmp/rustuml-cff-target/release/deps/golden_pairs-88a993b69eca84e7)
+
+running 1 test
+running 12550 golden pairs...
+
+golden_pairs: 12550 total, 10523 passed, 728 failed, 1299 skipped
+  panics: 0, xml diff: 728, other: 0
+  parked (numeric-only, allow-listed): 0 (max dev 0.0000)
+  park candidates (numeric-only, NOT yet parked, still counted as failures): 721 (max dev 961.0000) → see golden_ulp_candidates.txt
+  skip breakdown: parse=0, golden_error=1199, unsupported_kw=0, other=100
+  per-directory failures:
+      437 class
+      113 combo
+       74 edge-cases
+       52 er
+       16 rendering
+       14 preprocessing
+        7 deployment
+        7 state
+        4 skinparam
+        3 creole
+        1 type-detection
+test golden_pairs ... FAILED
+
+failures:
+
+failures:
+    golden_pairs
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`

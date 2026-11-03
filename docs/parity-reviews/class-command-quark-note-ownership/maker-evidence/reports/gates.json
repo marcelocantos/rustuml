@@ -1,0 +1,131 @@
+{
+  "revision": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e",
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/rustuml-cff-target",
+    "CARGO_BUILD_JOBS": "4",
+    "RAYON_NUM_THREADS": "4",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+  },
+  "java_policy": "No Java launched: selected tests use existing pairs or local Rust CLI; runner.run_preproc is not called.",
+  "commands": [
+    {
+      "name": "fmt",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "exit": 0,
+      "seconds": 1.2242019176483154,
+      "log": "fmt.log"
+    },
+    {
+      "name": "units-final",
+      "command": [
+        "cargo",
+        "test",
+        "--workspace",
+        "--lib",
+        "--release"
+      ],
+      "exit": 0,
+      "seconds": 47.52262330055237,
+      "log": "units-final.log"
+    },
+    {
+      "name": "cli-parser",
+      "command": [
+        "cargo",
+        "test",
+        "--release",
+        "--test",
+        "pipe_mode",
+        "--test",
+        "error_paths"
+      ],
+      "exit": 0,
+      "seconds": 5.248747110366821,
+      "log": "cli-parser.log"
+    },
+    {
+      "name": "golden-no-oracle",
+      "command": [
+        "cargo",
+        "test",
+        "--test",
+        "golden_no_oracle",
+        "--release",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "seconds": 5.261336803436279,
+      "log": "golden-no-oracle.log"
+    },
+    {
+      "name": "golden-assisted",
+      "command": [
+        "cargo",
+        "test",
+        "--test",
+        "golden_pairs",
+        "--release",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "seconds": 2.655249834060669,
+      "log": "golden-assisted.log"
+    },
+    {
+      "name": "guards",
+      "command": [
+        "cargo",
+        "test",
+        "--test",
+        "harness_guards",
+        "--release",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "seconds": 1.2129838466644287,
+      "log": "guards.log"
+    },
+    {
+      "name": "perturbations",
+      "command": [
+        "cargo",
+        "test",
+        "--test",
+        "parity_perturbations",
+        "--release",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "seconds": 2.638432025909424,
+      "log": "perturbations.log"
+    },
+    {
+      "name": "clippy-final",
+      "command": [
+        "cargo",
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit": 101,
+      "seconds": 7.954668998718262,
+      "log": "clippy-final.log"
+    }
+  ]
+}

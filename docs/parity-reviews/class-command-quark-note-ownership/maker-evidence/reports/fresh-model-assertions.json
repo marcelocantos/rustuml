@@ -1,0 +1,887 @@
+[
+  {
+    "source": "/tmp/rustuml-cff3/fresh/boundary_body.puml",
+    "source_sha256": "340dbcc4ab26fffa654f52c3f07c1746825f306784442975ce261f980f3be556",
+    "ast_sha256": "fe51b0d1bf9efede27c623375b8d567f5fc4185c91b4288608e8b4842ad3ef20",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/chrome_center.puml",
+    "source_sha256": "61410bb8ccb0560d764181868c464f7e4d8e246cdbdf75abde3654d69beb9fba",
+    "ast_sha256": "5893f555f4a3c41463b57c6d03ea90df158ec5a86d71617bb674775afaf5ab36",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/chrome_left.puml",
+    "source_sha256": "48112057ac74f43ba9059f1b839ad25230437db4a882b6d12e1223e72ebd8e2f",
+    "ast_sha256": "7ff05658b9f24ef547251d9d4514c8eb0ef74211abd9d0f23a041f4350cd56b5",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/chrome_right.puml",
+    "source_sha256": "c69bf4f20a81c784a60349810ded6f3e8b03c41fff28e7ae7d23349ec92d0074",
+    "ast_sha256": "e68cf5d4e65d6029bf0d9e79bf0c0cbc6e425d539f1262f5ae19826ddc2ca933",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/component_rectangle.puml",
+    "source_sha256": "8be77e8876c13b415acbe7d1fab5b37a086717e7be64e505f04971e4cbee5b12",
+    "ast_sha256": "d8823c4cbed05fef45c6df01c7596557ecd30830c1f720b14b2e403b116ffaab",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/component_uml1.puml",
+    "source_sha256": "09cd2d99095a4173db46fe4f6572cf0913ccde72ea057044bd70636f4ea7559a",
+    "ast_sha256": "a20d2cb7587a3b18d1bf70495d9dad449a7a00bbb9ab26d849d0474725376b7d",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/component_uml2.puml",
+    "source_sha256": "6c541dc338179f4b099c95a752808d6ee42cf37185e7e2b9b18e9cf3dd3266aa",
+    "ast_sha256": "2cb6fe5d079171f22fdc7687a4a600010972afbe0a4a304e22ff8bddc108be5c",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/native_protocol_False.puml",
+    "source_sha256": "9ee3c448b65a50f04fe897ae4f07d3c881e09d45d5a57e1abf9a51b5d0d53890",
+    "ast_sha256": "a43f1b91d36ce6f2ea0b9f194590215b807f8914804df267c16e12c306912512",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 0
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 0,
+      "Note": 1,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/native_protocol_True.puml",
+    "source_sha256": "403d4b927336b1cfd46d379c7ab78606ac61ff8c2e46d5c050115a8432bd4adc",
+    "ast_sha256": "b6b0d8024ae968111acde7a100ee2b54d82517acdc4e032170aaf236bc61a37b",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/native_record_False.puml",
+    "source_sha256": "4ad4cdb844cb8bd674b4d2e760ccca6d5c9b09abca68cb78823aa03df8766e97",
+    "ast_sha256": "4960f23ebf6cc844c2d7e1ec6e1b59130d5c0035ece5dde8f17d5abec47748fc",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 0
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 0,
+      "Note": 1,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/native_record_True.puml",
+    "source_sha256": "92f73ddc152f5991ad4ac89b6a1d102e38183baf0e3fab6570fe64d7bb36da11",
+    "ast_sha256": "53eb142472633f94332c1f29c2841d48953f116a5203278f92f7014806622d5d",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/native_struct_False.puml",
+    "source_sha256": "715febb4c80e7b161d19546b49243de7978000841ad9abe9e7dda67094e3e498",
+    "ast_sha256": "4a10c63150899e790a5761657dd7d6d774619e7543d8e0b9219b3f6cfa456078",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 0
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 0,
+      "Note": 1,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/native_struct_True.puml",
+    "source_sha256": "7563fd5a968b0886da4aa29eb670391616537822d4d17e34e264ec9d3adaa2ad",
+    "ast_sha256": "cd4e7e5e2379188c94d743f6817658e4f7c58b4fa0c6e3a91c05abe9ab450188",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/note_frontier_cloud.puml",
+    "source_sha256": "60ceaccf28c6d3a280310f6aac495cb43e27c9c9422bc9ceb8ce788ffb7bd45f",
+    "ast_sha256": "dcb70ee718f7e0e9ea560ec1b2ea5c54034e6aaa69b92c7d542b9ceb277d5f61",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 2,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/note_frontier_node.puml",
+    "source_sha256": "0f944237b69a4d2055c497d85c0ae0aaaf555e709d963fb0f0413e26941ca7be",
+    "ast_sha256": "831537c3f5b6b36cd9e0aa4fc7661b9c6632447db97909a4000049513952293c",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 2,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/note_frontier_rectangle.puml",
+    "source_sha256": "41adc5c3e9acef7b7263441b33a1136b1ac34898c15d48095ae03b4ef0b2e0d4",
+    "ast_sha256": "60292365d4d8f9635ee73260766ffc7f5deeeb88dfaff9a1fece8090ba35a0a3",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 2,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/shield_lef_False.puml",
+    "source_sha256": "c277a8f21d656ebe6cfb7c5875574e5a2fe2fa1b8d50b7221c5a5b67a93facdb",
+    "ast_sha256": "73aca81c39d388963091f1d136705e4b2687f8d3c4ce89db61f40de1d8ebb3ff",
+    "family": "Component",
+    "expected_counts": {},
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/shield_lef_True.puml",
+    "source_sha256": "9ad8db821d3a0bd920bac7d5747bacdbcb69755022388280620d0961ca646abf",
+    "ast_sha256": "a1164c4a684a4b3f8c34d895abf7f4a4c1e6c6214656a2cfd52b00727a0bb7dd",
+    "family": "Component",
+    "expected_counts": {},
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/shield_top_False.puml",
+    "source_sha256": "3b534b2d005b4e327163a4b3047c5643c5c9a6fa0fdab723527606863fe7e6d3",
+    "ast_sha256": "91078937a36d31423931cf2997256ca9d191a0c4301c6300c7dcc095181de61c",
+    "family": "Component",
+    "expected_counts": {},
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/shield_top_True.puml",
+    "source_sha256": "5cea7ef1193fccaffa1dd700bfc2602e9206c6a77ffe86310ef4c7c06318a37a",
+    "ast_sha256": "cf50c25ba02eb79b922b8e31b32040c7564ce02d7aae7abbd83ad3dad58785b3",
+    "family": "Component",
+    "expected_counts": {},
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/visibility_package.puml",
+    "source_sha256": "30564b91314d05de2879c67fc8e14c6df9b5b49e70fe347ada86d09a8fa7538b",
+    "ast_sha256": "b7aa006f6a8d3bb892d686d8d3c9b54d014a44aecc5035d227efc248bce30dbd",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/visibility_private.puml",
+    "source_sha256": "521bb09f13c4b7c74d50785f33f10735fdd93a63cfe51a64e53390018bcc678d",
+    "ast_sha256": "a7b24295bb3adca29fcaf0a212d603afd2cda3fa678f4b09610425194555cd61",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/visibility_protected.puml",
+    "source_sha256": "de5b55650215bfa4fccddf3e8c9fff68c2276492f9618b483d81de1b752afc15",
+    "ast_sha256": "51229a4839191f561cce49825952a759204ef2d45e1036706edafd5b1e6e3f45",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/fresh/visibility_public.puml",
+    "source_sha256": "dc9d7a31d1afc779b7fcda0f0cc83767315e0b1b616f6e7a76a8a50a35413e05",
+    "ast_sha256": "0ddaa47e5e68341a4f5a6f0eb387d345179ac5d43163ce2cddabc10c7ebc283f",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Note": 1,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 1,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/empty_cloud.puml",
+    "source_sha256": "d2346f4539328a7ed95db93bb48c71a53786e0f7fef105972260db4e2b3590ed",
+    "ast_sha256": "1c37d8cd81d365d6fd764f4a6c06e22ab358f0bf96b3c030a7b2366fb486699e",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/empty_database.puml",
+    "source_sha256": "d162f30673a6d04d36baf1c6c94efeb176ce938481c5081e23fab2c95dd9962d",
+    "ast_sha256": "ab028baff323e81cf5c4254279fb0673c885524c88d3f0b487ecc9cd85c02540",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/empty_node.puml",
+    "source_sha256": "456bc345f25e0b6f220449ef9685fb89e382c76cc63db01dc84585f42340eba3",
+    "ast_sha256": "44c57fadfd2b7980d97843342cd4310bc46185326eabb340988fb77ef0ace92c",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/empty_rectangle.puml",
+    "source_sha256": "5bf5a24e279d63192c8844d4d578ee765c53863ebc50bab0e1a1dc7aaa0c9935",
+    "ast_sha256": "d53cd2766104106948d6c9a4f6b47ddc13ab660aa5374bc2615c9fec92a76bef",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 2,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/empty_ribbon_left.puml",
+    "source_sha256": "0e851c4712faf6d63f47b7cb0f3eb757df78ac0bef3f19fb04a31bc070b258a5",
+    "ast_sha256": "486be4ccb74bed4255d7301ca9eb43e69dba469daa4a3b3a687fbc8019694859",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/empty_ribbon_right.puml",
+    "source_sha256": "25b886f3b23ba377844c1ba00038bbe30d7c480d1d679e652b33ab2b7d1e0911",
+    "ast_sha256": "700c7be30883af43e4c74f8407279f2bedb7317060ff182fefd827ddd2e6c432",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/member_class_14.puml",
+    "source_sha256": "e1a8bfd808e2821a6b150f612c5ef11e2ecac0c738966a5fccc05a1b681ac19b",
+    "ast_sha256": "bc6a2a6a237d36bfa462d7b3e058853a93d4a981fbacb4254aee8c977f3f401c",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Member": 4
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 4
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/member_class_15.puml",
+    "source_sha256": "cf26842a985a0d3207ff52d6415112b11486890f1adcd567c67b0fc392d4d081",
+    "ast_sha256": "379ea4953f70241e0700e193d423a78db9c7c0dd9786eb386270dd902616a2dd",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Member": 4
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 4
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/member_class_9.puml",
+    "source_sha256": "af0b989140e32d668de4609c4cec3f0f1577c4c52a1ed21b8bb2a27bdc63e17e",
+    "ast_sha256": "7aff9cce7b4acf57e9d585a3c9da2438dc0d50970246837a8ff99570c19c2029",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Member": 4
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 4
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/member_record_14.puml",
+    "source_sha256": "5afb7e9e8e15dc04ea20ba0b9ad6563e77a34de7bcd7697eb9426ec983c9457c",
+    "ast_sha256": "1f68749a2519fba4134ccf29d9a53cafba9f0440e9ce3d315ce64c934606a34a",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Member": 4
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 4
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/member_record_15.puml",
+    "source_sha256": "fe160448012fa8724203aeffdd035a0579e9cb52901fce83049c617dffc00473",
+    "ast_sha256": "9d5cd5fcf8843fc39ca56a938bad612748f060d8a48f8343e793aea99da31607",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Member": 4
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 4
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/member_record_9.puml",
+    "source_sha256": "91def113983b84f2aafad38bb272568b994ae92bc369f9da993fce4a6e879990",
+    "ast_sha256": "728fbe3feb8029e31c9d07e0a86a8258d9d2d19199b77dd3c8b7a5a5e5dd11b5",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Member": 4
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 4
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_actor_False.puml",
+    "source_sha256": "387ea71a49f19a11385dc480a3ff4754ad461a31b9236590795b17c0508e26df",
+    "ast_sha256": "27870f16ac5e36ba10a1a6ce472778fc66a01d51d8c3f0b3734c6bd910ac8b57",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_actor_True.puml",
+    "source_sha256": "2ffdef85a3a04c21c328513cce2a1f78ede3934205f6b2e485fcfd076fc15159",
+    "ast_sha256": "b21668cda78de5b7306985b0207e0c2c10ecbb95d9777b247e059eba0a0bf6c0",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_database_False.puml",
+    "source_sha256": "83765595debc1913c3e6da6d0d3dd06d591140fd5d8e36d80d8881ca49c6cb7c",
+    "ast_sha256": "dbbc858f34e58029b5df4b8de3440b45e2d9eb2f82ec9062c44d8a8c18a32ebe",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_database_True.puml",
+    "source_sha256": "5f266fff9c8d29d208988a06bd030b4937b441e7fae8531a10edccbc3caa9fe8",
+    "ast_sha256": "0d22a60153f7be1b54abadfa46adbee26780ea03dda8ec131c3c7ba345e3ed49",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_queue_False.puml",
+    "source_sha256": "cb6089dcf49eabb117de59e815a8f8f775c87236142e559677f22159d3917217",
+    "ast_sha256": "f0da803cc66fcda608580bf5d72bd2d8f11eceddb16b0464d56b436d1cb1e560",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_queue_True.puml",
+    "source_sha256": "8d7349ddfeba10cbea86566a6ccca595c2a9d0463e35dda7c9e4c98832a0ec8b",
+    "ast_sha256": "168a89b257293c4d30d4f14b5ced25c71ec54018932f966620e6cc1421956fd3",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_rectangle_False.puml",
+    "source_sha256": "d3984e3ca47844a4b69f9ad30b8168a14557111a9b7610a5041b7f6e2c7ea9ab",
+    "ast_sha256": "c58c53ede02cbcf919965169f2218cdf43783d51c2d9478a7abd5c4579962527",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/remote-fresh/mixed_rectangle_True.puml",
+    "source_sha256": "eec8bd12f6ba7005b2910ec70a1170c41079429f6750ba613b3a8ff21e3b7d1b",
+    "ast_sha256": "f548e6e3cad696699e7c1351c29af68f029e1e9b9bf574dc8dddae71e9885969",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/priority-fresh/entity_body.puml",
+    "source_sha256": "c01ff0c94d531c973556c2a677f1bcd5d1ebf934f784b4cd8eecf1066a2a9fa3",
+    "ast_sha256": "7e90afc5f76793a3e4e3192bf54840b87c6f879229a123c436111be88a91457c",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Member": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 1
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/priority-fresh/entity_nested.puml",
+    "source_sha256": "0cf981bc5351f5c8994075ea00b5647839c042565608c9e1a79735efde3cfa00",
+    "ast_sha256": "c95792f9f830bdfa8a1fec01cdc2dd1d288780a4716493688e28ba5bcae28478",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 1,
+      "Package": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 1,
+      "Package": 1,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/priority-fresh/entity_self.puml",
+    "source_sha256": "b44bd7e54766b3a5d38805f5489b28945bfe793ee64beeffc1291b8c7e9a8704",
+    "ast_sha256": "2ed26e9102ea6594a2dd37e742a345945a15f94cfe56a2b1d3cc2126819acf42",
+    "family": "Sequence",
+    "expected_counts": {},
+    "actual_counts": {
+      "ClassEntity": 0,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 0,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  },
+  {
+    "source": "/tmp/rustuml-cff3/priority-fresh/root_record_peer.puml",
+    "source_sha256": "27f7a04e84903709a44fc6ab8dcbe8374bfcf372645df95c57c3d7b4251119a7",
+    "ast_sha256": "4a550186b89e7279395f4fbd05369ae5b1f88f06f48d28b14d350cbf2967cf17",
+    "family": "Class",
+    "expected_counts": {
+      "ClassEntity": 2,
+      "Relationship": 1
+    },
+    "actual_counts": {
+      "ClassEntity": 2,
+      "Package": 0,
+      "Note": 0,
+      "Relationship": 1,
+      "Member": 0
+    },
+    "status": "maker assertion passed"
+  }
+]
