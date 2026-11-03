@@ -1,0 +1,46 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class FreshAlpha881
+
+
+      class FreshBeta883
+      FreshAlpha881 --> FreshBeta883
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity FreshAlpha881
+  - !Entity FreshBeta883
+  - !Relationship 0
+  entities:
+  - id: FreshAlpha881
+    label: FreshAlpha881
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: FreshBeta883
+    label: FreshBeta883
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships:
+  - from: FreshAlpha881
+    to: FreshBeta883
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 5
+  packages: []
+  notes: []
+  hide_show: []

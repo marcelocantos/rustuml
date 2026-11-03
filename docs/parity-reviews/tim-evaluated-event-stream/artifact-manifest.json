@@ -1,0 +1,2197 @@
+[
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/README.md",
+    "sha256": "2dfdf28d68c2b5d3566c8df90fe00afc441a5320896c2eb9333a1fd052532a0e",
+    "bytes": 9097
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/account.json",
+    "sha256": "c6f8de0efa5f13cdb75a3df55bb243879dd7ffa2b93f1c8d856e4c201f082b38",
+    "bytes": 3892
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/after-isolated.json",
+    "sha256": "2e17c7a264cf2a7ffb7ca0e328323ae034c2f9d5cde46f207780194d26d31eec",
+    "bytes": 197539
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/after-new.json",
+    "sha256": "cd0bd1639e55e84bd43c7c49b1e74269cd0d401469f60c4eaecd2c203d7de7a7",
+    "bytes": 5082
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/after-preserved.json",
+    "sha256": "2f74ef05e4c3085b7cb35e24648a1b8699a63c3c04477773ebf9d9001e6357b8",
+    "bytes": 9549
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/before-isolated.json",
+    "sha256": "41e0744fffe8a1386742b95d2e8bcdaea05f2ebc47219d179239659bdd73b49b",
+    "bytes": 198446
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/before-new.json",
+    "sha256": "99a0aca16ffac119a5e58e52be1302603bee6832e575c48c8f421700b55d7552",
+    "bytes": 6675
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/before-preserved.json",
+    "sha256": "430280d351097a2897ed7183c3c0ddcec7b1c944bfd8e876f9e71722d11fdc68",
+    "bytes": 9612
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/candidate-isolated-changes.json",
+    "sha256": "7fbd7e2248c00e575d779c961dbf201720d8de76637497d11e89f1d456c31d05",
+    "bytes": 13275
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/candidate-isolated.json",
+    "sha256": "0e3c5f52f7b54ce4d3964bcc9bfdfe2553a816dfda8bc54354c774ecf1fcc9e9",
+    "bytes": 201167
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/candidate-new-changes.json",
+    "sha256": "059b010f7dc680e73ef0aba05733e2e9a85aae9963eb60e07c1154555b90e59a",
+    "bytes": 14961
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/candidate-new.json",
+    "sha256": "49b3bddd673eb9bf3a3e2cec0908b75f7c6868af10472c2cbe18845ed387455e",
+    "bytes": 6722
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/candidate-preserved-changes.json",
+    "sha256": "4d7795883362eaed5e84691510d3ef64dcd48eaafdbbd756c44b7e2586390513",
+    "bytes": 16949
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/candidate-preserved.json",
+    "sha256": "b593c8db418813d15b849cd1bca8a4d4455628b1655c0e341a69c70285cd05a8",
+    "bytes": 9681
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before-cwd.diff.txt",
+    "sha256": "25bd8295469ba24cb14da44b8268a15e6cda03460b2dce84a2527211706858e4",
+    "bytes": 1881
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before-cwd.svg",
+    "sha256": "978d8eb1c6ef15d8877fa9c7ce4ddf91712b5f66b1dbc1e02694adcce098734c",
+    "bytes": 2504
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before.diff.txt",
+    "sha256": "b4e63026fa3eb61e33f6e65d1fdfd720e940c2e8966e5971bfc845bedbb0f2e5",
+    "bytes": 1048
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before.svg",
+    "sha256": "4953041bcb49ce88ef8913b95d35c3d0029639102cb93e4f725504b4873787f8",
+    "bytes": 1595
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before.uml-source",
+    "sha256": "299cf680d011f375d7af186d2dab3486c01f3c5a4a4b70d6d6ae3597b6b38668",
+    "bytes": 42
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/before.yaml",
+    "sha256": "99047cc17697605e07e326a60878a6294184ced52c5553394a83814a78362c3c",
+    "bytes": 399
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate-cwd.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate-cwd.svg",
+    "sha256": "31edec4a8ca88a9a5b7b1f7f855b894c5d1732f6eeae135691b853ad25c79d85",
+    "bytes": 2511
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate.diff.txt",
+    "sha256": "b4e63026fa3eb61e33f6e65d1fdfd720e940c2e8966e5971bfc845bedbb0f2e5",
+    "bytes": 1048
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate.svg",
+    "sha256": "4953041bcb49ce88ef8913b95d35c3d0029639102cb93e4f725504b4873787f8",
+    "bytes": 1595
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate.uml-source",
+    "sha256": "299cf680d011f375d7af186d2dab3486c01f3c5a4a4b70d6d6ae3597b6b38668",
+    "bytes": 42
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/candidate.yaml",
+    "sha256": "99047cc17697605e07e326a60878a6294184ced52c5553394a83814a78362c3c",
+    "bytes": 399
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/explicit-base.uml-source",
+    "sha256": "12cd5b408be95c39f0055e39fd7506fae2aa1f3bcf93819d898bb4f6deb9e819",
+    "bytes": 7294
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/java.svg",
+    "sha256": "3fe35ba15207a6b59b14eba00d88e6b5a421272d0e923d6091b8e3c6a19a2260",
+    "bytes": 2592
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/java.uml-source",
+    "sha256": "12cd5b408be95c39f0055e39fd7506fae2aa1f3bcf93819d898bb4f6deb9e819",
+    "bytes": 7294
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/settings.iuml",
+    "sha256": "35aa8bb72403c442505014db3cb1237f522abec43fc197bb2433866d091388ea",
+    "bytes": 70
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base/source.puml",
+    "sha256": "c2cb7253c3b9652fbfc9b9fbc54d392f20c579d571249acdac598eaee98e5d97",
+    "bytes": 65
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/file-base-results.json",
+    "sha256": "242acbe195e994f7bb1a21b7f59a3582c45b2bd7f57ca2a5909832ed89f3cf79",
+    "bytes": 430
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/final-isolated.json",
+    "sha256": "26161aa294762da69a31df9646f46879cf3671c97713bbb6ab8e06dcbae8baf9",
+    "bytes": 197539
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/final-new.json",
+    "sha256": "3c53428208de41d097745ffd84d3499976c1c9d5cb04984edf44cc51327d66d5",
+    "bytes": 6634
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/final-preserved.json",
+    "sha256": "05fa728a244f8de3a45b2c35df696522b7f3aad476d36a32fb9a04c76198b496",
+    "bytes": 9549
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/format-results.json",
+    "sha256": "e691eb3d2ebda33642ebefa2de22f62af25024353ee88425683c6752451160b4",
+    "bytes": 330
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/isolated-changes.json",
+    "sha256": "da6fbb875acaf5d22a3c2d5619c7b7e440baba882d79e8dceaac4b199e487b6d",
+    "bytes": 4603
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/before-versus-final.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/before.diff.txt",
+    "sha256": "3a085309076c1bcf0cedb6c40d6012bff79635c328e116684e493e434badc021",
+    "bytes": 12991
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/before.svg",
+    "sha256": "e5656ae410d286ede90f471bd11e2be67a216efc21b48945a203f2be69371b49",
+    "bytes": 6242
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/before.uml-source",
+    "sha256": "f341bbd457ab50ddaa709d06111b861d330cb68a24e2111b3a69c5eab4e38b85",
+    "bytes": 7908
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/before.yaml",
+    "sha256": "dd4a97300432cb953d9b299f2a914200d9a24d4370218482d2a5c9bb004c237b",
+    "bytes": 82998
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/candidate.diff.txt",
+    "sha256": "3a085309076c1bcf0cedb6c40d6012bff79635c328e116684e493e434badc021",
+    "bytes": 12991
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/candidate.svg",
+    "sha256": "e5656ae410d286ede90f471bd11e2be67a216efc21b48945a203f2be69371b49",
+    "bytes": 6242
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/candidate.uml-source",
+    "sha256": "f341bbd457ab50ddaa709d06111b861d330cb68a24e2111b3a69c5eab4e38b85",
+    "bytes": 7908
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/candidate.yaml",
+    "sha256": "9d6f9282dd6581bced9999b173cf01959422d387c3934c863338f08eff584348",
+    "bytes": 83052
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/java.svg",
+    "sha256": "d131cfa655d65569ee69298bc47a00d8e92bba60ed142c67b46bb2b54579d507",
+    "bytes": 6460
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed/java.uml-source",
+    "sha256": "f341bbd457ab50ddaa709d06111b861d330cb68a24e2111b3a69c5eab4e38b85",
+    "bytes": 7908
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed.puml",
+    "sha256": "4c1b80f05035e5920580e8ea66abdd9388c40390fef252e40b04ebceedea2be3",
+    "bytes": 249
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/before.diff.txt",
+    "sha256": "15b6e5acc66240a2295ece5128d7d2d0b8c14992f873fe5fe4f28928c965fb5b",
+    "bytes": 4527
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/before.svg",
+    "sha256": "3d2a73515bf2aa3d5318c0b95e3bd197180ebb56106cc1bc44e10a143a1537a3",
+    "bytes": 6911
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/before.uml-source",
+    "sha256": "0dd5ed391529aa42a7844885e4d8342352ed02c14ed0eb149f5f127c1a3712b0",
+    "bytes": 159
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/before.yaml",
+    "sha256": "6866c8db143f169a1675bd71c48332540215695746411a947c686c0366bae282",
+    "bytes": 859
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/candidate.svg",
+    "sha256": "77bd7ef554056626c2862dbae57a3344463bf474e49ad341ca76e59fe8ee4869",
+    "bytes": 6911
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/candidate.uml-source",
+    "sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+    "bytes": 160
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/candidate.yaml",
+    "sha256": "2c251077da4abd84bd99e36dedc6b64b3f4b367cc2964ac0f17a937b6895cd28",
+    "bytes": 861
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/java.svg",
+    "sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+    "bytes": 7102
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/java.uml-source",
+    "sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+    "bytes": 160
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true/preserved-versus-fresh-java.diff.txt",
+    "sha256": "46becbd38d7f0a9e3439da244249e4272db0b9c18a732d33a5715fd8c4dd29e0",
+    "bytes": 4527
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true.puml",
+    "sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+    "bytes": 160
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/before.diff.txt",
+    "sha256": "46e0b8e3de6ecdea52f799bab34967210a31e416bbfb3a234e0542a478f349a3",
+    "bytes": 4016
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/before.svg",
+    "sha256": "d020227d9a6561f60dec84fa8312afa199c2efc908ceedcce1544e1f574e79df",
+    "bytes": 5440
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/before.uml-source",
+    "sha256": "b30b580adf9cc558115e5c0a34b6e2906f06c9913577aa958624dd8950f5d1e6",
+    "bytes": 134
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/before.yaml",
+    "sha256": "17d06d609f40f343feafab81878cdd56253fdae6c27ebb0d30fb0d18aae6c169",
+    "bytes": 741
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/candidate.svg",
+    "sha256": "5cc35796ef055b46d8306ddbd2baa38319b31b9b7e609301f5bba0b6585e545c",
+    "bytes": 5431
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/candidate.uml-source",
+    "sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+    "bytes": 135
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/candidate.yaml",
+    "sha256": "ed75ff152a4ca18539e86ea579d481eb29f3ea5d82fbdfac2a0e605d66e2224b",
+    "bytes": 742
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/java.svg",
+    "sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+    "bytes": 5606
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/java.uml-source",
+    "sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+    "bytes": 135
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing/preserved-versus-fresh-java.diff.txt",
+    "sha256": "64e40e60c1f612902a6363e7ae4c3634ee55eeaf4018544d324dbca41cd6ca5a",
+    "bytes": 4016
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing.puml",
+    "sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+    "bytes": 135
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/before.diff.txt",
+    "sha256": "60e96de5d061520ae426744b93cee9456814cb61902fc0d0e63ae6f83d965ab8",
+    "bytes": 1295
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/before.svg",
+    "sha256": "a194ecc468a160efa980baa3bcc57da5cc27c79d47fc3fe9e23135bf5d92fde5",
+    "bytes": 3242
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/before.uml-source",
+    "sha256": "54b8f4d02935f30ddd22bfcb9393df603db10f234b362d941220b562474697e5",
+    "bytes": 59
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/before.yaml",
+    "sha256": "48ea3f937263a0c9aad978ed53ee03fd5c9a8c559ec174513af4bc573076e3e3",
+    "bytes": 755
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/candidate.svg",
+    "sha256": "aff2bb42a26a9f94d3f979c2c89383243c2b0950495882d23d8baa8072a772eb",
+    "bytes": 3244
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/candidate.uml-source",
+    "sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+    "bytes": 62
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/candidate.yaml",
+    "sha256": "77059dafd682329157fd7a31a01df2397a2f2772a94b35c31d68a885996a4ff2",
+    "bytes": 759
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/java.svg",
+    "sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+    "bytes": 3292
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/java.uml-source",
+    "sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+    "bytes": 62
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines/preserved-versus-fresh-java.diff.txt",
+    "sha256": "b0735e373bdc97bddf7c29e384b5c8404e258e9d9b79109a5701f63a3a2e908a",
+    "bytes": 1295
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines.puml",
+    "sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+    "bytes": 62
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/before.diff.txt",
+    "sha256": "57dd314f2d19342ef13a44eaafc44669d8fbfc7862f7fdce41dd39184d8ad85c",
+    "bytes": 3561
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/before.svg",
+    "sha256": "e4742b0d01fd99dcc581d9bf37d14f0acc4fe6341a5529c3360cf8c6ac1792c6",
+    "bytes": 1577
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/before.uml-source",
+    "sha256": "2c54a7e6798f9479f5e39ee12cc272b147940c49f0a99af3d61e3153d1244325",
+    "bytes": 77
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/before.yaml",
+    "sha256": "a8d04ff47b2a261f468239c12c1ff78341d5fb6fb3c9a1277badf80686c58fe2",
+    "bytes": 599
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/candidate.svg",
+    "sha256": "5b667c66ea2c43b70da2ba69c8d91e866411e052699786f8befba37f4100e81e",
+    "bytes": 1655
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/candidate.uml-source",
+    "sha256": "40355cefb9eb8a127b62c3ab6af079f95451031569e71d2db59d8959c7573277",
+    "bytes": 7050
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/candidate.yaml",
+    "sha256": "56035790e42baa3bead6723e23a9af9aa8abfde4247ae3effb487d8533c34ff1",
+    "bytes": 69938
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/java.svg",
+    "sha256": "cef02567e48187d770976da80b26064e79c48ab0960e279e67dd3d1ea912d9bf",
+    "bytes": 1820
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter/java.uml-source",
+    "sha256": "40355cefb9eb8a127b62c3ab6af079f95451031569e71d2db59d8959c7573277",
+    "bytes": 7050
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter.puml",
+    "sha256": "e190ae7121e462decd61a9c3e3b3a0f6a62a9dc9c4b9aec361a201fddc73895b",
+    "bytes": 150
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/before.diff.txt",
+    "sha256": "542e7c1bb32fac7f4f0ca27ef82c634a485b362eece0fab615e1c9e49f7b9158",
+    "bytes": 1048
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/before.svg",
+    "sha256": "682cf9f8182b6720afcc0d7b5d9258487e2dec55c7803934c2cf32a0d84cf6c0",
+    "bytes": 1581
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/before.uml-source",
+    "sha256": "1fdf0cf3e0bbb414262f296a6b061a3ec154a1611a28df100120e22046553f30",
+    "bytes": 50
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/before.yaml",
+    "sha256": "e750d4c77ee1c45f324628ae6aee8027cb19d6a14575813375ede31815fc3969",
+    "bytes": 384
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/candidate.svg",
+    "sha256": "3f5ce4dbc2ea47a25f550e475ad79ab90edff8c9b32f5d078606440a8b9db823",
+    "bytes": 2501
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/candidate.uml-source",
+    "sha256": "7b6ac273f93b2ecc058020134e4a8a0577deca615950d53425073954901b585c",
+    "bytes": 7258
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/candidate.yaml",
+    "sha256": "eff5973ab1d02a91f47ee228d99a708aa5610370657438e187148f299886cc37",
+    "bytes": 71643
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/java.svg",
+    "sha256": "b57bd7c578e24342ccd5689fe4d3a840cc73e21114bec824bed5455871a9b253",
+    "bytes": 2658
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments/java.uml-source",
+    "sha256": "7b6ac273f93b2ecc058020134e4a8a0577deca615950d53425073954901b585c",
+    "bytes": 7258
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments.puml",
+    "sha256": "da2f5c5a3210229ec4a912f3a30398c537f6829b284c7f2fa7fa8d08df1c81e5",
+    "bytes": 147
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/before.diff.txt",
+    "sha256": "8da98b425f468370204208b8eeaf1e9f626b5887769495fec47fba00a2b7bac0",
+    "bytes": 1043
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/before.svg",
+    "sha256": "3fcf8b20213e8d482180029d7c1fbda1ab4518ef8d9ac65d25dea021dd918d07",
+    "bytes": 1566
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/before.uml-source",
+    "sha256": "5a80d0d6c0139cf99f218234a6fd163c2db9990551482b536b506aba119ec4a4",
+    "bytes": 79
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/before.yaml",
+    "sha256": "d18df94518da757388dfa76ec088ee557a9a7a65d406c0bd515595dcd2142a0b",
+    "bytes": 480
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/candidate.svg",
+    "sha256": "ca87bbb9c1bdba78db04028ad2e7470981f1fc50cca6f50c98d088c23118d461",
+    "bytes": 1566
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/candidate.uml-source",
+    "sha256": "496c25df42fdb712a5c8156b749f5e8c460bc9a46044a7e2768ef2d384bfa13b",
+    "bytes": 85
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/candidate.yaml",
+    "sha256": "2f682cd746f55583a8f00b8841a16dac070f888fe360e1565ab0c920ae7ce6ab",
+    "bytes": 863
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/java.svg",
+    "sha256": "c0f5633316d130a671b8e75a10980f11b67ca7bfd3b91de4c38c9348725ef30a",
+    "bytes": 1788
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once/java.uml-source",
+    "sha256": "496c25df42fdb712a5c8156b749f5e8c460bc9a46044a7e2768ef2d384bfa13b",
+    "bytes": 85
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once.puml",
+    "sha256": "f4c35dd6325d31d8461d15bf1e8ba69b7152d46e6646aa9ee7577c0191b95d32",
+    "bytes": 228
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/before.diff.txt",
+    "sha256": "57ea6d5ba19b1221744cad01689046aea743cecb0ed006d1aa92baca1073b4bb",
+    "bytes": 1543
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/before.svg",
+    "sha256": "f09cbdfff030523dee9056eebc6162c2bd75c1cd82784125843112fa95a1f26c",
+    "bytes": 2491
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/before.uml-source",
+    "sha256": "5b58164dfddea353ab6bb66f120543427d6fbed370ca05f06c39325fddbfdedf",
+    "bytes": 7355
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/before.yaml",
+    "sha256": "b924a53f1097b952fed8c20901d7234b661bc1652791d4b09578720cf52ba041",
+    "bytes": 71739
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/candidate.svg",
+    "sha256": "a0ce4a434eae36dc8cc733c7df31c4b63cd205a72878425f1e4a63d017fd5a63",
+    "bytes": 2305
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/candidate.uml-source",
+    "sha256": "66ba117f677ced85b740265557361a494bf66dfa80256be04aad95b537118049",
+    "bytes": 7596
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/candidate.yaml",
+    "sha256": "0f68cedb592fa06f1584768ef1b890dd35b4321cdc1072ad5a20d2d9d7fd4b7d",
+    "bytes": 72340
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/java.svg",
+    "sha256": "6bb36c4b341e8fb7cbb7651c49e713e4901730c7eace6471b0635493030d1939",
+    "bytes": 2458
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect/java.uml-source",
+    "sha256": "66ba117f677ced85b740265557361a494bf66dfa80256be04aad95b537118049",
+    "bytes": 7596
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect.puml",
+    "sha256": "fe5e53afa758b9635df77da4a1e56f4bde33bf7136b07e8b20f09eae143d858e",
+    "bytes": 154
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/before.diff.txt",
+    "sha256": "d08bcb2cc1981450f9db7df4e0c3e0640b86fb83554c86f4bf3784d684fbb580",
+    "bytes": 1369
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/before.svg",
+    "sha256": "085398b6dc621b912b97a19ce86877299e9f6fd372bdc72fd8dec87b2a5fe506",
+    "bytes": 3350
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/before.uml-source",
+    "sha256": "fd211814ce25a1e085083afe9e7357aed3c297ec7cd8b56c43d3dce9701caa2e",
+    "bytes": 90
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/before.yaml",
+    "sha256": "09c0e0520f4891b9ad2c833a1ce1565e4070a16127d4670441cf59e0a3a00bcd",
+    "bytes": 862
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/candidate.svg",
+    "sha256": "067c890099d6bc2f98441ed6083f8f6fa7e4baca22d144bcdb1fe89a87df0349",
+    "bytes": 3350
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/candidate.uml-source",
+    "sha256": "9cc2120f80237a6168906158084a56aab9ba53082e2d5a5a2acd3e5c01581b00",
+    "bytes": 94
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/candidate.yaml",
+    "sha256": "f87b2e450c539a106508c83cc1df7cadae703589be62b01cdbaaeaab086144a3",
+    "bytes": 866
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/java.svg",
+    "sha256": "94af2688d932fe6d9ba71f6c537792b976f52d8b7fd4f3e5d2583369b0d1be3d",
+    "bytes": 3419
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control/java.uml-source",
+    "sha256": "9cc2120f80237a6168906158084a56aab9ba53082e2d5a5a2acd3e5c01581b00",
+    "bytes": 94
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control.puml",
+    "sha256": "9cc2120f80237a6168906158084a56aab9ba53082e2d5a5a2acd3e5c01581b00",
+    "bytes": 94
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/before.diff.txt",
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/before.svg",
+    "sha256": "303a6a95c33532d37bbfce0e569c8be87cc95029122915b1bfbbc960ddeaaf7d",
+    "bytes": 3627
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/before.uml-source",
+    "sha256": "582e7ac1f2be852c3597e56f1826858871778c19f4584b543a718dee49689e86",
+    "bytes": 94
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/before.yaml",
+    "sha256": "a178f395f50a9d93458e989de19de57f285dfa34e51e28a154a2e0d43b843f72",
+    "bytes": 732
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/candidate.diff.txt",
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/candidate.svg",
+    "sha256": "303a6a95c33532d37bbfce0e569c8be87cc95029122915b1bfbbc960ddeaaf7d",
+    "bytes": 3627
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/candidate.uml-source",
+    "sha256": "582e7ac1f2be852c3597e56f1826858871778c19f4584b543a718dee49689e86",
+    "bytes": 94
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/candidate.yaml",
+    "sha256": "a178f395f50a9d93458e989de19de57f285dfa34e51e28a154a2e0d43b843f72",
+    "bytes": 732
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/java.status",
+    "sha256": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf",
+    "bytes": 3
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/java.stderr",
+    "sha256": "6767bff5412f3420f4650d80c0bdc2318794f0bb81579b726dcef48f49bc8d24",
+    "bytes": 55
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/java.svg",
+    "sha256": "f0bf1eaacc3658de83ec18755c5d84dddb4e0c77b2bebf5b282d0e59e40b059d",
+    "bytes": 21366
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control/java.uml-source",
+    "sha256": "e0ac6ee2bc7c6e68b7e67cd9dd91ca145c0b750c145e735672ceb65e11c45933",
+    "bytes": 52
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control.puml",
+    "sha256": "6a21a685b6cfa5c16070e9b2005910b3ecf2e673f732fb98fb862f62c8e05bc0",
+    "bytes": 145
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/before.diff.txt",
+    "sha256": "360d8c951ca52094ddbf014cfa5e1ba9bfa16add959e4246663193e6922c2bf8",
+    "bytes": 1048
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/before.svg",
+    "sha256": "924f2e2919b80a5fb736512eecd16d4d6af3da7939f2b49f1747f90239fbc27e",
+    "bytes": 1592
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/before.uml-source",
+    "sha256": "25b48024b74dc418983d04fa7f53e52c5e3c0face2376e6efee010a079de88aa",
+    "bytes": 98
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/before.yaml",
+    "sha256": "5c90c752a066c08de1cd93678d2507588a359550dea7aa50214bc925a23a244e",
+    "bytes": 626
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/candidate.svg",
+    "sha256": "943d13fe408cbf2ae8e379aa192d40feecb50dd03fdcfaf13cee2d948186392e",
+    "bytes": 2500
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/candidate.uml-source",
+    "sha256": "381000aca5f44323d39350fb43ba6c31968a66d416325de9fbfd43a90c8f0899",
+    "bytes": 7293
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/candidate.yaml",
+    "sha256": "6d98fe8039bf5dcd01516a332abacb25259992d9e182bc9e0880898240db921b",
+    "bytes": 71789
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/java.svg",
+    "sha256": "34ed4f98d272b1e81b423fc0edb02659ef59eac7e369814ac17ccdc7a2af59cb",
+    "bytes": 2657
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme/java.uml-source",
+    "sha256": "381000aca5f44323d39350fb43ba6c31968a66d416325de9fbfd43a90c8f0899",
+    "bytes": 7293
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme.puml",
+    "sha256": "5189d6dd336fa0e033c5b19eb4fe77fba48573d996f7fc6ef14257f266ed2aab",
+    "bytes": 128
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/before.diff.txt",
+    "sha256": "3f4d62014b3aaec815259473013239970df1865b9d24b46e5d7c51505e537e35",
+    "bytes": 1881
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/before.svg",
+    "sha256": "4d69210be96202028d2cc141aec2f6efcc261237ac9a80b15a71dd24876070a2",
+    "bytes": 2500
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/before.uml-source",
+    "sha256": "4cabebf6f25a851fe6fcdc001ceb412c84475d5a3b03fc0ebf290c62b448310a",
+    "bytes": 7316
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/before.yaml",
+    "sha256": "7a3a99838bf33e45f69e71c84ee106ab9a3fe3949357e6e5913f58348405d13f",
+    "bytes": 71823
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/candidate.svg",
+    "sha256": "ee54ab3587a3492a3fd06c90bf51e088e9a0a0c1edb4113134669f3bc5feac9f",
+    "bytes": 2493
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/candidate.uml-source",
+    "sha256": "e0e92c45031e09cca23a3284914ea271a7ad01c1761f8befe046ab09aada3597",
+    "bytes": 7292
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/candidate.yaml",
+    "sha256": "073c40a6f0b394a192d8d5a62e4ccb0c7a8e0c28217fcf54b913f59b270f6980",
+    "bytes": 71794
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/java.svg",
+    "sha256": "a8e57fea5a984003c0751cd8e24cb7579b7be67cf4ecc80a19a196aba3c45e4d",
+    "bytes": 2634
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme/java.uml-source",
+    "sha256": "e0e92c45031e09cca23a3284914ea271a7ad01c1761f8befe046ab09aada3597",
+    "bytes": 7292
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme.puml",
+    "sha256": "9ba002d35dcd03a6f88900d0c553e9fad9c440196deff52d15631a98fc2a02a6",
+    "bytes": 115
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/before.diff.txt",
+    "sha256": "7f3f84d8012e4e9936e26b36d60052b9e376c03c9d2c6a4b5cf909a18c249d4d",
+    "bytes": 3015
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/before.svg",
+    "sha256": "c238a0296c287ed5b70227b59d4b179619a1f1e4a28f8acdd5162bf0ace25162",
+    "bytes": 2480
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/before.uml-source",
+    "sha256": "3de136117eae352a1f10b504fefafc80d7db3abeb03cdc83173a4cc0c264b978",
+    "bytes": 7423
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/before.yaml",
+    "sha256": "90fae49200a119a57e317bea03d774471642d40b526fbed125c92e45e6129850",
+    "bytes": 71807
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/candidate.svg",
+    "sha256": "4f57f2006b8332cf2ce5fc7f9c9e98affff52c81c2bd03f61b70fddaf66e4de7",
+    "bytes": 2487
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/candidate.uml-source",
+    "sha256": "b3553d1f06efb9ed6970027d616631fb09e3217211a67617bdb25b656262e578",
+    "bytes": 7305
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/candidate.yaml",
+    "sha256": "b443439f3e535336394ac7ecf51c2a1f66d997d28c7e4600bafa088da8cb2f84",
+    "bytes": 71953
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/java.svg",
+    "sha256": "f60f7c10cfb2462c6ee4d18db9aa67d38123e6f08a8cca069ce96ef92f1cf0ec",
+    "bytes": 2680
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations/java.uml-source",
+    "sha256": "b3553d1f06efb9ed6970027d616631fb09e3217211a67617bdb25b656262e578",
+    "bytes": 7305
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations.puml",
+    "sha256": "104094aef151e341c73b87d636645a6a83be073a658ef533cc32aead9f65c705",
+    "bytes": 222
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-inputs/themes/puml-theme-saffron.puml",
+    "sha256": "872e3e3891e4374935883bf00f6992656fc9201731e4260acb2d639d76630b68",
+    "bytes": 103
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-results-summary.json",
+    "sha256": "d62a4549545b979568b9301198abca05d55bb3979deafa23bffc483a16519971",
+    "bytes": 6909
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/maker-results.json",
+    "sha256": "6917281a644e6cc6f194a131bb38612c961c7cbc90a54ee6ca177b9794f4e00f",
+    "bytes": 9013
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/measurement-artifacts.tar.gz",
+    "sha256": "7bcae7cafda1ad78b11e7dd5e2391e8a189848127e3c655e9f519d1a8ab39826",
+    "bytes": 4513533
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/preserved-inventory.json",
+    "sha256": "d9909d06d223b4f1cdb70bb0458e803052436d2743f45d93518d5e5f27f3e71a",
+    "bytes": 392450
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/reference-environment.json",
+    "sha256": "d45ab8298b376cdf2ac1174efb2e05995e6578281d6dc95c6166e7e52514eca7",
+    "bytes": 3926
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/stream-new.json",
+    "sha256": "43c5df6f53e4aae3b476103e18b2947862c9668e4034e0b5bd8d80d8e134fb1f",
+    "bytes": 4505
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/stream-preserved.json",
+    "sha256": "118d19e423a99572574550bd12c43437c93cde66c27482afd69a483b013c0ee8",
+    "bytes": 9585
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/tools/SourceProbe.java",
+    "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+    "bytes": 689
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/tools/base_probe.rs",
+    "sha256": "d0438a6f8d89f721ae37fbdeb539cef37048aee5de813d6f156fdc537eb07799",
+    "bytes": 353
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/tools/file_base.py",
+    "sha256": "249c2eaa13999106fd704c8838b0d3f56482ddda63f0e3c83d9d38825975835d",
+    "bytes": 2871
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/tools/generate.py",
+    "sha256": "0705d6fe32d660edf1f25017cc8b856c6dfadce26c63f8ee882c4d47be1ac08c",
+    "bytes": 3058
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/tools/measure.py",
+    "sha256": "310166e23a87d10dda932465fdb7ee0dc8ad2b9fd499d54ec1e19e15d4436c13",
+    "bytes": 4081
+  },
+  {
+    "path": "docs/parity-reviews/tim-evaluated-event-stream/tools/probe.rs",
+    "sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "bytes": 1212
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/account.json",
+    "sha256": "64457d81d0556ff1aef2f7c8baa4808308eda9d66d80acae1a3f992b1b7eb4d9",
+    "bytes": 2175
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/before.diff.txt",
+    "sha256": "0ce175e2d8027c2b975a1168571e49764da15df4b509a3d9f7e6b8ee33ac27aa",
+    "bytes": 123
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/before.svg",
+    "sha256": "fc209205e6bfabafbf69716acdf35f5fdcfdd02af074e9f0bd0319299171e1b0",
+    "bytes": 1654
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/before.uml-source",
+    "sha256": "452d9deb8ecee8902c3148c95ffd3669aa9dfaccc2cabc4b897183d91177550f",
+    "bytes": 7097
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/before.yaml",
+    "sha256": "506c8cb28250ba7f5ef2e397cdbc85643c93480d481e11ec83e0cfdb6fe21447",
+    "bytes": 69870
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/candidate.svg",
+    "sha256": "e11e06e697d5ac76edeacd92c94860ff6a132c65efb1b692c9a9606d9d3ff9ae",
+    "bytes": 1654
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/candidate.uml-source",
+    "sha256": "e0939abdb540e2174fce7d1487b7e71a8ac9af8719f630cba2b5586ab6fa0743",
+    "bytes": 7033
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/candidate.yaml",
+    "sha256": "20e82ac1b221eb17cb43c99d2463d1dad73c7c22aee36be766287b794f47f7f3",
+    "bytes": 69802
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/java.svg",
+    "sha256": "1d3849d5f5a5c40088149a1db5f7dc7e3f5d734bf0cd2f590e0c5120b8ce8cdc",
+    "bytes": 1803
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp/java.uml-source",
+    "sha256": "e0939abdb540e2174fce7d1487b7e71a8ac9af8719f630cba2b5586ab6fa0743",
+    "bytes": 7033
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp.puml",
+    "sha256": "b1fdcb79076a777bde77637bd47063614415e5985a853a43ff112593106906b1",
+    "bytes": 128
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/before.diff.txt",
+    "sha256": "d6fe10f3c9c7888dd85520dea0e1f96a540bf52933799cac0d3cf9f0be51b8a1",
+    "bytes": 1990
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/before.svg",
+    "sha256": "5cb0095ef6ab47a90abaa3b6f1614486903e78287fb3ced4fc94af75c76eaf36",
+    "bytes": 2496
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/before.uml-source",
+    "sha256": "6f19cc898d9bac26108fe480bedaf96041a10711badc7e9ec261eb184e3cf663",
+    "bytes": 7337
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/before.yaml",
+    "sha256": "4d4b320c2f77000f5b64a91d116410db04b5a4d8a59af19965129bb986e775c4",
+    "bytes": 71720
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/candidate.svg",
+    "sha256": "060f2143fa494059be052d12e9f7ea697cf16daac65dda9341db979eee34ab38",
+    "bytes": 2503
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/candidate.uml-source",
+    "sha256": "fc08c52e377fa057a34ba66c684bab6fee1c0f9192ea3a17975473afd28f9ff0",
+    "bytes": 7274
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/candidate.yaml",
+    "sha256": "569184d250cadc25811a7efdef7dc4d3e47f66d11f499b37ffcf9e23e945d7b7",
+    "bytes": 71654
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/java.svg",
+    "sha256": "8f58f9eb06d4bd7a0d1ea3c65d60223c8f548e16feb8e944f6002330f3c5fa9d",
+    "bytes": 2636
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero/java.uml-source",
+    "sha256": "fc08c52e377fa057a34ba66c684bab6fee1c0f9192ea3a17975473afd28f9ff0",
+    "bytes": 7274
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero.puml",
+    "sha256": "3e2a5f2937f219102ec47127ea35774e1182d21b99941acfd0ba601b1e0f096a",
+    "bytes": 136
+  },
+  {
+    "path": "docs/parity-reviews/tim-explicit-date-instant/maker-results.json",
+    "sha256": "b674860c07bdb12db0306fe61b2f4068dbdde30b70908e373309fb5caff3e337",
+    "bytes": 1936
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/account.json",
+    "sha256": "6ef629e14c5df7efb957e857110e1bc6c6cc262822f837e51c391672761f1ded",
+    "bytes": 2304
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/before.diff.txt",
+    "sha256": "c10cb64b9fe976dddff9772f613a4e135adb5d06584023a834e5c9d790deb4e4",
+    "bytes": 2310
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/before.svg",
+    "sha256": "c2074e9988035fc8cf6f269a00eba2ba62607e1f0d4ea69bd01c2d92ce93844e",
+    "bytes": 1585
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/before.uml-source",
+    "sha256": "09e667691f7d900b4b9ad5c82f2a968259a405744fc8d87d089e02c4dabfba3c",
+    "bytes": 40
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/before.yaml",
+    "sha256": "2c43ffe53db62d1bf06746a25ed8c7007b86e8a9e3e24d47119be26f35f6e198",
+    "bytes": 391
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/candidate.svg",
+    "sha256": "99deccf83dc3a66556e5b94438e2eec453bf1997251fab69d9d7240545f30218",
+    "bytes": 1582
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/candidate.uml-source",
+    "sha256": "f9aa59683dc074741a87b44654449d68f1535699f10d8c541eb9eafa15db0367",
+    "bytes": 38
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/candidate.yaml",
+    "sha256": "763f31ef288297e11e0309207d63002d234091b17afb90d173204e5ca7d1b670",
+    "bytes": 383
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/java.svg",
+    "sha256": "3edbc8ae4860be0f0c1e55bda4046d6c271b952247481a88a7d6badc1aec4609",
+    "bytes": 1783
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name/java.uml-source",
+    "sha256": "f9aa59683dc074741a87b44654449d68f1535699f10d8c541eb9eafa15db0367",
+    "bytes": 38
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name.puml",
+    "sha256": "912834235473bd49e0bbae65268e1b4a9289795a75dd7afbef62847bcbf0e61e",
+    "bytes": 278
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/before.diff.txt",
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/before.svg",
+    "sha256": "a9f324917cd3f7b3b9f675186981eb6b1ac3fc51a11cea3b6458a08c2ddcb05c",
+    "bytes": 1586
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/before.uml-source",
+    "sha256": "e7f8e8d4ebde9b1df6f5d276cbe5af45d8a9f1fa87626eeebe93330b197a95da",
+    "bytes": 71
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/before.yaml",
+    "sha256": "fec1cec624a5d5fa7d3af989e2710d1d22e26d2fe37cb928d5ebbf61fa1012ae",
+    "bytes": 487
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/candidate.diff.txt",
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/candidate.svg",
+    "sha256": "a9f324917cd3f7b3b9f675186981eb6b1ac3fc51a11cea3b6458a08c2ddcb05c",
+    "bytes": 1586
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/candidate.uml-source",
+    "sha256": "6c2a8dbf995ad23d2d4e24034155074e3da67f82eae6e4b287a77c9d5d80f6c5",
+    "bytes": 39
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/candidate.yaml",
+    "sha256": "f7709bd3759739c562691d47e86d8fc71f18e8a130482ac301d6331c231a5fcd",
+    "bytes": 387
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/java.status",
+    "sha256": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf",
+    "bytes": 3
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/java.stderr",
+    "sha256": "53ffdee79b8bbb0694a9e542e4d1cb82c919e893e3be0e3b4b5e5ed448d85bfd",
+    "bytes": 40
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/java.svg",
+    "sha256": "2592f920cfacfa73811d8138184dc204f13d3cada8cbafbcc6ffa6823b4b98e4",
+    "bytes": 7716
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme/java.uml-source",
+    "sha256": "0593c3d83b214d8bc4e7e5caf7edda656c5794a6892a50e3ca1361196ae289b9",
+    "bytes": 31
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme.puml",
+    "sha256": "1e6b7e61f87d8a2427396fa37c66a86f6d4966f8b3da4d303a60ff44e407fc61",
+    "bytes": 82
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/before.diff.txt",
+    "sha256": "7a44df1a08993f7145bd792a368fd1eb63ba5dcd2e15e0b17609d973c77614be",
+    "bytes": 2488
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/before.svg",
+    "sha256": "4056a719019d11a0bdd440b910586e9412bb099494d936b2d4aa5ba25c3c9de4",
+    "bytes": 2081
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/before.uml-source",
+    "sha256": "fdc27016b0af7045b10c96fd2f04ac0d85f68a6537ac97e2af3a92229ba02b6c",
+    "bytes": 7331
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/before.yaml",
+    "sha256": "1eb4237d41f710352876b9f882e297a166d08e55dbdcf942d3ca6d873b1ca7be",
+    "bytes": 73594
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/candidate.svg",
+    "sha256": "c191419a857caea26c465c5383cb52209cebf086c4a964b246533ce21f4bf8b4",
+    "bytes": 2206
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/candidate.uml-source",
+    "sha256": "5c092db3d6edf68b37373e179a1a2d9a6ec0a5ffa1f82890155e0c89270157e2",
+    "bytes": 7105
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/candidate.yaml",
+    "sha256": "afc1a700a6ac3435b5ef1cb6a8309a1e66084defd72826eb03bcc91080e01c68",
+    "bytes": 73183
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/java.svg",
+    "sha256": "10c9c986aef0e3a0bcae3c28e530f0d04bc71a600ad8b0824077b1f38016e2f5",
+    "bytes": 2311
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid/java.uml-source",
+    "sha256": "5c092db3d6edf68b37373e179a1a2d9a6ec0a5ffa1f82890155e0c89270157e2",
+    "bytes": 7105
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid.puml",
+    "sha256": "5d028324861b06ead35fdecead9b81e09926a0aac93af9db1c1f1541ee193c79",
+    "bytes": 83
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/before.diff.txt",
+    "sha256": "de04d1a66c69aa8698e211aab5cc0657df5d4db1eb9eff2f41f33d1f9f8a2774",
+    "bytes": 2026
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/before.svg",
+    "sha256": "35e6fa1ff5016fc17e8702379b044e231015637280ad11719bc0d0f128b40d90",
+    "bytes": 1589
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/before.uml-source",
+    "sha256": "45e7c45408a810fcb83bee0da25d5e0acde9a5b3f8f053b02a728c897d9ce265",
+    "bytes": 60
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/before.yaml",
+    "sha256": "a1d32b37aafd401da3cece7b9344ad927bd95b94c607380679861332c8574b61",
+    "bytes": 407
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/candidate.svg",
+    "sha256": "9681901ad79fca41fbd59f2d1f32d71d41032e375bd246831200a42ab2ecc497",
+    "bytes": 1560
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/candidate.uml-source",
+    "sha256": "7f74da4219fc7d1b4b67e312ee0e7e595060b58fcb8284df2cf9d8794899e2a0",
+    "bytes": 49
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/candidate.yaml",
+    "sha256": "340d37e08d108709cc56d1162e7f2831ddf39f7764e912563dfa66c06d8774de",
+    "bytes": 387
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/java.svg",
+    "sha256": "68d6953a056bf079eae8b51d99c04150dc0db9a6c258f3a6a5bde87ee2c4f749",
+    "bytes": 1733
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control/java.uml-source",
+    "sha256": "7f74da4219fc7d1b4b67e312ee0e7e595060b58fcb8284df2cf9d8794899e2a0",
+    "bytes": 49
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control.puml",
+    "sha256": "7bb7ec3ae0ea373bed17bb381342f5b2257ce750ecc2e2b01c3de5b6d0fb36f1",
+    "bytes": 182
+  },
+  {
+    "path": "docs/parity-reviews/tim-literal-variable-lookup/maker-results.json",
+    "sha256": "8bdc5116cda7b337cc47f8197c7ad193e056a248ecf97499f9f18bd816de04fa",
+    "bytes": 3222
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/account.json",
+    "sha256": "4d7ed3300f18b44e76a02af7a547bf40c138a5c523fcdab27a5f0c0974e6ee60",
+    "bytes": 2553
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/before.diff.txt",
+    "sha256": "1eccc7b13d2f375bc6b1900947cef6a2a0377a0a134a0d140dfddc0bde820001",
+    "bytes": 2360
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/before.svg",
+    "sha256": "8f059c007ef6b3b6c3a9de7d190febb56c91b0c2888b80a73980c20e23808fe9",
+    "bytes": 2894
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/before.uml-source",
+    "sha256": "9dd24929d4e4eb2c731074465eb1fd838889ff923d1f2cb8f3dda6ad0be2058d",
+    "bytes": 132
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/before.yaml",
+    "sha256": "4b0ffb5a799e9b04ba662a1f0db67349a27954373c5ca7ff7249f0b796778ba1",
+    "bytes": 660
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/candidate.svg",
+    "sha256": "460bb70fefbe5997bc84cb97f57f475ceb10c1be018998ed10a9d0e30aa88260",
+    "bytes": 2896
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/candidate.uml-source",
+    "sha256": "5a0d26aedfe04fb2d307a5fde706247c28964a4fc88311dd005a25b74e6a5336",
+    "bytes": 102
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/candidate.yaml",
+    "sha256": "2d4e16caeb5e85be270549d5439063d822c21db9000ffa6eadbba6e4779b332f",
+    "bytes": 624
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/java.svg",
+    "sha256": "75c637f7a94fb8da62833a6c132dee95d0479851f1fd610497281d903f8ccfcc",
+    "bytes": 3065
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow/java.uml-source",
+    "sha256": "5a0d26aedfe04fb2d307a5fde706247c28964a4fc88311dd005a25b74e6a5336",
+    "bytes": 102
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow.puml",
+    "sha256": "f251a9ef7fbb1c715d87a50273f0b8b8c98aa75fc3b26575bd9dbd31449fb5ce",
+    "bytes": 231
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/before.diff.txt",
+    "sha256": "0b55d476efc54d98984fb9f94f728a980807db7435c23c1f1b1f310c8293d0f9",
+    "bytes": 8296
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/before.svg",
+    "sha256": "77f5db19e17f88f5ec36ca9848f605f4c111979c28f4f584e797ff4468324343",
+    "bytes": 4215
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/before.uml-source",
+    "sha256": "ffe48592d3c846c254c2db9b46e1ba7e7f8e3e2712ef2908aa03dd1059f5b7f0",
+    "bytes": 147
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/before.yaml",
+    "sha256": "bd6ecc858c5eefd27202adc912676d1f168adb161b35ff78219755781cf44907",
+    "bytes": 849
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/candidate.svg",
+    "sha256": "e1d9051d5a731d2c165f4057e2609b69368ff7ab05f198e2ae8983f608edcce1",
+    "bytes": 4211
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/candidate.uml-source",
+    "sha256": "7890a3b32470269399a3c9eb5f0491610dd9fde0a1a82ec27defff289417ea17",
+    "bytes": 145
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/candidate.yaml",
+    "sha256": "7f907acd7fdbf8794e555d3a7442d45067ceb8f8940ec2381f1270d83a464c95",
+    "bytes": 845
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/java.svg",
+    "sha256": "3d313cb54101a000ed379383e84c94365452c39c84b89cab40ab4227d109daaa",
+    "bytes": 4374
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global/java.uml-source",
+    "sha256": "7890a3b32470269399a3c9eb5f0491610dd9fde0a1a82ec27defff289417ea17",
+    "bytes": 145
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global.puml",
+    "sha256": "1c87c28983864ef71b10c39806fef1e97963a48d59330d327ea20cb11d98bf77",
+    "bytes": 293
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/before.diff.txt",
+    "sha256": "e6f19d3bc70fbde15faf4ccc66ed93e5e15417d713221ee13b543cf56696f9a3",
+    "bytes": 1019
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/before.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/before.svg",
+    "sha256": "44329ffcf18f7fd746ec216e94d5af5d9624f35a2e36cf3331a8987de3cd5c94",
+    "bytes": 1660
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/before.uml-source",
+    "sha256": "e34a9c9480afa040a4960e48d7992fd9d4b26c0e9d5b523d3f86097b59f463e5",
+    "bytes": 7074
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/before.yaml",
+    "sha256": "2fb8208d054ea542b3e7cd6c60ac9cdea644a8315911c9ee93acc9ec89a55ddc",
+    "bytes": 69852
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/candidate.diff.txt",
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/candidate.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/candidate.svg",
+    "sha256": "8f0996c3af9babd673782bca324eb36a865360212f9e7b017142602ed07ed01c",
+    "bytes": 2075
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/candidate.uml-source",
+    "sha256": "d299c2880a2c5d43961e1ef9fc66892f2faf33bc13950b720d206e9eae3079d8",
+    "bytes": 7342
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/candidate.yaml",
+    "sha256": "4f32427390e4ec08c42a5bb7579b49cc6c3f8113468e2024ce2ab9f7b0a92dc8",
+    "bytes": 70500
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/java.source.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/java.source.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/java.status",
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/java.svg",
+    "sha256": "2f43ae6b271778ad70291c250da6835c97c9292b1bcd465f817ec35b07582b9f",
+    "bytes": 2180
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper/java.uml-source",
+    "sha256": "d299c2880a2c5d43961e1ef9fc66892f2faf33bc13950b720d206e9eae3079d8",
+    "bytes": 7342
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper.puml",
+    "sha256": "439daec858d75a96779311f0aff32fa4d1995bd4b2a9cb4397aea01f2e72821f",
+    "bytes": 105
+  },
+  {
+    "path": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-results.json",
+    "sha256": "8f6cdc4215088b297ab08a2ab5ea26f30eec1e5c625a975d13f00eec649f76ed",
+    "bytes": 2603
+  }
+]

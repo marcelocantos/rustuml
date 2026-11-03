@@ -1,0 +1,38 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __theme
+      value: $palette
+    sprites:
+      badge:
+        width: 3
+        height: 2
+        rows:
+        - F0A
+        - '01F'
+    source: |
+      @startuml
+
+
+
+
+      skinparam __theme $palette
+      ' [dump] palette=cerulean
+      class SapphireRegistry
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity SapphireRegistry
+  entities:
+  - id: SapphireRegistry
+    label: SapphireRegistry
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

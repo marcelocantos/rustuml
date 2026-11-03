@@ -1,0 +1,3 @@
+@startuml
+class "false|true|false" as LiteralLookup
+@enduml

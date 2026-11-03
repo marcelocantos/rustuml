@@ -1,0 +1,24 @@
+SVG structural differences:
+  element count: expected 14, got 13
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "87.5px"), ("preserveAspectRatio", "none"), ("style", "width:164px;height:87px;background:#721345;"), ("version", "1.1"), ("viewBox", "0 0 164 87"), ("width", "164.5833px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "87.5px"), ("preserveAspectRatio", "none"), ("style", "width:164px;height:87px;"), ("version", "1.1"), ("viewBox", "0 0 164 87"), ("width", "164.5833px"), ("zoomAndPan", "magnify")]
+  [3] tag mismatch: expected <rect>, got <g>
+  [4] tag mismatch: expected <g>, got <rect>
+  [5] <rect> attr mismatch:
+    expected: [("fill", "#721345"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#55B2DE;stroke-width:1.0417;"), ("width", "128.1469"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "#227FAB"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#227FAB;stroke-width:1.0417;"), ("width", "128.1469"), ("x", "17.7083"), ("y", "17.7083")]
+  [6] <rect> attr mismatch:
+    expected: [("fill", "#227FAB"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#227FAB;stroke-width:1.0417;"), ("width", "128.1469"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "#227FAB"), ("height", "4.1667"), ("style", "stroke:#227FAB;stroke-width:1.0417;"), ("width", "128.1469"), ("x", "17.7083"), ("y", "48.3007")]
+  [7] <rect> attr mismatch:
+    expected: [("fill", "#227FAB"), ("height", "4.1667"), ("style", "stroke:#227FAB;stroke-width:1.0417;"), ("width", "128.1469"), ("x", "17.7083"), ("y", "48.3007")]
+    actual:   [("fill", "none"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#55B2DE;stroke-width:1.0417;"), ("width", "128.1469"), ("x", "17.7083"), ("y", "17.7083")]
+  [8] tag mismatch: expected <rect>, got <ellipse>
+  [9] tag mismatch: expected <ellipse>, got <path>
+  [10] tag mismatch: expected <path>, got <text>
+  [11] tag mismatch: expected <text>, got <line>
+  [12] <line> attr mismatch:
+    expected: [("style", "stroke:#55B2DE;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "144.8135"), ("y1", "52.4673"), ("y2", "52.4673")]
+    actual:   [("style", "stroke:#55B2DE;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "144.8135"), ("y1", "60.8007"), ("y2", "60.8007")]
+

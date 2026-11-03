@@ -1,0 +1,26 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __theme
+      value: minty-outline
+    source: |
+      @startuml
+      skinparam __theme minty-outline
+      class GarnetRegistry
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity GarnetRegistry
+  entities:
+  - id: GarnetRegistry
+    label: GarnetRegistry
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

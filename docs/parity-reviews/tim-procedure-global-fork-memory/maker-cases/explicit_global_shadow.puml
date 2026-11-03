@@ -1,0 +1,10 @@
+@startuml
+!$tone = "initial"
+!procedure $update($tone)
+!local $private = "local"
+!global $tone = "updated"
+class "Local $tone $private" as LocalRecord
+!endprocedure
+$update("parameter")
+class "Global $tone" as GlobalRecord
+@enduml

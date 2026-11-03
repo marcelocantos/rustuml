@@ -1,0 +1,4 @@
+@startuml
+class "Local parameter local" as LocalRecord
+class "Global updated" as GlobalRecord
+@enduml

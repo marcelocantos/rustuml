@@ -1,0 +1,167 @@
+[
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/aws_activity_seed.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/function_selector_parameter.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/inactive_and_comments.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/loop_side_effect.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/sprite_before_dynamic_theme.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/sub_sprite_after_theme.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-evaluated-event-stream/sub_state_two_mutations.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-explicit-date-instant/expression_timestamp.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-explicit-date-instant/negative_and_zero.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-literal-variable-lookup/computed_local_name.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-literal-variable-lookup/guard_changed_theme.puml",
+    "phase": "stream",
+    "java_svg_exit": 200,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-literal-variable-lookup/guard_changed_theme_valid.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-procedure-global-fork-memory/explicit_global_shadow.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-procedure-global-fork-memory/nested_local_and_global.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-repair/new/tim-procedure-global-fork-memory/theme_scope_helper.puml",
+    "phase": "stream",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  }
+]

@@ -1,0 +1,376 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  }
+]
