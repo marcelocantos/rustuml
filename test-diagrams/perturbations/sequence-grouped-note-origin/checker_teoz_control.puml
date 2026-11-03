@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+group teoz
+note left of I : Wide fractional Wi.f
+loop nested
+I -> W ++ : call
+note left of W : iii
+return reply
+end
+end
+@enduml

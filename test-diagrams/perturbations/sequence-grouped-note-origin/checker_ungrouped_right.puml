@@ -1,0 +1,11 @@
+@startuml
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+I -> W ++ : open
+note right of I
+Wide fractional Wi.f
+line
+end note
+return close
+@enduml

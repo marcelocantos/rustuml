@@ -1,0 +1,18 @@
+@startuml
+skinparam Padding 7
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+group padded
+I -> W ++ : take
+note right of W
+Wi.f
+width
+end note
+opt inner
+note left of I : MMMM.f
+return sent
+end
+end
+
+@enduml
