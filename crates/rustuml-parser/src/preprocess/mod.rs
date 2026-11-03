@@ -2294,7 +2294,7 @@ impl PreprocessContext {
     fn substitute_vars(&mut self, line: &str) -> String {
         // VariableExists receives an evaluated string token, not a textual
         // replacement of $name inside that quoted token (TContext's EaterFunctionCall).
-        let line = self.expand_lookup_functions(line);
+        let line = self.expand_argument_builtins(line);
         let line = line.as_str();
         // Preserve sprite icon references `<$name>` — they are rendered as
         // inline images and must not be stripped or variable-substituted here.
@@ -2384,9 +2384,9 @@ impl PreprocessContext {
         processed
     }
 
-    fn expand_lookup_functions(&mut self, line: &str) -> String {
+    fn expand_argument_builtins(&mut self, line: &str) -> String {
         static LOOKUP: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"%(variable_exists|get_variable_value|is_defined)\(").unwrap()
+            Regex::new(r"%(variable_exists|get_variable_value|is_defined|date)\(").unwrap()
         });
         let mut result = line.to_string();
         let mut offset = 0;
@@ -2625,13 +2625,22 @@ impl PreprocessContext {
             "true" => "1".to_string(),
             "false" => "0".to_string(),
             "date" => {
-                let fmt = args.first().copied().unwrap_or("");
                 let clock = &self.render_clock;
-                if fmt.is_empty() {
-                    format_java_date(clock.epoch_ms, &clock.tz)
-                } else {
-                    format_java_date_pattern(clock.epoch_ms, &clock.tz, fmt)
+                if args.is_empty() {
+                    return format_java_date(clock.epoch_ms as i64, &clock.tz);
                 }
+                // DateFunction.executeReturnFunction converts its second TValue
+                // to a signed Java int (seconds), then multiplies by 1000L.
+                let epoch_ms = if let Some(seconds) = args.get(1) {
+                    let Ok(seconds) = seconds.parse::<i32>() else {
+                        return String::new();
+                    };
+                    i64::from(seconds) * 1000
+                } else {
+                    clock.epoch_ms as i64
+                };
+                let tz = clock.timezone_at(epoch_ms);
+                format_java_date_pattern(epoch_ms, &tz, args[0])
             }
             "size" => {
                 // Count array elements if the argument looks like a JSON array [a, b, c].
@@ -2831,22 +2840,32 @@ impl PreprocessContext {
 ///
 /// Renders wall clock in the supplied timezone. Java's `Date.toString()`
 /// has no sub-second precision, so the millisecond remainder is discarded.
-fn format_java_date(epoch_ms: u64, tz: &TzSpec) -> String {
+fn format_java_date(epoch_ms: i64, tz: &TzSpec) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
+    let s = epoch_ms.div_euclid(1000) + i64::from(tz.offset_secs);
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm = (secs % 3600) / 60;
     let ss = secs % 60;
-    let dow = DAYS[(((s / 86400) % 7 + 7) % 7) as usize];
+    let dow = DAYS[(s.div_euclid(86400).rem_euclid(7)) as usize];
 
     // Days since epoch → year/month/day (civil calendar).
     let mut days = s.div_euclid(86400);
     let mut year = 1970i64;
+    // DateFunction accepts negative epoch seconds; walk the Gregorian calendar
+    // backwards as well as forwards from the Unix epoch.
+    while days < 0 {
+        year -= 1;
+        days += if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+    }
     loop {
         let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
             366
@@ -2896,22 +2915,32 @@ fn format_java_date(epoch_ms: u64, tz: &TzSpec) -> String {
 /// Renders wall clock in the supplied timezone. Supports the most common
 /// tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`, `EEE` (day-of-week),
 /// `MMM` (month abbreviation). Literal text passes through.
-fn format_java_date_pattern(epoch_ms: u64, tz: &TzSpec, pattern: &str) -> String {
+fn format_java_date_pattern(epoch_ms: i64, tz: &TzSpec, pattern: &str) -> String {
     const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
     const MONTHS: [&str; 12] = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
     let _millis = (epoch_ms % 1000) as u32;
-    let s = (epoch_ms / 1000) as i64 + tz.offset_secs as i64;
+    let s = epoch_ms.div_euclid(1000) + i64::from(tz.offset_secs);
     let secs = ((s % 86400) + 86400) % 86400;
     let hh = secs / 3600;
     let mm_time = (secs % 3600) / 60;
     let ss = secs % 60;
-    let dow_idx = (((s / 86400) % 7 + 7) % 7) as usize;
+    let dow_idx = (s.div_euclid(86400).rem_euclid(7)) as usize;
 
     let mut days = s.div_euclid(86400);
     let mut year = 1970i64;
+    // DateFunction accepts negative epoch seconds; walk the Gregorian calendar
+    // backwards as well as forwards from the Unix epoch.
+    while days < 0 {
+        year -= 1;
+        days += if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
+            366
+        } else {
+            365
+        };
+    }
     loop {
         let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
             366
@@ -3571,6 +3600,29 @@ $inspect("payload")
 %variable_exists("$local")
 @enduml"#;
         assert_eq!(pp(source), ["1 0 1", "0"]);
+    }
+
+    #[test]
+    fn explicit_date_uses_signed_seconds_and_expression_arguments() {
+        let mut ctx = PreprocessContext::new(None, false);
+        ctx.render_clock.tz = TzSpec {
+            name: "UTC".to_string(),
+            offset_secs: 0,
+        };
+        // Check the formatter independently of the host zone and current year.
+        assert_eq!(
+            format_java_date_pattern(-86400000, &ctx.render_clock.tz, "yyyy-MM-dd EEE"),
+            "1969-12-31 Wed"
+        );
+        let result = ctx
+            .eval_expr_to_value("%date(\"yyyy\", 946684800)")
+            .to_display();
+        assert_eq!(result, "2000");
+        assert_eq!(
+            ctx.substitute_vars("%date(\"yyyy\", 946684800 + 86400)"),
+            "2000"
+        );
+        assert_eq!(ctx.substitute_vars("%date(\"\", 0)"), "");
     }
 
     #[test]
