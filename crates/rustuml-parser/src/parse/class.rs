@@ -36,28 +36,32 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
 }
 
 pub(super) fn native_container_candidate(lines: &[String]) -> bool {
-    parse_commands(lines, false)
-        .is_ok_and(|parser| parser.has_native_class && !parser.packages.is_empty())
+    parse_commands(lines, false).is_ok_and(|parser| {
+        !parser.packages.is_empty() && (parser.has_native_class || parser.entities.is_empty())
+    })
 }
 
-/// DescriptionDiagramFactory has the same actor/usecase declarations without
-/// CommandCreateElementFull2's class-only mixing gate. This bounded trial uses
-/// consuming execution, never a raw scan, and excludes all native class leaves.
-pub(super) fn description_actor_candidate(lines: &[String]) -> bool {
-    parse_commands(lines, true).is_ok_and(|parser| {
-        !parser.has_native_class
-            && parser.packages.is_empty()
-            && !parser.entities.is_empty()
+/// PSystemBuilder tries DescriptionDiagramFactory after class execution fails.
+/// A full consuming trial is required; native-only declarations and class-only
+/// directives cannot be rescued by a description family score.
+pub(super) fn description_candidate(lines: &[String]) -> Option<bool> {
+    let parser = parse_commands(lines, true).ok()?;
+    if parser.entities.is_empty() {
+        return None;
+    }
+    Some(
+        parser.packages.is_empty()
             && parser
                 .entities
                 .iter()
-                .all(|entity| matches!(entity.kind, EntityKind::Actor | EntityKind::UseCase))
-    })
+                .all(|entity| matches!(entity.kind, EntityKind::Actor | EntityKind::UseCase)),
+    )
 }
 
 fn parse_commands(lines: &[String], description_factory: bool) -> Result<ClassParser, ParseError> {
     let mut parser = ClassParser::new();
     parser.allow_mixing = description_factory;
+    parser.description_factory = description_factory;
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if parser.current_note.is_some() {
@@ -141,6 +145,7 @@ fn name_and_code(input: &str) -> Option<NameAndCode<'_>> {
 struct ClassParser {
     meta: DiagramMeta,
     allow_mixing: bool,
+    description_factory: bool,
     has_native_class: bool,
     direction: ClassLayoutDirection,
     entities: Vec<ClassEntity>,
@@ -181,6 +186,8 @@ struct ClassParser {
     /// Accumulated `hide` / `show` directives, in source order.
     hide_show: Vec<crate::diagram::class::HideShow>,
     header_line: Option<usize>,
+    header_alignment: Option<LegendHorizontalAlignment>,
+    footer_alignment: Option<LegendHorizontalAlignment>,
     footer_line: Option<usize>,
     title_line: Option<usize>,
     caption_line: Option<usize>,
@@ -198,6 +205,7 @@ impl ClassParser {
         Self {
             meta: DiagramMeta::default(),
             allow_mixing: false,
+            description_factory: false,
             has_native_class: false,
             direction: ClassLayoutDirection::TopToBottom,
             entities: Vec::new(),
@@ -223,6 +231,8 @@ impl ClassParser {
             current_line: 0,
             hide_show: Vec::new(),
             header_line: None,
+            header_alignment: None,
+            footer_alignment: None,
             footer_line: None,
             title_line: None,
             caption_line: None,
@@ -263,6 +273,8 @@ impl ClassParser {
             notes: self.notes,
             hide_show: self.hide_show,
             header_line: self.header_line,
+            header_alignment: self.header_alignment,
+            footer_alignment: self.footer_alignment,
             footer_line: self.footer_line,
             title_line: self.title_line,
             caption_line: self.caption_line,
@@ -276,7 +288,19 @@ impl ClassParser {
         self.relationships.push(relationship);
     }
 
-    fn push_note(&mut self, note: Note) {
+    fn push_note(&mut self, mut note: Note) {
+        // CommandFactoryNote.executeInternal resolves named NOTE leaves with
+        // quarkInContext(false), in the same namespace used by CommandLinkClass.
+        if let Some(alias) = &note.alias {
+            let path = self.resolve_quark_path(alias, QuarkLookup::CurrentContext);
+            note.alias = Some(self.path_id(&path));
+            self.register_quark_path(&path);
+        }
+        // CommandFactoryNoteOnEntity uses the current group, not the target group.
+        note.owner_package = self
+            .package_stack
+            .last()
+            .map(|&idx| self.packages[idx].name.clone());
         self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
         self.notes.push(note);
     }
@@ -455,6 +479,9 @@ impl ClassParser {
             self.uid_events.push(ClassUidEvent::Package(name.clone()));
             self.packages.push(Package {
                 name,
+                tags: Vec::new(),
+                url: None,
+                url_tooltip: None,
                 kind: PackageKind::Package,
                 color: None,
                 entities: Vec::new(),
@@ -561,6 +588,18 @@ impl ClassParser {
         // `CommandLinkClass#executeArg` calls
         // `CucaDiagram#quarkInContextSafe(true, endpoint)` and first creates a
         // missing endpoint as `LeafType.CLASS` at the relationship location.
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+        if let Some(&index) = self.package_by_path.get(&path) {
+            return self.packages[index].name.clone();
+        }
+        let id = self.path_id(&path);
+        if self
+            .notes
+            .iter()
+            .any(|note| note.alias.as_deref() == Some(&id))
+        {
+            return id;
+        }
         self.ensure_entity(raw)
     }
 
@@ -786,7 +825,7 @@ impl ClassParser {
         // separates keywords, while labels/codes retain their original case.
         static DECL: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-            r"(?i)^([+~#-]?)\s*(?:(mix_)?(class|abstract\s+class|static\s+class|abstract|interface|enum|annotation|entity|protocol|struct|exception|metaclass|stereotype|dataclass|record|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle))\s+"
+            r"(?i)^([+~#-]?)\s*(?:(mix_)?(class|abstract\s+class|static\s+class|abstract|interface|enum|annotation|entity|protocol|struct|exception|metaclass|stereotype|dataclass|record|object|state|circle|diamond|actor|usecase|component|boundary|database|queue|node|rectangle))\s+"
         ).unwrap()
         });
         static SUFFIX: LazyLock<Regex> = LazyLock::new(|| {
@@ -805,7 +844,7 @@ impl ClassParser {
             .join(" ")
             .to_ascii_lowercase();
         let declaration_kind = declaration_key.as_str();
-        let ordinary_class_command = matches!(
+        let native_grammar = matches!(
             declaration_kind,
             "class"
                 | "abstract class"
@@ -825,6 +864,14 @@ impl ClassParser {
                 | "circle"
                 | "diamond"
         );
+        // DescriptionDiagramFactory shares interface/entity/circle spelling,
+        // but not native class semantics. CommandCreateElementFull chooses its
+        // own leaf type; other native declarations are not description commands.
+        let shared_description = matches!(declaration_kind, "interface" | "entity" | "circle");
+        if self.description_factory && native_grammar && !shared_description {
+            return Ok(false);
+        }
+        let ordinary_class_command = native_grammar && !self.description_factory;
         let mixed = !ordinary_class_command && declaration_kind != "object";
         let Some(name) = name_and_code(&line[caps.get(0).unwrap().end()..]) else {
             return Ok(false);
@@ -1193,7 +1240,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:\)[-.]+\(?|[-.]+\(|<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -1224,6 +1271,10 @@ impl ClassParser {
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
             let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_str);
+            let mut from_decor = rel_str
+                .starts_with(')')
+                .then_some(EndpointDecor::Parenthesis);
+            let mut to_decor = rel_str.ends_with('(').then_some(EndpointDecor::Parenthesis);
             if rel_str.contains(">>") || rel_str.contains("<<") {
                 style.arrowhead = RelationshipArrowhead::Triangle;
             }
@@ -1244,6 +1295,7 @@ impl ClassParser {
                 std::mem::swap(&mut from, &mut to);
                 std::mem::swap(&mut from_mult, &mut to_mult);
                 decorated_end = invert_relationship_end(decorated_end);
+                std::mem::swap(&mut from_decor, &mut to_decor);
                 style.inverted = true;
             }
 
@@ -1255,8 +1307,8 @@ impl ClassParser {
                 label_arrow,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
-                from_decor: None,
-                to_decor: None,
+                from_decor,
+                to_decor,
                 decorated_end,
                 dashed,
                 length,
@@ -1424,38 +1476,128 @@ impl ClassParser {
     }
 
     fn try_package(&mut self, line: &str) -> bool {
+        // ClassDiagramFactory registers CommandPackage before the symbol
+        // command. Its one non-greedy stereotype capture backtracks to the
+        // final >> when needed; apparent `as` inside that blob is not an alias.
+        static ORDINARY: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+            r#"(?i)^package\s+("[^"]+"|[^#\s{}]*)(?:\s+as\s+([\p{L}\p{N}_.]+))?\s*(?:\$[^\s<>]+\s*)*(<<.+?>>)?\s*(?:\$[^\s<>]+\s*)*(?:\[\[.*?\]\])?\s*(?:#[^\s{}]+)?\s*\{$"#
+        ).unwrap()
+        });
+        let ordinary = ORDINARY.captures(line);
+        static STEREO_LABEL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<<(.+?)>>").unwrap());
         // CommandPackageWithUSymbol#getRegexConcat/executeArg distinguish code
         // from display in both alias directions. The quark owns code; the
         // group's Display never participates in identity resolution.
         static PREFIX: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"(?i)^(package|namespace|cloud|database|folder|frame|rectangle|node)\s+")
+            Regex::new(r"(?i)^(package|namespace|cloud|database|folder|frame|rectangle|node|action|process|queue)\s+")
                 .unwrap()
         });
-        static TAIL: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r"^\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:#([^\s{<]+))?\s*\{\s*$",
-            )
-            .unwrap()
-        });
+        // CommandPackageWithUSymbol: identity-local stereotype before `as`,
+        // then TAGS1, STEREOTYPE, TAGS2, URL, color and the opening brace.
+        static STEREO: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^<<(.+?)>>\s*").unwrap());
+        static TAG: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\$([^\s{}<>]+)\s*").unwrap());
         let Some(prefix) = PREFIX.captures(line) else {
             return false;
         };
-        let Some(name) = name_and_code(&line[prefix.get(0).unwrap().end()..]) else {
+        let input = &line[prefix.get(0).unwrap().end()..];
+        let Some((first, quoted, mut rest)) = name_token(input) else {
             return false;
         };
-        let Some(tail) = TAIL.captures(name.tail) else {
+        rest = rest.trim_start();
+        let mut identity_stereotypes = Vec::new();
+        while let Some(caps) = STEREO.captures(rest) {
+            identity_stereotypes.push(caps[1].trim().to_string());
+            rest = &rest[caps.get(0).unwrap().end()..];
+        }
+        let mut code = first.to_string();
+        let mut display = first.to_string();
+        let mut explicit_alias = false;
+        if let Some((word, tail)) = rest.split_once(char::is_whitespace)
+            && word.eq_ignore_ascii_case("as")
+        {
+            let Some((second, second_quoted, tail)) = name_token(tail.trim_start()) else {
+                return false;
+            };
+            if second_quoted && !quoted {
+                display = second.into();
+            } else {
+                code = second.into();
+            }
+            explicit_alias = true;
+            rest = tail.trim_start();
+        }
+        let mut tags = Vec::new();
+        while let Some(caps) = TAG.captures(rest) {
+            tags.push(caps[1].to_string());
+            rest = &rest[caps.get(0).unwrap().end()..];
+        }
+        let mut trailing_stereotypes = Vec::new();
+        while let Some(caps) = STEREO.captures(rest) {
+            trailing_stereotypes.push(caps[1].trim().to_string());
+            rest = &rest[caps.get(0).unwrap().end()..];
+        }
+        while let Some(caps) = TAG.captures(rest) {
+            tags.push(caps[1].to_string());
+            rest = &rest[caps.get(0).unwrap().end()..];
+        }
+        let (mut url, clean_tail) = super::extract_link_url(rest);
+        let url_tooltip = super::extract_link_tooltip(rest);
+        // UrlBuilder permits a tooltip-only link with an empty href.
+        if url.is_none() && rest.starts_with("[[") {
+            url = Some(String::new());
+        }
+        if let Some(value) = &mut url
+            && !value.is_empty()
+            && !value.contains(":")
+            && let Some(top) = self
+                .meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|p| p.key.eq_ignore_ascii_case("topurl"))
+        {
+            *value = format!("{}{value}", top.value);
+        }
+        let Some(suffix) = clean_tail.trim().strip_suffix('{') else {
+            return false;
+        };
+        let suffix = suffix.trim();
+        let color = if suffix.is_empty() {
+            None
+        } else if let Some(value) = suffix.strip_prefix('#') {
+            if value.is_empty() || value.chars().any(char::is_whitespace) {
+                return false;
+            }
+            Some(value.into())
+        } else {
             return false;
         };
         {
             let kind_key = prefix[1].to_ascii_lowercase();
             let kind_str = kind_key.as_str();
-            let display = name.display;
-            let alias = name.explicit_alias.then_some(name.code);
-            let color = tail.get(1).or(tail.get(3)).map(|m| m.as_str().to_string());
-            let stereotypes = tail
-                .get(2)
-                .map(|m| vec![m.as_str().trim().to_string()])
-                .unwrap_or_default();
+            let alias = if let Some(caps) = &ordinary {
+                display = caps[1].trim_matches('"').into();
+                caps.get(2).map(|m| m.as_str().to_string())
+            } else {
+                explicit_alias.then_some(code)
+            };
+            // RegexResult.getLazzy selects the unnumbered STEREOTYPE slot first.
+            let stereotypes = if let Some(caps) = &ordinary {
+                // StereotypeDecoration.cutLabels extracts chevron spans only.
+                caps.get(3)
+                    .map(|m| {
+                        STEREO_LABEL
+                            .captures_iter(m.as_str())
+                            .map(|c| c[1].trim().to_string())
+                            .collect()
+                    })
+                    .unwrap_or_default()
+            } else if trailing_stereotypes.is_empty() {
+                identity_stereotypes
+            } else {
+                trailing_stereotypes
+            };
             let kind = match kind_str {
                 "namespace" => PackageKind::Namespace,
                 "cloud" => PackageKind::Cloud,
@@ -1464,6 +1606,9 @@ impl ClassParser {
                 "frame" => PackageKind::Frame,
                 "rectangle" => PackageKind::Rectangle,
                 "node" => PackageKind::Node,
+                "action" => PackageKind::Action,
+                "process" => PackageKind::Process,
+                "queue" => PackageKind::Queue,
                 _ => PackageKind::Package,
             };
             // `CommandPackage#getRegexConcat` consumes the complete line.
@@ -1494,7 +1639,14 @@ impl ClassParser {
                         let package = &mut self.packages[idx];
                         package.kind = kind;
                         package.color = color.clone();
-                        package.stereotypes = stereotypes.clone();
+                        if !stereotypes.is_empty() {
+                            package.stereotypes = stereotypes.clone();
+                        }
+                        package.tags.extend(tags.clone());
+                        if url.is_some() {
+                            package.url = url.clone();
+                            package.url_tooltip = url_tooltip.clone();
+                        }
                         if package.source_line == 0 {
                             package.source_line = self.current_line;
                         }
@@ -1517,6 +1669,9 @@ impl ClassParser {
                     };
                     self.packages.push(Package {
                         name,
+                        tags: if is_final { tags.clone() } else { Vec::new() },
+                        url: if is_final { url.clone() } else { None },
+                        url_tooltip: if is_final { url_tooltip.clone() } else { None },
                         kind: if is_final { kind } else { PackageKind::Package },
                         color: if is_final { color.clone() } else { None },
                         entities: Vec::new(),
@@ -1605,6 +1760,7 @@ impl ClassParser {
                 .map(|s| s.trim_end().to_string())
                 .collect();
             self.push_note(Note {
+                owner_package: None,
                 lines,
                 target: Some(target),
                 position: Some(position),
@@ -1629,6 +1785,7 @@ impl ClassParser {
             };
             let target = self.entities[target_idx].id.clone();
             self.current_note = Some(Note {
+                owner_package: None,
                 lines: Vec::new(),
                 target: Some(target),
                 position: Some(position),
@@ -1649,6 +1806,7 @@ impl ClassParser {
                 .collect();
             let target = self.last_entity_id.clone();
             self.push_note(Note {
+                owner_package: None,
                 lines,
                 target,
                 position: Some(position),
@@ -1664,6 +1822,7 @@ impl ClassParser {
             let position = parse_note_position(&caps[1].to_ascii_lowercase());
             let target = self.last_entity_id.clone();
             self.current_note = Some(Note {
+                owner_package: None,
                 lines: Vec::new(),
                 target,
                 position: Some(position),
@@ -1682,6 +1841,7 @@ impl ClassParser {
                 .map(|s| s.trim_end().to_string())
                 .collect();
             self.push_note(Note {
+                owner_package: None,
                 lines,
                 target: None,
                 position: None,
@@ -1695,6 +1855,7 @@ impl ClassParser {
         if let Some(caps) = FLOATING_ML_RE.captures(line) {
             let alias = caps[1].to_string();
             self.current_note = Some(Note {
+                owner_package: None,
                 lines: Vec::new(),
                 target: None,
                 position: None,
@@ -1719,6 +1880,7 @@ impl ClassParser {
                     .collect()
             };
             self.push_note(Note {
+                owner_package: None,
                 lines,
                 target: None,
                 position: None,
@@ -1731,6 +1893,7 @@ impl ClassParser {
         // `note on link` — multi-line note attached to the last relationship.
         if line == "note on link" {
             self.current_note = Some(Note {
+                owner_package: None,
                 lines: Vec::new(),
                 target: None,
                 position: None,
@@ -1807,33 +1970,38 @@ impl ClassParser {
             self.title_line.get_or_insert(self.current_line);
             return true;
         }
-        if let Some(rest) = line.strip_prefix("header ") {
-            self.meta.header = Some(rest.trim().to_string());
-            self.header_line.get_or_insert(self.current_line);
-            return true;
-        }
-        if line == "header"
-            || line == "left header"
-            || line == "right header"
-            || line == "center header"
-        {
-            self.meta_block = Some(MetaBlock::Header);
-            self.header_line.get_or_insert(self.current_line);
-            return true;
-        }
-        if let Some(rest) = line.strip_prefix("footer ") {
-            self.meta.footer = Some(rest.trim().to_string());
-            self.footer_line.get_or_insert(self.current_line);
-            return true;
-        }
-        if line == "footer"
-            || line == "left footer"
-            || line == "right footer"
-            || line == "center footer"
-        {
-            self.meta_block = Some(MetaBlock::Footer);
-            self.footer_line.get_or_insert(self.current_line);
-            return true;
+        // CommandMultilinesHeader/Footer and their single-line equivalents
+        // retain the alignment separately from the opaque text body.
+        let (alignment, command) = if let Some(rest) = line.strip_prefix("left ") {
+            (Some(LegendHorizontalAlignment::Left), rest)
+        } else if let Some(rest) = line.strip_prefix("right ") {
+            (Some(LegendHorizontalAlignment::Right), rest)
+        } else if let Some(rest) = line.strip_prefix("center ") {
+            (Some(LegendHorizontalAlignment::Center), rest)
+        } else {
+            (None, line)
+        };
+        for (name, block) in [("header", MetaBlock::Header), ("footer", MetaBlock::Footer)] {
+            if command == name || command.starts_with(&format!("{name} ")) {
+                let value = command[name.len()..].trim();
+                if value.is_empty() {
+                    self.meta_block = Some(block);
+                }
+                if name == "header" {
+                    self.header_alignment = alignment;
+                    self.header_line.get_or_insert(self.current_line);
+                    if !value.is_empty() {
+                        self.meta.header = Some(value.into());
+                    }
+                } else {
+                    self.footer_alignment = alignment;
+                    self.footer_line.get_or_insert(self.current_line);
+                    if !value.is_empty() {
+                        self.meta.footer = Some(value.into());
+                    }
+                }
+                return true;
+            }
         }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
@@ -1945,7 +2113,7 @@ impl ClassParser {
             });
             return true;
         }
-        if super::is_allow_mixing_command(line) {
+        if !self.description_factory && super::is_allow_mixing_command(line) {
             self.allow_mixing = true;
             return true;
         }
@@ -2139,6 +2307,7 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "actor" => EntityKind::Actor,
         "usecase" => EntityKind::UseCase,
         "component" => EntityKind::Component,
+        "boundary" => EntityKind::Boundary,
         "database" => EntityKind::Database,
         "queue" => EntityKind::Queue,
         "node" => EntityKind::Node,
@@ -2344,7 +2513,7 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool, RelationshipEnd)
             RelationshipEnd::To
         };
         (RelationshipKind::Dependency, false, decorated_end)
-    } else if s.contains("..") {
+    } else if s.contains('.') {
         // Dashed association (..)
         (RelationshipKind::Association, true, RelationshipEnd::None)
     } else {
@@ -4092,5 +4261,92 @@ mod tests {
         assert_eq!(d.relationships[0].from, "Site.Air Probe");
         assert!(d.entities[2].color.is_none());
         assert!(d.entities[2].url.is_none());
+    }
+
+    #[test]
+    fn restored_command_families_retain_declarations_and_group_endpoints() {
+        let d = parse(
+            "action \"Audit Gate\" as Gate <<Phase>> #Wheat {\nclass Record\nallowmixing\nBOUNDARY\t\"Intake\" as Intake\n}\nprocess Review {\nclass Verdict\n}\nGate )--( Review",
+        );
+        assert_eq!(d.packages.len(), 2);
+        assert_eq!(d.packages[0].kind, PackageKind::Action);
+        assert_eq!(d.packages[1].kind, PackageKind::Process);
+        assert_eq!(d.entities.len(), 3);
+        assert_eq!(d.entities[1].id, "Gate.Intake");
+        assert_eq!(d.entities[1].kind, EntityKind::Boundary);
+        assert_eq!(d.relationships[0].from, "Gate");
+        assert_eq!(d.relationships[0].to, "Review");
+        assert_eq!(
+            d.relationships[0].from_decor,
+            Some(EndpointDecor::Parenthesis)
+        );
+        assert_eq!(
+            d.relationships[0].to_decor,
+            Some(EndpointDecor::Parenthesis)
+        );
+    }
+
+    #[test]
+    fn package_command_precedence_retains_its_own_identity_and_modifiers() {
+        let d = parse(
+            "package \"Audit Zone\" <<First>> as Alias $blue <<Second>> <<Third>> [[https://example.org/a{Docs}]] #Azure {\nclass Entry\n}\ndatabase Data <<Old>> as \"Storage\" $hot <<Current>> [[https://example.org/db]] {\nclass Row\n}",
+        );
+        assert_eq!(d.packages[0].name, "Audit Zone");
+        assert_eq!(d.packages[0].stereotypes, ["First", "Second", "Third"]);
+        assert_eq!(d.entities[0].id, "Audit Zone.Entry");
+        assert_eq!(d.packages[0].url_tooltip.as_deref(), Some("Docs"));
+        assert_eq!(d.packages[1].name, "Data");
+        assert_eq!(d.packages[1].display_name.as_deref(), Some("Storage"));
+        assert_eq!(d.packages[1].stereotypes, ["Current"]);
+        assert_eq!(d.packages[1].tags, ["hot"]);
+    }
+
+    #[test]
+    fn chrome_body_and_note_owner_are_independent_of_attachment_target() {
+        let d = parse(
+            "left header\ncomponent prose\nendheader\nright footer final\nnode Source {\nclass Entry\nnote right of Entry : inside\n}\nnote left of Source.Entry : outside",
+        );
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.header_alignment, Some(LegendHorizontalAlignment::Left));
+        assert_eq!(d.footer_alignment, Some(LegendHorizontalAlignment::Right));
+        assert_eq!(d.meta.header.as_deref(), Some("component prose"));
+        assert_eq!(d.notes[0].owner_package.as_deref(), Some("Source"));
+        assert_eq!(d.notes[1].owner_package, None);
+        assert_eq!(d.notes[0].target, d.notes[1].target);
+    }
+
+    #[test]
+    fn complete_description_fallback_executes_shared_declarations() {
+        let input = "@startuml\ncomponent \"Adapter\" as Port\nINTERFACE\t\"Contract\" as API\nqueue Pending\nPort --> API\n@enduml";
+        let crate::diagram::Diagram::Component(d) = super::super::parse(input).unwrap() else {
+            panic!("description factory expected")
+        };
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.interfaces.len(), 1);
+        assert!(d.interfaces.iter().any(|e| e.id == "API"));
+        assert!(
+            super::super::parse("@startuml\nclass Data\ncomponent Port\nallowmixing\n@enduml")
+                .is_err()
+        );
+    }
+    #[test]
+    fn named_notes_are_scoped_quarks_and_empty_packages_survive_dispatch() {
+        let d = parse("node Yard {\nclass Gate\nnote \"Manual\" as N\nGate .. N\n}");
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.notes[0].alias.as_deref(), Some("Yard.N"));
+        assert_eq!(d.relationships[0].to, "Yard.N");
+        assert_eq!(d.notes[0].owner_package.as_deref(), Some("Yard"));
+        let crate::diagram::Diagram::Class(empty) = super::super::parse(
+            "@startuml\npackage \"Manual\" as M [[https://example.org/m]] {\n}\n@enduml",
+        )
+        .unwrap() else {
+            panic!("package-only class factory")
+        };
+        assert!(empty.entities.is_empty());
+        assert_eq!(empty.packages[0].name, "M");
+        assert_eq!(
+            empty.packages[0].url.as_deref(),
+            Some("https://example.org/m")
+        );
     }
 }
