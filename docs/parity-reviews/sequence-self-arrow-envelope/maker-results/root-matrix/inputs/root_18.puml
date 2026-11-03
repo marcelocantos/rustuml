@@ -1,0 +1,6 @@
+@startuml
+participant S
+S -> S ++ : recursive
+S -> S : WWW thick label WWW
+return unwind
+@enduml

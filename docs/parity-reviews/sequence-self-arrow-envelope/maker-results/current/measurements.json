@@ -1,0 +1,794 @@
+[
+  {
+    "source": "envelope_0.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_1.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_10.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_11.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_12.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_13.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_14.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_15.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_16.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_17.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_18.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_19.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_2.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_20.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_21.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_22.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_23.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_24.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_25.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_26.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_27.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_28.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_29.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_3.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_30.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_31.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_32.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_33.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_34.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_35.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_36.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_37.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_38.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_39.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_4.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_40.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_41.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_42.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 30, got 28\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-lifeline\")]\n  [4] <g> depth mismatch: expected 3, got 4\n  [4] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-lifeline\")]\n    actual:   []\n  [5] tag mismatch: expected <g>, got <rect>\n  [6] tag mismatch: expected <rect>, got <line>\n  [7] tag mismatch: expected <line>, got <g>\n  [8] <g> depth mismatch: expected 3, got 4\n  [8] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-lifeline\")]\n    actual:   []\n  [9] tag mismatch: expected <g>, got <rect>\n  [10] tag mismatch: expected <rect>, got <line>\n  [11] tag mismatch: expected <line>, got <g>\n  [12] tag mismatch: expected <g>, got <rect>\n  [13] tag mismatch: expected <rect>, got <text>\n  [14] tag mismatch: expected <text>, got <g>\n  [15] tag mismatch: expected <g>, got <rect>\n  [16] tag mismatch: expected <rect>, got <text>\n  [17] tag mismatch: expected <text>, got <g>\n  [18] tag mismatch: expected <g>, got <rect>\n  [19] tag mismatch: expected <rect>, got <text>\n  [20] tag mismatch: expected <text>, got <g>\n  [21] tag mismatch: expected <g>, got <rect>\n  [22] tag mismatch: expected <rect>, got <text>\n  [23] tag mismatch: expected <text>, got <g>\n  [24] tag mismatch: expected <g>, got <polygon>\n  [25] tag mismatch: expected <g>, got <line>\n  [26] tag mismatch: expected <polygon>, got <text>\n  [27] <line> depth mismatch: expected 4, got 3\n  [27] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"15.7324\"), (\"x2\", \"66.4673\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:2,2;\"), (\"x1\", \"0\"), (\"x2\", \"252.0952\"), (\"y1\", \"75.7988\"), (\"y2\", \"75.7988\")]\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 30, got 28\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-lifeline\")]\n  [4] <g> depth mismatch: expected 3, got 4\n  [4] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-lifeline\")]\n    actual:   []\n  [5] tag mismatch: expected <g>, got <rect>\n  [6] tag mismatch: expected <rect>, got <line>\n  [7] tag mismatch: expected <line>, got <g>\n  [8] <g> depth mismatch: expected 3, got 4\n  [8] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-lifeline\")]\n    actual:   []\n  [9] tag mismatch: expected <g>, got <rect>\n  [10] tag mismatch: expected <rect>, got <line>\n  [11] tag mismatch: expected <line>, got <g>\n  [12] tag mismatch: expected <g>, got <rect>\n  [13] tag mismatch: expected <rect>, got <text>\n  [14] tag mismatch: expected <text>, got <g>\n  [15] tag mismatch: expected <g>, got <rect>\n  [16] tag mismatch: expected <rect>, got <text>\n  [17] tag mismatch: expected <text>, got <g>\n  [18] tag mismatch: expected <g>, got <rect>\n  [19] tag mismatch: expected <rect>, got <text>\n  [20] tag mismatch: expected <text>, got <g>\n  [21] tag mismatch: expected <g>, got <rect>\n  [22] tag mismatch: expected <rect>, got <text>\n  [23] tag mismatch: expected <text>, got <g>\n  [24] tag mismatch: expected <g>, got <polygon>\n  [25] tag mismatch: expected <g>, got <line>\n  [26] tag mismatch: expected <polygon>, got <text>\n  [27] <line> depth mismatch: expected 4, got 3\n  [27] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"15.7324\"), (\"x2\", \"66.4673\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:2,2;\"), (\"x1\", \"0\"), (\"x2\", \"252.0952\"), (\"y1\", \"75.7988\"), (\"y2\", \"75.7988\")]\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_43.puml",
+    "product": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 34, got 28\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-lifeline\")]\n  [4] <g> depth mismatch: expected 3, got 4\n  [5] tag mismatch: expected <g>, got <rect>\n  [6] tag mismatch: expected <g>, got <line>\n  [7] <g> depth mismatch: expected 4, got 3\n  [7] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-lifeline\")]\n  [8] tag mismatch: expected <rect>, got <g>\n  [9] tag mismatch: expected <line>, got <rect>\n  [10] tag mismatch: expected <g>, got <line>\n  [11] <g> depth mismatch: expected 4, got 3\n  [11] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-head\")]\n  [12] <rect> depth mismatch: expected 5, got 4\n  [12] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"50.3105\"), (\"width\", \"8\"), (\"x\", \"68.4673\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"5\")]\n  [13] tag mismatch: expected <line>, got <text>\n  [14] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-head\")]\n    actual:   [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-tail\")]\n  [15] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"85.7988\")]\n  [16] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.4648\"), (\"x\", \"12\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.4648\"), (\"x\", \"12\"), (\"y\", \"106.334\")]\n  [17] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-tail\")]\n    actual:   [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-head\")]\n  [18] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"85.7988\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.54\"), (\"x\", \"61.6973\"), (\"y\", \"5\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.4648\"), (\"x\", \"12\"), (\"y\", \"106.334\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.54\"), (\"x\", \"68.6973\"), (\"y\", \"25.5352\")]\n  [19] <text> text mismatch:\n    expected: Some(\"L\")\n    actual:   Some(\"S\")\n  [20] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-head\")]\n    actual:   [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-tail\")]\n  [21] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.54\"), (\"x\", \"61.6973\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.54\"), (\"x\", \"61.6973\"), (\"y\", \"85.7988\")]\n  [22] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.54\"), (\"x\", \"68.6973\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.54\"), (\"x\", \"68.6973\"), (\"y\", \"106.334\")]\n  [23] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-tail\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n  [24] tag mismatch: expected <rect>, got <polygon>\n  [25] tag mismatch: expected <text>, got <line>\n  [26] tag mismatch: expected <g>, got <text>\n  [27] tag mismatch: expected <g>, got <line>\n\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 34, got 28\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-lifeline\")]\n  [4] <g> depth mismatch: expected 3, got 4\n  [5] tag mismatch: expected <g>, got <rect>\n  [6] tag mismatch: expected <g>, got <line>\n  [7] <g> depth mismatch: expected 4, got 3\n  [7] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-lifeline\")]\n  [8] tag mismatch: expected <rect>, got <g>\n  [9] tag mismatch: expected <line>, got <rect>\n  [10] tag mismatch: expected <g>, got <line>\n  [11] <g> depth mismatch: expected 4, got 3\n  [11] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-head\")]\n  [12] <rect> depth mismatch: expected 5, got 4\n  [12] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"50.3105\"), (\"width\", \"8\"), (\"x\", \"68.4673\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"5\")]\n  [13] tag mismatch: expected <line>, got <text>\n  [14] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-head\")]\n    actual:   [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-tail\")]\n  [15] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"85.7988\")]\n  [16] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.4648\"), (\"x\", \"12\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.4648\"), (\"x\", \"12\"), (\"y\", \"106.334\")]\n  [17] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"L\"), (\"data-source-line\", \"1\"), (\"id\", \"part1-tail\")]\n    actual:   [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-head\")]\n  [18] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.4648\"), (\"x\", \"5\"), (\"y\", \"85.7988\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.54\"), (\"x\", \"61.6973\"), (\"y\", \"5\")]\n  [19] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.4648\"), (\"x\", \"12\"), (\"y\", \"106.334\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.54\"), (\"x\", \"68.6973\"), (\"y\", \"25.5352\")]\n  [19] <text> text mismatch:\n    expected: Some(\"L\")\n    actual:   Some(\"S\")\n  [20] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-head\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-head\")]\n    actual:   [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-tail\")]\n  [21] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.54\"), (\"x\", \"61.6973\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"21.54\"), (\"x\", \"61.6973\"), (\"y\", \"85.7988\")]\n  [22] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.54\"), (\"x\", \"68.6973\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"7.54\"), (\"x\", \"68.6973\"), (\"y\", \"106.334\")]\n  [23] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"S\"), (\"data-source-line\", \"2\"), (\"id\", \"part2-tail\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n  [24] tag mismatch: expected <rect>, got <polygon>\n  [25] tag mismatch: expected <text>, got <line>\n  [26] tag mismatch: expected <g>, got <text>\n  [27] tag mismatch: expected <g>, got <line>\n\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_5.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_6.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_7.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_8.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "envelope_9.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  }
+]
