@@ -1,0 +1,44 @@
+{
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py parent isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate fresh",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/diagnostics.py",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/final_controls.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/candidate-rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/probe compare SOURCE.svg RUST.svg",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "cargo fmt --all --check",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "final_command": "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards",
+  "java_source_probe": "java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -cp SCRATCH:JAR ReaderProbe source SOURCE",
+  "probe_compilation": "rustc --edition=2024 docs/parity-reviews/tim-theme-post-expansion-source-identity/checker-support/probe.rs --extern rustuml_parser=<matching rlib> --extern rustuml_oracle=<matching rlib> -L dependency=/tmp/rustuml-tim-check-2fa74908/target/release/deps -o /tmp/rustuml-tim-check-2fa74908/probe",
+  "logs": {
+    "candidate-parser.log": "d77ce5446bcf3de301b3ec5b1d88ed025ef06e91a156241523befc3feac9cfbb",
+    "final-guards-schema.log": "feec0582e67c05ec6f138df3a703c48c4f2c3be37708231131c5dae109050647",
+    "candidate-fmt.log": "63b594de4d55e6ef1881cdcfef854464ce82a78805b26912d107db73268d1e44",
+    "parent-fmt.log": "63b594de4d55e6ef1881cdcfef854464ce82a78805b26912d107db73268d1e44",
+    "parent-check.log": "9b2f260aff0edce9cdf4659f7b037550ec7c606ed3f8e3dfac364e75cff95211",
+    "candidate-gates.log": "c8cb1809e54a3a61f869b8c229d8dd9251b04413ae4687afbd01e8de09e40d27",
+    "parent-parser.log": "d9b09049677b58be5dd8ed7edaadd3012a051052ef70ef1a4ebcb25d731ba853",
+    "touched-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parent-gates.log": "9e70b04a8d27d267714970e82fa5ad32bef1810a15c9af9ff4087d084894b7c7",
+    "error-probe.log": "cdec5175b8bb2211f9fbcd635745f332de9c9536b4a29050f21201f2893955be",
+    "parent-clippy.log": "f29703a72a94ec837f56f9d3fb1acc06eb6b7416e8480dd861a1709f070f167d",
+    "candidate-clippy.log": "2e4f94f7e57cf901fa13a5cff72fa1abb2d74d163172496886d3cb7f5500c0ec",
+    "parent-gates-empty-corpus.log": "2e0e3a607f4667a0cc87ba8551d5f84f596cb415c934bc78d5b6a44d411e5083",
+    "final-gates.log": "c5994b7361f52ec771d752fa37b21845700bb085822b5f189f8c38230c11f511"
+  },
+  "working_directories": {
+    "isolated": "/Users/marcelo/.t3/worktrees/rustuml/t3-2fa74908",
+    "cargo_tests": "/Users/marcelo/.t3/worktrees/rustuml/t3-2fa74908/crates/rustuml-oracle"
+  },
+  "supplemental_script": "supplement.py plus measure(... candidate, fresh=True), recorded in supplement-manifest.json and candidate-supplement.json",
+  "second_pass_only_dynamic_error_tested": false,
+  "metadata_final_guard_command": "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo test --release --test harness_guards"
+}

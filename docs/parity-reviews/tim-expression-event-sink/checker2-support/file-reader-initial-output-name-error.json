@@ -1,0 +1,44 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0,
+    "java_pipe_file_comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0,
+    "java_pipe_file_comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 101,
+    "java_pipe_file_comparison_exit": 101
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0,
+    "java_pipe_file_comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0,
+    "java_pipe_file_comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0,
+    "java_pipe_file_comparison_exit": 0
+  }
+]

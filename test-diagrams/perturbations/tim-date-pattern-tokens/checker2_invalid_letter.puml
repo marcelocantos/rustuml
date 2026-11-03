@@ -1,0 +1,4 @@
+@startuml
+!$stamp = %date("yyyy Q",-1)
+class "$stamp" as Clock
+@enduml

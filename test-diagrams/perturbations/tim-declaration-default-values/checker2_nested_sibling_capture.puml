@@ -1,0 +1,12 @@
+@startuml
+!$seed = "global"
+!procedure $emit($a = $seed)
+class "$a / $seed" as Capture
+!endprocedure
+!procedure $outer($seed)
+!local $private = "hidden"
+$emit()
+!endprocedure
+!$seed = "new-global"
+$outer("caller")
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!function $identity($value)
+!return $value
+!endfunction
+!$a = $identity('c:\temp,"x"')
+!$b = $identity("apostrophe's")
+Alice -> Bob : $a / $b
+@enduml

@@ -1,0 +1,48 @@
+{
+  "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.puml",
+  "java": [
+    {
+      "class": "entity",
+      "data-qualified-name": "FreshAlpha881",
+      "data-source-line": "5",
+      "id": "ent0002"
+    },
+    {
+      "class": "entity",
+      "data-qualified-name": "FreshBeta883",
+      "data-source-line": "8",
+      "id": "ent0003"
+    },
+    {
+      "class": "link",
+      "data-entity-1": "ent0002",
+      "data-entity-2": "ent0003",
+      "data-link-type": "dependency",
+      "data-source-line": "9",
+      "id": "lnk4"
+    }
+  ],
+  "rust": [
+    {
+      "class": "entity",
+      "data-qualified-name": "FreshAlpha881",
+      "data-source-line": "5",
+      "id": "ent0002"
+    },
+    {
+      "class": "entity",
+      "data-qualified-name": "FreshBeta883",
+      "data-source-line": "8",
+      "id": "ent0003"
+    },
+    {
+      "class": "link",
+      "data-entity-1": "ent0002",
+      "data-entity-2": "ent0003",
+      "data-link-type": "dependency",
+      "data-source-line": "9",
+      "id": "lnk4"
+    }
+  ],
+  "cli_exit": 0
+}

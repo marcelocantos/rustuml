@@ -1,0 +1,4 @@
+@startuml
+!$stamp = %date("z / zzzz / Z / XXX", 0)
+class "$stamp" as Zone
+@enduml

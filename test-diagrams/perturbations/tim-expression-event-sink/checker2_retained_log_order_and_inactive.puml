@@ -1,0 +1,13 @@
+@startuml
+!$n = 0
+!function $tick($word)
+!$n = $n * 10 + $word
+!return $word
+!endfunction
+!log $tick(1) $tick(2)
+!if 0
+!log $tick(9)
+!endif
+!log $tick(3)
+class "Order $n" as Copper
+@enduml

@@ -1,0 +1,297 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-procedure-global-fork-memory",
+  "reviewer": {
+    "task_id": "t3-2fa74908-independent-corrected-TIM-checker",
+    "model": "gpt-6-astra / high / inherited Codex intentional; fresh independent checker; no children"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py parent isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate fresh",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/diagnostics.py",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/final_controls.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/candidate-rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/probe compare SOURCE.svg RUST.svg",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "cargo fmt --all --check",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.svg",
+      "axes": [
+        "nested sibling frame and renamed parameter",
+        "undef override and fresh-local leakage"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.svg",
+      "axes": [
+        "new global eclipses auto-local",
+        "nested call and removal reveals auto-local"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.svg",
+      "axes": [
+        "parameter versus explicit global mutation",
+        "local leakage and renamed output"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.svg",
+      "axes": [
+        "early return inside nested conditional",
+        "caller control state and two arguments"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.svg",
+      "axes": [
+        "foreach caller state",
+        "global side effect and local privacy"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.svg",
+      "axes": [
+        "default captured at definition versus call",
+        "renamed global mutation and parameter binding"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_nested_local_and_global.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_nested_local_and_global.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_theme_scope_helper.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_theme_scope_helper.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "findings": [
+    "REJECTED for complete parameter-memory parity. Prior six checker controls now pass, including declaration-time capture; fresh sibling-frame/global mutation and declaration side-effect order pass.",
+    "checker2_literal_default_type and checker2_captured_string_type print 9 instead of Java 0072. Eater.eatDeclareFunction and TFunctionImpl.getNewMemory preserve TValue type; Rust call_function stores to_display strings and eval_expr_to_value reconstructs numeric-looking values with from_str_auto. Captured value type is lost.",
+    "checker2_named_default expects first / named but Rust treats $b=\"named\" as positional expression text. Java TFunctionImpl.getNewMemory binds named arguments before positional/default values; Rust call_function enumerates positions only. This is a relevant pre-existing dependency, not an assertion that the correction newly introduced named-argument omission."
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "53f2e605c222408ee81c23ff5ea81c8bf7449084",
+  "pre_policy_tested_commit": "86e0d0953acc1bbc660304265033c3314fa31150",
+  "parent_commit": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "original_candidate": "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+  "preparation_mappings": "docs/parity-reviews/tim-expression-event-sink/checker2-support/cherry-pick-mappings.json",
+  "followup_commits": [
+    "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+    "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+    "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "136ee057e0ffc3347ecdfafc9cf46e0bafa50197"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "Owner-selected raw Java pipe/file. Frozen historical GET corpus retained and separately reported. Negative evidence unchanged.",
+  "evidence": "docs/parity-reviews/tim-expression-event-sink/checker2-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; green bounded invariants do not certify the packet",
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.svg",
+      "axes": [
+        "declaration capture and later mutation",
+        "string versus numeric value type"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.svg",
+      "axes": [
+        "omitted first default",
+        "named argument order"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.svg",
+      "axes": [
+        "default side effect order",
+        "mutation after declaration"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.svg",
+      "axes": [
+        "sibling frame isolation",
+        "captured default versus current global"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+      "golden": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.svg",
+      "axes": [
+        "quoted literal default",
+        "numeric-looking string type"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "dependency_evidence_note": "Cross-mechanism cases are linked here as dependencies, not misfiled under this mechanism. Each has its owning checker record and unchanged executable fixture. No duplication inflates the corpus."
+}

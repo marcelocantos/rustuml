@@ -1,0 +1,4 @@
+@startuml
+!$s = %date("Y w W D F u EEEE", 1609372800)
+class "$s" as Copper
+@enduml

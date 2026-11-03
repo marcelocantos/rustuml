@@ -1,0 +1,13 @@
+@startuml
+!$shared = "outer"
+!procedure $inner()
+class "Inner $shared $private" as InnerRecord
+!endprocedure
+!procedure $outer($shared)
+!$private = "secret"
+$inner()
+class "Outer $shared $private" as OuterRecord
+!endprocedure
+$outer("parameter")
+class "Global $shared" as GlobalRecord
+@enduml

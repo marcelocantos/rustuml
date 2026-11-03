@@ -1,0 +1,7 @@
+@startuml
+!$needle = "silver"
+!$name = "$needle"
+!$a = %variable_exists(("$" + 'needle'))
+!$b = %get_variable_value(%get_variable_value('$name'))
+class "$a/$b" as Copper
+@enduml

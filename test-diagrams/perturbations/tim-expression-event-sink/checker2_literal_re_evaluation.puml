@@ -1,0 +1,10 @@
+@startuml
+!$calls = 0
+!function $tick()
+!$calls = $calls + 1
+!return 1
+!endfunction
+!if "$tick()"
+class "calls $calls" as Literal
+!endif
+@enduml
