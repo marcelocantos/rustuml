@@ -174,7 +174,7 @@ fn project_events(
 }
 
 fn extract_sprites(lines: &mut [String]) -> HashMap<String, SpriteData> {
-    let mut sprites = HashMap::new();
+    let mut sprites: HashMap<String, SpriteData> = HashMap::new();
     let mut current: Option<String> = None;
     for line in lines {
         let text = split_source_line_marker(line)
@@ -183,12 +183,12 @@ fn extract_sprites(lines: &mut [String]) -> HashMap<String, SpriteData> {
         if let Some(name) = &current {
             if text == "}" {
                 current = None;
-            } else if !text.is_empty() && text.chars().all(|c| c.is_ascii_hexdigit()) {
-                if let Some(sprite) = sprites.get_mut(name) {
-                    let sprite: &mut SpriteData = sprite;
-                    sprite.rows.push(text.to_string());
-                    sprite.height = sprite.rows.len() as u32;
-                }
+            } else if !text.is_empty()
+                && text.chars().all(|c| c.is_ascii_hexdigit())
+                && let Some(sprite) = sprites.get_mut(name)
+            {
+                sprite.rows.push(text.to_string());
+                sprite.height = sprite.rows.len() as u32;
             }
             line.clear();
         } else if text.starts_with("sprite ") || text.starts_with("sprite\t") {
@@ -511,6 +511,9 @@ struct PreprocessContext {
     /// stripping since EBNF uses `'` as a terminal delimiter.
     in_ebnf_block: bool,
     seen_start_tag: bool,
+    /// Rust's parse_block API supports definitions in a shared preamble and
+    /// keeps their one-based file origins (source_with_original_line_offset).
+    preamble_body: bool,
     base_dir: Option<PathBuf>,
     include_depth: usize,
     foreach_stack: Vec<ForEachState>,
@@ -606,6 +609,7 @@ impl PreprocessContext {
             in_diagram_block: false,
             in_ebnf_block: false,
             seen_start_tag: false,
+            preamble_body: false,
             base_dir,
             include_depth: 0,
             foreach_stack: Vec::new(),
@@ -651,7 +655,11 @@ impl PreprocessContext {
     }
 
     fn current_diagram_source_line(&self) -> usize {
-        if self.include_depth == 0 && self.in_diagram_block && self.seen_start_tag {
+        if self.include_depth == 0
+            && self.in_diagram_block
+            && self.seen_start_tag
+            && !self.preamble_body
+        {
             self.current_source_line.saturating_sub(1)
         } else {
             self.current_source_line
@@ -864,6 +872,10 @@ impl PreprocessContext {
 
         // Function definition collection.
         if self.try_function_def(&line_no_comment) {
+            // Derivation: parse_block_keeps_preamble_procedure_body_lines and
+            // parse_block_sequence_with_preamble_meta_procedure_stays_sequence
+            // specify one-based file origins for this Rust API extension.
+            self.preamble_body |= self.include_depth == 0 && !self.seen_start_tag;
             self.push_directive_placeholder(output);
             return;
         }
@@ -898,6 +910,7 @@ impl PreprocessContext {
 
         // Definelong.
         if self.try_definelong(trimmed) {
+            self.preamble_body |= self.include_depth == 0 && !self.seen_start_tag;
             self.push_directive_placeholder(output);
             return;
         }
@@ -1373,6 +1386,7 @@ impl PreprocessContext {
             }
 
             if !self.is_active() {
+                self.push_directive_placeholder(output);
                 return true;
             }
 
@@ -1394,7 +1408,6 @@ impl PreprocessContext {
             {
                 generated.push_str(trailing);
             }
-            let returned_value = ret.is_some();
             if lines.is_empty() {
                 // If the function produced no output lines but returned a value,
                 // emit the return value as an output line (e.g. note body calls).
@@ -1408,23 +1421,10 @@ impl PreprocessContext {
                 output.extend(lines);
             }
 
-            // Procedure bodies keep their own definition-line attribution; pad
-            // after the call so following source lines still retain file-line
-            // attribution.
-            if !returned_value
-                && self.include_depth == 0
-                && self.in_diagram_block
-                && self.local_vars.is_empty()
-            {
-                while output
-                    .iter()
-                    .filter(|event| !matches!(event, EvaluatedEvent::Boundary(_)))
-                    .count()
-                    < self.current_source_line
-                {
-                    output.push(EvaluatedEvent::ParserOnly(String::new()));
-                }
-            }
+            // Java keeps StringLocated origins on both generated body lines
+            // and subsequent caller lines. Output length is not an origin:
+            // a procedure can emit zero, one or many lines, or a theme event.
+            self.mark_source_lines = true;
 
             return true;
         }
@@ -2733,13 +2733,15 @@ impl PreprocessContext {
             }
             "variable_exists" => {
                 // VariableExists calls memory.getVariable with the exact name.
-                // Our TIM map omits the leading '$'; legacy macros are functions,
-                // not variables. TValue.fromBoolean renders numeric 1 or 0.
+                // Our TIM map omits the leading '$'. EaterAffectationDefine
+                // stores bare !define names in global memory as well.
+                // TValue.fromBoolean renders numeric 1 or 0.
                 let name = args.first().copied().unwrap_or("");
                 if name
                     .strip_prefix('$')
                     .and_then(|name| self.get_var(name))
                     .is_some()
+                    || self.token_defines.contains_key(name)
                 {
                     "1".to_string()
                 } else {
@@ -2771,6 +2773,7 @@ impl PreprocessContext {
                 let name = args.first().copied().unwrap_or("");
                 name.strip_prefix('$')
                     .and_then(|name| self.get_var(name).cloned())
+                    .or_else(|| self.token_defines.get(name).cloned())
                     .unwrap_or_default()
             }
             "set_variable_value" => {
@@ -3623,6 +3626,24 @@ $inspect("payload")
             "2000"
         );
         assert_eq!(ctx.substitute_vars("%date(\"\", 0)"), "");
+    }
+
+    #[test]
+    fn caller_origin_survives_a_procedure_that_emits_a_theme() {
+        let input = "@startuml\n!procedure $setup()\n!theme cerulean\n!endprocedure\n$setup()\nclass Ledger\n@enduml";
+        let output = preprocess_full_for_parse(input, None);
+        assert!(
+            output
+                .lines
+                .iter()
+                .any(|line| split_source_line_marker(line) == Some((5, "class Ledger")))
+        );
+    }
+
+    #[test]
+    fn legacy_define_names_are_visible_to_lookup() {
+        let source = "@startuml\n!define TOKEN amber\n%variable_exists(\"TOKEN\") %get_variable_value(\"TOKEN\")\n@enduml";
+        assert_eq!(pp(source), ["1 amber"]);
     }
 
     #[test]
