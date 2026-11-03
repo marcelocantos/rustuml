@@ -1,0 +1,1809 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Actual",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Actual",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Tree",
+        "data-source-line": "7",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Count",
+        "data-source-line": "10",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Tree",
+        "data-source-line": "7",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Count",
+        "data-source-line": "10",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Bud",
+        "data-source-line": "14",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Bud",
+        "data-source-line": "14",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Logic",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Logic",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Literal",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Literal",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": ".rable",
+        "data-source-line": "8",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Oak",
+        "data-source-line": "10",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": ".rable",
+        "data-source-line": "8",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Oak",
+        "data-source-line": "10",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Captured",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Captured",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Named",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Named",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Order",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Order",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Capture",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Capture",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Lookup",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Lookup",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Unicode",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "vert . a",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Nested",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Nested",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Raw",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Raw",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Clock",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Clock",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Clock",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Clock",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Clock",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Clock",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Zone",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Zone",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Offset",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Offset",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Fine",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Fine",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Foo",
+        "data-source-line": "4",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Bar",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Foo",
+        "data-source-line": "4",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Bar",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_function_selector_parameter.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "JasperIndex",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "JasperIndex",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "CobaltRegistry",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "CobaltRegistry",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "SpinelRecord",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "SpinelRecord",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_loop_side_effect.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "ZirconRecord",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "ZirconRecord",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_parser_blank_origin_control.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "FreshAlpha881",
+        "data-source-line": "5",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "FreshBeta883",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "FreshAlpha881",
+        "data-source-line": "5",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "FreshBeta883",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "SapphireRegistry",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "SapphireRegistry",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_sprite_after_theme.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "ObsidianLedger",
+        "data-source-line": "9",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "ObsidianLedger",
+        "data-source-line": "9",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_state_two_mutations.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "CobaltArchive",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "CobaltArchive",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "LocalRecord",
+        "data-source-line": "5",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "GlobalRecord",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "LocalRecord",
+        "data-source-line": "5",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "GlobalRecord",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_nested_local_and_global.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "InnerRecord",
+        "data-source-line": "3",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "OuterRecord",
+        "data-source-line": "8",
+        "id": "ent0003"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "GlobalRecord",
+        "data-source-line": "11",
+        "id": "ent0004"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "InnerRecord",
+        "data-source-line": "3",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "OuterRecord",
+        "data-source-line": "8",
+        "id": "ent0003"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "GlobalRecord",
+        "data-source-line": "11",
+        "id": "ent0004"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_theme_scope_helper.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "OpalRegistry",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "OpalRegistry",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_computed_local_name.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "PresentRecord",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "PresentRecord",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme_valid.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "GarnetRegistry",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "GarnetRegistry",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_name_literal_control.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "LiteralLookup",
+        "data-source-line": "6",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "LiteralLookup",
+        "data-source-line": "6",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "TopazClock",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "TopazClock",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "OnyxClock",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "OnyxClock",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "6",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "6",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "7",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_literal_backslash_and_quotes.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_quoted_commas_and_unicode.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "6",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "6",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_text_and_literals.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_week_fields.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_width_and_clock_fields.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_zones.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Copper",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Ash",
+        "data-source-line": "1",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Elm",
+        "data-source-line": "2",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Ash",
+        "data-source-line": "1",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Elm",
+        "data-source-line": "2",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Ash",
+        "data-source-line": "3",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Elm",
+        "data-source-line": "5",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Ash",
+        "data-source-line": "3",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Elm",
+        "data-source-line": "5",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Ash",
+        "data-source-line": "2",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Elm",
+        "data-source-line": "4",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Ash",
+        "data-source-line": "2",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Elm",
+        "data-source-line": "4",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Foo",
+        "data-source-line": "4",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Bar",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Foo",
+        "data-source-line": "4",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Bar",
+        "data-source-line": "8",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Typed",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Typed",
+        "data-source-line": "3",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Selected",
+        "data-source-line": "2",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "After",
+        "data-source-line": "2",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Selected",
+        "data-source-line": "2",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "After",
+        "data-source-line": "2",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Fine",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Fine",
+        "data-source-line": "4",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Order",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Order",
+        "data-source-line": "11",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+    "java_entities": [],
+    "rust_entities": [],
+    "same_count": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Wrapped",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Wrapped",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Wrapped",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Wrapped",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/kind_nested_procedure.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Nested",
+        "data-source-line": "3",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Actual",
+        "data-source-line": "16",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Nested",
+        "data-source-line": "3",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Actual",
+        "data-source-line": "16",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/kind_theme_repeated.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Actual",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Actual",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_binding.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Values",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Values",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_lookup_json.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Values",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Values",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_json_scalar.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Values",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Values",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_set_global.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Local",
+        "data-source-line": "5",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Global",
+        "data-source-line": "9",
+        "id": "ent0003"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Local",
+        "data-source-line": "5",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Global",
+        "data-source-line": "9",
+        "id": "ent0003"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/values_wrap_quotient.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Arithmetic",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Arithmetic",
+        "data-source-line": "5",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/eager_and_or.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Effects",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Effects",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/literal_truth.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Literal",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Literal",
+        "data-source-line": "10",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/sub_caller_relative.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Caller",
+        "data-source-line": "2",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Child",
+        "data-source-line": "0",
+        "id": "ent0003"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Again",
+        "data-source-line": "10",
+        "id": "ent0004"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "After",
+        "data-source-line": "3",
+        "id": "ent0005"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Child",
+        "data-source-line": "2",
+        "id": "ent0003"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Caller",
+        "data-source-line": "2",
+        "id": "ent0002"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "After",
+        "data-source-line": "3",
+        "id": "ent0005"
+      },
+      {
+        "class": "entity",
+        "data-qualified-name": "Again",
+        "data-source-line": "10",
+        "id": "ent0004"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/zone_tokyo_width.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Time",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Time",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/zone_new_york_summer.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Time",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Time",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/zone_utc_width.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Time",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Time",
+        "data-source-line": "2",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  },
+  {
+    "source": "/tmp/rustuml-tim3/new/boolean_value_kinds.puml",
+    "java_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Boolean",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "rust_entities": [
+      {
+        "class": "entity",
+        "data-qualified-name": "Boolean",
+        "data-source-line": "8",
+        "id": "ent0002"
+      }
+    ],
+    "same_count": true,
+    "source_equal": true
+  }
+]

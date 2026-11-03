@@ -63,3 +63,43 @@ the fixed gate timezone override via their declared `debug` setting.
 Final results, command status, regressions and pending dependencies are recorded
 in the subsequent maker-results commit. No frozen input, reference, baseline,
 review, comparator, guard allowance or error policy is changed.
+
+## Measured correction
+
+Candidate `0dd2de894fea40d5e9ed81efb6a54d837f80fa4c` retains 425/949 matches
+in the prepared parent cohort, with zero lost passes or new CLI errors. The 89
+checker additions improve from 53 to 64 matches: 11 gains, zero lost passes,
+zero new valid errors. The previously suppressed invalid logical operand now
+correctly rejects. The two valid wrapping arithmetic cases stop producing errors.
+Combined isolated results are 489/1038; 32 invalid references remain separate.
+The 17 new maker cases yield 13 SVG matches, one valid renderer mismatch and
+three negative controls. All 14 valid new cases have exact source diagnostics.
+Every intermediate result, including the transient `%not` regression, is retained.
+
+Main product parity remains 11179/11251; assisted parity remains 10497/11251
+(754 failures, 1299 skipped). The three preserved GET/raw historical losses are
+unchanged. Guards remain 4/6. The built-in 1038 suite has 483 matches and the two
+known sequence panics. Its six additional failures relative to isolated CLI
+measurement arise with the suite's crate cwd or fixed timezone; see
+`builtin-results.json` for exact paths. This is not the old filter-registry cascade.
+All six file/raw reader controls and all five class-checker TIM controls pass.
+Original33 source diagnostics are 33/33; prior42 are 40 valid agreements and two
+preserved invalid date rejections.
+
+Parser units: 581 pass, one root-owned assertion needs its expected literal-error
+message updated. CLI: 15/15. Owned formatting passes. Workspace formatting and
+clippy retain unowned class-formatting and component dead-code failures. No
+baseline, reference or guard change was made to obtain these results.
+
+The new external-sub case also exposes two renderer dependencies: the parser's
+correct Child source_line=0 is replaced with 2 by the legacy fallback in
+`rustuml-render/src/class.rs:1253`, and entity emission order differs. Its four
+entities and origins are retained in the YAML model. The existing opposite-quote
+case misparses alias Unicode as `vert . a` after preprocessing produced the exact
+Java source. `entity-observations.json` makes these remaining model/render
+observations explicit. Repeated palettes, AWS activity output, handwritten shapes
+and sequence continued-line geometry remain unowned dependencies.
+
+All ten previous mechanism claims remain rejected. These are maker measurements
+for a new independent checker, not an acceptance verdict. Root owns the assertion
+message update, combined class/sequence replay, and integration.

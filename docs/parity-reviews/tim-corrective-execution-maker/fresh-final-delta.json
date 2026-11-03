@@ -1,0 +1,110 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+    "old_match": false,
+    "new_match": false,
+    "old_exit": 0,
+    "new_exit": 1,
+    "old_source": false,
+    "new_source": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 0,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 1,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+    "old_match": false,
+    "new_match": true,
+    "old_exit": 1,
+    "new_exit": 0,
+    "old_source": false,
+    "new_source": true
+  }
+]

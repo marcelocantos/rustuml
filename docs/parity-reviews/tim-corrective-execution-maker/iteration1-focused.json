@@ -1,0 +1,702 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "return function plain simulation",
+      "nested mutation and class count"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1561,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "procedure prefix/suffix expansion",
+      "nested function side effects"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 2849,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "log order and duplicate execution",
+      "subblock sprite and theme identity"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 2283,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "logical operand evaluation",
+      "function side effect"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1552,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "quoted boolean token",
+      "recursive textual evaluation"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1554,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "nested theme order",
+      "Unicode declarations comments blanks origins"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 4780,
+    "comparison_exit": 1,
+    "svg_match": false,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "declaration capture and later mutation",
+      "string versus numeric value type"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1553,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "omitted first default",
+      "named argument order"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1574,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "default side effect order",
+      "mutation after declaration"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1555,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "sibling frame isolation",
+      "captured default versus current global"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1589,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "computed quoted key",
+      "string return type through builtin"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1551,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "Unicode computed name",
+      "opposite quotes comma parentheses"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1564,
+    "comparison_exit": 1,
+    "svg_match": false,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "lookup argument function",
+      "single-quoted concatenation and count"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1566,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "literal function-like text",
+      "concatenation without reevaluation"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1583,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1657,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1609,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1613,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "host timezone",
+      "short versus long zone names"
+    ],
+    "zone": "Australia/Melbourne",
+    "debug": "date=1774210426000",
+    "cli_exit": 0,
+    "stdout_bytes": 1660,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "negative instant",
+      "fractional fixed offset"
+    ],
+    "zone": "GMT-03:30",
+    "debug": "date=1774210426000,tz=-0330",
+    "cli_exit": 0,
+    "stdout_bytes": 1634,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context function_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context default_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context inactive_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context unused_function",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1545,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context sequence_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context error_after_theme",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context two_errors",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context short_circuit_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context multi_block_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1549,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context include_error",
+      "pattern versus overflow or inactive execution"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged",
+    "cli_exit": 0,
+    "stdout_bytes": 6911,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged",
+    "cli_exit": 0,
+    "stdout_bytes": 5431,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged",
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh supplemental",
+    "axes": [
+      "quoted literal default",
+      "numeric-looking string type"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1550,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external subblock extraction",
+      "fatal unselected prelude"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 2838,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external selected subblock",
+      "fatal pattern"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "inactive branch",
+      "invalid assignment"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1545,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "signed lower overflow",
+      "partial class output"
+    ],
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh supplemental",
+    "axes": [
+      "theme selector versus from evaluation",
+      "side effect ordering"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1637,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh arithmetic boundary",
+    "axes": [
+      "Java signed integer wrap",
+      "explicit date arithmetic expression"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1589,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh arithmetic boundary",
+    "axes": [
+      "Java signed integer wrap",
+      "explicit date arithmetic expression"
+    ],
+    "cli_exit": 0,
+    "stdout_bytes": 1589,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "source_equal": true
+  }
+]
