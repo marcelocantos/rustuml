@@ -1,0 +1,4 @@
+@startuml
+!$stamp = %date("QQ", 0)
+class "$stamp" as InvalidClock
+@enduml

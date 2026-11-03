@@ -1,0 +1,14 @@
+@startuml
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+group envelope
+K ->] : boundary Wi.f
+loop retry
+note left of I : Wide note MMMM.f
+I -> W : transfer
+end
+note left of W : ii
+end
+
+@enduml

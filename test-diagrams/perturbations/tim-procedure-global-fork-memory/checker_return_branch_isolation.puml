@@ -1,0 +1,20 @@
+@startuml
+!function $choose($seed)
+!if $seed > 2
+!return "tall"
+!else
+!return "short"
+!endif
+!endfunction
+!procedure $emit($seed)
+!if $seed > 0
+!$height = $choose($seed)
+class "$height" as Tree$seed
+!endif
+!endprocedure
+!if 1
+$emit(4)
+$emit(1)
+!endif
+class Sentinel
+@enduml

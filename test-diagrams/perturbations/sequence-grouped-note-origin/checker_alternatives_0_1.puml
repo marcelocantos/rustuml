@@ -1,0 +1,22 @@
+@startuml
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+K -> I ++ : acquire
+alt primary
+note left of I : WWW docket f
+I -> W ++ : inner
+opt validation
+note left of W
+iii.f
+second
+end note
+return checked
+end
+else secondary
+note left of I : i
+I -> K : closed
+end
+return released
+
+@enduml

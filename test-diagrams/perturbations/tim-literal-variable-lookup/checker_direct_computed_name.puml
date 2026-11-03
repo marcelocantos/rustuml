@@ -1,0 +1,6 @@
+@startuml
+!$cedar = "green"
+!$present = %variable_exists("$" + "cedar")
+!$value = %get_variable_value("$" + "cedar")
+class "$present / $value" as Computed
+@enduml

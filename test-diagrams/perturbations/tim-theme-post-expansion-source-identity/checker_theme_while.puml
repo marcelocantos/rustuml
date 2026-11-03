@@ -1,0 +1,8 @@
+@startuml
+!$n = 0
+!while $n < 2
+!theme minty
+!$n = $n + 1
+!endwhile
+class SpruceLedger
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+!$instant = -39601
+!$stamp = %date("yyyy-MM-dd HH:mm:ss", $instant)
+class "$stamp" as Clockmidnightbefore
+@enduml

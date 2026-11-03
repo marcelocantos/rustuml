@@ -1,0 +1,18 @@
+@startuml
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+group ledger
+note left of I : WMWM reservation iii
+loop retry
+loop retry
+note left of I
+MMMM compete iii.f
+ii
+end note
+I -> W : q
+end
+end
+end
+
+@enduml
