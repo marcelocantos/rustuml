@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-page-chrome-composition-dependency",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "unimplemented blocking dependency; no acceptance requested",
+  "production_changes": "NONE for this dependency; account precedes any future implementation",
+  "evidence": "../class-command-execution-ownership/maker-results.json",
+  "negative_evidence_contract": "Every preserved relevant failing valid input remains blocking. No scope waiver or factory-label-only acceptance.",
+  "java_locations": [
+    "command/CommandMultilinesHeader.java#execute",
+    "core/DiagramChromeFactory12026.java#create",
+    "svek/DecorateEntityImage.java#drawU,getTextX"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#try_meta",
+    "crates/rustuml-parser/src/diagram/class.rs#ClassDiagram",
+    "crates/rustuml-render/src/class.rs#DecorationLayout"
+  ],
+  "invariant": "Page commands retain their alignment, and each chrome wrapper measures/centers against its immediately enclosed TextBlock before the SVG export envelope is applied.",
+  "causal_divergence": "Body ownership now retains page text, but ClassDiagram has no header/footer alignment state. DecorationStyle fixes header alignment to right; other retained title/legend differences show the renderer composing decoration widths against an envelope different from Java nested TextBlocks. The exact nonalignment envelope arithmetic is not yet isolated.",
+  "planned_model_change": "Persist explicit page alignment and port nested DiagramChromeFactory/DecorateEntityImage dimensions before touching coordinates. Trace exporter margins and baseline provenance first. Do not compensate with per-container or per-title offsets.",
+  "perturbation_axes": [
+    "header alignment and command-looking text",
+    "multiple chrome layers, label widths and container kinds"
+  ],
+  "blocking_inputs": [
+    "header_left",
+    "header_left_text",
+    "header_plain",
+    "legend_body",
+    "title_body"
+  ]
+}

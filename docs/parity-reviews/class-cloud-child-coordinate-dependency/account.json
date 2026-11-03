@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cloud-child-coordinate-dependency",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "unimplemented blocking dependency; no acceptance requested",
+  "production_changes": "NONE for this dependency; account precedes any future implementation",
+  "evidence": "../class-command-execution-ownership/maker-results.json",
+  "negative_evidence_contract": "Every preserved relevant failing valid input remains blocking. No scope waiver or factory-label-only acceptance.",
+  "java_locations": [
+    "decoration/symbol/USymbolCloud.java#asBig",
+    "svek/SvgResult.java",
+    "svek/SvekResult.java#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#cloud_frontier,normalize_svek_package_envelope,package_content_offsets"
+  ],
+  "invariant": "Cloud path bounds, parsed Graphviz node coordinates, and SVEK drawing translations must be measured in the same coordinate frame and precision as Java.",
+  "causal_divergence": "Both retained cloud inputs now preserve the cloud and native child in the correct class factory but differ by approximately 0.0799 in child x. The drawing/envelope paths are separately reconstructed in Rust. The exact stage causing this offset is UNPROVEN; no corrective constant or production change is proposed from the SVG delta alone.",
+  "planned_model_change": "Instrument the Java and Rust cloud frontier, node SVG roundtrip and SVEK envelope intermediates in a separate packet. Commit a refined causal account naming the proved divergence before any production geometry edit.",
+  "perturbation_axes": [
+    "cloud label widths and class/interface children",
+    "nested versus root clouds and LR/TB direction"
+  ],
+  "blocking_inputs": [
+    "maker_cloud_class_top",
+    "maker_cloud_interface_top"
+  ]
+}
