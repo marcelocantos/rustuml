@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-arrow-async-stroke",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": ["skin/rose/ComponentRoseSelfArrow.java#drawRightSide lines 150-159", "sequencediagram/graphic/MessageSelfArrow.java#drawInternalU", "sequencediagram/graphic/Step1Message.java#createMessageSelfArrow"],
+  "rust_locations": ["crates/rustuml-render/src/sequence.rs::render self-message special_return_tip and return_left"],
+  "invariant": "The self-arrow return stroke begins one unit before the head tip for ASYNC; the head uses the restored x2. This adjustment follows the component's lifecycle delta and applies equally to inactive, activating and deactivating messages.",
+  "causal_divergence": "Rust handles ordinary inactive open self arrows with separate line/head positions, but special_return_tip for activation/deactivation bypasses the open-stroke adjustment. Both original calls and lowered returns therefore start the bottom stroke one unit too far right.",
+  "planned_change": "Compute the open return-stroke endpoint from the lifecycle-adjusted head tip using the same ComponentRoseSelfArrow ASYNC subtraction. Keep head coordinates and filled arrows unchanged; include thin asynchronous half-heads that use the same Java ASYNC head.",
+  "perturbation_axes": ["Inactive, activating and deactivating self messages at multiple live depths", "Filled/open/thin half heads and label width", "Explicit dotted messages versus lowered return syntax"],
+  "verification_plan": ["Fresh real CLI and pinned Java comparisons", "All prior fresh failures and preserved heldouts", "Both main tiers and sequence unit tests"],
+  "acceptance": "Maker candidate only; independent checker required."
+}
