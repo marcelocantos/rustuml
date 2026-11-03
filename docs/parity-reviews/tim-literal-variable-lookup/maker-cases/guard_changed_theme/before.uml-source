@@ -1,0 +1,4 @@
+@startuml
+skinparam __theme minty-outline
+class GarnetRegistry
+@enduml

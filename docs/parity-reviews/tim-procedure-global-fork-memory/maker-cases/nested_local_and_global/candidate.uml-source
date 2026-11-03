@@ -1,0 +1,5 @@
+@startuml
+class "Inner outer $private" as InnerRecord
+class "Outer parameter secret" as OuterRecord
+class "Global outer" as GlobalRecord
+@enduml

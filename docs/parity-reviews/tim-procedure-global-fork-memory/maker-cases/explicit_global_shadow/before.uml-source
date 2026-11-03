@@ -1,0 +1,5 @@
+@startuml
+!global parameter = "updated"
+class "Local parameter local" as LocalRecord
+class "Global initial" as GlobalRecord
+@enduml

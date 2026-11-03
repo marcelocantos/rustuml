@@ -1,0 +1,9 @@
+@startuml
+
+
+
+
+skinparam __theme $palette
+' [dump] palette=cerulean
+class SapphireRegistry
+@enduml

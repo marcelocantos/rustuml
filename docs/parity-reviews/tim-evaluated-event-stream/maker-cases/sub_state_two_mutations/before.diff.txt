@@ -1,0 +1,29 @@
+SVG structural differences:
+  [2] <linearGradient> attr mismatch:
+    expected: [("id", "g11fdc6191d0yc0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "gz27tv2f6gvki0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [5] <linearGradient> attr mismatch:
+    expected: [("id", "g11fdc6191d0yc1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "gz27tv2f6gvki1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [10] <rect> attr mismatch:
+    expected: [("fill", "url(#g11fdc6191d0yc0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#A41367;stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#gz27tv2f6gvki0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "17.7083")]
+  [11] <rect> attr mismatch:
+    expected: [("fill", "url(#g11fdc6191d0yc1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#g11fdc6191d0yc1);stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#gz27tv2f6gvki1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#gz27tv2f6gvki1);stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "17.7083")]
+  [12] <rect> attr mismatch:
+    expected: [("fill", "url(#g11fdc6191d0yc1)"), ("height", "4.1667"), ("style", "stroke:url(#g11fdc6191d0yc1);stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "48.3007")]
+    actual:   [("fill", "url(#gz27tv2f6gvki1)"), ("height", "4.1667"), ("style", "stroke:url(#gz27tv2f6gvki1);stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "48.3007")]
+  [13] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#A41367;stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "none"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "94.4489"), ("x", "17.7083"), ("y", "17.7083")]
+  [16] <text> text mismatch:
+    expected: Some("Ordinal 2")
+    actual:   Some("Ordinal 0")
+  [17] <line> attr mismatch:
+    expected: [("style", "stroke:#A41367;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "111.1155"), ("y1", "52.4673"), ("y2", "52.4673")]
+    actual:   [("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "111.1155"), ("y1", "52.4673"), ("y2", "52.4673")]
+  [18] <line> attr mismatch:
+    expected: [("style", "stroke:#A41367;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "111.1155"), ("y1", "60.8007"), ("y2", "60.8007")]
+    actual:   [("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("x1", "18.75"), ("x2", "111.1155"), ("y1", "60.8007"), ("y2", "60.8007")]
+

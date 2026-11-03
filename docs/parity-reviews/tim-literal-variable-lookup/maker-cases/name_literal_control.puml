@@ -1,0 +1,8 @@
+@startuml
+!$shade = "tone"
+!define TOKEN x
+!$a = %variable_exists("$shade")
+!$b = %variable_exists("shade")
+!$c = %variable_exists("TOKEN")
+class "$a|$b|$c" as LiteralLookup
+@enduml

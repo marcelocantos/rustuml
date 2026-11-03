@@ -1,0 +1,16 @@
+{
+  "java_svg_exit": 0,
+  "java_source_exit": 0,
+  "before_cli_exit": 0,
+  "before_comparison_exit": 1,
+  "before_source_equal": false,
+  "candidate_cli_exit": 0,
+  "candidate_comparison_exit": 1,
+  "candidate_source_equal": false,
+  "explicit_base_source_equal": true,
+  "explicit_base_exit": 0,
+  "before_cwd_cli_exit": 0,
+  "before_cwd_comparison_exit": 1,
+  "candidate_cwd_cli_exit": 0,
+  "candidate_cwd_comparison_exit": 0
+}

@@ -1,0 +1,4 @@
+@startuml
+$stdheader()
+Alice -> Bob : Hello
+@enduml

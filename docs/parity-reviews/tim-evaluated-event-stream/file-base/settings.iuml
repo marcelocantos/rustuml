@@ -1,0 +1,3 @@
+!$shade = "#915237"
+!theme cerulean
+skinparam classBorderColor $shade

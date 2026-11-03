@@ -1,0 +1,19 @@
+type: Class
+diagram:
+  meta:
+    source: "@startuml\nclass CobaltRegistry /' suffix \n@enduml\n"
+  direction: TopToBottom
+  uid_events:
+  - !Entity CobaltRegistry
+  entities:
+  - id: CobaltRegistry
+    label: CobaltRegistry
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

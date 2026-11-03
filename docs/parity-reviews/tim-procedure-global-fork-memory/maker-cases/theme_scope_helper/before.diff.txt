@@ -1,0 +1,14 @@
+SVG structural differences:
+  element count: expected 13, got 10
+  [3] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "OpalRegistry"), ("data-source-line", "5"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "OpalRegistry"), ("data-source-line", "6"), ("id", "ent0002")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#FFFFFF"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "115.0828"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "#86C8B5"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#78C2AD;stroke-width:1.0417;"), ("width", "115.0828"), ("x", "17.7083"), ("y", "17.7083")]
+  [5] tag mismatch: expected <rect>, got <ellipse>
+  [6] tag mismatch: expected <rect>, got <path>
+  [7] tag mismatch: expected <rect>, got <text>
+  [8] tag mismatch: expected <ellipse>, got <line>
+  [9] tag mismatch: expected <path>, got <line>
+
