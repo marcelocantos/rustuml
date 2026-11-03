@@ -149,7 +149,8 @@
       ],
       "strict_result": "pass",
       "scoped_style_result": "pass",
-      "comparison": "Java and Rust are structurally equivalent. Transparent document background, margin expansion, class paint, and arrow channels all survive."
+      "comparison": "Java and Rust are structurally equivalent. Transparent document background, margin expansion, class paint, and arrow channels all survive.",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_class_header_final_body_snapshot.puml",
@@ -164,7 +165,8 @@
       ],
       "strict_result": "fail",
       "scoped_style_result": "fail",
-      "comparison": "Class body/header ownership is largely correct, but class relationships do not consume arrow LineStyle. Java emits the requested dash pairs on both links; Rust renders both links solid."
+      "comparison": "Class body/header ownership is largely correct, but class relationships do not consume arrow LineStyle. Java emits the requested dash pairs on both links; Rust renders both links solid.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_class_stereotype_dash_priority.puml",
@@ -180,7 +182,8 @@
       ],
       "strict_result": "fail",
       "scoped_style_result": "fail",
-      "comparison": "Stereotype entity styling succeeds, but class arrows still ignore LineStyle and HeadColor. Java uses stroke-dasharray 6,2 and a #1B5E20 arrowhead; Rust renders a solid shaft and fills the head with the shaft color."
+      "comparison": "Stereotype entity styling succeeds, but class arrows still ignore LineStyle and HeadColor. Java uses stroke-dasharray 6,2 and a #1B5E20 arrowhead; Rust renders a solid shaft and fills the head with the shaft color.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_concrete_symbol_signatures.puml",
@@ -196,7 +199,8 @@
       ],
       "strict_result": "fail",
       "scoped_style_result": "fail",
-      "comparison": "The 9d317115 concrete database/node color and font mapping works, but not every concrete symbol style channel reaches the painter. Java paints the database shadow and node stroke-width 2; Rust omits the filter and keeps the node stroke at 0.5."
+      "comparison": "The 9d317115 concrete database/node color and font mapping works, but not every concrete symbol style channel reaches the painter. Java paints the database shadow and node stroke-width 2; Rust omits the filter and keeps the node stroke at 0.5.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_document_shadow_dash_margin.puml",
@@ -213,7 +217,8 @@
       ],
       "strict_result": "fail",
       "scoped_style_result": "fail",
-      "comparison": "Nested componentDiagram concrete selectors are a counterexample. Java applies the document background/margin, database/node paint, database shadow, and arrow color/thickness/dash/font. Rust renders default database/node colors, default canvas, no shadow, and default solid black arrow."
+      "comparison": "Nested componentDiagram concrete selectors are a counterexample. Java applies the document background/margin, database/node paint, database shadow, and arrow color/thickness/dash/font. Rust renders default database/node colors, default canvas, no shadow, and default solid black arrow.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_stereotype_inline_override.puml",
@@ -228,7 +233,8 @@
       ],
       "strict_result": "pass",
       "scoped_style_result": "pass",
-      "comparison": "Java and Rust are structurally equivalent. Qualified component stereotype styling and inline color override order are preserved."
+      "comparison": "Java and Rust are structurally equivalent. Qualified component stereotype styling and inline color override order are preserved.",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_temporal_legacy_link_capture.puml",
@@ -244,7 +250,8 @@
       ],
       "strict_result": "fail",
       "scoped_style_result": "fail",
-      "comparison": "Component entity refresh and shaft line styling are mostly correct, but component links do not consume HeadColor. Java preserves the declared #B71C1C head color on both links; Rust fills each head from the shaft color."
+      "comparison": "Component entity refresh and shaft line styling are mostly correct, but component links do not consume HeadColor. Java preserves the declared #B71C1C head color on both links; Rust fills each head from the shaft color.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_state_document_header_arrow_channels.puml",
@@ -261,7 +268,8 @@
       "strict_result": "fail",
       "scoped_style_result": "pass",
       "separate_mechanism": "state-direction-layout",
-      "comparison": "Document, state, header, arrow color, arrow font, and dash channels match. Strict comparison fails because Java lays the state graph left-to-right while Rust remains vertical."
+      "comparison": "Document, state, header, arrow color, arrow font, and dash channels match. Strict comparison fails because Java lays the state graph left-to-right while Rust remains vertical.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_state_stereotype_autonomous_shadow.puml",
@@ -278,7 +286,8 @@
       "strict_result": "fail",
       "scoped_style_result": "pass",
       "separate_mechanism": "state-composite-envelope",
-      "comparison": "The Rust render contains the expected stereotype fill, line color, header/body text colors, shadow filter, and arrow channels. Strict comparison stops at root width/height and viewBox differences."
+      "comparison": "The Rust render contains the expected stereotype fill, line color, header/body text colors, shadow filter, and arrow channels. Strict comparison stops at root width/height and viewBox differences.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_state_temporal_link_snapshot_legacy.puml",
@@ -294,7 +303,8 @@
       ],
       "strict_result": "fail",
       "scoped_style_result": "fail",
-      "comparison": "This disproves the broad state-link snapshot assumption. In Java, the link created before the legacy skinparam still renders with final #1565C0 width 3; Rust preserves the earlier #AD1457 width 2 snapshot. The strict diff also includes the known state direction-layout gap."
+      "comparison": "This disproves the broad state-link snapshot assumption. In Java, the link created before the legacy skinparam still renders with final #1565C0 width 3; Rust preserves the earlier #AD1457 width 2 snapshot. The strict diff also includes the known state direction-layout gap.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_actor_and_usecase_stereotypes.puml",
@@ -314,7 +324,8 @@
         "description-entity-alias-identity",
         "description-path-rounding"
       ],
-      "comparison": "Actor and use-case stereotype style values match. Strict comparison fails because Rust uses the actor display label instead of the alias in ids/data-qualified-name, plus a small path-coordinate difference."
+      "comparison": "Actor and use-case stereotype style values match. Strict comparison fails because Rust uses the actor display label instead of the alias in ids/data-qualified-name, plus a small path-coordinate difference.",
+      "result": "fail"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_document_transparent_dash.puml",
@@ -330,7 +341,8 @@
       ],
       "strict_result": "pass",
       "scoped_style_result": "pass",
-      "comparison": "Java and Rust are structurally equivalent. Transparent document handling, use-case paint, arrow line style, and arrow label font channels all pass."
+      "comparison": "Java and Rust are structurally equivalent. Transparent document handling, use-case paint, arrow line style, and arrow label font channels all pass.",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_legacy_refresh_link_capture.puml",
@@ -346,7 +358,8 @@
       ],
       "strict_result": "pass",
       "scoped_style_result": "pass",
-      "comparison": "Java and Rust are structurally equivalent. Use-case entity refresh and link style capture survive this legacy mutation probe."
+      "comparison": "Java and Rust are structurally equivalent. Use-case entity refresh and link style capture survive this legacy mutation probe.",
+      "result": "pass"
     },
     {
       "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_temporal_entities_links.puml",
@@ -366,7 +379,8 @@
         "description-entity-alias-identity",
         "description-path-rounding"
       ],
-      "comparison": "Temporal use-case and link style channels match. Strict comparison fails on actor alias identity and a small path-coordinate mismatch, not on theme/style cascade."
+      "comparison": "Temporal use-case and link style channels match. Strict comparison fails on actor alias identity and a small path-coordinate mismatch, not on theme/style cascade.",
+      "result": "fail"
     }
   ],
   "anti_overfit": {

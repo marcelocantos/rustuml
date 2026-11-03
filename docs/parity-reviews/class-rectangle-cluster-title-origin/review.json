@@ -77,84 +77,154 @@
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.svg",
-      "axes": ["left-to-right", "explicit rectangle", "competing frame and node owners", "root links", "long renamed labels"],
+      "axes": [
+        "left-to-right",
+        "explicit rectangle",
+        "competing frame and node owners",
+        "root links",
+        "long renamed labels"
+      ],
       "result": "pass: SVGs are structurally equivalent",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.svg",
-      "axes": ["left-to-right", "nested explicit rectangle", "competing frame and node owners", "root links", "long renamed labels"],
+      "axes": [
+        "left-to-right",
+        "nested explicit rectangle",
+        "competing frame and node owners",
+        "root links",
+        "long renamed labels"
+      ],
       "result": "pass: SVGs are structurally equivalent",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.svg",
-      "axes": ["left-to-right", "plain packageStyle rectangle", "nested rectangle", "short renamed labels", "competing cloud owner", "root link"],
+      "axes": [
+        "left-to-right",
+        "plain packageStyle rectangle",
+        "nested rectangle",
+        "short renamed labels",
+        "competing cloud owner",
+        "root link"
+      ],
       "result": "fail: Java emits a rectangle cluster for the plain packageStyle rectangle, but Rust emits the folder-style path; the title and descendant layout are consequently shifted",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.svg",
-      "axes": ["left-to-right", "plain packageStyle rectangle", "top-level rectangle", "long renamed labels", "root link"],
+      "axes": [
+        "left-to-right",
+        "plain packageStyle rectangle",
+        "top-level rectangle",
+        "long renamed labels",
+        "root link"
+      ],
       "result": "fail: Java emits a rectangle cluster while Rust emits the folder-style path; expected rectangle title baseline is y=22.5352, while the Rust folder title is y=21.5352",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.svg",
-      "axes": ["left-to-right", "explicit nested rectangle", "plain packageStyle rectangle owner", "renamed labels", "root links"],
+      "axes": [
+        "left-to-right",
+        "explicit nested rectangle",
+        "plain packageStyle rectangle owner",
+        "renamed labels",
+        "root links"
+      ],
       "result": "fail: the plain outer packageStyle rectangle is rendered by Java as a rectangle but by Rust as a folder-style path; the explicit nested title itself is not sufficient to make the complete valid sibling pass",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.svg",
-      "axes": ["left-to-right", "top-level explicit Rectangle", "stereotyped title", "long renamed labels", "root link"],
+      "axes": [
+        "left-to-right",
+        "top-level explicit Rectangle",
+        "stereotyped title",
+        "long renamed labels",
+        "root link"
+      ],
       "result": "pass: SVGs are structurally equivalent",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.svg",
-      "axes": ["top-to-bottom", "explicit rectangle", "competing frame and node owners", "multiple root links"],
+      "axes": [
+        "top-to-bottom",
+        "explicit rectangle",
+        "competing frame and node owners",
+        "multiple root links"
+      ],
       "result": "fail: SVG width differs by 10px; rectangle primitive and title origin match, so this is preserved as non-attributed envelope/layout residue",
       "mechanism_relevant": false
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.svg",
-      "axes": ["top-to-bottom", "nested explicit rectangle", "competing frame and node owners", "root links"],
+      "axes": [
+        "top-to-bottom",
+        "nested explicit rectangle",
+        "competing frame and node owners",
+        "root links"
+      ],
       "result": "fail: SVG width differs by 10px; nested rectangle primitive and title origin match, so this is preserved as non-attributed envelope/layout residue",
       "mechanism_relevant": false
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.svg",
-      "axes": ["top-to-bottom", "nested title without explicit symbol stereotype", "frame owner", "root links"],
+      "axes": [
+        "top-to-bottom",
+        "nested title without explicit symbol stereotype",
+        "frame owner",
+        "root links"
+      ],
       "result": "pass: SVGs are structurally equivalent",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.svg",
-      "axes": ["top-to-bottom", "plain packageStyle rectangle", "top-level rectangle", "short renamed label", "root link"],
+      "axes": [
+        "top-to-bottom",
+        "plain packageStyle rectangle",
+        "top-level rectangle",
+        "short renamed label",
+        "root link"
+      ],
       "result": "fail: Java emits a rectangle cluster while Rust emits the folder-style path; expected rectangle title baseline is y=22.5352, while the Rust folder title is y=21.5352",
       "mechanism_relevant": true
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.svg",
-      "axes": ["top-to-bottom", "nested explicit Rectangle", "node owner", "long renamed title", "root link"],
+      "axes": [
+        "top-to-bottom",
+        "nested explicit Rectangle",
+        "node owner",
+        "long renamed title",
+        "root link"
+      ],
       "result": "fail: SVG width differs by 10px; nested rectangle primitive and title origin match, so this is preserved as non-attributed envelope/layout residue",
       "mechanism_relevant": false
     },
     {
       "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.puml",
       "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.svg",
-      "axes": ["top-to-bottom", "top-level explicit Rectangle", "stereotyped title", "short renamed label", "root link"],
+      "axes": [
+        "top-to-bottom",
+        "top-level explicit Rectangle",
+        "stereotyped title",
+        "short renamed label",
+        "root link"
+      ],
       "result": "pass: SVGs are structurally equivalent",
       "mechanism_relevant": true
     }
@@ -172,32 +242,9 @@
     "oracle_errors": 0
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "Plain packageStyle rectangle is not modeled by the Rust class renderer.",
-      "evidence": "Java PackageStyle.toUSymbol maps RECTANGLE to USymbols.RECTANGLE and therefore uses the same USymbolRectangle.asBig origin rule for plain packages. Four fresh valid inputs across TB/LR, top-level/nested, short/long labels, and competing owners instead produce Rust folder-style paths. The direct TB and LR controls show Java rectangle titles at y=22.5352 while Rust's folder titles are at y=21.5352, with different primitive sequences and layout envelopes.",
-      "relevant_inputs": [
-        "checker3_tb_plain_top_short.puml",
-        "checker3_lr_plain_top_renamed_long.puml",
-        "checker3_lr_plain_nested_short.puml",
-        "checker3_lr_stereo_nested_under_plain.puml"
-      ]
-    },
-    {
-      "severity": "residual",
-      "summary": "Three explicit nested or competing-owner cases still have a 10px envelope-width mismatch.",
-      "evidence": "checker3_tb_competing_frame_node_rootlinks, checker3_tb_competing_nested_rectangle, and checker3_tb_stereo_nested_long fail only on the outer SVG width. Their rectangle primitive and title coordinates match the Java output; this review does not attribute those failures to the title-origin correction, but preserves them as executable residue.",
-      "relevant_inputs": [
-        "checker3_tb_competing_frame_node_rootlinks.puml",
-        "checker3_tb_competing_nested_rectangle.puml",
-        "checker3_tb_stereo_nested_long.puml"
-      ]
-    },
-    {
-      "severity": "informational",
-      "summary": "The one-line explicit rectangle correction itself is supported where its renderer is reached.",
-      "evidence": "Four fresh direct explicit-rectangle cases and all three preserved predecessor counterexamples are structurally equivalent. No fixture-shaped production logic or unexplained constant was found in the exact correction diff."
-    }
+    "{\"evidence\": \"Java PackageStyle.toUSymbol maps RECTANGLE to USymbols.RECTANGLE and therefore uses the same USymbolRectangle.asBig origin rule for plain packages. Four fresh valid inputs across TB/LR, top-level/nested, short/long labels, and competing owners instead produce Rust folder-style paths. The direct TB and LR controls show Java rectangle titles at y=22.5352 while Rust's folder titles are at y=21.5352, with different primitive sequences and layout envelopes.\", \"relevant_inputs\": [\"checker3_tb_plain_top_short.puml\", \"checker3_lr_plain_top_renamed_long.puml\", \"checker3_lr_plain_nested_short.puml\", \"checker3_lr_stereo_nested_under_plain.puml\"], \"severity\": \"rejecting\", \"summary\": \"Plain packageStyle rectangle is not modeled by the Rust class renderer.\"}",
+    "{\"evidence\": \"checker3_tb_competing_frame_node_rootlinks, checker3_tb_competing_nested_rectangle, and checker3_tb_stereo_nested_long fail only on the outer SVG width. Their rectangle primitive and title coordinates match the Java output; this review does not attribute those failures to the title-origin correction, but preserves them as executable residue.\", \"relevant_inputs\": [\"checker3_tb_competing_frame_node_rootlinks.puml\", \"checker3_tb_competing_nested_rectangle.puml\", \"checker3_tb_stereo_nested_long.puml\"], \"severity\": \"residual\", \"summary\": \"Three explicit nested or competing-owner cases still have a 10px envelope-width mismatch.\"}",
+    "{\"evidence\": \"Four fresh direct explicit-rectangle cases and all three preserved predecessor counterexamples are structurally equivalent. No fixture-shaped production logic or unexplained constant was found in the exact correction diff.\", \"severity\": \"informational\", \"summary\": \"The one-line explicit rectangle correction itself is supported where its renderer is reached.\"}"
   ],
   "no_oracle_gate": "failed",
   "rejection_basis": "Fresh valid plain-title siblings fail across both directions and top-level/nested contexts because packageStyle rectangle fallback is absent from Rust. This is mechanism-relevant to the requested plain/stereotyped title generalization even though the explicit-symbol one-pixel correction passes its direct controls.",
@@ -208,5 +255,188 @@
     "existing_review_records_modified": false,
     "existing_fixtures_modified": false
   },
-  "verdict": "REJECTED"
+  "verdict": "rejected",
+  "account_commit": "5d12ac818433e5e2e88fbd2223fb5039174931a2",
+  "implementation_commit": "dc0aee28931262bab3730b570c58fecaec7d7cdd",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.svg",
+      "axes": [
+        "left-to-right",
+        "explicit rectangle",
+        "competing frame and node owners",
+        "root links",
+        "long renamed labels"
+      ],
+      "result": "pass",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.svg",
+      "axes": [
+        "left-to-right",
+        "nested explicit rectangle",
+        "competing frame and node owners",
+        "root links",
+        "long renamed labels"
+      ],
+      "result": "pass",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.svg",
+      "axes": [
+        "left-to-right",
+        "plain packageStyle rectangle",
+        "nested rectangle",
+        "short renamed labels",
+        "competing cloud owner",
+        "root link"
+      ],
+      "result": "fail",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.svg",
+      "axes": [
+        "left-to-right",
+        "plain packageStyle rectangle",
+        "top-level rectangle",
+        "long renamed labels",
+        "root link"
+      ],
+      "result": "fail",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.svg",
+      "axes": [
+        "left-to-right",
+        "explicit nested rectangle",
+        "plain packageStyle rectangle owner",
+        "renamed labels",
+        "root links"
+      ],
+      "result": "fail",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.svg",
+      "axes": [
+        "left-to-right",
+        "top-level explicit Rectangle",
+        "stereotyped title",
+        "long renamed labels",
+        "root link"
+      ],
+      "result": "pass",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.svg",
+      "axes": [
+        "top-to-bottom",
+        "explicit rectangle",
+        "competing frame and node owners",
+        "multiple root links"
+      ],
+      "result": "fail",
+      "mechanism_relevant": false,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.svg",
+      "axes": [
+        "top-to-bottom",
+        "nested explicit rectangle",
+        "competing frame and node owners",
+        "root links"
+      ],
+      "result": "fail",
+      "mechanism_relevant": false,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.svg",
+      "axes": [
+        "top-to-bottom",
+        "nested title without explicit symbol stereotype",
+        "frame owner",
+        "root links"
+      ],
+      "result": "pass",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.svg",
+      "axes": [
+        "top-to-bottom",
+        "plain packageStyle rectangle",
+        "top-level rectangle",
+        "short renamed label",
+        "root link"
+      ],
+      "result": "fail",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.svg",
+      "axes": [
+        "top-to-bottom",
+        "nested explicit Rectangle",
+        "node owner",
+        "long renamed title",
+        "root link"
+      ],
+      "result": "fail",
+      "mechanism_relevant": false,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.svg"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.svg",
+      "axes": [
+        "top-to-bottom",
+        "top-level explicit Rectangle",
+        "stereotyped title",
+        "short renamed label",
+        "root link"
+      ],
+      "result": "pass",
+      "mechanism_relevant": true,
+      "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.puml",
+      "golden": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.svg"
+    }
+  ]
 }

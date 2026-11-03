@@ -54,5 +54,7 @@
     "short, aliased, qualified, unique-unqualified, intra-scope, and cross-scope link endpoints",
     "top-to-bottom versus left-to-right",
     "renamed labels plus independently varied topology, depth, and branch count"
-  ]
+  ],
+  "invariant": "Java ClassDiagramFactory owns object and map commands. Every declaration resolves through the same contextual Quark graph, group stack, source-identity lifecycle, and relationship model. GeneralImageBuilder later selects EntityImageObject or EntityImageMap from LeafType. Reopening a group reuses its first Entity, source location, and UID; aliases change identity while preserving display text; links resolve to those same entities.",
+  "planned_change": "[\"Add Map and an appropriate map-body representation to ClassDiagram; preserve Object bodies as shared-model members.\", \"Parse object/map multiline blocks through ClassParser command context so body text cannot influence top-level factory selection.\", \"Use canonical scoped identities, first-materialization source locations, UID events, reopen reuse, and contextual link resolution for all object/map leaves.\", \"Run one shared direction-aware graph and cluster layout, then dispatch Object and Map leaves to the proven dimensions and paint currently in object.rs.\", \"Remove ordinary object/map routing to the flat ObjectParser; do not expand it into a second ClassParser.\"]"
 }

@@ -82,16 +82,8 @@
     "valid_failed": 1
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "The implementation does not actually reconstruct serialized cluster origins.",
-      "evidence": "A fresh single-member cloud case still carries a consistent horizontal offset through the cluster path, child entity, and outgoing edge. The source keeps ll_x/ll_y from Graphviz and swaps only width and height from serialized coordinates."
-    },
-    {
-      "severity": "informational",
-      "summary": "Not every cloud case is broken; the miss is residual and input-shaped.",
-      "evidence": "The multi-member fallback cloud and the nested explicit-cloud LR case both pass, which means the remaining divergence is narrower than the account claims."
-    }
+    "{\"evidence\": \"A fresh single-member cloud case still carries a consistent horizontal offset through the cluster path, child entity, and outgoing edge. The source keeps ll_x/ll_y from Graphviz and swaps only width and height from serialized coordinates.\", \"severity\": \"rejecting\", \"summary\": \"The implementation does not actually reconstruct serialized cluster origins.\"}",
+    "{\"evidence\": \"The multi-member fallback cloud and the nested explicit-cloud LR case both pass, which means the remaining divergence is narrower than the account claims.\", \"severity\": \"informational\", \"summary\": \"Not every cloud case is broken; the miss is residual and input-shaped.\"}"
   ],
   "artifacts": {
     "held_out_directory": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/",
@@ -99,5 +91,49 @@
     "production_files_modified": false,
     "account_modified": false
   },
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.svg",
+      "axes": [
+        "fallback cloud",
+        "single-member cluster",
+        "link leaving cluster",
+        "top-to-bottom"
+      ],
+      "outcome": "fail: the cloud path, member rectangles, and outgoing edge are all shifted by roughly 0.27px on x because Rust keeps the internal origin.",
+      "source": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.svg",
+      "axes": [
+        "fallback cloud",
+        "multi-member cluster",
+        "internal plus external links",
+        "top-to-bottom"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.svg",
+      "axes": [
+        "explicit cloud",
+        "nested fallback child",
+        "left-to-right"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.svg",
+      "result": "pass"
+    }
+  ]
 }

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-mixed-state-group-metadata",
   "reviewed_at": "2026-07-28T00:44:09+1000",
-  "verdict": "reject",
+  "verdict": "rejected",
   "reviewer": {
     "identity": "Codex independent skeptical checker",
     "model": "GPT-5 Codex",
@@ -172,62 +172,10 @@
     ]
   },
   "findings": [
-    {
-      "severity": "reject",
-      "title": "EMPTY_PACKAGE leaves are laid out and allocated but never painted",
-      "rust_evidence": [
-        "crates/rustuml-render/src/class.rs:2192-2200 creates empty-package layout nodes.",
-        "crates/rustuml-render/src/class.rs:2292-2304 adds those nodes to parent clusters.",
-        "crates/rustuml-render/src/class.rs:3509-3530 computes EntityImageEmptyPackage-derived dimensions.",
-        "crates/rustuml-render/src/class.rs:5135-5191 filters SVG package emission to PackageRenderRole::Cluster and has no EmptyLeaf emitter."
-      ],
-      "java_evidence": [
-        "GraphvizImageBuilder#printGroups lines 416-418 mutates a directly empty package to EMPTY_PACKAGE and calls printEntity.",
-        "EntityImageEmptyPackage#drawU paints the package decoration, title, stereotype, colors, and outline."
-      ],
-      "held_out_evidence": [
-        "review6_unique_mixed_reuses_remote_class: Java paints BridgeActors; Rust omits it.",
-        "review7_nested_empty_groups_only: Java paints EmptyLeft and EmptyDeep; Rust omits both."
-      ],
-      "impact": "The 59/59 scoped result is a false accept for visible empty-package semantics and cannot attest this mechanism."
-    },
-    {
-      "severity": "reject",
-      "title": "Null-separator package lookup bypasses the shared creation-order model",
-      "rust_evidence": [
-        "crates/rustuml-parser/src/parse/class.rs:212-217 defines the shared creation-ordered first_quark_path_named lookup.",
-        "crates/rustuml-parser/src/parse/class.rs:234-243 uses it for resolve_quark_path.",
-        "crates/rustuml-parser/src/parse/class.rs:268-280 instead searches package_by_path HashMap iteration order for resolve_group_path and cannot select an earlier entity quark."
-      ],
-      "java_evidence": [
-        "CucaDiagram#quarkInContextSafe lines 249-255 calls firstWithName for every null-separator lookup.",
-        "CommandPackage and CommandPackageEmpty call quarkInContext(false), so the same rule applies to package declarations."
-      ],
-      "impact": "Package declarations under namespaceSeparator none can be nondeterministic, can select the wrong duplicate package, and can diverge when the first matching quark is an entity."
-    },
-    {
-      "severity": "reject",
-      "title": "Namespace-separator command grammar does not match Java",
-      "rust_evidence": [
-        "crates/rustuml-parser/src/parse/class.rs:1437 recognizes only the exact set namespaceSeparator prefix.",
-        "crates/rustuml-parser/src/parse/class.rs:1441-1444 recognizes only lowercase none as null."
-      ],
-      "java_evidence": [
-        "CommandNamespaceSeparator#getRegexConcat accepts separator and namespaceseparator.",
-        "CommandNamespaceSeparator#executeArg uses equalsIgnoreCase for none."
-      ],
-      "impact": "Valid Java commands such as set separator none and mixed-case NONE do not establish the intended null-separator state in Rust."
-    },
-    {
-      "severity": "info",
-      "title": "The implementation is mechanism-shaped and preserves aggregate metrics",
-      "evidence": [
-        "Static anti-overfit scans found no fixture/golden reads, embedded output, fixture labels, coordinate exceptions, or source-line branches.",
-        "All 59 review2 through review7 sources pass the existing scoped identity predicate.",
-        "The class family remains at its 1940/1971 no-oracle baseline with 169 intentional skips.",
-        "These positives do not override the three model-completeness failures."
-      ]
-    }
+    "{\"held_out_evidence\": [\"review6_unique_mixed_reuses_remote_class: Java paints BridgeActors; Rust omits it.\", \"review7_nested_empty_groups_only: Java paints EmptyLeft and EmptyDeep; Rust omits both.\"], \"impact\": \"The 59/59 scoped result is a false accept for visible empty-package semantics and cannot attest this mechanism.\", \"java_evidence\": [\"GraphvizImageBuilder#printGroups lines 416-418 mutates a directly empty package to EMPTY_PACKAGE and calls printEntity.\", \"EntityImageEmptyPackage#drawU paints the package decoration, title, stereotype, colors, and outline.\"], \"rust_evidence\": [\"crates/rustuml-render/src/class.rs:2192-2200 creates empty-package layout nodes.\", \"crates/rustuml-render/src/class.rs:2292-2304 adds those nodes to parent clusters.\", \"crates/rustuml-render/src/class.rs:3509-3530 computes EntityImageEmptyPackage-derived dimensions.\", \"crates/rustuml-render/src/class.rs:5135-5191 filters SVG package emission to PackageRenderRole::Cluster and has no EmptyLeaf emitter.\"], \"severity\": \"reject\", \"title\": \"EMPTY_PACKAGE leaves are laid out and allocated but never painted\"}",
+    "{\"impact\": \"Package declarations under namespaceSeparator none can be nondeterministic, can select the wrong duplicate package, and can diverge when the first matching quark is an entity.\", \"java_evidence\": [\"CucaDiagram#quarkInContextSafe lines 249-255 calls firstWithName for every null-separator lookup.\", \"CommandPackage and CommandPackageEmpty call quarkInContext(false), so the same rule applies to package declarations.\"], \"rust_evidence\": [\"crates/rustuml-parser/src/parse/class.rs:212-217 defines the shared creation-ordered first_quark_path_named lookup.\", \"crates/rustuml-parser/src/parse/class.rs:234-243 uses it for resolve_quark_path.\", \"crates/rustuml-parser/src/parse/class.rs:268-280 instead searches package_by_path HashMap iteration order for resolve_group_path and cannot select an earlier entity quark.\"], \"severity\": \"reject\", \"title\": \"Null-separator package lookup bypasses the shared creation-order model\"}",
+    "{\"impact\": \"Valid Java commands such as set separator none and mixed-case NONE do not establish the intended null-separator state in Rust.\", \"java_evidence\": [\"CommandNamespaceSeparator#getRegexConcat accepts separator and namespaceseparator.\", \"CommandNamespaceSeparator#executeArg uses equalsIgnoreCase for none.\"], \"rust_evidence\": [\"crates/rustuml-parser/src/parse/class.rs:1437 recognizes only the exact set namespaceSeparator prefix.\", \"crates/rustuml-parser/src/parse/class.rs:1441-1444 recognizes only lowercase none as null.\"], \"severity\": \"reject\", \"title\": \"Namespace-separator command grammar does not match Java\"}",
+    "{\"evidence\": [\"Static anti-overfit scans found no fixture/golden reads, embedded output, fixture labels, coordinate exceptions, or source-line branches.\", \"All 59 review2 through review7 sources pass the existing scoped identity predicate.\", \"The class family remains at its 1940/1971 no-oracle baseline with 169 intentional skips.\", \"These positives do not override the three model-completeness failures.\"], \"severity\": \"info\", \"title\": \"The implementation is mechanism-shaped and preserves aggregate metrics\"}"
   ],
   "missing_adversarial_cases": [
     {

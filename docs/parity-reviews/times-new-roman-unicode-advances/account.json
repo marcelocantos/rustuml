@@ -17,33 +17,10 @@
     "docs/parity-reviews/times-new-roman-unicode-advances/review.json"
   ],
   "java_locations": [
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/FontStack.java",
-      "symbol": "FontStack.getFont(String,UFontFace,int)",
-      "lines": "99-121",
-      "role": "With a single requested family, always derives that primary Java AWT Font; any physical-glyph fallback remains AWT Font behavior rather than selecting a different PlantUML family."
-    },
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
-      "symbol": "UFontImpl.getUnderlayingFont",
-      "lines": "69-82",
-      "role": "Returns the face-aware AWT Font used for the complete text."
-    },
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/FileFormat.java",
-      "symbol": "FileFormat.getJavaDimension",
-      "lines": "220-237",
-      "role": "Measures that AWT Font with fractional FontMetrics.getStringBounds."
-    },
-    {
-      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/StringBounderRaw.java",
-      "symbols": [
-        "calculateDimension",
-        "getDescent"
-      ],
-      "lines": "53-79",
-      "role": "Uses the same resolved font for layout dimensions and descent."
-    }
+    "{\"lines\": \"99-121\", \"path\": \"src/main/java/net/sourceforge/plantuml/klimt/font/FontStack.java\", \"role\": \"With a single requested family, always derives that primary Java AWT Font; any physical-glyph fallback remains AWT Font behavior rather than selecting a different PlantUML family.\", \"symbol\": \"FontStack.getFont(String,UFontFace,int)\"}",
+    "{\"lines\": \"69-82\", \"path\": \"src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java\", \"role\": \"Returns the face-aware AWT Font used for the complete text.\", \"symbol\": \"UFontImpl.getUnderlayingFont\"}",
+    "{\"lines\": \"220-237\", \"path\": \"src/main/java/net/sourceforge/plantuml/FileFormat.java\", \"role\": \"Measures that AWT Font with fractional FontMetrics.getStringBounds.\", \"symbol\": \"FileFormat.getJavaDimension\"}",
+    "{\"lines\": \"53-79\", \"path\": \"src/main/java/net/sourceforge/plantuml/klimt/font/StringBounderRaw.java\", \"role\": \"Uses the same resolved font for layout dimensions and descent.\", \"symbols\": [\"calculateDimension\", \"getDescent\"]}"
   ],
   "java_runtime_model": {
     "runtime": "Homebrew OpenJDK 21.0.11 on macOS",
@@ -77,15 +54,8 @@
     ]
   },
   "rust_locations": [
-    {
-      "path": "crates/rustuml-render/src/plantuml_metrics.rs",
-      "symbol": "times_new_roman_text_width",
-      "role": "Uses exact four-face tables only for printable ASCII and assigns every other scalar 1024 units."
-    },
-    {
-      "path": "tools/PhysicalFontMetricsExtract.java",
-      "role": "The checked-in derivation currently emits only printable ASCII even though the same AWT API can derive assigned Unicode scalar advances."
-    }
+    "{\"path\": \"crates/rustuml-render/src/plantuml_metrics.rs\", \"role\": \"Uses exact four-face tables only for printable ASCII and assigns every other scalar 1024 units.\", \"symbol\": \"times_new_roman_text_width\"}",
+    "{\"path\": \"tools/PhysicalFontMetricsExtract.java\", \"role\": \"The checked-in derivation currently emits only printable ASCII even though the same AWT API can derive assigned Unicode scalar advances.\"}"
   ],
   "claimed_invariant": "For scalar-additive text in a single requested PlantUML family, parity is defined by the same fallback decision and requested-size FontStrike that Java2D uses, with the same face, transform, antialiasing and fractional-metrics hints, followed by source-order f32 accumulation. A source-size advance may be scaled only for a glyph path whose target-size linearity has been established from the underlying scalable font model; exact representation of one sampled size is not evidence of that property. CoreText-substituted, bitmap-strike, optical-size, hinted, or otherwise strike-sensitive glyphs must be measured by their requested-size generative path.",
   "causal_divergence": "The original implementation replaced every non-ASCII scalar with a half-em advance. The first Unicode-table correction rounded 2048-point AWT advances; the 16.16 correction preserved those samples exactly and correctly repaired fractional accumulation for U+0518. Both corrections nevertheless treated a requested-size Java2D strike as a linear rescaling of one 2048-point observation. On macOS, CCharToGlyphMapper can encode a CoreText substitution as a negative Unicode glyph code, and CStrike measures that opaque glyph through a native strike created with the actual requested transform and hints. U+231A follows that path, so its size-dependent advance is generated downstream of the sampled Times table.",
@@ -166,5 +136,7 @@
     "The full renderer library suite passes.",
     "The no-oracle product gate does not regress any family.",
     "A separate checker reviews the exact implementation revision and preserves all passing and failing held-outs."
-  ]
+  ],
+  "invariant": "For scalar-additive text in a single requested PlantUML family, parity is defined by the same fallback decision and requested-size FontStrike that Java2D uses, with the same face, transform, antialiasing and fractional-metrics hints, followed by source-order f32 accumulation. A source-size advance may be scaled only for a glyph path whose target-size linearity has been established from the underlying scalable font model; exact representation of one sampled size is not evidence of that property. CoreText-substituted, bitmap-strike, optical-size, hinted, or otherwise strike-sensitive glyphs must be measured by their requested-size generative path.",
+  "planned_change": "Replace the Unicode range table as the source of truth with a fallback-aware requested-size text backend. Pin a legally shippable primary and fallback font profile, its coverage/cascade order, face selection, and hashes; make the Java oracle and Rust renderer consume that same profile rather than inheriting an unrecorded host cascade. In Rust, resolve each text run through that cascade, shape the complete run, and create glyph advances from the selected font's actual requested integer size, transform, and rendering-hint model. Scalable outline glyphs may use their font-program metrics only where the scaler establishes linearity; strike-sensitive glyphs must select and apply the font's bitmap, optical-size, hinting, or variation data at the requested size. Accumulate the resulting glyph positions with Java's f32 ordering. The existing 2048-point table becomes a diagnostic cross-check, not an execution model. If matching the current macOS CoreText cascade requires non-redistributable Apple or Microsoft font assets or a host CoreText dependency, resolve that product-contract conflict before implementation: either adopt a shared bundled-font oracle profile or explicitly authorize a platform profile. Do not approximate the conflict with per-codepoint, per-size corrections."
 }

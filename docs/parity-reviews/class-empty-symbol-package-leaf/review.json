@@ -7,7 +7,7 @@
     "model": "gpt-5.6-terra",
     "tool": "Codex desktop; Java PlantUML picoweb oracle; exact supplied diff_one --no-oracle binary"
   },
-  "verdict": "REJECTED",
+  "verdict": "rejected",
   "revisions": {
     "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
     "rust_revision_requested_and_audited": "18dcd865703088a6ef78c980085db2dd7ac81ebe",
@@ -70,44 +70,94 @@
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.svg",
-      "axes": ["all six explicit symbols", "ordinary empty package control", "root ownership", "TB", "short renamed labels", "declaration order", "neighboring filled group", "no Together"],
+      "axes": [
+        "all six explicit symbols",
+        "ordinary empty package control",
+        "root ownership",
+        "TB",
+        "short renamed labels",
+        "declaration order",
+        "neighboring filled group",
+        "no Together"
+      ],
       "result": "pass: SVGs are structurally equivalent"
     },
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.svg",
-      "axes": ["all six explicit symbols", "ordinary empty package control", "nested ownership", "TB", "long renamed labels", "declaration reordering", "neighboring filled group", "allowmixing forces class dispatch"],
+      "axes": [
+        "all six explicit symbols",
+        "ordinary empty package control",
+        "nested ownership",
+        "TB",
+        "long renamed labels",
+        "declaration reordering",
+        "neighboring filled group",
+        "allowmixing forces class dispatch"
+      ],
       "result": "pass: SVGs are structurally equivalent"
     },
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.svg",
-      "axes": ["folder/frame/node subset", "ordinary empty package control", "nested ownership", "LR", "long renamed labels", "declaration reordering", "neighboring filled group", "allowmixing forces class dispatch"],
+      "axes": [
+        "folder/frame/node subset",
+        "ordinary empty package control",
+        "nested ownership",
+        "LR",
+        "long renamed labels",
+        "declaration reordering",
+        "neighboring filled group",
+        "allowmixing forces class dispatch"
+      ],
       "result": "pass: SVGs are structurally equivalent"
     },
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.svg",
-      "axes": ["ordinary empty package only", "filled neighboring group", "valid class dispatch"],
+      "axes": [
+        "ordinary empty package only",
+        "filled neighboring group",
+        "valid class dispatch"
+      ],
       "result": "pass: SVGs are structurally equivalent"
     },
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.svg",
-      "axes": ["direct Together ownership", "folder plus ordinary empty package", "TB", "allowmixing forces class dispatch"],
+      "axes": [
+        "direct Together ownership",
+        "folder plus ordinary empty package",
+        "TB",
+        "allowmixing forces class dispatch"
+      ],
       "result": "pass: SVGs are structurally equivalent"
     },
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_allowmixing.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_allowmixing.svg",
-      "axes": ["all six explicit symbols", "ordinary empty package control", "root direct Together ownership", "TB", "short renamed labels", "declaration order", "neighboring filled group", "allowmixing forces class dispatch"],
+      "axes": [
+        "all six explicit symbols",
+        "ordinary empty package control",
+        "root direct Together ownership",
+        "TB",
+        "short renamed labels",
+        "declaration order",
+        "neighboring filled group",
+        "allowmixing forces class dispatch"
+      ],
       "result": "fail: both sides are CLASS, but Java is 1867 by 215 while Rust is 1852 by 215. Java places the ordinary empty package at x=1691.19 after the symbol leaves; Rust paints it at x=206.1899 before them. This is a mechanism-relevant Together ordering/ownership counterexample.",
       "counterexample": true
     },
     {
       "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.puml",
       "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.svg",
-      "axes": ["all six explicit symbols via package stereotypes", "ordinary empty package carrying a non-symbol stereotype", "filled neighboring group", "root ownership"],
+      "axes": [
+        "all six explicit symbols via package stereotypes",
+        "ordinary empty package carrying a non-symbol stereotype",
+        "filled neighboring group",
+        "root ownership"
+      ],
       "result": "fail: the ordinary <<Application>> package stereotype text is x=1441.5498 in Java and x=1437.5542 in Rust. The claimed ordinary EntityImageEmptyPackage-style branch does not preserve this visible stereotype placement.",
       "counterexample": true
     },
@@ -182,5 +232,143 @@
     "The five passing valid held-outs show that symbol geometry itself generalizes across root/nested ownership, TB/LR, renamed labels, a filled neighbor, all six symbols, and a simple folder-plus-ordinary Together case. They do not outweigh the two fresh counterexamples.",
     "Static inspection found no fixture-shaped code, golden-data reads, coordinate-keyed SVG surgery, unexplained high-precision parity constant, baseline edit, or guard/comparator modification in the audited mechanism. The rejection is a model-completeness failure, not an overfit finding.",
     "All generated SVGs are well-formed XML. Two exploratory inputs have Java syntax-error SVGs and are explicitly excluded; every valid Java pair is retained, including both failing counterexamples."
+  ],
+  "account_commit": "3a614bb347588c3eb025e6d080f93416a4c6e1f1",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.svg",
+      "axes": [
+        "all six explicit symbols",
+        "ordinary empty package control",
+        "root ownership",
+        "TB",
+        "short renamed labels",
+        "declaration order",
+        "neighboring filled group",
+        "no Together"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.svg",
+      "axes": [
+        "all six explicit symbols",
+        "ordinary empty package control",
+        "nested ownership",
+        "TB",
+        "long renamed labels",
+        "declaration reordering",
+        "neighboring filled group",
+        "allowmixing forces class dispatch"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.svg",
+      "axes": [
+        "folder/frame/node subset",
+        "ordinary empty package control",
+        "nested ownership",
+        "LR",
+        "long renamed labels",
+        "declaration reordering",
+        "neighboring filled group",
+        "allowmixing forces class dispatch"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.svg",
+      "axes": [
+        "ordinary empty package only",
+        "filled neighboring group",
+        "valid class dispatch"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.svg",
+      "axes": [
+        "direct Together ownership",
+        "folder plus ordinary empty package",
+        "TB",
+        "allowmixing forces class dispatch"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_allowmixing.svg",
+      "axes": [
+        "all six explicit symbols",
+        "ordinary empty package control",
+        "root direct Together ownership",
+        "TB",
+        "short renamed labels",
+        "declaration order",
+        "neighboring filled group",
+        "allowmixing forces class dispatch"
+      ],
+      "result": "fail",
+      "counterexample": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.svg",
+      "axes": [
+        "all six explicit symbols via package stereotypes",
+        "ordinary empty package carrying a non-symbol stereotype",
+        "filled neighboring group",
+        "root ownership"
+      ],
+      "result": "fail",
+      "counterexample": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_ordinary.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_ordinary.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_lr_long_labels_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_lr_long_labels_reordered.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_reordered.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_minimal.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_minimal.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_lr_nested_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_lr_nested_reordered.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_root.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_root.svg",
+      "result": "diagnostic duplicate of the valid allowmixing all-six Together counterexample; it fails with the same canvas and direct-node ordering divergence."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.svg",
+      "result": "excluded: Java oracle reports a syntax error; preserved to document the rejected probe."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.svg",
+      "result": "excluded: Java oracle reports a syntax error; preserved to document the rejected probe."
+    }
   ]
 }

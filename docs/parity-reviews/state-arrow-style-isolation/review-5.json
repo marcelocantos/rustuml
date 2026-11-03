@@ -35,111 +35,27 @@
     ]
   },
   "commands": [
-    {
-      "command": "pgrep -x cargo; pgrep -x rustc",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "pass: both exact process checks returned no running process before taking the compile slot"
-    },
-    {
-      "command": "git show -s --format=%H 3fb74a8b",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "3fb74a8bf518a528e89686d1390c223983fc98fb"
-    },
-    {
-      "command": "git show -s --format=%H 3f80363e",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "3f80363ecc8f683a452924f82d7ac8cb24ee7eb3"
-    },
-    {
-      "command": "git log --all --format=%H | rg '^1980fd23'",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "1980fd231e830d2cbc7277f4bcd9b7ca915b4934"
-    },
-    {
-      "command": "git archive --format=tar --output=/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/source.tar 3fb74a8b",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "pass"
-    },
-    {
-      "command": "tar -xf /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/source.tar -C /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "pass"
-    },
-    {
-      "command": "cp review5_*.puml/svg from shared tree into /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/test-diagrams/perturbations/state-arrow-style-isolation/",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "pass: only the six fresh arrow review-5 fixture files were copied into the immutable snapshot"
-    },
-    {
-      "command": "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
-    },
-    {
-      "command": "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
-    },
-    {
-      "command": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "pass: pinned Java SVG goldens generated"
-    },
-    {
-      "command": "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.svg test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.svg test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.svg",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "pass"
-    },
-    {
-      "command": "rg -n -i 'syntax error|error line|plantuml error|fatal parsing error|cannot include|class=\"error\"|id=\"error\"|<title>error' test-diagrams/perturbations/state-arrow-style-isolation/review5_*.svg",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "pass: no matches"
-    },
-    {
-      "command": "ruby -rdigest -e 'verify review5_*.puml SHA-256 uniqueness against test-diagrams/golden/**/*.puml and test-diagrams/perturbations/**/*.puml'",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "pass: unique 3 fresh sources checked against 12656 puml files"
-    },
-    {
-      "command": "shasum -a 256 test-diagrams/perturbations/state-arrow-style-isolation/review5_*.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_*.svg",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "puml e656d0030159ee076da8ec380e3ee66661db913c212835cb141ed0c024a4e89d, 34b2a0d25412f3785b42b4336817a80aa49895a44fafac489375d8a0affa263b, e1e590485f05b45a6e77bf6b9050ca193c4d896af10183ae6fb44f4dc6a1d9cb; svg 7f8b69da4bd9b66b92ce703a3f425be967317c97148a3b5f66452a17049830af, 55b45d8bdd655419c00fd8a274ab4963335d06a741426391a9f141005b89ca64, ef24396af9b1fffd5e4cfcd3b96491e3e70adeffff63673b04c84bab63c2aa9c"
-    },
-    {
-      "command": "rg/sed source review of Java SkinParam.cleanForKeySlow, SkinParam.setParam, FromSkinparamToStyle, TContext.executeTheme, Rust parse::collapse_reassigned_skinparams, preprocess theme flattening, and arrow-colour consumers in state/class/component/activity/sequence/usecase renderers",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "pass: source review completed; findings recorded below"
-    },
-    {
-      "command": "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review5-3fb74a8b-target cargo build -p rustuml-oracle --example diff_one --release",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "pass: finished release profile in 50.30s"
-    },
-    {
-      "command": "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "fail_strict: command completed but printed SVG structural differences; inherited emitted Rust arrow paths use #2E7D32 like Java, but component layout/link ordering differs and the local edge is not matched strictly"
-    },
-    {
-      "command": "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "fail_strict: command completed but printed SVG structural differences; Java inherited component arrows are #000000 from theme processing while Rust remains #181818, and layout/link ordering also differs"
-    },
-    {
-      "command": "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "fail_strict: inherited arrows match #2E7D32, but the local sequence override differs: Java renders #C2185B dashed, Rust renders #FFFFFF solid"
-    },
-    {
-      "command": "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review5-3fb74a8b-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
-      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
-      "result": "fail: held_out_perturbations_match_java_without_oracle_layout failed. New review-5 failures include review5_component_cross_family_alias_order, review5_component_theme_scope_negative, and review5_sequence_repeated_theme_cross_family_alias; pre-existing rejected state-arrow and state-recursive perturbations also remain red."
-    },
-    {
-      "command": "pgrep -x cargo; pgrep -x rustc",
-      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
-      "result": "pass: both exact process checks returned no running process after pausing and before the final review write"
-    }
+    "pgrep -x cargo; pgrep -x rustc",
+    "git show -s --format=%H 3fb74a8b",
+    "git show -s --format=%H 3f80363e",
+    "git log --all --format=%H | rg '^1980fd23'",
+    "git archive --format=tar --output=/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/source.tar 3fb74a8b",
+    "tar -xf /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/source.tar -C /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+    "cp review5_*.puml/svg from shared tree into /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/test-diagrams/perturbations/state-arrow-style-isolation/",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
+    "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.svg test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.svg test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.svg",
+    "rg -n -i 'syntax error|error line|plantuml error|fatal parsing error|cannot include|class=\"error\"|id=\"error\"|<title>error' test-diagrams/perturbations/state-arrow-style-isolation/review5_*.svg",
+    "ruby -rdigest -e 'verify review5_*.puml SHA-256 uniqueness against test-diagrams/golden/**/*.puml and test-diagrams/perturbations/**/*.puml'",
+    "shasum -a 256 test-diagrams/perturbations/state-arrow-style-isolation/review5_*.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_*.svg",
+    "rg/sed source review of Java SkinParam.cleanForKeySlow, SkinParam.setParam, FromSkinparamToStyle, TContext.executeTheme, Rust parse::collapse_reassigned_skinparams, preprocess theme flattening, and arrow-colour consumers in state/class/component/activity/sequence/usecase renderers",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review5-3fb74a8b-target cargo build -p rustuml-oracle --example diff_one --release",
+    "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml",
+    "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml",
+    "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review5-3fb74a8b-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "pgrep -x cargo; pgrep -x rustc"
   ],
   "perturbations": [
     {
@@ -154,7 +70,7 @@
         "final ordinary alias should win by Java cleanForKey identity",
         "local dashed colour override"
       ],
-      "result": "fail_strict",
+      "result": "fail",
       "arrow_specific_result": "The ordinary shared storage model is supported for emitted inherited links: both Java and Rust use #2E7D32 from the final Activity.Arrow_Color alias. The strict no-oracle comparison still fails because component layout/link ordering diverges and the local-edge path is not matched structurally."
     },
     {
@@ -169,7 +85,7 @@
         "component diagram family",
         "local dashed colour override"
       ],
-      "result": "fail_strict",
+      "result": "fail",
       "arrow_specific_result": "Rust keeps synthetic theme family records isolated in source, but the strict Java golden expects inherited component arrows in #000000 after PlantUML theme processing. Rust renders inherited arrows #181818, so the no-oracle comparison rejects the current compatibility model for this valid heldout."
     },
     {
@@ -184,7 +100,7 @@
         "different family prefixes from the target diagram family",
         "local sequence message colour and dashed style override"
       ],
-      "result": "fail_strict",
+      "result": "fail",
       "arrow_specific_result": "The inherited sequence arrows match Java at #2E7D32 after the final UseCase alias, so ordinary cross-family alias storage and repeated-theme source order survive this axis. The local message override rejects the implementation: Java renders the middle message #C2185B dashed, while Rust renders #FFFFFF solid."
     }
   ],

@@ -7,7 +7,7 @@
     "model": "GPT-5 Codex",
     "role": "Checker did not implement the mechanism and did not edit shipping code or account"
   },
-  "verdict": "ACCEPT",
+  "verdict": "accepted",
   "verdict_basis": "I tried to break the claimed raw-mode invariant with fresh held-out sequence, class-member, and class-note inputs covering implicit and explicit URLs, escaped-newline bytes inside and outside raw URL blocks, and multiple linked and unlinked runs. Every clean in-scope URL tokenization probe passed at Rust revision b9b5e3805458481c8e595247a18229c511aa52c3. The remaining failures sit on separate math or mixed note-layout surfaces and are reproducible without any raw escaped newline inside the raw block, so they do not reject this mechanism.",
   "revisions": {
     "rust_revision": "b9b5e3805458481c8e595247a18229c511aa52c3",
@@ -168,29 +168,15 @@
     }
   ],
   "findings": [
-    {
-      "severity": "high",
-      "kind": "adversarial_result",
-      "claim_evaluated": "Escaped Display newline controls create rows only outside raw Creole URL blocks and raw URL bytes reach the URL parser intact in the sequence, class-member, and class-note paths named in the account.",
-      "evidence": "All five clean URL-focused held-out probes pass structurally: sequence implicit and explicit URLs, class-note implicit URL, and class-member implicit and explicit URLs."
-    },
-    {
-      "severity": "medium",
-      "kind": "out_of_scope_residue",
-      "claim_evaluated": "Every raw block failure observed here is due to newline tokenization.",
-      "evidence": "The sequence math control fails in the same way with and without a raw escaped newline inside the raw blocks, and source inspection shows sequence.rs recognizes whole-line `<latex>` but has no parallel `<math>` path. That surface is not evidence against the newline-tokenization mechanism."
-    },
-    {
-      "severity": "low",
-      "kind": "mixed_surface_residue",
-      "claim_evaluated": "The mixed class-note URL plus LaTeX failure is a tokenization rejection.",
-      "evidence": "The simpler class-note implicit URL probe passes exactly. In the mixed URL plus LaTeX probe, the URL anchor and LaTeX image are both present and the mismatch reduces to note geometry, so it does not disprove the raw-mode invariant under review."
-    }
+    "{\"claim_evaluated\": \"Escaped Display newline controls create rows only outside raw Creole URL blocks and raw URL bytes reach the URL parser intact in the sequence, class-member, and class-note paths named in the account.\", \"evidence\": \"All five clean URL-focused held-out probes pass structurally: sequence implicit and explicit URLs, class-note implicit URL, and class-member implicit and explicit URLs.\", \"kind\": \"adversarial_result\", \"severity\": \"high\"}",
+    "{\"claim_evaluated\": \"Every raw block failure observed here is due to newline tokenization.\", \"evidence\": \"The sequence math control fails in the same way with and without a raw escaped newline inside the raw blocks, and source inspection shows sequence.rs recognizes whole-line `<latex>` but has no parallel `<math>` path. That surface is not evidence against the newline-tokenization mechanism.\", \"kind\": \"out_of_scope_residue\", \"severity\": \"medium\"}",
+    "{\"claim_evaluated\": \"The mixed class-note URL plus LaTeX failure is a tokenization rejection.\", \"evidence\": \"The simpler class-note implicit URL probe passes exactly. In the mixed URL plus LaTeX probe, the URL anchor and LaTeX image are both present and the mismatch reduces to note geometry, so it does not disprove the raw-mode invariant under review.\", \"kind\": \"mixed_surface_residue\", \"severity\": \"low\"}"
   ],
   "residue": [
     "The Java jar on this host emits Batik-related stack traces to stderr for math-capable cases while still writing well-formed SVGs. The review relies on the actual SVG artifacts, not the stderr noise.",
     "I intentionally avoided direct entity-anchor cases because the request called out unrelated class direct-anchor nesting residue. Every decisive URL verdict here stays on the generic Creole label and note paths."
   ],
   "preserved_evidence_root": "test-diagrams/perturbations/display-raw-newline-tokenization",
-  "review_file": "docs/parity-reviews/display-raw-newline-tokenization/review.json"
+  "review_file": "docs/parity-reviews/display-raw-newline-tokenization/review.json",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }

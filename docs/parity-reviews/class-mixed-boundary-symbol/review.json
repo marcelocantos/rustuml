@@ -109,15 +109,47 @@
     }
   ],
   "findings": [
-    {
-      "severity": "high",
-      "summary": "The new boundary branch still drifts on the wide connected case, so the claimed Java geometry has not been matched.",
-      "details": [
-        "Java centers the wide boundary one pixel left and one quarter-pixel higher than Rust: Java path starts at `M67.5791,10.75`, Rust at `M68.5791,11`.",
-        "The label baseline and connected-class placement drift with the same offset, proving the mismatch is in the boundary block geometry rather than an isolated path literal.",
-        "Because the linked Ledger box and the Gateway-to-Ledger edge move with the boundary, this is not a comparator artifact; the class pipeline is computing different positions from the Java symbol block."
-      ]
-    }
+    "{\"details\": [\"Java centers the wide boundary one pixel left and one quarter-pixel higher than Rust: Java path starts at `M67.5791,10.75`, Rust at `M68.5791,11`.\", \"The label baseline and connected-class placement drift with the same offset, proving the mismatch is in the boundary block geometry rather than an isolated path literal.\", \"Because the linked Ledger box and the Gateway-to-Ledger edge move with the boundary, this is not a comparator artifact; the class pipeline is computing different positions from the Java symbol block.\"], \"severity\": \"high\", \"summary\": \"The new boundary branch still drifts on the wide connected case, so the claimed Java geometry has not been matched.\"}"
   ],
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.svg",
+      "axes": [
+        "root ownership",
+        "isolated boundary",
+        "lowercase spelling",
+        "short label",
+        "top-to-bottom direction"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.svg",
+      "axes": [
+        "root ownership",
+        "connected boundary",
+        "mixed-case spelling",
+        "quoted display with AS alias",
+        "wide renamed label",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "boundary geometry drift"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.svg",
+      "axes": [
+        "nested package ownership",
+        "connected boundary",
+        "uppercase spelling",
+        "short label",
+        "top-to-bottom direction"
+      ],
+      "result": "pass"
+    }
+  ]
 }

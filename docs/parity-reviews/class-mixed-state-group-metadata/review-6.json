@@ -142,19 +142,63 @@
         "scoped_identity": "fail",
         "evidence": "Java firstWithName reuses SepNoneAlpha.EchoToken and creates no root EchoToken. Rust's uniqueness check sees two matches and creates root EchoToken at source line 8.",
         "java_records": [
-          ["cluster", "SepNoneAlpha", "1"],
-          ["cluster", "SepNoneBeta", "4"],
-          ["entity", "SepNoneAlpha.EchoToken", "2"],
-          ["entity", "SepNoneBeta.EchoToken", "5"],
-          ["entity", "SepNoneSink", "9"]
+          [
+            "cluster",
+            "SepNoneAlpha",
+            "1"
+          ],
+          [
+            "cluster",
+            "SepNoneBeta",
+            "4"
+          ],
+          [
+            "entity",
+            "SepNoneAlpha.EchoToken",
+            "2"
+          ],
+          [
+            "entity",
+            "SepNoneBeta.EchoToken",
+            "5"
+          ],
+          [
+            "entity",
+            "SepNoneSink",
+            "9"
+          ]
         ],
         "rust_records": [
-          ["cluster", "SepNoneAlpha", "1"],
-          ["cluster", "SepNoneBeta", "4"],
-          ["entity", "SepNoneAlpha.EchoToken", "2"],
-          ["entity", "SepNoneBeta.EchoToken", "5"],
-          ["entity", "EchoToken", "8"],
-          ["entity", "SepNoneSink", "9"]
+          [
+            "cluster",
+            "SepNoneAlpha",
+            "1"
+          ],
+          [
+            "cluster",
+            "SepNoneBeta",
+            "4"
+          ],
+          [
+            "entity",
+            "SepNoneAlpha.EchoToken",
+            "2"
+          ],
+          [
+            "entity",
+            "SepNoneBeta.EchoToken",
+            "5"
+          ],
+          [
+            "entity",
+            "EchoToken",
+            "8"
+          ],
+          [
+            "entity",
+            "SepNoneSink",
+            "9"
+          ]
         ]
       },
       {
@@ -213,15 +257,43 @@
         "scoped_identity": "fail",
         "evidence": "Both implementations reuse BridgeClasses.TransitBridge as the sole leaf, but Java emits no empty BridgeActors cluster. Rust emits an extra, misqualified BridgeClasses.BridgeActors cluster at source line 5.",
         "java_records": [
-          ["cluster", "BridgeClasses", "2"],
-          ["entity", "BridgeClasses.TransitBridge", "3"],
-          ["entity", "BridgeTerminal", "8"]
+          [
+            "cluster",
+            "BridgeClasses",
+            "2"
+          ],
+          [
+            "entity",
+            "BridgeClasses.TransitBridge",
+            "3"
+          ],
+          [
+            "entity",
+            "BridgeTerminal",
+            "8"
+          ]
         ],
         "rust_records": [
-          ["cluster", "BridgeClasses", "2"],
-          ["cluster", "BridgeClasses.BridgeActors", "5"],
-          ["entity", "BridgeClasses.TransitBridge", "3"],
-          ["entity", "BridgeTerminal", "8"]
+          [
+            "cluster",
+            "BridgeClasses",
+            "2"
+          ],
+          [
+            "cluster",
+            "BridgeClasses.BridgeActors",
+            "5"
+          ],
+          [
+            "entity",
+            "BridgeClasses.TransitBridge",
+            "3"
+          ],
+          [
+            "entity",
+            "BridgeTerminal",
+            "8"
+          ]
         ]
       }
     ]
@@ -241,39 +313,9 @@
     ]
   },
   "findings": [
-    {
-      "severity": "reject",
-      "title": "namespaceSeparator none implements uniqueness instead of first-created reuse",
-      "evidence": [
-        "review6_namespace_none_duplicate_first_match.puml is valid Java syntax and its SVG is not an error page.",
-        "Java reuses SepNoneAlpha.EchoToken after two EchoToken quarks exist and creates no root EchoToken.",
-        "Rust creates root EchoToken at declaration source line 8.",
-        "CucaDiagram.quarkInContextSafe's sep == null branch calls firstWithName without consulting reuseExistingChild or countByName.",
-        "Rust resolve_quark_path's namespace_sep.is_none branch calls unique_quark_path_named and therefore implements the wrong predicate.",
-        "The discrepancy was named in the pre-implementation review-5 response, so this is an omitted part of the documented model rather than a newly inferred requirement."
-      ]
-    },
-    {
-      "severity": "reject",
-      "title": "Unique remote mixed reuse leaves an extra misqualified package cluster",
-      "evidence": [
-        "review6_unique_mixed_reuses_remote_class.puml is valid Java syntax and its SVG is not an error page.",
-        "Java and Rust both reuse BridgeClasses.TransitBridge, proving the unique leaf lookup itself fires.",
-        "Java emits only BridgeClasses as a cluster because BridgeActors owns no rendered leaf after reuse.",
-        "Rust emits an extra cluster qualified as BridgeClasses.BridgeActors at declaration source line 5.",
-        "This is parser-owned group identity/metadata, not renderer geometry."
-      ]
-    },
-    {
-      "severity": "info",
-      "title": "The prior rejection is genuinely repaired without fixture shaping",
-      "evidence": [
-        "All 45 prior review2/review3/review4/review5 sources pass scoped identity.",
-        "Fresh enum and interface duplicate-name matrices pass.",
-        "Fresh mixed ambiguity and package-quark-count matrices pass.",
-        "Static anti-overfit scans found no fixture labels, fixture reads, golden embedding, or unexplained numeric/layout branches."
-      ]
-    }
+    "{\"evidence\": [\"review6_namespace_none_duplicate_first_match.puml is valid Java syntax and its SVG is not an error page.\", \"Java reuses SepNoneAlpha.EchoToken after two EchoToken quarks exist and creates no root EchoToken.\", \"Rust creates root EchoToken at declaration source line 8.\", \"CucaDiagram.quarkInContextSafe's sep == null branch calls firstWithName without consulting reuseExistingChild or countByName.\", \"Rust resolve_quark_path's namespace_sep.is_none branch calls unique_quark_path_named and therefore implements the wrong predicate.\", \"The discrepancy was named in the pre-implementation review-5 response, so this is an omitted part of the documented model rather than a newly inferred requirement.\"], \"severity\": \"reject\", \"title\": \"namespaceSeparator none implements uniqueness instead of first-created reuse\"}",
+    "{\"evidence\": [\"review6_unique_mixed_reuses_remote_class.puml is valid Java syntax and its SVG is not an error page.\", \"Java and Rust both reuse BridgeClasses.TransitBridge, proving the unique leaf lookup itself fires.\", \"Java emits only BridgeClasses as a cluster because BridgeActors owns no rendered leaf after reuse.\", \"Rust emits an extra cluster qualified as BridgeClasses.BridgeActors at declaration source line 5.\", \"This is parser-owned group identity/metadata, not renderer geometry.\"], \"severity\": \"reject\", \"title\": \"Unique remote mixed reuse leaves an extra misqualified package cluster\"}",
+    "{\"evidence\": [\"All 45 prior review2/review3/review4/review5 sources pass scoped identity.\", \"Fresh enum and interface duplicate-name matrices pass.\", \"Fresh mixed ambiguity and package-quark-count matrices pass.\", \"Static anti-overfit scans found no fixture labels, fixture reads, golden embedding, or unexplained numeric/layout branches.\"], \"severity\": \"info\", \"title\": \"The prior rejection is genuinely repaired without fixture shaping\"}"
   ],
   "required_followup": [
     "Preserve both failing review6_ pairs and all four passing controls.",

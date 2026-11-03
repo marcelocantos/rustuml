@@ -27,5 +27,7 @@
     "incoming versus outgoing external boundary and solid versus dotted body",
     "nested automatic calls and returns, renamed participants, and explicit activation override",
     "normal/open heads versus crossed or half heads"
-  ]
+  ],
+  "invariant": "External and ordinary sequence messages share one autoactivation rule. With autoactivate enabled, a solid normal/open-headed incoming external message activates its participant, while a dotted normal/open-headed outgoing external message deactivates its participant; the accepted change immediately updates subsequent return ownership.",
+  "planned_change": "[\"Apply the existing autoactivation_for rule after inline arrow style parsing in both external-message branches whenever no explicit activation suffix is present.\", \"Keep explicit activation authoritative through Option::or_else, matching CommandExoArrowAny's explicit-first control flow.\", \"After resolving a bare return pair, publish its reversed pair as the newest fallback in both spacing and paint projections, matching SequenceDiagram.addMessage and CommandReturn.\", \"Add parser tests covering incoming solid activation, outgoing dotted deactivation, explicit override, and crossed or half-head exclusions.\", \"Verify a nested return-stack perturbation with renamed participants and a direction/style perturbation not present in the golden corpus.\"]"
 }

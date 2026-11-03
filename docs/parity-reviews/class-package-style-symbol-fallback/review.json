@@ -63,84 +63,140 @@
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.svg",
       "valid": true,
-      "axes": ["rect alias", "top-to-bottom", "top-level ordinary package", "long renamed label", "package versus rectangle colors"],
+      "axes": [
+        "rect alias",
+        "top-to-bottom",
+        "top-level ordinary package",
+        "long renamed label",
+        "package versus rectangle colors"
+      ],
       "outcome": "pass: SVGs are structurally equivalent"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.svg",
       "valid": true,
-      "axes": ["rectangle", "left-to-right", "nested ordinary package", "automatic node precedence"],
+      "axes": [
+        "rectangle",
+        "left-to-right",
+        "nested ordinary package",
+        "automatic node precedence"
+      ],
       "outcome": "pass: SVGs are structurally equivalent"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.svg",
       "valid": true,
-      "axes": ["frame", "top-to-bottom", "package versus frame colors", "renamed label"],
+      "axes": [
+        "frame",
+        "top-to-bottom",
+        "package versus frame colors",
+        "renamed label"
+      ],
       "outcome": "pass: SVGs are structurally equivalent"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.svg",
       "valid": true,
-      "axes": ["cloud", "left-to-right", "top-level ordinary package"],
+      "axes": [
+        "cloud",
+        "left-to-right",
+        "top-level ordinary package"
+      ],
       "outcome": "pass: SVGs are structurally equivalent"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.svg",
       "valid": true,
-      "axes": ["last packageStyle declaration wins", "folder then cloud", "left-to-right"],
+      "axes": [
+        "last packageStyle declaration wins",
+        "folder then cloud",
+        "left-to-right"
+      ],
       "outcome": "pass: SVGs are structurally equivalent"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.svg",
       "valid": true,
-      "axes": ["database", "top-to-bottom", "top-level ordinary package"],
+      "axes": [
+        "database",
+        "top-to-bottom",
+        "top-level ordinary package"
+      ],
       "outcome": "fail: Rust adds 15px before the inner nodes and canvas bottom; Java does not promote database title layout through global packageStyle fallback"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.svg",
       "valid": true,
-      "axes": ["database", "left-to-right", "nested ordinary packages"],
+      "axes": [
+        "database",
+        "left-to-right",
+        "nested ordinary packages"
+      ],
       "outcome": "fail: Rust is 30px taller and moves both database clusters and descendants downward; this repeats the global-fallback database title coupling error"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.svg",
       "valid": true,
-      "axes": ["node", "top-to-bottom", "top-level ordinary package", "renamed label"],
+      "axes": [
+        "node",
+        "top-to-bottom",
+        "top-level ordinary package",
+        "renamed label"
+      ],
       "outcome": "fail: Rust widens the cluster by 60px and adds 5px vertical slack, moving all descendants; Java does neither"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.svg",
       "valid": true,
-      "axes": ["node", "left-to-right", "top-level ordinary package"],
+      "axes": [
+        "node",
+        "left-to-right",
+        "top-level ordinary package"
+      ],
       "outcome": "fail: Rust adds 5px cluster height and shifts descendants down; Java's node fallback has no matching title-layout expansion"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.svg",
       "valid": true,
-      "axes": ["database fallback", "automatic rectangle", "explicit node", "explicit frame", "explicit cloud", "left-to-right"],
+      "axes": [
+        "database fallback",
+        "automatic rectangle",
+        "explicit node",
+        "explicit frame",
+        "explicit cloud",
+        "left-to-right"
+      ],
       "outcome": "fail: Java emits five CLASS clusters with their explicit symbols preserved; Rust emits a DESCRIPTION diagram with only 52 rather than 70 structural elements"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.svg",
       "valid": true,
-      "axes": ["ordinary direct empty package", "cloud fallback", "filled ordinary control", "top-to-bottom"],
+      "axes": [
+        "ordinary direct empty package",
+        "cloud fallback",
+        "filled ordinary control",
+        "top-to-bottom"
+      ],
       "outcome": "fail: Java EntityImageEmptyPackage uses Cloud through ClusterDecoration(packageStyle, null, ...); Rust retains the ordinary folder leaf and produces a wider, structurally different diagram"
     },
     {
       "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
       "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.svg",
       "valid": false,
-      "axes": ["attempted direct empty package spelling", "cloud fallback"],
+      "axes": [
+        "attempted direct empty package spelling",
+        "cloud fallback"
+      ],
       "outcome": "excluded: Java reports Syntax Error? (Assumed diagram type: component) at line 4; retained as required but excluded from valid-input counts"
     }
   ],
@@ -155,26 +211,10 @@
     "oracle_errors": 0
   },
   "findings": [
-    {
-      "severity": "rejecting",
-      "summary": "Global node and database fallback is incorrectly coupled to explicit-symbol title sizing.",
-      "evidence": "effective_package_kind drives the ClusterHeader title-size extras in Rust. The node controls fail in both TB and LR with an added 60px width and/or 5px height, while the database controls fail in both top-level and nested forms with a 15px-per-cluster vertical displacement. Java resolves packageStyle only when ClusterDecoration chooses its asBig symbol after ClusterHeader is already built."
-    },
-    {
-      "severity": "rejecting",
-      "summary": "The account's empty-package exclusion is false for valid empty package groups.",
-      "evidence": "Java EntityImageEmptyPackage constructs ClusterDecoration(getSkinParam().packageStyle(), null, ...), and checker_empty_control_valid_tb renders an empty ordinary package as a cloud. Rust layout_empty_packages does not consult configured_package_kind for symbol_kind, so it renders the same leaf with ordinary folder chrome."
-    },
-    {
-      "severity": "rejecting",
-      "summary": "Explicit keyword precedence is not preserved across the requested keyword forms.",
-      "evidence": "checker_explicit_precedence_lr is valid Java class-diagram input containing node, frame, and cloud clusters. Java produces all five CLASS clusters, but Rust produces a DESCRIPTION diagram with 52 elements against Java's 70. This prevents accepting the claim that a global fallback cannot replace explicit keyword symbols."
-    },
-    {
-      "severity": "informational",
-      "summary": "The rectangle/frame/cloud and last-declaration parts of the general selector are supported.",
-      "evidence": "Five independent valid inputs pass exactly, including rect alias, nested rectangle with an automatic node, package-vs-symbol colors, frame, cloud, and a later cloud declaration superseding folder. No fixture-shaped production branch was found."
-    }
+    "{\"evidence\": \"effective_package_kind drives the ClusterHeader title-size extras in Rust. The node controls fail in both TB and LR with an added 60px width and/or 5px height, while the database controls fail in both top-level and nested forms with a 15px-per-cluster vertical displacement. Java resolves packageStyle only when ClusterDecoration chooses its asBig symbol after ClusterHeader is already built.\", \"severity\": \"rejecting\", \"summary\": \"Global node and database fallback is incorrectly coupled to explicit-symbol title sizing.\"}",
+    "{\"evidence\": \"Java EntityImageEmptyPackage constructs ClusterDecoration(getSkinParam().packageStyle(), null, ...), and checker_empty_control_valid_tb renders an empty ordinary package as a cloud. Rust layout_empty_packages does not consult configured_package_kind for symbol_kind, so it renders the same leaf with ordinary folder chrome.\", \"severity\": \"rejecting\", \"summary\": \"The account's empty-package exclusion is false for valid empty package groups.\"}",
+    "{\"evidence\": \"checker_explicit_precedence_lr is valid Java class-diagram input containing node, frame, and cloud clusters. Java produces all five CLASS clusters, but Rust produces a DESCRIPTION diagram with 52 elements against Java's 70. This prevents accepting the claim that a global fallback cannot replace explicit keyword symbols.\", \"severity\": \"rejecting\", \"summary\": \"Explicit keyword precedence is not preserved across the requested keyword forms.\"}",
+    "{\"evidence\": \"Five independent valid inputs pass exactly, including rect alias, nested rectangle with an automatic node, package-vs-symbol colors, frame, cloud, and a later cloud declaration superseding folder. No fixture-shaped production branch was found.\", \"severity\": \"informational\", \"summary\": \"The rectangle/frame/cloud and last-declaration parts of the general selector are supported.\"}"
   ],
   "artifacts": {
     "held_out_directory": "test-diagrams/perturbations/class-package-style-symbol-fallback/",
@@ -183,5 +223,185 @@
     "baselines_modified": false,
     "existing_fixtures_modified": false
   },
-  "verdict": "REJECT"
+  "verdict": "rejected",
+  "account_commit": "fe21fd308d19aa19092149a557a60ef5c24daf95",
+  "implementation_commit": "f7bf3fa3dd2cb33cae8fc4cb8d55027025430f65",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "perturbations": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.svg",
+      "valid": true,
+      "axes": [
+        "rect alias",
+        "top-to-bottom",
+        "top-level ordinary package",
+        "long renamed label",
+        "package versus rectangle colors"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.svg",
+      "valid": true,
+      "axes": [
+        "rectangle",
+        "left-to-right",
+        "nested ordinary package",
+        "automatic node precedence"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.svg",
+      "valid": true,
+      "axes": [
+        "frame",
+        "top-to-bottom",
+        "package versus frame colors",
+        "renamed label"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.svg",
+      "valid": true,
+      "axes": [
+        "cloud",
+        "left-to-right",
+        "top-level ordinary package"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.svg",
+      "valid": true,
+      "axes": [
+        "last packageStyle declaration wins",
+        "folder then cloud",
+        "left-to-right"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.svg",
+      "result": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.svg",
+      "valid": true,
+      "axes": [
+        "database",
+        "top-to-bottom",
+        "top-level ordinary package"
+      ],
+      "outcome": "fail: Rust adds 15px before the inner nodes and canvas bottom; Java does not promote database title layout through global packageStyle fallback",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.svg",
+      "valid": true,
+      "axes": [
+        "database",
+        "left-to-right",
+        "nested ordinary packages"
+      ],
+      "outcome": "fail: Rust is 30px taller and moves both database clusters and descendants downward; this repeats the global-fallback database title coupling error",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.svg",
+      "valid": true,
+      "axes": [
+        "node",
+        "top-to-bottom",
+        "top-level ordinary package",
+        "renamed label"
+      ],
+      "outcome": "fail: Rust widens the cluster by 60px and adds 5px vertical slack, moving all descendants; Java does neither",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.svg",
+      "valid": true,
+      "axes": [
+        "node",
+        "left-to-right",
+        "top-level ordinary package"
+      ],
+      "outcome": "fail: Rust adds 5px cluster height and shifts descendants down; Java's node fallback has no matching title-layout expansion",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.svg",
+      "valid": true,
+      "axes": [
+        "database fallback",
+        "automatic rectangle",
+        "explicit node",
+        "explicit frame",
+        "explicit cloud",
+        "left-to-right"
+      ],
+      "outcome": "fail: Java emits five CLASS clusters with their explicit symbols preserved; Rust emits a DESCRIPTION diagram with only 52 rather than 70 structural elements",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.svg",
+      "valid": true,
+      "axes": [
+        "ordinary direct empty package",
+        "cloud fallback",
+        "filled ordinary control",
+        "top-to-bottom"
+      ],
+      "outcome": "fail: Java EntityImageEmptyPackage uses Cloud through ClusterDecoration(packageStyle, null, ...); Rust retains the ordinary folder leaf and produces a wider, structurally different diagram",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.svg",
+      "result": "fail"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.svg",
+      "valid": false,
+      "axes": [
+        "attempted direct empty package spelling",
+        "cloud fallback"
+      ],
+      "outcome": "excluded: Java reports Syntax Error? (Assumed diagram type: component) at line 4; retained as required but excluded from valid-input counts",
+      "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.svg"
+    }
+  ]
 }

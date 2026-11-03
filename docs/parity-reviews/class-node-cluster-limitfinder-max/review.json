@@ -74,37 +74,219 @@
     "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml"
   ],
   "perturbations": [
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.svg","axes":["explicit node","TB","top-level","short label","outside link"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.svg","axes":["packageStyle node fallback","TB","top-level","long label","inside link"],"result":"fail: Java 430x255; Rust 490x260"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.svg","axes":["explicit node","LR","nested","right-envelope candidate","inside/outside links"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.svg","axes":["packageStyle node fallback","LR","wider frame"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.svg","axes":["explicit node","TB","nested","inside links"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.svg","axes":["explicit node alias","LR","renamed long label","inside/outside links"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.svg","axes":["explicit node","TB","wider frame"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.svg","axes":["packageStyle node fallback","TB","nested","inside/outside links"],"result":"fail: Java 289x401; Rust 317x411"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.svg","axes":["explicit node","LR","shadow","style"],"result":"fail: Rust DESCRIPTION and missing Java shadow/style"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.svg","axes":["packageStyle node fallback","TB","shadow","style"],"result":"fail: Java 275x130; Rust 322x140"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.svg","axes":["explicit node","TB","top-level","short identifier","outside link"],"result":"pass: SVGs structurally equivalent"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.svg","axes":["explicit node","LR","nested","inside/outside links"],"result":"pass: SVGs structurally equivalent"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.svg","axes":["explicit node","TB","wider competing frame"],"result":"pass: wider frame owns the competing envelope without node surplus"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.svg","axes":["packageStyle node fallback","LR","short identifier","outside link"],"result":"fail: width matches at 692px; Rust is 5px taller"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.svg","axes":["explicit node","TB","shadow","style"],"result":"fail: Java 285x135; Rust 290x140 with missing cluster style/filter"},
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.svg","axes":["explicit node","LR","node owns right envelope","outside link"],"result":"pass: SVGs structurally equivalent; no second +10 right extension"}
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.svg",
+      "axes": [
+        "explicit node",
+        "TB",
+        "top-level",
+        "short label",
+        "outside link"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.svg",
+      "axes": [
+        "packageStyle node fallback",
+        "TB",
+        "top-level",
+        "long label",
+        "inside link"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.svg",
+      "axes": [
+        "explicit node",
+        "LR",
+        "nested",
+        "right-envelope candidate",
+        "inside/outside links"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.svg",
+      "axes": [
+        "packageStyle node fallback",
+        "LR",
+        "wider frame"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.svg",
+      "axes": [
+        "explicit node",
+        "TB",
+        "nested",
+        "inside links"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.svg",
+      "axes": [
+        "explicit node alias",
+        "LR",
+        "renamed long label",
+        "inside/outside links"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.svg",
+      "axes": [
+        "explicit node",
+        "TB",
+        "wider frame"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.svg",
+      "axes": [
+        "packageStyle node fallback",
+        "TB",
+        "nested",
+        "inside/outside links"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.svg",
+      "axes": [
+        "explicit node",
+        "LR",
+        "shadow",
+        "style"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.svg",
+      "axes": [
+        "packageStyle node fallback",
+        "TB",
+        "shadow",
+        "style"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.svg",
+      "axes": [
+        "explicit node",
+        "TB",
+        "top-level",
+        "short identifier",
+        "outside link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.svg",
+      "axes": [
+        "explicit node",
+        "LR",
+        "nested",
+        "inside/outside links"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.svg",
+      "axes": [
+        "explicit node",
+        "TB",
+        "wider competing frame"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.svg",
+      "axes": [
+        "packageStyle node fallback",
+        "LR",
+        "short identifier",
+        "outside link"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.svg",
+      "axes": [
+        "explicit node",
+        "TB",
+        "shadow",
+        "style"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.svg",
+      "axes": [
+        "explicit node",
+        "LR",
+        "node owns right envelope",
+        "outside link"
+      ],
+      "result": "pass"
+    }
   ],
   "syntax_error_probes": [
-    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.svg","result":"excluded: intentional class syntax error; Java SVG contains Syntax Error?; diff_one not run"}
+    {
+      "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+      "golden": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.svg",
+      "result": "excluded: intentional class syntax error; Java SVG contains Syntax Error?; diff_one not run"
+    }
   ],
-  "summary": {"valid_inputs":16,"passes":4,"failures":12,"syntax_error_probes_excluded":1,"valid_sources_have_same_stem_java_svg":true,"java_error_markers_in_valid_svgs":false,"svg_xml_validation":"passed","fresh_identifier_collision_scan":"C1482 identifiers occur only in this new perturbation directory"},
+  "summary": {
+    "valid_inputs": 16,
+    "passes": 4,
+    "failures": 12,
+    "syntax_error_probes_excluded": 1,
+    "valid_sources_have_same_stem_java_svg": true,
+    "java_error_markers_in_valid_svgs": false,
+    "svg_xml_validation": "passed",
+    "fresh_identifier_collision_scan": "C1482 identifiers occur only in this new perturbation directory"
+  },
   "findings": [
-    {"severity":"supporting","summary":"The corrected +10 maximum is supported in isolated explicit-node controls.","evidence":"Fresh TB, nested LR, wider-frame, and direct LR right-owner controls pass. The right-owner case shows no second ten-pixel surplus."},
-    {"severity":"rejecting","summary":"PackageStyle node fallback remains divergent.","evidence":"The unquoted LR fallback is 692px wide in both outputs but 135px tall in Rust versus 130px in Java. Long top-level fallback is 490x260 versus 430x255, and nested fallback is 317x411 versus 289x401."},
-    {"severity":"rejecting","summary":"Shadow/style controls remain divergent.","evidence":"The unquoted explicit styled-shadow control is 285x135 in Java versus 290x140 in Rust and lacks Java cluster fill/filter/style. The styled fallback is 275x130 versus 322x140."},
-    {"severity":"rejecting","summary":"Valid quoted explicit node labels dispatch to a different Rust diagram type.","evidence":"Short, long-renamed, top-level, nested, TB, LR, inside-link, outside-link, and styled quoted-node inputs produce Java CLASS SVGs but Rust DESCRIPTION SVGs."},
-    {"severity":"informational","summary":"The Java primitive ownership account is not disproved.","evidence":"UEmpty is at x=0, drawEmpty measures x=0..10, and drawUPolygon measures maxX+10; direct right-owner and wider-peer controls agree with one independent +10 maximum."}
+    "{\"evidence\": \"Fresh TB, nested LR, wider-frame, and direct LR right-owner controls pass. The right-owner case shows no second ten-pixel surplus.\", \"severity\": \"supporting\", \"summary\": \"The corrected +10 maximum is supported in isolated explicit-node controls.\"}",
+    "{\"evidence\": \"The unquoted LR fallback is 692px wide in both outputs but 135px tall in Rust versus 130px in Java. Long top-level fallback is 490x260 versus 430x255, and nested fallback is 317x411 versus 289x401.\", \"severity\": \"rejecting\", \"summary\": \"PackageStyle node fallback remains divergent.\"}",
+    "{\"evidence\": \"The unquoted explicit styled-shadow control is 285x135 in Java versus 290x140 in Rust and lacks Java cluster fill/filter/style. The styled fallback is 275x130 versus 322x140.\", \"severity\": \"rejecting\", \"summary\": \"Shadow/style controls remain divergent.\"}",
+    "{\"evidence\": \"Short, long-renamed, top-level, nested, TB, LR, inside-link, outside-link, and styled quoted-node inputs produce Java CLASS SVGs but Rust DESCRIPTION SVGs.\", \"severity\": \"rejecting\", \"summary\": \"Valid quoted explicit node labels dispatch to a different Rust diagram type.\"}",
+    "{\"evidence\": \"UEmpty is at x=0, drawEmpty measures x=0..10, and drawUPolygon measures maxX+10; direct right-owner and wider-peer controls agree with one independent +10 maximum.\", \"severity\": \"informational\", \"summary\": \"The Java primitive ownership account is not disproved.\"}"
   ],
   "no_oracle_gate": "failed",
   "rejection_basis": "Fresh valid fallback and style/shadow perturbations fail the required no-oracle comparison, and the valid quoted-label matrix dispatches to a different Rust diagram type. The corrected 10px maximum is supported in isolated explicit controls, but the requested held-out matrix is not green.",
-  "artifacts_status": {"production_files_modified":false,"existing_review_records_modified":false,"existing_fixture_files_modified":false,"new_fixture_and_review_files_only":true},
-  "verdict": "REJECTED",
-  "verdict_label": "REJECT"
+  "artifacts_status": {
+    "production_files_modified": false,
+    "existing_review_records_modified": false,
+    "existing_fixture_files_modified": false,
+    "new_fixture_and_review_files_only": true
+  },
+  "verdict": "rejected",
+  "verdict_label": "REJECT",
+  "account_commit": "aab6b757a0b4539ab7b11b562e5f3676883c71b7",
+  "implementation_commit": "eca14ad8c80817e267ebce35834c263d2bdb35f2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }

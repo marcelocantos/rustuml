@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-mixed-state-group-metadata",
   "reviewed_at": "2026-07-28T00:19:37+1000",
-  "verdict": "reject",
+  "verdict": "rejected",
   "reviewer": {
     "identity": "Codex independent skeptical checker",
     "model": "GPT-5",
@@ -142,12 +142,28 @@
         "scoped_identity": "fail",
         "evidence": "Java emits cluster records for EmptyOuter at line 1 and EmptyOuter.EmptyRight at line 4 because each has a direct group child. Rust emits neither because both flattened package entity lists are empty.",
         "java_records": [
-          ["cluster", "EmptyOuter", "1"],
-          ["cluster", "EmptyOuter.EmptyRight", "4"],
-          ["entity", "EmptyControlAnchor", "9"]
+          [
+            "cluster",
+            "EmptyOuter",
+            "1"
+          ],
+          [
+            "cluster",
+            "EmptyOuter.EmptyRight",
+            "4"
+          ],
+          [
+            "entity",
+            "EmptyControlAnchor",
+            "9"
+          ]
         ],
         "rust_records": [
-          ["entity", "EmptyControlAnchor", "9"]
+          [
+            "entity",
+            "EmptyControlAnchor",
+            "9"
+          ]
         ]
       },
       {
@@ -216,19 +232,63 @@
         "scoped_identity": "fail",
         "evidence": "Java creates ColonRealm..InnerRealm..TransitionLeaf at declaration line 4. Rust leaves namespace_sep_none sticky, parses only ColonRealm as a root entity at line 4, then materializes the intended hierarchy and leaf from the relationship at line 5.",
         "java_records": [
-          ["cluster", "ColonRealm", "4"],
-          ["cluster", "ColonRealm..InnerRealm", "4"],
-          ["entity", "ColonRealm..InnerRealm..TransitionLeaf", "4"],
-          ["entity", "Literal.Dot", "2"],
-          ["entity", "TransitionSink", "5"]
+          [
+            "cluster",
+            "ColonRealm",
+            "4"
+          ],
+          [
+            "cluster",
+            "ColonRealm..InnerRealm",
+            "4"
+          ],
+          [
+            "entity",
+            "ColonRealm..InnerRealm..TransitionLeaf",
+            "4"
+          ],
+          [
+            "entity",
+            "Literal.Dot",
+            "2"
+          ],
+          [
+            "entity",
+            "TransitionSink",
+            "5"
+          ]
         ],
         "rust_records": [
-          ["cluster", "ColonRealm", "5"],
-          ["cluster", "ColonRealm..InnerRealm", "5"],
-          ["entity", "ColonRealm..InnerRealm..TransitionLeaf", "5"],
-          ["entity", "Literal.Dot", "2"],
-          ["entity", "ColonRealm", "4"],
-          ["entity", "TransitionSink", "5"]
+          [
+            "cluster",
+            "ColonRealm",
+            "5"
+          ],
+          [
+            "cluster",
+            "ColonRealm..InnerRealm",
+            "5"
+          ],
+          [
+            "entity",
+            "ColonRealm..InnerRealm..TransitionLeaf",
+            "5"
+          ],
+          [
+            "entity",
+            "Literal.Dot",
+            "2"
+          ],
+          [
+            "entity",
+            "ColonRealm",
+            "4"
+          ],
+          [
+            "entity",
+            "TransitionSink",
+            "5"
+          ]
         ]
       }
     ]
@@ -248,36 +308,9 @@
     ]
   },
   "findings": [
-    {
-      "severity": "reject",
-      "title": "namespaceSeparator none remains sticky after a non-none transition",
-      "evidence": [
-        "review7_separator_none_to_colon_qualified_declaration.puml is valid Java syntax and its SVG is not an error page.",
-        "CommandNamespaceSeparator.executeArg replaces the separator on every command.",
-        "Rust sets namespace_sep to :: but never clears namespace_sep_none, so try_entity_decl continues using RE_DOTTED.",
-        "The stale lexical mode creates an extra root ColonRealm entity and shifts the intended qualified leaf and phantom-group source lines from declaration line 4 to relationship line 5."
-      ]
-    },
-    {
-      "severity": "reject",
-      "title": "Flattened leaf membership erases nested empty-group clusters",
-      "evidence": [
-        "review7_nested_empty_groups_only.puml is valid Java syntax and its SVG is not an error page.",
-        "Java Entity.isEmpty returns false when a group has any direct nonremoved child, including an empty child group.",
-        "GraphvizImageBuilder therefore emits EmptyOuter and EmptyOuter.EmptyRight as clusters while rendering their directly empty children as EMPTY_PACKAGE leaves.",
-        "Rust is_rendered_package_cluster rejects every package whose flattened entities vector is empty, so it erases both parent clusters.",
-        "This contradicts review-6-response.md's rendered-descendant formulation: Java's relevant distinction is direct quark-child structure, not eventual ownership of a rendered leaf."
-      ]
-    },
-    {
-      "severity": "info",
-      "title": "Creation-ordered quark lookup is repaired without fixture shaping",
-      "evidence": [
-        "All 51 prior scoped controls pass.",
-        "Six of eight fresh controls pass, including both creation-order directions, explicit and phantom group-quark ambiguity, custom-to-none transition, remote mixed reuse, and nonempty descendant retention.",
-        "Static inspection found no fixture labels, golden reads, embedded output, unexplained constants, or fixture-count branches."
-      ]
-    }
+    "{\"evidence\": [\"review7_separator_none_to_colon_qualified_declaration.puml is valid Java syntax and its SVG is not an error page.\", \"CommandNamespaceSeparator.executeArg replaces the separator on every command.\", \"Rust sets namespace_sep to :: but never clears namespace_sep_none, so try_entity_decl continues using RE_DOTTED.\", \"The stale lexical mode creates an extra root ColonRealm entity and shifts the intended qualified leaf and phantom-group source lines from declaration line 4 to relationship line 5.\"], \"severity\": \"reject\", \"title\": \"namespaceSeparator none remains sticky after a non-none transition\"}",
+    "{\"evidence\": [\"review7_nested_empty_groups_only.puml is valid Java syntax and its SVG is not an error page.\", \"Java Entity.isEmpty returns false when a group has any direct nonremoved child, including an empty child group.\", \"GraphvizImageBuilder therefore emits EmptyOuter and EmptyOuter.EmptyRight as clusters while rendering their directly empty children as EMPTY_PACKAGE leaves.\", \"Rust is_rendered_package_cluster rejects every package whose flattened entities vector is empty, so it erases both parent clusters.\", \"This contradicts review-6-response.md's rendered-descendant formulation: Java's relevant distinction is direct quark-child structure, not eventual ownership of a rendered leaf.\"], \"severity\": \"reject\", \"title\": \"Flattened leaf membership erases nested empty-group clusters\"}",
+    "{\"evidence\": [\"All 51 prior scoped controls pass.\", \"Six of eight fresh controls pass, including both creation-order directions, explicit and phantom group-quark ambiguity, custom-to-none transition, remote mixed reuse, and nonempty descendant retention.\", \"Static inspection found no fixture labels, golden reads, embedded output, unexplained constants, or fixture-count branches.\"], \"severity\": \"info\", \"title\": \"Creation-ordered quark lookup is repaired without fixture shaping\"}"
   ],
   "required_followup": [
     "Preserve all eight review7 source/Java-SVG pairs, including both valid failing counterexamples.",

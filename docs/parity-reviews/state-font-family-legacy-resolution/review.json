@@ -78,50 +78,17 @@
     ]
   },
   "commands": [
-    {
-      "cmd": "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
-      "result": "initial helper hash matched requested value 29072fff...; jar hash c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
-    },
-    {
-      "cmd": "git show 976f8bf7780f6846dc0b9a76b0728f6a67f4ee29:docs/parity-reviews/state-font-family-legacy-resolution/account.json",
-      "result": "account inspected from the requested Rust revision"
-    },
-    {
-      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
-      "result": "Java font-family precedence inspected"
-    },
-    {
-      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
-      "result": "Java style-cascade mapping for defaultFontName inspected"
-    },
-    {
-      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-font-family-legacy-resolution/*.puml",
-      "result": "Java SVGs generated for all preserved perturbation inputs"
-    },
-    {
-      "cmd": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <input.puml>",
-      "result": "Rust SVG captured for each preserved perturbation"
-    },
-    {
-      "cmd": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <input.puml>",
-      "result": "Strict comparator output captured per perturbation in sibling `.diff.txt` files"
-    },
-    {
-      "cmd": "xmllint --noout test-diagrams/perturbations/state-font-family-legacy-resolution/*.svg test-diagrams/perturbations/state-font-family-legacy-resolution/*.rust.svg",
-      "result": "all preserved Java and Rust SVGs are well-formed XML"
-    },
-    {
-      "cmd": "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/state-font-family-legacy-resolution -g '*.svg' -g '*.rust.svg'",
-      "result": "no PlantUML error markers found"
-    },
-    {
-      "cmd": "shasum -a 256 docs/parity-reviews/state-font-family-legacy-resolution/account.json /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/state-font-family-legacy-resolution/*",
-      "result": "final artifact hashes recorded below; helper path now hashes to a6b99870..."
-    },
-    {
-      "cmd": "find /tmp /private/tmp -path '*/examples/diff_one' -type f -print0 | xargs -0 shasum -a 256",
-      "result": "no accessible `diff_one` copy with SHA-256 29072fff... was found after the helper drift"
-    }
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "git show 976f8bf7780f6846dc0b9a76b0728f6a67f4ee29:docs/parity-reviews/state-font-family-legacy-resolution/account.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-font-family-legacy-resolution/*.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <input.puml>",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <input.puml>",
+    "xmllint --noout test-diagrams/perturbations/state-font-family-legacy-resolution/*.svg test-diagrams/perturbations/state-font-family-legacy-resolution/*.rust.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/state-font-family-legacy-resolution -g '*.svg' -g '*.rust.svg'",
+    "shasum -a 256 docs/parity-reviews/state-font-family-legacy-resolution/account.json /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/state-font-family-legacy-resolution/*",
+    "find /tmp /private/tmp -path '*/examples/diff_one' -type f -print0 | xargs -0 shasum -a 256"
   ],
   "perturbations": [
     {
@@ -137,7 +104,8 @@
         "monospace request expected to be inert"
       ],
       "result": "pass",
-      "finding": "Structurally equivalent. Java and Rust both keep `font-family=\"sans-serif\"` for state text, transition labels, and the history `H`, showing raw generic `fontName` is inert on the no-oracle state path."
+      "finding": "Structurally equivalent. Java and Rust both keep `font-family=\"sans-serif\"` for state text, transition labels, and the history `H`, showing raw generic `fontName` is inert on the no-oracle state path.",
+      "golden": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb_root_history.svg"
     },
     {
       "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_defaultfontname_courier_lr_nested.puml",
@@ -151,7 +119,8 @@
         "monospace fallback propagation"
       ],
       "result": "pass",
-      "finding": "Structurally equivalent. `defaultFontName` reaches the outer state title, nested worker state, history `H`, and transition labels in both Java and Rust."
+      "finding": "Structurally equivalent. `defaultFontName` reaches the outer state title, nested worker state, history `H`, and transition labels in both Java and Rust.",
+      "golden": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_defaultfontname_courier_lr_nested.svg"
     },
     {
       "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_specific_keys_override_tb.puml",
@@ -167,7 +136,8 @@
         "proportional specific overrides"
       ],
       "result": "pass",
-      "finding": "Structurally equivalent. State and history text resolve to Verdana, while transition labels resolve to Arial, confirming `state*` keys outrank default and `stateArrowFontName` outranks `arrowFontName`."
+      "finding": "Structurally equivalent. State and history text resolve to Verdana, while transition labels resolve to Arial, confirming `state*` keys outrank default and `stateArrowFontName` outranks `arrowFontName`.",
+      "golden": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_specific_keys_override_tb.svg"
     },
     {
       "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_style_fontname_beats_raw_generic_lr.puml",
@@ -181,7 +151,8 @@
         "left-to-right direction"
       ],
       "result": "pass",
-      "finding": "Structurally equivalent. Resolved style `fontName` remains effective for states and arrows, while the raw generic legacy `fontName` does not override those channels."
+      "finding": "Structurally equivalent. Resolved style `fontName` remains effective for states and arrows, while the raw generic legacy `fontName` does not override those channels.",
+      "golden": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_style_fontname_beats_raw_generic_lr.svg"
     },
     {
       "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb.puml",
@@ -193,8 +164,9 @@
         "top-to-bottom direction",
         "nested topology with history label and nested start marker"
       ],
-      "result": "fail_unrelated_residue",
-      "finding": "Both sides still render state/history/label text in sans-serif, so the font-family invariant holds on the exercised channels. The failure is elsewhere: Java emits a `class=\"start_entity\"` nested start ellipse `Flow..start.Flow`, while Rust emits a normal boxed entity named `[*]Flow`, causing a large topology diff unrelated to font resolution."
+      "result": "fail",
+      "finding": "Both sides still render state/history/label text in sans-serif, so the font-family invariant holds on the exercised channels. The failure is elsewhere: Java emits a `class=\"start_entity\"` nested start ellipse `Flow..start.Flow`, while Rust emits a normal boxed entity named `[*]Flow`, causing a large topology diff unrelated to font resolution.",
+      "golden": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb.svg"
     }
   ],
   "artifact_hashes": {
@@ -228,5 +200,7 @@
     "Exact helper provenance drifted. The helper matched the requested SHA-256 at the start of the review, but later the same path hashed to `a6b9987075ad50edbda5e889dff354ba18f3328f57020e1857af796d5900ac56` with a future-dated mtime. This does not by itself create a mechanism counterexample, but it weakens the exact-binary attestation for the diff runs."
   ],
   "verdict": "accepted",
-  "verdict_scope": "Accepted on the mechanism claim only: no in-scope counterexample was found for legacy state font-family resolution at the requested Rust revision. Exact helper-binary provenance drifted during the review and is explicitly not attested as stable."
+  "verdict_scope": "Accepted on the mechanism claim only: no in-scope counterexample was found for legacy state font-family resolution at the requested Rust revision. Exact helper-binary provenance drifted during the review and is explicitly not attested as stable.",
+  "implementation_commit": "976f8bf7780f6846dc0b9a76b0728f6a67f4ee29",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
 }
