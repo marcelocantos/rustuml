@@ -37,7 +37,8 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
 
 pub(super) fn native_container_candidate(lines: &[String]) -> bool {
     parse_commands(lines, false).is_ok_and(|parser| {
-        !parser.packages.is_empty() && (parser.has_native_class || parser.entities.is_empty())
+        // ClassDiagramFactory registers native declarations at every scope.
+        parser.has_native_class || (!parser.packages.is_empty() && parser.entities.is_empty())
     })
 }
 
@@ -173,6 +174,8 @@ struct ClassParser {
     quark_creation_order: Vec<Vec<String>>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
+    /// CommandFactoryNoteOnEntity selects a brace or end-note terminator.
+    note_with_bracket: bool,
     /// ID of the last declared entity (for shorthand `note right : text`).
     last_entity_id: Option<String>,
     /// Namespace separator string (default "."; `None` when `set namespaceSeparator none`).
@@ -224,6 +227,7 @@ impl ClassParser {
             entity_by_path: HashMap::new(),
             quark_creation_order: Vec::new(),
             current_note: None,
+            note_with_bracket: false,
             last_entity_id: None,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
@@ -241,31 +245,11 @@ impl ClassParser {
     }
 
     fn finish(self) -> ClassDiagram {
-        // Filter out phantom entities created by `ensure_entity` on
-        // relationship endpoints when the endpoint is a note alias
-        // (e.g. `A .. N1` after `note "..." as N1`). These should not be
-        // rendered as classes — they are notes. Keep their relationships:
-        // Java `CommandFactoryNote` creates real note entities, and
-        // `GraphvizImageBuilder` sends every `Link` involving them through
-        // SVEK (where a singly linked class note may become an Opale).
-        let note_aliases: std::collections::HashSet<&str> = self
-            .notes
-            .iter()
-            .filter_map(|n| n.alias.as_deref())
-            .collect();
-        let entities = if note_aliases.is_empty() {
-            self.entities
-        } else {
-            self.entities
-                .into_iter()
-                .filter(|e| !note_aliases.contains(e.id.as_str()))
-                .collect()
-        };
         ClassDiagram {
             meta: self.meta,
             direction: self.direction,
             uid_events: self.uid_events,
-            entities,
+            entities: self.entities,
             relationships: self.relationships,
             association_classes: self.association_classes,
             together: self.together,
@@ -288,21 +272,39 @@ impl ClassParser {
         self.relationships.push(relationship);
     }
 
-    fn push_note(&mut self, mut note: Note) {
-        // CommandFactoryNote.executeInternal resolves named NOTE leaves with
-        // quarkInContext(false), in the same namespace used by CommandLinkClass.
-        if let Some(alias) = &note.alias {
+    fn push_note(&mut self, mut note: Note) -> Result<(), ParseError> {
+        // CommandFactoryNote.executeInternal creates a NOTE in its resolved
+        // quark parent, which need not be the current declaration scope.
+        note.owner_package = if let Some(alias) = &note.alias {
             let path = self.resolve_quark_path(alias, QuarkLookup::CurrentContext);
-            note.alias = Some(self.path_id(&path));
+            let id = self.path_id(&path);
+            if self.entity_by_path.contains_key(&path)
+                || self.package_by_path.contains_key(&path)
+                || self
+                    .notes
+                    .iter()
+                    .any(|note| note.alias.as_deref() == Some(&id))
+            {
+                return Err(ParseError {
+                    line: self.current_line,
+                    message: format!("note already created: {id}"),
+                });
+            }
+            self.ensure_phantom_packages(&path);
+            note.alias = Some(id);
             self.register_quark_path(&path);
-        }
-        // CommandFactoryNoteOnEntity uses the current group, not the target group.
-        note.owner_package = self
-            .package_stack
-            .last()
-            .map(|&idx| self.packages[idx].name.clone());
+            self.package_by_path
+                .get(&path[..path.len() - 1])
+                .map(|&idx| self.packages[idx].name.clone())
+        } else {
+            // Attached GMN notes are new quarks in the current group.
+            self.package_stack
+                .last()
+                .map(|&idx| self.packages[idx].name.clone())
+        };
         self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
         self.notes.push(note);
+        Ok(())
     }
 
     fn current_group_path(&self) -> &[String] {
@@ -478,6 +480,7 @@ impl ClassParser {
             let name = self.path_id(&path);
             self.uid_events.push(ClassUidEvent::Package(name.clone()));
             self.packages.push(Package {
+                visibility: Visibility::Default,
                 name,
                 tags: Vec::new(),
                 url: None,
@@ -708,9 +711,13 @@ impl ClassParser {
 
         // Inside a multi-line note?
         if self.current_note.is_some() {
-            if line.trim().eq_ignore_ascii_case("end note")
-                || line.trim().eq_ignore_ascii_case("endnote")
-            {
+            if if self.note_with_bracket {
+                line.trim() == "}"
+            } else {
+                line.trim().eq_ignore_ascii_case("end note")
+                    || line.trim().eq_ignore_ascii_case("endnote")
+            } {
+                self.note_with_bracket = false;
                 let mut note = self.current_note.take().unwrap();
                 if note.lines.is_empty() {
                     // A body line that is itself an inline diagram directive
@@ -720,7 +727,7 @@ impl ClassParser {
                     note.source_line = note.source_line.saturating_add(1);
                 }
                 dedent_note_lines(&mut note.lines);
-                self.push_note(note);
+                self.push_note(note)?;
             } else if let Some(note) = self.current_note.as_mut() {
                 if note.lines.is_empty() {
                     // `CommandFactoryNote` attributes a multiline note entity
@@ -1481,10 +1488,28 @@ impl ClassParser {
         // final >> when needed; apparent `as` inside that blob is not an alias.
         static ORDINARY: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-            r#"(?i)^package\s+("[^"]+"|[^#\s{}]*)(?:\s+as\s+([\p{L}\p{N}_.]+))?\s*(?:\$[^\s<>]+\s*)*(<<.+?>>)?\s*(?:\$[^\s<>]+\s*)*(?:\[\[.*?\]\])?\s*(?:#[^\s{}]+)?\s*\{$"#
+            r#"(?i)^[+~#-]?\s*package\s+("[^"]+"|[^#\s{}]*)(?:\s+as\s+([\p{L}\p{N}_.]+))?\s*(?:\$[^\s<>]+\s*)*(<<.+?>>)?\s*(?:\$[^\s<>]+\s*)*(?:\[\[.*?\]\])?\s*(?:#[^\s{}]+)?\s*\{$"#
         ).unwrap()
         });
         let ordinary = ORDINARY.captures(line);
+        // CommandPackage.executeArg stores visibility on the group; the symbol
+        // command has no visibility prefix, so only consume it for this grammar.
+        let visibility = if ordinary.is_some() {
+            match line.as_bytes()[0] {
+                b'+' => Visibility::Public,
+                b'-' => Visibility::Private,
+                b'#' => Visibility::Protected,
+                b'~' => Visibility::Package,
+                _ => Visibility::Default,
+            }
+        } else {
+            Visibility::Default
+        };
+        let line = if visibility != Visibility::Default {
+            line[1..].trim_start()
+        } else {
+            line
+        };
         static STEREO_LABEL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<<(.+?)>>").unwrap());
         // CommandPackageWithUSymbol#getRegexConcat/executeArg distinguish code
         // from display in both alias directions. The quark owns code; the
@@ -1638,6 +1663,7 @@ impl ClassParser {
                     if is_final {
                         let package = &mut self.packages[idx];
                         package.kind = kind;
+                        package.visibility = visibility;
                         package.color = color.clone();
                         if !stereotypes.is_empty() {
                             package.stereotypes = stereotypes.clone();
@@ -1668,6 +1694,11 @@ impl ClassParser {
                         prefix.last().cloned()
                     };
                     self.packages.push(Package {
+                        visibility: if is_final {
+                            visibility
+                        } else {
+                            Visibility::Default
+                        },
                         name,
                         tags: if is_final { tags.clone() } else { Vec::new() },
                         url: if is_final { url.clone() } else { None },
@@ -1717,7 +1748,7 @@ impl ClassParser {
         // Multi-line attached note start: `note <pos> of <entity>` (optional color: `#color`)
         static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("[^"]+"|[^\s{}"<>]+)\s*(#\S+)?\s*$"#,
+                r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("[^"]+"|[^\s{}"<>]+)\s*(#[^\s{}]+)?\s*(\{)?\s*$"#,
             )
             .unwrap()
         });
@@ -1727,14 +1758,16 @@ impl ClassParser {
         });
         // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
         static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap()
+            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*(#[^\s{}]+)?\s*(\{)?\s*$").unwrap()
         });
         // Floating named note: `note "text" as Name`
-        static FLOATING_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+        static FLOATING_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+([\p{L}\p{N}_.]+)\s*$"#).unwrap()
+        });
         // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
-        static FLOATING_ML_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
+        static FLOATING_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"(?i)^note\s+as\s+([\p{L}\p{N}_.]+)\s*(#\S+)?\s*$").unwrap()
+        });
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
             let position = parse_note_position(&caps[1].to_ascii_lowercase());
@@ -1742,13 +1775,20 @@ impl ClassParser {
             // with quarkInContext(true, idShort) before creating the note/link.
             let target_path =
                 self.resolve_quark_path(caps[2].trim_matches('"'), QuarkLookup::ReuseUnique);
-            let Some(&target_idx) = self.entity_by_path.get(&target_path) else {
-                return Err(ParseError {
+            // Quark<Entity>.getData includes groups as well as leaves.
+            let target = self
+                .entity_by_path
+                .get(&target_path)
+                .map(|&idx| self.entities[idx].id.clone())
+                .or_else(|| {
+                    self.package_by_path
+                        .get(&target_path)
+                        .map(|&idx| self.packages[idx].name.clone())
+                })
+                .ok_or_else(|| ParseError {
                     line: self.current_line,
                     message: format!("unknown note target: {}", &caps[2]),
-                });
-            };
-            let target = self.entities[target_idx].id.clone();
+                })?;
             let text = caps[3].trim().to_string();
             // Expand `\n` escape sequences into actual newlines.  Preserve
             // leading whitespace on each segment so that indented `* items`
@@ -1767,23 +1807,31 @@ impl ClassParser {
                 alias: None,
                 color: None,
                 source_line: self.current_line,
-            });
+            })?;
             return Ok(true);
         }
 
         if let Some(caps) = ATTACHED_ML_RE.captures(line) {
+            self.note_with_bracket = caps.get(4).is_some();
             let position = parse_note_position(&caps[1].to_ascii_lowercase());
             // CommandFactoryNoteOnEntity.executeInternal resolves the target
             // with quarkInContext(true, idShort) before creating the note/link.
             let target_path =
                 self.resolve_quark_path(caps[2].trim_matches('"'), QuarkLookup::ReuseUnique);
-            let Some(&target_idx) = self.entity_by_path.get(&target_path) else {
-                return Err(ParseError {
+            // Quark<Entity>.getData includes groups as well as leaves.
+            let target = self
+                .entity_by_path
+                .get(&target_path)
+                .map(|&idx| self.entities[idx].id.clone())
+                .or_else(|| {
+                    self.package_by_path
+                        .get(&target_path)
+                        .map(|&idx| self.packages[idx].name.clone())
+                })
+                .ok_or_else(|| ParseError {
                     line: self.current_line,
                     message: format!("unknown note target: {}", &caps[2]),
-                });
-            };
-            let target = self.entities[target_idx].id.clone();
+                })?;
             self.current_note = Some(Note {
                 owner_package: None,
                 lines: Vec::new(),
@@ -1813,12 +1861,13 @@ impl ClassParser {
                 alias: None,
                 color: None,
                 source_line: self.current_line,
-            });
+            })?;
             return Ok(true);
         }
 
         // Shorthand multi-line: `note right` — attaches to the last declared entity.
         if let Some(caps) = SHORT_ML_RE.captures(line) {
+            self.note_with_bracket = caps.get(3).is_some();
             let position = parse_note_position(&caps[1].to_ascii_lowercase());
             let target = self.last_entity_id.clone();
             self.current_note = Some(Note {
@@ -1848,7 +1897,7 @@ impl ClassParser {
                 alias: Some(alias),
                 color: None,
                 source_line: self.current_line,
-            });
+            })?;
             return Ok(true);
         }
 
@@ -1887,7 +1936,7 @@ impl ClassParser {
                 alias: None,
                 color: None,
                 source_line: self.current_line,
-            });
+            })?;
             return Ok(true);
         }
         // `note on link` — multi-line note attached to the last relationship.
@@ -2834,6 +2883,35 @@ mod tests {
     fn parse(input: &str) -> ClassDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_class(&lines).unwrap()
+    }
+
+    #[test]
+    fn native_trial_owns_brace_notes_and_group_quarks() {
+        for kind in ["record", "struct", "class", "protocol"] {
+            let input = format!(
+                "{kind} Root\n+package Outer {{\n{kind} Inner\n}}\nnote left of Outer {{\ncomponent must stay text\nend note\n}}\nnote \"qualified\" as Outer.Memo\nOuter.Memo .. Outer.Inner"
+            );
+            let lines = input.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert!(native_container_candidate(&lines));
+            let diagram = parse_class(&lines).unwrap();
+            assert_eq!(diagram.entities.len(), 2);
+            assert_eq!(diagram.notes.len(), 2);
+            assert_eq!(diagram.notes[0].target.as_deref(), Some("Outer"));
+            assert_eq!(
+                diagram.notes[0].lines,
+                ["component must stay text", "end note"]
+            );
+            assert_eq!(diagram.notes[1].owner_package.as_deref(), Some("Outer"));
+            assert_eq!(diagram.notes[1].alias.as_deref(), Some("Outer.Memo"));
+            assert_eq!(diagram.packages[0].visibility, Visibility::Public);
+            assert_eq!(diagram.relationships[0].from, "Outer.Memo");
+        }
+        for input in [
+            "class A\nA .. Memo\nnote \"cannot replace class\" as Memo",
+            "class A\nnote as Memo\ntext\n}",
+        ] {
+            assert!(parse_class(&input.lines().map(str::to_owned).collect::<Vec<_>>()).is_err());
+        }
     }
 
     #[test]
