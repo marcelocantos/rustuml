@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not independently accepted",
+  "rust_revision": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "Previously passing comparisons AND valid-input parseability must be preserved. Every relevant valid failing input remains blocking. No checker attestation will be authored.",
+  "mechanism": "class-command-grammar-closure",
+  "java_locations": [
+    "PSystemBuilder#createPSystem",
+    "classdiagram/ClassDiagramFactory#initCommandsList",
+    "classdiagram/command/CommandCreateElementFull2#executeArg",
+    "descdiagram/command/CommandCreateElementFull#ALL_TYPES",
+    "descdiagram/command/CommandPackageWithUSymbol#getRegexConcat,executeArg",
+    "classdiagram/command/CommandLinkClass#getRegexConcat,executeArg",
+    "decoration/LinkDecor#PARENTHESIS"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#parse_commands,try_entity_decl,try_package,try_relationship",
+    "crates/rustuml-parser/src/parse/mod.rs#detect_uml_subtype",
+    "crates/rustuml-parser/src/diagram/class.rs"
+  ],
+  "invariant": "A complete command is consumed only by a factory that supports and executes its grammar; every declaration, modifier and relationship accepted is retained in the AST. Description execution may follow class failure, but never erase native classes or revive a failed mixing directive.",
+  "causal_divergence": "The first consuming engine exposed 36 previously silently misrendered valid inputs as errors: boundary leaves absent from declaration grammar; action/process/queue absent from container grammar; alias-local stereotypes, tags and URL slots absent from package grammar; parenthesis link decorations absent from relationship grammar; description trial limited to actor-only while uppercase description declarations score Class.",
+  "planned_model_change": "Extend typed leaves/groups and consuming package name/modifier slots from Java; preserve tags, URL, selected stereotype and symbol identity. Store parenthesis as an endpoint decoration, preserving direction inversion and package endpoints. Parameterize class command consumption by class/description factory semantics: description rejects native-only declarations and allowmixing but accepts shared interface/entity meanings. Use the successful complete description trial only after class rejection, route its represented leaves into existing component/usecase parser. Verify AST retention, not only factory names. Do not relax unknown-command rejection.",
+  "perturbation_axes": [
+    "case/tabs/alias direction and modifier slot order",
+    "class/description declaration order and native versus shared interface commands",
+    "parenthesis endpoint side, directions, root versus group topology"
+  ],
+  "evidence_inventory": "../class-command-execution-ownership/maker-evidence/perturbation-results.json"
+}
