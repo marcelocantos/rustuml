@@ -90,122 +90,130 @@ fn preprocess_full_inner(
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
 ) -> PreprocessOutput {
-    let identity_base_dir = base_dir.clone();
+    // Java TContext.resultList is produced once; UmlSource and diagram parsing
+    // consume that same evaluated stream. Never rerun TIM to compute identity.
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-    let input_lines = source_identity_input_lines(input);
-    let mut lines = ctx.process_lines(&input_lines);
-    let expanded_theme_source = expanded_theme_seed_source(input, &ctx.theme_seed_expansions);
-    if let Some(seed_source) = &expanded_theme_source {
-        ctx.theme_tail.push(format!(
+    let events = ctx.process(input);
+    let mut identity = Vec::new();
+    let mut lines = Vec::new();
+    let mut theme_tail = Vec::new();
+    project_events(&events, &mut identity, &mut lines, &mut theme_tail);
+    let uml_source = uml_source_string(&identity, preserve_teoz_pragma);
+    if !theme_tail.is_empty() {
+        theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
-            svg_id_seed_prefix(seed_source)
+            svg_id_seed_prefix(&uml_source)
         ));
+        lines.extend(theme_tail);
     }
-    // Append any accumulated theme expansion to the end of the diagram so
-    // user-source line numbers are preserved (see `theme_tail`).
-    if !ctx.theme_tail.is_empty() {
-        let tail = std::mem::take(&mut ctx.theme_tail);
-        // Find the last `@end…` marker; insert before it if present so the
-        // diagram parser still terminates correctly.
-        let insert_at = lines
-            .iter()
-            .rposition(|l| l.trim_start().starts_with("@end"))
-            .unwrap_or(lines.len());
-        for (i, line) in tail.into_iter().enumerate() {
-            lines.insert(insert_at + i, line);
-        }
-    }
-    let uml_source = expanded_theme_source.unwrap_or_else(|| {
-        let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
-        identity_ctx.source_identity_mode = true;
-        identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-        let input_lines = source_identity_input_lines(input);
-        let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
-        uml_source_string(&identity_lines, preserve_teoz_pragma)
-    });
+    // Sprite extraction belongs to parser lowering, after TIM evaluation.
+    // Java leaves every evaluated sprite line in TContext.resultList/UmlSource.
+    let sprites = extract_sprites(&mut lines);
     PreprocessOutput {
         lines,
-        sprites: ctx.sprites,
+        sprites,
         uml_source,
     }
 }
 
-fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) -> Option<String> {
-    if expansions.is_empty() {
-        return None;
-    }
-
-    // Java provenance: `PSystemBuilder.createPSystem` builds `UmlSource` from
-    // the preprocessor output, and `UmlSource.seed` hashes
-    // `getPlainString("\n")`. Theme includes occupy the original `!theme`
-    // position in that source; parser-oriented flattening and `theme_tail`
-    // relocation happen only after this representation is captured.
-    let mut source = String::new();
-    let mut in_block = false;
-    let mut skip_initial_empty_lines = false;
-    for (index, line) in input.lines().enumerate() {
-        let source_line = index + 1;
-        let trimmed = line.trim_start();
-        if !in_block {
-            if !trimmed.starts_with("@start") {
-                continue;
-            }
-            in_block = true;
-            skip_initial_empty_lines = true;
-        } else if skip_initial_empty_lines && trimmed.is_empty() {
-            continue;
-        } else {
-            skip_initial_empty_lines = false;
-        }
-
-        if let Some(expansion) = expansions
-            .iter()
-            .find(|expansion| expansion.source_line == source_line)
-        {
-            for expanded in &expansion.lines {
-                let expanded =
-                    split_source_line_marker(expanded).map_or(expanded.as_str(), |(_, text)| text);
-                source.push_str(expanded);
-                source.push('\n');
-            }
-        } else {
-            source.push_str(line);
-            source.push('\n');
-        }
-
-        if trimmed.starts_with("@end") {
-            break;
-        }
-    }
-    Some(source)
+/// A TIM execution result, before parser-specific lowering. Plain text has one
+/// owner: both projections see exactly this value, including its origin marker.
+/// Java provenance: TContext.addPlain/executeTheme/executeOption and UmlSource.
+#[derive(Clone, Debug)]
+enum EvaluatedEvent {
+    Plain(String),
+    Boundary(String),
+    ParserOnly(String),
+    Theme {
+        name: String,
+        source_line: usize,
+        body: Vec<EvaluatedEvent>,
+    },
 }
 
-/// Mirror the source reader that runs before Java's TIM expansion.
-///
-/// PlantUML drops empty lines immediately after the `@start…` marker. Empty
-/// lines that appear later in TIM output remain part of `UmlSource` and must
-/// still participate in deterministic SVG resource hashes.
-fn source_identity_input_lines(input: &str) -> Vec<&str> {
-    let mut result = Vec::new();
-    let mut in_block = false;
-    let mut skip_initial_empty_lines = false;
-
-    for line in input.lines() {
-        let trimmed = line.trim_start();
-        if !in_block && trimmed.starts_with("@start") {
-            in_block = true;
-            skip_initial_empty_lines = true;
-            result.push(line);
-        } else if skip_initial_empty_lines && trimmed.is_empty() {
-            continue;
-        } else {
-            skip_initial_empty_lines = false;
-            result.push(line);
+fn project_events(
+    events: &[EvaluatedEvent],
+    identity: &mut Vec<String>,
+    lines: &mut Vec<String>,
+    theme_tail: &mut Vec<String>,
+) {
+    for event in events {
+        match event {
+            EvaluatedEvent::Plain(line) => {
+                identity.push(
+                    split_source_line_marker(line)
+                        .map_or(line.as_str(), |(_, text)| text)
+                        .to_string(),
+                );
+                lines.push(line.clone());
+            }
+            EvaluatedEvent::Boundary(line) => identity.push(line.clone()),
+            EvaluatedEvent::ParserOnly(line) => lines.push(line.clone()),
+            EvaluatedEvent::Theme {
+                name,
+                source_line,
+                body,
+            } => {
+                let mut expanded = Vec::new();
+                let mut nested_tail = Vec::new();
+                project_events(body, identity, &mut expanded, &mut nested_tail);
+                lines.push(source_line_marker(
+                    *source_line,
+                    &format!("skinparam __theme {name}"),
+                ));
+                // Retain the parser's theme envelope contract. Only this
+                // projection flattens grouped properties or relocates them.
+                theme_tail.push(format!("skinparam __theme_body_start {name}"));
+                theme_tail.extend(themes::flatten_theme_output(&expanded));
+                theme_tail.extend(nested_tail);
+                theme_tail.push(format!("skinparam __theme_body_end {name}"));
+            }
         }
     }
+}
 
-    result
+fn extract_sprites(lines: &mut [String]) -> HashMap<String, SpriteData> {
+    let mut sprites = HashMap::new();
+    let mut current: Option<String> = None;
+    for line in lines {
+        let text = split_source_line_marker(line)
+            .map_or(line.as_str(), |(_, text)| text)
+            .trim();
+        if let Some(name) = &current {
+            if text == "}" {
+                current = None;
+            } else if !text.is_empty() && text.chars().all(|c| c.is_ascii_hexdigit()) {
+                if let Some(sprite) = sprites.get_mut(name) {
+                    let sprite: &mut SpriteData = sprite;
+                    sprite.rows.push(text.to_string());
+                    sprite.height = sprite.rows.len() as u32;
+                }
+            }
+            line.clear();
+        } else if text.starts_with("sprite ") || text.starts_with("sprite\t") {
+            if text.ends_with('{') {
+                let rest = text["sprite ".len()..].trim_start();
+                let rest = rest.strip_prefix('$').unwrap_or(rest);
+                let name: String = rest
+                    .chars()
+                    .take_while(|c| c.is_alphanumeric() || *c == '_')
+                    .collect();
+                let (width, height) = parse_sprite_dimensions(rest);
+                sprites.insert(
+                    name.clone(),
+                    SpriteData {
+                        width,
+                        height,
+                        rows: Vec::new(),
+                    },
+                );
+                current = Some(name);
+            }
+            line.clear();
+        }
+    }
+    sprites
 }
 
 fn svg_id_seed_prefix(source: &str) -> String {
@@ -497,11 +505,6 @@ struct PreprocessContext {
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
-    in_sprite_block: bool,
-    /// The name of the sprite currently being collected (if any).
-    current_sprite_name: Option<String>,
-    /// Sprite definitions parsed from `sprite $name { ... }` blocks.
-    sprites: HashMap<String, SpriteData>,
     archimate_enabled: bool,
     in_diagram_block: bool,
     /// True when inside an @startebnf block — disables single-quote comment
@@ -515,13 +518,9 @@ struct PreprocessContext {
     functions: HashMap<String, FunctionDef>,
     collecting_function: Option<String>,
     collecting_definelong: Option<String>,
-    subs: HashMap<String, Vec<String>>,
-    sub_blocks: Vec<SubBlock>,
+    subs: HashMap<String, Vec<BufferedLine>>,
     collecting_sub: Option<String>,
-    collecting_sub_lines: Vec<String>,
-    /// Seed-only pass: consume `!startsub` markers while processing their
-    /// bodies in place, matching PlantUML's theme include source.
-    expand_subs_inline: bool,
+    collecting_sub_lines: Vec<BufferedLine>,
     /// Local variable scopes for function calls (stack of saved scopes).
     local_vars: Vec<HashMap<String, String>>,
     /// Pending return value from a `!return` inside a function body.
@@ -534,23 +533,6 @@ struct PreprocessContext {
     /// Defaults to system time + local timezone; both overridable via
     /// `RUSTUML_DEBUG` (see [`debug`]) for deterministic golden tests.
     render_clock: RenderClock,
-    /// Theme expansion output accumulated across `!theme` directives.
-    ///
-    /// Themes emit many `skinparam` lines plus `<style>` blocks. Inlining the
-    /// expansion in place would push every subsequent diagram line down by
-    /// ~150 positions, breaking `data-source-line=` matching in goldens.
-    /// Instead we collect the expansion here and append it once at the end of
-    /// the preprocessed output. Internal body delimiters let the shared style
-    /// parser reconstruct the directive's temporal position without shifting
-    /// user source lines.
-    theme_tail: Vec<String>,
-    /// Unflattened theme expansions keyed by their top-level source line.
-    ///
-    /// PlantUML seeds SVG resource IDs from `UmlSource.source`, after TIM has
-    /// expanded `!theme` in place but before grouped skinparams are flattened
-    /// for individual diagram parsers. Keep only this transient representation;
-    /// the resulting seed prefix is carried as parser metadata.
-    theme_seed_expansions: Vec<ThemeSeedExpansion>,
     /// Once loop expansion produces generated content, subsequent original
     /// lines need explicit source-origin markers because output position no
     /// longer equals PlantUML's `data-source-line`.
@@ -558,14 +540,6 @@ struct PreprocessContext {
     source_line_override: Option<usize>,
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
-    /// Emit Java's post-TIM `UmlSource` stream instead of parser line-number
-    /// placeholders. Used only by the deterministic SVG identity pass.
-    source_identity_mode: bool,
-}
-
-struct ThemeSeedExpansion {
-    source_line: usize,
-    lines: Vec<String>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -595,11 +569,6 @@ struct BufferedLine {
 }
 
 #[derive(Clone)]
-struct SubBlock {
-    lines: Vec<String>,
-}
-
-#[derive(Clone)]
 struct FunctionDef {
     params: Vec<FuncParam>,
     body: Vec<BufferedLine>,
@@ -625,9 +594,6 @@ impl PreprocessContext {
             definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
-            in_sprite_block: false,
-            current_sprite_name: None,
-            sprites: HashMap::new(),
             archimate_enabled: false,
             in_diagram_block: false,
             in_ebnf_block: false,
@@ -640,21 +606,16 @@ impl PreprocessContext {
             collecting_function: None,
             collecting_definelong: None,
             subs: HashMap::new(),
-            sub_blocks: Vec::new(),
             collecting_sub: None,
             collecting_sub_lines: Vec::new(),
-            expand_subs_inline: false,
             local_vars: Vec::new(),
             return_signal: None,
             current_source_line: 0,
             render_clock: RenderClock::from_env(),
-            theme_tail: Vec::new(),
-            theme_seed_expansions: Vec::new(),
             mark_source_lines: false,
             source_line_override: None,
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
-            source_identity_mode: false,
         }
     }
 
@@ -670,17 +631,14 @@ impl PreprocessContext {
     /// stream — which the diagram parser indexes 1-based — aligned with that.
     /// Placeholders are only emitted while collecting a single top-level
     /// diagram block; nested includes manage their own numbering.
-    fn push_directive_placeholder(&self, output: &mut Vec<String>) {
-        if self.source_identity_mode {
-            return;
-        }
+    fn push_directive_placeholder(&self, output: &mut Vec<EvaluatedEvent>) {
         // PlantUML `TFunctionImpl.executeReturnFunction` and
         // `executeProcedureInternal` feed their body through
         // `TContext.executeLines`; consumed body directives do not enter the
         // resulting diagram stream. Placeholders only represent directives
         // from the user's top-level source, never generated function bodies.
         if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
-            output.push(String::new());
+            output.push(EvaluatedEvent::ParserOnly(String::new()));
         }
     }
 
@@ -700,25 +658,23 @@ impl PreprocessContext {
         }
     }
 
-    fn push_content_line(&self, output: &mut Vec<String>, line: String) {
-        // Macro expanders may already attribute a generated statement to the
-        // defining stdlib procedure body. Preserve that explicit marker
-        // instead of nesting the caller's source line around it; downstream
-        // subtype detection and parsers consume exactly one marker layer.
-        if split_source_line_marker(&line).is_some() {
-            output.push(line);
-        } else if self.mark_source_lines && !line.is_empty() {
-            output.push(source_line_marker(
+    fn push_content_line(&self, output: &mut Vec<EvaluatedEvent>, line: String) {
+        let line = if split_source_line_marker(&line).is_none()
+            && self.mark_source_lines
+            && !line.is_empty()
+        {
+            source_line_marker(
                 self.source_line_override
                     .unwrap_or_else(|| self.current_diagram_source_line()),
                 &line,
-            ));
+            )
         } else {
-            output.push(line);
-        }
+            line
+        };
+        output.push(EvaluatedEvent::Plain(line));
     }
 
-    fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<String>) {
+    fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<EvaluatedEvent>) {
         let saved_source_line = self.current_source_line;
         let saved_mark_source_lines = self.mark_source_lines;
         let saved_source_line_override = self.source_line_override;
@@ -762,12 +718,12 @@ impl PreprocessContext {
         }
     }
 
-    fn process(&mut self, input: &str) -> Vec<String> {
+    fn process(&mut self, input: &str) -> Vec<EvaluatedEvent> {
         let lines: Vec<&str> = input.lines().collect();
         self.process_lines(&lines)
     }
 
-    fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
+    fn process_lines(&mut self, lines: &[&str]) -> Vec<EvaluatedEvent> {
         let mut output = Vec::new();
 
         let saved_source_line = self.current_source_line;
@@ -780,45 +736,25 @@ impl PreprocessContext {
         output
     }
 
-    fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
+    fn process_one_line(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) {
         let trimmed = line.trim();
-
-        // Collect sprite pixel-data blocks. Emit empty placeholder lines so
-        // downstream parsers preserve original source line numbers (PlantUML's
-        // `data-source-line` attribute matches the user's editor view).
-        if self.in_sprite_block {
-            if trimmed == "}" {
-                self.in_sprite_block = false;
-                self.current_sprite_name = None;
-            } else if let Some(name) = self.current_sprite_name.clone() {
-                // Accumulate pixel row into the sprite definition.
-                if let Some(sprite) = self.sprites.get_mut(&name) {
-                    // Only accept lines that look like hex pixel data.
-                    if !trimmed.is_empty() && trimmed.chars().all(|c| c.is_ascii_hexdigit()) {
-                        sprite.rows.push(trimmed.to_string());
-                        sprite.height = sprite.rows.len() as u32;
-                    }
-                }
-            }
-            output.push(String::new());
-            return;
-        }
 
         // Handle block comments. We emit empty placeholder lines for each
         // comment line so downstream parsers preserve original source line
         // numbers (PlantUML's `data-source-line` attribute matches the
         // user's editor view).
         if self.in_block_comment {
-            if trimmed.contains("'/") {
+            if trimmed.ends_with("'/") {
                 self.in_block_comment = false;
             }
             self.push_directive_placeholder(output);
             return;
         }
-        if trimmed.starts_with("/'") {
-            if !trimmed.contains("'/") || trimmed.ends_with("/'") {
-                self.in_block_comment = true;
-            }
+        // TLineType: a whole-line /'...'/ is a short comment; a /'
+        // without a closing '/ starts a long comment. Prefix comments with
+        // following content are handled by StringLocated.removeInnerComment.
+        if trimmed.starts_with("/'") && (!trimmed.contains("'/") || trimmed.ends_with("'/")) {
+            self.in_block_comment = !trimmed.contains("'/");
             self.push_directive_placeholder(output);
             return;
         }
@@ -831,12 +767,12 @@ impl PreprocessContext {
             return;
         }
 
-        // Strip inline comments (single-quote comment syntax) — but NOT
-        // inside EBNF blocks.
+        // Java StringLocated.removeInnerComment leaves trailing apostrophes
+        // alone and removes only its supported block-comment forms.
         let line_no_comment = if self.in_ebnf_block {
             line.to_string()
         } else {
-            strip_inline_comment(line)
+            remove_inner_comment(line)
         };
         let trimmed = line_no_comment.trim();
 
@@ -849,15 +785,13 @@ impl PreprocessContext {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
                     self.in_ebnf_block = trimmed.starts_with("@startebnf");
-                    if self.source_identity_mode {
-                        output.push(line_no_comment);
-                    }
+                    output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 return;
             }
             if trimmed.starts_with("@end") {
-                if self.source_identity_mode && self.in_diagram_block {
-                    output.push(line_no_comment);
+                if self.in_diagram_block {
+                    output.push(EvaluatedEvent::Boundary(line_no_comment));
                 }
                 self.in_diagram_block = false;
                 self.in_ebnf_block = false;
@@ -867,39 +801,6 @@ impl PreprocessContext {
                 return;
             }
         } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
-            return;
-        }
-
-        // Parse sprite definitions: `sprite $name [WxH/Z] {`
-        if trimmed.starts_with("sprite ") || trimmed.starts_with("sprite\t") {
-            if trimmed.ends_with('{') {
-                // Parse: sprite $name [WxH/Z] {
-                let rest = trimmed["sprite ".len()..].trim_start();
-                // Strip leading $ if present.
-                let rest = rest.strip_prefix('$').unwrap_or(rest);
-                // Name is the first word (up to whitespace, '[', or '{').
-                let name: String = rest
-                    .chars()
-                    .take_while(|c| c.is_alphanumeric() || *c == '_')
-                    .collect();
-                // Try to parse [WxH/Z] dimensions if present.
-                let (width, height) = parse_sprite_dimensions(rest);
-                if !name.is_empty() {
-                    self.sprites.insert(
-                        name.clone(),
-                        SpriteData {
-                            width,
-                            height,
-                            rows: Vec::new(),
-                        },
-                    );
-                    self.current_sprite_name = Some(name);
-                }
-                self.in_sprite_block = true;
-            }
-            // Emit a placeholder for the `sprite $name {` opening line so
-            // downstream source-line numbers stay aligned (see block above).
-            output.push(String::new());
             return;
         }
 
@@ -917,20 +818,23 @@ impl PreprocessContext {
             return;
         }
 
-        // Collecting sub.
-        if !self.expand_subs_inline && self.collecting_sub.is_some() {
-            if trimmed == "!endsub" {
-                if self.collecting_sub.take().is_some() {
-                    self.sub_blocks.push(SubBlock {
-                        lines: std::mem::take(&mut self.collecting_sub_lines),
-                    });
-                }
-            } else if let Some(name) = self.collecting_sub.clone() {
-                let line = line.to_string();
-                self.subs.entry(name).or_default().push(line.clone());
-                self.collecting_sub_lines.push(line);
-            }
+        // CodeIteratorSub buffers then replays the body at its definition,
+        // before the conditional/function iterators. Capture origins as well
+        // as text; no special theme-only subblock execution path exists.
+        if let Some(name) = self.collecting_sub.clone() {
             self.push_directive_placeholder(output);
+            if trimmed == "!endsub" {
+                self.collecting_sub = None;
+                let body = std::mem::take(&mut self.collecting_sub_lines);
+                self.subs.insert(name, body.clone());
+                for buffered in &body {
+                    self.process_buffered_line(buffered, output);
+                }
+                self.mark_source_lines = true;
+            } else {
+                self.collecting_sub_lines
+                    .push(self.current_buffered_line(&line_no_comment));
+            }
             return;
         }
 
@@ -941,12 +845,12 @@ impl PreprocessContext {
         }
 
         // While buffering.
-        if self.try_while(trimmed, output) {
+        if self.try_while(&line_no_comment, output) {
             return;
         }
 
         // Foreach buffering.
-        if self.try_foreach(trimmed, output) {
+        if self.try_foreach(&line_no_comment, output) {
             return;
         }
 
@@ -958,10 +862,8 @@ impl PreprocessContext {
 
         // Startsub.
         if let Some(name) = trimmed.strip_prefix("!startsub ") {
-            if !self.expand_subs_inline {
-                self.collecting_sub = Some(name.trim().to_string());
-                self.collecting_sub_lines.clear();
-            }
+            self.collecting_sub = Some(name.trim().to_string());
+            self.collecting_sub_lines.clear();
             self.push_directive_placeholder(output);
             return;
         }
@@ -1027,38 +929,17 @@ impl PreprocessContext {
             return;
         }
         if let Some(theme_lines) = self.try_theme(trimmed) {
-            if self.is_active() {
-                output.extend(theme_lines);
-            }
+            output.extend(theme_lines);
             return;
         }
         if let Some(option_lines) = self.try_option(trimmed) {
-            if self.is_active() {
-                output.extend(option_lines);
-            }
+            output.extend(option_lines);
             return;
         }
 
-        // !dump_memory — emit a comment line with all current defines (debugging aid).
-        if trimmed == "!dump_memory" {
-            if self.is_active() {
-                let mut pairs: Vec<String> = self
-                    .defines
-                    .iter()
-                    .map(|(k, v)| format!("{k}={v}"))
-                    .collect();
-                pairs.sort();
-                let token_pairs: Vec<String> = self
-                    .token_defines
-                    .iter()
-                    .map(|(k, v)| format!("{k}={v}"))
-                    .collect();
-                let mut all = pairs;
-                let mut sorted_tokens = token_pairs;
-                sorted_tokens.sort();
-                all.extend(sorted_tokens);
-                self.push_content_line(output, format!("' [dump] {}", all.join(", ")));
-            }
+        // TContext.executeDumpMemory logs diagnostics only, never resultList.
+        if trimmed == "!dump_memory" || trimmed.starts_with("!dump_memory ") {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -1389,7 +1270,11 @@ impl PreprocessContext {
     }
 
     /// Call a function and return its return value (if any) plus any output lines.
-    fn call_function(&mut self, name: &str, args: &[String]) -> (Option<Value>, Vec<String>) {
+    fn call_function(
+        &mut self,
+        name: &str,
+        args: &[String],
+    ) -> (Option<Value>, Vec<EvaluatedEvent>) {
         let func = match self.functions.get(name) {
             Some(f) => f.clone(),
             None => return (None, Vec::new()),
@@ -1452,7 +1337,7 @@ impl PreprocessContext {
         (return_value, output_lines)
     }
 
-    fn try_function_call(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+    fn try_function_call(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
         // $funcName("arg1", "arg2"). PlantUML themes also use bare
         // procedure calls like `basic_style()` inside skinparam blocks.
         static RE: LazyLock<Regex> =
@@ -1475,7 +1360,7 @@ impl PreprocessContext {
             let (ret, mut lines) = self.call_function(&name, &args);
             let indent = &line[..line.len() - line.trim_start().len()];
             if !indent.is_empty()
-                && let Some(generated) = lines.first_mut()
+                && let Some(EvaluatedEvent::Plain(generated)) = lines.first_mut()
             {
                 if let Some((source_line, text)) = split_source_line_marker(generated) {
                     *generated = source_line_marker(source_line, &format!("{indent}{text}"));
@@ -1485,7 +1370,7 @@ impl PreprocessContext {
             }
             let trailing = &line[line.trim_end().len()..];
             if !trailing.is_empty()
-                && let Some(generated) = lines.last_mut()
+                && let Some(EvaluatedEvent::Plain(generated)) = lines.last_mut()
             {
                 generated.push_str(trailing);
             }
@@ -1496,7 +1381,7 @@ impl PreprocessContext {
                 if let Some(val) = ret {
                     let s = val.to_display();
                     if !s.is_empty() {
-                        output.push(s);
+                        self.push_content_line(output, s);
                     }
                 }
             } else {
@@ -1507,13 +1392,17 @@ impl PreprocessContext {
             // after the call so following source lines still retain file-line
             // attribution.
             if !returned_value
-                && !self.source_identity_mode
                 && self.include_depth == 0
                 && self.in_diagram_block
                 && self.local_vars.is_empty()
             {
-                while output.len() < self.current_source_line {
-                    output.push(String::new());
+                while output
+                    .iter()
+                    .filter(|event| !matches!(event, EvaluatedEvent::Boundary(_)))
+                    .count()
+                    < self.current_source_line
+                {
+                    output.push(EvaluatedEvent::ParserOnly(String::new()));
                 }
             }
 
@@ -1566,7 +1455,19 @@ impl PreprocessContext {
             let args = parse_call_args(&args_str);
             let (return_value, output_lines) = self.call_function(func_name, &args);
             let replacement = return_value.map_or_else(
-                || output_lines.join("\n"),
+                || {
+                    output_lines
+                        .into_iter()
+                        .filter_map(|event| match event {
+                            EvaluatedEvent::Plain(line) => Some(
+                                split_source_line_marker(&line)
+                                    .map_or(line.clone(), |(_, text)| text.to_string()),
+                            ),
+                            _ => None,
+                        })
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                },
                 |return_value| return_value.to_display(),
             );
             result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
@@ -1575,11 +1476,12 @@ impl PreprocessContext {
         result
     }
 
-    fn try_foreach(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+    fn try_foreach(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
+        let trimmed = line.trim();
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!foreach\s+\$(\w+)\s+in\s+\[(.+)\]$"#).unwrap());
 
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE.captures(trimmed) {
             if !self.is_active() {
                 return true;
             }
@@ -1599,7 +1501,7 @@ impl PreprocessContext {
             return true;
         }
 
-        if (line == "!endfor" || line == "!endforeach")
+        if (trimmed == "!endfor" || trimmed == "!endforeach")
             && let Some(foreach) = self.foreach_stack.pop()
         {
             if self.is_active() {
@@ -1637,10 +1539,11 @@ impl PreprocessContext {
         false
     }
 
-    fn try_while(&mut self, line: &str, output: &mut Vec<String>) -> bool {
+    fn try_while(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
+        let trimmed = line.trim();
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^!while\s+(.+)$").unwrap());
 
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE.captures(trimmed) {
             if !self.is_active() {
                 return true;
             }
@@ -1652,7 +1555,7 @@ impl PreprocessContext {
             return true;
         }
 
-        if line == "!endwhile" {
+        if trimmed == "!endwhile" {
             if let Some(while_state) = self.while_stack.pop()
                 && self.is_active()
             {
@@ -1689,12 +1592,16 @@ impl PreprocessContext {
         false
     }
 
-    fn try_include(&mut self, line: &str) -> Option<Vec<String>> {
+    fn try_include(&mut self, line: &str) -> Option<Vec<EvaluatedEvent>> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^!include(?:_once)?\s+(?:"([^"]+)"|<([^>]+)>|(\S+))$"#).unwrap()
         });
 
         let caps = RE.captures(line)?;
+        // CodeIteratorIf suppresses includes before TContext executes them.
+        if !self.is_active() {
+            return Some(Vec::new());
+        }
         // Group 1: quoted, Group 2: angle-bracket, Group 3: bare path.
         let quoted_path = caps.get(1).map(|m| m.as_str());
         let angle_path = caps.get(2).map(|m| m.as_str());
@@ -1705,9 +1612,9 @@ impl PreprocessContext {
             .unwrap_or("<unknown>");
 
         if self.include_depth >= MAX_INCLUDE_DEPTH {
-            return Some(vec![format!(
+            return Some(vec![EvaluatedEvent::ParserOnly(format!(
                 "' WARNING: max include depth ({MAX_INCLUDE_DEPTH}) reached for {display_path}"
-            )]);
+            ))]);
         }
 
         // Handle known stdlib includes.
@@ -1742,7 +1649,7 @@ impl PreprocessContext {
     /// Resolve and include a stdlib path (from angle-bracket includes).
     /// Returns `Some(lines)` always — the include directive is consumed even
     /// if the stdlib root or file is not found (silently ignored).
-    fn try_include_stdlib(&mut self, include_path: &str) -> Option<Vec<String>> {
+    fn try_include_stdlib(&mut self, include_path: &str) -> Option<Vec<EvaluatedEvent>> {
         let Some(stdlib_root) = stdlib::get_stdlib_root() else {
             return Some(vec![]);
         };
@@ -1760,7 +1667,7 @@ impl PreprocessContext {
         }
     }
 
-    fn try_includesub(&mut self, line: &str) -> Option<Vec<String>> {
+    fn try_includesub(&mut self, line: &str) -> Option<Vec<EvaluatedEvent>> {
         // !includesub file.puml!SUBNAME
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!includesub\s+(?:"([^"]+)"|(\S+))!(\w+)$"#).unwrap());
@@ -1768,6 +1675,9 @@ impl PreprocessContext {
         let caps = RE.captures(line)?;
         let path_str = caps.get(1).or(caps.get(2)).map(|m| m.as_str())?;
         let sub_name = &caps[3];
+        if !self.is_active() {
+            return Some(Vec::new());
+        }
 
         if self.include_depth >= MAX_INCLUDE_DEPTH {
             return Some(vec![]);
@@ -1791,8 +1701,12 @@ impl PreprocessContext {
                 let _ = temp_ctx.process(&content);
                 // Now extract the named sub.
                 if let Some(sub_lines) = temp_ctx.subs.get(sub_name) {
-                    let refs: Vec<&str> = sub_lines.iter().map(|s| s.as_str()).collect();
-                    Some(self.process_lines(&refs))
+                    let mut output = Vec::new();
+                    for line in sub_lines {
+                        self.process_buffered_line(line, &mut output);
+                    }
+                    self.mark_source_lines = true;
+                    Some(output)
                 } else {
                     Some(vec![])
                 }
@@ -1801,106 +1715,82 @@ impl PreprocessContext {
         }
     }
 
-    /// Expand a `!theme NAME` (or `!theme NAME from URL`) directive.
-    ///
-    /// Returns `Some(lines)` when the directive is consumed (whether the
-    /// theme was found or not — unknown themes silently drop just like
-    /// PlantUML when no theme by that name exists). Returns `None` when
-    /// the line is not a theme directive.
-    ///
-    /// In-place output is a single metadata marker. The theme expansion is
-    /// appended to `theme_tail` so the user diagram keeps its original line
-    /// numbers; parser-side body delimiters restore its source-order effects.
-    fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
+    fn try_theme(&mut self, line: &str) -> Option<Vec<EvaluatedEvent>> {
         let rest = line.strip_prefix("!theme ")?;
-        let source_line = self.current_source_line;
-        let diagram_source_line = self.current_diagram_source_line();
-        let top_level = self.include_depth == 0;
-        let mut name_part = rest.trim();
-        // `!theme NAME from URL` — strip the `from URL` portion. We always
-        // resolve from the embedded bundle regardless of the URL.
-        if let Some(idx) = name_part.find(" from ") {
-            name_part = name_part[..idx].trim();
+        let mut output = Vec::new();
+        if !self.is_active() || self.include_depth >= MAX_INCLUDE_DEPTH {
+            self.push_directive_placeholder(&mut output);
+            return Some(output);
         }
-        if name_part.is_empty() {
-            // Keep a placeholder so subsequent diagram lines retain their
-            // original source-line numbers in the preprocessed output.
-            return Some(vec![String::new()]);
+        // EaterTheme.analyze applies functions and variables to both expressions.
+        let (name, from) =
+            rest.to_ascii_lowercase()
+                .find(" from ")
+                .map_or((rest.trim(), None), |index| {
+                    (
+                        rest[..index].trim(),
+                        Some(rest[index + " from ".len()..].trim()),
+                    )
+                });
+        let from = from.map(|value| {
+            let value = self.substitute_vars(value);
+            self.expand_inline_func_calls_in_line(&value)
+        });
+        let name = self.substitute_vars(name);
+        let name = self.expand_inline_func_calls_in_line(&name);
+        let source = if let Some(from) = from {
+            // Local custom themes use the same naming convention as ThemeUtils.
+            // Remote fetching remains outside the no-runtime-dependency product.
+            let directory = self
+                .base_dir
+                .as_deref()
+                .unwrap_or_else(|| Path::new("."))
+                .join(from);
+            std::fs::read_to_string(directory.join(format!("puml-theme-{name}.puml"))).ok()
+        } else {
+            themes::get_theme_source(&name).map(str::to_string)
+        };
+        if let Some(source) = source {
+            let source_line = self
+                .source_line_override
+                .unwrap_or_else(|| self.current_diagram_source_line());
+            let saved_mark = self.mark_function_body_source_lines;
+            self.mark_function_body_source_lines = false;
+            self.include_depth += 1;
+            let body = self.process(themes::strip_front_matter(&source));
+            self.include_depth -= 1;
+            self.mark_function_body_source_lines = saved_mark;
+            output.push(EvaluatedEvent::Theme {
+                name,
+                source_line,
+                body,
+            });
+        } else {
+            self.push_directive_placeholder(&mut output);
         }
-        if !self.is_active() {
-            return Some(vec![String::new()]);
-        }
-        if let Some(theme_src) = themes::get_theme_source(name_part) {
-            let body = themes::strip_front_matter(theme_src);
-            if self.include_depth < MAX_INCLUDE_DEPTH {
-                self.theme_tail
-                    .push(format!("skinparam __theme_body_start {name_part}"));
-                let saved_mark_function_body_source_lines = self.mark_function_body_source_lines;
-                self.mark_function_body_source_lines = false;
-                let sub_start = self.sub_blocks.len();
-                self.include_depth += 1;
-                let expanded = self.process(body);
-                self.include_depth -= 1;
-                // Preserve `<style>` blocks for the shared parser-owned style
-                // pass, and flatten grouped `skinparam X { ... }` declarations
-                // so both that pass and every family parser see ordinary keys.
-                self.theme_tail
-                    .extend(themes::flatten_theme_output(&expanded));
-
-                // PlantUML themes keep diagram-family styles in `!startsub`
-                // blocks (activity, sequence, class, arrow, note, etc.). A
-                // `!theme` load makes those family blocks available to the
-                // current diagram; process blocks collected by this theme
-                // through the normal TIM evaluator so procedure calls and
-                // variables are resolved before flattening.
-                let theme_subs: Vec<SubBlock> = self.sub_blocks[sub_start..].to_vec();
-                for sub in theme_subs {
-                    if sub.lines.is_empty() {
-                        continue;
-                    }
-                    let refs: Vec<&str> = sub.lines.iter().map(String::as_str).collect();
-                    self.include_depth += 1;
-                    let expanded = self.process_lines(&refs);
-                    self.include_depth -= 1;
-                    self.theme_tail
-                        .extend(themes::flatten_theme_output(&expanded));
-                }
-                if top_level {
-                    self.expand_subs_inline = true;
-                    self.include_depth += 1;
-                    let seed_expansion = self.process(body);
-                    self.include_depth -= 1;
-                    self.expand_subs_inline = false;
-                    self.theme_seed_expansions.push(ThemeSeedExpansion {
-                        source_line,
-                        lines: seed_expansion,
-                    });
-                }
-                self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
-                self.theme_tail
-                    .push(format!("skinparam __theme_body_end {name_part}"));
-            }
-        }
-        // Replacing the directive with one metadata line preserves every
-        // following source-line number while retaining its temporal position.
-        // Keep an explicit marker because an earlier include or macro may make
-        // the output index differ from the user's entity/link source lines.
-        Some(vec![source_line_marker(
-            diagram_source_line,
-            &format!("skinparam __theme {name_part}"),
-        )])
+        // Theme execution can add arbitrary generated content; subsequent
+        // statements retain their StringLocated origin, including inactive loads.
+        self.mark_source_lines = true;
+        Some(output)
     }
 
-    fn try_option(&self, line: &str) -> Option<Vec<String>> {
+    fn try_option(&self, line: &str) -> Option<Vec<EvaluatedEvent>> {
         let rest = line.strip_prefix("!option ")?;
         let mut parts = rest.split_whitespace();
         let name = parts.next()?;
         let value = parts.next().unwrap_or("true");
-        if name.eq_ignore_ascii_case("handwritten") && value.eq_ignore_ascii_case("true") {
-            Some(vec!["skinparam __optionHandwritten true".to_string()])
+        let mut output = Vec::new();
+        if self.is_active()
+            && name.eq_ignore_ascii_case("handwritten")
+            && value.eq_ignore_ascii_case("true")
+        {
+            output.push(EvaluatedEvent::ParserOnly(
+                "skinparam __optionHandwritten true".to_string(),
+            ));
         } else {
-            Some(vec![String::new()])
+            self.push_directive_placeholder(&mut output);
         }
+        Some(output)
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
@@ -3497,26 +3387,19 @@ fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
     (0, 0)
 }
 
-fn strip_inline_comment(line: &str) -> String {
-    let mut in_quotes = false;
-    let chars: Vec<char> = line.chars().collect();
-    let bytes: Vec<usize> = line
-        .char_indices()
-        .map(|(i, _)| i)
-        .chain(std::iter::once(line.len()))
-        .collect();
-    for (idx, &c) in chars.iter().enumerate() {
-        let byte_pos = bytes[idx];
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if c == '\'' && !in_quotes {
-            let preceded_by_space = idx == 0 || chars[idx - 1].is_whitespace();
-            if preceded_by_space {
-                return line[..byte_pos].to_string();
-            }
-        }
-    }
-    line.to_string()
+// StringLocated.removeInnerComment: only leading/trailing block comments and
+// the special /'''[-\w]*'''/ form are removed; a trailing apostrophe is plain.
+fn remove_inner_comment(line: &str) -> String {
+    let trimmed = line.trim();
+    let content = if trimmed.starts_with("/'") {
+        line.find("'/").map_or(line, |end| &line[end + 2..])
+    } else if trimmed.ends_with("'/") {
+        line.rfind("/'").map_or(line, |start| &line[..start])
+    } else {
+        line
+    };
+    static SPECIAL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"/'''[-\w]*'''/").unwrap());
+    SPECIAL.replace_all(content, "").into_owned()
 }
 
 #[cfg(test)]
@@ -3533,6 +3416,43 @@ mod tests {
             .into_iter()
             .filter(|l| !l.is_empty())
             .collect()
+    }
+
+    #[test]
+    fn evaluated_sprite_is_shared_by_identity_and_extraction() {
+        let source = "@startuml\n!$pixels = \"FA\"\nsprite $badge [2x1/16] {\n$pixels\n}\nclass Ledger\n@enduml";
+        let output = preprocess_full(source, None);
+        assert_eq!(
+            output.uml_source,
+            "@startuml\nsprite $badge [2x1/16] {\nFA\n}\nclass Ledger\n@enduml\n"
+        );
+        assert_eq!(output.sprites["badge"].rows, ["FA"]);
+        assert!(!output.lines.iter().any(|line| line == "FA"));
+    }
+
+    #[test]
+    fn subblock_execution_updates_content_and_identity_once() {
+        let source = "@startuml\n!$count = 0\n!startsub setup\n!$count = $count + 1\nskinparam classBorderColor #124578\n!endsub\nclass Record$count\n@enduml";
+        let output = preprocess_full(source, None);
+        assert_eq!(
+            output.uml_source,
+            "@startuml\nskinparam classBorderColor #124578\nclass Record1\n@enduml\n"
+        );
+        assert!(output.lines.iter().any(|line| line == "class Record1"));
+        assert!(
+            output
+                .lines
+                .iter()
+                .any(|line| line == "skinparam classBorderColor #124578")
+        );
+    }
+
+    #[test]
+    fn inactive_theme_and_option_keep_following_source_origin() {
+        let source = "@startuml\n!if 0\n!theme minty\n!option handwritten true\n!endif\nclass Ledger\n@enduml";
+        let output = preprocess_full_for_parse(source, None);
+        assert_eq!(output.uml_source, "@startuml\nclass Ledger\n@enduml\n");
+        assert_eq!(output.lines[4], "class Ledger");
     }
 
     #[test]
@@ -3668,10 +3588,10 @@ now-undefined
     }
 
     #[test]
-    fn inline_comment() {
+    fn trailing_apostrophe_is_plain_text() {
         let input = "@startuml\nAlice -> Bob : hello ' with comment\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["Alice -> Bob : hello "]);
+        assert_eq!(lines, vec!["Alice -> Bob : hello ' with comment"]);
     }
 
     #[test]
@@ -3980,7 +3900,7 @@ $record(SaffronArchive)\n\
     }
 
     #[test]
-    fn source_identity_drops_only_raw_empty_lines_after_start() {
+    fn source_identity_preserves_raw_empty_lines_after_start() {
         let input = concat!(
             "@startuml\n",
             "\n",
@@ -4004,6 +3924,8 @@ $record(SaffronArchive)\n\
             output.uml_source,
             concat!(
                 "@startuml\n",
+                "\n",
+                "\n",
                 "skinparam shadowing true\n",
                 "start\n",
                 ":Fresh intake;\n",
@@ -4086,22 +4008,17 @@ $record(SaffronArchive)\n\
 
     #[test]
     fn dump_memory_no_vars() {
-        // With no defines, !dump_memory emits an empty dump comment.
+        // Java TContext.executeDumpMemory adds no source line.
         let input = "@startuml\n!dump_memory\nA -> B\n@enduml";
         let lines = pp(input);
-        assert_eq!(lines, vec!["' [dump] ", "A -> B"]);
+        assert_eq!(lines, vec!["A -> B"]);
     }
 
     #[test]
     fn dump_memory_with_vars() {
         let input = "@startuml\n!$foo = \"bar\"\n!$baz = \"qux\"\n!dump_memory\n@enduml";
         let lines = pp(input);
-        // Output must contain the dump comment. Variable order is sorted.
-        assert_eq!(lines.len(), 1);
-        let dump = &lines[0];
-        assert!(dump.starts_with("' [dump] "), "got: {dump}");
-        assert!(dump.contains("baz=qux"), "got: {dump}");
-        assert!(dump.contains("foo=bar"), "got: {dump}");
+        assert!(lines.is_empty());
     }
 
     #[test]
