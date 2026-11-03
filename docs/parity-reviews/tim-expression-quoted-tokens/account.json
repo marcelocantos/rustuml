@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-expression-quoted-tokens",
+  "rust_revision": "5f1035ace5c1fa38df91b2cf44c20e1e7edc79f0",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/expression/TokenType.java:eatOneToken",
+    "tim/Eater.java:eatAndGetQuotedString/addUpTo",
+    "tim/expression/TokenStack.java:getResult"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Quoted tokens of either Java quote form are literal values; concatenation and nested function/name expressions are evaluated as tokens, not substituted source text.",
+  "causal_divergence": "Lookup strips the first and last quote of compound expressions and other paths substitute inside single-quoted tokens. Parenthesis helpers use char offsets as byte offsets.",
+  "planned_change": "Share quote-aware byte-position delimiter scanning and expression evaluation for lookup/default/call arguments. Respect Java no-backslash-escape quoted tokenizer; backslashes are literal and opposite quotes can be embedded. Preserve nested effects through event sink.",
+  "perturbation_axes": [
+    "Single/double quoted names plus concatenation/nested getters",
+    "Embedded opposite quotes, literal backslashes, unicode and commas/parentheses in strings"
+  ],
+  "oracle_plan": [
+    "Exact raw Java Diagram.getSource() and shipped CLI SVG, preserved checker cases and >=2 fresh axes",
+    "Parser/CLI tests, main tiers, original907 and expanded949 isolated CLI; built-in with accepted registry cleanup"
+  ],
+  "scope": "preprocess modules and new maker evidence only; no checker attestation",
+  "pending": [
+    "T14.6.3 reader contract owner decision; current behavior unchanged",
+    "Independent checker required",
+    "Date error to ParseError handoff requires parse owner; CLI errors remain blocked until that interface is consumed"
+  ]
+}
