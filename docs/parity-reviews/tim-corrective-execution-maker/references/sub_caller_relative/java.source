@@ -1,0 +1,6 @@
+@startuml
+class Caller
+class Child
+class Again
+class After
+@enduml

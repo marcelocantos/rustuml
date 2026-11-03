@@ -1,0 +1,4 @@
+@startuml
+class "0081" as Local
+class "0092" as Global
+@enduml
