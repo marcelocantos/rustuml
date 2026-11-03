@@ -1,0 +1,28 @@
+{
+  "mixing_late": {
+    "java_valid": false,
+    "before": {
+      "ast_exit": 0,
+      "cli_exit": 0,
+      "ast_first_line": "Class("
+    },
+    "after": {
+      "ast_exit": 1,
+      "cli_exit": 1,
+      "ast_first_line": "parse error: line 3: Use 'allowmixing' before mixing classes and other UML elements"
+    }
+  },
+  "modifier_mandatory": {
+    "java_valid": false,
+    "before": {
+      "ast_exit": 0,
+      "cli_exit": 0,
+      "ast_first_line": "Deployment("
+    },
+    "after": {
+      "ast_exit": 0,
+      "cli_exit": 0,
+      "ast_first_line": "Deployment("
+    }
+  }
+}

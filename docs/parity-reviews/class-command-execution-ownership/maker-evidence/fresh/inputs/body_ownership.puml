@@ -1,0 +1,9 @@
+@startuml
+node "Observation Zone" {
+static class Gauge {
+component stored
+[stored]
+allowmixing trailing
+}
+}
+@enduml

@@ -1,0 +1,20 @@
+SVG structural differences:
+  [7] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "115.1934"), ("x", "22.3234"), ("y", "43.0589")]
+    actual:   [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "115.1934"), ("x", "22.4033"), ("y", "43.0589")]
+  [8] <ellipse> attr mismatch:
+    expected: [("cx", "37.3234"), ("cy", "59.0589"), ("fill", "#B4A7E5"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("cx", "37.4033"), ("cy", "59.0589"), ("fill", "#B4A7E5"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#181818;stroke-width:1;")]
+  [9] <path> attr mismatch:
+    expected: [("d", "M33.7511,55.324 L33.7511,53.1658 L41.1305,53.1658 L41.1305,55.324 L38.6652,55.324 L38.6652,63.4007 L41.1305,63.4007 L41.1305,65.5589 L33.7511,65.5589 L33.7511,63.4007 L36.2165,63.4007 L36.2165,55.324 Z "), ("fill", "#000000")]
+    actual:   [("d", "M33.831,55.324 L33.831,53.1658 L41.2104,53.1658 L41.2104,55.324 L38.7451,55.324 L38.7451,63.4007 L41.2104,63.4007 L41.2104,65.5589 L33.831,65.5589 L33.831,63.4007 L36.2964,63.4007 L36.2964,55.324 Z "), ("fill", "#000000")]
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "83.1934"), ("x", "51.3234"), ("y", "64.3499")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "83.1934"), ("x", "51.4033"), ("y", "64.3499")]
+  [11] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "23.3234"), ("x2", "136.5168"), ("y1", "75.0589"), ("y2", "75.0589")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "23.4033"), ("x2", "136.5967"), ("y1", "75.0589"), ("y2", "75.0589")]
+  [12] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "23.3234"), ("x2", "136.5168"), ("y1", "83.0589"), ("y2", "83.0589")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "23.4033"), ("x2", "136.5967"), ("y1", "83.0589"), ("y2", "83.0589")]
+

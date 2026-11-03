@@ -1,0 +1,18 @@
+SVG structural differences:
+  element count: expected 16, got 7
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "120px"), ("preserveAspectRatio", "none"), ("style", "width:209px;height:120px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 209 120"), ("width", "209px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "66px"), ("preserveAspectRatio", "none"), ("style", "width:169px;height:66px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 169 66"), ("width", "169px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "Observation Bay"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Observation Bay"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "99"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:1;"), ("width", "188"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("height", "46.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "149.4297"), ("x", "7"), ("y", "7")]
+  [5] <path> attr mismatch:
+    expected: [("d", "M135.0088,7 L135.0088,16.4883 L125.0088,26.4883 L7,26.4883"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M56.8099,7 L56.8099,12 L49.8099,19 L7,19"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "118.0088"), ("x", "10"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "109.4297"), ("x", "22"), ("y", "40.5352")]
+

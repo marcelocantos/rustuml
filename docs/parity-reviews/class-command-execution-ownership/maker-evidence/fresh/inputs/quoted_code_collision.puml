@@ -1,0 +1,7 @@
+@startuml
+node "Orchard" as Site {
+class "Air Probe"
+class Air_Probe
+"Air Probe" --> Air_Probe
+}
+@enduml

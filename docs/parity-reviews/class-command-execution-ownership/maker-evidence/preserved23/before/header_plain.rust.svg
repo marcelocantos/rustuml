@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="78px" preserveAspectRatio="none" style="width:117px;height:78px;background:#FFFFFF;" version="1.1" viewBox="0 0 117 78" width="117px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Polar Harbor-->
+<g class="cluster" data-qualified-name="Polar Harbor" data-source-line="4" id="ent0003">
+<polygon fill="none" points="16,63.4883,26,53.4883,16,53.4883,16,43.4883,6,53.4883,16,53.4883,16,63.4883" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="6" x2="16" y1="63.4883" y2="53.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="6" y1="63.4883" y2="63.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="6" x2="6" y1="63.4883" y2="53.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="91.3896" x="-33.6948" y="80.0235">Polar Harbor</text>
+</g>
+<!--entity journal-->
+<g class="entity" data-qualified-name="journal" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="87.7422" x="16" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="83.7422" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="81.7422" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="81.7422" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="47.7422" x="31" y="40.5352">journal</text>
+</g>
+</g></svg>
