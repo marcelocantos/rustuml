@@ -1,0 +1,1 @@
+parse error: line 3: unrecognized class command: package CoreCode <<IdentityPkg>> as "Core Display" $pkg <<TrailingPkg>> #Azure {

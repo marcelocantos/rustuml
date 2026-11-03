@@ -1,0 +1,5 @@
+@startuml
+!option handwritten true
+skinparam shadowing true
+class PoplarLedger
+@enduml

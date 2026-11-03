@@ -1,0 +1,8 @@
+@startuml
+node "Polar Harbor" {
+class Cache {
+component journal
+[Harbor display]
+}
+}
+@enduml

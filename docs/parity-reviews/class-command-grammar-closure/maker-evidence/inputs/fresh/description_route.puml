@@ -1,0 +1,7 @@
+@startuml
+component "Bus" as B
+INTERFACE "Wire API" as I
+queue Q
+B --> I
+I --> Q
+@enduml

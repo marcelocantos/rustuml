@@ -1,0 +1,842 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_complex.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cluster-post-normalization-dimensions/checker_cluster_tb_explicit_cloud_stereo_no_color_complex.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/cloud_filled_source_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_link_before_target_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_target_from_class_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_link_before_late_class_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_package_endpoint_control_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_parent_child_only_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_empty_source_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_filled_target_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_ordinary.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_lr_long_labels_reordered.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_reordered.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_minimal.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_lr_nested_reordered.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_remote_reuse_then_local.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nonempty_deep_descendant_keeps_ancestors.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/namespace_separator_reopened_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_source_double_link_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_target_single_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_nested_triple_target_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_source_double_link_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_target_double_link_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/namespace_separator_reopened_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/reopened_package_source_double_link_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-named-note-quark-identity/reopened_package_target_double_link_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left_text.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_plain.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/legend_body.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_cloud_class_top.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_cloud_interface_top.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_mixing_first.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/mix_early_tabs.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/mix_prefix.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/note_body.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-native-container-factory-precedence/title_body.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_nested_descendant_threshold.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-explicit-parent-ownership/review_10a16ee3_reopened_nested_empty_custom_separator.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-explicit-parent-ownership/review_10a16ee3_root_empty_phantom_reorder.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/action_alias_nested_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/cloud_alias_nested_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/database_alias_nested_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/frame_alias_nested_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/node_alias_nested_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/process_alias_nested_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/rectangle_alias_nested_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-modifier-order/followup_empty_package_tooltip_only_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-modifier-order/followup_topurl_reopen_nested_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_node_url_empty_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_no_url_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_url_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_database_nested_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/checker_hdr_node_fallback_vs_explicit_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_explicit_precedence_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_left_source_inversion_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_up_target_inversion_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_lr_source_two_dash.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_both_two_dash.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_target_one_dash.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_source_one_dot_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_target_two_dot_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/nested_class_both_two_dash_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_both_endpoints_two_dash_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_source_parenthesis_one_dash_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml",
+    "before": "process_error",
+    "after": "mismatch"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_source_one_dash_tb_control.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/styled_both_two_dash_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_only_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_root_leaf_package_empty_interleave.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_frame_lr_long_labels.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_frame_tb_root_link.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_nested_symbol_under_ordinary_package.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_node_lr_competing_frame.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_node_tb_polygon_overscan.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_lr_root_link.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_tb_competing_owners.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_three_root_envelope_owners.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_frame_lr_renamed_long_labels.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_frame_tb_root_link.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_nested_symbol_under_ordinary_package.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_node_lr_competing_frame.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_node_tb_polygon_overscan.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_rectangle_lr_root_link.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_rectangle_tb_competing_owners.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_three_root_envelope_owners.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_vs_missing_right_dotted_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_right_dotted_code_as_quoted_display_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_missing_left_dotted_vs_existing_right_dotted_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_parent_late_deeper_default_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_early_decl_tb.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_tb_nested.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/outer_together_package_inner_together_scope.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/outer_together_package_no_inner_control.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/package_children_lr_without_together_control.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/package_inner_together_without_outer_control.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/package_owned_together_children_lr.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_note_target_no_together.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_metadata_bracket_pressure.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_header.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_title.puml",
+    "before": "mismatch",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-element-command-case/followup3/followup3_component_mixed_leaf_control_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-element-command-case/followup3/followup3_deployment_mixed_database_queue_control_lr.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-element-command-case/followup3/followup3_mixed_component_with_upper_interface_and_queue_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-element-command-case/followup3/followup3_mixed_interface_quoted_as_tb.puml",
+    "before": "process_error",
+    "after": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/description-element-command-case/followup3/followup3_upper_interface_bare_lr.puml",
+    "before": "process_error",
+    "after": "mismatch"
+  }
+]

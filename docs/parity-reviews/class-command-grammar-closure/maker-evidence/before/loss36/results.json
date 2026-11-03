@@ -1,0 +1,290 @@
+{
+  "00-followup_nested_connected_boundary_short_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: BOUNDARY Gate\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "01-followup_root_connected_boundary_wide_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: BoUnDaRy \"Wide Customer Gateway\" as Gateway\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "02-followup_root_isolated_boundary_short_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: unrecognized class command: boundary Ui\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "03-action_alias_nested_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: unrecognized class command: action \"Review Action\" as ReviewAction <<ActionStereo>> #Wheat {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "04-process_alias_nested_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: unrecognized class command: process \"Review Process\" as ReviewProcess <<ProcessStereo>> #PaleGreen {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "05-followup_empty_package_tooltip_only_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: unrecognized class command: package TooltipOnly $doc <<Reference>> $stable [[{Tooltip <U+0026> More} shown-label]] #Wheat {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "06-followup_topurl_reopen_nested_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: package \"API Surface\" as systems.api $core <<Facade>> $stable [[guides/api{Guide docs} helper-label]] #AliceBlue {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "07-package_modifier_order_node_url_empty_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 1: Use 'allowmixing' before mixing classes and other UML elements\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "08-package_modifier_order_package_no_url_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 1: unrecognized class command: package \"Payroll\" as Payroll $alpha <<Domain>> $beta #BurlyWood {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "09-package_modifier_order_package_url_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: unrecognized class command: package \"Operations\" as Ops $core <<Domain>> $v1 [[https://example.com/ops]] #Wheat {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "10-checker_three_fallback_split_nested_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: package \"Split Fallback\" <<PreOne>> as SplitFallback $core <<PostTwo>> <<PostThree>> [[https://example.com/split{Split docs}]] #MistyRose {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "11-checker_two_explicit_pre_nested_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: database AuditHub <<ReplicaSet>> <<Readonly>> as \"Audit Hub\" {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "12-checker_two_fallback_post_root_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: package \"Root Two\" as RootTwo <<AlphaTeam>> <<BetaReview>> {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "13-checker_zero_fallback_root_tags_url_color_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: unrecognized class command: package \"Zero Root\" as ZeroRoot $ops $live [[https://example.com/zero{Zero docs}]] #AliceBlue {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "14-followup_folder_reverse_alias_trailing_owns_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: folder FolderCode <<IdentitySlot>> as \"Folder Display\" $ops <<TrailingSlot>> #HoneyDew {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "15-followup_package_reverse_alias_symbol_fallback_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: package CoreCode <<IdentityPkg>> as \"Core Display\" $pkg <<TrailingPkg>> #Azure {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "16-followup_queue_reverse_alias_nested_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: queue QueueCode <<IdentityQueue>> as \"Review Queue\" $flow <<QueuePost>> #AliceBlue {\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "17-direction_left_source_inversion_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 4: unrecognized class command: SaffronWest )-left- JuniperEast\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "18-direction_up_target_inversion_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: NimbusUpper -up-( HarborLower\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "19-flat_lr_source_two_dash": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 4: unrecognized class command: IndigoSource )-- WillowSink\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "20-flat_tb_both_two_dash": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: CobaltOrigin )--( MarigoldDestination\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "21-flat_tb_target_one_dash": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: QuartzSource -( VelvetSink\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "22-literal_dotted_source_one_dot_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 4: unrecognized class command: UmberDottedSource ). SilverDottedSink\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "23-literal_dotted_target_two_dot_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: PewterDottedSource ..( LilacDottedSink\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "24-nested_class_both_two_dash_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 6: unrecognized class command: ExternalSource )--( OrchidScope.NestedTarget\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "25-package_both_endpoints_two_dash_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 7: unrecognized class command: FjordPackage )--( LanternPackage\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "26-package_source_parenthesis_one_dash_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 5: unrecognized class command: CopperVault )- OuterPeer\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "27-package_target_parenthesis_one_dash_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 6: unrecognized class command: RemotePeer -( GarnetArchive\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "28-styled_both_two_dash_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: AzureStyled )-[dotted,#336699,thickness=3]-( CoralStyled\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "29-checker_followup3_allowmixing_before_upper_boundary_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: unrecognized class command: BOUNDARY Ui\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "30-followup_nested_frame_entity_allowmixing_boundary_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 5: unrecognized class command: boundary Gate\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "31-followup3_component_mixed_leaf_control_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: Use 'allowmixing' before mixing classes and other UML elements\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "32-followup3_deployment_mixed_database_queue_control_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 3: Use 'allowmixing' before mixing classes and other UML elements\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "33-followup3_mixed_component_with_upper_interface_and_queue_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: Use 'allowmixing' before mixing classes and other UML elements\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "34-followup3_mixed_interface_quoted_as_tb": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 1: Use 'allowmixing' before mixing classes and other UML elements\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  },
+  "35-followup3_upper_interface_bare_lr": {
+    "cli_exit": 1,
+    "cli_stderr": "parse error: line 2: Use 'allowmixing' before mixing classes and other UML elements\n",
+    "ast_exit": 1,
+    "rust_factory": "",
+    "comparison_exit": 1,
+    "comparison": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+  }
+}

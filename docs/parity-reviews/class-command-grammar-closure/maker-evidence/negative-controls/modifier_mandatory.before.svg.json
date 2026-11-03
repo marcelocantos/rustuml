@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/rustuml-cff2-before-rustuml",
+    "-tsvg",
+    "docs/parity-reviews/class-command-execution-ownership/maker-evidence/invalid-controls/modifier_mandatory.puml"
+  ],
+  "exit": 0
+}

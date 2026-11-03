@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+class "Umber Dotted Source 3571" as UmberDottedSource
+class "Silver Dotted Sink 8161" as SilverDottedSink
+UmberDottedSource ). SilverDottedSink
+@enduml

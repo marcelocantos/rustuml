@@ -1,0 +1,7 @@
+@startuml
+frame "Polar Harbor" {
++class Engine {
+[storedField]
+}
+}
+@enduml

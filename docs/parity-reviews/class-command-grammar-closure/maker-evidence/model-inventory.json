@@ -1,0 +1,1090 @@
+{
+  "loss36": {
+    "14-followup_folder_reverse_alias_trailing_owns_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 1
+    },
+    "08-package_modifier_order_package_no_url_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "10-checker_three_fallback_split_nested_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "04-process_alias_nested_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "23-literal_dotted_target_two_dot_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "18-direction_up_target_inversion_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "02-followup_root_isolated_boundary_short_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "31-followup3_component_mixed_leaf_control_lr.ast.txt": {
+      "factory": "Component",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "13-checker_zero_fallback_root_tags_url_color_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "30-followup_nested_frame_entity_allowmixing_boundary_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "20-flat_tb_both_two_dash.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "19-flat_lr_source_two_dash.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "22-literal_dotted_source_one_dot_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "35-followup3_upper_interface_bare_lr.ast.txt": {
+      "factory": "Component",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "00-followup_nested_connected_boundary_short_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "06-followup_topurl_reopen_nested_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 3,
+      "notes": 0,
+      "relationships": 1
+    },
+    "12-checker_two_fallback_post_root_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "07-package_modifier_order_node_url_empty_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "33-followup3_mixed_component_with_upper_interface_and_queue_tb.ast.txt": {
+      "factory": "Component",
+      "class_entities": 0,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "11-checker_two_explicit_pre_nested_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "24-nested_class_both_two_dash_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "32-followup3_deployment_mixed_database_queue_control_lr.ast.txt": {
+      "factory": "Component",
+      "class_entities": 0,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "01-followup_root_connected_boundary_wide_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "34-followup3_mixed_interface_quoted_as_tb.ast.txt": {
+      "factory": "Component",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "15-followup_package_reverse_alias_symbol_fallback_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 1
+    },
+    "27-package_target_parenthesis_one_dash_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "16-followup_queue_reverse_alias_nested_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 1
+    },
+    "03-action_alias_nested_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "29-checker_followup3_allowmixing_before_upper_boundary_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "21-flat_tb_target_one_dash.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "25-package_both_endpoints_two_dash_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 4,
+      "notes": 0,
+      "relationships": 1
+    },
+    "09-package_modifier_order_package_url_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "05-followup_empty_package_tooltip_only_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 0,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "17-direction_left_source_inversion_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "26-package_source_parenthesis_one_dash_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "28-styled_both_two_dash_tb.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    }
+  },
+  "checker23": {
+    "native_record.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "note_body.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 0
+    },
+    "tabs_lower.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "alias_forward.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "case_tabs.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "declaration_static_body.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "legend_body.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_cloud_class_top.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "mix_early_tabs.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "header_left_text.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "header_plain.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "mix_prefix.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "title_body.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "label_plain.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_cloud_interface_top.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "declaration_static.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "header_left.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_mixing_first.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "label_bracket.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "declaration_visible_body.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "alias_reverse.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "member_body.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "declaration_visible.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    }
+  },
+  "prior31": {
+    "header_right.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "actor_generalization.ast.txt": {
+      "factory": "UseCase",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_stereotype.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_record.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_struct.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "mixing_early.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "body_legend.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "quote_reverse.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_metaclass.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "modifier_private.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_dataclass.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "visibility_sizes.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "modifier_public.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_exception.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "note_quote.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 0
+    },
+    "visibility_stereotype.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "generic_reverse.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "body_title.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "native_protocol.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "modifier_protected.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "header_left.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "quote_forward.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "quoted_decorations.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "modifier_package.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "alias_reopen.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "mixing_prefix.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "nested_alias_note.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 2,
+      "notes": 1,
+      "relationships": 0
+    },
+    "modifier_static.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "header_center.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "quoted_code_collision.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "body_ownership.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    }
+  },
+  "theme33": {
+    "checker_repeated_reverse.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_line_continuation.ast.txt": {
+      "factory": "Sequence",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_inactive_function.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_nested_conditional.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_sprite_identity.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_preproc_complex_theme_override.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "checker_theme_custom_function.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_inline_comment.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_option_false.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_inactive_include.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_variables_after_theme.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_theme_loop.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_theme_procedure.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_theme_variable.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_option_inactive.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_theme_while.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_fixed_timestamp.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_procedure_after_theme.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_blank_lines.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_repeated_themes.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_subblock_state.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_variable_before_theme.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_outline_state.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_dump_memory.ast.txt": {
+      "factory": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_theme_function.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_clock_year.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_inner_comment.ast.txt": {
+      "factory": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_conditional_before_theme.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_inactive_theme_pair.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_option_true.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_comments_before_after.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "maker_inactive_theme.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "checker_include_theme.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    }
+  },
+  "fresh": {
+    "component_reverse.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "endpoint_21.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "quote_modifiers.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "component_stereo.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "empty_link.ast.txt": {
+      "factory": "Class",
+      "class_entities": 0,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "action_process.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "chrome_right.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "group_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 1
+    },
+    "description_route.ast.txt": {
+      "factory": "Component",
+      "class_entities": 0,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 0
+    },
+    "endpoint_20.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "floating_note.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "package_slots.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "notes_nested.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 2,
+      "notes": 1,
+      "relationships": 0
+    },
+    "cloud_nested.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "note_alias_duplicates.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 2,
+      "relationships": 2
+    },
+    "package_link.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "empty_nested.ast.txt": {
+      "factory": "Class",
+      "class_entities": 0,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 0
+    },
+    "endpoint_19.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 0,
+      "notes": 0,
+      "relationships": 1
+    },
+    "boundary_renamed.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "group_link.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 2,
+      "notes": 0,
+      "relationships": 1
+    },
+    "chrome_left.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "cloud_long.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "queue_alias.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "note_top_scope.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 0
+    },
+    "note_outside_right.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 0
+    },
+    "group_leaf.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 1
+    },
+    "chrome_center.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 0,
+      "relationships": 0
+    },
+    "note_namespace.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 1
+    },
+    "note_two_links.ast.txt": {
+      "factory": "Class",
+      "class_entities": 2,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 2
+    },
+    "notes_cross_scope.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 2,
+      "relationships": 0
+    },
+    "note_scope_lr.ast.txt": {
+      "factory": "Class",
+      "class_entities": 1,
+      "packages": 1,
+      "notes": 1,
+      "relationships": 1
+    }
+  }
+}

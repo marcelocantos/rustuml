@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="271px" preserveAspectRatio="none" style="width:84px;height:271px;background:#FFFFFF;" version="1.1" viewBox="0 0 84 271" width="84px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity B-->
+<g class="entity" data-qualified-name="B" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="63.8779" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="50.8779" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="48.8779" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="48.8779" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="23.8779" x="22" y="40.5352">Bus</text>
+</g>
+<!--entity I-->
+<g class="entity" data-qualified-name="I" data-source-line="2" id="ent0003">
+<ellipse cx="38.94" cy="142.49" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="55.4121" x="11.2339" y="173.0252">Wire API</text>
+</g>
+<!--entity Q-->
+<g class="entity" data-qualified-name="Q" data-source-line="3" id="ent0004">
+<path d="M28.501,231.4883 L49.3769,231.4883 C54.3769,231.4883 54.3769,244.7325 54.3769,244.7325 C54.3769,244.7325 54.3769,257.9766 49.3769,257.9766 L28.501,257.9766 C23.501,257.9766 23.501,244.7325 23.501,244.7325 C23.501,244.7325 23.501,231.4883 28.501,231.4883" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M49.3769,231.4883 C44.3769,231.4883 44.3769,244.7325 44.3769,244.7325 C44.3769,257.9766 49.3769,257.9766 49.3769,257.9766" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="10.876" x="28.501" y="250.0235">Q</text>
+</g>
+<!--link B to I-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M38.9389,53.82 C38.9389,78.64 38.9389,111.18 38.9389,127.62" fill="none" id="B-to-I" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="38.9389,133.62,42.9389,124.62,38.9389,128.62,34.9389,124.62,38.9389,133.62" style="stroke:#181818;stroke-width:1;"/>
+</g>
+<!--link I to Q-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk6">
+<path d="M38.9389,151.36 C38.9389,168.71 38.9389,204.4 38.9389,225.32" fill="none" id="I-to-Q" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="38.9389,231.32,42.9389,222.32,38.9389,226.32,34.9389,222.32,38.9389,231.32" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

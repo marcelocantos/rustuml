@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+class "Indigo Source 2719" as IndigoSource
+class "Willow Sink 6353" as WillowSink
+IndigoSource )-- WillowSink
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+package Envelope {
+  database AuditHub <<ReplicaSet>> <<Readonly>> as "Audit Hub" {
+    class ReplicaA
+    class ReplicaB
+  }
+}
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+node "Polar Harbor" {
+class "North Cache" as Cache
+}
+@enduml
