@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "3518e81fcfa3c88340f84cfdf6f25a13068ff3d7",
+  "mechanism": "class-simple-actor-image",
+  "java_locations": [
+    "skin/ActorStickMan#getPreferredWidth,getPreferredHeight,drawU",
+    "decoration/symbol/USymbolSimpleAbstract#asSmall"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "Mixed actors retain the selected description image and stack drawing, label and stereotype using USymbolSimpleAbstract.",
+  "causal_divergence": "Accepted actor leaves still use class header/compartment rendering.",
+  "planned_change": "Implement the default stickman image from its source dimensions and primitives in the existing description path; measure its stroke-dependent block and painted primitive minimum.",
+  "perturbation_axes": [
+    "multiline/stereotype and renamed display",
+    "nested/root ownership and edge/declaration direction"
+  ]
+}

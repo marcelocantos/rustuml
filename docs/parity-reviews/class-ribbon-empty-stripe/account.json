@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "3518e81fcfa3c88340f84cfdf6f25a13068ff3d7",
+  "mechanism": "class-ribbon-empty-stripe",
+  "java_locations": [
+    "klimt/creole/legacy/StripeSimple#getAtoms"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "An empty text stripe contains the Java fallback space atom, retaining its measured width and text emission.",
+  "causal_divergence": "The ribbon currently measures and emits empty lines as zero-length strings; Java StripeSimple inserts one space.",
+  "planned_change": "Use the fallback space only for empty ribbon display lines, consistently in measure and paint.",
+  "perturbation_axes": [
+    "left/right/center ribbon alignment",
+    "empty middle lines and changed font sizes"
+  ]
+}

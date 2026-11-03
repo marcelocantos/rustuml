@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "3518e81fcfa3c88340f84cfdf6f25a13068ff3d7",
+  "mechanism": "class-empty-symbol-painted-frontier",
+  "java_locations": [
+    "svek/SvekResult#calculateDimension",
+    "svek/image/EntityImageDescription#drawU",
+    "decoration/symbol/USymbolNode#drawNode",
+    "decoration/symbol/USymbolCloud#drawCloud"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "A symbol represented as an empty group leaf has the same painted frontier as that USymbol, rather than the raw layout box.",
+  "causal_divergence": "Final origin traversal applies symbol frontiers only to nonempty clusters. Empty group nodes beyond the ordinary entity slots default to zero minima and raw maxima; node overscan and UEmpty, and cloud paths are omitted.",
+  "planned_change": "Resolve empty group layout slots through package render roles and reuse the same symbol frontier functions for final origin, chrome and canvas. Preserve layout serialization and dimensions.",
+  "perturbation_axes": [
+    "empty node/cloud/rectangle/database symbols",
+    "linked/unlinked groups and label lengths"
+  ]
+}
