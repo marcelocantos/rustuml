@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-page-textblock-composition",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "core/DiagramChromeFactory12026.java#create,addTitle,addCaption,addHeaderAndFooter",
+    "svek/DecorateEntityImage.java#drawU,calculateDimension",
+    "core/TextBlockExporter12026.java#calculateFinalDimension",
+    "sequencediagram/SequenceDiagram.java#getDefaultMargins",
+    "sequencediagram/graphic/DrawableSet.java#asTextBlock,drawU22,clipAndTranslate2",
+    "klimt/drawing/svg/DriverRectangleSvg.java#draw"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::meta_shift,group_band_get_width,page title/header/caption/footer placement",
+    "crates/rustuml-render/src/sequence.rs::activation_bars and draw_activation_bar"
+  ],
+  "invariant": "Page chrome wraps the complete DrawableSet body TextBlock. Each wrapper width is max(child width, decoration width), centers the child by half the difference, and is then wrapped by the next decoration; exporter margins apply last. Page clipping trims geometry, not the component identity/group or accepted lifecycle: off-page activation components retain empty title groups in both drawing passes.",
+  "causal_divergence": "Rust centers page decorations on a participant-box midpoint or an obsolete SequenceDiagramArea formula before the complete body envelope is known. Wide titles therefore change constraints and can paint at negative x. Page-one lifecycle truncation omits later activation component groups even though Java builds all components then clips their paint.",
+  "planned_change": "Resolve body extent first and apply the actual nested text-block width/centering hierarchy before paint, with default legacy margins left0/right5. Keep page-body constraints independent of decoration size. Build accepted activation segments across pages and clip their rectangle paint to the selected page while retaining component group wrappers.",
+  "perturbation_axes": [
+    "wide versus narrow/multiline title, caption and header/footer combinations",
+    "group and note envelope versus participant-only body; label/declaration changes",
+    "newpage with activations opened/closed before or after boundary at multiple recursion depths"
+  ],
+  "acceptance": "Maker candidate only; preserve all references and require independent checking. No shared text/SVG APIs changed."
+}
