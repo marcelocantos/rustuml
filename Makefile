@@ -23,7 +23,7 @@ test:
 # Full corpus required. No filters or baseline writes are permitted in this gate.
 # --no-fail-fast runs the remaining binaries when a parity/evidence suite fails.
 test-parity:
-	@test -z "$$GOLDEN_FILTER" && test -z "$$HARNESS_WRITE_BASELINES" || \
+	@test -z "$${GOLDEN_FILTER+x}" && test -z "$${HARNESS_WRITE_BASELINES+x}" || \
 		{ echo "test-parity requires GOLDEN_FILTER and HARNESS_WRITE_BASELINES unset"; exit 1; }
 	@cargo test --workspace --release --no-fail-fast \
 		--test golden_no_oracle --test golden_pairs --test harness_guards \

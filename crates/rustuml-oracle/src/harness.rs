@@ -184,6 +184,31 @@ mod tests {
         };
         let unit = run("test");
         let gate = run("gate");
+        // The ratchet enables writes on variable presence, even an empty value.
+        // Reject both empty and nonempty overrides before invoking Cargo.
+        for variable in ["GOLDEN_FILTER", "HARNESS_WRITE_BASELINES"] {
+            for value in ["", "1"] {
+                let guarded = Command::new("make")
+                    .arg("test-parity")
+                    .current_dir(&repo)
+                    .env("PATH", &path)
+                    .env_remove("MAKEFLAGS")
+                    .env_remove("MFLAGS")
+                    .env_remove("GOLDEN_FILTER")
+                    .env_remove("HARNESS_WRITE_BASELINES")
+                    .env(variable, value)
+                    .output()
+                    .expect("run parity gate with forbidden override");
+                assert!(
+                    !guarded.status.success(),
+                    "gate accepted {variable}={value:?}"
+                );
+                assert!(
+                    !String::from_utf8_lossy(&guarded.stdout).contains("mock cargo"),
+                    "gate ran Cargo with {variable}={value:?}"
+                );
+            }
+        }
         std::fs::remove_dir_all(&root).unwrap();
         let unit_stdout = String::from_utf8_lossy(&unit.stdout);
         assert!(!unit.status.success(), "make test masked a failing command");
