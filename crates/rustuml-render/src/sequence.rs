@@ -1764,7 +1764,7 @@ fn over_several_note_geometry(
     page_shift: f64,
 ) -> OverSeveralNoteGeometry {
     let participant_right = participants[hi].box_x
-        + participants[hi].box_width
+        + participants[hi].preferred_width
         + if teoz { 0.0 } else { PARTICIPANT_OUT_MARGIN };
     let participant_area_w = participant_right - participants[lo].box_x;
     let area_width = component_pref_w.max(participant_area_w);
@@ -2855,6 +2855,10 @@ struct ParticipantLayout {
     stereotype_width: f64,
     /// Box width (used for spacing and centering — meaning varies by kind)
     box_width: f64,
+    /// ComponentRoseParticipant preferred width, including deltaShadow. Kept
+    /// separate from the visible rectangle; ParticipantBox and NoteBox consume
+    /// this same dimension (account 11c4e635).
+    preferred_width: f64,
     /// Box height (varies by participant kind)
     box_height: f64,
     /// Left x of participant box/shape
@@ -6990,6 +6994,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 text_y_offset: participant_text_y_offset,
                 stereotype_width: st_w,
                 box_width: bw,
+                preferred_width: bw
+                    + if sequence_shadowing {
+                        SHADOW_LIVING_WIDTH_EXTRA
+                    } else {
+                        0.0
+                    },
                 box_height: bh,
                 box_x: 0.0,
                 center_x: 0.0,
@@ -7389,6 +7399,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     msg_count += 1;
                 }
                 Event::Delay(t) => {
+                    // ComponentRoseDelayText#getPreferredHeight = padded
+                    // TextBlock height + 2*marginY(4) + 20. Display#getCreole
+                    // supplies the skin padding on both vertical sides.
+                    y += 2.0 * global_padding;
                     if msg_count == 0 {
                         y += first_msg_offset(has_text, MSG_TEXT_HEIGHT);
                     } else {
@@ -8102,7 +8116,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         let needed = pref_w
                             - participants[lo].box_width / 2.0
-                            - participants[hi].box_width / 2.0;
+                            - participants[hi].preferred_width / 2.0;
                         if hi - lo == 1 {
                             pair_max_label_width[lo] = pair_max_label_width[lo].max(needed);
                         } else {
@@ -8247,14 +8261,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     //
     // We also need to consider min_gap_boxes for each pair (from Phase 3),
     // so compute that ahead of the constraint pass.
-    let shadow_preferred_width_extra = if sequence_shadowing {
-        SHADOW_LIVING_WIDTH_EXTRA
-    } else {
-        0.0
-    };
     let participant_layout_halves: Vec<f64> = participants
         .iter()
-        .map(|p| (p.box_width + shadow_preferred_width_extra) / 2.0)
+        .map(|p| p.preferred_width / 2.0)
         .collect();
     let participant_box_members: Vec<Option<usize>> = participants
         .iter()
@@ -8806,7 +8815,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         NotePosition::Over => {
                             if note.participants.is_empty() || note.participants.len() > 1 {
                                 width = width.max(
-                                    participants[hi].box_x + participants[hi].box_width
+                                    participants[hi].box_x + participants[hi].preferred_width
                                         - participants[lo].box_x,
                                 );
                             }
@@ -8847,7 +8856,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 // NoteBox#getPreferredWidth: p2.getMaxX - p1.getMinX.
                                 width = width.max(
                                     participants[hi].box_x
-                                        + participants[hi].box_width
+                                        + participants[hi].preferred_width
                                         + PARTICIPANT_OUT_MARGIN
                                         - participants[lo].box_x,
                                 );
@@ -8973,9 +8982,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     ))
                             {
                                 let component_pref_w = if note.shape == NoteShape::Note {
-                                    max_text_w
-                                        + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                        + 2.0 * note_global_padding
+                                    folded_note_component_width(
+                                        max_text_w,
+                                        note_global_padding,
+                                        note_shadow_delta,
+                                    )
                                 } else {
                                     note_content_width_raw_padded(
                                         max_text_w,
@@ -9043,10 +9054,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     min: participant.box_x - PARTICIPANT_OUT_MARGIN,
                     // ComponentRoseParticipant#getPreferredWidth includes shadow;
                     // ParticipantBox#getMaxX consumes it, not the painted box width.
-                    max: participant.box_x
-                        + participant.box_width
-                        + shadow_preferred_width_extra
-                        + PARTICIPANT_OUT_MARGIN,
+                    max: participant.box_x + participant.preferred_width + PARTICIPANT_OUT_MARGIN,
                     kind: SequenceGroupMemberKind::Ordinary,
                 }
             };
@@ -9888,7 +9896,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     if note.participants.is_empty() || note.participants.len() > 1 {
                         width = width.max(
                             participants[hi].box_x
-                                + participants[hi].box_width
+                                + participants[hi].preferred_width
                                 + PARTICIPANT_OUT_MARGIN
                                 - participants[lo].box_x,
                         );
@@ -10020,7 +10028,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 NotePosition::Over => {
                     if note.participants.is_empty() || note.participants.len() > 1 {
                         width = width.max(
-                            participants[hi].box_x + participants[hi].box_width
+                            participants[hi].box_x + participants[hi].preferred_width
                                 - participants[lo].box_x,
                         );
                     }
@@ -11290,6 +11298,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .filter_map(|(idx, ev)| match ev {
             Event::Delay(t) => {
                 let band_h = DELAY_BAND_HEIGHT
+                    + 2.0 * global_padding
                     + if t.is_some() {
                         plantuml_metrics::text_height(DELAY_LABEL_FONT_SIZE as f64)
                     } else {
@@ -13089,7 +13098,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // below the band top (= msg_y - band_height).
                 let label_w =
                     text_width_with_family(t, DELAY_LABEL_FONT_SIZE as f64, &message_font_family);
+                // GraphicalDelayText uses the same padded component height
+                // as flow and the lifeline cut; SheetBlock1 paints at paddingY.
                 let label_y = msg_y
+                    - global_padding
                     - DELAY_BAND_HEIGHT
                     - text_height_with_family(DELAY_LABEL_FONT_SIZE as f64, &message_font_family)
                     + DELAY_BAND_TOP_PAD
@@ -13363,9 +13375,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     ))
                             {
                                 let component_pref_w = if note.shape == NoteShape::Note {
-                                    max_text_w
-                                        + ROSE_NOTE_COMPONENT_PREF_EXTRA
-                                        + 2.0 * note_global_padding
+                                    folded_note_component_width(
+                                        max_text_w,
+                                        note_global_padding,
+                                        note_shadow_delta,
+                                    )
                                 } else {
                                     note_content_width_raw_padded(
                                         max_text_w,
@@ -13678,7 +13692,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // areaWidth = p2.getMaxX - p1.getMinX. ParticipantBox.getMinX =
                     // box_x; getMaxX = box_x + box_width + outMargin.
                     let area_w = participants[hi].box_x
-                        + participants[hi].box_width
+                        + participants[hi].preferred_width
                         + if diagram.teoz {
                             0.0
                         } else {
@@ -13692,7 +13706,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         note_shadow_delta,
                     );
                     let diff_x = (area_w - pref_w).max(0.0);
-                    Some(note_left + NOTE_TEXT_X_PAD + diff_x / 2.0)
+                    // ComponentRoseNote centers the padded TextBlock in its
+                    // allocated area; SheetBlock1#drawU then adds skin padding.
+                    Some(note_left + NOTE_TEXT_X_PAD + diff_x / 2.0 + note_global_padding)
                 } else {
                     None
                 };
@@ -13928,7 +13944,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &mut svg.buf,
                         label,
                         tab_right + 15.0 + global_padding,
-                        frame_top + 12.634765625 + global_padding,
+                        // ComponentRoseGroupingHeader: comment y=marginY(1)+1,
+                        // then the 11pt text ascent and SheetBlock padding.
+                        frame_top
+                            + 2.0
+                            + ascent_with_family(11.0, &group_header_font_family)
+                            + global_padding,
                         &group_header_font_family,
                     );
                 }
@@ -13967,7 +13988,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         &mut svg.buf,
                                         label,
                                         frame_left + 5.0 + global_padding,
-                                        ely + 12.63475 + global_padding,
+                                        // GroupingElse: text y=marginY(1)+2; divider
+                                        // at y=1, hence relative text offset 2+ascent.
+                                        ely + 2.0
+                                            + ascent_with_family(11.0, &group_header_font_family)
+                                            + global_padding,
                                         &group_header_font_family,
                                     );
                                 }
@@ -14018,7 +14043,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &mut svg.buf,
                         label,
                         frame_left + 5.0 + global_padding,
-                        msg_y + 10.63475 + global_padding,
+                        // Legacy GroupingElse: both text origin and line
+                        // use marginY=1; baseline relative to line is ascent.
+                        msg_y
+                            + ascent_with_family(11.0, &group_header_font_family)
+                            + global_padding,
                         &group_header_font_family,
                     );
                 }
