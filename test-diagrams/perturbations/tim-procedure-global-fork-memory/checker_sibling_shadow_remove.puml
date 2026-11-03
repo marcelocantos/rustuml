@@ -1,0 +1,14 @@
+@startuml
+!$canopy = "root"
+!procedure $sibling()
+class "sibling $canopy $private" as Sibling
+!endprocedure
+!procedure $branch($canopy)
+!local $private = "leaf"
+$sibling()
+!undef $canopy
+class "branch $canopy $private" as Branch
+!endprocedure
+$branch("parameter")
+class "after $canopy $private" as After
+@enduml

@@ -1,0 +1,497 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "group": "preserved33",
+    "java_exit": 200,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_sprite_identity.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_custom_function.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_while.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_conditional_before_theme.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variable_before_theme.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+    "group": "preserved33",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control.puml",
+    "group": "maker22",
+    "java_exit": 200,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "source_equal": false
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme.puml",
+    "group": "maker22",
+    "java_exit": 200,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "source_equal": false
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero.puml",
+    "group": "maker22",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "source_equal": true
+  }
+]

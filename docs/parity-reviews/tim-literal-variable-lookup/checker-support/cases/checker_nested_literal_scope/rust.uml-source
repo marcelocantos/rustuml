@@ -1,0 +1,4 @@
+@startuml
+class "root / 0" as Inner
+class "branch / 1" as Outer
+@enduml

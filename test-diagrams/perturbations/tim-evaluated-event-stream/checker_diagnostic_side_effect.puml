@@ -1,0 +1,10 @@
+@startuml
+!$calls = 0
+!function $tick()
+!$calls = $calls + 1
+!return "diagnostic"
+!endfunction
+!log $tick()
+!theme cerulean
+class "Calls $calls" as LogTree
+@enduml

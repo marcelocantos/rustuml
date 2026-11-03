@@ -1,0 +1,6 @@
+@startuml
+!theme cerulean
+!$older = %date("yyyy-MM-dd", -86400)
+!$epoch = %date("yyyy", 0)
+class "$older / $epoch" as OnyxClock
+@enduml

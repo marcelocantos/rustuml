@@ -1,0 +1,3 @@
+@startuml
+class "1901-12-14 07:45:52 Sat" as Clockminimumseconds
+@enduml

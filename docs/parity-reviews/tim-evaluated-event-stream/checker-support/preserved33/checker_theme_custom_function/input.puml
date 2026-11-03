@@ -1,0 +1,10 @@
+@startuml
+!theme cerulean
+!function $border()
+!return $PRIMARY
+!endfunction
+skinparam classBorderColor $border()
+!$PRIMARY = "#123456"
+skinparam classBackgroundColor $border()
+class MagnoliaLedger
+@enduml

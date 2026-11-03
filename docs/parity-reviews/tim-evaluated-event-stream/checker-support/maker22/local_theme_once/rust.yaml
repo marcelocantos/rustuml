@@ -1,0 +1,43 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __theme
+      value: saffron
+    - key: classBorderColor
+      value: '#531247'
+    - key: __svgIdSeed
+      value: '60c186v3w5v5'
+    style_program:
+      declarations:
+      - selector:
+        - element
+        - class
+        property: linecolor
+        value: '#531247'
+        source_line: 6
+        epoch: 0
+        priority: 0
+        origin:
+          kind: theme_skin_param
+          theme: saffron
+    source: |
+      @startuml
+      skinparam classBorderColor #531247
+      class "Count 2" as SpinelRecord
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity SpinelRecord
+  entities:
+  - id: SpinelRecord
+    label: Count 2
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

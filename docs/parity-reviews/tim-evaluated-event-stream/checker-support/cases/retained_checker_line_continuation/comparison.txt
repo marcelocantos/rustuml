@@ -1,0 +1,36 @@
+SVG structural differences:
+  element count: expected 30, got 54
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "164.5833px"), ("preserveAspectRatio", "none"), ("style", "width:312px;height:164px;"), ("version", "1.1"), ("viewBox", "0 0 312 164"), ("width", "312.5px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "189.5833px"), ("preserveAspectRatio", "none"), ("style", "width:585px;height:189px;"), ("version", "1.1"), ("viewBox", "0 0 585 189"), ("width", "585.4167px"), ("zoomAndPan", "magnify")]
+  [8] <rect> attr mismatch:
+    expected: [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "61.025"), ("width", "8.3333"), ("x", "80.307"), ("y", "51.65")]
+    actual:   [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "86.025"), ("width", "8.3333"), ("x", "80.307"), ("y", "51.65")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;"), ("x1", "84.375"), ("x2", "84.375"), ("y1", "51.65"), ("y2", "112.675")]
+    actual:   [("style", "stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;"), ("x1", "84.375"), ("x2", "84.375"), ("y1", "51.65"), ("y2", "137.675")]
+  [12] <rect> attr mismatch:
+    expected: [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "61.025"), ("width", "8.3333"), ("x", "225.7111"), ("y", "51.65")]
+    actual:   [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "86.025"), ("width", "8.3333"), ("x", "225.7111"), ("y", "51.65")]
+  [13] <line> attr mismatch:
+    expected: [("style", "stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;"), ("x1", "229.364"), ("x2", "229.364"), ("y1", "51.65"), ("y2", "112.675")]
+    actual:   [("style", "stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;"), ("x1", "229.364"), ("x2", "229.364"), ("y1", "51.65"), ("y2", "137.675")]
+  [14] <g> attr mismatch:
+    expected: [("class", "participant participant-head"), ("data-entity-uid", "part1"), ("data-qualified-name", "Alice"), ("data-source-line", "2"), ("id", "part1-head")]
+    actual:   [("class", "participant-lifeline"), ("data-entity-uid", "part3"), ("data-qualified-name", "sec"), ("data-source-line", "3"), ("id", "part3-lifeline")]
+  [15] tag mismatch: expected <rect>, got <g>
+  [16] tag mismatch: expected <text>, got <rect>
+  [17] tag mismatch: expected <g>, got <line>
+  [18] tag mismatch: expected <rect>, got <g>
+  [19] tag mismatch: expected <text>, got <g>
+  [20] tag mismatch: expected <g>, got <rect>
+  [21] tag mismatch: expected <rect>, got <line>
+  [22] tag mismatch: expected <text>, got <g>
+  [23] tag mismatch: expected <g>, got <rect>
+  [24] tag mismatch: expected <rect>, got <text>
+  [25] tag mismatch: expected <text>, got <g>
+  [26] tag mismatch: expected <g>, got <rect>
+  [27] tag mismatch: expected <polygon>, got <text>
+  [28] tag mismatch: expected <line>, got <g>
+  [29] tag mismatch: expected <text>, got <rect>
+

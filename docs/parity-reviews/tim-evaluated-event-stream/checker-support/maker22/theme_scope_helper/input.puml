@@ -1,0 +1,7 @@
+@startuml
+!procedure $theme_setup()
+!theme minty
+!endprocedure
+$theme_setup()
+class OpalRegistry
+@enduml

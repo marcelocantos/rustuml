@@ -1,0 +1,192 @@
+[
+  {
+    "source": "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "input_sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+    "input_repr": "b'@startuml\\n\\nskinparam shadowing true\\nstart\\n:Action A;\\nif (cond?) then (yes)\\n  :Yes;\\nelse (no)\\n  :No;\\nendif\\nwhile (loop?) is (yes)\\n  :Work;\\nendwhile\\nstop\\n@enduml\\n'",
+    "decoded_repr": "b'@startuml\\nskinparam shadowing true\\nstart\\n:Action A;\\nif (cond?) then (yes)\\n  :Yes;\\nelse (no)\\n  :No;\\nendif\\nwhile (loop?) is (yes)\\n  :Work;\\nendwhile\\nstop\\n@enduml'",
+    "outputs": {
+      "pipe": {
+        "sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "decoded-pipe": {
+        "sha256": "45744f54b447986be3a9e2d2fd2324b45f26a84040a941603318afb0ec77f9d9",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "get": {
+        "sha256": "45744f54b447986be3a9e2d2fd2324b45f26a84040a941603318afb0ec77f9d9",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "post": {
+        "sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "file": {
+        "sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "input_sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+    "input_repr": "b'@startuml\\n\\nskinparam shadowing true\\nstart\\n:Action A;\\nif (condition?) then (yes)\\n  :Yes;\\nelse (no)\\n  :No;\\nendif\\n:Action B;\\nstop\\n@enduml\\n'",
+    "decoded_repr": "b'@startuml\\nskinparam shadowing true\\nstart\\n:Action A;\\nif (condition?) then (yes)\\n  :Yes;\\nelse (no)\\n  :No;\\nendif\\n:Action B;\\nstop\\n@enduml'",
+    "outputs": {
+      "pipe": {
+        "sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "decoded-pipe": {
+        "sha256": "49a50170af9eb3d128fde5fdc560de3a72b2b149864e38fb68439f72a2201600",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "get": {
+        "sha256": "49a50170af9eb3d128fde5fdc560de3a72b2b149864e38fb68439f72a2201600",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "post": {
+        "sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "file": {
+        "sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+    "input_sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+    "input_repr": "b'@startuml\\n\\n\\n\\nclass Foo\\n\\n\\n\\nclass Bar\\n\\n\\n\\nFoo --> Bar\\n\\n\\n\\n@enduml\\n'",
+    "decoded_repr": "b'@startuml\\nclass Foo\\n\\n\\n\\nclass Bar\\n\\n\\n\\nFoo --> Bar\\n@enduml'",
+    "outputs": {
+      "pipe": {
+        "sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "decoded-pipe": {
+        "sha256": "0dac6045c791f2f60df45b80c936a5aec35961b220743a51afc9184bacbe0dd4",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "get": {
+        "sha256": "0dac6045c791f2f60df45b80c936a5aec35961b220743a51afc9184bacbe0dd4",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "post": {
+        "sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "file": {
+        "sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.puml",
+    "input_sha256": "9adc20d546482ff05c601317b8e123073e4e0482fd00c5efe9110b7517a52307",
+    "input_repr": "b'@startuml\\n\\n\\n\\n\\nclass ReaderCedar\\n\\n\\nclass ReaderLarch\\nReaderCedar --> ReaderLarch\\n@enduml'",
+    "decoded_repr": "b'@startuml\\nclass ReaderCedar\\n\\n\\nclass ReaderLarch\\nReaderCedar --> ReaderLarch\\n@enduml'",
+    "outputs": {
+      "pipe": {
+        "sha256": "fa1b66dde8f08aa12c392f86d4963cbfc515029191edacb971575b5d0b798c86",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "decoded-pipe": {
+        "sha256": "d2652d31dac6fef0e21194797c207177e08722792395aa7f8070f2ce306bd835",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "get": {
+        "sha256": "d2652d31dac6fef0e21194797c207177e08722792395aa7f8070f2ce306bd835",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "post": {
+        "sha256": "fa1b66dde8f08aa12c392f86d4963cbfc515029191edacb971575b5d0b798c86",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "file": {
+        "sha256": "fa1b66dde8f08aa12c392f86d4963cbfc515029191edacb971575b5d0b798c86",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      }
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.puml",
+    "input_sha256": "70448ac72c5e38c448b035ce4c335f5231c156f96858c8e5b720b2bfaa57115d",
+    "input_repr": "b'@startuml\\n\\n\\n\\n\\nclass FreshAlpha881\\n\\n\\nclass FreshBeta883\\nFreshAlpha881 --> FreshBeta883\\n@enduml'",
+    "decoded_repr": "b'@startuml\\nclass FreshAlpha881\\n\\n\\nclass FreshBeta883\\nFreshAlpha881 --> FreshBeta883\\n@enduml'",
+    "outputs": {
+      "pipe": {
+        "sha256": "94af2688d932fe6d9ba71f6c537792b976f52d8b7fd4f3e5d2583369b0d1be3d",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "decoded-pipe": {
+        "sha256": "3e0b4bf70670c79079e1a8826c3be933618f915dbf0eecb18bf661414526c4cb",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "get": {
+        "sha256": "3e0b4bf70670c79079e1a8826c3be933618f915dbf0eecb18bf661414526c4cb",
+        "xml_equals_frozen": false,
+        "xml_equals_pipe": false,
+        "xml_equals_get": true
+      },
+      "post": {
+        "sha256": "94af2688d932fe6d9ba71f6c537792b976f52d8b7fd4f3e5d2583369b0d1be3d",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      },
+      "file": {
+        "sha256": "94af2688d932fe6d9ba71f6c537792b976f52d8b7fd4f3e5d2583369b0d1be3d",
+        "xml_equals_frozen": true,
+        "xml_equals_pipe": true,
+        "xml_equals_get": false
+      }
+    }
+  }
+]

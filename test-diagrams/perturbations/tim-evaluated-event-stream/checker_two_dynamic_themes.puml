@@ -1,0 +1,10 @@
+@startuml
+!$first = "minty"
+!$second = "cerulean"
+!theme $first
+!if 0
+!theme united
+!endif
+!theme $second
+class Rowan
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+class "QQ" as InvalidClock
+@enduml

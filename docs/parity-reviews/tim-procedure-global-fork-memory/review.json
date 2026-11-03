@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-procedure-global-fork-memory",
+  "reviewer": {
+    "task_id": "t3/adversarial-reader-contract-review:t3-d2205b7f",
+    "model": "gpt-6-astra / high / inherited Codex (intentional); independent checker; no children"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test pipe_mode --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/check.py isolated",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/replay_maker.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-checker-d2205b7f/target/release/rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-checker-d2205b7f/probe compare SOURCE.svg RUST.svg",
+    "uv run --no-project python docs/parity-reviews/tim-evaluated-event-stream/checker-support/reader_contract.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/provenance.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-explicit-date-instant/checker-support/timezones.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-explicit-date-instant/checker-support/error_controls.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/prepared_builtin.py"
+  ],
+  "findings": [
+    "REJECTED: checker_default_capture is valid Java and fails both exact source and shipped SVG. Java captures first at declaration; Rust emits literal $seed after the global changes to second.",
+    "Provenance: Java Eater.eatDeclareFunction evaluates TokenStack defaults to TValue at declaration, and TFunctionImpl.getNewMemory binds stored values. Rust parse_func_params stores text and call_function clones param.default. This defect predates the candidate; it is a dependency of complete parameter-memory parity, not an attributed regression.",
+    "Five fresh shipped CLI controls pass: sibling local privacy, override removal, global precedence over automatic locals, explicit-local/parameter protection, early-return conditional restoration and foreach state. The three maker procedure controls also freshly reproduce.",
+    "No fixture logic or unexplained new constants found in the memory patch. Core sibling-frame improvement has positive bounded evidence; full mechanism cannot be accepted while the relevant default-binding counterexample persists. These tests run on the combined revision, not an independently built memory-only transplant.",
+    "The maker account uses claimed_invariant/planned_model_change instead of required invariant/planned_change; unchanged schema guard rejects it. Account editing is outside checker ownership."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_sibling_shadow_remove.svg",
+      "axes": [
+        "nested sibling frame and renamed parameter",
+        "undef override and fresh-local leakage"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.svg",
+      "axes": [
+        "new global eclipses auto-local",
+        "nested call and removal reveals auto-local"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.svg",
+      "axes": [
+        "parameter versus explicit global mutation",
+        "local leakage and renamed output"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_return_branch_isolation.svg",
+      "axes": [
+        "early return inside nested conditional",
+        "caller control state and two arguments"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_foreach_sibling.svg",
+      "axes": [
+        "foreach caller state",
+        "global side effect and local privacy"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+      "golden": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.svg",
+      "axes": [
+        "default captured at definition versus call",
+        "renamed global mutation and parameter binding"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": false
+    }
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "9102a45ed27188abf9f0db7784daed490a48ec1c",
+  "parent_commit": "bb2bdb67d5efc780de2c04f788dbbe8d53b54196",
+  "followup_commits": [
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "maker_evidence_commit": "d2d571de0ca551cfd93223d577539eff7c366afe",
+  "combined_dependencies": [
+    "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+    "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+    "1ee250f0fafdc62fa9f348b64d12fe4363790d6c",
+    "e2503bd4c282841abee982fd6063658975f25f69",
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "New canonical SVGs use raw Java CLI -pipe -tsvg; historical frozen main corpus retains its GET-transcoder contract. No reference policy choice is authorized by this review.",
+  "evidence": "docs/parity-reviews/tim-evaluated-event-stream/checker-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; main tiers, parser assertion, held-outs and guards remain red"
+}

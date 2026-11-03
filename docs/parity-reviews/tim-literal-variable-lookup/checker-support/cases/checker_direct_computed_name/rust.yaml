@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "0 / " as Computed
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Computed
+  entities:
+  - id: Computed
+    label: '0 / '
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
