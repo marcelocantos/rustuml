@@ -1,0 +1,195 @@
+{
+  "cohort955": {
+    "before": {
+      "total": 955,
+      "matches": 431,
+      "invalid": 10,
+      "nonzero": 4,
+      "panics": 2,
+      "valid_errors": 2
+    },
+    "after": {
+      "total": 955,
+      "matches": 431,
+      "invalid": 10,
+      "nonzero": 4,
+      "panics": 2,
+      "valid_errors": 2
+    },
+    "gains": [],
+    "lost_passes": [],
+    "new_valid_errors": [],
+    "new_panics": []
+  },
+  "cohort1044": {
+    "before": {
+      "total": 1044,
+      "matches": 484,
+      "invalid": 32,
+      "nonzero": 24,
+      "panics": 2,
+      "valid_errors": 4
+    },
+    "after": {
+      "total": 1044,
+      "matches": 495,
+      "invalid": 32,
+      "nonzero": 23,
+      "panics": 2,
+      "valid_errors": 2
+    },
+    "gains": [
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+      "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+      "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+      "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+      "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml"
+    ],
+    "lost_passes": [],
+    "new_valid_errors": [],
+    "new_panics": []
+  },
+  "parent1449": {
+    "before": {
+      "total": 1449,
+      "matches": 509,
+      "invalid": 38,
+      "nonzero": 55,
+      "panics": 32,
+      "valid_errors": 35
+    },
+    "after": {
+      "total": 1449,
+      "matches": 520,
+      "invalid": 38,
+      "nonzero": 54,
+      "panics": 32,
+      "valid_errors": 33
+    },
+    "gains": [
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+      "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+      "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+      "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+      "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml"
+    ],
+    "lost_passes": [],
+    "new_valid_errors": [],
+    "new_panics": []
+  },
+  "fresh": {
+    "before": {
+      "total": 42,
+      "matches": 2,
+      "invalid": 10,
+      "nonzero": 9,
+      "panics": 0,
+      "valid_errors": 3
+    },
+    "after": {
+      "total": 42,
+      "matches": 18,
+      "invalid": 10,
+      "nonzero": 6,
+      "panics": 0,
+      "valid_errors": 0
+    },
+    "gains": [
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_default.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_named_siblings.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.puml",
+      "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_eager_recursion.puml",
+      "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_quoted_unicode.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml"
+    ],
+    "lost_passes": [
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml"
+    ],
+    "new_valid_errors": [],
+    "new_panics": []
+  },
+  "retained": {
+    "before": {
+      "total": 21,
+      "matches": 0,
+      "invalid": 7,
+      "nonzero": 6,
+      "panics": 0,
+      "valid_errors": 1
+    },
+    "after": {
+      "total": 21,
+      "matches": 13,
+      "invalid": 7,
+      "nonzero": 7,
+      "panics": 0,
+      "valid_errors": 0
+    },
+    "gains": [
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_binding.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_lookup_json.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_json_scalar.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_set_global.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_wrap_quotient.puml",
+      "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_eager_and_or.puml",
+      "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_literal_truth.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+      "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_boolean_value_kinds.puml"
+    ],
+    "lost_passes": [],
+    "new_valid_errors": [],
+    "new_panics": []
+  },
+  "supplement": {
+    "before": {
+      "total": 4,
+      "matches": 0,
+      "invalid": 2,
+      "nonzero": 0,
+      "panics": 0,
+      "valid_errors": 0
+    },
+    "after": {
+      "total": 4,
+      "matches": 2,
+      "invalid": 2,
+      "nonzero": 0,
+      "panics": 0,
+      "valid_errors": 0
+    },
+    "gains": [
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml"
+    ],
+    "lost_passes": [],
+    "new_valid_errors": [],
+    "new_panics": []
+  }
+}

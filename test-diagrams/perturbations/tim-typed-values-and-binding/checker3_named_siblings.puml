@@ -1,0 +1,11 @@
+@startuml
+!$shared="006"
+!function $leaf($a="007",$b=3)
+!return $a+$b
+!endfunction
+!function $outer($shared="local")
+!return $leaf($b=2)+" / "+%get_variable_value("$shared")
+!endfunction
+!$result=$outer()
+class "$result" as Result
+@enduml

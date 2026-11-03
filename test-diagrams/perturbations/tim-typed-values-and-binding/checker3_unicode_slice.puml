@@ -1,0 +1,4 @@
+@startuml
+!$result=%substr("é😀ab", 3, 1)
+class "$result" as Result
+@enduml

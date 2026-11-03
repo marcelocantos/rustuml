@@ -1,0 +1,4 @@
+@startuml
+!$result=(1 << 3)
+class "$result" as Result
+@enduml

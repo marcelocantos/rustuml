@@ -1,0 +1,5 @@
+@startuml
+!$n=7
+!$result=(-$n)+2
+class "$result" as Result
+@enduml

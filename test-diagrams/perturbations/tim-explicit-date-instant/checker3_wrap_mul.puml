@@ -1,0 +1,4 @@
+@startuml
+!$result=%date("yyyy-MM-dd HH:mm:ss", (1073741824 * 4) - 1)
+class "$result" as Result
+@enduml

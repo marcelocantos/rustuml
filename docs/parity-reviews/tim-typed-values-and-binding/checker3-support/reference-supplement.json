@@ -1,0 +1,100 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "negative DST representation in libc versus JDK",
+      "Ramadan versus summer daylight state and display width"
+    ],
+    "zone": "Africa/Casablanca",
+    "debug": "date=1774210426000",
+    "kind": "fresh independent supplemental",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Africa/Casablanca",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "461d6489e2a0454b4aeccce1735af918748115c2127ef69b62b6ee908e5253d1",
+    "java_svg_sha256": "b8565ddb4d37bb1cf8ed6806e4e328e8bf6690a322ca06a557a826497b723112"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+    "mechanism": "tim-zone-display-width",
+    "axes": [
+      "negative DST representation in libc versus JDK",
+      "Ramadan versus summer daylight state and display width"
+    ],
+    "zone": "Africa/Casablanca",
+    "debug": "date=1774210426000",
+    "kind": "fresh independent supplemental",
+    "java_exit": 0,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "Africa/Casablanca",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "7602d7b2594f52d245e6d098bdb6ad97c37db694f72bc78db88a061bfbdaf13b",
+    "java_svg_sha256": "45028c2d318f060655e6f694f1e484c9af4fb1efebde96c9ae5b0c5494437e43"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "first fatal builtin",
+      "later visible output cancellation"
+    ],
+    "kind": "fresh isolating counterexample",
+    "negative_intent": true,
+    "java_exit": 1,
+    "source_exit": 1,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "ed8b9206ffdf92541492a794f5e0f97520e2349c8bb65fa3b82683657b91228b",
+    "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "axes": [
+      "first fatal builtin",
+      "later visible output cancellation"
+    ],
+    "kind": "fresh isolating counterexample",
+    "negative_intent": true,
+    "java_exit": 200,
+    "source_exit": 0,
+    "java_command": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn/.",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "source_sha256": "be396bcbc5d6d6cf040ff69bb91b3432e56f123dc4fa772fec5a97bc6683727a",
+    "java_svg_sha256": "b12b35a63cbb86c46f6530c6265c1fc5e7e0e9bbdbe85d3429f97258b0de75dd"
+  }
+]

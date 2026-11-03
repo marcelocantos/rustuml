@@ -1,0 +1,11 @@
+@startuml
+!function $bad()
+!return %date("QQ",0)
+!endfunction
+!function $later()
+!return %date("XXXX",0)
+!endfunction
+class Before
+!$result=$bad()+$later()
+class After
+@enduml

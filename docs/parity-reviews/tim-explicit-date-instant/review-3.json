@@ -1,0 +1,894 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-explicit-date-instant",
+  "reviewer": {
+    "task_id": "t3-bf706fe0-fresh-independent-typed-TIM-checker",
+    "model": "gpt-6-astra / high / Codex in T3 Code; no children; did not implement candidate"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "0dd2de894fea40d5e9ed81efb6a54d837f80fa4c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "prepared_before": "ed0dcd3c9c11de50288f914947e6735005fb6bb5",
+  "combined_tested_commit": "579b9b1173fef9dd3d10afca05b6d688b9bbd2c2",
+  "parent_commit": "caae198aabd7a20a989e906b42749602a1d73cc5",
+  "root_test_only_followup": "6f52f87e532d549b047f7ccd3fe7fb577fc56df9",
+  "commands": [
+    "ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/new-worker",
+    "ssh -T -o BatchMode=yes marcelo@192.168.1.112 '/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn --timezone GMT+11:00 -- -pipe -tsvg' < SOURCE.puml",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py before frozen",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py after frozen",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py reference fresh (also retained, supplement; each row records zone/cwd)",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py after fresh (also before and retained/supplement)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs -- --nocapture",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml --bin rustuml --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.svg",
+      "axes": [
+        "signed int arithmetic",
+        "explicit date conversion"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.svg",
+      "axes": [
+        "signed int arithmetic",
+        "explicit date conversion"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.svg",
+      "axes": [
+        "signed int arithmetic",
+        "explicit date conversion"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.svg",
+      "axes": [
+        "explicit date argument error",
+        "Java rejection versus silent Rust output"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.svg",
+      "axes": [
+        "explicit date argument error",
+        "Java rejection versus silent Rust output"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    }
+  ],
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.svg",
+      "axes": [
+        "builtin typed argument boundary",
+        "string/JSON/integer or UTF16"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.svg",
+      "axes": [
+        "builtin typed argument boundary",
+        "string/JSON/integer or UTF16"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.svg",
+      "axes": [
+        "builtin typed argument boundary",
+        "string/JSON/integer or UTF16"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.svg",
+      "axes": [
+        "builtin typed argument boundary",
+        "string/JSON/integer or UTF16"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.svg",
+      "axes": [
+        "builtin typed argument boundary",
+        "string/JSON/integer or UTF16"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.svg",
+      "axes": [
+        "builtin typed argument boundary",
+        "string/JSON/integer or UTF16"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_default.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_default.svg",
+      "axes": [
+        "JSON declaration capture",
+        "named override with numeric string"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.svg",
+      "axes": [
+        "JSON field and array indexing",
+        "numeric-looking string type"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_named_siblings.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_named_siblings.svg",
+      "axes": [
+        "sibling/global versus parameter memory",
+        "named/default types"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.svg",
+      "axes": [
+        "variable token capture timing",
+        "function side effect"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.svg",
+      "axes": [
+        "legacy token adapter",
+        "quoted returned text"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_shift_scope.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_shift_scope.svg",
+      "axes": [
+        "operator grammar boundary",
+        "integer"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 1,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unary_variable.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unary_variable.svg",
+      "axes": [
+        "unary signed expression",
+        "typed variable"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 1,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.svg",
+      "axes": [
+        "zone Europe/London",
+        "run widths and daylight/instant"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Europe/London",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.svg",
+      "axes": [
+        "zone Europe/London",
+        "run widths and daylight/instant"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Europe/London",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.svg",
+      "axes": [
+        "zone Australia/Lord_Howe",
+        "run widths and daylight/instant"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Australia/Lord_Howe",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.svg",
+      "axes": [
+        "zone Europe/Dublin",
+        "run widths and daylight/instant"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Europe/Dublin",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.svg",
+      "axes": [
+        "zone Asia/Kathmandu",
+        "run widths and daylight/instant"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Asia/Kathmandu",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.svg",
+      "axes": [
+        "fixed fractional offset",
+        "negative epoch and width"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=FIX-0330",
+      "zone": "GMT-03:30",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_binding.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_binding.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_lookup_json.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_lookup_json.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_json_scalar.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_json_scalar.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_set_global.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_set_global.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_wrap_quotient.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_wrap_quotient.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Asia/Tokyo",
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "America/New_York",
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "UTC",
+      "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_boolean_value_kinds.puml",
+      "golden": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_boolean_value_kinds.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.svg",
+      "axes": [
+        "negative DST representation in libc versus JDK",
+        "Ramadan versus summer daylight state and display width"
+      ],
+      "result": "pass",
+      "kind": "fresh independent supplemental",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Africa/Casablanca",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "golden": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.svg",
+      "axes": [
+        "negative DST representation in libc versus JDK",
+        "Ramadan versus summer daylight state and display width"
+      ],
+      "result": "pass",
+      "kind": "fresh independent supplemental",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000",
+      "zone": "Africa/Casablanca",
+      "cwd": "."
+    }
+  ],
+  "findings": [
+    "Fresh signed multiplication wrap, INT_MIN/-1 division and negative truncating quotient followed by date conversion all match Java source and shipped SVG. The previous checker2_sum_wrap and checker2_difference_wrap valid CLI errors are repaired; no new valid CLI errors occur on the frozen1044 cohort.",
+    "The root test-only correction is sound: exact unchanged class and sequence assertion sources cause remote Java NumberFormatException in TValue.fromNumber/Integer.parseInt before DateFunction. Rust emits Integer literal outside signed 32-bit range at line2. All582 parser tests pass. Java does not emit that exact Rust diagnostic text; its literal exception escapes, so the claim is causal equivalence and fatal rejection, not identical wording.",
+    "The complete inherited mechanism remains REJECTED with preserved negative references and unresolved upstream expression/builtin semantics. Supported invariant: signed Java i32 add/subtract/multiply/truncating division before TValue.toInt date conversion on the exercised valid expressions. Floats, shifts and unary variable expressions are not inferred as accepted Java grammar."
+  ],
+  "verdict": "rejected",
+  "packet_verdict": "rejected; no production changes accepted or integrated by this review",
+  "evidence": "docs/parity-reviews/tim-typed-values-and-binding/checker3-support/README.md",
+  "environment": "All Java remote Monkey Man: OpenJDK21.0.5, Graphviz12.2.0, en_AU, UTF8, headless wrapper; origin21.0.13/16.1.0 equivalence unproven. Local Rust and unchanged strict comparator; declared per-input timezone/cwd.",
+  "scope": "Evidence only; original accounts/reviews/reference data/frozen rules/targets unchanged. No class or sequence candidate production imported.",
+  "supersedes_without_overwriting": "docs/parity-reviews/tim-explicit-date-instant/review-2.json"
+}

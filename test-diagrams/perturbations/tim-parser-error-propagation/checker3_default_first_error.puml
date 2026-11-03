@@ -1,0 +1,6 @@
+@startuml
+!procedure $unused($a=%substr("abc",-1),$b=%date("QQ",0))
+class Wrong
+!endprocedure
+class After
+@enduml

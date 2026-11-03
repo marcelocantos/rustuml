@@ -1,0 +1,30 @@
+{
+  "parent": "caae198aabd7a20a989e906b42749602a1d73cc5",
+  "prepared": "579b9b1173fef9dd3d10afca05b6d688b9bbd2c2",
+  "frozen_pairs": 1449,
+  "all_parent_review_files_unchanged": 5928,
+  "frozen_paths": {
+    "bullseye.yaml": "21273f0fc0e5384b24d4fe03012882ab452aa5b7a443c0f2cea59137e627650a",
+    "test-diagrams/no_oracle_baseline.txt": "adc17ebe8a0e9ec7122329c0ef2310021a3fc4b34fec6d4d94da295b1a84228f",
+    "crates/rustuml-oracle/src/compare.rs": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5",
+    "crates/rustuml-oracle/src/harness.rs": "0542e56ff01abb53d7e977228c49d9610fab4940061973da2924f82d8619770d",
+    "crates/rustuml-oracle/tests/harness_guards.rs": "83a17e7b7e412b7e0c544a1558da7ee24e4a7dc8e14537ca4fd4b418f8fe7a1e"
+  },
+  "production_paths": [
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-parser/src/preprocess/date_format.rs",
+    "crates/rustuml-parser/src/preprocess/debug.rs",
+    "crates/rustuml-parser/src/preprocess/mod.rs",
+    "crates/rustuml-parser/src/preprocess/zone_names.json",
+    "crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "production_matches_requested_tip": true,
+  "binary_sha256": {
+    "before": "9cd9e843a1e00eff70109d6fc9bea8bf56bc42e688a8929d8a5d3b9efcb0dbb6",
+    "after": "9a7eff59d2a20b539418c3f1ef6cfb5673340711d559ec15d4b7c9bf9feff2b5"
+  },
+  "comparator_source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "comparator_binary_sha256": "5468a15c85f54b2bfbac4916433fe854f218b10a4db5223d8a24f7aa6144d698",
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "golden_is_symlink": false
+}

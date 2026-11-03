@@ -1,0 +1,5 @@
+@startuml
+class Before
+!$result=%substr("abc",-1)+%date("QQ",0)
+class After
+@enduml

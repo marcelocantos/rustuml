@@ -1,0 +1,10 @@
+@startuml
+!$counter=0
+!function $load()
+!includesub test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/caller.inc!chosen
+class Phantom
+!return $counter
+!endfunction
+!$result=$load()
+class "$result" as Result
+@enduml
