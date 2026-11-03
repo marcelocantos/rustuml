@@ -1,0 +1,11 @@
+@startuml
+participant R
+participant T
+participant S
+R -> S ++ : enter
+S -> S ++ : recursive
+S -> T ++ : delegated
+return result
+return local
+return caller
+@enduml

@@ -3006,7 +3006,8 @@ struct LifeVariation {
 struct SequenceReturnContext {
     from: String,
     to: String,
-    open_arrow: bool,
+    arrow: Arrow,
+    deactivate: bool,
 }
 
 #[derive(Default)]
@@ -3295,7 +3296,8 @@ fn sequence_lifelines(
                 let context = SequenceReturnContext {
                     from: message.to.clone(),
                     to: message.from.clone(),
-                    open_arrow: message.arrow.head == ArrowHead::Open,
+                    arrow: message.arrow.clone(),
+                    deactivate: false,
                 };
                 last_return_context = Some(context.clone());
                 if let Some(change) = &message.activation {
@@ -3424,10 +3426,15 @@ fn sequence_lifelines(
                 }
             }
             Event::Return(_) => {
-                let context = return_stack
+                let mut context = return_stack
                     .last()
                     .cloned()
                     .or_else(|| last_return_context.clone());
+                if let Some(context) = &mut context {
+                    // CommandReturn#executeArg deactivates only when it found
+                    // an activating message, not when replying to the last one.
+                    context.deactivate = !return_stack.is_empty();
+                }
                 model.return_context_by_event[event_index] = context.clone();
                 if let Some(context) = context {
                     // CommandReturn materializes a real reverse message. It
@@ -3437,7 +3444,8 @@ fn sequence_lifelines(
                     last_return_context = Some(SequenceReturnContext {
                         from: context.to.clone(),
                         to: context.from.clone(),
-                        open_arrow: context.open_arrow,
+                        arrow: context.arrow,
+                        deactivate: false,
                     });
                 }
                 if let Some(context) = return_stack.last().cloned()
@@ -7472,6 +7480,35 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .as_ref()
         .unwrap_or(&life_lines);
 
+    // CommandReturn#executeArg materializes a Message, including self returns.
+    // Resolve ownership first, then feed those events through the existing
+    // self-message geometry rather than treating equal endpoints as a span.
+    // Keep source identity/event indices; this is a render-local model. Every
+    // restart replaces at least one Return, so this lowering cannot cycle.
+    let mut lowered = None;
+    for (index, event) in diagram.events.iter().enumerate() {
+        if let Event::Return(ret) = event
+            && let Some(context) = horizontal_life_lines.return_context(index)
+            && context.from == context.to
+        {
+            let normalized = lowered.get_or_insert_with(|| diagram.clone());
+            let mut arrow = context.arrow.clone();
+            arrow.line = LineStyle::Dotted;
+            normalized.events[index] = Event::Message(Message {
+                from: context.from.clone(),
+                to: context.to.clone(),
+                label: ret.label.clone(),
+                arrow,
+                activation: context.deactivate.then_some(ActivationChange::Deactivate),
+                activation_color: None,
+                source_line: ret.source_line,
+            });
+        }
+    }
+    if let Some(normalized) = lowered {
+        return render(&normalized, _theme, oracle);
+    }
+
     // -----------------------------------------------------------------------
     // Phase 2: Compute required gap between adjacent participant pairs
     // -----------------------------------------------------------------------
@@ -7545,11 +7582,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 .get(event_idx)
                                 .copied()
                                 .unwrap_or_default();
+                            // Step1Message#prepareMessage samples live thickness at the
+                            // arrow START, before a self activation at its END.
+                            // CommunicationTileSelf's Teoz constraint instead uses
+                            // the newly opened target level.
                             let depth = horizontal_life_lines.depth_before(&msg.from, ordinate)
-                                + usize::from(matches!(
-                                    msg.activation,
-                                    Some(ActivationChange::Activate)
-                                ));
+                                + usize::from(
+                                    diagram.teoz
+                                        && matches!(
+                                            msg.activation,
+                                            Some(ActivationChange::Activate)
+                                        ),
+                                );
 
                             let needed = if diagram.teoz {
                                 // Teoz `CommunicationTileSelf.addConstraints` (non-reverse):
@@ -12151,7 +12195,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
                 let (ret_from, ret_to, ret_open) =
                     if let Some(context) = life_lines.return_context(ev_idx) {
-                        (context.from.clone(), context.to.clone(), context.open_arrow)
+                        (
+                            context.from.clone(),
+                            context.to.clone(),
+                            context.arrow.head == ArrowHead::Open,
+                        )
                     } else {
                         // Fallback if no activation context
                         let p0 = participants
@@ -13802,6 +13850,54 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn self_returns_share_explicit_self_message_geometry_and_ownership() {
+        for declarations in [
+            "participant S\nparticipant R\nparticipant T\n",
+            "participant R\nparticipant S\nparticipant T\n",
+            "participant R\nparticipant T\nparticipant S\n",
+        ] {
+            for depth in 1..=4 {
+                let calls = format!(
+                    "R -> S ++ : enter\n{}",
+                    "S -> S ++ : recurse\n".repeat(depth)
+                );
+                let returns = format!("{}return exit\n", "return restore\n".repeat(depth));
+                let explicit = format!("{}return exit\n", "S --> S -- : restore\n".repeat(depth));
+                let source = format!("@startuml\n{declarations}{calls}{returns}@enduml\n");
+                let expected = format!("@startuml\n{declarations}{calls}{explicit}@enduml\n");
+                let actual = rustuml_parser::parse::parse(&source).unwrap();
+                let mut reference = rustuml_parser::parse::parse(&expected).unwrap();
+                reference.meta_mut().source = actual.meta().source.clone();
+                assert_eq!(crate::render_svg(&actual), crate::render_svg(&reference));
+                let rustuml_parser::diagram::Diagram::Sequence(sequence) = &actual else {
+                    panic!("expected sequence");
+                };
+                assert_eq!(
+                    sequence
+                        .events
+                        .iter()
+                        .filter(|e| matches!(e, Event::Return(_)))
+                        .count(),
+                    depth + 1
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn self_return_without_activation_keeps_the_lifeline_inactive() {
+        let actual =
+            rustuml_parser::parse::parse("@startuml\nS -> S : inspect\nreturn settled\n@enduml\n")
+                .unwrap();
+        let mut reference = rustuml_parser::parse::parse(
+            "@startuml\nS -> S : inspect\nS --> S : settled\n@enduml\n",
+        )
+        .unwrap();
+        reference.meta_mut().source = actual.meta().source.clone();
+        assert_eq!(crate::render_svg(&actual), crate::render_svg(&reference));
+    }
 
     #[test]
     fn group_minimum_selects_raw_member_before_applying_its_kind_margin() {

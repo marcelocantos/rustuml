@@ -1,0 +1,11 @@
+@startuml
+participant R
+participant T
+participant S
+R -> S ++ : enter
+S -> S ++ : recurse
+S -> S ++ : recurse
+return restore
+return resume
+return exit
+@enduml
