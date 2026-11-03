@@ -1,0 +1,5 @@
+SVG structural differences:
+  [7] <text> text mismatch:
+    expected: Some("2000-01-02")
+    actual:   Some("2026-03-23")
+

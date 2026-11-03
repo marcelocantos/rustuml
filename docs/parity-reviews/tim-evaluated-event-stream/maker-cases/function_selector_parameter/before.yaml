@@ -1,0 +1,39 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __theme
+      value: $palette("minty")
+    sprites:
+      rune:
+        width: 1
+        height: 3
+        rows:
+        - A
+        - B
+        - C
+    source: |
+      @startuml
+      skinparam __theme $palette("minty")
+
+
+
+
+
+      class JasperIndex
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity JasperIndex
+  entities:
+  - id: JasperIndex
+    label: JasperIndex
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 10
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

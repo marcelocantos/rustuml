@@ -1,0 +1,14 @@
+SVG structural differences:
+  [3] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Foo"), ("data-source-line", "4"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Foo"), ("data-source-line", "1"), ("id", "ent0002")]
+  [10] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Bar"), ("data-source-line", "8"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Bar"), ("data-source-line", "5"), ("id", "ent0003")]
+  [17] <g> attr mismatch:
+    expected: [("class", "link"), ("data-entity-1", "ent0002"), ("data-entity-2", "ent0003"), ("data-link-type", "dependency"), ("data-source-line", "12"), ("id", "lnk4")]
+    actual:   [("class", "link"), ("data-entity-1", "ent0002"), ("data-entity-2", "ent0003"), ("data-link-type", "dependency"), ("data-source-line", "9"), ("id", "lnk4")]
+  [18] <path> attr mismatch:
+    expected: [("codeLine", "12"), ("d", "M35.35,55.26 C35.35,72.94 35.35,91.13 35.35,108.79"), ("fill", "none"), ("id", "Foo-to-Bar"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "9"), ("d", "M35.35,55.26 C35.35,72.94 35.35,91.13 35.35,108.79"), ("fill", "none"), ("id", "Foo-to-Bar"), ("style", "stroke:#181818;stroke-width:1;")]
+

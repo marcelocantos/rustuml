@@ -1,0 +1,11 @@
+@startuml
+!theme cerulean
+!startsub badge
+sprite $badge [2x3/16] {
+AF
+F0
+0A
+}
+!endsub
+class ObsidianLedger
+@enduml

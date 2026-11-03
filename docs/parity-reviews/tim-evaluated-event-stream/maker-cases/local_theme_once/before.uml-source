@@ -1,0 +1,4 @@
+@startuml
+skinparam __theme $palette()
+class "Count 0" as SpinelRecord
+@enduml

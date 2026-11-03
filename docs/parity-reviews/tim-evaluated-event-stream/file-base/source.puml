@@ -1,0 +1,4 @@
+@startuml
+!include settings.iuml
+class AlexandriteLedger
+@enduml

@@ -1,0 +1,60 @@
+{
+  "role": "implementation maker measurements; not a checker attestation or acceptance verdict",
+  "mechanism": "tim-procedure-global-fork-memory",
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "candidate_revision": "cefd22f9d047cf4ab1f2bb515aa869266b91aff6",
+  "base_revision": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "shared_evidence": "../tim-evaluated-event-stream/maker-results-summary.json",
+  "cases": [
+    {
+      "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "source_sha256": "f251a9ef7fbb1c715d87a50273f0b8b8c98aa75fc3b26575bd9dbd31449fb5ce",
+      "java_svg_sha256": "75c637f7a94fb8da62833a6c132dee95d0479851f1fd610497281d903f8ccfcc",
+      "candidate_svg_sha256": "460bb70fefbe5997bc84cb97f57f475ceb10c1be018998ed10a9d0e30aa88260",
+      "java_valid": true
+    },
+    {
+      "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "source_sha256": "1c87c28983864ef71b10c39806fef1e97963a48d59330d327ea20cb11d98bf77",
+      "java_svg_sha256": "3d313cb54101a000ed379383e84c94365452c39c84b89cab40ab4227d109daaa",
+      "candidate_svg_sha256": "e1d9051d5a731d2c165f4057e2609b69368ff7ab05f198e2ae8983f608edcce1",
+      "java_valid": true
+    },
+    {
+      "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "source_sha256": "439daec858d75a96779311f0aff32fa4d1995bd4b2a9cb4397aea01f2e72821f",
+      "java_svg_sha256": "2f43ae6b271778ad70291c250da6835c97c9292b1bcd465f817ec35b07582b9f",
+      "candidate_svg_sha256": "8f0996c3af9babd673782bca324eb36a865360212f9e7b017142602ed07ed01c",
+      "java_valid": true
+    }
+  ],
+  "total": 3,
+  "svg_pass": 3,
+  "exact_source_pass": 3,
+  "independent_checker": "Pending; parent schedules fresh heldouts. All invalid and failing maker inputs retained."
+}

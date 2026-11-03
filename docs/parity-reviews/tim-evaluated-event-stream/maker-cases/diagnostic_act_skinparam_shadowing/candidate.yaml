@@ -1,0 +1,44 @@
+type: Activity
+diagram:
+  meta:
+    skinparams:
+    - key: shadowing
+      value: 'true'
+    style_program:
+      declarations:
+      - selector:
+        - root
+        property: shadowing
+        value: '3'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+    source: |
+      @startuml
+
+      skinparam shadowing true
+      start
+      :Action A;
+      if (condition?) then (yes)
+        :Yes;
+      else (no)
+        :No;
+      endif
+      :Action B;
+      stop
+      @enduml
+  steps:
+  - Start
+  - !Action Action A
+  - !If
+    condition: condition?
+    then_label: 'yes'
+    source_line: 5
+  - !Action 'Yes'
+  - !Else 'no'
+  - !Action 'No'
+  - EndIf
+  - !Action Action B
+  - Stop

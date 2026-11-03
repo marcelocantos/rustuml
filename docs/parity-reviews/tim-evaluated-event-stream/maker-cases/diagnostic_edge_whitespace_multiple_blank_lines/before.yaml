@@ -1,0 +1,53 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Foo
+
+
+
+      class Bar
+
+
+
+      Foo --> Bar
+
+
+
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Foo
+  - !Entity Bar
+  - !Relationship 0
+  entities:
+  - id: Foo
+    label: Foo
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 1
+  - id: Bar
+    label: Bar
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships:
+  - from: Foo
+    to: Bar
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 9
+  packages: []
+  notes: []
+  hide_show: []

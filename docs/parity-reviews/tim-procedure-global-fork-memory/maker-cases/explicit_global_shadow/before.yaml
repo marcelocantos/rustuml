@@ -1,0 +1,32 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      !global parameter = "updated"
+      class "Local parameter local" as LocalRecord
+      class "Global initial" as GlobalRecord
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity LocalRecord
+  - !Entity GlobalRecord
+  entities:
+  - id: LocalRecord
+    label: Local parameter local
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: GlobalRecord
+    label: Global initial
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 9
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
