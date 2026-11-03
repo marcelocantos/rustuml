@@ -22,5 +22,6 @@
     "LR/TB, nested group aliases and group/leaf topology"
   ],
   "negative_evidence_contract": "Every failing relevant input remains blocking.",
-  "planned_change": "Use existing layout cluster endpoint API from class renderer, enroll points in their declared groups, preserve normal image node slot mapping, reuse existing compound clipping routine with class graph cluster coordinates, and resolve metadata through actual package UIDs. No shared layout edits."
+  "planned_change": "Use existing layout cluster endpoint API from class renderer, enroll points in their declared groups, preserve normal image node slot mapping, reuse existing compound clipping routine with class graph cluster coordinates, and resolve metadata through actual package UIDs. No shared layout edits.",
+  "mechanism": "class-group-endpoint-routing"
 }
