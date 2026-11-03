@@ -436,53 +436,42 @@ impl SeqParser {
     }
 
     fn try_external_message(&mut self, line: &str) -> bool {
-        if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {
-            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
-            let mut arrow = parse_arrow(&arrow_str);
-            arrow.direction = ArrowDirection::LeftToRight;
-            apply_inline_arrow_style(&mut arrow, arrow_style);
-            let to = self.ensure_participant(&caps[3]);
-            let activation = caps
-                .get(4)
-                .map(|m| parse_activation(m.as_str()))
-                .or_else(|| self.autoactivation_for(&arrow));
-            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
-            let label = message_label(line, caps.get(6));
-            self.events.push(Event::Message(Message {
-                from: caps[1].to_string(),
-                to,
-                label,
-                arrow,
-                activation,
-                activation_color,
-                source_line: self.current_line,
-            }));
-            true
+        let (caps, boundary_first) = if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {
+            (caps, true)
         } else if let Some(caps) = EXTERNAL_MESSAGE_OUT_RE.captures(line) {
-            let from = self.ensure_participant(&caps[1]);
-            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
-            let mut arrow = parse_arrow(&arrow_str);
-            arrow.direction = ArrowDirection::LeftToRight;
-            apply_inline_arrow_style(&mut arrow, arrow_style);
-            let activation = caps
-                .get(4)
-                .map(|m| parse_activation(m.as_str()))
-                .or_else(|| self.autoactivation_for(&arrow));
-            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
-            let label = message_label(line, caps.get(6));
-            self.events.push(Event::Message(Message {
-                from,
-                to: caps[3].to_string(),
-                label,
-                arrow,
-                activation,
-                activation_color,
-                source_line: self.current_line,
-            }));
-            true
+            (caps, false)
         } else {
-            false
-        }
+            return false;
+        };
+        let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
+        let mut arrow = parse_arrow(&arrow_str);
+        apply_inline_arrow_style(&mut arrow, arrow_style);
+        let (left, right) = if boundary_first {
+            (caps[1].to_string(), self.ensure_participant(&caps[3]))
+        } else {
+            (self.ensure_participant(&caps[1]), caps[3].to_string())
+        };
+        // CommandExoArrowLeft/Right#getMessageExoType select FROM/TO from
+        // the dressing, independently of which side contains the border token.
+        let (from, to) = if arrow.direction == ArrowDirection::RightToLeft {
+            (right, left)
+        } else {
+            (left, right)
+        };
+        let activation = caps
+            .get(4)
+            .map(|m| parse_activation(m.as_str()))
+            .or_else(|| self.autoactivation_for(&arrow));
+        self.events.push(Event::Message(Message {
+            from,
+            to,
+            label: message_label(line, caps.get(6)),
+            arrow,
+            activation,
+            activation_color: caps.get(5).map(|m| m.as_str().to_string()),
+            source_line: self.current_line,
+        }));
+        true
     }
 
     fn try_note(&mut self, line: &str) -> bool {
@@ -1291,6 +1280,42 @@ mod tests {
     fn parse(input: &str) -> SequenceDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_sequence(&lines).unwrap()
+    }
+
+    #[test]
+    fn external_dressing_selects_direction_independently_of_border_syntax() {
+        for border in ["[", "]"] {
+            for (head, arrow_head) in [(">", ArrowHead::Filled), (">>", ArrowHead::Open)] {
+                let left_head = head.replace('>', "<");
+                for (source, incoming) in [
+                    (format!("{border}-{head} Iris ++ : enter"), true),
+                    (format!("Iris {left_head}-{border} ++ : enter"), true),
+                    (format!("{border}{left_head}- Iris ++ : enter"), false),
+                    (format!("Iris -{head}{border} ++ : enter"), false),
+                ] {
+                    let diagram = parse(&source);
+                    let Event::Message(message) = &diagram.events[0] else {
+                        panic!("expected message for {source}");
+                    };
+                    let expected = if incoming {
+                        (border, "Iris")
+                    } else {
+                        ("Iris", border)
+                    };
+                    assert_eq!(
+                        (message.from.as_str(), message.to.as_str()),
+                        expected,
+                        "{source}"
+                    );
+                    assert_eq!(message.arrow.head, arrow_head, "{source}");
+                    assert!(matches!(
+                        message.activation,
+                        Some(ActivationChange::Activate)
+                    ));
+                    assert_eq!(diagram.participants.len(), 1);
+                }
+            }
+        }
     }
 
     #[test]
