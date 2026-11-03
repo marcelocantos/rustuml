@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "maker proposal, not independently accepted",
+  "reference": "docs/reference-bootstrap.md",
+  "prior_rejection": "class-native-container-factory-precedence/review.json",
+  "verification": {
+    "frozen": "Both main tiers, original 810 and added 23 perturbations, guards; unchanged comparator/baselines/references.",
+    "maker": "Parser assertions and fresh CLI/reference comparisons; independent checker assigned by parent.",
+    "acceptance": "Relevant failures remain blocking; no factory-only waiver."
+  },
+  "mechanism": "class-command-execution-ownership",
+  "java_locations": [
+    "PSystemBuilder.java#createPSystem",
+    "classdiagram/ClassDiagramFactory.java#initCommandsList",
+    "classdiagram/command/CommandCreateClass.java#getRegexConcat,executeArg",
+    "classdiagram/command/CommandCreateClassMultilines.java#executeNow",
+    "command/NameAndCodeParser.java#nameAndCodeForClassWithGeneric",
+    "classdiagram/command/CommandCreateElementFull2.java#executeArg",
+    "command/CommandMultilinesHeader.java",
+    "command/PSystemCommandFactory.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs#detect_uml_subtype,parse_with_base",
+    "crates/rustuml-parser/src/parse/class.rs#parse_class,ClassParser::parse_line,try_entity_decl,try_meta",
+    "crates/rustuml-parser/src/diagram/class.rs#ClassEntity,EntityKind"
+  ],
+  "invariant": "A class-factory candidate succeeds only when its consuming command parser recognizes the complete stream, including multiline ownership, and each ordered command executes successfully. Quoted display is data, not command syntax. Every recognized declaration materializes an ordinary typed entity.",
+  "causal_divergence": "The integrated dispatcher scores raw lines; the rejected candidate adds an independent keyword scan. Neither shares the actual class command execution. This permits quoted content and body text to change factories, drops case/modifier/native/mix declarations, and lets a later allowmixing revive an earlier command failure. The class parser silently ignores unknown commands and has no ordered mixing state.",
+  "planned_model_change": "Use the actual class parser as the bounded native/container viability trial. Record recognized native declarations and containers during consuming execution, rather than inspecting raw text. Preserve the existing other-factory routing when that trial is inapplicable. Add a quote-aware name/code recognizer shared with declaration execution, case-insensitive command grammar, ordered mixing checks, complete body ownership, and explicit unrecognized-command results. Preserve static/visibility and native leaf kinds in the AST. Parse failures cannot be resurrected as successful class parses by score fallback.",
+  "perturbation_axes": [
+    "quoted display containing as/brackets/keywords versus alias identity",
+    "aligned multiline page/note/class bodies with command-looking text",
+    "declaration case/tabs/static/visibility/native kinds",
+    "mix prefix versus ordered allowmixing before/after description commands"
+  ],
+  "known_dependencies": [
+    "class-symbol-container-alias-identity",
+    "Class renderer currently paints mixed description leaves as classes; page chrome, cloud-child offset, and note attachment have independent renderer failures. No geometry change is licensed by this account."
+  ]
+}

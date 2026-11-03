@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "maker proposal, not independently accepted",
+  "reference": "docs/reference-bootstrap.md",
+  "prior_rejection": "class-native-container-factory-precedence/review.json",
+  "verification": {
+    "frozen": "Both main tiers, original 810 and added 23 perturbations, guards; unchanged comparator/baselines/references.",
+    "maker": "Parser assertions and fresh CLI/reference comparisons; independent checker assigned by parent.",
+    "acceptance": "Relevant failures remain blocking; no factory-only waiver."
+  },
+  "mechanism": "class-symbol-container-alias-identity",
+  "java_locations": [
+    "descdiagram/command/CommandPackageWithUSymbol.java#getRegexConcat,executeArg",
+    "command/CommandPackage.java#executeArg",
+    "abel/AbstractEntityDiagram.java#quarkInContext,gotoGroup"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#ClassParser::try_package,resolve_group_path",
+    "crates/rustuml-parser/src/diagram/class.rs#Package"
+  ],
+  "invariant": "A symbol container uses CODE for quark identity and DISPLAY for its label in both forward and reverse alias syntax; children and references resolve under that identity, and re-entering the same group reuses it.",
+  "causal_divergence": "try_package explicitly rejects aliases for every kind except package and accepts no reverse aliases. It consequently drops valid symbol groups and leaves children at the wrong scope. This is independent of choosing the class factory.",
+  "planned_model_change": "Parse forward/reverse quoted display and unquoted code as separate fields; feed the existing canonical package/quark model with code, retain display_name, preserve container kind, declaration location and nesting. Reuse the quote-aware name/code primitive where grammar permits, with the symbol-command-specific alternate forms kept explicit.",
+  "perturbation_axes": [
+    "forward versus reverse aliases with unrelated display/code",
+    "nested containers and reopened groups",
+    "labels containing as/brackets and dotted alias identity"
+  ]
+}
