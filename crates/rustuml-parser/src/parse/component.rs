@@ -69,16 +69,6 @@ fn parse_description_bracket_declaration(trimmed: &str) -> Option<(String, Strin
     ))
 }
 
-pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
-    if RE_DESCRIPTION_BRACKET_DECL.is_match(trimmed) {
-        return true;
-    }
-    let normalized = RE_DESCRIPTION_LINK_DIRECTION.replace_all(trimmed, "-$2");
-    RE_DESCRIPTION_CONN
-        .captures(&normalized)
-        .is_some_and(|captures| captures.get(1).is_some() || captures.get(7).is_some())
-}
-
 /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
 fn container_keyword(trimmed: &str) -> Option<&'static str> {
     for &kw in CONTAINER_KEYWORDS {

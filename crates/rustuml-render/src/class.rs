@@ -503,6 +503,13 @@ impl HideFlags {
 fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
     let mut h = HideFlags::default();
     let entity_kind_word = match entity.kind {
+        EntityKind::Protocol => "protocol",
+        EntityKind::Struct => "struct",
+        EntityKind::Exception => "exception",
+        EntityKind::Metaclass => "metaclass",
+        EntityKind::Stereotype => "stereotype",
+        EntityKind::Dataclass => "dataclass",
+        EntityKind::Record => "record",
         EntityKind::Class => "class",
         EntityKind::Interface => "interface",
         EntityKind::Enum => "enum",
@@ -1025,7 +1032,18 @@ fn calc_entity_dims(
     } else {
         HEADER_CIRCLE_LEFT_MARGIN + font.circled_radius() * 2.0 + ICON_TEXT_GAP
     };
-    let name_total = icon_area + name_width + HEADER_RIGHT_PAD + font.text_padding * 2.0;
+    // EntityImageClassHeader merges VisibilityModifier.getUBlock (size + 1)
+    // to the left of the name before HeaderLayout measures the complete block.
+    let declaration_visibility_width = if entity.visibility == Visibility::Default {
+        0.0
+    } else {
+        (font.attr_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE) + 1) as f64
+    };
+    let name_total = icon_area
+        + name_width
+        + declaration_visibility_width
+        + HEADER_RIGHT_PAD
+        + font.text_padding * 2.0;
 
     // Stereotype text may also affect width.
     let stereo_width = if has_stereotypes {
@@ -1172,6 +1190,7 @@ fn calc_entity_dims(
         font.name_font_size(),
         &font.name_family,
         font.circled_radius(),
+        font.attr_icon_size,
     );
     let field_padding = visible_field_blocks as f64 * font.text_padding * 2.0;
     let method_padding = visible_method_blocks as f64 * font.text_padding * 2.0;
@@ -1461,6 +1480,7 @@ fn class_header_height(
     name_font_size: u32,
     name_font_family: &str,
     circled_radius: f64,
+    visibility_icon_size: Option<u32>,
 ) -> f64 {
     let name_content_height: f64 = escaped_newline_lines(&entity.label)
         .iter()
@@ -1473,6 +1493,14 @@ fn class_header_height(
     // 10px `HeaderLayout` vertical envelope, then takes the maximum with the
     // complete circled-character block. Multi-line or enlarged names can
     // therefore grow the header beyond the default 32px icon envelope.
+    // EntityImageClassHeader: visibility block has size + 1 dimensions and
+    // a top margin of 4, then TextBlockUtils.mergeLR centers both blocks.
+    let name_content_height = if entity.visibility == Visibility::Default {
+        name_content_height
+    } else {
+        name_content_height
+            .max((visibility_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE) + 1 + 4) as f64)
+    };
     let name_driven_height = name_content_height + 10.0 + text_padding * 2.0;
     let circle_driven_height = circled_radius * 2.0 + CIRCLED_ICON_TOP_INSET * 2.0;
     if has_stereotypes {
@@ -3826,9 +3854,9 @@ fn empty_package_dims(pkg: &Package) -> (f64, f64) {
             PackageKind::Database => (10.0, 10.0, 24.0, 5.0, 0.0, 0.0),
             PackageKind::Rectangle => (10.0, 10.0, 10.0, 10.0, 0.0, 0.0),
             PackageKind::Cloud => (15.0, 15.0, 15.0, 15.0, 0.0, 0.0),
-            PackageKind::Package | PackageKind::Namespace => unreachable!(
-                "ordinary package kinds do not retain an explicit USymbol"
-            ),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
         };
         return (
             content_width.max(title_width) + left + right,
@@ -6004,17 +6032,8 @@ fn layout_empty_packages(
         .collect()
 }
 
-fn emit_layout_empty_package(
-    svg: &mut String,
-    package: &EmptyPackageLayout,
-    entity_id: &str,
-) {
-    write!(
-        svg,
-        "<!--entity {}-->",
-        escape_xml(&package.qualified_name)
-    )
-    .unwrap();
+fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
+    write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
@@ -6031,9 +6050,9 @@ fn emit_layout_empty_package(
             PackageKind::Database => emit_layout_empty_symbol_database(svg, package),
             PackageKind::Rectangle => emit_layout_empty_symbol_rectangle(svg, package),
             PackageKind::Cloud => emit_layout_empty_symbol_cloud(svg, package),
-            PackageKind::Package | PackageKind::Namespace => unreachable!(
-                "ordinary package kinds do not retain an explicit USymbol"
-            ),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
         }
         svg.push_str("</g>");
         return;
@@ -6134,13 +6153,10 @@ fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayou
     let y = package.y;
     let right = x + package.width;
     let bottom = y + package.height;
-    let title_width =
-        SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let title_width = SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
-    let line_y = y
-        + SYMBOL_FOLDER_TAB_TITLE_HEIGHT
-        + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let line_y = y + SYMBOL_FOLDER_TAB_TITLE_HEIGHT + 2.0 * PACKAGE_TITLE_MARGIN_X;
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -6210,9 +6226,7 @@ fn emit_layout_empty_symbol_text(
             stereotype,
             &TextBase {
                 x: body_x + (content_width - width) / 2.0,
-                y: body_y
-                    + preceding_height
-                    + text_render::label_ascent(stereotype, FONT_SIZE),
+                y: body_y + preceding_height + text_render::label_ascent(stereotype, FONT_SIZE),
                 font_size: FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: &package.font_fill,
@@ -6229,9 +6243,7 @@ fn emit_layout_empty_symbol_text(
         &package.label,
         &TextBase {
             x: body_x + (content_width - label_width) / 2.0,
-            y: body_y
-                + preceding_height
-                + text_render::label_ascent(&package.label, FONT_SIZE),
+            y: body_y + preceding_height + text_render::label_ascent(&package.label, FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: &package.font_fill,
@@ -6408,12 +6420,7 @@ fn emit_layout_empty_symbol_rectangle(svg: &mut String, package: &EmptyPackageLa
         fmt4(package.y),
     )
     .unwrap();
-    emit_layout_empty_symbol_text(
-        svg,
-        package,
-        package.x + 10.0,
-        package.y + 10.0,
-    );
+    emit_layout_empty_symbol_text(svg, package, package.x + 10.0, package.y + 10.0);
 }
 
 fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout) {
@@ -6444,12 +6451,7 @@ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout
         package.fill, package.stroke, BORDER_WIDTH,
     )
     .unwrap();
-    emit_layout_empty_symbol_text(
-        svg,
-        package,
-        package.x + 15.0,
-        package.y + 15.0,
-    );
+    emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
 }
 
 fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
@@ -7918,6 +7920,7 @@ fn render_entity_content(
         font.name_font_size(),
         &font.name_family,
         font.circled_radius(),
+        font.attr_icon_size,
     );
     let band_first_sep: Option<f64> = if has_body_polygon {
         None
@@ -8031,13 +8034,20 @@ fn render_entity_content(
             )
         })
         .fold(0.0_f64, f64::max);
+    // VisibilityModifier.getUBlock contributes size + 1 to the name block.
+    let declaration_visibility_width = if entity.visibility == Visibility::Default {
+        0.0
+    } else {
+        (font.attr_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE) + 1) as f64
+    };
+    let name_block_width = name_tl + declaration_visibility_width;
     let header_sprite = entity_header_sprite(entity, sprites);
     let header_sprite_position = header_sprite.map(|(_, sprite)| {
         let (sprite_width, sprite_height) = crate::sprite::sprite_dimensions(sprite);
         let content_width = HEADER_CIRCLE_LEFT_MARGIN
             + sprite_width as f64
             + ICON_TEXT_GAP
-            + name_tl
+            + name_block_width
             + HEADER_RIGHT_PAD
             + text_padding * 2.0;
         let slack = (dim.width - content_width).max(0.0) / 2.0;
@@ -8053,6 +8063,7 @@ fn render_entity_content(
                 name_font_size,
                 &font.name_family,
                 icon_radius,
+                font.attr_icon_size,
             ) - sprite_height as f64)
                 / 2.0,
             x + slack
@@ -8067,7 +8078,7 @@ fn render_entity_content(
         && !suppress_header_icon
         && !is_object_entity
         && entity.generic.is_none())
-    .then(|| class_header_positions(x, dim.width, icon_radius, name_tl, text_padding));
+    .then(|| class_header_positions(x, dim.width, icon_radius, name_block_width, text_padding));
     let generic_header_positions = entity
         .generic
         .as_deref()
@@ -8079,7 +8090,7 @@ fn render_entity_content(
                 x,
                 dim.width,
                 icon_radius,
-                name_tl,
+                name_block_width,
                 text_render::measure(generic, GENERIC_FONT_SIZE as f64, false),
                 text_padding,
             )
@@ -8099,7 +8110,7 @@ fn render_entity_content(
             dim.width,
             icon_radius,
             stereo_width,
-            name_tl,
+            name_block_width,
             text_padding,
         )
     });
@@ -8128,6 +8139,7 @@ fn render_entity_content(
             name_font_size,
             &font.name_family,
             icon_radius,
+            font.attr_icon_size,
         );
         // Java `HeaderLayout.drawU` vertically centres the complete
         // circled-character block inside the measured header.
@@ -8194,6 +8206,20 @@ fn render_entity_content(
                 EntityKind::AbstractClass => {
                     stereotype_a_fill.as_deref().unwrap_or(ABSTRACT_ICON_FILL)
                 }
+                // plantuml.skin: no spotProtocol override; root common-background.
+                EntityKind::Protocol => root_background_fill.as_deref().unwrap_or("#F1F1F1"),
+                // plantuml.skin: no spotStruct override; root common-background.
+                EntityKind::Struct => root_background_fill.as_deref().unwrap_or("#F1F1F1"),
+                // plantuml.skin: spotException, or inherited spot background.
+                EntityKind::Exception => "#D94321",
+                // plantuml.skin: spotMetaClass, or inherited spot background.
+                EntityKind::Metaclass => "#CCCCCC",
+                // plantuml.skin: spotStereotype, or inherited spot background.
+                EntityKind::Stereotype => "#FF77FF",
+                // plantuml.skin: spotDataClass, or inherited spot background.
+                EntityKind::Dataclass => "#7E57C2",
+                // plantuml.skin: spotRecord, or inherited spot background.
+                EntityKind::Record => "#FF8F00",
                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
                 EntityKind::Entity => stereotype_c_fill
                     .as_deref()
@@ -8270,6 +8296,20 @@ fn render_entity_content(
         } else {
             let character = entity.spot_character.unwrap_or(match entity.kind {
                 EntityKind::Class | EntityKind::Object | EntityKind::State => 'C',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Protocol => 'P',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Struct => 'S',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Exception => 'X',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Metaclass => 'M',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Stereotype => 'S',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Dataclass => 'D',
+                // EntityImageClassHeader#getCircledChar.
+                EntityKind::Record => 'R',
                 EntityKind::Interface => 'I',
                 // `EntityImageClassHeader.getCircledChar` maps both leaf
                 // types to the circled `E`.
@@ -8446,7 +8486,7 @@ fn render_entity_content(
         sprite_name_x
     } else if dim.hide.circle {
         // With the icon hidden the name is centred inside the rectangle.
-        x + (dim.width - round_4dp(name_tl)) / 2.0
+        x + (dim.width - round_4dp(name_block_width)) / 2.0
     } else {
         let default_name_x = header_positions
             .as_ref()
@@ -8470,6 +8510,7 @@ fn render_entity_content(
         name_font_size,
         &font.name_family,
         icon_radius,
+        font.attr_icon_size,
     );
     let name_y_default = if dim.has_stereotypes {
         let stereo_content_height = dim.stereotype_count as f64 * STEREOTYPE_LINE_HEIGHT;
@@ -8498,6 +8539,19 @@ fn render_entity_content(
             .and_then(|r| r.text_y_values.first().copied())
             .unwrap_or(name_y_default)
     };
+    if entity.visibility != Visibility::Default {
+        // EntityImageClassHeader merges the icon block (with top margin 4)
+        // and text using VerticalAlignment.CENTER. Use the text block's center
+        // to recover that composite origin, independent of font/label height.
+        let size = font.attr_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE);
+        let icon_y = name_y
+            - text_render::ascent_for_family(name_font_size as f64, &font.name_family)
+            + name_content_height / 2.0
+            - (size + 1 + 4) as f64 / 2.0
+            + 4.0;
+        render_declaration_visibility(svg, entity.visibility, name_x, icon_y, size);
+    }
+    let name_x = name_x + declaration_visibility_width;
     let oracle_name_line_anchors = oracle_rect
         .map(oracle_text_line_anchors)
         .unwrap_or_default();
@@ -8716,6 +8770,7 @@ fn render_entity_content(
         name_font_size,
         &font.name_family,
         icon_radius,
+        font.attr_icon_size,
     );
 
     // `dim.is_enum` is true only for the classic enum-constants layout
@@ -10085,6 +10140,64 @@ fn emit_block_members(
             member_text_offset,
         );
     }
+}
+
+/// VisibilityModifier.getUBlock/drawInternal, used by EntityImageClassHeader
+/// with getVisibilityModifier(..., false): declaration icons use METHOD fill.
+/// All insets and dimensions below come from drawCircle/Square/Diamond/Triangle.
+fn render_declaration_visibility(
+    svg: &mut String,
+    visibility: Visibility,
+    x: f64,
+    y: f64,
+    size: u32,
+) {
+    let (name, fill, stroke) = match visibility {
+        Visibility::Public => ("PUBLIC_METHOD", VIS_PUBLIC_FILL_METHOD, VIS_PUBLIC_STROKE),
+        Visibility::Private => (
+            "PRIVATE_METHOD",
+            VIS_PRIVATE_FILL_METHOD,
+            VIS_PRIVATE_STROKE,
+        ),
+        Visibility::Protected => (
+            "PROTECTED_METHOD",
+            VIS_PROTECTED_FILL_METHOD,
+            VIS_PROTECTED_STROKE,
+        ),
+        Visibility::Package => (
+            "PACKAGE_PRIVATE_METHOD",
+            VIS_PACKAGE_FILL_METHOD,
+            VIS_PACKAGE_STROKE,
+        ),
+        Visibility::IeMandatory => ("IE_MANDATORY", "#000000", "#000000"),
+        Visibility::Default => return,
+    };
+    let size = (size - size % 2) as f64;
+    write!(svg, r#"<g data-visibility-modifier="{name}">"#).unwrap();
+    match visibility {
+        Visibility::Public | Visibility::IeMandatory => {
+            write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:{stroke};stroke-width:1;"/>"#,
+                fmt4(x + size / 2.0), fmt4(y + size / 2.0), fmt4((size - 4.0) / 2.0), fmt4((size - 4.0) / 2.0)).unwrap();
+        }
+        Visibility::Private => {
+            write!(svg, r#"<rect fill="{fill}" height="{}" style="stroke:{stroke};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fmt4(size - 4.0), fmt4(size - 4.0), fmt4(x + 2.0), fmt4(y + 2.0)).unwrap();
+        }
+        Visibility::Protected => {
+            let side = size - 2.0;
+            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:1;"/>"#,
+                fmt4(x + 1.0 + side / 2.0), fmt4(y), fmt4(x + 1.0 + side), fmt4(y + side / 2.0),
+                fmt4(x + 1.0 + side / 2.0), fmt4(y + side), fmt4(x + 1.0), fmt4(y + side / 2.0)).unwrap();
+        }
+        Visibility::Package => {
+            let side = size - 2.0;
+            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:1;"/>"#,
+                fmt4(x + 1.0 + side / 2.0), fmt4(y + 1.0), fmt4(x + 1.0), fmt4(y + side - 1.0),
+                fmt4(x + 1.0 + side), fmt4(y + side - 1.0)).unwrap();
+        }
+        Visibility::Default => unreachable!(),
+    }
+    svg.push_str("</g>");
 }
 
 /// Render a single member line (visibility icon + text).
@@ -15451,6 +15564,8 @@ mod tests {
             uid_events: vec![],
             entities: vec![
                 ClassEntity {
+                    is_static: false,
+                    visibility: Visibility::Default,
                     id: "Animal".into(),
                     label: "Animal".into(),
                     explicit_alias: false,
@@ -15488,6 +15603,8 @@ mod tests {
                     source_line: 0,
                 },
                 ClassEntity {
+                    is_static: false,
+                    visibility: Visibility::Default,
                     id: "Dog".into(),
                     label: "Dog".into(),
                     explicit_alias: false,
@@ -16119,6 +16236,8 @@ mod tests {
             direction: ClassLayoutDirection::TopToBottom,
             uid_events: vec![],
             entities: vec![ClassEntity {
+                is_static: false,
+                visibility: Visibility::Default,
                 id: "MyClass".into(),
                 label: "MyClass".into(),
                 explicit_alias: false,
@@ -18118,6 +18237,8 @@ mod tests {
             direction: ClassLayoutDirection::TopToBottom,
             uid_events: vec![],
             entities: vec![ClassEntity {
+                is_static: false,
+                visibility: Visibility::Default,
                 id: "Drawable".into(),
                 label: "Drawable".into(),
                 explicit_alias: false,

@@ -128,6 +128,11 @@ pub struct ClassEntity {
     #[serde(default)]
     pub explicit_alias: bool,
     pub kind: EntityKind,
+    /// CommandCreateClass stores declaration-level modifiers on the entity.
+    #[serde(default)]
+    pub is_static: bool,
+    #[serde(default)]
+    pub visibility: Visibility,
     pub members: Vec<Member>,
     pub stereotypes: Vec<String>,
     /// Generic type parameter(s) declared with `<...>` after the entity name,
@@ -186,6 +191,13 @@ pub enum EntityKind {
     Enum,
     Annotation,
     Entity,
+    Protocol,
+    Struct,
+    Exception,
+    Metaclass,
+    Stereotype,
+    Dataclass,
+    Record,
     Object,
     State,
     Circle,
