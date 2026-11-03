@@ -1,0 +1,200 @@
+[
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_0.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_0.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_0.rust.svg",
+    "source_sha256": "eb7d88757b1f7d8227707891f963832a21225cc7ae1ee86dbd7858d8916b408b",
+    "java_sha256": "3e31d3c9dcaf938f0ad399247a5b32b3834e07550b820df5ac4e5eef9076bf45",
+    "rust_sha256": "08f3ebba3b3d22d9f090336db53074d25f9b63533aa43ac24b18fb1c038a25d4",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_1.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_1.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_1.rust.svg",
+    "source_sha256": "8073792c20afdcba476c76f4fd459a3ecb837b02f4d38fa705c21977cbf271d7",
+    "java_sha256": "699fd8be2fdd2846990ab7119c7cf7589b18ab307b3fcc1af584a2bbe70afc11",
+    "rust_sha256": "9b4a07fe0c6f9843c7e68d201386a550fd4870a133ce15f1a270871d5776153c",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_10.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_10.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_10.rust.svg",
+    "source_sha256": "eecae322e26baf0b5fdf8460e405818b98bbe9148d671b9d9b3ee488a2f89c80",
+    "java_sha256": "725c70ac0415f6a8e094b8d9a569bacad7b138be485fe3b450cac225cf6ef2fa",
+    "rust_sha256": "0b80b578b6b165fab042676eab7fe915b25ad4f59e592a1adb014c9b3baf25ae",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_11.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_11.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_11.rust.svg",
+    "source_sha256": "258223aabcf6ad3ab5d09defdf09ad7657df1b2a939c255c62c8cb092c222b43",
+    "java_sha256": "bb7f16b462de5c5634978d517cd42071ab57ad3bf95b5a936b2f4e23ef05975c",
+    "rust_sha256": "e4fed6b4469b573cd3885fbc495ab10ce1f38dca19ea64c791346545f8e301d5",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_12.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_12.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_12.rust.svg",
+    "source_sha256": "b1c8c8e47b2460c9f016a2363a7c34066a2f910c48ef4dcc577c58ee01860b15",
+    "java_sha256": "e205be6d922ba60c06d990a7be8a1d161deeb2a0b09dfaa0f60a7341b938f072",
+    "rust_sha256": "e5597d7a922fe9cde6acc8cccd733f4d92a3bbafe807af3feda957522b33f47b",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_13.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_13.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_13.rust.svg",
+    "source_sha256": "416350d834dfc748b3739c534e3ff92a42163079f366d1fff0c3ee4867671ab6",
+    "java_sha256": "1f417854c1f797bf1b46941f8b90f313aaf4911830bd9cac6d779b5684fb442f",
+    "rust_sha256": "b3606d232420fe2b8223e80e523b70edf2ea1739202a9627897b09abcd7e3994",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_14.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_14.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_14.rust.svg",
+    "source_sha256": "fbb430e33c3123c26437707fcc1f358228e2fd96fa19e4fb0d3de7b7a9eed7aa",
+    "java_sha256": "2a1b593ff060365353c1049c26ecdeb1a37a78b5e36d64dd253d03a5dc20f0dc",
+    "rust_sha256": "940ff3e8639bcda0a6f48349590e37e1877d81e12252cecabc04b7a1b94614ce",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_15.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_15.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_15.rust.svg",
+    "source_sha256": "59a0b53583bbe326455486adf8191f54ec2fd3845fa987c84a7781b3e36f1f16",
+    "java_sha256": "5f00a846a2c3f6f2f36b28c8f063ba63ebea5e905c19f3dede3503286fb6c8a7",
+    "rust_sha256": "a957e885404f5d218063c9ef8d8bdbfc34c2e4183b4011e19c9f78e4cf9cb4bc",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_16.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_16.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_16.rust.svg",
+    "source_sha256": "14b2f910aa3ac0091e4e7e08aa00dba7a644e8da1fed997085e95146e97bf780",
+    "java_sha256": "cc59c39b2158c47e074e25d16cad22185018591e1cd8a1aeb264d1c5432cf6b9",
+    "rust_sha256": "b9d959fe4e303ff6e63aee9f0e883a51568efefa3e42ba494d6b26c6267dea0a",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_17.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_17.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_17.rust.svg",
+    "source_sha256": "db02b0d20fed33e9e6ed0789004a5a9dcd9aad6991b3b23cb71c56fb164ee1f9",
+    "java_sha256": "c57df0ba56056ea09c59d6a3fcf5ca9367f31284352f1bf139bc2f2fef69f0ad",
+    "rust_sha256": "661386511cc8adcd3fb4576511bc282df7e33ee13071cdc975ea85f038b2d1bf",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_2.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_2.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_2.rust.svg",
+    "source_sha256": "293531f14d8b016d1bb353e75c09cca8cd12897de9766a198ae2ce23b9564be5",
+    "java_sha256": "29e1bdb8845b31ce0628d92056abd09ba6eaf0173fa1d932538378f814bbeb07",
+    "rust_sha256": "a167c30681474f3f3b5131a7ba9fe0a488ea171a8256b912dae70fceccf91ff0",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_3.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_3.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_3.rust.svg",
+    "source_sha256": "c67d768bd8eaee932e1218a65e6392ffd9838d23a2e44aab2b38417aa54dd4f1",
+    "java_sha256": "a82e990cac3b389637f29487c44fecdc72ab837068eb95cb7d30054453d629de",
+    "rust_sha256": "d138808b5186236063824743a4dfc9d8a19ee0078193e480e54e6a701b5e2136",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_4.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_4.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_4.rust.svg",
+    "source_sha256": "aa0eb781c4603023fd31a6a7f2a962c8c6979960c323e4eb7c5f184df6af5837",
+    "java_sha256": "4ae8f43c18d3b7591032b54a2b644427d95052ed4a7873dd7a34541dcf7361ea",
+    "rust_sha256": "433f44bbb07307f8d28a7c6f7586f0592aeb12310c451d10a43151d0ad9b008e",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_5.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_5.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_5.rust.svg",
+    "source_sha256": "137605b2504994d3e4e36b4105b6e40bef562685ae0848ec4a2690c110409ec2",
+    "java_sha256": "c2b2954f8d5d1f92dcedc5d68619d72158f9b3f5e5787383e865f6d97bd71b21",
+    "rust_sha256": "ea72a27e294c72f122f068cd2e40eb5812cef358caaf74e2f9d210214edacd58",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_6.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_6.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_6.rust.svg",
+    "source_sha256": "357f6b4ccd870a8438ed3742c32f80e48b3920d26644ff4b627b01570ac8ce4e",
+    "java_sha256": "3c62afaf484de4cf80c602de35a3dc8fb40f97743cc8706bd96159c1980320d3",
+    "rust_sha256": "febaffeaa4d752091fe2512311049bf6b680bb1cd9a6c2b8f96c85cc1fe69730",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_7.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_7.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_7.rust.svg",
+    "source_sha256": "236ce2f9d83f22fe70f8394b51e25382548f3b27171671ed6901ce42e7a46500",
+    "java_sha256": "60bbddffc94e4938e0c06cb41e58f0c166d5bbd440826207a3070e47167961d7",
+    "rust_sha256": "1607d781d565d544def8f7ccf4af97e00e5d914cf3808abdc0444395ff0836cb",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_8.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_8.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_8.rust.svg",
+    "source_sha256": "6d15a5ae1bb197290070ba33b8051bdc78f9cb7a30394c3c67e5866a60adbbda",
+    "java_sha256": "5030142867b557e9f896b2479d1e9e25577c3b2540d84b9d22576997c01b37cd",
+    "rust_sha256": "4def6900918df0f8c4aafa962a74f7a5685df9dd4af1018ead2520654ac198ef",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_9.puml",
+    "java_svg": "docs/parity-reviews/sequence-self-arrow-async-stroke/maker-results/inputs/async_9.svg",
+    "rust_svg": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async/async_9.rust.svg",
+    "source_sha256": "fbef97b979d718319d47da041f7c5afc7ec98494fc3fcaf26550723f37d644ae",
+    "java_sha256": "e1c0361372015868b433b40ad6a4084976f23501ee72bf04ae08a1fea0a9bd69",
+    "rust_sha256": "8f627daeeee247ce1f7930cb30ae49bfbd965c315267ee97a2b7d6c967e52906",
+    "product_exit": 0,
+    "assisted_exit": 0,
+    "cli_exit": 0
+  }
+]
