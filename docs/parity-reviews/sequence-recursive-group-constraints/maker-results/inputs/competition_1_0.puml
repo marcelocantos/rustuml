@@ -1,0 +1,9 @@
+@startuml
+participant Sedge as S
+participant Forge as F
+group package
+note left of S : MMMMll
+note left of S : WMW.ff
+S -> F : transfer
+end
+@enduml
