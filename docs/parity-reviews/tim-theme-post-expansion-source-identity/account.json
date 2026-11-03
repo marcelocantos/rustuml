@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-theme-post-expansion-source-identity",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/tim/TContext.java:344-359,389-398,456-473,725-741: executeLines, executeOneLineNotSafe, addPlain, addToResultList, executeTheme",
+    "src/main/java/net/sourceforge/plantuml/tim/iterator/CodeIteratorSub.java:68-100: replay sub body at its definition position",
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:203-213: createPSystem constructs UmlSource from preprocessed source",
+    "src/main/java/net/sourceforge/plantuml/core/UmlSource.java:173-192: getPlainString and seed"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs::preprocess_full_inner",
+    "crates/rustuml-parser/src/preprocess/mod.rs::expanded_theme_seed_source",
+    "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::try_theme"
+  ],
+  "invariant": "A themed diagram derives resource identity from the entire post-TIM source in execution order, with theme text inserted at the active directive, comments/directives consumed, and surrounding variables/functions/control flow expanded. Parser-only flattening, source markers, placeholders and theme-tail relocation never enter that identity stream.",
+  "causal_divergence": "expanded_theme_seed_source reconstructs source by replacing theme lines in raw input but copying every other raw line verbatim. The measured preproc_complex_theme_override differs from Java -preproc by exactly its single-line comment. Its SVG differences are gradient IDs and corresponding references (small geometry differences are within the existing comparator). Procedure-generator failures have equal content expansion; most other failed themed inputs are downstream geometry, style, font-outline or handwritten-shape differences.",
+  "planned_change": "Use the existing separate source_identity_mode TIM pass for themed and unthemed inputs alike. In that pass, execute a theme body in place with sub bodies expanded inline, in the same context as surrounding source; return that raw TIM expansion rather than parser metadata. Derive the parser seed metadata from this complete stream. Delete raw-source reconstruction and redundant per-theme seed replay; retain parser-oriented theme-tail/flattening and existing source-location behavior.",
+  "perturbation_axes": [
+    "comment/directive placement before versus after theme, including block comments and inactive branches",
+    "renamed identifiers and variable values versus literal declarations",
+    "theme choice and number/order of active theme loads",
+    "procedure-generated declarations versus ordinary statements"
+  ],
+  "verification_plan": [
+    "Preserve original input and references untouched; record exact Java and Rust before/after expansion and CLI SVG comparator outputs under maker evidence.",
+    "Run fresh valid Java probes across the axes; preserve failures too, no scope waivers.",
+    "Run all parser unit tests, both release corpus tiers, all 833 preserved perturbations (810 original + 23 added), and honesty guards.",
+    "Parent provides independent checker; maker writes no review.json and changes no ratchets."
+  ],
+  "baseline": {
+    "source_only": [
+      11181,
+      11251
+    ],
+    "assisted": [
+      10497,
+      11251
+    ],
+    "preprocessing_source_only": [
+      285,
+      307
+    ],
+    "perturbations": {
+      "pass": 349,
+      "total": 833,
+      "fail": 484,
+      "original_total": 810,
+      "added_total": 23
+    },
+    "guards": [
+      4,
+      6
+    ]
+  },
+  "limits": [
+    "Source-pinned rebuilt JAR is not historical-byte-identical; host font/Graphviz parity remains unproven.",
+    "This packet does not change dispatch, class/description layout, font metrics or theme style resolution downstream.",
+    "Existing unrelated TIM expression/scoping limitations can still cause failing fresh inputs; they remain negative evidence, not an acceptance exception."
+  ],
+  "review_status": "Maker proposal only; no acceptance claim."
+}
