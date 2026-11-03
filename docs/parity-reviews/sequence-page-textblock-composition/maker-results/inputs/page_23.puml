@@ -1,0 +1,10 @@
+@startuml
+title Wide heading WWWWWWWWWWWWWWWWWWWWWWWWW
+participant Willow as W
+participant Fir as F
+group package
+note left of W : Wide outside note WWW
+W -> F : request
+F --> W : response
+end
+@enduml

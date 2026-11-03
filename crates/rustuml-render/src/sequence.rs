@@ -1772,6 +1772,7 @@ fn over_several_note_geometry(
     component_pref_w: f64,
     content_visible_w: f64,
     teoz: bool,
+    page_shift: f64,
 ) -> OverSeveralNoteGeometry {
     let participant_right = participants[hi].box_x
         + participants[hi].box_width
@@ -1785,7 +1786,8 @@ fn over_several_note_geometry(
     let area_left = if teoz {
         raw_area_left
     } else {
-        raw_area_left.trunc()
+        // NoteBox truncates before DecorateEntityImage translates the body.
+        (raw_area_left - page_shift).trunc() + page_shift
     };
     let visible_width = if area_width > component_pref_w {
         (area_width - 2.0 * ROSE_NOTE_PADDING_X).floor()
@@ -8384,6 +8386,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         component_pref_w,
                         content_visible_w,
                         diagram.teoz,
+                                    0.0,
                     )
                     .visible_left;
                     (HEAD_BOX_Y - note_left).max(0.0).floor()
@@ -8847,6 +8850,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     component_pref_w,
                                     note_content_w,
                                     diagram.teoz,
+                                    0.0,
                                 );
                                 Some((geom.visible_left, geom.visible_left + geom.visible_width))
                             } else {
@@ -9771,7 +9775,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     group_frames.retain(|frame| frame.closed);
     // Page decorations are outside DrawableSetInitializer's constraint and
     // missing-space stages; they must not participate in winner selection.
-    if !participants.is_empty() {
+    if diagram.teoz && !participants.is_empty() {
         // Title/header/caption/footer band feedback: if any band is wider than the
         // current participant span, shift the participants so the span midpoint
         // lands under the band's centre. `c0` is the span midpoint on the
@@ -10055,6 +10059,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 component_pref_w,
                                 note_content_w,
                                 diagram.teoz,
+                                    0.0,
                             );
                             geom.visible_left + geom.visible_width
                         } else {
@@ -10397,7 +10402,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
     {
-        for (participant_id, variations) in &life_lines.variations {
+        for (participant_id, variations) in &horizontal_life_lines.variations {
             let mut open: Vec<(usize, f64, Option<String>, usize)> = Vec::new();
             for variation in variations {
                 match variation.kind {
@@ -10491,13 +10496,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // rects in document order (outermost first). Sort by the group's start event
     // index to restore document order.
     group_frames.sort_by_key(|f| f.event_idx);
-
-    let center_of = |id: &str| -> f64 {
-        id_to_idx
-            .get(id)
-            .map(|&i| participants[i].center_x)
-            .unwrap_or(0.0)
-    };
 
     // A group left open at @enduml (e.g. a `break` inside an `alt` consumes the
     // loop's `end`) is never drawn, but PlantUML's InGroupableList still
@@ -10614,6 +10612,62 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         svg_width
     };
 
+    // DiagramChromeFactory12026 wraps body -> legend -> title -> caption ->
+    // header/footer. DecorateEntityImage centers the child in each maximum width.
+    // TextBlockBordered contributes one trailing unit; plantuml.skin supplies
+    // title padding/margin 5+5, caption margin 1 and legend margin 12.
+    let mut page_body_shift = 0.0;
+    let mut page_text_center = None;
+    let mut legend_left = LEGEND_LEFT;
+    let body_right;
+    let svg_width = if !diagram.teoz {
+        let body_width = svg_width_exact - LEGACY_SEQUENCE_RIGHT_MARGIN;
+        let legend_width = if legend_lines.is_empty() { body_width } else {
+            body_width.max(legend_box_w + 2.0 * LEGEND_LEFT + 1.0)
+        };
+        let mut decorated_width = legend_width;
+        if !title_lines.is_empty() {
+            let text = title_lines.iter().map(|line|
+                text_render::measure(line, TITLE_FONT_SIZE as f64, true))
+                .fold(0.0_f64, f64::max);
+            decorated_width = decorated_width.max(text + 2.0 * TITLE_TOP_PAD + 1.0);
+        }
+        if let Some(caption) = &diagram.meta.caption {
+            decorated_width = decorated_width.max(text_width_with_family(
+                caption, CAPTION_FONT_SIZE as f64, &page_font_family) + 3.0);
+        }
+        for text in header_lines.iter().copied().chain(diagram.meta.footer.as_deref()) {
+            decorated_width = decorated_width.max(text_width_with_family(
+                text, HEADER_FONT_SIZE as f64, &page_font_family) + 1.0);
+        }
+        page_body_shift = (decorated_width - body_width) / 2.0;
+        for participant in &mut participants {
+            participant.center_x += page_body_shift;
+            participant.box_x += page_body_shift;
+            participant.lifeline_line_x += page_body_shift;
+        }
+        for frame in &mut group_frames {
+            frame.left += page_body_shift;
+            frame.right += page_body_shift;
+        }
+        for left in self_msg_right_note_left_by_event.values_mut() { *left += page_body_shift; }
+        legend_left += (decorated_width - legend_width) / 2.0;
+        page_text_center = Some((decorated_width - 1.0) / 2.0);
+        body_right = body_width + page_body_shift;
+        svg_width_exact = decorated_width + LEGACY_SEQUENCE_RIGHT_MARGIN;
+        svg_width_exact.ceil() as u32
+    } else {
+        body_right = svg_width_exact - HEAD_BOX_Y;
+        svg_width
+    };
+
+    let center_of = |id: &str| -> f64 {
+        id_to_idx
+            .get(id)
+            .map(|&i| participants[i].center_x)
+            .unwrap_or(page_body_shift)
+    };
+
     // -----------------------------------------------------------------------
     // Phase 6: Generate SVG
     // -----------------------------------------------------------------------
@@ -10689,10 +10743,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // PlantUML `SequenceDiagramArea.getHeaderX(RIGHT) = getWidth - headerWidth`.
             // With group frames the band reference is the full sequence area width;
             // otherwise it is the canvas-derived `svg_width_exact - 6` inset.
-            let x = match group_band_get_width {
+            let x = if let Some(center) = page_text_center {
+                2.0 * center - text_length
+            } else { match group_band_get_width {
                 Some(gw) => gw - text_length,
                 None => svg_width_exact - text_length - 6.0,
-            };
+            }};
             text_render::emit_text(
                 &mut svg.buf,
                 line,
@@ -10723,7 +10779,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Actor-to-database endpoint spans in Java land 7.5px left of the
         // generic box-edge midpoint (edge_mixed_sequence_all_features).
         const ACTOR_TO_DATABASE_TITLE_CENTER_ADJUST: f64 = 7.5;
-        let title_center = if let Some(gw) = group_band_get_width {
+        let title_center = if let Some(center) = page_text_center {
+            center
+        } else if let Some(gw) = group_band_get_width {
             // PlantUML `SequenceDiagramArea.getTitleX`: title centred on the
             // whole sequence area width (which, with group frames, spans the
             // outermost frame: getWidth = frame_left + frame_right - 1).
@@ -10971,7 +11029,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let close_down = i == n - 1;
             svg.buf.push_str("<g>");
             write!(svg.buf, "<title>{}</title>", escape_xml(title)).unwrap();
-            svg.activation_bar_segment(bar_x, s1, s2 - s1, &fill_color, close_up, close_down);
+            // DrawableSet#clipAndTranslate2 clips the complete component pass.
+            // DriverRectangleSvg#draw trims rectangles but preserves their groups.
+            let bottom = if has_newpage {
+                s2.min(tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0)
+            } else { s2 };
+            if bottom > s1 {
+                svg.activation_bar_segment(bar_x, s1, bottom - s1, &fill_color, close_up, close_down);
+            }
             svg.buf.push_str("</g>");
         }
     };
@@ -11241,7 +11306,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // MessageExoArrow receives DrawableSet's final freeX after
         // prepareMissingSpace has measured every graphical element. The SVG
         // canvas adds the standard 5px outer inset after that shared edge.
-        .max(svg_width_exact - 5.0);
+        .max(body_right);
     // Track enclosing group frame bounds so else dividers span the full frame.
     let mut else_frame_stack: Vec<(f64, f64)> = Vec::new();
     // A group whose `end` was consumed (e.g. a `break` inside an `alt` swallows
@@ -11304,7 +11369,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // MessageExoArrow draws right-boundary found messages from
                     // the diagram area's right edge. The SVG body edge is the
                     // exact width minus the standard 5px content inset.
-                    svg_width_exact - 5.0
+                    body_right
                 } else {
                     center_of(&msg.from)
                 };
@@ -12480,7 +12545,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         0.0,
                         participant_span
                             .max(label_box_w + 24.0)
-                            .max(svg_width_exact - HEAD_BOX_Y),
+                            .max(body_right),
                     )
                 };
                 let mid_x = (line_left + line_right) / 2.0;
@@ -12674,6 +12739,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     })
                     .collect();
+                // Java NoteBox rounds in body coordinates; chrome translates
+                // the already laid out body without re-rounding its components.
+                let body_trunc = |x: f64| (x - page_body_shift).trunc() + page_body_shift;
+                let body_floor = |x: f64| (x - page_body_shift).floor() + page_body_shift;
+                let body_ceil = |x: f64| (x - page_body_shift).ceil() + page_body_shift;
                 // Compute note left/right based on position. A message-attached
                 // note anchors to the leftmost (Left) / rightmost (Right) endpoint
                 // of the message by screen position; a participant note uses its
@@ -12700,13 +12770,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
                             let left = if !diagram.teoz && note.shape == NoteShape::Note {
                                 // NoteBox truncates the raw origin before Rose padding.
-                                ll_x.trunc() + ROSE_NOTE_PADDING_X
+                                body_trunc(ll_x) + ROSE_NOTE_PADDING_X
                             } else if note.on_message {
-                                ll_x.ceil() + gap
+                                body_ceil(ll_x) + gap
                             } else if diagram.teoz {
                                 ll_x + gap
                             } else {
-                                (ll_x + gap).floor()
+                                body_floor(ll_x + gap)
                             };
                             (left, left + note_content_w)
                         }
@@ -12731,11 +12801,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if note.shape == NoteShape::Note && !diagram.teoz {
                             let component_width =
                                 folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta);
-                            let component_left = (ll_x - component_width).trunc();
+                            let component_left = body_trunc(ll_x - component_width);
                             let left = component_left + ROSE_NOTE_PADDING_X;
                             (left, left + note_content_w)
                         } else if note.on_message {
-                            let right = ll_x.floor() - gap;
+                            let right = body_floor(ll_x) - gap;
                             (right - note_content_w, right)
                         } else {
                             let preferred_width = single_note_visible_raw_width(
@@ -12743,7 +12813,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 note.shape,
                                 note_global_padding,
                             );
-                            let left = (ll_x - gap - preferred_width).trunc();
+                            let left = body_trunc(ll_x - gap - preferred_width);
                             (left, left + note_content_w)
                         }
                     }
@@ -12769,7 +12839,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let centre = (participants[0].center_x
                                     + participants[participants.len() - 1].center_x)
                                     / 2.0;
-                                let left = note_across_left(centre, pw_raw);
+                                let left = note_across_left(centre - page_body_shift, pw_raw) + page_body_shift;
                                 (left, left + pw)
                             }
                         } else if note.participants.len() == 1 {
@@ -12808,8 +12878,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // NoteBox#getStartingX centers the full preferred component,
                             // including shadow; AbstractComponent then adds paddingX.
                             let shadow = if note.shape == NoteShape::Note { note_shadow_delta } else { 0.0 };
-                            let left = (cx - (raw_w + shadow) / 2.0).max(HEAD_BOX_Y);
-                            let left = if diagram.teoz { left } else { left.floor() };
+                            let left = (cx - (raw_w + shadow) / 2.0).max(HEAD_BOX_Y + page_body_shift);
+                            let left = if diagram.teoz { left } else { body_floor(left) };
                             (left, left + note_content_w)
                         } else {
                             // Note over multiple participants (OVER_SEVERAL).
@@ -12858,6 +12928,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     component_pref_w,
                                     note_content_w,
                                     diagram.teoz,
+                                    page_body_shift,
                                 );
                                 (geom.visible_left, geom.visible_left + geom.visible_width)
                             } else {
@@ -12875,7 +12946,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     centre,
                                 );
                                 let pw = note_content_w.max(min_width);
-                                let left = (centre - pw_raw / 2.0).floor();
+                                let left = body_floor(centre - pw_raw / 2.0);
                                 (left, left + pw)
                             }
                         }
@@ -13707,12 +13778,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // the divider/group "participant span" right edge. Holds whether the
         // page-1 right edge is set by participant boxes, a wide group frame,
         // a note, or a divider.
-        let sep_x2 = svg_width_exact - 5.0;
+        let sep_x2 = body_right;
         let sep_y = tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP;
         write!(
             svg.buf,
-            r##"<line style="stroke:{};stroke-width:0.5;stroke-dasharray:2,2;" x1="0" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:{};stroke-width:0.5;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
             svg.lifeline_border,
+            fmt_coord(page_body_shift),
             fmt_coord(sep_x2),
             fmt_coord(sep_y),
             fmt_coord(sep_y),
@@ -13729,7 +13801,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             r##"<g class="legend" data-source-line="{legend_line}"><rect fill="#DDDDDD" height="{}" rx="7.5" ry="7.5" style="stroke:#000000;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
             fmt_coord(legend_box_h),
             fmt_coord(legend_box_w),
-            fmt_coord(LEGEND_LEFT),
+            fmt_coord(legend_left),
             fmt_coord(legend_y),
         )
         .unwrap();
@@ -13739,7 +13811,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 &mut svg.buf,
                 line,
                 &TextBase {
-                    x: LEGEND_LEFT + LEGEND_PAD,
+                    x: legend_left + LEGEND_PAD,
                     y: line_top + metrics.ascent,
                     font_size: LEGEND_FONT_SIZE,
                     font_family: &page_font_family,
@@ -13761,9 +13833,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // split into separate `<text>` elements at calculated x offsets.
     if let Some(caption) = &diagram.meta.caption {
         let src_line = diagram.meta.caption_line.unwrap_or(1);
-        let caption_x = if let (Some(first), Some(last)) =
-            (participants.first(), participants.last())
-        {
+        let caption_x = if let Some(center) = page_text_center {
+            center - text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family) / 2.0
+        } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
             let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
             let w = text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family);
             (center - w / 2.0).max(1.0)
@@ -13812,7 +13884,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let w = text_width_with_family(footer, FOOTER_FONT_SIZE as f64, &page_font_family);
             // PlantUML `getFooterX(CENTER) = (getWidth - footerWidth) / 2`. With
             // group frames the sequence area width spans the outermost frame.
-            if let Some(gw) = group_band_get_width {
+            if let Some(center) = page_text_center {
+                center - w / 2.0
+            } else if let Some(gw) = group_band_get_width {
                 ((gw - w) / 2.0).max(0.0)
             } else if diagram.teoz {
                 // Teoz centres the footer on the same area width as the title /
