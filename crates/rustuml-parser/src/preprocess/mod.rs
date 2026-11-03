@@ -2201,7 +2201,10 @@ impl PreprocessContext {
             .strip_prefix("%variable_exists(\"")
             .and_then(|s| s.strip_suffix("\")"))
         {
-            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
+            return name
+                .strip_prefix('$')
+                .and_then(|name| self.get_var(name))
+                .is_some();
         }
 
         // %is_defined("name") — alias for variable_exists
@@ -2288,7 +2291,11 @@ impl PreprocessContext {
     // Variable substitution
     // ------------------------------------------------------------------
 
-    fn substitute_vars(&self, line: &str) -> String {
+    fn substitute_vars(&mut self, line: &str) -> String {
+        // VariableExists receives an evaluated string token, not a textual
+        // replacement of $name inside that quoted token (TContext's EaterFunctionCall).
+        let line = self.expand_lookup_functions(line);
+        let line = line.as_str();
         // Preserve sprite icon references `<$name>` — they are rendered as
         // inline images and must not be stripped or variable-substituted here.
         // Temporarily replace them with null-byte placeholders, process variable
@@ -2375,6 +2382,27 @@ impl PreprocessContext {
         }
 
         processed
+    }
+
+    fn expand_lookup_functions(&mut self, line: &str) -> String {
+        static LOOKUP: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"%(variable_exists|get_variable_value|is_defined)\(").unwrap()
+        });
+        let mut result = line.to_string();
+        let mut offset = 0;
+        while let Some(found) = LOOKUP.find_at(&result, offset) {
+            let start = found.start();
+            let open = found.end() - 1;
+            let Some(close) = find_matching_paren_from(&result, open) else {
+                break;
+            };
+            let name = result[start + 1..open].to_string();
+            let args = result[open + 1..close].to_string();
+            let replacement = self.eval_builtin_with_expr_args(&name, &args);
+            result.replace_range(start..close + 1, &replacement);
+            offset = start + replacement.len();
+        }
+        result
     }
 
     fn substitute_inline_func_calls(&self, line: &str) -> String {
@@ -2515,11 +2543,25 @@ impl PreprocessContext {
 
         // Split on top-level commas in the raw arg string (before substitution).
         let raw_parts = split_builtin_args(args_raw);
-        if func == "get_variable_value" {
-            let args: Vec<&str> = raw_parts
+        if matches!(
+            func,
+            "get_variable_value" | "variable_exists" | "is_defined"
+        ) {
+            let values: Vec<String> = raw_parts
                 .iter()
-                .map(|a| a.trim().trim_matches('"'))
+                .map(|argument| {
+                    let argument = argument.trim();
+                    if let Some(literal) =
+                        argument.strip_prefix('"').and_then(|s| s.strip_suffix('"'))
+                    {
+                        // TokenStack quoted strings retain the dollar in a name.
+                        literal.to_string()
+                    } else {
+                        self.eval_expr_to_value(argument).to_display()
+                    }
+                })
                 .collect();
+            let args: Vec<&str> = values.iter().map(String::as_str).collect();
             return self.eval_one_builtin_from_values(func, &args);
         }
         // Evaluate each argument as an expression.
@@ -2681,13 +2723,19 @@ impl PreprocessContext {
                 }
             }
             "variable_exists" => {
+                // VariableExists calls memory.getVariable with the exact name.
+                // Our TIM map omits the leading '$'; legacy macros are functions,
+                // not variables. TValue.fromBoolean renders numeric 1 or 0.
                 let name = args.first().copied().unwrap_or("");
-                if self.defines.contains_key(name) || self.token_defines.contains_key(name) {
-                    "true"
+                if name
+                    .strip_prefix('$')
+                    .and_then(|name| self.get_var(name))
+                    .is_some()
+                {
+                    "1".to_string()
                 } else {
-                    "false"
+                    "0".to_string()
                 }
-                .to_string()
             }
             "is_defined" => {
                 let name = args.first().copied().unwrap_or("");
@@ -3510,6 +3558,19 @@ $set("argument")
 global $name
 @enduml"#;
         assert_eq!(pp(source), ["local argument", "global after"]);
+    }
+
+    #[test]
+    fn lookup_names_remain_literal_and_observe_current_frame() {
+        let source = r#"@startuml
+!$shade = "value"
+!procedure $inspect($local)
+%variable_exists("$shade") %variable_exists("shade") %variable_exists("$local")
+!endprocedure
+$inspect("payload")
+%variable_exists("$local")
+@enduml"#;
+        assert_eq!(pp(source), ["1 0 1", "0"]);
     }
 
     #[test]
