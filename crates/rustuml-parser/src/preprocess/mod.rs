@@ -95,11 +95,19 @@ fn preprocess_full_inner(
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
     let input_lines = source_identity_input_lines(input);
     let mut lines = ctx.process_lines(&input_lines);
-    let expanded_theme_source = expanded_theme_seed_source(input, &ctx.theme_seed_expansions);
-    if let Some(seed_source) = &expanded_theme_source {
+    // Java TContext.executeTheme inserts TIM output in the same stream as
+    // surrounding source; UmlSource.seed hashes that complete stream. Run the
+    // identity pass before parser-only theme relocation/flattening. Rebuilding
+    // it from raw source would retain consumed comments and TIM directives.
+    let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
+    identity_ctx.source_identity_mode = true;
+    identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
+    let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
+    let uml_source = uml_source_string(&identity_lines, preserve_teoz_pragma);
+    if ctx.has_theme {
         ctx.theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
-            svg_id_seed_prefix(seed_source)
+            svg_id_seed_prefix(&uml_source)
         ));
     }
     // Append any accumulated theme expansion to the end of the diagram so
@@ -116,69 +124,11 @@ fn preprocess_full_inner(
             lines.insert(insert_at + i, line);
         }
     }
-    let uml_source = expanded_theme_source.unwrap_or_else(|| {
-        let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
-        identity_ctx.source_identity_mode = true;
-        identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-        let input_lines = source_identity_input_lines(input);
-        let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
-        uml_source_string(&identity_lines, preserve_teoz_pragma)
-    });
     PreprocessOutput {
         lines,
         sprites: ctx.sprites,
         uml_source,
     }
-}
-
-fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) -> Option<String> {
-    if expansions.is_empty() {
-        return None;
-    }
-
-    // Java provenance: `PSystemBuilder.createPSystem` builds `UmlSource` from
-    // the preprocessor output, and `UmlSource.seed` hashes
-    // `getPlainString("\n")`. Theme includes occupy the original `!theme`
-    // position in that source; parser-oriented flattening and `theme_tail`
-    // relocation happen only after this representation is captured.
-    let mut source = String::new();
-    let mut in_block = false;
-    let mut skip_initial_empty_lines = false;
-    for (index, line) in input.lines().enumerate() {
-        let source_line = index + 1;
-        let trimmed = line.trim_start();
-        if !in_block {
-            if !trimmed.starts_with("@start") {
-                continue;
-            }
-            in_block = true;
-            skip_initial_empty_lines = true;
-        } else if skip_initial_empty_lines && trimmed.is_empty() {
-            continue;
-        } else {
-            skip_initial_empty_lines = false;
-        }
-
-        if let Some(expansion) = expansions
-            .iter()
-            .find(|expansion| expansion.source_line == source_line)
-        {
-            for expanded in &expansion.lines {
-                let expanded =
-                    split_source_line_marker(expanded).map_or(expanded.as_str(), |(_, text)| text);
-                source.push_str(expanded);
-                source.push('\n');
-            }
-        } else {
-            source.push_str(line);
-            source.push('\n');
-        }
-
-        if trimmed.starts_with("@end") {
-            break;
-        }
-    }
-    Some(source)
 }
 
 /// Mirror the source reader that runs before Java's TIM expansion.
@@ -544,13 +494,9 @@ struct PreprocessContext {
     /// parser reconstruct the directive's temporal position without shifting
     /// user source lines.
     theme_tail: Vec<String>,
-    /// Unflattened theme expansions keyed by their top-level source line.
-    ///
-    /// PlantUML seeds SVG resource IDs from `UmlSource.source`, after TIM has
-    /// expanded `!theme` in place but before grouped skinparams are flattened
-    /// for individual diagram parsers. Keep only this transient representation;
-    /// the resulting seed prefix is carried as parser metadata.
-    theme_seed_expansions: Vec<ThemeSeedExpansion>,
+    /// An active bundled theme needs the complete post-TIM source identity
+    /// carried past parser-only theme flattening (Java UmlSource.seed).
+    has_theme: bool,
     /// Once loop expansion produces generated content, subsequent original
     /// lines need explicit source-origin markers because output position no
     /// longer equals PlantUML's `data-source-line`.
@@ -561,11 +507,6 @@ struct PreprocessContext {
     /// Emit Java's post-TIM `UmlSource` stream instead of parser line-number
     /// placeholders. Used only by the deterministic SVG identity pass.
     source_identity_mode: bool,
-}
-
-struct ThemeSeedExpansion {
-    source_line: usize,
-    lines: Vec<String>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -649,7 +590,7 @@ impl PreprocessContext {
             current_source_line: 0,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
-            theme_seed_expansions: Vec::new(),
+            has_theme: false,
             mark_source_lines: false,
             source_line_override: None,
             mark_function_body_source_lines,
@@ -1813,14 +1754,17 @@ impl PreprocessContext {
     /// numbers; parser-side body delimiters restore its source-order effects.
     fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
         let rest = line.strip_prefix("!theme ")?;
-        let source_line = self.current_source_line;
         let diagram_source_line = self.current_diagram_source_line();
-        let top_level = self.include_depth == 0;
         let mut name_part = rest.trim();
         // `!theme NAME from URL` — strip the `from URL` portion. We always
         // resolve from the embedded bundle regardless of the URL.
         if let Some(idx) = name_part.find(" from ") {
             name_part = name_part[..idx].trim();
+        }
+        // Java's conditional iterator suppresses inactive THEME directives;
+        // consumed directives do not add blank lines to TContext.resultList.
+        if self.source_identity_mode && (name_part.is_empty() || !self.is_active()) {
+            return Some(Vec::new());
         }
         if name_part.is_empty() {
             // Keep a placeholder so subsequent diagram lines retain their
@@ -1833,6 +1777,19 @@ impl PreprocessContext {
         if let Some(theme_src) = themes::get_theme_source(name_part) {
             let body = themes::strip_front_matter(theme_src);
             if self.include_depth < MAX_INCLUDE_DEPTH {
+                self.has_theme = true;
+                // Java TContext.executeTheme -> executeLines uses the current
+                // memory and output position. CodeIteratorSub replays sub
+                // bodies in place. Keep this stream unflattened for UmlSource.
+                if self.source_identity_mode {
+                    let saved_expand_subs_inline = self.expand_subs_inline;
+                    self.expand_subs_inline = true;
+                    self.include_depth += 1;
+                    let expanded = self.process(body);
+                    self.include_depth -= 1;
+                    self.expand_subs_inline = saved_expand_subs_inline;
+                    return Some(expanded);
+                }
                 self.theme_tail
                     .push(format!("skinparam __theme_body_start {name_part}"));
                 let saved_mark_function_body_source_lines = self.mark_function_body_source_lines;
@@ -1865,21 +1822,13 @@ impl PreprocessContext {
                     self.theme_tail
                         .extend(themes::flatten_theme_output(&expanded));
                 }
-                if top_level {
-                    self.expand_subs_inline = true;
-                    self.include_depth += 1;
-                    let seed_expansion = self.process(body);
-                    self.include_depth -= 1;
-                    self.expand_subs_inline = false;
-                    self.theme_seed_expansions.push(ThemeSeedExpansion {
-                        source_line,
-                        lines: seed_expansion,
-                    });
-                }
                 self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
                 self.theme_tail
                     .push(format!("skinparam __theme_body_end {name_part}"));
             }
+        }
+        if self.source_identity_mode {
+            return Some(Vec::new());
         }
         // Replacing the directive with one metadata line preserves every
         // following source-line number while retaining its temporal position.
@@ -1893,6 +1842,11 @@ impl PreprocessContext {
 
     fn try_option(&self, line: &str) -> Option<Vec<String>> {
         let rest = line.strip_prefix("!option ")?;
+        // TContext.executeOneLineNotSafe consumes OPTION via executeOption;
+        // its state change never adds a line to resultList / UmlSource.
+        if self.source_identity_mode {
+            return Some(Vec::new());
+        }
         let mut parts = rest.split_whitespace();
         let name = parts.next()?;
         let value = parts.next().unwrap_or("true");
@@ -4346,6 +4300,91 @@ $record(SaffronArchive)\n\
     }
 
     #[test]
+    fn themed_identity_consumes_comments_and_surrounding_tim_directives() {
+        // TContext.executeLines / executeTheme feed one post-TIM stream to
+        // UmlSource. These sources differ only in consumed TIM input, so their
+        // identity must equal the literal expansion, including theme text.
+        let literal = "@startuml\n!theme cerulean\nclass CedarLedger\n@enduml\n";
+        let generated = concat!(
+            "@startuml\n",
+            "' leading comment\n",
+            "!$label = \"CedarLedger\"\n",
+            "!theme cerulean\n",
+            "/' block comment\n",
+            "still a comment\n",
+            "'/\n",
+            "!if 1\n",
+            "!if 0\n",
+            "class Unused\n",
+            "!else\n",
+            "class $label\n",
+            "!endif\n",
+            "!endif\n",
+            "@enduml\n",
+        );
+        let expected = preprocess_full(literal, None);
+        let actual = preprocess_full(generated, None);
+        assert_eq!(actual.uml_source, expected.uml_source);
+        assert_eq!(
+            actual
+                .lines
+                .iter()
+                .find(|line| line.starts_with("skinparam __svgIdSeed ")),
+            expected
+                .lines
+                .iter()
+                .find(|line| line.starts_with("skinparam __svgIdSeed ")),
+        );
+    }
+
+    #[test]
+    fn themed_identity_expands_procedure_and_retains_only_active_themes() {
+        let literal = "@startuml\n!theme cerulean\nclass HarborRecord\n!theme minty\n@enduml\n";
+        let generated = concat!(
+            "@startuml\n",
+            "!theme cerulean\n",
+            "!procedure $record($name)\n",
+            "class $name\n",
+            "!endprocedure\n",
+            "$record(HarborRecord)\n",
+            "!if 0\n",
+            "!theme united\n",
+            "!endif\n",
+            "' palette change\n",
+            "!theme minty\n",
+            "@enduml\n",
+        );
+        assert_eq!(
+            preprocess_full(generated, None).uml_source,
+            preprocess_full(literal, None).uml_source,
+        );
+    }
+
+    #[test]
+    fn themed_identity_keeps_variable_changes_in_source_order() {
+        // Theme-defined variables remain available after executeTheme, and
+        // later assignments affect only subsequent statements in resultList.
+        let input = concat!(
+            "@startuml\n",
+            "!theme cerulean\n",
+            "skinparam classBorderColor $PRIMARY\n",
+            "!$PRIMARY = \"#123456\"\n",
+            "skinparam classBackgroundColor $PRIMARY\n",
+            "class HarborRecord\n",
+            "@enduml\n",
+        );
+        let output = preprocess_full(input, None);
+        assert!(output.uml_source.ends_with(concat!(
+            "skinparam classBorderColor #2FA4E7\n",
+            "skinparam classBackgroundColor #123456\n",
+            "class HarborRecord\n",
+            "@enduml\n",
+        )));
+        assert!(!output.uml_source.contains("!$PRIMARY"));
+        assert!(!output.uml_source.contains("__theme"));
+    }
+
+    #[test]
     fn one_line_unquoted_function_expands_in_theme_style_content() {
         let output = preprocess(
             "@startuml\n\
@@ -4374,6 +4413,11 @@ $record(SaffronArchive)\n\
         let input = "@startuml\n!theme sketchy\nstart\n@enduml";
         let lines = pp(input);
         assert!(lines.contains(&"skinparam __optionHandwritten true".to_string()));
+        assert!(
+            !preprocess_full(input, None)
+                .uml_source
+                .contains("__optionHandwritten")
+        );
     }
 
     #[test]
