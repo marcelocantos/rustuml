@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8",
+  "mechanism": "class-member-visibility-even-image",
+  "java_locations": [
+    "skin/VisibilityModifier#ensureEven,drawCircle,drawSquare,drawDiamond,drawTriangle",
+    "cucadiagram/MethodsOrFieldsArea#asBlock,getUBlock"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#VisibilityIconGeom"
+  ],
+  "invariant": "The member visibility glyph is the even-sized Java image inside the six-pixel member margin; its placement block retains requested size plus one.",
+  "causal_divergence": "Rust divides requested size by three for circle radius and uses requested size as center. Those happen to approximate some sizes but disagree with Java size-minus-four geometry and odd-size normalization.",
+  "planned_change": "Derive center and primitive half extents from ensureEven size and member margin. Retain separate placement-block height and vertical centering.",
+  "perturbation_axes": [
+    "odd/even icon sizes and public/private/protected/package primitives",
+    "native record/struct/protocol and ordinary class members"
+  ]
+}
