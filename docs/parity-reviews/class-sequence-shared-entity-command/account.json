@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "maker corrective plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "f805738ac5af84ef8c8ef3e3803f6d52d6d16081",
+  "mechanism": "class-sequence-shared-entity-command",
+  "java_locations": [
+    "PSystemBuilder#createPSystem (Sequence before Class)",
+    "sequencediagram/command/CommandParticipant#getRegexType",
+    "sequencediagram/command/CommandParticipantA,A2,A3,A4#getRegexConcat",
+    "classdiagram/command/CommandCreateClass#getRegexConcat"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#native_container_candidate,try_class_decl"
+  ],
+  "invariant": "A successful class trial may claim root-only native declarations only when a consumed declaration is not also owned by the earlier sequence participant grammar. Containers independently disqualify the sequence factory.",
+  "causal_divergence": "Removing the package requirement made root record/struct work but also force-selected Class for bare entity declarations and self messages; the main tier exposes the precedence loss.",
+  "planned_change": "Record whether a consumed native declaration is class-only versus shared entity participant syntax, based on parsed kind, visibility and recognized suffix grammar. Keep complete consumption and execution-order rejection; do not alter scores or scan quoted content. Root record/struct and braced entity remain native; bare entity stays eligible for the prior dispatcher.",
+  "perturbation_axes": [
+    "root entity versus record/struct and braced/native modifiers",
+    "self messages versus nested ownership and quoted displays"
+  ]
+}
