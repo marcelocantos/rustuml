@@ -1,0 +1,13 @@
+@startuml
+
+!function $choose()
+!theme minty
+!return "cerulean"
+!endfunction
+/' prefix '/ !theme $choose()
+' removed
+class Érable
+
+class Oak
+Érable --> Oak
+@enduml

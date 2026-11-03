@@ -1,0 +1,10 @@
+@startuml
+
+/' prefix '/ !theme cerulean
+!if 0
+!theme minty
+!option handwritten true
+!theme united
+!endif
+class CobaltRegistry /' suffix '/
+@enduml

@@ -1,0 +1,9 @@
+@startuml canopy
+
+class Ash
+
+class Elm
+Ash --> Elm
+
+
+@enduml

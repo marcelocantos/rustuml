@@ -1,0 +1,7 @@
+@startuml
+!$été = "vert"
+!$key = "$" + "été"
+!$v = %get_variable_value(($key))
+!$literal = 'a"b,(c)'
+class "$v / $literal" as Unicode
+@enduml

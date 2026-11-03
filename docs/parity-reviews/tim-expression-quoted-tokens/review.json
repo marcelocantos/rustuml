@@ -1,0 +1,399 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-expression-quoted-tokens",
+  "reviewer": {
+    "task_id": "t3-2fa74908-independent-corrected-TIM-checker",
+    "model": "gpt-6-astra / high / inherited Codex intentional; fresh independent checker; no children"
+  },
+  "account_commit": "67e53172fa470cdf2cec61c5aa0323dad11ba224",
+  "implementation_commit": "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py parent isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate fresh",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/diagnostics.py",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/final_controls.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/candidate-rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/probe compare SOURCE.svg RUST.svg",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "cargo fmt --all --check",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.svg",
+      "axes": [
+        "computed quoted key",
+        "string return type through builtin"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.svg",
+      "axes": [
+        "Unicode computed name",
+        "opposite quotes comma parentheses"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.svg",
+      "axes": [
+        "lookup argument function",
+        "single-quoted concatenation and count"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.svg",
+      "axes": [
+        "literal function-like text",
+        "concatenation without reevaluation"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_literal_backslash_and_quotes.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_literal_backslash_and_quotes.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_quoted_commas_and_unicode.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_quoted_commas_and_unicode.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "findings": [
+    "REJECTED. New Unicode/opposite quote/nested getter/literal function-text controls establish bounded token-scanning progress. Numeric-looking string lookup loses its type, yielding 9 instead of Java 0072. Quoted boolean function-like text is re-evaluated by eval_bool, producing calls 1 instead of 0.",
+    "Java TokenType.eatOneToken and TValue distinguish quoted tokens from numbers throughout evaluation. Rust reconstructs Values from display strings at variable/builtin boundaries. Repair the value representation and boolean evaluator, not fixture labels or string special cases.",
+    "The opposite-quote case has exact source but unequal SVG; downstream class parsing remains a dependency and is not waived."
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "53f2e605c222408ee81c23ff5ea81c8bf7449084",
+  "pre_policy_tested_commit": "86e0d0953acc1bbc660304265033c3314fa31150",
+  "parent_commit": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "original_candidate": "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+  "preparation_mappings": "docs/parity-reviews/tim-expression-event-sink/checker2-support/cherry-pick-mappings.json",
+  "followup_commits": [
+    "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+    "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+    "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "136ee057e0ffc3347ecdfafc9cf46e0bafa50197"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "Owner-selected raw Java pipe/file. Frozen historical GET corpus retained and separately reported. Negative evidence unchanged.",
+  "evidence": "docs/parity-reviews/tim-expression-event-sink/checker2-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; green bounded invariants do not certify the packet",
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.svg",
+      "axes": [
+        "return function plain simulation",
+        "nested mutation and class count"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.svg",
+      "axes": [
+        "procedure prefix/suffix expansion",
+        "nested function side effects"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.svg",
+      "axes": [
+        "log order and duplicate execution",
+        "subblock sprite and theme identity"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.svg",
+      "axes": [
+        "logical operand evaluation",
+        "function side effect"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.svg",
+      "axes": [
+        "quoted boolean token",
+        "recursive textual evaluation"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.svg",
+      "axes": [
+        "nested theme order",
+        "Unicode declarations comments blanks origins"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_computed_local_name.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_computed_local_name.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme_valid.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme_valid.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_name_literal_control.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_name_literal_control.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.svg",
+      "axes": [
+        "theme selector versus from evaluation",
+        "side effect ordering"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.svg",
+      "axes": [
+        "custom theme body",
+        "reference generation for preserved helper"
+      ],
+      "result": "pass",
+      "kind": "helper source",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "dependency_evidence_note": "Cross-mechanism cases are linked here as dependencies, not misfiled under this mechanism. Each has its owning checker record and unchanged executable fixture. No duplication inflates the corpus."
+}

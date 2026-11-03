@@ -1,0 +1,855 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "return function plain simulation",
+      "nested mutation and class count"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "procedure prefix/suffix expansion",
+      "nested function side effects"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "log order and duplicate execution",
+      "subblock sprite and theme identity"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "logical operand evaluation",
+      "function side effect"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "quoted boolean token",
+      "recursive textual evaluation"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh",
+    "axes": [
+      "nested theme order",
+      "Unicode declarations comments blanks origins"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_captured_string_type.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "declaration capture and later mutation",
+      "string versus numeric value type"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_named_default.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "omitted first default",
+      "named argument order"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_default_effect_order.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "default side effect order",
+      "mutation after declaration"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_nested_sibling_capture.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh",
+    "axes": [
+      "sibling frame isolation",
+      "captured default versus current global"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_numeric_string_lookup.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "computed quoted key",
+      "string return type through builtin"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "Unicode computed name",
+      "opposite quotes comma parentheses"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_nested_name_side_effect.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "lookup argument function",
+      "single-quoted concatenation and count"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_quoted_function_text.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "fresh",
+    "axes": [
+      "literal function-like text",
+      "concatenation without reevaluation"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "signed instant/date boundary",
+      "token width and quoting"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "host timezone",
+      "short versus long zone names"
+    ],
+    "zone": "Australia/Melbourne",
+    "debug": "date=1774210426000"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh",
+    "axes": [
+      "negative instant",
+      "fractional fixed offset"
+    ],
+    "zone": "GMT-03:30",
+    "debug": "date=1774210426000,tz=-0330"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context function_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context default_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context inactive_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context unused_function",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context sequence_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context error_after_theme",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context two_errors",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context short_circuit_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context multi_block_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh",
+    "axes": [
+      "error context include_error",
+      "pattern versus overflow or inactive execution"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_function_selector_parameter.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_loop_side_effect.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_parser_blank_origin_control.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_sprite_after_theme.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_state_two_mutations.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_explicit_global_shadow.puml",
+    "mechanism": "tim-procedure-global-fork-memory",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_nested_local_and_global.puml",
+    "mechanism": "tim-procedure-global-fork-memory",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker2_retained_theme_scope_helper.puml",
+    "mechanism": "tim-procedure-global-fork-memory",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_computed_local_name.puml",
+    "mechanism": "tim-literal-variable-lookup",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme.puml",
+    "mechanism": "tim-literal-variable-lookup",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_guard_changed_theme_valid.puml",
+    "mechanism": "tim-literal-variable-lookup",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker2_retained_name_literal_control.puml",
+    "mechanism": "tim-literal-variable-lookup",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.puml",
+    "mechanism": "tim-explicit-date-instant",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_explicit_override.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_function_capture.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_retained_default_sibling_shadow.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_literal_backslash_and_quotes.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_nested_computed_lookup.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_retained_quoted_commas_and_unicode.puml",
+    "mechanism": "tim-expression-quoted-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_text_and_literals.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_week_fields.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_width_and_clock_fields.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_zones.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_0.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_1.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_2.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "retained maker",
+    "axes": [
+      "retained maker input",
+      "fresh raw-pipe Java reference"
+    ],
+    "original_source": "docs/parity-reviews/tim-parser-error-propagation/maker-cases/invalid_3.puml"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh supplemental",
+    "axes": [
+      "quoted literal default",
+      "numeric-looking string type"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external subblock extraction",
+      "fatal unselected prelude"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external selected subblock",
+      "fatal pattern"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "inactive branch",
+      "invalid assignment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "signed lower overflow",
+      "partial class output"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh supplemental",
+    "axes": [
+      "theme selector versus from evaluation",
+      "side effect ordering"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "helper source",
+    "axes": [
+      "custom theme body",
+      "reference generation for preserved helper"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh arithmetic boundary",
+    "axes": [
+      "Java signed integer wrap",
+      "explicit date arithmetic expression"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh arithmetic boundary",
+    "axes": [
+      "Java signed integer wrap",
+      "explicit date arithmetic expression"
+    ]
+  }
+]

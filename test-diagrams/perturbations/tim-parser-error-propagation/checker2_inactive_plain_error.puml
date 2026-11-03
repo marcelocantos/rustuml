@@ -1,0 +1,6 @@
+@startuml
+!if 0
+!$v = %date("QQ",0)
+!endif
+class Fine
+@enduml

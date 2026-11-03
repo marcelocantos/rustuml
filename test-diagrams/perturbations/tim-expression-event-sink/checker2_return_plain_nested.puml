@@ -1,0 +1,13 @@
+@startuml
+!$count = 0
+!function $tick()
+!$count = $count + 1
+!return "tick"
+!endfunction
+!function $outer()
+class "discard $tick()" as Phantom
+!return "visible"
+!endfunction
+!$label = $outer()
+class "$label $count" as Actual
+@enduml

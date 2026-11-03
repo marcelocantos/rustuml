@@ -1,0 +1,4 @@
+@startuml
+!includesub test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_body.inc!useful
+class After
+@enduml

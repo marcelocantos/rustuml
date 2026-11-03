@@ -1,0 +1,11 @@
+@startuml
+!$seed = "early"
+!procedure $emit($caption = $seed + " suffix")
+class "$caption" as Copper
+!endprocedure
+!procedure $call($seed)
+$emit()
+!endprocedure
+!$seed = "late"
+$call("local")
+@enduml

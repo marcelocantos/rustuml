@@ -1,0 +1,10 @@
+@startuml
+!$calls = 0
+!$oak = "green"
+!function $key()
+!$calls = $calls + 1
+!return '$' + 'oak'
+!endfunction
+!$value = %get_variable_value($key())
+class "$value / $calls" as Nested
+@enduml

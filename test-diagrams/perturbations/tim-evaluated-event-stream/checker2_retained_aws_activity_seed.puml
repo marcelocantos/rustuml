@@ -1,0 +1,13 @@
+@startuml
+!theme aws-orange
+start
+:Receive renamed parcel;
+if (fresh route?) then (primary)
+  :Validate primary lane;
+elseif (secondary route?) then (secondary)
+  :Validate secondary lane;
+else (fallback)
+  :Record fallback lane;
+endif
+stop
+@enduml

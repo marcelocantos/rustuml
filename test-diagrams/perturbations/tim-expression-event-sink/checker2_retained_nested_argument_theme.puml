@@ -1,0 +1,13 @@
+@startuml
+!$n = 0
+!function $paint()
+!$n = $n + 1
+!theme cerulean
+!return "amber"
+!endfunction
+!function $wrap($value)
+!return "[" + $value + "]"
+!endfunction
+!$value = $wrap($paint())
+class "$value $n" as Copper
+@enduml

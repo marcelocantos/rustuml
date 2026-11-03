@@ -1,0 +1,127 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh supplemental",
+    "axes": [
+      "quoted literal default",
+      "numeric-looking string type"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external subblock extraction",
+      "fatal unselected prelude"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external selected subblock",
+      "fatal pattern"
+    ],
+    "negative": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "inactive branch",
+      "invalid assignment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "signed lower overflow",
+      "partial class output"
+    ],
+    "negative": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh supplemental",
+    "axes": [
+      "theme selector versus from evaluation",
+      "side effect ordering"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "helper source",
+    "axes": [
+      "custom theme body",
+      "reference generation for preserved helper"
+    ]
+  }
+]

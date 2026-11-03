@@ -1,0 +1,777 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-explicit-date-instant",
+  "reviewer": {
+    "task_id": "t3-2fa74908-independent-corrected-TIM-checker",
+    "model": "gpt-6-astra / high / inherited Codex intentional; fresh independent checker; no children"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "e2503bd4c282841abee982fd6063658975f25f69",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py parent isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate fresh",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/diagnostics.py",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/final_controls.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/candidate-rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/probe compare SOURCE.svg RUST.svg",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "cargo fmt --all --check",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_minimum_seconds.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_maximum_seconds.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_before.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_midnight_after.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_leap_expression.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.svg",
+      "axes": [
+        "signed instant/expression or boundary",
+        "format tokens/timezone at explicit instant"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.svg",
+      "axes": [
+        "instant straddles DST transition",
+        "host timezone versus fixed debug offset"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.svg",
+      "axes": [
+        "explicit date argument error",
+        "Java rejection versus silent Rust output"
+      ],
+      "result": "fail",
+      "cli_exit": 1,
+      "comparison_exit": 3,
+      "kind": "retained previous review",
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.svg",
+      "axes": [
+        "explicit date argument error",
+        "Java rejection versus silent Rust output"
+      ],
+      "result": "fail",
+      "cli_exit": 1,
+      "comparison_exit": 2,
+      "kind": "retained previous review",
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_expression_timestamp.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.puml",
+      "golden": "test-diagrams/perturbations/tim-explicit-date-instant/checker2_retained_negative_and_zero.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "findings": [
+    "REJECTED. Signed literal extrema, fixed offsets, prior valid date cases and current width/quote boundary controls pass. Java-valid arithmetic overflow does not: checker2_sum_wrap and checker2_difference_wrap produce 1901/2038 dates in Java but Rust exits 1 with no SVG.",
+    "Java TValue.plus/minus operate on int fields, preserving Java signed-32 wrap before DateFunction multiplies to long milliseconds. Rust arithmetic uses f64/number_value and checks the unwrapped result with parse::<i32>(). Do not classify these valid expressions as invalid overflow controls.",
+    "Named-host zzzz is still wrong: Java SimpleDateFormat.subFormat selects TimeZone.LONG at width >=4; Rust date_format::format always uses tz.name (abbreviation). checker2_long_zone source and SVG fail.",
+    "Direct invalid pattern, literal overflow and selected function/include/default errors now cause CLI failure without SVG. Negative references remain failures in the unchanged SVG suite, separately reported as successful rejection controls."
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "53f2e605c222408ee81c23ff5ea81c8bf7449084",
+  "pre_policy_tested_commit": "86e0d0953acc1bbc660304265033c3314fa31150",
+  "parent_commit": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "original_candidate": "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+  "preparation_mappings": "docs/parity-reviews/tim-expression-event-sink/checker2-support/cherry-pick-mappings.json",
+  "followup_commits": [
+    "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+    "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+    "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "136ee057e0ffc3347ecdfafc9cf46e0bafa50197"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "Owner-selected raw Java pipe/file. Frozen historical GET corpus retained and separately reported. Negative evidence unchanged.",
+  "evidence": "docs/parity-reviews/tim-expression-event-sink/checker2-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; green bounded invariants do not certify the packet",
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_negative_width.svg",
+      "axes": [
+        "signed instant/date boundary",
+        "token width and quoting"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_year_boundary.svg",
+      "axes": [
+        "signed instant/date boundary",
+        "token width and quoting"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_quote_unicode.svg",
+      "axes": [
+        "signed instant/date boundary",
+        "token width and quoting"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.svg",
+      "axes": [
+        "signed instant/date boundary",
+        "token width and quoting"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.svg",
+      "axes": [
+        "signed instant/date boundary",
+        "token width and quoting"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.svg",
+      "axes": [
+        "signed instant/date boundary",
+        "token width and quoting"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.svg",
+      "axes": [
+        "host timezone",
+        "short versus long zone names"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.svg",
+      "axes": [
+        "negative instant",
+        "fractional fixed offset"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.svg",
+      "axes": [
+        "error context function_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.svg",
+      "axes": [
+        "error context default_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.svg",
+      "axes": [
+        "error context inactive_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.svg",
+      "axes": [
+        "error context unused_function",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.svg",
+      "axes": [
+        "error context sequence_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.svg",
+      "axes": [
+        "error context error_after_theme",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.svg",
+      "axes": [
+        "error context two_errors",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.svg",
+      "axes": [
+        "error context short_circuit_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.svg",
+      "axes": [
+        "error context multi_block_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.svg",
+      "axes": [
+        "error context include_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_text_and_literals.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_text_and_literals.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_week_fields.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_week_fields.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_width_and_clock_fields.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_width_and_clock_fields.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_zones.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_date_zones.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.svg",
+      "axes": [
+        "external subblock extraction",
+        "fatal unselected prelude"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.svg",
+      "axes": [
+        "external selected subblock",
+        "fatal pattern"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.svg",
+      "axes": [
+        "inactive branch",
+        "invalid assignment"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.svg",
+      "axes": [
+        "signed lower overflow",
+        "partial class output"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.svg",
+      "axes": [
+        "Java signed integer wrap",
+        "explicit date arithmetic expression"
+      ],
+      "result": "fail",
+      "kind": "fresh arithmetic boundary",
+      "java_exit": 0,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+      "golden": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.svg",
+      "axes": [
+        "Java signed integer wrap",
+        "explicit date arithmetic expression"
+      ],
+      "result": "fail",
+      "kind": "fresh arithmetic boundary",
+      "java_exit": 0,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "dependency_evidence_note": "Cross-mechanism cases are linked here as dependencies, not misfiled under this mechanism. Each has its owning checker record and unchanged executable fixture. No duplication inflates the corpus."
+}

@@ -1,0 +1,107 @@
+{
+  "class_evidence_commit": "502960ac950d62a1e3a5e57f7f01664b694f146b",
+  "cohort": "frozen parent955; all five already measured independently",
+  "results": [
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "cli": {
+        "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+        "source_sha256": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+        "golden_sha256": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02",
+        "cli_exit": 0,
+        "stdout_bytes": 4759,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "reference_invalid": false
+      },
+      "source_diagnostic": {
+        "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+        "group": "prior42",
+        "java_source_exit": 0,
+        "metadata_exit": 0,
+        "source_equal": true
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "cli": {
+        "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+        "source_sha256": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+        "golden_sha256": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8",
+        "cli_exit": 0,
+        "stdout_bytes": 2877,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "reference_invalid": false
+      },
+      "source_diagnostic": {
+        "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+        "group": "prior42",
+        "java_source_exit": 0,
+        "metadata_exit": 0,
+        "source_equal": true
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "cli": {
+        "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+        "source_sha256": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+        "golden_sha256": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7",
+        "cli_exit": 0,
+        "stdout_bytes": 2863,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "reference_invalid": false
+      },
+      "source_diagnostic": {
+        "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+        "group": "prior42",
+        "java_source_exit": 0,
+        "metadata_exit": 0,
+        "source_equal": true
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "cli": {
+        "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+        "source_sha256": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+        "golden_sha256": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17",
+        "cli_exit": 0,
+        "stdout_bytes": 2479,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "reference_invalid": false
+      },
+      "source_diagnostic": {
+        "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+        "group": "original33",
+        "java_source_exit": 0,
+        "metadata_exit": 0,
+        "source_equal": true
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "cli": {
+        "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+        "source_sha256": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+        "golden_sha256": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12",
+        "cli_exit": 0,
+        "stdout_bytes": 2491,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "reference_invalid": false
+      },
+      "source_diagnostic": {
+        "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+        "group": "original33",
+        "java_source_exit": 0,
+        "metadata_exit": 0,
+        "source_equal": true
+      }
+    }
+  ],
+  "limitation": "No class production imported. All five now match Java source and SVG on this TIM candidate; combined strict class parser behavior must be verified by integrator."
+}

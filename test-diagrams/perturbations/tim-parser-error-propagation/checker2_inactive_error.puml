@@ -1,0 +1,9 @@
+@startuml
+!if 0
+!$v = %date("QQ",0)
+!procedure $unused($v = %date("QQ",0))
+class Never
+!endprocedure
+!endif
+class Fine
+@enduml

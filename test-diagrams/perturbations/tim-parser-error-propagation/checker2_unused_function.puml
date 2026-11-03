@@ -1,0 +1,6 @@
+@startuml
+!function $unused()
+!return %date("QQ",0)
+!endfunction
+class Fine
+@enduml

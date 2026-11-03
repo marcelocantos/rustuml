@@ -1,0 +1,7 @@
+@startuml
+!procedure $bad()
+Alice -> Bob: before
+!$v = %date("XXXX",0)
+!endprocedure
+$bad()
+@enduml
