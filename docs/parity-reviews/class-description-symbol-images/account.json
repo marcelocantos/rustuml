@@ -28,5 +28,6 @@
     "label width/stereotype/color and mixed native neighbours",
     "isolated/connected leaves, group nesting and LR/TB direction",
     "parenthesis endpoint sides and direction inversion"
-  ]
+  ],
+  "planned_change": "Add symbol-specific dimension/paint paths using Java USymbol margins, label/stereotype composition and vector primitives. Reuse owned component rendering primitives where their input model matches. Feed actual image dimensions into existing SVEK layout; retain declared identity and group membership. Trace endpoint shortening and parenthesis arc through ExtremityParenthesis, without coordinate-specific output surgery."
 }

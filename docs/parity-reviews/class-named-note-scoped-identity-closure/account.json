@@ -19,5 +19,6 @@
   "perturbation_axes": [
     "root/nested declaration and qualified/unqualified reference",
     "relationship before/after note and multiline note body"
-  ]
+  ],
+  "planned_change": "Resolve/register named note aliases in current scope when consumed and reuse them through canonical relationship identity. Preserve owner scope separately."
 }

@@ -22,5 +22,6 @@
   "perturbation_axes": [
     "note inside/outside target group and sibling/nested aliases",
     "left/right/top/bottom, multiline and named floating notes"
-  ]
+  ],
+  "planned_change": "Persist declaration owner package, count note leaves for group nonemptiness, enroll note layout node in its exact declaration cluster and preserve target identity separately. Trace Opale and final painted origin before any further note geometry corrections."
 }
