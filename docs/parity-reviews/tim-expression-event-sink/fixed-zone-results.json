@@ -1,0 +1,23 @@
+[
+  {
+    "java_zone": "GMT+05:45",
+    "debug_zone": "+0545",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "java_zone": "GMT-03:30",
+    "debug_zone": "-0330",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "java_zone": "UTC",
+    "debug_zone": "UTC",
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  }
+]

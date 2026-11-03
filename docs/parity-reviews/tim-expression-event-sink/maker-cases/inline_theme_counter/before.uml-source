@@ -1,0 +1,3 @@
+@startuml
+class "Paint 1" as Copper
+@enduml

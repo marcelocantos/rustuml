@@ -1,0 +1,155 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_literal.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_width.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_format_zone.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+    "before": {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+      "phase": "before",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail"
+    },
+    "candidate": {
+      "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_default_capture.puml",
+      "phase": "candidate",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass"
+    }
+  }
+]

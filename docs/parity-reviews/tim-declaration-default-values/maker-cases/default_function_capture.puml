@@ -1,0 +1,12 @@
+@startuml
+!$n = 0
+!function $once()
+!$n = $n + 1
+!return "a,b"
+!endfunction
+!procedure $emit($caption = $once())
+class "$caption $n" as Copper
+!endprocedure
+!$n = 9
+$emit()
+@enduml

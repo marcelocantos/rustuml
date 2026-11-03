@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1/silver" as Copper
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Copper
+  entities:
+  - id: Copper
+    label: '1/silver'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

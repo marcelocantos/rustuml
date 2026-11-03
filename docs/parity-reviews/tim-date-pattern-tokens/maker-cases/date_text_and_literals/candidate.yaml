@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "Saturday January 1 year's day ' x" as Copper
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Copper
+  entities:
+  - id: Copper
+    label: Saturday January 1 year's day ' x
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

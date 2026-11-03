@@ -1,0 +1,22 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+    "preprocess_probe_exit": 2,
+    "error": "1\tBad date pattern: unsupported letter Q\n"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+    "preprocess_probe_exit": 2,
+    "error": "1\tDate seconds outside signed 32-bit range\n"
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/invalid_unclosed_pattern.puml",
+    "preprocess_probe_exit": 2,
+    "error": "1\tBad date pattern: unterminated quote\n"
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/invalid_four_x.puml",
+    "preprocess_probe_exit": 2,
+    "error": "1\tBad date pattern: X must have one to three letters\n"
+  }
+]

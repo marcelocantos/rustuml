@@ -1,0 +1,53 @@
+{
+  "role": "maker only; no independent review or acceptance",
+  "mechanism": "tim-expression-quoted-tokens",
+  "account_commit": "67e53172fa470cdf2cec61c5aa0323dad11ba224",
+  "candidate_revision": "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "cases": [
+    {
+      "source": "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "c92247e26d074eed57ca3969ce3dd312d7b01e5428c65690d70a8ebac714aa6b",
+      "java_svg_sha256": "27f40e004fa57ebee02345cc1696f7e40e521b05e5acaec831fa27c1e340ba01"
+    },
+    {
+      "source": "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "e96670863b1d2ae659bc9fdcc2d5eeeb33717d120d4ae29d2331f6cc9bc08aef",
+      "java_svg_sha256": "d7ddd80891d8513586ce3b63ee2a8c4ee9f2eb5a43456c2a9ad5cd44bd31b004"
+    },
+    {
+      "source": "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "ac73c5b41a2b1b4a88e5674312bf47a7c184b7b335bf594f89ae1db56e204075",
+      "java_svg_sha256": "982ed3020f21a0a6a23ef088d3ad3fda63666b202b06bb4fad62b3f9a6248d14"
+    }
+  ],
+  "shared_evidence": "../tim-expression-event-sink/maker-results-summary.json",
+  "pending": "Fresh independent checker; reader policy and parse error handoff not resolved."
+}
