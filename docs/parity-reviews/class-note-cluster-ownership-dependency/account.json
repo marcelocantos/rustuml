@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-cluster-ownership-dependency",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "unimplemented blocking dependency; no acceptance requested",
+  "production_changes": "NONE for this dependency; account precedes any future implementation",
+  "evidence": "../class-command-execution-ownership/maker-results.json",
+  "negative_evidence_contract": "Every preserved relevant failing valid input remains blocking. No scope waiver or factory-label-only acceptance.",
+  "java_locations": [
+    "command/note/CommandFactoryNoteOnEntity.java#executeInternal",
+    "svek/GraphvizImageBuilder.java#printGroup,printEntity"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs#Note",
+    "crates/rustuml-parser/src/parse/class.rs#try_note",
+    "crates/rustuml-render/src/class.rs#attached_layout_slots,layout.add_cluster_node"
+  ],
+  "invariant": "The note entity belongs to its declaration context, independently of the attachment target; Graphviz receives both node membership and the attachment edge.",
+  "causal_divergence": "Canonical target lookup is repaired in this packet, but Note lacks declaration-container ownership. Java creates the note quark in the current context and printGroup prints every leaf under that group; Rust adds attached notes as global layout nodes and enrolls only class entities in clusters. The note now paints but escapes the target container/rank. Opale/layout consequences remain to be measured.",
+  "planned_model_change": "Persist note owner scope on the AST, enroll the note in its declaration cluster, and trace SVEK Opale selection/edge constraints. Do not infer ownership solely from target (notes may be declared outside that target group).",
+  "perturbation_axes": [
+    "note declared inside versus outside target container",
+    "nested scopes, sibling aliases and note positions"
+  ],
+  "blocking_inputs": [
+    "note_body",
+    "maker fresh nested_alias_note",
+    "maker fresh note_quote"
+  ]
+}
