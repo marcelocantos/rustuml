@@ -12,14 +12,25 @@ use regex::Regex;
 
 use crate::diagram::SpriteData;
 
+mod date_format;
 mod debug;
 mod stdlib;
 mod themes;
 
 use debug::{RenderClock, TzSpec};
 
-/// Output from the preprocessor: expanded lines plus any sprite definitions.
+/// A fatal TIM evaluation error with its source location.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PreprocessError {
+    pub line: usize,
+    pub message: String,
+}
+
+/// Evaluated source and parser projection, or a fatal error with partial output.
 pub struct PreprocessOutput {
+    /// Fatal TIM error. Callers must check this before consuming partial output.
+    /// parse_with_base must map it to ParseError (owned by the parse worker).
+    pub error: Option<PreprocessError>,
     pub lines: Vec<String>,
     pub sprites: HashMap<String, SpriteData>,
     /// PlantUML's post-TIM `UmlSource.getPlainString("\n")`.
@@ -114,6 +125,7 @@ fn preprocess_full_inner(
         lines,
         sprites,
         uml_source,
+        error: ctx.error,
     }
 }
 
@@ -543,6 +555,10 @@ struct PreprocessContext {
     source_line_override: Option<usize>,
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
+    /// Effects produced while evaluating the current statement expression.
+    error: Option<PreprocessError>,
+    expression_events: Vec<EvaluatedEvent>,
+    text_consumed: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -588,7 +604,7 @@ struct FunctionDef {
 #[derive(Clone)]
 struct FuncParam {
     name: String,
-    default: Option<String>,
+    default: Option<Value>,
 }
 
 #[derive(Clone)]
@@ -628,6 +644,9 @@ impl PreprocessContext {
             source_line_override: None,
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
+            error: None,
+            expression_events: Vec::new(),
+            text_consumed: false,
         }
     }
 
@@ -676,7 +695,7 @@ impl PreprocessContext {
 
     fn push_content_line(&self, output: &mut Vec<EvaluatedEvent>, line: String) {
         let line = if split_source_line_marker(&line).is_none()
-            && self.mark_source_lines
+            && (self.mark_source_lines || !self.expression_events.is_empty())
             && !line.is_empty()
         {
             source_line_marker(
@@ -769,6 +788,28 @@ impl PreprocessContext {
     }
 
     fn process_one_line(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) {
+        // TContext.resultList is shared by return-value and procedure execution.
+        // Each statement owns a sink; nested statements preserve the caller's
+        // already-emitted effects and contribute their own before its content.
+        if self.error.is_some() {
+            return;
+        }
+        let outer = std::mem::take(&mut self.expression_events);
+        let outer_consumed = std::mem::replace(&mut self.text_consumed, false);
+        let mut content = Vec::new();
+        self.execute_one_line(line, &mut content);
+        if !self.expression_events.is_empty() {
+            self.mark_source_lines = true;
+        }
+        if self.error.is_none() {
+            output.append(&mut self.expression_events);
+            output.extend(content);
+        }
+        self.expression_events = outer;
+        self.text_consumed = outer_consumed;
+    }
+
+    fn execute_one_line(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) {
         let trimmed = line.trim();
 
         // Handle block comments. We emit empty placeholder lines for each
@@ -1005,7 +1046,7 @@ impl PreprocessContext {
                         self.mark_source_lines = true;
                     }
                     // Expand any inline $func(args) calls in output content.
-                    self.expand_inline_func_calls_in_line(&after_definelong)
+                    after_definelong
                 };
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
@@ -1013,6 +1054,9 @@ impl PreprocessContext {
             // input file (parsers skip blank lines themselves on the `trim().is_empty()`
             // check, but the index advances). PlantUML's `data-source-line` counts
             // blank lines but excludes the dropped `@startuml`.
+            if self.text_consumed {
+                return;
+            }
             for expanded_line in line_to_process.split('\n') {
                 self.push_content_line(output, expanded_line.to_string());
             }
@@ -1024,7 +1068,17 @@ impl PreprocessContext {
         }
     }
 
-    fn try_silent_directive(&self, line: &str) -> bool {
+    fn try_silent_directive(&mut self, line: &str) -> bool {
+        // EaterLog.analyze evaluates its argument exactly once, even though
+        // the diagnostic text itself never enters TContext.resultList.
+        if let Some(rest) = line.strip_prefix("!log")
+            && (rest.is_empty() || rest.starts_with(char::is_whitespace))
+        {
+            if self.is_active() {
+                self.substitute_vars(rest.trim_start());
+            }
+            return true;
+        }
         // !log, !pragma, !assert — consume silently.
         // !includeurl / !import — URL fetching deferred; strip the line silently.
         if self.preserve_teoz_pragma {
@@ -1266,15 +1320,16 @@ impl PreprocessContext {
         // TIM also accepts a complete unquoted function on one line:
         // `!unquoted function $name($arg) !return expression`.
         static INLINE_RETURN_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:unquoted\s+)?function\s+\$?(\w+)\s*\(([^)]*)\)\s+!return\s+(.+)$")
+            Regex::new(r"^!(?:unquoted\s+)?function\s+\$?(\w+)\s*\((.*)\)\s+!return\s+(.+)$")
                 .unwrap()
         });
         if let Some(caps) = INLINE_RETURN_RE.captures(trimmed) {
             let name = caps[1].to_string();
+            let params = self.parse_func_params(&caps[2]);
             self.functions.insert(
                 name,
                 FunctionDef {
-                    params: parse_func_params(&caps[2]),
+                    params,
                     body: vec![BufferedLine {
                         text: format!("!return {}", &caps[3]),
                         raw_source_line: self.current_source_line,
@@ -1288,12 +1343,12 @@ impl PreprocessContext {
         // !function $name($param1, $param2 = "default")
         // !procedure name() is also accepted by PlantUML themes.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\(([^)]*)\)$").unwrap()
+            Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\((.*)\)$").unwrap()
         });
 
         if let Some(caps) = RE.captures(trimmed) {
             let name = caps[1].to_string();
-            let params = parse_func_params(&caps[2]);
+            let params = self.parse_func_params(&caps[2]);
 
             self.functions.insert(
                 name.clone(),
@@ -1307,6 +1362,28 @@ impl PreprocessContext {
         }
 
         false
+    }
+
+    fn parse_func_params(&mut self, parameters: &str) -> Vec<FuncParam> {
+        if parameters.trim().is_empty() {
+            return Vec::new();
+        }
+        split_builtin_args(parameters)
+            .into_iter()
+            .map(|parameter| {
+                let (name, default) =
+                    parameter
+                        .split_once('=')
+                        .map_or((parameter, None), |(name, expression)| {
+                            // Eater.eatDeclareFunction stores the evaluated TValue now.
+                            (name, Some(self.eval_expr_to_value(expression)))
+                        });
+                FuncParam {
+                    name: name.trim().trim_start_matches('$').to_string(),
+                    default,
+                }
+            })
+            .collect()
     }
 
     /// Call a function and return its return value (if any) plus any output lines.
@@ -1327,7 +1404,11 @@ impl PreprocessContext {
             let value = if let Some(arg) = args.get(i) {
                 self.eval_expr_to_value(arg).to_display()
             } else {
-                param.default.clone().unwrap_or_default()
+                param
+                    .default
+                    .as_ref()
+                    .map(Value::to_display)
+                    .unwrap_or_default()
             };
             scope.overrides.insert(param.name.clone(), value);
         }
@@ -1374,10 +1455,17 @@ impl PreprocessContext {
         // $funcName("arg1", "arg2"). PlantUML themes also use bare
         // procedure calls like `basic_style()` inside skinparam blocks.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\(([^)]*)\)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\((.*)\)$").unwrap());
 
         let trimmed = line.trim();
         if let Some(caps) = RE.captures(trimmed) {
+            let open = trimmed
+                .find('(')
+                .expect("call regex includes opening parenthesis");
+            if find_matching_paren_from(trimmed, open) != Some(trimmed.len() - 1) {
+                return false;
+            }
+
             let name = caps[1].to_string();
             let args_str = &caps[2];
 
@@ -1408,17 +1496,12 @@ impl PreprocessContext {
             {
                 generated.push_str(trailing);
             }
-            if lines.is_empty() {
-                // If the function produced no output lines but returned a value,
-                // emit the return value as an output line (e.g. note body calls).
-                if let Some(val) = ret {
-                    let s = val.to_display();
-                    if !s.is_empty() {
-                        self.push_content_line(output, s);
-                    }
+            output.extend(lines);
+            if let Some(value) = ret {
+                let value = value.to_display();
+                if !value.is_empty() {
+                    self.push_content_line(output, value);
                 }
-            } else {
-                output.extend(lines);
             }
 
             // Java keeps StringLocated origins on both generated body lines
@@ -1435,65 +1518,9 @@ impl PreprocessContext {
     /// Evaluate a function call in an expression context, returning the return value.
     fn eval_function_call(&mut self, name: &str, args_str: &str) -> Value {
         let args = parse_call_args(args_str);
-        let (ret, _lines) = self.call_function(name, &args);
+        let (ret, lines) = self.call_function(name, &args);
+        self.expression_events.extend(lines);
         ret.unwrap_or(Value::Str(String::new()))
-    }
-
-    /// Expand inline `$func(args)` calls within a content line (output line).
-    /// This allows function return values to appear inline in notes and messages.
-    /// Procedures expand to their output lines, matching TIM's textual
-    /// replacement when a procedure call appears after a property name.
-    fn expand_inline_func_calls_in_line(&mut self, line: &str) -> String {
-        static INLINE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)\(").unwrap());
-
-        // Check if there are any $func( patterns at all.
-        if !INLINE_RE.is_match(line) {
-            return line.to_string();
-        }
-
-        let mut result = line.to_string();
-        // Iterate to handle nested or multiple calls, up to a limit.
-        for _ in 0..20 {
-            // Find the LAST (innermost) $func( to evaluate inside-out.
-            let Some(m) = INLINE_RE.find_iter(&result).last() else {
-                break;
-            };
-            let start = m.start();
-            let after_open = m.end();
-            let func_name = &result[start + 1..after_open - 1].to_string();
-
-            // Only expand if this function is defined.
-            if !self.functions.contains_key(func_name.as_str()) {
-                // No more user-defined calls to expand; stop.
-                break;
-            }
-
-            let Some(close) = find_matching_paren_from(&result, after_open - 1) else {
-                break;
-            };
-            let args_str = result[after_open..close].to_string();
-            let args = parse_call_args(&args_str);
-            let (return_value, output_lines) = self.call_function(func_name, &args);
-            let replacement = return_value.map_or_else(
-                || {
-                    output_lines
-                        .into_iter()
-                        .filter_map(|event| match event {
-                            EvaluatedEvent::Plain(line) => Some(
-                                split_source_line_marker(&line)
-                                    .map_or(line.clone(), |(_, text)| text.to_string()),
-                            ),
-                            _ => None,
-                        })
-                        .collect::<Vec<_>>()
-                        .join("\n")
-                },
-                |return_value| return_value.to_display(),
-            );
-            result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
-        }
-
-        result
     }
 
     fn try_foreach(&mut self, line: &str, output: &mut Vec<EvaluatedEvent>) -> bool {
@@ -1581,11 +1608,10 @@ impl PreprocessContext {
             {
                 let mut iterations = 0;
                 loop {
-                    if iterations >= MAX_WHILE_ITERATIONS {
+                    if self.error.is_some() || iterations >= MAX_WHILE_ITERATIONS {
                         break;
                     }
-                    let cond_expanded = self.substitute_vars(&while_state.condition);
-                    if !self.eval_bool(&cond_expanded) {
+                    if !self.eval_bool(&while_state.condition) {
                         break;
                     }
 
@@ -1752,12 +1778,8 @@ impl PreprocessContext {
                         Some(rest[index + " from ".len()..].trim()),
                     )
                 });
-        let from = from.map(|value| {
-            let value = self.substitute_vars(value);
-            self.expand_inline_func_calls_in_line(&value)
-        });
+        let from = from.map(|value| self.substitute_vars(value));
         let name = self.substitute_vars(name);
-        let name = self.expand_inline_func_calls_in_line(&name);
         let source = if let Some(from) = from {
             // Local custom themes use the same naming convention as ThemeUtils.
             // Remote fetching remains outside the no-runtime-dependency product.
@@ -1869,8 +1891,7 @@ impl PreprocessContext {
         }
         if let Some(caps) = RE_IF.captures(line) {
             let expr = caps[1].trim();
-            let expanded = self.substitute_vars(expr);
-            let result = self.eval_bool(&expanded);
+            let result = self.is_active() && self.eval_bool(expr);
             self.cond_stack.push(CondState {
                 active: result && self.is_active(),
                 has_matched: result,
@@ -1885,8 +1906,7 @@ impl PreprocessContext {
                 false
             } else {
                 let expr = caps[1].trim();
-                let expanded = self.substitute_vars(expr);
-                self.eval_bool(&expanded)
+                parent_active && self.eval_bool(expr)
             };
             if let Some(cond) = self.cond_stack.last_mut() {
                 if already_matched {
@@ -1921,232 +1941,75 @@ impl PreprocessContext {
     // ------------------------------------------------------------------
 
     /// Evaluate an expression string to a Value.
-    fn eval_expr_to_value(&mut self, expr: &str) -> Value {
-        let expr = expr.trim();
-
-        // Strip surrounding quotes.
-        // Strip surrounding quotes only when the WHOLE expression is a single
-        // quoted string (i.e. the closing `"` at position len-1 is genuinely
-        // the end of the string that started at position 0, not part of a
-        // later token in a compound expression like `"Hello, " + World + "!"`).
-        if expr.starts_with('"') && expr.ends_with('"') && expr.len() >= 2 {
-            // Walk the interior to find where the opening quote closes.  If the
-            // first closing quote is at the very end, we have a single string.
-            let inner_candidate = &expr[1..expr.len() - 1];
-            // Check for an unescaped quote inside the inner part.  If there is
-            // none, the last `"` is the matching close of the opening `"`.
-            if !inner_candidate.contains('"') {
-                let substituted = self.substitute_vars(inner_candidate);
-                return Value::Str(substituted);
-            }
-            // The interior contains quotes — the expression is something like
-            // `"Hello, " + x + "!"`.  Fall through to the general path.
-        }
-
-        // If the expression is a bare word that is a token_define, return its
-        // raw value as a string (without further evaluation).  This preserves
-        // quoted token values like `!define VERSION "2.0"` — when VERSION
-        // appears in a string concatenation `"v" + VERSION`, the result is
-        // `v"2.0"` (with quotes), matching PlantUML's text-substitution model.
-        static BARE_WORD_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^[A-Za-z_]\w*$").unwrap());
-        if BARE_WORD_RE.is_match(expr)
-            && let Some(raw) = self.token_defines.get(expr).cloned()
+    fn eval_expr_to_value(&mut self, expression: &str) -> Value {
+        let expr = expression.trim();
+        // TokenType.QUOTED_STRING / Eater.addUpTo: both quote forms are
+        // literal; backslash is not an escape and contents are not interpolated.
+        if let Some(quote) = expr.chars().next().filter(|c| matches!(c, '\'' | '"'))
+            && let Some(end) = expr[1..].find(quote).map(|n| n + 1)
+            && end + 1 == expr.len()
         {
-            return Value::Str(raw);
+            return Value::Str(expr[1..end].to_string());
         }
-
-        // Boolean literals (plain "true"/"false" without % prefix).
+        if expr.starts_with('(') && find_matching_paren(expr) == Some(expr.len() - 1) {
+            return self.eval_expr_to_value(&expr[1..expr.len() - 1]);
+        }
+        for ops in [&['+', '-'][..], &['*', '/', '%'][..]] {
+            if let Some((position, op)) = ops
+                .iter()
+                .filter_map(|op| find_top_level_op_pos(expr, *op).map(|position| (position, *op)))
+                .max_by_key(|(position, _)| *position)
+            {
+                let left = self.eval_expr_to_value(&expr[..position]);
+                let right = self.eval_expr_to_value(&expr[position + 1..]);
+                if op == '+' && (matches!(left, Value::Str(_)) || matches!(right, Value::Str(_))) {
+                    return Value::Str(format!("{}{}", left.to_display(), right.to_display()));
+                }
+                let (a, b) = (left.to_number(), right.to_number());
+                return number_value(match op {
+                    '+' => a + b,
+                    '-' => a - b,
+                    '*' => a * b,
+                    '/' if b != 0.0 => a / b,
+                    '%' if b != 0.0 => a % b,
+                    _ => 0.0,
+                });
+            }
+        }
+        if let Some(open) = expr.find('(')
+            && find_matching_paren_from(expr, open) == Some(expr.len() - 1)
+        {
+            let name = expr[..open].trim();
+            let args = &expr[open + 1..expr.len() - 1];
+            if let Some(name) = name.strip_prefix('%') {
+                return Value::from_str_auto(&self.eval_builtin_with_expr_args(name, args));
+            }
+            let name = name.trim_start_matches('$');
+            if self.functions.contains_key(name) {
+                return self.eval_function_call(name, args);
+            }
+        }
+        if let Some(name) = expr.strip_prefix('$')
+            && let Some(value) = self.get_var(name).or_else(|| self.token_defines.get(name))
+        {
+            return Value::from_str_auto(value);
+        }
+        if let Some(value) = self.token_defines.get(expr) {
+            return Value::Str(value.clone());
+        }
         if expr == "true" {
             return Value::Bool(true);
         }
         if expr == "false" {
             return Value::Bool(false);
         }
-        // %true() and %false() are builtin functions that return 1 and 0 (numeric).
-        // Fall through to the BUILTIN_CALL_RE path which dispatches to
-        // eval_one_builtin_args("true"/"false", ...) returning "1"/"0".
-
-        // If the expression is a bare builtin call (%func(...)), evaluate it
-        // directly and return the result as a string.  This avoids the problem
-        // where substitute_vars eagerly evaluates builtins (e.g. %date()) into
-        // a plain string like "2026-03-23" which is then re-evaluated as
-        // arithmetic by the code below.
-        static BUILTIN_CALL_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^%(\w+)\(([^)]*)\)$").unwrap());
-        if let Some(caps) = BUILTIN_CALL_RE.captures(expr) {
-            let func_name = caps[1].to_string();
-            let args_raw = caps[2].to_string();
-            // Evaluate argument expressions so variables are resolved first.
-            let evaluated = self.eval_builtin_with_expr_args(&func_name, &args_raw);
-            return Value::from_str_auto(&evaluated);
+        if let Ok(number) = expr.parse::<i64>() {
+            return Value::Int(number);
         }
-
-        // Before substituting variables, try to split at `+` on the original
-        // expression.  This matters when one of the parts is a bare token_define
-        // whose value contains quotes (e.g. `!define VERSION "2.0"`).  If we
-        // substituted first we'd get `"v" + "2.0"` and the `"2.0"` would be
-        // stripped of quotes; instead we want `"v" + VERSION` → `v` + `"2.0"`
-        // → `v"2.0"` (PlantUML's text-substitution model).
-        {
-            let pre_parts = split_at_top_level_op(expr, '+');
-            if pre_parts.len() > 1 {
-                // Check whether any part is a bare token_define.
-                let has_token_define = pre_parts.iter().any(|p| {
-                    let t = p.trim();
-                    BARE_WORD_RE.is_match(t) && self.token_defines.contains_key(t)
-                });
-                if has_token_define {
-                    let mut result = String::new();
-                    for part in &pre_parts {
-                        let val = self.eval_expr_to_value(part.trim());
-                        result.push_str(&val.to_display());
-                    }
-                    return Value::Str(result);
-                }
-            }
+        if let Ok(number) = expr.parse::<f64>() {
+            return Value::Float(number);
         }
-
-        // Substitute variables first.
-        let substituted = self.substitute_vars(expr);
-        let substituted = substituted.trim();
-
-        // Try to parse as a pure number.
-        if let Ok(n) = substituted.parse::<i64>() {
-            return Value::Int(n);
-        }
-        if let Ok(f) = substituted.parse::<f64>() {
-            return Value::Float(f);
-        }
-
-        // Try string concatenation with +.
-        if let Some(result) = self.try_eval_string_concat(substituted) {
-            return result;
-        }
-
-        // Try arithmetic.
-        if let Some(result) = self.try_eval_arithmetic(substituted) {
-            return result;
-        }
-
-        // Function call: $funcName(args)
-        if let Some(val) = self.try_eval_func_call(substituted) {
-            return val;
-        }
-
-        // Fall back to string.
-        Value::Str(substituted.to_string())
-    }
-
-    fn try_eval_func_call(&mut self, expr: &str) -> Option<Value> {
-        // $funcName(args)
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\$(\w+)\(([^)]*)\)$").unwrap());
-
-        if let Some(caps) = RE.captures(expr) {
-            let name = caps[1].to_string();
-            if self.functions.contains_key(&name) {
-                let args_str = &caps[2];
-                return Some(self.eval_function_call(&name, args_str));
-            }
-        }
-        None
-    }
-
-    fn try_eval_string_concat(&mut self, expr: &str) -> Option<Value> {
-        // Find top-level + that looks like string concatenation.
-        // We check if it's NOT purely numeric.
-        let parts = split_at_top_level_op(expr, '+');
-        if parts.len() <= 1 {
-            return None;
-        }
-
-        // Check if any part is a quoted string.
-        let has_string = parts.iter().any(|p| {
-            let t = p.trim();
-            t.starts_with('"') || (t.parse::<f64>().is_err() && !t.starts_with('$'))
-        });
-
-        if has_string {
-            let mut result = String::new();
-            for part in &parts {
-                let val = self.eval_expr_to_value(part.trim());
-                result.push_str(&val.to_display());
-            }
-            return Some(Value::Str(result));
-        }
-
-        None
-    }
-
-    fn try_eval_arithmetic(&mut self, expr: &str) -> Option<Value> {
-        // Find the lowest-precedence top-level operator.
-        // Precedence (low to high): +/-, */%, unary-
-        // Scan right-to-left for + and - first (to get left-associativity).
-        let expr = expr.trim();
-
-        // Try + and - (lowest precedence).
-        for &op in &['+', '-'] {
-            if let Some(pos) = find_top_level_op_pos(expr, op) {
-                if pos == 0 {
-                    continue; // unary minus
-                }
-                let left = &expr[..pos];
-                let right = &expr[pos + 1..];
-                let lval = self.eval_expr_to_value(left);
-                let rval = self.eval_expr_to_value(right);
-
-                // If either side is a non-numeric string, do string concat for +.
-                if op == '+' && (!lval.is_numeric() || !rval.is_numeric()) {
-                    return Some(Value::Str(format!(
-                        "{}{}",
-                        lval.to_display(),
-                        rval.to_display()
-                    )));
-                }
-
-                let result = match op {
-                    '+' => lval.to_number() + rval.to_number(),
-                    '-' => lval.to_number() - rval.to_number(),
-                    _ => unreachable!(),
-                };
-                return Some(number_value(result));
-            }
-        }
-
-        // Try *, /, % (higher precedence).
-        for &op in &['*', '/', '%'] {
-            if let Some(pos) = find_top_level_op_pos(expr, op) {
-                let left = &expr[..pos];
-                let right = &expr[pos + 1..];
-                let lval = self.eval_expr_to_value(left);
-                let rval = self.eval_expr_to_value(right);
-                let result = match op {
-                    '*' => lval.to_number() * rval.to_number(),
-                    '/' => {
-                        let r = rval.to_number();
-                        if r == 0.0 { 0.0 } else { lval.to_number() / r }
-                    }
-                    '%' => {
-                        let r = rval.to_number();
-                        if r == 0.0 { 0.0 } else { lval.to_number() % r }
-                    }
-                    _ => unreachable!(),
-                };
-                return Some(number_value(result));
-            }
-        }
-
-        // Parenthesized expression.
-        if expr.starts_with('(') && expr.ends_with(')') {
-            return Some(self.eval_expr_to_value(&expr[1..expr.len() - 1]));
-        }
-
-        // Function call.
-        if let Some(val) = self.try_eval_func_call(expr) {
-            return Some(val);
-        }
-
-        None
+        Value::Str(self.substitute_vars(expr))
     }
 
     // ------------------------------------------------------------------
@@ -2194,33 +2057,6 @@ impl PreprocessContext {
                 let right = expr[pos + op.len()..].trim();
                 return self.eval_comparison(left, right, op);
             }
-        }
-
-        // %variable_exists("name")
-        if let Some(name) = expr
-            .strip_prefix("%variable_exists(\"")
-            .and_then(|s| s.strip_suffix("\")"))
-        {
-            return name
-                .strip_prefix('$')
-                .and_then(|name| self.get_var(name))
-                .is_some();
-        }
-
-        // %is_defined("name") — alias for variable_exists
-        if let Some(name) = expr
-            .strip_prefix("%is_defined(\"")
-            .and_then(|s| s.strip_suffix("\")"))
-        {
-            return self.defines.contains_key(name) || self.token_defines.contains_key(name);
-        }
-
-        // %function_exists("name")
-        if let Some(name) = expr
-            .strip_prefix("%function_exists(\"")
-            .and_then(|s| s.strip_suffix("\")"))
-        {
-            return self.functions.contains_key(name);
         }
 
         // %true / %false
@@ -2292,46 +2128,77 @@ impl PreprocessContext {
     // ------------------------------------------------------------------
 
     fn substitute_vars(&mut self, line: &str) -> String {
-        // VariableExists receives an evaluated string token, not a textual
-        // replacement of $name inside that quoted token (TContext's EaterFunctionCall).
-        let line = self.expand_argument_builtins(line);
-        let line = line.as_str();
-        // Preserve sprite icon references `<$name>` — they are rendered as
-        // inline images and must not be stripped or variable-substituted here.
-        // Temporarily replace them with null-byte placeholders, process variable
-        // substitution on the rest, then restore the sprite references.
-        static SPRITE_REF_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"<\$(\w+)>").unwrap());
-
-        // Collect sprite ref names in order.
-        let sprite_names: Vec<String> = SPRITE_REF_RE
-            .captures_iter(line)
-            .map(|c| c[1].to_string())
-            .collect();
-
-        // Replace each `<$name>` with a null-byte placeholder `\x00N\x00`.
-        let mut counter = 0usize;
-        let line_protected = SPRITE_REF_RE.replace_all(line, |_: &regex::Captures| {
-            let ph = format!("\x00{counter}\x00");
-            counter += 1;
-            ph
-        });
-        let mut result = line_protected.into_owned();
-
-        // First apply $variable substitution (also checks token_defines).
-        result = self.substitute_inline_func_calls(&result);
-
-        static VAR_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)").unwrap());
-
-        result = VAR_RE
-            .replace_all(&result, |caps: &regex::Captures| {
-                let name = &caps[1];
-                self.get_var(name)
-                    .or_else(|| self.token_defines.get(name))
-                    .cloned()
-                    .unwrap_or_else(|| format!("${name}"))
-            })
-            .to_string();
-
+        let mut result = String::new();
+        let mut offset = 0;
+        while offset < line.len() {
+            let ch = line[offset..].chars().next().unwrap();
+            if ch == '<'
+                && line[offset..].starts_with("<$")
+                && let Some(end) = line[offset..].find('>')
+            {
+                result.push_str(&line[offset..offset + end + 1]);
+                offset += end + 1;
+                continue;
+            }
+            if matches!(ch, '$' | '%') {
+                let name_end = line[offset + 1..]
+                    .char_indices()
+                    .find(|(_, c)| !c.is_alphanumeric() && *c != '_')
+                    .map_or(line.len(), |(i, _)| offset + 1 + i);
+                let name = &line[offset + 1..name_end];
+                if line[name_end..].starts_with('(')
+                    && (ch == '%' || self.functions.contains_key(name))
+                    && let Some(close) = find_matching_paren_from(line, name_end)
+                {
+                    if ch == '%' {
+                        result.push_str(
+                            &self.eval_builtin_with_expr_args(name, &line[name_end + 1..close]),
+                        );
+                    } else {
+                        let args = parse_call_args(&line[name_end + 1..close]);
+                        let (value, mut events) = self.call_function(name, &args);
+                        if let Some(value) = value {
+                            self.expression_events.extend(events);
+                            result.push_str(&value.to_display());
+                        } else {
+                            // TContext.pendingAdd / appendToLastResult. Keep
+                            // every event variant, including themes and options.
+                            if let Some(EvaluatedEvent::Plain(first)) = events
+                                .iter_mut()
+                                .find(|event| matches!(event, EvaluatedEvent::Plain(_)))
+                            {
+                                let (origin, text) = split_source_line_marker(first)
+                                    .map_or((None, first.as_str()), |(n, t)| (Some(n), t));
+                                let text = format!("{result}{text}");
+                                *first =
+                                    origin.map_or(text.clone(), |n| source_line_marker(n, &text));
+                            }
+                            if let Some(EvaluatedEvent::Plain(last)) = events
+                                .iter_mut()
+                                .rev()
+                                .find(|event| matches!(event, EvaluatedEvent::Plain(_)))
+                            {
+                                last.push_str(&line[close + 1..]);
+                            }
+                            self.expression_events.extend(events);
+                            self.text_consumed = true;
+                            return String::new();
+                        }
+                    }
+                    offset = close + 1;
+                    continue;
+                }
+                if ch == '$'
+                    && let Some(value) = self.get_var(name).or_else(|| self.token_defines.get(name))
+                {
+                    result.push_str(value);
+                    offset = name_end;
+                    continue;
+                }
+            }
+            result.push(ch);
+            offset += ch.len_utf8();
+        }
         // Then apply !define token macros (word-boundary bare-word substitution).
         // Iterate until stable (up to 20 rounds) so that expansions containing
         // other macro names are themselves expanded (e.g. LABEL = "Step STEP"
@@ -2369,49 +2236,7 @@ impl PreprocessContext {
             }
         }
 
-        let after_vars = result;
-
-        // Evaluate built-in %functions.
-        let mut processed = self.eval_builtin_functions(&after_vars);
-
-        // Restore sprite references (replaced with placeholders above).
-        for (i, name) in sprite_names.iter().enumerate() {
-            let ph = format!("\x00{i}\x00");
-            let sprite_tag = format!("<${name}>");
-            processed = processed.replace(&ph, &sprite_tag);
-        }
-
-        processed
-    }
-
-    fn expand_argument_builtins(&mut self, line: &str) -> String {
-        static LOOKUP: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"%(variable_exists|get_variable_value|is_defined|date)\(").unwrap()
-        });
-        let mut result = line.to_string();
-        let mut offset = 0;
-        while let Some(found) = LOOKUP.find_at(&result, offset) {
-            let start = found.start();
-            let open = found.end() - 1;
-            let Some(close) = find_matching_paren_from(&result, open) else {
-                break;
-            };
-            let name = result[start + 1..open].to_string();
-            let args = result[open + 1..close].to_string();
-            let replacement = self.eval_builtin_with_expr_args(&name, &args);
-            result.replace_range(start..close + 1, &replacement);
-            offset = start + replacement.len();
-        }
         result
-    }
-
-    fn substitute_inline_func_calls(&self, line: &str) -> String {
-        // We need &mut self to call functions, but we're in &self context here.
-        // This is a limitation — inline function calls in output lines require
-        // a different approach. For now, we handle it in eval_builtin_functions
-        // for %string() etc. and rely on the caller to handle $func() calls
-        // in assignment context.
-        line.to_string()
     }
 
     /// Expand Archimate macros.
@@ -2492,45 +2317,6 @@ impl PreprocessContext {
     // Built-in %functions
     // ------------------------------------------------------------------
 
-    fn eval_builtin_functions(&self, input: &str) -> String {
-        // Handle nested function calls by repeatedly evaluating.
-        let mut result = input.to_string();
-        let mut iterations = 0;
-        loop {
-            let next = self.eval_builtins_once(&result);
-            if next == result || iterations > 10 {
-                break;
-            }
-            result = next;
-            iterations += 1;
-        }
-        result
-    }
-
-    fn eval_builtins_once(&self, input: &str) -> String {
-        // Find the innermost (last/rightmost) %func(...) call to evaluate
-        // inside-out, so that nested calls like %not(%true()) work correctly.
-        static FUNC_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"%(\w+)\(").unwrap());
-
-        let mut result = input.to_string();
-
-        // Find the last (rightmost) %func( match — this is the innermost call
-        // because the last match in a nested expression has no further %func(
-        // calls before its closing paren.
-        if let Some(m) = FUNC_RE.find_iter(&result).last() {
-            let start = m.start();
-            let after_open = m.end(); // position after '('
-            if let Some(close) = find_matching_paren_from(&result, after_open - 1) {
-                let func_name = &result[start + 1..after_open - 1];
-                let args_raw = &result[after_open..close];
-                let replacement = self.eval_one_builtin(func_name, args_raw);
-                result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
-            }
-        }
-
-        result
-    }
-
     /// Evaluate a builtin function call where each argument is itself an
     /// expression (possibly containing `$variables`).  This avoids the
     /// common problem where pre-substituted variable values contain commas
@@ -2543,27 +2329,6 @@ impl PreprocessContext {
 
         // Split on top-level commas in the raw arg string (before substitution).
         let raw_parts = split_builtin_args(args_raw);
-        if matches!(
-            func,
-            "get_variable_value" | "variable_exists" | "is_defined"
-        ) {
-            let values: Vec<String> = raw_parts
-                .iter()
-                .map(|argument| {
-                    let argument = argument.trim();
-                    if let Some(literal) =
-                        argument.strip_prefix('"').and_then(|s| s.strip_suffix('"'))
-                    {
-                        // TokenStack quoted strings retain the dollar in a name.
-                        literal.to_string()
-                    } else {
-                        self.eval_expr_to_value(argument).to_display()
-                    }
-                })
-                .collect();
-            let args: Vec<&str> = values.iter().map(String::as_str).collect();
-            return self.eval_one_builtin_from_values(func, &args);
-        }
         // Evaluate each argument as an expression.
         let evaluated: Vec<String> = raw_parts
             .iter()
@@ -2578,23 +2343,11 @@ impl PreprocessContext {
     }
 
     /// Core builtin dispatcher taking pre-evaluated string arguments.
-    fn eval_one_builtin_from_values(&self, func: &str, args: &[&str]) -> String {
+    fn eval_one_builtin_from_values(&mut self, func: &str, args: &[&str]) -> String {
         self.eval_one_builtin_args(func, args)
     }
 
-    fn eval_one_builtin(&self, func: &str, args_raw: &str) -> String {
-        let args: Vec<&str> = if args_raw.trim().is_empty() {
-            Vec::new()
-        } else {
-            split_builtin_args(args_raw)
-        };
-
-        // Strip quotes from args.
-        let args: Vec<&str> = args.iter().map(|a| a.trim().trim_matches('"')).collect();
-        self.eval_one_builtin_args(func, &args)
-    }
-
-    fn eval_one_builtin_args(&self, func: &str, args: &[&str]) -> String {
+    fn eval_one_builtin_args(&mut self, func: &str, args: &[&str]) -> String {
         match func {
             "strlen" => args
                 .first()
@@ -2633,14 +2386,27 @@ impl PreprocessContext {
                 // to a signed Java int (seconds), then multiplies by 1000L.
                 let epoch_ms = if let Some(seconds) = args.get(1) {
                     let Ok(seconds) = seconds.parse::<i32>() else {
+                        self.error = Some(PreprocessError {
+                            line: self.current_diagram_source_line(),
+                            message: "Date seconds outside signed 32-bit range".into(),
+                        });
                         return String::new();
                     };
                     i64::from(seconds) * 1000
                 } else {
                     clock.epoch_ms as i64
                 };
-                let tz = clock.timezone_at(epoch_ms);
-                format_java_date_pattern(epoch_ms, &tz, args[0])
+                let tz = clock.pattern_timezone_at(epoch_ms);
+                match date_format::format(epoch_ms, &tz, args[0]) {
+                    Ok(formatted) => formatted,
+                    Err(message) => {
+                        self.error = Some(PreprocessError {
+                            line: self.current_diagram_source_line(),
+                            message,
+                        });
+                        String::new()
+                    }
+                }
             }
             "size" => {
                 // Count array elements if the argument looks like a JSON array [a, b, c].
@@ -2913,185 +2679,12 @@ fn format_java_date(epoch_ms: i64, tz: &TzSpec) -> String {
     )
 }
 
-/// Format epoch milliseconds using a Java `SimpleDateFormat` pattern.
-///
-/// Renders wall clock in the supplied timezone. Supports the most common
-/// tokens: `yyyy`, `yy`, `MM`, `dd`, `HH`, `mm`, `ss`, `EEE` (day-of-week),
-/// `MMM` (month abbreviation). Literal text passes through.
-fn format_java_date_pattern(epoch_ms: i64, tz: &TzSpec, pattern: &str) -> String {
-    const DAYS: [&str; 7] = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
-    const MONTHS: [&str; 12] = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-    ];
-
-    let _millis = (epoch_ms % 1000) as u32;
-    let s = epoch_ms.div_euclid(1000) + i64::from(tz.offset_secs);
-    let secs = ((s % 86400) + 86400) % 86400;
-    let hh = secs / 3600;
-    let mm_time = (secs % 3600) / 60;
-    let ss = secs % 60;
-    let dow_idx = (s.div_euclid(86400).rem_euclid(7)) as usize;
-
-    let mut days = s.div_euclid(86400);
-    let mut year = 1970i64;
-    // DateFunction accepts negative epoch seconds; walk the Gregorian calendar
-    // backwards as well as forwards from the Unix epoch.
-    while days < 0 {
-        year -= 1;
-        days += if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
-            366
-        } else {
-            365
-        };
-    }
-    loop {
-        let ylen = if year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) {
-            366
-        } else {
-            365
-        };
-        if days < ylen {
-            break;
-        }
-        days -= ylen;
-        year += 1;
-    }
-    let leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-    let mdays = [
-        31,
-        if leap { 29 } else { 28 },
-        31,
-        30,
-        31,
-        30,
-        31,
-        31,
-        30,
-        31,
-        30,
-        31,
-    ];
-    let mut month = 0usize;
-    for (i, &ml) in mdays.iter().enumerate() {
-        if days < ml {
-            month = i;
-            break;
-        }
-        days -= ml;
-    }
-    let day = days + 1;
-
-    let mut result = String::new();
-    let chars: Vec<char> = pattern.chars().collect();
-    let mut i = 0;
-    while i < chars.len() {
-        match chars[i] {
-            'y' => {
-                let start = i;
-                while i < chars.len() && chars[i] == 'y' {
-                    i += 1;
-                }
-                let len = i - start;
-                if len <= 2 {
-                    result.push_str(&format!("{:02}", year % 100));
-                } else {
-                    result.push_str(&format!("{year:04}"));
-                }
-            }
-            'M' => {
-                let start = i;
-                while i < chars.len() && chars[i] == 'M' {
-                    i += 1;
-                }
-                let len = i - start;
-                if len >= 3 {
-                    result.push_str(MONTHS[month]);
-                } else {
-                    result.push_str(&format!("{:02}", month + 1));
-                }
-            }
-            'd' => {
-                while i < chars.len() && chars[i] == 'd' {
-                    i += 1;
-                }
-                result.push_str(&format!("{day:02}"));
-            }
-            'H' => {
-                while i < chars.len() && chars[i] == 'H' {
-                    i += 1;
-                }
-                result.push_str(&format!("{hh:02}"));
-            }
-            'm' => {
-                while i < chars.len() && chars[i] == 'm' {
-                    i += 1;
-                }
-                result.push_str(&format!("{mm_time:02}"));
-            }
-            's' => {
-                while i < chars.len() && chars[i] == 's' {
-                    i += 1;
-                }
-                result.push_str(&format!("{ss:02}"));
-            }
-            'E' => {
-                while i < chars.len() && chars[i] == 'E' {
-                    i += 1;
-                }
-                result.push_str(DAYS[dow_idx]);
-            }
-            '\'' => {
-                // Quoted literal text.
-                i += 1;
-                while i < chars.len() && chars[i] != '\'' {
-                    result.push(chars[i]);
-                    i += 1;
-                }
-                if i < chars.len() {
-                    i += 1;
-                } // skip closing quote
-            }
-            c => {
-                result.push(c);
-                i += 1;
-            }
-        }
-    }
-    result
-}
-
 fn number_value(f: f64) -> Value {
     if f == (f as i64) as f64 && f.abs() < i64::MAX as f64 {
         Value::Int(f as i64)
     } else {
         Value::Float(f)
     }
-}
-
-fn parse_func_params(params_str: &str) -> Vec<FuncParam> {
-    if params_str.trim().is_empty() {
-        return Vec::new();
-    }
-    params_str
-        .split(',')
-        .map(|p| {
-            let p = p.trim();
-            // Check for default: $name = "value" or $name = value
-            if let Some(eq_pos) = p.find('=') {
-                let name = p[..eq_pos].trim().trim_start_matches('$').to_string();
-                let default = p[eq_pos + 1..].trim().trim_matches('"').to_string();
-                FuncParam {
-                    name,
-                    default: Some(default),
-                }
-            } else {
-                FuncParam {
-                    name: p.trim_start_matches('$').to_string(),
-                    default: None,
-                }
-            }
-        })
-        .collect()
 }
 
 fn parse_call_args(args_str: &str) -> Vec<String> {
@@ -3102,250 +2695,108 @@ fn parse_call_args(args_str: &str) -> Vec<String> {
     args.into_iter().map(|a| a.trim().to_string()).collect()
 }
 
-fn split_args(s: &str) -> Vec<String> {
-    let mut args = Vec::new();
-    let mut current = String::new();
+// Eater.eatAndGetQuotedString consumes to the next matching quote, with
+// no backslash escape. Keep byte offsets so non-ASCII token contents are safe.
+fn syntax_positions(text: &str) -> Vec<(usize, char, i32)> {
+    let mut result = Vec::new();
+    let mut quote = None;
     let mut depth = 0;
-    let mut in_quotes = false;
-
-    for c in s.chars() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-            current.push(c);
-        } else if in_quotes {
-            current.push(c);
-        } else if c == '(' {
-            depth += 1;
-            current.push(c);
-        } else if c == ')' {
-            depth -= 1;
-            current.push(c);
-        } else if c == ',' && depth == 0 {
-            args.push(current.trim().to_string());
-            current = String::new();
+    for (index, ch) in text.char_indices() {
+        if let Some(end) = quote {
+            if ch == end {
+                quote = None;
+            }
+        } else if matches!(ch, '\'' | '"') {
+            quote = Some(ch);
         } else {
-            current.push(c);
-        }
-    }
-    if !current.trim().is_empty() {
-        args.push(current.trim().to_string());
-    }
-    args
-}
-
-fn split_builtin_args(s: &str) -> Vec<&str> {
-    // Simple comma split respecting quotes and parens.
-    let mut args = Vec::new();
-    let mut start = 0;
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let bytes = s.as_bytes();
-
-    for (i, &b) in bytes.iter().enumerate() {
-        if b == b'"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if b == b'(' {
+            result.push((index, ch, depth));
+            if ch == '(' {
                 depth += 1;
-            } else if b == b')' {
+            }
+            if ch == ')' {
                 depth -= 1;
-            } else if b == b',' && depth == 0 {
-                args.push(&s[start..i]);
-                start = i + 1;
             }
         }
     }
-    args.push(&s[start..]);
-    args
+    result
 }
 
-fn find_matching_paren(s: &str) -> Option<usize> {
-    // s starts with '('
-    if !s.starts_with('(') {
-        return None;
-    }
-    let mut depth = 0;
-    let mut in_quotes = false;
-    for (i, c) in s.chars().enumerate() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-                if depth == 0 {
-                    return Some(i);
-                }
-            }
-        }
-    }
-    None
+fn split_args(text: &str) -> Vec<String> {
+    split_builtin_args(text)
+        .into_iter()
+        .filter(|s| !s.trim().is_empty())
+        .map(|s| s.trim().to_string())
+        .collect()
 }
 
-fn find_matching_paren_from(s: &str, open_pos: usize) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    for (i, c) in s[open_pos..].chars().enumerate() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-                if depth == 0 {
-                    return Some(open_pos + i);
-                }
-            }
-        }
-    }
-    None
-}
-
-/// Find the rightmost top-level position of an operator (not inside parens or quotes).
-fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let mut last_pos = None;
-    let chars: Vec<char> = expr.chars().collect();
-
-    for (i, &c) in chars.iter().enumerate() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-            } else if c == op && depth == 0 {
-                // For -, don't match if it's part of ->
-                if op == '-' && i + 1 < chars.len() && chars[i + 1] == '>' {
-                    continue;
-                }
-                // Skip position 0: a leading operator character is a prefix
-                // (e.g., leading '/' in '/users' is not division), not binary op.
-                if i == 0 {
-                    continue;
-                }
-                // Don't match if preceded by another operator (unary).
-                let prev = chars[i - 1];
-                if prev == '+'
-                    || prev == '-'
-                    || prev == '*'
-                    || prev == '/'
-                    || prev == '%'
-                    || prev == '('
-                    || prev == '='
-                    || prev == '<'
-                    || prev == '>'
-                    || prev == '!'
-                {
-                    continue;
-                }
-                last_pos = Some(i);
-            }
-        }
-    }
-    last_pos
-}
-
-fn split_at_top_level_op(expr: &str, op: char) -> Vec<String> {
+fn split_builtin_args(text: &str) -> Vec<&str> {
     let mut parts = Vec::new();
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let mut current = String::new();
-
-    for c in expr.chars() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-            current.push(c);
-        } else if in_quotes {
-            current.push(c);
-        } else if c == '(' {
-            depth += 1;
-            current.push(c);
-        } else if c == ')' {
-            depth -= 1;
-            current.push(c);
-        } else if c == op && depth == 0 {
-            parts.push(current);
-            current = String::new();
-        } else {
-            current.push(c);
+    let mut start = 0;
+    for (index, ch, depth) in syntax_positions(text) {
+        if ch == ',' && depth == 0 {
+            parts.push(&text[start..index]);
+            start = index + 1;
         }
     }
-    parts.push(current);
+    parts.push(&text[start..]);
     parts
 }
 
-fn find_top_level_logical_op(expr: &str, op: &str) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let bytes = expr.as_bytes();
-    let op_bytes = op.as_bytes();
-    let mut last_pos = None;
+fn find_matching_paren(text: &str) -> Option<usize> {
+    text.starts_with('(')
+        .then(|| find_matching_paren_from(text, 0))
+        .flatten()
+}
 
-    for i in 0..bytes.len() {
-        if bytes[i] == b'"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if bytes[i] == b'(' {
-                depth += 1;
-            } else if bytes[i] == b')' {
-                depth -= 1;
-            } else if depth == 0
-                && i + op_bytes.len() <= bytes.len()
-                && &bytes[i..i + op_bytes.len()] == op_bytes
-            {
-                last_pos = Some(i);
+fn find_matching_paren_from(text: &str, open: usize) -> Option<usize> {
+    syntax_positions(&text[open..])
+        .into_iter()
+        .find(|(_, ch, depth)| *ch == ')' && *depth == 1)
+        .map(|(index, _, _)| open + index)
+}
+
+fn find_top_level_op_pos(expr: &str, op: char) -> Option<usize> {
+    syntax_positions(expr)
+        .into_iter()
+        .filter(|(index, ch, depth)| {
+            if *ch != op || *depth != 0 || *index == 0 {
+                return false;
             }
-        }
-    }
-    last_pos
+            if op == '-' && expr[*index..].starts_with("->") {
+                return false;
+            }
+            let before = expr[..*index].trim_end();
+            !before.is_empty()
+                && !before.ends_with(['+', '-', '*', '/', '%', '(', '=', '<', '>', '!'])
+        })
+        .map(|(index, _, _)| index)
+        .next_back()
+}
+
+fn find_top_level_logical_op(expr: &str, op: &str) -> Option<usize> {
+    syntax_positions(expr)
+        .into_iter()
+        .filter(|(index, _, depth)| *depth == 0 && expr[*index..].starts_with(op))
+        .map(|(index, _, _)| index)
+        .next_back()
 }
 
 fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    let bytes = expr.as_bytes();
-    let op_bytes = op.as_bytes();
-
-    // For == and !=, scan from left; for others, also from left.
-    for i in 0..bytes.len() {
-        if bytes[i] == b'"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if bytes[i] == b'(' {
-                depth += 1;
-            } else if bytes[i] == b')' {
-                depth -= 1;
-            } else if depth == 0
-                && i + op_bytes.len() <= bytes.len()
-                && &bytes[i..i + op_bytes.len()] == op_bytes
-            {
-                // For < and >, make sure it's not <= or >= or <> or <<.
-                if op == "<"
-                    && i + 1 < bytes.len()
-                    && (bytes[i + 1] == b'=' || bytes[i + 1] == b'>')
-                {
-                    continue;
-                }
-                if op == ">" {
-                    if i + 1 < bytes.len() && bytes[i + 1] == b'=' {
-                        continue;
-                    }
-                    // Also skip -> (arrow).
-                    if i > 0 && bytes[i - 1] == b'-' {
-                        continue;
-                    }
-                }
-                // For == make sure it's not part of !== or ===.
-                return Some(i);
+    syntax_positions(expr)
+        .into_iter()
+        .find(|(index, _, depth)| {
+            if *depth != 0 || !expr[*index..].starts_with(op) {
+                return false;
             }
-        }
-    }
-    None
+            if op == "<" && (expr[*index..].starts_with("<=") || expr[*index..].starts_with("<>")) {
+                return false;
+            }
+            if op == ">" && (expr[*index..].starts_with(">=") || expr[..*index].ends_with('-')) {
+                return false;
+            }
+            true
+        })
+        .map(|(index, _, _)| index)
 }
 
 fn eval_defined_expression(expression: &str, truth: impl FnMut(&str) -> bool) -> Option<bool> {
@@ -3439,24 +2890,22 @@ where
     }
 }
 
-fn parens_balanced(s: &str) -> bool {
-    let mut depth = 0;
-    let mut in_quotes = false;
-    for c in s.chars() {
-        if c == '"' {
-            in_quotes = !in_quotes;
-        } else if !in_quotes {
-            if c == '(' {
-                depth += 1;
-            } else if c == ')' {
-                depth -= 1;
-                if depth < 0 {
-                    return false;
+fn parens_balanced(text: &str) -> bool {
+    let positions = syntax_positions(text);
+    !positions
+        .iter()
+        .any(|(_, ch, depth)| *ch == ')' && *depth <= 0)
+        && positions.last().is_none_or(|(_, ch, depth)| {
+            depth
+                + if *ch == '(' {
+                    1
+                } else if *ch == ')' {
+                    -1
+                } else {
+                    0
                 }
-            }
-        }
-    }
-    depth == 0
+                == 0
+        })
 }
 
 /// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
@@ -3514,6 +2963,87 @@ mod tests {
             .into_iter()
             .filter(|l| !l.is_empty())
             .collect()
+    }
+
+    #[test]
+    fn expression_effects_reach_identity_and_parser_once() {
+        let source = "@startuml\n!$calls = 0\n!function $configure()\n!$calls = $calls + 1\n!theme cerulean\n!return \"ok\"\n!endfunction\n!$label = $configure()\nclass \"$label $calls\" as Grove\n@enduml";
+        let output = preprocess_full_for_parse(source, None);
+        assert!(output.error.is_none());
+        assert!(
+            output
+                .uml_source
+                .ends_with("class \"ok 1\" as Grove\n@enduml\n")
+        );
+        assert_eq!(
+            output
+                .uml_source
+                .matches("skinparam backgroundColor transparent")
+                .count(),
+            1
+        );
+        assert!(
+            output
+                .lines
+                .iter()
+                .any(|line| split_source_line_marker(line) == Some((8, "class \"ok 1\" as Grove")))
+        );
+        assert!(output.lines.iter().any(|line| {
+            split_source_line_marker(line)
+                .is_some_and(|(_, text)| text == "skinparam __theme cerulean")
+        }));
+    }
+
+    #[test]
+    fn diagnostic_evaluation_is_ordered_and_not_replayed() {
+        let source = "@startuml\n!$n = 0\n!function $tick($digit)\n!$n = $n * 10 + $digit\n!return $digit\n!endfunction\n!log $tick(1) $tick(2)\n!if 0\n!log $tick(9)\n!endif\n!log $tick(3)\nclass Record$n\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass Record123\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn declaration_defaults_capture_nested_values_once() {
+        let source = "@startuml\n!$seed = \"first\"\n!function $value($ignored)\n!return $seed\n!endfunction\n!procedure $emit($label = $value('é,(x)'))\nclass \"$label\" as Grove\n!endprocedure\n!$seed = \"second\"\n$emit()\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"first\" as Grove\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn quoted_lookup_tokens_preserve_names_and_unicode_boundaries() {
+        let source = "@startuml\n!$cedar = \"green\"\n!function $name($ignored, $key)\n!return $key\n!endfunction\n!$a = %variable_exists(\"$\" + 'cedar')\n!$b = %get_variable_value($name('é,(x)', '$cedar'))\nclass \"$a / $b\" as Grove\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nclass \"1 / green\" as Grove\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn a_label_with_parentheses_is_not_a_standalone_call() {
+        let source = "@startuml\n!function $double($n)\n!return $n * 2\n!endfunction\nAlice -> Bob : double(3) = $double(3)\n@enduml";
+        assert_eq!(
+            preprocess_full(source, None).uml_source,
+            "@startuml\nAlice -> Bob : double(3) = 6\n@enduml\n"
+        );
+    }
+
+    #[test]
+    fn invalid_date_returns_a_located_preprocessing_error() {
+        for expr in [
+            "%date(\"QQ\", 0)",
+            "%date(\"yyyy\", 2147483648)",
+            "%date(\"XXXX\", 0)",
+        ] {
+            let output = preprocess_full(
+                &format!("@startuml\n!$value = {expr}\nclass Lost\n@enduml"),
+                None,
+            );
+            assert_eq!(output.error.as_ref().map(|error| error.line), Some(1));
+            assert!(!output.uml_source.contains("class Lost"));
+        }
     }
 
     #[test]
@@ -3614,7 +3144,7 @@ $inspect("payload")
         };
         // Check the formatter independently of the host zone and current year.
         assert_eq!(
-            format_java_date_pattern(-86400000, &ctx.render_clock.tz, "yyyy-MM-dd EEE"),
+            date_format::format(-86400000, &ctx.render_clock.tz, "yyyy-MM-dd EEE").unwrap(),
             "1969-12-31 Wed"
         );
         let result = ctx
