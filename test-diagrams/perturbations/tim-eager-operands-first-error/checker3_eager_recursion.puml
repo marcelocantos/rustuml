@@ -1,0 +1,12 @@
+@startuml
+!$trace=""
+!function $walk($n)
+!$trace=$trace+"x"
+!if $n > 0
+!return $walk($n-1)
+!endif
+!return 0
+!endfunction
+!$result=(1 || $walk(2)) && (0 || $walk(1))
+class "$trace / $result" as Result
+@enduml

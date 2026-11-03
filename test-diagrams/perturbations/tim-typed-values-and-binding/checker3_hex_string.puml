@@ -1,0 +1,4 @@
+@startuml
+!$result=%dec2hex("255")
+class "$result" as Result
+@enduml

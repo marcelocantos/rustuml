@@ -1,0 +1,9 @@
+@startuml
+!$flag=0
+!function $set()
+!$flag=1
+!return 1
+!endfunction
+!$result=$set() && $flag
+class "$result / $flag" as Result
+@enduml

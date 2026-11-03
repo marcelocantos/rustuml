@@ -1,0 +1,12 @@
+@startuml
+!$j = {"n":1.5,"s":"007","b":true}
+!$text = "007"
+!function $relay($v)
+!return $v
+!endfunction
+!$s = $relay(%get_variable_value("$text")) + 2
+!$a = %size($relay($j))
+!$b = $relay(%true()) + 2
+!$c = %date("yyyy", $j)
+class "$s / $a / $b / $c" as Values
+@enduml

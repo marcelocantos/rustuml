@@ -1,0 +1,246 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "host": "marcelo@192.168.1.112",
+  "remote_scratch": "/Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn",
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "new_worker_command": "ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/new-worker",
+  "all_java_remote": true,
+  "local_jvm_or_javac_invocations": 0,
+  "readiness": {
+    "ready": true,
+    "status": "calibrated_on_supplied_cases",
+    "root": "/Users/marcelo/rustuml-reference",
+    "host": {
+      "computer_name": "Monkey Man",
+      "local_hostname": "Monkey-Man",
+      "hostname": "MacBookPro",
+      "lan_ipv4": "192.168.1.112",
+      "ssh_port": 22,
+      "tcp22_local_check": true,
+      "os": "macOS 27.0.1 (26A434)",
+      "architecture": "arm64"
+    },
+    "runtime": {
+      "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "java_version": "Homebrew OpenJDK 21.0.5",
+      "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+      "dot_version": "12.2.0 (20241103.1931)",
+      "headless_property": true,
+      "awt_headless": true,
+      "encoding": "UTF-8",
+      "locale": "en_AU",
+      "default_timezone": "Australia/Melbourne",
+      "timezone_override_verified": "UTC",
+      "jar_path": "/Users/marcelo/rustuml-reference/reference.jar",
+      "expected_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "actual_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053"
+    },
+    "environment_differences": [
+      "Java Homebrew 21.0.5 versus origin Temurin 21.0.13+9-LTS",
+      "Graphviz 12.2.0 versus origin 16.1.0",
+      "Seven conformance pairs match strict parsed XML; broader font/layout equivalence remains unproven"
+    ],
+    "install_actions": [],
+    "existing_dependencies_reused": true,
+    "global_changes": [],
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "worker_allocator": "/Users/marcelo/rustuml-reference/bin/new-worker",
+    "staging_protocol": {
+      "transport": "SSH/SCP with existing credentials and trust",
+      "directory": "scratch/worker.XXXXXXXX",
+      "isolation": "one directory per worker/job; preserve relative include hierarchy; no concurrent reuse",
+      "cleanup": "caller after collecting outputs",
+      "external_stdlib": "caller must stage pinned 747d1eae809cde20675976d67e3eb84dc0021a0c for caller includes"
+    },
+    "bundle": {
+      "expected_size": 55326525,
+      "path": "/Users/marcelo/rustuml-reference/bundle.tar.gz",
+      "received": true,
+      "manifest_verified": true
+    },
+    "calibration": {
+      "expected_cases": 7,
+      "completed_cases": 7,
+      "results": [
+        {
+          "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_node.puml",
+          "source_sha256": "e698c595e931f022f51ade7f2dea14d10f679a40d0044f8e1723568a5a2475eb",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "46eab635d12f60533dd0b8e01310a0acc7c6934a7d030a9e7f4dce13dcd11df4",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/alias_node.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/alias_node.stderr"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.puml",
+          "source_sha256": "6288b71f2dae71a7257513426bc68ed564b9f1c8a5e19eb80ad152dce09d3ed7",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "d85dcbd20ab58dcfcdb588dd332f87e12f5aa45d07d8acb5448124778572be15",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/checker_font_control_sansserif.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/checker_font_control_sansserif.stderr"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.puml",
+          "source_sha256": "103a9edb30fc9f9f58c61b0ae38ee7b959b19cffed92e828c5f2fcae7c4e5700",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "87c2ae3c040d3751b8cb34414b8771ce05805f102162a932f3ffff2fd05fe331",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/checker_font_control_serif.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/checker_font_control_serif.stderr"
+        },
+        {
+          "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i3.puml",
+          "source_sha256": "273ea94740945a25e41b00bfd3ee5c0cf86bd3b87e88cb37356235110e64ae6b",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "80f8fca0dc0fb20f49d31531e170218535beb179932793c68eadc36aa6dcc931",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/checker_winner_d2_i3.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/checker_winner_d2_i3.stderr"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+          "source_sha256": "45605b4de0167e671a00b20615b6d93dc60c9b1ad7bd697de845b065a35a45b7",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "9cd3c744bba12e257386c7720daa08a626e5aa1609006de70bc398190efebca7",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/checker2_raw_counterpart_act_skinparam2_shadowing_true.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/checker2_raw_counterpart_act_skinparam2_shadowing_true.stderr"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+          "source_sha256": "9010efc49fe79952c524c0a511d9be32692332662cc247c5bc7ce305eebabe13",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "01f7925d4c3cecd64f7bf06fc8577c97e65c9c4f1c248df3697e039cc10546ee",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/checker2_raw_counterpart_act_skinparam_shadowing.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/checker2_raw_counterpart_act_skinparam_shadowing.stderr"
+        },
+        {
+          "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+          "source_sha256": "f56e0ad2e6eceb32376ba692da9ce144459eeb205ad31ba43707832b778c2e15",
+          "argv": [
+            "/Users/marcelo/rustuml-reference/bin/reference",
+            "--cwd",
+            "/Users/marcelo/rustuml-reference/scratch/worker.2zi8aywq",
+            "--timezone",
+            "GMT+11:00",
+            "--",
+            "-pipe",
+            "-tsvg"
+          ],
+          "exit_status": 0,
+          "xml_equivalent": true,
+          "stdout_sha256": "be689b0f3429b25d95991d72d298864775fdb1bdf7d7375d1aa60c1f420770ee",
+          "stdout": "/Users/marcelo/rustuml-reference/captures/calibration/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.svg",
+          "stderr": "/Users/marcelo/rustuml-reference/captures/calibration/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.stderr"
+        }
+      ],
+      "historical_equivalence_claimed": false
+    },
+    "ssh": {
+      "origin_to_runner": "Verified from origin via BatchMode SSH; calibration script and Java run on Monkey Man",
+      "reverse_colossus_lan": "DNS resolution failed",
+      "reverse_baby_colossus_local": "No route to host",
+      "local_self_ssh": "Host key verification failed; security unchanged"
+    },
+    "blockers": [],
+    "parent_messaging": "No parentThreadId and no linked origin environment available; status delivered in thread commentary",
+    "contract": "/Users/marcelo/rustuml-reference/README.md",
+    "evidence_sha256": {
+      "captures/EnvironmentProbe.java": "0726d090fe1c6565a1fa84b815d4ef1b5dde0d63bedad19b1e0257a5661e1d7a",
+      "captures/TransportProbe.java": "9cf43ea43c0b7e0d35010bee769164bf76594a6f3320e6048f5aa6c847e07b2f",
+      "captures/dot-smoke.svg": "694bd8594643e0c5b3f1d5326661ec4851b7e6816c15f9f964e196e5fb966110",
+      "captures/java.txt": "b909c00aae86c28855fa502767959727de1e756b3460994f4f8b0b61cf73a61b",
+      "captures/environment.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "captures/dot-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "captures/environment-utc.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "captures/dot.txt": "40f682979de9c32fac39cf6bb5052d4e903a7cc3c79436ec2f3b7d3facd80a80",
+      "captures/transport.json": "8fa7288cc671112cf6c44abb475653da878a3f59ac9061ea883725687ad93264",
+      "captures/font-match.txt": "98e0d2cd50b380f0710ac22c793d8e359617d32e7de14f031311e55c1e834efe",
+      "captures/environment.txt": "5c5441d7764a2c5472216a07a25dc50cea3637134ce987d38574866ead71acf1",
+      "captures/environment-utc.txt": "42c891bc7a331c2bf537dbf3edfee3dea92f87ef652b5cdbad587c143110c762",
+      "captures/fonts.txt": "a35c946f3a244e65c5d758b088c806d68bfada0b107f1de16df320ba4cba28f3"
+    },
+    "origin_checks": {
+      "headless_property": true,
+      "awt_headless": true,
+      "raw_source_probe": "exact source bytes matched",
+      "invalid_date_exit": 200,
+      "invalid_date_stderr": "ERROR\n1\nBad date pattern\n",
+      "local_java_launched": false,
+      "evidence": "captures/origin-transport-check.json"
+    }
+  },
+  "origin_runtime": "Temurin21.0.13 / Graphviz16.1.0",
+  "remote_runtime": "OpenJDK21.0.5 / Graphviz12.2.0",
+  "calibration_limit": "Seven root calibration pairs only; eleven regression controls additionally rechecked here. Not universal environment equivalence.",
+  "locale": "en_AU",
+  "encoding": "UTF8",
+  "headless": "forced by wrapper",
+  "timezone": "GMT+11:00 unless row explicitly names another; matching local TZ/debug declared in manifests",
+  "cargo_target": "/tmp/rustuml-tim-checker3.dRQvKH/target",
+  "cargo_build_jobs": 4,
+  "local_rust_cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-bf706fe0"
+}

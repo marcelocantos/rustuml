@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: before
+!$bad = %date("yyyy",2147483648)
+@enduml
