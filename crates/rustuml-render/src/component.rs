@@ -6955,7 +6955,7 @@ fn component_svek_edge_points(
     out
 }
 
-fn simulate_compound(
+pub(crate) fn simulate_compound(
     points: Vec<(f64, f64)>,
     tail: Option<&ClusterPosition>,
     head: Option<&ClusterPosition>,
