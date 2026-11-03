@@ -1130,6 +1130,14 @@ pub fn parse_with_base(
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
+    // Java TContext.executeOneLineSafe propagates fatal TIM errors; its partial
+    // result list must not become a successful diagram (account 0530072a).
+    if let Some(error) = preprocess_out.error.take() {
+        return Err(ParseError {
+            line: error.line,
+            message: error.message,
+        });
+    }
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
     if typ == "uml" {
         for (index, line) in preprocess_out.lines.iter().enumerate() {
@@ -1150,6 +1158,13 @@ pub fn parse_with_base(
             }
             None => preprocess::preprocess_full_for_sequence_parse(input, None),
         };
+        // The sequence projection has the same TContext error contract.
+        if let Some(error) = preprocess_out.error.take() {
+            return Err(ParseError {
+                line: error.line,
+                message: error.message,
+            });
+        }
         style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
     let lines = preprocess_out.lines;
@@ -1299,6 +1314,24 @@ pub fn parse_with_base(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn fatal_preprocessing_errors_preserve_origin() {
+        for declaration in ["class Before", "Alice -> Bob: before"] {
+            for (expression, diagnostic) in [
+                ("%date(\"QQ\",0)", "Bad date pattern"),
+                (
+                    "%date(\"yyyy\",2147483648)",
+                    "Date seconds outside signed 32-bit range",
+                ),
+            ] {
+                let input = format!("@startuml\n{declaration}\n!$bad = {expression}\n@enduml\n");
+                let error = parse(&input).expect_err("fatal TIM error accepted partial diagram");
+                assert_eq!(error.line, 2, "{input}");
+                assert!(error.message.starts_with(diagnostic), "{error:?}");
+            }
+        }
+    }
 
     #[test]
     fn detects_uml_type() {

@@ -1,0 +1,4 @@
+@startuml
+class Before
+!$bad = %date("QQ",0)
+@enduml
