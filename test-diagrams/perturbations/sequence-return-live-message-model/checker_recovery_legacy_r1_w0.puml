@@ -1,0 +1,11 @@
+@startuml
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+T -> Q ++ : i.f
+Q -> Q ++ : local
+Q -> E ++ : delegate
+return delegated
+return local
+return sender
+@enduml

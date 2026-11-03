@@ -1,0 +1,24 @@
+@startuml
+!pragma teoz true
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+T -> E ++ : begin
+E -> E ++ : recurse
+E -> E ++ : recurse
+group outer
+opt nested
+note right of E : fresh WWW.i envelope
+E -> E : history point
+activate E
+note over E : intervening tile
+deactivate E
+E -> Q ++ : forward
+return delegated
+end
+end
+return unwind
+return unwind
+return unwind
+
+@enduml

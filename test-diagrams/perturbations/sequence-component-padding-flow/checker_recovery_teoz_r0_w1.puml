@@ -1,0 +1,19 @@
+@startuml
+!pragma teoz true
+skinparam Padding 6
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+alt WW.quartz iii transmission envelope\nsecond guard
+Q -> E ++ : call
+note left
+WW.quartz iii transmission envelope
+line
+end note
+else
+group inner
+note over Q,T : span
+return done
+end
+end
+@enduml

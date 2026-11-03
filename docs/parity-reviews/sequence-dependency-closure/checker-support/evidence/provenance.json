@@ -1,0 +1,142 @@
+[
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "original_account": "b080d075ef80064e3af27bd692443a42e54bbd1d",
+    "original_implementation": "ef3b7a8691d5b1a06a579919b9724b118361b593",
+    "prepared_account": "b6c43da53ab24ba360820b1f8bd9d73e6a5ad8b4",
+    "prepared_implementation": "bb761bd13b3d9630ec9409022a7225eba3e3d9f0",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "646a77e84c71affe37188be5c479206a1e752cd0e2e47e29c108f0c1796fd6c1"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "original_account": "cd2e96858835e29e0ca3cd0f30de2a65e6fe29f7",
+    "original_implementation": "caf642a96b667373cecf424646f5a22a1302528b",
+    "prepared_account": "bbf7d9fb2c33c2612db836c06e8b0423999cd84e",
+    "prepared_implementation": "0fd964be4d8d4efe1ad222278865eeff305262b5",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "a8d0297c031577dbf163ef6eeb246ff5ce59a3367c7d9d4526bf391c8eb3ff43"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "original_account": "6f36fedfba38ca19244a81454e3f7d9c900f2974",
+    "original_implementation": "10b2906dad9cdfd94b1a036a0ce10c77a82edb40",
+    "prepared_account": "c1ef52be1a1cb9614c3a06a7b524d650f32ecbb7",
+    "prepared_implementation": "9c988764885240bd2615dca3f5f2af3f45d2eb69",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "12cd2027329e02a6ea0707d1414b392249866060644b5c1874f51f0b376af03b"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "original_account": "ec228aba301359d217145d2bfc402390f5c3b27c",
+    "original_implementation": "23c872994861214207ef2a156f8cfe2088123340",
+    "prepared_account": "37e9e23f2c095356261999d64fe747e39c537d39",
+    "prepared_implementation": "48716e0f3eb67cd6e492059e484cd13af5425afe",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "8b8c6beb87c8af87560e81324d4a716bddd29f63c8137e2867a77b34c00a2e14"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "original_account": "2b7dbb908b3a5d129ff5897d8493366286018e25",
+    "original_implementation": "10b2906dad9cdfd94b1a036a0ce10c77a82edb40",
+    "prepared_account": "dec729705b3cfc9b905cfd6030d03d61e1c20875",
+    "prepared_implementation": "9c988764885240bd2615dca3f5f2af3f45d2eb69",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "df36a4ac04d89c824f5dcb0a39b59e5d8c47bed1b2ed98d373c70e9b04a6b3f3"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "original_account": "9ef2acc9c72e614bfe4c8ab06147aab8fa80c45b",
+    "original_implementation": "078d2cb982ab764172ed89a0fb4ecfb505197763",
+    "prepared_account": "3e4c5fc96e462cc3ecbde5c65abc47477f576004",
+    "prepared_implementation": "34fe478f0b539932613f414b8f756ebacee8fbf3",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "dfa6d4d93cfff3e6efbc9f2a1c59a930c2f410992abf11b8e4796380aee09779"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "original_account": "40919de22b7fb5f408c5e6abbd93414923f365dc",
+    "original_implementation": "29fd2932f20fa44d27299c035da5f5ba4fc0b7a6",
+    "prepared_account": "28a3de4d55609458d4ca7f4f784b2ba172242018",
+    "prepared_implementation": "0f45579b977907cc1389f2736cdb26cb8808a69e",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "d35b634958e86c7115543229ce5a5545aac6b923bc44faf4711993de0348c730"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "original_account": "97820400929a1afcfaba701ca2f8b9efb6aadea1",
+    "original_implementation": "0821a330c726a351a162c5a2cdaf3f7425910bb2",
+    "prepared_account": "de1678345e5c6f5154f9415d8113cc9e65aa592d",
+    "prepared_implementation": "c15c6ecff53b7ec1e250e2744accd1852c7d1941",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "79d6ff1c529713ff00691520ba0a2447b275e9855627542d4ef16ad722d7da49"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "original_account": "f55d79708e03d18dafa3c6c2f0538840194c0f1a",
+    "original_implementation": "ff2c542b42b62e9c6334f6cad20dea616e6cb04b",
+    "prepared_account": "2a1c77633f559acf87dee2fc8437cdd25eacd76d",
+    "prepared_implementation": "c0d425a0ee074e10c2c80c42a2e16ee3798827ad",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "8f108d23dec1a19b4d3ba265e60b81ab30e6b459ac75d44c0d69b74a8b13a226"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "original_account": "2b7dbb908b3a5d129ff5897d8493366286018e25",
+    "original_implementation": "73c44e851ddb3d8fcfba4ca472dc8834d88a96d8",
+    "prepared_account": "dec729705b3cfc9b905cfd6030d03d61e1c20875",
+    "prepared_implementation": "b9a0cdb52a557fb7cbc754cc16aa3840d0827145",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "7bee1fdbaae6baecefbf66627553b7dfdbf79eaf3e74ba03d92cf6fc28f2f6ed"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "original_account": "5adc80477ee0fac05ceb42ad0f032237425b97c9",
+    "original_implementation": "bd8b0934d2630a730e077a320331a6e29f3b4a06",
+    "prepared_account": "c865c5b3a35e5c5a1b965ab7f79e05775475ea9e",
+    "prepared_implementation": "02abc3cd267a972efff07c805237f8af5cca3139",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "55538449c43c9ea0158794d1d82ed49cdbf862d74a1ef321af4f5333f78236b4"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "original_account": "8c6074666083f8db47872f81a1e79811331859b5",
+    "original_implementation": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc",
+    "prepared_account": "02decb25825e2570c88cfca2681ec446dc303439",
+    "prepared_implementation": "0a46ebb536765daaabd0599edba9daebbea7fc21",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "7e02fc19faf299e2513993dbe1bb2d54365e33e1d18bdabe37a1cb2fa3ce6cf8"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "original_account": "76ee592d31820903dcde86c437ccb6a3c0b63aca",
+    "original_implementation": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc",
+    "prepared_account": "fb565277bcbf06b9eb80243d03cfb1b4b9e96bfc",
+    "prepared_implementation": "0a46ebb536765daaabd0599edba9daebbea7fc21",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "3426c3305bcdc16a3d22285966d1d599a12155386fafb64cc04c8ae607fb9b4f"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "original_account": "b1f50dd4cea86440543cda55aa8387f85de9da6b",
+    "original_implementation": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc",
+    "prepared_account": "42e9ddcd32372b2c2e3b50067caf7a43ddfa0a2f",
+    "prepared_implementation": "0a46ebb536765daaabd0599edba9daebbea7fc21",
+    "account_precedes_implementation": true,
+    "account_bytes_unchanged": true,
+    "account_sha256": "3ee7c6c3acbdb9c68f268b8cb36e6c77016e599a72ba3c498fb08c413ba2d603"
+  }
+]

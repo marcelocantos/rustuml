@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-return-live-message-model",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "28a3de4d55609458d4ca7f4f784b2ba172242018",
+  "implementation_commit": "0f45579b977907cc1389f2736cdb26cb8808a69e",
+  "original_account_commit": "40919de22b7fb5f408c5e6abbd93414923f365dc",
+  "original_implementation_commit": "29fd2932f20fa44d27299c035da5f5ba4fc0b7a6",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "fb52cc382e3d715c01e9a2a71d4a046df6de4325c78442c10fb1dcf33722b731",
+      "golden_sha256": "727fe51c4ae6441e762ffb2629dd3051880ccaf57254f712c7ddb3b18eb113c8",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "bc18f2524421cb98ccb491a36a053ea13c36e3ce94fbccf30b1be8756a2f8499",
+      "golden_sha256": "23ff300e2e8da5fbd17f020bbdf4986250276d232a769e7c818f7c1640beeae0",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "e9928d60c505033b748247a743fb4112323478cf3a9c18856f1e63fb507d70da",
+      "golden_sha256": "de1828a9aeb309f62e0577366d43d647135d2052cfa86b081773cb49f7daae99",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "883f7bb3905498b6a0ba54ce64cde06d81289e5c42cd60851547db631b21f385",
+      "golden_sha256": "4a6f20fc5f45afd466e8dbbfd09731a5fc604b2c17dab5692b71e9a3866158fe",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "80f0ab3ad2f410d7ddb02391658f9808b9cbe79cb38a5920a72258aeadebde97",
+      "golden_sha256": "7c86693cfbb74e85e1cc9d80fa0eec1202e92b993eecdf0f33da1eaa9a744545",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "257371f1c5d4ea6ba78dc9a3a41e5464a30feb5e362cf4ab1591b3f01a7a40be",
+      "golden_sha256": "6719f94cda0931ba2e382ed318ec6c8d71a9d8292ef130ea5f936a77f0666049",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "4ab6a7bf182a8116b448de80c09632f68389409ad8ed983c5ba4759e851a3152",
+      "golden_sha256": "ea5c2612d4073871c4b68aede541cafc886b34d4e96b03d949535913fba2af59",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "nested live endpoints and return ownership"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "4bd2eee1a30a9417d86200444ce850be8b61069a9400c753ac92b08da1095a4e",
+      "golden_sha256": "00a98e4519b7c7fe09ebed8656766e1b5ff1b66f899f6bd90037a6acbe5f00bf",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.svg",
+      "axes": [
+        "explicit return color",
+        "self versus interparticipant ownership",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "f6a0ce77cc27f396e1ab8fa29812b5474c0af1561493fb6c7beeb87f5c4c7017",
+      "golden_sha256": "4720f6a4a19ded184b3ee08f1b6bf3f4b3785bc3b7bebe963618e8e70fdc3342",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.svg",
+      "axes": [
+        "explicit return color",
+        "self versus interparticipant ownership",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "1ac2c9c961184f638450226b60f3d49c3692463bcc3260e01f5128937bf0a5eb",
+      "golden_sha256": "3b2f379953ddff46066f5189c0efbd33de746bec7d08b18d38eaed954bad0a62",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "Java has no independent return painter: CommandReturn produces Message and MessageArrow#getLeftStartInternal/getRightEndInternal samples the spatial left/right live segments. Rust ordinary-return lowering correctly shares sequence_arrow_endpoints and the message constraints; eight fresh nested delegated-return cases pass across direction/order/label and both engines.",
+    "Both fresh explicit-color return cases fail: CommandReturn applies COLOR to the inherited dotted configuration; ReturnMessage currently retains it as visible label text and the normalized message does not override arrow color. Legacy interparticipant canvas is316px versus369px. Whole-source return semantics therefore remain rejected even though the endpoint algebra has positive evidence.",
+    "No regression of any previously passing parent955 or maker535 input was found. Correct internal endpoint selection does not waive unresolved parser/lifecycle dependencies.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "Java has no independent return painter: CommandReturn produces Message and MessageArrow#getLeftStartInternal/getRightEndInternal samples the spatial left/right live segments. Rust ordinary-return lowering correctly shares sequence_arrow_endpoints and the message constraints; eight fresh nested delegated-return cases pass across direction/order/label and both engines.",
+    "Both fresh explicit-color return cases fail: CommandReturn applies COLOR to the inherited dotted configuration; ReturnMessage currently retains it as visible label text and the normalized message does not override arrow color. Legacy interparticipant canvas is316px versus369px. Whole-source return semantics therefore remain rejected even though the endpoint algebra has positive evidence.",
+    "No regression of any previously passing parent955 or maker535 input was found. Correct internal endpoint selection does not waive unresolved parser/lifecycle dependencies."
+  ]
+}

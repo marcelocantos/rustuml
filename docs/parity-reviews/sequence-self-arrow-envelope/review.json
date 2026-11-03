@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-arrow-envelope",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "dec729705b3cfc9b905cfd6030d03d61e1c20875",
+  "implementation_commit": "b9a0cdb52a557fb7cbc754cc16aa3840d0827145",
+  "original_account_commit": "2b7dbb908b3a5d129ff5897d8493366286018e25",
+  "original_implementation_commit": "73c44e851ddb3d8fcfba4ca472dc8834d88a96d8",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "2969f9355a963a100e724dcff831d4f18aebc6b93904172312063c1eccdea5b2",
+      "golden_sha256": "a1c0fa951af0a184ad81f51b4f2236fe0ecd84743db519b49b99511d7763580a",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "dbd97ab8f9ff8346fa8369210c2d348383a6525e6ddbf599af7c80343b46aa5a",
+      "golden_sha256": "315d40ff62826f8612d87237e19872af637f2643259485dc7f18398952b725d5",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "3c59e3dce2cc56114bbf1fae8b50ae17c3b3d7aa2188618d8d87234128fed3c7",
+      "golden_sha256": "10c001f9f2e615d5414cfef489ec31032d05be1653cb1b536a4e65fcc3dfebeb",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "39e3f80fb17585e3ecffc5f9f10467b7167cf7a12b1a3b335c586d20c1ece356",
+      "golden_sha256": "b82add0774908920e07658aa01e431b8bc7440eb7b0a55e4f525ab970490c55b",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "f25e13cae035a3e7508f19956efc582cbb40f57dafacd2dc10311baa00b1c40f",
+      "golden_sha256": "2ddb90d6c115fcb2efae6362cc8acc203c9ec597b760fe5117183f5807fb772a",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "02caa56c5d03ef010a3f0f8660c88d897c30a317d9b6d5f9b52f7f150bfec86e",
+      "golden_sha256": "0a3eccef1f844bbf3c50a0c63f2bb5dba280eaf40daa3a6cb63b4f45b59555df",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "d24af5c9304564394028e8fa7a79feae3e8e7d2f112239515c790a6c81317079",
+      "golden_sha256": "2269663dbebfafa588b24090e70099c49050aaed6a9f90fc26f63f4ae6b13b47",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "all-page self extent",
+        "padding and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "9bc84974c0447d32ec9f4e019c21ffd3757ba70430d69144bbc19963ab8fd6af",
+      "golden_sha256": "a155504bbbca37eb0d00e9db0425e5b28ea76dc523bfa2b7f51616e8da2c6f00",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "SequenceSelfArrow now shares one width/start/segment-length value for legacy forward self constraints, group bounds, right extent and paint. Java MessageSelfArrow preferred width adds live-segment length, and ConstraintAfter adds it again. Account precedes implementation and replaced created/destroyed padding constants were removed.",
+    "The new value omits Java isReverse: MessageSelfArrow#getStartingX returns pos2-preferredWidth for reverse definition, while SequenceSelfArrow always uses right+activation_delta. Focused reversed async controls at depths0 and2 fail with a missing left envelope. This is a direction dependency of the shared geometry, not a reason to carve away failed inputs.",
+    "All eight own primary padded attached-note/newpage cases fail. In the legacy case the attached note starts y97.2988 in Rust versus91.2988 in Java at padding3; the first-page loop itself can agree while the whole component does not. Later-page horizontal handling removes crashes but does not prove all-page composition. The envelope remains dependent on NoteBox/ArrowAndNoteBox and page composition repairs.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "SequenceSelfArrow now shares one width/start/segment-length value for legacy forward self constraints, group bounds, right extent and paint. Java MessageSelfArrow preferred width adds live-segment length, and ConstraintAfter adds it again. Account precedes implementation and replaced created/destroyed padding constants were removed.",
+    "The new value omits Java isReverse: MessageSelfArrow#getStartingX returns pos2-preferredWidth for reverse definition, while SequenceSelfArrow always uses right+activation_delta. Focused reversed async controls at depths0 and2 fail with a missing left envelope. This is a direction dependency of the shared geometry, not a reason to carve away failed inputs.",
+    "All eight own primary padded attached-note/newpage cases fail. In the legacy case the attached note starts y97.2988 in Rust versus91.2988 in Java at padding3; the first-page loop itself can agree while the whole component does not. Later-page horizontal handling removes crashes but does not prove all-page composition. The envelope remains dependent on NoteBox/ArrowAndNoteBox and page composition repairs."
+  ]
+}

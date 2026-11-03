@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+skinparam shadowing false
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+group perimeter
+Q -> T : i.f
+note over Q,T : spanning participant heads
+opt nested
+T -> E : settle
+end
+end
+@enduml
