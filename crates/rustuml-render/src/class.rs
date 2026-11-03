@@ -98,8 +98,6 @@ const VIS_ICON_DEFAULT_SIZE: u32 = 10;
 const VIS_ICON_R: f64 = 3.0;
 /// Default half-size for diamond and triangle visibility icons.
 const VIS_ICON_ANGLED_HALF: f64 = 4.0;
-/// PlantUML derives the round/square half-size as `classAttributeIconSize / 3`.
-const VIS_ICON_SIZE_RADIUS_DIVISOR: u32 = 3;
 /// Diamond/triangle horizontal half-size is one pixel inside half the icon box.
 const VIS_ICON_ANGLED_INSET: f64 = 1.0;
 /// `LimitFinder.drawUPolygon` expands every polygon by 10px horizontally
@@ -879,8 +877,35 @@ fn filter_removed(
 
 /// EntityImageDescription + plantuml.skin root/element defaults. USymbols own
 /// their margins; they do not borrow native class compartment/header metrics.
+#[derive(Clone, Copy)]
+enum DescriptionSymbol {
+    Component1,
+    Component2,
+    Rectangle,
+    Database,
+    Queue,
+    Actor,
+    Boundary,
+}
+
+impl DescriptionSymbol {
+    fn margins(self) -> (f64, f64, f64, f64) {
+        // USymbolComponent1/Rectangle.getMargin and USymbolComponent2.getMargin.
+        match self {
+            Self::Component2 => (15.0, 25.0, 20.0, 10.0),
+            Self::Component1 | Self::Rectangle => (10.0, 10.0, 10.0, 10.0),
+            // USymbolDatabase/Queue.getMargin, shared by asSmall's measure/paint.
+            Self::Database => (10.0, 10.0, 24.0, 5.0),
+            Self::Queue => (5.0, 15.0, 5.0, 5.0),
+            Self::Boundary | Self::Actor => (0.0, 0.0, 0.0, 0.0),
+        }
+    }
+}
+
 #[derive(Clone)]
 struct DescriptionLeafStyle {
+    symbol: DescriptionSymbol,
+    alignment: LegendHorizontalAlignment,
     family: String,
     size: u32,
     bold: bool,
@@ -944,10 +969,21 @@ fn calc_entity_dims(
         let (width, name_height, stereo_height) = description_text_size(entity, hide, style);
         // USymbolComponent2 margin=(15,25,20,10). Boundary drawing is
         // (2*12+17+2*4, 2*12+2*4), merged between stereotype and label.
-        let (width, height) = if entity.kind == EntityKind::Boundary {
+        let (left, right, top, bottom) = style.symbol.margins();
+        let (width, height) = if matches!(style.symbol, DescriptionSymbol::Boundary) {
             (width.max(49.0), 32.0 + name_height + stereo_height)
+        } else if matches!(style.symbol, DescriptionSymbol::Actor) {
+            // ActorStickMan: head 16, body 27, legs 15, arms half-width 13;
+            // preferred dimension adds twice the stroke and one bottom pixel.
+            (
+                width.max(26.0 + 2.0 * style.thickness),
+                59.0 + 2.0 * style.thickness + name_height + stereo_height,
+            )
         } else {
-            (width + 40.0, name_height + stereo_height + 30.0)
+            (
+                width + left + right,
+                name_height + stereo_height + top + bottom,
+            )
         };
         return EntityDims {
             width,
@@ -2486,10 +2522,10 @@ fn render_with_oracle_uid_origin(
         .enumerate()
         .filter(|(idx, p)| {
             package_render.roles[*idx] == PackageRenderRole::Cluster
-                && diagram
-                    .relationships
-                    .iter()
-                    .any(|r| r.from == p.name || r.to == p.name)
+                // CommandFactoryNoteOnEntity links to group quark data just as
+                // CommandLinkClass does; both require ClusterDotString's point.
+                && (diagram.relationships.iter().any(|r| r.from == p.name || r.to == p.name)
+                    || diagram.notes.iter().any(|n| n.target.as_deref() == Some(&p.name)))
         })
         .map(|(idx, _)| idx)
         .collect();
@@ -2509,6 +2545,22 @@ fn render_with_oracle_uid_origin(
         // title before `ClusterDotString.printInternal` serializes the
         // integer-truncated combined dimensions as Graphviz's cluster label.
         let stereotype_lines = visible_package_stereotype_lines(pkg);
+        // ClusterHeader.getTitleBlock merges VisibilityModifier.getUBlock
+        // (size+1 square, top margin 4) before the package title.
+        let visibility_size = ClassFontOverrides::from_diagram(diagram)
+            .attr_icon_size
+            .unwrap_or(VIS_ICON_DEFAULT_SIZE);
+        let visibility_width = if pkg.visibility == Visibility::Default {
+            0.0
+        } else {
+            (visibility_size + 1) as f64
+        };
+        let title_height =
+            text_render::label_height(label, FONT_SIZE).max(if visibility_width > 0.0 {
+                visibility_width + 4.0
+            } else {
+                0.0
+            });
         let stereotype_width = stereotype_lines
             .iter()
             .map(|line| text_render::measure_no_underline(line, FONT_SIZE, false))
@@ -2538,12 +2590,11 @@ fn render_with_oracle_uid_origin(
             ClusterTitleSize {
                 // ClusterHeader adds suppWidthBecauseOfShape after merging
                 // the title and stereotype, not to the title alone.
-                width: text_render::measure_no_underline(label, FONT_SIZE, true)
+                width: (text_render::measure_no_underline(label, FONT_SIZE, true)
+                    + visibility_width)
                     .max(stereotype_width)
                     + title_width_extra,
-                height: text_render::label_height(label, FONT_SIZE)
-                    + title_height_extra
-                    + stereotype_height,
+                height: title_height + title_height_extra + stereotype_height,
             },
         );
     }
@@ -2738,84 +2789,6 @@ fn render_with_oracle_uid_origin(
     );
     if uses_ortho_labels {
         synthesize_ortho_edge_labels(diagram, &mut result.edge_paths);
-    }
-    // Java `SvekResult.calculateDimension` measures the rendered MinMax and
-    // calls `moveDelta(6 - minX, 6 - minY)`. An Opale polygon begins at its
-    // node minimum, while ordinary class images retain the renderer's 1px
-    // body inset. Reproduce that envelope-origin shift on each axis only when
-    // an attached note, rather than an ordinary entity, owns the minimum.
-    let entity_positions = &result.node_positions[..diagram.entities.len()];
-    let note_start = diagram.entities.len() + diagram.association_classes.len();
-    let note_count = attached_layout_slots.len() + floating_note_indices.len();
-    let note_positions = &result.node_positions[note_start..note_start + note_count];
-    let entity_min_x = entity_positions
-        .iter()
-        .map(|pos| pos.x)
-        .fold(f64::INFINITY, f64::min);
-    let entity_min_y = entity_positions
-        .iter()
-        .map(|pos| pos.y)
-        .fold(f64::INFINITY, f64::min);
-    let note_min_x = note_positions
-        .iter()
-        .map(|pos| pos.x)
-        .fold(f64::INFINITY, f64::min);
-    let note_min_y = note_positions
-        .iter()
-        .map(|pos| pos.y)
-        .fold(f64::INFINITY, f64::min);
-    // SvekResult's LimitFinder includes the group frontier. A contained note
-    // cannot own the image minimum merely by preceding its target class.
-    let cluster_min_x = result
-        .cluster_positions
-        .iter()
-        .map(|p| p.x)
-        .fold(f64::INFINITY, f64::min);
-    let cluster_min_y = result
-        .cluster_positions
-        .iter()
-        .map(|p| p.y)
-        .fold(f64::INFINITY, f64::min);
-    let note_dx = if note_min_x < entity_min_x.min(cluster_min_x) {
-        -1.0
-    } else {
-        0.0
-    };
-    let note_dy = if note_min_y < entity_min_y.min(cluster_min_y) {
-        -1.0
-    } else {
-        0.0
-    };
-    if note_dx != 0.0 || note_dy != 0.0 {
-        for pos in &mut result.node_positions {
-            pos.x += note_dx;
-            pos.y += note_dy;
-        }
-        for cluster in &mut result.cluster_positions {
-            cluster.x += note_dx;
-            cluster.y += note_dy;
-        }
-        for path in &mut result.edge_paths {
-            for point in &mut path.points {
-                point.0 += note_dx;
-                point.1 += note_dy;
-            }
-            if let Some(point) = &mut path.start_point {
-                point.0 += note_dx;
-                point.1 += note_dy;
-            }
-            if let Some(point) = &mut path.end_point {
-                point.0 += note_dx;
-                point.1 += note_dy;
-            }
-            for label in [&mut path.label, &mut path.tail_label, &mut path.head_label]
-                .into_iter()
-                .flatten()
-            {
-                label.x += note_dx;
-                label.y += note_dy;
-            }
-        }
     }
     resolve_endpoint_label_collisions(diagram, &result.node_positions, &mut result.edge_paths);
 
@@ -3178,14 +3151,25 @@ impl ClassFontOverrides {
         font.root_font_color = root_style.property("fontColor").map(str::to_string);
         font.root_background_color = root_style.property("backgroundColor").map(str::to_string);
         if let Some(entity) = entity
-            && matches!(entity.kind, EntityKind::Component | EntityKind::Boundary)
+            && matches!(
+                entity.kind,
+                EntityKind::Component
+                    | EntityKind::Boundary
+                    | EntityKind::Rectangle
+                    | EntityKind::Database
+                    | EntityKind::Queue
+                    | EntityKind::Actor
+            )
         {
             // EntityImageDescription builds symbol/title/stereotype signatures
             // using the entity's builder, not the native class header style.
-            let symbol = if entity.kind == EntityKind::Boundary {
-                "boundary"
-            } else {
-                "component"
+            let symbol = match entity.kind {
+                EntityKind::Boundary => "boundary",
+                EntityKind::Rectangle => "rectangle",
+                EntityKind::Database => "database",
+                EntityKind::Queue => "queue",
+                EntityKind::Actor => "actor",
+                _ => "component",
             };
             let mut signature =
                 StyleSignature::from_selectors(["root", "element", "classDiagram", symbol]);
@@ -3199,7 +3183,40 @@ impl ClassFontOverrides {
             );
             // plantuml.skin root/element defaults: sans-serif 14, black text,
             // F1F1F1 background, 181818 line; symbol rules override via cascade.
+            // EntityImageDescription.getUSymbol falls back to componentStyle;
+            // ComponentStyle.toUSymbol distinguishes UML1, UML2 and rectangle.
+            let selected = match entity.kind {
+                EntityKind::Boundary => DescriptionSymbol::Boundary,
+                EntityKind::Rectangle => DescriptionSymbol::Rectangle,
+                EntityKind::Database => DescriptionSymbol::Database,
+                EntityKind::Queue => DescriptionSymbol::Queue,
+                EntityKind::Actor => DescriptionSymbol::Actor,
+                _ => match diagram
+                    .meta
+                    .skinparams
+                    .iter()
+                    .rev()
+                    .find(|p| p.key.eq_ignore_ascii_case("componentStyle"))
+                    .map(|p| p.value.to_ascii_lowercase())
+                    .as_deref()
+                {
+                    Some("uml1") => DescriptionSymbol::Component1,
+                    Some("rectangle") => DescriptionSymbol::Rectangle,
+                    _ => DescriptionSymbol::Component2,
+                },
+            };
             font.description = Some(DescriptionLeafStyle {
+                symbol: selected,
+                // BodyEnhanced2.create9 receives the title style alignment.
+                alignment: match style.property("horizontalAlignment") {
+                    Some(value) if value.eq_ignore_ascii_case("right") => {
+                        LegendHorizontalAlignment::Right
+                    }
+                    Some(value) if value.eq_ignore_ascii_case("center") => {
+                        LegendHorizontalAlignment::Center
+                    }
+                    _ => LegendHorizontalAlignment::Left,
+                },
                 family: style
                     .property("fontName")
                     .map(canonical_class_font_family)
@@ -3610,13 +3627,17 @@ struct VisibilityIconGeom {
 impl VisibilityIconGeom {
     fn from_attribute_icon_size(size: Option<u32>) -> Self {
         if let Some(size) = size {
-            let round_half = (size / VIS_ICON_SIZE_RADIUS_DIVISOR) as f64;
+            // VisibilityModifier.ensureEven/drawCircle/drawSquare: diameter
+            // is the even image size minus four. MethodsOrFieldsArea.asBlock
+            // supplies the six-pixel member margin; the placement block keeps
+            // the requested size + 1, independently of this primitive size.
             let even_size = size - size % 2;
+            let round_half = (even_size as f64 - 4.0) / 2.0;
             let block_height = if size == 0 { 0.0 } else { (size + 1) as f64 };
             Self {
-                center_offset: size as f64,
+                center_offset: ENUM_TEXT_OFFSET + even_size as f64 / 2.0,
                 round_half,
-                angled_half: (size as f64 / 2.0 - VIS_ICON_ANGLED_INSET).max(round_half),
+                angled_half: even_size as f64 / 2.0 - VIS_ICON_ANGLED_INSET,
                 triangle_half_y: round_half,
                 block_height,
                 placement_center_bias: if block_height == 0.0 {
@@ -4371,7 +4392,7 @@ fn package_frontier_min(diagram: &ClassDiagram, cluster: &ClusterPosition) -> (f
         .and_then(|s| s.parse::<usize>().ok())
         .and_then(|idx| diagram.packages.get(idx))
         .map(|pkg| effective_package_kind(diagram, pkg));
-    match kind {
+    let mut minimum = match kind {
         // LimitFinder.drawRectangle extends from (-1,-1) to (w-1,h-1).
         Some(PackageKind::Frame | PackageKind::Rectangle) => {
             (-LIMIT_FINDER_RECTANGLE_INSET, -LIMIT_FINDER_RECTANGLE_INSET)
@@ -4381,7 +4402,21 @@ fn package_frontier_min(diagram: &ClassDiagram, cluster: &ClusterPosition) -> (f
             (-LIMIT_FINDER_POLYGON_OVERSCAN_X, 0.0)
         }
         _ => (0.0, 0.0),
+    };
+    if let Some(pkg) = cluster
+        .id
+        .strip_prefix("pkg")
+        .and_then(|id| id.parse::<usize>().ok())
+        .and_then(|idx| diagram.packages.get(idx))
+        && matches!(pkg.visibility, Visibility::Protected | Visibility::Package)
+    {
+        // ClusterHeader title starts x=4; VisibilityModifier's polygon starts
+        // x=1 and LimitFinder.drawUPolygon reserves ten pixels on each side.
+        minimum.0 = minimum
+            .0
+            .min(PACKAGE_TAB_TEXT_X + 1.0 - LIMIT_FINDER_POLYGON_OVERSCAN_X);
     }
+    minimum
 }
 
 /// Java `SvekResult.calculateDimension` measures only renderer-visible shapes
@@ -4818,6 +4853,8 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
             }
             CucaUidEvent::AttachedNote(idx) => {
                 allocation.attached_note_starts[idx] = Some(next_id);
+                // CommandFactoryNoteOnEntity allocates GMN name, NOTE leaf, link.
+                allocation.note_ids[idx] = Some(format!("ent{:04}", next_id + 1));
                 next_id += 3;
             }
             CucaUidEvent::Relationship(idx) => {
@@ -5072,6 +5109,11 @@ fn render_plantuml_svg(
         body_max_x = body_max_x.max(x + dims[i].width + generic_right);
         body_top = body_top.min(*y);
         body_bottom = body_bottom.max(y + dims[i].height);
+        // USymbolDatabase.drawDatabase: UEmpty(10,10) at (width,height).
+        if diagram.entities[i].kind == EntityKind::Database {
+            body_max_x = body_max_x.max(x + dims[i].width + DATABASE_CLUSTER_ENVELOPE_EXTRA);
+            body_bottom = body_bottom.max(y + dims[i].height + DATABASE_CLUSTER_ENVELOPE_EXTRA);
+        }
         if is_lollipop(diagram.entities[i].kind) {
             // `EntityImageLollipopInterface` reports only its 10px circle to
             // Graphviz but paints its centered Display immediately below it.
@@ -5119,14 +5161,17 @@ fn render_plantuml_svg(
             body_bottom = body_bottom.max(y + pos.height);
         }
     }
-    for &(_, node_idx) in &empty_packages {
+    for &(package_idx, node_idx) in &empty_packages {
         if let Some(pos) = positions.get(node_idx) {
+            let frontier = package_leaf_frontier_position(package_idx, pos);
+            let minimum = package_frontier_min(diagram, &frontier);
+            let extra = package_cluster_envelope_extra(diagram, &frontier);
             let x = pos.x + MARGIN + layout_x_bias;
             let y = pos.y + MARGIN;
-            body_min_x = body_min_x.min(x);
-            body_max_x = body_max_x.max(x + pos.width);
-            body_top = body_top.min(y);
-            body_bottom = body_bottom.max(y + pos.height);
+            body_min_x = body_min_x.min(x + minimum.0);
+            body_max_x = body_max_x.max(x + pos.width + extra.0);
+            body_top = body_top.min(y + minimum.1);
+            body_bottom = body_bottom.max(y + pos.height + extra.1);
         }
     }
     if !body_min_x.is_finite() {
@@ -5241,6 +5286,11 @@ fn render_plantuml_svg(
             max_x = max_x.max(x + dims[i].width + generic_right);
             max_y = max_y.max(y + dims[i].height);
             let entity = &diagram.entities[i];
+            // USymbolDatabase.drawDatabase's UEmpty extends the painted envelope.
+            if entity.kind == EntityKind::Database {
+                max_x = max_x.max(x + dims[i].width + DATABASE_CLUSTER_ENVELOPE_EXTRA);
+                max_y = max_y.max(y + dims[i].height + DATABASE_CLUSTER_ENVELOPE_EXTRA);
+            }
             if is_lollipop(entity.kind) {
                 let label_width = text_render::measure(&entity.label, FONT_SIZE, false);
                 let center_x = x + dims[i].width / 2.0;
@@ -5282,10 +5332,12 @@ fn render_plantuml_svg(
                 max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
             }
         }
-        for &(_, node_idx) in &empty_packages {
+        for &(package_idx, node_idx) in &empty_packages {
             if let Some(pos) = positions.get(node_idx) {
-                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + pos.width);
-                max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
+                let frontier = package_leaf_frontier_position(package_idx, pos);
+                let extra = package_cluster_envelope_extra(diagram, &frontier);
+                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + pos.width + extra.0);
+                max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height + extra.1);
             }
         }
         for cluster in cluster_positions
@@ -5294,7 +5346,9 @@ fn render_plantuml_svg(
         {
             let (envelope_extra_x, envelope_extra_y) =
                 package_cluster_envelope_extra(diagram, cluster);
-            max_x = max_x.max(cluster.x + MARGIN + cluster.width + envelope_extra_x);
+            // SvekResult.calculateDimension moves the complete ClusterManager.
+            max_x =
+                max_x.max(cluster.x + MARGIN + layout_x_bias + cluster.width + envelope_extra_x);
             max_y = max_y.max(cluster.y + MARGIN + cluster.height + envelope_extra_y);
         }
         if let Some((width, height)) = layout_extent {
@@ -5500,6 +5554,7 @@ fn render_plantuml_svg(
     // `<g class="..." data-source-line="N"><text ...>TEXT</text></g>`.
     layout.emit(
         &mut svg,
+        diagram,
         "header",
         diagram.meta.header.as_deref(),
         diagram.header_line,
@@ -5508,6 +5563,7 @@ fn render_plantuml_svg(
     );
     layout.emit(
         &mut svg,
+        diagram,
         "title",
         diagram.meta.title.as_deref(),
         diagram.title_line,
@@ -5554,7 +5610,7 @@ fn render_plantuml_svg(
         })
         .unwrap_or_default();
     let layout_pkg_clusters = if oracle.is_none() {
-        layout_package_clusters(diagram, cluster_positions)
+        layout_package_clusters(diagram, cluster_positions, layout_x_bias)
     } else {
         Vec::new()
     };
@@ -5625,9 +5681,18 @@ fn render_plantuml_svg(
         })
         .collect::<Vec<_>>();
     let mut node_emission_cursor = 0;
+    let mut non_opale_attached_notes = Vec::new();
+    // SvekResult draws all NOTE leaves in Bibliotekon order regardless of the
+    // source command used to create them (attached versus named).
     let mut layout_floating_notes = floating_notes
         .iter()
-        .filter_map(|&(note_idx, node_idx)| {
+        .copied()
+        .chain(
+            attached_notes
+                .iter()
+                .map(|&(note_idx, node_idx, _)| (note_idx, node_idx)),
+        )
+        .filter_map(|(note_idx, node_idx)| {
             svek_ids.note_ids[note_idx]
                 .as_deref()
                 .map(|entity_id| (note_idx, node_idx, entity_id))
@@ -5737,19 +5802,22 @@ fn render_plantuml_svg(
         {
             let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
             if let Some(pos) = positions.get(node_idx) {
-                render_svek_floating_note(
+                if render_svek_note(
                     &mut svg,
                     diagram,
                     note_idx,
                     pos,
                     entity_id,
+                    &svek_ids,
                     edge_paths,
                     &resolved_relationship_edges,
                     floating_note_opale_relationships[note_idx],
                     layout_x_bias,
                     body_dx,
                     body_dy,
-                );
+                ) {
+                    non_opale_attached_notes.push(note_idx);
+                }
             }
             layout_note_cursor += 1;
         }
@@ -5902,105 +5970,24 @@ fn render_plantuml_svg(
     while oracle.is_none() && layout_note_cursor < layout_floating_notes.len() {
         let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
         if let Some(pos) = positions.get(node_idx) {
-            render_svek_floating_note(
+            if render_svek_note(
                 &mut svg,
                 diagram,
                 note_idx,
                 pos,
                 entity_id,
+                &svek_ids,
                 edge_paths,
                 &resolved_relationship_edges,
                 floating_note_opale_relationships[note_idx],
                 layout_x_bias,
                 body_dx,
                 body_dy,
-            );
-        }
-        layout_note_cursor += 1;
-    }
-
-    let mut non_opale_attached_notes = Vec::new();
-    if oracle.is_none() {
-        for &(note_idx, node_idx, position) in &attached_notes {
-            let note = &diagram.notes[note_idx];
-            let Some(target) = note.target.as_deref() else {
-                continue;
-            };
-            let note_layout_id = attached_note_layout_id(note_idx);
-            let (edge_from, edge_to) = match position {
-                NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
-                NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
-            };
-            let Some(edge) = edge_paths
-                .iter()
-                .find(|edge| edge.from == edge_from && edge.to == edge_to)
-            else {
-                continue;
-            };
-            let endpoint = match position {
-                NotePosition::Left | NotePosition::Top => {
-                    edge.end_point.or_else(|| edge.points.last().copied())
-                }
-                NotePosition::Right | NotePosition::Bottom => {
-                    edge.start_point.or_else(|| edge.points.first().copied())
-                }
-            };
-            let Some((tip_x, tip_y)) = endpoint else {
-                continue;
-            };
-            let Some(pos) = positions.get(node_idx) else {
-                continue;
-            };
-            let Some(note_start) = svek_ids.attached_note_starts[note_idx] else {
-                continue;
-            };
-            let qualified_name = note.owner_package.as_ref().map_or_else(
-                || format!("GMN{note_start}"),
-                |owner| format!("{owner}.GMN{note_start}"),
-            );
-            let entity_id = format!("ent{:04}", note_start + 1);
-            let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
-            let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
-            let (anchor_x, anchor_y) = match position {
-                NotePosition::Left | NotePosition::Right => (x, y + pos.height / 2.0),
-                NotePosition::Top | NotePosition::Bottom => (x + pos.width / 2.0, y),
-            };
-            if edge_path_is_opalisable(edge) {
-                render_attached_note(
-                    &mut svg,
-                    diagram,
-                    note,
-                    // SVEK consumes Graphviz's two-decimal SVG coordinates before
-                    // `Opale` adds its local note and atom margins.
-                    x,
-                    y,
-                    pos.width,
-                    pos.height,
-                    anchor_x,
-                    anchor_y,
-                    tip_x + MARGIN + layout_x_bias,
-                    tip_y + MARGIN,
-                    position,
-                    &qualified_name,
-                    &entity_id,
-                    &diagram.meta.sprites,
-                );
-            } else {
-                render_floating_note_entity(
-                    &mut svg,
-                    diagram,
-                    note,
-                    x,
-                    y,
-                    pos.width,
-                    pos.height,
-                    &qualified_name,
-                    &entity_id,
-                    &diagram.meta.sprites,
-                );
+            ) {
                 non_opale_attached_notes.push(note_idx);
             }
         }
+        layout_note_cursor += 1;
     }
 
     while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
@@ -6085,6 +6072,7 @@ fn render_plantuml_svg(
             edge_paths,
             &svek_ids,
             layout_x_bias,
+            &layout_pkg_clusters,
         );
     }
 
@@ -6115,6 +6103,7 @@ fn render_plantuml_svg(
         .map_or(0.0, |legend| legend.block_h);
     layout.emit(
         &mut svg,
+        diagram,
         "caption",
         diagram.meta.caption.as_deref(),
         diagram.caption_line,
@@ -6129,6 +6118,7 @@ fn render_plantuml_svg(
     let footer_y = body_bottom + bottom_legend_h + body_footer_gap + layout.caption_h;
     layout.emit(
         &mut svg,
+        diagram,
         "footer",
         diagram.meta.footer.as_deref(),
         diagram.footer_line,
@@ -6165,6 +6155,8 @@ fn package_anchor(diagram: &ClassDiagram, package: &Package) -> Option<String> {
 }
 
 struct LayoutPackageCluster {
+    visibility: Visibility,
+    visibility_size: u32,
     anchor: Option<String>,
     package_idx: usize,
     kind: PackageKind,
@@ -6185,6 +6177,7 @@ struct LayoutPackageCluster {
 fn layout_package_clusters(
     diagram: &ClassDiagram,
     cluster_positions: &[ClusterPosition],
+    layout_x_bias: f64,
 ) -> Vec<LayoutPackageCluster> {
     let package_render = package_render_model(diagram);
     package_cluster_depth_first_order(&package_render)
@@ -6239,6 +6232,10 @@ fn layout_package_clusters(
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
             Some(LayoutPackageCluster {
+                visibility: pkg.visibility,
+                visibility_size: ClassFontOverrides::from_diagram(diagram)
+                    .attr_icon_size
+                    .unwrap_or(VIS_ICON_DEFAULT_SIZE),
                 anchor: package_anchor(diagram, pkg),
                 package_idx: idx,
                 kind,
@@ -6250,7 +6247,8 @@ fn layout_package_clusters(
                 stroke,
                 stroke_width,
                 font_fill,
-                x: pos.x + MARGIN,
+                // SvekResult/ClusterManager.moveDelta also owns group outlines.
+                x: pos.x + MARGIN + layout_x_bias,
                 y: pos.y + MARGIN,
                 width: pos.width,
                 height: pos.height,
@@ -6857,7 +6855,12 @@ fn emit_extra_group_symbol(
 
 fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-    let title_w = label_w + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let visibility_width = if cluster.visibility == Visibility::Default {
+        0.0
+    } else {
+        (cluster.visibility_size + 1) as f64
+    };
+    let title_w = label_w + visibility_width + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_w = (title_w + PACKAGE_TAB_SLOPE_WIDTH).min(cluster.width.max(0.0));
     let x = cluster.x;
     let y = cluster.y;
@@ -6865,9 +6868,17 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     let bottom = cluster.y + cluster.height;
     let tab_join = x + title_w - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + tab_w;
-    let line_y = y + PACKAGE_TAB_H;
+    let text_height = text_render::label_height(&cluster.label, FONT_SIZE);
+    // ClusterHeader mergeLR height includes the icon's four-pixel top margin.
+    let title_height = text_height.max(if visibility_width > 0.0 {
+        visibility_width + 4.0
+    } else {
+        0.0
+    });
+    let title_growth = title_height - text_height;
+    let line_y = y + PACKAGE_TAB_H + title_growth;
     let text_x = x + PACKAGE_TAB_TEXT_X;
-    let text_y = y + PACKAGE_TITLE_BASELINE;
+    let text_y = y + PACKAGE_TITLE_BASELINE + title_growth / 2.0;
     write!(
         svg,
         "<!--cluster {}-->",
@@ -7013,6 +7024,22 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 fmt4(line_y),
             )
             .unwrap();
+            if cluster.visibility != Visibility::Default {
+                // ClusterHeader.getTitleBlock: icon top margin=4, mergeLR CENTER.
+                let text_height = text_render::label_height(&cluster.label, FONT_SIZE);
+                let icon_y = text_y - crate::plantuml_metrics::ascent(FONT_SIZE)
+                    + text_height / 2.0
+                    - (visibility_width + 4.0) / 2.0
+                    + 4.0;
+                render_declaration_visibility(
+                    svg,
+                    cluster.visibility,
+                    text_x,
+                    icon_y,
+                    cluster.visibility_size,
+                    cluster.stroke_width,
+                );
+            }
             // `ClusterHeader` renders the title through the normal Creole
             // `Display` pipeline with a bold base font. Segment-level colour,
             // italic and other inline styles therefore split into adjacent
@@ -7021,7 +7048,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 svg,
                 &cluster.label,
                 &TextBase {
-                    x: text_x,
+                    x: text_x + visibility_width,
                     y: text_y,
                     font_size: FONT_SIZE as u32,
                     font_family: "sans-serif",
@@ -7041,6 +7068,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                     &TextBase {
                         x: x + PACKAGE_TAB_TEXT_X + (cluster.width - width) / 2.0,
                         y: y + PACKAGE_STEREOTYPE_BASELINE
+                            + title_growth
                             + line_index as f64 * text_render::label_height(stereotype, FONT_SIZE),
                         font_size: FONT_SIZE as u32,
                         font_family: "sans-serif",
@@ -7576,16 +7604,21 @@ fn emit_layout_symbol_cluster_title(
     }
 }
 
-fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
-    let x = cluster.x;
-    let y = cluster.y;
-    let middle = x + cluster.width / 2.0;
-    let right = x + cluster.width;
-    let bottom = y + cluster.height;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-    let text_x = x + (cluster.width - label_w) / 2.0;
-    let text_y = y + PACKAGE_TITLE_BASELINE + DATABASE_CLUSTER_TITLE_OFFSET;
-
+/// USymbolDatabase.drawDatabase, used by both asSmall and asBig.
+#[allow(clippy::too_many_arguments)]
+fn emit_database_symbol(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: &str,
+) {
+    let middle = x + width / 2.0;
+    let right = x + width;
+    let bottom = y + height;
     // Java `USymbolDatabase.asBig()` delegates to `drawDatabase()`: a closed
     // cylinder path plus the top ellipse's lower half as a separate path.
     write!(
@@ -7621,9 +7654,9 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(bottom - 10.0),
         fmt4(x),
         fmt4(y + 10.0),
-        cluster.fill,
-        cluster.stroke,
-        cluster.stroke_width,
+        fill,
+        stroke,
+        stroke_width,
     )
     .unwrap();
     write!(
@@ -7643,10 +7676,29 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(y + 20.0),
         fmt4(right),
         fmt4(y + 10.0),
-        cluster.stroke,
-        cluster.stroke_width,
+        stroke,
+        stroke_width,
     )
     .unwrap();
+}
+
+fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let x = cluster.x;
+    let y = cluster.y;
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let text_x = x + (cluster.width - label_w) / 2.0;
+    let text_y = y + PACKAGE_TITLE_BASELINE + DATABASE_CLUSTER_TITLE_OFFSET;
+
+    emit_database_symbol(
+        svg,
+        x,
+        y,
+        cluster.width,
+        cluster.height,
+        &cluster.fill,
+        &cluster.stroke,
+        &cluster.stroke_width,
+    );
     emit_layout_symbol_cluster_title(svg, cluster, text_x, text_y);
 }
 
@@ -7779,7 +7831,10 @@ struct LegendLayout {
 /// padding+margin inset added on each side, and the block alignment.
 struct DecorationStyle {
     font_size: u32,
-    fill: &'static str,
+    fill: String,
+    family: String,
+    italic: bool,
+    inner_alignment: LegendHorizontalAlignment,
     bold: bool,
     /// Padding + margin added to one side of the glyph run (the bordered text
     /// block grows by `2 * inset`; the glyph starts `inset` from the block's
@@ -7794,7 +7849,7 @@ impl DecorationLayout {
         if text.is_empty() {
             return None;
         }
-        let lines = text.lines().collect::<Vec<_>>();
+        let lines = text.split('\n').collect::<Vec<_>>();
         let text_w = lines
             .iter()
             .map(|line| text_render::measure_no_underline(line, LEGEND_FONT_SIZE, false))
@@ -7815,12 +7870,15 @@ impl DecorationLayout {
         })
     }
 
-    fn style(class_name: &str) -> DecorationStyle {
-        match class_name {
+    fn style(diagram: &ClassDiagram, class_name: &str) -> DecorationStyle {
+        let mut result = match class_name {
             // document.title: FontSize 14, bold, Padding 5 + Margin 5, centre.
             "title" => DecorationStyle {
                 font_size: 14,
-                fill: "#000000",
+                fill: "#000000".into(),
+                family: "sans-serif".into(),
+                italic: false,
+                inner_alignment: LegendHorizontalAlignment::Center,
                 bold: true,
                 inset: DECORATION_TITLE_INSET,
                 align_right: false,
@@ -7828,7 +7886,10 @@ impl DecorationLayout {
             // document.caption: FontSize 14, Padding 0 + Margin 1, centre.
             "caption" => DecorationStyle {
                 font_size: 14,
-                fill: "#000000",
+                fill: "#000000".into(),
+                family: "sans-serif".into(),
+                italic: false,
+                inner_alignment: LegendHorizontalAlignment::Center,
                 bold: false,
                 inset: DECORATION_CAPTION_INSET,
                 align_right: false,
@@ -7836,7 +7897,10 @@ impl DecorationLayout {
             // document.header: FontSize 10, grey, no padding/margin, right.
             "header" => DecorationStyle {
                 font_size: 10,
-                fill: "#888888",
+                fill: "#888888".into(),
+                family: "sans-serif".into(),
+                italic: false,
+                inner_alignment: LegendHorizontalAlignment::Center,
                 bold: false,
                 inset: 0.0,
                 align_right: true,
@@ -7844,20 +7908,57 @@ impl DecorationLayout {
             // document.footer: FontSize 10, grey, no padding/margin, centre.
             _ => DecorationStyle {
                 font_size: 10,
-                fill: "#888888",
+                fill: "#888888".into(),
+                family: "sans-serif".into(),
+                italic: false,
+                inner_alignment: LegendHorizontalAlignment::Center,
                 bold: false,
                 inset: 0.0,
                 align_right: false,
             },
+        };
+        // DiagramChromeFactory12026 -> DisplayPositioned.createRibbon uses
+        // the current root.document style for both measure and drawing.
+        result.inner_alignment = if result.align_right {
+            LegendHorizontalAlignment::Right
+        } else {
+            LegendHorizontalAlignment::Center
+        };
+        let style = StyleCascade::new(&diagram.meta.style_program).resolve(
+            &StyleSignature::from_selectors(["root", "document", class_name]),
+            StyleScheme::Regular,
+        );
+        if let Some(value) = style.property("fontSize").and_then(|s| s.parse().ok()) {
+            result.font_size = value;
         }
+        if let Some(value) = style.property("fontName") {
+            result.family = canonical_class_font_family(value);
+        }
+        if let Some(value) = style.property("fontColor") {
+            result.fill = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = style.property("fontStyle") {
+            result.bold = value.to_ascii_lowercase().contains("bold");
+            result.italic = value.to_ascii_lowercase().contains("italic");
+        }
+        if let Some(value) = style.property("horizontalAlignment") {
+            result.inner_alignment = match value.to_ascii_lowercase().as_str() {
+                "left" => LegendHorizontalAlignment::Left,
+                "right" => LegendHorizontalAlignment::Right,
+                _ => LegendHorizontalAlignment::Center,
+            };
+        }
+        result
     }
 
     /// Width of a decoration's bordered text block (glyph run + 2 * inset).
-    fn block_width(class_name: &str, text: &str) -> f64 {
-        let st = Self::style(class_name);
-        text.lines()
+    fn block_width(diagram: &ClassDiagram, class_name: &str, text: &str) -> f64 {
+        let st = Self::style(diagram, class_name);
+        text.split('\n')
             .map(|line| {
-                text_render::measure_no_underline(line, st.font_size as f64, st.bold)
+                // StripeSimple.getAtoms inserts a space for an empty stripe.
+                let line = if line.is_empty() { " " } else { line };
+                text_render::measure_no_underline_with_family(line, st.font_size as f64, st.bold, &st.family)
                     + 2.0 * st.inset
             })
             .fold(0.0_f64, f64::max)
@@ -7868,9 +7969,9 @@ impl DecorationLayout {
     /// Height of the Java bordered text block. `Style.createTextBlockBordered`
     /// wraps the line box in style padding and margin, while
     /// `TextBlockBordered.calculateDimension` contributes one final pixel.
-    fn block_height(class_name: &str, text: &str) -> f64 {
-        let st = Self::style(class_name);
-        text.lines()
+    fn block_height(diagram: &ClassDiagram, class_name: &str, text: &str) -> f64 {
+        let st = Self::style(diagram, class_name);
+        text.split('\n')
             .map(|line| text_render::label_height(line, st.font_size as f64))
             .sum::<f64>()
             + 2.0 * st.inset
@@ -7909,7 +8010,7 @@ impl DecorationLayout {
             ("caption", diagram.meta.caption.as_deref()),
         ] {
             if let Some(text) = text.filter(|text| !text.is_empty()) {
-                wrap_centered(Self::block_width(class_name, text));
+                wrap_centered(Self::block_width(diagram, class_name, text));
             }
         }
         let header_footer_w = [
@@ -7919,7 +8020,7 @@ impl DecorationLayout {
         .into_iter()
         .filter_map(|(class_name, text)| {
             text.filter(|text| !text.is_empty())
-                .map(|text| Self::block_width(class_name, text))
+                .map(|text| Self::block_width(diagram, class_name, text))
         })
         .fold(0.0_f64, f64::max);
         wrap_centered(header_footer_w);
@@ -7934,7 +8035,7 @@ impl DecorationLayout {
             .any(|text| text.as_deref().is_some_and(|text| !text.is_empty()));
         let block_height = |class_name, text: Option<&str>| {
             text.filter(|value| !value.is_empty())
-                .map_or(0.0, |value| Self::block_height(class_name, value))
+                .map_or(0.0, |value| Self::block_height(diagram, class_name, value))
         };
         let header_h = block_height("header", diagram.meta.header.as_deref());
         let title_h = block_height("title", diagram.meta.title.as_deref());
@@ -7957,7 +8058,10 @@ impl DecorationLayout {
             // TextBlockBordered.drawU translates by its padding and margin.
             title_baseline: header_h
                 + DECORATION_TITLE_INSET
-                + crate::plantuml_metrics::ascent(14.0),
+                + text_render::ascent_for_family(
+                    Self::style(diagram, "title").font_size as f64,
+                    &Self::style(diagram, "title").family,
+                ),
             dim_total_w,
             top_h: header_h + title_h + top_legend_h,
             bottom_h: bottom_legend_h + caption_h + footer_h,
@@ -8020,6 +8124,7 @@ impl DecorationLayout {
     fn emit(
         &self,
         svg: &mut String,
+        diagram: &ClassDiagram,
         class_name: &str,
         text: Option<&str>,
         line: Option<usize>,
@@ -8030,7 +8135,7 @@ impl DecorationLayout {
         if text.is_empty() {
             return;
         }
-        let st = Self::style(class_name);
+        let st = Self::style(diagram, class_name);
         let source_line = line.unwrap_or(1);
         let line_height = crate::plantuml_metrics::text_height(st.font_size as f64);
         write!(
@@ -8041,7 +8146,13 @@ impl DecorationLayout {
         let base_y = if class_name == "title" {
             self.title_baseline
         } else {
-            y
+            let default_size = if class_name == "header" || class_name == "footer" {
+                10.0
+            } else {
+                14.0
+            };
+            y + text_render::ascent_for_family(st.font_size as f64, &st.family)
+                - crate::plantuml_metrics::ascent(default_size)
         };
         let alignment = match class_name {
             "header" => self.header_alignment,
@@ -8049,9 +8160,11 @@ impl DecorationLayout {
             _ if st.align_right => LegendHorizontalAlignment::Right,
             _ => LegendHorizontalAlignment::Center,
         };
-        let block_w = Self::block_width(class_name, text);
-        for (idx, line_text) in text.lines().enumerate() {
-            let line_w = Self::block_width(class_name, line_text);
+        let block_w = Self::block_width(diagram, class_name, text);
+        for (idx, line_text) in text.split('\n').enumerate() {
+            // StripeSimple.getAtoms: the empty stripe contains one space atom.
+            let line_text = if line_text.is_empty() { " " } else { line_text };
+            let line_w = Self::block_width(diagram, class_name, line_text);
             let block_x = match alignment {
                 LegendHorizontalAlignment::Left => 0.0,
                 LegendHorizontalAlignment::Right => self.dim_total_w - block_w,
@@ -8059,10 +8172,10 @@ impl DecorationLayout {
             };
             // Display.create uses the style's inner alignment independently
             // of CommandMultilinesHeader/Footer's outer block alignment.
-            let inner_x = if st.align_right {
-                block_w - line_w
-            } else {
-                (block_w - line_w) / 2.0
+            let inner_x = match st.inner_alignment {
+                LegendHorizontalAlignment::Left => 0.0,
+                LegendHorizontalAlignment::Center => (block_w - line_w) / 2.0,
+                LegendHorizontalAlignment::Right => block_w - line_w,
             };
             let computed_x = block_x + st.inset + inner_x;
             let computed_y = base_y + idx as f64 * line_height;
@@ -8078,10 +8191,10 @@ impl DecorationLayout {
                     x,
                     y,
                     font_size: st.font_size,
-                    font_family: "sans-serif",
-                    fill: st.fill,
+                    font_family: &st.family,
+                    fill: &st.fill,
                     bold: st.bold,
-                    italic: false,
+                    italic: st.italic,
                     underline: false,
                     skip_underline: false,
                 },
@@ -8104,23 +8217,74 @@ fn render_description_leaf(
     style: &DescriptionLeafStyle,
 ) {
     let (text_width, _, stereo_height) = description_text_size(entity, dim.hide, style);
-    let (text_x, text_y) = if entity.kind == EntityKind::Boundary {
-        // Boundary.drawU has margin 4, radius 12, and a 17px left arm.
-        let bx = x + (dim.width - 49.0) / 2.0 + 4.0;
-        let by = y + stereo_height + 4.0;
-        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
-            fmt4(bx),fmt4(by),fmt4(bx),fmt4(by+24.0),fmt4(bx),fmt4(by+12.0),fmt4(bx+17.0),fmt4(by+12.0),style.stroke,fmt4(style.thickness)).unwrap();
-        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}" rx="12" ry="12" style="stroke:{};stroke-width:{};"/>"#,
-            fmt4(bx+29.0),fmt4(by+12.0),style.fill,style.stroke,fmt4(style.thickness)).unwrap();
+    let label_width = escaped_newline_lines(&entity.label)
+        .iter()
+        .map(|line| {
+            text_render::measure_no_underline_with_family(
+                line,
+                style.size as f64,
+                style.bold,
+                &style.family,
+            )
+        })
+        .fold(0.0_f64, f64::max);
+    let boundary = matches!(style.symbol, DescriptionSymbol::Boundary);
+    let actor = matches!(style.symbol, DescriptionSymbol::Actor);
+    let simple = boundary || actor;
+    let (left, _, top, _) = style.symbol.margins();
+    let (text_x, text_y) = if simple {
         (x + (dim.width - text_width) / 2.0, y)
     } else {
-        // USymbolComponent2.drawComponent2: outer rectangle and UML2 icon.
-        for (rx, ry, w, h, round) in [
-            (x, y, dim.width, dim.height, style.round / 2.0),
-            (x + dim.width - 20.0, y + 5.0, 15.0, 10.0, 0.0),
-            (x + dim.width - 22.0, y + 7.0, 4.0, 2.0, 0.0),
-            (x + dim.width - 22.0, y + 11.0, 4.0, 2.0, 0.0),
-        ] {
+        // The selected USymbol owns both its outer rectangle and its icon.
+        let mut rectangles = vec![(x, y, dim.width, dim.height, style.round / 2.0)];
+        match style.symbol {
+            DescriptionSymbol::Component1 => {
+                // USymbolComponent1.drawComponent1: two 10x5 tabs at x=-5.
+                rectangles.extend([
+                    (x - 5.0, y + 5.0, 10.0, 5.0, 0.0),
+                    (x - 5.0, y + dim.height - 10.0, 10.0, 5.0, 0.0),
+                ]);
+            }
+            DescriptionSymbol::Component2 => {
+                // USymbolComponent2.drawComponent2: the UML2 corner icon.
+                rectangles.extend([
+                    (x + dim.width - 20.0, y + 5.0, 15.0, 10.0, 0.0),
+                    (x + dim.width - 22.0, y + 7.0, 4.0, 2.0, 0.0),
+                    (x + dim.width - 22.0, y + 11.0, 4.0, 2.0, 0.0),
+                ]);
+            }
+            DescriptionSymbol::Database => {
+                rectangles.clear();
+                emit_database_symbol(
+                    svg,
+                    x,
+                    y,
+                    dim.width,
+                    dim.height,
+                    &style.fill,
+                    &style.stroke,
+                    &fmt4(style.thickness),
+                );
+            }
+            DescriptionSymbol::Queue => {
+                rectangles.clear();
+                emit_extra_group_symbol(
+                    svg,
+                    PackageKind::Queue,
+                    x,
+                    y,
+                    dim.width,
+                    dim.height,
+                    &style.fill,
+                    &style.stroke,
+                    &fmt4(style.thickness),
+                );
+            }
+            DescriptionSymbol::Rectangle
+            | DescriptionSymbol::Boundary
+            | DescriptionSymbol::Actor => {}
+        }
+        for (rx, ry, w, h, round) in rectangles {
             let rounded = if round > 0.0 {
                 format!(r#" rx="{}" ry="{}""#, fmt4(round), fmt4(round))
             } else {
@@ -8129,16 +8293,17 @@ fn render_description_leaf(
             write!(svg,r#"<rect fill="{}" height="{}"{} style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
                 style.fill,fmt4(h),rounded,style.stroke,fmt4(style.thickness),fmt4(w),fmt4(rx),fmt4(ry)).unwrap();
         }
-        (x + 15.0, y + 20.0)
+        (x + left, y + top)
     };
     let line_height = text_render::label_height("X", style.size as f64);
+    let mut stereotype_image = String::new();
     // EntityImageDescription uses the stereotype style (skin default italic).
     if !dim.hide.stereotype {
         for (i, label) in entity.stereotypes.iter().enumerate() {
             let label = format!("«{label}»");
             let width = text_render::measure(&label, style.size as f64, false);
             text_render::emit_text(
-                svg,
+                &mut stereotype_image,
                 &label,
                 &TextBase {
                     x: text_x + (text_width - width) / 2.0,
@@ -8156,10 +8321,40 @@ fn render_description_leaf(
             );
         }
     }
+    if !simple {
+        svg.push_str(&stereotype_image);
+    }
+    if actor {
+        // ActorStickMan.drawU: centered 16px head, then the 27px body,
+        // arms at y=8 with half-width 13, and legs extending (13,15).
+        let cx = x + dim.width / 2.0;
+        let head_y = y + stereo_height + style.thickness;
+        let body_y = head_y + 16.0;
+        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(cx),fmt4(head_y+8.0),style.fill,style.stroke,fmt4(style.thickness)).unwrap();
+        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{} M{},{} L{},{} M{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(cx),fmt4(body_y),fmt4(cx),fmt4(body_y+27.0),
+            fmt4(cx-13.0),fmt4(body_y+8.0),fmt4(cx+13.0),fmt4(body_y+8.0),
+            fmt4(cx),fmt4(body_y+27.0),fmt4(cx-13.0),fmt4(body_y+42.0),
+            fmt4(cx),fmt4(body_y+27.0),fmt4(cx+13.0),fmt4(body_y+42.0),style.stroke,fmt4(style.thickness)).unwrap();
+    }
+    if boundary {
+        // USymbolSimpleAbstract paints Boundary, label, then stereotype.
+        // Boundary.drawU paints path then circle with margin=4,
+        // radius=12 and arm=17.
+        let bx = x + (dim.width - 49.0) / 2.0 + 4.0;
+        let by = y + stereo_height + 4.0;
+        write!(svg, r#"<path d="M{},{} L{},{} M{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(bx),fmt4(by),fmt4(bx),fmt4(by+24.0),fmt4(bx),fmt4(by+12.0),fmt4(bx+17.0),fmt4(by+12.0),style.stroke,fmt4(style.thickness)).unwrap();
+        write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{}" rx="12" ry="12" style="stroke:{};stroke-width:{};"/>"#,
+            fmt4(bx+29.0),fmt4(by+12.0),style.fill,style.stroke,fmt4(style.thickness)).unwrap();
+    }
     let label_y = text_y
         + stereo_height
-        + if entity.kind == EntityKind::Boundary {
+        + if boundary {
             32.0
+        } else if actor {
+            59.0 + 2.0 * style.thickness
         } else {
             0.0
         };
@@ -8174,7 +8369,14 @@ fn render_description_leaf(
             svg,
             line,
             &TextBase {
-                x: text_x + (text_width - width) / 2.0,
+                // mergeTB centers the label block; BodyEnhanced2 aligns its lines.
+                x: text_x
+                    + (text_width - label_width) / 2.0
+                    + match style.alignment {
+                        LegendHorizontalAlignment::Left => 0.0,
+                        LegendHorizontalAlignment::Center => (label_width - width) / 2.0,
+                        LegendHorizontalAlignment::Right => label_width - width,
+                    },
                 y: label_y
                     + i as f64 * line_height
                     + text_render::label_ascent(line, style.size as f64),
@@ -8187,6 +8389,9 @@ fn render_description_leaf(
                 skip_underline: true,
             },
         );
+    }
+    if simple {
+        svg.push_str(&stereotype_image);
     }
 }
 
@@ -9235,7 +9440,7 @@ fn render_entity_content(
             + name_content_height / 2.0
             - (size + 1 + 4) as f64 / 2.0
             + 4.0;
-        render_declaration_visibility(svg, entity.visibility, name_x, icon_y, size);
+        render_declaration_visibility(svg, entity.visibility, name_x, icon_y, size, "1");
     }
     let name_x = name_x + declaration_visibility_width;
     let oracle_name_line_anchors = oracle_rect
@@ -10837,6 +11042,7 @@ fn render_declaration_visibility(
     x: f64,
     y: f64,
     size: u32,
+    stroke_width: &str,
 ) {
     let (name, fill, stroke) = match visibility {
         Visibility::Public => ("PUBLIC_METHOD", VIS_PUBLIC_FILL_METHOD, VIS_PUBLIC_STROKE),
@@ -10862,22 +11068,22 @@ fn render_declaration_visibility(
     write!(svg, r#"<g data-visibility-modifier="{name}">"#).unwrap();
     match visibility {
         Visibility::Public | Visibility::IeMandatory => {
-            write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:{stroke};stroke-width:1;"/>"#,
+            write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
                 fmt4(x + size / 2.0), fmt4(y + size / 2.0), fmt4((size - 4.0) / 2.0), fmt4((size - 4.0) / 2.0)).unwrap();
         }
         Visibility::Private => {
-            write!(svg, r#"<rect fill="{fill}" height="{}" style="stroke:{stroke};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+            write!(svg, r#"<rect fill="{fill}" height="{}" style="stroke:{stroke};stroke-width:{stroke_width};" width="{}" x="{}" y="{}"/>"#,
                 fmt4(size - 4.0), fmt4(size - 4.0), fmt4(x + 2.0), fmt4(y + 2.0)).unwrap();
         }
         Visibility::Protected => {
             let side = size - 2.0;
-            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:1;"/>"#,
+            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
                 fmt4(x + 1.0 + side / 2.0), fmt4(y), fmt4(x + 1.0 + side), fmt4(y + side / 2.0),
                 fmt4(x + 1.0 + side / 2.0), fmt4(y + side), fmt4(x + 1.0), fmt4(y + side / 2.0)).unwrap();
         }
         Visibility::Package => {
             let side = size - 2.0;
-            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:1;"/>"#,
+            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
                 fmt4(x + 1.0 + side / 2.0), fmt4(y + 1.0), fmt4(x + 1.0), fmt4(y + side - 1.0),
                 fmt4(x + 1.0 + side), fmt4(y + side - 1.0)).unwrap();
         }
@@ -13309,6 +13515,43 @@ fn relationship_label_arrow_x_bounds(
     ))
 }
 
+/// Match render_plantuml_svg's canonical node slots. Empty groups are SVEK
+/// leaves but retain their package identity for USymbol frontier measurement.
+fn empty_symbol_position(
+    diagram: &ClassDiagram,
+    index: usize,
+    position: &NodePosition,
+) -> Option<ClusterPosition> {
+    let notes = diagram
+        .notes
+        .iter()
+        .filter(|note| {
+            note.target.is_some() && note.position.is_some()
+                || note.target.is_none() && note.alias.is_some()
+        })
+        .count();
+    let start = diagram.entities.len() + diagram.association_classes.len() + notes;
+    let ordinal = index.checked_sub(start)?;
+    let model = package_render_model(diagram);
+    let (package_index, _) = model
+        .roles
+        .iter()
+        .enumerate()
+        .filter(|(_, role)| role.is_leaf_node())
+        .nth(ordinal)?;
+    Some(package_leaf_frontier_position(package_index, position))
+}
+
+fn package_leaf_frontier_position(index: usize, position: &NodePosition) -> ClusterPosition {
+    ClusterPosition {
+        id: format!("pkg{index}"),
+        x: position.x,
+        y: position.y,
+        width: position.width,
+        height: position.height,
+    }
+}
+
 fn entity_frontier_min(
     diagram: &ClassDiagram,
     index: usize,
@@ -13316,8 +13559,53 @@ fn entity_frontier_min(
     degenerated: bool,
 ) -> (f64, f64) {
     let Some(entity) = diagram.entities.get(index) else {
+        // Empty symbol groups are layout leaves, not ordinary ClassEntity
+        // slots. Their image still participates in the same SvekResult union.
+        if let Some(cluster) = empty_symbol_position(diagram, index, position) {
+            return package_frontier_min(diagram, &cluster);
+        }
         return (0.0, 0.0);
     };
+    if entity.kind == EntityKind::Actor {
+        let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+        if let Some(style) = &font.description {
+            // USymbolSimpleAbstract centers the actor and label independently;
+            // ActorStickMan's first painted head starts at the stroke inset.
+            let (text_width, _, stereo_height) =
+                description_text_size(entity, effective_hide(diagram, entity), style);
+            return (
+                ((position.width - text_width) / 2.0).min(position.width / 2.0 - 13.0),
+                if stereo_height > 0.0 {
+                    // LimitFinder.drawText subtracts (font height - 1.5)
+                    // from the emitted baseline, not merely the ascent.
+                    text_render::label_ascent("X", style.size as f64)
+                        - text_render::label_height("X", style.size as f64)
+                        + 1.5
+                } else {
+                    style.thickness
+                },
+            );
+        }
+    }
+    // Database and queue use UPath primitives, so LimitFinder applies no
+    // URectangle -1 minimum. USymbolDatabase's UEmpty affects only maxima.
+    if matches!(entity.kind, EntityKind::Database | EntityKind::Queue) {
+        return (0.0, 0.0);
+    }
+    if entity.kind == EntityKind::Component {
+        let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+        if font
+            .description
+            .as_ref()
+            .is_some_and(|s| matches!(s.symbol, DescriptionSymbol::Component1))
+        {
+            // USymbolComponent1 tabs start x=-5; LimitFinder URectangle adds -1.
+            return (
+                -5.0 - LIMIT_FINDER_RECTANGLE_INSET,
+                -LIMIT_FINDER_RECTANGLE_INSET,
+            );
+        }
+    }
     if entity.kind == EntityKind::Boundary && !degenerated {
         // USymbolSimpleAbstract stacks stereotype, Boundary(49x32), label.
         // Boundary draws its first vertical at (4,4); unlike class/component
@@ -13449,23 +13737,15 @@ fn svek_layout_x_bias(
                 }),
         )
         .chain(visibility_polygon_min_x)
-        .fold(
-            if diagram.together.is_empty() {
-                0.0
-            } else {
-                f64::INFINITY
-            },
-            f64::min,
-        );
-    let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_x - MARGIN;
-    if cluster_positions.is_empty() {
-        envelope_bias
-    } else {
-        // `normalize_svek_package_envelope` has already translated rendered
-        // cluster frontiers to Java's SVEK origin. Do not apply that move a
-        // second time merely because an enclosed class rectangle starts later.
-        envelope_bias.max(0.0)
+        .fold(f64::INFINITY, f64::min);
+    if !min_x.is_finite() {
+        return 0.0;
     }
+    let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_x - MARGIN;
+    // SvekResult.calculateDimension translates the complete painted union,
+    // including notes and groups. Earlier normalization changes coordinates,
+    // not which direction the final envelope correction may take.
+    envelope_bias
 }
 
 /// Vertical twin of `svek_layout_x_bias`. Java
@@ -13514,11 +13794,7 @@ fn svek_layout_y_bias(
         return 0.0;
     }
     let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_y - MARGIN;
-    if cluster_positions.is_empty() {
-        envelope_bias
-    } else {
-        envelope_bias.max(0.0)
-    }
+    envelope_bias
 }
 
 fn uses_degenerated_entity(diagram: &ClassDiagram, cluster_positions: &[ClusterPosition]) -> bool {
@@ -14274,6 +14550,15 @@ fn floating_note_opale_relationship(diagram: &ClassDiagram, note_idx: usize) -> 
     } else {
         relationship.from.as_str()
     };
+    let groups = package_render_model(diagram);
+    if diagram
+        .packages
+        .iter()
+        .enumerate()
+        .any(|(idx, p)| p.name == other && groups.roles[idx] == PackageRenderRole::Cluster)
+    {
+        return None;
+    }
     (!diagram
         .notes
         .iter()
@@ -14695,6 +14980,7 @@ fn render_no_oracle_attached_note_connector(
     edge_paths: &[EdgePath],
     svek_ids: &SvekIdAllocation,
     layout_x_bias: f64,
+    packages: &[LayoutPackageCluster],
 ) {
     let Some(note) = diagram.notes.get(note_idx) else {
         return;
@@ -14743,17 +15029,37 @@ fn render_no_oracle_attached_note_connector(
     else {
         return;
     };
-    let round_graphviz = |value: f64| (value * 100.0).round() / 100.0;
-    let points = edge
+    let group = packages
+        .iter()
+        .find(|p| diagram.packages[p.package_idx].name == target);
+    let mut points = edge
         .points
         .iter()
         .map(|&(x, y)| {
-            (
-                round_graphviz(x + MARGIN + layout_x_bias),
-                round_graphviz(y + MARGIN),
-            )
+            // SvekEdge.solveLine already quantized before simulateCompound.
+            // Ordinary paths still cross Graphviz's two-decimal SVG boundary here.
+            if group.is_some() {
+                (x + MARGIN + layout_x_bias, y + MARGIN)
+            } else {
+                (
+                    ((x + MARGIN + layout_x_bias) * 100.0).round() / 100.0,
+                    ((y + MARGIN) * 100.0).round() / 100.0,
+                )
+            }
         })
         .collect::<Vec<_>>();
+    if let Some(group) = group
+        && points.len() >= 4
+    {
+        let at_start = matches!(position, NotePosition::Right | NotePosition::Bottom);
+        let index = if at_start { 0 } else { points.len() - 1 };
+        let force = folder_magnetic_force(group, points[index]);
+        if at_start {
+            move_path_start(&mut points, force);
+        } else {
+            move_path_end(&mut points, force);
+        }
+    }
     let Some(first) = points.first() else {
         return;
     };
@@ -14790,19 +15096,105 @@ fn render_no_oracle_attached_note_connector(
 }
 
 #[allow(clippy::too_many_arguments)]
-fn render_svek_floating_note(
+fn render_svek_note(
     svg: &mut String,
     diagram: &ClassDiagram,
     note_idx: usize,
     pos: &NodePosition,
     entity_id: &str,
+    svek_ids: &SvekIdAllocation,
     edge_paths: &[EdgePath],
     relationship_edges: &[Option<usize>],
     opale_relationship: Option<usize>,
     layout_x_bias: f64,
     body_dx: f64,
     body_dy: f64,
-) {
+) -> bool {
+    if diagram.notes[note_idx].target.is_some() && diagram.notes[note_idx].position.is_some() {
+        let note = &diagram.notes[note_idx];
+        let position = note.position.expect("attached note position");
+        let Some(target) = note.target.as_deref() else {
+            return false;
+        };
+        let note_layout_id = attached_note_layout_id(note_idx);
+        let (edge_from, edge_to) = match position {
+            NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
+            NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
+        };
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.from == edge_from && edge.to == edge_to)
+        else {
+            return false;
+        };
+        let endpoint = match position {
+            NotePosition::Left | NotePosition::Top => {
+                edge.end_point.or_else(|| edge.points.last().copied())
+            }
+            NotePosition::Right | NotePosition::Bottom => {
+                edge.start_point.or_else(|| edge.points.first().copied())
+            }
+        };
+        let Some((tip_x, tip_y)) = endpoint else {
+            return false;
+        };
+        let Some(note_start) = svek_ids.attached_note_starts[note_idx] else {
+            return false;
+        };
+        let qualified_name = note.owner_package.as_ref().map_or_else(
+            || format!("GMN{note_start}"),
+            |owner| format!("{owner}.GMN{note_start}"),
+        );
+        let entity_id = format!("ent{:04}", note_start + 1);
+        let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
+        let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
+        let (anchor_x, anchor_y) = match position {
+            NotePosition::Left | NotePosition::Right => (x, y + pos.height / 2.0),
+            NotePosition::Top | NotePosition::Bottom => (x + pos.width / 2.0, y),
+        };
+        // GraphvizImageBuilder requires a SvekNode peer; clusters are
+        // endpoints but have no leaf image to form an Opale callout.
+        let group_peer = diagram.packages.iter().enumerate().any(|(idx, p)| {
+            p.name == target
+                && package_render_model(diagram).roles[idx] == PackageRenderRole::Cluster
+        });
+        if !group_peer && edge_path_is_opalisable(edge) {
+            render_attached_note(
+                svg,
+                diagram,
+                note,
+                // SVEK consumes Graphviz's two-decimal SVG coordinates before
+                // `Opale` adds its local note and atom margins.
+                x,
+                y,
+                pos.width,
+                pos.height,
+                anchor_x,
+                anchor_y,
+                tip_x + MARGIN + layout_x_bias,
+                tip_y + MARGIN,
+                position,
+                &qualified_name,
+                &entity_id,
+                &diagram.meta.sprites,
+            );
+        } else {
+            render_floating_note_entity(
+                svg,
+                diagram,
+                note,
+                x,
+                y,
+                pos.width,
+                pos.height,
+                &qualified_name,
+                &entity_id,
+                &diagram.meta.sprites,
+            );
+            return true;
+        }
+        return false;
+    }
     let note = &diagram.notes[note_idx];
     // EntityImageNote is a leaf of the same SvekResult as its owner group;
     // named notes use the same painted origin as attached notes and classes.
@@ -14832,7 +15224,7 @@ fn render_svek_floating_note(
             entity_id,
             &diagram.meta.sprites,
         );
-        return;
+        return false;
     }
 
     let alias = note.alias.as_deref().expect("floating named note");
@@ -14848,6 +15240,7 @@ fn render_svek_floating_note(
         entity_id,
         &diagram.meta.sprites,
     );
+    false
 }
 
 struct FloatingNoteOpaleGeometry {
@@ -18516,6 +18909,7 @@ mod tests {
             std::slice::from_ref(&edge),
             &allocation,
             0.0,
+            &[],
         );
 
         assert!(svg.contains("<!--link GMN4 to FreshTarget1181-->"), "{svg}");

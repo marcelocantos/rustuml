@@ -280,9 +280,9 @@ impl LayoutGraph {
     /// Adds a SVEK node whose painted image sits inside an HTML-table shield.
     ///
     /// PlantUML `SvekNode.appendHtml` uses this shape for images whose labels
-    /// are painted outside their Graphviz image bounds. Graphviz's
-    /// `fixedsize=shape` keeps edges on the image boundary while the generated
-    /// fixed-size label reserves the same surrounding layout room.
+    /// are painted outside their Graphviz image bounds. Its plaintext grid
+    /// reserves surrounding layout room while the central `h` cell owns the
+    /// edge port. The static HTML cell model supplies that port directly.
     pub fn add_svek_shielded_node(
         &mut self,
         id: &str,
@@ -1011,7 +1011,6 @@ impl LayoutGraph {
         let point_val = CString::new("point").unwrap();
         let record_val = CString::new("record").unwrap();
         let plaintext_val = CString::new("plaintext").unwrap();
-        let shape_fixedsize_val = CString::new("shape").unwrap();
         let arrowhead_key = CString::new("arrowhead").unwrap();
         let arrowtail_key = CString::new("arrowtail").unwrap();
         let headport_key = CString::new("headport").unwrap();
@@ -1101,45 +1100,12 @@ impl LayoutGraph {
                 let node = graphviz_ffi::agnode($parent_graph, cid.as_ptr(), 1);
 
                 if let NodeShape::SvekShielded { shield_x, shield_y } = spec.shape {
-                    let w_inches = spec.width / DOT_POINTS_PER_INCH;
-                    let h_inches = spec.height / DOT_POINTS_PER_INCH;
-                    let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
-                    let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
-                    graphviz_ffi::agsafeset(
-                        node as *mut c_void,
-                        width_key.as_ptr(),
-                        w_str.as_ptr(),
-                        empty.as_ptr(),
-                    );
-                    graphviz_ffi::agsafeset(
-                        node as *mut c_void,
-                        height_key.as_ptr(),
-                        h_str.as_ptr(),
-                        empty.as_ptr(),
-                    );
-                    graphviz_ffi::agsafeset(
-                        node as *mut c_void,
-                        fixedsize_key.as_ptr(),
-                        shape_fixedsize_val.as_ptr(),
-                        empty.as_ptr(),
-                    );
+                    // SvekNode.appendHtml: plaintext with the complete shield
+                    // grid. Native html_port resolves the central cell h.
                     graphviz_ffi::agsafeset(
                         node as *mut c_void,
                         shape_key.as_ptr(),
-                        box_val.as_ptr(),
-                        empty.as_ptr(),
-                    );
-                    graphviz_ffi::agsafeset(
-                        node as *mut c_void,
-                        svek_center_port_key.as_ptr(),
-                        CString::new(spec.width.to_string()).unwrap().as_ptr(),
-                        empty.as_ptr(),
-                    );
-                    let center_offset = shield_x.round() - shield_x.floor();
-                    graphviz_ffi::agsafeset(
-                        node as *mut c_void,
-                        svek_center_port_offset_key.as_ptr(),
-                        CString::new(center_offset.to_string()).unwrap().as_ptr(),
+                        plaintext_val.as_ptr(),
                         empty.as_ptr(),
                     );
                     let table =
@@ -2230,12 +2196,11 @@ fn escape_record_port(port: &str) -> String {
 }
 
 fn svek_shielded_node_table(spec: &NodeSpec, shield_x: f64, shield_y: f64) -> String {
-    // Smetana solves the complete fixed-width table to integer points after
-    // composing the two fractional shield cells around the image cell.
-    let width = (spec.width + shield_x * 2.0).round();
-    let height = spec.height + shield_y.floor() * 2.0;
+    // SvekNode.appendLabelHtml/appendTd: preserve fractional input. The
+    // native HTML dimension parser owns truncation and cell-grid composition.
+    let (width, height) = (spec.width, spec.height);
     format!(
-        r##"<TABLE BGCOLOR="#000005" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}"><TR><TD></TD></TR></TABLE>"##,
+        r##"<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="{shield_y}"></TD><TD></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="{shield_x}" HEIGHT="1"></TD><TD BGCOLOR="#000005" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}" PORT="h"></TD><TD FIXEDSIZE="TRUE" WIDTH="{shield_x}" HEIGHT="1"></TD></TR><TR><TD></TD><TD FIXEDSIZE="TRUE" WIDTH="1" HEIGHT="{shield_y}"></TD><TD></TD></TR></TABLE>"##,
     )
 }
 
@@ -2420,6 +2385,29 @@ pub struct EdgeLabelPosition {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn shield_grid_reserves_cells_but_routes_to_the_image_port() {
+        for direction in [Direction::TopToBottom, Direction::LeftToRight] {
+            for shield in [31.25_f64, 58.75] {
+                let mut graph = LayoutGraph::new(direction);
+                graph.add_node("client", "", 80.0, 40.0);
+                graph.add_svek_shielded_node("port", 18.0, 18.0, shield, 16.25);
+                graph.add_edge_with_ports("client", "port", None, None, Some("h"));
+                let result = graph.layout_full_no_timeout();
+                let node = result.node_positions[1];
+                // htmllex.doInt truncates each fixed cell. Graphviz PAD adds
+                // 16x8 points to plaintext; the center image remains 18x18.
+                assert_eq!(node.width, 2.0 * shield.floor() + 18.0 + 16.0);
+                assert_eq!(node.height, 2.0 * 16.0 + 18.0 + 8.0);
+                let edge = &result.edge_paths[0];
+                let last = edge.end_point.unwrap_or(*edge.points.last().unwrap());
+                let center = (node.x + node.width / 2.0, node.y + node.height / 2.0);
+                assert!((last.0 - center.0).abs() <= 18.0);
+                assert!((last.1 - center.1).abs() <= 18.0);
+            }
+        }
+    }
 
     #[test]
     fn simple_graph_positions() {

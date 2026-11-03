@@ -431,6 +431,9 @@ pub enum PackageKind {
 /// A package/namespace/container grouping entities.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Package {
+    /// CommandPackage visibility belongs to group data, independently of its name.
+    #[serde(default)]
+    pub visibility: Visibility,
     /// CommandPackageWithUSymbol decoration slots belong to the group.
     #[serde(default)]
     pub tags: Vec<String>,
