@@ -1,0 +1,18 @@
+@startuml
+skinparam shadowing true
+skinparam Padding 0
+participant Root as L
+participant Branch as R
+group Outer
+L -> R ++ : borrow
+note over R
+Wi matrix
+second line
+end note
+opt Held
+R -> R ++ : nested
+return inside
+return outside
+end
+end
+@enduml
