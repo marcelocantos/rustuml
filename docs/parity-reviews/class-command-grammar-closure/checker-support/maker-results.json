@@ -1,0 +1,2565 @@
+{
+  "mode": "maker",
+  "tested_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa",
+  "environment": {
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+  },
+  "binary_sha256": "508ce5d1edb5d88869a768796150c89d12c267748091ee141d5a181218c4f42c",
+  "comparator_sha256": "8da838d7787d7d4e90d4367bdfd3782f9738d4a87f1b0629202983e9f740f974",
+  "seconds": 1.8839411735534668,
+  "counts": {
+    "prior31": {
+      "pass": 31
+    },
+    "fresh": {
+      "pass": 30,
+      "mismatch": 1
+    }
+  },
+  "results": [
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/actor_generalization.puml",
+      "relative": "actor_generalization.puml",
+      "source_sha256": "0189f66dc0579599280e1b6f562e1e43395d5a3fbdbfaa81439657d049d75117",
+      "java_sha256": "08f05ed3fe33b948cf1182b4b5f366ba0d79169bbdc2d53826d07af2cc461fe6",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/actor_generalization.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/actor_generalization.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/actor_generalization.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/actor_generalization/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "4ee7dc0a4d6b6e5c8132a9ef2decd3e5acfaf038a60cd2bde6689de9e8806886",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "fa4a63f20e2076a493c60b36fe3d609673cf6df6efb90c2e34a89a2ffe957c75",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/actor_generalization"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/alias_reopen.puml",
+      "relative": "alias_reopen.puml",
+      "source_sha256": "bf3b7845bd3f0fe02f736dd7f8b2beffa126fdea7940ac3758e31c55f6a59f93",
+      "java_sha256": "48112e962adc3c9197c406450b5629d29a4377dc5edc4587eaaa66f1f388e6bc",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/alias_reopen.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/alias_reopen.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/alias_reopen.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/alias_reopen/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0c4b85772cb676faa8bdb32823bfde3ac5f0d7997bbd7aa47cc315e93f323822",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "72e3718f41afaf1f51c97c56ea6f4a823313b98bfed6b2f11aa24c52f18c2292",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/alias_reopen"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_legend.puml",
+      "relative": "body_legend.puml",
+      "source_sha256": "61f1dcb652d7268898e7e92c85facb647b9d977c0e8233ab2543cf2c8a538791",
+      "java_sha256": "6857e4e2395600fd45c3c1e27a7adafeac354b99429733975b748bee152c9000",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_legend.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_legend.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_legend.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/body_legend/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0a4c2b56de6bcd0f4b1419771bea1ee4681fba18a96fd003e569ed2a4f641680",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "702a38d8e47f68111dabf3fffe84e665e0c1da8674e7fda2328a860b2ed62815",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/body_legend"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_ownership.puml",
+      "relative": "body_ownership.puml",
+      "source_sha256": "5cfa42e57aeb98089167bacf3b62e13a33d0e17f9c117b77f769887a9744d37a",
+      "java_sha256": "50366b42f0082cb2ded62dd575bc54ca3ea8190e81c529b5d675f03e75c74064",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_ownership.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_ownership.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_ownership.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/body_ownership/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "bb56ff198035904e68bd8b3f3ff225748e3bf14c18e4becac66c2d748443f63e",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "5aea4bcd1751fea9d2ca833d00a228d94c02df95672a0b5e64f2e42eb3516de8",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/body_ownership"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_title.puml",
+      "relative": "body_title.puml",
+      "source_sha256": "7fb887567f92697a749c139635ad16df0db4208a6bff59196652bdcb7f9d91e0",
+      "java_sha256": "86c084cfbb3de0a3461ef4abb20f84349133138a5f39602582beb9824d7be9fe",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_title.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_title.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_title.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/body_title/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "3a4c4b35a8056a7b3fd5d9134e5b647bb2cf38bc016feabab357b5d885152391",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "2551c216a0bb48519523cc185c74cb081dccfdae2574efb50fce42c574cc8915",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/body_title"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/generic_reverse.puml",
+      "relative": "generic_reverse.puml",
+      "source_sha256": "9b7ba1882fcbdf756c024e2b16a48faf9ef1fb402e42c92493beec5f29d5a73c",
+      "java_sha256": "8ddce745b3db0ecea22ed8ab53895e42015f9e050a1fd5c649bcf0203fbe778c",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/generic_reverse.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/generic_reverse.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/generic_reverse.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/generic_reverse/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "ea0463deede4426ae64236616073d50a2c38f24634c62a1c4c698fbeb1020ed1",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "3af6fbfa5ce620cbaca5bf91ef5d358925e44f2d7c698e3d96ae3c60729c160c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/generic_reverse"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_center.puml",
+      "relative": "header_center.puml",
+      "source_sha256": "496de8f8653cfe1c23312e5a71b15a036253cacd89b70e97ba110f1023e87216",
+      "java_sha256": "728f456cbb4df7b989ce1db408da994a109f9c006b81d564ca1a98348c9cc7d5",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_center.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_center.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_center.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/header_center/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "27557f8073b37432411d419d55e1428573aa1b60ea27e1cb8f4148cf4f44870c",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "079bee864d7bea16b9f0301768bcb6abab9dca16cf57f1d0e14e48f15b247a86",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/header_center"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_left.puml",
+      "relative": "header_left.puml",
+      "source_sha256": "29611956bc8749ee1045636d8e281cfd1a2203083a71f2879dc4a28ba0daf31d",
+      "java_sha256": "a5a4a0ef7237516a1f72cac30c1873c47ef3738c2eeb80f9c3a072ffc4399338",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_left.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_left.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_left.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/header_left/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "88a3876b5a1eec5a38d2bb5ae5ab0610032f40031cc6d6d64fc382c6e8d2ec9a",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "1fd935266886c4274722830bddc510a3fb51b1c12cb6e6c21a1a591477766d4f",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/header_left"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_right.puml",
+      "relative": "header_right.puml",
+      "source_sha256": "d9441fc7d124a6d9a5d9919ea08f519f4b9c509743652acdad5f095615944849",
+      "java_sha256": "1e2bc38c7acb70442238fdef0f06f0e1192ac95a6b552ecbb8a278b142f43e5a",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_right.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_right.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_right.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/header_right/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0967b1ef9f9fb10a9b7af80f09f4d1d6f1a0e7ec01756fb495c7c6988d9fbbb8",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "860c845f032fc676438586f8ea972cdebdd4c922d5cc1c45acc71761cd970cd7",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/header_right"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_early.puml",
+      "relative": "mixing_early.puml",
+      "source_sha256": "9f798db50b06577390dc19f0f779f58bbcc954ab47c16c2dc4c35ab82934caef",
+      "java_sha256": "8e4764e06931c65ee9a71f6f17bae2c155fa7c426a43c2f09eca08a30679590d",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_early.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_early.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_early.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/mixing_early/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "ac242ae3ffa6add8495a63c900ab3c8d279dd7e7e854da9539c4dcc94305792c",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "75110cdcb63df4aefed6829b7c74a3eae058d3056b041b151da1471a575ca508",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/mixing_early"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_prefix.puml",
+      "relative": "mixing_prefix.puml",
+      "source_sha256": "25b6fcb1408d0b5d48b8d47133293fcaf6b2ef4be430c8e73d8f0d54a9e604cd",
+      "java_sha256": "cbdd5c1cd591adb3379d6b09dac02f95ce2ae5abb6463dec01ccedfd50c96127",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_prefix.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_prefix.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_prefix.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/mixing_prefix/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "441d8af035bcbfe6e0b6b82d5d435c3b63c834de3c185f4061e9cdc66e2c7056",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "3409836f4a62d379be1fd0fa247e521b6b7b5ea2d7835f1060653098b9a2f2cd",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/mixing_prefix"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_package.puml",
+      "relative": "modifier_package.puml",
+      "source_sha256": "9f02fca5f86491836170088435ca33bd7005328c53bce753c628b31c6917c784",
+      "java_sha256": "5523b26534a6b096583acafc85dea73537014b29f35c73a5efa5f0f46f372b6c",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_package.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_package.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_package.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/modifier_package/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "d0a7ae378a8e6512d8c70487fb1fd14fd929cd2570f5000429dcde8e00d55efc",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "f1c5b9195930f51bfadfb2d67c083c01c5e732fb7e06b03640086d4351a2a86f",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/modifier_package"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_private.puml",
+      "relative": "modifier_private.puml",
+      "source_sha256": "381dabd9e582b7380fb7080e4caec957aa4b5c658dfa925f61c28fd7ed10b058",
+      "java_sha256": "021e4f66456e54955f3e78fd58370b83a605621631fbc96fbfc2dabf73c1c19b",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_private.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_private.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_private.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/modifier_private/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "24b900137e1ad123c6f2ae90382a120742d7468cd7a219c5ce8a4821104e9e69",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "6d26c062d86ec79301e270cd2c6e19e5ccecb5d91fa8bf25a00b17dd3ff423bc",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/modifier_private"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_protected.puml",
+      "relative": "modifier_protected.puml",
+      "source_sha256": "d54db01004ce4a4a79f3a8166b1611825a03c9093f1dbc22d421f1bdd30d9db2",
+      "java_sha256": "81cc042bd3a397a1c9cecee6aba8fa2944cd6678de22edda1ae0070dbcd3bbc8",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_protected.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_protected.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_protected.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/modifier_protected/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "242e789d343fa0bb607b134f9820f10fa5a1b399810b9d2d1bc45452fb262f05",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "7158f1d23a0364664089c9e3a8993965007a2f642283af5d95525c505d0a718b",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/modifier_protected"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_public.puml",
+      "relative": "modifier_public.puml",
+      "source_sha256": "5c002e7f49b0b1fa0123655681e3647438f5cebfb1eba45d4272b75c833a134c",
+      "java_sha256": "5431efe6acd619e17cc8726a09bab19bbd78bc499e6d74037951ca4cf2908770",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_public.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_public.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_public.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/modifier_public/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "30a0fe221bc436b5263c01cffb727bfc694457768a0866a1cc007fcc7abefd66",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "fa2b3385fd206e33b7e8120996b347d5f6d4b9d1bd0049ab25da4da9538ee046",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/modifier_public"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_static.puml",
+      "relative": "modifier_static.puml",
+      "source_sha256": "4ad6cc6016c1305b5224bc2d0d7c57b60be9b159948998d63defc5ca3815c82d",
+      "java_sha256": "5bfe9b166aaffe5e082e671b3a33c3d8f3f0cdf1f61e8c3386a4d3e40a6ca751",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_static.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_static.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_static.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/modifier_static/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "21fa74c2e7d12f6c9605d8760ced6b18f73fabd6fe090f3605e2a828a76acde8",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ad434ba2ef525a568864c98d8f9415536762e4b74a27c54908f3237243465eb9",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/modifier_static"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_dataclass.puml",
+      "relative": "native_dataclass.puml",
+      "source_sha256": "847abff7e44351240486e9b32bca5d36513813455b1655d0af1fbe1cb6a2df80",
+      "java_sha256": "30179776d0b0921dac92b7ec3b314a9b19788a4377dc837528bcc9c0de627792",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_dataclass.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_dataclass.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_dataclass.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_dataclass/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "ca4acc0a74203552356953c35704b580eddbb64d3d2e23de2ed020946c7c7103",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "d60cca74f7f1c83699315a1f8954c04616f8386f01a95de64470581f9684bbbf",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_dataclass"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_exception.puml",
+      "relative": "native_exception.puml",
+      "source_sha256": "8d24d2d6351d9508cf94540ccd47ba9042f077a31c389bf24d98070715aa1fc7",
+      "java_sha256": "dddea4a8dd2f1fe9fda774df79cc0c12706138cb8759d9be9c9de964f2c02441",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_exception.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_exception.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_exception.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_exception/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "15be5fd9c73e34f4e926561df1dcbbde43a90f6260c26439592e39c02a69c139",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "c5054b5103759a4b8da019442a94f51b05d44104f369965fe9fb4e1a7e16a44f",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_exception"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_metaclass.puml",
+      "relative": "native_metaclass.puml",
+      "source_sha256": "903009d4c8776d5672ebea17eb8108ab19e2f032d108eae4fa695e04509c6f5a",
+      "java_sha256": "4ef9c93a197c5162d29e7548922c4f06ce27fcd359aad5985f941a46dd0daa4c",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_metaclass.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_metaclass.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_metaclass.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_metaclass/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "d6c82602bb390740875a1e4cfbe33db897772581125208cd7611604ab67e1b43",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "b7cdc7574c89535e8e25144927d373f3dd937084237253e4018097c74b8f22df",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_metaclass"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_protocol.puml",
+      "relative": "native_protocol.puml",
+      "source_sha256": "36fd5a8467b86d64de42323999b2cd97fdeb2be9132624aec46debe2b7c3c80c",
+      "java_sha256": "66e68052d37315b963f89667e4cf1bd2913ca4b9d08ed6b8652c17fecdf20f12",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_protocol.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_protocol.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_protocol.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_protocol/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "e44b0b2928cfab3e9a4907d0b1b21653203a83248d2fac509fcb68da6250058e",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "a22a3ec98da2490031aaa7ba2f08d3ad2e707aaf81e2ba290d0eeeed8747fe7c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_protocol"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_record.puml",
+      "relative": "native_record.puml",
+      "source_sha256": "248fbaf111dc0c7618a50b197d854f6d28c5091b5193ff1ef022677be00eecfc",
+      "java_sha256": "7276aee1215ac4fb40ce4a9fced29ffc5c41608c6620f2ef59e6fc1444409568",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_record.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_record.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_record.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_record/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "81e7705102c2802f36b740b645c3dd868bd91ce89fdc4f75c1a44219c6650ee8",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "d801f8b1bc01e80931e00fe19f8c71b5ee426814d6919723a239b8364de9bb45",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_record"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_stereotype.puml",
+      "relative": "native_stereotype.puml",
+      "source_sha256": "0bae5fddf0d1f7a5e6dc51686ee781dbb8b9ec62eeaa99334ddaa20b6a57689a",
+      "java_sha256": "8ab013c444c241d245729a4bc957f47e8da46db5ded42f33050feaeaff5cd368",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_stereotype.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_stereotype.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_stereotype.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_stereotype/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "f297f32f0bba679fbd2db1ab1c8b3fef0619164dfa307d5785ec9bcce2101328",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ea423a21b20adc3e9933742d820b663d5c40e858c005ec19161fd8ba6751ac34",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_stereotype"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_struct.puml",
+      "relative": "native_struct.puml",
+      "source_sha256": "0a1e8e38882fac3fb8a03a9d8905027a72160c86277f8a5df7fe925e776a6127",
+      "java_sha256": "00266385c08c974397eadc0b9f93ad314c661a95b23ab83a963f58979cc9d7f4",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_struct.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_struct.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_struct.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/native_struct/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "adec757b6f0686f6403e395654e69488168f30e6b42aa12f39da5fbd2d81385f",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "0cda5cf11a526d031069efb3fc8c8de1c3bf9d8a98c72941986a9f72e00a194b",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/native_struct"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/nested_alias_note.puml",
+      "relative": "nested_alias_note.puml",
+      "source_sha256": "a55cc58ec45f32f12ff721a75dcce49b74482c46553bd7c40e71357bf5f332b0",
+      "java_sha256": "53f42050b2fda1f2d66d76acc989468798d3e35113692947387d9f13bf02ce0c",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/nested_alias_note.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/nested_alias_note.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/nested_alias_note.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/nested_alias_note/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6d1a65cfdc46ca097edbf768580e4613dcf1f4fc8c80d13c021016f4e1f4eb79",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "1edde017baf32538ada5f65f5a55395aea8c7131157a945e65535fd202055541",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/nested_alias_note"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/note_quote.puml",
+      "relative": "note_quote.puml",
+      "source_sha256": "0e15da0a603c60b027c19242a21ef6380aab27415094be9fd2f2d4a7a88c5839",
+      "java_sha256": "32bcad6a44334ed5af6f2cd5dd87131f2c0a4fea3c2c158471177bcebf49502c",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/note_quote.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/note_quote.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/note_quote.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/note_quote/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "9fcaad227639b2843f0daad40d976ad4fb959d222528a4ae5aeaceb84b43f516",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "1f65b6071c5f8f91eaf328865fce95e0769daf42e3c1a31dc8b6a7f353280cbd",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/note_quote"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_forward.puml",
+      "relative": "quote_forward.puml",
+      "source_sha256": "0675d30e61263b9f32979ac6ec8b830ccbcc4ed07561fcdb7ca43083bb2e9896",
+      "java_sha256": "1effedbc7ea17149aca419fcd991bb8aed93d67724457c4ba2d73e4fe976ea58",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_forward.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_forward.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_forward.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/quote_forward/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "a27403b729ce4c5d790e5ddbe37d321ba260a8b28dfe2e83107ccceb0334dcb7",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "620e342e88a416c67a142c359c8c26417634e9e67610340939ae2f816365dce9",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/quote_forward"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_reverse.puml",
+      "relative": "quote_reverse.puml",
+      "source_sha256": "92d1ced6ec7dd3da406d572a08e5817c94c00c411e3365529e1750b48fd02a51",
+      "java_sha256": "fdcdddd78f1255f74a31872bf09d49a71583847eb2df472e072d9b175c205a54",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_reverse.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_reverse.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_reverse.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/quote_reverse/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "b8b9b910c9cf7cf9d2c7acf2b1ab869f6a0c50d24583911c4972a32bf84ee561",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ea85b96080b22cbac6d6c33e82991f931a43eac2b360ed5d9d2b80b22492ceb5",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/quote_reverse"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_code_collision.puml",
+      "relative": "quoted_code_collision.puml",
+      "source_sha256": "3502fec6f85d1a31e959a9ffc62ece81dfa2115de849a3c832d0a20f858a95ed",
+      "java_sha256": "8c92dd496306c99981dbec5294c8f3efbd7343b895a166c4121a3663d7d2aa0b",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_code_collision.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_code_collision.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_code_collision.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/quoted_code_collision/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "7b0a9d059014c2d97b9fde902988bbcde7b0726948196a87f697a75db312fd26",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "0a2a168c2fb78955bd151ba232e573f65c49a0f5daba0c3272e049b55b63c04c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/quoted_code_collision"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_decorations.puml",
+      "relative": "quoted_decorations.puml",
+      "source_sha256": "675a0143a98c86c6a1acbcaa07a165d4ad028524684ec1c2e17538f41d213cda",
+      "java_sha256": "790b648eb6e4300d1d25920c37931d2eebb4ffea934586ece296e0145f1d154e",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_decorations.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_decorations.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_decorations.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/quoted_decorations/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0ebd896dfb852ed594a2972d5d69c6fbe95eb83c8ce3697720f7cc0f0f6b6d2f",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "4640aa31631ac40c03e5e11fd01af9d71ae00221acd0ef2577d60de45bacd179",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/quoted_decorations"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_sizes.puml",
+      "relative": "visibility_sizes.puml",
+      "source_sha256": "cc7cf61eb98e17c138509d48a2f622d205c8f2528e9a2ee1b8c869e083062d1c",
+      "java_sha256": "cc31c5c37e6194d4075b8d858f545941bef1a599063c8dfa7e04fb9829a222c9",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_sizes.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_sizes.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_sizes.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/visibility_sizes/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "e9d194db5df57e0dd76c22c28dca65a72652f9286519b1620060f60217806f0b",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "b572c0246390780ba9efcd338d05cba650a30e72a768367218ad31406f5f657f",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/visibility_sizes"
+    },
+    {
+      "cohort": "prior31",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_stereotype.puml",
+      "relative": "visibility_stereotype.puml",
+      "source_sha256": "9cb34b77f1429c6dc16fa8b28092f1b3f15b9b2df8aa2f797792debe6a3dfe37",
+      "java_sha256": "dc3205e3b3207ffff8b3fdd21c11dbdf4e0e604199eb01055115a3d6a20e09e2",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_stereotype.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_stereotype.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_stereotype.svg",
+          "/tmp/rustuml-checker2740/outputs/prior31/visibility_stereotype/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "87e79815a873c3c8b31493808574277d0c23ed80ac099cb8e36a7efe02b9b76e",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "54f5930108e609f26a59edc8bfb3532eab1e6a9366bde6f746077750f7173fda",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/prior31/visibility_stereotype"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/action_process.puml",
+      "relative": "action_process.puml",
+      "source_sha256": "6f923948738eb955fb3bf21f1c0f079f51d38fcf9e38ac7c81bae594651cb9c8",
+      "java_sha256": "0a0c3e9be6525f4691975eacaf5ff4ddc083d009073504d215be98703050a02d",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/action_process.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/action_process.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/action_process.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/action_process/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "7ec4b59b1753775e9da0e9ab330d0f0745cb3e02c8b68064a20abe8f4cd8f7d9",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "64b85c9b6958cb293f10006eb7d7c9e3e3569e190e8bf7e9197c3ffd6460aa87",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/action_process"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/boundary_renamed.puml",
+      "relative": "boundary_renamed.puml",
+      "source_sha256": "a10c0c3e760549238acf4dcf917afe2d04c2462eb203bc9b2f4ac6c6116d7eca",
+      "java_sha256": "ef4bf1a573c17faca365b1861495df7ebe0720b8188fa41381328600b7c43230",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/boundary_renamed.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/boundary_renamed.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/boundary_renamed.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/boundary_renamed/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "fd35a8fb6d209f84b34defbef1d4a6b03e63844bcbd730bfbdc160c462599b1f",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "1907db18088d8f97c0fcdadf9ec0d26a02599750f0367b0fda53243ed1aa29c6",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/boundary_renamed"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_center.puml",
+      "relative": "chrome_center.puml",
+      "source_sha256": "b4c4d7b87cfd965eff9159bfeb13cab73c0f9f406b6415ce52af4442014a8d49",
+      "java_sha256": "5189eeb0f450c88a603dcb95d9c380763d7db9bb573239a775813f360d96d007",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_center.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_center.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_center.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/chrome_center/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "3632b2bb6c058fca1f5e96853422870a192cd34db0cc2f2f8fcdd6e6bc00965a",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "765f12b32719aa75925c8f329a87d3355672142149a7a5023a2bd5841ca80472",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/chrome_center"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_left.puml",
+      "relative": "chrome_left.puml",
+      "source_sha256": "055af62ca60318bc3652827125482657cb7386754eef1c82cf5673bd496312ed",
+      "java_sha256": "e596e5922ed7b54f28b2007dd13aea6d989cb16a86bda9a17d2716596b5edfdf",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_left.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_left.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_left.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/chrome_left/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "090b057f00b0aa4be1bc072232687c7605af9a4b46aa09312729825eebbdc809",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "9bac18f5b7ad55b799f9794afc9307fefc0ca0540380769ba0268224ea4e771a",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/chrome_left"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_right.puml",
+      "relative": "chrome_right.puml",
+      "source_sha256": "178a5f16dc9072cae8de9805502a9d554f6c80bc5eaecb412c9ace7b37fc7591",
+      "java_sha256": "0662243a34cc26ac8913947ef287765f24b658ff989ce0f1677b5404cd09903d",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_right.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_right.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_right.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/chrome_right/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "689def58493a83a129e88c9abea5053688d838cce09358662ef54cb4d979815f",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "dea1ada40a195ddcd314bfb960dfeaa5009c299f8f115e63d7e469d7b433991e",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/chrome_right"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_long.puml",
+      "relative": "cloud_long.puml",
+      "source_sha256": "73af931060c97b8c10e5c2584daf5d6ae050b8acfb595c3aa9cebc3b3d199bd7",
+      "java_sha256": "fb30582f6a98bceb6f643108d3307f3a2c2b7357177f446ca7776b65908b3ca4",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_long.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_long.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_long.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/cloud_long/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "1a25b9cc8fceae91d8f8b945ecce54c1005ec9a7c92e81ea52a1ce29636d4b8b",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "103d1c2f6971fd22e829f82445ce2c8974ca70f8c278dc4f2f6fe8e8c4135ab6",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/cloud_long"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_nested.puml",
+      "relative": "cloud_nested.puml",
+      "source_sha256": "f520181beada36797e5f242ba03df5757e86c99584ff46b5a6fa1503bc891382",
+      "java_sha256": "e66f5f920433d34a547c8344e129594a824fde2182eb35a008eab54be6c19389",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_nested.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/cloud_nested/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6fb1d053a08606a7021bf83daec478beda383479fd0b2ff0e9303e0a3faf63c0",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "df37b9a33254b2e0e846aac03e2457f8dbb49d601a098a0cabad33b347e4ccd8",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/cloud_nested"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_reverse.puml",
+      "relative": "component_reverse.puml",
+      "source_sha256": "2ce0bd6486704122bcf64bc67a1138fa2f6becd0af32194e14ba0a1e26ab41b2",
+      "java_sha256": "4d61ce753fba5cc646e3f14b6a27ba4fbe457753ddd435fd5363c77d300fb253",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_reverse.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_reverse.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_reverse.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/component_reverse/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "08efd45d96fcbdbc9bcfeb9ec705b45a2228498380898409ebb7387e69bf6e33",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ea5f147ba0adac49ef38f5047d0cb8ea6c00917ed48b438719f15bf46528c9a2",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/component_reverse"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_stereo.puml",
+      "relative": "component_stereo.puml",
+      "source_sha256": "011fb429ff73ab4f4d06a562fbd4f5511c506fc2d30366fa75c18501bed7bcd1",
+      "java_sha256": "48c57d727fc6a8fc74df2173d614260b14440bb529e242477181dc0fd2c93a6a",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_stereo.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_stereo.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_stereo.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/component_stereo/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0bb2929ad919adf5967189849537d11274f6008f2ed882c68b511cd8fd7dde08",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "04cc5ab432d51e33ef74f7c35bc8c12eb21508aa4c0c300add9cfe8cb9d2a423",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/component_stereo"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/description_route.puml",
+      "relative": "description_route.puml",
+      "source_sha256": "e91096b45ebc09bc89303d9f8052fed685d36d5ead01ab0ce806c2669829ada0",
+      "java_sha256": "9fe4d749264d3bf422a5a40a5132bf817f888f16068403d364793d377945c82d",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/description_route.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/description_route.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/description_route.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/description_route/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "ab23501e77e823c5b58a93fe03578bf4c6cd72d6ec39df7e40df1e263bb7e007",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "a1a31486ff9546553c956711bf54377eadaa5783c96ba20bc3256b9e003d8cb8",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/description_route"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_link.puml",
+      "relative": "empty_link.puml",
+      "source_sha256": "77cb545287dd24dc4eff8d609761af4a2e973e7c8bc43ada2f766f9612d65c6e",
+      "java_sha256": "a0fcb2788ace6e727e0cc508b04f1302994325e6f743500a7bd8828a217854e8",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_link.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_link.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_link.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/empty_link/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "f50cb406fe524655c7635b8c4b2aa1d5a287dafc6572b0a7e916221a86588d3b",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "7d902e13c2e3422338f866ea84408a05080d8e701a6ad639a9a62b91a0ab1711",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/empty_link"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_nested.puml",
+      "relative": "empty_nested.puml",
+      "source_sha256": "769cdb9b53b9933f16db4b525580199bca81b254d1aa616bca207bdbaad5dccb",
+      "java_sha256": "5d6daa61e3c1849fb271b5bbbcc7343616d82a03952c39888e6efdbe4f5bc6ce",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_nested.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/empty_nested/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "b5e7fc2cd0f34c45d0b1a5bd157338029c819cab36d80c816ffbfccae48c7569",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "859a9ccaa51eefed40c2ef247ee5ec7eb200b7d5f1fb02220b9dcfba2947574a",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/empty_nested"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_19.puml",
+      "relative": "endpoint_19.puml",
+      "source_sha256": "1381105a7c2422ba6e23c61f73b4674b4ec86d4c0547192efc20190862e88b7c",
+      "java_sha256": "ea0d6ccf0df41b6ae4701ff68de8767622fe751b9c96cd783b6f7b9abe6d9ee4",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_19.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_19.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_19.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/endpoint_19/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "481056c1a6e21c8ffb9673f8ea926b3c53e7b54ceffcb6eb3fe7f17111c41be7",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ef09c824d9d4b4fa1e9aeae9d2e4cc8dfe11a33b51f5eabc5ffbc52ce0a1a735",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/endpoint_19"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_20.puml",
+      "relative": "endpoint_20.puml",
+      "source_sha256": "dc40808f54ee665b55ff0bb5937b8ed19b46eb196add457fba87f3ce713040a4",
+      "java_sha256": "41bb3bb3f682911ac191304f0ad7d0dc299d1ad1889a0099d4a0935f929915af",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_20.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_20.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_20.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/endpoint_20/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "d1de239bfa9c9d58283fdf10157681d6c4531a9e275bb2cc5a8a82b49f17a30c",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "f9349df260d92eb5674d7ac114c184382cc726d0b622bfdc06e5aa4c87842243",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/endpoint_20"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_21.puml",
+      "relative": "endpoint_21.puml",
+      "source_sha256": "89bbecbf2162b6baaa4e751fc4ebd7d7dcd8aaf0e9dcac79a2a9c31f33b7e684",
+      "java_sha256": "515920e979c93d9f9a89fcc5f005d350ad6522f0cca390c65df396f89f40f3ba",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_21.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_21.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_21.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/endpoint_21/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "7996607278b3727d1e7727345bc78e4e137862d8cdaf24906e24cdec40f1c966",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "0b5311e5e16f58dcaa0739a8d4a5a64ae3e8ccaee7dcff7b17f700f855c416a8",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/endpoint_21"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/floating_note.puml",
+      "relative": "floating_note.puml",
+      "source_sha256": "c862cf4326443daba74e892a27292c180decf9367b9cefe8413fb7e68a249286",
+      "java_sha256": "01db05b1aa905366818980e956b2de49c5d7dae55eddb74196fe6dd549c769f1",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/floating_note.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/floating_note.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/floating_note.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/floating_note/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "7b818a6fb9b1793d61bae971e2c564dcc6c257bc3dda3000ea3c50090f8c3119",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "aaaae377f79fe66851f8ae89cc4b58a2eb63953ebe81044cd1fc715fe99f95cc",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/floating_note"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_leaf.puml",
+      "relative": "group_leaf.puml",
+      "source_sha256": "3f78e1d69ec9bb464172b94b6572cc953d15123df50e87c60dab7ee4af7ef7b9",
+      "java_sha256": "c733a137e0a7f84faf8a6ea5307f94c6ead49e360c69226177de4e047c0898b1",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_leaf.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_leaf.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_leaf.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/group_leaf/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "252e9435cd0221b4100c20dc84b51b1f8ccbaf4b97f2f158922bf30841017aff",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "56cab7ac79f5721995ae70d88b96c804d24260ea0476b4828e8ee1f7b4e29a2a",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/group_leaf"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_link.puml",
+      "relative": "group_link.puml",
+      "source_sha256": "e5c0cd8d8641ada8c673f62c70cd5e53c5bfd84257ec1b05762f471ff80d0e84",
+      "java_sha256": "9ab2a2c94b477d6f57aa326819bcdc80ea7ebc0e6a03bdc172c76b7ee0dec34d",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_link.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_link.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_link.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/group_link/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "ff1820a9a041512ed2b2970946c05139edfc896cd7f3416cbe9af090c1c032df",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "d8572d5582ed75b2a00d8e441d41e1ba9284a3846c8d6a763955b25d6b41e937",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/group_link"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.puml",
+      "relative": "group_lr.puml",
+      "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+      "java_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/group_lr/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "9ce98a9dea83af8a7f3edd12504128cfc96c707fc44b802a5ed7ca7c9d3efc60",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "5ba3c99c1e35b2a88bedda475d824470e0e9442c2990dd6bd8a4d18fd7d7a0c5",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "fcd91a94e698636e3c484ceec2ac5935064c8e8806f810a43dea4f0056e7f0cc",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/group_lr"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_alias_duplicates.puml",
+      "relative": "note_alias_duplicates.puml",
+      "source_sha256": "3bc8adcb77f571240c223a207ffb19bec08bf338c04a1a0f5d76563113283c8c",
+      "java_sha256": "78e49221aaed0354784e3f5d0440e0799bb410fa892630632a974df5471dab95",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_alias_duplicates.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_alias_duplicates.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_alias_duplicates.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/note_alias_duplicates/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "dd9ff3321cc46cb9292dbca3165cfd5ba37a8c331cd39c167a28b11c738d8a93",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "665e8cd101628d94d407cde1fef0ec73e819e17a26eada8458becc8e0a452a6d",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/note_alias_duplicates"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_namespace.puml",
+      "relative": "note_namespace.puml",
+      "source_sha256": "0385a27050ac44f277fd7c02933438851ef44b02075b0ec56c85fe4cb95b6497",
+      "java_sha256": "d0dabe22f057a3ce8b6771e92ee0810d1cf0a39b36fd7314771719518cc12c4f",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_namespace.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_namespace.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_namespace.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/note_namespace/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0b84bd863d054a0830b29d589972fc5ca53545d734d0f208b0259b6464ddc6f0",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "52ce0e3789b51fc6a99b32db999ad4528ca7fd8ba3117d3bda2a0329fc1f43f7",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/note_namespace"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_outside_right.puml",
+      "relative": "note_outside_right.puml",
+      "source_sha256": "969e620ab7e3813bdecfcebc30c007f81fcd89ddb064e3d988da4e5c05cb9455",
+      "java_sha256": "483b302934bc688f39aeaf964d76285c7606356b3cbc19469628d2150fcf85c8",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_outside_right.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_outside_right.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_outside_right.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/note_outside_right/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6f4c1dca300ce4aff625d42ff27237b414f0a1d467ad683d93e0dd492490504b",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "9dc406b731582d11fded496443f8cb668643539768a8f2800fe0af0437f1d92c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/note_outside_right"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_scope_lr.puml",
+      "relative": "note_scope_lr.puml",
+      "source_sha256": "199470ac922428d8ea0b2f8bbeb378cf80962f968568c06f602530ed64e14a33",
+      "java_sha256": "f378671f39645a6b093e95054b08225f5f07ae16e84cf230cf00a8aeb45a48b2",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_scope_lr.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_scope_lr.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_scope_lr.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/note_scope_lr/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "658f472a8a4732e5ec60205ce36fc01367421e5bdd5447889d022525df7403b8",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ddb7aee2f84d879e8f91e6ea9a8c2719736dffa03f4a76abf591c8681660724c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/note_scope_lr"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_top_scope.puml",
+      "relative": "note_top_scope.puml",
+      "source_sha256": "0dea9f7e83f59067c1370d482c5bc9ed58eb72f4e788e361aaf26eceef7c9e0e",
+      "java_sha256": "6f919aa0bc4faec2abaec4785a5fde4e44b250e641264a6c902e74348286081a",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_top_scope.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_top_scope.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_top_scope.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/note_top_scope/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "a6ad48f2c4b4419136dad67957711ad5c5d486ecce71f3b614bf2e1060e67a0a",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "2a10b10ccf5508b94eb681c0f5600a571bfea8a525f06028a7cecd808b859e13",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/note_top_scope"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_two_links.puml",
+      "relative": "note_two_links.puml",
+      "source_sha256": "a0989563e841fb051037197b95c9560a7dee41a22fd8fbb523aa62cae0a6d341",
+      "java_sha256": "3a18e49081bfaa99e3a5c735a21eb428919e240ff401943c09a1e9c99a0df1e0",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_two_links.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_two_links.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_two_links.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/note_two_links/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "2771a33aa444cca37a6c8b0bbb0bd35447be2d5e2f9b2c41c33a274274578ab1",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "addefd36999ea741ffa9104add340957ef17e4ba9b1ae548af661accf20cc5f8",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/note_two_links"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_cross_scope.puml",
+      "relative": "notes_cross_scope.puml",
+      "source_sha256": "e56c082e4c44d749237c86e1b9111535e4c3259fcd4b5f0b69e3de41c4820e90",
+      "java_sha256": "aef2ea64db8e75ec385a778d00bfa3d01e4f8d33f79d951ff7bdd7e8665457b1",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_cross_scope.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_cross_scope.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_cross_scope.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/notes_cross_scope/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "29a7b6ac050e89e017510b881465172eab27266d49582df63011d08e36ea5a72",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "5851835db678695e580b1f008c7a47d43754bcd785cd58da40e196b5e49eba69",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/notes_cross_scope"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_nested.puml",
+      "relative": "notes_nested.puml",
+      "source_sha256": "46e2bda839c567f92bf92c303d163170d3bf6529ea6f6c88ddf92fe37b4cf157",
+      "java_sha256": "2c3c7c0747e58e86bbc3abbee24f3b4e151e7b5f4bc43985d8792f520f587a7b",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_nested.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_nested.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/notes_nested/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "9610dd06eb954cf8be7545161f00b48cb14c06458c4567409d89feadd8b121e9",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "c0ac28bb731182ffec3b03e915760029434bf2aa2baa469aa91fbd3bb14c5ce3",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/notes_nested"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_link.puml",
+      "relative": "package_link.puml",
+      "source_sha256": "5bc5a26e4e9f299b08dbf8c2f345f645f3de22499418979574e77a55ecdc6e66",
+      "java_sha256": "0d2b4583e580b882807379fc11541e075654c81bee575a35a16d0e029111c7e0",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_link.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_link.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_link.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/package_link/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "c8bfffa084592eeaf2e133a8111cea138aacf0f1c93f3c7f163eaa368839fe20",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "e0024196b89ed0709938f2debe3c77ea0d98bea626332fd9456fee0d067d9c30",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/package_link"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_slots.puml",
+      "relative": "package_slots.puml",
+      "source_sha256": "9ad4e1ac09304d3dab9caf6c428d50010f45acde78b9e38fd27790d982710671",
+      "java_sha256": "c8403e2508df1d16dfb23fbbcc49376e32d85022a12f8d6c96068ef183edd257",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_slots.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_slots.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_slots.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/package_slots/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "3a927c3093406b525a9e531f2a3b0cbd2c44f9282dd74282bb9f1efa5746b1fa",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "2d35fdb53dc5fd086480e6d2199a6a03f879acbbf7043661dd2d37c4c490791c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/package_slots"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/queue_alias.puml",
+      "relative": "queue_alias.puml",
+      "source_sha256": "8b83e7919a85e6f8966b1ef9adce48d2d534dce8cb3702361623236969dc1ef4",
+      "java_sha256": "b39bfe55b6ba319f486d80d647e6da5f9691dda7c15a772f4edfa546a087307e",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/queue_alias.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/queue_alias.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/queue_alias.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/queue_alias/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "d45c6c041e05d492bedb1aff3eb684c44611f565a8e24dbc7665206a64765a30",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "2d9072708bed406870d1ade31f1ed88d6aa8198a66e47822b49435be389942f7",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/queue_alias"
+    },
+    {
+      "cohort": "fresh",
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/quote_modifiers.puml",
+      "relative": "quote_modifiers.puml",
+      "source_sha256": "fbba99d6e2295380d30666a4fe6e58dce4a0582cc35f0cf7891b2c389c91a8dc",
+      "java_sha256": "d1586161e82d89a6ff17f1e2d1418622a3781b40a8c450e098c91cab41ef84ad",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/quote_modifiers.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/quote_modifiers.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/quote_modifiers.svg",
+          "/tmp/rustuml-checker2740/outputs/fresh/quote_modifiers/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "96949e979b1707ad36a84855e9882e9eaab1f2d904bee969be7e30808011f95c",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "f538b32c104ddc28ef43e271a5ce5f1ea6478b8132c723e16ff09cc452bf71dd",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/fresh/quote_modifiers"
+    }
+  ]
+}

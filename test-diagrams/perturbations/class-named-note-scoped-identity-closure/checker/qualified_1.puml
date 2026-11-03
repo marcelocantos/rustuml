@@ -1,0 +1,9 @@
+@startuml
+package H {
+class Peer
+}
+note as H.N
+Multiline body
+end note
+H.N .. H.Peer
+@enduml

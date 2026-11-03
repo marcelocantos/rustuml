@@ -1,0 +1,7 @@
+@startuml
+node "Sensor Hub" as Hub {
+class Pressure
+note right of Pressure : Local
+}
+note left of Hub.Pressure : External
+@enduml

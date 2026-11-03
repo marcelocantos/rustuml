@@ -1,0 +1,9 @@
+@startuml
+!theme minty
+class Earlier
+!theme cerulean
+skinparam stereotypeCBackgroundColor #1278ab
+skinparam stereotypeCBorderColor #bb4411
+class Later
+Earlier --> Later
+@enduml

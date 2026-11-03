@@ -1,0 +1,5 @@
+@startuml
+struct "Root declaration" as R
+struct Peer
+R --> Peer
+@enduml

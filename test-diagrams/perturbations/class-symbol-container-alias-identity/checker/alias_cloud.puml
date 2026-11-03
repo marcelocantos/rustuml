@@ -1,0 +1,9 @@
+@startuml
+cloud "Small" as Port {
+class Inside
+}
+cloud Port {
+class Next
+Inside --> Next
+}
+@enduml

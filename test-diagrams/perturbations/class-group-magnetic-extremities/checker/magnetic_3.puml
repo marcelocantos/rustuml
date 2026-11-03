@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+folder "Long folder shoulder title" as F {
+class Inside
+}
+class Peer
+F )-- Peer
+@enduml

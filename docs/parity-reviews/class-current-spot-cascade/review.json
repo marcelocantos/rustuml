@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-current-spot-cascade",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "The new current-spot lookup follows EntityImageClassHeader.getCircledCharacter using the current style builder rather than the entity creation snapshot. Two repeated-theme orders and explicit override positions pass for ordinary class/interface; this supports the narrow color-dataflow change.",
+    "The declared native-type/style model is not accepted: root record/struct choose Sequence, grouped themed native cases have container/style geometry failures, and custom spot cases fail. Eight of twelve fresh cases fail strict CLI comparison. Spot-color diagnostic correctness cannot turn those product failures into acceptance or certify an extracted palette-only patch."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.svg",
+      "axes": [
+        "custom spot versus native default",
+        "theme change after declaration"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/custom_class.puml",
+      "source_sha256": "fe2a998b1aa4cee36a60bc84f708582b3299cf5f2927acd1ca1e3e70e36a4a8a",
+      "java_sha256": "b1fe7afe0e593d07d39e93e1fdb43c71c76add1a0713eb21abbc9a33f32f2c73",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/custom_class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.svg",
+      "axes": [
+        "custom spot and native type",
+        "container plus later theme"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/custom_grouped_class.puml",
+      "source_sha256": "a55216becaf8664a7bb9c9e3f7270c3cc2983fc998db3ce4b538b9dbce2bd3c2",
+      "java_sha256": "c275c1adf7728eba32a4cd6482561de0702a5544494957688921b97bb48cf2b0",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/custom_grouped_class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_record.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_record.svg",
+      "axes": [
+        "custom spot and native type",
+        "container plus later theme"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/custom_grouped_record.puml",
+      "source_sha256": "5f3319c2cf09ebfb3eef34a40c211bd95386ac2b7cce0c8f927308a8413cfe9a",
+      "java_sha256": "34bd7be87cf60767070b060fa481a55818eb2fc64a94ba7b94da7754614d671d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/custom_grouped_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_record.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_record.svg",
+      "axes": [
+        "custom spot versus native default",
+        "theme change after declaration"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/custom_record.puml",
+      "source_sha256": "0f8ca698788a3ab2aff0b39157aba1eb496b3d9eab6ff1f3c521847b107ab491",
+      "java_sha256": "62bbe796347c25ff04d2b08d9627d92ccdd52e9be91f5628bb5b339d822f958f",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/custom_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_record.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_record.svg",
+      "axes": [
+        "native spot type",
+        "theme change within container scope"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/grouped_record.puml",
+      "source_sha256": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+      "java_sha256": "bc03905cab65a8a6e7e6c2cee1af8b5279a81eeaa65cb9ad743a2f09b38ede51",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/grouped_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_struct.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/grouped_struct.svg",
+      "axes": [
+        "native spot type",
+        "theme change within container scope"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/grouped_struct.puml",
+      "source_sha256": "dfba9980757edfd53a804e029e9f80c336a808bf739914a5d8586ba08df465af",
+      "java_sha256": "905ea48500af2f25e9ddb52fc64925793facc5ca301bd437729e5cd1d6e142c0",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/grouped_struct"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/override_after.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/override_after.svg",
+      "axes": [
+        "explicit override position relative to themes",
+        "declaration epoch"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/override_after.puml",
+      "source_sha256": "f359c43ba41251b2e06eb6bb04b9e8956322d6f6ef71400f432b27e38f79a62c",
+      "java_sha256": "c92181241613137ae9296c25816c08d3d8ea8ee66c87361f53254ef2b75c9cf8",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/override_after"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/override_before.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/override_before.svg",
+      "axes": [
+        "explicit override position relative to themes",
+        "declaration epoch"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/override_before.puml",
+      "source_sha256": "f032cab8076dfb89dbefee3fe88891e2ba55ab892d0e0db51a0f40ee8a2a92b3",
+      "java_sha256": "9a86c3de3ab61174d9baf4a7562476967b65f17d6e592803967dd1ef1e5ceab1",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/override_before"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_class.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_class.svg",
+      "axes": [
+        "theme order and declaration epoch",
+        "native spot type and label width"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/theme_class.puml",
+      "source_sha256": "d524dec53c3d38c7a1a81d00e38881cdbd6480215c9383c8355c96af5148e678",
+      "java_sha256": "b8862d2137233279edf7f8beef0c8054572bba6a1770cd6479d94bd8ad373d96",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/theme_class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_interface.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_interface.svg",
+      "axes": [
+        "theme order and declaration epoch",
+        "native spot type and label width"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/theme_interface.puml",
+      "source_sha256": "11e949b275d32a335e8f839f1b6ac4b4f17fb32617c1a265caa8624838dd8c40",
+      "java_sha256": "115c9a0cc7dcf9ab032b337c8f9b22a68119bbccd47a87522d1a84d5a69c4cca",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/theme_interface"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_record.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_record.svg",
+      "axes": [
+        "theme order and declaration epoch",
+        "native spot type and label width"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/theme_record.puml",
+      "source_sha256": "042be2a624ee6914d5142d571e4797547501caf63167dd28428e6810f5a33921",
+      "java_sha256": "05ccfec9b4332f9688d20168074a59832dab41ba429b44797b7b79f59ffe9269",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/theme_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_struct.puml",
+      "golden": "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_struct.svg",
+      "axes": [
+        "theme order and declaration epoch",
+        "native spot type and label width"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/theme_struct.puml",
+      "source_sha256": "d5147eeae73832a32728e24ff7118172e3410dbba4a0de13dd75a7365b4140d1",
+      "java_sha256": "7497c7f4c0a0f9709d3e2fa3e2d5b47376ef5ed1e91b2c5b14349f169e1555cd",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-current-spot-cascade/theme_struct"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-current-spot-cascade",
+    "account_path": "docs/parity-reviews/class-current-spot-cascade/account.json",
+    "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+    "picked_account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+    "account_history_original": [
+      "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "fd4eb9f768768c006d814f389dbdad79605acc7f",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "1ca32540ba15fe97b2d7d6ecb678aa8305eba966a61dccef7801b0aea7de503f",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-command-execution-ownership",
+    "class-native-leaf-presentation",
+    "class-group-paint-ownership"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "mismatch": 8,
+    "pass": 4
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

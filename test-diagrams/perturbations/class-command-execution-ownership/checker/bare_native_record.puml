@@ -1,0 +1,5 @@
+@startuml
+record "Root declaration" as R
+record Peer
+R --> Peer
+@enduml

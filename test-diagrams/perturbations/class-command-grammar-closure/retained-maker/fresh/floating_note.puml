@@ -1,0 +1,7 @@
+@startuml
+node Yard {
+class Gate
+note "Manual" as N
+Gate .. N
+}
+@enduml

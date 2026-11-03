@@ -1,0 +1,9 @@
+@startuml
+folder Port as "Wide Repository" {
+class Inside
+}
+folder Port {
+class Next
+Inside --> Next
+}
+@enduml

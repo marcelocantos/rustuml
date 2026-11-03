@@ -1,0 +1,372 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-command-execution-ownership",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "f3b2e9901928560ea5d811270b6398c938a14d3a",
+  "implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "The actual consuming parser is shared by trial and execution; quoted displays and ordered allowmixing are real improvements. However native_container_candidate still requires a package. Root record/struct streams pass the class parser but fall through the legacy score to Sequence, contradicting complete-command factory ownership.",
+    "Java ClassDiagramFactory registers CommandFactoryNoteOnEntity.withBracket. Rust try_note lacks the braced multiline form: braced_note_class exits with a parse error; braced_note_interface enters description fallback and loses ordinary class ownership. Header body blanks are retained as empty strings but Java renders an internal blank as a space; this is not the unresolved outer-body reader contract.",
+    "The unchanged current955 inventory has five new valid parse-status regressions in TIM/theme sources despite zero pass-to-nonpass regressions. Strict class consumption exposes upstream residual comments/!global commands; caller integration must handle them without restoring silent drops."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_record.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_record.svg",
+      "axes": [
+        "new native kind",
+        "root aliased declaration plus relationship"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/bare_native_record.puml",
+      "source_sha256": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+      "java_sha256": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/bare_native_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_struct.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/bare_native_struct.svg",
+      "axes": [
+        "new native kind",
+        "root aliased declaration plus relationship"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/bare_native_struct.puml",
+      "source_sha256": "04a58f849d5bf1302c4e100f4f3d4e1e6951c9905698c998bc7d8de3c3c435b0",
+      "java_sha256": "8cf2d3dfb3217c3059b5bb1032a0591152241206c369960b353bfca844cc27fe",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/bare_native_struct"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/body_left.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/body_left.svg",
+      "axes": [
+        "aligned multiline header with internal blank",
+        "class member command ownership"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/body_left.puml",
+      "source_sha256": "1478cf4114fa960714af5c4902b0926cd287919fa5cc2eaa977dc5efa96a086c",
+      "java_sha256": "e0dba493034018c14601ae434cacc7f7a6d0cdd43a1dad48b7d63208ca88fd49",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/body_left"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/body_right.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/body_right.svg",
+      "axes": [
+        "aligned multiline header with internal blank",
+        "class member command ownership"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/body_right.puml",
+      "source_sha256": "babe2176c6d00d90dca71dd5be8f82ec49146938518502f49459f85a4af22942",
+      "java_sha256": "3fea7b7b4ef28bc97aead397a4b9e620e7586d88178defbc9101b5296c24e967",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/body_right"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_class.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_class.svg",
+      "axes": [
+        "brace-delimited multiline note ownership",
+        "native type and nested scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/braced_note_class.puml",
+      "source_sha256": "be122b28cbcda5ce53d15b5ff4adfc5805b8c2de8fa1614dd70c08744ccf202c",
+      "java_sha256": "ae7f18a11e25d7cdd191b7c2095b09398aedb10c558afbb06eac14728cbcc6af",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/braced_note_class"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_interface.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/braced_note_interface.svg",
+      "axes": [
+        "brace-delimited multiline note ownership",
+        "native type and nested scope"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/braced_note_interface.puml",
+      "source_sha256": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+      "java_sha256": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/braced_note_interface"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/mixed_order_0.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/mixed_order_0.svg",
+      "axes": [
+        "allowmixing versus mix prefix",
+        "native and description declaration order"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/mixed_order_0.puml",
+      "source_sha256": "f1232a91f20281a6704f360f7fa0deecd6fd3890bdc73b2e7962771fb32dd5b5",
+      "java_sha256": "42e0ae9a9305e7b3bed074417451fe47d1d4daa69e8966a05b393ed102bb410d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/mixed_order_0"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/mixed_order_1.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/mixed_order_1.svg",
+      "axes": [
+        "allowmixing versus mix prefix",
+        "native and description declaration order"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/mixed_order_1.puml",
+      "source_sha256": "cecdbc3c5992a9cea9c178ca88423da20d5d8aa99fbfa5f431be115d56497288",
+      "java_sha256": "710fd0087490c89bf2245c81fa7a8c576c35fd308d75ccfcc9a75050f9993beb",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/mixed_order_1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/negative_late_mixing.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/negative_late_mixing.svg",
+      "axes": [
+        "late mixing directive",
+        "nested native/description order"
+      ],
+      "result": "fail",
+      "observed_status": "invalid_reference",
+      "java_valid": false,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/negative_late_mixing.puml",
+      "source_sha256": "8e44920cb9044bf5946fd61ebd81bd21393b672e6eea1579cc40a219552b5c4f",
+      "java_sha256": "a9cf1a281b384128c27b1150cb93ab31a2682b55efb13e9e0b88c812e013a447",
+      "cli_exit": 1,
+      "strict_comparator_exit": 2,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/negative_late_mixing"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_0.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_0.svg",
+      "axes": [
+        "quoted command-looking display",
+        "native type and root topology"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/opaque_root_0.puml",
+      "source_sha256": "3f926b7763b650cc80ed48924c68307ef6773848dcd1199b49f01c01e6d7a1f1",
+      "java_sha256": "f1d4e3bf04c6d75b1781ba6eb2835560437715be49333fdb8e34a1b8ffabeaad",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/opaque_root_0"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_1.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_1.svg",
+      "axes": [
+        "quoted command-looking display",
+        "native type and root topology"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/opaque_root_1.puml",
+      "source_sha256": "9fb1b6fc8c28fb044aa8a5653777f3c10944fb4eff6e68c0d389d79164f9f999",
+      "java_sha256": "9eae6185893a05b57cf61476e83e033db010b8100019f39af6b2a39b3e369458",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/opaque_root_1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_2.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/checker/opaque_root_2.svg",
+      "axes": [
+        "quoted command-looking display",
+        "native type and root topology"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/opaque_root_2.puml",
+      "source_sha256": "a2f4019b83bec5196669d0cedf5b6d61c71eae93ac404807314f8555080c81e2",
+      "java_sha256": "9694d87f129ae5132e1b2692feff6be66b834f265f8f9f26d99124fd4e5fdf8d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/opaque_root_2"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "source_sha256": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+      "java_sha256": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-evaluated-event-stream/checker_comments_and_origins"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "source_sha256": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+      "java_sha256": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-procedure-global-fork-memory/checker_explicit_override_survives_global"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "source_sha256": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+      "java_sha256": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "source_sha256": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+      "java_sha256": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-theme-post-expansion-source-identity/checker_dump_memory"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+      "golden": "test-diagrams/perturbations/class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "source_sha256": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+      "java_sha256": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-theme-post-expansion-source-identity/checker_inner_comment"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+  "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+  "phase_mapping": {
+    "mechanism": "class-command-execution-ownership",
+    "account_path": "docs/parity-reviews/class-command-execution-ownership/account.json",
+    "original_account_commit": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+    "picked_account_commit": "f3b2e9901928560ea5d811270b6398c938a14d3a",
+    "account_history_original": [
+      "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec"
+    ],
+    "account_history_picked": [
+      "f3b2e9901928560ea5d811270b6398c938a14d3a"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "26ea92c5b40932232b359680b0e546abb793d65213799187bfc79ba77c932bf1",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-command-grammar-closure"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "mismatch": 5,
+    "process_error": 6,
+    "pass": 5,
+    "invalid_reference": 1
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

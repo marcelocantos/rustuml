@@ -1,0 +1,284 @@
+[
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/resources/skin/plantuml.skin",
+    "sha256": "efc1747ec10be10c62b7d69bc280196c4f64fac618a5556d15c1fe3858017bbb"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "sha256": "ebb5aa889848a1d0c815c76a415fa0ce96e31d92a2691d82671f8ca17d1d0c7d"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+    "sha256": "1c679f6535e60079fc34f11bc31e9676e203b2ad1297b5313dce67be525527f1"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/posimo/Cluster.java",
+    "sha256": "0945568b7f91fb77908ab23fe55dab0be29b6d4b471f3f0581010b0c20a6e16b"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/skin/VisibilityModifier.java",
+    "sha256": "10bdb00f738a54f6880daa65491a165e0634990d38a98c7229cf4e3374542301"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockBordered.java",
+    "sha256": "aa6a51eaf76fb0e312b76bd1fe696c5fb21622e7a8f8b568a66aa4820942aea7"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+    "sha256": "830f7815e76070c0693460cd76ce91b280775993018f9ac65ddbc44b71f5b478"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolComponent2.java",
+    "sha256": "d01e4b04c16c0773c7fae710211dd3e6d20aa6f95b6afad35f1807ae29c33cff"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolAction.java",
+    "sha256": "0fb337d7d1371c31266ae251be9599f3f9aa62a37cedccb6a7f7d4261bc7df45"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolCloud.java",
+    "sha256": "2ac007f0173b92c09d23b479a6c338528521945f4b7c586c3ce738c2a117fe14"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java",
+    "sha256": "67d8545288215f51cb12fcf64e939e059e418057b9ee671f85bda812f24c7c7f"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolProcess.java",
+    "sha256": "56da5b0a5fa328f0fcd94c311178ad98c2ec1a75e7aa16a9381ea5593090bc89"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolQueue.java",
+    "sha256": "04f5a9252f98391cae0fdea525d1e67bf5d839c177318eaa8cdd973b1953fbe6"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolBoundary.java",
+    "sha256": "2f8c47287defffea98bf7758663a2d12404d4bb47062939643df48ccf0e1b559"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java",
+    "sha256": "7ef9718ded7d41323a4ed2903d980448d6514f32033b380472f84246203d627c"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolNode.java",
+    "sha256": "a0ba0e207535ea16eedeb40990b87d64c15a9fe9f1b738cc9f79e3c2431df6d2"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sha256": "b6866edc25e6a35003067202a9167b24435387fdc7ce3f2f8759583fae985bfa"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java",
+    "sha256": "ff895f08a88a6cea25ad88b8b2cced8b25431b47cd8fce5c62693cea4f240a68"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/SvekNode.java",
+    "sha256": "56af4d9d49e49581ce55af801515f5345c08784884b597d6e60f91bf154b40ac"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/DecorateEntityImage.java",
+    "sha256": "0091c3ecaaa77706d498bd6b364d8a0115f6253a99141f1775f1fbfdf94199ec"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+    "sha256": "a9c9fca14beac8635873d266a4b1c9bf301c936ca8e3873cb49525fc765818bb"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClassHeader.java",
+    "sha256": "c19976f9876a674ab487009016683a108a44dc4a1d5ae44d6228d3fe5f8b3971"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "sha256": "2f000b9eca5b99f3f492eda8b7e49835e447041327da49be78a2f0bdf51e9d6e"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "sha256": "e1d04c9264cd4a0215581f30560917ff44aad2d70ecd7fe6c639dd8f7eec41d3"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java",
+    "sha256": "8208a6a61e1b3b57828a962578cac84a23f98826f5dd84e63bc443444714ab26"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+    "sha256": "042dcdc675cf02aea9e8eb1d357a1d17ab4d4faf3681285c3467adf4071021b7"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sha256": "c479ef28db5aebca79293c01be674e88d4bd40a3da70eb1cf3aa45f0795d6178"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "sha256": "934c994d396482815a66aa7c7e311c9051c924989004bc0af1a2e8723c87f73c"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java",
+    "sha256": "2c68f3e3868b30a33e0ff5f7463b3536ed46854652210308d8797429d636f992"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/svek/extremity/ExtremityParenthesis.java",
+    "sha256": "edee9582a891c9998c9590d27a847b20b760918a58c5ad705838751082c82d3e"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+    "sha256": "742fc602d073e06b494e24b4d932db4cfded4c6ae98bf463648854e7a2c0a19d"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+    "sha256": "19ed17c5ec56c21ccf2b0042bdf9b9029995b53ad691bedf0d7d9a599ed6950a"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java",
+    "sha256": "3472d6731ae664de46a523240f5914c21c7cc8bf5fc10adbc1cb8fdfc540d699"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java",
+    "sha256": "fc54ae0fee21d32b68b2a3c920427d3e04066769eeb7db80f66ffd819d3147b3"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "sha256": "652b36312263c9fb8998b9f9028dc684446c3e5673b3f4bed4a907cc99322252"
+  },
+  {
+    "repository": "Java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "path": "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "sha256": "91758f0b242ce2dbe44e65819743a2b46ec85980d268def966bb60a0f1dbd69a"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-parser/src/diagram/class.rs",
+    "sha256": "70ed311f87345b66ed798e39d254698dd16d8a491385eaac1554c18cc4ca2cfb"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-parser/src/parse/class.rs",
+    "sha256": "666f921e538660dd403f470f18c056000d32517aa9923a790c48c8345788dbae"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-parser/src/parse/component.rs",
+    "sha256": "7175acdecd07ba636e08535800017ae31c5af18f4d2dee382151a96c7af186ad"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-parser/src/parse/mod.rs",
+    "sha256": "2b343e3c92f0246073fa72611c473843aea8b7fc56f8384d3085a9ca540af743"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-render/src/ascii_class.rs",
+    "sha256": "2b5e77997c0066d5eebabba44324eccd5f6aa6f05f00c0984fabb10fde1ab866"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-render/src/class.rs",
+    "sha256": "491aafd9b9e7749d4d3f0ebb455a76eae4cbbd72891d58960430cbcfcc56a8ac"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-render/src/component.rs",
+    "sha256": "44c2d4cc0967bf61e8b2bff3f7b50c8c6a5c9243f7a65c86298cf084c2af7382"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-layout/src/graph.rs",
+    "sha256": "bf3506372896c2fc1cf80c4d0860baab96607d205e2fb93f925aa40d616cbd1c"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-oracle/src/compare.rs",
+    "sha256": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-oracle/tests/harness_guards.rs",
+    "sha256": "83a17e7b7e412b7e0c544a1558da7ee24e4a7dc8e14537ca4fd4b418f8fe7a1e"
+  },
+  {
+    "repository": "Rust",
+    "revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+    "path": "crates/rustuml-oracle/tests/parity_perturbations.rs",
+    "sha256": "c634eae105159e9b20fd140c6400ed6c645556d6636121b915136c513532b236"
+  }
+]

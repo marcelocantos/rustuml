@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean
+class "Custom spot" as First <<(Z,#123456) marker>>
+!theme minty
+class Second
+First --> Second
+@enduml

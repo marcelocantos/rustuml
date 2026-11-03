@@ -1,0 +1,9 @@
+@startuml
+node Scope {
+interface Item
+note right of Item {
+component Shadow
+class Phantom
+}
+}
+@enduml

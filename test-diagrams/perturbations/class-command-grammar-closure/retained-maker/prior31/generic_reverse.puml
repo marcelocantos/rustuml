@@ -1,0 +1,7 @@
+@startuml
+folder "Data Types" {
+class Gauge as "Gauge<T>"
+class Result<K,V>
+Gauge --> Result
+}
+@enduml

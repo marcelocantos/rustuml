@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+COMPONENT Bridge
+INTERFACE "A much wider interface label" as Port
+Bridge ..> Port
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam componentStyle uml1
+allowmixing
+class Local
+boundary "Remote\nService" as Remote <<gateway>> #LightBlue
+Local --> Remote
+@enduml
