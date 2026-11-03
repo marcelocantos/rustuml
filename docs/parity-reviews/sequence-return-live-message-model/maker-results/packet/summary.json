@@ -1,0 +1,317 @@
+{
+  "status": "NOT ACCEPTED: maker packet with preserved failures; independent checker and dependency repairs required",
+  "base_revision": "b15a5fedd84b42a913a4f1d2cdfd7747a0c4b094",
+  "commits": {
+    "render-registry-unwind-scope": {
+      "account": "c6ba01b4453825dd6ec85f849964716ad5fcd961",
+      "implementation": "43f6e7b82c52c6b4ce989926e33f84eec84bcc38"
+    },
+    "sequence-recursive-group-constraints": {
+      "account": "9ef2acc9c72e614bfe4c8ab06147aab8fa80c45b",
+      "implementation": "078d2cb982ab764172ed89a0fb4ecfb505197763"
+    },
+    "sequence-self-return-message-model": {
+      "account": "5adc80477ee0fac05ceb42ad0f032237425b97c9",
+      "implementation": "bd8b0934d2630a730e077a320331a6e29f3b4a06"
+    },
+    "sequence-return-live-message-model": {
+      "account": "40919de22b7fb5f408c5e6abbd93414923f365dc",
+      "implementation": "29fd2932f20fa44d27299c035da5f5ba4fc0b7a6"
+    }
+  },
+  "production_files": [
+    "crates/rustuml-render/src/filter_registry.rs",
+    "crates/rustuml-render/src/sequence.rs",
+    "crates/rustuml-parser/src/diagram/sequence.rs"
+  ],
+  "main_tiers": {
+    "product": {
+      "before_pass": 11181,
+      "after_pass": 11181,
+      "eligible": 11251
+    },
+    "assisted": {
+      "before_pass": 10497,
+      "after_pass": 10497,
+      "eligible": 11251,
+      "failed": 754,
+      "skipped": 1299,
+      "total": 12550
+    },
+    "sequence_product_and_assisted": {
+      "before_pass": 1411,
+      "after_pass": 1411,
+      "eligible": 1411
+    },
+    "suite_exit": 101,
+    "note": "Frozen aggregate ratchet is not rewritten; existing failures remain. Main source-only sequence family remains fully passing."
+  },
+  "isolated_874": {
+    "product": {
+      "before": {
+        "pass": 366,
+        "mismatch": 499,
+        "invalid_java": 7,
+        "panic": 2
+      },
+      "after": {
+        "pass": 382,
+        "mismatch": 485,
+        "invalid_java": 7,
+        "panic": 0
+      },
+      "recoveries": [
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_0.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_1.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_incoming.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_outgoing.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_inside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_wide.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_wide.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_wide.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_1.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+        "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+        "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml"
+      ],
+      "regressions": []
+    },
+    "assisted": {
+      "before": {
+        "pass": 326,
+        "mismatch": 539,
+        "invalid_java": 7,
+        "panic": 2
+      },
+      "after": {
+        "pass": 342,
+        "mismatch": 525,
+        "invalid_java": 7,
+        "panic": 0
+      },
+      "recoveries": [
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_0.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_1.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_incoming.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_outgoing.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_inside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_wide.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_wide.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_narrow.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_wide.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_1.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+        "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+        "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml"
+      ],
+      "regressions": []
+    }
+  },
+  "rejection_41": {
+    "before": {
+      "pass": 17,
+      "mismatch": 22,
+      "invalid_java": 0,
+      "panic": 2
+    },
+    "after": {
+      "pass": 31,
+      "mismatch": 10,
+      "invalid_java": 0,
+      "panic": 0
+    },
+    "cli_equivalence": 41
+  },
+  "builtin_perturbations": {
+    "cases": 874,
+    "matched": 382,
+    "mismatch": 485,
+    "invalid_java": 7,
+    "renderer_panics": 0,
+    "registry_cascades": 0,
+    "negative_missing_empty_corpus_test": "pass",
+    "suite_exit": 101
+  },
+  "fresh_cases": {
+    "groups": {
+      "count": 31,
+      "product": {
+        "pass": 28,
+        "mismatch": 3,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "assisted": {
+        "pass": 28,
+        "mismatch": 3,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "cli_equal": 31,
+      "failed_inputs": [
+        "reservation_24.puml",
+        "reservation_25.puml",
+        "reservation_26.puml"
+      ],
+      "baseline": {
+        "pass": 24,
+        "mismatch": 7,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "regressions": []
+    },
+    "self": {
+      "count": 27,
+      "product": {
+        "pass": 24,
+        "mismatch": 3,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "assisted": {
+        "pass": 24,
+        "mismatch": 3,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "cli_equal": 27,
+      "failed_inputs": [
+        "delegated_25.puml",
+        "later_page.puml",
+        "single_21.puml"
+      ],
+      "baseline": {
+        "pass": 0,
+        "mismatch": 13,
+        "invalid_java": 0,
+        "panic": 14
+      },
+      "regressions": []
+    },
+    "returns": {
+      "count": 20,
+      "product": {
+        "pass": 14,
+        "mismatch": 6,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "assisted": {
+        "pass": 14,
+        "mismatch": 6,
+        "invalid_java": 0,
+        "panic": 0
+      },
+      "cli_equal": 20,
+      "failed_inputs": [
+        "return_1.puml",
+        "return_10.puml",
+        "return_13.puml",
+        "return_16.puml",
+        "return_4.puml",
+        "return_7.puml"
+      ],
+      "baseline": {
+        "pass": 2,
+        "mismatch": 12,
+        "invalid_java": 0,
+        "panic": 6
+      },
+      "regressions": []
+    }
+  },
+  "units": {
+    "parser_pass": 561,
+    "renderer_pass": 780,
+    "failed": 0,
+    "registry_pass": 11,
+    "focused_sequence_tests_included": true
+  },
+  "guards": {
+    "pass": 4,
+    "fail": 2,
+    "failing_tests": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ],
+    "evidence_diagnostic_count": 648,
+    "new_diagnostics": "Four missing independent checker records for the new accounts. No own-file decimal ratchet increase. No allow-list/baseline/comparator edits."
+  },
+  "formatting": {
+    "touched_files": "pass",
+    "workspace": "fails on pre-existing class parser/render formatting"
+  },
+  "clippy": "fails on pre-existing dead function parse/component.rs:72, looks_like_description_bracket_command",
+  "new_shared_perturbation_fixtures": 0,
+  "fixture_note": "Ownership forbids editing shared fixtures. All 78 fresh valid Java pairs are preserved under the three new mechanism maker-results/inputs directories and executed with the unchanged comparator and real CLI. They are not a passing standing gate; root/checker owns their future registration.",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml --bin rustuml",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml-oracle --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --no-fail-fast -- --nocapture",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-render -p rustuml-parser --lib --no-fail-fast -- --nocapture",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test parity_perturbations --test harness_guards --no-fail-fast -- --nocapture",
+    "uv run --no-project docs/parity-reviews/sequence-grouped-note-origin/checker.py measure /tmp/rustuml-seq-recovery/packet-isolated /tmp/rustuml-seq-recovery/return-bin",
+    "uv run --no-project python /tmp/rustuml-seq-recovery/fresh_groups.py",
+    "uv run --no-project python /tmp/rustuml-seq-recovery/fresh_self.py",
+    "uv run --no-project python /tmp/rustuml-seq-recovery/fresh_returns.py",
+    "uv run --no-project python /tmp/rustuml-seq-recovery/measure_fresh.py FIXTURE_DIR OUTPUT_DIR /tmp/rustuml-seq-recovery/return-bin",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 cargo clippy --release --workspace --all-targets -- -D warnings",
+    "cargo fmt --all -- --check",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/filter_registry.rs crates/rustuml-parser/src/diagram/sequence.rs"
+  ],
+  "logs": {
+    "/tmp/rustuml-seq-recovery/return-main.log": {
+      "sha256": "1ed68fd68b5edd192a5fc7c991872c51453b810045520fb0fedaf5605f3edb9b",
+      "bytes": 6368
+    },
+    "/tmp/rustuml-seq-recovery/packet-libs.log": {
+      "sha256": "42ba5a735daadd324510742e83adf6cb362f3f3106df8eb0e640384774204d55",
+      "bytes": 94649
+    },
+    "/tmp/rustuml-seq-recovery/packet-builtins.log": {
+      "sha256": "f4cc39a3e8e0180055be0c4c2b4cbf560f5c3c679b8f55fb46ef7d8200a8e41f",
+      "bytes": 2824109
+    },
+    "/tmp/rustuml-seq-recovery/packet-isolated.log": {
+      "sha256": "96965167d76539cf9a5b74ce990f010a23f87e19fb3bc2a86a3f72e78e232f08",
+      "bytes": 250
+    },
+    "/tmp/rustuml-seq-recovery/packet-clippy.log": {
+      "sha256": "37ad29eb4df95b5884df4304c383f7c21201f65c227f0bc28962ed750b71c8ff",
+      "bytes": 4495
+    },
+    "/tmp/rustuml-seq-recovery/packet-fmt.log": {
+      "sha256": "636e0b21f0925c73bf592a2332fac46bc84d954948fa11548288e0a98980a74b",
+      "bytes": 5931
+    },
+    "/tmp/rustuml-seq-recovery/packet-touched-fmt.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "/tmp/rustuml-seq-recovery/group-fresh-final.log": {
+      "sha256": "715a643991d76030e1d52c1d54f36b1e1089f3270c0348a02a56bb221d68f817",
+      "bytes": 1636
+    },
+    "/tmp/rustuml-seq-recovery/self-fresh-returns.log": {
+      "sha256": "a9276a0a25b75735a7668b9198ebfaacc32ab4f2c83fde54fbeaac792e098b55",
+      "bytes": 1625
+    },
+    "/tmp/rustuml-seq-recovery/return-fresh-current.log": {
+      "sha256": "16d33d3a2229157b43b76e9ce18694c511d7551a83ba092bd4fe57e03d2336da",
+      "bytes": 3172
+    },
+    "/tmp/rustuml-seq-recovery/registry-after.log": {
+      "sha256": "f24a302567e5e520417513631ec1e4c6d8ebe7ab19eac34a9bec5212c05569ee",
+      "bytes": 2506
+    }
+  },
+  "dependencies": "dependencies.json contains all ten surviving rejection-fixture failures and all twelve fresh failures; none is waived."
+}
