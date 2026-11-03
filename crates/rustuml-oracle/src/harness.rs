@@ -12,7 +12,7 @@
 
 use std::path::{Path, PathBuf};
 
-/// Root of the golden corpus (git submodule; may be absent).
+/// Root of the required golden corpus (git submodule).
 pub fn golden_dir() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .parent()
@@ -98,18 +98,30 @@ pub fn is_ditaa(source: &str) -> bool {
 pub const GOLDEN_DEBUG: &str = "date=1774210426000,tz=AEDT+1100";
 
 /// All .puml files under `root` that have a sibling .svg golden, sorted.
+/// Missing, unreadable, or empty corpora are setup failures, never passing suites.
 pub fn collect_golden_pairs(root: &Path) -> Vec<PathBuf> {
     let mut pairs = Vec::new();
     collect_recursive(root, &mut pairs);
     pairs.sort();
+    assert!(
+        !pairs.is_empty(),
+        "required golden corpus {} contains no pairs; run: git submodule update --init test-diagrams/golden",
+        root.display()
+    );
     pairs
 }
 
 fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
-    let Ok(entries) = std::fs::read_dir(dir) else {
-        return;
-    };
-    for entry in entries.flatten() {
+    let entries = std::fs::read_dir(dir).unwrap_or_else(|error| {
+        panic!(
+            "cannot read required golden corpus {}: {error}; run: git submodule update --init test-diagrams/golden",
+            dir.display()
+        )
+    });
+    for entry in entries {
+        let entry = entry.unwrap_or_else(|error| {
+            panic!("cannot read golden entry in {}: {error}", dir.display())
+        });
         let path = entry.path();
         if path.is_dir() {
             collect_recursive(&path, pairs);
@@ -118,5 +130,101 @@ fn collect_recursive(dir: &Path, pairs: &mut Vec<PathBuf>) {
         {
             pairs.push(path);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[cfg(unix)]
+    #[test]
+    fn make_gate_preserves_failure_and_runs_remaining_checks() {
+        use std::os::unix::fs::PermissionsExt;
+        use std::process::Command;
+
+        let root = std::env::temp_dir().join(format!(
+            "rustuml-gate-negative-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        std::fs::create_dir(&root).unwrap();
+        let cargo = root.join("cargo");
+        // Reproduce the original masking trigger: print a matching result line
+        // but exit unsuccessfully. The other checks succeed independently.
+        std::fs::write(
+            &cargo,
+            "#!/bin/sh\nprintf 'mock cargo %s\\n' \"$*\"\ncase \" $* \" in\n  *' --lib '*) echo 'test result: FAILED'; exit 101;;\nesac\nexit 0\n",
+        )
+        .unwrap();
+        std::fs::set_permissions(&cargo, std::fs::Permissions::from_mode(0o755)).unwrap();
+        let inherited = std::env::var_os("PATH").unwrap_or_default();
+        let paths = std::iter::once(root.clone()).chain(std::env::split_paths(&inherited));
+        let path = std::env::join_paths(paths).unwrap();
+        let repo = golden_dir()
+            .parent()
+            .unwrap()
+            .parent()
+            .unwrap()
+            .to_path_buf();
+        let run = |target| {
+            Command::new("make")
+                .arg(target)
+                .current_dir(&repo)
+                .env("PATH", &path)
+                .env_remove("MAKEFLAGS")
+                .env_remove("MFLAGS")
+                .env_remove("GOLDEN_FILTER")
+                .env_remove("HARNESS_WRITE_BASELINES")
+                .output()
+                .expect("run make to exercise exit propagation")
+        };
+        let unit = run("test");
+        let gate = run("gate");
+        std::fs::remove_dir_all(&root).unwrap();
+        let unit_stdout = String::from_utf8_lossy(&unit.stdout);
+        assert!(!unit.status.success(), "make test masked a failing command");
+        assert!(unit_stdout.contains("test result: FAILED"));
+        assert!(!unit_stdout.contains("✓ tests"));
+        assert!(!gate.status.success(), "make gate masked a failing check");
+        let gate_stdout = String::from_utf8_lossy(&gate.stdout);
+        for expected in [
+            "mock cargo fmt",
+            "mock cargo clippy",
+            "mock cargo test --workspace --lib",
+            "mock cargo test --workspace --release --no-fail-fast",
+        ] {
+            assert!(
+                gate_stdout.contains(expected),
+                "gate omitted {expected}: {gate_stdout}"
+            );
+        }
+    }
+
+    #[test]
+    fn required_golden_corpus_fails_when_missing_or_empty() {
+        let root = std::env::temp_dir().join(format!(
+            "rustuml-corpus-negative-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        assert!(!root.exists());
+        let missing = std::panic::catch_unwind(|| collect_golden_pairs(&root));
+        std::fs::create_dir(&root).unwrap();
+        let empty = std::panic::catch_unwind(|| collect_golden_pairs(&root));
+        // Control: the same collector accepts a populated corpus.
+        std::fs::write(root.join("control.puml"), "@startuml\nA -> B\n@enduml\n").unwrap();
+        std::fs::write(root.join("control.svg"), "<svg/>").unwrap();
+        let pairs = collect_golden_pairs(&root);
+        std::fs::remove_dir_all(&root).unwrap();
+        assert!(missing.is_err(), "missing corpus must fail");
+        assert!(empty.is_err(), "empty corpus must fail");
+        assert_eq!(pairs.len(), 1);
     }
 }

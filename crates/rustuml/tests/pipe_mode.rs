@@ -234,12 +234,35 @@ fn help_agent_discloses_no_oracle_product_metric() {
     );
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(
-        stdout.contains("Product truth is the no-oracle tier"),
+        stdout.contains("Product truth is the no-oracle product tier"),
         "--help-agent must name no-oracle as the product metric"
     );
+    let baseline = include_str!("../../../test-diagrams/no_oracle_baseline.txt");
+    let mut passed = 0_usize;
+    let mut eligible = 0_usize;
+    for line in baseline.lines().map(str::trim) {
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        let fields: Vec<_> = line.split_whitespace().collect();
+        assert_eq!(fields.len(), 3, "malformed baseline line: {line}");
+        passed += fields[1].parse::<usize>().expect("baseline pass count");
+        eligible += fields[2].parse::<usize>().expect("baseline eligible count");
+    }
+    assert!(eligible > 0 && passed <= eligible);
+    // Ignore grouping commas, but check the full ratio and percentage against
+    // the checked-in ratchet rather than another hand-maintained count.
+    let expected = format!(
+        "{passed}/{eligible} eligible SVG goldens pass ({:.1}%)",
+        passed as f64 / eligible as f64 * 100.0
+    );
     assert!(
-        stdout.contains("5,005/11,251 eligible SVG goldens pass"),
-        "--help-agent must disclose the current no-oracle baseline"
+        stdout.replace(',', "").contains(&expected),
+        "--help-agent must disclose the checked-in no-oracle baseline: {expected}"
+    );
+    assert!(
+        stdout.contains("The strict tier is oracle-assisted"),
+        "--help-agent must distinguish assisted parity from product parity"
     );
     assert!(
         stdout.contains("1,199 Java PlantUML error-page goldens are skips"),

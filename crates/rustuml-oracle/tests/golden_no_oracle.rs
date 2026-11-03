@@ -110,15 +110,7 @@ fn golden_no_oracle() {
     unsafe { std::env::set_var("RUSTUML_DEBUG", GOLDEN_DEBUG) };
 
     let root = golden_dir();
-    if !root.exists() || !root.join("sequence").exists() {
-        eprintln!("golden submodule not populated — run: git submodule update --init");
-        return;
-    }
     let pairs = collect_golden_pairs(&root);
-    if pairs.is_empty() {
-        eprintln!("no golden pairs found");
-        return;
-    }
     eprintln!("running {} golden pairs (no-oracle tier)...", pairs.len());
 
     std::panic::set_hook(Box::new(|_| {}));

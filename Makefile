@@ -3,9 +3,13 @@
 # Each recipe runs an independent check and exits non-zero on
 # violation. Stdout is relayed to the agent verbatim.
 
-.PHONY: bullseye fmt clippy test check-dirty formula-guard
+.PHONY: bullseye gate fmt clippy test test-parity check-dirty formula-guard
 
 bullseye: fmt clippy test check-dirty formula-guard
+
+# Run every independent gate even after a failure; make preserves failure status.
+gate:
+	@$(MAKE) --keep-going fmt clippy test test-parity
 
 fmt:
 	@cargo fmt --check && echo "✓ fmt"
@@ -14,7 +18,16 @@ clippy:
 	@cargo clippy --workspace --quiet -- -D warnings && echo "✓ clippy"
 
 test:
-	@cargo test --workspace --lib --quiet 2>&1 | grep "test result" && echo "✓ tests"
+	@cargo test --workspace --lib --quiet --no-fail-fast && echo "✓ tests"
+
+# Full corpus required. No filters or baseline writes are permitted in this gate.
+# --no-fail-fast runs the remaining binaries when a parity/evidence suite fails.
+test-parity:
+	@test -z "$$GOLDEN_FILTER" && test -z "$$HARNESS_WRITE_BASELINES" || \
+		{ echo "test-parity requires GOLDEN_FILTER and HARNESS_WRITE_BASELINES unset"; exit 1; }
+	@cargo test --workspace --release --no-fail-fast \
+		--test golden_no_oracle --test golden_pairs --test harness_guards \
+		--test doc_claims --test parity_perturbations --test pipe_mode -- --nocapture
 
 check-dirty:
 	@dirty=$$(git status --porcelain | grep -vE 'bullseye\.yaml$$' || true); \

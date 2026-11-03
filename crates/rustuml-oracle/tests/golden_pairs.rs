@@ -179,16 +179,7 @@ fn golden_pairs() {
     unsafe { std::env::set_var("RUSTUML_DEBUG", GOLDEN_DEBUG) };
 
     let root = golden_dir();
-    if !root.exists() || !root.join("sequence").exists() {
-        eprintln!("golden submodule not populated — run: git submodule update --init");
-        return;
-    }
-
     let mut pairs = collect_golden_pairs(&root);
-    if pairs.is_empty() {
-        eprintln!("no golden pairs found");
-        return;
-    }
     if let Ok(filter) = std::env::var("GOLDEN_FILTER")
         && !filter.is_empty()
     {

@@ -17,10 +17,19 @@ fn repo_root() -> PathBuf {
 }
 
 fn collect_sources(dir: &Path, out: &mut Vec<PathBuf>) {
-    let Ok(entries) = std::fs::read_dir(dir) else {
-        return;
-    };
-    for entry in entries.flatten() {
+    let entries = std::fs::read_dir(dir).unwrap_or_else(|error| {
+        panic!(
+            "cannot read required perturbation corpus {}: {error}",
+            dir.display()
+        )
+    });
+    for entry in entries {
+        let entry = entry.unwrap_or_else(|error| {
+            panic!(
+                "cannot read perturbation entry in {}: {error}",
+                dir.display()
+            )
+        });
         let path = entry.path();
         if path.is_dir() {
             collect_sources(&path, out);
@@ -33,12 +42,44 @@ fn collect_sources(dir: &Path, out: &mut Vec<PathBuf>) {
     }
 }
 
+fn required_sources(root: &Path) -> Vec<PathBuf> {
+    let mut sources = Vec::new();
+    collect_sources(root, &mut sources);
+    sources.sort();
+    assert!(
+        !sources.is_empty(),
+        "required perturbation corpus {} contains no sources",
+        root.display()
+    );
+    sources
+}
+
+#[test]
+fn required_perturbation_corpus_fails_when_missing_or_empty() {
+    let root = std::env::temp_dir().join(format!(
+        "rustuml-perturbations-negative-{}-{}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    ));
+    assert!(!root.exists());
+    let missing = std::panic::catch_unwind(|| required_sources(&root));
+    std::fs::create_dir(&root).unwrap();
+    let empty = std::panic::catch_unwind(|| required_sources(&root));
+    std::fs::write(root.join("control.puml"), "@startuml\nA -> B\n@enduml\n").unwrap();
+    let sources = required_sources(&root);
+    std::fs::remove_dir_all(&root).unwrap();
+    assert!(missing.is_err(), "missing corpus must fail");
+    assert!(empty.is_err(), "empty corpus must fail");
+    assert_eq!(sources.len(), 1);
+}
+
 #[test]
 fn held_out_perturbations_match_java_without_oracle_layout() {
     let root = repo_root().join("test-diagrams/perturbations");
-    let mut sources = Vec::new();
-    collect_sources(&root, &mut sources);
-    sources.sort();
+    let sources = required_sources(&root);
 
     let mut failures = Vec::new();
     for source_path in sources {
