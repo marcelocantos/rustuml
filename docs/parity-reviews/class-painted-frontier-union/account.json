@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "92f3bdc9e90fc24b14d6af8563c6a7bd78016194",
+  "mechanism": "class-painted-frontier-union",
+  "java_locations": [
+    "svek/SvekResult#calculateDimension",
+    "klimt/drawing/LimitFinder#drawU",
+    "svek/image/EntityImageDescription#drawU",
+    "svek/image/EntityImageNote#drawU",
+    "svek/Opale#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#svek_layout_x_bias,svek_layout_y_bias,entity_frontier_min",
+    "crates/rustuml-render/src/component.rs#component_svek_translation"
+  ],
+  "invariant": "Final origin is six minus the union of painted primitive minima, not a comparison of raw layout boxes. Hidden shield cells do not paint, visible interface text does.",
+  "causal_divergence": "Class rendering applies a note-versus-raw-box minus-one correction before its final frontier traversal. The latter clamps package shifts and seeds x minimum at zero. Component frontier traverses the shielded circle but omits the visible interface text, producing negative text x in TB. UML1 tabs protrude beyond the ordinary component rectangle.",
+  "planned_change": "Remove the independent note minimum adjustment and compute final translation from existing entity/package/spline frontiers with no phantom zero seed. Include visible interface text and selected UML1 tab primitive in minima. Keep two-decimal solver serialization and existing frontier shape implementations, without coordinate tuning.",
+  "perturbation_axes": [
+    "root notes versus nested cloud/rectangle groups",
+    "TB/LR wide and narrow interface labels, component styles and endpoint order"
+  ]
+}
