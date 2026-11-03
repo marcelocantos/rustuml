@@ -1,0 +1,384 @@
+{
+  "role": "maker measurements; all previous rejections retained; no acceptance claim",
+  "starting_revision": "d2d571de0ca551cfd93223d577539eff7c366afe",
+  "candidate_revision": "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+  "account_commit": "67e53172fa470cdf2cec61c5aa0323dad11ba224",
+  "prerequisites": {
+    "evidence_original": "5fc923d08d817d415000d6dc14bd66657f894c65",
+    "evidence_local": "fcf4a3f6d18291093df7750c25156eb335b8cd5c",
+    "registry_account_original": "c6ba01b4453825dd6ec85f849964716ad5fcd961",
+    "registry_account_local": "17bea64df19426c836e9d538260ee5f24d47aa60",
+    "registry_original": "43f6e7b82c52c6b4ce989926e33f84eec84bcc38",
+    "registry_local": "5f1035ace5c1fa38df91b2cf44c20e1e7edc79f0",
+    "note": "Registry cleanup independently accepted by parent; not a TIM mechanism claim."
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/rustuml-tim-repair-target",
+    "CARGO_BUILD_JOBS": "4",
+    "RAYON_NUM_THREADS": "4",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563",
+    "java_canonical_timezone": "GMT+11:00"
+  },
+  "binaries": {
+    "before": {
+      "sha256": "cadaf758c694524466e555bcecf943b5ae974a7fbd7da5050a09af5903e2946f",
+      "revision": "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+    },
+    "after": {
+      "sha256": "50e3c0385cb298c81366db28800289b42ed485498b91e6798ede69f534465988",
+      "revision": "intermediate uncommitted diagnostic snapshot"
+    },
+    "fixed": {
+      "sha256": "2d0ab7d57441d5804736d263501d8f0c9d4013d12a09a2bed83431c024bef1ff",
+      "revision": "intermediate uncommitted diagnostic snapshot"
+    },
+    "candidate": {
+      "sha256": "90e5e5f040b75e7993cd21e82cbe623f62a26a8500af51e4d697d1777d9f5d13",
+      "revision": "c1730d656949364dd12f0fa3bcc69b1dc04b1941"
+    }
+  },
+  "measurements": {
+    "new": {
+      "total": 16,
+      "svg_pass": 14,
+      "svg_mismatch": 0,
+      "java_error_svg": 2,
+      "unparseable_java_reference": 0,
+      "cli_error": 0,
+      "source_equal": 14
+    },
+    "checker": {
+      "total": 42,
+      "svg_pass": 31,
+      "svg_mismatch": 9,
+      "java_error_svg": 1,
+      "unparseable_java_reference": 1,
+      "cli_error": 0,
+      "source_equal": 40
+    },
+    "prior": {
+      "total": 22,
+      "svg_pass": 19,
+      "svg_mismatch": 1,
+      "java_error_svg": 2,
+      "unparseable_java_reference": 0,
+      "cli_error": 0,
+      "source_equal": 20
+    },
+    "preserved": {
+      "total": 33,
+      "svg_pass": 28,
+      "svg_mismatch": 4,
+      "java_error_svg": 1,
+      "unparseable_java_reference": 0,
+      "cli_error": 0,
+      "source_equal": 33
+    },
+    "isolated": {
+      "total": 949,
+      "svg_pass": 425,
+      "svg_mismatch": 512,
+      "java_error_svg": 9,
+      "unparseable_java_reference": 1,
+      "cli_error": 2,
+      "source_equal": null,
+      "source_note": "Not measured in this SVG-only replay; separate focused source matrices are recorded above."
+    },
+    "prepared907": {
+      "total": 907,
+      "svg_pass": 394,
+      "svg_mismatch": 503,
+      "java_error_svg": 8,
+      "unparseable_java_reference": 0,
+      "cli_error": 2,
+      "source_equal": null,
+      "source_note": "Not measured in this SVG-only replay; separate focused source matrices are recorded above."
+    },
+    "before949": {
+      "total": 949,
+      "svg_pass": 418,
+      "svg_mismatch": 519,
+      "java_error_svg": 9,
+      "unparseable_java_reference": 1,
+      "cli_error": 2,
+      "source_equal": null,
+      "source_note": "Not measured in this SVG-only replay; separate focused source matrices are recorded above."
+    }
+  },
+  "isolated_changes": {
+    "gains": 8,
+    "regressions": 1,
+    "new_cli_errors": 0,
+    "details": "isolated-changes.json"
+  },
+  "denominator_note": "Prepared907 + checker42 = 949. Parent955 additionally contains six registry cleanup controls absent here. Invalid references are not valid-positive evidence.",
+  "tests": {
+    "parser": {
+      "pass": 575,
+      "fail": 1,
+      "failure": "Unchanged parse::tests::leading_blank_lines_do_not_shift_locations_but_internal_blanks_do; reader decision pending T14.6.3"
+    },
+    "cli_pipe": {
+      "pass": 13,
+      "fail": 0
+    },
+    "product": {
+      "pass": 11179,
+      "eligible": 11251,
+      "exit": 101,
+      "change_from_start": 0
+    },
+    "assisted": {
+      "pass": 10497,
+      "fail": 754,
+      "skip": 1299,
+      "exit": 101,
+      "change_from_start": 0
+    },
+    "guards": {
+      "pass": 4,
+      "fail": 2,
+      "failures": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ]
+    },
+    "builtin949": {
+      "matches": 424,
+      "failures": 525,
+      "real_panics": 2,
+      "registry_cascade": false,
+      "note": "One fewer match than isolated root cwd: original checker_include_theme, T14.6.2 path dependence; not geometry."
+    },
+    "format": [
+      {
+        "command": [
+          "cargo",
+          "fmt",
+          "--all",
+          "--check"
+        ],
+        "exit": 1
+      },
+      {
+        "command": [
+          "rustfmt",
+          "--edition",
+          "2024",
+          "--check",
+          "crates/rustuml-parser/src/preprocess/mod.rs",
+          "crates/rustuml-parser/src/preprocess/debug.rs",
+          "crates/rustuml-parser/src/preprocess/date_format.rs"
+        ],
+        "exit": 0
+      }
+    ],
+    "clippy": {
+      "exit": 101,
+      "failure": "Only pre-existing parse/component.rs:72 unused looks_like_description_bracket_command; new lints fixed."
+    }
+  },
+  "date_supplemental": {
+    "host_zone_controls": [
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+        "zone": "Australia/Melbourne",
+        "environment": {
+          "TZ": "Australia/Melbourne",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+        "zone": "Australia/Melbourne",
+        "environment": {
+          "TZ": "Australia/Melbourne",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+        "zone": "Australia/Melbourne",
+        "environment": {
+          "TZ": "Australia/Melbourne",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+        "zone": "Australia/Melbourne",
+        "environment": {
+          "TZ": "Australia/Melbourne",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+        "zone": "Asia/Kathmandu",
+        "environment": {
+          "TZ": "Asia/Kathmandu",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+        "zone": "Asia/Kathmandu",
+        "environment": {
+          "TZ": "Asia/Kathmandu",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+        "zone": "Asia/Kathmandu",
+        "environment": {
+          "TZ": "Asia/Kathmandu",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+        "zone": "Asia/Kathmandu",
+        "environment": {
+          "TZ": "Asia/Kathmandu",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+        "zone": "UTC",
+        "environment": {
+          "TZ": "UTC",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+        "zone": "UTC",
+        "environment": {
+          "TZ": "UTC",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+        "zone": "UTC",
+        "environment": {
+          "TZ": "UTC",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+        "zone": "UTC",
+        "environment": {
+          "TZ": "UTC",
+          "RUSTUML_DEBUG": "date=1774210426000"
+        },
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      }
+    ],
+    "fixed_zone_controls": [
+      {
+        "java_zone": "GMT+05:45",
+        "debug_zone": "+0545",
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "java_zone": "GMT-03:30",
+        "debug_zone": "-0330",
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      },
+      {
+        "java_zone": "UTC",
+        "debug_zone": "UTC",
+        "java_exit": 0,
+        "rust_exit": 0,
+        "comparison_exit": 0
+      }
+    ],
+    "invalid_controls": [
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+        "preprocess_probe_exit": 2,
+        "error": "1\tBad date pattern: unsupported letter Q\n"
+      },
+      {
+        "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+        "preprocess_probe_exit": 2,
+        "error": "1\tDate seconds outside signed 32-bit range\n"
+      },
+      {
+        "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/invalid_unclosed_pattern.puml",
+        "preprocess_probe_exit": 2,
+        "error": "1\tBad date pattern: unterminated quote\n"
+      },
+      {
+        "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/invalid_four_x.puml",
+        "preprocess_probe_exit": 2,
+        "error": "1\tBad date pattern: X must have one to three letters\n"
+      }
+    ],
+    "binary": "fixed snapshot; same date implementation as candidate"
+  },
+  "blocking_interfaces": {
+    "reader": "Owner has not chosen raw versus historical picoweb GET. Current candidate behavior retained; normalization, assertion, references and baselines unchanged. Earlier frozen-reference difference is now explained by DiagramSourceCompressor.decompress, not a font hypothesis.",
+    "date_errors": "PreprocessOutput.error: Option<PreprocessError {line, message}> records the error and stops further source emission. Existing parse_with_base ignores it; both first preprocessing and sequence retry must return ParseError when it is Some before consuming lines. Unowned parse/CLI left unchanged. Invalid checker inputs still exit CLI 0; this remains a failure, not repaired rejection semantics."
+  },
+  "downstream_residue": [
+    "checker_selector_nested_theme_event loses one prior SVG pass: its formerly dropped first theme now reaches identity AND parser, exposing repeated-theme stereotype palette precedence. Source is now exact; class worker owns palette.",
+    "Other repeated palettes: checker_two_dynamic_themes, retained_checker_repeated_reverse, retained_maker_repeated_themes, and original repeated cases.",
+    "checker_comment_closure_tail: exact evaluated source, empty themed class canvas dimensions (32.2917 versus16.6667).",
+    "checker_loop_sprite_comment: exact source, standalone class note font/shape/placement.",
+    "Retained activity diamond styling/geometry, handwritten shape geometry and sequence continuation geometry unchanged.",
+    "Two existing sequence-grouped-note-origin checker_live_stack_2/_3 panics remain; cleanup only prevents cascades.",
+    "Formatter uses pinned English calendar symbols/week rules. Localized symbols, long display names for named host zones and non-Unix fallback not established by this matrix.",
+    "Independent checker and owner reader-policy decision remain pending."
+  ],
+  "evidence": {
+    "archive": "measurement-artifacts.tar.gz",
+    "archive_sha256": "9b604757f7592685219a5d48f397258a8653034530fda73a3cc554815d6852ae",
+    "schema_alias_note": "Only canonical invariant/planned_change aliases were added to four earlier accounts in 67e5317, retaining all original fields; earlier evidence manifests remain historical snapshots."
+  }
+}

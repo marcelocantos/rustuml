@@ -1,0 +1,25 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      !procedure $emit($caption = a,b)
+      class "$caption 1" as Copper
+      !endprocedure
+      $emit()
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Copper
+  entities:
+  - id: Copper
+    label: $caption 1
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

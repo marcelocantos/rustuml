@@ -1,0 +1,8 @@
+@startuml
+!$needle = "value"
+!function $name($ignored, $key)
+!return $key
+!endfunction
+!$a = %get_variable_value($name('é,(x)', '$' + "needle"))
+class "$a" as Copper
+@enduml

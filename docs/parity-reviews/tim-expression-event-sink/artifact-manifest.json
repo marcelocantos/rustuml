@@ -1,0 +1,2290 @@
+{
+  "docs/parity-reviews/tim-expression-event-sink/README.md": {
+    "sha256": "938863f052b6b31f8409c0d906b4ee7f154599db708c652e14f62840ba539326",
+    "bytes": 10279
+  },
+  "docs/parity-reviews/tim-expression-event-sink/account.json": {
+    "sha256": "cd81823b28d375ec7525014749e25bf424a20f039b38fba372177f4b56a61d09",
+    "bytes": 1890
+  },
+  "docs/parity-reviews/tim-expression-event-sink/after-checker.json": {
+    "sha256": "16e08adc905086c87ff541e6ceee6e86f49035a7055df3e986fc74425fd82563",
+    "bytes": 11760
+  },
+  "docs/parity-reviews/tim-expression-event-sink/after-mainpre.json": {
+    "sha256": "9ad0b4dc0f55b44e9f4dcf2a072c57f9471d066deef4fadb9f1b7e5d1c997186",
+    "bytes": 72460
+  },
+  "docs/parity-reviews/tim-expression-event-sink/after-new.json": {
+    "sha256": "5edbb5b4aa3699cab7f6558c0b0b377bb23c12322de9363037eb1700556f6e72",
+    "bytes": 4828
+  },
+  "docs/parity-reviews/tim-expression-event-sink/before-isolated.json": {
+    "sha256": "c4426ebba9db99d4b929b06f6e653772d703c8e9b62202c522cf9833012e264a",
+    "bytes": 207009
+  },
+  "docs/parity-reviews/tim-expression-event-sink/before-mainpre.json": {
+    "sha256": "37665e037a614b56bdcaeb9fbfc7b41253bdae71f31f7dff54c792ee1f1970a8",
+    "bytes": 72854
+  },
+  "docs/parity-reviews/tim-expression-event-sink/before-new.json": {
+    "sha256": "6aced2b9f0cf94f9236068e562c57c447e9d910363265558b8ecf465035f7666",
+    "bytes": 4858
+  },
+  "docs/parity-reviews/tim-expression-event-sink/builtin-failure-names.json": {
+    "sha256": "f9786f5956380dadb6c204230fecd7d07980d87394d573996502836f0724aee8",
+    "bytes": 57880
+  },
+  "docs/parity-reviews/tim-expression-event-sink/candidate-checker.json": {
+    "sha256": "7eb4747b31eff2bc85f08840314ad8337d34087ddc9a3e3ef7fe1b4ffea2634e",
+    "bytes": 11928
+  },
+  "docs/parity-reviews/tim-expression-event-sink/candidate-isolated.json": {
+    "sha256": "2c76125ce3ea6eb881774f80cc852232d47803f18c39c83d02df63db5f55493b",
+    "bytes": 209856
+  },
+  "docs/parity-reviews/tim-expression-event-sink/candidate-new.json": {
+    "sha256": "d3d71a1b8ba3246a08d19d301d42e218b55153eac272d4b80d95b417abb29701",
+    "bytes": 4892
+  },
+  "docs/parity-reviews/tim-expression-event-sink/candidate-preserved.json": {
+    "sha256": "b593c8db418813d15b849cd1bca8a4d4455628b1655c0e341a69c70285cd05a8",
+    "bytes": 9681
+  },
+  "docs/parity-reviews/tim-expression-event-sink/candidate-prior.json": {
+    "sha256": "6976e9d26e5fc80bfbc5f0157c47e2e34c337fa13b18ed24426f7d9abd6d0d74",
+    "bytes": 6278
+  },
+  "docs/parity-reviews/tim-expression-event-sink/error-results.json": {
+    "sha256": "44654f67c10693cc8991252be51b0ef598fbeccbd3146b1a606ac3f628edca87",
+    "bytes": 824
+  },
+  "docs/parity-reviews/tim-expression-event-sink/fixed-checker.json": {
+    "sha256": "2220f5869af5b13e3645054c0b08ca1b3123ecd745f7ab3cc50709f18edeb6fe",
+    "bytes": 11760
+  },
+  "docs/parity-reviews/tim-expression-event-sink/fixed-isolated.json": {
+    "sha256": "d26a573ba5c75a58a153357191cbbaa9271bca72db6ebfc8e90ad4e3a7258193",
+    "bytes": 206060
+  },
+  "docs/parity-reviews/tim-expression-event-sink/fixed-new.json": {
+    "sha256": "7d7b139142155944bf1efd99c90be9a80ec2aac305b7e557d78e8f80aae6a223",
+    "bytes": 4828
+  },
+  "docs/parity-reviews/tim-expression-event-sink/fixed-preserved.json": {
+    "sha256": "b3746c19f431523215bb11938a31ab4f114749147c36212b43fc8fd7617271fd",
+    "bytes": 9549
+  },
+  "docs/parity-reviews/tim-expression-event-sink/fixed-prior.json": {
+    "sha256": "0114a20b670081a1ab19a5d8511c4130e36342f72d0bc8a643ea68de239ed1d7",
+    "bytes": 6190
+  },
+  "docs/parity-reviews/tim-expression-event-sink/fixed-zone-results.json": {
+    "sha256": "194d243325862449f278840f9ae50743a28ba2c872bf3d98857a1d8c5cb060ba",
+    "bytes": 388
+  },
+  "docs/parity-reviews/tim-expression-event-sink/format-results.json": {
+    "sha256": "ee32fb1f84696af7d0ce5b89da374cb8719020f1798df69f52a0f98461c5cb98",
+    "bytes": 391
+  },
+  "docs/parity-reviews/tim-expression-event-sink/inventory-949.json": {
+    "sha256": "faa47a5510be46f514911a73542d265ddbce63d165b286be1cbecb490b3bfc77",
+    "bytes": 433956
+  },
+  "docs/parity-reviews/tim-expression-event-sink/isolated-changes.json": {
+    "sha256": "2fa39f24ef2596704e5bc8c252172e0019d3b992e94612da604d4fb5f8ce53ad",
+    "bytes": 5160
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/after.diff.txt": {
+    "sha256": "114dd29335d04515ba4ac84295eecb676edb0bfc653132dbe311df70d88ee144",
+    "bytes": 288
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/after.svg": {
+    "sha256": "71dd68f3f6b3b11666d81c457ad6e06cb1e960698a3d878ae39b351b00c8d0b0",
+    "bytes": 2042
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/after.uml-source": {
+    "sha256": "e1c8ccca55281888beab2b4599b96ae7d9d67163845a95acc3354db7abdfe24e",
+    "bytes": 7345
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/after.yaml": {
+    "sha256": "fa03d3003b397bcf87f1904bc91ebfbcb34ce71d61536956f139c4e9c1d06ae0",
+    "bytes": 70482
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/before.diff.txt": {
+    "sha256": "685d8212adc9edf3527d31508061327542227ff6c7f25b6effe14f420d3a52d7",
+    "bytes": 1301
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/before.svg": {
+    "sha256": "ad3d1967cbc383e18579c08f28115b2a256039c4bc780e867c35597ca5392e92",
+    "bytes": 1549
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/before.uml-source": {
+    "sha256": "aa69d113b812fa3997492a92ed65c69fb2849674b31bb5430eb3bb95c5472e20",
+    "bytes": 40
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/before.yaml": {
+    "sha256": "15319dacdb57bdff0e2b172371144737d5f6f1917d877e3f67d5b7f5296843f5",
+    "bytes": 362
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/candidate.svg": {
+    "sha256": "cb4bda0f4fb78356344fee2a15f077e5e7443017d209b9644cefa9380105706a",
+    "bytes": 2042
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/candidate.uml-source": {
+    "sha256": "e1c8ccca55281888beab2b4599b96ae7d9d67163845a95acc3354db7abdfe24e",
+    "bytes": 7345
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/candidate.yaml": {
+    "sha256": "c5e08fed683e8d781694323ff17a226b9822737c1b59a2033e3b98d1b9ea2ed5",
+    "bytes": 70482
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/fixed.svg": {
+    "sha256": "cb4bda0f4fb78356344fee2a15f077e5e7443017d209b9644cefa9380105706a",
+    "bytes": 2042
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/fixed.uml-source": {
+    "sha256": "e1c8ccca55281888beab2b4599b96ae7d9d67163845a95acc3354db7abdfe24e",
+    "bytes": 7345
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/fixed.yaml": {
+    "sha256": "c5e08fed683e8d781694323ff17a226b9822737c1b59a2033e3b98d1b9ea2ed5",
+    "bytes": 70482
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/java.svg": {
+    "sha256": "62b40c408659cc1d3f2aeceda7fd162e66dbf2e1ff1edff8c8a84d3cde996bee",
+    "bytes": 2214
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect/java.uml-source": {
+    "sha256": "e1c8ccca55281888beab2b4599b96ae7d9d67163845a95acc3354db7abdfe24e",
+    "bytes": 7345
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect.puml": {
+    "sha256": "35fab53859257bef2a7ae549f34ec19e8cc39dd4d3f1d82915744230c514b6ca",
+    "bytes": 162
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/after.diff.txt": {
+    "sha256": "57cedadcbda13972c85c53fa363c851067e071b18318a38b90f7aa5652238fa1",
+    "bytes": 288
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/after.svg": {
+    "sha256": "c3fc2e300f2ed49664592d7f0b951efee9364406dea9a66186dae80ed41c988c",
+    "bytes": 2280
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/after.uml-source": {
+    "sha256": "380fdfd1f7400bf9c141d9d4f11f93045aa8d779f3da91522f0f1d610b147a6f",
+    "bytes": 7585
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/after.yaml": {
+    "sha256": "2441e36f53cea746e58ad26ce3be21bd1331b93f54754621b8c3d5bec1d0b8ad",
+    "bytes": 72309
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/before.diff.txt": {
+    "sha256": "aae016aa372ea152cb36f6a1f6746fdb2550a7dc4d68758386925d2abd2207fd",
+    "bytes": 1035
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/before.svg": {
+    "sha256": "cc750389e4ada097f0f707ea1383fd62ae4ebb901620e7d97695bcd3d2fa0bf4",
+    "bytes": 1557
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/before.uml-source": {
+    "sha256": "aa7f456a7957bfb03350ce25a207bd762fe38e4e760507e2dd24a174e30b51f9",
+    "bytes": 44
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/before.yaml": {
+    "sha256": "725a0d43bb3b3580d2ae94020c9a7378d666fe67234fa6c724013a1ff1fb2994",
+    "bytes": 368
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/candidate.svg": {
+    "sha256": "531c2f8c4c083446450ef6399e1eaff0f48c4435141d444ec327931f77ae0149",
+    "bytes": 2280
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/candidate.uml-source": {
+    "sha256": "380fdfd1f7400bf9c141d9d4f11f93045aa8d779f3da91522f0f1d610b147a6f",
+    "bytes": 7585
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/candidate.yaml": {
+    "sha256": "7e0e0db62b302413e8d67524f2b63a0389e442dd691a23d52ed2587ebd9fdce7",
+    "bytes": 72309
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/fixed.svg": {
+    "sha256": "531c2f8c4c083446450ef6399e1eaff0f48c4435141d444ec327931f77ae0149",
+    "bytes": 2280
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/fixed.uml-source": {
+    "sha256": "380fdfd1f7400bf9c141d9d4f11f93045aa8d779f3da91522f0f1d610b147a6f",
+    "bytes": 7585
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/fixed.yaml": {
+    "sha256": "7e0e0db62b302413e8d67524f2b63a0389e442dd691a23d52ed2587ebd9fdce7",
+    "bytes": 72309
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/java.svg": {
+    "sha256": "5e954a5380470ca7b78edbaa4d94a9308b381dbfa10a0e896f9f18ccf065883a",
+    "bytes": 2420
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter/java.uml-source": {
+    "sha256": "380fdfd1f7400bf9c141d9d4f11f93045aa8d779f3da91522f0f1d610b147a6f",
+    "bytes": 7585
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter.puml": {
+    "sha256": "ebb3f91058dce53cea5c8effc5a4469a1c6f3a7a1422eb78ec7764ade3c87b99",
+    "bytes": 131
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/after.svg": {
+    "sha256": "ff83d9e71751b49aaeb51216e0d3e9663907c21402bb0a055b074077b80b9e7c",
+    "bytes": 1568
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/after.uml-source": {
+    "sha256": "2ab44ed462f2cbe96467d1e9ea6429cc01f0195786eb792016eacc0eacbc9c22",
+    "bytes": 46
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/after.yaml": {
+    "sha256": "b50fbda29713b0d957146dce310638963287e4492cd475b9913aad0067135fd5",
+    "bytes": 373
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/before.diff.txt": {
+    "sha256": "dd9d994458b16636cb918dc2bd8be3aebf8568a97d20fa5d9fd3ccd40a35361d",
+    "bytes": 2023
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/before.svg": {
+    "sha256": "238cc3dadae249736213bb9263212594253b3e986fd3871acd151ea353e77d55",
+    "bytes": 1561
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/before.uml-source": {
+    "sha256": "e70a6c7a8910a29d248f42cd84d17200fbb11b920596326ad3b8dc9a4ce99247",
+    "bytes": 44
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/before.yaml": {
+    "sha256": "6bb618236658521f55a5e52dda3785ce881bb1e157c07762b12cf77a7056b9d5",
+    "bytes": 369
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/candidate.svg": {
+    "sha256": "ff83d9e71751b49aaeb51216e0d3e9663907c21402bb0a055b074077b80b9e7c",
+    "bytes": 1568
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/candidate.uml-source": {
+    "sha256": "2ab44ed462f2cbe96467d1e9ea6429cc01f0195786eb792016eacc0eacbc9c22",
+    "bytes": 46
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/candidate.yaml": {
+    "sha256": "b50fbda29713b0d957146dce310638963287e4492cd475b9913aad0067135fd5",
+    "bytes": 373
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/fixed.svg": {
+    "sha256": "ff83d9e71751b49aaeb51216e0d3e9663907c21402bb0a055b074077b80b9e7c",
+    "bytes": 1568
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/fixed.uml-source": {
+    "sha256": "2ab44ed462f2cbe96467d1e9ea6429cc01f0195786eb792016eacc0eacbc9c22",
+    "bytes": 46
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/fixed.yaml": {
+    "sha256": "b50fbda29713b0d957146dce310638963287e4492cd475b9913aad0067135fd5",
+    "bytes": 373
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/java.svg": {
+    "sha256": "e0e1ed9154282512de2847af9c0bae56f37c184e93d459fee5661e3f9e10ab3f",
+    "bytes": 1738
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive/java.uml-source": {
+    "sha256": "2ab44ed462f2cbe96467d1e9ea6429cc01f0195786eb792016eacc0eacbc9c22",
+    "bytes": 46
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive.puml": {
+    "sha256": "9d59b68b0ca1823f74cb7ed269aca9ebde2980fb8d1920b9d9a0810b97081e5d",
+    "bytes": 189
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/after.diff.txt": {
+    "sha256": "9b66eaae04ef3df4bcc0e535b1c096fa8814bc5fa23b6a6ff393512ac0b81f33",
+    "bytes": 290
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/after.svg": {
+    "sha256": "0c2e07d69b99456040525d87bb03305afdaf40d1557649e0ec7af7eec95b4ac0",
+    "bytes": 2298
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/after.uml-source": {
+    "sha256": "c02af951e5c299e55e7bec59fe21aa710954d20c0711ec1c5af824c12ed14969",
+    "bytes": 7587
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/after.yaml": {
+    "sha256": "fa7fa5d832d6c96aed558a0531c2b06931de25a701bb2cb9eb0c8a7817e3d345",
+    "bytes": 72319
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/before.diff.txt": {
+    "sha256": "b7047dfb435df8cce4d99b332d401b3dc32a2649aecb7bba4e486609501d4fd4",
+    "bytes": 1038
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/before.svg": {
+    "sha256": "03f276a5637d975fad088325f30e9e35f6dedcb2dc77183b5a151f18861434ed",
+    "bytes": 1567
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/before.uml-source": {
+    "sha256": "f9ce781e440fc3881616fe15e22e179cd89e6adae238e84497031ad818cdbcbf",
+    "bytes": 46
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/before.yaml": {
+    "sha256": "fc4c116a75532fdc1b19149dd8442bcdf098b453104b66e0f83feb6768cdf14d",
+    "bytes": 375
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/candidate.svg": {
+    "sha256": "25bf714c81ca58419bc32fdf56c0411cd64c55c19fde91ed258aaba3746f6643",
+    "bytes": 2298
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/candidate.uml-source": {
+    "sha256": "c02af951e5c299e55e7bec59fe21aa710954d20c0711ec1c5af824c12ed14969",
+    "bytes": 7587
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/candidate.yaml": {
+    "sha256": "135e235ba39fc86fec6fd36a0eca53020bc41b6598c579ce173c076a4e7e577f",
+    "bytes": 72319
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/fixed.svg": {
+    "sha256": "25bf714c81ca58419bc32fdf56c0411cd64c55c19fde91ed258aaba3746f6643",
+    "bytes": 2298
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/fixed.uml-source": {
+    "sha256": "c02af951e5c299e55e7bec59fe21aa710954d20c0711ec1c5af824c12ed14969",
+    "bytes": 7587
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/fixed.yaml": {
+    "sha256": "135e235ba39fc86fec6fd36a0eca53020bc41b6598c579ce173c076a4e7e577f",
+    "bytes": 72319
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/java.svg": {
+    "sha256": "720b2219fea35c96aa0ff9f49c360699efa799ba3e7ef30ee1ddd2fd53d00f5b",
+    "bytes": 2480
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme/java.uml-source": {
+    "sha256": "c02af951e5c299e55e7bec59fe21aa710954d20c0711ec1c5af824c12ed14969",
+    "bytes": 7587
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme.puml": {
+    "sha256": "3e9991704ad9f092a98982d9edb1280ee628c5b5f37b184884184bf25d637b94",
+    "bytes": 221
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-results-summary.json": {
+    "sha256": "0504c8faf32e9e808dbb0290d8cfcd86e2ac2dc4661ca249188d3e86d83a87f8",
+    "bytes": 13625
+  },
+  "docs/parity-reviews/tim-expression-event-sink/maker-results.json": {
+    "sha256": "2138207f5d892f44c1e0b884f4f562964efb06b4c663ca0ee0429f0fbfc0afea",
+    "bytes": 2639
+  },
+  "docs/parity-reviews/tim-expression-event-sink/measurement-artifacts.tar.gz": {
+    "sha256": "9b604757f7592685219a5d48f397258a8653034530fda73a3cc554815d6852ae",
+    "bytes": 6415625
+  },
+  "docs/parity-reviews/tim-expression-event-sink/reference-environment.json": {
+    "sha256": "d45ab8298b376cdf2ac1174efb2e05995e6578281d6dc95c6166e7e52514eca7",
+    "bytes": 3926
+  },
+  "docs/parity-reviews/tim-expression-event-sink/timezone-results.json": {
+    "sha256": "03b1edf0c52d84c6aefeb67a99145394c02db8aa41fb2b2fe2db1cab81b215d5",
+    "bytes": 3633
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/SourceProbe.java": {
+    "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+    "bytes": 689
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/error_probe.rs": {
+    "sha256": "76d4c86a9c99e29c1a86b4ceee02cf6a8a51f5a6dc8b9e4c07d11b82b6447b05",
+    "bytes": 418
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/fixed_zones.py": {
+    "sha256": "20da8a501c8cc2a763824122bc5e11f34e54436e2b480c063068eedeacf920d2",
+    "bytes": 1402
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/generate.py": {
+    "sha256": "46282e54e9b4f88cdc6434d2c11475525bb8c4665d8670e355a9ac47aa401311",
+    "bytes": 3030
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/measure.py": {
+    "sha256": "1fe04a21c84ead05e5a3e6886b857057871eab33735a2a3969d16253704d0017",
+    "bytes": 4970
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/probe.rs": {
+    "sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "bytes": 1212
+  },
+  "docs/parity-reviews/tim-expression-event-sink/tools/timezones.py": {
+    "sha256": "14b407694ebd3832492710513966c5315d27653a805141f0549f606a9c11736e",
+    "bytes": 1873
+  },
+  "docs/parity-reviews/tim-declaration-default-values/account.json": {
+    "sha256": "57c5f01a9cc13a0a7b8dec9ce33f1217807f765b2b1a55c8a250cd98e8471d93",
+    "bytes": 1634
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/after.svg": {
+    "sha256": "1936273cd88e900bdd70a0d9708d0f9fa93c533fe920348246afccc769403fd1",
+    "bytes": 1596
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/after.uml-source": {
+    "sha256": "11028cac59b3427dc000b62059268d9f338318c20a37847d91ec9936c0d42efb",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/after.yaml": {
+    "sha256": "8253ed9cb2895c207e29d659a5c098ac8e4345b271f05b8c537bd60ca1ab2f94",
+    "bytes": 400
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/before.diff.txt": {
+    "sha256": "5fed0d736c3b98c82958d80c0822ec7dae00bc490eebd0921fb659c3af8fa237",
+    "bytes": 2069
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/before.svg": {
+    "sha256": "c59391a2237a2a2a69ebac69cdf32d598b87ee8b753fadf51e022dc49b9587de",
+    "bytes": 1618
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/before.uml-source": {
+    "sha256": "4b5ea17d12f88a295ea1e63e48a85a516cf7c412f04ca50264edf405ce8aaa8d",
+    "bytes": 138
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/before.yaml": {
+    "sha256": "bd22b7155d5f5293f372d73b75d0ba3325227c77ddad11cbe0df4220c9b6a68a",
+    "bytes": 501
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/candidate.svg": {
+    "sha256": "1936273cd88e900bdd70a0d9708d0f9fa93c533fe920348246afccc769403fd1",
+    "bytes": 1596
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/candidate.uml-source": {
+    "sha256": "11028cac59b3427dc000b62059268d9f338318c20a37847d91ec9936c0d42efb",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/candidate.yaml": {
+    "sha256": "8253ed9cb2895c207e29d659a5c098ac8e4345b271f05b8c537bd60ca1ab2f94",
+    "bytes": 400
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/fixed.svg": {
+    "sha256": "1936273cd88e900bdd70a0d9708d0f9fa93c533fe920348246afccc769403fd1",
+    "bytes": 1596
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/fixed.uml-source": {
+    "sha256": "11028cac59b3427dc000b62059268d9f338318c20a37847d91ec9936c0d42efb",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/fixed.yaml": {
+    "sha256": "8253ed9cb2895c207e29d659a5c098ac8e4345b271f05b8c537bd60ca1ab2f94",
+    "bytes": 400
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/java.svg": {
+    "sha256": "a3911a1b1cc465747ef2263a248cc148638f0afc718b0e24dd3f29fc8913f031",
+    "bytes": 1768
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override/java.uml-source": {
+    "sha256": "11028cac59b3427dc000b62059268d9f338318c20a37847d91ec9936c0d42efb",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_explicit_override.puml": {
+    "sha256": "f3d8204356c8c9b1c6c9af2c01f517924838764a91b6900c68a22d5bc9a2266a",
+    "bytes": 197
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/after.svg": {
+    "sha256": "0f19eca6f9fd8a6cd022e13fefe5dd5f8083fdc225e653a900710c26dbb171cc",
+    "bytes": 1553
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/after.uml-source": {
+    "sha256": "226e3035e8a3847ebb91d4dbe396c507bfe9792e2241f18072e69e111ba27b53",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/after.yaml": {
+    "sha256": "946d3ba0ec8a1a9e0205acba8af1cc4e47ae5fb1435a687f7f7d72b12fede139",
+    "bytes": 364
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/before.diff.txt": {
+    "sha256": "da72048f82b38b742bd8adad7831566450d8709f70f2715c08b2f423a4b78ddd",
+    "bytes": 2019
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/before.svg": {
+    "sha256": "3ef88f1f27ce19964b8745b7483f38375f91d72c40ff2d6d7517fc7354c5ba3c",
+    "bytes": 1569
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/before.uml-source": {
+    "sha256": "380a0128a85f92eba03e115ed8d2596a007e2dbec034524647aadc60295dfd55",
+    "bytes": 102
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/before.yaml": {
+    "sha256": "39567e8baad734db6b8385cc922e697daaf2bc1179bc5a9065f82a6e3fda0d83",
+    "bytes": 447
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/candidate.svg": {
+    "sha256": "0f19eca6f9fd8a6cd022e13fefe5dd5f8083fdc225e653a900710c26dbb171cc",
+    "bytes": 1553
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/candidate.uml-source": {
+    "sha256": "226e3035e8a3847ebb91d4dbe396c507bfe9792e2241f18072e69e111ba27b53",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/candidate.yaml": {
+    "sha256": "946d3ba0ec8a1a9e0205acba8af1cc4e47ae5fb1435a687f7f7d72b12fede139",
+    "bytes": 364
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/fixed.svg": {
+    "sha256": "0f19eca6f9fd8a6cd022e13fefe5dd5f8083fdc225e653a900710c26dbb171cc",
+    "bytes": 1553
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/fixed.uml-source": {
+    "sha256": "226e3035e8a3847ebb91d4dbe396c507bfe9792e2241f18072e69e111ba27b53",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/fixed.yaml": {
+    "sha256": "946d3ba0ec8a1a9e0205acba8af1cc4e47ae5fb1435a687f7f7d72b12fede139",
+    "bytes": 364
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/java.svg": {
+    "sha256": "0962f6647ea42349e16953896d9dcb81ddb09151b02de27be7d939f96612387b",
+    "bytes": 1723
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture/java.uml-source": {
+    "sha256": "226e3035e8a3847ebb91d4dbe396c507bfe9792e2241f18072e69e111ba27b53",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_function_capture.puml": {
+    "sha256": "71b58680f157172751526bf64e5aaea5326650288c4065dda619070c1a002cca",
+    "bytes": 181
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/after.svg": {
+    "sha256": "4ed489e78dbcf8d4ab90a594f596237d824c2de52452e692014800b69f85741a",
+    "bytes": 1573
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/after.uml-source": {
+    "sha256": "df0d38cc56d4e1a0b64b9cd66f6b28996810c9f81c87bcc34db2a1fe41da0026",
+    "bytes": 49
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/after.yaml": {
+    "sha256": "72def0806edb6121a144754f5a5020fab93b89295f24064074b6fccd8f8b9657",
+    "bytes": 378
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/before.diff.txt": {
+    "sha256": "71febf1fc0fd55d949574abcaf2ef68f1ae7bd0fad8955c48f56cdef91cedcc5",
+    "bytes": 2286
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/before.svg": {
+    "sha256": "4426adb03786766571ccd7841d1cad5123ee1ef48023c24201f3bc1760e1f902",
+    "bytes": 1562
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/before.uml-source": {
+    "sha256": "4f81daf9236a28245a2cd13ac69e4bcc9599bf14117eb89493a48a9f578ff50c",
+    "bytes": 53
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/before.yaml": {
+    "sha256": "c698121c1b1c61431e31d8597fc0c32f8814bec426e2d36cd1111ca6b9cf7a6b",
+    "bytes": 383
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/candidate.svg": {
+    "sha256": "4ed489e78dbcf8d4ab90a594f596237d824c2de52452e692014800b69f85741a",
+    "bytes": 1573
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/candidate.uml-source": {
+    "sha256": "df0d38cc56d4e1a0b64b9cd66f6b28996810c9f81c87bcc34db2a1fe41da0026",
+    "bytes": 49
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/candidate.yaml": {
+    "sha256": "72def0806edb6121a144754f5a5020fab93b89295f24064074b6fccd8f8b9657",
+    "bytes": 378
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/fixed.svg": {
+    "sha256": "4ed489e78dbcf8d4ab90a594f596237d824c2de52452e692014800b69f85741a",
+    "bytes": 1573
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/fixed.uml-source": {
+    "sha256": "df0d38cc56d4e1a0b64b9cd66f6b28996810c9f81c87bcc34db2a1fe41da0026",
+    "bytes": 49
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/fixed.yaml": {
+    "sha256": "72def0806edb6121a144754f5a5020fab93b89295f24064074b6fccd8f8b9657",
+    "bytes": 378
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/java.svg": {
+    "sha256": "c72b03115fd4ee19a3baa05ac9f9dc629376ae58876155ead420d6ff699c422e",
+    "bytes": 1736
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow/java.uml-source": {
+    "sha256": "df0d38cc56d4e1a0b64b9cd66f6b28996810c9f81c87bcc34db2a1fe41da0026",
+    "bytes": 49
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-cases/default_sibling_shadow.puml": {
+    "sha256": "34b73e83224f31e219742387247cce9821483be1ad5942921b7b7e5d18946741",
+    "bytes": 200
+  },
+  "docs/parity-reviews/tim-declaration-default-values/maker-results.json": {
+    "sha256": "a7e15fcabfbeaf11b300dc1cd5398488945c0d454ae30316b6917486b6e81641",
+    "bytes": 2131
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/account.json": {
+    "sha256": "dfb24984433787ff008bc6d4950cad53c34b17a94c154b7465c055bf5b95e7d0",
+    "bytes": 1900
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/after.svg": {
+    "sha256": "8231b5c5e7c1aa86c5b8c1d89386bafca1d56f7968a3d8227a0fac18149e99ec",
+    "bytes": 3341
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/after.uml-source": {
+    "sha256": "3e25e58fd92ffe8ff75201f2b684f508c2449fd429ab304f80a4add8438dd140",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/after.yaml": {
+    "sha256": "b923137b710bc20683fdec6091ab336e67ff32417827ae3d0b765232a317a965",
+    "bytes": 609
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/before.diff.txt": {
+    "sha256": "95ccb9d9a3adccaad7edd977759a37ce375e6a049b51dc68cbce30dde0e6ca55",
+    "bytes": 4547
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/before.svg": {
+    "sha256": "b389cb92c47f9d8b67621fecf020b896bf96a4ab9759d9982f1a89b192563bb5",
+    "bytes": 3328
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/before.uml-source": {
+    "sha256": "6f748f862734d4371d764af07d7e101c6d703ef41d8f6f064184c414830e83dd",
+    "bytes": 57
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/before.yaml": {
+    "sha256": "837220a48c76fd67f6b6cda4a3075752cd8a3dc019a74481cb79bfe2f193a11f",
+    "bytes": 607
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/candidate.svg": {
+    "sha256": "8231b5c5e7c1aa86c5b8c1d89386bafca1d56f7968a3d8227a0fac18149e99ec",
+    "bytes": 3341
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/candidate.uml-source": {
+    "sha256": "3e25e58fd92ffe8ff75201f2b684f508c2449fd429ab304f80a4add8438dd140",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/candidate.yaml": {
+    "sha256": "b923137b710bc20683fdec6091ab336e67ff32417827ae3d0b765232a317a965",
+    "bytes": 609
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/fixed.svg": {
+    "sha256": "8231b5c5e7c1aa86c5b8c1d89386bafca1d56f7968a3d8227a0fac18149e99ec",
+    "bytes": 3341
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/fixed.uml-source": {
+    "sha256": "3e25e58fd92ffe8ff75201f2b684f508c2449fd429ab304f80a4add8438dd140",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/fixed.yaml": {
+    "sha256": "b923137b710bc20683fdec6091ab336e67ff32417827ae3d0b765232a317a965",
+    "bytes": 609
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/java.svg": {
+    "sha256": "27f40e004fa57ebee02345cc1696f7e40e521b05e5acaec831fa27c1e340ba01",
+    "bytes": 3496
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes/java.uml-source": {
+    "sha256": "3e25e58fd92ffe8ff75201f2b684f508c2449fd429ab304f80a4add8438dd140",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/literal_backslash_and_quotes.puml": {
+    "sha256": "c92247e26d074eed57ca3969ce3dd312d7b01e5428c65690d70a8ebac714aa6b",
+    "bytes": 160
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/after.svg": {
+    "sha256": "e63b37acaf328676493779bccaf8fbeed510ef2c3c6d5c3b289d4df90b04a14c",
+    "bytes": 1562
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/after.uml-source": {
+    "sha256": "229276ade521ba0d6ed11ef9fb3bfd3a608d956e27bebbd9938acae7ac8fbacf",
+    "bytes": 45
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/after.yaml": {
+    "sha256": "0d3784e9d52f5251af911d85382ca7ce887f414fcfba3cd6f37a0b72965d2316",
+    "bytes": 372
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/before.diff.txt": {
+    "sha256": "7dfff1fd675291f8f2a1f9b1b9da8d4d349ff9d75834a927e5bb30916d8318e6",
+    "bytes": 2011
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/before.svg": {
+    "sha256": "ba44faf7e7510dadee3f3f1ce14f7d694c8423ad31dafcac3a733dadce32a250",
+    "bytes": 1547
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/before.uml-source": {
+    "sha256": "c84fc217e395ef61aec2bb7ead8a172f3bd99d5de6fb08c57dc111a1c0a9fea1",
+    "bytes": 39
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/before.yaml": {
+    "sha256": "a1b42aac87f2514ca32a79bd9d8d16d466bc60606156d6950be806c717afb569",
+    "bytes": 360
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/candidate.svg": {
+    "sha256": "e63b37acaf328676493779bccaf8fbeed510ef2c3c6d5c3b289d4df90b04a14c",
+    "bytes": 1562
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/candidate.uml-source": {
+    "sha256": "229276ade521ba0d6ed11ef9fb3bfd3a608d956e27bebbd9938acae7ac8fbacf",
+    "bytes": 45
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/candidate.yaml": {
+    "sha256": "0d3784e9d52f5251af911d85382ca7ce887f414fcfba3cd6f37a0b72965d2316",
+    "bytes": 372
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/fixed.svg": {
+    "sha256": "e63b37acaf328676493779bccaf8fbeed510ef2c3c6d5c3b289d4df90b04a14c",
+    "bytes": 1562
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/fixed.uml-source": {
+    "sha256": "229276ade521ba0d6ed11ef9fb3bfd3a608d956e27bebbd9938acae7ac8fbacf",
+    "bytes": 45
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/fixed.yaml": {
+    "sha256": "0d3784e9d52f5251af911d85382ca7ce887f414fcfba3cd6f37a0b72965d2316",
+    "bytes": 372
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/java.svg": {
+    "sha256": "d7ddd80891d8513586ce3b63ee2a8c4ee9f2eb5a43456c2a9ad5cd44bd31b004",
+    "bytes": 1725
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup/java.uml-source": {
+    "sha256": "229276ade521ba0d6ed11ef9fb3bfd3a608d956e27bebbd9938acae7ac8fbacf",
+    "bytes": 45
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/nested_computed_lookup.puml": {
+    "sha256": "e96670863b1d2ae659bc9fdcc2d5eeeb33717d120d4ae29d2331f6cc9bc08aef",
+    "bytes": 178
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/after.svg": {
+    "sha256": "b60b7dd120de19e132fb7bb57460c8c0e4006aabef82d1108f7655dfdcfabc07",
+    "bytes": 1553
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/after.uml-source": {
+    "sha256": "213cf21d9e36271cd4d00b04bca43f24e2d106d2ecb1314cf6ab6e767b47fc4b",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/after.yaml": {
+    "sha256": "3c41731b6ae77a00bfc42c6139900751f71b8704f9426c614833c549cc94795e",
+    "bytes": 364
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/before.diff.txt": {
+    "sha256": "6276c96bf7f06e546b31ead3c89ad0829a7420354f031cd821b27225325ab50d",
+    "bytes": 2003
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/before.svg": {
+    "sha256": "e379ace8d97bde90abe516adf8c3ae433b1a933d10ec795ec6ae73e2a74d06a4",
+    "bytes": 1544
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/before.uml-source": {
+    "sha256": "55803251a2c49843f2f7833cd8fd530358fe58fb8aee5e7454b4cdd0ec6896f4",
+    "bytes": 38
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/before.yaml": {
+    "sha256": "38b7d03da9c68a2acdb616f59d941cc3b219fded9ef552943980c08c81046c71",
+    "bytes": 356
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/candidate.svg": {
+    "sha256": "b60b7dd120de19e132fb7bb57460c8c0e4006aabef82d1108f7655dfdcfabc07",
+    "bytes": 1553
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/candidate.uml-source": {
+    "sha256": "213cf21d9e36271cd4d00b04bca43f24e2d106d2ecb1314cf6ab6e767b47fc4b",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/candidate.yaml": {
+    "sha256": "3c41731b6ae77a00bfc42c6139900751f71b8704f9426c614833c549cc94795e",
+    "bytes": 364
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/fixed.svg": {
+    "sha256": "b60b7dd120de19e132fb7bb57460c8c0e4006aabef82d1108f7655dfdcfabc07",
+    "bytes": 1553
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/fixed.uml-source": {
+    "sha256": "213cf21d9e36271cd4d00b04bca43f24e2d106d2ecb1314cf6ab6e767b47fc4b",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/fixed.yaml": {
+    "sha256": "3c41731b6ae77a00bfc42c6139900751f71b8704f9426c614833c549cc94795e",
+    "bytes": 364
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/java.svg": {
+    "sha256": "982ed3020f21a0a6a23ef088d3ad3fda63666b202b06bb4fad62b3f9a6248d14",
+    "bytes": 1743
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode/java.uml-source": {
+    "sha256": "213cf21d9e36271cd4d00b04bca43f24e2d106d2ecb1314cf6ab6e767b47fc4b",
+    "bytes": 42
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-cases/quoted_commas_and_unicode.puml": {
+    "sha256": "ac73c5b41a2b1b4a88e5674312bf47a7c184b7b335bf594f89ae1db56e204075",
+    "bytes": 175
+  },
+  "docs/parity-reviews/tim-expression-quoted-tokens/maker-results.json": {
+    "sha256": "b2b50d51f24b26e42db5d14f8eb5f769ec60af9e02c6791385d15fd274bba16c",
+    "bytes": 2127
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/account.json": {
+    "sha256": "07c2ff52cfd66fe13ba8bc9c4199a980d1bd0dfefcf5a8f1277b30c26f449455",
+    "bytes": 1895
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/checker_invalid_bad_pattern/stderr.txt": {
+    "sha256": "20bd42ac840043666e1fcf403681c8bebb8c1666bd35766b9fa27be382b0e0a4",
+    "bytes": 41
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/checker_invalid_bad_pattern/stdout.txt": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/checker_invalid_overflow_seconds/stderr.txt": {
+    "sha256": "7c5bbd3f45ae59d85c9dd5097de6f31dd08c791fe0cd9a52d6e7b5648b8d24f5",
+    "bytes": 43
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/checker_invalid_overflow_seconds/stdout.txt": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/invalid_four_x/stderr.txt": {
+    "sha256": "49d8ef9bcaf64de5ff521219aa0a41a62c8e660a2668876fb76c72cce1d0a8ba",
+    "bytes": 53
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/invalid_four_x/stdout.txt": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/invalid_unclosed_pattern/stderr.txt": {
+    "sha256": "76fdde93fc1f580d91da8c28a748c9246956eb671ae428b5d245c67f136953d6",
+    "bytes": 39
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/errors/invalid_unclosed_pattern/stdout.txt": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/+0545/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/+0545/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/+0545/java.svg": {
+    "sha256": "f21102f2f8180dc2679f1062554c885a3405bd1854675aadf3f38dcdf0a9996b",
+    "bytes": 1724
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/+0545/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/+0545/rust.svg": {
+    "sha256": "8dcd9c73160e4acfb23af85e297ed3bf5f70da79bb839cebdc3e6fa01173b73e",
+    "bytes": 1653
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/+0545/source.puml": {
+    "sha256": "fed03da150674555e867f3c3abd2206a977af96ffa0e5289b6c0dcdd328d46c4",
+    "bytes": 88
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/-0330/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/-0330/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/-0330/java.svg": {
+    "sha256": "fa09142806b7a7e022d4f4047dca7a6568965f790c6bea2e3bf34c42d6f51a70",
+    "bytes": 1727
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/-0330/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/-0330/rust.svg": {
+    "sha256": "fbee89ea59b86bb87da0d2d1e2e4b1f4b3e6dde78681664f4b9de87581d5617e",
+    "bytes": 1659
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/-0330/source.puml": {
+    "sha256": "fed03da150674555e867f3c3abd2206a977af96ffa0e5289b6c0dcdd328d46c4",
+    "bytes": 88
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/UTC/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/UTC/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/UTC/java.svg": {
+    "sha256": "9b5765db3009b74082cb2c328048858fdeac77934dec45fcad28c56ffc91bb81",
+    "bytes": 1710
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/UTC/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/UTC/rust.svg": {
+    "sha256": "3b2d0bd19cde24a1c20caec2f7518280d49176c5944a77edb9c19ddc52c87cb7",
+    "bytes": 1625
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/fixed-zones/UTC/source.puml": {
+    "sha256": "fed03da150674555e867f3c3abd2206a977af96ffa0e5289b6c0dcdd328d46c4",
+    "bytes": 88
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/after.svg": {
+    "sha256": "9e8eaf52e992cbfab77d29f292f80ac7c894889f3388badfa675ae8cd6d8120c",
+    "bytes": 1616
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/after.uml-source": {
+    "sha256": "d132d342aa71e32a2291558c6d39d73cf5ab914dcc6c4986f52fa80e5a7a7776",
+    "bytes": 70
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/after.yaml": {
+    "sha256": "8b69c40be176a9b0bcb541086096e59ac6381c88c7c55d588065812105bff944",
+    "bytes": 420
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/before.diff.txt": {
+    "sha256": "f55bb12b2e671e8b36d50d639d3b872f0df30ed702fb9363ae8b1b5290114e97",
+    "bytes": 2068
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/before.svg": {
+    "sha256": "65803ba4a6409ab953abb41cb80dac3c3bedab56276f9ed2d39130887198b9af",
+    "bytes": 1596
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/before.uml-source": {
+    "sha256": "b00bc93dab0fab95f0441cea3eba63db645e28dc74aa999a922ccf616dbbff73",
+    "bytes": 60
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/before.yaml": {
+    "sha256": "f6ed3a25543fd4f2e7dad133ed8fdae212c5adf92edfb6fe58291996e815a56e",
+    "bytes": 400
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/candidate.svg": {
+    "sha256": "9e8eaf52e992cbfab77d29f292f80ac7c894889f3388badfa675ae8cd6d8120c",
+    "bytes": 1616
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/candidate.uml-source": {
+    "sha256": "d132d342aa71e32a2291558c6d39d73cf5ab914dcc6c4986f52fa80e5a7a7776",
+    "bytes": 70
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/candidate.yaml": {
+    "sha256": "8b69c40be176a9b0bcb541086096e59ac6381c88c7c55d588065812105bff944",
+    "bytes": 420
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/fixed.svg": {
+    "sha256": "9e8eaf52e992cbfab77d29f292f80ac7c894889f3388badfa675ae8cd6d8120c",
+    "bytes": 1616
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/fixed.uml-source": {
+    "sha256": "d132d342aa71e32a2291558c6d39d73cf5ab914dcc6c4986f52fa80e5a7a7776",
+    "bytes": 70
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/fixed.yaml": {
+    "sha256": "8b69c40be176a9b0bcb541086096e59ac6381c88c7c55d588065812105bff944",
+    "bytes": 420
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/java.svg": {
+    "sha256": "4647cdb59870eebd3587e60fcc3f1748de542569d580c022708394d2c1645b07",
+    "bytes": 1710
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals/java.uml-source": {
+    "sha256": "d132d342aa71e32a2291558c6d39d73cf5ab914dcc6c4986f52fa80e5a7a7776",
+    "bytes": 70
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_text_and_literals.puml": {
+    "sha256": "131e6d7a1d2d1e4ff66bc7152c30024f7fb1cd479e8d539cb9e1f1fb18da8f84",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/after.svg": {
+    "sha256": "d779a6db1f49086efa868c92fd022de7c4bd1590c4107bac3413c2bef8b101bd",
+    "bytes": 1600
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/after.uml-source": {
+    "sha256": "ef2567edc46207b6fe6bfc09fdd8fa2c508e2fbf5fa2a65051f08619ba8eacc8",
+    "bytes": 62
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/after.yaml": {
+    "sha256": "f93793e888c894fc5344c73db68f1579388f906d1829ca0bb460a626ce2b75c3",
+    "bytes": 406
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/before.diff.txt": {
+    "sha256": "2bd9ba8d6d39014dd612f073e57acf52db81566c8217c90db14fc8cf6a9f382e",
+    "bytes": 2052
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/before.svg": {
+    "sha256": "f033262c944f7a526f89429038d2fca21a10a5849c9578a2f4bbd5c9ee70d641",
+    "bytes": 1580
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/before.uml-source": {
+    "sha256": "63d09825277e2fe21e800c58eb7013cbb79cbd080bc9cc99dc962408e01e459a",
+    "bytes": 52
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/before.yaml": {
+    "sha256": "04404b9bf5eec8c90162b2c9e19747668e6aab7014a52d244a4b65dfb784ca2f",
+    "bytes": 384
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/candidate.svg": {
+    "sha256": "d779a6db1f49086efa868c92fd022de7c4bd1590c4107bac3413c2bef8b101bd",
+    "bytes": 1600
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/candidate.uml-source": {
+    "sha256": "ef2567edc46207b6fe6bfc09fdd8fa2c508e2fbf5fa2a65051f08619ba8eacc8",
+    "bytes": 62
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/candidate.yaml": {
+    "sha256": "f93793e888c894fc5344c73db68f1579388f906d1829ca0bb460a626ce2b75c3",
+    "bytes": 406
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/fixed.svg": {
+    "sha256": "d779a6db1f49086efa868c92fd022de7c4bd1590c4107bac3413c2bef8b101bd",
+    "bytes": 1600
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/fixed.uml-source": {
+    "sha256": "ef2567edc46207b6fe6bfc09fdd8fa2c508e2fbf5fa2a65051f08619ba8eacc8",
+    "bytes": 62
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/fixed.yaml": {
+    "sha256": "f93793e888c894fc5344c73db68f1579388f906d1829ca0bb460a626ce2b75c3",
+    "bytes": 406
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/java.svg": {
+    "sha256": "8a22b3379030fb9100a5d68fe1e3bd29b0a7280aab70f210f24271965c91b2d2",
+    "bytes": 1686
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields/java.uml-source": {
+    "sha256": "ef2567edc46207b6fe6bfc09fdd8fa2c508e2fbf5fa2a65051f08619ba8eacc8",
+    "bytes": 62
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_week_fields.puml": {
+    "sha256": "11979be6da1ce49d395908d7d28204d024aaf44e4d2a370042b064b6bb85e92c",
+    "bytes": 83
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/after.svg": {
+    "sha256": "5a21fefdc867e1c64b777f5387b048d65d4b9181d6785c751eba8a6077119235",
+    "bytes": 1660
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/after.uml-source": {
+    "sha256": "a9f21417c4385a43615c16d23faea86dfdef1aef875bcda57a770864787e70ee",
+    "bytes": 92
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/after.yaml": {
+    "sha256": "4dbecd48ae684f1f9d60a05d722f78e6447163084e8ff418384535ce4a56c66a",
+    "bytes": 466
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/before.diff.txt": {
+    "sha256": "57de1d816950793f040c6aa6beab37e1e57415555547b11fba8a084e4d8c2c96",
+    "bytes": 2122
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/before.svg": {
+    "sha256": "6fd7d554e8548b7ea3c144f8c35cb1856d32144fadb19b0211cfeb22da2b30fa",
+    "bytes": 1660
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/before.uml-source": {
+    "sha256": "fefb030190e99b896e51eedbd4497e660b99518b8a4846ec57ede8d95a5a5674",
+    "bytes": 92
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/before.yaml": {
+    "sha256": "d8b8e41919ce6c71902624ff1755bd9115248390a32338e6f16475c9ab6b4934",
+    "bytes": 466
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/candidate.svg": {
+    "sha256": "5a21fefdc867e1c64b777f5387b048d65d4b9181d6785c751eba8a6077119235",
+    "bytes": 1660
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/candidate.uml-source": {
+    "sha256": "a9f21417c4385a43615c16d23faea86dfdef1aef875bcda57a770864787e70ee",
+    "bytes": 92
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/candidate.yaml": {
+    "sha256": "4dbecd48ae684f1f9d60a05d722f78e6447163084e8ff418384535ce4a56c66a",
+    "bytes": 466
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/fixed.svg": {
+    "sha256": "5a21fefdc867e1c64b777f5387b048d65d4b9181d6785c751eba8a6077119235",
+    "bytes": 1660
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/fixed.uml-source": {
+    "sha256": "a9f21417c4385a43615c16d23faea86dfdef1aef875bcda57a770864787e70ee",
+    "bytes": 92
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/fixed.yaml": {
+    "sha256": "4dbecd48ae684f1f9d60a05d722f78e6447163084e8ff418384535ce4a56c66a",
+    "bytes": 466
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/java.svg": {
+    "sha256": "134d30b70670c12bed07cda6c8a14ff1b77d605f8221208a4e124d908d2a2496",
+    "bytes": 1744
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields/java.uml-source": {
+    "sha256": "a9f21417c4385a43615c16d23faea86dfdef1aef875bcda57a770864787e70ee",
+    "bytes": 92
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_width_and_clock_fields.puml": {
+    "sha256": "aa51f96ed4eb60ca4577a50418266f7fc163a75316f25dfee4d45845bad44dce",
+    "bytes": 110
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/after.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/after.svg": {
+    "sha256": "739387d508aaf4b634cfead43052f8ebd609f4927b02290c4e1c15606498bcf2",
+    "bytes": 1646
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/after.uml-source": {
+    "sha256": "4603adc6bdba179d18235e4ca6d7842900597f3ecf5ef90973904d15cfd02415",
+    "bytes": 85
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/after.yaml": {
+    "sha256": "f3fa01a4ef3f83f468b574a8bccf319d1f28947e42a39d56e32554484bc7a325",
+    "bytes": 452
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/before.diff.txt": {
+    "sha256": "9feb77b7653eea4bb74324c667c38ceca5d901014fffb3cc8ccf84bae36ea1a7",
+    "bytes": 2080
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/before.svg": {
+    "sha256": "3612c7fe605fc927a6e1580413e5a352b085a3bb932df949e56a7591881f6f12",
+    "bytes": 1590
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/before.uml-source": {
+    "sha256": "e65cdf7171344e72322ac467aa7fb9b6185cc3aa7a5413b2a24338f70a614832",
+    "bytes": 57
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/before.yaml": {
+    "sha256": "53ea613998c6a5bec8d71661fa398459ae639a88d4cf7c292099a387cd1eda89",
+    "bytes": 394
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/candidate.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/candidate.svg": {
+    "sha256": "739387d508aaf4b634cfead43052f8ebd609f4927b02290c4e1c15606498bcf2",
+    "bytes": 1646
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/candidate.uml-source": {
+    "sha256": "4603adc6bdba179d18235e4ca6d7842900597f3ecf5ef90973904d15cfd02415",
+    "bytes": 85
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/candidate.yaml": {
+    "sha256": "f3fa01a4ef3f83f468b574a8bccf319d1f28947e42a39d56e32554484bc7a325",
+    "bytes": 452
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/fixed.diff.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/fixed.svg": {
+    "sha256": "739387d508aaf4b634cfead43052f8ebd609f4927b02290c4e1c15606498bcf2",
+    "bytes": 1646
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/fixed.uml-source": {
+    "sha256": "4603adc6bdba179d18235e4ca6d7842900597f3ecf5ef90973904d15cfd02415",
+    "bytes": 85
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/fixed.yaml": {
+    "sha256": "f3fa01a4ef3f83f468b574a8bccf319d1f28947e42a39d56e32554484bc7a325",
+    "bytes": 452
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/java.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/java.svg": {
+    "sha256": "e1e099639f0a5777665b8781519a8c962a6be883e7e4fce9f1c7f3abc9f51b4c",
+    "bytes": 1701
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones/java.uml-source": {
+    "sha256": "4603adc6bdba179d18235e4ca6d7842900597f3ecf5ef90973904d15cfd02415",
+    "bytes": 85
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/date_zones.puml": {
+    "sha256": "de2b83de4ace91469fb5225fec7ddac21e85742490e1c228c47b95838d9b1a33",
+    "bytes": 79
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/after.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/after.svg": {
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "bytes": 4554
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/after.uml-source": {
+    "sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "bytes": 10
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/after.yaml": {
+    "sha256": "ca72e0ad0346bcedaf3d700387d19190157180d1b8440828dbd3d38c368a940b",
+    "bytes": 149
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/before.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/before.svg": {
+    "sha256": "8b03810cab584d134d3580aab749202aea4160aa41aa78845c785165df8364fc",
+    "bytes": 1551
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/before.uml-source": {
+    "sha256": "afd5cf34ad2b2e7028c95306067137a2ea1cca4418f20caf32f5426e43f45d69",
+    "bytes": 41
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/before.yaml": {
+    "sha256": "2c2454b79ba8165db5e597b594f113f79bfd04c556346a61f1961cabffcce535",
+    "bytes": 362
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/candidate.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/candidate.svg": {
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "bytes": 4554
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/candidate.uml-source": {
+    "sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "bytes": 10
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/candidate.yaml": {
+    "sha256": "ca72e0ad0346bcedaf3d700387d19190157180d1b8440828dbd3d38c368a940b",
+    "bytes": 149
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/fixed.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/fixed.svg": {
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "bytes": 4554
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/fixed.uml-source": {
+    "sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "bytes": 10
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/fixed.yaml": {
+    "sha256": "ca72e0ad0346bcedaf3d700387d19190157180d1b8440828dbd3d38c368a940b",
+    "bytes": 149
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/java.status": {
+    "sha256": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf",
+    "bytes": 3
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/java.stderr": {
+    "sha256": "593d425bf40186165c12f183417992c315419b2fefb049a6072dfe9a6b646c63",
+    "bytes": 25
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/java.svg": {
+    "sha256": "20d40ba4eb4df38ec79757a789d3f73ffadedc37fe981960d091f48bd47e7e1c",
+    "bytes": 7532
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x/java.uml-source": {
+    "sha256": "310d150cef82520662315aa7a48d1e3c7352c3ff5971995cfa694586e06bc254",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_four_x.puml": {
+    "sha256": "954a83809f5e488dde3f1d06ad03b9f186fd50134f6353fbcc408effc8352169",
+    "bytes": 62
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/after.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/after.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/after.svg": {
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "bytes": 4554
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/after.uml-source": {
+    "sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "bytes": 10
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/after.yaml": {
+    "sha256": "ca72e0ad0346bcedaf3d700387d19190157180d1b8440828dbd3d38c368a940b",
+    "bytes": 149
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/before.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/before.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/before.svg": {
+    "sha256": "68fbedb132cf77838fd77c0a3bac3d2eb9496b6c8ed58569bba4f36fa75b54ad",
+    "bytes": 1567
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/before.uml-source": {
+    "sha256": "6437bbdfd51edfae639b038d4a0cf23407131d5cfbfa480ebff6aa5ae32481fc",
+    "bytes": 46
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/before.yaml": {
+    "sha256": "d6fa7702f9caeacb490f87442f70d23763b01d9c329c65bf210d1d658d723209",
+    "bytes": 374
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/candidate.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/candidate.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/candidate.svg": {
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "bytes": 4554
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/candidate.uml-source": {
+    "sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "bytes": 10
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/candidate.yaml": {
+    "sha256": "ca72e0ad0346bcedaf3d700387d19190157180d1b8440828dbd3d38c368a940b",
+    "bytes": 149
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/fixed.diff.txt": {
+    "sha256": "171aa1a7ba477492b69f7e433df1470859ecf3ff99146b17fbbb241baf99c2c4",
+    "bytes": 23
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/fixed.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/fixed.svg": {
+    "sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+    "bytes": 4554
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/fixed.uml-source": {
+    "sha256": "cf3b664fb35281ccb4bfd1d810a5951bd234b69ec3515ec2cd004ddab156d3fd",
+    "bytes": 10
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/fixed.yaml": {
+    "sha256": "ca72e0ad0346bcedaf3d700387d19190157180d1b8440828dbd3d38c368a940b",
+    "bytes": 149
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/java.source.status": {
+    "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "bytes": 1
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/java.source.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/java.status": {
+    "sha256": "27badc983df1780b60c2b3fa9d3a19a00e46aac798451f0febdca52920faaddf",
+    "bytes": 3
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/java.stderr": {
+    "sha256": "593d425bf40186165c12f183417992c315419b2fefb049a6072dfe9a6b646c63",
+    "bytes": 25
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/java.svg": {
+    "sha256": "287bd814828314085e1c718e40f46bbcf06e5ec1c17d29a71f325cf9b5ada4e0",
+    "bytes": 7546
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern/java.uml-source": {
+    "sha256": "7b47abe562fd3f8819908c71d53ebaa0b73e5bf8b75f28b92cfaa52ae713ed2a",
+    "bytes": 39
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-cases/invalid_unclosed_pattern.puml": {
+    "sha256": "887f6b8e96c9d2f10ece4ae967c12865ea6a2ac5035a24b7561e8be0846c93e6",
+    "bytes": 68
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/maker-results.json": {
+    "sha256": "91577d0efc1369ea9075c09b48bf922e69b6bafbec7c63a6d0b22dd5a9b60703",
+    "bytes": 3692
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_after/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_after/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_after/java.svg": {
+    "sha256": "54ca60da3309a0cb7ffed9d979dbfc1c4127f4b3879eb0483d0aa1c3ab5dd3a4",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_after/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_after/rust.svg": {
+    "sha256": "74d953a68fb487fb6feefa0d55267945897c94e1ac4d06332b92e7dbbd10e890",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_after/source.puml": {
+    "sha256": "18234fd3c64e339572dc560e7ae48aef52f5f04a2ebf2fc8a3c2b6cfc2f63ae3",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_before/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_before/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_before/java.svg": {
+    "sha256": "1a11b6cdaa5433183c61c1735803ca87e706db073eb69469f02cdd758594d76e",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_before/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_before/rust.svg": {
+    "sha256": "65d6f9cd6e38b95250fffd933d82eaaa84b411d85fc2caa41189f04023848c68",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_fall_before/source.puml": {
+    "sha256": "442e418bd426ce4199fd5ae69b7cdd72ce1675c11d178adca02bfd38655b06c8",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_after/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_after/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_after/java.svg": {
+    "sha256": "5acd415e66db8cbb880d36cffc5483513af7105cd552f5c29af0c375bda85889",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_after/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_after/rust.svg": {
+    "sha256": "4323c1d834555a3310b52e944507841cad854d3b3e84fa4e6d9a9fd59aeb57f5",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_after/source.puml": {
+    "sha256": "730085b9a1d2e40a42db83dca983c1db7313505a0f67bea19c6d54026233f790",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_before/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_before/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_before/java.svg": {
+    "sha256": "01a13767e2e74f828bcf99bae0c1acbf89264d2302119dbd864131e21280d208",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_before/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_before/rust.svg": {
+    "sha256": "32c73428c976103fe8c01c421095f4d323d4b82bca8474745a9f4d03cd05f137",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Asia_Kathmandu/checker_dst_spring_before/source.puml": {
+    "sha256": "2d2b2fc71dcdd3e127c56845d197a856e0b51d796e377de0d8c8e5c6e5639b11",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_after/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_after/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_after/java.svg": {
+    "sha256": "8b93b840812e08dfd47a15e68e47a6b28a9c0a649a1f68df2c9b324e3d63705e",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_after/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_after/rust.svg": {
+    "sha256": "7b174edc36815cb95007be4a5cc6461f12796c17b0cdba7c5ebdc00b465be17e",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_after/source.puml": {
+    "sha256": "18234fd3c64e339572dc560e7ae48aef52f5f04a2ebf2fc8a3c2b6cfc2f63ae3",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_before/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_before/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_before/java.svg": {
+    "sha256": "3b11e13d6496914557950ff63fbf4bde9cc362be065433f1c1c23c257387c1f2",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_before/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_before/rust.svg": {
+    "sha256": "bdf6503ef029114ced5ddbdd76f5b1bb6ccf2117311a4442d2a94b0834bb5d9e",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_fall_before/source.puml": {
+    "sha256": "442e418bd426ce4199fd5ae69b7cdd72ce1675c11d178adca02bfd38655b06c8",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_after/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_after/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_after/java.svg": {
+    "sha256": "fdf78d518c2251b5410eed82c5cb50da8da601f0ee35052fe7288c494b3124ee",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_after/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_after/rust.svg": {
+    "sha256": "5abdf0c6d95e1329ae878669827561bba03bd9fceebe08f0ddea988eabeb1887",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_after/source.puml": {
+    "sha256": "730085b9a1d2e40a42db83dca983c1db7313505a0f67bea19c6d54026233f790",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_before/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_before/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_before/java.svg": {
+    "sha256": "957acef5a1c58a8d6051c2eb8d562487c8c843211428d32f8a8f5fbc6a8071e9",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_before/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_before/rust.svg": {
+    "sha256": "6c5795e4b7091619c6b6c90d7df8e12cda96b8a2b7371477fb32542d41c3fc01",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/Australia_Melbourne/checker_dst_spring_before/source.puml": {
+    "sha256": "2d2b2fc71dcdd3e127c56845d197a856e0b51d796e377de0d8c8e5c6e5639b11",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_after/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_after/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_after/java.svg": {
+    "sha256": "37cb853441b3dd7e57fe08b3cc48c45cd3bbc536ed50a7f5325fc1ed5a370991",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_after/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_after/rust.svg": {
+    "sha256": "ebb3865510be9d09f01b96deb3886da64180bf14b6adb891fbd5dd89706d8075",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_after/source.puml": {
+    "sha256": "18234fd3c64e339572dc560e7ae48aef52f5f04a2ebf2fc8a3c2b6cfc2f63ae3",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_before/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_before/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_before/java.svg": {
+    "sha256": "1489d976ae220d19cf1c112df06c5aad3e3aff7c3101058016a8a72df4c5a17d",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_before/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_before/rust.svg": {
+    "sha256": "ee548973c55d27249c5730d8bb00cdf45c923dbf7dd564c97f9f0562ba7fbcae",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_fall_before/source.puml": {
+    "sha256": "442e418bd426ce4199fd5ae69b7cdd72ce1675c11d178adca02bfd38655b06c8",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_after/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_after/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_after/java.svg": {
+    "sha256": "194d33b2074154379421989470e96a5aa2406613d74a51db6a15fcd46b01d59a",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_after/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_after/rust.svg": {
+    "sha256": "27670c42c9e431b71cc9c737089666c45861d97bdb397ede3f1f25c64a78ec45",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_after/source.puml": {
+    "sha256": "730085b9a1d2e40a42db83dca983c1db7313505a0f67bea19c6d54026233f790",
+    "bytes": 98
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_before/comparison.txt": {
+    "sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+    "bytes": 33
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_before/java.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_before/java.svg": {
+    "sha256": "210bde5469d0b5ba8185335d11e00082d3b121e6953a8c64354f7a3f944ddfaa",
+    "bytes": 1700
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_before/rust.stderr": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_before/rust.svg": {
+    "sha256": "81595d1f59d9e7bfc8cda0c3428e275285b39653a1edb9f5610cd1b5e28f24ed",
+    "bytes": 1592
+  },
+  "docs/parity-reviews/tim-date-pattern-tokens/timezones/UTC/checker_dst_spring_before/source.puml": {
+    "sha256": "2d2b2fc71dcdd3e127c56845d197a856e0b51d796e377de0d8c8e5c6e5639b11",
+    "bytes": 98
+  }
+}

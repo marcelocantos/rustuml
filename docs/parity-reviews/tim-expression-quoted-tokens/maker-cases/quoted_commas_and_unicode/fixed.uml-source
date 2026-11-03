@@ -1,0 +1,3 @@
+@startuml
+class "value" as Copper
+@enduml

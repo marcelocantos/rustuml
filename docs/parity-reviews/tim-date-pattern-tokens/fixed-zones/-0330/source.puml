@@ -1,0 +1,4 @@
+@startuml
+!$s = %date("y-M-d H:m:s Z z X XX XXX", -1)
+class "$s" as WillowClock
+@enduml

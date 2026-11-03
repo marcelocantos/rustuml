@@ -1,0 +1,34 @@
+type: Sequence
+diagram:
+  meta:
+    source: |
+      @startuml
+      Alice -> Bob : 'c:\temp / apostrophe's
+      @enduml
+  participants:
+  - id: Alice
+    label: Alice
+    kind: Participant
+    order: 0
+    stereotype: null
+    source_line: 6
+  - id: Bob
+    label: Bob
+    kind: Participant
+    order: 1
+    stereotype: null
+    source_line: 6
+  events:
+  - !Message
+    from: Alice
+    to: Bob
+    label: '''c:\temp / apostrophe''s'
+    arrow:
+      line: Solid
+      head: Filled
+      direction: LeftToRight
+    activation: null
+    source_line: 6
+  autonumber: null
+  hide_footbox: false
+  teoz: false

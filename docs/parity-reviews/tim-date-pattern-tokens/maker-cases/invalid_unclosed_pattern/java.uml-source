@@ -1,0 +1,2 @@
+@startuml
+!$s = %date("yyyy 'oops", 0)

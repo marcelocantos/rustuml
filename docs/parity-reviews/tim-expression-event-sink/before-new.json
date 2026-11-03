@@ -1,0 +1,178 @@
+[
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/date_text_and_literals.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/date_week_fields.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/date_width_and_clock_fields.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/date_zones.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/invalid_four_x.puml",
+    "phase": "before",
+    "java_svg_exit": 200,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-date-pattern-tokens/invalid_unclosed_pattern.puml",
+    "phase": "before",
+    "java_svg_exit": 200,
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-declaration-default-values/default_explicit_override.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-declaration-default-values/default_function_capture.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-declaration-default-values/default_sibling_shadow.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-event-sink/builtin_return_effect.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-event-sink/inline_theme_counter.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-event-sink/log_order_and_inactive.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-event-sink/nested_argument_theme.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-quoted-tokens/literal_backslash_and_quotes.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-quoted-tokens/nested_computed_lookup.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "/tmp/rustuml-tim-correction/new/tim-expression-quoted-tokens/quoted_commas_and_unicode.puml",
+    "phase": "before",
+    "java_svg_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  }
+]

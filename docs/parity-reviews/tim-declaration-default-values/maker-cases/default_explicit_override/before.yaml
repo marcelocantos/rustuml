@@ -1,0 +1,24 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      !function $label($prefix = "é,(x)", $suffix = early)
+      !endfunction
+      class "$label() / $label('other', 'tail')" as Copper
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Copper
+  entities:
+  - id: Copper
+    label: $label() / $label('other', 'tail')
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

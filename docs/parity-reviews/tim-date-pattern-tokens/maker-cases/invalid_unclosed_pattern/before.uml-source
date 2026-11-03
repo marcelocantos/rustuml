@@ -1,0 +1,3 @@
+@startuml
+class "1970 oops" as Copper
+@enduml

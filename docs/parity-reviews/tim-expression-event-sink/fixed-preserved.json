@@ -1,0 +1,332 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_sprite_identity.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_custom_function.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_while.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_conditional_before_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variable_before_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  }
+]

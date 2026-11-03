@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "$seed + " suffix" as Copper
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity $seed_+
+  entities:
+  - id: $seed_+
+    label: '$seed + '
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

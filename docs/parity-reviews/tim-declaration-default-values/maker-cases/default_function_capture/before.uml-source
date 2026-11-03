@@ -1,0 +1,6 @@
+@startuml
+!procedure $emit($caption = a,b)
+class "$caption 1" as Copper
+!endprocedure
+$emit()
+@enduml

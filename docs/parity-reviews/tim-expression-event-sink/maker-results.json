@@ -1,0 +1,67 @@
+{
+  "role": "maker only; no independent review or acceptance",
+  "mechanism": "tim-expression-event-sink",
+  "account_commit": "67e53172fa470cdf2cec61c5aa0323dad11ba224",
+  "candidate_revision": "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "cases": [
+    {
+      "source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/builtin_return_effect.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "35fab53859257bef2a7ae549f34ec19e8cc39dd4d3f1d82915744230c514b6ca",
+      "java_svg_sha256": "62b40c408659cc1d3f2aeceda7fd162e66dbf2e1ff1edff8c8a84d3cde996bee"
+    },
+    {
+      "source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/inline_theme_counter.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "ebb3f91058dce53cea5c8effc5a4469a1c6f3a7a1422eb78ec7764ade3c87b99",
+      "java_svg_sha256": "5e954a5380470ca7b78edbaa4d94a9308b381dbfa10a0e896f9f18ccf065883a"
+    },
+    {
+      "source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/log_order_and_inactive.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "9d59b68b0ca1823f74cb7ed269aca9ebde2980fb8d1920b9d9a0810b97081e5d",
+      "java_svg_sha256": "e0e1ed9154282512de2847af9c0bae56f37c184e93d459fee5661e3f9e10ab3f"
+    },
+    {
+      "source": "docs/parity-reviews/tim-expression-event-sink/maker-cases/nested_argument_theme.puml",
+      "phase": "candidate",
+      "java_svg_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "java_source_exit": 0,
+      "metadata_exit": 0,
+      "source_equal": true,
+      "java_valid": true,
+      "source_sha256": "3e9991704ad9f092a98982d9edb1280ee628c5b5f37b184884184bf25d637b94",
+      "java_svg_sha256": "720b2219fea35c96aa0ff9f49c360699efa799ba3e7ef30ee1ddd2fd53d00f5b"
+    }
+  ],
+  "shared_evidence": "../tim-expression-event-sink/maker-results-summary.json",
+  "pending": "Fresh independent checker; reader policy and parse error handoff not resolved."
+}
