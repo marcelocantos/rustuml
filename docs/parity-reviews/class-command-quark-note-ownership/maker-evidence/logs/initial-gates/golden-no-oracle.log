@@ -1,0 +1,112 @@
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 3.77s
+     Running tests/golden_no_oracle.rs (/tmp/rustuml-cff-target/release/deps/golden_no_oracle-901d5e92a3796558)
+
+running 1 test
+running 12550 golden pairs (no-oracle tier)...
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.ep0, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp0, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.xp2, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.exit1, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.ep, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.xp, port P unrecognized
+Warning: node Composite.ep1, port P unrecognized
+Warning: node Composite.ep2, port P unrecognized
+Warning: node Composite.xp1, port P unrecognized
+Warning: node Composite.xp2, port P unrecognized
+Warning: Unable to reclaim box space in spline routing for edge "PCCT" -> "VPIFC". Something is probably seriously wrong.
+
+golden_no_oracle: 11174/11251 eligible pairs pass per family:
+  activity          1299/1299
+  archimate           48/48
+  chart               25/25
+  class             1964/1971
+  combo              319/327
+  component          663/663
+  creole             639/639
+  deployment         494/495
+  dot                 25/25
+  ebnf                25/25
+  edge-cases         761/777
+  er                 153/157
+  gantt              114/114
+  git                 25/25
+  json-yaml          147/147
+  links               50/50
+  math                50/50
+  mindmap            157/157
+  multi-diagram       53/53
+  nwdiag              89/89
+  object             155/155
+  preprocessing      285/307
+  regex               45/45
+  rendering           96/98
+  salt               103/103
+  sequence          1406/1411
+  skinparam          404/410
+  sprites             49/49
+  state              895/901
+  timing             141/141
+  type-detection      42/42
+  usecase            315/315
+  wbs                138/138
+  wire                 0/0
+
+thread 'golden_no_oracle' (588341932) panicked at crates/rustuml-oracle/tests/golden_no_oracle.rs:214:5:
+no-oracle PRODUCT REGRESSION — the CLI path renders fewer goldens than baseline:
+  deployment: pass 495 -> 494 (eligible 495 -> 495)
+  sequence: pass 1411 -> 1406 (eligible 1411 -> 1411)
+  skinparam: pass 409 -> 404 (eligible 410 -> 410)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test golden_no_oracle ... FAILED
+
+failures:
+
+failures:
+    golden_no_oracle
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.03s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_no_oracle`

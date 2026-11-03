@@ -1,0 +1,32 @@
+# Copyright 2026 Marcelo Cantos
+# SPDX-License-Identifier: Apache-2.0
+from pathlib import Path
+import subprocess,json,hashlib,os
+base=Path('/tmp/rustuml-cff3/fresh');base.mkdir(exist_ok=True)
+java='/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java'
+jar='/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar'
+cases={}
+for kind in ['record','struct','protocol']:
+ for nested in [False,True]:
+  command=f'{kind} "Ridge as [Depot]" as Ridge'
+  cases[f'native_{kind}_{nested}']=('package Valley {\n'+command+'\n}\nnote left of Valley {\n' if nested else command+'\nnote right of Ridge {\n')+'component this is note text\nend note\n}\n'
+for sign,name in [('+','public'),('-','private'),('#','protected'),('~','package')]:
+ cases[f'visibility_{name}']=f'skinparam classAttributeIconSize 12\n{sign}package "North Valley" as Valley {{\nclass Linden\n}}\nnote "Qualified memo" as Valley.Memo\nValley.Memo .. Valley.Linden\n'
+for direction in ['top to bottom','left to right']:
+ for reverse in [False,True]:
+  cases[f'shield_{direction[:3]}_{reverse}']=f'{direction} direction\ncomponent "Harbor client" as Client\ninterface "Extremely wide transport port" as Port\n'+('Port --> Client' if reverse else 'Client --> Port')+'\n'
+for style in ['uml1','uml2','rectangle']:
+ cases[f'component_{style}']=f'allowmixing\nskinparam componentStyle {style}\nclass Linden\ncomponent "Telemetry dispatch\\nshort" as Relay <<meter>>\nLinden --> Relay\n'
+cases['boundary_body']='allowmixing\nclass Linden\nboundary "Boundary dispatch\\nshort" as Edge <<gate>>\nLinden --> Edge\n'
+for align in ['left','center','right']:
+ cases[f'chrome_{align}']=f'<style>\nheader {{\nFontSize 18\nHorizontalAlignment {align}\n}}\nfooter {{\nFontSize 15\n}}\n</style>\nleft header\nReport from Cedar Observatory\nshort\nendheader\nright footer Closing record\ncloud Sky {{\nclass Linden\n}}\n'
+for shape in ['cloud','rectangle','node']:
+ cases[f'note_frontier_{shape}']=f'{shape} "Envelope with a longer name" as Envelope {{\nclass Linden\nnote left of Linden : owned memo\n}}\nnote "Outside record" as Memo\nMemo .. Envelope\n'
+rows=[]
+for name,body in cases.items():
+ p=base/(name+'.puml');p.write_text('@startuml\n'+body+'@enduml\n')
+ cmd=[java,'-Djava.awt.headless=true','-jar',jar,'-tsvg','-pipe']
+ r=subprocess.run(cmd,input=p.read_bytes(),capture_output=True,env=dict(os.environ,JAVA_HOME=str(Path(java).parent.parent), JAVA_TOOL_OPTIONS=(os.environ.get('JAVA_TOOL_OPTIONS', '') + ' -Djava.awt.headless=true').strip()),timeout=60)
+ p.with_suffix('.svg').write_bytes(r.stdout);p.with_suffix('.stderr').write_bytes(r.stderr)
+ rows.append({'source':p.name,'command':cmd,'stdin_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'svg_sha256':hashlib.sha256(r.stdout).hexdigest(),'exit':r.returncode,'reference_policy':'raw CLI pipe; historical GET references unchanged'})
+(base/'generation.json').write_text(json.dumps(rows,indent=2)+'\n');print(len(rows),'cases',sum(r['exit']!=0 for r in rows),'Java errors')

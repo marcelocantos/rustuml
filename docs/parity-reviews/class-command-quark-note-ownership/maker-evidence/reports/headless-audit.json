@@ -1,0 +1,15 @@
+{
+  "unguarded_command": [
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "-jar",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "-tsvg",
+    "-pipe"
+  ],
+  "script": "generate.py",
+  "batch_completed": 24,
+  "correction": "All future generator launches explicitly add -Djava.awt.headless=true and preserve existing JAVA_TOOL_OPTIONS while appending -Djava.awt.headless=true in subprocess environment. Replay scripts launch only Rust CLI and comparator. No active own Java batch remains; no process killed.",
+  "existing_references": "Preserved without rerun; generation.json records actual original commands.",
+  "inherited_JAVA_TOOL_OPTIONS": "",
+  "verification": "Inspected generator command and explicit subprocess env, and replay subprocess invocations before any new Java launch."
+}

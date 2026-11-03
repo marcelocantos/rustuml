@@ -1,0 +1,9 @@
+{
+  "status": "maker evidence; not accepted",
+  "mechanism": "class-package-visibility-title-image",
+  "account_commit": "de192dc216b6795b6d820c240e82234988d1f39d",
+  "tested_revision": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+  "central_evidence": "docs/parity-reviews/class-command-quark-note-ownership/maker-results.json",
+  "report": "docs/parity-reviews/class-command-quark-note-ownership/maker-evidence/README.md",
+  "new_independent_checker_required": true
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "ssh",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "marcelo@192.168.1.112",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.9DpvoRzt --timezone GMT+11:00 -- -pipe -tsvg"
+  ],
+  "exit": 0,
+  "source_sha256": "d2346f4539328a7ed95db93bb48c71a53786e0f7fef105972260db4e2b3590ed",
+  "svg_sha256": "b439868be2e10e5ad1e69df65465443ebb8e031def6037935166dfe7d6a2687b",
+  "java": "Homebrew OpenJDK 21.0.5",
+  "graphviz": "12.2.0",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "headless": "forced by verified remote wrapper",
+  "timezone": "GMT+11:00",
+  "transport": "raw stdin bytes, no trimming",
+  "historical_equivalence_claimed": false
+}

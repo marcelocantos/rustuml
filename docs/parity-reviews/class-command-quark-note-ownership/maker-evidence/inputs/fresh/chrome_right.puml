@@ -1,0 +1,19 @@
+@startuml
+<style>
+header {
+FontSize 18
+HorizontalAlignment right
+}
+footer {
+FontSize 15
+}
+</style>
+left header
+Report from Cedar Observatory
+short
+endheader
+right footer Closing record
+cloud Sky {
+class Linden
+}
+@enduml

@@ -1,0 +1,993 @@
+{
+  "binary_sha256": "d15366cb2213eafab81e3546428ebfb6c922335acdef108e0ad05597a5e7172c",
+  "counts": {
+    "mismatch": 20,
+    "process_error": 4
+  },
+  "results": [
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/boundary_body.puml",
+      "relative": "boundary_body.puml",
+      "source_sha256": "340dbcc4ab26fffa654f52c3f07c1746825f306784442975ce261f980f3be556",
+      "java_sha256": "326024c485e092917df8cc80ccb8d641834523ed4f812e9d9ff318a79e824327",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/boundary_body.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/boundary_body.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/boundary_body.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/boundary_body/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "2197f4a752d471caab395adc1d4ee6b431a528c3bd341d4af5d26a5280c6cab8",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "fe51b0d1bf9efede27c623375b8d567f5fc4185c91b4288608e8b4842ad3ef20",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "79a931bb3227ee73d4dde087ef936dc409afabfd81a7b3ae06ce8622eed21e57",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/boundary_body"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/chrome_center.puml",
+      "relative": "chrome_center.puml",
+      "source_sha256": "61410bb8ccb0560d764181868c464f7e4d8e246cdbdf75abde3654d69beb9fba",
+      "java_sha256": "54fc6ab7384efd7a3fd6dfb1372386b0332bee735f11742b4c0eda40a96dce7e",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/chrome_center.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/chrome_center.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/chrome_center.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/chrome_center/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0f27f95b0eab8d9bd599f1cbccf41d1b22fabdba4460b9d38d0f8d2d260cd7d3",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "b9c6cb1b507a2575cfabad7febb1ba4ff9d9568d6696bbb0788fcd0704ad0d5a",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "e857e598b82dd7003e98ca21a1ef111491d469599e2d272e2db05ba62df3b601",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/chrome_center"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/chrome_left.puml",
+      "relative": "chrome_left.puml",
+      "source_sha256": "48112057ac74f43ba9059f1b839ad25230437db4a882b6d12e1223e72ebd8e2f",
+      "java_sha256": "ee7ff25f9bb795943cdfbd1863e1af303d2e061d6eda569215a10f271f1e3c10",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/chrome_left.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/chrome_left.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/chrome_left.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/chrome_left/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0f27f95b0eab8d9bd599f1cbccf41d1b22fabdba4460b9d38d0f8d2d260cd7d3",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "547549265029284f5158ba959f2ff4f39eb5197bbdc20d39dc7bc720ed6f4def",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "a22180f924ad799c516ddd0d0825824a033a77ca68c6d5730d267789ccadfbb7",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/chrome_left"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/chrome_right.puml",
+      "relative": "chrome_right.puml",
+      "source_sha256": "c69bf4f20a81c784a60349810ded6f3e8b03c41fff28e7ae7d23349ec92d0074",
+      "java_sha256": "2f6cadf4296140e7dcf1e2efddb43f66f7d3d0800d156315d08e00d212341b48",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/chrome_right.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/chrome_right.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/chrome_right.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/chrome_right/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "0f27f95b0eab8d9bd599f1cbccf41d1b22fabdba4460b9d38d0f8d2d260cd7d3",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "fdc3989b8ef7586b670f3c27150388442041be735e8872187c2f176c5904f58b",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "497fae0f724fd738576b377be8e0ed79400dc1a618053d896af36527ee78677b",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/chrome_right"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/component_rectangle.puml",
+      "relative": "component_rectangle.puml",
+      "source_sha256": "8be77e8876c13b415acbe7d1fab5b37a086717e7be64e505f04971e4cbee5b12",
+      "java_sha256": "9aa34168d032649980f41f90c365e429817056d9f80217ec21cb84aad2eac274",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/component_rectangle.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/component_rectangle.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/component_rectangle.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/component_rectangle/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "2a3b87916d76f75ace83dc8b94e04e15d3843ee98eb742fac9a1f07cf1d94e55",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "d8823c4cbed05fef45c6df01c7596557ecd30830c1f720b14b2e403b116ffaab",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "86b6e27882345ed0bd2c0aee9758abdb04ed94bfcaa55d2d485c4e523bd11ff8",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/component_rectangle"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/component_uml1.puml",
+      "relative": "component_uml1.puml",
+      "source_sha256": "09cd2d99095a4173db46fe4f6572cf0913ccde72ea057044bd70636f4ea7559a",
+      "java_sha256": "9fc0873133e43f09a3d51dc7acfd75a23beb0ca30d46e1d0f9cb7800b6d1058b",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/component_uml1.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/component_uml1.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/component_uml1.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/component_uml1/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "2a3b87916d76f75ace83dc8b94e04e15d3843ee98eb742fac9a1f07cf1d94e55",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "a20d2cb7587a3b18d1bf70495d9dad449a7a00bbb9ab26d849d0474725376b7d",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "a4b2b04961f4fe5c482cea0d4c32a89324e8c25d3f5f2aeb1337a7080a427110",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/component_uml1"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/component_uml2.puml",
+      "relative": "component_uml2.puml",
+      "source_sha256": "6c541dc338179f4b099c95a752808d6ee42cf37185e7e2b9b18e9cf3dd3266aa",
+      "java_sha256": "4732519ab4a8bf6121a45c7b178cca07b04ce4e68713070ed4896fff6bdba655",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/component_uml2.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/component_uml2.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/component_uml2.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/component_uml2/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "2a3b87916d76f75ace83dc8b94e04e15d3843ee98eb742fac9a1f07cf1d94e55",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "2cb6fe5d079171f22fdc7687a4a600010972afbe0a4a304e22ff8bddc108be5c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "f3103f1363476a19cc5e1883d72eab95f653e8b985a95670b67b75313f4e6edc",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/component_uml2"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/native_protocol_False.puml",
+      "relative": "native_protocol_False.puml",
+      "source_sha256": "9ee3c448b65a50f04fe897ae4f07d3c881e09d45d5a57e1abf9a51b5d0d53890",
+      "java_sha256": "e36e7899c6192833039c20fad61e5befd8b0321cf2dde3fa6e56a95021a735e8",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/native_protocol_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/native_protocol_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/native_protocol_False.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_protocol_False/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "412838c4f8e7815475a4b669a8f5ebdf98b9f818d5be1fcea941593cdd349524",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "3621d3b30cd091769450482f8a344b20dbb87244393cf1efb82be4c6e1237e64",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_protocol_False"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/native_protocol_True.puml",
+      "relative": "native_protocol_True.puml",
+      "source_sha256": "403d4b927336b1cfd46d379c7ab78606ac61ff8c2e46d5c050115a8432bd4adc",
+      "java_sha256": "9ca8d2c8b8fd47ce2c04e1d66bf4c46846fe7eb36f921489ced10bff3d8b1d12",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/native_protocol_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/native_protocol_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/native_protocol_True.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_protocol_True/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "274cbdb723929cd6637becfb0b7aab232969744684a905048e67e160ab29f987",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "1c576d1d6c7fd2b5d7b22f116d085db096273b73a10e63a804b3f93e8e455976",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "21ae8e1d7b31b0fae7261ba145360efe90e33ea33a998d263c6cda9d267d1b97",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_protocol_True"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/native_record_False.puml",
+      "relative": "native_record_False.puml",
+      "source_sha256": "4ad4cdb844cb8bd674b4d2e760ccca6d5c9b09abca68cb78823aa03df8766e97",
+      "java_sha256": "f1d02f5d5130d7b0a3b2e56549739af71eca7f67166af0e7afed7fd1ba9a9296",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/native_record_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/native_record_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/native_record_False.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_record_False/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "c226d72c9b221134eb5990961a0349724a2699b8e792a32b0a0560519de27e45",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "3621d3b30cd091769450482f8a344b20dbb87244393cf1efb82be4c6e1237e64",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_record_False"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/native_record_True.puml",
+      "relative": "native_record_True.puml",
+      "source_sha256": "92f73ddc152f5991ad4ac89b6a1d102e38183baf0e3fab6570fe64d7bb36da11",
+      "java_sha256": "b9ec83c776006107b7a216e4d212caa4fa0fba5faf1b4a79bded8e027b1959ad",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/native_record_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/native_record_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/native_record_True.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_record_True/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "274cbdb723929cd6637becfb0b7aab232969744684a905048e67e160ab29f987",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "951d0a6dfa0a30b1055f35dfcbc3cbdfbf3b527560b250221010bcd983d0c0af",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "21ae8e1d7b31b0fae7261ba145360efe90e33ea33a998d263c6cda9d267d1b97",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_record_True"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/native_struct_False.puml",
+      "relative": "native_struct_False.puml",
+      "source_sha256": "715febb4c80e7b161d19546b49243de7978000841ad9abe9e7dda67094e3e498",
+      "java_sha256": "2655f204a1b46c02b3a923d0a28bc382aa7f96ca0d7aec150aec19dd7e105653",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/native_struct_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/native_struct_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/native_struct_False.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_struct_False/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "ee5439a7cf8892d8d9b2011c7613778c9e155880e607ac28e5b79212bf51a9e3",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "3621d3b30cd091769450482f8a344b20dbb87244393cf1efb82be4c6e1237e64",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_struct_False"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/native_struct_True.puml",
+      "relative": "native_struct_True.puml",
+      "source_sha256": "7563fd5a968b0886da4aa29eb670391616537822d4d17e34e264ec9d3adaa2ad",
+      "java_sha256": "0feebbb8073d97e2cce6ded588600f0a8600b8f70675b19998657f7d4a5d7d00",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/native_struct_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/native_struct_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/native_struct_True.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_struct_True/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "274cbdb723929cd6637becfb0b7aab232969744684a905048e67e160ab29f987",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "49d896d21db4a088391e3116fbe3e0eca3fcd3ddc5e07d283da6dbd90c14693e",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "21ae8e1d7b31b0fae7261ba145360efe90e33ea33a998d263c6cda9d267d1b97",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/native_struct_True"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/note_frontier_cloud.puml",
+      "relative": "note_frontier_cloud.puml",
+      "source_sha256": "60ceaccf28c6d3a280310f6aac495cb43e27c9c9422bc9ceb8ce788ffb7bd45f",
+      "java_sha256": "a29b773b02b42d643c1b1a189024e8c7d50e6e64dfc1a5af02b5e6d4f977677a",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/note_frontier_cloud.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/note_frontier_cloud.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/note_frontier_cloud.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/note_frontier_cloud/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "9e4a9e77cd1da5936292719f3d2a1590eb4384172342b255b7d82a3470503bc2",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "3af167828206cbdde35a10641525f00dbba49413056777a2a13c15119e29b95c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "0aab4c7d30acf0302a8532a0d516ac80bbc6d80810be194c2ee65a209f1cfc8f",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/note_frontier_cloud"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/note_frontier_node.puml",
+      "relative": "note_frontier_node.puml",
+      "source_sha256": "0f944237b69a4d2055c497d85c0ae0aaaf555e709d963fb0f0413e26941ca7be",
+      "java_sha256": "b7ac3baaf24ff24358b21b678ec2346b9e773608680f7448fb5efeb10570a2b8",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/note_frontier_node.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/note_frontier_node.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/note_frontier_node.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/note_frontier_node/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "b06df220596c13658d100088f87473500f8ed417d9a67152196860a66ac93b54",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "00335f459d438b320f8ced5161ac3ad3bd4c00a6fb5f1f52b1b114131f22bb5d",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "680b70e73517f012214463c9fb7991e4e9f3ad63c09bd5fbb2859f4799abfdc4",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/note_frontier_node"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/note_frontier_rectangle.puml",
+      "relative": "note_frontier_rectangle.puml",
+      "source_sha256": "41adc5c3e9acef7b7263441b33a1136b1ac34898c15d48095ae03b4ef0b2e0d4",
+      "java_sha256": "887dcbca19d7e428532addb1e91953056d9696c1def0565520c6ba8897a45d5e",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/note_frontier_rectangle.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/note_frontier_rectangle.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/note_frontier_rectangle.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/note_frontier_rectangle/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "6132352cc03f32bfb550418f5174cba4885f554aec8d03a09f4391bbbebc653d",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "3e672c6586981e7fd003fa05f7848c0a1e67feef9ce9cfc8b62437d54cd258a5",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "feac5c0330f0825990dd47e1ffe353c602212791b9cc40eb0c4983332449f3fa",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/note_frontier_rectangle"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/shield_lef_False.puml",
+      "relative": "shield_lef_False.puml",
+      "source_sha256": "c277a8f21d656ebe6cfb7c5875574e5a2fe2fa1b8d50b7221c5a5b67a93facdb",
+      "java_sha256": "cbb2b9ed09ad6f7b606554f98ee7f370e9e1aaffc1aaf1661ca95d767d543dbe",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/shield_lef_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/shield_lef_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/shield_lef_False.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_lef_False/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "54b8fa06f8dae78353c24e2d7fea7c23314c368aea16a0b36e57c4c85f7deeb3",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "73aca81c39d388963091f1d136705e4b2687f8d3c4ce89db61f40de1d8ebb3ff",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "c7af714c648740de496b1267bdb9e3efff6d800fccc0c3c9140782b9b0ec6c2c",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_lef_False"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/shield_lef_True.puml",
+      "relative": "shield_lef_True.puml",
+      "source_sha256": "9ad8db821d3a0bd920bac7d5747bacdbcb69755022388280620d0961ca646abf",
+      "java_sha256": "7ab1d20443f4b034f48a4176ead22fcd15fdb678cae95ec42771fda7da9be797",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/shield_lef_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/shield_lef_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/shield_lef_True.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_lef_True/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "75196f8cba7f0c6d622c78ece28b76b13cb9277eeb5df4d9d3156697d808f142",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "a1164c4a684a4b3f8c34d895abf7f4a4c1e6c6214656a2cfd52b00727a0bb7dd",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "2a7661a544c356184b5801f389e5e31c0876f7d6d554bb3e1de0f88c68d923a2",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_lef_True"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/shield_top_False.puml",
+      "relative": "shield_top_False.puml",
+      "source_sha256": "3b534b2d005b4e327163a4b3047c5643c5c9a6fa0fdab723527606863fe7e6d3",
+      "java_sha256": "c59f9b8f424cd569276211bbce1ecc3486613f3effa27cfc92c626a4a75e39ae",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/shield_top_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/shield_top_False.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/shield_top_False.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_top_False/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "96ecc60b57205b9a9e0fc1fb99b4c7b2f31a0140b09f49949d962dde47120da1",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "91078937a36d31423931cf2997256ca9d191a0c4301c6300c7dcc095181de61c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "f4bf4985b697a8d09b6d435dbab76f2d8bb0acfc5a3226e5f11b650c9681b5aa",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_top_False"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/shield_top_True.puml",
+      "relative": "shield_top_True.puml",
+      "source_sha256": "5cea7ef1193fccaffa1dd700bfc2602e9206c6a77ffe86310ef4c7c06318a37a",
+      "java_sha256": "4fada3842550297d266976201b11d75903d076f144e2a898b67f43b3512e13ef",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/shield_top_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/shield_top_True.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/shield_top_True.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_top_True/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "f352a7baf0c69fee7e59dc8b3536cfbf59a82e69b52a162b9696621f6cb29199",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "cf50c25ba02eb79b922b8e31b32040c7564ce02d7aae7abbd83ad3dad58785b3",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "eb4dc6b40a063e24b0f5a4dd552f6597990147682e2bd94d96d413ac5de8fc98",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/shield_top_True"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/visibility_package.puml",
+      "relative": "visibility_package.puml",
+      "source_sha256": "30564b91314d05de2879c67fc8e14c6df9b5b49e70fe347ada86d09a8fa7538b",
+      "java_sha256": "3d4484bdce8669e3055164b09b0af85de1926ac63d0e29ef20d3b1d1138e7988",
+      "status": "process_error",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/visibility_package.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/visibility_package.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/visibility_package.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_package/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: ~package \"North Valley\" as Valley {\n"
+      },
+      "ast": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: ~package \"North Valley\" as Valley {\n"
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_package"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/visibility_private.puml",
+      "relative": "visibility_private.puml",
+      "source_sha256": "521bb09f13c4b7c74d50785f33f10735fdd93a63cfe51a64e53390018bcc678d",
+      "java_sha256": "7afce0102a0ba1d413ad4e3dbfbc9bbc6cb86a092b455a8c104c8b2779af933d",
+      "status": "process_error",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/visibility_private.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/visibility_private.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/visibility_private.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_private/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: -package \"North Valley\" as Valley {\n"
+      },
+      "ast": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: -package \"North Valley\" as Valley {\n"
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_private"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/visibility_protected.puml",
+      "relative": "visibility_protected.puml",
+      "source_sha256": "de5b55650215bfa4fccddf3e8c9fff68c2276492f9618b483d81de1b752afc15",
+      "java_sha256": "512a25ff0a6299e490e7a1f4bf81b75f2bb29bf5d490e2c6b75fe3c11b9ea7e1",
+      "status": "process_error",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/visibility_protected.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/visibility_protected.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/visibility_protected.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_protected/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: #package \"North Valley\" as Valley {\n"
+      },
+      "ast": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: #package \"North Valley\" as Valley {\n"
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_protected"
+    },
+    {
+      "cohort": "fresh24",
+      "source": "/tmp/rustuml-cff3/fresh/visibility_public.puml",
+      "relative": "visibility_public.puml",
+      "source_sha256": "dc9d7a31d1afc779b7fcda0f0cc83767315e0b1b616f6e7a76a8a50a35413e05",
+      "java_sha256": "7c67048f85f90e67eb70f81b5344040eced1050b555db229d010bb9b8dc67ab9",
+      "status": "process_error",
+      "commands": [
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "-tsvg",
+          "/tmp/rustuml-cff3/fresh/visibility_public.puml"
+        ],
+        [
+          "/tmp/rustuml-cff3/before-rustuml",
+          "--ast",
+          "/tmp/rustuml-cff3/fresh/visibility_public.puml"
+        ],
+        [
+          "/tmp/rustuml-cff-check-svg",
+          "/tmp/rustuml-cff3/fresh/visibility_public.svg",
+          "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_public/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: +package \"North Valley\" as Valley {\n"
+      },
+      "ast": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "parse error: line 2: unrecognized class command: +package \"North Valley\" as Valley {\n"
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "Error: \"failed to parse SVG: the document does not have a root node\"\n"
+      },
+      "output": "/tmp/rustuml-cff3/fresh-before/outputs/fresh24/visibility_public"
+    }
+  ]
+}
