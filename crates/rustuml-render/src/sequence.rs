@@ -6701,8 +6701,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     const LEGEND_FONT_SIZE: u32 = 14;
     const LEGEND_LEFT: f64 = 12.0;
     const LEGEND_PAD: f64 = 5.0;
-    const LEGEND_TOP_GAP: f64 = 14.0;
-    const LEGEND_BOTTOM_PAD: f64 = 18.0;
     const TITLE_TOP_PAD: f64 = 10.0; // gap from y=0 to first title baseline (minus ascent)
     const TITLE_BOTTOM_PAD: f64 = 11.0; // gap from last title descent line to head top
     let title_lines: Vec<&str> = diagram
@@ -6711,6 +6709,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .as_deref()
         .map(|t| t.split("\\n").collect())
         .unwrap_or_default();
+    let caption_lines = diagram
+        .meta
+        .caption
+        .as_deref()
+        .map(|caption| {
+            caption
+                .split("\\n")
+                .flat_map(str::lines)
+                .collect::<Vec<_>>()
+        })
+        .unwrap_or_default();
+    let caption_metrics = caption_lines
+        .iter()
+        .map(|line| {
+            rendered_line_metrics_with_family(line, CAPTION_FONT_SIZE as f64, &page_font_family)
+        })
+        .collect::<Vec<_>>();
+    let caption_text_height = caption_metrics.iter().map(|m| m.height).sum::<f64>();
+    let caption_text_width = caption_lines
+        .iter()
+        .map(|line| text_width_with_family(line, CAPTION_FONT_SIZE as f64, &page_font_family))
+        .fold(0.0_f64, f64::max);
     let header_lines: Vec<&str> = diagram
         .meta
         .header
@@ -7109,11 +7129,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `newpage` splits the diagram into pages; single-image SVG output renders
     // only page one. Normalize lifecycle attachment before any spacing, extent,
     // note, activation, or paint scan asks for live depth.
-    let page1_end = diagram
+    let paint_page_end = diagram
         .events
         .iter()
         .position(|event| matches!(event, Event::NewPage(_)))
         .unwrap_or(diagram.events.len());
+    // PlayingSpaceWithParticipants clips page paint while measuring the full
+    // PlayingSpace; legacy DrawableSet instead sizes a separate Page.
+    let page1_end = if diagram.teoz {
+        diagram.events.len()
+    } else {
+        paint_page_end
+    };
     let has_newpage = page1_end < diagram.events.len();
     let lifecycle = sequence_lifecycle_layout(&diagram.events, diagram.events.len());
     let lifecycle_owner = lifecycle.attachment_owner;
@@ -7626,8 +7653,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // DrawableSetInitializer#prepareNewpage advances the shared
                     // frontier by the component height. Page selection occurs later.
                     event_y_positions.push(y);
-                    y += NEWPAGE_SEPARATOR_HEIGHT;
-                    first_page_end.get_or_insert((y, msg_count));
+                    // NewpageTile has zero height; Teoz SVG keeps the complete
+                    // PlayingSpace dimensions and history (account 836f9c0d).
+                    if !diagram.teoz {
+                        y += NEWPAGE_SEPARATOR_HEIGHT;
+                        first_page_end.get_or_insert((y, msg_count));
+                    }
                 }
                 _ => {
                     event_y_positions.push(y);
@@ -8313,16 +8344,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Phase 3: Assign x positions
     // -----------------------------------------------------------------------
 
-    // Additional rightward shift forced by a title/header/caption/footer wider than the
-    // participant span. PlantUML centres each such band on the participant-span
-    // midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the
-    // band (at its own left margin) would push that midpoint right of where the
-    // participants currently sit, the whole diagram shifts and the canvas grows
-    // symmetrically by `2 * meta_shift`. Derived from seq_footer_variant_01
-    // (footer 133.4033 @ m=0 -> shift 13.249, width 113->140), seq_title_basic
-    // (title 159.1133 @ m=10 -> shift 36.104, width 113->186) and the caption
-    // variants (m=1). See the C3 width-feedback note.
-    let mut meta_shift: f64 = 0.0;
     let group_shift = if diagram.teoz || legacy_groups {
         0.0
     } else if group_left_shift_depth > 0 {
@@ -10069,75 +10090,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         max_self_msg_right += shift;
     }
 
-    // Page decorations are outside DrawableSetInitializer's constraint and
-    // missing-space stages; they must not participate in winner selection.
-    if diagram.teoz && !participants.is_empty() {
-        // Title/header/caption/footer band feedback: if any band is wider than the
-        // current participant span, shift the participants so the span midpoint
-        // lands under the band's centre. `c0` is the span midpoint on the
-        // current (post-across-shift) layout; each band wants its own centre at
-        // `left_margin + band_width / 2`.
-        let first = &participants[0];
-        let last = &participants[n - 1];
-        let c0 = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-        let mut want_center: f64 = c0;
-        if !header_lines.is_empty() {
-            // Header text right-aligns to the canvas with a 6px right inset.
-            // When it would overhang the left edge, PlantUML shifts the same
-            // participant span used by other page decorations. Multiline
-            // headers use the widest rendered line.
-            let w = header_lines
-                .iter()
-                .map(|line| {
-                    text_width_with_family(line, HEADER_FONT_SIZE as f64, &page_font_family)
-                })
-                .fold(0.0_f64, f64::max);
-            want_center = want_center.max(w / 2.0);
-        }
-        if let Some(footer) = &diagram.meta.footer {
-            // Footer left margin is 0.
-            let w = text_width_with_family(footer, 10.0, &page_font_family);
-            want_center = want_center.max(w / 2.0);
-        }
-        if let Some(caption) = &diagram.meta.caption {
-            // Caption left margin is 1.
-            let w = text_width_with_family(caption, 14.0, &page_font_family);
-            want_center = want_center.max(1.0 + w / 2.0);
-        }
-        if !legend_lines.is_empty() {
-            // Legend boxes use a fixed 12px left margin and a 5px text inset on
-            // each side; when wider than the participant span they shift the
-            // same span right and grow the canvas symmetrically.
-            want_center = want_center.max(LEGEND_LEFT + legend_box_w / 2.0);
-        }
-        if !title_lines.is_empty() {
-            // Title left margin is 10; use the widest line.
-            let w = title_lines
-                .iter()
-                .map(|line| text_render::measure(line, TITLE_FONT_SIZE as f64, true))
-                .fold(0.0_f64, f64::max);
-            want_center = want_center.max(10.0 + w / 2.0);
-        }
-        meta_shift = (want_center - c0).max(0.0);
-        if meta_shift > 0.0 {
-            for p in participants.iter_mut() {
-                p.center_x += meta_shift;
-                p.box_x += meta_shift;
-                p.lifeline_line_x += meta_shift;
-            }
-        }
-        if meta_shift > 0.0 {
-            max_self_msg_right += meta_shift;
-            for left in self_msg_right_note_left_by_event.values_mut() {
-                *left += meta_shift;
-            }
-            for frame in &mut group_frames {
-                frame.left += meta_shift;
-                frame.right += meta_shift;
-            }
-        }
-    }
-
     // Compute tail box y based on message count.
     // With 0 messages, PlantUML uses a minimum lifeline height of 20px.
     // With messages, the tail starts TAIL_GAP below the last effective y
@@ -10543,9 +10495,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // this exact value with a 6px margin, so the ceiled `svg_width` (used
     // elsewhere) would mis-place the header by the rounding remainder.
     let svg_width_exact = effective_right + RIGHT_MARGIN;
-    // A title/caption/footer band wider than the participant span shifted the
-    // participants right by `meta_shift` (so `effective_right` already grew by
-    // that much); add it once more to keep the band centred and symmetric.
     // The resolved theme margin surrounds an event envelope expanded by
     // `prepareMissingSpace`, but is already represented on the participant
     // envelope's left edge. Preserve the historical subtraction when padded
@@ -10557,7 +10506,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         -theme_top_padding
     };
     let mut svg_width_exact = svg_width_exact
-        + meta_shift
         + theme_horizontal_margin
         + if sequence_shadowing {
             SHADOW_CANVAS_RIGHT_PAD
@@ -10602,51 +10550,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if diagram.teoz && has_boxes && !diagram.hide_footbox {
         pre_caption_height += f64::from(TEOZ_BOX_CANVAS_BOTTOM_EXTRA);
     }
-    let mut svg_height = pre_caption_height.ceil() as u32;
-    // Caption adds vertical space below the foot boxes. Caption-only diagrams
-    // place the baseline from the tail box bottom, then size the canvas around
-    // that baseline. When a footer is present, PlantUML stacks caption above
-    // the footer inside a shared bottom decoration band. With hidden footboxes
-    // that band is compact; otherwise the tail boxes reserve an extra few
-    // pixels above the bottom decorations.
-    const CAPTION_BOTTOM_AFTER_BASELINE: f64 = 10.1777;
-    const FOOTER_BASELINE_AFTER_TAIL: f64 = 11.6679;
-    let caption_top = if diagram.hide_footbox {
-        // The raw hidden-footbox sequence block ends eight pixels before the
-        // visible lifeline tail.
-        lifeline_bottom - 8.0
-    } else {
-        // The raw sequence block leaves three pixels below the tail boxes
-        // before DiagramChromeFactory12026 stacks the caption.
-        tail_box_y + max_box_h + 3.0
-    };
-    let caption_only_y =
-        caption_top + ascent_with_family(CAPTION_FONT_SIZE as f64, &page_font_family);
-    if diagram.meta.caption.is_some() {
-        if diagram.meta.footer.is_some() {
-            if diagram.hide_footbox {
-                svg_height += 15;
+    // Account 836f9c0d. DecorateEntityImage stacks complete preferred
+    // blocks: raw -> legend -> title (already above body) -> caption -> footer.
+    // DrawableSet's hidden tail has height 1; its lifeline extends by
+    // ParticipantBox.magicMargin=10 beyond the body, hence bottom-10+1.
+    // Teoz's raw TextBlock has its own 5px bottom inset and includes the
+    // participant component's trailing preferred-height pixel when shown.
+    let raw_body_bottom = if diagram.teoz {
+        tail_box_y
+            + if diagram.hide_footbox {
+                0.0
             } else {
-                // DiagramChromeFactory12026 wraps the raw diagram with the
-                // caption before adding the footer. The default caption style
-                // contributes a one-pixel margin on both vertical sides, and
-                // the exported block keeps one outer pixel. Preserve the raw
-                // fractional height until this final ceil.
-                let caption_block_height = text_height_with_family(14.0, &page_font_family) + 2.0;
-                svg_height = (pre_caption_height + caption_block_height + 1.0).ceil() as u32;
+                max_box_h + 1.0 + shadow_vertical_pad
             }
-        } else {
-            svg_height = (caption_only_y + CAPTION_BOTTOM_AFTER_BASELINE).ceil() as u32;
-        }
-    }
-    let legend_y = if diagram.hide_footbox {
-        lifeline_bottom + LEGEND_TOP_GAP
+            + HEAD_BOX_Y
+    } else if diagram.hide_footbox {
+        lifeline_bottom - 10.0 + 1.0
     } else {
-        tail_box_y + max_box_h + LEGEND_TOP_GAP
+        pre_caption_height - footer_band_h - HEAD_BOX_Y
     };
-    if !legend_lines.is_empty() {
-        svg_height = svg_height.max((legend_y + legend_box_h + LEGEND_BOTTOM_PAD).ceil() as u32);
-    }
+    let legend_block_height = if legend_lines.is_empty() {
+        0.0
+    } else {
+        legend_box_h + 2.0 * LEGEND_LEFT + 1.0
+    };
+    let caption_block_height = if caption_lines.is_empty() {
+        0.0
+    } else {
+        caption_text_height + 2.0 + 1.0
+    };
+    let caption_top = raw_body_bottom + legend_block_height + 1.0;
+    let legend_y = raw_body_bottom + LEGEND_LEFT;
+    let footer_top = raw_body_bottom + legend_block_height + caption_block_height;
+    let mut svg_height = (footer_top + footer_band_h + HEAD_BOX_Y)
+        .max(lifeline_bottom)
+        .ceil() as u32;
+    const FOOTER_BASELINE_AFTER_TAIL: f64 = 11.6679;
     // Named boxes extend below the foot boxes; the frame bottom plus its own
     // bottom margin must fit inside the canvas.
     if has_boxes {
@@ -10918,12 +10857,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // header/footer. DecorateEntityImage centers the child in each maximum width.
     // TextBlockBordered contributes one trailing unit; plantuml.skin supplies
     // title padding/margin 5+5, caption margin 1 and legend margin 12.
-    let mut page_body_shift = 0.0;
-    let mut page_text_center = None;
+    let page_body_shift;
+    let page_text_center;
     let mut legend_left = LEGEND_LEFT;
     let body_right;
-    let svg_width = if !diagram.teoz {
-        let body_width = svg_width_exact - LEGACY_SEQUENCE_RIGHT_MARGIN;
+    let svg_width = {
+        let outer_left = if diagram.teoz { HEAD_BOX_Y } else { 0.0 };
+        let body_width = svg_width_exact - LEGACY_SEQUENCE_RIGHT_MARGIN - outer_left;
         let legend_width = if legend_lines.is_empty() {
             body_width
         } else {
@@ -10937,10 +10877,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .fold(0.0_f64, f64::max);
             decorated_width = decorated_width.max(text + 2.0 * TITLE_TOP_PAD + 1.0);
         }
-        if let Some(caption) = &diagram.meta.caption {
-            decorated_width = decorated_width.max(
-                text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family) + 3.0,
-            );
+        if !caption_lines.is_empty() {
+            decorated_width = decorated_width.max(caption_text_width + 3.0);
         }
         for text in header_lines
             .iter()
@@ -10964,14 +10902,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         for left in self_msg_right_note_left_by_event.values_mut() {
             *left += page_body_shift;
         }
-        legend_left += (decorated_width - legend_width) / 2.0;
-        page_text_center = Some((decorated_width - 1.0) / 2.0);
-        body_right = body_width + page_body_shift;
-        svg_width_exact = decorated_width + LEGACY_SEQUENCE_RIGHT_MARGIN;
+        legend_left += outer_left + (decorated_width - legend_width) / 2.0;
+        page_text_center = Some(outer_left + (decorated_width - 1.0) / 2.0);
+        body_right = body_width + outer_left + page_body_shift;
+        svg_width_exact = decorated_width + outer_left + LEGACY_SEQUENCE_RIGHT_MARGIN;
         svg_width_exact.ceil() as u32
-    } else {
-        body_right = svg_width_exact - HEAD_BOX_Y;
-        svg_width
     };
 
     let center_of = |id: &str| -> f64 {
@@ -11061,7 +10996,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // With group frames the band reference is the full sequence area width;
             // otherwise it is the canvas-derived `svg_width_exact - 6` inset.
             let x = if let Some(center) = page_text_center {
-                2.0 * center - text_length
+                2.0 * center - text_length - if diagram.teoz { HEAD_BOX_Y } else { 0.0 }
             } else {
                 match group_band_get_width {
                     Some(gw) => gw - text_length,
@@ -11672,7 +11607,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     };
     // Only page-1 events are drawn (see `page1_end` above); event_y_positions
     // only spans page 1, so the loop must not index past it either.
-    for (ev_idx, event) in events.iter().take(page1_end).enumerate() {
+    for (ev_idx, event) in events.iter().take(paint_page_end).enumerate() {
         let multi_side_note_arrow_y_adjust = msg_side_note_count
             .get(&ev_idx)
             .copied()
@@ -14315,42 +14250,42 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // PlantUML wraps it in `<g class="caption" data-source-line="N">` and
     // routes the text through the creole segmenter so bold/italic/under runs
     // split into separate `<text>` elements at calculated x offsets.
-    if let Some(caption) = &diagram.meta.caption {
+    if diagram.meta.caption.is_some() {
         let src_line = diagram.meta.caption_line.unwrap_or(1);
-        let caption_x = if let Some(center) = page_text_center {
-            center
-                - text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family) / 2.0
-        } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
-            let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
-            let w = text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family);
-            (center - w / 2.0).max(1.0)
-        } else {
-            1.0
-        };
-        // Adding the footer wraps the captioned block and does not move the
-        // caption inside it (`DiagramChromeFactory12026#addCaption` followed
-        // by `addHeaderAndFooter`).
-        let caption_y = caption_only_y;
+        let caption_x = page_text_center.unwrap_or(0.0) - caption_text_width / 2.0;
         write!(
             svg.buf,
             r#"<g class="caption" data-source-line="{src_line}">"#
         )
         .unwrap();
-        text_render::emit_text(
-            &mut svg.buf,
-            caption,
-            &TextBase {
-                x: caption_x,
-                y: caption_y,
-                font_size: CAPTION_FONT_SIZE,
-                font_family: &page_font_family,
-                fill: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        let mut top = caption_top;
+        for (line, metrics) in caption_lines.iter().zip(&caption_metrics) {
+            text_render::emit_text(
+                &mut svg.buf,
+                line,
+                &TextBase {
+                    // Caption style is centered, including each line within
+                    // the widest-line TextBlock (Style#createTextBlockBordered).
+                    x: caption_x
+                        + (caption_text_width
+                            - text_width_with_family(
+                                line,
+                                CAPTION_FONT_SIZE as f64,
+                                &page_font_family,
+                            ))
+                            / 2.0,
+                    y: top + metrics.ascent,
+                    font_size: CAPTION_FONT_SIZE,
+                    font_family: &page_font_family,
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            top += metrics.height;
+        }
         svg.buf.push_str("</g>");
     }
 
@@ -14392,14 +14327,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             r#"<g class="footer" data-source-line="{footer_line}">"#
         )
         .unwrap();
-        let footer_y = if diagram.meta.caption.is_some() {
-            // DecorateEntityImage stacks the footer below the complete caption
-            // block. The caption's default style has one-pixel top and bottom
-            // margins around its measured text.
-            caption_only_y - ascent_with_family(14.0, &page_font_family)
-                + text_height_with_family(14.0, &page_font_family)
-                + 2.0
-                + ascent_with_family(FOOTER_FONT_SIZE as f64, &page_font_family)
+        let footer_y = if diagram.meta.caption.is_some() || !legend_lines.is_empty() {
+            footer_top + ascent_with_family(FOOTER_FONT_SIZE as f64, &page_font_family)
         } else if diagram.hide_footbox {
             if diagram.teoz && has_boxes {
                 // Teoz sizes the named-box frame 6px below the lifeline tail
