@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-component-padding-flow",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": ["klimt/creole/Display.java#create0 and SheetBlock1 padded dimension/drawing", "skin/AbstractTextualComponent.java#getTextHeight", "skin/rose/ComponentRoseGroupingHeader.java#getPreferredHeight,getSuppHeightForComment,drawInternalU", "skin/rose/ComponentRoseGroupingElse.java#getPreferredHeight", "skin/rose/ComponentRoseNote.java#getPreferredHeight", "sequencediagram/graphic/DrawableSetInitializer.java#prepareGroupingStart,prepareGroupingLeaf,prepareNote"],
+  "rust_locations": ["crates/rustuml-render/src/sequence.rs::render group header metrics, phase-1 vertical flow, group painters and minimum width"],
+  "invariant": "Each component reserves its preferred height, including the global padding contributed by its text block. Group-header reservation additionally includes max(comment text block height - 15, 0); this overflow changes flow but not the tab shape. Empty text blocks carry no padding. Painting uses the same padded text origins and component widths.",
+  "causal_divergence": "Rust message spacing already includes global text padding, but standalone note flow discards it and group header/else metrics omit it. The group comment overflow rule is absent. With two padded headers and two notes, the missing preferred-height contributions accumulate before return/closing frames; a padded guard may add further height. Tab and label positions also use unpadded block dimensions.",
+  "planned_change": "Use padded header/tab metrics, padded group/comment text origins and minimum widths. Reserve header comment overflow from actual text metrics and Java's named 15-unit comment allowance. Add note and else padding at their component scheduling sites; do not translate final diagram y coordinates. Preserve message geometry and distinguish empty text from nonempty components.",
+  "perturbation_axes": ["Padding 0/2/5/9 with nested groups and notes", "Multiline/empty group guards and else comments", "Standalone versus message-attached notes, left/right/over positions"],
+  "verification_plan": ["Fresh pinned Java source-to-SVG matrix", "Original padding3/7 checker cases and all previous counterexamples", "Whole sequence family remains 1411/1411; both main tiers and all current heldouts"],
+  "acceptance": "Maker candidate only; independent checker required."
+}
