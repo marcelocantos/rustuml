@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-static-shield-cell-grid",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a7bfb71cb202caecfdb9c33a099f0c32c726571",
+  "java_locations": [
+    "svek/SvekNode#appendHtml,appendLabelHtml,appendTd",
+    "svek/image/EntityImageDescription#getShield",
+    "Graphviz common/htmllex.c#doInt,widthfn,heightfn",
+    "Graphviz common/htmltable.c#size_html_tbl,pos_html_tbl,pos_html_cell,html_port",
+    "Graphviz common/shapes.c#poly_init,poly_port"
+  ],
+  "rust_locations": [
+    "crates/rustuml-layout/src/graph.rs#svek_shielded_node_table,create_node",
+    "vendor/graphviz/lib/rustuml_helpers.c#rustuml_make_fixed_html_table_label"
+  ],
+  "invariant": "A shield is a plaintext node with a zero-border/padding/spacing grid. Column widths and row heights are the maxima of their fixed cells after Graphviz dimension truncation. The image port belongs to the central cell, not the padded node box.",
+  "causal_divergence": "The previous SvekShielded branch emitted a fixed box plus a single rounded table and synthesized center-port offset. The native no-Expat parser cannot consume Java 3x3 table, so exact diagnostic DOT falls back to node-name text and loses h. External/native Java-DOT diagnostics locate the divergence before solve.",
+  "planned_change": "Extend the existing native fixed-table entrypoint with a bounded, validating empty-cell grid parser. Support only explicit zero border/padding/spacing, TD fixed dimensions/background/port and empty cells, returning unsupported input to the ordinary HTML path. Build native htmltbl/cells with Graphviz-equivalent dimension truncation, row/column maxima, centered fixed cells and exposed-side flags. Emit Java plaintext 3x3 shield directly and use native html_port, removing the shield-specific synthesized box attributes from this branch. Preserve state-border behavior and its separately owned model.",
+  "perturbation_axes": [
+    "LR/TB and reversed endpoint order",
+    "fractional label width, stereotype height, declaration order, multiple shields"
+  ],
+  "diagnostic_evidence": "../class-command-grammar-closure/checker-support/java-trace/shield",
+  "negative_evidence_contract": "Existing comparisons and valid parseability must be preserved; exact DOT equivalence does not waive real CLI mismatches. No self-owned review."
+}
