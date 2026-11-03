@@ -1,0 +1,5 @@
+@startuml
+participant S
+participant Tail as T
+S -> S : q
+@enduml

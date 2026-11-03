@@ -685,24 +685,22 @@ const SELF_MSG_LIFELINE_CLOSE_INSET: f64 = 7.0;
 /// Text x offset from center_x for self-messages.
 const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
 /// Extra right padding beyond self-message text/loopback.
-const SELF_MSG_RIGHT_PAD: f64 = 2.0;
 /// Bare `note right` attached to a self-message starts this far after
 /// `floor(cx) + label_width`.
-const SELF_MSG_RIGHT_NOTE_X_PAD: f64 = 19.0;
 /// Bare `note right` attached to a self-message places the note top at
 /// `arrow_y - first_line_height + this`.
 const SELF_MSG_RIGHT_NOTE_Y_PAD: f64 = 2.5;
 /// Extra canvas reservation PlantUML keeps for an active self-message on an
 /// inline-created participant. The visible loopback geometry is unchanged, but
 /// the computed right edge is wider in create+activate lifecycles.
-const CREATED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 16.0;
 /// Extra canvas reservation for active self-messages on a participant whose
 /// lifecycle is later ended by a standalone destroy.
-const DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD: f64 = 15.0;
 /// Minimum preferred width a self-message reserves in the gap to the next
 /// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns
 /// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.
 const SELF_MSG_MIN_PREF_WIDTH: f64 = 50.0;
+// SequenceDiagram#getDefaultMargins (legacy): top/right/bottom/left = 5/5/5/0.
+const LEGACY_SEQUENCE_RIGHT_MARGIN: f64 = 5.0;
 
 // ---------------------------------------------------------------------------
 // Participant-type shape constants (reverse-engineered from golden SVGs)
@@ -3030,13 +3028,6 @@ struct SequenceLifeLines {
 }
 
 impl SequenceLifeLines {
-    fn accepted_event(&self, event_index: usize) -> bool {
-        self.accepted_events
-            .get(event_index)
-            .copied()
-            .unwrap_or(false)
-    }
-
     fn return_context(&self, event_index: usize) -> Option<&SequenceReturnContext> {
         self.return_context_by_event
             .get(event_index)
@@ -3102,6 +3093,34 @@ impl SequenceLifeLines {
             (-ACTIVATION_HALF_W, depth as f64 * ACTIVATION_HALF_W)
         }
     }
+}
+
+/// Legacy MessageSelfArrow geometry relative to its participant center.
+/// Step1Message adds deltaX for activation; MessageSelfArrow adds the start
+/// segment length to ComponentRoseSelfArrow's preferred width. The same value
+/// supplies constraint-after, group membership, page extent and paint origin.
+#[derive(Clone, Copy)]
+struct SequenceSelfArrow {
+    start: f64,
+    width: f64,
+    segment_length: f64,
+    activation_delta: f64,
+}
+
+impl SequenceSelfArrow {
+    fn new(depth: usize, padded_text_width: f64, activates: bool) -> Self {
+        let (left, right) = sequence_live_segment(0.0, depth);
+        let activation_delta = if activates { ACTIVATION_HALF_W } else { 0.0 };
+        Self {
+            start: right + activation_delta,
+            width: padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH) + right - left,
+            segment_length: right - left,
+            activation_delta,
+        }
+    }
+
+    fn max_x(self) -> f64 { self.start + self.width }
+    fn constraint_after(self) -> f64 { self.width + self.segment_length }
 }
 
 #[derive(Clone, Copy)]
@@ -7023,7 +7042,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .position(|event| matches!(event, Event::NewPage(_)))
         .unwrap_or(diagram.events.len());
     let has_newpage = page1_end < diagram.events.len();
-    let lifecycle = sequence_lifecycle_layout(&diagram.events, page1_end);
+    let lifecycle = sequence_lifecycle_layout(&diagram.events, diagram.events.len());
     let lifecycle_owner = lifecycle.attachment_owner;
     let lifecycle_y_offset = lifecycle.y_offset;
     let lifecycle_row_after_message = lifecycle.row_after_message;
@@ -7187,10 +7206,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut event_y_positions: Vec<f64> = Vec::new();
     let mut msg_count: u32 = 0;
     let last_effective_y;
+    let mut first_page_end = None;
     {
         let mut y = lifeline_top;
         let message_vertical_padding = 2.0 * global_padding;
-        for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
+        for (idx, event) in diagram.events.iter().enumerate() {
             let (has_text, event_text_height) = event_message_text_height(event);
             match event {
                 Event::Message(msg) => {
@@ -7492,19 +7512,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .unwrap_or(y);
                     event_y_positions.push(event_y);
                 }
-                _ => {
+                Event::NewPage(_) => {
+                    // DrawableSetInitializer#prepareNewpage advances the shared
+                    // frontier by the component height. Page selection occurs later.
                     event_y_positions.push(y);
+                    y += NEWPAGE_SEPARATOR_HEIGHT;
+                    first_page_end.get_or_insert((y, msg_count));
                 }
+                _ => { event_y_positions.push(y); }
             }
         }
         // The first `newpage` reserves NEWPAGE_SEPARATOR_HEIGHT in the page-1
         // flow (Java `prepareNewpage` advances `freeY2` by the separator
         // component's preferred height of 1), shifting the foot boxes and
         // lifeline bottoms of page 1 down by that amount.
-        if has_newpage {
-            y += NEWPAGE_SEPARATOR_HEIGHT;
-        }
-        last_effective_y = y;
+        let (page_y, page_messages) = first_page_end.unwrap_or((y, msg_count));
+        last_effective_y = page_y;
+        msg_count = page_messages;
     }
 
     let life_lines = sequence_lifelines(
@@ -7514,20 +7538,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         &lifecycle_owner,
         &create_msg_idx,
     );
-    // Java builds one ConstraintSet for the complete sequence before the page
-    // renderer selects a page. Horizontal constraints after `newpage` therefore
-    // see activation state carried from earlier pages, even though only page 1
-    // contributes vertical geometry to this SVG. Give later-page events stable,
-    // increasing ordinates and build the same whole-diagram lifeline history for
-    // the spacing pass; painting continues to use the page-1 model above.
-    let mut horizontal_event_y_positions = event_y_positions.clone();
-    if has_newpage {
-        let mut ordinate = last_effective_y + 1.0;
-        for _ in page1_end..diagram.events.len() {
-            horizontal_event_y_positions.push(ordinate);
-            ordinate += 1.0;
-        }
-    }
+    // DrawableSetInitializer lays out every event before page selection. Use
+    // actual component scheduling here: fabricated unit-spaced ordinates overlap
+    // self-arrow start/end levels and lose accepted activations on later pages.
+    let horizontal_event_y_positions = event_y_positions.clone();
     let horizontal_life_lines_storage = if has_newpage {
         let full_lifecycle = sequence_lifecycle_layout(&diagram.events, diagram.events.len());
         Some(sequence_lifelines(
@@ -7642,7 +7656,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             };
 
                             let text_pref =
-                                autonumber_extra + label_w + MSG_TEXT_LEFT_PAD + MSG_TEXT_LEFT_PAD;
+                                autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD
+                                    + 2.0 * constraint_global_padding;
                             let arrow_only_w = text_pref.max(SELF_MSG_MIN_PREF_WIDTH);
 
                             let ordinate = horizontal_event_y_positions
@@ -7677,12 +7692,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 // where segment.getLength() = rightShift + leftShift of
                                 // the lifeline at this level. Counted twice, matching
                                 // PlantUML's double-add via getPreferredWidth.
-                                let segment_len = if depth > 0 {
-                                    ACTIVATION_HALF_W + depth as f64 * ACTIVATION_HALF_W
-                                } else {
-                                    0.0
-                                };
-                                arrow_only_w + 2.0 * segment_len
+                                SequenceSelfArrow::new(depth, text_pref, false).constraint_after()
                             };
                             pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
                         }
@@ -8490,26 +8500,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     // Compute self-message right extents from the accepted actual-ordinate
     // lifeline history.
+    let mut self_arrow_by_event = HashMap::new();
     {
         let mut extent_auto = AutoState::default();
         for (idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::Message(msg) => {
                     if msg.from == msg.to {
-                        let ordinate = event_y_positions.get(idx).copied().unwrap_or_default();
-                        let depth = life_lines.depth_before(&msg.from, ordinate);
+                        let ordinate = horizontal_event_y_positions[idx];
+                        let depth = horizontal_life_lines.depth_before(&msg.from, ordinate);
                         let cx_base = id_to_idx
                             .get(msg.from.as_str())
                             .map(|&index| participants[index].center_x)
                             .unwrap_or(0.0);
-                        let active = depth > 0
-                            || (life_lines.accepted_event(idx)
-                                && matches!(msg.activation, Some(ActivationChange::Activate)));
-                        let cx = if active {
-                            cx_base + ACTIVATION_HALF_W
-                        } else {
-                            cx_base
-                        };
+                        let activates = matches!(msg.activation, Some(ActivationChange::Activate));
                         let label = process_label(&msg.label);
                         let label_w = message_label_width(&label);
                         let autonumber_extra = if let Some((_, w, _)) = extent_auto.current() {
@@ -8517,86 +8521,30 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             0.0
                         };
-                        let loopback_right = cx + SELF_MSG_EXTEND;
-                        let loopback_extent_right = loopback_right + SELF_MSG_RIGHT_PAD;
-                        let destroyed_later =
-                            diagram
-                                .events
-                                .iter()
-                                .skip(idx + 1)
-                                .any(|event| match event {
-                                    Event::Destroy(id) => id == &msg.from,
-                                    Event::Message(next) => {
-                                        next.to == msg.from
-                                            && matches!(
-                                                next.activation,
-                                                Some(ActivationChange::Destroy)
-                                            )
-                                    }
-                                    _ => false,
-                                });
-                        let created_active_pad =
-                            if active && create_msg_idx.contains_key(msg.from.as_str()) {
-                                CREATED_ACTIVE_SELF_MSG_RIGHT_PAD
-                            } else if active && destroyed_later {
-                                DESTROYED_ACTIVE_SELF_MSG_RIGHT_PAD
-                            } else {
-                                0.0
-                            };
-                        let ordinary_active_self = active
-                            && msg.activation.is_none()
-                            && !create_msg_idx.contains_key(msg.from.as_str())
-                            && !destroyed_later;
-                        // Teoz self-message right extent follows
-                        // `CommunicationTileSelf.getMaxX() = posC2 + compWidth`,
-                        // where posC2 = lifeline centre + LIVE_DELTA_SIZE * level
-                        // (the active livebox right edge) and compWidth is the
-                        // self-arrow preferred width = max(textWidth, 50). Unlike
-                        // the legacy extent it does NOT bake in an arrow-size pad;
-                        // the canvas-wide RIGHT_MARGIN is added once afterwards.
-                        let teoz_self_extent = if diagram.teoz {
-                            let level = depth as f64;
-                            let pos_c2 = cx_base + level * ACTIVATION_HALF_W;
-                            let comp_w = (autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD)
-                                .max(SELF_MSG_MIN_PREF_WIDTH);
-                            Some(pos_c2 + comp_w)
+                        let padded_text_width = autonumber_extra + label_w
+                            + 2.0 * MSG_TEXT_LEFT_PAD + 2.0 * constraint_global_padding;
+                        let model = SequenceSelfArrow::new(depth, padded_text_width, activates);
+                        self_arrow_by_event.insert(idx, model);
+                        let self_right = if diagram.teoz {
+                            // CommunicationTileSelf#getMaxX uses posC2 + component width.
+                            cx_base + depth as f64 * ACTIVATION_HALF_W
+                                + padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH)
                         } else {
-                            None
+                            // ConstraintSet has a real last-border constraint even
+                            // without a following participant. prepareMissingSpace
+                            // then compares that border with MessageSelfArrow.maxX.
+                            let border = if id_to_idx.get(&msg.from) == Some(&(n - 1)) {
+                                model.constraint_after()
+                            } else { 0.0 };
+                            cx_base + model.max_x().max(border)
+                                + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN
                         };
-                        let text_extent_right = if let Some(e) = teoz_self_extent {
-                            e
-                        } else if ordinary_active_self {
-                            cx + autonumber_extra + label_w + 2.0 * MSG_TEXT_LEFT_PAD + ARROW_SIZE
-                        } else {
-                            cx + SELF_MSG_TEXT_X_PAD
-                                + autonumber_extra
-                                + label_w
-                                + SELF_MSG_RIGHT_PAD
-                        };
-                        let activation_stack_depth = match msg.activation {
-                            Some(ActivationChange::Activate) if life_lines.accepted_event(idx) => {
-                                depth + 1
-                            }
-                            Some(ActivationChange::Deactivate) => depth,
-                            _ => 0,
-                        };
-                        let self_activation_pad = if activation_stack_depth > 0 {
-                            5.0 + activation_stack_depth as f64 * ACTIVATION_WIDTH
-                        } else {
-                            0.0
-                        };
-                        let self_right = loopback_extent_right.max(text_extent_right)
-                            + created_active_pad
-                            + self_activation_pad;
                         max_self_msg_right = max_self_msg_right.max(self_right);
-                        self_msg_right_note_left_by_event.insert(
-                            idx,
-                            cx.floor()
-                                + autonumber_extra
-                                + label_w
-                                + SELF_MSG_RIGHT_NOTE_X_PAD
-                                + created_active_pad,
-                        );
+                        // Step1Abstract#createNoteBox pushes a right self-note by
+                        // the full MessageSelfArrow preferred width. Its live edge
+                        // is resolved below after NoteBox top/bottom sampling.
+                        self_msg_right_note_left_by_event.insert(idx,
+                            cx_base.trunc() + model.width + ROSE_NOTE_PADDING_X);
                     }
                     extent_auto.advance();
                 }
@@ -8656,6 +8604,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
         if right_shift != 0.0 {
             note_right_live_shift_by_event.insert(event_index, right_shift);
+        }
+    }
+
+    if !diagram.teoz {
+        for (note_index, owner) in &note_owner {
+            if let Event::Note(note) = &diagram.events[*note_index]
+                && note.position == NotePosition::Right
+                && let Some(model) = self_arrow_by_event.get(owner)
+                && let Some(participant) = note.participants.first().and_then(|id| id_to_idx.get(id)) {
+                let center = participants[*participant].center_x;
+                let shift = note_right_live_shift_by_event.get(note_index).copied().unwrap_or(0.0);
+                self_msg_right_note_left_by_event.insert(*owner,
+                    (center + shift).trunc() + model.width + ROSE_NOTE_PADDING_X);
+            }
         }
     }
 
@@ -9341,37 +9303,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         Event::Message(msg) => {
                             let fi = id_to_idx.get(msg.from.as_str()).copied();
                             let ti = id_to_idx.get(msg.to.as_str()).copied();
-                            let self_message_right = if msg.from == msg.to {
-                                let cx_base = center_of(&msg.from);
-                                let ordinate =
-                                    event_y_positions.get(ev_idx).copied().unwrap_or_default();
-                                let depth = life_lines.depth_before(&msg.from, ordinate);
-                                let (segment_left, segment_right) =
-                                    sequence_live_segment(cx_base, depth);
-                                let segment_length = segment_right - segment_left;
-                                let activate_delta =
-                                    if matches!(msg.activation, Some(ActivationChange::Activate)) {
-                                        ACTIVATION_HALF_W
-                                    } else {
-                                        0.0
-                                    };
-                                let label_w = message_label_width(&process_label(&msg.label));
-                                let component_width = (label_w + 2.0 * MSG_TEXT_LEFT_PAD)
-                                    .max(SELF_MSG_MIN_PREF_WIDTH);
-                                // MessageSelfArrow starts at the live segment's right
-                                // edge (plus STRICT_SELFMESSAGE_POSITION's half-livebox
-                                // delta for an activating message) and its preferred
-                                // width adds both the Rose component width and the live
-                                // segment length.
-                                Some(
-                                    segment_right
-                                        + activate_delta
-                                        + component_width
-                                        + segment_length,
-                                )
-                            } else {
-                                None
-                            };
+                            let self_message_right = self_arrow_by_event.get(&ev_idx)
+                                .map(|model| center_of(&msg.from) + model.max_x());
                             // Teoz: a message that activates its target (`++`) creates a
                             // livebox tile *inside* the frame; that tile's getMaxX is the
                             // livebox right edge `target.center + level*LIVE_DELTA` (level
@@ -9414,7 +9347,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let mut group_arrow_member = match (fi, ti) {
                                 (Some(fi), Some(ti)) if fi == ti => {
                                     self_message_right.map(|right| SequenceGroupMemberBounds {
-                                        min: participants[fi].center_x,
+                                        min: participants[fi].center_x + self_arrow_by_event[&ev_idx].start,
                                         max: right,
                                         kind: SequenceGroupMemberKind::Ordinary,
                                     })
@@ -9959,6 +9892,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
     let mut max_note_right: f64 = 0.0;
+    let mut max_arrow_note_right: f64 = 0.0;
     for (event_idx, event) in diagram.events.iter().enumerate() {
         if let Event::Note(note) = event {
             let max_line_width =
@@ -9969,6 +9903,26 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 note_content_width_raw_padded(max_line_width, note.shape, note_text_align);
             match note.position {
                 NotePosition::Right => {
+                    if !diagram.teoz && note.on_message
+                        && note.shape == NoteShape::Note
+                        && let Some(owner) = note_owner.get(&event_idx)
+                        && let Some(model) = self_arrow_by_event.get(owner)
+                        && let Some(&note_left) = self_msg_right_note_left_by_event.get(owner)
+                        && let Event::Message(message) = &diagram.events[*owner]
+                    {
+                        // ArrowAndNoteBox#getStartingX/getPreferredWidth uses raw
+                        // component origins and widths, then NoteBox#getRightShift
+                        // at the arrow start. Rounding belongs only to note painting.
+                        let center = participants[id_to_idx[&message.from]].center_x;
+                        let start = (center + model.start).min(note_left - ROSE_NOTE_PADDING_X);
+                        let depth = horizontal_life_lines.depth_before(&message.from,
+                            horizontal_event_y_positions[*owner]);
+                        let width = model.width + folded_note_component_width(
+                            max_line_width, note_global_padding, note_shadow_delta)
+                            + depth as f64 * ACTIVATION_HALF_W + NOTE_LIFELINE_GAP;
+                        max_arrow_note_right = max_arrow_note_right.max(start + width);
+                        continue;
+                    }
                     if note.on_message
                         && let Some(&note_left) = note_owner
                             .get(&event_idx)
@@ -10268,6 +10222,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let effective_right = participant_envelope_right
         .max(note_envelope_right)
         .max(max_self_msg_right)
+        .max(max_arrow_note_right + LEGACY_SEQUENCE_RIGHT_MARGIN - RIGHT_MARGIN)
         // A wide divider strip ends at max_divider_right; the canvas adds
         // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
         .max(max_divider_right - 5.0)
@@ -11497,7 +11452,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let activates_self = matches!(msg.activation, Some(ActivationChange::Activate));
                     let deactivates_self =
                         matches!(msg.activation, Some(ActivationChange::Deactivate));
-                    let active_anchor = if activates_self {
+                    let active_anchor = if !diagram.teoz {
+                        from_x + self_arrow_by_event[&ev_idx].start
+                    } else if activates_self {
                         from_x + (existing_depth + 1) as f64 * ACTIVATION_HALF_W
                     } else if deactivates_self && existing_depth > 0 {
                         from_x + existing_depth as f64 * ACTIVATION_HALF_W
@@ -11512,7 +11469,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     } else {
                         from_x
                     };
-                    let start_x = if activates_self {
+                    let start_x = if !diagram.teoz {
+                        active_anchor - self_arrow_by_event[&ev_idx].activation_delta
+                    } else if activates_self {
                         from_x + existing_depth as f64 * ACTIVATION_HALF_W
                     } else {
                         active_anchor

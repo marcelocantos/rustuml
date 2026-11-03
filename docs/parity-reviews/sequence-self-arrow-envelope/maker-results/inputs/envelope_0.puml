@@ -1,0 +1,10 @@
+@startuml
+skinparam Padding 0
+participant S
+participant L
+participant R
+group scope
+L -> S : seed
+S -> S : tiny
+end
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+participant L
+participant S
+L -> S : enter
+S -> S ++ : nested
+S -> S ++ : nested
+S -> S ++ : nested
+S -> S : Wide WWWWWWWWWW
+return done
+return done
+return done
+L -> S !! : destroy
+@enduml

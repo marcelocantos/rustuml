@@ -1,0 +1,8 @@
+@startuml
+participant Lead as L
+create S
+L -> S : birth
+S -> S ++ : recursive
+S -> S : WWW thick label WWW
+return unwind
+@enduml
