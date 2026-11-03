@@ -1,0 +1,4 @@
+@startuml
+Grove -> Flint : <back:coral>fresh cargo</back>
+Flint --> Grove : <back:navy>signed</back>
+@enduml

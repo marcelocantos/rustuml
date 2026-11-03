@@ -1,0 +1,12 @@
+@startuml
+!$wood = "root"
+!procedure $inner()
+class "%get_variable_value("$wood") / %variable_exists("$bark")" as Inner
+!endprocedure
+!procedure $outer($wood)
+!local $bark = "private"
+$inner()
+class "%get_variable_value("$wood") / %variable_exists("$bark")" as Outer
+!endprocedure
+$outer("branch")
+@enduml

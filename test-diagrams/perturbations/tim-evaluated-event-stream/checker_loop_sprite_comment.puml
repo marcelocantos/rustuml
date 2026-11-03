@@ -1,0 +1,11 @@
+@startuml
+!theme cerulean
+!foreach $leaf in ["Cedar", "Willow", "Birch"]
+class $leaf
+!endfor
+sprite $twig [1x2/16] {
+F
+A
+}
+note "branch ' annotation" as BranchNote
+@enduml

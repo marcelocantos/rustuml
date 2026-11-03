@@ -1,0 +1,5 @@
+@startuml
+!$instant = 0
+!$stamp = %date("yyyy-MM-dd HH:mm:ss Z z XXX", $instant)
+class "$stamp" as Clockformatzone
+@enduml

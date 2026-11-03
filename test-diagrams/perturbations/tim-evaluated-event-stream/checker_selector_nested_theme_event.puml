@@ -1,0 +1,8 @@
+@startuml
+!function $choose()
+!theme cerulean
+!return "minty"
+!endfunction
+!theme $choose()
+class SelectorTheme
+@enduml

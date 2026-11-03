@@ -1,0 +1,4 @@
+@startuml
+!$stamp = %date("yyyy", 2147483648)
+class "$stamp" as InvalidClock
+@enduml
