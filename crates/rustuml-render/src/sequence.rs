@@ -11527,7 +11527,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // inside that mark.
                         active_anchor + ARROW_SIZE + 3.0
                     } else if let Some(tip_x) = special_return_tip {
-                        tip_x
+                        // ComponentRoseSelfArrow#drawRightSide subtracts one
+                        // from ASYNC x2 for the stroke, then restores it before
+                        // painting the head. Apply it after the lifecycle delta.
+                        if is_open || (head_half.is_some() && thin_head) {
+                            tip_x - 1.0
+                        } else {
+                            tip_x
+                        }
                     } else if is_open || (head_half.is_some() && thin_head) {
                         active_anchor // open / thin half: line goes to center
                     } else {
