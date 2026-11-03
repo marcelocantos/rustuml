@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-grouped-note-origin",
+  "created": "2026-11-03",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "716813f43f1453fe9e96bea4a10d1e07b42be08f",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java:createDrawableSet,prepareNote,prepareMissingSpace (132-201,246-296,430-464): create concrete notes, solve participant constraints, measure all element deficits, then translate constraints once",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/NoteBox.java:getStartingX,getSegment,getMinX,getMaxX (121-166): LEFT origin is integer truncation toward zero of the merged live segment's left minus component preferred width; queries recompute from translated participants",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java:getPreferredWidth,drawInternalU (64-131): component includes text margins and padding, whereas the painted polygon has an integer width",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/InGroupableList.java:getMinX (175-193): ordinary member contributes minus MARGIN5, nested list contributes minus MARGIN10",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/GroupingGraphicalElement.java:getStartingX (61-63): header reports list minimum minus MARGIN10",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeLine.java:addSegmentVariation (99-121) and command/CommandReturn.java:executeArg (81-125): accepted life variations and activating-message ownership determine segment endpoints; no change to these mechanisms is proposed"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs:render, minimum first-participant note reservation near 7851-7940",
+    "crates/rustuml-render/src/sequence.rs:render, group_shift and participant/virtual-border constraints near 8040-8168",
+    "crates/rustuml-render/src/sequence.rs:render, note_left_live_shift_by_event and note-only missing-space solve near 8520-8630",
+    "crates/rustuml-render/src/sequence.rs:render, note_group_extent and group_left_feedback near 9284-9465 and 10179-10217",
+    "crates/rustuml-render/src/sequence.rs:render, folded LEFT note painting near 12446-12452"
+  ],
+  "claimed_invariant": "A legacy folded participant note enclosed by groups contributes its raw component origin, truncated toward zero in the untranslated participant constraint solution, to the same left-deficit calculation as its enclosing headers. For a note at group depth d, the enclosing header contribution is component origin minus MARGIN5 minus d*MARGIN10. Participant translation is applied once for that contribution; painted note and group bounds are evaluated from the resulting participant locations, not translated snapshots of integer-rounded bounds.",
+  "causal_divergence": "Rust first reserves the ceiled painted width of a left note, adds participant-based group_shift, then measures a note-only deficit and finally translates frozen group bounds. Truncation is not translation-invariant across zero. Measuring an already-reserved note loses both the original fractional participant constraint and the negative-to-positive truncation change. Both preserved ordered-drawable counterexamples have matching vertical lifecycle/return geometry but shifted horizontal anchors and narrowed frames. The older checker already rejected these inputs before b3eb1bcb; b3eb1bcb changes their projection further but did not originate their failure. The visible Serif case is a separate predeclared shared physical-font-metrics gap.",
+  "planned_model_change": [
+    "Keep grouped folded participant LEFT notes out of the early painted-width reservation; retain independent participant and external-arrow constraints.",
+    "Measure their component origins in the participant constraint coordinate system before group translation, using the existing accepted live-segment shifts.",
+    "Include the recursively enclosing headers' MARGIN5/MARGIN10 contribution in the note deficit rather than adding a later translation to a rounded snapshot.",
+    "Keep the correction local to legacy grouped folded participant LEFT notes. Preserve the existing broader group, note shape, Teoz, lifecycle, return, and font behavior; report any failing counterexample rather than expand this packet into a rewrite."
+  ],
+  "perturbation_axes": [
+    "Rename participants and note labels to vary fractional font widths, including notes narrower and wider than their participant heads",
+    "Change group depth and kinds, move a note between nested groups, and add competing notes at different depths",
+    "Vary activation depth, explicit deactivate/activate order and nested return ownership while preserving the accepted lifeline source",
+    "Add or reorder left-boundary messages so independent virtual-border constraints compete with note/header extents"
+  ],
+  "verification_plan": [
+    "Run all preserved sequence-* perturbations with the existing diff_one strict comparator, in product and assisted modes; do not alter references or exclusions",
+    "Run every main sequence golden in both modes and relevant parser/renderer sequence unit tests",
+    "Run fresh Java comparisons only once the verification worker publishes the reference provenance; otherwise identify checked-in-reference evidence explicitly",
+    "Run formatter, clippy and guards, reporting known repository-wide failures without weakening gates",
+    "Parent dispatches an independent adversarial checker; implementer never authors review.json"
+  ],
+  "journey_exception": "This renderer is a deterministic in-process CLI transformation with no provider/backend wire. The existing strict source-to-SVG product-path corpus and preserved perturbation harness are the behavior oracle; a local CLI pipe smoke additionally exercises process entry. Independent fresh Java counterexamples remain required for acceptance."
+}
