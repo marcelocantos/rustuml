@@ -5801,8 +5801,8 @@ fn render_plantuml_svg(
             && ent_id_seq(Some(layout_floating_notes[layout_note_cursor].2)) < cur_seq
         {
             let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
-            if let Some(pos) = positions.get(node_idx) {
-                if render_svek_note(
+            if let Some(pos) = positions.get(node_idx)
+                && render_svek_note(
                     &mut svg,
                     diagram,
                     note_idx,
@@ -5815,9 +5815,9 @@ fn render_plantuml_svg(
                     layout_x_bias,
                     body_dx,
                     body_dy,
-                ) {
-                    non_opale_attached_notes.push(note_idx);
-                }
+                )
+            {
+                non_opale_attached_notes.push(note_idx);
             }
             layout_note_cursor += 1;
         }
@@ -5969,8 +5969,8 @@ fn render_plantuml_svg(
 
     while oracle.is_none() && layout_note_cursor < layout_floating_notes.len() {
         let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
-        if let Some(pos) = positions.get(node_idx) {
-            if render_svek_note(
+        if let Some(pos) = positions.get(node_idx)
+            && render_svek_note(
                 &mut svg,
                 diagram,
                 note_idx,
@@ -5983,9 +5983,9 @@ fn render_plantuml_svg(
                 layout_x_bias,
                 body_dx,
                 body_dy,
-            ) {
-                non_opale_attached_notes.push(note_idx);
-            }
+            )
+        {
+            non_opale_attached_notes.push(note_idx);
         }
         layout_note_cursor += 1;
     }
@@ -7697,7 +7697,7 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         cluster.height,
         &cluster.fill,
         &cluster.stroke,
-        &cluster.stroke_width,
+        cluster.stroke_width,
     );
     emit_layout_symbol_cluster_title(svg, cluster, text_x, text_y);
 }
@@ -8121,6 +8121,7 @@ impl DecorationLayout {
     }
 
     /// Emit a single decoration's `<g>`/`<text>` at the given glyph baseline `y`.
+    #[allow(clippy::too_many_arguments)]
     fn emit(
         &self,
         svg: &mut String,
@@ -13793,8 +13794,7 @@ fn svek_layout_y_bias(
     if !min_y.is_finite() {
         return 0.0;
     }
-    let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_y - MARGIN;
-    envelope_bias
+    SVEK_LABEL_ENVELOPE_MARGIN - min_y - MARGIN
 }
 
 fn uses_degenerated_entity(diagram: &ClassDiagram, cluster_positions: &[ClusterPosition]) -> bool {
@@ -14505,13 +14505,13 @@ impl ResolvedNoteStyle {
 }
 
 fn note_shadow_attr(diagram: &ClassDiagram, style: &ResolvedNoteStyle) -> String {
-    (style.shadow > 0.0)
-        .then(|| {
-            let filter_id =
-                crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""));
-            format!(r#" filter="url(#{filter_id})""#)
-        })
-        .unwrap_or_default()
+    if style.shadow > 0.0 {
+        let filter_id =
+            crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""));
+        format!(r#" filter="url(#{filter_id})""#)
+    } else {
+        String::new()
+    }
 }
 
 fn note_skinparam<'a>(diagram: &'a ClassDiagram, suffix: &str) -> Option<&'a str> {
