@@ -315,6 +315,13 @@ fn detect_type(input: &str) -> &str {
 /// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
 /// `YamlDiagramFactory`.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+    // PSystemBuilder tries ClassDiagramFactory before DescriptionDiagramFactory.
+    // Trial the consuming engine: quoted labels and command bodies cannot vote
+    // independently, and a command rejected by execution cannot make a trial pass.
+    if class::native_container_candidate(lines) {
+        return UmlSubtype::Class;
+    }
+
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     // `allowmixing` is a class-diagram directive: it permits mixing other
@@ -862,6 +869,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let max_score = scores.iter().copied().max().unwrap_or(0);
     let max_idx = scores.iter().position(|&s| s == max_score).unwrap_or(0);
 
+    // PSystemBuilder continues from a rejected ClassDiagramFactory to the
+    // Description factory. Actor generalization arrows previously won the
+    // class score despite CommandCreateElementFull2 rejecting their leaves.
+    // A complete consuming description trial preserves the valid actor-only
+    // path, without permitting native mixtures or reviving late allowmixing.
+    if max_idx == 1 && !has_allowmixing && class::description_actor_candidate(lines) {
+        return UmlSubtype::UseCase;
+    }
     subtypes[max_idx]
 }
 
@@ -1131,7 +1146,9 @@ pub fn parse_with_base(
         None => preprocess::preprocess_full_for_parse(input, None),
     };
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
-    if typ == "uml" {
+    // A successful consuming class parse has already owned every body line.
+    // Do not apply the legacy malformed-directive guard to its member/page text.
+    if typ == "uml" && class::parse_class(&preprocess_out.lines).is_err() {
         for (index, line) in preprocess_out.lines.iter().enumerate() {
             let (source_line, trimmed) = source_line_and_trimmed(index + 1, line);
             if resembles_allow_mixing_command(trimmed) {
