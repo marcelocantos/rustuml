@@ -1,0 +1,41 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nframe \"Polar Harbor\" {\nstatic class Engine\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Polar_Harbor",
+                label: "Polar Harbor",
+                kind: Frame,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [],
+                source_line: 1,
+            },
+        ],
+        connections: [],
+        notes: [],
+    },
+)

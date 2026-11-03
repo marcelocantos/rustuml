@@ -1,0 +1,78 @@
+[
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-before.log",
+    "sha256": "35816fba50c4bc54fcd57a8ee429db8a582f4d30f3c1171dd20482809852bbe8",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 1m 17s",
+      "golden_no_oracle: 11181/11251 eligible pairs pass per family:",
+      "no-oracle progress not locked in (or corpus changed) \u2014 rerun with HARNESS_WRITE_BASELINES=1 and commit the baseline:",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.39s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test golden_no_oracle`",
+      "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.59s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`",
+      "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.83s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test parity_perturbations`",
+      "error: 3 targets failed:"
+    ]
+  },
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-before-build.log",
+    "sha256": "1984b94ef35ae8f0a4052ca215025f2fdbf843468a6d9fa51d0d01d83755010b",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 56.14s"
+    ]
+  },
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-parser.log",
+    "sha256": "d4850177d3f322f276affa8046552d2aadc9a42669d80f710cbdd9832bef940e",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 26.95s",
+      "test result: ok. 566 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s"
+    ]
+  },
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-after-original.log",
+    "sha256": "efd49ee3d90c34020accc717997d816070d496b29d7de9ab20990d021c2cc33d",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 1m 03s",
+      "golden_no_oracle: 11181/11251 eligible pairs pass per family:",
+      "no-oracle progress not locked in (or corpus changed) \u2014 rerun with HARNESS_WRITE_BASELINES=1 and commit the baseline:",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.94s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test golden_no_oracle`",
+      "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped",
+      "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.90s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test golden_pairs`",
+      "test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.48s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test harness_guards`",
+      "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test parity_perturbations`",
+      "error: 4 targets failed:"
+    ]
+  },
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-after-build.log",
+    "sha256": "6b542a5d39baf12ba7404ce1bcb432a3e15c4f186e24f62d33d49c9947c4a334",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 1m 05s"
+    ]
+  },
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-after-added.log",
+    "sha256": "979deba69564234b5b9c0f434a9653f24c6ef377724568d66a853893191ccaa9",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 0.11s",
+      "test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.72s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test parity_perturbations`"
+    ]
+  },
+  {
+    "scratch_log": "/tmp/rustuml-checker-de790caf-guards-recorded.log",
+    "sha256": "80489269ee1a892f54cc94865cc78bb0e4eedd31b4e3b62286d2ca13d8a1b19e",
+    "summary_lines": [
+      "    Finished `release` profile [optimized] target(s) in 0.27s",
+      "test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.24s",
+      "error: test failed, to rerun pass `-p rustuml-oracle --test harness_guards`"
+    ]
+  }
+]
