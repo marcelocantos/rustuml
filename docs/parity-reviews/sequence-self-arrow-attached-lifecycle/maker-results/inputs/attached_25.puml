@@ -1,0 +1,10 @@
+@startuml
+participant Cedar as C
+participant Pine as P
+participant Willow as W
+C -> C : attached life Wi.f
+activate W
+note over C, P : interleaved life
+deactivate W
+C -> P : complete
+@enduml
