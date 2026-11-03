@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "92f3bdc9e90fc24b14d6af8563c6a7bd78016194",
+  "mechanism": "class-package-visibility-title-image",
+  "java_locations": [
+    "command/CommandPackage#executeArg",
+    "svek/ClusterHeader#getTitleBlock",
+    "skin/VisibilityModifier#getUBlock,drawInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#layout_package_clusters,emit_layout_package_cluster,cluster title dimensions"
+  ],
+  "invariant": "A group visibility modifier contributes its measured icon block to the group title before SVEK layout and is painted before the title text.",
+  "causal_divergence": "Parser now retains visibility but Rust title width and paint ignore it; Java merges size+1 icon with the title and gives the icon a top margin of four.",
+  "planned_change": "Derive visibility title width and icon placement from the existing classAttributeIconSize geometry and Java mergeLR composition. Use ordinary visibility glyph rendering and include the icon width in cluster header measurement and title tab extent.",
+  "perturbation_axes": [
+    "all four visibility kinds and custom icon sizes",
+    "short/long group names, stereotype and child topology"
+  ]
+}
