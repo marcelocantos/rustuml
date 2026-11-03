@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not independently accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "34c51916fb59d5af7e5d02fa4b493463280caf94",
+  "negative_evidence_contract": "All preserved failures remain executable; previously passing comparisons and valid-input parseability must be preserved. Maker results are not acceptance.",
+  "mechanism": "class-final-svek-cluster-origin",
+  "java_locations": [
+    "svek/SvekResult#calculateDimension,drawU,moveDelta",
+    "svek/Cluster#moveDelta,drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_plantuml_svg,layout_package_clusters,svek_layout_x_bias"
+  ],
+  "invariant": "The final SVEK envelope translation is applied once to all solved images, clusters, splines and bounds, after native solve and coordinate serialization.",
+  "causal_divergence": "render_plantuml_svg applies layout_x_bias to leaves, edges and notes but layout_package_clusters records pos.x+MARGIN and cluster canvas bounds omit that bias. Exact Java DOT/native-solver evidence proves package_target and group_lr solve equivalently before this omission.",
+  "planned_change": "Pass the already-computed final x translation into the cluster image constructor and include it in cluster canvas bounds. Preserve solver inputs, quantization and earlier normalization stages. Assess note frontier separately rather than tuning final offsets.",
+  "perturbation_axes": [
+    "LR/TB, root and nested containers",
+    "group endpoint decorations, wide labels, root and attached notes"
+  ]
+}
