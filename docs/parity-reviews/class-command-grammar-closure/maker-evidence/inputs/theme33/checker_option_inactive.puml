@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean
+!if 0
+!option handwritten true
+!endif
+class HemlockLedger
+@enduml

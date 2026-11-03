@@ -1,0 +1,8 @@
+SVG structural differences:
+  [2] <filter> attr mismatch:
+    expected: [("height", "300%"), ("id", "f1nf87dd0ko44i"), ("width", "300%"), ("x", "-1"), ("y", "-1")]
+    actual:   [("height", "300%"), ("id", "fy93xgjz1hjzi"), ("width", "300%"), ("x", "-1"), ("y", "-1")]
+  [9] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f1nf87dd0ko44i)"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "131.9482"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fy93xgjz1hjzi)"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "131.9482"), ("x", "7"), ("y", "7")]
+

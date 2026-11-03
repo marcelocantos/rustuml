@@ -1,0 +1,14 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "227px"), ("preserveAspectRatio", "none"), ("style", "width:280px;height:227px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 280 227"), ("width", "280px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "227px"), ("preserveAspectRatio", "none"), ("style", "width:257px;height:227px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 257 227"), ("width", "257px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M64.46,6 L214.1143,6 A3.75,3.75 0 0 1 216.6143,8.5 L223.6143,28.4883 L263,28.4883 A2.5,2.5 0 0 1 265.5,30.9883 L265.5,137.5 A2.5,2.5 0 0 1 263,140 L64.46,140 A2.5,2.5 0 0 1 61.96,137.5 L61.96,8.5 A2.5,2.5 0 0 1 64.46,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,6 L158.1543,6 A3.75,3.75 0 0 1 160.6543,8.5 L167.6543,28.4883 L207.0391,28.4883 A2.5,2.5 0 0 1 209.5391,30.9883 L209.5391,137.5 A2.5,2.5 0 0 1 207.0391,140 L8.5,140 A2.5,2.5 0 0 1 6,137.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "61.96"), ("x2", "223.6143"), ("y1", "28.4883"), ("y2", "28.4883")]
+    actual:   [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "6"), ("x2", "167.6543"), ("y1", "28.4883"), ("y2", "28.4883")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "148.6543"), ("x", "65.96"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "148.6543"), ("x", "10"), ("y", "21.5352")]
+

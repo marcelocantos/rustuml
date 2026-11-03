@@ -1,0 +1,7 @@
+@startuml
+frame "Polar Harbor" {
+static class Engine {
+component storedField
+}
+}
+@enduml

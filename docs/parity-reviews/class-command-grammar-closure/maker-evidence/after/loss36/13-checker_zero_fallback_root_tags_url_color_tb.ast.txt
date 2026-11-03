@@ -1,0 +1,103 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [
+                SkinParam {
+                    key: "packagestyle",
+                    value: "node",
+                },
+            ],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nskinparam packageStyle node\npackage \"Zero Root\" as ZeroRoot $ops $live [[https://example.com/zero{Zero docs}]] #AliceBlue {\n  class ZeroLeaf\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "ZeroRoot",
+            ),
+            Entity(
+                "ZeroRoot.ZeroLeaf",
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "ZeroRoot.ZeroLeaf",
+                label: "ZeroLeaf",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 3,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [
+                    "ops",
+                    "live",
+                ],
+                url: Some(
+                    "https://example.com/zero",
+                ),
+                url_tooltip: Some(
+                    "Zero docs",
+                ),
+                name: "ZeroRoot",
+                kind: Package,
+                color: Some(
+                    "AliceBlue",
+                ),
+                entities: [
+                    "ZeroRoot.ZeroLeaf",
+                ],
+                parent: None,
+                source_line: 2,
+                stereotypes: [],
+                display_name: Some(
+                    "Zero Root",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

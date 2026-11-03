@@ -1,0 +1,9 @@
+SVG structural differences:
+  [2] <filter> attr mismatch:
+    expected: [("height", "300%"), ("id", "fgjrie6d1cmkt"), ("width", "300%"), ("x", "-1"), ("y", "-1")]
+    actual:   [("height", "300%"), ("id", "f1ih7sog40bini"), ("width", "300%"), ("x", "-1"), ("y", "-1")]
+  [9] tag mismatch: expected <polygon>, got <rect>
+  [10] tag mismatch: expected <polygon>, got <ellipse>
+  [13] tag mismatch: expected <path>, got <line>
+  [14] tag mismatch: expected <path>, got <line>
+

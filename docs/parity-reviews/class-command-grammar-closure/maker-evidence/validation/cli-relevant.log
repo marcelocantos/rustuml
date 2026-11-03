@@ -1,0 +1,65 @@
+[
+  {
+    "group": "loss36",
+    "argv": [
+      "python3",
+      "docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/check_cli.py",
+      "/tmp/rustuml-cff-target/release/rustuml",
+      "/tmp/rustuml-cff-check-svg",
+      "/tmp/rustuml-cff2/loss36",
+      "/tmp/rustuml-cff2/after/loss36"
+    ],
+    "exit": 1,
+    "pass": 34,
+    "parse_errors": [],
+    "total": 36
+  },
+  {
+    "group": "checker23",
+    "argv": [
+      "python3",
+      "docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/check_cli.py",
+      "/tmp/rustuml-cff-target/release/rustuml",
+      "/tmp/rustuml-cff-check-svg",
+      "/tmp/rustuml-cff2/checker23",
+      "/tmp/rustuml-cff2/after/checker23"
+    ],
+    "exit": 0,
+    "pass": 23,
+    "parse_errors": [],
+    "total": 23
+  },
+  {
+    "group": "prior31",
+    "argv": [
+      "python3",
+      "docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/check_cli.py",
+      "/tmp/rustuml-cff-target/release/rustuml",
+      "/tmp/rustuml-cff-check-svg",
+      "/tmp/rustuml-cff2/prior31",
+      "/tmp/rustuml-cff2/after/prior31"
+    ],
+    "exit": 0,
+    "pass": 31,
+    "parse_errors": [],
+    "total": 31
+  },
+  {
+    "group": "theme33",
+    "argv": [
+      "python3",
+      "docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/check_cli.py",
+      "/tmp/rustuml-cff-target/release/rustuml",
+      "/tmp/rustuml-cff-check-svg",
+      "/tmp/rustuml-cff2/theme33",
+      "/tmp/rustuml-cff2/after/theme33"
+    ],
+    "exit": 1,
+    "pass": 7,
+    "parse_errors": [
+      "checker_dump_memory",
+      "checker_inner_comment"
+    ],
+    "total": 33
+  }
+]

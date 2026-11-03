@@ -1,0 +1,77 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [
+                SkinParam {
+                    key: "svglinktarget",
+                    value: "_parent",
+                },
+            ],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nskinparam svgLinkTarget _parent\npackage TooltipOnly $doc <<Reference>> $stable [[{Tooltip <U+0026> More} shown-label]] #Wheat {\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "TooltipOnly",
+            ),
+        ],
+        entities: [],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [
+                    "doc",
+                    "stable",
+                ],
+                url: Some(
+                    "",
+                ),
+                url_tooltip: Some(
+                    "Tooltip <U+0026> More",
+                ),
+                name: "TooltipOnly",
+                kind: Package,
+                color: Some(
+                    "Wheat",
+                ),
+                entities: [],
+                parent: None,
+                source_line: 2,
+                stereotypes: [
+                    "Reference",
+                ],
+                display_name: None,
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

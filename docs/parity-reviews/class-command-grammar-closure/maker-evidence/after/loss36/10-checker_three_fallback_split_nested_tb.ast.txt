@@ -1,0 +1,127 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [
+                SkinParam {
+                    key: "packagestyle",
+                    value: "rectangle",
+                },
+            ],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nskinparam packageStyle rectangle\npackage Host {\n  package \"Split Fallback\" <<PreOne>> as SplitFallback $core <<PostTwo>> <<PostThree>> [[https://example.com/split{Split docs}]] #MistyRose {\n    class SplitLeaf\n  }\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Host",
+            ),
+            Package(
+                "Host.Split Fallback",
+            ),
+            Entity(
+                "Host.Split Fallback.SplitLeaf",
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "Host.Split Fallback.SplitLeaf",
+                label: "SplitLeaf",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 4,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [],
+                url: None,
+                url_tooltip: None,
+                name: "Host",
+                kind: Package,
+                color: None,
+                entities: [
+                    "Host.Split Fallback.SplitLeaf",
+                ],
+                parent: None,
+                source_line: 2,
+                stereotypes: [],
+                display_name: None,
+                phantom: false,
+            },
+            Package {
+                tags: [
+                    "core",
+                ],
+                url: Some(
+                    "https://example.com/split",
+                ),
+                url_tooltip: Some(
+                    "Split docs",
+                ),
+                name: "Host.Split Fallback",
+                kind: Package,
+                color: Some(
+                    "MistyRose",
+                ),
+                entities: [
+                    "Host.Split Fallback.SplitLeaf",
+                ],
+                parent: Some(
+                    0,
+                ),
+                source_line: 3,
+                stereotypes: [
+                    "PreOne",
+                    "PostTwo",
+                    "PostThree",
+                ],
+                display_name: Some(
+                    "Split Fallback",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)
