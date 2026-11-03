@@ -95,6 +95,19 @@ pub fn with_registry<R>(source: &str, body: impl FnOnce() -> R) -> (R, FilterReg
         );
         *slot.borrow_mut() = Some(FilterRegistry::for_source(source));
     });
+    // SvgGraphics owns filterBackColor per drawing instance. CURRENT adapts
+    // that lifetime to a thread-local, so release it on unwind as well as on
+    // return. Construct the guard only after installation: a rejected nested
+    // call must not clear the outer render's registry.
+    struct RegistryScope;
+    impl Drop for RegistryScope {
+        fn drop(&mut self) {
+            CURRENT.with(|slot| {
+                slot.borrow_mut().take();
+            });
+        }
+    }
+    let _scope = RegistryScope;
     let result = body();
     let registry = CURRENT
         .with(|slot| slot.borrow_mut().take())
@@ -445,6 +458,72 @@ fn abs_base36(seed: i64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn registry_scope_returns_body_value_and_collected_filters() {
+        let (value, registry) = with_registry("successful render", || {
+            let first = id_for_current("cyan").unwrap();
+            assert_eq!(id_for_current("#00FFFF").unwrap(), first);
+            id_for_current("yellow").unwrap()
+        });
+        assert!(registry.render_defs_content().contains(&value));
+        assert_eq!(registry.entries.len(), 2);
+        assert!(id_for_current("cyan").is_none());
+    }
+
+    #[test]
+    fn registry_scope_unwinds_without_poisoning_subsequent_renders() {
+        let ordinary =
+            rustuml_parser::parse::parse("@startuml\nQuarry -> Harbor : dispatch\n@enduml\n")
+                .unwrap();
+        let colored = rustuml_parser::parse::parse(concat!(
+            "@startuml\n",
+            "Quarry -> Harbor : <back:cyan>dispatch</back>\n",
+            "Harbor -> Quarry : <back:yellow>receipt</back>\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let clean_ordinary = crate::render_svg(&ordinary);
+        let clean_colored = crate::render_svg(&colored);
+        assert!(clean_colored.contains("<feFlood"));
+        let panic = std::panic::catch_unwind(|| {
+            with_registry("failed render with a different seed", || {
+                id_for_current("red").unwrap();
+                std::panic::panic_any(String::from("initiating renderer failure"));
+            });
+        })
+        .unwrap_err();
+        assert_eq!(
+            panic.downcast_ref::<String>().map(String::as_str),
+            Some("initiating renderer failure")
+        );
+        assert_eq!(crate::render_svg(&ordinary), clean_ordinary);
+        assert_eq!(crate::render_svg(&colored), clean_colored);
+        assert!(id_for_current("red").is_none());
+    }
+
+    #[test]
+    fn registry_scope_rejects_nested_calls_without_clearing_outer_state() {
+        let (_, outer) = with_registry("outer", || {
+            let before = id_for_current("cyan").unwrap();
+            let panic = std::panic::catch_unwind(|| with_registry("inner", || ())).unwrap_err();
+            assert_eq!(
+                panic.downcast_ref::<&str>().copied(),
+                Some("filter_registry::with_registry is not re-entrant")
+            );
+            assert_eq!(id_for_current("cyan").unwrap(), before);
+            id_for_current("yellow").unwrap();
+        });
+        assert_eq!(outer.entries.len(), 2);
+        assert!(id_for_current("cyan").is_none());
+
+        let panic = std::panic::catch_unwind(|| {
+            with_registry("outer uncaught", || with_registry("inner", || ()))
+        });
+        assert!(panic.is_err());
+        let (_, next) = with_registry("next", || id_for_current("green"));
+        assert_eq!(next.entries.len(), 1);
+    }
 
     #[test]
     fn seed_matches_plantuml_known_source() {
