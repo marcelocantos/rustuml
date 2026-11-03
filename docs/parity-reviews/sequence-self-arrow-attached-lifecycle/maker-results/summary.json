@@ -1,0 +1,34 @@
+{
+  "account_commit": "f55d79708e03d18dafa3c6c2f0538840194c0f1a",
+  "status": "candidate; independent checker required",
+  "observations": {
+    "before": {
+      "product": {
+        "0": 24,
+        "1": 24
+      },
+      "assisted": {
+        "0": 24,
+        "1": 24
+      },
+      "cli_equivalence": 48
+    },
+    "current": {
+      "product": {
+        "0": 48
+      },
+      "assisted": {
+        "0": 48
+      },
+      "cli_equivalence": 48
+    }
+  },
+  "logs": {
+    "/tmp/rustuml-seq-recovery/attached-units.log": "99b2e7256fa61482022a8da01bd1570ded98faf017bfaad8b35cfaff571287e9",
+    "/tmp/rustuml-seq-recovery/attached-current.log": "88b65af4a815db9b64f41d36270629e022224f97668ec49a10f12d9b768c6709",
+    "/tmp/rustuml-seq-recovery/attached-isolated.log": "941c45392fda70c7ef8c77398149ccbef022c92f6fb5951689ba0b020ba903b5",
+    "/tmp/rustuml-seq-recovery/attached-suites.log": "c3a941b4c54c43ca381d2f058c189cbc498c8e3a94109b9e9907e5266a568e91",
+    "/tmp/rustuml-seq-recovery/attached-before.log": "c56656dca1a834044d661d6778e0fdf7b137d68e34741b94cdf3024115e59e94",
+    "/tmp/rustuml-seq-recovery/attached-build.log": "7a2bc3eac63a9ffc08c1e17c4b530c9799e54dca0411d0d93f920043ffa7e1da"
+  }
+}

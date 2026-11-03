@@ -684,17 +684,9 @@ const SELF_MSG_DROP: f64 = 13.0;
 const SELF_MSG_LIFELINE_CLOSE_INSET: f64 = 7.0;
 /// Text x offset from center_x for self-messages.
 const SELF_MSG_TEXT_X_PAD: f64 = 7.0;
-/// Extra right padding beyond self-message text/loopback.
-/// Bare `note right` attached to a self-message starts this far after
-/// `floor(cx) + label_width`.
 /// Bare `note right` attached to a self-message places the note top at
 /// `arrow_y - first_line_height + this`.
 const SELF_MSG_RIGHT_NOTE_Y_PAD: f64 = 2.5;
-/// Extra canvas reservation PlantUML keeps for an active self-message on an
-/// inline-created participant. The visible loopback geometry is unchanged, but
-/// the computed right edge is wider in create+activate lifecycles.
-/// Extra canvas reservation for active self-messages on a participant whose
-/// lifecycle is later ended by a standalone destroy.
 /// Minimum preferred width a self-message reserves in the gap to the next
 /// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns
 /// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.
@@ -2973,6 +2965,8 @@ impl LifecycleAttachmentOwner {
 
 #[derive(Default)]
 struct MessageLifecycleState {
+    has_activate: bool,
+    has_deactivate: bool,
     first_accepted_is_activate: Option<bool>,
     has_closing_type: bool,
 }
@@ -2980,6 +2974,10 @@ struct MessageLifecycleState {
 impl MessageLifecycleState {
     fn accept(&mut self, change: &ActivationChange) {
         let is_activate = matches!(change, ActivationChange::Activate);
+        // AbstractMessage#addLifeEvent stores independent types; activate and
+        // deactivate can both belong to one self message across intervening notes.
+        self.has_activate |= is_activate;
+        self.has_deactivate |= matches!(change, ActivationChange::Deactivate);
         self.first_accepted_is_activate.get_or_insert(is_activate);
         if matches!(
             change,
@@ -2998,6 +2996,7 @@ struct SequenceLifecycleLayout {
     attachment_owner: Vec<Option<usize>>,
     y_offset: Vec<f64>,
     row_after_message: Vec<f64>,
+    message_states: Vec<MessageLifecycleState>,
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -3121,18 +3120,21 @@ struct SequenceSelfArrow {
     start: f64,
     width: f64,
     segment_length: f64,
-    activation_delta: f64,
+    component_delta_y: f64,
 }
 
 impl SequenceSelfArrow {
-    fn new(depth: usize, padded_text_width: f64, activates: bool) -> Self {
+    fn new(depth: usize, padded_text_width: f64, activates: bool, deactivates: bool) -> Self {
         let (left, right) = sequence_live_segment(0.0, depth);
         let activation_delta = if activates { ACTIVATION_HALF_W } else { 0.0 };
         Self {
             start: right + activation_delta,
             width: padded_text_width.max(SELF_MSG_MIN_PREF_WIDTH) + right - left,
             segment_length: right - left,
-            activation_delta,
+            // Step1Message#createMessageSelfArrow independently adds the two
+            // lifecycle deltas, then supplies deltaY as Area.deltaX1.
+            component_delta_y: (i32::from(deactivates) - i32::from(activates)) as f64
+                * ACTIVATION_HALF_W,
         }
     }
 
@@ -3660,6 +3662,7 @@ fn sequence_lifecycle_layout(events: &[Event], page1_end: usize) -> SequenceLife
         attachment_owner,
         y_offset,
         row_after_message,
+        message_states,
     }
 }
 
@@ -7091,6 +7094,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let lifecycle_owner = lifecycle.attachment_owner;
     let lifecycle_y_offset = lifecycle.y_offset;
     let lifecycle_row_after_message = lifecycle.row_after_message;
+    let lifecycle_message_states = lifecycle.message_states;
     let create_msg_idx = sequence_create_message_indices(&diagram.events);
     // Map creating-message event index -> extra vertical advance for that event:
     // the base advance plus any extent by which a tall inline head shape (actor,
@@ -7612,7 +7616,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // message geometry. In particular, MessageArrow samples both live segments
     // for constraints and endpoints; a separate return path loses their depth.
     // CommandReturn also reverses MessageExo; normalized boundary endpoints
-    // preserve its real participant. Non-self Teoz remains a separate model.
+    // preserve its real participant. Teoz uses its own endpoint/history model
+    // after lowering, while sharing the parser's return ownership.
     // Keep source identity/event indices; this is a render-local model. Every
     // restart replaces at least one Return, so this lowering cannot cycle.
     let mut lowered = None;
@@ -7743,7 +7748,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 // where segment.getLength() = rightShift + leftShift of
                                 // the lifeline at this level. Counted twice, matching
                                 // PlantUML's double-add via getPreferredWidth.
-                                SequenceSelfArrow::new(depth, text_pref, false).constraint_after()
+                                SequenceSelfArrow::new(depth, text_pref, false, false)
+                                    .constraint_after()
                             };
                             pair_max_label_width[fi] = pair_max_label_width[fi].max(needed);
                         }
@@ -8498,7 +8504,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .get(msg.from.as_str())
                             .map(|&index| participants[index].center_x)
                             .unwrap_or(0.0);
-                        let activates = matches!(msg.activation, Some(ActivationChange::Activate));
+                        let state = &lifecycle_message_states[idx];
+                        let activates = state.has_activate;
                         let label = process_label(&msg.label);
                         let label_w = message_label_width(&label);
                         let autonumber_extra = if let Some((_, w, _)) = extent_auto.current() {
@@ -8510,7 +8517,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             + label_w
                             + 2.0 * MSG_TEXT_LEFT_PAD
                             + 2.0 * constraint_global_padding;
-                        let model = SequenceSelfArrow::new(depth, padded_text_width, activates);
+                        let model = SequenceSelfArrow::new(
+                            depth,
+                            padded_text_width,
+                            activates,
+                            state.has_deactivate,
+                        );
                         self_arrow_by_event.insert(idx, model);
                         let self_right = if diagram.teoz {
                             // CommunicationTileSelf#getMaxX uses posC2 + component width.
@@ -11797,7 +11809,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         from_x
                     };
                     let start_x = if !diagram.teoz {
-                        active_anchor - self_arrow_by_event[&ev_idx].activation_delta
+                        // ComponentRoseSelfArrow#drawRightSide: x1 = min(deltaY, 0).
+                        active_anchor + self_arrow_by_event[&ev_idx].component_delta_y.min(0.0)
                     } else if activates_self {
                         from_x + existing_depth as f64 * ACTIVATION_HALF_W
                     } else {
@@ -11806,14 +11819,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let draw_y = if diagram.teoz {
                         // CommunicationTileSelf#drawU leaves the component Y unchanged.
                         msg_y
-                    } else if activates_self {
-                        msg_y - ACTIVATION_HALF_W
-                    } else if deactivates_self {
-                        msg_y + ACTIVATION_HALF_W
                     } else {
-                        msg_y
+                        msg_y + self_arrow_by_event[&ev_idx].component_delta_y
                     };
-                    let special_return_tip = if deactivates_self && existing_depth > 0 {
+                    let special_return_tip = if !diagram.teoz {
+                        // ComponentRoseSelfArrow#drawRightSide: x2 is -deltaY
+                        // when positive, otherwise one; ASYNC adjusts the stroke later.
+                        let delta = self_arrow_by_event[&ev_idx].component_delta_y;
+                        Some(active_anchor + if delta > 0.0 { -delta } else { 1.0 })
+                    } else if deactivates_self && existing_depth > 0 {
                         Some(from_x + (existing_depth - 1) as f64 * ACTIVATION_HALF_W)
                     } else if activates_self {
                         Some(active_anchor + 1.0)
@@ -11950,7 +11964,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .unwrap();
                         } else {
                             // Filled triangle: wing base, tip, wing tip.
-                            let tip_x = special_return_tip.unwrap_or(active_anchor);
+                            // ComponentRoseSelfArrow#getPolygon offsets every
+                            // filled half-head point by -1 before drawRightSide
+                            // translates the polygon by the component's x2.
+                            let tip_x = if diagram.teoz {
+                                special_return_tip.unwrap_or(active_anchor)
+                            } else {
+                                special_return_tip.unwrap_or(active_anchor + 1.0) - 1.0
+                            };
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{}",
                                 fmt_coord(tip_x + ARROW_SIZE),
@@ -14256,36 +14277,66 @@ mod tests {
 
     #[test]
     fn returns_share_message_constraints_live_endpoints_and_arrow_configuration() {
-        for declarations in [
-            "participant Caller\nparticipant Server\nparticipant Delegate\n",
-            "participant Delegate\nparticipant Server\nparticipant Caller\n",
-        ] {
-            for depth in 1..=3 {
-                for arrow in ["->", "->>", "-[#purple]>"] {
-                    let dotted = arrow.replacen('-', "--", 1);
-                    let calls = format!(
-                        "Caller {arrow} Server ++ : enter\n{}Server {arrow} Delegate ++ : work\n",
-                        format!("Server {arrow} Server ++ : recur\n").repeat(depth)
-                    );
-                    let returns = format!(
-                        "return delegated result with wide label\n{}return complete\n",
-                        "return local\n".repeat(depth)
-                    );
-                    let explicit = format!(
-                        "Delegate {dotted} Server -- : delegated result with wide label\n{}Server {dotted} Caller -- : complete\n",
-                        format!("Server {dotted} Server -- : local\n").repeat(depth)
-                    );
-                    let actual = rustuml_parser::parse::parse(&format!(
-                        "@startuml\n{declarations}{calls}{returns}@enduml\n"
-                    ))
-                    .unwrap();
-                    let mut reference = rustuml_parser::parse::parse(&format!(
-                        "@startuml\n{declarations}{calls}{explicit}@enduml\n"
-                    ))
-                    .unwrap();
-                    reference.meta_mut().source = actual.meta().source.clone();
-                    assert_eq!(crate::render_svg(&actual), crate::render_svg(&reference));
+        for engine in ["", "!pragma teoz true\n"] {
+            for page in ["", "Caller -> Server : first page\nnewpage Continuation\n"] {
+                for declarations in [
+                    "participant Caller\nparticipant Server\nparticipant Delegate\n",
+                    "participant Delegate\nparticipant Server\nparticipant Caller\n",
+                ] {
+                    for depth in 1..=3 {
+                        for arrow in ["->", "->>", "-[#purple]>"] {
+                            let dotted = arrow.replacen('-', "--", 1);
+                            let calls = format!(
+                                "Caller {arrow} Server ++ : enter\n{}Server {arrow} Delegate ++ : work\n",
+                                format!("Server {arrow} Server ++ : recur\n").repeat(depth)
+                            );
+                            let returns = format!(
+                                "return delegated result with wide label\n{}return complete\n",
+                                "return local\n".repeat(depth)
+                            );
+                            let explicit = format!(
+                                "Delegate {dotted} Server -- : delegated result with wide label\n{}Server {dotted} Caller -- : complete\n",
+                                format!("Server {dotted} Server -- : local\n").repeat(depth)
+                            );
+                            let actual = rustuml_parser::parse::parse(&format!(
+                                "@startuml\n{engine}{declarations}{page}{calls}{returns}@enduml\n"
+                            ))
+                            .unwrap();
+                            let mut reference = rustuml_parser::parse::parse(&format!(
+                                "@startuml\n{engine}{declarations}{page}{calls}{explicit}@enduml\n"
+                            ))
+                            .unwrap();
+                            reference.meta_mut().source = actual.meta().source.clone();
+                            assert_eq!(crate::render_svg(&actual), crate::render_svg(&reference));
+                        }
+                    }
                 }
+            }
+        }
+    }
+
+    #[test]
+    fn attached_self_lifecycle_matches_inline_activation_across_a_note() {
+        for arrow in ["->", "->>", "-/", "-//"] {
+            for depth in [0, 2] {
+                let prefix = format!(
+                    "@startuml\nparticipant Cedar as C\nparticipant Pine as P\n{}",
+                    "P -> C ++ : seed\n".repeat(depth)
+                );
+                let suffix =
+                    "note over C, P : interleaved life\ndeactivate C\nC -> P : complete\n@enduml\n";
+                let actual = rustuml_parser::parse::parse(&format!(
+                    "{prefix}C {arrow} C : attached life\nactivate C\n{suffix}"
+                ))
+                .unwrap();
+                // Preserve source line positions while moving the lifecycle type
+                // from a directive into the message's shorthand syntax.
+                let mut reference = rustuml_parser::parse::parse(&format!(
+                    "{prefix}C {arrow} C ++ : attached life\n\n{suffix}"
+                ))
+                .unwrap();
+                reference.meta_mut().source = actual.meta().source.clone();
+                assert_eq!(crate::render_svg(&actual), crate::render_svg(&reference));
             }
         }
     }
