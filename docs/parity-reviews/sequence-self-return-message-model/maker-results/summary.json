@@ -1,0 +1,59 @@
+{
+  "status": "maker candidate, not accepted; independent checker required",
+  "account_commit": "5adc80477ee0fac05ceb42ad0f032237425b97c9",
+  "fresh_cases": 27,
+  "before": {
+    "pass": 0,
+    "mismatch": 13,
+    "panic": 14
+  },
+  "after": {
+    "pass": 23,
+    "mismatch": 4,
+    "panic": 0
+  },
+  "cli_equivalence": 27,
+  "new_regressions": 0,
+  "main_product": [
+    11181,
+    11251
+  ],
+  "main_assisted": [
+    10497,
+    11251
+  ],
+  "sequence": [
+    1411,
+    1411
+  ],
+  "focused_units": {
+    "passed": 2,
+    "failed": 0
+  },
+  "dependencies": [
+    "Delegated non-self return still uses a boolean activation offset instead of its actual live segment; checker_live_stack_2/3 no longer panic but mismatch only at delegated answer endpoints/label. Separate account follows.",
+    "delegated_25: additional label constraint width mismatch in reverse delegation.",
+    "later_page: first-page extent and footer/head element count mismatch.",
+    "single_21: existing open self-arrow start line endpoint differs by one pixel; both incoming and return use the shared self painter."
+  ],
+  "logs": {
+    "/tmp/rustuml-seq-recovery/self-main.log": {
+      "sha256": "188b7928f66611550ca9a2d78e6b19c1416c02d696f2853977474e08d8a98ffd"
+    },
+    "/tmp/rustuml-seq-recovery/self-units.log": {
+      "sha256": "40e843ee51e6e615d6678406fd8cc821facd977e0533d62e9fb41ebe82299cbd"
+    },
+    "/tmp/rustuml-seq-recovery/self-stack-2-after-width.log": {
+      "sha256": "00e54d19239ef770db9a49f1ff6433043c206ad20a436df1c4eac7a0dbbc2a3e"
+    },
+    "/tmp/rustuml-seq-recovery/self-stack-3-after-width.log": {
+      "sha256": "8381c4228a9c4ab42202ecadb6bff7e2e4bd255c33324dd3f27cccd00da27e3f"
+    },
+    "/tmp/rustuml-seq-recovery/self-fresh-current.log": {
+      "sha256": "29cbefaf52fea27eceb1c753bcf2f3cfe4963d2b2c3fafe668437a47b46c34f4"
+    },
+    "/tmp/rustuml-seq-recovery/self-fresh-baseline.log": {
+      "sha256": "411e644aff50fdb5f1ecad717d863272117975626d8df26db75b2b7a44644bfc"
+    }
+  }
+}

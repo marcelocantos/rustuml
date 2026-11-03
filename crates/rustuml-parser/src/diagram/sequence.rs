@@ -7,7 +7,7 @@ use super::DiagramMeta;
 use serde::{Deserialize, Serialize};
 
 /// A complete sequence diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SequenceDiagram {
     pub meta: DiagramMeta,
     pub participants: Vec<Participant>,
@@ -70,7 +70,7 @@ pub enum ParticipantKind {
 }
 
 /// A sequence diagram event (message, note, group boundary, etc.).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Event {
     Message(Message),
     Note(Note),
@@ -113,7 +113,7 @@ pub enum AutonumberCmd {
 }
 
 /// A message arrow between participants.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
     pub from: String,
     pub to: String,
@@ -199,7 +199,7 @@ pub enum ActivationChange {
 }
 
 /// A note attached to one or more participants.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Note {
     pub position: NotePosition,
     pub participants: Vec<String>,
@@ -240,7 +240,7 @@ pub enum NoteShape {
 }
 
 /// Start of a grouping construct (alt, opt, loop, etc.).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GroupStart {
     pub kind: GroupKind,
     pub label: Option<String>,
@@ -261,7 +261,7 @@ pub enum GroupKind {
 }
 
 /// An "else" branch within a group.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GroupElse {
     pub label: Option<String>,
     /// 1-based line number within the `@startuml` block.
@@ -270,7 +270,7 @@ pub struct GroupElse {
 }
 
 /// A reference to another diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Ref {
     pub participants: Vec<String>,
     pub text: String,
@@ -280,7 +280,7 @@ pub struct Ref {
 }
 
 /// A return message (shorthand for dotted reply).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReturnMessage {
     pub label: String,
     /// 1-based line number within the `@startuml` block.
@@ -289,7 +289,7 @@ pub struct ReturnMessage {
 }
 
 /// Auto-numbering configuration.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AutoNumber {
     pub start: u32,
     pub step: u32,

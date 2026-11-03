@@ -1,0 +1,11 @@
+@startuml
+participant S
+participant R
+participant T
+R -> S ++ : enter
+S -> S ++ : recurse
+S -> S ++ : recurse
+return restore WMWM buffer several times
+return resume
+return exit
+@enduml
