@@ -1,0 +1,6 @@
+@startuml
+frame Rack {
+class Server
+}
+note right of Rack.Server : External note
+@enduml

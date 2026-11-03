@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+component "Wide display name\nTiny" as C
+class Peer
+C --> Peer
+@enduml

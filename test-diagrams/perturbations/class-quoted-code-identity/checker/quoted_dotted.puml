@@ -1,0 +1,8 @@
+@startuml
+package Container {
+class "A dotted.name"
+class Peer
+"A dotted.name" --> Peer
+note left of "A dotted.name" : retained
+}
+@enduml

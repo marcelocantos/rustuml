@@ -1,0 +1,14 @@
+@startuml
+left header
+allowmixing
+component Ghost
+
+class Phantom
+end header
+package Vault {
+class Actual {
+allowmixing
+component field
+}
+}
+@enduml

@@ -1,0 +1,518 @@
+[
+  {
+    "mechanism": "class-chrome-bordered-block-geometry",
+    "account_path": "docs/parity-reviews/class-chrome-bordered-block-geometry/account.json",
+    "original_account_commit": "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+    "picked_account_commit": "8402dc013e4116f661ccb1c253a40754ae615b9e",
+    "account_history_original": [
+      "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "8402dc013e4116f661ccb1c253a40754ae615b9e",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "5634dac6307c4bcc67d6d408a258226f5dbe90406c55e01327d1cd329f92a2ac",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-cloud-child-coordinate-dependency",
+    "account_path": "docs/parity-reviews/class-cloud-child-coordinate-dependency/account.json",
+    "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "picked_account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+    "account_history_original": [
+      "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+    ],
+    "account_history_picked": [
+      "924dbf9ec902511456f678a3fffdf1b835719e78"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": true,
+    "final_account_sha256": "ddd1ce676a6d3e8af2a6c59c00f147e25ce862d67b149c80fb66fe1794bb1727",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-cluster-header-shape-extent",
+    "account_path": "docs/parity-reviews/class-cluster-header-shape-extent/account.json",
+    "original_account_commit": "926f2832e0318b1f0b66fa18a3967233f3c0c1e7",
+    "picked_account_commit": "3cb4946597cabbcc0a5ea1b0942c2a1950ed4d47",
+    "account_history_original": [
+      "926f2832e0318b1f0b66fa18a3967233f3c0c1e7",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "3cb4946597cabbcc0a5ea1b0942c2a1950ed4d47",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "9ee147fd1e1c8eefa7e55bb609cbf491108b6e62ec2cc9c2346a4b7c3a9f1098",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-command-execution-ownership",
+    "account_path": "docs/parity-reviews/class-command-execution-ownership/account.json",
+    "original_account_commit": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+    "picked_account_commit": "f3b2e9901928560ea5d811270b6398c938a14d3a",
+    "account_history_original": [
+      "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec"
+    ],
+    "account_history_picked": [
+      "f3b2e9901928560ea5d811270b6398c938a14d3a"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "26ea92c5b40932232b359680b0e546abb793d65213799187bfc79ba77c932bf1",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-command-grammar-closure",
+    "account_path": "docs/parity-reviews/class-command-grammar-closure/account.json",
+    "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+    "picked_account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+    "account_history_original": [
+      "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "fd4eb9f768768c006d814f389dbdad79605acc7f",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "05c955f9d1c09a159e49c4ac74430c9caab9f1b64f1872b46d2689a5470adaa7",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-container-only-factory-closure",
+    "account_path": "docs/parity-reviews/class-container-only-factory-closure/account.json",
+    "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+    "picked_account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+    "account_history_original": [
+      "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "77468aaed3478d586da411b2c98811dd52e31ea4",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "29832886cae3561ab36ce73ddf98fcd3d3cbc8a2b3b29a187284ca44e488cab5",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-current-spot-cascade",
+    "account_path": "docs/parity-reviews/class-current-spot-cascade/account.json",
+    "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+    "picked_account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+    "account_history_original": [
+      "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "fd4eb9f768768c006d814f389dbdad79605acc7f",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "1ca32540ba15fe97b2d7d6ecb678aa8305eba966a61dccef7801b0aea7de503f",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-description-leaf-image-dependency",
+    "account_path": "docs/parity-reviews/class-description-leaf-image-dependency/account.json",
+    "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "picked_account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+    "account_history_original": [
+      "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+    ],
+    "account_history_picked": [
+      "924dbf9ec902511456f678a3fffdf1b835719e78"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": true,
+    "final_account_sha256": "8a8e3a6c0cf65a3431067eeee9bfb8a2cdc7f87b0c3a08f3ff65caf1228888f2",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-description-symbol-images",
+    "account_path": "docs/parity-reviews/class-description-symbol-images/account.json",
+    "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+    "picked_account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+    "account_history_original": [
+      "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "fd4eb9f768768c006d814f389dbdad79605acc7f",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "5d579ab11c16dbd930309c0a0363bd17fe1a4edfb7eb47617fe7c291aab652af",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-group-endpoint-routing",
+    "account_path": "docs/parity-reviews/class-group-endpoint-routing/account.json",
+    "original_account_commit": "be1dfda42afdb55e055de74064dd6178a6436b47",
+    "picked_account_commit": "644bb16a3266f0f2d1f619db742d5edbc85e2805",
+    "account_history_original": [
+      "be1dfda42afdb55e055de74064dd6178a6436b47",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f",
+      "ee458fb064d859d2a1fdba9e12fc8dd0759cba79"
+    ],
+    "account_history_picked": [
+      "644bb16a3266f0f2d1f619db742d5edbc85e2805",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0",
+      "efe4371a85d2716d1314a440082027a6b87e6764"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "03a63e85fc7948289740c69dacac27d8b431b78ab1da572d18ec4580355be073",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-group-magnetic-extremities",
+    "account_path": "docs/parity-reviews/class-group-magnetic-extremities/account.json",
+    "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+    "picked_account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+    "account_history_original": [
+      "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "77468aaed3478d586da411b2c98811dd52e31ea4",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "379d6c2338a79521c2b4e3e10099dc6173cefcfbd86a632fccdcc80763f3d61b",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-group-paint-ownership",
+    "account_path": "docs/parity-reviews/class-group-paint-ownership/account.json",
+    "original_account_commit": "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+    "picked_account_commit": "47e6daa930606a186d90f13034831fdd15cf8280",
+    "account_history_original": [
+      "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+      "ee458fb064d859d2a1fdba9e12fc8dd0759cba79"
+    ],
+    "account_history_picked": [
+      "47e6daa930606a186d90f13034831fdd15cf8280",
+      "efe4371a85d2716d1314a440082027a6b87e6764"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "97185ad08d4a3b0d24de1b0dc4d8a33434b9cb7431cbe47690d8ad7c582806bb",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-named-note-scoped-identity-closure",
+    "account_path": "docs/parity-reviews/class-named-note-scoped-identity-closure/account.json",
+    "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+    "picked_account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+    "account_history_original": [
+      "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "77468aaed3478d586da411b2c98811dd52e31ea4",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "576fd057f63df13a48b653d9dd78e7337755b8a07f55f8e84c420a278f52f07f",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-native-leaf-presentation",
+    "account_path": "docs/parity-reviews/class-native-leaf-presentation/account.json",
+    "original_account_commit": "be918a98f6e445c13e29d6f314f0f1dfa13b9acb",
+    "picked_account_commit": "975f39d1519946bf22f58a7b1ea05587b1892f0f",
+    "account_history_original": [
+      "be918a98f6e445c13e29d6f314f0f1dfa13b9acb"
+    ],
+    "account_history_picked": [
+      "975f39d1519946bf22f58a7b1ea05587b1892f0f"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "4c2cbfbd93c56ca36b8de0304505643a4a56be41d8c1ca2bb8da1d7f07d03e87",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-note-cluster-ownership-dependency",
+    "account_path": "docs/parity-reviews/class-note-cluster-ownership-dependency/account.json",
+    "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "picked_account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+    "account_history_original": [
+      "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+    ],
+    "account_history_picked": [
+      "924dbf9ec902511456f678a3fffdf1b835719e78"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": true,
+    "final_account_sha256": "442b0fc84244cfba677ead8cffd3d3fef3e78719babd351756bad4137a41516f",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-note-declaration-scope",
+    "account_path": "docs/parity-reviews/class-note-declaration-scope/account.json",
+    "original_account_commit": "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+    "picked_account_commit": "8402dc013e4116f661ccb1c253a40754ae615b9e",
+    "account_history_original": [
+      "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "8402dc013e4116f661ccb1c253a40754ae615b9e",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "d576b58cefb6afdaa0ebb3ad243584c67feae94b22f866e8443534f83fe51b0b",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-note-target-quark",
+    "account_path": "docs/parity-reviews/class-note-target-quark/account.json",
+    "original_account_commit": "902086e529d4eb564bce381458995048b580c5be",
+    "picked_account_commit": "5b55a2de9750929ef4012b95e0d115a7c9a85bff",
+    "account_history_original": [
+      "902086e529d4eb564bce381458995048b580c5be"
+    ],
+    "account_history_picked": [
+      "5b55a2de9750929ef4012b95e0d115a7c9a85bff"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "7134bfb271abdbf4c0c2708f300057d84755f4f1f183add99821b4b1efff565b",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-package-command-precedence-closure",
+    "account_path": "docs/parity-reviews/class-package-command-precedence-closure/account.json",
+    "original_account_commit": "48438ed090c90de545a0828c64205b4072bd931a",
+    "picked_account_commit": "2547003b2d306c80e86d7d457ee8e802482ff07a",
+    "account_history_original": [
+      "48438ed090c90de545a0828c64205b4072bd931a",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f",
+      "ee458fb064d859d2a1fdba9e12fc8dd0759cba79"
+    ],
+    "account_history_picked": [
+      "2547003b2d306c80e86d7d457ee8e802482ff07a",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0",
+      "efe4371a85d2716d1314a440082027a6b87e6764"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "b675034452d653bef8848d669caf916656fa386d07351756e2f18e64c48fad10",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-page-chrome-composition-dependency",
+    "account_path": "docs/parity-reviews/class-page-chrome-composition-dependency/account.json",
+    "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "picked_account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+    "account_history_original": [
+      "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+    ],
+    "account_history_picked": [
+      "924dbf9ec902511456f678a3fffdf1b835719e78"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": true,
+    "final_account_sha256": "4748724a2904b7594c569af43224972957fc9fb3a5b8c748de969b27cc688ac2",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-parenthesis-link-identity",
+    "account_path": "docs/parity-reviews/class-parenthesis-link-identity/account.json",
+    "original_account_commit": "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+    "picked_account_commit": "47e6daa930606a186d90f13034831fdd15cf8280",
+    "account_history_original": [
+      "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+      "ee458fb064d859d2a1fdba9e12fc8dd0759cba79"
+    ],
+    "account_history_picked": [
+      "47e6daa930606a186d90f13034831fdd15cf8280",
+      "efe4371a85d2716d1314a440082027a6b87e6764"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "f6d97ffcfb01d044db1801d74d4714a0dedaa706000e3c0449d13ccbd48b5bb3",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-quoted-code-identity",
+    "account_path": "docs/parity-reviews/class-quoted-code-identity/account.json",
+    "original_account_commit": "bc0c65b6aad9cf98995fba162ccb9ee3b16613c4",
+    "picked_account_commit": "ea8199b33a60c0714b27b6fa2faae30877eecff8",
+    "account_history_original": [
+      "bc0c65b6aad9cf98995fba162ccb9ee3b16613c4"
+    ],
+    "account_history_picked": [
+      "ea8199b33a60c0714b27b6fa2faae30877eecff8"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "46dbeab1f31310dd682e8e2d07275bca62e9efd8d3af46a8a246f69c60a9149d",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-single-svek-envelope-origin",
+    "account_path": "docs/parity-reviews/class-single-svek-envelope-origin/account.json",
+    "original_account_commit": "c32b7c090b9901072bb5cc555865287517bf6781",
+    "picked_account_commit": "93c864f1b842f2b9ba5accbdb0e4427766b408e1",
+    "account_history_original": [
+      "c32b7c090b9901072bb5cc555865287517bf6781",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "93c864f1b842f2b9ba5accbdb0e4427766b408e1",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "7afc7fbf848f3404773a975f503708e19ce0c108548b2f2363b20e7bd46448de",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-svek-painted-origin",
+    "account_path": "docs/parity-reviews/class-svek-painted-origin/account.json",
+    "original_account_commit": "3e91019bb5ed1d0efc9fa66d6f8390eef241135d",
+    "picked_account_commit": "46f36d5c53872a611d54390cee40b3231e8e0b81",
+    "account_history_original": [
+      "3e91019bb5ed1d0efc9fa66d6f8390eef241135d",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f",
+      "ee458fb064d859d2a1fdba9e12fc8dd0759cba79"
+    ],
+    "account_history_picked": [
+      "46f36d5c53872a611d54390cee40b3231e8e0b81",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0",
+      "efe4371a85d2716d1314a440082027a6b87e6764"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "1c9a1a5d1ebae2c7f4bd9bbb4b7da3b43c99ee4a82f345cd7c4601fc21657cd7",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  {
+    "mechanism": "class-symbol-container-alias-identity",
+    "account_path": "docs/parity-reviews/class-symbol-container-alias-identity/account.json",
+    "original_account_commit": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+    "picked_account_commit": "f3b2e9901928560ea5d811270b6398c938a14d3a",
+    "account_history_original": [
+      "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec"
+    ],
+    "account_history_picked": [
+      "f3b2e9901928560ea5d811270b6398c938a14d3a"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "82e548f826f9d98985b3e53f72caade745f0e4f78263d793725da764de24fbc1",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  }
+]

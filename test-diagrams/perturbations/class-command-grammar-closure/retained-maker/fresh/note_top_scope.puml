@@ -1,0 +1,6 @@
+@startuml
+node Archive {
+class Folder
+note top of Folder : Instruction
+}
+@enduml

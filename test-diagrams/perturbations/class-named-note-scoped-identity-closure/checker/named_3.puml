@@ -1,0 +1,7 @@
+@startuml
+package Harbor {
+class Peer
+N .. Peer
+note "Annotation with width" as N
+}
+@enduml

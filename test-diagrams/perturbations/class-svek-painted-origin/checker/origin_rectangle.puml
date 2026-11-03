@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+rectangle "Variable width envelope" as Env {
+class "Small" as A
+class "Wider child label" as B
+A --> B
+}
+@enduml

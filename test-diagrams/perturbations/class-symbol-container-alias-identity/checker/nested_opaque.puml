@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+frame Harbor {
+cloud "component as [actor]" as G {
+class LongPayload
+}
+cloud G {
+class X
+X --> LongPayload
+}
+}
+@enduml

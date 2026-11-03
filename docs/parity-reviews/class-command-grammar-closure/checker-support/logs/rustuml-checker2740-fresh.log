@@ -1,0 +1,8 @@
+{
+  "checker_fresh": {
+    "pass": 80,
+    "mismatch": 46,
+    "process_error": 5,
+    "invalid_reference": 4
+  }
+}

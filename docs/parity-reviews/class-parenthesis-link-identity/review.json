@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-parenthesis-link-identity",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "47e6daa930606a186d90f13034831fdd15cf8280",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "Four fresh scoped source/target/double/inverted parenthesis cases pass. LinkType ID selection and ExtremityParenthesis constants are source-backed, and the link remains a link rather than an invented lollipop entity.",
+    "Relevant group endpoint cases still fail strict comparison, including package_target_parenthesis_one_dash_lr and maker group_lr. Identity itself is corroborated, but the endpoint/image dependencies needed for this production mechanism remain rejected. No isolated cherry-pick was tested."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_0.puml",
+      "golden": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_0.svg",
+      "axes": [
+        "source/target/double/inverted decorations",
+        "scoped aliases and width"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-parenthesis-link-identity/endpoint_0.puml",
+      "source_sha256": "312ab70760971819e46dc7cd31277de4d7ae2c53b8e476661a8b2ab3e2ecc374",
+      "java_sha256": "a389f5ca028220f09f5b843d9cc6e20584bf4a247395bd5b1dc9ff47ca182ffb",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-parenthesis-link-identity/endpoint_0"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_1.puml",
+      "golden": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_1.svg",
+      "axes": [
+        "source/target/double/inverted decorations",
+        "scoped aliases and width"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-parenthesis-link-identity/endpoint_1.puml",
+      "source_sha256": "1e249c80f4ccd32d8b98f09e2f9cbf09b89b0e73a5119848bdffbaf5af79dcce",
+      "java_sha256": "b68dccb37387b7681c505031ae1bd3415ddfa642df7079d69507a2b0bb728cd1",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-parenthesis-link-identity/endpoint_1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_2.puml",
+      "golden": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_2.svg",
+      "axes": [
+        "source/target/double/inverted decorations",
+        "scoped aliases and width"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-parenthesis-link-identity/endpoint_2.puml",
+      "source_sha256": "0e3407324e4a74650ec77bb584f24ed3009be98e4052850203669acf67bd2f12",
+      "java_sha256": "0979583d7c3c8d3ecf7a1f3be5fd8e190c0c7a264d55e94c4b9d07610a0920c6",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-parenthesis-link-identity/endpoint_2"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_3.puml",
+      "golden": "test-diagrams/perturbations/class-parenthesis-link-identity/checker/endpoint_3.svg",
+      "axes": [
+        "source/target/double/inverted decorations",
+        "scoped aliases and width"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-parenthesis-link-identity/endpoint_3.puml",
+      "source_sha256": "1ce5c76240e22b17cdae586dcf3774f3fb5c0b87a403be9abb9dd64118004296",
+      "java_sha256": "d066dcccf32853013167efa50e6bb7d79f91201e93a5b09737ba1df6c57418c4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-parenthesis-link-identity/endpoint_3"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "golden": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml",
+      "source_sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+      "java_sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-maker/group_lr.puml",
+      "golden": "test-diagrams/perturbations/class-parenthesis-link-identity/retained-maker/group_lr.svg",
+      "axes": [
+        "two nonempty aliased groups as endpoints",
+        "left-to-right direction and parenthesis decoration"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "byte-identical maker failure; independent replay and raw-DOT diagnosis",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.puml",
+      "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+      "java_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/group_lr"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-parenthesis-link-identity",
+    "account_path": "docs/parity-reviews/class-parenthesis-link-identity/account.json",
+    "original_account_commit": "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+    "picked_account_commit": "47e6daa930606a186d90f13034831fdd15cf8280",
+    "account_history_original": [
+      "aa5bb750598e170f8fce5bd5599162f9389c7e9f",
+      "ee458fb064d859d2a1fdba9e12fc8dd0759cba79"
+    ],
+    "account_history_picked": [
+      "47e6daa930606a186d90f13034831fdd15cf8280",
+      "efe4371a85d2716d1314a440082027a6b87e6764"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "f6d97ffcfb01d044db1801d74d4714a0dedaa706000e3c0449d13ccbd48b5bb3",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-group-endpoint-routing",
+    "class-group-magnetic-extremities",
+    "class-single-svek-envelope-origin"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 4,
+    "mismatch": 2
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

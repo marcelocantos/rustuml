@@ -1,0 +1,196 @@
+[
+  {
+    "mechanism": "class-chrome-bordered-block-geometry",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 6,
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-cloud-child-coordinate-dependency",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 2,
+      "mismatch": 1
+    }
+  },
+  {
+    "mechanism": "class-cluster-header-shape-extent",
+    "verdict": "accepted",
+    "counts": {
+      "pass": 4
+    }
+  },
+  {
+    "mechanism": "class-command-execution-ownership",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 5,
+      "process_error": 6,
+      "pass": 5,
+      "invalid_reference": 1
+    }
+  },
+  {
+    "mechanism": "class-command-grammar-closure",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 8,
+      "pass": 63,
+      "process_error": 7
+    }
+  },
+  {
+    "mechanism": "class-container-only-factory-closure",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 2,
+      "pass": 2
+    }
+  },
+  {
+    "mechanism": "class-current-spot-cascade",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 8,
+      "pass": 4
+    }
+  },
+  {
+    "mechanism": "class-description-leaf-image-dependency",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-description-symbol-images",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 3,
+      "mismatch": 6
+    }
+  },
+  {
+    "mechanism": "class-group-endpoint-routing",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 5,
+      "mismatch": 6
+    }
+  },
+  {
+    "mechanism": "class-group-magnetic-extremities",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 4,
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-group-paint-ownership",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 4,
+      "mismatch": 4
+    }
+  },
+  {
+    "mechanism": "class-named-note-scoped-identity-closure",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 2,
+      "invalid_reference": 2,
+      "process_error": 2
+    }
+  },
+  {
+    "mechanism": "class-native-leaf-presentation",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 3,
+      "mismatch": 6,
+      "invalid_reference": 1
+    }
+  },
+  {
+    "mechanism": "class-note-cluster-ownership-dependency",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 2,
+      "pass": 1
+    }
+  },
+  {
+    "mechanism": "class-note-declaration-scope",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 3,
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-note-target-quark",
+    "verdict": "rejected",
+    "counts": {
+      "mismatch": 2,
+      "pass": 4
+    }
+  },
+  {
+    "mechanism": "class-package-command-precedence-closure",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 4,
+      "process_error": 2
+    }
+  },
+  {
+    "mechanism": "class-page-chrome-composition-dependency",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 2,
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-parenthesis-link-identity",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 4,
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-quoted-code-identity",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 4,
+      "mismatch": 2
+    }
+  },
+  {
+    "mechanism": "class-single-svek-envelope-origin",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 2,
+      "mismatch": 6
+    }
+  },
+  {
+    "mechanism": "class-svek-painted-origin",
+    "verdict": "rejected",
+    "counts": {
+      "pass": 4,
+      "mismatch": 3
+    }
+  },
+  {
+    "mechanism": "class-symbol-container-alias-identity",
+    "verdict": "accepted",
+    "counts": {
+      "pass": 8
+    }
+  }
+]

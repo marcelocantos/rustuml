@@ -1,0 +1,17 @@
+{
+  "command": [
+    "rustc",
+    "--edition=2024",
+    "/tmp/checker2740_raw_dot.rs",
+    "--extern",
+    "rustuml_layout=/tmp/rustuml-checker2740-target/release/deps/librustuml_layout-cc0b5eb7759a0ae4.rlib",
+    "-L",
+    "dependency=/tmp/rustuml-checker2740-target/release/deps",
+    "-L",
+    "native=/tmp/rustuml-checker2740-target/release/build/rustuml-layout-2d2dc6e5d94b037d/out",
+    "-o",
+    "/tmp/rustuml-checker2740/raw_dot"
+  ],
+  "exit": 0,
+  "stderr": ""
+}

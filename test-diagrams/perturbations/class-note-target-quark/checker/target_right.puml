@@ -1,0 +1,9 @@
+@startuml
+package "Outer harbor" as H {
+class "Air sensor" as S
+note right of S
+Reading 1
+second line
+end note
+}
+@enduml

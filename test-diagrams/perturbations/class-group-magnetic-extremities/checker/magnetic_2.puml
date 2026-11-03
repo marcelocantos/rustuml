@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+folder "N" as F {
+class Inside
+}
+class Peer
+F )-( Peer
+@enduml

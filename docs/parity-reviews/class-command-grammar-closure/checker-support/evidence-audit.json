@@ -1,0 +1,25 @@
+{
+  "tested_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "owner_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+  "production_unchanged": true,
+  "existing_tracked_files_unchanged": true,
+  "new_paths_within_checker_ownership": true,
+  "review_count": 24,
+  "verdicts": {
+    "rejected": 22,
+    "accepted": 2
+  },
+  "all237_sources_and_references_hash_verified": true,
+  "all237_statuses_reproduced_after_retention": true,
+  "final_source_inventory": 1192,
+  "final_counts": {
+    "mismatch": 429,
+    "pass": 726,
+    "process_error": 24,
+    "invalid_reference": 13
+  },
+  "fresh_source_entries": 139,
+  "fresh_unique_source_hashes": 131,
+  "review_schema_shape_checked": true,
+  "frozen_harness_review_gate": "still fails on rejected records and existing evidence residue; shape check is not acceptance"
+}

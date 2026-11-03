@@ -1,0 +1,10 @@
+@startuml
+node "Outer envelope" as G {
+frame Inner {
+class Payload
+}
+}
+class Peer
+Peer --> G.Inner.Payload
+note right of G.Inner.Payload : root annotation
+@enduml

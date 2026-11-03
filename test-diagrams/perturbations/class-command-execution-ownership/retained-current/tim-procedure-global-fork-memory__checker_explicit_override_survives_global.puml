@@ -1,0 +1,12 @@
+@startuml
+!procedure $publish()
+!global $spruce = "published"
+!endprocedure
+!procedure $outer($spruce)
+!local $local = "kept"
+$publish()
+class "$spruce $local" as Local
+!endprocedure
+$outer("argument")
+class "$spruce $local" as Global
+@enduml

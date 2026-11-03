@@ -1,0 +1,1623 @@
+commit 18916d312c32340b0a674e15259dc3031ea57acf
+Author:     Marcelo Cantos <marcelo.cantos@gmail.com>
+AuthorDate: Tue Nov 3 18:38:26 2026 +1100
+Commit:     Marcelo Cantos <marcelo.cantos@gmail.com>
+CommitDate: Tue Nov 3 18:38:26 2026 +1100
+
+    fix: share consuming class commands between factory trials and execution
+    
+    Own quoted names and complete multiline bodies, preserve native declarations
+    and modifier state, execute mixing in order, and retain container aliases and
+    canonical note targets. Render native leaf spots and declaration visibility
+    from Java's header and VisibilityModifier model. Keep actor-only generalization
+    on its valid description path after a rejected class trial.
+    
+    Precommitted causal accounts:
+    - 2a0981759c523c9da3d19ebc7f7919bb4cdd3fec (commands, container aliases)
+    - be918a98f6e445c13e29d6f314f0f1dfa13b9acb (native leaf presentation)
+    - 902086e529d4eb564bce381458995048b580c5be (note target quarks)
+    - bc0c65b6aad9cf98995fba162ccb9ee3b16613c4 (quoted code identity)
+    - 93dd8e2f5edd728607704f3d72a7c09a09fe7d9a (description trial fallback)
+    
+    Unimplemented blocking renderer dependencies are recorded in
+     eb5b550fe22d246a5dee048bf7396cd70de0378d.
+    
+    Maker results: workspace lib 1420/1420; parser 566/566; parser Clippy clean.
+    Prepared perturbations 383/833 (was 349/833), including 12/23 prior checker
+    inputs; 22/31 fresh valid CLI cases. Main tiers unchanged at 11181/11251 and
+    10497/11251, with identical failure inventories. Both main tier gates and
+    perturbation gate remain red; guards 4/6. No acceptance claim. Mixed leaf
+    paint, page chrome, cloud coordinates and note layout still block parity.
+
+diff --git a/crates/rustuml-parser/src/diagram/class.rs b/crates/rustuml-parser/src/diagram/class.rs
+index d8b43b73..7c86c3d2 100644
+--- a/crates/rustuml-parser/src/diagram/class.rs
++++ b/crates/rustuml-parser/src/diagram/class.rs
+@@ -128,6 +128,11 @@ pub struct ClassEntity {
+     #[serde(default)]
+     pub explicit_alias: bool,
+     pub kind: EntityKind,
++    /// CommandCreateClass stores declaration-level modifiers on the entity.
++    #[serde(default)]
++    pub is_static: bool,
++    #[serde(default)]
++    pub visibility: Visibility,
+     pub members: Vec<Member>,
+     pub stereotypes: Vec<String>,
+     /// Generic type parameter(s) declared with `<...>` after the entity name,
+@@ -186,6 +191,13 @@ pub enum EntityKind {
+     Enum,
+     Annotation,
+     Entity,
++    Protocol,
++    Struct,
++    Exception,
++    Metaclass,
++    Stereotype,
++    Dataclass,
++    Record,
+     Object,
+     State,
+     Circle,
+diff --git a/crates/rustuml-parser/src/parse/class.rs b/crates/rustuml-parser/src/parse/class.rs
+index 6c808d6a..5a2729af 100644
+--- a/crates/rustuml-parser/src/parse/class.rs
++++ b/crates/rustuml-parser/src/parse/class.rs
+@@ -28,31 +28,120 @@ enum QuarkLookup {
+     ReuseUnique,
+ }
+ 
+-/// Parse preprocessed lines into a class diagram.
++/// Parse preprocessed lines with the same consuming command engine used for
++/// factory viability. Java PSystemCommandFactory executes complete commands;
++/// body lines never re-enter the outer command dispatcher.
+ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
+-    let mut parser = ClassParser::new();
++    Ok(parse_commands(lines, false)?.finish())
++}
++
++pub(super) fn native_container_candidate(lines: &[String]) -> bool {
++    parse_commands(lines, false)
++        .is_ok_and(|parser| parser.has_native_class && !parser.packages.is_empty())
++}
++
++/// DescriptionDiagramFactory has the same actor/usecase declarations without
++/// CommandCreateElementFull2's class-only mixing gate. This bounded trial uses
++/// consuming execution, never a raw scan, and excludes all native class leaves.
++pub(super) fn description_actor_candidate(lines: &[String]) -> bool {
++    parse_commands(lines, true).is_ok_and(|parser| {
++        !parser.has_native_class
++            && parser.packages.is_empty()
++            && !parser.entities.is_empty()
++            && parser
++                .entities
++                .iter()
++                .all(|entity| matches!(entity.kind, EntityKind::Actor | EntityKind::UseCase))
++    })
++}
+ 
++fn parse_commands(lines: &[String], description_factory: bool) -> Result<ClassParser, ParseError> {
++    let mut parser = ClassParser::new();
++    parser.allow_mixing = description_factory;
+     for (i, line) in lines.iter().enumerate() {
+         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+         if parser.current_note.is_some() {
+-            // Java `CommandFactoryNote.createMultiLine` delegates to
+-            // `BlocLines.removeEmptyColumns`, which removes only common
+-            // leading columns. Terminal spaces remain in the Display and
+-            // therefore contribute to note layout.
++            // CommandFactoryNote owns indentation and terminal spaces.
+             parser.parse_line(source_line, super::source_text(line))?;
+-            continue;
++        } else if !trimmed.is_empty() || parser.meta_block.is_some() {
++            parser.parse_line(source_line, trimmed)?;
+         }
+-        if trimmed.is_empty() {
+-            continue;
+-        }
+-        parser.parse_line(source_line, trimmed)?;
+     }
++    // Java multiline commands cannot succeed before their closing delimiter.
++    if parser.current_entity.is_some()
++        || parser.current_note.is_some()
++        || parser.meta_block.is_some()
++        || parser.current_skinparam_prefix.is_some()
++        || !parser.scope_stack.is_empty()
++    {
++        return Err(ParseError {
++            line: parser.current_line,
++            message: "unclosed class command".into(),
++        });
++    }
++    Ok(parser)
++}
++
++/// NameAndCodeParser.nameAndCodeForClassWithGeneric: quoted display text is
++/// opaque; `as` is syntax only between complete tokens. The returned tail is
++/// owned by the declaration command, not rescanned as another command.
++struct NameAndCode<'a> {
++    code: String,
++    display: String,
++    explicit_alias: bool,
++    quoted_only: bool,
++    alias_display_quoted: bool,
++    tail: &'a str,
++}
++
++fn name_token(input: &str) -> Option<(&str, bool, &str)> {
++    if let Some(rest) = input.strip_prefix('"') {
++        let end = rest.find('"')?;
++        return Some((&rest[..end], true, &rest[end + 1..]));
++    }
++    let end = input
++        .find(|c: char| c.is_whitespace() || matches!(c, '{' | '}' | '"' | '<' | '>'))
++        .unwrap_or(input.len());
++    (end > 0).then_some((&input[..end], false, &input[end..]))
++}
+ 
+-    Ok(parser.finish())
++fn name_and_code(input: &str) -> Option<NameAndCode<'_>> {
++    let (first, quoted, tail) = name_token(input)?;
++    let rest = tail.trim_start();
++    if let Some((word, after_as)) = rest.split_once(char::is_whitespace)
++        && word.eq_ignore_ascii_case("as")
++    {
++        let (second, second_quoted, tail) = name_token(after_as.trim_start())?;
++        // Class name grammar has quoted-display/code and code/quoted-display
++        // alternatives. CommandPackageWithUSymbol also permits display/code.
++        let (code, display) = if second_quoted {
++            (first, second)
++        } else {
++            (second, first)
++        };
++        return Some(NameAndCode {
++            code: code.into(),
++            display: display.into(),
++            explicit_alias: true,
++            quoted_only: false,
++            alias_display_quoted: quoted || second_quoted,
++            tail,
++        });
++    }
++    Some(NameAndCode {
++        code: first.into(),
++        display: first.into(),
++        explicit_alias: false,
++        quoted_only: quoted,
++        alias_display_quoted: false,
++        tail,
++    })
+ }
+ 
+ struct ClassParser {
+     meta: DiagramMeta,
++    allow_mixing: bool,
++    has_native_class: bool,
+     direction: ClassLayoutDirection,
+     entities: Vec<ClassEntity>,
+     relationships: Vec<Relationship>,
+@@ -108,6 +197,8 @@ impl ClassParser {
+     fn new() -> Self {
+         Self {
+             meta: DiagramMeta::default(),
++            allow_mixing: false,
++            has_native_class: false,
+             direction: ClassLayoutDirection::TopToBottom,
+             entities: Vec::new(),
+             relationships: Vec::new(),
+@@ -352,9 +443,8 @@ impl ClassParser {
+             if let Some(&idx) = self.package_by_path.get(&path) {
+                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
+                     self.packages[idx].source_line = self.current_line;
+-                    self.uid_events.push(ClassUidEvent::Package(
+-                        self.packages[idx].name.clone(),
+-                    ));
++                    self.uid_events
++                        .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
+                 }
+                 continue;
+             }
+@@ -398,6 +488,8 @@ impl ClassParser {
+             label,
+             explicit_alias,
+             kind,
++            is_static: false,
++            visibility: Visibility::Default,
+             members: Vec::new(),
+             stereotypes: Vec::new(),
+             generic: None,
+@@ -522,7 +614,7 @@ impl ClassParser {
+                 MetaBlock::Footer => "endfooter",
+                 MetaBlock::Legend => "endlegend",
+                 MetaBlock::Caption => "endcaption",
+-                MetaBlock::Title => "end title",
++                MetaBlock::Title => "endtitle",
+             };
+             let end2 = match block {
+                 MetaBlock::Header => "end header",
+@@ -531,7 +623,7 @@ impl ClassParser {
+                 MetaBlock::Caption => "end caption",
+                 MetaBlock::Title => "end title",
+             };
+-            if line == end1 || line == end2 {
++            if line.eq_ignore_ascii_case(end1) || line.eq_ignore_ascii_case(end2) {
+                 self.meta_block = None;
+             } else {
+                 match block {
+@@ -577,7 +669,9 @@ impl ClassParser {
+ 
+         // Inside a multi-line note?
+         if self.current_note.is_some() {
+-            if line.trim() == "end note" {
++            if line.trim().eq_ignore_ascii_case("end note")
++                || line.trim().eq_ignore_ascii_case("endnote")
++            {
+                 let mut note = self.current_note.take().unwrap();
+                 if note.lines.is_empty() {
+                     // A body line that is itself an inline diagram directive
+@@ -621,6 +715,11 @@ impl ClassParser {
+             return Ok(());
+         }
+ 
++        // The public preprocessed entrypoint also accepts an outer wrapper.
++        if line.starts_with("@startuml") || line == "@enduml" {
++            return Ok(());
++        }
++
+         // Closing brace: leave the exact structural scope that opened it.
+         if line == "}" {
+             match self.scope_stack.pop() {
+@@ -647,7 +746,11 @@ impl ClassParser {
+         if self.try_together(line) {
+             return Ok(());
+         }
+-        if self.try_entity_decl(line) {
++        // ClassDiagramFactory registers shared containers before mixed leaves.
++        if self.try_package(line) {
++            return Ok(());
++        }
++        if self.try_entity_decl(line)? {
+             return Ok(());
+         }
+         if self.try_association_class(line) {
+@@ -659,86 +762,136 @@ impl ClassParser {
+         if self.try_inline_member(line) {
+             return Ok(());
+         }
+-        if self.try_package(line) {
+-            return Ok(());
+-        }
+         if self.try_enum_decl(line) {
+             return Ok(());
+         }
+-        if self.try_note(line) {
++        if self.try_note(line)? {
+             return Ok(());
+         }
+         if self.try_meta(line) {
+             return Ok(());
+         }
+ 
+-        // Silently ignore unknown lines.
+-        Ok(())
++        // PSystemCommandFactory rejects unrecognized commands. In particular,
++        // an unsuccessful trial cannot claim viability by dropping a line.
++        Err(ParseError {
++            line: line_num,
++            message: format!("unrecognized class command: {line}"),
++        })
+     }
+ 
+-    fn try_entity_decl(&mut self, line: &str) -> bool {
+-        let (url, clean_line) = super::extract_link_url(line);
+-        let url_tooltip = super::extract_link_tooltip(line);
+-        let line = clean_line.as_str();
+-        // Allows dots in the identifier (for `set namespaceSeparator none`).
+-        static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
++    fn try_entity_decl(&mut self, line: &str) -> Result<bool, ParseError> {
++        // CommandCreateClass[Multilines].getRegexConcat and
++        // CommandCreateElementFull2: Pattern2 is case-insensitive; whitespace
++        // separates keywords, while labels/codes retain their original case.
++        static DECL: LazyLock<Regex> = LazyLock::new(|| {
+             Regex::new(
+-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+-            )
+-            .unwrap()
++            r"(?i)^([+~#-]?)\s*(?:(mix_)?(class|abstract\s+class|static\s+class|abstract|interface|enum|annotation|entity|protocol|struct|exception|metaclass|stereotype|dataclass|record|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle))\s+"
++        ).unwrap()
+         });
+-        // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
+-        static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
++        static SUFFIX: LazyLock<Regex> = LazyLock::new(|| {
+             Regex::new(
+-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+-            )
+-            .unwrap()
++            r#"(?i)^\s*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>\s*)?(?:(?:<<[^>]+>>|\$[^\s{]+|#[^\s{]+)\s*)*(?:(?:extends|implements)\s+[^{}]+)?\s*(?:\{\s*\}|\{\{?)?\s*$"#
++        ).unwrap()
+         });
+         static STEREOTYPE_RE: LazyLock<Regex> =
+             LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
+-
+-        let re = if matches!(self.namespace_sep.as_deref(), None | Some(".")) {
+-            // With Java's null separator, dots are literal name characters.
+-            // The default dot separator uses the same lexical grammar and
+-            // splits the captured identity later.
+-            &*RE_DOTTED
+-        } else {
+-            // Custom separators (e.g. "::" or "/") use the permissive grammar.
+-            &*RE_PERMISSIVE
++        let Some(caps) = DECL.captures(line) else {
++            return Ok(false);
+         };
+-        if let Some(caps) = re.captures(line) {
+-            let declaration_kind = caps[1].trim();
+-            if line.trim_end().ends_with('{')
+-                && matches!(declaration_kind, "database" | "node" | "rectangle")
+-            {
+-                return false;
+-            }
+-            let kind = parse_entity_kind(declaration_kind);
+-            // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
+-            let (mut label, mut id) = if let Some(m) = caps.get(4) {
+-                let label_raw = m.as_str().to_string();
+-                let id = strip_creole_for_id(&label_raw);
+-                (label_raw, id)
+-            } else {
+-                let label = caps
+-                    .get(2)
+-                    .map_or_else(|| caps[3].to_string(), |m| m.as_str().to_string());
+-                let id = caps[3].to_string();
+-                (label, id)
+-            };
++        let declaration_key = caps[3]
++            .split_whitespace()
++            .collect::<Vec<_>>()
++            .join(" ")
++            .to_ascii_lowercase();
++        let declaration_kind = declaration_key.as_str();
++        let ordinary_class_command = matches!(
++            declaration_kind,
++            "class"
++                | "abstract class"
++                | "static class"
++                | "abstract"
++                | "interface"
++                | "enum"
++                | "annotation"
++                | "entity"
++                | "protocol"
++                | "struct"
++                | "exception"
++                | "metaclass"
++                | "stereotype"
++                | "dataclass"
++                | "record"
++                | "circle"
++                | "diamond"
++        );
++        let mixed = !ordinary_class_command && declaration_kind != "object";
++        let Some(name) = name_and_code(&line[caps.get(0).unwrap().end()..]) else {
++            return Ok(false);
++        };
++        // CommandCreateClass parses URLs/colors/supertypes only after the
++        // complete name/code alternative. Brackets, # and keywords inside a
++        // quoted display cannot become declaration decorations.
++        let (url, clean_tail) = super::extract_link_url(name.tail);
++        let url_tooltip = super::extract_link_tooltip(name.tail);
++        if !SUFFIX.is_match(&clean_tail) {
++            return Ok(false);
++        }
++        // NameAndCodeParser's aliased native class alternatives require a
++        // quoted display. Symbol containers separately permit unquoted display.
++        if ordinary_class_command && name.explicit_alias && !name.alias_display_quoted {
++            return Ok(false);
++        }
++        // CommandCreateElementFull2.NORMAL_KEYWORD checks the current state,
++        // not whether an allowmixing directive exists later in the source.
++        if mixed && caps.get(2).is_none() && !self.allow_mixing {
++            return Err(ParseError {
++                line: self.current_line,
++                message: "Use 'allowmixing' before mixing classes and other UML elements".into(),
++            });
++        }
++        if caps.get(2).is_some() && !mixed {
++            return Ok(false);
++        }
++        if ordinary_class_command {
++            self.has_native_class = true;
++        }
++        let kind = parse_entity_kind(declaration_kind);
++        let quoted_only = name.quoted_only;
++        let explicit_alias = name.explicit_alias;
++        // CucaDiagram.cleanId removes only enclosing quotes, which the
++        // NameAndCode recognizer already consumed. Preserve the code itself.
++        let mut id = name.code;
++        let mut label = name.display;
++        {
+             label = normalize_inline_stereotypes(&label);
+ 
+             // A trailing `<...>` is a generic type parameter, not part of the
+             // entity id/label/qualified-name. Split it off the id; mirror the
+             // split onto the label only when the label was derived from the id
+             // (no explicit alias / quoted name).
+-            let label_was_id = caps.get(2).is_none() && caps.get(4).is_none();
+-            let generic = split_generic(&mut id);
++            let label_was_id = !explicit_alias && !quoted_only;
++            // NameAndCodeParser permits generics in quoted display or after code.
++            let tail = clean_tail.trim_start();
++            let generic = if tail.starts_with('<') && !tail.starts_with("<<") {
++                let mut depth = 0;
++                let end = tail.char_indices().find_map(|(i, ch)| {
++                    match ch {
++                        '<' => depth += 1,
++                        '>' => depth -= 1,
++                        _ => {}
++                    }
++                    (depth == 0).then_some(i)
++                });
++                end.map(|end| tail[1..end].trim().to_string())
++            } else {
++                split_generic(&mut id).or_else(|| split_generic(&mut label))
++            };
+             if label_was_id {
+                 split_generic(&mut label);
+             }
+ 
+-            let stereotype_source = text_outside_double_quotes(line);
++            let stereotype_source = text_outside_double_quotes(&clean_tail);
+             let mut spot_color: Option<String> = None;
+             let mut spot_character: Option<char> = None;
+             let stereotypes: Vec<String> = STEREOTYPE_RE
+@@ -754,31 +907,19 @@ impl ClassParser {
+                 .filter(|s| !s.is_empty())
+                 .collect();
+ 
+-            let entity_colors = parse_entity_colors(line);
++            let entity_colors = parse_entity_colors(&clean_tail);
+ 
+-            let explicit_alias = caps.get(2).is_some();
+-            // The ordinary class commands use
+-            // `CucaDiagram#quarkInContextSafe(false, idShort)`, while
+-            // `CommandCreateElementFull2` uses the unique-reuse form.
+-            let lookup = match declaration_kind {
+-                "class" | "abstract class" | "abstract" | "interface" | "enum" | "annotation"
+-                | "entity" => QuarkLookup::CurrentContext,
+-                _ => QuarkLookup::ReuseUnique,
++            // Native commands use current-context quarks; description commands
++            // use CommandCreateElementFull2's unique-reuse lookup.
++            let lookup = if ordinary_class_command {
++                QuarkLookup::CurrentContext
++            } else {
++                QuarkLookup::ReuseUnique
+             };
+-            let ordinary_class_command = matches!(
+-                declaration_kind,
+-                "class"
+-                    | "abstract class"
+-                    | "abstract"
+-                    | "interface"
+-                    | "enum"
+-                    | "annotation"
+-                    | "entity"
+-            );
+             let entity_path = self.resolve_quark_path(&id, lookup);
+             let display_label = if explicit_alias {
+                 label
+-            } else if caps.get(4).is_some() {
++            } else if quoted_only {
+                 match self.namespace_sep.as_deref() {
+                     Some(separator) if label.contains(separator) => {
+                         label.rsplit(separator).next().unwrap().to_string()
+@@ -804,6 +945,17 @@ impl ClassParser {
+ 
+             {
+                 let entity = &mut self.entities[entity_idx];
++                if ordinary_class_command || entity_was_created {
++                    entity.kind = kind;
++                }
++                entity.is_static = declaration_kind == "static class";
++                entity.visibility = match &caps[1] {
++                    "+" => Visibility::Public,
++                    "-" => Visibility::Private,
++                    "#" => Visibility::Protected,
++                    "~" => Visibility::Package,
++                    _ => Visibility::Default,
++                };
+                 // `CommandCreateClass` preserves the display owned by the
+                 // first materialization. `CommandCreateElementFull2` is the
+                 // separate mixed-description command that calls setDisplay
+@@ -850,16 +1002,14 @@ impl ClassParser {
+             // `LinkType(NONE, EXTENDS)`. Preserve that SVEK orientation:
+             // reversing an otherwise equivalent child -> parent edge changes
+             // Graphviz ranks, endpoint UIDs, and the SVG path identity.
+-            self.parse_supertypes(line, &final_id);
++            self.parse_supertypes(&clean_tail, &final_id);
+ 
+             if line.ends_with('{') || line.ends_with("{{") {
+                 self.current_entity = Some(final_id.clone());
+                 self.current_entity_needs_body_location = true;
+             }
+             self.last_entity_id = Some(final_id);
+-            true
+-        } else {
+-            false
++            Ok(true)
+         }
+     }
+ 
+@@ -991,7 +1141,7 @@ impl ClassParser {
+         };
+         let pick = |q: usize, b: usize| -> String {
+             if let Some(m) = caps.get(q) {
+-                strip_creole_for_id(m.as_str())
++                m.as_str().to_string()
+             } else {
+                 caps.get(b).map(|m| m.as_str()).unwrap_or("").to_string()
+             }
+@@ -1059,7 +1209,7 @@ impl ClassParser {
+             // `"Fish & Chips" --> "Bread & Butter"` resolves to the existing
+             // declared entity instead of creating a duplicate.
+             let from_raw = if let Some(m) = caps.get(1) {
+-                strip_creole_for_id(m.as_str())
++                m.as_str().to_string()
+             } else {
+                 caps.get(2).map(|m| m.as_str()).unwrap_or("").to_string()
+             };
+@@ -1067,7 +1217,7 @@ impl ClassParser {
+             let rel_str = &caps[4];
+             let to_mult = caps.get(5).map(|m| m.as_str().to_string());
+             let to_raw = if let Some(m) = caps.get(6) {
+-                strip_creole_for_id(m.as_str())
++                m.as_str().to_string()
+             } else {
+                 caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
+             };
+@@ -1165,7 +1315,7 @@ impl ClassParser {
+         let endpoint = |caps: &regex::Captures<'_>, quoted: usize, bare: usize| {
+             caps.get(quoted).map_or_else(
+                 || caps.get(bare).map(|m| m.as_str()).unwrap_or("").to_string(),
+-                |m| strip_creole_for_id(m.as_str()),
++                |m| m.as_str().to_string(),
+             )
+         };
+         if let Some(caps) = ENT_THEN_LOLLIPOP_RE.captures(line) {
+@@ -1274,28 +1424,36 @@ impl ClassParser {
+     }
+ 
+     fn try_package(&mut self, line: &str) -> bool {
+-        static RE: LazyLock<Regex> = LazyLock::new(|| {
++        // CommandPackageWithUSymbol#getRegexConcat/executeArg distinguish code
++        // from display in both alias directions. The quark owns code; the
++        // group's Display never participates in identity resolution.
++        static PREFIX: LazyLock<Regex> = LazyLock::new(|| {
++            Regex::new(r"(?i)^(package|namespace|cloud|database|folder|frame|rectangle|node)\s+")
++                .unwrap()
++        });
++        static TAIL: LazyLock<Regex> = LazyLock::new(|| {
+             Regex::new(
+-                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"|([^#\s{<]+))(?:\s+(?i:as)\s+([\p{L}\p{N}_.]+))?\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*\{\s*$"#,
++                r"^\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:#([^\s{<]+))?\s*\{\s*$",
+             )
+             .unwrap()
+         });
+-
+-        if let Some(caps) = RE.captures(line) {
+-            let kind_key = caps[1].to_ascii_lowercase();
++        let Some(prefix) = PREFIX.captures(line) else {
++            return false;
++        };
++        let Some(name) = name_and_code(&line[prefix.get(0).unwrap().end()..]) else {
++            return false;
++        };
++        let Some(tail) = TAIL.captures(name.tail) else {
++            return false;
++        };
++        {
++            let kind_key = prefix[1].to_ascii_lowercase();
+             let kind_str = kind_key.as_str();
+-            let display = caps
++            let display = name.display;
++            let alias = name.explicit_alias.then_some(name.code);
++            let color = tail.get(1).or(tail.get(3)).map(|m| m.as_str().to_string());
++            let stereotypes = tail
+                 .get(2)
+-                .or(caps.get(3))
+-                .map(|m| m.as_str().to_string())
+-                .unwrap_or_default();
+-            let alias = caps.get(4).map(|m| m.as_str().to_string());
+-            if alias.is_some() && kind_str != "package" {
+-                return false;
+-            }
+-            let color = caps.get(5).map(|m| m.as_str().to_string());
+-            let stereotypes = caps
+-                .get(6)
+                 .map(|m| vec![m.as_str().trim().to_string()])
+                 .unwrap_or_default();
+             let kind = match kind_str {
+@@ -1389,37 +1547,53 @@ impl ClassParser {
+             self.package_stack.push(package_idx);
+             self.scope_stack.push(ClassScope::Package);
+             true
+-        } else {
+-            false
+         }
+     }
+ 
+-    fn try_note(&mut self, line: &str) -> bool {
++    fn try_note(&mut self, line: &str) -> Result<bool, ParseError> {
+         // Single-line attached note: `note <pos> of <entity> : <text>`
+         // Entity may be a dotted name (e.g. `domain.User` in namespace diagrams).
+         static ATTACHED_RE: LazyLock<Regex> = LazyLock::new(|| {
+-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*:\s*(.+)$").unwrap()
++            Regex::new(
++                r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("[^"]+"|[^\s{}"<>]+)\s*:\s*(.+)$"#,
++            )
++            .unwrap()
+         });
+         // Multi-line attached note start: `note <pos> of <entity>` (optional color: `#color`)
+         static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
+-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(#\S+)?\s*$").unwrap()
++            Regex::new(
++                r#"(?i)^note\s+(top|bottom|left|right)\s+of\s+("[^"]+"|[^\s{}"<>]+)\s*(#\S+)?\s*$"#,
++            )
++            .unwrap()
+         });
+         // Shorthand single-line note attached to last entity: `note <pos> : <text>`
+-        static SHORT_RE: LazyLock<Regex> =
+-            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap());
++        static SHORT_RE: LazyLock<Regex> = LazyLock::new(|| {
++            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap()
++        });
+         // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
+-        static SHORT_ML_RE: LazyLock<Regex> =
+-            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap());
++        static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
++            Regex::new(r"(?i)^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap()
++        });
+         // Floating named note: `note "text" as Name`
+         static FLOATING_RE: LazyLock<Regex> =
+-            LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
++            LazyLock::new(|| Regex::new(r#"(?i)^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
+         // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
+         static FLOATING_ML_RE: LazyLock<Regex> =
+-            LazyLock::new(|| Regex::new(r"^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
++            LazyLock::new(|| Regex::new(r"(?i)^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
+ 
+         if let Some(caps) = ATTACHED_RE.captures(line) {
+-            let position = parse_note_position(&caps[1]);
+-            let target = caps[2].to_string();
++            let position = parse_note_position(&caps[1].to_ascii_lowercase());
++            // CommandFactoryNoteOnEntity.executeInternal resolves the target
++            // with quarkInContext(true, idShort) before creating the note/link.
++            let target_path =
++                self.resolve_quark_path(caps[2].trim_matches('"'), QuarkLookup::ReuseUnique);
++            let Some(&target_idx) = self.entity_by_path.get(&target_path) else {
++                return Err(ParseError {
++                    line: self.current_line,
++                    message: format!("unknown note target: {}", &caps[2]),
++                });
++            };
++            let target = self.entities[target_idx].id.clone();
+             let text = caps[3].trim().to_string();
+             // Expand `\n` escape sequences into actual newlines.  Preserve
+             // leading whitespace on each segment so that indented `* items`
+@@ -1438,12 +1612,22 @@ impl ClassParser {
+                 color: None,
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         if let Some(caps) = ATTACHED_ML_RE.captures(line) {
+-            let position = parse_note_position(&caps[1]);
+-            let target = caps[2].to_string();
++            let position = parse_note_position(&caps[1].to_ascii_lowercase());
++            // CommandFactoryNoteOnEntity.executeInternal resolves the target
++            // with quarkInContext(true, idShort) before creating the note/link.
++            let target_path =
++                self.resolve_quark_path(caps[2].trim_matches('"'), QuarkLookup::ReuseUnique);
++            let Some(&target_idx) = self.entity_by_path.get(&target_path) else {
++                return Err(ParseError {
++                    line: self.current_line,
++                    message: format!("unknown note target: {}", &caps[2]),
++                });
++            };
++            let target = self.entities[target_idx].id.clone();
+             self.current_note = Some(Note {
+                 lines: Vec::new(),
+                 target: Some(target),
+@@ -1452,12 +1636,12 @@ impl ClassParser {
+                 color: caps.get(3).map(|m| m.as_str().to_string()),
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         // Shorthand: `note right : text` — attaches to the last declared entity.
+         if let Some(caps) = SHORT_RE.captures(line) {
+-            let position = parse_note_position(&caps[1]);
++            let position = parse_note_position(&caps[1].to_ascii_lowercase());
+             let text = caps[2].trim().to_string();
+             let lines = text
+                 .split("\\n")
+@@ -1472,12 +1656,12 @@ impl ClassParser {
+                 color: None,
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         // Shorthand multi-line: `note right` — attaches to the last declared entity.
+         if let Some(caps) = SHORT_ML_RE.captures(line) {
+-            let position = parse_note_position(&caps[1]);
++            let position = parse_note_position(&caps[1].to_ascii_lowercase());
+             let target = self.last_entity_id.clone();
+             self.current_note = Some(Note {
+                 lines: Vec::new(),
+@@ -1487,7 +1671,7 @@ impl ClassParser {
+                 color: caps.get(2).map(|m| m.as_str().to_string()),
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         if let Some(caps) = FLOATING_RE.captures(line) {
+@@ -1505,7 +1689,7 @@ impl ClassParser {
+                 color: None,
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         if let Some(caps) = FLOATING_ML_RE.captures(line) {
+@@ -1518,7 +1702,7 @@ impl ClassParser {
+                 color: caps.get(2).map(|m| m.as_str().to_string()),
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         // `note on link : text` or `note on link: text` — inline single-line note on the last relationship.
+@@ -1542,7 +1726,7 @@ impl ClassParser {
+                 color: None,
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+         // `note on link` — multi-line note attached to the last relationship.
+         if line == "note on link" {
+@@ -1554,12 +1738,12 @@ impl ClassParser {
+                 color: None,
+                 source_line: self.current_line,
+             });
+-            return true;
++            return Ok(true);
+         }
+ 
+         // `end note` is handled in parse_line; skip it here if encountered standalone.
+         if line == "end note" {
+-            return true;
++            return Ok(true);
+         }
+ 
+         // `note : text` — Java PlantUML treats bare `note` as an entity named
+@@ -1580,18 +1764,39 @@ impl ClassParser {
+                     ent.members.push(member);
+                 }
+             }
+-            return true;
+-        }
+-
+-        // Bare `note` prefix — consume to avoid falling through to unknown.
+-        if line.starts_with("note ") {
+-            return true;
++            return Ok(true);
+         }
+ 
+-        false
++        Ok(false)
+     }
+ 
+     fn try_meta(&mut self, line: &str) -> bool {
++        // CommonCommands' Pattern2 grammar is case insensitive. Preserve data
++        // after the command prefix; only recognized syntax is canonicalized.
++        static PREFIX: LazyLock<Regex> = LazyLock::new(|| {
++            Regex::new(
++            r"(?i)^(?:(left|right|center)\s+)?(header|footer|title|caption|legend|skinparam|hide|show|remove)(?:\s+|$)"
++        ).unwrap()
++        });
++        let normalized;
++        let line = if let Some(caps) = PREFIX.captures(line) {
++            let prefix = caps.get(0).unwrap();
++            let alignment = caps
++                .get(1)
++                .map(|m| format!("{} ", m.as_str().to_ascii_lowercase()))
++                .unwrap_or_default();
++            let tail = &line[prefix.end()..];
++            normalized = format!(
++                "{alignment}{}{}{}",
++                caps[2].to_ascii_lowercase(),
++                if tail.is_empty() { "" } else { " " },
++                tail
++            );
++            normalized.as_str()
++        } else {
++            line
++        };
++
+         if let Some(rest) = line.strip_prefix("title ") {
+             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
+             self.title_line.get_or_insert(self.current_line);
+@@ -1608,9 +1813,9 @@ impl ClassParser {
+             return true;
+         }
+         if line == "header"
+-            || line.starts_with("left header")
+-            || line.starts_with("right header")
+-            || line.starts_with("center header")
++            || line == "left header"
++            || line == "right header"
++            || line == "center header"
+         {
+             self.meta_block = Some(MetaBlock::Header);
+             self.header_line.get_or_insert(self.current_line);
+@@ -1622,9 +1827,9 @@ impl ClassParser {
+             return true;
+         }
+         if line == "footer"
+-            || line.starts_with("left footer")
+-            || line.starts_with("right footer")
+-            || line.starts_with("center footer")
++            || line == "left footer"
++            || line == "right footer"
++            || line == "center footer"
+         {
+             self.meta_block = Some(MetaBlock::Footer);
+             self.footer_line.get_or_insert(self.current_line);
+@@ -1642,7 +1847,11 @@ impl ClassParser {
+         }
+         let mut legend_words = line.split_ascii_whitespace();
+         let is_legend = legend_words.next() == Some("legend");
+-        let legend_position = legend_words.collect::<Vec<_>>();
++        let legend_tail = legend_words
++            .collect::<Vec<_>>()
++            .join(" ")
++            .to_ascii_lowercase();
++        let legend_position = legend_tail.split_whitespace().collect::<Vec<_>>();
+         let valid_legend_position = matches!(
+             legend_position.as_slice(),
+             [] | ["left" | "center" | "right"]
+@@ -1737,10 +1946,21 @@ impl ClassParser {
+             return true;
+         }
+         if super::is_allow_mixing_command(line) {
++            self.allow_mixing = true;
+             return true;
+         }
+-        // Skip other layout/format directives.
+-        line.starts_with("map ") || line.starts_with("set ")
++        // CommonCommands.addCommonScaleCommands: rendering consumes scale from
++        // DiagramMeta.source (scale::directive_from_meta). Recognize complete
++        // forms here; this command does not create a class entity.
++        static SCALE: LazyLock<Regex> = LazyLock::new(|| {
++            Regex::new(
++            r"(?i)^scale\s+(?:max\s+)?[0-9]+(?:\.[0-9]+)?(?:\s*/\s*[0-9]+(?:\.[0-9]+)?|\s*[*x]\s*[0-9]+(?:\.[0-9]+)?|\s+(?:width|height))?\s*$"
++        ).unwrap()
++        });
++        // CommandAssumeTransparent.executeArg is explicitly a no-op in Java.
++        static ASSUME: LazyLock<Regex> =
++            LazyLock::new(|| Regex::new(r"(?i)^!assume\s+transparent\s+(?:dark|light)$").unwrap());
++        SCALE.is_match(line) || ASSUME.is_match(line)
+     }
+ 
+     fn parse_member_line(&mut self, line: &str) {
+@@ -1905,6 +2125,13 @@ fn parse_entity_kind(s: &str) -> EntityKind {
+         "enum" => EntityKind::Enum,
+         "annotation" => EntityKind::Annotation,
+         "entity" => EntityKind::Entity,
++        "record" => EntityKind::Record,
++        "protocol" => EntityKind::Protocol,
++        "struct" => EntityKind::Struct,
++        "exception" => EntityKind::Exception,
++        "metaclass" => EntityKind::Metaclass,
++        "stereotype" => EntityKind::Stereotype,
++        "dataclass" => EntityKind::Dataclass,
+         "object" => EntityKind::Object,
+         "state" => EntityKind::State,
+         "circle" => EntityKind::Circle,
+@@ -2431,27 +2658,6 @@ fn text_outside_double_quotes(s: &str) -> String {
+     out
+ }
+ 
+-/// Strip Creole/HTML markup from a display name to produce a plain identifier.
+-/// Used when a class is declared with a quoted markup name but no `as` alias.
+-fn strip_creole_for_id(s: &str) -> String {
+-    let mut out = s.to_string();
+-    for marker in &["**", "//", "__", "--"] {
+-        out = out.replace(marker, "");
+-    }
+-    let mut result = String::new();
+-    let mut in_tag = false;
+-    for ch in out.chars() {
+-        if ch == '<' {
+-            in_tag = true;
+-        } else if ch == '>' {
+-            in_tag = false;
+-        } else if !in_tag {
+-            result.push(ch);
+-        }
+-    }
+-    result.split_whitespace().collect::<Vec<_>>().join("_")
+-}
+-
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+@@ -2502,7 +2708,7 @@ mod tests {
+     #[test]
+     fn entity_types() {
+         let d = parse(
+-            "class A\nabstract class B\ninterface C\nenum D\nannotation E\nentity F\nstate G",
++            "allowmixing\nclass A\nabstract class B\ninterface C\nenum D\nannotation E\nentity F\nstate G",
+         );
+         assert_eq!(d.entities[0].kind, EntityKind::Class);
+         assert_eq!(d.entities[1].kind, EntityKind::AbstractClass);
+@@ -2947,9 +3153,9 @@ mod tests {
+         assert_eq!(d.packages.len(), 2);
+         assert_eq!(d.packages[0].name, "fresh");
+         assert_eq!(d.packages[1].name, "fresh.domain");
+-        assert_eq!(d.entities[0].id, "fresh.domain.My_Worker");
++        assert_eq!(d.entities[0].id, "fresh.domain.My Worker");
+         assert_eq!(d.entities[0].label, "My Worker");
+-        assert_eq!(d.relationships[0].from, "fresh.domain.My_Worker");
++        assert_eq!(d.relationships[0].from, "fresh.domain.My Worker");
+         assert_eq!(d.relationships[0].to, "FreshSink3503");
+     }
+ 
+@@ -3773,4 +3979,118 @@ mod tests {
+         assert_eq!(d.relationships[1].from, "FreshMemo4217");
+         assert_eq!(d.relationships[1].to, "FreshPeer4219");
+     }
++    #[test]
++    fn consuming_trial_keeps_display_tokens_and_modifiers_as_entity_data() {
++        for command in [
++            "class",
++            "ClAsS",
++            "static\tclass",
++            "+class",
++            "~ class",
++            "record",
++        ] {
++            let input = format!(
++                "@startuml\nNoDe\t\"Orchard District\" {{\n{command} \"East as [Inventory]\" as Store\n}}\n@enduml"
++            );
++            let crate::diagram::Diagram::Class(d) = super::super::parse(&input).unwrap() else {
++                panic!("{input}")
++            };
++            assert_eq!(d.entities.len(), 1, "{input}");
++            let e = &d.entities[0];
++            assert_eq!(e.id, "Orchard District.Store");
++            assert_eq!(e.label, "East as [Inventory]");
++            assert_eq!(e.is_static, command.starts_with("static"));
++            if command.starts_with('+') {
++                assert_eq!(e.visibility, Visibility::Public);
++            }
++            if command == "record" {
++                assert_eq!(e.kind, EntityKind::Record);
++            }
++        }
++    }
++
++    #[test]
++    fn consuming_trial_owns_page_note_and_member_bodies() {
++        for (open, close) in [
++            ("left header", "endheader"),
++            ("RIGHT HEADER", "END HEADER"),
++            ("center footer", "endfooter"),
++            ("legend right", "endlegend"),
++            ("title", "endtitle"),
++        ] {
++            let input = format!(
++                "@startuml\n{open}\ncomponent fictitious\n[display]\n{close}\nnode \"Orchard District\" {{\nclass Actual {{\ncomponent attribute\n[member]\n}}\nNOTE right of Actual\ncomponent prose\nENDNOTE\n}}\n@enduml"
++            );
++            let crate::diagram::Diagram::Class(d) = super::super::parse(&input).unwrap() else {
++                panic!("{input}")
++            };
++            assert_eq!(d.entities.len(), 1, "{input}");
++            assert_eq!(d.entities[0].members.len(), 2);
++            assert_eq!(d.notes.len(), 1);
++            assert_eq!(
++                d.notes[0].target.as_deref(),
++                Some("Orchard District.Actual")
++            );
++            assert_eq!(d.notes[0].lines, ["component prose"]);
++        }
++    }
++
++    #[test]
++    fn ordered_mixing_rejection_survives_the_public_dispatcher() {
++        for declaration in ["component Endpoint", "COMPONENT\tEndpoint"] {
++            let early = format!(
++                "@startuml\nnode \"Orchard District\" {{\nclass Record\nallowmixing\n{declaration}\n}}\n@enduml"
++            );
++            let late = format!(
++                "@startuml\nnode \"Orchard District\" {{\nclass Record\n{declaration}\nallowmixing\n}}\n@enduml"
++            );
++            let crate::diagram::Diagram::Class(d) = super::super::parse(&early).unwrap() else {
++                panic!("{early}")
++            };
++            assert_eq!(d.entities.len(), 2);
++            assert_eq!(d.entities[1].kind, EntityKind::Component);
++            assert!(super::super::parse(&late).is_err(), "{late}");
++        }
++        let d = parse("node Root {\nclass Data\nmix_component \"Inbound Port\" as Port\n}");
++        assert_eq!(d.entities[1].id, "Root.Port");
++        assert_eq!(d.entities[1].label, "Inbound Port");
++        assert_eq!(d.entities[1].kind, EntityKind::Component);
++        let lines = vec!["class Known".into(), "invented command".into()];
++        assert!(parse_class(&lines).is_err());
++    }
++
++    #[test]
++    fn symbol_aliases_reuse_canonical_scope_and_notes_follow_identity() {
++        for outer in [
++            "node \"Display as [text]\" as Root",
++            "node Root as \"Display as [text]\"",
++        ] {
++            let d = parse(&format!(
++                "{outer} {{\nfolder \"Storage Area\" as Inner {{\nclass \"Shelf Label\" as Shelf\nnote right of Shelf : attached\n}}\n}}\nnode Root {{\nclass Spare\n}}"
++            ));
++            assert_eq!(d.packages.len(), 2);
++            assert_eq!(d.packages[0].name, "Root");
++            assert_eq!(
++                d.packages[0].display_name.as_deref(),
++                Some("Display as [text]")
++            );
++            assert_eq!(d.entities[0].id, "Root.Inner.Shelf");
++            assert_eq!(d.notes[0].target.as_deref(), Some("Root.Inner.Shelf"));
++            assert_eq!(d.entities[1].id, "Root.Spare");
++        }
++    }
++    #[test]
++    fn quoted_codes_remain_distinct_from_underscore_names_and_own_decorations() {
++        let d = parse(
++            "node Site {\nclass \"Air Probe\"\nclass Air_Probe\n\"Air Probe\" --> Air_Probe\nnote right of \"Air Probe\" : attached\nclass \"X extends Ghost [[literal]] #red\" as Quoted\n}",
++        );
++        assert_eq!(d.entities.len(), 3);
++        assert_eq!(d.entities[0].id, "Site.Air Probe");
++        assert_eq!(d.entities[1].id, "Site.Air_Probe");
++        assert_eq!(d.notes[0].target.as_deref(), Some("Site.Air Probe"));
++        assert_eq!(d.relationships.len(), 1);
++        assert_eq!(d.relationships[0].from, "Site.Air Probe");
++        assert!(d.entities[2].color.is_none());
++        assert!(d.entities[2].url.is_none());
++    }
+ }
+diff --git a/crates/rustuml-parser/src/parse/component.rs b/crates/rustuml-parser/src/parse/component.rs
+index f9298174..be97d482 100644
+--- a/crates/rustuml-parser/src/parse/component.rs
++++ b/crates/rustuml-parser/src/parse/component.rs
+@@ -69,16 +69,6 @@ fn parse_description_bracket_declaration(trimmed: &str) -> Option<(String, Strin
+     ))
+ }
+ 
+-pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+-    if RE_DESCRIPTION_BRACKET_DECL.is_match(trimmed) {
+-        return true;
+-    }
+-    let normalized = RE_DESCRIPTION_LINK_DIRECTION.replace_all(trimmed, "-$2");
+-    RE_DESCRIPTION_CONN
+-        .captures(&normalized)
+-        .is_some_and(|captures| captures.get(1).is_some() || captures.get(7).is_some())
+-}
+-
+ /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
+ fn container_keyword(trimmed: &str) -> Option<&'static str> {
+     for &kw in CONTAINER_KEYWORDS {
+diff --git a/crates/rustuml-parser/src/parse/mod.rs b/crates/rustuml-parser/src/parse/mod.rs
+index 99b6484b..b9a2a3a8 100644
+--- a/crates/rustuml-parser/src/parse/mod.rs
++++ b/crates/rustuml-parser/src/parse/mod.rs
+@@ -315,6 +315,13 @@ fn detect_type(input: &str) -> &str {
+ /// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
+ /// `YamlDiagramFactory`.
+ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
++    // PSystemBuilder tries ClassDiagramFactory before DescriptionDiagramFactory.
++    // Trial the consuming engine: quoted labels and command bodies cannot vote
++    // independently, and a command rejected by execution cannot make a trial pass.
++    if class::native_container_candidate(lines) {
++        return UmlSubtype::Class;
++    }
++
+     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
+ 
+     // `allowmixing` is a class-diagram directive: it permits mixing other
+@@ -862,6 +869,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+     let max_score = scores.iter().copied().max().unwrap_or(0);
+     let max_idx = scores.iter().position(|&s| s == max_score).unwrap_or(0);
+ 
++    // PSystemBuilder continues from a rejected ClassDiagramFactory to the
++    // Description factory. Actor generalization arrows previously won the
++    // class score despite CommandCreateElementFull2 rejecting their leaves.
++    // A complete consuming description trial preserves the valid actor-only
++    // path, without permitting native mixtures or reviving late allowmixing.
++    if max_idx == 1 && !has_allowmixing && class::description_actor_candidate(lines) {
++        return UmlSubtype::UseCase;
++    }
+     subtypes[max_idx]
+ }
+ 
+@@ -1131,7 +1146,9 @@ pub fn parse_with_base(
+         None => preprocess::preprocess_full_for_parse(input, None),
+     };
+     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
+-    if typ == "uml" {
++    // A successful consuming class parse has already owned every body line.
++    // Do not apply the legacy malformed-directive guard to its member/page text.
++    if typ == "uml" && class::parse_class(&preprocess_out.lines).is_err() {
+         for (index, line) in preprocess_out.lines.iter().enumerate() {
+             let (source_line, trimmed) = source_line_and_trimmed(index + 1, line);
+             if resembles_allow_mixing_command(trimmed) {
+diff --git a/crates/rustuml-render/src/ascii_class.rs b/crates/rustuml-render/src/ascii_class.rs
+index 3fad86e7..96903e5e 100644
+--- a/crates/rustuml-render/src/ascii_class.rs
++++ b/crates/rustuml-render/src/ascii_class.rs
+@@ -263,6 +263,8 @@ mod tests {
+ 
+     fn make_entity(name: &str, members: Vec<Member>) -> ClassEntity {
+         ClassEntity {
++            is_static: false,
++            visibility: Visibility::Default,
+             id: name.to_string(),
+             label: name.to_string(),
+             explicit_alias: false,
+diff --git a/crates/rustuml-render/src/class.rs b/crates/rustuml-render/src/class.rs
+index 1684d7ab..a9c950f6 100644
+--- a/crates/rustuml-render/src/class.rs
++++ b/crates/rustuml-render/src/class.rs
+@@ -503,6 +503,13 @@ impl HideFlags {
+ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
+     let mut h = HideFlags::default();
+     let entity_kind_word = match entity.kind {
++        EntityKind::Protocol => "protocol",
++        EntityKind::Struct => "struct",
++        EntityKind::Exception => "exception",
++        EntityKind::Metaclass => "metaclass",
++        EntityKind::Stereotype => "stereotype",
++        EntityKind::Dataclass => "dataclass",
++        EntityKind::Record => "record",
+         EntityKind::Class => "class",
+         EntityKind::Interface => "interface",
+         EntityKind::Enum => "enum",
+@@ -1025,7 +1032,18 @@ fn calc_entity_dims(
+     } else {
+         HEADER_CIRCLE_LEFT_MARGIN + font.circled_radius() * 2.0 + ICON_TEXT_GAP
+     };
+-    let name_total = icon_area + name_width + HEADER_RIGHT_PAD + font.text_padding * 2.0;
++    // EntityImageClassHeader merges VisibilityModifier.getUBlock (size + 1)
++    // to the left of the name before HeaderLayout measures the complete block.
++    let declaration_visibility_width = if entity.visibility == Visibility::Default {
++        0.0
++    } else {
++        (font.attr_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE) + 1) as f64
++    };
++    let name_total = icon_area
++        + name_width
++        + declaration_visibility_width
++        + HEADER_RIGHT_PAD
++        + font.text_padding * 2.0;
+ 
+     // Stereotype text may also affect width.
+     let stereo_width = if has_stereotypes {
+@@ -1172,6 +1190,7 @@ fn calc_entity_dims(
+         font.name_font_size(),
+         &font.name_family,
+         font.circled_radius(),
++        font.attr_icon_size,
+     );
+     let field_padding = visible_field_blocks as f64 * font.text_padding * 2.0;
+     let method_padding = visible_method_blocks as f64 * font.text_padding * 2.0;
+@@ -1461,6 +1480,7 @@ fn class_header_height(
+     name_font_size: u32,
+     name_font_family: &str,
+     circled_radius: f64,
++    visibility_icon_size: Option<u32>,
+ ) -> f64 {
+     let name_content_height: f64 = escaped_newline_lines(&entity.label)
+         .iter()
+@@ -1473,6 +1493,14 @@ fn class_header_height(
+     // 10px `HeaderLayout` vertical envelope, then takes the maximum with the
+     // complete circled-character block. Multi-line or enlarged names can
+     // therefore grow the header beyond the default 32px icon envelope.
++    // EntityImageClassHeader: visibility block has size + 1 dimensions and
++    // a top margin of 4, then TextBlockUtils.mergeLR centers both blocks.
++    let name_content_height = if entity.visibility == Visibility::Default {
++        name_content_height
++    } else {
++        name_content_height
++            .max((visibility_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE) + 1 + 4) as f64)
++    };
+     let name_driven_height = name_content_height + 10.0 + text_padding * 2.0;
+     let circle_driven_height = circled_radius * 2.0 + CIRCLED_ICON_TOP_INSET * 2.0;
+     if has_stereotypes {
+@@ -3826,9 +3854,9 @@ fn empty_package_dims(pkg: &Package) -> (f64, f64) {
+             PackageKind::Database => (10.0, 10.0, 24.0, 5.0, 0.0, 0.0),
+             PackageKind::Rectangle => (10.0, 10.0, 10.0, 10.0, 0.0, 0.0),
+             PackageKind::Cloud => (15.0, 15.0, 15.0, 15.0, 0.0, 0.0),
+-            PackageKind::Package | PackageKind::Namespace => unreachable!(
+-                "ordinary package kinds do not retain an explicit USymbol"
+-            ),
++            PackageKind::Package | PackageKind::Namespace => {
++                unreachable!("ordinary package kinds do not retain an explicit USymbol")
++            }
+         };
+         return (
+             content_width.max(title_width) + left + right,
+@@ -6004,17 +6032,8 @@ fn layout_empty_packages(
+         .collect()
+ }
+ 
+-fn emit_layout_empty_package(
+-    svg: &mut String,
+-    package: &EmptyPackageLayout,
+-    entity_id: &str,
+-) {
+-    write!(
+-        svg,
+-        "<!--entity {}-->",
+-        escape_xml(&package.qualified_name)
+-    )
+-    .unwrap();
++fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
++    write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
+     write!(
+         svg,
+         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+@@ -6031,9 +6050,9 @@ fn emit_layout_empty_package(
+             PackageKind::Database => emit_layout_empty_symbol_database(svg, package),
+             PackageKind::Rectangle => emit_layout_empty_symbol_rectangle(svg, package),
+             PackageKind::Cloud => emit_layout_empty_symbol_cloud(svg, package),
+-            PackageKind::Package | PackageKind::Namespace => unreachable!(
+-                "ordinary package kinds do not retain an explicit USymbol"
+-            ),
++            PackageKind::Package | PackageKind::Namespace => {
++                unreachable!("ordinary package kinds do not retain an explicit USymbol")
++            }
+         }
+         svg.push_str("</g>");
+         return;
+@@ -6134,13 +6153,10 @@ fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayou
+     let y = package.y;
+     let right = x + package.width;
+     let bottom = y + package.height;
+-    let title_width =
+-        SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
++    let title_width = SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
+     let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
+     let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
+-    let line_y = y
+-        + SYMBOL_FOLDER_TAB_TITLE_HEIGHT
+-        + 2.0 * PACKAGE_TITLE_MARGIN_X;
++    let line_y = y + SYMBOL_FOLDER_TAB_TITLE_HEIGHT + 2.0 * PACKAGE_TITLE_MARGIN_X;
+     write!(
+         svg,
+         r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+@@ -6210,9 +6226,7 @@ fn emit_layout_empty_symbol_text(
+             stereotype,
+             &TextBase {
+                 x: body_x + (content_width - width) / 2.0,
+-                y: body_y
+-                    + preceding_height
+-                    + text_render::label_ascent(stereotype, FONT_SIZE),
++                y: body_y + preceding_height + text_render::label_ascent(stereotype, FONT_SIZE),
+                 font_size: FONT_SIZE as u32,
+                 font_family: "sans-serif",
+                 fill: &package.font_fill,
+@@ -6229,9 +6243,7 @@ fn emit_layout_empty_symbol_text(
+         &package.label,
+         &TextBase {
+             x: body_x + (content_width - label_width) / 2.0,
+-            y: body_y
+-                + preceding_height
+-                + text_render::label_ascent(&package.label, FONT_SIZE),
++            y: body_y + preceding_height + text_render::label_ascent(&package.label, FONT_SIZE),
+             font_size: FONT_SIZE as u32,
+             font_family: "sans-serif",
+             fill: &package.font_fill,
+@@ -6408,12 +6420,7 @@ fn emit_layout_empty_symbol_rectangle(svg: &mut String, package: &EmptyPackageLa
+         fmt4(package.y),
+     )
+     .unwrap();
+-    emit_layout_empty_symbol_text(
+-        svg,
+-        package,
+-        package.x + 10.0,
+-        package.y + 10.0,
+-    );
++    emit_layout_empty_symbol_text(svg, package, package.x + 10.0, package.y + 10.0);
+ }
+ 
+ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout) {
+@@ -6444,12 +6451,7 @@ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout
+         package.fill, package.stroke, BORDER_WIDTH,
+     )
+     .unwrap();
+-    emit_layout_empty_symbol_text(
+-        svg,
+-        package,
+-        package.x + 15.0,
+-        package.y + 15.0,
+-    );
++    emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
+ }
+ 
+ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
+@@ -7918,6 +7920,7 @@ fn render_entity_content(
+         font.name_font_size(),
+         &font.name_family,
+         font.circled_radius(),
++        font.attr_icon_size,
+     );
+     let band_first_sep: Option<f64> = if has_body_polygon {
+         None
+@@ -8031,13 +8034,20 @@ fn render_entity_content(
+             )
+         })
+         .fold(0.0_f64, f64::max);
++    // VisibilityModifier.getUBlock contributes size + 1 to the name block.
++    let declaration_visibility_width = if entity.visibility == Visibility::Default {
++        0.0
++    } else {
++        (font.attr_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE) + 1) as f64
++    };
++    let name_block_width = name_tl + declaration_visibility_width;
+     let header_sprite = entity_header_sprite(entity, sprites);
+     let header_sprite_position = header_sprite.map(|(_, sprite)| {
+         let (sprite_width, sprite_height) = crate::sprite::sprite_dimensions(sprite);
+         let content_width = HEADER_CIRCLE_LEFT_MARGIN
+             + sprite_width as f64
+             + ICON_TEXT_GAP
+-            + name_tl
++            + name_block_width
+             + HEADER_RIGHT_PAD
+             + text_padding * 2.0;
+         let slack = (dim.width - content_width).max(0.0) / 2.0;
+@@ -8053,6 +8063,7 @@ fn render_entity_content(
+                 name_font_size,
+                 &font.name_family,
+                 icon_radius,
++                font.attr_icon_size,
+             ) - sprite_height as f64)
+                 / 2.0,
+             x + slack
+@@ -8067,7 +8078,7 @@ fn render_entity_content(
+         && !suppress_header_icon
+         && !is_object_entity
+         && entity.generic.is_none())
+-    .then(|| class_header_positions(x, dim.width, icon_radius, name_tl, text_padding));
++    .then(|| class_header_positions(x, dim.width, icon_radius, name_block_width, text_padding));
+     let generic_header_positions = entity
+         .generic
+         .as_deref()
+@@ -8079,7 +8090,7 @@ fn render_entity_content(
+                 x,
+                 dim.width,
+                 icon_radius,
+-                name_tl,
++                name_block_width,
+                 text_render::measure(generic, GENERIC_FONT_SIZE as f64, false),
+                 text_padding,
+             )
+@@ -8099,7 +8110,7 @@ fn render_entity_content(
+             dim.width,
+             icon_radius,
+             stereo_width,
+-            name_tl,
++            name_block_width,
+             text_padding,
+         )
+     });
+@@ -8128,6 +8139,7 @@ fn render_entity_content(
+             name_font_size,
+             &font.name_family,
+             icon_radius,
++            font.attr_icon_size,
+         );
+         // Java `HeaderLayout.drawU` vertically centres the complete
+         // circled-character block inside the measured header.
+@@ -8194,6 +8206,20 @@ fn render_entity_content(
+                 EntityKind::AbstractClass => {
+                     stereotype_a_fill.as_deref().unwrap_or(ABSTRACT_ICON_FILL)
+                 }
++                // plantuml.skin: no spotProtocol override; root common-background.
++                EntityKind::Protocol => root_background_fill.as_deref().unwrap_or("#F1F1F1"),
++                // plantuml.skin: no spotStruct override; root common-background.
++                EntityKind::Struct => root_background_fill.as_deref().unwrap_or("#F1F1F1"),
++                // plantuml.skin: spotException, or inherited spot background.
++                EntityKind::Exception => "#D94321",
++                // plantuml.skin: spotMetaClass, or inherited spot background.
++                EntityKind::Metaclass => "#CCCCCC",
++                // plantuml.skin: spotStereotype, or inherited spot background.
++                EntityKind::Stereotype => "#FF77FF",
++                // plantuml.skin: spotDataClass, or inherited spot background.
++                EntityKind::Dataclass => "#7E57C2",
++                // plantuml.skin: spotRecord, or inherited spot background.
++                EntityKind::Record => "#FF8F00",
+                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
+                 EntityKind::Entity => stereotype_c_fill
+                     .as_deref()
+@@ -8270,6 +8296,20 @@ fn render_entity_content(
+         } else {
+             let character = entity.spot_character.unwrap_or(match entity.kind {
+                 EntityKind::Class | EntityKind::Object | EntityKind::State => 'C',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Protocol => 'P',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Struct => 'S',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Exception => 'X',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Metaclass => 'M',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Stereotype => 'S',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Dataclass => 'D',
++                // EntityImageClassHeader#getCircledChar.
++                EntityKind::Record => 'R',
+                 EntityKind::Interface => 'I',
+                 // `EntityImageClassHeader.getCircledChar` maps both leaf
+                 // types to the circled `E`.
+@@ -8446,7 +8486,7 @@ fn render_entity_content(
+         sprite_name_x
+     } else if dim.hide.circle {
+         // With the icon hidden the name is centred inside the rectangle.
+-        x + (dim.width - round_4dp(name_tl)) / 2.0
++        x + (dim.width - round_4dp(name_block_width)) / 2.0
+     } else {
+         let default_name_x = header_positions
+             .as_ref()
+@@ -8470,6 +8510,7 @@ fn render_entity_content(
+         name_font_size,
+         &font.name_family,
+         icon_radius,
++        font.attr_icon_size,
+     );
+     let name_y_default = if dim.has_stereotypes {
+         let stereo_content_height = dim.stereotype_count as f64 * STEREOTYPE_LINE_HEIGHT;
+@@ -8498,6 +8539,19 @@ fn render_entity_content(
+             .and_then(|r| r.text_y_values.first().copied())
+             .unwrap_or(name_y_default)
+     };
++    if entity.visibility != Visibility::Default {
++        // EntityImageClassHeader merges the icon block (with top margin 4)
++        // and text using VerticalAlignment.CENTER. Use the text block's center
++        // to recover that composite origin, independent of font/label height.
++        let size = font.attr_icon_size.unwrap_or(VIS_ICON_DEFAULT_SIZE);
++        let icon_y = name_y
++            - text_render::ascent_for_family(name_font_size as f64, &font.name_family)
++            + name_content_height / 2.0
++            - (size + 1 + 4) as f64 / 2.0
++            + 4.0;
++        render_declaration_visibility(svg, entity.visibility, name_x, icon_y, size);
++    }
++    let name_x = name_x + declaration_visibility_width;
+     let oracle_name_line_anchors = oracle_rect
+         .map(oracle_text_line_anchors)
+         .unwrap_or_default();
+@@ -8716,6 +8770,7 @@ fn render_entity_content(
+         name_font_size,
+         &font.name_family,
+         icon_radius,
++        font.attr_icon_size,
+     );
+ 
+     // `dim.is_enum` is true only for the classic enum-constants layout
+@@ -10087,6 +10142,64 @@ fn emit_block_members(
+     }
+ }
+ 
++/// VisibilityModifier.getUBlock/drawInternal, used by EntityImageClassHeader
++/// with getVisibilityModifier(..., false): declaration icons use METHOD fill.
++/// All insets and dimensions below come from drawCircle/Square/Diamond/Triangle.
++fn render_declaration_visibility(
++    svg: &mut String,
++    visibility: Visibility,
++    x: f64,
++    y: f64,
++    size: u32,
++) {
++    let (name, fill, stroke) = match visibility {
++        Visibility::Public => ("PUBLIC_METHOD", VIS_PUBLIC_FILL_METHOD, VIS_PUBLIC_STROKE),
++        Visibility::Private => (
++            "PRIVATE_METHOD",
++            VIS_PRIVATE_FILL_METHOD,
++            VIS_PRIVATE_STROKE,
++        ),
++        Visibility::Protected => (
++            "PROTECTED_METHOD",
++            VIS_PROTECTED_FILL_METHOD,
++            VIS_PROTECTED_STROKE,
++        ),
++        Visibility::Package => (
++            "PACKAGE_PRIVATE_METHOD",
++            VIS_PACKAGE_FILL_METHOD,
++            VIS_PACKAGE_STROKE,
++        ),
++        Visibility::IeMandatory => ("IE_MANDATORY", "#000000", "#000000"),
++        Visibility::Default => return,
++    };
++    let size = (size - size % 2) as f64;
++    write!(svg, r#"<g data-visibility-modifier="{name}">"#).unwrap();
++    match visibility {
++        Visibility::Public | Visibility::IeMandatory => {
++            write!(svg, r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{}" ry="{}" style="stroke:{stroke};stroke-width:1;"/>"#,
++                fmt4(x + size / 2.0), fmt4(y + size / 2.0), fmt4((size - 4.0) / 2.0), fmt4((size - 4.0) / 2.0)).unwrap();
++        }
++        Visibility::Private => {
++            write!(svg, r#"<rect fill="{fill}" height="{}" style="stroke:{stroke};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
++                fmt4(size - 4.0), fmt4(size - 4.0), fmt4(x + 2.0), fmt4(y + 2.0)).unwrap();
++        }
++        Visibility::Protected => {
++            let side = size - 2.0;
++            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:1;"/>"#,
++                fmt4(x + 1.0 + side / 2.0), fmt4(y), fmt4(x + 1.0 + side), fmt4(y + side / 2.0),
++                fmt4(x + 1.0 + side / 2.0), fmt4(y + side), fmt4(x + 1.0), fmt4(y + side / 2.0)).unwrap();
++        }
++        Visibility::Package => {
++            let side = size - 2.0;
++            write!(svg, r#"<polygon fill="{fill}" points="{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:1;"/>"#,
++                fmt4(x + 1.0 + side / 2.0), fmt4(y + 1.0), fmt4(x + 1.0), fmt4(y + side - 1.0),
++                fmt4(x + 1.0 + side), fmt4(y + side - 1.0)).unwrap();
++        }
++        Visibility::Default => unreachable!(),
++    }
++    svg.push_str("</g>");
++}
++
+ /// Render a single member line (visibility icon + text).
+ /// `vis_icon_y_override`: oracle-provided visibility icon y position (rect y or ellipse cy).
+ #[allow(clippy::too_many_arguments)]
+@@ -15451,6 +15564,8 @@ mod tests {
+             uid_events: vec![],
+             entities: vec![
+                 ClassEntity {
++                    is_static: false,
++                    visibility: Visibility::Default,
+                     id: "Animal".into(),
+                     label: "Animal".into(),
+                     explicit_alias: false,
+@@ -15488,6 +15603,8 @@ mod tests {
+                     source_line: 0,
+                 },
+                 ClassEntity {
++                    is_static: false,
++                    visibility: Visibility::Default,
+                     id: "Dog".into(),
+                     label: "Dog".into(),
+                     explicit_alias: false,
+@@ -16119,6 +16236,8 @@ mod tests {
+             direction: ClassLayoutDirection::TopToBottom,
+             uid_events: vec![],
+             entities: vec![ClassEntity {
++                is_static: false,
++                visibility: Visibility::Default,
+                 id: "MyClass".into(),
+                 label: "MyClass".into(),
+                 explicit_alias: false,
+@@ -18118,6 +18237,8 @@ mod tests {
+             direction: ClassLayoutDirection::TopToBottom,
+             uid_events: vec![],
+             entities: vec![ClassEntity {
++                is_static: false,
++                visibility: Visibility::Default,
+                 id: "Drawable".into(),
+                 label: "Drawable".into(),
+                 explicit_alias: false,

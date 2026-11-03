@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+class Peer
+class "node as [Class]"
+Peer --> "node as [Class]"
+note bottom of "node as [Class]" : retained
+@enduml

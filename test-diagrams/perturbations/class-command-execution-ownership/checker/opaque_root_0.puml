@@ -1,0 +1,5 @@
+@startuml
+class "actor actor actor" as Ledger
+class Peer
+Ledger --> Peer
+@enduml

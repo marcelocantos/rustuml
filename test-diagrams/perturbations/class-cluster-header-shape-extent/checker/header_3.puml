@@ -1,0 +1,7 @@
+@startuml
+package Nest {
+node "N" as Host <<s>> {
+class Leaf
+}
+}
+@enduml

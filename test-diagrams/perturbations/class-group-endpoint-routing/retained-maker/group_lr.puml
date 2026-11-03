@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package "Departure area" as D {
+class Dispatch
+}
+package "Arrival" as A {
+class Receipt
+}
+D )-( A
+@enduml
