@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "All relevant valid failures remain blocking. No checker record changes.",
+  "mechanism": "class-chrome-bordered-block-geometry",
+  "java_locations": [
+    "core/DiagramChromeFactory12026#create,addTitle,addHeaderAndFooter,addLegend",
+    "svek/DecorateEntityImage#drawU,getTextX,calculateDimension",
+    "klimt/shape/TextBlockBordered#calculateDimension,drawU",
+    "command/CommandMultilinesHeader#execute",
+    "command/CommandMultilinesFooter#execute"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs#ClassDiagram",
+    "crates/rustuml-parser/src/parse/class.rs#try_meta",
+    "crates/rustuml-render/src/class.rs#DecorationLayout,new,block_width,emit"
+  ],
+  "invariant": "Chrome alignment uses the complete bordered text block dimension, including the one-pixel dimension extent. Title starts at its wrapper origin plus inset, independently of the first graph node. Explicit header/footer alignment survives parsing.",
+  "causal_divergence": "Rust block_height includes TextBlockBordered final pixel but block_width and legend block width omit it, shifting centered/right text. Title baseline is reconstructed from graph body_top minus a fitted gap; nested container graph origins need not equal wrapper origin. Explicit aligned commands discard alignment in the AST.",
+  "planned_model_change": "Retain header/footer alignment on owned ClassDiagram, resolve default alignment from existing style cascade, include bordered width extent consistently and compute title baseline from header wrapper height plus title inset/ascent. Preserve inside-out wrapper composition and compare multi-decoration/nested layouts. No SVG surgery.",
+  "perturbation_axes": [
+    "left/center/right and default header/footer alignment",
+    "single/multiline titles with wider/narrower captions/legends and nested groups"
+  ]
+}
