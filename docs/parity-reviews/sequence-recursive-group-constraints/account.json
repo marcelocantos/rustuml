@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-recursive-group-constraints",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.sequencediagram.InGroupableList#getMinSlow, getMin, getMinX, getMax, getMaxXInternal (lines 101-218)",
+    "net.sourceforge.plantuml.sequencediagram.graphic.InGroupablesStack#addElement, addList",
+    "net.sourceforge.plantuml.sequencediagram.graphic.NoteBox#getStartingX, getSegment, getPreferredWidth",
+    "net.sourceforge.plantuml.sequencediagram.graphic.GroupingGraphicalElement#getStartingX",
+    "net.sourceforge.plantuml.sequencediagram.graphic.GroupingGraphicalElementHeader#drawInternalU",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#createDrawableSet, prepareMissingSpace, prepareNote, prepareGroupingStart",
+    "net.sourceforge.plantuml.sequencediagram.graphic.Step1MessageExo#prepareMessage",
+    "net.sourceforge.plantuml.sequencediagram.graphic.MessageExoArrow#getLeftStartInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::sequence_group_list_bounds",
+    "crates/rustuml-render/src/sequence.rs::render phases 1.5, 3 and 5.5",
+    "crates/rustuml-render/src/sequence.rs::render note_group_extent and left_missing_space"
+  ],
+  "invariant": "For legacy groups, select each group's raw minimum member in the actual participant constraint solution, then apply only that member kind's list margin. Every element and nested list belongs to all enclosing groups. Retain selected member identities while applying one shared missing-space translation; reevaluate participant-relative and integer-truncated note coordinates after translation. A left exo arrow remains attached to the absolute left edge, so recomputing the winning member after translation is not equivalent. GroupingGraphicalElement's measured starting coordinate is list minimum minus MARGIN10; its painted frame starts at the list minimum.",
+  "causal_divergence": "The integrated renderer reserves a depth-based group shift and painted note widths before constraints are measured, then scans already translated notes and translates rounded group snapshots. The rejected candidate changes the per-note deficit to MARGIN5 + depth*MARGIN10, which chooses after margin application and fails competing direct versus nested members. Neither approach retains the Java cached member identity. Boundary groups can select a note before translation but incorrectly select the fixed exo origin afterward. min_first_center_x maxima, box-title expansion, across-note reservations and page decoration translation mean subtracting group_shift cannot recover the original constraint state.",
+  "planned_change": "Make legacy grouped layout measure concrete group members before missing-space translation. Reuse one group measurement pass for raw and final coordinates with cached minimum/maximum member selections and explicit nested-list membership. Remove early group/note margin reservations on this path, preserving actual participant and virtual-border constraints and box-title expansion. Measure raw folded-note component origins with NoteBox truncation and endpoint-merged live thickness, combine all required deficits once, and reevaluate coordinates through the same membership after moving participants. Keep Teoz's separate tile model outside this legacy mechanism. Do not alter shared font metrics, comparator, baseline or historical reviews.",
+  "perturbation_axes": [
+    "Direct-note versus nested-list competition across label widths, member insertion order and group depth",
+    "Left incoming/outgoing virtual-border arrows competing with notes on differently ordered participants",
+    "Independent ungrouped/across notes and box/title reservations competing with grouped note origins"
+  ],
+  "verification_plan": [
+    "Preserve and replay every rejected checker input, both original repaired failures, all sequence perturbations, and all 1411 main sequence inputs",
+    "Generate fresh real CLI/pinned Java comparisons across at least two axes, preserving every mismatch under maker evidence",
+    "Run full main product/assisted tiers, all 874 isolated perturbations and built-in suite, sequence units, formatter, clippy and unchanged guards",
+    "Root schedules a new independent checker; maker does not author an attestation or assert acceptance"
+  ],
+  "journey_exception": "The source-to-SVG product is a deterministic CLI with no provider wire. Fresh rustuml -tsvg -pipe and pinned Java subprocesses with unchanged strict SVG comparison exercise the shipped transformation. Units additionally check raw winning-member selection and reevaluation; they are not substituted for product comparisons.",
+  "prior_rejection": "docs/parity-reviews/sequence-grouped-note-origin/review.json remains unchanged and rejected. This account supersedes its rejected depth invariant, not its historical evidence. Other existing style/Teoz/font/return failures remain nonaccepted dependencies if this bounded change does not repair them."
+}
