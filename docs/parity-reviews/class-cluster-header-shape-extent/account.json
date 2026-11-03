@@ -19,5 +19,6 @@
   "perturbation_axes": [
     "short/long title relative to stereotype",
     "node direct/nested package and aliases"
-  ]
+  ],
+  "planned_change": "Move the existing source-derived symbol width supplement after the title/stereotype width maximum; preserve integer serialization and graph solve."
 }

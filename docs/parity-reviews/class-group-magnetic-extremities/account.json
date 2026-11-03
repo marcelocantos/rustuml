@@ -21,5 +21,6 @@
   "perturbation_axes": [
     "source/target/both parenthesis on group endpoints",
     "renamed short/wide folder titles, TB/LR and group-to-leaf links"
-  ]
+  ],
+  "planned_change": "Implement DotPath start-removal semantics, retain already serialized compound precision, and derive folder magnetic displacement from cluster dimensions and measured title. Apply displacement to visible endpoint/control and the corresponding decoration only."
 }

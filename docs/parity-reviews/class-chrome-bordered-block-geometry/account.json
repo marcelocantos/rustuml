@@ -23,5 +23,6 @@
   "perturbation_axes": [
     "left/center/right and default header/footer alignment",
     "single/multiline titles with wider/narrower captions/legends and nested groups"
-  ]
+  ],
+  "planned_change": "Retain header/footer alignment on owned ClassDiagram, resolve default alignment from existing style cascade, include bordered width extent consistently and compute title baseline from header wrapper height plus title inset/ascent. Preserve inside-out wrapper composition and compare multi-decoration/nested layouts. No SVG surgery."
 }
