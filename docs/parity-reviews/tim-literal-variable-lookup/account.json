@@ -35,5 +35,7 @@
     "Present/absent names and bare versus dollar-prefixed strings",
     "Computed lookup names and local/global shadowing",
     "Guarded theme defaults with changed colors and theme families"
-  ]
+  ],
+  "invariant": "Quoted builtin lookup names are string values, not recursively expanded variable contents; dollar-prefixed names address TIM variables in the current Java-equivalent memory.",
+  "planned_change": "Evaluate lookup builtin arguments before textual output substitution and preserve quoted names; distinguish dollar TIM names from legacy bare tokens and consult current scope."
 }

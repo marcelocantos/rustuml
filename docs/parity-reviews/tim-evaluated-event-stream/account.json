@@ -43,5 +43,7 @@
     "Subblock state mutations versus include/procedure/loop nesting",
     "Leading/internal blanks and prefix/trailing/special inner comments"
   ],
-  "boundary": "No parse dispatcher, renderer, comparator or baseline changes. Sequence dispatcher may request a separate preprocessing operation; each returned representation must be internally single-evaluation. A cache across parse calls is not introduced."
+  "boundary": "No parse dispatcher, renderer, comparator or baseline changes. Sequence dispatcher may request a separate preprocessing operation; each returned representation must be internally single-evaluation. A cache across parse calls is not introduced.",
+  "invariant": "One execution produces ordered evaluated content with origins. Identity preserves every evaluated plain line (including sprites, blanks and boundaries), while parser lowering consumes sprites and lowers theme/option events without reevaluating TIM or changing its state.",
+  "planned_change": "Replace dual passes and raw substitution with typed evaluated events: plain located text, boundaries, parser-only consumed directives/options and nested theme expansions. Evaluate each theme/sub/procedure once in the active memory; lower that same stream into identity and parser representation. Move sprite extraction to parser projection. Retain original line origins across consumed directives. Mirror Java comment iterator/inner-comment operations and retain blank lines. Resolve theme selectors (and local from expressions) before loading; inactive includes/themes must have no execution side effects."
 }

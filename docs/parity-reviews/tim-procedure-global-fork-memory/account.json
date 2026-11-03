@@ -35,5 +35,7 @@
     "Nested sibling calls with shadowed parameter/local names",
     "Existing global mutations versus fresh locals and explicit global declarations",
     "Theme loaded within a procedure versus theme in global scope"
-  ]
+  ],
+  "invariant": "Each function/procedure receives a sibling local frame rooted in global memory; parameters and explicit locals shadow globals, ordinary new names stay local, existing global names update globally, and a nested call cannot see caller locals.",
+  "planned_change": "Represent parameter/explicit overrides separately from ordinary local names, read only the current frame plus globals with Java precedence, bind evaluated parameters without mutating globals, and implement scoped assignment/removal."
 }
