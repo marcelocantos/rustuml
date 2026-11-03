@@ -263,6 +263,8 @@ mod tests {
 
     fn make_entity(name: &str, members: Vec<Member>) -> ClassEntity {
         ClassEntity {
+            is_static: false,
+            visibility: Visibility::Default,
             id: name.to_string(),
             label: name.to_string(),
             explicit_alias: false,
