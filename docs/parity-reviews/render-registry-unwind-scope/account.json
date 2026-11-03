@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "render-registry-unwind-scope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics#filterBackColor (instance field, line 740)",
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics#getFilterBackColor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/filter_registry.rs::with_registry",
+    "crates/rustuml-render/src/filter_registry.rs::id_for_current",
+    "crates/rustuml-render/src/lib.rs::render_under_filter_registry"
+  ],
+  "invariant": "The thread-local registry belongs exclusively to the dynamic extent of one successful installation. Normal return transfers the collected registry to its caller; unwinding releases it without replacing the initiating panic. A nested installation remains unsupported and must neither replace nor clear the outer registry when its rejection is caught inside the outer body.",
+  "causal_divergence": "Java holds background filters on each SvgGraphics instance. Rust adapts that per-render ownership to thread-local CURRENT but takes CURRENT only after body returns normally. A sequence panic leaves Some(registry) installed, causing every subsequent same-thread render to fail the reentrancy assertion. A cleanup guard created before checking/installing the registry would introduce a second bug: a rejected nested call could erase the outer render's state.",
+  "planned_change": "Introduce an RAII scope guard only after successful installation. Its destructor removes CURRENT during both ordinary return and unwind. Keep normal registry transfer and the existing nested-call assertion; do not catch or suppress the body panic. Add same-thread unwind/reuse, successful transfer, and caught/uncaught nested rejection tests, plus ordinary and background-text SVG comparisons against clean renders.",
+  "perturbation_axes": [
+    "Normal return versus body panic versus nested-installation panic, including a nested rejection caught inside an outer render",
+    "Ordinary text versus multiple background colors and distinct source seeds on the next same-thread render"
+  ],
+  "verification_plan": [
+    "Run focused filter registry unit tests against the old code to establish failure, then against the repair",
+    "Run full renderer/parser sequence units and all 874 perturbations in-process and isolated per input; initiating renderer failures remain failures",
+    "Run both main tiers and unchanged guards; record raw counts without changing baselines or review verdicts"
+  ],
+  "journey_exception": "Registry cleanup is an in-process renderer lifecycle property. Unit tests exercise the real parse/render_svg path on the same thread after a caught body panic; separate CLI processes cannot detect leaked thread-local state. Real CLI/Java comparisons remain part of the surrounding sequence packet.",
+  "scope": "T14.6.1 robustness repair. No geometry, comparator, corpus, failure classification, or acceptance contract changes. Maker evidence is not an independent attestation."
+}
