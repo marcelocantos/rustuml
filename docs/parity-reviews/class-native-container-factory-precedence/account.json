@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-native-container-factory-precedence",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "716813f43f1453fe9e96bea4a10d1e07b42be08f",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:129-135,231-240: constructor factory order and createPSystem first successful factory",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:112-139: initCommandsList native leaf commands, allowmixing, and shared symbol containers",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:73-131,140-163: getRegexConcat and executeArg",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java:81-110: getRegexConcat native declaration grammar",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClassMultilines.java:91-137: END and multiline body consumption",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java:85-86,151-155: NORMAL_KEYWORD execution requires prior allowmixing",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:75-83: ALL_TYPES and optional description symbol keyword"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/mod.rs::parse_with_base",
+    "crates/rustuml-parser/src/parse/component.rs::looks_like_description_bracket_command",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package"
+  ],
+  "invariant": "For a source containing native class declarations and shared package/container commands, a quoted container cannot force the later DESCRIPTION factory when the class command family can consume the source. Native class multiline bodies own their contents; bracketed member text is not a description command. A mixed-only description leaf before allowmixing or a standalone bracket description command rejects this earlier candidate. Later allowmixing cannot undo an earlier rejection.",
+  "causal_divergence": "b3eb1bcbd138314ece69a0b23ea2191b19008b79 removed class_factory_viable and its command-order/body-aware rejection logic from detect_uml_subtype. It restored unconditional quoted-container promotion above every other score. A valid node containing a class or interface therefore selects Deployment, discarding the class model before rendering. The only caller of looks_like_description_bracket_command was deleted in the same diff; the helper is live grammar infrastructure stranded by this regression, not accidental unused code.",
+  "planned_change": "Add a bounded class-container eligibility scan for the container kinds currently represented by the class parser (package, namespace, node, cloud, database, frame, folder, rectangle), with native class declaration evidence, multiline command ownership, and permanent rejection for unsupported description-only commands. Give an eligible candidate Class precedence independently of diagram keyword counts. Reuse the bracket-command helper for rejection. Keep bare entities without a class container on the existing sequence path, retain object-only backend selection, and leave DESCRIPTION selection to the existing dispatcher when mixed leaves reject the class candidate. Do not restore the integration wholesale or change renderer geometry.",
+  "scope_limits": [
+    "This is factory selection, not a claim that every resulting class SVG is already correct.",
+    "The recovered class parser separately rejects aliases on non-package containers. Full alias grammar, missing package symbol kinds, endpoint ownership, and painted bounds remain separate packets.",
+    "Existing allowmixing-only selection and unsupported command families outside the bounded class-container candidate are not a complete factory trial parser."
+  ],
+  "perturbation_axes": [
+    "native declaration kind (class, interface, entity) crossed with container symbol and nesting",
+    "quoted versus bare labels and renamed identities",
+    "multiline member bodies versus standalone bracket description commands",
+    "description leaves before versus after allowmixing, plus command case",
+    "object-only controls and component/deployment fall-through controls"
+  ],
+  "regression_diagnosis": {
+    "mixed_state_metadata": "The integration removed named-note quark identity, explicit note ownership, global phantom-quark sweeps, and Boundary entity kind; failures have multiple causes and are not all dispatch.",
+    "package_symbols": "PackageKind lost Action/Artifact/Card/Component/File/Hexagon/Process/Queue/Stack/Storage and the command-symbol projection; this is separate from dispatch.",
+    "endpoint_ownership": "register_quark_path no longer registers prefixes; global materialize_phantom_packages became endpoint-local ensure_phantom_packages; notes are removed by a flat alias filter.",
+    "painted_bounds": "The integration rewrote thousands of class rendering lines. No blanket attribution or renderer reversal is proposed.",
+    "preserved_failure_cluster_counts": {
+      "class-mixed-state-group-metadata": 31,
+      "class-quoted-symbol-container-dispatch": 22,
+      "class-package-full-symbol-model": 19,
+      "class-empty-package-link-endpoint": 18,
+      "class-package-symbol-cluster-ownership": 17,
+      "class-node-cluster-limitfinder-max": 16,
+      "class-symbol-cluster-painted-frontier": 16
+    }
+  },
+  "verification_plan": [
+    "Rebuild in /tmp/rustuml-class-target with CARGO_BUILD_JOBS=4.",
+    "Run parser regression tests and Java factory probes when the verification worker JAR is available.",
+    "Run golden_no_oracle, golden_pairs, parity_perturbations, and harness_guards before and after; preserve all failures and report exact deltas.",
+    "Exercise the shipped CLI on fresh source and compare with the pinned Java output; parent supplies the independent checker and its fresh held-out cases."
+  ],
+  "review_status": "Implementation proposal only; independent checker required. No checker record is authored by the maker."
+}
