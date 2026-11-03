@@ -1,0 +1,7 @@
+@startuml
+AlLoW_MiXiNg
+node "Polar Harbor" {
+class Cache
+component	Endpoint
+}
+@enduml

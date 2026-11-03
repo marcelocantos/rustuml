@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/rustuml-cff-target/release/rustuml",
+    "-tsvg",
+    "docs/parity-reviews/class-command-execution-ownership/maker-evidence/invalid-controls/mixing_late.puml"
+  ],
+  "exit": 1
+}

@@ -1,0 +1,32 @@
+Sequence(
+    SequenceDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\npackage \"Outer docs\" as Outer {\npackage \"Index\" as Index [[https://example.org/index]] {\n}\n}\n@enduml\n",
+            ),
+        },
+        participants: [],
+        events: [],
+        autonumber: None,
+        hide_footbox: false,
+        teoz: false,
+        boxes: [],
+    },
+)

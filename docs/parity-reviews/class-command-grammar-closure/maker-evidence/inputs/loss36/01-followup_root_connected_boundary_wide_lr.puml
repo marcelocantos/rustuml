@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+allowmixing
+BoUnDaRy "Wide Customer Gateway" as Gateway
+class Ledger
+Gateway --> Ledger
+@enduml

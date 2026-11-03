@@ -1,0 +1,8 @@
+@startuml
+set namespaceSeparator ::
+package Station {
+class Reading
+note "Calibration" as Memo
+}
+Station::Reading .. Station::Memo
+@enduml

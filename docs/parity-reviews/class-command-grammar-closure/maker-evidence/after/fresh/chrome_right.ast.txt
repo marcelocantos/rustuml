@@ -1,0 +1,103 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: Some(
+                "Instrument register\nSummary",
+            ),
+            title_line: None,
+            header: Some(
+                "component page text\nshort",
+            ),
+            header_line: None,
+            footer: Some(
+                "Footer details\ntiny",
+            ),
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nright header\ncomponent page text\nshort\nendheader\ntitle\nInstrument register\nSummary\nendtitle\nnode \"Control Bay\" {\nclass Gauge\n}\nright footer\nFooter details\ntiny\nendfooter\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Control Bay",
+            ),
+            Entity(
+                "Control Bay.Gauge",
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "Control Bay.Gauge",
+                label: "Gauge",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 10,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [],
+                url: None,
+                url_tooltip: None,
+                name: "Control Bay",
+                kind: Node,
+                color: None,
+                entities: [
+                    "Control Bay.Gauge",
+                ],
+                parent: None,
+                source_line: 9,
+                stereotypes: [],
+                display_name: None,
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: Some(
+            1,
+        ),
+        header_alignment: Some(
+            Right,
+        ),
+        footer_alignment: Some(
+            Right,
+        ),
+        footer_line: Some(
+            12,
+        ),
+        title_line: Some(
+            5,
+        ),
+        caption_line: None,
+        legend_line: None,
+    },
+)

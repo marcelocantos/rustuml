@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package "Orchid Scope 6763" as OrchidScope {
+  class "Nested Target 1433" as NestedTarget
+}
+class "External Source 8093" as ExternalSource
+ExternalSource )--( OrchidScope.NestedTarget
+@enduml

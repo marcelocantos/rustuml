@@ -1,0 +1,73 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nleft to right direction\nCOMPONENT GatewayF3C\nINTERFACE ServicePortF3C\nGatewayF3C ..> ServicePortF3C\n@enduml\n",
+            ),
+        },
+        direction: LeftToRight,
+        components: [
+            Component {
+                id: "GatewayF3C",
+                label: "GatewayF3C",
+                stereotypes: [],
+                color: None,
+                url: None,
+                source_line: 2,
+                kind: Component,
+            },
+        ],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [
+            Interface {
+                id: "ServicePortF3C",
+                label: "ServicePortF3C",
+                source_line: 3,
+            },
+        ],
+        connections: [
+            Connection {
+                from: "GatewayF3C",
+                to: "ServicePortF3C",
+                label: None,
+                from_mult: None,
+                to_mult: None,
+                dashed: true,
+                has_arrow: true,
+                arrow_at_start: false,
+                arrow_at_end: true,
+                extension_at_start: false,
+                extension_at_end: false,
+                direction: Some(
+                    Down,
+                ),
+                length: 2,
+                shape: Plain,
+                source_line: 4,
+            },
+        ],
+        removed_connections: [],
+        packages: [],
+        together: [],
+        notes: [],
+        removed_notes: [],
+    },
+)

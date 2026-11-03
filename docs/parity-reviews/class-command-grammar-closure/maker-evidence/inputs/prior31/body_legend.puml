@@ -1,0 +1,9 @@
+@startuml
+legend bottom right
+class prose
+[page text]
+end legend
+node "Measurement Bay" {
+class Probe
+}
+@enduml

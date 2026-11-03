@@ -1,0 +1,5 @@
+@startuml
+class "Quartz Source 4107" as QuartzSource
+class "Velvet Sink 9823" as VelvetSink
+QuartzSource -( VelvetSink
+@enduml

@@ -1,0 +1,20 @@
+SVG structural differences:
+  [4] <text> attr mismatch:
+    expected: [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "103.8965"), ("x", "44.5518"), ("y", "9.668")]
+    actual:   [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "103.8965"), ("x", "90.1035"), ("y", "9.668")]
+  [5] <text> attr mismatch:
+    expected: [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "25.2783"), ("x", "123.1699"), ("y", "21.4453")]
+    actual:   [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "25.2783"), ("x", "168.7217"), ("y", "21.4453")]
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "140.7588"), ("x", "26.1206"), ("y", "48.0898")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "140.7588"), ("x", "26.6206"), ("y", "47.0899")]
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "67.1016"), ("x", "62.9492"), ("y", "64.5781")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "67.1016"), ("x", "63.4492"), ("y", "63.5782")]
+  [23] <text> attr mismatch:
+    expected: [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "66.2207"), ("x", "63.3896"), ("y", "217.1992")]
+    actual:   [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "66.2207"), ("x", "63.8896"), ("y", "217.1993")]
+  [24] <text> attr mismatch:
+    expected: [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "18.0615"), ("x", "87.4692"), ("y", "228.9766")]
+    actual:   [("fill", "#888888"), ("font-family", "sans-serif"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "18.0615"), ("x", "87.9692"), ("y", "228.9766")]
+

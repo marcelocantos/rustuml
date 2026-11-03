@@ -1,0 +1,86 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\npackage \"Outer docs\" as Outer {\npackage \"Index\" as Index [[https://example.org/index]] {\n}\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Outer",
+            ),
+            Package(
+                "Outer.Index",
+            ),
+        ],
+        entities: [],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [],
+                url: None,
+                url_tooltip: None,
+                name: "Outer",
+                kind: Package,
+                color: None,
+                entities: [],
+                parent: None,
+                source_line: 1,
+                stereotypes: [],
+                display_name: Some(
+                    "Outer docs",
+                ),
+                phantom: false,
+            },
+            Package {
+                tags: [],
+                url: Some(
+                    "https://example.org/index",
+                ),
+                url_tooltip: None,
+                name: "Outer.Index",
+                kind: Package,
+                color: None,
+                entities: [],
+                parent: Some(
+                    0,
+                ),
+                source_line: 2,
+                stereotypes: [],
+                display_name: Some(
+                    "Index",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

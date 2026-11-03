@@ -1,0 +1,67 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\npackage \"Manual\" as M [[https://example.org/manual{Read manual}]] {\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "M",
+            ),
+        ],
+        entities: [],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [],
+                url: Some(
+                    "https://example.org/manual",
+                ),
+                url_tooltip: Some(
+                    "Read manual",
+                ),
+                name: "M",
+                kind: Package,
+                color: None,
+                entities: [],
+                parent: None,
+                source_line: 1,
+                stereotypes: [],
+                display_name: Some(
+                    "Manual",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

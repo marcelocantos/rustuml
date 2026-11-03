@@ -1,0 +1,23 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "329px"), ("preserveAspectRatio", "none"), ("style", "width:225px;height:329px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 225 329"), ("width", "225px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "329px"), ("preserveAspectRatio", "none"), ("style", "width:201px;height:329px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 201 329"), ("width", "201px"), ("zoomAndPan", "magnify")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M73.605,180 L182.8589,180 A3.75,3.75 0 0 1 185.3589,182.5 L192.3589,202.4883 L207.915,202.4883 A2.5,2.5 0 0 1 210.415,204.9883 L210.415,311.5 A2.5,2.5 0 0 1 207.915,314 L73.605,314 A2.5,2.5 0 0 1 71.105,311.5 L71.105,182.5 A2.5,2.5 0 0 1 73.605,180"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,180 L117.7539,180 A3.75,3.75 0 0 1 120.2539,182.5 L127.2539,202.4883 L142.8086,202.4883 A2.5,2.5 0 0 1 145.3086,204.9883 L145.3086,311.5 A2.5,2.5 0 0 1 142.8086,314 L8.5,314 A2.5,2.5 0 0 1 6,311.5 L6,182.5 A2.5,2.5 0 0 1 8.5,180"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "71.105"), ("x2", "192.3589"), ("y1", "202.4883"), ("y2", "202.4883")]
+    actual:   [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "6"), ("x2", "127.2539"), ("y1", "202.4883"), ("y2", "202.4883")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "108.2539"), ("x", "75.105"), ("y", "195.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "108.2539"), ("x", "10"), ("y", "195.5352")]
+  [8] <path> attr mismatch:
+    expected: [("d", "M78.405,6 L128.0837,6 A3.75,3.75 0 0 1 130.5837,8.5 L137.5837,28.4883 L203.125,28.4883 A2.5,2.5 0 0 1 205.625,30.9883 L205.625,137.5 A2.5,2.5 0 0 1 203.125,140 L78.405,140 A2.5,2.5 0 0 1 75.905,137.5 L75.905,8.5 A2.5,2.5 0 0 1 78.405,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M13.2954,6 L62.9741,6 A3.75,3.75 0 0 1 65.4741,8.5 L72.4741,28.4883 L138.0132,28.4883 A2.5,2.5 0 0 1 140.5132,30.9883 L140.5132,137.5 A2.5,2.5 0 0 1 138.0132,140 L13.2954,140 A2.5,2.5 0 0 1 10.7954,137.5 L10.7954,8.5 A2.5,2.5 0 0 1 13.2954,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "75.905"), ("x2", "137.5837"), ("y1", "28.4883"), ("y2", "28.4883")]
+    actual:   [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "10.7954"), ("x2", "72.4741"), ("y1", "28.4883"), ("y2", "28.4883")]
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "48.6787"), ("x", "79.905"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "48.6787"), ("x", "14.7954"), ("y", "21.5352")]
+

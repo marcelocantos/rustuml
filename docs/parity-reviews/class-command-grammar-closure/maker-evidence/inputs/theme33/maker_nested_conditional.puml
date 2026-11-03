@@ -1,0 +1,12 @@
+@startuml
+!theme cerulean
+!$first = 2
+!$second = 3
+!if $first > 1
+!if $second > 2
+class CedarRegister {
+  +revision: int
+}
+!endif
+!endif
+@enduml

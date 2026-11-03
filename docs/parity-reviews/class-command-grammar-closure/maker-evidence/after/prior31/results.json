@@ -1,0 +1,250 @@
+{
+  "actor_generalization": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "UseCase",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "alias_reopen": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "body_legend": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "body_ownership": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "body_title": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "generic_reverse": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "header_center": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "header_left": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "header_right": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "mixing_early": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "mixing_prefix": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "modifier_package": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "modifier_private": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "modifier_protected": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "modifier_public": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "modifier_static": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_dataclass": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_exception": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_metaclass": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_protocol": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_record": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_stereotype": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "native_struct": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "nested_alias_note": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "note_quote": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "quote_forward": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "quote_reverse": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "quoted_code_collision": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "quoted_decorations": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "visibility_sizes": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  },
+  "visibility_stereotype": {
+    "cli_exit": 0,
+    "cli_stderr": "",
+    "ast_exit": 0,
+    "rust_factory": "Class",
+    "comparison_exit": 0,
+    "comparison": "SVGs are structurally equivalent\n"
+  }
+}
