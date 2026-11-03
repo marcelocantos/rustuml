@@ -1,0 +1,14 @@
+@startuml
+participant Caller
+participant Work
+participant Receiver
+Caller -> Work ++ : enter
+Work -> Work ++ : nest
+Work -> Work ++ : nest
+Work -// Work : short
+Work -// Work ++ : activate
+return close local
+return unwind
+return unwind
+return unwind
+@enduml
