@@ -1,0 +1,11 @@
+@startuml
+skinparam Padding 2
+participant "Mica.i" as M
+participant "Long heron" as H
+M -> H : sample
+note left
+first
+second
+end note
+H -> M : after
+@enduml

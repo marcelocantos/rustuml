@@ -1,0 +1,11 @@
+@startuml
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+T -> Q ++ : WW.quartz iii transmission envelope
+Q -> Q ++ : local
+Q -> E ++ : delegate
+return delegated
+return local
+return sender
+@enduml

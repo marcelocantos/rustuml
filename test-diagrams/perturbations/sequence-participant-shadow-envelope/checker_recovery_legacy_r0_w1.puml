@@ -1,0 +1,13 @@
+@startuml
+skinparam shadowing true
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+group perimeter
+Q -> T : WW.quartz iii transmission envelope
+note over Q,T : spanning participant heads
+opt nested
+T -> E : settle
+end
+end
+@enduml

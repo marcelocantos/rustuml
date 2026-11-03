@@ -1,0 +1,19 @@
+{
+  "revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "command": [
+    "rustc",
+    "--edition=2024",
+    "docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs",
+    "--extern",
+    "rustuml_oracle=/tmp/rustuml-seq-check-b60455c3/target/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib",
+    "-L",
+    "dependency=/tmp/rustuml-seq-check-b60455c3/target/release/deps",
+    "-o",
+    "/tmp/rustuml-seq-check-b60455c3/after/compare_cli"
+  ],
+  "sha256": {
+    "compare_cli": "39a733764a1a5d152772871790f2aca720ea42af4c7b503d288af141a59e7c5a",
+    "diff_one": "43e8498045c51b17974e2c3b8505278695c0f134b0707ff325702612e725eb87",
+    "rustuml": "ff87e6559b90ce9b84fe85683fa0afb60c98032776a777477095ddbcfd5693bd"
+  }
+}

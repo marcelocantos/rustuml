@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+participant "Mica.i" as M
+participant "Long heron" as H
+H -> M ++ : earlier
+H -> M ++ : earlier
+M <<- M : same row
+activate M
+deactivate M
+M -> H : after
+deactivate M
+deactivate M
+
+@enduml

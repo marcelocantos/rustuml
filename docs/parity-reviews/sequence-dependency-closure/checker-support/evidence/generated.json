@@ -1,0 +1,3472 @@
+[
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "9b0a87b6745dec18c3b0593cca6666e91338dedf281881a2fd3d8586a7429124"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0ff468071e89097951aca5ab743a16b952395a0ed9b5d42f3ebc6b26f5bac919"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "727fe51c4ae6441e762ffb2629dd3051880ccaf57254f712c7ddb3b18eb113c8"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3ec1212fbeea6dc9e5bbecb13ca0d687435a020aa66f12d17d397dbd3986b7e1"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "b24bd305a3d44b0f8c140385f0704f8fdebedef2b505da9118a290c5e900e0a2"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3ab5998e100488f0b74404b87aaa1747582160462fe631d709f10fcf3c33ce5d"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3be4ba93c46cdaeb45b0cbfe4ca09ca9a6d6399bf90ebc29845eb5fc008516bf"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a1c0fa951af0a184ad81f51b4f2236fe0ecd84743db519b49b99511d7763580a"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "803d1214e46e2776f295dda2945c9db94496688b02c60cc64f20a23d52bc1f1f"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_legacy_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7e21b63d8e46d778d9a9c72e407afb45b9807657a44a4d6874475eaedf70b9cd"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2abc98676e08da6d7813dcf84491e63743633b853dfb5c1f9e497a5dd44c16d3"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c2e6b81089c150c04810a4eb2bd586f6a8c7f0465b79ddd63b9afa062aa7dcb6"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "23ff300e2e8da5fbd17f020bbdf4986250276d232a769e7c818f7c1640beeae0"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "05dcd284b112ef7a77c92aa79b4e36328c6e772b8670476666fb850fc44da593"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "49f8e92eafdf87dd3396a3f048817a80940086ec342498672499bee2065f998a"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "94e0a66ee31280bb086902de02f91cac13f6cc085b7a722cbdf949611bd83a73"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "d1c835bb5c13451b9ca0735db96167bb26556cf4cce8aa594c70c30544c6e67a"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "315d40ff62826f8612d87237e19872af637f2643259485dc7f18398952b725d5"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a338f7dde4459ffbb345fbb847e3d60d3b0d984248d00756f1535a74d0049330"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_legacy_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e3839d6ed07de1f2e161aeef1ac5b6adb106e059211024b4a15676e8eabe1e25"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "fcd43991b25caa36aeb87efbf6f24845b2c155c8f8ce6f25f4edb02d5905bcd4"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f0a81d5f9a2885614e69585d31550e3c6e78baa617d7c91ea9aaaa102626794f"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "de1828a9aeb309f62e0577366d43d647135d2052cfa86b081773cb49f7daae99"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "d58c02856da2e3495b5e502f6e3d9fdda8f26c6b3d2b34bb737c23b584c5a8fb"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c4e0db38341688d9f6cce8e197ca827463a66ed0b7b3d199b66d137730dae12e"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "6eec811486f9c5bd98382144df35798bb151b00b5382c880c3a24c89c0f1ce61"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ca49ea502437edd5d4a3294d9add607dbf500989ed6acb2a499964f9cf3f90bf"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "10c001f9f2e615d5414cfef489ec31032d05be1653cb1b536a4e65fcc3dfebeb"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "870822c27f60b44dd61cf18cfa8520b9bc5227ae44f2de1309edd7040f1bd30a"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_legacy_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3fd94995e75e8b3d3c360a7335a9fe8ce286b38dbeb32bea3afe1b71f29e33fc"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f8579aa94cb0c21dccccfd6e754cad78018df6813be4722782e6a315ccc38427"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "43b5273d66a81f3bd74dfb8e7c83e2d2f4671e0943888645774bfab4fde75daf"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "4a6f20fc5f45afd466e8dbbfd09731a5fc604b2c17dab5692b71e9a3866158fe"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "d178abc1d157045853d9b46009ca27593c057ed16bca51ff6132300bead07bd5"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "cb500503027654ad2ef52b6855e0538c779568491297303e0c695fdbc179965b"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f10a03e0304787dd88d7278552ee60391bfaeecffa54ac38b6658da6d7e99983"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ee9bff52cc5f5b721eca4e0ad13b295f62a6bc0b652b457fb7a5e0a95b1fd0bc"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "b82add0774908920e07658aa01e431b8bc7440eb7b0a55e4f525ab970490c55b"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e6f52120e6be4bf61552e4c3ef05374a93eaa109f989ecdbf4cf5456d68b4812"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_legacy_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c669075cf98b12aeaaf45d2dbf2789fce6d59d75c8f8a495bda3e8e64ba95294"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "92c0d31f1f8eee79068e59ec3ba8e13a3f7e1c87ab0f43a5463864cf16f138d9"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "67de82551e224819bb9e2b22327b01a39bc98456875fd3f04b3c9df4e6cf88a9"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7c86693cfbb74e85e1cc9d80fa0eec1202e92b993eecdf0f33da1eaa9a744545"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a29f07589a012b1f4bd5823e7ed35f7ee1adcdb4bd2a67745cac63efbc6b09ab"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c3adb119b82848ef5a4d6b79c1bc04a3ed34ad97026d0a450eaea67cb9f465fc"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "602c8ff81f219c1b3f6b2a386a663628a95316b7f94b96c24c399c593d4fbfb2"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "25ca6bdc2205d86c2491285437a250f1c6884bbe430ae8fd08180c4bbf1a1702"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2ddb90d6c115fcb2efae6362cc8acc203c9ec597b760fe5117183f5807fb772a"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "4d4b25db3ce9171168c12e5311a5c4e6dac464370503ff8ff294279f8c86722d"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_teoz_r0_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "31be5511500b583ce954637e79e13993a27365fcacb486451149a9eaf7d9b12b"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "60aa13e136a514bc061588a3d6cbadd0f1bc724adc2f12207c4c6570642aa915"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "1a48f620a7beaafe3d6dab27c6fe34d817f8a052ff57ce75de42cd7dc5096762"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "6719f94cda0931ba2e382ed318ec6c8d71a9d8292ef130ea5f936a77f0666049"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "085f452c38a89c6487570a7d858eb3cdf1c653bfd758a471168e8430d47a9b21"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7ce835e9323b08fb4a1d9a0d3b65818ec9bc81f3a2ea727f89901a6d7d7f7b48"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "d2f1fee199182bc369fa97d258138bd0f3567a67a2ec976f077ac4fb181af85a"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "fcace9af8f85ad4e6972b104384faf27654cd3e867808b99a4f5d94f08219bbd"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0a3eccef1f844bbf3c50a0c63f2bb5dba280eaf40daa3a6cb63b4f45b59555df"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e1efe7d72b44f5c8e26984b84cc0ad278f7fad7dbe14a571c7cb630c6ecce658"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_teoz_r0_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3b215df294dcf848bc88c77482fdc6ae990f4a28ca07cf296649edcdb765cbb6"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0d973d381ff8651b64d08803e9040de02e9f0817d48b9736ff723a5ebbeafba7"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3d60cfca86390cbb3652798ddba6464bb180f39754e77222bf825c86bb827600"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ea5c2612d4073871c4b68aede541cafc886b34d4e96b03d949535913fba2af59"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "73f0d4a3bf0b36bb5eb3cc3481e4b57a5b4729ab5d63568df184df12da52b2a0"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ad94669ab8f674046454a50a8f55d8b04bcce421a41218bf27be6fb13cd9411f"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f31308586345d5db21f9fc88d929634af45e8962f646822f5c98c46328c71f69"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "81852c4ce5a77c01310c3393d7e7080809495ec00d1d4b7cb0312e6ab2755f2c"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2269663dbebfafa588b24090e70099c49050aaed6a9f90fc26f63f4ae6b13b47"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "6f2a26332d95c4fbc158e53162571b7b9905c1b359cc5a856221c535e7267946"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_teoz_r1_w0",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bc7e7715331545d8f0c3f630ee3e62b39c9a998c6d4303b29b9b1e749d87a1d6"
+  },
+  {
+    "mechanism": "sequence-recursive-group-constraints",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "direct versus nested member competition"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-recursive-group-constraints",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "6a0e51e2370ae1bbad6b5ca0eb993e329673db294c31d3ba7dbeee51e764de9d"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "two owned self returns"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e11690cd646250da56cfdf4ca7c4f152fb6881bed4ab5d9d2d752370b1a8e2d7"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "nested live endpoints and return ownership"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "00a98e4519b7c7fe09ebed8656766e1b5ff1b66f899f6bd90037a6acbe5f00bf"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "open self arrow with activation and deactivation"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "b23384ea87811b811bdf84eee2fdabef17823f2e56085118938956d3339829bf"
+  },
+  {
+    "mechanism": "sequence-component-padding-flow",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "padding 1 versus 6",
+      "multiline versus empty branch guards",
+      "attached notes"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-component-padding-flow",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "44ed16de87a7062fbd067508d7838697d31d5eb488bf5ec69e796bbef8d08cc4"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "shadow on/off",
+      "note across activation and delay"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "552c13a6602ad42dd755f508bb6fcd6f9cb1652f83dc4c9e0c88943f2b7af045"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "participant shadow on/off",
+      "nested group and spanning note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f6a9b235799f4c1e79e56c444b6312c369166188f7a7e85e5d5f01353fc255f3"
+  },
+  {
+    "mechanism": "sequence-self-arrow-envelope",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "all-page self extent",
+      "padding and attached note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-envelope/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-self-arrow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a155504bbbca37eb0d00e9db0425e5b28ea76dc523bfa2b7f51616e8da2c6f00"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "wide versus narrow page chrome",
+      "cross-page activation clipping"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "d5637ddfa5ae68fc0926a4fad258adc2fd663b0306a43c33ced7318f8e5c1f31"
+  },
+  {
+    "mechanism": "sequence-self-arrow-attached-lifecycle",
+    "name": "checker_recovery_teoz_r1_w1",
+    "axes": [
+      "legacy versus Teoz",
+      "participant declaration order",
+      "label width",
+      "explicit activate/deactivate attached across a note",
+      "pre-existing recursion"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.svg",
+    "cohort": "checker-sequence-self-arrow-attached-lifecycle",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e585222fc256db5976808f23ef58b1096f33a04d518e4ab59354785591e561de"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_left_in0_teoz0",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "d71a47497829ebe3f62f92fe63f9a0e463bb2462c2c3d08b09f155b373088257"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_left_in0_teoz1",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f508e4beaa9c53b3f095416a23eda3a93536afdd105cac5c768e085b56f79bd4"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_left_in1_teoz0",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "66e902b63c040fa6f817bca3d86eb331eb937e592049a2581d0da3f782d88116"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_left_in1_teoz1",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a990ba8853f4d3beeed5d17f85f37f067bda7fe374d91d383fd5b62209672b3a"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_right_in0_teoz0",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0d049ffd9a0414558f8da39814ddb3389b7d3387dd514a7123d1238925338862"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_right_in0_teoz1",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "b8bf1b4fc4f6b01ea77c712d0e7a7184fda1494e498e0eb7c89b93bcaea70a5f"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_right_in1_teoz0",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "8f7e5298fa13241650dd540bc1ca9ee9fce0678383ff374a63f85830234d4780"
+  },
+  {
+    "mechanism": "sequence-external-arrow-grammar",
+    "name": "checker_recovery_right_in1_teoz1",
+    "axes": [
+      "left/right border",
+      "incoming/outgoing dressing",
+      "external return lifecycle",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.svg",
+    "cohort": "checker-sequence-external-arrow-grammar",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "5d351d64caca8b9a435274f1b938e300f3394d42095b687b04d29f11f883b87e"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r0_d1_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r0_d1_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r0_d3_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r0_d3_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r1_d1_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r1_d1_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r1_d3_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b"
+  },
+  {
+    "mechanism": "sequence-teoz-note-tile-bounds",
+    "name": "checker_recovery_r1_d3_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.svg",
+    "cohort": "checker-sequence-teoz-note-tile-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r0_d1_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_left.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r0_d1_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d1_right.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r0_d3_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_left.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r0_d3_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r0_d3_right.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r1_d1_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_left.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r1_d1_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d1_right.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r1_d3_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_left.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b"
+  },
+  {
+    "mechanism": "sequence-teoz-self-tile-history",
+    "name": "checker_recovery_r1_d3_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-self-tile-history/checker_recovery_r1_d3_right.svg",
+    "cohort": "checker-sequence-teoz-self-tile-history",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r0_d1_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r0_d1_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r0_d3_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r0_d3_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r1_d1_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r1_d1_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r1_d3_left",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b"
+  },
+  {
+    "mechanism": "sequence-teoz-life-event-bounds",
+    "name": "checker_recovery_r1_d3_right",
+    "axes": [
+      "recursion depth",
+      "note side",
+      "declaration order",
+      "explicit lifecycle separated by note"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.svg",
+    "cohort": "checker-sequence-teoz-life-event-bounds",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_colored_teoz0",
+    "axes": [
+      "explicit return color",
+      "self versus interparticipant ownership",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz0.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "4720f6a4a19ded184b3ee08f1b6bf3f4b3785bc3b7bebe963618e8e70fdc3342"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_colored_teoz0",
+    "axes": [
+      "explicit return color",
+      "self versus interparticipant ownership",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "fcbdbb6a3a6e81b7454e757d430009b13ee453478b48a493b433dd0078b75c66"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_negative_nowhere_teoz0",
+    "axes": [
+      "no preceding activating message",
+      "engine"
+    ],
+    "negative_control": true,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 200,
+    "java_stderr": "ERROR\n4\nNowhere to return to. (Assumed diagram type: sequence)\n",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2b85f6343d1f3756f2a74ed5de20b024a2a1477748e15e8023d0cff79a53c035"
+  },
+  {
+    "mechanism": "sequence-return-live-message-model",
+    "name": "checker_recovery_colored_teoz1",
+    "axes": [
+      "explicit return color",
+      "self versus interparticipant ownership",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-return-live-message-model/checker_recovery_colored_teoz1.svg",
+    "cohort": "checker-sequence-return-live-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "3b2f379953ddff46066f5189c0efbd33de746bec7d08b18d38eaed954bad0a62"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_colored_teoz1",
+    "axes": [
+      "explicit return color",
+      "self versus interparticipant ownership",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "346edeae416538c4852489c1bc9f7058ab1e06054b19402a6a5134547059ce84"
+  },
+  {
+    "mechanism": "sequence-self-return-message-model",
+    "name": "checker_recovery_negative_nowhere_teoz1",
+    "axes": [
+      "no preceding activating message",
+      "engine"
+    ],
+    "negative_control": true,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.svg",
+    "cohort": "checker-sequence-self-return-message-model",
+    "java_exit": 200,
+    "java_stderr": "ERROR\n5\nNowhere to return to. (Assumed diagram type: sequence)\n",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "de45b18e491222e9151f4748438f1bec1b5766d913094250b6cef73c6e6acfa8"
+  }
+]

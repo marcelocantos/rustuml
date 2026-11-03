@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+]->> Q ++ : boundary traffic
+note right of Q : live channel
+return dispatch
+Q -> E : after
+@enduml

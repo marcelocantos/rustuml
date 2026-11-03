@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-arrow-attached-lifecycle",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "2a1c77633f559acf87dee2fc8437cdd25eacd76d",
+  "implementation_commit": "c0d425a0ee074e10c2c80c42a2e16ee3798827ad",
+  "original_account_commit": "f55d79708e03d18dafa3c6c2f0538840194c0f1a",
+  "original_implementation_commit": "ff2c542b42b62e9c6334f6cad20dea616e6cb04b",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "b117a23fedaea21eaedb13816669345eb436784321abc9d25fdaff9f0e50ea14",
+      "golden_sha256": "7e21b63d8e46d778d9a9c72e407afb45b9807657a44a4d6874475eaedf70b9cd",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "1722fd876ed0aa718947139a5811976a450d5503d78057e5e296d6a2c0875a5d",
+      "golden_sha256": "e3839d6ed07de1f2e161aeef1ac5b6adb106e059211024b4a15676e8eabe1e25",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "521a487e5dcfb1496c89aec5d239eaf25c077fa55e14c63619afb7cbe89c04bc",
+      "golden_sha256": "3fd94995e75e8b3d3c360a7335a9fe8ce286b38dbeb32bea3afe1b71f29e33fc",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "ba77432bcc3f22d89a461893ef17c2c8154a7d0f668f07ff313db99a59e984c5",
+      "golden_sha256": "c669075cf98b12aeaaf45d2dbf2789fce6d59d75c8f8a495bda3e8e64ba95294",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "4fe6c5446c077fa1eef2b0358d1a02e428d41678077f55c60ed8f39da224145b",
+      "golden_sha256": "31be5511500b583ce954637e79e13993a27365fcacb486451149a9eaf7d9b12b",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "e5381ba0cfdcf268897aa8bab681b493e31465fa00de4ff42d9d908722584a32",
+      "golden_sha256": "3b215df294dcf848bc88c77482fdc6ae990f4a28ca07cf296649edcdb765cbb6",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "6eeb96dc700f7eb5d21a0ada5b7067b7938cfbfb2d0352f1612665adb53ccd66",
+      "golden_sha256": "bc7e7715331545d8f0c3f630ee3e62b39c9a998c6d4303b29b9b1e749d87a1d6",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-attached-lifecycle/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "explicit activate/deactivate attached across a note",
+        "pre-existing recursion"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "aea39b55407a42249efe016c7db39a744248fec7969bfbd6751d360f84a43461",
+      "golden_sha256": "e585222fc256db5976808f23ef58b1096f33a04d518e4ab59354785591e561de",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "AbstractMessage#addLifeEvent attaches the event first and records independent activate/deactivate type flags for matching self participants. Step1Message adds the two lifecycle deltas independently so they cancel when both are set. Rust now retains both flags and its legacy shared geometry consumes them; four primary legacy controls pass.",
+    "The four matching Teoz controls fail by30px because the shared lifecycle scheduler still inserts a legacy combined row and the Teoz self painter reads only shorthand Message.activation. The fresh focused both-flag/direction controls also reveal the shared reverse-envelope failure. Correct flag aggregation is not independently accepted while these consumers remain inconsistent.",
+    "The original maker attached matrices (48+48) reproduce as passing, but they do not cover the independent engine/direction/standalone-note combinations generated here.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "AbstractMessage#addLifeEvent attaches the event first and records independent activate/deactivate type flags for matching self participants. Step1Message adds the two lifecycle deltas independently so they cancel when both are set. Rust now retains both flags and its legacy shared geometry consumes them; four primary legacy controls pass.",
+    "The four matching Teoz controls fail by30px because the shared lifecycle scheduler still inserts a legacy combined row and the Teoz self painter reads only shorthand Message.activation. The fresh focused both-flag/direction controls also reveal the shared reverse-envelope failure. Correct flag aggregation is not independently accepted while these consumers remain inconsistent.",
+    "The original maker attached matrices (48+48) reproduce as passing, but they do not cover the independent engine/direction/standalone-note combinations generated here."
+  ]
+}

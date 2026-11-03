@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-page-textblock-composition",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "37e9e23f2c095356261999d64fe747e39c537d39",
+  "implementation_commit": "48716e0f3eb67cd6e492059e484cd13af5425afe",
+  "original_account_commit": "ec228aba301359d217145d2bfc402390f5c3b27c",
+  "original_implementation_commit": "23c872994861214207ef2a156f8cfe2088123340",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "eac705a19ee2b617769a60f30250243ded6475ba3075fba9759640744376f48d",
+      "golden_sha256": "803d1214e46e2776f295dda2945c9db94496688b02c60cc64f20a23d52bc1f1f",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "2f105172e6e5286477b2e91ee0a29efa2bacf8ca8a58e945dc856f29175a48f7",
+      "golden_sha256": "a338f7dde4459ffbb345fbb847e3d60d3b0d984248d00756f1535a74d0049330",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "52aca32320cf0f57e5bd99335a5e2de29863955e7dc72a32f297c6d3bb9b829a",
+      "golden_sha256": "870822c27f60b44dd61cf18cfa8520b9bc5227ae44f2de1309edd7040f1bd30a",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "efca7917c8b51dddaf8427caebc6b32e76c51c70c1eb08d2e385e0c56d9a3207",
+      "golden_sha256": "e6f52120e6be4bf61552e4c3ef05374a93eaa109f989ecdbf4cf5456d68b4812",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "91dacd406dcf7182c49dc6cf93b14d766cb25f4761188801bd17183e181a3d5a",
+      "golden_sha256": "4d4b25db3ce9171168c12e5311a5c4e6dac464370503ff8ff294279f8c86722d",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "4913360533250c3d4ebc65032312bb0bdf1ef92026a48a76138fdbd481eb8c79",
+      "golden_sha256": "e1efe7d72b44f5c8e26984b84cc0ad278f7fad7dbe14a571c7cb630c6ecce658",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "1374e243385192cdabc7985708f5511ee2d8523f8ab79865e1d1af9a1c87a377",
+      "golden_sha256": "6f2a26332d95c4fbc158e53162571b7b9905c1b359cc5a856221c535e7267946",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "wide versus narrow page chrome",
+        "cross-page activation clipping"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "3f1094030d2c99513e5b01726f67aa4a4a80062406fa166191888ec2a54f9ede",
+      "golden_sha256": "d5637ddfa5ae68fc0926a4fad258adc2fd663b0306a43c33ced7318f8e5c1f31",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.svg",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "5cc8ed5d3b5c11ee74e01b6aad66a92f91bd581809a1eb185bc5ca8084109698",
+      "golden_sha256": "2a178ca00bd33dbbbfa61093a8454c5321e15a2ed828a657bc90f337a9d0f319",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.svg",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "4b8bbf395982fce6f4165f80dbe8d8c1f5136db5bc18e8c68c2f284095cee053",
+      "golden_sha256": "321f9b44f2693b7833cc192f08ed6e94ba60bf6d9b0920dae24eee9105037bf9",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.svg",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "4b4cf1e196c25a649179689d817adb7c75d862d5d10a698730356e4078ed787f",
+      "golden_sha256": "5b90ad0ae07fd7a7a61bb5fa3a006ce30afb1ee527b7a4712ce3dc4fb8859227",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.svg",
+      "axes": [
+        "multiline caption",
+        "legend and title wrapper composition",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "9b21cb8cbcb87039e9a4c653a8475ab20044b2367af66e90c617d40ff2fc20d2",
+      "golden_sha256": "e62ae79efd837ab2e0ebd964882cc53f205ef37e19544d9e397f978b81d75c69",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    }
+  ],
+  "findings": [
+    "Inspected DiagramChromeFactory12026#create wrapper order (body, legend, title, caption, header/footer), DecorateEntityImage dimensions/centering, DrawableSet#asTextBlock/drawU22/clipAndTranslate2. The new legacy horizontal max-width calculation follows this order and default right margin5 is directly sourced. Four fresh legacy wide/narrow chrome plus cross-page activation controls pass.",
+    "Focused legacy legend+title+caption disproves full TextBlock composition: Java height231 versus Rust212, caption y220.7988 versus169.3105 even with matching width404. Rust still calculates caption_top from tail boxes and takes max with legend height rather than stacking caption after the decorated legend block. The multiline version also emits34 elements instead of35 because caption measurement/paint does not create line blocks.",
+    "Every Teoz page control fails. Rust still truncates the body at newpage whereas raw Java Teoz renders the combined history in these inputs (primary height437 versus324), and Teoz retains participant-midpoint chrome feedback. No helper-only width or clipping acceptance can cover these whole-page failures.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "Inspected DiagramChromeFactory12026#create wrapper order (body, legend, title, caption, header/footer), DecorateEntityImage dimensions/centering, DrawableSet#asTextBlock/drawU22/clipAndTranslate2. The new legacy horizontal max-width calculation follows this order and default right margin5 is directly sourced. Four fresh legacy wide/narrow chrome plus cross-page activation controls pass.",
+    "Focused legacy legend+title+caption disproves full TextBlock composition: Java height231 versus Rust212, caption y220.7988 versus169.3105 even with matching width404. Rust still calculates caption_top from tail boxes and takes max with legend height rather than stacking caption after the decorated legend block. The multiline version also emits34 elements instead of35 because caption measurement/paint does not create line blocks.",
+    "Every Teoz page control fails. Rust still truncates the body at newpage whereas raw Java Teoz renders the combined history in these inputs (primary height437 versus324), and Teoz retains participant-midpoint chrome feedback. No helper-only width or clipping acceptance can cover these whole-page failures."
+  ]
+}

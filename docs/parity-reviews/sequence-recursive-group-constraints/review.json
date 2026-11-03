@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-recursive-group-constraints",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "3e4c5fc96e462cc3ecbde5c65abc47477f576004",
+  "implementation_commit": "34fe478f0b539932613f414b8f756ebacee8fbf3",
+  "original_account_commit": "9ef2acc9c72e614bfe4c8ab06147aab8fa80c45b",
+  "original_implementation_commit": "078d2cb982ab764172ed89a0fb4ecfb505197763",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "e43accd92927b32f36b57c4e95cf57d865450b77002ea4500faadfd7edd1b186",
+      "golden_sha256": "9b0a87b6745dec18c3b0593cca6666e91338dedf281881a2fd3d8586a7429124",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "7a47f4927c88e4576154d5f2857d92d3bb0d6f9c9a92ee46cde01b10f2229181",
+      "golden_sha256": "2abc98676e08da6d7813dcf84491e63743633b853dfb5c1f9e497a5dd44c16d3",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "e58e7c7579c9b5865cc9c8e6789beb558b058aade981cb432e8e5286c487fb39",
+      "golden_sha256": "fcd43991b25caa36aeb87efbf6f24845b2c155c8f8ce6f25f4edb02d5905bcd4",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "c60c5066f64bf3071a19249c0b115624f433d1c4ecd27c078a20f63e6166af77",
+      "golden_sha256": "f8579aa94cb0c21dccccfd6e754cad78018df6813be4722782e6a315ccc38427",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "d2e687615aeceda750ffdcfc884bb4c72fa547a3e1ca85b84c9b226cd0e76d6c",
+      "golden_sha256": "92c0d31f1f8eee79068e59ec3ba8e13a3f7e1c87ab0f43a5463864cf16f138d9",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "79b521b56d497bc538d2542cdbfead50ebb24b0ae7aa53420383852a06b7d02a",
+      "golden_sha256": "60aa13e136a514bc061588a3d6cbadd0f1bc724adc2f12207c4c6570642aa915",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "45a8b9663cbba1e2a65274690cb3f8c48b76130f7bb0d56863a187ca21b10c76",
+      "golden_sha256": "0d973d381ff8651b64d08803e9040de02e9f0817d48b9736ff723a5ebbeafba7",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-recursive-group-constraints/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "direct versus nested member competition"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "7f722a34d2969e5e5b3e31d566600f02d699526c82e84006af772ef893ec5d3f",
+      "golden_sha256": "6a0e51e2370ae1bbad6b5ca0eb993e329673db294c31d3ba7dbeee51e764de9d",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "Java InGroupableList#getMinSlow/getMaxSlow selects a raw member and caches its identity, then getMinX/getMaxXInternal applies the member-kind margin; InGroupablesStack adds elements to every open list. Rust sequence_group_list_bounds now follows this order and retains indices across the pretranslation and posttranslation measure_group_frames passes. Four fresh legacy competing-member/declaration/label cases pass. This is positive evidence for raw-winner selection, not acceptance of the complete group envelope.",
+    "The envelope still depends on full NoteBox/ParticipantBox preferred widths. checker_focus_shadow_span1_e0 in sequence-participant-shadow-envelope has a Java group width187.9014 versus Rust186.9014 and participant translation off by1. Rust group note extent at sequence.rs:8773 and over_several_note_geometry reconstruct participant span from painted box_width plus an outer margin, omitting the shadow part of the preferred head width. This is relevant to the account planned multi-participant allocation and raw-coordinate invariant; no independent whole-source group acceptance is established.",
+    "Four fresh Teoz group/external-note controls fail. The legacy account correctly excludes Teoz internals, but the complete recovery still needs independently accepted Teoz dependencies. The two preserved font controls remain failed unwaived dependencies. No direct disproof of the isolated raw-minimum algebra is claimed.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "Java InGroupableList#getMinSlow/getMaxSlow selects a raw member and caches its identity, then getMinX/getMaxXInternal applies the member-kind margin; InGroupablesStack adds elements to every open list. Rust sequence_group_list_bounds now follows this order and retains indices across the pretranslation and posttranslation measure_group_frames passes. Four fresh legacy competing-member/declaration/label cases pass. This is positive evidence for raw-winner selection, not acceptance of the complete group envelope.",
+    "The envelope still depends on full NoteBox/ParticipantBox preferred widths. checker_focus_shadow_span1_e0 in sequence-participant-shadow-envelope has a Java group width187.9014 versus Rust186.9014 and participant translation off by1. Rust group note extent at sequence.rs:8773 and over_several_note_geometry reconstruct participant span from painted box_width plus an outer margin, omitting the shadow part of the preferred head width. This is relevant to the account planned multi-participant allocation and raw-coordinate invariant; no independent whole-source group acceptance is established.",
+    "Four fresh Teoz group/external-note controls fail. The legacy account correctly excludes Teoz internals, but the complete recovery still needs independently accepted Teoz dependencies. The two preserved font controls remain failed unwaived dependencies. No direct disproof of the isolated raw-minimum algebra is claimed."
+  ]
+}

@@ -1,0 +1,9 @@
+@startuml
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+Q -> Q ++ : WW.quartz iii transmission envelope
+Q -> Q ++ : inner
+return nested
+return final
+@enduml

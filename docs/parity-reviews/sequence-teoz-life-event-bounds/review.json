@@ -1,0 +1,533 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-life-event-bounds",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "02decb25825e2570c88cfca2681ec446dc303439",
+  "implementation_commit": "0a46ebb536765daaabd0599edba9daebbea7fc21",
+  "original_account_commit": "8c6074666083f8db47872f81a1e79811331859b5",
+  "original_implementation_commit": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "golden_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d1_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "golden_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "golden_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r0_d3_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "golden_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "golden_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d1_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "golden_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "golden_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/checker_recovery_r1_d3_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "golden_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_0.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_0.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_0.svg",
+      "source_sha256": "92185eb1aff3ecbcc885e691671afaf01857728581be3f542cb97f8a71f10d05",
+      "golden_sha256": "7defc3cf9559d0aea1d4fdca4e61eeae7b2ffb0fbad6d046ca571214b8555c5e",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_1.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_1.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_1.svg",
+      "source_sha256": "f02f4fb1f8339fa1ad40d0390bf78256eff6882c69dab270d2d9aee3dbd07ca7",
+      "golden_sha256": "1009c9a5dfae70b80e48f913d60e3303088b07391c6bd836395591ff54607109",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_10.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_10.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_10.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_10.svg",
+      "source_sha256": "15a795ce707b9ee962ed691e4fdc5cfe5ac81452e19d4cef4649a1c488688395",
+      "golden_sha256": "8804d58731f69a045c9d8dcb3a7df4438a7603068dde8344dd17efb93aced56a",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_11.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_11.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_11.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_11.svg",
+      "source_sha256": "52b25f36a17230126e889aa88946709e5cf9c39ba87f2b87ca516fd1aa2f0529",
+      "golden_sha256": "419bf968dea751c932a3bacc8d760b02071b91f58837e36f266b8fe0a0e28e70",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_12.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_12.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_12.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_12.svg",
+      "source_sha256": "f6e0b708477ea9d8ff5b108d78b058b2871b5963e2c841e210990d1747819c36",
+      "golden_sha256": "0955f41c4c2e620606a471bdc3447f83f7f49e73dfffa67249bf66787e4b307e",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_13.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_13.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_13.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_13.svg",
+      "source_sha256": "a57ea060ee9e5499b9e4dd72acb8965ab2f50ee17491f8f643110c6c32948902",
+      "golden_sha256": "e7cdb150038be577bbefc8d4ec94ad1278bcee6f3c0785cfa134d330f2c1651b",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_14.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_14.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_14.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_14.svg",
+      "source_sha256": "1f0d71ab322bc17f14e249e16aae0d69f3800787d0c93170ef71fa76a5fb2464",
+      "golden_sha256": "6819e896ae5f00138391e3512bd700d4455995c4c92b4371ed374cdb20235e9e",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_15.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_15.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_15.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_15.svg",
+      "source_sha256": "0a678127e08c421cf9b539875264b2afdf2bc21427d65151ccb2a2f38243915e",
+      "golden_sha256": "63e43306a443e3a7be29ee1c5bd9e5e0b9dfe9e9dc2e9e9dd00c40845c7c5542",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_16.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_16.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_16.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_16.svg",
+      "source_sha256": "1f006bd536ee4c9b2b7893c63a7eee7c327ab5981ea751759b1f0df61940b159",
+      "golden_sha256": "3f61d2acad7a0e3cda23708265c9c8a54ef230960b4d736cafec831568b28e16",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_18.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_18.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_18.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_18.svg",
+      "source_sha256": "a2df1a9bf02c75190faadc54f8954bdff26cb319a6ae51b9084bb07c5f1b0b82",
+      "golden_sha256": "199545a0d8198829d4b1c0d19a39d081593a159ff44a5bfc1b43e465c8f858ff",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_19.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_19.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_19.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_19.svg",
+      "source_sha256": "ab97c7ba4031e48cd5bb5466ef4c0205da8b90e687d6f3a8e1ab463525b746cf",
+      "golden_sha256": "e782150cb2a581b5ecd80c23a4e183469e7bc72ba917fdb5d4ba6cf76ef20b6b",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_2.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_2.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_2.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_2.svg",
+      "source_sha256": "e3aa7b27df55e8cfae7d26948898224684e5e690a232ff146c397f8d8bc5a9a0",
+      "golden_sha256": "05503bfaa02fd614b8accbee82be79777fa9d421b57c80cefa4ca212deeb9750",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_20.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_20.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_20.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_20.svg",
+      "source_sha256": "b5bb58e09f238d1a3861509d9f5582a3040a3525e70673044e34725ab90672b5",
+      "golden_sha256": "b99536d290a0e4eb5b89a878503217d296981c8544050eda05e0239be92db2b9",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_21.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_21.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_21.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_21.svg",
+      "source_sha256": "3c55f88ac96f427c2269a5fead56386351078300d124d335cdd40aa2a6c0d29f",
+      "golden_sha256": "7c2a7ee5d42cdbc5543154d959b440ff57622ef85e0e6b4afe4ce230955cbce3",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_22.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_22.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_22.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_22.svg",
+      "source_sha256": "c9633969dcca1745305b22154e811b0a9479fea59e61ccc0b694297e96256e3f",
+      "golden_sha256": "c7d5ffe57befff40190725aadd4faaa8937b3fca0d55d1fef4c660b48b1efc47",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_23.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_23.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_23.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_23.svg",
+      "source_sha256": "650c0036bafae1c134846be71484030ba278e3afead751a823e5690760e97a4f",
+      "golden_sha256": "cbf2e25be1ddd80b43faeca093837bb4672905254a784cda68869e546d8cfa3f",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_3.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_3.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_3.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_3.svg",
+      "source_sha256": "886e41d3a17821f20d7498b201ce053c5fcedf4fcaf8a19876e9b3c5343e4b35",
+      "golden_sha256": "69ff12437d101eba7169b4d0f26ece8cd48c77de44513ac14620886a62c72f51",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_4.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_4.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_4.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_4.svg",
+      "source_sha256": "fda1788fbb2588d6221e3e8d1e37c8c5034fef0fc49fe84fcc116b45ee2f850c",
+      "golden_sha256": "b62b3cd8452341bef05fd1f2932cbd8673ce42cc60c3d7720f66c89b710981c1",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_6.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_6.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_6.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_6.svg",
+      "source_sha256": "4cfe2a11476240e81a56734bdd26f7825379e4fec53cae3aea7a671ed72c2e3a",
+      "golden_sha256": "441820e54904f68460c8b14f6385e2829d9a153795b537375a7f369f16f71e49",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_7.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_7.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_7.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_7.svg",
+      "source_sha256": "d3d0e7803bcc5a1fd3287cdf1b8284afd6b4d14070795659b4ba48930a74af74",
+      "golden_sha256": "ca684c3f7b369ee2869f2527a4ca4cfc08fbeabbe3292ebf23e6e1957602e5f6",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_8.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_8.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_8.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_8.svg",
+      "source_sha256": "8b4e7420cb099463a4ad56a6a167460c1e57c6199076b2d47d4b06532b8eb3e6",
+      "golden_sha256": "b30ae0f442557aa685965ef6ce8f867f09e83184dc80d480892de42ee5b9f1d1",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_9.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-life-event-bounds/retained_maker_life_9.svg",
+      "original_source": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_9.puml",
+      "original_golden": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs/life_9.svg",
+      "source_sha256": "396a6b3924a72d65f09df0c057cda286a01135c98bd990e4e1c9051e240bca23",
+      "golden_sha256": "1fbac616727417a6a76c421e2bd4d44d9348b496c07056dbc805e4b59ce369f1",
+      "axes": [
+        "explicit versus attached lifecycle",
+        "declaration order and note position",
+        "activation depth"
+      ],
+      "result": "fail",
+      "provenance": "Exact maker pair copied into standing held-out suite; not claimed as independent new input"
+    }
+  ],
+  "findings": [
+    "LifeEventTile#getMinX/getMaxX uses the resulting level in IGNORE_FUTURE_ACTIVATE mode; positive levels contribute center-5 and center+level*5. Rust adds a lifecycle-variation scan and feeds these bounds to each enclosing group. The arithmetic is supported by Java source.",
+    "The scan only sees accepted legacy-style variations, not the full Java LifeEvent/message callback history. LifeEventTile has zero preferred height, LiveBoxes#getStairs samples per-event levels and resets ownership across standalone notes, and Stairs#addStep discards decreasing ordinates. Rust retains the30-unit same-message row and pairs opens/closes. Eight new cases fail;22/24 original maker cases also fail and are copied byte-for-byte into this mechanism standing corpus.",
+    "Example primary Java height422 versus Rust452. A correct horizontal bounds helper is insufficient when the event/stair data supplying its level and placement is incomplete. All22 maker failures plus eight new failures are named in this record; no scope waiver is applied.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "LifeEventTile#getMinX/getMaxX uses the resulting level in IGNORE_FUTURE_ACTIVATE mode; positive levels contribute center-5 and center+level*5. Rust adds a lifecycle-variation scan and feeds these bounds to each enclosing group. The arithmetic is supported by Java source.",
+    "The scan only sees accepted legacy-style variations, not the full Java LifeEvent/message callback history. LifeEventTile has zero preferred height, LiveBoxes#getStairs samples per-event levels and resets ownership across standalone notes, and Stairs#addStep discards decreasing ordinates. Rust retains the30-unit same-message row and pairs opens/closes. Eight new cases fail;22/24 original maker cases also fail and are copied byte-for-byte into this mechanism standing corpus.",
+    "Example primary Java height422 versus Rust452. A correct horizontal bounds helper is insufficient when the event/stair data supplying its level and placement is incomplete. All22 maker failures plus eight new failures are named in this record; no scope waiver is applied."
+  ]
+}
