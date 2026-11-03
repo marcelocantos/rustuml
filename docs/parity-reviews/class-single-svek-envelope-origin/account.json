@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "All relevant valid failures remain blocking; no checker record changes.",
+  "mechanism": "class-single-svek-envelope-origin",
+  "java_locations": [
+    "svek/SvekResult#calculateDimension,moveDelta",
+    "klimt/drawing/LimitFinder#drawRectangle,drawUPolygon",
+    "svek/Cluster#drawU",
+    "svek/image/EntityImageNote#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#normalize_svek_package_envelope,package_owner_offset,svek_layout_x_bias,svek_layout_y_bias"
+  ],
+  "invariant": "A SvekResult owns one painted-envelope origin for every group, leaf, note and spline, independent of quark ownership. Group ownership controls graph membership, never a separate image translation.",
+  "causal_divergence": "Current packet applies source-derived rectangle/polygon offsets per outer owner group. Root notes attached to grouped leaves therefore remain behind by the same offset even after their graph solve matches Java. Nested origins were already removed, but root peers expose the remaining per-owner mistake.",
+  "planned_model_change": "Measure actual cluster frontiers with LimitFinder rectangle inset/polygon overscan/cloud frontier during the existing common normalization, then remove per-package paint translations. Use the same frontier calculation during final envelope measurement to avoid a second shift. Preserve graph membership and serialized node origins.",
+  "perturbation_axes": [
+    "root versus contained notes attached to the same grouped class",
+    "mixed/nested container symbols, root peers and multiple root groups"
+  ]
+}
