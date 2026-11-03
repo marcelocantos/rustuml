@@ -1,0 +1,506 @@
+{
+  "schema_version": 1,
+  "role": "implementation maker; no independent review or attestation",
+  "status": "NOT ACCEPTED; blocking preserved and fresh valid counterexamples remain",
+  "base_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+  "account_commits": {
+    "class-command-execution-ownership": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+    "class-symbol-container-alias-identity": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+    "class-native-leaf-presentation": "be918a98f6e445c13e29d6f314f0f1dfa13b9acb",
+    "class-note-target-quark": "902086e529d4eb564bce381458995048b580c5be",
+    "class-quoted-code-identity": "bc0c65b6aad9cf98995fba162ccb9ee3b16613c4",
+    "class-command-execution-ownership/dispatch-followup": "93dd8e2f5edd728607704f3d72a7c09a09fe7d9a",
+    "class-description-leaf-image-dependency": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "class-page-chrome-composition-dependency": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "class-cloud-child-coordinate-dependency": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "class-note-cluster-ownership-dependency": "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+  },
+  "changed_production_files": [
+    "crates/rustuml-parser/src/diagram/class.rs",
+    "crates/rustuml-parser/src/parse/class.rs",
+    "crates/rustuml-parser/src/parse/component.rs",
+    "crates/rustuml-parser/src/parse/mod.rs",
+    "crates/rustuml-render/src/ascii_class.rs",
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "causal_summary": [
+    "Factory viability and class execution now share a consuming parser. Quoted names and multiline bodies own their text, declarations build typed entities, and mixing is checked in execution order. Unknown commands no longer silently disappear.",
+    "NameAndCode grammar preserves display/code identity for forward and reverse container aliases and quoted class codes; notes resolve through canonical quark lookup.",
+    "Native types and modifier state survive into ordinary ASTs. Class header spots and visibility blocks follow EntityImageClassHeader/VisibilityModifier. Static is retained without inventing a Java header effect.",
+    "A complete actor-only description trial handles generalization after class rejection. It excludes native classes, packages and allowmixing-directed dispatch. This fixed the full-workspace usecase regression."
+  ],
+  "counts": {
+    "main": {
+      "source_only": {
+        "eligible": 11251,
+        "before_pass": 11181,
+        "after_pass": 11181,
+        "repaired": [],
+        "regressed": [],
+        "skipped": 1299,
+        "total": 12550,
+        "gate_exit": 101
+      },
+      "assisted": {
+        "eligible": 11251,
+        "before_pass": 10497,
+        "after_pass": 10497,
+        "repaired": [],
+        "regressed": [],
+        "skipped": 1299,
+        "total": 12550,
+        "gate_exit": 101
+      }
+    },
+    "perturbations": {
+      "original810": {
+        "denominator": 810,
+        "before": {
+          "mismatch": 454,
+          "pass": 349,
+          "invalid_reference": 7
+        },
+        "after": {
+          "mismatch": 432,
+          "pass": 371,
+          "invalid_reference": 7
+        }
+      },
+      "added23": {
+        "denominator": 23,
+        "before": {
+          "mismatch": 23
+        },
+        "after": {
+          "pass": 12,
+          "mismatch": 11
+        }
+      },
+      "expanded833": {
+        "denominator": 833,
+        "before": {
+          "mismatch": 477,
+          "pass": 349,
+          "invalid_reference": 7
+        },
+        "after": {
+          "mismatch": 443,
+          "pass": 383,
+          "invalid_reference": 7
+        }
+      }
+    },
+    "cli": {
+      "preserved23": {
+        "before": {
+          "denominator": 23,
+          "passed": 0,
+          "passing_inputs": [],
+          "failing_inputs": [
+            "alias_forward",
+            "alias_reverse",
+            "case_tabs",
+            "declaration_static",
+            "declaration_static_body",
+            "declaration_visible",
+            "declaration_visible_body",
+            "header_left",
+            "header_left_text",
+            "header_plain",
+            "label_bracket",
+            "label_plain",
+            "legend_body",
+            "maker_cloud_class_top",
+            "maker_cloud_interface_top",
+            "maker_mixing_first",
+            "member_body",
+            "mix_early_tabs",
+            "mix_prefix",
+            "native_record",
+            "note_body",
+            "tabs_lower",
+            "title_body"
+          ],
+          "factories": {
+            "Deployment": 15,
+            "Class": 3,
+            "Sequence": 1,
+            "Component": 4
+          }
+        },
+        "after": {
+          "denominator": 23,
+          "passed": 12,
+          "passing_inputs": [
+            "alias_forward",
+            "alias_reverse",
+            "case_tabs",
+            "declaration_static",
+            "declaration_static_body",
+            "declaration_visible",
+            "declaration_visible_body",
+            "label_bracket",
+            "label_plain",
+            "member_body",
+            "native_record",
+            "tabs_lower"
+          ],
+          "failing_inputs": [
+            "header_left",
+            "header_left_text",
+            "header_plain",
+            "legend_body",
+            "maker_cloud_class_top",
+            "maker_cloud_interface_top",
+            "maker_mixing_first",
+            "mix_early_tabs",
+            "mix_prefix",
+            "note_body",
+            "title_body"
+          ],
+          "factories": {
+            "Class": 23
+          }
+        }
+      },
+      "fresh": {
+        "before": {
+          "denominator": 31,
+          "passed": 0,
+          "passing_inputs": [],
+          "failing_inputs": [
+            "actor_generalization",
+            "alias_reopen",
+            "body_legend",
+            "body_ownership",
+            "body_title",
+            "generic_reverse",
+            "header_center",
+            "header_left",
+            "header_right",
+            "mixing_early",
+            "mixing_prefix",
+            "modifier_package",
+            "modifier_private",
+            "modifier_protected",
+            "modifier_public",
+            "modifier_static",
+            "native_dataclass",
+            "native_exception",
+            "native_metaclass",
+            "native_protocol",
+            "native_record",
+            "native_stereotype",
+            "native_struct",
+            "nested_alias_note",
+            "note_quote",
+            "quote_forward",
+            "quote_reverse",
+            "quoted_code_collision",
+            "quoted_decorations",
+            "visibility_sizes",
+            "visibility_stereotype"
+          ],
+          "factories": {
+            "Class": 4,
+            "Deployment": 23,
+            "": 1,
+            "Component": 3
+          }
+        },
+        "after": {
+          "denominator": 31,
+          "passed": 22,
+          "passing_inputs": [
+            "actor_generalization",
+            "alias_reopen",
+            "body_ownership",
+            "generic_reverse",
+            "modifier_package",
+            "modifier_private",
+            "modifier_protected",
+            "modifier_public",
+            "modifier_static",
+            "native_dataclass",
+            "native_exception",
+            "native_metaclass",
+            "native_protocol",
+            "native_record",
+            "native_stereotype",
+            "native_struct",
+            "quote_forward",
+            "quote_reverse",
+            "quoted_code_collision",
+            "quoted_decorations",
+            "visibility_sizes",
+            "visibility_stereotype"
+          ],
+          "failing_inputs": [
+            "body_legend",
+            "body_title",
+            "header_center",
+            "header_left",
+            "header_right",
+            "mixing_early",
+            "mixing_prefix",
+            "nested_alias_note",
+            "note_quote"
+          ],
+          "factories": {
+            "UseCase": 1,
+            "Class": 30
+          }
+        }
+      }
+    },
+    "parser_tests": {
+      "before": 561,
+      "after": 566,
+      "failures_before": 0,
+      "failures_after": 0
+    },
+    "workspace_release_lib": {
+      "passed": 1420,
+      "failed": 0,
+      "parser": 566,
+      "renderer": 772,
+      "other": 82
+    },
+    "guards": {
+      "before_pass": 4,
+      "after_pass": 4,
+      "denominator": 6,
+      "failing": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "note": "Frozen baselines/old rejection records untouched. New account directories intentionally have no maker-authored checker reviews."
+    }
+  },
+  "negative_controls": {
+    "mixing_late": {
+      "java_valid": false,
+      "before": {
+        "ast_exit": 0,
+        "cli_exit": 0,
+        "ast_first_line": "Class("
+      },
+      "after": {
+        "ast_exit": 1,
+        "cli_exit": 1,
+        "ast_first_line": "parse error: line 3: Use 'allowmixing' before mixing classes and other UML elements"
+      }
+    },
+    "modifier_mandatory": {
+      "java_valid": false,
+      "before": {
+        "ast_exit": 0,
+        "cli_exit": 0,
+        "ast_first_line": "Deployment("
+      },
+      "after": {
+        "ast_exit": 0,
+        "cli_exit": 0,
+        "ast_first_line": "Deployment("
+      }
+    }
+  },
+  "failure_deltas": {
+    "perturbations_repaired": 34,
+    "previously_passing_perturbations_regressed": 0,
+    "new_parse_errors_on_previously_mismatching_valid_inputs": 36,
+    "details": "maker-evidence/perturbation-results.json",
+    "caveat": "No passing-comparator regressions does not mean all parser behavior is preserved: 36 previously misrendered valid inputs now explicitly fail command execution. Boundary leaves, action/process containers, richer package modifier grammar, parenthesis endpoints and description routing remain unsupported here. These are blocking residues, not acceptance waivers."
+  },
+  "blocking_dependencies": [
+    {
+      "account": "class-description-leaf-image-dependency",
+      "inputs": [
+        "maker_mixing_first",
+        "mix_early_tabs",
+        "mix_prefix",
+        "fresh/mixing_early",
+        "fresh/mixing_prefix"
+      ],
+      "reason": "Mixed declarations survive, but class renderer still uses class compartment paint instead of the Java description USymbol image."
+    },
+    {
+      "account": "class-page-chrome-composition-dependency",
+      "inputs": [
+        "header_left",
+        "header_left_text",
+        "header_plain",
+        "legend_body",
+        "title_body",
+        "fresh/header_center",
+        "fresh/header_left",
+        "fresh/header_right",
+        "fresh/body_legend",
+        "fresh/body_title"
+      ],
+      "reason": "Body ownership is fixed; alignment and complete page-envelope composition are not."
+    },
+    {
+      "account": "class-cloud-child-coordinate-dependency",
+      "inputs": [
+        "maker_cloud_class_top",
+        "maker_cloud_interface_top"
+      ],
+      "reason": "Approximate 0.0799 child-x residual; exact causal coordinate stage unproven. No tuned geometry constant."
+    },
+    {
+      "account": "class-note-cluster-ownership-dependency",
+      "inputs": [
+        "note_body",
+        "fresh/nested_alias_note",
+        "fresh/note_quote"
+      ],
+      "reason": "Target identity is fixed but declaration owner scope is absent from Note, so layout membership/Opale effects remain wrong."
+    },
+    {
+      "account": null,
+      "inputs": [
+        "cross-worker-repeated-themes/source.puml"
+      ],
+      "reason": "Provided preprocessing candidate produces exact post-TIM expansion yet the class spot retains the earlier palette (#EDF0F2 versus Java #F4A1A4). This packet changes native default spots, not cascade precedence. Retained read-only evidence; no preprocessing or shared-style change.",
+      "source_maker_commit": "a3082894f29e642f146bf2bc573e33df39753e51",
+      "source_candidate_commit": "0f2fb90c656b3c575db20a0b3a6d690fdfa33d30",
+      "candidate_integrated": false,
+      "original_path": "/Users/marcelo/.t3/worktrees/rustuml/t3-eac091cc/docs/parity-reviews/tim-theme-post-expansion-source-identity/maker-evidence/repeated_themes"
+    }
+  ],
+  "reference": {
+    "ready": true,
+    "created_at": "2026-11-03T06:36:51.763621+00:00",
+    "source": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "clean": true
+    },
+    "jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+      "version": "1.2026.3beta6",
+      "historical_checker_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "historical_binary_reproduced": false,
+      "hash_note": "Upstream Gradle injects wall-clock CompilationInfo and git.properties build metadata; rebuilt JAR is not historical-byte-identical."
+    },
+    "java": {
+      "executable": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "version": "openjdk version \"21.0.13\" 2026-10-20 LTS\nOpenJDK Runtime Environment Temurin-21.0.13+9 (build 21.0.13+9-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.13+9 (build 21.0.13+9-LTS, mixed mode, sharing)",
+      "headless": true
+    },
+    "graphviz": {
+      "executable": "/opt/homebrew/bin/dot",
+      "version": "dot - graphviz version 16.1.0 (20260904.0139)"
+    },
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "environment": {
+      "JAVA_HOME": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home",
+      "PATH_prefix": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin",
+      "PLANTUML_JAR": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+      "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+    },
+    "stdlib": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib",
+      "revision": "747d1eae809cde20675976d67e3eb84dc0021a0c",
+      "tupadr3_version": "3.0.0",
+      "tupadr3_bundle_sha1_markers": {
+        "info.sha1": "9e084a1a40cc1a03da15319bcc9e9b330f48f6aa",
+        "puml.sha1": "a19d01af7b2341028354f509705093769f0d1f03",
+        "sprite.sha1": "658f814fe7fd80ebbbff1be859cbe9e4adbdf3e1"
+      },
+      "provenance": "All three committed tupadr3 output hash markers exactly equal the Java source bundle hash markers. This is not an assertion about every stdlib library."
+    },
+    "golden": {
+      "revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+      "svg_files": 12554,
+      "version_processing_instructions": {
+        "1.2026.3beta6": 12428,
+        "absent": 126
+      },
+      "error_page_full_version": "1.2026.3beta6 / 71806a2 [2026-03-21 13:49:45 UTC]",
+      "full_version_occurrences": 1115
+    },
+    "smoke": {
+      "input": "test-diagrams/golden/deployment/deploy_sprite_server.puml",
+      "output": "/tmp/rustuml-foundation-deploy-java.svg",
+      "valid_svg": true,
+      "parsed_svg_matches_preserved_golden": true
+    },
+    "caveats": [
+      "Use the absolute Java executable or supplied JAVA_HOME/PATH; the default jenv 21 shim currently fails.",
+      "macOS host fonts and Graphviz 16.1.0 are not proven identical to the historical font/Graphviz environment.",
+      "Do not regenerate or overwrite preserved reference SVGs.",
+      "Other workers must treat both reference checkouts as read-only."
+    ],
+    "fonts": {
+      "diagnostic_log": "/tmp/rustuml-foundation-fonts.log",
+      "awt_sample": [
+        "SansSerif -> SansSerif / SansSerif; AppServer advance=69.125",
+        "Arial -> Arial / ArialMT; AppServer advance=66.14453125",
+        "Serif -> Serif / Serif; AppServer advance=60.6484375",
+        "Times New Roman -> Times New Roman / TimesNewRomanPSMT; AppServer advance=60.6484375",
+        "Monospaced -> Monospaced / Monospaced; AppServer advance=75.8583984375",
+        "Courier -> Monospaced / Monospaced; AppServer advance=75.8583984375",
+        "Courier New -> Courier New / CourierNewPSMT; AppServer advance=75.6123046875"
+      ],
+      "historical_profile_reproduced": false
+    }
+  },
+  "integration_caveats": [
+    "Prepared corpus is 833, comprising original 810 plus 23 class checker pairs. Parent now has 874 after 41 sequence heldouts; those 41 are not claimed tested here.",
+    "No comparator, slack, error markers, allowlists, baseline, old reference, old account, review, target or preprocessing change. Golden submodule initialized normally; gitlink unchanged.",
+    "The historical rejected class-native-container-factory-precedence record remains rejected and unchanged. Parent must assign fresh independent checker; maker cases are not independent evidence.",
+    "Main source-only gate remains red because frozen ratchet counts are stale; assisted retains 754 failures; perturbations and evidence/decimal guards remain red.",
+    "Reference JAR is source-pinned, not historical-byte-identical. Host font/Graphviz historical equivalence is unproven.",
+    "Malformed late mixing is now rejected by the real CLI. Fresh invalid *class still routes to Deployment and exits successfully: preserved negative residual, excluded from positive denominators.",
+    "Workspace Clippy remains red on preexisting warnings in unchanged class code and other modules. Parser Clippy and targeted rustfmt pass."
+  ],
+  "commands": "maker-evidence/command-replay.json",
+  "logs_outside_repo": [
+    {
+      "path": "/tmp/rustuml-cff-before.log",
+      "sha256": "59cb9ac8869609b805d78db3c26351ea50e2a381e097ffdfc477f2e506fee01e"
+    },
+    {
+      "path": "/tmp/rustuml-cff-parser-before.log",
+      "sha256": "26eac9b14a63141c972f269bee5688b1b522cc50c5e31160fe635d6c0c267952"
+    },
+    {
+      "path": "/tmp/rustuml-cff-baseline-inventory.log",
+      "sha256": "6b603580a86a18d3510f9aef171fb67492bf69dbe93f2a2faaf95c50d4530623"
+    },
+    {
+      "path": "/tmp/rustuml-cff-final-oracles.log",
+      "sha256": "b8524ec40588e443c304c7a31fdd939ed7db7955cd5b4367c7b113d7d7b07d21"
+    },
+    {
+      "path": "/tmp/rustuml-cff-final-workspace-lib.log",
+      "sha256": "9686e86cdd893b57e3f1d6684944989f21be383c048b32901658bf9faa0f6197"
+    },
+    {
+      "path": "/tmp/rustuml-cff-final-build.log",
+      "sha256": "f5b804c2c93e6c3c6dc70aad7db3af84152af0aade13838e98a1dd4e7cc1d625"
+    },
+    {
+      "path": "/tmp/rustuml-cff-final-parser-clippy.log",
+      "sha256": "5d4913b518f759d459988998cf378457795df10eada60ee2c884276c7a0a2b69"
+    },
+    {
+      "path": "/tmp/rustuml-cff-final-fmt.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/rustuml-cff-clippy.log",
+      "sha256": "24b61c94622a84944e47368c53133adce5edf00f3d9523123af7618c19319ed9"
+    },
+    {
+      "path": "/tmp/rustuml-cff-fresh-reference-replay.log",
+      "sha256": "8a578c6a15e9bc5f480d9636e496cf723d687748a4d9f82dc4227a4433599f2c"
+    }
+  ],
+  "evidence_manifest": "maker-evidence/manifest.json"
+}

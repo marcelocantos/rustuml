@@ -1,0 +1,9 @@
+@startuml
+right header
+component textOnly
+[page text]
+endheader
+node "Measurement Bay" {
+class Probe
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Signal Bay" as Site {
+class First
+}
+node Site {
+class Second
+First --> Second
+}
+@enduml

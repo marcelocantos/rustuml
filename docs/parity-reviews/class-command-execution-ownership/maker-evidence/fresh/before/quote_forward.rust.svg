@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="66px" preserveAspectRatio="none" style="width:165px;height:66px;background:#FFFFFF;" version="1.1" viewBox="0 0 165 66" width="165px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Rain as [Gauge]-->
+<g class="entity" data-qualified-name="Observatory" data-source-line="1" id="ent0002">
+<polygon fill="#F1F1F1" points="7,17,17,7,152.2188,7,152.2188,43.4883,142.2188,53.4883,7,53.4883,7,17" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="142.2188" x2="152.2188" y1="17" y2="7"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="7" x2="142.2188" y1="17" y2="17"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="142.2188" x2="142.2188" y1="17" y2="53.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="105.2188" x="22" y="40.5352">Rain as [Gauge]</text>
+</g>
+</g></svg>

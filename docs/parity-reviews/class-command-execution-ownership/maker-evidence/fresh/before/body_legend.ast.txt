@@ -1,0 +1,32 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: Some(
+                1,
+            ),
+            legend_horizontal_alignment: Right,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nlegend bottom right\nclass prose\n[page text]\nend legend\nnode \"Measurement Bay\" {\nclass Probe\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [],
+        connections: [],
+        notes: [],
+    },
+)

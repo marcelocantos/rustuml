@@ -1,0 +1,16 @@
+SVG structural differences:
+  element count: expected 18, got 9
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "147px"), ("preserveAspectRatio", "none"), ("style", "width:208px;height:147px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 208 147"), ("width", "208px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "66px"), ("preserveAspectRatio", "none"), ("style", "width:145px;height:66px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 145 66"), ("width", "145px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "header"), ("data-source-line", "1")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Polar Harbor"), ("data-source-line", "4"), ("id", "ent0002")]
+  [4] tag mismatch: expected <text>, got <polygon>
+  [5] tag mismatch: expected <g>, got <line>
+  [6] tag mismatch: expected <polygon>, got <line>
+  [7] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "173"), ("x2", "183"), ("y1", "28.7773"), ("y2", "18.7773")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "122.1621"), ("x2", "122.1621"), ("y1", "17"), ("y2", "53.4883")]
+  [8] tag mismatch: expected <line>, got <text>
+
