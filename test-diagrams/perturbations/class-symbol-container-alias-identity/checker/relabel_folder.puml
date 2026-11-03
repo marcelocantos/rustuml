@@ -1,0 +1,9 @@
+@startuml
+folder "First display" as G {
+class Earlier
+}
+folder "Second unrelated display" as G {
+class Later
+Earlier --> Later
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+frame "Field Station" as Outer {
+node "Cabinet" as Inner {
+class Meter
+note bottom of Meter
+component text
+[end of note]
+end note
+}
+}
+@enduml

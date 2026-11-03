@@ -1,0 +1,362 @@
+[
+  {
+    "case": "group_lr",
+    "java": {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.svg",
+      "sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+      "svg": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "CLASS",
+        "height": "329px",
+        "preserveAspectRatio": "none",
+        "style": "width:225px;height:329px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 225 329",
+        "width": "225px",
+        "zoomAndPan": "magnify"
+      },
+      "groups": [
+        {
+          "attributes": {
+            "class": "cluster",
+            "data-qualified-name": "D",
+            "data-source-line": "2",
+            "id": "ent0002"
+          },
+          "first_child": {
+            "d": "M73.605,180 L182.8589,180 A3.75,3.75 0 0 1 185.3589,182.5 L192.3589,202.4883 L207.915,202.4883 A2.5,2.5 0 0 1 210.415,204.9883 L210.415,311.5 A2.5,2.5 0 0 1 207.915,314 L73.605,314 A2.5,2.5 0 0 1 71.105,311.5 L71.105,182.5 A2.5,2.5 0 0 1 73.605,180",
+            "fill": "none",
+            "style": "stroke:#000000;stroke-width:1.5;"
+          }
+        },
+        {
+          "attributes": {
+            "class": "cluster",
+            "data-qualified-name": "A",
+            "data-source-line": "5",
+            "id": "ent0004"
+          },
+          "first_child": {
+            "d": "M78.405,6 L128.0837,6 A3.75,3.75 0 0 1 130.5837,8.5 L137.5837,28.4883 L203.125,28.4883 A2.5,2.5 0 0 1 205.625,30.9883 L205.625,137.5 A2.5,2.5 0 0 1 203.125,140 L78.405,140 A2.5,2.5 0 0 1 75.905,137.5 L75.905,8.5 A2.5,2.5 0 0 1 78.405,6",
+            "fill": "none",
+            "style": "stroke:#000000;stroke-width:1.5;"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "D.Dispatch",
+            "data-source-line": "3",
+            "id": "ent0003"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "91.3086",
+            "x": "95.105",
+            "y": "242"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "A.Receipt",
+            "data-source-line": "6",
+            "id": "ent0005"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "81.7178",
+            "x": "99.905",
+            "y": "68"
+          }
+        },
+        {
+          "attributes": {
+            "class": "link",
+            "data-entity-1": "ent0002",
+            "data-entity-2": "ent0004",
+            "data-source-line": "8",
+            "id": "lnk6"
+          },
+          "first_child": {
+            "codeLine": "8",
+            "d": "M81.8108,174.2392 C73.6161,168.9789 72.1072,167.5031 64.0763,161.165 C31.9525,135.8125 6,102.77 25.105,69.5 C31.5025,58.3625 41.4181,50.4606 52.812,44.8847 C58.509,42.0967 64.5755,39.8902 70.7566,38.1515 C72.3019,37.7168 64.1371,39.6725 65.6927,39.2945",
+            "fill": "none",
+            "id": "D-A",
+            "style": "stroke:#181818;stroke-width:1;"
+          }
+        }
+      ]
+    },
+    "rust": {
+      "source": "/tmp/rustuml-checker2740/outputs/fresh/group_lr/rust.svg",
+      "sha256": "9ce98a9dea83af8a7f3edd12504128cfc96c707fc44b802a5ed7ca7c9d3efc60",
+      "svg": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "CLASS",
+        "height": "329px",
+        "preserveAspectRatio": "none",
+        "style": "width:201px;height:329px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 201 329",
+        "width": "201px",
+        "zoomAndPan": "magnify"
+      },
+      "groups": [
+        {
+          "attributes": {
+            "class": "cluster",
+            "data-qualified-name": "D",
+            "data-source-line": "2",
+            "id": "ent0002"
+          },
+          "first_child": {
+            "d": "M8.5,180 L117.7539,180 A3.75,3.75 0 0 1 120.2539,182.5 L127.2539,202.4883 L142.8086,202.4883 A2.5,2.5 0 0 1 145.3086,204.9883 L145.3086,311.5 A2.5,2.5 0 0 1 142.8086,314 L8.5,314 A2.5,2.5 0 0 1 6,311.5 L6,182.5 A2.5,2.5 0 0 1 8.5,180",
+            "fill": "none",
+            "style": "stroke:#000000;stroke-width:1.5;"
+          }
+        },
+        {
+          "attributes": {
+            "class": "cluster",
+            "data-qualified-name": "A",
+            "data-source-line": "5",
+            "id": "ent0004"
+          },
+          "first_child": {
+            "d": "M13.2954,6 L62.9741,6 A3.75,3.75 0 0 1 65.4741,8.5 L72.4741,28.4883 L138.0132,28.4883 A2.5,2.5 0 0 1 140.5132,30.9883 L140.5132,137.5 A2.5,2.5 0 0 1 138.0132,140 L13.2954,140 A2.5,2.5 0 0 1 10.7954,137.5 L10.7954,8.5 A2.5,2.5 0 0 1 13.2954,6",
+            "fill": "none",
+            "style": "stroke:#000000;stroke-width:1.5;"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "D.Dispatch",
+            "data-source-line": "3",
+            "id": "ent0003"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "91.3086",
+            "x": "95.105",
+            "y": "242"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "A.Receipt",
+            "data-source-line": "6",
+            "id": "ent0005"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "81.7178",
+            "x": "99.905",
+            "y": "68"
+          }
+        },
+        {
+          "attributes": {
+            "class": "link",
+            "data-entity-1": "ent0002",
+            "data-entity-2": "ent0004",
+            "data-source-line": "8",
+            "id": "lnk6"
+          },
+          "first_child": {
+            "codeLine": "8",
+            "d": "M81.8108,174.2392 C73.6161,168.9789 72.1072,167.5031 64.0763,161.165 C31.9525,135.8125 6,102.77 25.105,69.5 C31.5025,58.3625 41.4181,50.4606 52.812,44.8847 C58.509,42.0967 64.5755,39.8902 70.7566,38.1515 C72.3019,37.7168 64.1371,39.6725 65.6927,39.2945",
+            "fill": "none",
+            "id": "D-A",
+            "style": "stroke:#181818;stroke-width:1;"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "case": "package_target",
+    "java": {
+      "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.svg",
+      "sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+      "svg": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "CLASS",
+        "height": "227px",
+        "preserveAspectRatio": "none",
+        "style": "width:280px;height:227px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 280 227",
+        "width": "280px",
+        "zoomAndPan": "magnify"
+      },
+      "groups": [
+        {
+          "attributes": {
+            "class": "cluster",
+            "data-qualified-name": "GarnetArchive",
+            "data-source-line": "2",
+            "id": "ent0002"
+          },
+          "first_child": {
+            "d": "M64.46,6 L214.1143,6 A3.75,3.75 0 0 1 216.6143,8.5 L223.6143,28.4883 L263,28.4883 A2.5,2.5 0 0 1 265.5,30.9883 L265.5,137.5 A2.5,2.5 0 0 1 263,140 L64.46,140 A2.5,2.5 0 0 1 61.96,137.5 L61.96,8.5 A2.5,2.5 0 0 1 64.46,6",
+            "fill": "none",
+            "style": "stroke:#000000;stroke-width:1.5;"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "GarnetArchive.StoredNode",
+            "data-source-line": "3",
+            "id": "ent0003"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "155.5391",
+            "x": "85.96",
+            "y": "68"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "RemotePeer",
+            "data-source-line": "5",
+            "id": "ent0004"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "156.6943",
+            "x": "85.38",
+            "y": "164"
+          }
+        },
+        {
+          "attributes": {
+            "class": "link",
+            "data-entity-1": "ent0004",
+            "data-entity-2": "ent0002",
+            "data-source-line": "6",
+            "id": "lnk5"
+          },
+          "first_child": {
+            "codeLine": "6",
+            "d": "M85.01,168.36 C57.97,157.32 30.8,140.34 15.96,114.5 C6,97.16 6,86.84 15.96,69.5 C23.9875,55.5225 36.5794,46.1338 51.1047,39.9405 C52.9204,39.1663 54.7662,38.4421 56.6372,37.7651 C57.5726,37.4265 58.5144,37.0998 59.4618,36.7846 C59.9354,36.627 60.4105,36.4722 60.8869,36.3203 C61.1251,36.2443 51.8179,39.1488 52.0568,39.0742",
+            "fill": "none",
+            "id": "RemotePeer-to-GarnetArchive",
+            "style": "stroke:#181818;stroke-width:1;"
+          }
+        }
+      ]
+    },
+    "rust": {
+      "source": "/tmp/rustuml-checker2740/outputs/current955/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr/rust.svg",
+      "sha256": "0894e866edd982c684b200edfddb0411b4380879c31f6e70df2ddf4ae7833ec5",
+      "svg": {
+        "contentStyleType": "text/css",
+        "data-diagram-type": "CLASS",
+        "height": "227px",
+        "preserveAspectRatio": "none",
+        "style": "width:257px;height:227px;background:#FFFFFF;",
+        "version": "1.1",
+        "viewBox": "0 0 257 227",
+        "width": "257px",
+        "zoomAndPan": "magnify"
+      },
+      "groups": [
+        {
+          "attributes": {
+            "class": "cluster",
+            "data-qualified-name": "GarnetArchive",
+            "data-source-line": "2",
+            "id": "ent0002"
+          },
+          "first_child": {
+            "d": "M8.5,6 L158.1543,6 A3.75,3.75 0 0 1 160.6543,8.5 L167.6543,28.4883 L207.0391,28.4883 A2.5,2.5 0 0 1 209.5391,30.9883 L209.5391,137.5 A2.5,2.5 0 0 1 207.0391,140 L8.5,140 A2.5,2.5 0 0 1 6,137.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6",
+            "fill": "none",
+            "style": "stroke:#000000;stroke-width:1.5;"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "GarnetArchive.StoredNode",
+            "data-source-line": "3",
+            "id": "ent0003"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "155.5391",
+            "x": "85.96",
+            "y": "68"
+          }
+        },
+        {
+          "attributes": {
+            "class": "entity",
+            "data-qualified-name": "RemotePeer",
+            "data-source-line": "5",
+            "id": "ent0004"
+          },
+          "first_child": {
+            "fill": "#F1F1F1",
+            "height": "48",
+            "rx": "2.5",
+            "ry": "2.5",
+            "style": "stroke:#181818;stroke-width:0.5;",
+            "width": "156.6943",
+            "x": "85.38",
+            "y": "164"
+          }
+        },
+        {
+          "attributes": {
+            "class": "link",
+            "data-entity-1": "ent0004",
+            "data-entity-2": "ent0002",
+            "data-source-line": "6",
+            "id": "lnk5"
+          },
+          "first_child": {
+            "codeLine": "6",
+            "d": "M85.01,168.36 C57.97,157.32 30.8,140.34 15.96,114.5 C6,97.16 6,86.84 15.96,69.5 C23.9875,55.5225 36.5794,46.1337 51.1047,39.9405 C52.9204,39.1663 54.7662,38.4421 56.6372,37.7651 C57.5726,37.4265 58.5144,37.0998 59.4618,36.7846 C59.9354,36.627 60.4105,36.4722 60.8869,36.3203 C61.1251,36.2443 51.8179,39.1488 52.0568,39.0742",
+            "fill": "none",
+            "id": "RemotePeer-to-GarnetArchive",
+            "style": "stroke:#181818;stroke-width:1;"
+          }
+        }
+      ]
+    }
+  }
+]

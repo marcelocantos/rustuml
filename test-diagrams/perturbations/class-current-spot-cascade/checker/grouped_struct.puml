@@ -1,0 +1,9 @@
+@startuml
+!theme cerulean
+node Group {
+struct Early
+!theme minty
+struct Later
+Early --> Later
+}
+@enduml

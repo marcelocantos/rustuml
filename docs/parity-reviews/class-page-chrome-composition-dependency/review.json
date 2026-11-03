@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-page-chrome-composition-dependency",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "The original deferred chrome plan has preimplementation continuation support. Default aligned combinations pass, but the successor style-driven header cases fail.",
+    "Java DiagramChromeFactory resolves current style and wraps bordered TextBlocks; Rust DecorationStyle retains fixed/default font and command alignment rather than the complete style dataflow. FontSize 18 and left/right alignment are not honored in the new valid probes."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_False.puml",
+      "golden": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_False.svg",
+      "axes": [
+        "header/footer/legend alignment",
+        "title width and complete chrome stack"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "checker successor probe retained for dependency mapping",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-page-chrome-composition-dependency/dependency_left_False.puml",
+      "source_sha256": "f12696f3d3a0a7a81a7f28f57e1c9abdee839c552b0237f1421c1ea6ccf3c28c",
+      "java_sha256": "fddbe0c26516ce8e10d4f454c67ebe288d1682ce59a21a5b600e3741464b9190",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-page-chrome-composition-dependency/dependency_left_False"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_True.puml",
+      "golden": "test-diagrams/perturbations/class-page-chrome-composition-dependency/checker/dependency_left_True.svg",
+      "axes": [
+        "header/footer/legend alignment",
+        "title width and complete chrome stack"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "checker successor probe retained for dependency mapping",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-page-chrome-composition-dependency/dependency_left_True.puml",
+      "source_sha256": "e5e6de599409f82754a79fad659ca9e4a67deed095274b6990d2d805b71edb9b",
+      "java_sha256": "7a5b230234f0e5240339476c093e7d7a8852e5b3a28c274597d80c709864211b",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-page-chrome-composition-dependency/dependency_left_True"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_left.puml",
+      "golden": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_left.svg",
+      "axes": [
+        "current style alignment/font size",
+        "multiline unequal-width header"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-chrome-bordered-block-geometry/style_left.puml",
+      "source_sha256": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+      "java_sha256": "3cc031dea4297d5322ad41a3fa0cf1855cf3cb1f4c21adb9d39e979b9694e58d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-chrome-bordered-block-geometry/style_left"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_right.puml",
+      "golden": "test-diagrams/perturbations/class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_right.svg",
+      "axes": [
+        "current style alignment/font size",
+        "multiline unequal-width header"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-chrome-bordered-block-geometry/style_right.puml",
+      "source_sha256": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+      "java_sha256": "f68b4796e7049953ef89233b15fd35f3f82d81edde4a9c8ec3937c73daa5476e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-chrome-bordered-block-geometry/style_right"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-page-chrome-composition-dependency",
+    "account_path": "docs/parity-reviews/class-page-chrome-composition-dependency/account.json",
+    "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "picked_account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+    "account_history_original": [
+      "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+    ],
+    "account_history_picked": [
+      "924dbf9ec902511456f678a3fffdf1b835719e78"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": true,
+    "final_account_sha256": "4748724a2904b7594c569af43224972957fc9fb3a5b8c748de969b27cc688ac2",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-chrome-bordered-block-geometry"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 2,
+    "mismatch": 2
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

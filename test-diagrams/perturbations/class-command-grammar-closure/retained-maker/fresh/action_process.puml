@@ -1,0 +1,8 @@
+@startuml
+action "Inspect" as A {
+class Reading
+}
+process "Decide" as B {
+class Result
+}
+@enduml

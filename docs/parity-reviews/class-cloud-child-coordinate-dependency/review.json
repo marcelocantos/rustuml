@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cloud-child-coordinate-dependency",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "The original blocking account was written before the first implementation and explicitly deferred the renderer. The later painted-origin and single-origin accounts supply the implemented continuation; the initial two simple cloud/node probes pass.",
+    "Fresh nested cloud plus a root note/root peer still fails, and retained LR group cases show inconsistent final translations. This dependency is not closed by simple cloud passes. Review the concrete successor records; do not treat the old deferred account as retrospective approval."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_cloud.puml",
+      "golden": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_cloud.svg",
+      "axes": [
+        "painted container shape and direction",
+        "child label widths and linked topology"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "checker successor probe retained for dependency mapping",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-cloud-child-coordinate-dependency/dependency_origin_cloud.puml",
+      "source_sha256": "0403f02d8204b2474d709a733007c86792d61126633d4750e1245936fc99518b",
+      "java_sha256": "2f9977887f2ed0ae635f3ffacce5ba08d043fc5a212ac5b9cb152e47159b9999",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-cloud-child-coordinate-dependency/dependency_origin_cloud"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_node.puml",
+      "golden": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/checker/dependency_origin_node.svg",
+      "axes": [
+        "painted container shape and direction",
+        "child label widths and linked topology"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "checker successor probe retained for dependency mapping",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-cloud-child-coordinate-dependency/dependency_origin_node.puml",
+      "source_sha256": "7ddf039ae50de3930d6384fdd898184321221288c364fbe4606c3e8c93f65839",
+      "java_sha256": "98e729a01ff184b1ed970bcc7386ca894a5428e3577edc0a47f805df979bb100",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-cloud-child-coordinate-dependency/dependency_origin_node"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+      "golden": "test-diagrams/perturbations/class-cloud-child-coordinate-dependency/dependencies/single-svek-envelope-origin__root_note_cloud.svg",
+      "axes": [
+        "nested shape frontier with root peer",
+        "root note side and cross-group spline"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-single-svek-envelope-origin/root_note_cloud.puml",
+      "source_sha256": "63a01f130bd47e9e941fc31f5b46ae24e3049e32823fc4b04f23329ca39022b4",
+      "java_sha256": "c1eb32ac966f1dc0d64cc23f9014914e13c02878c2b7f5ac0769a627358e0280",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-single-svek-envelope-origin/root_note_cloud"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-cloud-child-coordinate-dependency",
+    "account_path": "docs/parity-reviews/class-cloud-child-coordinate-dependency/account.json",
+    "original_account_commit": "eb5b550fe22d246a5dee048bf7396cd70de0378d",
+    "picked_account_commit": "924dbf9ec902511456f678a3fffdf1b835719e78",
+    "account_history_original": [
+      "eb5b550fe22d246a5dee048bf7396cd70de0378d"
+    ],
+    "account_history_picked": [
+      "924dbf9ec902511456f678a3fffdf1b835719e78"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": true,
+    "final_account_sha256": "ddd1ce676a6d3e8af2a6c59c00f147e25ce862d67b149c80fb66fe1794bb1727",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-svek-painted-origin",
+    "class-single-svek-envelope-origin"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 2,
+    "mismatch": 1
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

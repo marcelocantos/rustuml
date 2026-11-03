@@ -1,0 +1,12 @@
+{
+  "path": "crates/rustuml-render/src/class.rs",
+  "method": "same digit-dot-at-least-three-digits lexical census as count_high_precision_literals; strings/comments count too",
+  "counts": {
+    "8a61fa097d278dad508da0659953a98765926774": 578,
+    "18916d312c32340b0a674e15259dc3031ea57acf": 578,
+    "bed3b50ca08e12d8ada612791cf07393617b2041": 578,
+    "fefca37686ff0c93b5b306831e4554a2d8f9efa6": 578
+  },
+  "frozen_baseline": 383,
+  "baseline_unchanged": true
+}

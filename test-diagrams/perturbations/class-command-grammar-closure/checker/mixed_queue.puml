@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+node Dock {
+class Native
+queue "External queue" as Ext
+Native --> Ext
+}
+@enduml

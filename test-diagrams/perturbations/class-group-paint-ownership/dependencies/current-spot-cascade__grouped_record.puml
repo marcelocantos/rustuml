@@ -1,0 +1,9 @@
+@startuml
+!theme cerulean
+node Group {
+record Early
+!theme minty
+record Later
+Early --> Later
+}
+@enduml

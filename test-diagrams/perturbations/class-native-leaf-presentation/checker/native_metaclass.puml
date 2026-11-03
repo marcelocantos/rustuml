@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 8
+node "Native types" as N {
+~metaclass "Schema" as V {
++id: int
+}
+}
+@enduml

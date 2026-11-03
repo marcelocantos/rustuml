@@ -1,0 +1,13 @@
+@startuml
+!procedure $create()
+!global $cedar = "global"
+!endprocedure
+!procedure $outer()
+!$cedar = "automatic"
+$create()
+class "now $cedar" as Now
+!undef $cedar
+class "again $cedar" as Again
+!endprocedure
+$outer()
+@enduml

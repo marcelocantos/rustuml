@@ -1,0 +1,7 @@
+@startuml
+cloud "Empty endpoint" as E [[https://example.test/resource{A tooltip}]] {
+}
+cloud "Other endpoint" as F {
+}
+E --> F
+@enduml

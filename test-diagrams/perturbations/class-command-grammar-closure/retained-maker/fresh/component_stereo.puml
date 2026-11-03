@@ -1,0 +1,7 @@
+@startuml
+cloud "Collector" as Net {
+class Event
+mix_component "Receiver" as Rx <<Port>>
+Event --> Rx
+}
+@enduml

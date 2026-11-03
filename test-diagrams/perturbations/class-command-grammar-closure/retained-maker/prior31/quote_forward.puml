@@ -1,0 +1,5 @@
+@startuml
+node "Rain as [Gauge]" as Observatory {
+class "Meter as [Reading]" as Instrument
+}
+@enduml

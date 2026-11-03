@@ -1,0 +1,7 @@
+@startuml
+package Nest {
+node "A very long node title" as Host <<s>> {
+class Leaf
+}
+}
+@enduml

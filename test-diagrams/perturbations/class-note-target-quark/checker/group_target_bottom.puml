@@ -1,0 +1,6 @@
+@startuml
+node "Group target" as G {
+class Item
+}
+note bottom of G : group annotation
+@enduml

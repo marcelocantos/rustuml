@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-code-identity",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "ea8199b33a60c0714b27b6fa2faae30877eecff8",
+  "implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker",
+    "python3 /tmp/checker2740_acceptance_probes.py"
+  ],
+  "findings": [
+    "Canonical quoted identity is preserved across declarations/links/notes in the source model, and four initial full-CLI cases pass. However the additional dotted-code and LR/note perturbations both fail strict CLI comparison, so this mechanism is not accepted.",
+    "quoted_dotted creates an implicit namespace. Java emits the root-scope note before the nested leaf; Rust emits the leaf before that note despite retaining the same quark IDs. quoted_lr_order retains identity and declarations but places a bottom note to the right under LR direction. These are concrete emission/note-layout dependencies, not evidence that character preservation itself is wrong.",
+    "The complete combined revision alone was tested. No production subset is approved for extraction. The original quoted-code account is preserved; this checker does not alter any historical review."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_0.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_0.svg",
+      "axes": [
+        "spaces/markup/command text in quoted code",
+        "relationship and attached-note lookup"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_0.puml",
+      "source_sha256": "9dca5c56603f7788b9996071399a4fa76674dad4994a09663a1619978ff6e6b0",
+      "java_sha256": "1ac57b90c721f96a688892a748963cb4b8bbb9b7708d00a07450ce75f22b0d57",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-quoted-code-identity/quoted_0"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_1.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_1.svg",
+      "axes": [
+        "spaces/markup/command text in quoted code",
+        "relationship and attached-note lookup"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_1.puml",
+      "source_sha256": "55bdbd020c6803901f5917d7b940446eab4e717225cde9538937704f0ba5b47c",
+      "java_sha256": "3aff71195d52f154a32fef4669f32cafdfc91188c9a62d2ac564de20fc99aa8a",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-quoted-code-identity/quoted_1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_2.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_2.svg",
+      "axes": [
+        "spaces/markup/command text in quoted code",
+        "relationship and attached-note lookup"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_2.puml",
+      "source_sha256": "2fd3cf8c51ee8e776062c8179a1ff1f942522e895fcfb9eda8749ed2188ef5eb",
+      "java_sha256": "85c4583b632ace69c314c92bd715d68d688c61330b7681ac49e4da7c36eecb16",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-quoted-code-identity/quoted_2"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_3.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_3.svg",
+      "axes": [
+        "spaces/markup/command text in quoted code",
+        "relationship and attached-note lookup"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_3.puml",
+      "source_sha256": "48c5a03b803fa1665b72e4c93902130d34b8b47804403e2e592b98a6d5d4da28",
+      "java_sha256": "b30109bf6455aca39c76da2566416558a259edd4907372462049cd4e631ce057",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-quoted-code-identity/quoted_3"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_dotted.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_dotted.svg",
+      "axes": [
+        "literal dot plus space in quoted code",
+        "scoped link and left note resolution"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "final independent source-guided attempt to break a narrowly passing identity mechanism",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_dotted.puml",
+      "source_sha256": "f671e90fa42f1fb1d9455ac9be6f58611a18056ead877bcc4382ea50adc4bcbc",
+      "java_sha256": "ff2d4c7918bd195ffc515eb42a9ea5c2afefcecab2808d87d5df6b2cefdaccef",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/acceptance_probes/class-quoted-code-identity/quoted_dotted"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_lr_order.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-code-identity/checker/quoted_lr_order.svg",
+      "axes": [
+        "quoted brackets and as keyword at root",
+        "LR direction and peer declared first"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "final independent source-guided attempt to break a narrowly passing identity mechanism",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_lr_order.puml",
+      "source_sha256": "78d727526124e1f1c8145a09c36687bcdf3dba3efcc91a892910ce15790d22fe",
+      "java_sha256": "cdec272c6a723589582621894ae97206537b563e3674a61ac1b72aa447366332",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/acceptance_probes/class-quoted-code-identity/quoted_lr_order"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "bc0c65b6aad9cf98995fba162ccb9ee3b16613c4",
+  "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+  "phase_mapping": {
+    "mechanism": "class-quoted-code-identity",
+    "account_path": "docs/parity-reviews/class-quoted-code-identity/account.json",
+    "original_account_commit": "bc0c65b6aad9cf98995fba162ccb9ee3b16613c4",
+    "picked_account_commit": "ea8199b33a60c0714b27b6fa2faae30877eecff8",
+    "account_history_original": [
+      "bc0c65b6aad9cf98995fba162ccb9ee3b16613c4"
+    ],
+    "account_history_picked": [
+      "ea8199b33a60c0714b27b6fa2faae30877eecff8"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "46dbeab1f31310dd682e8e2d07275bca62e9efd8d3af46a8a246f69c60a9149d",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-note-declaration-scope",
+    "implicit namespace entity/note emission ordering",
+    "LR note direction translation"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 4,
+    "mismatch": 2
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}
