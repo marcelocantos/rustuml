@@ -44,6 +44,22 @@ impl RenderClock {
         }
     }
 
+    pub fn pattern_timezone_at(&self, epoch_ms: i64) -> TzSpec {
+        let mut tz = self.timezone_at(epoch_ms);
+        if self.timezone_override && tz.offset_secs != 0 {
+            // A fixed debug offset corresponds to Java's custom GMT zone;
+            // SimpleDateFormat z uses its normalized GMT[+-]HH:mm ID.
+            let minutes = tz.offset_secs.unsigned_abs() / 60;
+            tz.name = format!(
+                "GMT{}{:02}:{:02}",
+                if tz.offset_secs < 0 { '-' } else { '+' },
+                minutes / 60,
+                minutes % 60
+            );
+        }
+        tz
+    }
+
     pub fn timezone_at(&self, epoch_ms: i64) -> TzSpec {
         // SimpleDateFormat uses the timezone rules at the supplied instant,
         // not the offset at render time. Explicit debug zones are fixed offsets.
