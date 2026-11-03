@@ -1,0 +1,16 @@
+@startuml
+skinparam Padding 0
+participant Seed as S
+participant Forge as F
+group Package
+S -> F ++ : acquire
+note right
+Wide Wi.f
+second line
+end note
+opt verify
+note left of S : MMM short
+return answer
+end
+end
+@enduml

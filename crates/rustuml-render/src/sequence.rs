@@ -1890,8 +1890,13 @@ fn group_header_parts<'a>(
 
 fn group_guard_width_with_family(label: &str, font_family: &str) -> f64 {
     if !label.trim_start().starts_with("//") {
-        let guard = format!("[{label}]");
-        return bold_text_width_with_family(&guard, 11.0, font_family);
+        // ComponentRoseGroupingHeader constructs Display with newlines, so
+        // width is the maximum line advance, not the joined source spelling.
+        let guard = decode_backslash_escapes(&format!("[{label}]"));
+        return guard
+            .split("\\n")
+            .map(|line| bold_text_width_with_family(line, 11.0, font_family))
+            .fold(0.0, f64::max);
     }
     bold_text_width_with_family("[", 11.0, font_family)
         + bold_text_width_with_family(label, 11.0, font_family)
@@ -1900,22 +1905,28 @@ fn group_guard_width_with_family(label: &str, font_family: &str) -> f64 {
 
 fn emit_group_guard(svg: &mut String, label: &str, x: f64, y: f64, font_family: &str) {
     if !label.trim_start().starts_with("//") {
-        let guard = format!("[{label}]");
-        text_render::emit_text(
-            svg,
-            &guard,
-            &TextBase {
-                x,
-                y,
-                font_size: 11,
-                font_family,
-                fill: "#000000",
-                bold: true,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        let guard = decode_backslash_escapes(&format!("[{label}]"));
+        let mut line_y = y;
+        // Display#getWithNewlines preserves the bracketed comment as separate
+        // lines; SheetBlock1 stacks their actual line heights.
+        for line in guard.split("\\n") {
+            text_render::emit_text(
+                svg,
+                line,
+                &TextBase {
+                    x,
+                    y: line_y,
+                    font_size: 11,
+                    font_family,
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            line_y += rendered_line_metrics_with_family(line, 11.0, font_family).height;
+        }
         return;
     }
     let base = TextBase {
@@ -6453,13 +6464,31 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let message_font_size_f = message_font_size as f64;
     let message_text_height = atom_height_with_family(message_font_size_f, &message_font_family);
     let group_header_font_size_f = group_header_font_size as f64;
+    // Display#create0 builds a SheetBlock1 whose dimension and text origin
+    // include global padding; AbstractTextualComponent adds its two Y margins.
     let group_header_height =
-        text_height_with_family(group_header_font_size_f, &group_header_font_family) + 2.0;
+        text_height_with_family(group_header_font_size_f, &group_header_font_family)
+            + 2.0
+            + 2.0 * global_padding;
+    let group_comment_extra = |group: &GroupStart| {
+        let (_, guard, _) = group_header_parts(group.kind, "group", group.label.as_ref());
+        guard.map_or(0.0, |label| {
+            // ComponentRoseGroupingHeader#getSuppHeightForComment reserves
+            // only the part of the comment block exceeding its 15-unit slot.
+            const COMMENT_RESERVED_HEIGHT: f64 = 15.0;
+            let comment = format!("[{label}]");
+            (message_label_block_height_with_family(&comment, 11.0, &group_header_font_family)
+                + 2.0 * global_padding
+                - COMMENT_RESERVED_HEIGHT)
+                .max(0.0)
+        })
+    };
     let group_inner_top_pad = group_header_height - GROUP_HEADER_INNER_PAD_DROP;
     let group_inner_top_pad_first = group_inner_top_pad - GROUP_HEADER_FIRST_PAD_ADJUST;
     let group_header_text_baseline =
         ascent_with_family(group_header_font_size_f, &group_header_font_family)
-            + GROUP_HEADER_TEXT_TOP_PAD;
+            + GROUP_HEADER_TEXT_TOP_PAD
+            + global_padding;
     // Bundled themes with `shadowing false` keep the regular 5px diagram top
     // margin and do not add global `Padding` to the leading participant
     // reservation. Shadowed themes reserve that padding for the shadow.
@@ -7334,11 +7363,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // shadow in the painted extent. Keep the note anchored
                         // at its logical y, but advance subsequent events past
                         // the three-pixel shadow tail.
-                        y = note_event_y + shadow_vertical_pad;
+                        // NoteBox#getPreferredHeight delegates to the note
+                        // component, including the padded body text block.
+                        y = note_event_y + shadow_vertical_pad + 2.0 * note_global_padding;
                         msg_count += 1; // note counts as an event for spacing
                     }
                 }
-                Event::GroupStart(_) => {
+                Event::GroupStart(group) => {
                     // Group frame top is offset from the preceding message (or
                     // the lifeline top when the group is the first event).
                     let inner_pad = if msg_count == 0 {
@@ -7358,7 +7389,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                     event_y_positions.push(y);
                     // Advance y past the header so subsequent messages are positioned correctly.
-                    y += inner_pad;
+                    y += inner_pad + group_comment_extra(group);
                     if diagram.teoz {
                         y += TEOZ_GROUP_MARGIN_Y / 2.0 + GROUP_HEADER_FIRST_PAD_ADJUST;
                     }
@@ -7375,7 +7406,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     event_y_positions.push(y);
                     if g.label.is_some() {
                         // With a label: advance past the label text.
-                        y += GROUP_ELSE_INNER_PAD;
+                        // ComponentRoseGroupingElse#getPreferredHeight includes
+                        // the complete padded comment block (no padding on empty).
+                        let comment = format!("[{}]", g.label.as_deref().unwrap());
+                        let extra_lines = message_label_block_height_with_family(
+                            &comment,
+                            11.0,
+                            &group_header_font_family,
+                        ) - message_label_block_height_with_family(
+                            "x",
+                            11.0,
+                            &group_header_font_family,
+                        );
+                        y += GROUP_ELSE_INNER_PAD + 2.0 * global_padding + extra_lines;
                     } else {
                         // Without a label: PlantUML uses a tighter layout.
                         // The next message step (msg_step) overshoots by 7px
@@ -8999,7 +9042,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                             tab_text,
                                             group_header_font_size_f,
                                             &group_header_font_family,
-                                        ) + 45.0;
+                                        ) + 45.0
+                                            + 2.0 * global_padding;
                                         if start.kind == GroupKind::Group && guard_label.is_some() {
                                             width += bold_text_width_with_family(
                                                 " ",
@@ -9009,10 +9053,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         }
                                         width
                                             + guard_label.map_or(5.0, |label| {
-                                                20.0 + group_guard_width_with_family(
-                                                    label,
-                                                    &group_header_font_family,
-                                                )
+                                                20.0 + 2.0 * global_padding
+                                                    + group_guard_width_with_family(
+                                                        label,
+                                                        &group_header_font_family,
+                                                    )
                                             })
                                     } else {
                                         0.0
@@ -13337,7 +13382,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &group_header_font_family,
                     );
                 }
-                let tab_right = frame_left + kind_w + 45.0;
+                let tab_right = frame_left + kind_w + 45.0 + 2.0 * global_padding;
                 let tab_bottom_left = frame_top + group_header_height;
                 let tab_bottom_right = frame_top + group_header_height - 10.0;
                 write!(
@@ -13369,7 +13414,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     &mut svg.buf,
                     tab_text,
                     &TextBase {
-                        x: frame_left + 15.0,
+                        x: frame_left + 15.0 + global_padding,
                         y: frame_top + group_header_text_baseline,
                         font_size: group_header_font_size,
                         font_family: &group_header_font_family,
@@ -13386,8 +13431,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     emit_group_guard(
                         &mut svg.buf,
                         label,
-                        tab_right + 15.0,
-                        frame_top + 12.634765625,
+                        tab_right + 15.0 + global_padding,
+                        frame_top + 12.634765625 + global_padding,
                         &group_header_font_family,
                     );
                 }
@@ -13425,8 +13470,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     emit_group_guard(
                                         &mut svg.buf,
                                         label,
-                                        frame_left + 5.0,
-                                        ely + 12.63475,
+                                        frame_left + 5.0 + global_padding,
+                                        ely + 12.63475 + global_padding,
                                         &group_header_font_family,
                                     );
                                 }
@@ -13476,8 +13521,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     emit_group_guard(
                         &mut svg.buf,
                         label,
-                        frame_left + 5.0,
-                        msg_y + 10.63475,
+                        frame_left + 5.0 + global_padding,
+                        msg_y + 10.63475 + global_padding,
                         &group_header_font_family,
                     );
                 }
