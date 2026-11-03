@@ -5,6 +5,40 @@ The recovery campaign uses Java PlantUML source revision
 submodule at `9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a`. Preserve existing
 references. Building a new JAR does not authorize regenerating any corpus.
 
+## Owner-selected input contract (3 November 2026)
+
+RustUML parity follows Java's raw CLI/file input behavior. The owner explicitly
+approved this choice after clarification that the observed blank-line differences
+affect internal SVG identifiers and source-line metadata, not diagram appearance.
+Preserve outer and internal body blank lines before preprocessing; do not apply
+picoweb GET's `DiagramSourceCompressor.decompress` normalization to raw input.
+
+The historical golden corpus was generated through picoweb GET. Keep those
+sources and references unchanged, and continue reporting their regression counts
+with that provenance. They are not authoritative raw-reader references where the
+front ends differ. New raw-reader evidence must identify the exact source bytes,
+Java revision/JAR, input front end and environment. Compare source origins and
+SVG identifier/reference consistency against that same raw front end, separately
+from the historical GET result. A visually unchanged diagram does not license
+broken SVG references or arbitrary source-location changes.
+
+The affected parser origin assertion now expects 5/8/9 under the approved raw
+contract, rather than GET's 1/4/5. That assertion update accompanies the TIM
+candidate, which remains subject to independent checking. The three documented
+historical mismatches are `activity/act_skinparam2_shadowing_true`,
+`activity/act_skinparam_shadowing`, and
+`edge-cases/edge_whitespace_multiple_blank_lines`; their raw counterparts must
+be preserved as additional evidence, never replacements for the historical files.
+The exact reader trace and reproduced outputs are in
+`docs/parity-reviews/tim-evaluated-event-stream/checker-support/README.md`.
+
+This decision does not widen SVG comparator tolerances, remove error markers,
+change eligibility, or turn historical mismatches into passes. XML formatting
+whitespace is not a visual parity requirement; meaningful text whitespace,
+geometry, styling and valid identifier references remain required. Until a
+separately reviewed raw-reference tier is established, publish both the unchanged
+historical counts and explicitly scoped raw-reader results without conflating them.
+
 ## Provenance observed on 3 November 2026
 
 - All 12,428 golden SVG files containing a PlantUML processing instruction name
