@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "maker correction; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "1051c34cc9ac39115368720fa8e5ed44ebdbadc5",
+  "mechanism": "class-note-leaf-emission-and-group-links",
+  "java_locations": [
+    "svek/SvekResult#drawU",
+    "svek/GraphvizImageBuilder#isOpalisable,buildImage",
+    "svek/SvekEdge#drawU",
+    "svek/Cluster#getMagneticBorder"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_plantuml_svg,floating_note_opale_relationship,render_no_oracle_attached_note_connector"
+  ],
+  "invariant": "Attached and named notes are ordinary leaves in SVEK creation order. Opale conversion requires the peer to be a SvekNode; a group peer retains its link and uses group clipping and magnetic border without a second quantization.",
+  "causal_divergence": "Fresh probes retain both notes in AST but paint floating notes before attached ones. Named note linked to a group incorrectly becomes Opale. Attached group connector rounds after compound clipping and omits folder magnetic border.",
+  "planned_change": "Merge attached/named note painting into the existing ordered note emission stream; retain non-Opale connectors. Require an ordinary leaf peer for named Opale. Apply the existing group magnetic-border operation to attached connectors, retaining fractional compound controls. No SVG postprocessing.",
+  "perturbation_axes": [
+    "mixed attached/named note order and nested owners",
+    "group target shape and endpoint side with multiline notes"
+  ]
+}
