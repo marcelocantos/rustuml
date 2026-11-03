@@ -309,6 +309,8 @@ mod tests {
             notes: vec![],
             hide_show: vec![],
             header_line: None,
+            header_alignment: None,
+            footer_alignment: None,
             footer_line: None,
             title_line: None,
             caption_line: None,

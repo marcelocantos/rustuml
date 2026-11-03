@@ -874,8 +874,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // class score despite CommandCreateElementFull2 rejecting their leaves.
     // A complete consuming description trial preserves the valid actor-only
     // path, without permitting native mixtures or reviving late allowmixing.
-    if max_idx == 1 && !has_allowmixing && class::description_actor_candidate(lines) {
-        return UmlSubtype::UseCase;
+    if max_idx == 1
+        && !has_allowmixing
+        && class::parse_class(lines).is_err()
+        && let Some(actors_only) = class::description_candidate(lines)
+    {
+        return if actors_only {
+            UmlSubtype::UseCase
+        } else {
+            UmlSubtype::Component
+        };
     }
     subtypes[max_idx]
 }

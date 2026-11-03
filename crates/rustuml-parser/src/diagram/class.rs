@@ -24,7 +24,8 @@ pub struct Note {
     pub target: Option<String>,
     /// Position relative to target entity.
     pub position: Option<NotePosition>,
-    /// Named note alias (for `note "..." as N`).
+    /// Canonical quark identity for a named note (`note "..." as N`).
+    /// CommandFactoryNote resolves it in the current namespace.
     pub alias: Option<String>,
     /// Optional note background color.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -32,6 +33,9 @@ pub struct Note {
     /// 1-based source line (first content line for multiline notes).
     #[serde(default)]
     pub source_line: usize,
+    /// CommandFactoryNoteOnEntity creates the leaf in the declaration group.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner_package: Option<String>,
 }
 
 /// A complete class diagram.
@@ -64,6 +68,10 @@ pub struct ClassDiagram {
     /// `<g class="header">`-style decoration wrappers PlantUML emits.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub header_line: Option<usize>,
+    #[serde(default)]
+    pub header_alignment: Option<super::LegendHorizontalAlignment>,
+    #[serde(default)]
+    pub footer_alignment: Option<super::LegendHorizontalAlignment>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub footer_line: Option<usize>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -209,6 +217,7 @@ pub enum EntityKind {
     Actor,
     UseCase,
     Component,
+    Boundary,
     Database,
     Queue,
     Node,
@@ -393,6 +402,8 @@ pub enum LinkArrow {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EndpointDecor {
+    /// LinkDecor.PARENTHESIS: an endpoint arc, not a lollipop leaf.
+    Parenthesis,
     CrowFoot,
     CircleCrowFoot,
     CircleLine,
@@ -403,6 +414,9 @@ pub enum EndpointDecor {
 /// Container type for grouping entities in a class diagram.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum PackageKind {
+    Action,
+    Process,
+    Queue,
     #[default]
     Package,
     Namespace,
@@ -417,6 +431,13 @@ pub enum PackageKind {
 /// A package/namespace/container grouping entities.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Package {
+    /// CommandPackageWithUSymbol decoration slots belong to the group.
+    #[serde(default)]
+    pub tags: Vec<String>,
+    #[serde(default)]
+    pub url: Option<String>,
+    #[serde(default)]
+    pub url_tooltip: Option<String>,
     pub name: String,
     pub kind: PackageKind,
     /// Optional background color (CSS name or hex without leading `#`).
