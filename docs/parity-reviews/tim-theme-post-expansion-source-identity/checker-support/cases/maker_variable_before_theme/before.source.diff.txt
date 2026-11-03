@@ -1,0 +1,17 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -1,4 +1,5 @@
+ @startuml
++!$record = "AsterCollection"
+ 
+ 
+ 
+@@ -433,7 +434,7 @@
+ 	BorderColor #d24c1d
+ 	BackgroundColor #e95420
+ }
+-class AsterCollection {
++class $record {
+   +length: int
+ }
+ @enduml

@@ -1,0 +1,375 @@
+
+skinparam __theme united
+class AsterCollection {
+  +length: int
+}
+skinparam __theme_body_start united
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor transparent
+    FontColor #fff
+    HyperLinkColor #e95420
+    LineColor #d24c1d
+    LineThickness 1
+    Margin 10
+    Padding 6
+    Shadowing 0.0
+  }
+  node {
+   Padding 15
+   roundcorner 20
+   BackgroundColor #e95420-#d24c1d
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor #aea79f
+    FontColor #17a2b8
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  referenceHeader {
+    BackgroundColor transparent
+    FontColor #772953
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor #fff
+    FontColor transparent
+    FontStyle bold
+  }
+  title {
+	FontSize 20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor  #b6b0a9-#aea79f
+	FontColor #e95420
+	BorderColor #aea79f
+  }
+  nwdiagDiagram {
+	network {
+			FontColor #fff
+	BorderColor #d24c1d
+	BackgroundColor #e95420    
+		LineColor #e95420
+		LineThickness 1.0
+		FontColor #d24c1d
+	}
+	server {
+			FontColor #fff
+	BorderColor #d24c1d
+	BackgroundColor #e95420
+	}
+	arrow {
+		FontColor #d24c1d
+		LineColor #d24c1d
+	}
+	group {
+		BackGroundColor #e9ecef
+		LineColor #d2d4d7
+		LineThickness 2.0
+		Margin 5
+		Padding 5
+	}
+  }
+  ganttDiagram {
+	task {
+			FontColor #fff
+	BorderColor #d24c1d
+	BackgroundColor #e95420
+		LineColor #e95420
+		Margin 10 2 2 2
+		Padding 6
+	}
+	note {
+		FontColor #fff
+		LineColor #1592a6
+		BackGroundColor #17a2b8
+	}
+	separator {
+		LineColor #aea79f
+		BackGroundColor #aea79f-#9d968f
+		FontColor #fff
+	}
+	milestone {
+		FontColor #17a2b8
+		FontSize 16
+		FontStyle italic
+		BackGroundColor #aea79f
+		LineColor #9d968f
+	}
+	timeline {
+		BackgroundColor #aea79f
+		FontColor #fff
+	}
+	closed {
+		BackgroundColor #d7a538
+		FontColor #fff
+	}
+  }
+</style>
+skinparam __styleRootFontColor #fff
+skinparam __styleRootLineColor #d24c1d
+skinparam __styleRootLineThickness 1
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #772953
+skinparam stereotypeCBackgroundColor #b6b0a9
+skinparam stereotypeCBorderColor #9d968f
+skinparam stereotypeABackgroundColor #4cbc5c
+skinparam stereotypeABorderColor #32a243
+skinparam stereotypeIBackgroundColor #e24c41
+skinparam stereotypeIBorderColor #c93228
+skinparam stereotypeEBackgroundColor #f1be51
+skinparam stereotypeEBorderColor #d7a538
+skinparam stereotypeNBackgroundColor #2eabbf
+skinparam stereotypeNBorderColor #1592a6
+skinparam titleFontColor #e95420
+skinparam titleBorderColor #9d968f
+skinparam titleFontSize 20
+skinparam titleBorderRoundCorner 8
+skinparam titleBorderThickness 1
+skinparam titleBackgroundColor #b6b0a9-#aea79f
+
+skinparam legendBackgroundColor #aea79f
+skinparam legendBorderColor #9d968f
+skinparam legendFontColor #e9ecef
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+skinparam swimlaneBorderColor #17a2b8
+skinparam swimlaneBorderThickness 2
+skinparam swimlaneTitleBackgroundColor #b6b0a9-#aea79f
+skinparam swimlaneTitleFontColor #e95420
+
+skinparam activityFontColor #fff
+skinparam activityBorderColor #d24c1d
+skinparam activityBackgroundColor #e95420
+skinparam activityBarColor #38b44a
+skinparam activityStartColor #17a2b8
+skinparam activityEndColor #17a2b8
+skinparam activityDiamondBackgroundColor #b6b0a9
+skinparam activityDiamondBorderColor #9d968f
+skinparam activityDiamondFontColor #fff
+
+skinparam participantFontColor #fff
+skinparam participantBorderColor #d24c1d
+skinparam participantBackgroundColor #e95420
+skinparam participantParticipantBorderThickness 2
+
+skinparam actorFontColor #fff
+skinparam actorBorderColor #d24c1d
+skinparam actorBackgroundColor #e95420
+
+skinparam arrowThickness 3
+skinparam arrowColor #e95420
+skinparam arrowFontColor #fff
+
+skinparam sequenceBorderColor #e95420
+skinparam sequenceTitleFontColor #e95420
+skinparam sequenceBackgroundColor transparent
+skinparam sequenceStartColor #e95420
+skinparam sequenceEndColor #e95420
+skinparam sequenceBoxBackgroundColor transparent
+skinparam sequenceBoxBorderColor #772953
+skinparam sequenceBoxFontColor #772953
+skinparam sequenceDelayFontColor #772953
+skinparam sequenceLifeLineBorderColor #aea79f
+skinparam sequenceLifeLineBorderThickness 2
+skinparam sequenceLifeLineBackgroundColor #9d968f
+skinparam sequenceGroupBorderColor #772953
+skinparam sequenceGroupFontColor #772953
+skinparam sequenceGroupHeaderFontColor #17a2b8
+skinparam sequenceGroupBackgroundColor #aea79f
+skinparam sequenceGroupHeaderBackgroundColor transparent
+skinparam sequenceDividerBackgroundColor #772953
+skinparam sequenceDividerBorderColor #772953
+skinparam sequenceDividerBorderThickness 2
+skinparam sequenceDividerFontColor #e9ecef
+skinparam sequenceReferenceBackgroundColor transparent
+skinparam sequenceReferenceBorderColor #772953
+skinparam sequenceReferenceFontColor #772953
+skinparam sequenceReferenceHeaderFontColor #17a2b8
+skinparam sequenceReferenceHeaderBackgroundColor #aea79f
+skinparam sequenceStereotypeFontColor #fff
+
+skinparam partitionBorderColor #e95420
+skinparam partitionFontColor #e95420
+skinparam partitionBackgroundColor transparent
+
+skinparam collectionsFontColor #fff
+skinparam collectionsBorderColor #d24c1d
+skinparam collectionsBackgroundColor #e95420
+
+skinparam controlFontColor #fff
+skinparam controlBorderColor #d24c1d
+skinparam controlBackgroundColor #e95420
+
+skinparam entityFontColor #fff
+skinparam entityBorderColor #d24c1d
+skinparam entityBackgroundColor #e95420
+
+skinparam boundaryFontColor #fff
+skinparam boundaryBorderColor #d24c1d
+skinparam boundaryBackgroundColor #e95420
+
+skinparam agentBackgroundColor #efb73e
+skinparam agentBorderColor #f1be51
+skinparam agentFontColor #772953
+
+skinparam noteBorderThickness 1
+skinparam noteBackgroundColor #17a2b8
+skinparam noteBorderColor #1592a6
+skinparam noteFontColor #fff
+
+skinparam artifactBackgroundColor #772953
+skinparam artifactBorderColor #6b254b
+skinparam artifactFontColor #e9ecef
+
+skinparam componentFontColor #fff
+skinparam componentBorderColor #d24c1d
+skinparam componentBackgroundColor #e95420
+
+skinparam interfaceBackgroundColor #c93228
+skinparam interfaceBorderColor #df382c
+skinparam interfaceFontColor #772953
+
+skinparam storageBackgroundColor #efb73e
+skinparam storageBorderColor #d7a538
+skinparam storageFontColor #fff
+
+skinparam nodeBackgroundColor #aea79f
+skinparam nodeBorderColor #e9ecef
+skinparam nodeFontColor #e9ecef
+
+skinparam cloudBackgroundColor #F2FCFE-#eeeeee
+skinparam cloudBorderColor #F2FCFE
+skinparam cloudFontColor #772953
+
+skinparam databaseFontColor #fff
+skinparam databaseBorderColor #d24c1d
+skinparam databaseBackgroundColor #e95420
+
+skinparam classFontColor #fff
+skinparam classBorderColor #d24c1d
+skinparam classBackgroundColor #e95420
+skinparam classHeaderBackgroundColor #eb6536
+skinparam classStereotypeFontColor #772953
+skinparam classBorderThickness 1
+skinparam classAttributeFontColor #772953
+skinparam classAttributeFontSize 11
+
+skinparam objectFontColor #fff
+skinparam objectBorderColor #d24c1d
+skinparam objectBackgroundColor #e95420
+skinparam objectStereotypeFontColor #772953
+skinparam objectBorderThickness 1
+skinparam objectAttributeFontColor #fff
+skinparam objectAttributeFontSize 11
+
+skinparam usecaseFontColor #fff
+skinparam usecaseBorderColor #d24c1d
+skinparam usecaseBackgroundColor #e95420
+skinparam usecaseBorderThickness 2
+skinparam usecaseStereotypeFontColor #e95420
+
+skinparam rectangleFontColor #fff
+skinparam rectangleBorderColor #d24c1d
+skinparam rectangleBackgroundColor #e95420
+skinparam rectangleBackgroundColor #b6b0a9
+skinparam rectangleBorderThickness 2
+skinparam rectangleStereotypeFontColor #e95420
+
+skinparam packageBackgroundColor #aea79f
+skinparam packageBorderColor #e95420
+skinparam packageFontColor #e95420
+skinparam packageBorderThickness 2
+
+skinparam folderBackgroundColor #b6b0a9
+skinparam folderBorderColor #efb73e
+skinparam folderFontColor #efb73e
+skinparam folderBorderThickness 2
+
+skinparam frameBackgroundColor #b6b0a9
+skinparam frameBorderColor #17a2b8
+skinparam frameFontColor #17a2b8
+skinparam frameBorderThickness 2
+
+skinparam stateFontColor #fff
+skinparam stateBorderColor #d24c1d
+skinparam stateBackgroundColor #e95420
+skinparam stateBackgroundColor #eb6536
+skinparam stateStartColor #17a2b8
+skinparam stateEndColor #17a2b8
+skinparam stateAttributeFontColor #fff
+skinparam stateAttributeFontSize 11
+
+skinparam queueFontColor #fff
+skinparam queueBorderColor #d24c1d
+skinparam queueBackgroundColor #e95420
+
+skinparam cardBackgroundColor #17a2b8
+skinparam cardBorderColor #1592a6
+skinparam cardFontColor #fff
+
+skinparam fileBackgroundColor #9d968f
+skinparam fileBorderColor #e9ecef
+skinparam fileFontColor #e9ecef
+
+skinparam stackFontColor #fff
+skinparam stackBorderColor #d24c1d
+skinparam stackBackgroundColor #e95420
+skinparam __theme_body_end united
+skinparam __svgIdSeed 14fvayt12wye5

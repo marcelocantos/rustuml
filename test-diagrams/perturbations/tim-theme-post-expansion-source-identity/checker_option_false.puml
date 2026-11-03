@@ -1,0 +1,5 @@
+@startuml
+!option handwritten false
+skinparam shadowing true
+class CypressLedger
+@enduml

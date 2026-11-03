@@ -1,0 +1,10 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -436,5 +436,6 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
+-class "Clock 2026" as ClockLedger
++!$stamp = %date("yyyy")
++class "Clock $stamp" as ClockLedger
+ @enduml

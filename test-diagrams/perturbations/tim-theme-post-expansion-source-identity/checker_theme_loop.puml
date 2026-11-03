@@ -1,0 +1,6 @@
+@startuml
+!foreach $n in [1,2]
+!theme cerulean
+!endfor
+class ElmLedger
+@enduml
