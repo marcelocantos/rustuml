@@ -1,0 +1,6 @@
+@startuml
+start
+:<back:cyan>Sort cobalt</back>;
+:<back:yellow>Seal fern</back>;
+stop
+@enduml
