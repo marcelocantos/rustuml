@@ -59,7 +59,56 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
         parser.parse_line(source_line, text)?;
     }
 
+    validate_return_destinations(&parser.events)?;
     Ok(parser.finish())
+}
+
+// Account f785ee82. SequenceDiagram#addMessage/#activate/#grouping and
+// CommandReturn#executeArg operate on source history, before drawable layout.
+// bool distinguishes internal Message (valid fallback) from MessageExo (stack
+// destination only). Notes preserve this owner; END replaces it with a leaf.
+fn validate_return_destinations(events: &[Event]) -> Result<(), ParseError> {
+    let mut last_message = None;
+    let mut activation_stack = Vec::new();
+    for event in events {
+        match event {
+            Event::Message(message) => {
+                let internal = !matches!(message.from.as_str(), "[" | "]")
+                    && !matches!(message.to.as_str(), "[" | "]");
+                last_message = Some(internal);
+                match message.activation {
+                    Some(ActivationChange::Activate) => activation_stack.push(internal),
+                    Some(ActivationChange::Deactivate) => {
+                        activation_stack.pop();
+                    }
+                    _ => {}
+                }
+            }
+            Event::Activate(_, _) => {
+                if let Some(internal) = last_message {
+                    activation_stack.push(internal);
+                }
+            }
+            Event::Deactivate(_) => {
+                activation_stack.pop();
+            }
+            Event::GroupEnd => last_message = None,
+            Event::Return(ret) => {
+                let destination = activation_stack
+                    .pop()
+                    .or_else(|| last_message.filter(|internal| *internal));
+                let Some(internal) = destination else {
+                    return Err(ParseError {
+                        line: ret.source_line,
+                        message: "Nowhere to return to.".to_owned(),
+                    });
+                };
+                last_message = Some(internal);
+            }
+            _ => {}
+        }
+    }
+    Ok(())
 }
 
 struct SeqParser {
@@ -872,9 +921,19 @@ impl SeqParser {
 
     fn try_return(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("return") {
-            let label = rest.trim().to_string();
+            // CommandReturn#getRegexConcat captures COLOR only when #\w+
+            // is followed by whitespace; a terminal #word remains label text.
+            static COLOR: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r"^(#\w+)\s+(.*)$").unwrap());
+            let rest = rest.trim_start();
+            let (color, label) = if let Some(caps) = COLOR.captures(rest) {
+                (Some(caps[1].to_owned()), caps[2].to_owned())
+            } else {
+                (None, rest.to_owned())
+            };
             self.events.push(Event::Return(ReturnMessage {
                 label,
+                color,
                 source_line: self.current_line,
             }));
             true
@@ -1814,6 +1873,50 @@ mod tests {
         assert!(matches!(d.events[1], Event::Return(_)));
         if let Event::Return(r) = &d.events[1] {
             assert_eq!(r.label, "response");
+        }
+    }
+
+    #[test]
+    fn return_color_and_source_history() {
+        for prefix in ["", "!pragma teoz true\n"] {
+            for call in ["A -> A ++", "A -> B ++", "[-> B ++"] {
+                let d = parse(&format!("{prefix}{call} : enter\nreturn #purple settled"));
+                let ret = d
+                    .events
+                    .iter()
+                    .find_map(|event| match event {
+                        Event::Return(ret) => Some(ret),
+                        _ => None,
+                    })
+                    .unwrap();
+                assert_eq!(ret.color.as_deref(), Some("#purple"));
+                assert_eq!(ret.label, "settled");
+            }
+        }
+        let d = parse("A -> B : enter\nreturn #purple");
+        let Event::Return(ret) = &d.events[1] else {
+            panic!("return");
+        };
+        assert_eq!(ret.label, "#purple");
+        assert_eq!(ret.color, None);
+        // Initial life is not an activating message; END replaces fallback.
+        for body in [
+            "participant A\nreturn lost",
+            "activate A\nreturn lost",
+            "[-> A : incoming\nreturn lost",
+            "group G\nA -> B : enter\nend\nreturn lost",
+        ] {
+            let lines = body.lines().map(str::to_owned).collect::<Vec<_>>();
+            let error = parse_sequence(&lines).unwrap_err();
+            assert_eq!(error.message, "Nowhere to return to.");
+            assert_eq!(error.line, lines.len());
+        }
+        for body in [
+            "A -> B : enter\nnote over A : note\nreturn okay",
+            "group G\nA -> B ++ : enter\nend\nreturn okay",
+            "A -> B ++ : enter\nreturn one\nreturn two",
+        ] {
+            parse(body);
         }
     }
 

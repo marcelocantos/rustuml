@@ -3505,7 +3505,7 @@ fn sequence_lifelines(
                     active_participants.remove(position);
                 }
             }
-            Event::Return(_) => {
+            Event::Return(ret) => {
                 let mut context = return_stack
                     .last()
                     .cloned()
@@ -3514,6 +3514,11 @@ fn sequence_lifelines(
                     // CommandReturn#executeArg deactivates only when it found
                     // an activating message, not when replying to the last one.
                     context.deactivate = !return_stack.is_empty();
+                    // CommandReturn#executeArg: configuration overrides survive
+                    // through the generated message into subsequent returns.
+                    if let Some(color) = &ret.color {
+                        context.arrow.color = Some(color.clone());
+                    }
                 }
                 model.return_context_by_event[event_index] = context.clone();
                 if let Some(context) = context {
@@ -7628,6 +7633,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let normalized = lowered.get_or_insert_with(|| diagram.clone());
             let mut arrow = context.arrow.clone();
             arrow.line = LineStyle::Dotted;
+            // CommandReturn#executeArg withColor, account f785ee82.
+            if let Some(color) = &ret.color {
+                arrow.color = Some(color.clone());
+            }
             normalized.events[index] = Event::Message(Message {
                 from: context.from.clone(),
                 to: context.to.clone(),

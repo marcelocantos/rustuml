@@ -283,6 +283,9 @@ pub struct Ref {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReturnMessage {
     pub label: String,
+    /// Optional CommandReturn arrow-configuration color override.
+    #[serde(default)]
+    pub color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
