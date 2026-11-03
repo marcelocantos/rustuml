@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-return-live-message-model",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.sequencediagram.command.CommandReturn#executeArg lines 83-131",
+    "net.sourceforge.plantuml.sequencediagram.graphic.Step1Message#prepareMessage",
+    "net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow#getLeftStartInternal, getRightEndInternal lines 83-101",
+    "net.sourceforge.plantuml.sequencediagram.graphic.LivingParticipantBox#getLiveThicknessAt"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render Event::Return spacing and painting",
+    "crates/rustuml-render/src/sequence.rs::sequence_arrow_endpoints",
+    "crates/rustuml-render/src/sequence.rs::sequence_lifelines and render-local return lowering"
+  ],
+  "invariant": "A legacy internal return is an ordinary Message with reversed endpoints and inherited dotted arrow configuration. Its constraints and paint sample the actual live segment at the arrow ordinate. The spatial-left endpoint is segment.pos2; the spatial-right endpoint is segment.pos2 minus activation component width if active, otherwise segment.pos1. Deactivation belongs to the sender and occurs only for an owned activating message.",
+  "causal_divergence": "Rust's separate Return painter starts at participant centers and applies only a boolean half-activation offset to a left target, losing nested depth and the right-side active edge. The Return spacing branch also omits the ordinary message live-segment width adjustment. After self-return lowering removes the crash, checker_live_stack_2/3 differ only at the delegated non-self answer by one/two activation half-widths. Fresh reversed-order delegation exposes the matching constraint-width defect. Java does not have a separate Return rendering path: CommandReturn adds an ordinary Message.",
+  "planned_change": "Extend render-local message lowering to all resolved internal legacy returns, reusing ordinary message constraints, lifecycle, group extent, style and paint. Preserve event indices and source identity. Keep boundary MessageExo and non-self Teoz paths outside this change because their different models need separate accounting. No new geometric constants or index clamps.",
+  "perturbation_axes": [
+    "Caller, callee and delegate declaration order versus message direction",
+    "Nested activation depth at sender and receiver",
+    "Return label width and inherited arrow style, with and without owned deactivation"
+  ],
+  "verification_plan": [
+    "Model equivalence units against explicit reverse dotted messages with sender deactivation",
+    "Fresh valid pinned Java inputs across declaration order, depth and label/style",
+    "Both full main tiers, all preserved 874 isolated and built-in perturbations, unchanged guards"
+  ],
+  "journey_exception": "The real CLI source-to-SVG path is compared to pinned live Java; this deterministic renderer has no provider/backend wire.",
+  "acceptance": "Maker candidate only; fresh independent checker required. Remaining counterexamples are preserved, not waived."
+}
