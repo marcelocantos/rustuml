@@ -315,6 +315,13 @@ fn detect_type(input: &str) -> &str {
 /// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
 /// `YamlDiagramFactory`.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+    // PSystemBuilder#createPSystem tries ClassDiagramFactory before
+    // DescriptionDiagramFactory. Shared containers cannot override a native
+    // class command stream merely because their labels are quoted.
+    if native_class_container_candidate(lines) {
+        return UmlSubtype::Class;
+    }
+
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     // `allowmixing` is a class-diagram directive: it permits mixing other
@@ -865,6 +872,202 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     subtypes[max_idx]
 }
 
+/// Recover the shared-container/native-class part of Java's factory ordering.
+/// This is deliberately separate from keyword scoring: one description command
+/// can reject a class candidate regardless of how many class declarations occur.
+fn native_class_container_candidate(lines: &[String]) -> bool {
+    let mut has_container = false;
+    let mut has_native_class = false;
+    let mut allow_mixing = false;
+    let mut body_end: Option<&str> = None;
+
+    for line in lines {
+        let line = source_text(line).trim();
+        let lower = line.to_ascii_lowercase();
+        if let Some(end) = body_end {
+            if lower == end || lower.replace(' ', "") == end {
+                body_end = None;
+            }
+            continue;
+        }
+        let (keyword, rest) = lower
+            .split_once(char::is_whitespace)
+            .map_or((lower.as_str(), ""), |(keyword, rest)| {
+                (keyword, rest.trim_start())
+            });
+
+        // CommandCreateClassMultilines owns every line until its standalone
+        // closing brace. CommonCommands' page blocks and note commands likewise
+        // own their text; bracketed text there is not a DESCRIPTION command.
+        if matches!(
+            keyword,
+            "title" | "caption" | "header" | "footer" | "legend"
+        ) {
+            if rest.is_empty() || keyword == "legend" {
+                body_end = Some(match keyword {
+                    "title" => "endtitle",
+                    "caption" => "endcaption",
+                    "header" => "endheader",
+                    "footer" => "endfooter",
+                    _ => "endlegend",
+                });
+            }
+            continue;
+        }
+        if keyword == "skinparam" {
+            if line.ends_with('{') {
+                body_end = Some("}");
+            }
+            continue;
+        }
+        if keyword == "note" {
+            if !line.contains(':') && !rest.starts_with('"') {
+                body_end = Some("endnote");
+            }
+            continue;
+        }
+        if is_allow_mixing_command(line) {
+            allow_mixing = true;
+            continue;
+        }
+
+        // CommandPackageWithUSymbol#getRegexConcat plus CommandPackage and
+        // CommandNamespace. These are the shared kinds currently represented
+        // by ClassParser::try_package; other symbol kinds need their own model.
+        if line.ends_with('{')
+            && matches!(
+                keyword,
+                "package"
+                    | "namespace"
+                    | "node"
+                    | "cloud"
+                    | "database"
+                    | "frame"
+                    | "folder"
+                    | "rectangle"
+            )
+        {
+            has_container = true;
+            continue;
+        }
+
+        // CommandCreateClass#getRegexConcat and its multiline counterpart
+        // precede CommandCreateElementFull2 in ClassDiagramFactory. Object/map
+        // alone retain Rust's object backend instead of becoming class evidence.
+        if !rest.is_empty()
+            && matches!(
+                keyword,
+                "class"
+                    | "interface"
+                    | "enum"
+                    | "annotation"
+                    | "abstract"
+                    | "entity"
+                    | "circle"
+                    | "diamond"
+                    | "protocol"
+                    | "struct"
+                    | "exception"
+                    | "metaclass"
+                    | "stereotype"
+                    | "dataclass"
+                    | "record"
+            )
+        {
+            // Bracket-coded interface declarations belong to DESCRIPTION's
+            // CommandCreateElementFull, not CommandCreateClass's name grammar.
+            if rest.starts_with('[') || rest.contains(" as [") {
+                return false;
+            }
+            has_native_class = true;
+            if line.ends_with('{') {
+                body_end = Some("}");
+            }
+            continue;
+        }
+        if matches!(keyword, "object" | "map") && line.ends_with('{') {
+            body_end = Some("}");
+            continue;
+        }
+
+        // ClassDiagramFactory does not register DESCRIPTION's bare bracket
+        // declarations or bracket endpoints (even after allowmixing).
+        if component::looks_like_description_bracket_command(line) {
+            return false;
+        }
+        // CommandCreateElementFull.ALL_TYPES, excluding the native class
+        // commands above, plus state from CommandCreateElementFull2. Its
+        // NORMAL_KEYWORD execution fails unless allowmixing has already run;
+        // a later directive cannot revive the failed factory candidate.
+        if !allow_mixing
+            && matches!(
+                keyword,
+                "person"
+                    | "artifact"
+                    | "actor/"
+                    | "actor"
+                    | "folder"
+                    | "card"
+                    | "file"
+                    | "package"
+                    | "rectangle"
+                    | "hexagon"
+                    | "label"
+                    | "node"
+                    | "frame"
+                    | "cloud"
+                    | "action"
+                    | "process"
+                    | "database"
+                    | "queue"
+                    | "stack"
+                    | "storage"
+                    | "agent"
+                    | "usecase/"
+                    | "usecase"
+                    | "component"
+                    | "boundary"
+                    | "control"
+                    | "collections"
+                    | "port"
+                    | "portin"
+                    | "portout"
+                    | "state"
+            )
+        {
+            return false;
+        }
+        // Other factories' exclusive commands cannot be consumed by the class
+        // command list. Preserve the existing dispatcher for these sources.
+        if matches!(
+            keyword,
+            "participant"
+                | "autonumber"
+                | "box"
+                | "activate"
+                | "deactivate"
+                | "return"
+                | "start"
+                | "stop"
+                | "fork"
+                | "split"
+                | "if"
+                | "while"
+                | "switch"
+                | "robust"
+                | "concise"
+                | "binary"
+                | "clock"
+                | "archimate_element"
+                | "archimate_rel"
+        ) || line.contains("[*]")
+        {
+            return false;
+        }
+    }
+    has_container && has_native_class && body_end.is_none()
+}
+
 fn looks_like_bare_class_association(line: &str) -> bool {
     static RE: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
         regex::Regex::new(
@@ -1320,6 +1523,93 @@ mod tests {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn native_class_containers_follow_factory_order_independent_of_label_and_count() {
+        for symbol in [
+            "node",
+            "cloud",
+            "database",
+            "frame",
+            "folder",
+            "rectangle",
+            "package",
+        ] {
+            for label in ["Domain", "\"Different Domain\""] {
+                for declaration in ["class Record", "interface Contract", "entity Ledger {}"] {
+                    let input =
+                        format!("@startuml\n{symbol} {label} {{\n{declaration}\n}}\n@enduml");
+                    let Diagram::Class(diagram) = parse(&input).unwrap() else {
+                        panic!("class factory lost precedence: {input}");
+                    };
+                    assert_eq!(diagram.entities.len(), 1, "{input}");
+                    assert_eq!(diagram.packages.len(), 1, "{input}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn native_class_container_dispatch_owns_multiline_member_and_note_text() {
+        let input = "@startuml\nnode \"Runtime\" {\nclass Ledger {\n[member text]\ncomponent field\n}\nnote right of Ledger\n[explanatory text]\nend note\n}\n@enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Class(_)));
+    }
+
+    #[test]
+    fn native_class_container_dispatch_rejects_description_commands() {
+        for command in [
+            "component Api",
+            "DATABASE Store",
+            "[Screen] as Ui",
+            "interface [Port] as P",
+        ] {
+            let input =
+                format!("@startuml\nnode \"Runtime\" {{\nentity Ledger\n{command}\n}}\n@enduml");
+            let lines = preprocess::preprocess_full_for_parse(&input, None).lines;
+            assert!(!native_class_container_candidate(&lines), "{input}");
+            assert!(
+                !matches!(parse(&input).unwrap(), Diagram::Class(_)),
+                "{input}"
+            );
+        }
+    }
+
+    #[test]
+    fn native_class_container_candidate_respects_allowmixing_execution_order() {
+        for (commands, eligible) in [
+            ("allowmixing\ncomponent Api", true),
+            ("component Api\nallowmixing", false),
+            ("AlLoW_MiXiNg\nDaTaBaSe Store", true),
+            ("DaTaBaSe Store\nAlLoW_MiXiNg", false),
+        ] {
+            let input =
+                format!("@startuml\nnode \"Runtime\" {{\nentity Ledger\n{commands}\n}}\n@enduml");
+            let lines = preprocess::preprocess_full_for_parse(&input, None).lines;
+            assert_eq!(
+                native_class_container_candidate(&lines),
+                eligible,
+                "{input}"
+            );
+        }
+    }
+
+    #[test]
+    fn native_class_container_candidate_keeps_other_factory_controls() {
+        assert!(matches!(
+            parse("@startuml\nentity Ledger\n@enduml").unwrap(),
+            Diagram::Sequence(_)
+        ));
+        assert!(matches!(
+            parse("@startuml\npackage Domain {\nobject Record\n}\n@enduml").unwrap(),
+            Diagram::Object(_)
+        ));
+        assert!(matches!(
+            parse("@startuml\nnode \"Runtime\" {\ncomponent Api\n}\n@enduml").unwrap(),
+            Diagram::Deployment(_)
+        ));
+        let input = "@startuml\nrectangle Domain {\narchimate_element Business Actor User \"User\"\n}\n@enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Archimate(_)));
     }
 
     #[test]
