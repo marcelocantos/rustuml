@@ -1,0 +1,11 @@
+@startuml
+participant S
+participant D
+participant C
+C ->> S ++ : entry
+S ->> S ++ : recursion
+S ->> D ++ : dispatch
+return completed broad message WWWiii
+return local result
+return complete
+@enduml

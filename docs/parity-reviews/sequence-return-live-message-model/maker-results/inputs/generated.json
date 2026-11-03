@@ -1,0 +1,202 @@
+[
+  {
+    "source": "return_0.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_1.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_2.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_3.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_4.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_5.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_6.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_7.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_8.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_9.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_10.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_11.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_12.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_13.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_14.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_15.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_16.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_17.puml",
+    "axes": [
+      "participant order",
+      "activation depth",
+      "arrow configuration and label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "fallback_18.puml",
+    "axes": [
+      "participant order",
+      "fallback without activation",
+      "alternating return ownership"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "fallback_19.puml",
+    "axes": [
+      "participant order",
+      "fallback without activation",
+      "alternating return ownership"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  }
+]
