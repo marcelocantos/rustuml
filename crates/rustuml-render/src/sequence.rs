@@ -376,8 +376,10 @@ fn single_note_visible_raw_width(
     max_text_w + raw_margin + 2.0 * note_global_padding
 }
 
-fn folded_note_component_width(max_text_w: f64, note_global_padding: f64) -> f64 {
-    max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding
+fn folded_note_component_width(max_text_w: f64, note_global_padding: f64, shadow: f64) -> f64 {
+    // ComponentRoseNote#getPreferredWidth includes Fashion.deltaShadow;
+    // drawInternalU keeps the visible polygon at getTextWidth.
+    max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding + shadow
 }
 
 fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: MessageAlign) -> f64 {
@@ -473,7 +475,6 @@ const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
 const OPEN_ACTIVATION_TAIL_CLEARANCE: f64 = 8.0;
 const SHADOW_LIVING_WIDTH_EXTRA: f64 = 3.0;
 const SHADOW_VERTICAL_PAD: f64 = 3.0;
-const SHADOW_NOTE_EXTRA: f64 = 1.5;
 const SHADOW_CANVAS_RIGHT_PAD: f64 = 3.0;
 const SHADOW_CANVAS_BOTTOM_PAD: f64 = 3.0;
 
@@ -3719,6 +3720,7 @@ struct PlantUmlSvg {
     /// Drop-shadow filter id for note bodies. Driven by
     /// `skinparam noteShadowing true`.
     note_shadow_filter: Option<String>,
+    component_shadow_filter: Option<String>,
     /// Drop-shadow filter id for participant head/tail boxes. Driven by
     /// global `skinparam shadowing true`.
     participant_shadow_filter: Option<String>,
@@ -3769,6 +3771,7 @@ impl PlantUmlSvg {
             note_font_size: MSG_FONT_SIZE as u32,
             note_font_family: "sans-serif".into(),
             note_shadow_filter: None,
+            component_shadow_filter: None,
             participant_shadow_filter: None,
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
@@ -5058,11 +5061,13 @@ impl PlantUmlSvg {
         close_up: bool,
         close_down: bool,
     ) {
+        let shadow = self.component_shadow_filter.as_ref()
+            .map(|id| format!(r#" filter="url(#{id})""#)).unwrap_or_default();
         if close_up && close_down {
             // Plain stroked rect: identical to the uncut activation bar.
             write!(
                 self.buf,
-                r##"<rect fill="{}" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+                r##"<rect fill="{}"{shadow} height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
                 color,
                 fmt_coord(h),
                 ACTIVATION_WIDTH as u32,
@@ -5076,7 +5081,7 @@ impl PlantUmlSvg {
         // invisible), then explicit border lines.
         write!(
             self.buf,
-            r##"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+            r##"<rect fill="{}"{shadow} height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
             color,
             fmt_coord(h),
             color,
@@ -6554,6 +6559,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         explicit_global_padding
     };
+    // ComponentRoseNote preferred dimensions include its own shadow style,
+    // independently of participant shadowing. ArrowAndNoteBox centers the note.
+    // FromSkinparamToStyle#getShadowingValue maps boolean true to 3.
+    let note_shadow_delta = if note_shadow_filter.is_some() { SHADOW_VERTICAL_PAD } else { 0.0 };
+    let shadow_note_extra = note_shadow_delta / 2.0;
     let note_global_padding = if theme_loaded && !sequence_shadowing {
         global_padding
     } else {
@@ -7052,11 +7062,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         0.0
     };
-    let shadow_note_extra = if sequence_shadowing {
-        SHADOW_NOTE_EXTRA
-    } else {
-        0.0
-    };
     let lifeline_top = head_box_y + max_box_h + LIFELINE_Y_OFFSET + shadow_vertical_pad;
 
     let event_message_text_height = |event: &Event| -> (bool, f64) {
@@ -7365,7 +7370,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         // the three-pixel shadow tail.
                         // NoteBox#getPreferredHeight delegates to the note
                         // component, including the padded body text block.
-                        y = note_event_y + shadow_vertical_pad + 2.0 * note_global_padding;
+                        y = note_event_y + note_shadow_delta + 2.0 * note_global_padding;
                         msg_count += 1; // note counts as an event for spacing
                     }
                 }
@@ -8359,7 +8364,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                 } else if note.shape == NoteShape::Note {
                     let component_pref_w =
-                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                        folded_note_component_width(max_tw, note_global_padding, note_shadow_delta);
                     let content_visible_w =
                         note_content_width_padded(max_tw, note.shape, note_text_align);
                     let note_left = over_several_note_geometry(
@@ -8433,7 +8438,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         &note_font_family,
                     );
                     let component_pref_w =
-                        max_tw + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                        folded_note_component_width(max_tw, note_global_padding, note_shadow_delta);
                     let nest_extra = (depth.saturating_sub(1)) as f64
                         * (TEOZ_GROUP_MARGIN_X + TEOZ_GROUP_EXTERNAL_MARGIN_X1);
                     let cx_floor = GROUP_FRAME_MIN_LEFT
@@ -8617,12 +8622,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let Event::Note(note) = event else {
             continue;
         };
-        if note.on_message {
-            continue;
-        }
-        let Some(participant) = note.participants.first() else {
-            continue;
+        // Step1Abstract#createNoteBox uses the spatial left/right participant;
+        // NoteBox#getSegment merges live thickness at both component edges.
+        let participant = note.participants.iter().filter_map(|id| id_to_idx.get(id).map(|i| (*i, id)));
+        let participant = if note.position == NotePosition::Right {
+            participant.max_by_key(|(index, _)| *index)
+        } else {
+            participant.min_by_key(|(index, _)| *index)
         };
+        let Some((_, participant)) = participant else { continue; };
         let metrics =
             note_text_metrics_with_family(&note.text, note_font_size_f, &note_font_family);
         let note_y_extra = match note.shape {
@@ -8631,11 +8639,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         };
         let note_top =
             horizontal_event_y_positions[event_index] - note_y_extra - metrics.total_height;
-        let note_bottom = note_top + note_rendered_height_padded(note.shape, &metrics);
+        let component_top = note_top - ROSE_NOTE_PADDING_Y;
+        // NoteBox#getSegment samples preferred height, not the integer polygon
+        // height. ComponentRoseNote has marginY=5 and paddingY=5 on each side.
+        let component_bottom = if note.shape == NoteShape::Note {
+            component_top + metrics.total_height + 4.0 * ROSE_NOTE_PADDING_Y
+                + 2.0 * note_global_padding + note_shadow_delta
+        } else {
+            note_top + note_rendered_height_padded(note.shape, &metrics) + ROSE_NOTE_PADDING_Y
+        };
         let (left_shift, right_shift) = horizontal_life_lines.segment_shifts(
-            participant,
-            note_top - ROSE_NOTE_PADDING_Y,
-            note_bottom + ROSE_NOTE_PADDING_Y,
+            participant, component_top, component_bottom,
         );
         if left_shift != 0.0 {
             note_left_live_shift_by_event.insert(event_index, left_shift);
@@ -8695,23 +8709,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .map(|&i| {
                         if note.position == NotePosition::Right {
                             participants[i].center_x
-                                + if note.on_message {
-                                    0.0
-                                } else {
-                                    note_right_live_shift_by_event
-                                        .get(&event_idx)
-                                        .copied()
-                                        .unwrap_or(0.0)
-                                }
+                                + note_right_live_shift_by_event
+                                    .get(&event_idx).copied().unwrap_or(0.0)
                         } else {
-                            let live_shift = if note.on_message {
-                                0.0
-                            } else {
-                                note_left_live_shift_by_event
-                                    .get(&event_idx)
-                                    .copied()
-                                    .unwrap_or(0.0)
-                            };
+                            let live_shift = note_left_live_shift_by_event
+                                .get(&event_idx).copied().unwrap_or(0.0);
                             if live_shift == 0.0 {
                                 participants[i].center_x
                             } else {
@@ -8723,11 +8725,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // NoteBox#getStartingX casts the component origin toward zero. Its
                 // getMinX/getMaxX expose that origin and full component preferred width,
                 // not the visible polygon inset by Rose's horizontal padding.
-                if !diagram.teoz && !note.on_message && note.shape == NoteShape::Note {
-                    let mut width = folded_note_component_width(max_text_w, note_global_padding);
+                if !diagram.teoz && note.shape == NoteShape::Note
+                    && !(note.on_message && note.position == NotePosition::Right
+                        && note_owner.get(&event_idx).is_some_and(|owner| self_msg_right_note_left_by_event.contains_key(owner))) {
+                    let mut width = folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta);
                     let left = match note.position {
-                        NotePosition::Left => (anchor_xs.first()? - width).trunc(),
-                        NotePosition::Right => anchor_xs.first()?.trunc(),
+                        NotePosition::Left => (anchor_xs.iter().copied().reduce(f64::min)? - width).trunc(),
+                        NotePosition::Right => anchor_xs.iter().copied().reduce(f64::max)?.trunc(),
                         NotePosition::Over => {
                             let (lo, hi) = if note.participants.is_empty() {
                                 (0, participants.len().checked_sub(1)?)
@@ -8931,7 +8935,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // ParticipantBox.startingX and getMaxX include Java's invisible
                     // outMargin around the painted participant component.
                     min: participant.box_x - PARTICIPANT_OUT_MARGIN,
-                    max: participant.box_x + participant.box_width + PARTICIPANT_OUT_MARGIN,
+                    // ComponentRoseParticipant#getPreferredWidth includes shadow;
+                    // ParticipantBox#getMaxX consumes it, not the painted box width.
+                    max: participant.box_x + participant.box_width
+                        + shadow_preferred_width_extra + PARTICIPANT_OUT_MARGIN,
                     kind: SequenceGroupMemberKind::Ordinary,
                 }
             };
@@ -9464,7 +9471,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let mut preferred_width =
                                     (message_label_width(&process_label(&msg.label))
                                         + 2.0 * MSG_TEXT_LEFT_PAD
-                                        + ARROW_SIZE)
+                                        + ARROW_SIZE
+                                        // ArrowAndNoteBox uses the arrow component's
+                                        // preferred width; Display#create0 pads its text.
+                                        + 2.0 * constraint_global_padding)
                                         .max(arrow_actual_width);
                                 let mut start = member.min;
                                 let mut has_attached_note = false;
@@ -9495,6 +9505,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                             folded_note_component_width(
                                                 max_text_w,
                                                 note_global_padding,
+                                                note_shadow_delta,
                                             )
                                         } else {
                                             note_content_width_raw_padded(
@@ -9729,7 +9740,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     note_font_size_f,
                     &note_font_family,
                 );
-                let mut width = folded_note_component_width(max_text_w, note_global_padding);
+                let mut width = folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta);
                 let origin = if note.position == NotePosition::Right {
                     (participants[lo].center_x
                         + note_right_live_shift_by_event
@@ -9771,6 +9782,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 .iter()
                 .map(|&index| participants[index].center_x)
                 .fold(f64::MAX, f64::min)
+                + note_left_live_shift_by_event.get(&event_index).copied().unwrap_or(0.0)
         } else {
             let index = anchor_idxs[0];
             let live_shift = note_left_live_shift_by_event
@@ -9791,13 +9803,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             note.color.is_some(),
             note.text.lines().count(),
         );
-        let note_left = if note.on_message {
-            ll_x.floor() - gap - note_content_w
-        } else if note.shape == NoteShape::Note {
+        let note_left = if note.shape == NoteShape::Note && !diagram.teoz {
             let component_left =
-                (ll_x - folded_note_component_width(max_text_w, note_global_padding)).trunc();
+                (ll_x - folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta)).trunc();
             left_missing_space = left_missing_space.max(-component_left);
             continue;
+        } else if note.on_message {
+            ll_x.floor() - gap - note_content_w
         } else {
             let preferred_width =
                 single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
@@ -10670,6 +10682,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     svg.note_font_family = note_font_family.clone();
     svg.note_font_size = note_font_size;
     svg.note_shadow_filter = note_shadow_filter.clone();
+    // ComponentRoseActiveLine and GroupingHeader background set deltaShadow;
+    // their preferred dimensions do not include that paint-only extent.
+    svg.component_shadow_filter = if sequence_shadowing { filter_id.clone() } else { None };
     svg.participant_shadow_filter = participant_shadow_filter.clone();
     svg.lifeline_border = lifeline_border.clone();
     svg.lifeline_border_thickness = lifeline_border_thickness.clone();
@@ -11017,12 +11032,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Group frame rects (first instance) — rendered after first activation bars pass.
     // Teoz uses a single-pass group-frame layer (the inline instance below) and
     // does not emit this back-layer copy, so the frame appears exactly once.
+    let group_shadow = svg.component_shadow_filter.as_ref()
+        .map(|id| format!(r#" filter="url(#{id})""#)).unwrap_or_default();
     if !diagram.teoz {
         for frame in &group_frames {
             let frame_height = frame.bottom - frame.top;
             write!(
                 svg.buf,
-                r##"<rect fill="none" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
+                r##"<rect fill="none"{group_shadow} height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"##,
                 fmt_coord(frame_height),
                 fmt_coord(frame.right - frame.left),
                 fmt_coord(frame.left),
@@ -12685,27 +12702,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .map(|&i| {
                         if note.position == NotePosition::Right {
                             participants[i].center_x
-                                + if note.on_message {
-                                    0.0
-                                } else {
-                                    note_right_live_shift_by_event
-                                        .get(&ev_idx)
-                                        .copied()
-                                        .unwrap_or(0.0)
-                                }
+                                + note_right_live_shift_by_event
+                                    .get(&ev_idx).copied().unwrap_or(0.0)
                         } else {
-                            let live_shift = if note.on_message {
-                                0.0
-                            } else {
-                                note_left_live_shift_by_event
-                                    .get(&ev_idx)
-                                    .copied()
-                                    .unwrap_or(0.0)
-                            };
+                            let live_shift = note_left_live_shift_by_event
+                                .get(&ev_idx).copied().unwrap_or(0.0);
                             if live_shift == 0.0 {
                                 participants[i].center_x
                             } else {
-                                participants[i].box_x + participants[i].box_width / 2.0 + live_shift
+                                participants[i].center_x + live_shift
                             }
                         }
                     })
@@ -12734,7 +12739,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             } else {
                                 NOTE_LIFELINE_GAP
                             };
-                            let left = if note.on_message {
+                            let left = if !diagram.teoz && note.shape == NoteShape::Note {
+                                // NoteBox truncates the raw origin before Rose padding.
+                                ll_x.trunc() + ROSE_NOTE_PADDING_X
+                            } else if note.on_message {
                                 ll_x.ceil() + gap
                             } else if diagram.teoz {
                                 ll_x + gap
@@ -12761,15 +12769,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             note.color.is_some(),
                             note.text.lines().count(),
                         );
-                        if note.on_message {
-                            let right = ll_x.floor() - gap;
-                            (right - note_content_w, right)
-                        } else if note.shape == NoteShape::Note {
+                        if note.shape == NoteShape::Note && !diagram.teoz {
                             let component_width =
-                                folded_note_component_width(max_text_w, note_global_padding);
+                                folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta);
                             let component_left = (ll_x - component_width).trunc();
                             let left = component_left + ROSE_NOTE_PADDING_X;
                             (left, left + note_content_w)
+                        } else if note.on_message {
+                            let right = ll_x.floor() - gap;
+                            (right - note_content_w, right)
                         } else {
                             let preferred_width = single_note_visible_raw_width(
                                 max_text_w,
@@ -12838,7 +12846,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             // fractional Real x of the lifeline centre; the classic
                             // renderer truncates with `(int)` (floor). Only floor
                             // in the classic path (seq_all_features_01).
-                            let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y);
+                            // NoteBox#getStartingX centers the full preferred component,
+                            // including shadow; AbstractComponent then adds paddingX.
+                            let shadow = if note.shape == NoteShape::Note { note_shadow_delta } else { 0.0 };
+                            let left = (cx - (raw_w + shadow) / 2.0).max(HEAD_BOX_Y);
                             let left = if diagram.teoz { left } else { left.floor() };
                             (left, left + note_content_w)
                         } else {
@@ -13194,7 +13205,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         - participants[lo].box_x;
                     // ComponentRoseNote preferred (text-block) width for LEFT text.
                     let pref_w =
-                        max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding;
+                        folded_note_component_width(max_text_w, note_global_padding, note_shadow_delta);
                     let diff_x = (area_w - pref_w).max(0.0);
                     Some(note_left + NOTE_TEXT_X_PAD + diff_x / 2.0)
                 } else {
