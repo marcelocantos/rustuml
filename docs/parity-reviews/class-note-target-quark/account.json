@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-target-quark",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "maker proposal, not accepted",
+  "java_locations": [
+    "command/note/CommandFactoryNoteOnEntity.java#executeInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#try_note,resolve_quark_path",
+    "crates/rustuml-render/src/class.rs#attached note layout edges"
+  ],
+  "invariant": "An explicit attached note target is the entity found by quarkInContext(true,idShort), not the unresolved token in the command. A missing target makes the command fail.",
+  "causal_divergence": "ClassParser stores the short text Cache as Note.target inside a group whose entity id is Polar Harbor.Cache. The renderer adds Graphviz edges using that noncanonical target and cannot find the entity to paint the note attachment. Quoted-code/name grammar also differs from native class note commands.",
+  "planned_model_change": "Resolve explicit note targets through existing ReuseUnique quark lookup while executing the note command; preserve canonical identity for both single and multiline notes, including quoted codes. Reject unknown explicit targets. Keep shorthand using last_entity_id. Do not alter note layout constants; retain any downstream Opale/cluster failure as nonaccepted residue.",
+  "perturbation_axes": [
+    "nested versus top-level target identity and alias names",
+    "single versus multiline attached notes",
+    "reused names in sibling scopes and declaration order"
+  ],
+  "verification": "Parser identity checks and fresh source-only CLI/Java comparisons plus all preserved suites with unchanged comparator. Independent checker belongs to parent."
+}
