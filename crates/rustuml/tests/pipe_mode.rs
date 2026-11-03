@@ -26,6 +26,41 @@ class Dog extends Animal
 
 const INVALID_PUML: &str = "this is not valid plantuml at all !!@@##";
 
+#[test]
+fn pipe_rejects_fatal_preprocessing_errors() {
+    for declaration in ["class Before", "Alice -> Bob: before"] {
+        for expression in ["%date(\"QQ\",0)", "%date(\"yyyy\",2147483648)"] {
+            let input = format!("@startuml\n{declaration}\n!$bad = {expression}\n@enduml\n");
+            let output = run_pipe(&["-pipe", "-tsvg"], input.as_bytes());
+            assert!(!output.status.success(), "accepted {input}");
+            assert!(
+                output.stdout.is_empty(),
+                "emitted a partial diagram for {input}"
+            );
+            assert!(
+                !output.stderr.is_empty(),
+                "missing fatal diagnostic for {input}"
+            );
+        }
+    }
+}
+
+#[test]
+fn pipe_accepts_valid_dates_and_inactive_errors() {
+    for declaration in ["class Before", "Alice -> Bob: before"] {
+        let input = format!(
+            "@startuml\n{declaration}\n!if 0\n!$bad = %date(\"QQ\",0)\n!endif\n!$ok = %date(\"yyyy\",0)\n@enduml\n"
+        );
+        let output = run_pipe(&["-pipe", "-tsvg"], input.as_bytes());
+        assert!(
+            output.status.success(),
+            "{}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(String::from_utf8_lossy(&output.stdout).contains("<svg"));
+    }
+}
+
 const SKINPARAM_PUML: &str = r#"@startuml
 skinparam participantBackgroundColor #AADDFF
 Alice -> Bob: Styled
