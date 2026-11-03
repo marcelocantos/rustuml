@@ -20,6 +20,7 @@
 pub struct RenderClock {
     pub epoch_ms: u64,
     pub tz: TzSpec,
+    timezone_override: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -34,8 +35,23 @@ impl RenderClock {
     pub fn from_env() -> Self {
         let cfg = parse_debug(std::env::var("RUSTUML_DEBUG").ok().as_deref());
         let epoch_ms = cfg.date.unwrap_or_else(system_epoch_ms);
-        let tz = cfg.tz.unwrap_or_else(|| system_tz_at(epoch_ms));
-        Self { epoch_ms, tz }
+        let timezone_override = cfg.tz.is_some();
+        let tz = cfg.tz.unwrap_or_else(|| system_tz_at(epoch_ms as i64));
+        Self {
+            epoch_ms,
+            tz,
+            timezone_override,
+        }
+    }
+
+    pub fn timezone_at(&self, epoch_ms: i64) -> TzSpec {
+        // SimpleDateFormat uses the timezone rules at the supplied instant,
+        // not the offset at render time. Explicit debug zones are fixed offsets.
+        if self.timezone_override {
+            self.tz.clone()
+        } else {
+            system_tz_at(epoch_ms)
+        }
     }
 }
 
@@ -125,9 +141,9 @@ fn system_epoch_ms() -> u64 {
 }
 
 #[cfg(unix)]
-fn system_tz_at(epoch_ms: u64) -> TzSpec {
+fn system_tz_at(epoch_ms: i64) -> TzSpec {
     use std::ffi::CStr;
-    let t: libc::time_t = (epoch_ms / 1000) as libc::time_t;
+    let t: libc::time_t = epoch_ms.div_euclid(1000) as libc::time_t;
     let mut tm: libc::tm = unsafe { std::mem::zeroed() };
     let result = unsafe { libc::localtime_r(&t, &mut tm) };
     if result.is_null() {
@@ -150,7 +166,7 @@ fn system_tz_at(epoch_ms: u64) -> TzSpec {
 }
 
 #[cfg(not(unix))]
-fn system_tz_at(_epoch_ms: u64) -> TzSpec {
+fn system_tz_at(_epoch_ms: i64) -> TzSpec {
     TzSpec {
         offset_secs: 0,
         name: "UTC".to_string(),
