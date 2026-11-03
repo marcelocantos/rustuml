@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-current-document-ribbon-style",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "de192dc216b6795b6d820c240e82234988d1f39d",
+  "java_locations": [
+    "core/DiagramChromeFactory12026#addHeaderAndFooter,addTitle,addCaption",
+    "abel/DisplayPositioned#createRibbon",
+    "style/Style#createTextBlockBordered"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#DecorationStyle,DecorationLayout"
+  ],
+  "invariant": "Document ribbon font, color and inner line alignment are resolved from current root.document.<kind> style for both measurement and paint; command alignment owns only outer placement.",
+  "causal_divergence": "DecorationLayout uses hardcoded font size, family, color and alignment even after style resolution elsewhere. The checker header font18 case therefore shifts text and downstream body geometry.",
+  "planned_change": "Resolve document ribbon font and inner alignment through existing StyleCascade in class renderer; use the same resolved font in dimensions, baselines and paint while preserving established wrapper order and outer alignment. No shared style or font rewrite.",
+  "perturbation_axes": [
+    "header/footer font size and inner alignment versus outer command alignment",
+    "multiline unequal labels with nested containers and title/caption siblings"
+  ]
+}
