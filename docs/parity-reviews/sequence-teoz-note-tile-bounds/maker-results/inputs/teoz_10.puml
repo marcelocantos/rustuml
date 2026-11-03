@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Fir as F
+participant Willow as W
+participant Kiln as K
+note over of W : Wide Wi.f fractional
+W -> F ++ : enter
+note over of F : iii
+return outer
+@enduml

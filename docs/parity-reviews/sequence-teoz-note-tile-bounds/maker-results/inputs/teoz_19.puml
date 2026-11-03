@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+participant Fir as F
+participant Willow as W
+participant Kiln as K
+group frame
+note right of W : Wide Wi.f fractional
+W -> F ++ : enter
+F -> F ++ : recurse
+F -> F ++ : recurse
+note right of F : iii
+return inner
+return inner
+return outer
+end
+@enduml
