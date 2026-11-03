@@ -112,10 +112,6 @@ fn error_golden_census_is_frozen() {
     const EXPECTED_ERROR_GOLDENS: usize = 1199;
 
     let root = golden_dir();
-    if !root.exists() || !root.join("sequence").exists() {
-        eprintln!("golden submodule not populated — census skipped");
-        return;
-    }
     let census = collect_golden_pairs(&root)
         .iter()
         .filter(|p| {
