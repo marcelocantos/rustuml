@@ -135,11 +135,9 @@ fn match_chrome_directive(line: &str) -> Option<ChromeDirective> {
     } else if let Some(after) = strip_keyword_ci(rest, "title") {
         rest = after;
         (ChromeKind::Title, false)
-    } else if let Some(after) = strip_keyword_ci(rest, "caption") {
-        rest = after;
-        (ChromeKind::Caption, false)
     } else {
-        return None;
+        rest = strip_keyword_ci(rest, "caption")?;
+        (ChromeKind::Caption, false)
     };
 
     // A position prefix is only valid before header/footer.
