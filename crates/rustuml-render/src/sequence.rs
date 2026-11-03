@@ -7906,6 +7906,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     min_first_center_x = min_first_center_x.max(min_cx);
                 }
                 NotePosition::Left if first_part == Some(0) => {
+                    // NoteBox.getStartingX and the enclosing
+                    // GroupingGraphicalElement must measure the untranslated
+                    // component origin together in prepareMissingSpace. A
+                    // painted-width reservation here changes truncation at zero.
+                    if !diagram.teoz
+                        && min_scan_group_depth > 0
+                        && !note.on_message
+                        && note.shape == NoteShape::Note
+                    {
+                        continue;
+                    }
                     // "note left of" on participant 0: the note extends left from the
                     // lifeline. The note right edge = floor(lifeline_line_x) - gap.
                     // The note left edge = note_right - note_content_w, which must be >= HEAD_BOX_Y.
@@ -8560,7 +8571,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // relative, so derive their actual starting X from the accepted lifeline
     // segments and apply the shared push once.
     let mut left_missing_space = 0.0_f64;
+    let mut note_group_depth = 0usize;
     for (event_index, event) in diagram.events.iter().take(page1_end).enumerate() {
+        match event {
+            Event::GroupStart(_) => note_group_depth += 1,
+            Event::GroupEnd => note_group_depth = note_group_depth.saturating_sub(1),
+            _ => {}
+        }
         let Event::Note(note) = event else {
             continue;
         };
@@ -8606,6 +8623,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let note_left = if note.on_message {
             ll_x.floor() - gap - note_content_w
         } else if note.shape == NoteShape::Note {
+            if !diagram.teoz && note_group_depth > 0 {
+                // NoteBox.getStartingX truncates in the unshifted constraint
+                // space. InGroupableList.getMinX subtracts MARGIN5 for the
+                // note and MARGIN10 per nested list; the outer header's
+                // getStartingX supplies the final MARGIN10. Subtract the
+                // participant-based translation already reserved by group_shift
+                // so this is one shared deficit, not two rounded translations.
+                let component_left = (ll_x
+                    - group_shift
+                    - folded_note_component_width(max_text_w, note_global_padding))
+                .trunc();
+                let header_margin =
+                    GROUP_FRAME_INNER_MARGIN + note_group_depth as f64 * GROUP_FRAME_MARGIN;
+                left_missing_space =
+                    left_missing_space.max(header_margin - component_left - group_shift);
+                continue;
+            }
             let component_left =
                 (ll_x - folded_note_component_width(max_text_w, note_global_padding)).trunc();
             left_missing_space = left_missing_space.max(-component_left);
@@ -9374,6 +9408,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 } else {
                     anchor_xs.first().copied()?
                 };
+                if !diagram.teoz && !note.on_message && note.shape == NoteShape::Note {
+                    // NoteBox.getMinX/getMaxX expose the component, not the
+                    // painted polygon's padding or multiline lifeline gap.
+                    // Re-evaluate getStartingX after the shared constraint push.
+                    let width = folded_note_component_width(max_text_w, note_global_padding);
+                    let left = (ll_x - width).trunc();
+                    return Some((left, left + width));
+                }
                 let gap = left_note_lifeline_gap(
                     &participants,
                     note.shape,
@@ -13601,6 +13643,51 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn grouped_multiline_left_note_uses_component_bounds() {
+        // NoteBox.getMinX is the painted left minus ComponentRoseNote.paddingX;
+        // InGroupableList.getMinX subtracts MARGIN5, then MARGIN10 for each
+        // enclosing list. Multiline text does not introduce another gap.
+        let frames = regex::Regex::new(
+            r#"<rect fill="none" height="[^"]+" style="stroke:#000000;stroke-width:1.5;" width="[^"]+" x="([^"]+)""#,
+        )
+        .unwrap();
+        let note_path = regex::Regex::new(r##"<path d="M([^,]+),[^"]+" fill="#FEFFDD""##).unwrap();
+        for depth in 1..=3 {
+            for active in [false, true] {
+                let mut source = String::from("@startuml\nparticipant Willow\nparticipant Elm\n");
+                if active {
+                    source.push_str("activate Willow\n");
+                }
+                source.push_str(&"group enclosing\n".repeat(depth));
+                source.push_str(
+                    "note left of Willow\nA deliberately wider note envelope\nwith another line\nend note\nWillow -> Elm ++ : invoke\nreturn finished\n",
+                );
+                source.push_str(&"end\n".repeat(depth));
+                if active {
+                    source.push_str("deactivate Willow\n");
+                }
+                source.push_str("@enduml\n");
+                let diagram = rustuml_parser::parse::parse(&source).unwrap();
+                let svg = crate::render_svg(&diagram);
+                let note_left: f64 = note_path.captures(&svg).unwrap()[1].parse().unwrap();
+                let frame_lefts: Vec<f64> = frames
+                    .captures_iter(&svg)
+                    .take(depth)
+                    .map(|capture| capture[1].parse().unwrap())
+                    .collect();
+                assert_eq!(frame_lefts.len(), depth);
+                for (index, left) in frame_lefts.iter().enumerate() {
+                    let expected = note_left
+                        - ROSE_NOTE_PADDING_X
+                        - GROUP_FRAME_INNER_MARGIN
+                        - (depth - index - 1) as f64 * GROUP_FRAME_MARGIN;
+                    assert_eq!(*left, expected, "depth={depth}, active={active}");
+                }
+            }
+        }
+    }
 
     #[test]
     fn folded_note_measurement_preserves_fractional_text_width() {
