@@ -1,0 +1,610 @@
+[
+  {
+    "source": "border_0.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_1.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_2.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_3.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_4.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_5.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_6.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_7.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_8.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_9.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_10.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_11.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_12.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_13.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_14.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_15.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_16.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_17.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_18.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_19.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_20.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_21.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_22.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_23.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_24.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_25.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_26.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_27.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_28.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_29.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_30.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_31.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_32.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_33.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_34.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_35.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_36.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_37.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_38.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_39.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_40.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_41.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_42.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_43.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_44.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_45.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_46.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "border_47.puml",
+    "axes": [
+      "physical border",
+      "textual direction",
+      "head style",
+      "activation mode"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_48.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_49.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_50.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_51.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_52.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_53.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_54.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "return_55.puml",
+    "axes": [
+      "border",
+      "return ownership",
+      "head style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  }
+]

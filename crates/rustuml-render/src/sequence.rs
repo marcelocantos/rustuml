@@ -3301,6 +3301,17 @@ fn sequence_lifelines(
                 };
                 last_return_context = Some(context.clone());
                 if let Some(change) = &message.activation {
+                    // CommandExoArrowAny#executeArg applies every lifecycle
+                    // suffix to its one real participant, regardless of direction.
+                    let participant = if matches!(message.from.as_str(), "[" | "]") {
+                        &message.to
+                    } else if matches!(message.to.as_str(), "[" | "]") {
+                        &message.from
+                    } else if matches!(change, ActivationChange::Deactivate) {
+                        &message.from
+                    } else {
+                        &message.to
+                    };
                     match change {
                         ActivationChange::Activate => {
                             if add_sequence_life_variation(
@@ -3311,11 +3322,11 @@ fn sequence_lifelines(
                                 lifecycle_owner,
                                 create_msg_idx,
                                 first_message_index,
-                                &message.to,
+                                participant,
                                 event_index,
                                 LifeVariationKind::Open,
                             ) {
-                                active_participants.push(message.to.clone());
+                                active_participants.push(participant.clone());
                                 return_stack.push(context);
                             }
                         }
@@ -3328,13 +3339,12 @@ fn sequence_lifelines(
                                 lifecycle_owner,
                                 create_msg_idx,
                                 first_message_index,
-                                &message.from,
+                                participant,
                                 event_index,
                                 LifeVariationKind::Close,
                             ) {
-                                if let Some(position) = active_participants
-                                    .iter()
-                                    .rposition(|id| id == &message.from)
+                                if let Some(position) =
+                                    active_participants.iter().rposition(|id| id == participant)
                                 {
                                     active_participants.remove(position);
                                 }
@@ -3353,11 +3363,11 @@ fn sequence_lifelines(
                                 lifecycle_owner,
                                 create_msg_idx,
                                 first_message_index,
-                                &message.to,
+                                participant,
                                 event_index,
                                 LifeVariationKind::Close,
                             ) && let Some(position) =
-                                active_participants.iter().rposition(|id| id == &message.to)
+                                active_participants.iter().rposition(|id| id == participant)
                             {
                                 active_participants.remove(position);
                             }
@@ -3448,8 +3458,14 @@ fn sequence_lifelines(
                         deactivate: false,
                     });
                 }
-                if let Some(context) = return_stack.last().cloned()
-                    && add_sequence_life_variation(
+                if let Some(context) = return_stack.last().cloned() {
+                    // MessageExo#getParticipant1/2 both return the real participant.
+                    let participant = if matches!(context.from.as_str(), "[" | "]") {
+                        &context.to
+                    } else {
+                        &context.from
+                    };
+                    if add_sequence_life_variation(
                         &mut model,
                         &mut levels,
                         events,
@@ -3457,18 +3473,18 @@ fn sequence_lifelines(
                         lifecycle_owner,
                         create_msg_idx,
                         first_message_index,
-                        &context.from,
+                        participant,
                         event_index,
                         LifeVariationKind::Close,
-                    )
-                {
-                    if let Some(position) = active_participants
-                        .iter()
-                        .rposition(|participant| *participant == context.from)
-                    {
-                        active_participants.remove(position);
+                    ) {
+                        if let Some(position) = active_participants
+                            .iter()
+                            .rposition(|target| target == participant)
+                        {
+                            active_participants.remove(position);
+                        }
+                        return_stack.pop();
                     }
-                    return_stack.pop();
                 }
             }
             Event::GroupEnd => {
@@ -7484,17 +7500,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // Resolve ownership first, then feed those events through the existing
     // message geometry. In particular, MessageArrow samples both live segments
     // for constraints and endpoints; a separate return path loses their depth.
-    // Non-self Teoz and MessageExo use different models and remain separate.
+    // CommandReturn also reverses MessageExo; normalized boundary endpoints
+    // preserve its real participant. Non-self Teoz remains a separate model.
     // Keep source identity/event indices; this is a render-local model. Every
     // restart replaces at least one Return, so this lowering cannot cycle.
     let mut lowered = None;
     for (index, event) in diagram.events.iter().enumerate() {
         if let Event::Return(ret) = event
             && let Some(context) = horizontal_life_lines.return_context(index)
-            && (context.from == context.to
-                || (!diagram.teoz
-                    && id_to_idx.contains_key(context.from.as_str())
-                    && id_to_idx.contains_key(context.to.as_str())))
+            && (context.from == context.to || !diagram.teoz)
         {
             let normalized = lowered.get_or_insert_with(|| diagram.clone());
             let mut arrow = context.arrow.clone();

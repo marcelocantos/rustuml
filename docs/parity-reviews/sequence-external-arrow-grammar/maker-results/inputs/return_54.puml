@@ -1,0 +1,6 @@
+@startuml
+participant Probe
+participant Relay
+]-> Probe ++ : enter
+return boundary result
+@enduml
