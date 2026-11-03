@@ -522,7 +522,7 @@ struct PreprocessContext {
     collecting_sub: Option<String>,
     collecting_sub_lines: Vec<BufferedLine>,
     /// Local variable scopes for function calls (stack of saved scopes).
-    local_vars: Vec<HashMap<String, String>>,
+    local_vars: Vec<LocalMemory>,
     /// Pending return value from a `!return` inside a function body.
     /// Set by process_one_line when `!return` is encountered while active.
     return_signal: Option<Value>,
@@ -544,6 +544,14 @@ struct PreprocessContext {
 
 const MAX_INCLUDE_DEPTH: usize = 10;
 const MAX_WHILE_ITERATIONS: usize = 10000;
+
+// TMemoryLocal separates explicit locals/arguments from automatically local
+// names. A global introduced later takes precedence over an automatic local.
+#[derive(Default)]
+struct LocalMemory {
+    overrides: HashMap<String, String>,
+    locals: HashMap<String, String>,
+}
 
 struct CondState {
     active: bool,
@@ -688,21 +696,24 @@ impl PreprocessContext {
     }
 
     fn get_var(&self, name: &str) -> Option<&String> {
-        // Check local scope first, then global.
-        for scope in self.local_vars.iter().rev() {
-            if let Some(v) = scope.get(name) {
-                return Some(v);
-            }
-        }
-        self.defines.get(name)
+        // TMemoryLocal.getVariable and forkFromGlobal: sibling calls see the
+        // global memory, never their caller's overrides or fresh local names.
+        let local = self.local_vars.last();
+        local
+            .and_then(|scope| scope.overrides.get(name))
+            .or_else(|| self.defines.get(name))
+            .or_else(|| local.and_then(|scope| scope.locals.get(name)))
     }
 
     fn set_var(&mut self, name: &str, value: &str) {
-        // Update the innermost local scope that already holds this variable,
-        // so that !local variables are updated in-place by plain !$var = ...
-        for scope in self.local_vars.iter_mut().rev() {
-            if scope.contains_key(name) {
-                scope.insert(name.to_string(), value.to_string());
+        // TMemoryLocal.putVariable: override, existing global, then new local.
+        if let Some(scope) = self.local_vars.last_mut() {
+            if scope.overrides.contains_key(name) {
+                scope.overrides.insert(name.to_string(), value.to_string());
+                return;
+            }
+            if !self.defines.contains_key(name) {
+                scope.locals.insert(name.to_string(), value.to_string());
                 return;
             }
         }
@@ -711,11 +722,24 @@ impl PreprocessContext {
 
     fn set_local_var(&mut self, name: &str, value: &str) {
         if let Some(scope) = self.local_vars.last_mut() {
-            scope.insert(name.to_string(), value.to_string());
+            scope.overrides.insert(name.to_string(), value.to_string());
         } else {
-            // No local scope active, set global.
             self.set_var(name, value);
         }
+    }
+
+    fn remove_var(&mut self, name: &str) {
+        // TMemoryLocal.removeVariable uses the same precedence as getVariable.
+        if let Some(scope) = self.local_vars.last_mut() {
+            if scope.overrides.remove(name).is_some() {
+                return;
+            }
+            if !self.defines.contains_key(name) {
+                scope.locals.remove(name);
+                return;
+            }
+        }
+        self.defines.remove(name);
     }
 
     fn process(&mut self, input: &str) -> Vec<EvaluatedEvent> {
@@ -1079,15 +1103,18 @@ impl PreprocessContext {
     }
 
     fn try_local_var(&mut self, line: &str) -> bool {
+        // EaterAffectation.analyze selects LOCAL/GLOBAL before putVariable.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!local\s+\$(\w+)\s*=\s*(.+)$").unwrap());
-
+            LazyLock::new(|| Regex::new(r"^!(local|global)\s+\$(\w+)\s*=\s*(.+)$").unwrap());
         if let Some(caps) = RE.captures(line) {
             if self.is_active() {
-                let name = caps[1].to_string();
-                let raw_value = caps[2].trim();
-                let value = self.eval_expr_to_value(raw_value);
-                self.set_local_var(&name, &value.to_display());
+                let name = &caps[2];
+                let value = self.eval_expr_to_value(caps[3].trim()).to_display();
+                if &caps[1] == "global" {
+                    self.defines.insert(name.to_string(), value);
+                } else {
+                    self.set_local_var(name, &value);
+                }
             }
             return true;
         }
@@ -1280,22 +1307,23 @@ impl PreprocessContext {
             None => return (None, Vec::new()),
         };
 
-        // Save current values, set params.
-        let mut saved: Vec<(String, Option<String>)> = Vec::new();
+        // TFunctionImpl.getNewMemory binds evaluated arguments in a new
+        // sibling frame without temporarily changing global variables.
+        let mut scope = LocalMemory::default();
         for (i, param) in func.params.iter().enumerate() {
-            saved.push((param.name.clone(), self.get_var(&param.name).cloned()));
-            let arg_val = if let Some(arg) = args.get(i) {
-                arg.clone()
-            } else if let Some(def) = &param.default {
-                def.clone()
+            let value = if let Some(arg) = args.get(i) {
+                self.eval_expr_to_value(arg).to_display()
             } else {
-                String::new()
+                param.default.clone().unwrap_or_default()
             };
-            self.set_var(&param.name, &arg_val);
+            scope.overrides.insert(param.name.clone(), value);
         }
-
-        // Push a local scope.
-        self.local_vars.push(HashMap::new());
+        self.local_vars.push(scope);
+        // ExecutionContexts belongs to TMemory too; an early return from a
+        // nested conditional must not leave that conditional in the caller.
+        let outer_conditions = std::mem::take(&mut self.cond_stack);
+        let outer_whiles = std::mem::take(&mut self.while_stack);
+        let outer_foreaches = std::mem::take(&mut self.foreach_stack);
 
         // Save and clear any pending return signal from an outer context.
         let outer_return = self.return_signal.take();
@@ -1322,17 +1350,9 @@ impl PreprocessContext {
         // Pop local scope.
         self.local_vars.pop();
 
-        // Restore saved values.
-        for (param, old_val) in saved {
-            match old_val {
-                Some(v) => {
-                    self.defines.insert(param, v);
-                }
-                None => {
-                    self.defines.remove(&param);
-                }
-            }
-        }
+        self.cond_stack = outer_conditions;
+        self.while_stack = outer_whiles;
+        self.foreach_stack = outer_foreaches;
 
         (return_value, output_lines)
     }
@@ -1518,7 +1538,7 @@ impl PreprocessContext {
                             self.set_var(&foreach.var_name, &v);
                         }
                         None => {
-                            self.defines.remove(&foreach.var_name);
+                            self.remove_var(&foreach.var_name);
                         }
                     }
                 }
@@ -1802,7 +1822,7 @@ impl PreprocessContext {
             // EaterUndef. An inactive branch must not mutate outer memory.
             if self.is_active() {
                 let name = &caps[1];
-                self.defines.remove(name);
+                self.remove_var(name);
                 self.token_defines.remove(name);
             }
             return true;
@@ -2999,9 +3019,7 @@ fn parse_call_args(args_str: &str) -> Vec<String> {
         return Vec::new();
     }
     let args = split_args(args_str);
-    args.into_iter()
-        .map(|a| a.trim().trim_matches('"').to_string())
-        .collect()
+    args.into_iter().map(|a| a.trim().to_string()).collect()
 }
 
 fn split_args(s: &str) -> Vec<String> {
@@ -3453,6 +3471,45 @@ mod tests {
         let output = preprocess_full_for_parse(source, None);
         assert_eq!(output.uml_source, "@startuml\nclass Ledger\n@enduml\n");
         assert_eq!(output.lines[4], "class Ledger");
+    }
+
+    #[test]
+    fn procedure_frames_are_siblings_rooted_at_global_memory() {
+        let source = r#"@startuml
+!$shared = "global"
+!procedure $inner()
+inside $shared $fresh
+!endprocedure
+!procedure $outer($shared)
+!$fresh = "private"
+$inner()
+outer $shared $fresh
+!endprocedure
+$outer("argument")
+after $shared $fresh
+@enduml"#;
+        assert_eq!(
+            pp(source),
+            [
+                "inside global $fresh",
+                "outer argument private",
+                "after global $fresh"
+            ]
+        );
+    }
+
+    #[test]
+    fn explicit_global_assignment_does_not_replace_parameter_override() {
+        let source = r#"@startuml
+!$name = "before"
+!procedure $set($name)
+!global $name = "after"
+local $name
+!endprocedure
+$set("argument")
+global $name
+@enduml"#;
+        assert_eq!(pp(source), ["local argument", "global after"]);
     }
 
     #[test]
