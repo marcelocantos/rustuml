@@ -27,5 +27,6 @@
     "class/description declaration order and native versus shared interface commands",
     "parenthesis endpoint side, directions, root versus group topology"
   ],
-  "evidence_inventory": "../class-command-execution-ownership/maker-evidence/perturbation-results.json"
+  "evidence_inventory": "../class-command-execution-ownership/maker-evidence/perturbation-results.json",
+  "planned_change": "Extend typed leaves/groups and consuming package name/modifier slots from Java; preserve tags, URL, selected stereotype and symbol identity. Store parenthesis as an endpoint decoration, preserving direction inversion and package endpoints. Parameterize class command consumption by class/description factory semantics: description rejects native-only declarations and allowmixing but accepts shared interface/entity meanings. Use the successful complete description trial only after class rejection, route its represented leaves into existing component/usecase parser. Verify AST retention, not only factory names. Do not relax unknown-command rejection."
 }

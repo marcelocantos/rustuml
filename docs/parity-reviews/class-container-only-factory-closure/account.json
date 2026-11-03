@@ -19,5 +19,6 @@
   "perturbation_axes": [
     "empty/nested/linked packages",
     "quoted display, aliases and URL syntax"
-  ]
+  ],
+  "planned_change": "Extend the successful consuming trial to package-only models with no entities; do not accept unknown commands or bypass execution failures."
 }

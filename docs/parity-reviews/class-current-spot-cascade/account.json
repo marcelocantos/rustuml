@@ -20,5 +20,6 @@
     "cerulean/minty ordering and explicit override before/after themes",
     "native class/interface/record types and custom spots"
   ],
-  "independent_dependency": "git show b2c9143f95de43cde37cbcc055a56da40e56735e:docs/parity-reviews/tim-theme-post-expansion-source-identity/review.json"
+  "independent_dependency": "git show b2c9143f95de43cde37cbcc055a56da40e56735e:docs/parity-reviews/tim-theme-post-expansion-source-identity/review.json",
+  "planned_change": "Resolve the Java spot signature through the existing StyleCascade at render time in owned class code; apply selected current background/line/font color while preserving explicit custom spot override and body creation style. No preprocessing or shared-style changes. Preserve parent reference bytes and compare original CLI plus isolated post-TIM source diagnostics."
 }

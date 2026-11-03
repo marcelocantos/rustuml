@@ -20,5 +20,6 @@
   "perturbation_axes": [
     "root versus contained notes attached to the same grouped class",
     "mixed/nested container symbols, root peers and multiple root groups"
-  ]
+  ],
+  "planned_change": "Measure actual cluster frontiers with LimitFinder rectangle inset/polygon overscan/cloud frontier during the existing common normalization, then remove per-package paint translations. Use the same frontier calculation during final envelope measurement to avoid a second shift. Preserve graph membership and serialized node origins."
 }
