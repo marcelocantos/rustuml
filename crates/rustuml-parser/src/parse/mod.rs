@@ -1322,7 +1322,8 @@ mod tests {
                 ("%date(\"QQ\",0)", "Bad date pattern"),
                 (
                     "%date(\"yyyy\",2147483648)",
-                    "Date seconds outside signed 32-bit range",
+                    // Java TValue.fromNumber rejects the literal before DateFunction.
+                    "Integer literal outside signed 32-bit range",
                 ),
             ] {
                 let input = format!("@startuml\n{declaration}\n!$bad = {expression}\n@enduml\n");
