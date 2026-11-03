@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+  "status": "pre-implementation causal account; maker only, independent checker pending",
+  "scope": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "oracle_plan": {
+    "class": "2, reference-comparable; judgment cost converted to exact stream and strict SVG checks",
+    "checks": [
+      "Java SourceStringReader Diagram.getSource().getPlainString versus shipped CLI --yaml meta.source",
+      "Shipped CLI SVG versus pinned Java using unchanged compare_svg_strict",
+      "Parser units, pipe_mode, golden_no_oracle, golden_pairs, harness_guards, parity_perturbations and all 907 preserved inputs in isolated CLI processes"
+    ],
+    "residue": [
+      "Independent checker heldouts and verdict required",
+      "Historical font/Graphviz equivalence unproven; source-pinned JAR is not byte-identical",
+      "Repeated-theme class spot palette, handwritten shapes and sequence continuation geometry remain outside ownership"
+    ]
+  },
+  "mechanism": "tim-evaluated-event-stream",
+  "java_locations": [
+    "tim/TContext.java:326-472 buildCodeIterator/executeLines/addPlain",
+    "tim/TContext.java:725 executeTheme",
+    "tim/iterator/CodeIteratorSub.java:peek",
+    "tim/EaterTheme.java:analyze",
+    "text/StringLocated.java:255 removeInnerComment",
+    "tim/iterator/CodeIteratorLongComment.java:peek",
+    "core/UmlSource.java:loadInternal/getPlainString",
+    "BlockUmlBuilder.java:constructor"
+  ],
+  "rust_locations": [
+    "preprocess/mod.rs:preprocess_full_inner/expanded_theme_seed_source",
+    "preprocess/mod.rs:process_one_line/try_theme/try_include/try_option/call_function"
+  ],
+  "claimed_invariant": "One execution produces ordered evaluated content with origins. Identity preserves every evaluated plain line (including sprites, blanks and boundaries), while parser lowering consumes sprites and lowers theme/option events without reevaluating TIM or changing its state.",
+  "causal_divergence": "The integrated code reconstructs themed identity from raw input and replays theme bodies, including subblocks, in separate orders; non-themed identity creates another context. Sprites are erased before identity, user subblocks never execute, diagnostic comments are synthesized, inactive theme/option placeholders are discarded, raw initial blanks are dropped, and trailing apostrophes are incorrectly treated as TIM comments. Theme names never execute functions/variables. These are alternative projections/evaluation orders rather than Java resultList semantics.",
+  "planned_model_change": "Replace dual passes and raw substitution with typed evaluated events: plain located text, boundaries, parser-only consumed directives/options and nested theme expansions. Evaluate each theme/sub/procedure once in the active memory; lower that same stream into identity and parser representation. Move sprite extraction to parser projection. Retain original line origins across consumed directives. Mirror Java comment iterator/inner-comment operations and retain blank lines. Resolve theme selectors (and local from expressions) before loading; inactive includes/themes must have no execution side effects.",
+  "perturbation_axes": [
+    "Sprite dimensions/pixels and declaration placement relative to a theme/sub/procedure",
+    "Theme selector function arguments versus variables and inactive directive count",
+    "Subblock state mutations versus include/procedure/loop nesting",
+    "Leading/internal blanks and prefix/trailing/special inner comments"
+  ],
+  "boundary": "No parse dispatcher, renderer, comparator or baseline changes. Sequence dispatcher may request a separate preprocessing operation; each returned representation must be internally single-evaluation. A cache across parse calls is not introduced."
+}
