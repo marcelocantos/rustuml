@@ -1,0 +1,16 @@
+--- Java UmlSource
++++ after CLI metadata source
+@@ -436,9 +436,9 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
+-sprite $mark [2x2/16] {
+-F0
+-0F
+-}
++
++
++
++
+ class BeechLedger
+ @enduml

@@ -1,0 +1,16 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -436,7 +436,10 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
+-class CopperRegister {
+-  +key: String
+-}
++!procedure $record($name, $field)
++class $name {
++  +$field: String
++}
++!endprocedure
++$record(CopperRegister, key)
+ @enduml

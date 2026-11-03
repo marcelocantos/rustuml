@@ -1,0 +1,14 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -436,7 +436,9 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
+-class SaffronLedger {
+-  +invoice: String
++!$record = "SaffronLedger"
++!$field = "invoice"
++class $record {
++  +$field: String
+ }
+ @enduml

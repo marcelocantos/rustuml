@@ -1,0 +1,7 @@
+@startuml
+!$record = "AsterCollection"
+!theme united
+class $record {
+  +length: int
+}
+@enduml

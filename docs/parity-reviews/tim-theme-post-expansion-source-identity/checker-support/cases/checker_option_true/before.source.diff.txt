@@ -1,0 +1,8 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -1,4 +1,5 @@
+ @startuml
++skinparam __optionHandwritten true
+ skinparam shadowing true
+ class PoplarLedger
+ @enduml

@@ -1,0 +1,7 @@
+@startuml
+!function $palette()
+!return "minty"
+!endfunction
+!theme $palette()
+class HazelLedger
+@enduml

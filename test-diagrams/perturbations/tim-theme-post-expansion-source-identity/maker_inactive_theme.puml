@@ -1,0 +1,10 @@
+@startuml
+!theme cerulean
+!if 0
+!theme minty
+class Unused
+!endif
+class WillowRegister {
+  +weight: int
+}
+@enduml

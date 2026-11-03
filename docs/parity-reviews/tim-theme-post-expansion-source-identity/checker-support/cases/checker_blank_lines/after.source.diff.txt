@@ -1,0 +1,9 @@
+--- Java UmlSource
++++ after CLI metadata source
+@@ -1,6 +1,4 @@
+ @startuml
+-
+-
+ 
+ 
+ 

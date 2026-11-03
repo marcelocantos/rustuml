@@ -1,0 +1,5 @@
+@startuml
+skinparam __theme minty
+skinparam classBorderColor #123456
+class WillowLedger
+@enduml

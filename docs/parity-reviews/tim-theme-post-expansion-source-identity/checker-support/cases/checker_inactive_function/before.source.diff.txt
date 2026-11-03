@@ -1,0 +1,23 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -1,4 +1,7 @@
+ @startuml
++!function $tone()
++!return "#123456"
++!endfunction
+ 
+ 
+ 
+@@ -436,6 +439,11 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
+-skinparam classBorderColor #654321
++!if 0
++!function $tone()
++!return "#654321"
++!endfunction
++!endif
++skinparam classBorderColor $tone()
+ class AcaciaLedger
+ @enduml
