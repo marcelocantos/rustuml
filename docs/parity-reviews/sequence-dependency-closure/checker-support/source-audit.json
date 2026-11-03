@@ -1,0 +1,3348 @@
+{
+  "reviewed_parent": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "reviewed_candidate": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "method": "Inspect exact production diff and Java sources; enumerate renderer branch/numeric expressions not matched by a whitespace-normalized parent line multiset, excluding test-only items from production conclusions. Moved unchanged code is not falsely called a new literal. Inventory is a navigation aid, not an acceptance gate.",
+  "files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "model_file_change": "Clone derives only; required for render-local lowering, no fixture/input discrimination.",
+  "sections": [
+    {
+      "lines": [
+        1,
+        2999
+      ],
+      "name": "Component dimensions and multiline guards",
+      "java_methods": [
+        "skin/rose/ComponentRoseNote#getPreferredWidth",
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseGroupingHeader#getPreferredHeight",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "assessment": "New folded-note shadow width and right margin5 have direct citations. Guard line splitting has Display citation. Existing inherited font sizes/metrics were not retuned. Over-several span still omits participant shadow; see focused shadow controls."
+    },
+    {
+      "lines": [
+        3000,
+        3118
+      ],
+      "name": "Teoz all-history depth",
+      "java_methods": [
+        "sequencediagram/teoz/LivingSpace#getPosC2",
+        "sequencediagram/teoz/LiveBoxes#getMaxPosition,getLevelAtInternal"
+      ],
+      "assessment": "Max-depth arithmetic is sourced but accepted legacy variations are not the full Java event history. Counterexamples reject the data-flow equivalence."
+    },
+    {
+      "lines": [
+        3119,
+        3177
+      ],
+      "name": "Shared self geometry",
+      "java_methods": [
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/Step1Message#createMessageSelfArrow"
+      ],
+      "assessment": "Forward delta/start/width algebra is sourced. Reverse direction is missing from the shared value; fresh reverse-definition controls fail."
+    },
+    {
+      "lines": [
+        3178,
+        3240
+      ],
+      "name": "Recursive winning members",
+      "java_methods": [
+        "sequencediagram/InGroupableList#getMinSlow,getMin,getMinX,getMaxXInternal"
+      ],
+      "assessment": "Member identity cached before translation and kind margin afterward is source-faithful. Minimum ties remain an unproven corner because Java iterates a HashSet and Rust an ordered vector; no tie-specific failure is asserted. Complete envelope still depends on failing component widths."
+    },
+    {
+      "lines": [
+        3241,
+        3715
+      ],
+      "name": "Return and lifecycle ownership",
+      "java_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "assessment": "External real-participant selection, return-owned deactivation, and independent lifecycle flags are cited. Teoz ordinates remain supplied by a legacy combined-row scheduler; return optional color is not represented."
+    },
+    {
+      "lines": [
+        3716,
+        6500
+      ],
+      "name": "Shadow painting",
+      "java_methods": [
+        "skin/rose/ComponentRoseActiveLine#drawInternalU",
+        "skin/rose/ComponentRoseGroupingHeader#drawBackgroundInternalU"
+      ],
+      "assessment": "Added filter fields reuse resolved sequence shadow state and do not read golden output. No new shadow magnitude was invented."
+    },
+    {
+      "lines": [
+        6501,
+        7174
+      ],
+      "name": "Preferred padded metrics",
+      "java_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "assessment": "New named COMMENT_RESERVED_HEIGHT=15 exactly matches Java. Padding is added twice for the block sides. The global style branch and empty-comment cases have scoped evidence; whole-source padding still fails."
+    },
+    {
+      "lines": [
+        7175,
+        7619
+      ],
+      "name": "Event scheduling",
+      "java_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareNote,prepareGroupingStart,prepareGroupingLeaf,prepareNewpage",
+        "sequencediagram/graphic/ArrowAndNoteBox#ArrowAndNoteBox,getPreferredHeight"
+      ],
+      "assessment": "Standalone padded note and group flows are accounted. Attached notes retain separate ad hoc scheduling, and self-note branch does not include the same padding origin as other notes. Fresh note and Teoz histories reject full scheduling."
+    },
+    {
+      "lines": [
+        7620,
+        7660
+      ],
+      "name": "Return lowering",
+      "java_methods": [
+        "sequencediagram/command/CommandReturn#executeArg"
+      ],
+      "assessment": "Clone retains event indices and source lines. Each recursive render removes at least one Return; termination has a strict decreasing measure. Color parsing omission is demonstrated by fresh raw-Java controls."
+    },
+    {
+      "lines": [
+        7661,
+        8555
+      ],
+      "name": "Constraints and shared self envelopes",
+      "java_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "assessment": "Forward width includes the start live segment, with a further segment reservation in ConstraintAfter; last-border branch is accounted. Reverse ConstraintBefore envelope is not represented by SequenceSelfArrow. Removed create/destroy pad constants are a structural improvement, not proof of parity."
+    },
+    {
+      "lines": [
+        8556,
+        8656
+      ],
+      "name": "Note live envelopes",
+      "java_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "assessment": "4*ROSE_NOTE_PADDING_Y is documented as two marginY plus two paddingY contributions; shadow and global text padding are separate. Uses full preferred component edges for legacy; Teoz still consumes ordinate-based unions rather than full event-history modes."
+    },
+    {
+      "lines": [
+        8657,
+        9749
+      ],
+      "name": "Group membership and tiled bounds",
+      "java_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "assessment": "Raw and translated evaluation reuses one closure with cached winning identities; this deliberate two-pass measurement is not duplicate independent policy. However component bounds are duplicated elsewhere, and participant shadow is still omitted from spanning-note width. Teoz life arithmetic is source-derived but its accepted-variation inputs are incomplete."
+    },
+    {
+      "lines": [
+        9750,
+        10095
+      ],
+      "name": "Missing-space and page translation",
+      "java_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "assessment": "Single missing-space push and legacy reevaluation are supported. Teoz min_tile separately reconstructs notes and groups and misses exo origin behavior. Legacy midpoint chrome logic was removed; its Teoz branch remains and is contradicted by page controls."
+    },
+    {
+      "lines": [
+        10096,
+        10819
+      ],
+      "name": "Final envelopes and all-page activations",
+      "java_methods": [
+        "sequencediagram/graphic/ArrowAndNoteBox#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/DrawableSet#drawU22",
+        "sequencediagram/graphic/LifeLine#finish"
+      ],
+      "assessment": "Preferred width versus actual width is correctly distinguished in the self-note wrapper. Multiple note extent reconstructions remain. The raw_note_content_w.fract()>0.57 branch is inherited unchanged and remains a pre-existing unexplained workaround on still-reachable Teoz paths; this review does not bless it."
+    },
+    {
+      "lines": [
+        10820,
+        11194
+      ],
+      "name": "Chrome composition",
+      "java_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "assessment": "Right margin5 and child centering /2 are sourced. Added +1 TextBlockBordered trailing unit, +3 caption (two unit margins plus trailing unit), and title padding are described at the new block. This only fixes horizontal composition; vertical caption still starts at the undecorated tail and ignores preceding legend height. Focused counterexamples reject complete composition."
+    },
+    {
+      "lines": [
+        11195,
+        11549
+      ],
+      "name": "Activation clipping and background shadow",
+      "java_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "assessment": "Clipping preserves title/group wrappers. The +2 body-bottom expression is tied to the existing tail/separator coordinate convention; the adjacent comment names the clipping method but does not independently derive that conversion. No isolated acceptance is issued. Four legacy page controls pass; Teoz and combined chrome fail."
+    },
+    {
+      "lines": [
+        11550,
+        11785
+      ],
+      "name": "Teoz ordinary message endpoints",
+      "java_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "assessment": "The depth==1 / depth>2 branches and subtract2 are literal Java control flow, not a fixture-shaped depth ladder. The caller approximates IGNORE_FUTURE_DEACTIVATE by max(before,at); failing event histories mean that input is not generally equivalent."
+    },
+    {
+      "lines": [
+        11786,
+        12969
+      ],
+      "name": "Self strokes and direction",
+      "java_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "assessment": "One-unit ASYNC stroke adjustment after lifecycle delta is directly sourced. Half-head branch shares ASYNC dressing. Legacy flag-based component delta works in forward controls; reverse start/envelope and Teoz explicit-flag histories fail. No text-label keyed branch found."
+    },
+    {
+      "lines": [
+        12970,
+        13599
+      ],
+      "name": "Note component painting",
+      "java_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "assessment": "Body-coordinate truncation before page translation is source-derived. Multiple paint/extent formulas omit shadow/padding in different places. The participant-span and attached-note failures expose this duplication. Existing note origin clamps are retained, not independently justified."
+    },
+    {
+      "lines": [
+        13600,
+        14273
+      ],
+      "name": "Group and footer painting",
+      "java_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "assessment": "Padding added to inherited guard positions reuses existing decimal baselines; decimal counts do not increase. Immediate comments at the changed12.634765625/12.63475 offsets do not state a Java metric derivation, so adjacent provenance is incomplete despite account-level references. New page-text-center condition is sourced, but multiline caption and vertical wrapper composition remain wrong."
+    }
+  ],
+  "changed_branch_numeric_inventory": [
+    {
+      "line": 382,
+      "text": "max_text_w + ROSE_NOTE_COMPONENT_PREF_EXTRA + 2.0 * note_global_padding + shadow",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Component dimensions and multiline guards",
+      "reference_methods": [
+        "skin/rose/ComponentRoseNote#getPreferredWidth",
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseGroupingHeader#getPreferredHeight",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseNote#getPreferredWidth includes Fashion.deltaShadow;",
+        "// drawInternalU keeps the visible polygon at getTextWidth."
+      ]
+    },
+    {
+      "line": 695,
+      "text": "const LEGACY_SEQUENCE_RIGHT_MARGIN: f64 = 5.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Component dimensions and multiline guards",
+      "reference_methods": [
+        "skin/rose/ComponentRoseNote#getPreferredWidth",
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseGroupingHeader#getPreferredHeight",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "/// Bare `note right` attached to a self-message places the note top at",
+        "/// `arrow_y - first_line_height + this`.",
+        "/// Minimum preferred width a self-message reserves in the gap to the next",
+        "/// participant. PlantUML's ComponentRoseSelfArrow.getPreferredWidth returns",
+        "/// `max(textWidth, arrowWidth + 5)` with arrowWidth = 45, i.e. min 50.",
+        "// SequenceDiagram#getDefaultMargins (legacy): top/right/bottom/left = 5/5/5/0."
+      ]
+    },
+    {
+      "line": 1889,
+      "text": ".map(|line| bold_text_width_with_family(line, 11.0, font_family))",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Component dimensions and multiline guards",
+      "reference_methods": [
+        "skin/rose/ComponentRoseNote#getPreferredWidth",
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseGroupingHeader#getPreferredHeight",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseGroupingHeader constructs Display with newlines, so",
+        "// width is the maximum line advance, not the joined source spelling."
+      ]
+    },
+    {
+      "line": 1890,
+      "text": ".fold(0.0, f64::max);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Component dimensions and multiline guards",
+      "reference_methods": [
+        "skin/rose/ComponentRoseNote#getPreferredWidth",
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseGroupingHeader#getPreferredHeight",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseGroupingHeader constructs Display with newlines, so",
+        "// width is the maximum line advance, not the joined source spelling."
+      ]
+    },
+    {
+      "line": 1919,
+      "text": "line_y += rendered_line_metrics_with_family(line, 11.0, font_family).height;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Component dimensions and multiline guards",
+      "reference_methods": [
+        "skin/rose/ComponentRoseNote#getPreferredWidth",
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseGroupingHeader#getPreferredHeight",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 3034,
+      "text": "let mut maximum = 0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz all-history depth",
+      "reference_methods": [
+        "sequencediagram/teoz/LivingSpace#getPosC2",
+        "sequencediagram/teoz/LiveBoxes#getMaxPosition,getLevelAtInternal"
+      ],
+      "nearby_comments": [
+        "// LivingSpace#getPosC2 / LiveBoxes#getMaxPosition: half-width times",
+        "// maximum accepted level across the complete event history."
+      ]
+    },
+    {
+      "line": 3035,
+      "text": "if let Some(variations) = self.variations.get(participant) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz all-history depth",
+      "reference_methods": [
+        "sequencediagram/teoz/LivingSpace#getPosC2",
+        "sequencediagram/teoz/LiveBoxes#getMaxPosition,getLevelAtInternal"
+      ],
+      "nearby_comments": [
+        "// LivingSpace#getPosC2 / LiveBoxes#getMaxPosition: half-width times",
+        "// maximum accepted level across the complete event history."
+      ]
+    },
+    {
+      "line": 3039,
+      "text": "LifeVariationKind::Close => depth = depth.saturating_sub(1),",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz all-history depth",
+      "reference_methods": [
+        "sequencediagram/teoz/LivingSpace#getPosC2",
+        "sequencediagram/teoz/LiveBoxes#getMaxPosition,getLevelAtInternal"
+      ],
+      "nearby_comments": [
+        "// LivingSpace#getPosC2 / LiveBoxes#getMaxPosition: half-width times",
+        "// maximum accepted level across the complete event history."
+      ]
+    },
+    {
+      "line": 3096,
+      "text": "LifeVariationKind::Open => depth += 1,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz all-history depth",
+      "reference_methods": [
+        "sequencediagram/teoz/LivingSpace#getPosC2",
+        "sequencediagram/teoz/LiveBoxes#getMaxPosition,getLevelAtInternal"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 3128,
+      "text": "let (left, right) = sequence_live_segment(0.0, depth);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Shared self geometry",
+      "reference_methods": [
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/Step1Message#createMessageSelfArrow"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 3129,
+      "text": "let activation_delta = if activates { ACTIVATION_HALF_W } else { 0.0 };",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Shared self geometry",
+      "reference_methods": [
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/Step1Message#createMessageSelfArrow"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 3187,
+      "text": "if !winners.selected {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Recursive winning members",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinSlow,getMin,getMinX,getMaxXInternal"
+      ],
+      "nearby_comments": [
+        "// InGroupableList#getMin/getMax cache the winning *member*, not its",
+        "// coordinate. prepareMissingSpace selects it before pushing constraints;",
+        "// subsequent paint reevaluates that same member in the translated state."
+      ]
+    },
+    {
+      "line": 3299,
+      "text": "event_y_positions[index] + SELF_MSG_DROP - if teoz { 0.0 } else { ACTIVATION_HALF_W }",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// CommunicationTileSelf#callbackY_internal uses p2; legacy Step1Message",
+        "// translates its self component up by half a livebox width."
+      ]
+    },
+    {
+      "line": 3304,
+      "text": "+ if teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// CommunicationTileSelf#callbackY_internal uses p2; legacy Step1Message",
+        "// translates its self component up by half a livebox width.",
+        "// Teoz closes at p1, while the legacy self arrow closes near p2."
+      ]
+    },
+    {
+      "line": 3370,
+      "text": "let participant = if matches!(message.from.as_str(), \"[\" | \"]\") {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// CommandExoArrowAny#executeArg applies every lifecycle",
+        "// suffix to its one real participant, regardless of direction."
+      ]
+    },
+    {
+      "line": 3372,
+      "text": "} else if matches!(message.to.as_str(), \"[\" | \"]\") {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// CommandExoArrowAny#executeArg applies every lifecycle",
+        "// suffix to its one real participant, regardless of direction."
+      ]
+    },
+    {
+      "line": 3374,
+      "text": "} else if matches!(change, ActivationChange::Deactivate) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// CommandExoArrowAny#executeArg applies every lifecycle",
+        "// suffix to its one real participant, regardless of direction."
+      ]
+    },
+    {
+      "line": 3481,
+      "text": "if let Some(position) =",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 3513,
+      "text": "if let Some(context) = &mut context {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 3531,
+      "text": "if let Some(context) = return_stack.last().cloned() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// not the last source-level Message event."
+      ]
+    },
+    {
+      "line": 3533,
+      "text": "let participant = if matches!(context.from.as_str(), \"[\" | \"]\") {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// MessageExo#getParticipant1/2 both return the real participant."
+      ]
+    },
+    {
+      "line": 3538,
+      "text": "if add_sequence_life_variation(",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return and lifecycle ownership",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg",
+        "sequencediagram/MessageExo#getParticipant1,getParticipant2",
+        "sequencediagram/AbstractMessage#addLifeEvent",
+        "sequencediagram/teoz/CommunicationTileSelf#callbackY_internal"
+      ],
+      "nearby_comments": [
+        "// MessageExo#getParticipant1/2 both return the real participant."
+      ]
+    },
+    {
+      "line": 5133,
+      "text": "r##\"<rect fill=\"{}\"{shadow} height=\"{}\" style=\"stroke:#181818;stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"##,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Shadow painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseActiveLine#drawInternalU",
+        "skin/rose/ComponentRoseGroupingHeader#drawBackgroundInternalU"
+      ],
+      "nearby_comments": [
+        "// Plain stroked rect: identical to the uncut activation bar."
+      ]
+    },
+    {
+      "line": 5147,
+      "text": "r##\"<rect fill=\"{}\"{shadow} height=\"{}\" style=\"stroke:{};stroke-width:1;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"##,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Shadow painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseActiveLine#drawInternalU",
+        "skin/rose/ComponentRoseGroupingHeader#drawBackgroundInternalU"
+      ],
+      "nearby_comments": [
+        "// Back-colored rect (border = fill = back color, so the box edges are",
+        "// invisible), then explicit border lines."
+      ]
+    },
+    {
+      "line": 6540,
+      "text": "+ 2.0 * global_padding;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// Display#create0 builds a SheetBlock1 whose dimension and text origin",
+        "// include global padding; AbstractTextualComponent adds its two Y margins."
+      ]
+    },
+    {
+      "line": 6543,
+      "text": "guard.map_or(0.0, |label| {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// Display#create0 builds a SheetBlock1 whose dimension and text origin",
+        "// include global padding; AbstractTextualComponent adds its two Y margins."
+      ]
+    },
+    {
+      "line": 6546,
+      "text": "const COMMENT_RESERVED_HEIGHT: f64 = 15.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseGroupingHeader#getSuppHeightForComment reserves",
+        "// only the part of the comment block exceeding its 15-unit slot."
+      ]
+    },
+    {
+      "line": 6548,
+      "text": "(message_label_block_height_with_family(&comment, 11.0, &group_header_font_family)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseGroupingHeader#getSuppHeightForComment reserves",
+        "// only the part of the comment block exceeding its 15-unit slot."
+      ]
+    },
+    {
+      "line": 6549,
+      "text": "+ 2.0 * global_padding",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseGroupingHeader#getSuppHeightForComment reserves",
+        "// only the part of the comment block exceeding its 15-unit slot."
+      ]
+    },
+    {
+      "line": 6551,
+      "text": ".max(0.0)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseGroupingHeader#getSuppHeightForComment reserves",
+        "// only the part of the comment block exceeding its 15-unit slot."
+      ]
+    },
+    {
+      "line": 6628,
+      "text": "let note_shadow_delta = if note_shadow_filter.is_some() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseNote preferred dimensions include its own shadow style,",
+        "// independently of participant shadowing. ArrowAndNoteBox centers the note.",
+        "// FromSkinparamToStyle#getShadowingValue maps boolean true to 3."
+      ]
+    },
+    {
+      "line": 6633,
+      "text": "let shadow_note_extra = note_shadow_delta / 2.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Preferred padded metrics",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#getSuppHeightForComment",
+        "skin/AbstractTextualComponent#getTextHeight",
+        "klimt/creole/SheetBlock1#calculateDimension"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseNote preferred dimensions include its own shadow style,",
+        "// independently of participant shadowing. ArrowAndNoteBox centers the note.",
+        "// FromSkinparamToStyle#getShadowingValue maps boolean true to 3."
+      ]
+    },
+    {
+      "line": 7442,
+      "text": "y = note_event_y + note_shadow_delta + 2.0 * note_global_padding;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Event scheduling",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareNote,prepareGroupingStart,prepareGroupingLeaf,prepareNewpage",
+        "sequencediagram/graphic/ArrowAndNoteBox#ArrowAndNoteBox,getPreferredHeight"
+      ],
+      "nearby_comments": [
+        "// `AbstractUGraphic.getMaxY` includes the note's delta",
+        "// shadow in the painted extent. Keep the note anchored",
+        "// at its logical y, but advance subsequent events past",
+        "// the three-pixel shadow tail.",
+        "// NoteBox#getPreferredHeight delegates to the note",
+        "// component, including the padded body text block."
+      ]
+    },
+    {
+      "line": 7488,
+      "text": "11.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Event scheduling",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareNote,prepareGroupingStart,prepareGroupingLeaf,prepareNewpage",
+        "sequencediagram/graphic/ArrowAndNoteBox#ArrowAndNoteBox,getPreferredHeight"
+      ],
+      "nearby_comments": [
+        "// With a label: advance past the label text.",
+        "// ComponentRoseGroupingElse#getPreferredHeight includes",
+        "// the complete padded comment block (no padding on empty)."
+      ]
+    },
+    {
+      "line": 7492,
+      "text": "11.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Event scheduling",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareNote,prepareGroupingStart,prepareGroupingLeaf,prepareNewpage",
+        "sequencediagram/graphic/ArrowAndNoteBox#ArrowAndNoteBox,getPreferredHeight"
+      ],
+      "nearby_comments": [
+        "// the complete padded comment block (no padding on empty)."
+      ]
+    },
+    {
+      "line": 7495,
+      "text": "y += GROUP_ELSE_INNER_PAD + 2.0 * global_padding + extra_lines;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Event scheduling",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareNote,prepareGroupingStart,prepareGroupingLeaf,prepareNewpage",
+        "sequencediagram/graphic/ArrowAndNoteBox#ArrowAndNoteBox,getPreferredHeight"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 7625,
+      "text": "if let Event::Return(ret) = event",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return lowering",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg"
+      ],
+      "nearby_comments": [
+        "// for constraints and endpoints; a separate return path loses their depth.",
+        "// CommandReturn also reverses MessageExo; normalized boundary endpoints",
+        "// preserve its real participant. Teoz uses its own endpoint/history model",
+        "// after lowering, while sharing the parser's return ownership.",
+        "// Keep source identity/event indices; this is a render-local model. Every",
+        "// restart replaces at least one Return, so this lowering cannot cycle."
+      ]
+    },
+    {
+      "line": 7642,
+      "text": "if let Some(normalized) = lowered {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Return lowering",
+      "reference_methods": [
+        "sequencediagram/command/CommandReturn#executeArg"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 7930,
+      "text": "+ 2.0 * constraint_global_padding;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": [
+        "// Same spacing formula as forward messages"
+      ]
+    },
+    {
+      "line": 8161,
+      "text": "let group_pad = if min_scan_group_depth > 0 && !legacy_groups {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8249,
+      "text": "let group_shift = if diagram.teoz || legacy_groups {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": [
+        "// midpoint `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`; when the",
+        "// band (at its own left margin) would push that midpoint right of where the",
+        "// participants currently sit, the whole diagram shifts and the canvas grows",
+        "// symmetrically by `2 * meta_shift`. Derived from seq_footer_variant_01",
+        "// (footer 133.4033 @ m=0 -> shift 13.249, width 113->140), seq_title_basic",
+        "// (title 159.1133 @ m=10 -> shift 36.104, width 113->186) and the caption",
+        "// variants (m=1). See the C3 width-feedback note."
+      ]
+    },
+    {
+      "line": 8265,
+      "text": "let group_shift = group_shift.max(if group_has_external_left && !legacy_groups {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": [
+        "// InGroupableList; an ordinary LivingParticipantBox list",
+        "// minimum is another MARGIN5 outside ParticipantBox's",
+        "// invisible outMargin."
+      ]
+    },
+    {
+      "line": 8380,
+      "text": "if let Event::Note(note) = event",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": [
+        "// An OVER_SEVERAL note (note across, or note over A,B) is centered on the",
+        "// midpoint of its first/last participant box centers and extends pw/2 each",
+        "// side. If its left edge would fall left of the HEAD_BOX_Y margin, the",
+        "// whole diagram must shift right. pw = max(content, round(span) + 25)."
+      ]
+    },
+    {
+      "line": 8519,
+      "text": "+ 2.0 * constraint_global_padding;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8527,
+      "text": "let self_right = if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8537,
+      "text": "let border = if id_to_idx.get(&msg.from) == Some(&(n - 1)) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Constraints and shared self envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/Step1Message#prepareMessage",
+        "sequencediagram/graphic/MessageSelfArrow#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/ConstraintSet#getConstraintAfter,getConstraintBefore",
+        "sequencediagram/teoz/CommunicationTileSelf#getMaxX"
+      ],
+      "nearby_comments": [
+        "// ConstraintSet has a real last-border constraint even",
+        "// without a following participant. prepareMissingSpace",
+        "// then compares that border with MessageSelfArrow.maxX."
+      ]
+    },
+    {
+      "line": 8566,
+      "text": ".take(if legacy_groups {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note live envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8582,
+      "text": "let participant = if note.position == NotePosition::Right {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note live envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "nearby_comments": [
+        "// Step1Abstract#createNoteBox uses the spatial left/right participant;",
+        "// NoteBox#getSegment merges live thickness at both component edges."
+      ]
+    },
+    {
+      "line": 8601,
+      "text": "let component_bottom = if note.shape == NoteShape::Note {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note live envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "nearby_comments": [
+        "// NoteBox#getSegment samples preferred height, not the integer polygon",
+        "// height. ComponentRoseNote has marginY=5 and paddingY=5 on each side."
+      ]
+    },
+    {
+      "line": 8604,
+      "text": "+ 4.0 * ROSE_NOTE_PADDING_Y",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note live envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "nearby_comments": [
+        "// NoteBox#getSegment samples preferred height, not the integer polygon",
+        "// height. ComponentRoseNote has marginY=5 and paddingY=5 on each side."
+      ]
+    },
+    {
+      "line": 8612,
+      "text": "if !diagram.teoz && left_shift != 0.0 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note live envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8622,
+      "text": "if let Event::Note(note) = &diagram.events[*note_index]",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note live envelopes",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getSegment,getStartingX",
+        "skin/rose/ComponentRoseNote#getPreferredHeight",
+        "sequencediagram/graphic/Step1Abstract#createNoteBox"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8662,
+      "text": "|id: &str| -> f64 { id_to_idx.get(id).map_or(0.0, |&i| participants[i].center_x) };",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8710,
+      "text": "if diagram.teoz && !note.on_message && note.shape == NoteShape::Note {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// NoteTile#getX/getUsedWidth uses fractional Real coordinates;",
+        "// LEFT never applies a live-left shift, RIGHT uses its level."
+      ]
+    },
+    {
+      "line": 8716,
+      "text": "let lo = anchor_idxs.iter().min().copied().unwrap_or(0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// NoteTile#getX/getUsedWidth uses fractional Real coordinates;",
+        "// LEFT never applies a live-left shift, RIGHT uses its level."
+      ]
+    },
+    {
+      "line": 8721,
+      "text": ".unwrap_or(participants.len().checked_sub(1)?);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8722,
+      "text": "let left = match note.position {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8732,
+      "text": "if note.participants.is_empty() || note.participants.len() > 1 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8738,
+      "text": "(participants[lo].center_x + participants[hi].center_x) / 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8739,
+      "text": "- width / 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8747,
+      "text": "if !diagram.teoz",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// NoteBox#getStartingX casts the component origin toward zero. Its",
+        "// getMinX/getMaxX expose that origin and full component preferred width,",
+        "// not the visible polygon inset by Rose's horizontal padding."
+      ]
+    },
+    {
+      "line": 8760,
+      "text": "let left = match note.position {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8767,
+      "text": "(0, participants.len().checked_sub(1)?)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8771,
+      "text": "if note.participants.is_empty() || note.participants.len() > 1 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8780,
+      "text": "((participants[lo].center_x + participants[hi].center_x) / 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// NoteBox#getPreferredWidth: p2.getMaxX - p1.getMinX."
+      ]
+    },
+    {
+      "line": 8781,
+      "text": "- width / 2.0)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 8876,
+      "text": "let cx = participants[*id_to_idx.get(note.participants[0].as_str())?]",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9020,
+      "text": "match variation.kind {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// (LiveBoxes#getLevelAtInternal, IGNORE_FUTURE_ACTIVATE). Fold",
+        "// accepted variations in event order, not by ordinate: several",
+        "// zero-height life events can share an ordinate."
+      ]
+    },
+    {
+      "line": 9021,
+      "text": "LifeVariationKind::Open => level += 1,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// accepted variations in event order, not by ordinate: several",
+        "// zero-height life events can share an ordinate."
+      ]
+    },
+    {
+      "line": 9022,
+      "text": "LifeVariationKind::Close => level = level.saturating_sub(1),",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// zero-height life events can share an ordinate."
+      ]
+    },
+    {
+      "line": 9025,
+      "text": "let left = center - if level > 0 { ACTIVATION_HALF_W } else { 0.0 };",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9030,
+      "text": "bounds.0 = bounds.0.min(left);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9031,
+      "text": "bounds.1 = bounds.1.max(right);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9048,
+      "text": ".fold(0usize, |depth, event| match event {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// plus the drawn extent of any enclosed note (which the frame must cover).",
+        "// DrawableSetInitializer creates headers at group start, even if",
+        "// no END follows. Their lists still participate in missing-space",
+        "// measurement, while Header#drawInternalU omits the unclosed frame."
+      ]
+    },
+    {
+      "line": 9049,
+      "text": "Event::GroupStart(_) => depth + 1,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// DrawableSetInitializer creates headers at group start, even if",
+        "// no END follows. Their lists still participate in missing-space",
+        "// measurement, while Header#drawInternalU omits the unclosed frame."
+      ]
+    },
+    {
+      "line": 9050,
+      "text": "Event::GroupEnd => depth.saturating_sub(1),",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// DrawableSetInitializer creates headers at group start, even if",
+        "// no END follows. Their lists still participate in missing-space",
+        "// measurement, while Header#drawInternalU omits the unclosed frame."
+      ]
+    },
+    {
+      "line": 9059,
+      "text": "if let Some(&(left, right)) = life_tile_bounds.get(&ev_idx) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9099,
+      "text": "let min_width = if let Event::GroupStart(start) =",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9120,
+      "text": ") + 45.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9121,
+      "text": "+ 2.0 * global_padding;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9131,
+      "text": "20.0 + 2.0 * global_padding",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9141,
+      "text": "participants.first().map_or(0.0, |participant| {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9284,
+      "text": "if let Event::GroupStart(g) = &diagram.events[start_idx] {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// Compute the header text right edge (group kind label + guard)",
+        "// anchored at the final frame left."
+      ]
+    },
+    {
+      "line": 9402,
+      "text": "frame_right.max(group.message_right + if diagram.teoz { TEOZ_GROUP_MARGIN_X } else { group_frame_margin });",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// GroupingTile wraps every child tile by MARGINX."
+      ]
+    },
+    {
+      "line": 9484,
+      "text": "if fi < ti { (fi, ti) } else { (ti, fi) };",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9498,
+      "text": "if msg.from == \"[\" || msg.to == \"[\" =>",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9511,
+      "text": "if msg.from == \"]\" || msg.to == \"]\" =>",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9519,
+      "text": "+ 2.0 * MSG_TEXT_LEFT_PAD",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9533,
+      "text": "+ 2.0 * MSG_TEXT_LEFT_PAD",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9537,
+      "text": "+ 2.0 * constraint_global_padding)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": [
+        "// ArrowAndNoteBox uses the arrow component's",
+        "// preferred width; Display#create0 pads its text."
+      ]
+    },
+    {
+      "line": 9637,
+      "text": "if fi < ti { (fi, ti) } else { (ti, fi) };",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9733,
+      "text": "if let Some(&participant_idx) =",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group membership and tiled bounds",
+      "reference_methods": [
+        "sequencediagram/InGroupableList#getMinX,getMaxX",
+        "sequencediagram/graphic/InGroupablesStack#addElement,addList",
+        "sequencediagram/graphic/NoteBox#getPreferredWidth",
+        "sequencediagram/teoz/NoteTile#getX,getUsedWidth",
+        "sequencediagram/teoz/GroupingTile#GroupingTile",
+        "sequencediagram/teoz/LifeEventTile#getMinX,getMaxX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9752,
+      "text": "let raw_group_frames = if legacy_groups {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9774,
+      "text": ".take(if legacy_groups {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": [
+        "// segments and apply the shared push once."
+      ]
+    },
+    {
+      "line": 9784,
+      "text": "if legacy_groups",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9789,
+      "text": "let indices: Vec<usize> = if note.participants.is_empty() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9790,
+      "text": "(0..participants.len()).collect()",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9797,
+      "text": "if let (Some(&lo), Some(&hi)) = (indices.iter().min(), indices.iter().max()) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9805,
+      "text": "let origin = if note.position == NotePosition::Right {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9810,
+      "text": ".unwrap_or(0.0))",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9813,
+      "text": "if note.participants.is_empty() || note.participants.len() > 1 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9821,
+      "text": "((participants[lo].center_x + participants[hi].center_x) / 2.0 - width / 2.0)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9870,
+      "text": "let note_left = if note.shape == NoteShape::Note && !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9876,
+      "text": "} else if note.on_message {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9904,
+      "text": "if diagram.teoz && !participants.is_empty() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9917,
+      "text": "if note.on_message || note.shape != NoteShape::Note {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9925,
+      "text": "let lo = indices.iter().min().copied().unwrap_or(0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9936,
+      "text": "let origin = match note.position {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9946,
+      "text": "if note.participants.is_empty() || note.participants.len() > 1 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9952,
+      "text": "(participants[lo].center_x + participants[hi].center_x) / 2.0 - width / 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 9975,
+      "text": "if diagram.teoz && !participants.is_empty() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": [
+        "// Page decorations are outside DrawableSetInitializer's constraint and",
+        "// missing-space stages; they must not participate in winner selection."
+      ]
+    },
+    {
+      "line": 10019,
+      "text": ".fold(0.0_f64, f64::max);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": [
+        "// same span right and grow the canvas symmetrically.",
+        "// Title left margin is 10; use the widest line."
+      ]
+    },
+    {
+      "line": 10030,
+      "text": "if meta_shift > 0.0 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Missing-space and page translation",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSetInitializer#prepareMissingSpace",
+        "sequencediagram/teoz/PlayingSpace#PlayingSpace",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz#getTextBlock12026"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10096,
+      "text": "let mut max_arrow_note_right: f64 = 0.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Final envelopes and all-page activations",
+      "reference_methods": [
+        "sequencediagram/graphic/ArrowAndNoteBox#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/DrawableSet#drawU22",
+        "sequencediagram/graphic/LifeLine#finish"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10107,
+      "text": "if !diagram.teoz",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Final envelopes and all-page activations",
+      "reference_methods": [
+        "sequencediagram/graphic/ArrowAndNoteBox#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/DrawableSet#drawU22",
+        "sequencediagram/graphic/LifeLine#finish"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10250,
+      "text": "+ 2.0 * note_global_padding",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Final envelopes and all-page activations",
+      "reference_methods": [
+        "sequencediagram/graphic/ArrowAndNoteBox#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/DrawableSet#drawU22",
+        "sequencediagram/graphic/LifeLine#finish"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10611,
+      "text": "match variation.kind {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Final envelopes and all-page activations",
+      "reference_methods": [
+        "sequencediagram/graphic/ArrowAndNoteBox#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/DrawableSet#drawU22",
+        "sequencediagram/graphic/LifeLine#finish"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10689,
+      "text": ".unwrap_or(0.0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Final envelopes and all-page activations",
+      "reference_methods": [
+        "sequencediagram/graphic/ArrowAndNoteBox#getStartingX,getPreferredWidth",
+        "sequencediagram/graphic/DrawableSet#drawU22",
+        "sequencediagram/graphic/LifeLine#finish"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10822,
+      "text": "let mut page_body_shift = 0.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// DiagramChromeFactory12026 wraps body -> legend -> title -> caption ->",
+        "// header/footer. DecorateEntityImage centers the child in each maximum width.",
+        "// TextBlockBordered contributes one trailing unit; plantuml.skin supplies",
+        "// title padding/margin 5+5, caption margin 1 and legend margin 12."
+      ]
+    },
+    {
+      "line": 10826,
+      "text": "let svg_width = if !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// DiagramChromeFactory12026 wraps body -> legend -> title -> caption ->",
+        "// header/footer. DecorateEntityImage centers the child in each maximum width.",
+        "// TextBlockBordered contributes one trailing unit; plantuml.skin supplies",
+        "// title padding/margin 5+5, caption margin 1 and legend margin 12."
+      ]
+    },
+    {
+      "line": 10828,
+      "text": "let legend_width = if legend_lines.is_empty() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// TextBlockBordered contributes one trailing unit; plantuml.skin supplies",
+        "// title padding/margin 5+5, caption margin 1 and legend margin 12."
+      ]
+    },
+    {
+      "line": 10831,
+      "text": "body_width.max(legend_box_w + 2.0 * LEGEND_LEFT + 1.0)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10838,
+      "text": ".fold(0.0_f64, f64::max);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10839,
+      "text": "decorated_width = decorated_width.max(text + 2.0 * TITLE_TOP_PAD + 1.0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10843,
+      "text": "text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family) + 3.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10852,
+      "text": "text_width_with_family(text, HEADER_FONT_SIZE as f64, &page_font_family) + 1.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10855,
+      "text": "page_body_shift = (decorated_width - body_width) / 2.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10868,
+      "text": "legend_left += (decorated_width - legend_width) / 2.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10869,
+      "text": "page_text_center = Some((decorated_width - 1.0) / 2.0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 10910,
+      "text": "svg.component_shadow_filter = if sequence_shadowing {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseActiveLine and GroupingHeader background set deltaShadow;",
+        "// their preferred dimensions do not include that paint-only extent."
+      ]
+    },
+    {
+      "line": 10964,
+      "text": "let x = if let Some(center) = page_text_center {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// PlantUML `SequenceDiagramArea.getHeaderX(RIGHT) = getWidth - headerWidth`.",
+        "// With group frames the band reference is the full sequence area width;",
+        "// otherwise it is the canvas-derived `svg_width_exact - 6` inset."
+      ]
+    },
+    {
+      "line": 10965,
+      "text": "2.0 * center - text_length",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// PlantUML `SequenceDiagramArea.getHeaderX(RIGHT) = getWidth - headerWidth`.",
+        "// With group frames the band reference is the full sequence area width;",
+        "// otherwise it is the canvas-derived `svg_width_exact - 6` inset."
+      ]
+    },
+    {
+      "line": 10967,
+      "text": "match group_band_get_width {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// PlantUML `SequenceDiagramArea.getHeaderX(RIGHT) = getWidth - headerWidth`.",
+        "// With group frames the band reference is the full sequence area width;",
+        "// otherwise it is the canvas-derived `svg_width_exact - 6` inset."
+      ]
+    },
+    {
+      "line": 10998,
+      "text": "if !title_lines.is_empty() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// Render title if present. PlantUML wraps the title in",
+        "// `<g class=\"title\" data-source-line=\"N\">` and emits a bold 14pt text",
+        "// per line. Each line is centered around the midpoint between the first",
+        "// participant's box left edge and the last participant's box right edge",
+        "// (minus 0.5 px), and each baseline uses the rendered line's ascent."
+      ]
+    },
+    {
+      "line": 11002,
+      "text": "let title_center = if let Some(center) = page_text_center {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// `<g class=\"title\" data-source-line=\"N\">` and emits a bold 14pt text",
+        "// per line. Each line is centered around the midpoint between the first",
+        "// participant's box left edge and the last participant's box right edge",
+        "// (minus 0.5 px), and each baseline uses the rendered line's ascent.",
+        "// Actor-to-database endpoint spans in Java land 7.5px left of the",
+        "// generic box-edge midpoint (edge_mixed_sequence_all_features)."
+      ]
+    },
+    {
+      "line": 11004,
+      "text": "} else if let Some(gw) = group_band_get_width {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Chrome composition",
+      "reference_methods": [
+        "core/DiagramChromeFactory12026#create,addTitle,addCaption,addHeaderAndFooter",
+        "svek/DecorateEntityImage#drawU,calculateDimension",
+        "klimt/shape/TextBlockBordered#calculateDimension",
+        "sequencediagram/SequenceDiagram#getDefaultMargins"
+      ],
+      "nearby_comments": [
+        "// participant's box left edge and the last participant's box right edge",
+        "// (minus 0.5 px), and each baseline uses the rendered line's ascent.",
+        "// Actor-to-database endpoint spans in Java land 7.5px left of the",
+        "// generic box-edge midpoint (edge_mixed_sequence_all_features)."
+      ]
+    },
+    {
+      "line": 11254,
+      "text": "let bottom = if has_newpage {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Activation clipping and background shadow",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "nearby_comments": [
+        "// DrawableSet#clipAndTranslate2 clips the complete component pass.",
+        "// DriverRectangleSvg#draw trims rectangles but preserves their groups."
+      ]
+    },
+    {
+      "line": 11255,
+      "text": "s2.min(tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Activation clipping and background shadow",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "nearby_comments": [
+        "// DrawableSet#clipAndTranslate2 clips the complete component pass.",
+        "// DriverRectangleSvg#draw trims rectangles but preserves their groups."
+      ]
+    },
+    {
+      "line": 11259,
+      "text": "if bottom > s1 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Activation clipping and background shadow",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "nearby_comments": [
+        "// DrawableSet#clipAndTranslate2 clips the complete component pass.",
+        "// DriverRectangleSvg#draw trims rectangles but preserves their groups."
+      ]
+    },
+    {
+      "line": 11294,
+      "text": "r##\"<rect fill=\"none\"{group_shadow} height=\"{}\" style=\"stroke:#000000;stroke-width:1.5;\" width=\"{}\" x=\"{}\" y=\"{}\"/>\"##,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Activation clipping and background shadow",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11331,
+      "text": "if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Activation clipping and background shadow",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11514,
+      "text": "if !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Activation clipping and background shadow",
+      "reference_methods": [
+        "sequencediagram/graphic/DrawableSet#clipAndTranslate2",
+        "klimt/drawing/svg/DriverRectangleSvg#draw",
+        "skin/rose/ComponentRoseActiveLine#drawInternalU"
+      ],
+      "nearby_comments": [
+        "// Second pass: standard sequence SVG renders activation bars again after",
+        "// participant heads; Teoz already emitted them inline with lifelines."
+      ]
+    },
+    {
+      "line": 11660,
+      "text": "} else if diagram.teoz",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11666,
+      "text": "let (source, target) = if is_right {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11669,
+      "text": "to_x + if target_level > 0 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11670,
+      "text": "(target_level as f64 - 2.0) * ACTIVATION_HALF_W",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11678,
+      "text": "+ if source_level == 1 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11680,
+      "text": "} else if source_level > 2 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11681,
+      "text": "(source_level - 2) as f64 * ACTIVATION_HALF_W",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11688,
+      "text": "Some(if is_right {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Teoz ordinary message endpoints",
+      "reference_methods": [
+        "sequencediagram/teoz/CommunicationTile#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 11794,
+      "text": "let active_anchor = if !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// activated, the loop starts from the activation bar's right",
+        "// edge (lifeline center + ACTIVATION_HALF_W)."
+      ]
+    },
+    {
+      "line": 11811,
+      "text": "let start_x = if !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// (Java); using a single ACTIVATION_HALF_W mis-anchors a",
+        "// self-message sent while the participant is multiply",
+        "// activated. `existing_depth` is >= 1 here (the participant",
+        "// is active), so depth==1 keeps the prior single-level x."
+      ]
+    },
+    {
+      "line": 11813,
+      "text": "active_anchor + self_arrow_by_event[&ev_idx].component_delta_y.min(0.0)",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// activated. `existing_depth` is >= 1 here (the participant",
+        "// is active), so depth==1 keeps the prior single-level x.",
+        "// ComponentRoseSelfArrow#drawRightSide: x1 = min(deltaY, 0)."
+      ]
+    },
+    {
+      "line": 11814,
+      "text": "} else if activates_self {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// is active), so depth==1 keeps the prior single-level x.",
+        "// ComponentRoseSelfArrow#drawRightSide: x1 = min(deltaY, 0)."
+      ]
+    },
+    {
+      "line": 11819,
+      "text": "let draw_y = if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseSelfArrow#drawRightSide: x1 = min(deltaY, 0)."
+      ]
+    },
+    {
+      "line": 11825,
+      "text": "let special_return_tip = if !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// CommunicationTileSelf#drawU leaves the component Y unchanged."
+      ]
+    },
+    {
+      "line": 11829,
+      "text": "Some(active_anchor + if delta > 0.0 { -delta } else { 1.0 })",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseSelfArrow#drawRightSide: x2 is -deltaY",
+        "// when positive, otherwise one; ASYNC adjusts the stroke later."
+      ]
+    },
+    {
+      "line": 11830,
+      "text": "} else if deactivates_self && existing_depth > 0 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseSelfArrow#drawRightSide: x2 is -deltaY",
+        "// when positive, otherwise one; ASYNC adjusts the stroke later."
+      ]
+    },
+    {
+      "line": 11832,
+      "text": "} else if activates_self {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// ComponentRoseSelfArrow#drawRightSide: x2 is -deltaY",
+        "// when positive, otherwise one; ASYNC adjusts the stroke later."
+      ]
+    },
+    {
+      "line": 11898,
+      "text": "if is_open || (head_half.is_some() && thin_head) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// lifeline. Java places a 10px cross to the right of",
+        "// the self-loop anchor and starts the segment slightly",
+        "// inside that mark.",
+        "// ComponentRoseSelfArrow#drawRightSide subtracts one",
+        "// from ASYNC x2 for the stroke, then restores it before",
+        "// painting the head. Apply it after the lifecycle delta."
+      ]
+    },
+    {
+      "line": 11899,
+      "text": "tip_x - 1.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// the self-loop anchor and starts the segment slightly",
+        "// inside that mark.",
+        "// ComponentRoseSelfArrow#drawRightSide subtracts one",
+        "// from ASYNC x2 for the stroke, then restores it before",
+        "// painting the head. Apply it after the lifecycle delta."
+      ]
+    },
+    {
+      "line": 11970,
+      "text": "let tip_x = if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// Filled triangle: wing base, tip, wing tip.",
+        "// ComponentRoseSelfArrow#getPolygon offsets every",
+        "// filled half-head point by -1 before drawRightSide",
+        "// translates the polygon by the component's x2."
+      ]
+    },
+    {
+      "line": 11973,
+      "text": "special_return_tip.unwrap_or(active_anchor + 1.0) - 1.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": [
+        "// Filled triangle: wing base, tip, wing tip.",
+        "// ComponentRoseSelfArrow#getPolygon offsets every",
+        "// filled half-head point by -1 before drawRightSide",
+        "// translates the polygon by the component's x2."
+      ]
+    },
+    {
+      "line": 12831,
+      "text": "0.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 12832,
+      "text": "participant_span.max(label_box_w + 24.0).max(body_right),",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Self strokes and direction",
+      "reference_methods": [
+        "skin/rose/ComponentRoseSelfArrow#drawRightSide,drawLeftSide",
+        "sequencediagram/graphic/MessageSelfArrow#drawInternalU",
+        "sequencediagram/teoz/CommunicationTileSelf#drawU"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13021,
+      "text": ".unwrap_or(0.0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13059,
+      "text": "let left = if !diagram.teoz && note.shape == NoteShape::Note {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13062,
+      "text": "} else if note.on_message {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// NoteBox truncates the raw origin before Rose padding."
+      ]
+    },
+    {
+      "line": 13089,
+      "text": "if note.shape == NoteShape::Note && diagram.teoz && !note.on_message {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13097,
+      "text": "} else if note.shape == NoteShape::Note && !diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13106,
+      "text": "} else if note.on_message {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13180,
+      "text": "let shadow = if note.shape == NoteShape::Note {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// Teoz routes notes through NoteTile, which keeps the",
+        "// fractional Real x of the lifeline centre; the classic",
+        "// renderer truncates with `(int)` (floor). Only floor",
+        "// in the classic path (seq_all_features_01).",
+        "// NoteBox#getStartingX centers the full preferred component,",
+        "// including shadow; AbstractComponent then adds paddingX."
+      ]
+    },
+    {
+      "line": 13186,
+      "text": "(cx - (raw_w + shadow) / 2.0).max(HEAD_BOX_Y + page_body_shift);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// NoteBox#getStartingX centers the full preferred component,",
+        "// including shadow; AbstractComponent then adds paddingX."
+      ]
+    },
+    {
+      "line": 13187,
+      "text": "let left = if diagram.teoz { left } else { body_floor(left) };",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// including shadow; AbstractComponent then adds paddingX."
+      ]
+    },
+    {
+      "line": 13221,
+      "text": "+ 2.0 * note_global_padding",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13245,
+      "text": "(participants[lo].center_x + participants[hi].center_x) / 2.0;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13254,
+      "text": "let left = body_floor(centre - pw_raw / 2.0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13322,
+      "text": "0.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// Rectangular note (rnote): a simple rectangle."
+      ]
+    },
+    {
+      "line": 13323,
+      "text": "0.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// Rectangular note (rnote): a simple rectangle."
+      ]
+    },
+    {
+      "line": 13514,
+      "text": "let (lo, hi) = if note.participants.is_empty() {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13528,
+      "text": ".unwrap_or(participants.len() - 1);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13535,
+      "text": "+ if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Note component painting",
+      "reference_methods": [
+        "sequencediagram/graphic/NoteBox#getStartingX",
+        "skin/rose/ComponentRoseNote#drawInternalU",
+        "sequencediagram/teoz/NoteTile#drawU,getX"
+      ],
+      "nearby_comments": [
+        "// areaWidth = p2.getMaxX - p1.getMinX. ParticipantBox.getMinX =",
+        "// box_x; getMaxX = box_x + box_width + outMargin."
+      ]
+    },
+    {
+      "line": 13734,
+      "text": "let tab_right = frame_left + kind_w + 45.0 + 2.0 * global_padding;",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13766,
+      "text": "x: frame_left + 15.0 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Emit tab text (bold) \u2014 the label for `group`, else the keyword."
+      ]
+    },
+    {
+      "line": 13783,
+      "text": "tab_right + 15.0 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Emit guard label if present (in brackets)"
+      ]
+    },
+    {
+      "line": 13784,
+      "text": "frame_top + 12.634765625 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Emit guard label if present (in brackets)"
+      ]
+    },
+    {
+      "line": 13794,
+      "text": "if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Teoz draws all of a group's else dividers as part of the group",
+        "// frame layer (GroupingTile.drawAllElses), immediately after the",
+        "// header \u2014 not interleaved with the body messages. Emit them here",
+        "// for this group's direct-child `else` events; the per-GroupElse",
+        "// arm below then skips emission in teoz mode."
+      ]
+    },
+    {
+      "line": 13822,
+      "text": "frame_left + 5.0 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Teoz places the else guard label 2px lower",
+        "// relative to the divider line."
+      ]
+    },
+    {
+      "line": 13823,
+      "text": "ely + 12.63475 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Teoz places the else guard label 2px lower",
+        "// relative to the divider line."
+      ]
+    },
+    {
+      "line": 13873,
+      "text": "frame_left + 5.0 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Emit else label only when explicitly provided (PlantUML",
+        "// does NOT show \"[else]\" text when the else clause has no label)."
+      ]
+    },
+    {
+      "line": 13874,
+      "text": "msg_y + 10.63475 + global_padding,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Emit else label only when explicitly provided (PlantUML",
+        "// does NOT show \"[else]\" text when the else clause has no label)."
+      ]
+    },
+    {
+      "line": 13921,
+      "text": ".unwrap_or(0.0);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 13927,
+      "text": "if diagram.teoz {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": []
+    },
+    {
+      "line": 14093,
+      "text": "r##\"<line style=\"stroke:{};stroke-width:0.5;stroke-dasharray:2,2;\" x1=\"{}\" x2=\"{}\" y1=\"{}\" y2=\"{}\"/>\"##,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// the un-ceiled canvas width less the 5px right gutter \u2014 equivalently",
+        "// the divider/group \"participant span\" right edge. Holds whether the",
+        "// page-1 right edge is set by participant boxes, a wide group frame,",
+        "// a note, or a divider."
+      ]
+    },
+    {
+      "line": 14142,
+      "text": "if let Some(caption) = &diagram.meta.caption {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Caption appears at the bottom of the diagram, AFTER messages.",
+        "// PlantUML wraps it in `<g class=\"caption\" data-source-line=\"N\">` and",
+        "// routes the text through the creole segmenter so bold/italic/under runs",
+        "// split into separate `<text>` elements at calculated x offsets."
+      ]
+    },
+    {
+      "line": 14144,
+      "text": "let caption_x = if let Some(center) = page_text_center {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Caption appears at the bottom of the diagram, AFTER messages.",
+        "// PlantUML wraps it in `<g class=\"caption\" data-source-line=\"N\">` and",
+        "// routes the text through the creole segmenter so bold/italic/under runs",
+        "// split into separate `<text>` elements at calculated x offsets."
+      ]
+    },
+    {
+      "line": 14146,
+      "text": "- text_width_with_family(caption, CAPTION_FONT_SIZE as f64, &page_font_family) / 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Caption appears at the bottom of the diagram, AFTER messages.",
+        "// PlantUML wraps it in `<g class=\"caption\" data-source-line=\"N\">` and",
+        "// routes the text through the creole segmenter so bold/italic/under runs",
+        "// split into separate `<text>` elements at calculated x offsets."
+      ]
+    },
+    {
+      "line": 14196,
+      "text": "if let Some(center) = page_text_center {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// `(first.box_x + last.box_x + last.box_width - 1.0) / 2.0`. When the",
+        "// footer is wider than the span the diagram was already shifted right",
+        "// (see meta_shift), so this resolves to x=0 for the widest band and to a",
+        "// positive inset for narrower footers (seq_footer_variant_02..04).",
+        "// PlantUML `getFooterX(CENTER) = (getWidth - footerWidth) / 2`. With",
+        "// group frames the sequence area width spans the outermost frame."
+      ]
+    },
+    {
+      "line": 14197,
+      "text": "center - w / 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// footer is wider than the span the diagram was already shifted right",
+        "// (see meta_shift), so this resolves to x=0 for the widest band and to a",
+        "// positive inset for narrower footers (seq_footer_variant_02..04).",
+        "// PlantUML `getFooterX(CENTER) = (getWidth - footerWidth) / 2`. With",
+        "// group frames the sequence area width spans the outermost frame."
+      ]
+    },
+    {
+      "line": 14198,
+      "text": "} else if let Some(gw) = group_band_get_width {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// (see meta_shift), so this resolves to x=0 for the widest band and to a",
+        "// positive inset for narrower footers (seq_footer_variant_02..04).",
+        "// PlantUML `getFooterX(CENTER) = (getWidth - footerWidth) / 2`. With",
+        "// group frames the sequence area width spans the outermost frame."
+      ]
+    },
+    {
+      "line": 14206,
+      "text": "} else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// Teoz centres the footer on the same area width as the title /",
+        "// header (`getWidth = svg_width_exact - 1`), which spans the",
+        "// group frames rather than the participant boxes",
+        "// (seq_all_features_01)."
+      ]
+    },
+    {
+      "line": 14225,
+      "text": "+ 2.0",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "audit_section": "Group and footer painting",
+      "reference_methods": [
+        "skin/rose/ComponentRoseGroupingHeader#drawInternalU",
+        "skin/rose/ComponentRoseGroupingElse#drawInternalU",
+        "klimt/creole/SheetBlock1#drawU",
+        "core/DiagramChromeFactory12026#addCaption,addHeaderAndFooter"
+      ],
+      "nearby_comments": [
+        "// DecorateEntityImage stacks the footer below the complete caption",
+        "// block. The caption's default style has one-pixel top and bottom",
+        "// margins around its measured text."
+      ]
+    },
+    {
+      "line": 14286,
+      "text": "for depth in 1..=3 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "classification": "test-only; not production layout"
+    },
+    {
+      "line": 14288,
+      "text": "let dotted = arrow.replacen('-', \"--\", 1);",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "classification": "test-only; not production layout"
+    },
+    {
+      "line": 14321,
+      "text": "for depth in [0, 2] {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "classification": "test-only; not production layout"
+    },
+    {
+      "line": 14351,
+      "text": "for depth in 1..=4 {",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "classification": "test-only; not production layout"
+    },
+    {
+      "line": 14396,
+      "text": "min: -60.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "classification": "test-only; not production layout"
+    },
+    {
+      "line": 14397,
+      "text": "max: 20.0,",
+      "file": "crates/rustuml-render/src/sequence.rs",
+      "classification": "test-only; not production layout"
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 439,
+      "text": "let (caps, boundary_first) = if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 449,
+      "text": "let (left, right) = if boundary_first {",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 450,
+      "text": "(caps[1].to_string(), self.ensure_participant(&caps[3]))",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 452,
+      "text": "(self.ensure_participant(&caps[1]), caps[3].to_string())",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 456,
+      "text": "let (from, to) = if arrow.direction == ArrowDirection::RightToLeft {",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 468,
+      "text": "label: message_label(line, caps.get(6)),",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    },
+    {
+      "file": "crates/rustuml-parser/src/parse/sequence.rs",
+      "line": 471,
+      "text": "activation_color: caps.get(5).map(|m| m.as_str().to_string()),",
+      "audit_section": "External grammar",
+      "reference_methods": [
+        "sequencediagram/command/CommandExoArrowLeft#getMessageExoType",
+        "sequencediagram/command/CommandExoArrowRight#getMessageExoType"
+      ],
+      "finding": "Branch selects boundary-first/last syntax and semantic direction independently; capture group numbers unchanged. Four legacy full-CLI cases pass, four Teoz fail on downstream geometry."
+    }
+  ],
+  "provenance_conclusion": "All14 durable accounts precede corresponding code and are byte-identical at candidate. New named5 and15 constants are cited and match Java. New Teoz depth branches match Java source. Several changed composite expressions still lack local derivations and some cite the right class while using incomplete inputs. No model acceptance follows from the absence of decimal-ratchet growth.",
+  "fixture_logic": "No new shipping golden-file reads, include_str fixture replay, label-text keyed conditions, SVG coordinate string surgery, or invented branch-count constant ladder found. Maker label strings in parser/unit tests are not shipping discriminators. Existing historical heuristics remain reachable; they are listed as unresolved instead of silently legitimized.",
+  "duplication": "Self width/start sharing and one two-pass group closure reduce duplication. Note preferred width, live sampling, group membership, canvas envelope and paint still reconstruct overlapping models, which causes demonstrated shadow/padding discrepancies. Legacy group_band_get_width is now bypassed by page_text_center on the non-Teoz path while the old midpoint model survives for Teoz.",
+  "source_tool_residue": "Sawmill check_invariants required a loaded codebase; parse(single file) then failed treating sequence.rs as a directory. Review proceeded with exact diffs and source reads; no structural-tool success is claimed.",
+  "acceptance": "Rejected; see14 per-mechanism reviews. Positive primitive-level observations are not whole-product approval."
+}

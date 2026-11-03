@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+participant Cedar as C
+participant Pine as P
+group frame
+P -> C : request
+C -> C ++ : enter
+C -> C ++ : enter
+C -> C ++ : enter
+note right of P : fractional iWi
+C -> P : completion
+end
+deactivate C
+deactivate C
+deactivate C
+@enduml

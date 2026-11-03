@@ -1,0 +1,17 @@
+@startuml
+participant "Quartz relay" as Q
+participant "Ember.i" as E
+participant "Tern archive" as T
+[-> Q : arrive
+group outer
+note left of Q : i.f
+alt selected
+loop retry
+note left of Q : WWWMi
+Q -> E : relay
+end
+else alternate
+note over E,T : other
+end
+end
+@enduml

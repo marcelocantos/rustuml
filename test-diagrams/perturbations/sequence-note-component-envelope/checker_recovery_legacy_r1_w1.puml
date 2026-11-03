@@ -1,0 +1,20 @@
+@startuml
+skinparam shadowing true
+skinparam Padding 2
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+T -> Q ++ : enter
+Q -> Q ++ : recursive
+group notes
+Q -> E : WW.quartz iii transmission envelope
+note left : attached while live
+note right of Q
+line one
+line two
+end note
+... pause ...
+return unwind
+end
+return release
+@enduml

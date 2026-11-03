@@ -1,0 +1,17 @@
+[
+  {
+    "source": "test-diagrams/perturbations/class-package-full-symbol-model/archimate_rectangle_expanded_lr.puml",
+    "golden": "test-diagrams/perturbations/class-package-full-symbol-model/archimate_rectangle_expanded_lr.svg",
+    "cohort": "original810"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+    "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.svg",
+    "cohort": "parent-added145"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+    "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.svg",
+    "cohort": "parent-added145"
+  }
+]

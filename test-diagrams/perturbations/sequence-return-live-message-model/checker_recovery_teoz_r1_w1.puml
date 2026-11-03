@@ -1,0 +1,12 @@
+@startuml
+!pragma teoz true
+participant "Tern archive" as T
+participant "Ember.i" as E
+participant "Quartz relay" as Q
+T -> Q ++ : WW.quartz iii transmission envelope
+Q -> Q ++ : local
+Q -> E ++ : delegate
+return delegated
+return local
+return sender
+@enduml

@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-note-tile-bounds",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "fb565277bcbf06b9eb80243d03cfb1b4b9e96bfc",
+  "implementation_commit": "0a46ebb536765daaabd0599edba9daebbea7fc21",
+  "original_account_commit": "76ee592d31820903dcde86c437ccb6a3c0b63aca",
+  "original_implementation_commit": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "18f99da1eb9b9f9a79393b28594a529f0797ce47aa0517b411d1ae57b479187f",
+      "golden_sha256": "0cc08cd998db5f3ed92333712a1da45ec31601f5f995a1b729152fb7473353db",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d1_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "d1d45599a40d5c1b8986543c2285c3d21fb07b2164d3a19c29870b3fd063616f",
+      "golden_sha256": "50b08491506a14ee3bf55247c9acc49ae7622e8b86f49ce60dfc969d71ecb5e0",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "0a8807c5d4a055f79368c2f068d70fae4a92a9262c8a8aeb2ef98fcde296d7f1",
+      "golden_sha256": "c964b2fb9607fb1376cdc690804788d50ed79c60b3bb12382a30c16804961c76",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r0_d3_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "c8078420a7a278dddc54147728dc8b67ef32513b56f412d1a24bf3bd3c9cc55f",
+      "golden_sha256": "7d766a1c7bd6c580e9c5e4f500a9d4e66040d6fdaf8cc97b963c461fed24fac8",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "39edf915d921ea1d873f08b925ab16fa6219f88ce1c6873fb212bd6dc6e2540d",
+      "golden_sha256": "bb9a93cc23904e3a14887168b67224c26d71c5b069c8dca0b472247152fc86d7",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d1_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "565e63cefc3a31342a978de8503c5949c145bd46076166898819b33de9edc89a",
+      "golden_sha256": "ab8142f5ee17da5b63bfdea3ef7a1fb65d6db979c145220901b536fb58549fd9",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_left.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "dc49f899050aee931a1029b541e84a82d47968be8b60f5e59ae1ba230dda9cae",
+      "golden_sha256": "bdba5565c2b0ca7ada9f82dbb480465d329f41dd6bd4de0cc7b8a160fa29cb0b",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-tile-bounds/checker_recovery_r1_d3_right.svg",
+      "axes": [
+        "recursion depth",
+        "note side",
+        "declaration order",
+        "explicit lifecycle separated by note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "4c6ae1951c6a1d02cc9e7313444b081ff4633136c1fab04f00f65c7f019dd161",
+      "golden_sha256": "f5a46bf33688244c59a21fc43220e72a9b999989683fdc5296c1e25a7208498e",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "NoteTile#getX correctly distinguishes fractional LEFT without live shift, RIGHT with IGNORE_FUTURE_DEACTIVATE, and OVER center; GroupingTile wraps child bounds and PlayingSpace translates full extrema. Rust adds these branches, and all36 original maker note cases recover.",
+    "All eight independent recursive/note-side/declaration-order/lifecycle controls fail, typically +30px in height. sequence_lifecycle_layout and attach_sequence_lifecycle_event still reserve SAME_MESSAGE_LIFECYCLE_ROW without an engine parameter, while Java LifeEventTile preferred height is0 except standalone destroy. NoteTile uses event-history level, while Rust still obtains right shifts from ordinate-based legacy segment unions. The source predicates are accounted for but their event histories are not equivalent.",
+    "New exo/group and attached-note controls expose additional Teoz origin and component-height dependencies. The22 retained maker life-history failures remain binding. This review does not waive them on the ground that the minX expression alone agrees.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "NoteTile#getX correctly distinguishes fractional LEFT without live shift, RIGHT with IGNORE_FUTURE_DEACTIVATE, and OVER center; GroupingTile wraps child bounds and PlayingSpace translates full extrema. Rust adds these branches, and all36 original maker note cases recover.",
+    "All eight independent recursive/note-side/declaration-order/lifecycle controls fail, typically +30px in height. sequence_lifecycle_layout and attach_sequence_lifecycle_event still reserve SAME_MESSAGE_LIFECYCLE_ROW without an engine parameter, while Java LifeEventTile preferred height is0 except standalone destroy. NoteTile uses event-history level, while Rust still obtains right shifts from ordinate-based legacy segment unions. The source predicates are accounted for but their event histories are not equivalent.",
+    "New exo/group and attached-note controls expose additional Teoz origin and component-height dependencies. The22 retained maker life-history failures remain binding. This review does not waive them on the ground that the minX expression alone agrees."
+  ]
+}

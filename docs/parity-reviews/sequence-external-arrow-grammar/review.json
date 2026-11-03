@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-external-arrow-grammar",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "bbf7d9fb2c33c2612db836c06e8b0423999cd84e",
+  "implementation_commit": "0fd964be4d8d4efe1ad222278865eeff305262b5",
+  "original_account_commit": "cd2e96858835e29e0ca3cd0f30de2a65e6fe29f7",
+  "original_implementation_commit": "caf642a96b667373cecf424646f5a22a1302528b",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz0.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "f3397a75c1a1609c12dd28caca3535e42d99d05cc2b2f977ae0231b92ecb8a7b",
+      "golden_sha256": "d71a47497829ebe3f62f92fe63f9a0e463bb2462c2c3d08b09f155b373088257",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in0_teoz1.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "abae795fde98143e87fdd1e2a2064c2506b98af80fdfded918fdbca0157988e3",
+      "golden_sha256": "f508e4beaa9c53b3f095416a23eda3a93536afdd105cac5c768e085b56f79bd4",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz0.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "b5bc9a476c0f3683157e7f4a758b22b822220aa9310eeb52b93b5dfbafc707fe",
+      "golden_sha256": "66e902b63c040fa6f817bca3d86eb331eb937e592049a2581d0da3f782d88116",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_left_in1_teoz1.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "330e9845f0f49dcbd54f2ea6657a96c4338c76dae68049a42bcb9d785966034c",
+      "golden_sha256": "a990ba8853f4d3beeed5d17f85f37f067bda7fe374d91d383fd5b62209672b3a",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz0.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "3943c935d8c243777c6933ab13ca15a6189960a779b180ae090883850bf99d37",
+      "golden_sha256": "0d049ffd9a0414558f8da39814ddb3389b7d3387dd514a7123d1238925338862",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in0_teoz1.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "f598968b683ffd179a7d76778c6a94fa01fbd3bf1bc06a4fcf876f5d3c12bcd7",
+      "golden_sha256": "b8bf1b4fc4f6b01ea77c712d0e7a7184fda1494e498e0eb7c89b93bcaea70a5f",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz0.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "8a8ac65713c4be21456847a3d4318f65a14ff7ac3055bfb03228ba0c7d84e9a2",
+      "golden_sha256": "8f7e5298fa13241650dd540bc1ca9ee9fce0678383ff374a63f85830234d4780",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-external-arrow-grammar/checker_recovery_right_in1_teoz1.svg",
+      "axes": [
+        "left/right border",
+        "incoming/outgoing dressing",
+        "external return lifecycle",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "f70364a9cb04bf58424298725fee53d904a06109f167cc4c3d7f53ef7d878dfd",
+      "golden_sha256": "5d351d64caca8b9a435274f1b938e300f3394d42095b687b04d29f11f883b87e",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "Inspected CommandExoArrowLeft/Right#getMessageExoType, CommandExoArrowAny#executeArg and MessageExo#getParticipant1/2. Border side and dressing direction are independent; both lifecycle endpoints name the real participant. The parser now normalizes from/to without forcing LeftToRight and renderer ownership uses the real endpoint. All four new legacy border/direction/return controls pass.",
+    "All four corresponding Teoz controls fail. For checker_recovery_left_in0_teoz1 Java width378 versus Rust373, with participant centers displaced5px. The shared boundary normalization feeds an unrepaired Teoz exo tile/body-origin constraint path. Fresh grouped incoming exo cases also paint x1=0 while Java starts at10. These valid relevant-direction/engine controls reject full external-arrow recovery; parser-only equivalence is not accepted as product parity.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "Inspected CommandExoArrowLeft/Right#getMessageExoType, CommandExoArrowAny#executeArg and MessageExo#getParticipant1/2. Border side and dressing direction are independent; both lifecycle endpoints name the real participant. The parser now normalizes from/to without forcing LeftToRight and renderer ownership uses the real endpoint. All four new legacy border/direction/return controls pass.",
+    "All four corresponding Teoz controls fail. For checker_recovery_left_in0_teoz1 Java width378 versus Rust373, with participant centers displaced5px. The shared boundary normalization feeds an unrepaired Teoz exo tile/body-origin constraint path. Fresh grouped incoming exo cases also paint x1=0 while Java starts at10. These valid relevant-direction/engine controls reject full external-arrow recovery; parser-only equivalence is not accepted as product parity."
+  ]
+}

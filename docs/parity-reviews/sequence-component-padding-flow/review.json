@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-component-padding-flow",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "b6c43da53ab24ba360820b1f8bd9d73e6a5ad8b4",
+  "implementation_commit": "bb761bd13b3d9630ec9409022a7225eba3e3d9f0",
+  "original_account_commit": "b080d075ef80064e3af27bd692443a42e54bbd1d",
+  "original_implementation_commit": "ef3b7a8691d5b1a06a579919b9724b118361b593",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "e00361cc0ad2f9bd6b6a56883c124284145453cadb02a4cc0eb18215c7253c47",
+      "golden_sha256": "b24bd305a3d44b0f8c140385f0704f8fdebedef2b505da9118a290c5e900e0a2",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "fd71eb2011197a148e6c3a2d77c45ec6f0c942134ecab6485c219df89fd102dd",
+      "golden_sha256": "49f8e92eafdf87dd3396a3f048817a80940086ec342498672499bee2065f998a",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "6537af2aa11af9358d2e6418041eeb1d293b90fbd5561fe648d15682167a6ddd",
+      "golden_sha256": "c4e0db38341688d9f6cce8e197ca827463a66ed0b7b3d199b66d137730dae12e",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "df80c0b4f79dcbc030ffa64e34721b9beb9f3ba7dacac24cc637dbe0bda542a4",
+      "golden_sha256": "cb500503027654ad2ef52b6855e0538c779568491297303e0c695fdbc179965b",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "ff89992fb3569bb43eb2455bcb858d6a4191fa1dc56874e4982518571c301c7b",
+      "golden_sha256": "c3adb119b82848ef5a4d6b79c1bc04a3ed34ad97026d0a450eaea67cb9f465fc",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "d6556da24ede15e491903051f93e4e9e4a29ead1892c57bb65e403f7a4d4eadf",
+      "golden_sha256": "7ce835e9323b08fb4a1d9a0d3b65818ec9bc81f3a2ea727f89901a6d7d7f7b48",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "ffc7d536e26a0c91b4819e9745f6cad0dc4b00503d193f40dcb3293a42464a63",
+      "golden_sha256": "ad94669ab8f674046454a50a8f55d8b04bcce421a41218bf27be6fb13cd9411f",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-padding-flow/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "padding 1 versus 6",
+        "multiline versus empty branch guards",
+        "attached notes"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "eefbe088d864d36c52e036b2024748db2683e792f7a5ca49c1bd7a1d99f92b93",
+      "golden_sha256": "44ed16de87a7062fbd067508d7838697d31d5eb488bf5ec69e796bbef8d08cc4",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "ComponentRoseGroupingHeader preferred height includes padded getTextHeight plus max(commentHeight-15,0); the literal15 is directly cited. SheetBlock1 contributes padding around nonempty blocks. The new note/group scheduling uses those contributions and the prior padding3/7 cases recover.",
+    "All eight fresh multiline/empty-else/attached-note/padding controls fail. The simplest legacy primary case differs only at the reply label x by1px (153.3333 Java versus152.3333 Rust with padding1), growing to6px at padding6. This shows the component-padding dependency is not coherent across scheduling and ordinary-message text origins. Attached self notes remain6px too low at padding3, and the note+delay combination is4px too short at padding2.",
+    "The code retains multiple calculations of note_top/preferred height and special self-note scheduling rather than deriving ArrowAndNoteBox vertical centering from max(arrowHeight,noteHeight). These are traced to Java ArrowAndNoteBox constructor/getPreferredHeight and Step1Abstract#createNoteBox. Do not repair by adding offsets to these fixtures; unify the component measurement data flow.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "ComponentRoseGroupingHeader preferred height includes padded getTextHeight plus max(commentHeight-15,0); the literal15 is directly cited. SheetBlock1 contributes padding around nonempty blocks. The new note/group scheduling uses those contributions and the prior padding3/7 cases recover.",
+    "All eight fresh multiline/empty-else/attached-note/padding controls fail. The simplest legacy primary case differs only at the reply label x by1px (153.3333 Java versus152.3333 Rust with padding1), growing to6px at padding6. This shows the component-padding dependency is not coherent across scheduling and ordinary-message text origins. Attached self notes remain6px too low at padding3, and the note+delay combination is4px too short at padding2.",
+    "The code retains multiple calculations of note_top/preferred height and special self-note scheduling rather than deriving ArrowAndNoteBox vertical centering from max(arrowHeight,noteHeight). These are traced to Java ArrowAndNoteBox constructor/getPreferredHeight and Step1Abstract#createNoteBox. Do not repair by adding offsets to these fixtures; unify the component measurement data flow."
+  ]
+}
