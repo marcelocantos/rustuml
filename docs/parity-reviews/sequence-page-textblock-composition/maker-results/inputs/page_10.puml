@@ -1,0 +1,10 @@
+@startuml
+title Small
+caption Caption WWWWWWWWWWWWWW
+header Heading WWWWWWWWWWWWWWWWW
+footer Footer ffff
+participant Willow as W
+participant Fir as F
+W -> F : request
+F --> W : response
+@enduml
