@@ -37,8 +37,11 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
 
 pub(super) fn native_container_candidate(lines: &[String]) -> bool {
     parse_commands(lines, false).is_ok_and(|parser| {
-        // ClassDiagramFactory registers native declarations at every scope.
-        parser.has_native_class || (!parser.packages.is_empty() && parser.entities.is_empty())
+        // PSystemBuilder tries Sequence before Class. CommandParticipant owns
+        // bare `entity` too, but cannot own class-only declarations/containers.
+        parser.has_class_only_declaration
+            || (!parser.packages.is_empty()
+                && (parser.has_native_class || parser.entities.is_empty()))
     })
 }
 
@@ -148,6 +151,7 @@ struct ClassParser {
     allow_mixing: bool,
     description_factory: bool,
     has_native_class: bool,
+    has_class_only_declaration: bool,
     direction: ClassLayoutDirection,
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
@@ -210,6 +214,7 @@ impl ClassParser {
             allow_mixing: false,
             description_factory: false,
             has_native_class: false,
+            has_class_only_declaration: false,
             direction: ClassLayoutDirection::TopToBottom,
             entities: Vec::new(),
             relationships: Vec::new(),
@@ -909,6 +914,15 @@ impl ClassParser {
         }
         if ordinary_class_command {
             self.has_native_class = true;
+            // CommandParticipantA/A2/A3/A4 share the entity declaration's
+            // name/code, optional stereotype, URL (already extracted), color.
+            // Visibility, generics, supertypes and braces are Class commands.
+            // Only the parsed suffix participates: quoted display is opaque.
+            static PARTICIPANT_SUFFIX: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r"^\s*(?:<<[^>]+>>\s*)?(?:#[^\s{}]+\s*)?$").unwrap());
+            self.has_class_only_declaration |= declaration_kind != "entity"
+                || !caps[1].is_empty()
+                || !PARTICIPANT_SUFFIX.is_match(&clean_tail);
         }
         let kind = parse_entity_kind(declaration_kind);
         let quoted_only = name.quoted_only;
@@ -2883,6 +2897,29 @@ mod tests {
     fn parse(input: &str) -> ClassDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_class(&lines).unwrap()
+    }
+
+    #[test]
+    fn root_entity_retains_earlier_participant_command_ownership() {
+        for source in [
+            "entity Harbor",
+            "entity \"record as [Harbor]\" as H #blue",
+            "entity H\nH -> H : echo",
+        ] {
+            let lines = source.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert!(!native_container_candidate(&lines));
+        }
+        for source in [
+            "record Harbor",
+            "struct Harbor",
+            "entity Harbor {\n}",
+            "+entity Harbor",
+            "package Bay {\nentity Harbor\n}",
+        ] {
+            let lines = source.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert!(native_container_candidate(&lines));
+            assert_eq!(parse_class(&lines).unwrap().entities.len(), 1);
+        }
     }
 
     #[test]
