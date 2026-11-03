@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "maker correction; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "1051c34cc9ac39115368720fa8e5ed44ebdbadc5",
+  "mechanism": "class-boundary-primitive-paint-order",
+  "java_locations": [
+    "decoration/symbol/USymbolSimpleAbstract#asSmall.drawU",
+    "svek/Boundary#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render_description_leaf"
+  ],
+  "invariant": "Boundary paints shape, label, then stereotype, although the stereotype is geometrically above the shape. Paint order and spatial order are distinct.",
+  "causal_divergence": "The preceding maker account incorrectly inferred paint order from merged vertical geometry. Reading USymbolSimpleAbstract.drawU and the fresh stereotype probe disproves that inference.",
+  "planned_change": "Draw boundary geometry first, label second, stereotype last using the already-measured positions. Keep component stereotype-before-label order.",
+  "perturbation_axes": [
+    "stereotype absent/present and unequal multiline name widths",
+    "component versus boundary and declaration order"
+  ]
+}
