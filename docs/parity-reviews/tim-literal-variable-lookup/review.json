@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-literal-variable-lookup",
+  "reviewer": {
+    "task_id": "t3/adversarial-reader-contract-review:t3-d2205b7f",
+    "model": "gpt-6-astra / high / inherited Codex (intentional); independent checker; no children"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "1ee250f0fafdc62fa9f348b64d12fe4363790d6c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test pipe_mode --test golden_no_oracle --test golden_pairs --test harness_guards --test parity_perturbations",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker-d2205b7f/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/check.py isolated",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/replay_maker.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-checker-d2205b7f/target/release/rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-checker-d2205b7f/probe compare SOURCE.svg RUST.svg",
+    "uv run --no-project python docs/parity-reviews/tim-evaluated-event-stream/checker-support/reader_contract.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/provenance.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-explicit-date-instant/checker-support/timezones.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-explicit-date-instant/checker-support/error_controls.py",
+    "uv run --with pyyaml python docs/parity-reviews/tim-evaluated-event-stream/checker-support/prepared_builtin.py"
+  ],
+  "findings": [
+    "REJECTED: checker_direct_computed_name expects 1 / green but emits 0 / empty. eval_builtin_with_expr_args assumes any argument starting and ending with double quote is a single literal, so the valid expression \"$\" + \"cedar\" is never evaluated.",
+    "checker_single_quoted_name expects 1 / silver but emits 0 / empty. Java TokenType.eatOneToken/TLineType.isQuote and Eater.eatAndGetQuotedString tokenize both quote styles; the Rust lookup special case handles only double quotes before textual substitution.",
+    "Four fresh controls pass for legacy bare/dollar collisions, sibling literal scope, variable-stored computed names and legacy undef/local lifetime. The invalid maker guard_changed_theme remains invalid and preserved at its original path; it is not a positive control.",
+    "The cefd22 follow-up correctly restores legacy bare define visibility for tested names. It does not fix expression tokenization. Repair argument evaluation generically and recheck, with procedure-memory semantics a dependency for nested lookups.",
+    "The maker account uses claimed_invariant/planned_model_change instead of required invariant/planned_change; unchanged schema guard rejects it. Account editing is outside checker ownership."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_direct_computed_name.svg",
+      "axes": [
+        "literal concatenation name expression",
+        "exists and get operations with renamed variable"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_single_quoted_name.svg",
+      "axes": [
+        "single versus double quoted token",
+        "exists/get with renamed payload"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "result": "fail",
+      "metadata_exit": 0,
+      "source_equal": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_prefix_collision.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_prefix_collision.svg",
+      "axes": [
+        "legacy versus dollar namespace",
+        "same-name collision and renamed colors"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_nested_literal_scope.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_nested_literal_scope.svg",
+      "axes": [
+        "nested sibling scope and shadowing",
+        "literal lookup and missing local"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_variable_computed_name.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_variable_computed_name.svg",
+      "axes": [
+        "name stored in variable",
+        "conditional and getter with renamed key"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_undef_scope.puml",
+      "golden": "test-diagrams/perturbations/tim-literal-variable-lookup/checker_legacy_undef_scope.svg",
+      "axes": [
+        "legacy define removal across call",
+        "local versus global existence"
+      ],
+      "kind": "fresh checker",
+      "java_exit": 0,
+      "java_source_exit": 0,
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "result": "pass",
+      "metadata_exit": 0,
+      "source_equal": true
+    }
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "9102a45ed27188abf9f0db7784daed490a48ec1c",
+  "parent_commit": "bb2bdb67d5efc780de2c04f788dbbe8d53b54196",
+  "followup_commits": [
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "maker_evidence_commit": "d2d571de0ca551cfd93223d577539eff7c366afe",
+  "combined_dependencies": [
+    "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+    "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+    "1ee250f0fafdc62fa9f348b64d12fe4363790d6c",
+    "e2503bd4c282841abee982fd6063658975f25f69",
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "New canonical SVGs use raw Java CLI -pipe -tsvg; historical frozen main corpus retains its GET-transcoder contract. No reference policy choice is authorized by this review.",
+  "evidence": "docs/parity-reviews/tim-evaluated-event-stream/checker-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; main tiers, parser assertion, held-outs and guards remain red"
+}

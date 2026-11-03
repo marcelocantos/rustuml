@@ -1,0 +1,2738 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __theme
+      value: cerulean
+    - key: backgroundColor
+      value: transparent
+    - key: useBetaStyle
+      value: 'false'
+    - key: __styleRootFontColor
+      value: '#FFF'
+    - key: __styleRootLineColor
+      value: '#2683B9'
+    - key: __styleRootLineThickness
+      value: '1'
+    - key: defaultFontName
+      value: '"Verdana"'
+    - key: defaultFontSize
+      value: '12'
+    - key: dpi
+      value: '100'
+    - key: shadowing
+      value: 'false'
+    - key: roundcorner
+      value: '8'
+    - key: ParticipantPadding
+      value: '40'
+    - key: BoxPadding
+      value: '40'
+    - key: Padding
+      value: '5'
+    - key: stereotypeCBackgroundColor
+      value: '#EDF0F2'
+    - key: stereotypeCBorderColor
+      value: '#BABDBF'
+    - key: stereotypeABackgroundColor
+      value: '#8FB961'
+    - key: stereotypeABorderColor
+      value: '#5C862E'
+    - key: stereotypeIBackgroundColor
+      value: '#D2494E'
+    - key: stereotypeIBorderColor
+      value: '#9F161B'
+    - key: stereotypeEBackgroundColor
+      value: '#E47833'
+    - key: stereotypeEBorderColor
+      value: '#B14500'
+    - key: stereotypeNBackgroundColor
+      value: '#35638F'
+    - key: stereotypeNBorderColor
+      value: '#02305C'
+    - key: titleFontColor
+      value: '#2FA4E7'
+    - key: titleBorderColor
+      value: '#BABDBF'
+    - key: titleFontSize
+      value: '20'
+    - key: titleBorderRoundCorner
+      value: '8'
+    - key: titleBorderThickness
+      value: '1'
+    - key: titleBackgroundColor
+      value: '#EDF0F2-#E9ECEF'
+    - key: legendBackgroundColor
+      value: '#E9ECEF'
+    - key: legendBorderColor
+      value: '#BABDBF'
+    - key: legendFontColor
+      value: '#343A40'
+    - key: swimlaneBorderColor
+      value: '#033C73'
+    - key: swimlaneBorderThickness
+      value: '2'
+    - key: swimlaneTitleBackgroundColor
+      value: '#EDF0F2-#E9ECEF'
+    - key: swimlaneTitleFontColor
+      value: '#2FA4E7'
+    - key: activityFontColor
+      value: '#FFF'
+    - key: activityBorderColor
+      value: '#2FA4E7'
+    - key: activityBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: activityBarColor
+      value: '#73A839'
+    - key: activityStartColor
+      value: '#033C73'
+    - key: activityEndColor
+      value: '#033C73'
+    - key: activityDiamondBackgroundColor
+      value: '#FFF-#EDF0F2'
+    - key: activityDiamondBorderColor
+      value: '#BABDBF'
+    - key: activityDiamondFontColor
+      value: '#343A40'
+    - key: participantFontColor
+      value: '#FFF'
+    - key: participantBorderColor
+      value: '#2FA4E7'
+    - key: participantBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: participantParticipantBorderThickness
+      value: '2'
+    - key: actorBorderColor
+      value: '#2FA4E7'
+    - key: actorBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: actorFontColor
+      value: '#343A40'
+    - key: arrowThickness
+      value: '3'
+    - key: arrowColor
+      value: '#2FA4E7'
+    - key: arrowFontColor
+      value: '#343A40'
+    - key: sequenceBorderColor
+      value: '#2FA4E7'
+    - key: sequenceTitleFontColor
+      value: '#2FA4E7'
+    - key: sequenceBackgroundColor
+      value: transparent
+    - key: sequenceStartColor
+      value: '#2FA4E7'
+    - key: sequenceEndColor
+      value: '#2FA4E7'
+    - key: sequenceBoxBackgroundColor
+      value: '#F8F9FA'
+    - key: sequenceBoxBorderColor
+      value: '#868E96'
+    - key: sequenceBoxFontColor
+      value: '#343A40'
+    - key: sequenceDelayFontColor
+      value: '#343A40'
+    - key: sequenceLifeLineBorderColor
+      value: '#BABDBF'
+    - key: sequenceLifeLineBorderThickness
+      value: '2'
+    - key: sequenceLifeLineBackgroundColor
+      value: '#EDF0F2'
+    - key: sequenceGroupBorderColor
+      value: '#868E96'
+    - key: sequenceGroupFontColor
+      value: '#343A40'
+    - key: sequenceGroupHeaderFontColor
+      value: '#033C73'
+    - key: sequenceDividerBackgroundColor
+      value: '#FFF-#F8F9FA'
+    - key: sequenceDividerBorderColor
+      value: '#868E96'
+    - key: sequenceDividerBorderThickness
+      value: '2'
+    - key: sequenceDividerFontColor
+      value: '#343A40'
+    - key: sequenceReferenceBackgroundColor
+      value: transparent
+    - key: sequenceReferenceBorderColor
+      value: '#868E96'
+    - key: sequenceReferenceFontColor
+      value: '#343A40'
+    - key: sequenceReferenceHeaderFontColor
+      value: '#033C73'
+    - key: sequenceStereotypeFontColor
+      value: '#FFF'
+    - key: partitionBorderColor
+      value: '#2FA4E7'
+    - key: partitionFontColor
+      value: '#2FA4E7'
+    - key: partitionBackgroundColor
+      value: transparent
+    - key: collectionsFontColor
+      value: '#FFF'
+    - key: collectionsBorderColor
+      value: '#2FA4E7'
+    - key: collectionsBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: controlBorderColor
+      value: '#2FA4E7'
+    - key: controlBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: controlFontColor
+      value: '#343A40'
+    - key: entityBorderColor
+      value: '#2FA4E7'
+    - key: entityBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: entityFontColor
+      value: '#343A40'
+    - key: boundaryBorderColor
+      value: '#2FA4E7'
+    - key: boundaryBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: boundaryFontColor
+      value: '#343A40'
+    - key: agentBackgroundColor
+      value: '#orange'
+    - key: agentBorderColor
+      value: '#999999'
+    - key: agentFontColor
+      value: '#333333'
+    - key: noteBorderThickness
+      value: '1'
+    - key: noteBackgroundColor
+      value: '#35638F-#033C73'
+    - key: noteBorderColor
+      value: '#033C73'
+    - key: noteFontColor
+      value: '#FFF'
+    - key: artifactBackgroundColor
+      value: '#FFF-#F8F9FA'
+    - key: artifactBorderColor
+      value: '#BABDBF'
+    - key: artifactFontColor
+      value: '#343A40'
+    - key: componentFontColor
+      value: '#FFF'
+    - key: componentBorderColor
+      value: '#2FA4E7'
+    - key: componentBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: interfaceBackgroundColor
+      value: '#D2494E'
+    - key: interfaceBorderColor
+      value: '#C71C22'
+    - key: interfaceFontColor
+      value: '#343A40'
+    - key: storageBackgroundColor
+      value: '#E47833-#DD5600'
+    - key: storageBorderColor
+      value: '#DD5600'
+    - key: storageFontColor
+      value: '#FFF'
+    - key: nodeBackgroundColor
+      value: '#EDF0F2-#E9ECEF'
+    - key: nodeBorderColor
+      value: '#E9ECEF'
+    - key: nodeFontColor
+      value: '#343A40'
+    - key: cloudBackgroundColor
+      value: '#F2FCFE-#eeeeee'
+    - key: cloudBorderColor
+      value: '#F2FCFE'
+    - key: cloudFontColor
+      value: '#2FA4E7'
+    - key: databaseBorderColor
+      value: '#2FA4E7'
+    - key: databaseBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: databaseFontColor
+      value: '#343A40'
+    - key: classFontColor
+      value: '#FFF'
+    - key: classBorderColor
+      value: '#2FA4E7'
+    - key: classBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: classHeaderBackgroundColor
+      value: '#2FA4E7-#2683B9'
+    - key: classStereotypeFontColor
+      value: '#343A40'
+    - key: classBorderThickness
+      value: '1'
+    - key: classAttributeFontColor
+      value: '#F8F9FA'
+    - key: classAttributeFontSize
+      value: '11'
+    - key: objectFontColor
+      value: '#FFF'
+    - key: objectBorderColor
+      value: '#2FA4E7'
+    - key: objectBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: objectStereotypeFontColor
+      value: '#343A40'
+    - key: objectBorderThickness
+      value: '1'
+    - key: objectAttributeFontColor
+      value: '#343A40'
+    - key: objectAttributeFontSize
+      value: '11'
+    - key: usecaseFontColor
+      value: '#FFF'
+    - key: usecaseBorderColor
+      value: '#2FA4E7'
+    - key: usecaseBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: usecaseBorderThickness
+      value: '2'
+    - key: usecaseStereotypeFontColor
+      value: '#2FA4E7'
+    - key: rectangleFontColor
+      value: '#2FA4E7'
+    - key: rectangleBorderColor
+      value: '#59B6EC'
+    - key: rectangleBackgroundColor
+      value: transparent
+    - key: rectangleBorderThickness
+      value: '2'
+    - key: rectangleStereotypeFontColor
+      value: '#2FA4E7'
+    - key: packageFontColor
+      value: '#2FA4E7'
+    - key: packageBorderColor
+      value: '#59B6EC'
+    - key: packageBackgroundColor
+      value: transparent
+    - key: packageBorderThickness
+      value: '2'
+    - key: folderBackgroundColor
+      value: '#FFF-#EDF0F2'
+    - key: folderBorderColor
+      value: '#DD5600'
+    - key: folderFontColor
+      value: '#DD5600'
+    - key: folderBorderThickness
+      value: '2'
+    - key: frameBackgroundColor
+      value: '#FFF-#EDF0F2'
+    - key: frameBorderColor
+      value: '#033C73'
+    - key: frameFontColor
+      value: '#033C73'
+    - key: frameBorderThickness
+      value: '2'
+    - key: stateFontColor
+      value: '#FFF'
+    - key: stateBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: stateBorderColor
+      value: '#2683B9'
+    - key: stateStartColor
+      value: '#033C73'
+    - key: stateEndColor
+      value: '#033C73'
+    - key: stateAttributeFontColor
+      value: '#343A40'
+    - key: stateAttributeFontSize
+      value: '11'
+    - key: queueFontColor
+      value: '#FFF'
+    - key: queueBorderColor
+      value: '#2FA4E7'
+    - key: queueBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: cardBackgroundColor
+      value: '#35638F-#033C73'
+    - key: cardBorderColor
+      value: '#033C73'
+    - key: cardFontColor
+      value: '#FFF'
+    - key: fileBackgroundColor
+      value: '#EDF0F2-#E9ECEF'
+    - key: fileBorderColor
+      value: '#033C73'
+    - key: fileFontColor
+      value: '#868E96'
+    - key: stackFontColor
+      value: '#FFF'
+    - key: stackBorderColor
+      value: '#2FA4E7'
+    - key: stackBackgroundColor
+      value: '#59B6EC-#2FA4E7'
+    - key: __svgIdSeed
+      value: '1a30cn66cdf9p'
+    style_program:
+      declarations:
+      - selector:
+        - document
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 0
+        priority: 0
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - root
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 1
+        priority: 1
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 2
+        priority: 2
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: hyperlinkcolor
+        value: '#FD7E14'
+        source_line: 1
+        epoch: 3
+        priority: 3
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: linecolor
+        value: '#2683B9'
+        source_line: 1
+        epoch: 4
+        priority: 4
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: linethickness
+        value: '1'
+        source_line: 1
+        epoch: 5
+        priority: 5
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: margin
+        value: '10'
+        source_line: 1
+        epoch: 6
+        priority: 6
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: padding
+        value: '6'
+        source_line: 1
+        epoch: 7
+        priority: 7
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: shadowing
+        value: '0.0'
+        source_line: 1
+        epoch: 8
+        priority: 8
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - node
+        property: padding
+        value: '15'
+        source_line: 1
+        epoch: 9
+        priority: 9
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - node
+        property: roundcorner
+        value: '20'
+        source_line: 1
+        epoch: 10
+        priority: 10
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - node
+        property: backgroundcolor
+        value: '#2FA4E7-#2683B9'
+        source_line: 1
+        epoch: 11
+        priority: 11
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - caption
+        property: linethickness
+        value: '0'
+        source_line: 1
+        epoch: 12
+        priority: 12
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - footer
+        property: linethickness
+        value: '0'
+        source_line: 1
+        epoch: 13
+        priority: 13
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - groupheader
+        property: backgroundcolor
+        value: '#E9ECEF'
+        source_line: 1
+        epoch: 14
+        priority: 14
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - groupheader
+        property: fontcolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 15
+        priority: 15
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - groupheader
+        property: fontstyle
+        value: bold
+        source_line: 1
+        epoch: 16
+        priority: 16
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - header
+        property: linethickness
+        value: '0'
+        source_line: 1
+        epoch: 17
+        priority: 17
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - referenceheader
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 18
+        priority: 18
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - referenceheader
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 19
+        priority: 19
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - referenceheader
+        property: fontstyle
+        value: bold
+        source_line: 1
+        epoch: 20
+        priority: 20
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - separator
+        property: backgroundcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 21
+        priority: 21
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - separator
+        property: fontcolor
+        value: transparent
+        source_line: 1
+        epoch: 22
+        priority: 22
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - separator
+        property: fontstyle
+        value: bold
+        source_line: 1
+        epoch: 23
+        priority: 23
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - title
+        property: fontsize
+        value: '20'
+        source_line: 1
+        epoch: 24
+        priority: 24
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - title
+        property: backgroundcolor
+        value: '#EDF0F2-#E9ECEF'
+        source_line: 1
+        epoch: 25
+        priority: 25
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - title
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 26
+        priority: 26
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - network
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 27
+        priority: 27
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - network
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 28
+        priority: 28
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - network
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 29
+        priority: 29
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - network
+        property: linethickness
+        value: '1.0'
+        source_line: 1
+        epoch: 30
+        priority: 30
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - network
+        property: fontcolor
+        value: '#2683B9'
+        source_line: 1
+        epoch: 31
+        priority: 31
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - server
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 32
+        priority: 32
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - server
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 33
+        priority: 33
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - arrow
+        property: fontcolor
+        value: '#2683B9'
+        source_line: 1
+        epoch: 34
+        priority: 34
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - arrow
+        property: linecolor
+        value: '#2683B9'
+        source_line: 1
+        epoch: 35
+        priority: 35
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - group
+        property: backgroundcolor
+        value: '#F8F9FA'
+        source_line: 1
+        epoch: 36
+        priority: 36
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - group
+        property: linecolor
+        value: $LIGHT_DARK
+        source_line: 1
+        epoch: 37
+        priority: 37
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - group
+        property: linethickness
+        value: '2.0'
+        source_line: 1
+        epoch: 38
+        priority: 38
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - group
+        property: margin
+        value: '5'
+        source_line: 1
+        epoch: 39
+        priority: 39
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - nwdiagdiagram
+        - group
+        property: padding
+        value: '5'
+        source_line: 1
+        epoch: 40
+        priority: 40
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - task
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 41
+        priority: 41
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - task
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 42
+        priority: 42
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - task
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 43
+        priority: 43
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - task
+        property: margin
+        value: '10 2 2 2'
+        source_line: 1
+        epoch: 44
+        priority: 44
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - task
+        property: padding
+        value: '6'
+        source_line: 1
+        epoch: 45
+        priority: 45
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - note
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 46
+        priority: 46
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - note
+        property: linecolor
+        value: '#02305C'
+        source_line: 1
+        epoch: 47
+        priority: 47
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - note
+        property: backgroundcolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 48
+        priority: 48
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - separator
+        property: linecolor
+        value: '#E9ECEF'
+        source_line: 1
+        epoch: 49
+        priority: 49
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - separator
+        property: backgroundcolor
+        value: '#E9ECEF-#BABDBF'
+        source_line: 1
+        epoch: 50
+        priority: 50
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - separator
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 51
+        priority: 51
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - milestone
+        property: fontcolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 52
+        priority: 52
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - milestone
+        property: fontsize
+        value: '16'
+        source_line: 1
+        epoch: 53
+        priority: 53
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - milestone
+        property: fontstyle
+        value: italic
+        source_line: 1
+        epoch: 54
+        priority: 54
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - milestone
+        property: backgroundcolor
+        value: '#E9ECEF'
+        source_line: 1
+        epoch: 55
+        priority: 55
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - milestone
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 56
+        priority: 56
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - timeline
+        property: backgroundcolor
+        value: '#E9ECEF'
+        source_line: 1
+        epoch: 57
+        priority: 57
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - timeline
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 58
+        priority: 58
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - closed
+        property: backgroundcolor
+        value: '#B14500'
+        source_line: 1
+        epoch: 59
+        priority: 59
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - ganttdiagram
+        - closed
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 60
+        priority: 60
+        origin:
+          kind: theme_style
+          theme: cerulean
+      - selector:
+        - root
+        property: fontname
+        value: '"Verdana"'
+        source_line: 1
+        epoch: 61
+        priority: 61
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        property: fontsize
+        value: '12'
+        source_line: 1
+        epoch: 62
+        priority: 62
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - root
+        property: shadowing
+        value: '0'
+        source_line: 1
+        epoch: 63
+        priority: 63
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - root
+        property: roundcorner
+        value: '8'
+        source_line: 1
+        epoch: 64
+        priority: 64
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - arrow
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 65
+        priority: 65
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotclass
+        property: backgroundcolor
+        value: '#EDF0F2'
+        source_line: 1
+        epoch: 66
+        priority: 66
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotclass
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 67
+        priority: 67
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotabstractclass
+        property: backgroundcolor
+        value: '#8FB961'
+        source_line: 1
+        epoch: 68
+        priority: 68
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotabstractclass
+        property: linecolor
+        value: '#5C862E'
+        source_line: 1
+        epoch: 69
+        priority: 69
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotinterface
+        property: backgroundcolor
+        value: '#D2494E'
+        source_line: 1
+        epoch: 70
+        priority: 70
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotinterface
+        property: linecolor
+        value: '#9F161B'
+        source_line: 1
+        epoch: 71
+        priority: 71
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotenum
+        property: backgroundcolor
+        value: '#E47833'
+        source_line: 1
+        epoch: 72
+        priority: 72
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotenum
+        property: linecolor
+        value: '#B14500'
+        source_line: 1
+        epoch: 73
+        priority: 73
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotannotation
+        property: backgroundcolor
+        value: '#35638F'
+        source_line: 1
+        epoch: 74
+        priority: 74
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - spotannotation
+        property: linecolor
+        value: '#02305C'
+        source_line: 1
+        epoch: 75
+        priority: 75
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - document
+        - title
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 76
+        priority: 76
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - title
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 77
+        priority: 77
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - document
+        - title
+        property: fontsize
+        value: '20'
+        source_line: 1
+        epoch: 78
+        priority: 78
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - title
+        property: roundcorner
+        value: '8'
+        source_line: 1
+        epoch: 79
+        priority: 79
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - title
+        property: linethickness
+        value: '1'
+        source_line: 1
+        epoch: 80
+        priority: 80
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - title
+        property: backgroundcolor
+        value: '#EDF0F2-#E9ECEF'
+        source_line: 1
+        epoch: 81
+        priority: 81
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - legend
+        property: backgroundcolor
+        value: '#E9ECEF'
+        source_line: 1
+        epoch: 82
+        priority: 82
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - legend
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 83
+        priority: 83
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - legend
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 84
+        priority: 84
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - swimlane
+        property: linecolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 85
+        priority: 85
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - swimlane
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 86
+        priority: 86
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - swimlane
+        property: backgroundcolor
+        value: '#EDF0F2-#E9ECEF'
+        source_line: 1
+        epoch: 87
+        priority: 87
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - swimlane
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 88
+        priority: 88
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - activity
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 89
+        priority: 89
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - activity
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 90
+        priority: 90
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - activity
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 91
+        priority: 91
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - activitybar
+        property: backgroundcolor
+        value: '#73A839'
+        source_line: 1
+        epoch: 92
+        priority: 92
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - circle
+        - start
+        property: backgroundcolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 93
+        priority: 93
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - circle
+        - end
+        property: linecolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 94
+        priority: 94
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - diamond
+        property: backgroundcolor
+        value: '#FFF-#EDF0F2'
+        source_line: 1
+        epoch: 95
+        priority: 95
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - diamond
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 96
+        priority: 96
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - diamond
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 97
+        priority: 97
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - participant
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 98
+        priority: 98
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - participant
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 99
+        priority: 99
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - participant
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 100
+        priority: 100
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - actor
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 101
+        priority: 101
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - actor
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 102
+        priority: 102
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - actor
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 103
+        priority: 103
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - actor
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 104
+        priority: 104
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - arrow
+        property: linethickness
+        value: '3'
+        source_line: 1
+        epoch: 105
+        priority: 105
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - arrow
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 106
+        priority: 106
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - arrow
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 107
+        priority: 107
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - box
+        property: backgroundcolor
+        value: '#F8F9FA'
+        source_line: 1
+        epoch: 108
+        priority: 108
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - box
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 109
+        priority: 109
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - box
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 110
+        priority: 110
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - delay
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 111
+        priority: 111
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - lifeline
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 112
+        priority: 112
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - activationbox
+        property: backgroundcolor
+        value: '#EDF0F2'
+        source_line: 1
+        epoch: 113
+        priority: 113
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - group
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 114
+        priority: 114
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - groupheader
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 115
+        priority: 115
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - group
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 116
+        priority: 116
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - groupheader
+        property: fontcolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 117
+        priority: 117
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - separator
+        property: backgroundcolor
+        value: '#FFF-#F8F9FA'
+        source_line: 1
+        epoch: 118
+        priority: 118
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - separator
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 119
+        priority: 119
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - separator
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 120
+        priority: 120
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - separator
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 121
+        priority: 121
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - reference
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 122
+        priority: 122
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - reference
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 123
+        priority: 123
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - referenceheader
+        property: linecolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 124
+        priority: 124
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - reference
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 125
+        priority: 125
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - referenceheader
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 126
+        priority: 126
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - stereotype
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 127
+        priority: 127
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - composite
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 128
+        priority: 128
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - composite
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 129
+        priority: 129
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - composite
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 130
+        priority: 130
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - collections
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 131
+        priority: 131
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - collections
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 132
+        priority: 132
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - collections
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 133
+        priority: 133
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - control
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 134
+        priority: 134
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - control
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 135
+        priority: 135
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - control
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 136
+        priority: 136
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - control
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 137
+        priority: 137
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - entity
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 138
+        priority: 138
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - entity
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 139
+        priority: 139
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - entity
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 140
+        priority: 140
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - entity
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 141
+        priority: 141
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - boundary
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 142
+        priority: 142
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - boundary
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 143
+        priority: 143
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - boundary
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 144
+        priority: 144
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - boundary
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 145
+        priority: 145
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - agent
+        property: backgroundcolor
+        value: '#orange'
+        source_line: 1
+        epoch: 146
+        priority: 146
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - agent
+        property: linecolor
+        value: '#999999'
+        source_line: 1
+        epoch: 147
+        priority: 147
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - agent
+        property: fontcolor
+        value: '#333333'
+        source_line: 1
+        epoch: 148
+        priority: 148
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - note
+        property: linethickness
+        value: '1'
+        source_line: 1
+        epoch: 149
+        priority: 149
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - note
+        property: backgroundcolor
+        value: '#35638F-#033C73'
+        source_line: 1
+        epoch: 150
+        priority: 150
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - note
+        property: linecolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 151
+        priority: 151
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - note
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 152
+        priority: 152
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - artifact
+        property: backgroundcolor
+        value: '#FFF-#F8F9FA'
+        source_line: 1
+        epoch: 153
+        priority: 153
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - artifact
+        property: linecolor
+        value: '#BABDBF'
+        source_line: 1
+        epoch: 154
+        priority: 154
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - artifact
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 155
+        priority: 155
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - component
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 156
+        priority: 156
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - component
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 157
+        priority: 157
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - component
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 158
+        priority: 158
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - interface
+        property: backgroundcolor
+        value: '#D2494E'
+        source_line: 1
+        epoch: 159
+        priority: 159
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - interface
+        property: linecolor
+        value: '#C71C22'
+        source_line: 1
+        epoch: 160
+        priority: 160
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - interface
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 161
+        priority: 161
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - storage
+        property: backgroundcolor
+        value: '#E47833-#DD5600'
+        source_line: 1
+        epoch: 162
+        priority: 162
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - storage
+        property: linecolor
+        value: '#DD5600'
+        source_line: 1
+        epoch: 163
+        priority: 163
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - storage
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 164
+        priority: 164
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - node
+        property: backgroundcolor
+        value: '#EDF0F2-#E9ECEF'
+        source_line: 1
+        epoch: 165
+        priority: 165
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - node
+        property: linecolor
+        value: '#E9ECEF'
+        source_line: 1
+        epoch: 166
+        priority: 166
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - node
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 167
+        priority: 167
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - cloud
+        property: backgroundcolor
+        value: '#F2FCFE-#eeeeee'
+        source_line: 1
+        epoch: 168
+        priority: 168
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - cloud
+        property: linecolor
+        value: '#F2FCFE'
+        source_line: 1
+        epoch: 169
+        priority: 169
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - cloud
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 170
+        priority: 170
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - database
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 171
+        priority: 171
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - database
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 172
+        priority: 172
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - database
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 173
+        priority: 173
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - database
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 174
+        priority: 174
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        - header
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 175
+        priority: 175
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 176
+        priority: 176
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 177
+        priority: 177
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        - header
+        property: backgroundcolor
+        value: '#2FA4E7-#2683B9'
+        source_line: 1
+        epoch: 178
+        priority: 178
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        property: linethickness
+        value: '1'
+        source_line: 1
+        epoch: 179
+        priority: 179
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        property: fontcolor
+        value: '#F8F9FA'
+        source_line: 1
+        epoch: 180
+        priority: 180
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - element
+        - class
+        property: fontsize
+        value: '11'
+        source_line: 1
+        epoch: 181
+        priority: 181
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - object
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 182
+        priority: 182
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - object
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 183
+        priority: 183
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - object
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 184
+        priority: 184
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - object
+        property: linethickness
+        value: '1'
+        source_line: 1
+        epoch: 185
+        priority: 185
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - object
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 186
+        priority: 186
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - object
+        property: fontsize
+        value: '11'
+        source_line: 1
+        epoch: 187
+        priority: 187
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - usecase
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 188
+        priority: 188
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - usecase
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 189
+        priority: 189
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - usecase
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 190
+        priority: 190
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - usecase
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 191
+        priority: 191
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - stereotype
+        - usecase
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 192
+        priority: 192
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - rectangle
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 193
+        priority: 193
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - rectangle
+        property: linecolor
+        value: '#59B6EC'
+        source_line: 1
+        epoch: 194
+        priority: 194
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - rectangle
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 195
+        priority: 195
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - rectangle
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 196
+        priority: 196
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - stereotype
+        - rectangle
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 197
+        priority: 197
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - package
+        property: fontcolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 198
+        priority: 198
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - group
+        property: linecolor
+        value: '#59B6EC'
+        source_line: 1
+        epoch: 199
+        priority: 199
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - package
+        property: linecolor
+        value: '#59B6EC'
+        source_line: 1
+        epoch: 200
+        priority: 200
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - group
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 201
+        priority: 201
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - package
+        property: backgroundcolor
+        value: transparent
+        source_line: 1
+        epoch: 202
+        priority: 202
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - package
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 203
+        priority: 203
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - folder
+        property: backgroundcolor
+        value: '#FFF-#EDF0F2'
+        source_line: 1
+        epoch: 204
+        priority: 204
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - folder
+        property: linecolor
+        value: '#DD5600'
+        source_line: 1
+        epoch: 205
+        priority: 205
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - folder
+        property: fontcolor
+        value: '#DD5600'
+        source_line: 1
+        epoch: 206
+        priority: 206
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - folder
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 207
+        priority: 207
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - frame
+        property: backgroundcolor
+        value: '#FFF-#EDF0F2'
+        source_line: 1
+        epoch: 208
+        priority: 208
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - frame
+        property: linecolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 209
+        priority: 209
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - frame
+        property: fontcolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 210
+        priority: 210
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - frame
+        property: linethickness
+        value: '2'
+        source_line: 1
+        epoch: 211
+        priority: 211
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - state
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 212
+        priority: 212
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - state
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 213
+        priority: 213
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - state
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 214
+        priority: 214
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - state
+        property: linecolor
+        value: '#2683B9'
+        source_line: 1
+        epoch: 215
+        priority: 215
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - state
+        property: fontcolor
+        value: '#343A40'
+        source_line: 1
+        epoch: 216
+        priority: 216
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - state
+        property: fontsize
+        value: '11'
+        source_line: 1
+        epoch: 217
+        priority: 217
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - queue
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 218
+        priority: 218
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - queue
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 219
+        priority: 219
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - queue
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 220
+        priority: 220
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - card
+        property: backgroundcolor
+        value: '#35638F-#033C73'
+        source_line: 1
+        epoch: 221
+        priority: 221
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - card
+        property: linecolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 222
+        priority: 222
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - card
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 223
+        priority: 223
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - file
+        property: backgroundcolor
+        value: '#EDF0F2-#E9ECEF'
+        source_line: 1
+        epoch: 224
+        priority: 224
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - file
+        property: linecolor
+        value: '#033C73'
+        source_line: 1
+        epoch: 225
+        priority: 225
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - file
+        property: fontcolor
+        value: '#868E96'
+        source_line: 1
+        epoch: 226
+        priority: 226
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - stack
+        property: fontcolor
+        value: '#FFF'
+        source_line: 1
+        epoch: 227
+        priority: 227
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - stack
+        property: linecolor
+        value: '#2FA4E7'
+        source_line: 1
+        epoch: 228
+        priority: 228
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+      - selector:
+        - stack
+        property: backgroundcolor
+        value: '#59B6EC-#2FA4E7'
+        source_line: 1
+        epoch: 229
+        priority: 229
+        origin:
+          kind: theme_skin_param
+          theme: cerulean
+    source: "@startuml\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass WillowRegister {\n  +weight: int\n}\n@enduml\n"
+  direction: TopToBottom
+  uid_events:
+  - !Entity WillowRegister
+  entities:
+  - id: WillowRegister
+    label: WillowRegister
+    explicit_alias: false
+    kind: Class
+    members:
+    - name: weight
+      return_type: int
+      visibility: Public
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: 'weight: int'
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

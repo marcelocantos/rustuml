@@ -1,0 +1,3 @@
+@startuml
+class "70-01-01 11:00:00" as Clockformatwidth
+@enduml

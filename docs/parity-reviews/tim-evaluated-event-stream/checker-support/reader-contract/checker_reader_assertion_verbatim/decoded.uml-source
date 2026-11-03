@@ -1,0 +1,7 @@
+@startuml
+class FreshAlpha881
+
+
+class FreshBeta883
+FreshAlpha881 --> FreshBeta883
+@enduml

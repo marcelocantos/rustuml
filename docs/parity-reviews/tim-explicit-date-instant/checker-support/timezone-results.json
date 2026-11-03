@@ -1,0 +1,110 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "timezone": "Australia/Melbourne",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "timezone": "Australia/Melbourne",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "timezone": "Australia/Melbourne",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "timezone": "Australia/Melbourne",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "timezone": "Asia/Kathmandu",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "timezone": "Asia/Kathmandu",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "timezone": "Asia/Kathmandu",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "timezone": "Asia/Kathmandu",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "timezone": "UTC",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "timezone": "UTC",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "timezone": "UTC",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "timezone": "UTC",
+    "RUSTUML_DEBUG": "date=1774210426000",
+    "java_exit": 0,
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  }
+]

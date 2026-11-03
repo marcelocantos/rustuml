@@ -1,0 +1,12 @@
+@startuml
+!$count = 0
+!procedure $tick($label)
+!$count = $count + 1
+!local $secret = "private"
+class "$label $count" as Tree$count
+!endprocedure
+!foreach $label in ["Oak", "Elm", "Yew"]
+$tick($label)
+!endfor
+class "total $count $secret" as Total
+@enduml

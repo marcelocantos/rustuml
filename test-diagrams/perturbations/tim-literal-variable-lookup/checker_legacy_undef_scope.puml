@@ -1,0 +1,11 @@
+@startuml
+!define ACORN ochre
+!procedure $inspect()
+!local $seed = "bud"
+!$present = %variable_exists("ACORN")
+class "$present / %get_variable_value("$seed")" as Local
+!undef ACORN
+!endprocedure
+$inspect()
+class "%variable_exists("ACORN") / %variable_exists("$seed")" as After
+@enduml

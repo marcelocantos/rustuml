@@ -1,0 +1,49 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "Oak 1" as Tree1
+      class "Elm 2" as Tree2
+      class "Yew 3" as Tree3
+      class "total 3 $secret" as Total
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Tree1
+  - !Entity Tree2
+  - !Entity Tree3
+  - !Entity Total
+  entities:
+  - id: Tree1
+    label: Oak 1
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: Tree2
+    label: Elm 2
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: Tree3
+    label: Yew 3
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: Total
+    label: total 3 $secret
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 10
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,31 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "root / 0" as Inner
+      class "branch / 1" as Outer
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Inner
+  - !Entity Outer
+  entities:
+  - id: Inner
+    label: root / 0
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  - id: Outer
+    label: branch / 1
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

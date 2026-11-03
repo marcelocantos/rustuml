@@ -1,0 +1,5 @@
+@startuml
+class "tall" as Tree4
+class "short" as Tree1
+class Sentinel
+@enduml

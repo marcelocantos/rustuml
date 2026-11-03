@@ -1,0 +1,4 @@
+@startuml
+class "now global" as Now
+class "again automatic" as Again
+@enduml

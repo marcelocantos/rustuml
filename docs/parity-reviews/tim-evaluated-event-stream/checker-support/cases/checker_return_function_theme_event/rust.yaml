@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "configured 1" as ReturnTheme
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity ReturnTheme
+  entities:
+  - id: ReturnTheme
+    label: configured 1
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

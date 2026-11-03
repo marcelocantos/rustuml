@@ -1,0 +1,13 @@
+@startuml
+!$enabled = 1
+!if $enabled
+!theme minty
+!endif
+!if $enabled
+class QuartzArchive {
+  +capacity: int
+}
+!else
+class UnusedArchive
+!endif
+@enduml

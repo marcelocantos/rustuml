@@ -1,0 +1,5 @@
+@startuml
+!$instant = 946684800
+!$stamp = %date("yyyy-MM-dd 'year''s day'", $instant)
+class "$stamp" as Clockformatliteral
+@enduml

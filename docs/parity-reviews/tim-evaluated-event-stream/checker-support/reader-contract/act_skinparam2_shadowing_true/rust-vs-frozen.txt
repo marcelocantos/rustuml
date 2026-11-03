@@ -1,0 +1,32 @@
+SVG structural differences:
+  [2] <filter> attr mismatch:
+    expected: [("height", "300%"), ("id", "f4a86o8ehqhok"), ("width", "300%"), ("x", "-1"), ("y", "-1")]
+    actual:   [("height", "300%"), ("id", "fuon9sr0qvzo4"), ("width", "300%"), ("x", "-1"), ("y", "-1")]
+  [8] <ellipse> attr mismatch:
+    expected: [("cx", "76.7803"), ("cy", "25"), ("fill", "#222222"), ("filter", "url(#f4a86o8ehqhok)"), ("rx", "10"), ("ry", "10"), ("style", "stroke:#222222;stroke-width:1;")]
+    actual:   [("cx", "76.7803"), ("cy", "25"), ("fill", "#222222"), ("filter", "url(#fuon9sr0qvzo4)"), ("rx", "10"), ("ry", "10"), ("style", "stroke:#222222;stroke-width:1;")]
+  [9] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "69.2773"), ("x", "42.1416"), ("y", "55")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "69.2773"), ("x", "42.1416"), ("y", "55")]
+  [11] <polygon> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("points", "61.3894,109.1328,92.1711,109.1328,104.1711,121.1328,92.1711,133.1328,61.3894,133.1328,49.3894,121.1328,61.3894,109.1328"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("points", "61.3894,109.1328,92.1711,109.1328,104.1711,121.1328,92.1711,133.1328,61.3894,133.1328,49.3894,121.1328,61.3894,109.1328"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [15] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "40.2793"), ("x", "19.2498"), ("y", "143.1328")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "40.2793"), ("x", "19.2498"), ("y", "143.1328")]
+  [17] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "36.2363"), ("x", "96.053"), ("y", "143.1328")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "36.2363"), ("x", "96.053"), ("y", "143.1328")]
+  [19] <polygon> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("points", "76.7803,183.2656,88.7803,195.2656,76.7803,207.2656,64.7803,195.2656,76.7803,183.2656"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("points", "76.7803,183.2656,88.7803,195.2656,76.7803,207.2656,64.7803,195.2656,76.7803,183.2656"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [20] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "49.5605"), ("x", "52"), ("y", "288.2207")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("height", "34.1328"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "49.5605"), ("x", "52"), ("y", "288.2207")]
+  [22] <polygon> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("filter", "url(#f4a86o8ehqhok)"), ("points", "62.6516,227.2656,90.9089,227.2656,102.9089,239.2656,90.9089,251.2656,62.6516,251.2656,50.6516,239.2656,62.6516,227.2656"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("fill", "#F1F1F1"), ("filter", "url(#fuon9sr0qvzo4)"), ("points", "62.6516,227.2656,90.9089,227.2656,102.9089,239.2656,90.9089,251.2656,62.6516,251.2656,50.6516,239.2656,62.6516,227.2656"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [25] <ellipse> attr mismatch:
+    expected: [("cx", "29"), ("cy", "286.2656"), ("fill", "none"), ("filter", "url(#f4a86o8ehqhok)"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#222222;stroke-width:1;")]
+    actual:   [("cx", "29"), ("cy", "286.2656"), ("fill", "none"), ("filter", "url(#fuon9sr0qvzo4)"), ("rx", "11"), ("ry", "11"), ("style", "stroke:#222222;stroke-width:1;")]
+

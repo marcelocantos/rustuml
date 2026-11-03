@@ -1,0 +1,7 @@
+@startuml
+!$maple = "ruby"
+!$key = "$" + "maple"
+!if %variable_exists($key)
+class "%get_variable_value($key)" as VariableComputed
+!endif
+@enduml

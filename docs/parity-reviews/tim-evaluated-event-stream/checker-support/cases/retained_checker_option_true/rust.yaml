@@ -1,0 +1,39 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __optionHandwritten
+      value: 'true'
+    - key: shadowing
+      value: 'true'
+    style_program:
+      declarations:
+      - selector:
+        - root
+        property: shadowing
+        value: '3'
+        source_line: 2
+        epoch: 0
+        priority: 0
+        origin:
+          kind: user_skin_param
+    source: |
+      @startuml
+      skinparam shadowing true
+      class PoplarLedger
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity PoplarLedger
+  entities:
+  - id: PoplarLedger
+    label: PoplarLedger
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

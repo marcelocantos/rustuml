@@ -1,0 +1,184 @@
+{
+  "combined_tested_commit": "9102a45ed27188abf9f0db7784daed490a48ec1c",
+  "parent_commit": "bb2bdb67d5efc780de2c04f788dbbe8d53b54196",
+  "review_verdicts": {
+    "tim-explicit-date-instant": "rejected",
+    "tim-procedure-global-fork-memory": "rejected",
+    "tim-evaluated-event-stream": "rejected",
+    "tim-literal-variable-lookup": "rejected"
+  },
+  "prepared": {
+    "sources": 913,
+    "isolated_cli": {
+      "pass": 400,
+      "mismatch": 503,
+      "invalid_reference": 8,
+      "panic": 2
+    },
+    "built_in": {
+      "pass": 399,
+      "mismatch": 504,
+      "invalid_reference": 8,
+      "panic": 2
+    },
+    "cwd_difference": "tim-theme-post-expansion-source-identity/checker_include_theme; T14.6.2"
+  },
+  "added": {
+    "total": 42,
+    "valid": 40,
+    "deliberately_invalid": 2,
+    "valid_svg_pass": 24,
+    "valid_svg_fail": 16,
+    "valid_exact_source": 31,
+    "retained_valid_maker_failures": 5,
+    "java_error_svg": 1,
+    "java_empty_stdout": 1,
+    "cli_errors": 0
+  },
+  "per_mechanism": {
+    "tim-explicit-date-instant": {
+      "total": 14,
+      "valid": 12,
+      "svg_pass": 9,
+      "exact_source": 9,
+      "verdict": "rejected"
+    },
+    "tim-procedure-global-fork-memory": {
+      "total": 6,
+      "valid": 6,
+      "svg_pass": 5,
+      "exact_source": 5,
+      "verdict": "rejected"
+    },
+    "tim-evaluated-event-stream": {
+      "total": 16,
+      "valid": 16,
+      "svg_pass": 6,
+      "exact_source": 13,
+      "verdict": "rejected"
+    },
+    "tim-literal-variable-lookup": {
+      "total": 6,
+      "valid": 6,
+      "svg_pass": 4,
+      "exact_source": 4,
+      "verdict": "rejected"
+    }
+  },
+  "final_built_in": {
+    "total": 955,
+    "pass": 423,
+    "mismatch": 520,
+    "java_error_reference": 9,
+    "non_svg_reference": 1,
+    "panic": 2,
+    "registry_cascades": 0,
+    "exit": 101
+  },
+  "main_product": {
+    "pass": 11179,
+    "eligible": 11251,
+    "result": "red"
+  },
+  "assisted": {
+    "pass": 10497,
+    "fail": 754,
+    "skip": 1299,
+    "total": 12550,
+    "result": "red"
+  },
+  "parser_units": {
+    "pass": 569,
+    "fail": 1,
+    "failure": "leading_blank_lines_do_not_shift_locations_but_internal_blanks_do"
+  },
+  "pipe_tests": {
+    "pass": 13,
+    "fail": 0
+  },
+  "guards": {
+    "pass": 4,
+    "fail": 2,
+    "failures": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ],
+    "own_review_schema": "Required schema fields and pair membership validated; unchanged guard reports own rejected verdicts/failing cases, not missing review fields. Maker account field-name errors remain."
+  },
+  "preserved_theme33": {
+    "total": 33,
+    "valid": 32,
+    "svg_pass": 28,
+    "valid_fail": 4,
+    "invalid": 1,
+    "exact_source_including_invalid": 33
+  },
+  "maker22": {
+    "total": 22,
+    "valid": 20,
+    "svg_pass": 19,
+    "valid_fail": 1,
+    "invalid": 2,
+    "valid_exact_source": 20
+  },
+  "host_zone_supplement": {
+    "pass": 12,
+    "total": 12,
+    "zones": [
+      "Australia/Melbourne",
+      "Asia/Kathmandu",
+      "UTC"
+    ]
+  },
+  "residue": [
+    "All four mechanism reviews rejected; no aggregate acceptance.",
+    "Reader contract needs explicit owner sign-off before reference/assertion/code policy changes.",
+    "Historical JAR binary/font/Graphviz equivalence unproven, despite exact reproduction of the three GET conflicts.",
+    "Procedure default capture and date formatting defects are retained pre-existing dependencies, not all regressions from the new patches.",
+    "Initial-gates.log main tier and CLI/guard results are valid; its perturbation run overlapped creation of the first checker pair and saw a temporarily missing reference. Use prepared-builtin.log and final-heldouts-guards.log for held-out counts.",
+    "Non-Unix timezone fallback was not executed."
+  ],
+  "artifact_paths": [
+    "reader-contract/results.json",
+    "provenance-results.json",
+    "fresh-results.json",
+    "isolated-results.json",
+    "replay-results.json",
+    "prepared-inventory.json",
+    "prepared-builtin.log",
+    "measurement-artifacts.tar.gz"
+  ],
+  "binary_sha256": "bb8b63eb36361d5e99a8f7420e8b61e59a92416cd523af24449391d29a81fd88",
+  "comparator_probe_sha256": "ed909df905d06241ed7ca0c0bc46fcccc2a8b93877fe0e323a84bc8a87fffce5",
+  "actual_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "cherry_picks": [
+    {
+      "original": "22c023397bc1422d21d24e37e800ed939be3d841",
+      "local": "ed7b328c73537f74e3bb5861dd6072b23313858e"
+    },
+    {
+      "original": "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+      "local": "a8407ecc7d23f82a65509cb43e35ce71473634d5"
+    },
+    {
+      "original": "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+      "local": "0be8a32f79fb76ae80346dcecb34e5c4175ff218"
+    },
+    {
+      "original": "1ee250f0fafdc62fa9f348b64d12fe4363790d6c",
+      "local": "874a1d19fa87f569ae95ac096cf4de5bfa61a5d0"
+    },
+    {
+      "original": "e2503bd4c282841abee982fd6063658975f25f69",
+      "local": "372a4c94a509ad4c2c41f687245de5ab1fe0250d"
+    },
+    {
+      "original": "cefd22f9d047cf4ab1f2bb515aa869266b91aff6",
+      "local": "ee23a19dabebd44f9806ce8fab907fc414eb0ee6"
+    },
+    {
+      "original": "d2d571de0ca551cfd93223d577539eff7c366afe",
+      "local": "9102a45ed27188abf9f0db7784daed490a48ec1c"
+    }
+  ]
+}

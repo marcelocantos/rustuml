@@ -1,0 +1,31 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1 / bud" as Local
+      class "0 / 0" as After
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Local
+  - !Entity After
+  entities:
+  - id: Local
+    label: '1 / bud'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: After
+    label: '0 / 0'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 9
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,5 @@
+@startuml
+!$instant = -2147483648
+!$stamp = %date("yyyy-MM-dd HH:mm:ss EEE", $instant)
+class "$stamp" as Clockminimumseconds
+@enduml

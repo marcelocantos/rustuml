@@ -1,0 +1,14 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "203.125px"), ("preserveAspectRatio", "none"), ("style", "width:302px;height:203px;"), ("version", "1.1"), ("viewBox", "0 0 302 203"), ("width", "302.0833px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "203.125px"), ("preserveAspectRatio", "none"), ("style", "width:415px;height:203px;"), ("version", "1.1"), ("viewBox", "0 0 415 203"), ("width", "415.625px"), ("zoomAndPan", "magnify")]
+  [43] <path> attr mismatch:
+    expected: [("d", "M127.0729,143.5 L127.0729,171.1917 A4.1667,4.1667 0 0 0 131.2396,175.3583 L277.5063,175.3583 A4.1667,4.1667 0 0 0 281.6729,171.1917 L281.6729,149.75 L271.2563,139.3333 L131.2396,139.3333 A4.1667,4.1667 0 0 0 127.0729,143.5"), ("fill", "url(#g1g2phin9m59xd2)"), ("style", "stroke:#033C73;stroke-width:1.0417;")]
+    actual:   [("d", "M245.1531,30.2386 L245.1531,56.6037 L394.8342,56.6037 L394.8342,40.6553 L384.4175,30.2386 L245.1531,30.2386"), ("fill", "url(#g1g2phin9m59xd2)"), ("style", "stroke:#033C73;stroke-width:1.0417;")]
+  [44] <path> attr mismatch:
+    expected: [("d", "M271.2563,139.3333 L271.2563,147.6667 A2.0833,2.0833 0 0 0 273.3396,149.75 L281.6729,149.75 L271.2563,139.3333"), ("fill", "url(#g1g2phin9m59xd2)"), ("style", "stroke:#033C73;stroke-width:1.0417;")]
+    actual:   [("d", "M384.4175,30.2386 L384.4175,40.6553 L394.8342,40.6553 L384.4175,30.2386"), ("fill", "url(#g1g2phin9m59xd2)"), ("style", "stroke:#033C73;stroke-width:1.0417;")]
+  [45] <text> attr mismatch:
+    expected: [("fill", "#FFFFFF"), ("font-family", "'Verdana'"), ("font-size", "12.5"), ("lengthAdjust", "spacing"), ("textLength", "122.3083"), ("x", "138.5313"), ("y", "162.3171")]
+    actual:   [("fill", "#FFFFFF"), ("font-family", "sans-serif"), ("font-size", "13.5417"), ("lengthAdjust", "spacing"), ("textLength", "127.8061"), ("x", "251.4031"), ("y", "48.539")]
+

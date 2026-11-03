@@ -1,0 +1,9 @@
+@startuml
+!theme cerulean
+!procedure $record($name, $field)
+class $name {
+  +$field: String
+}
+!endprocedure
+$record(CopperRegister, key)
+@enduml

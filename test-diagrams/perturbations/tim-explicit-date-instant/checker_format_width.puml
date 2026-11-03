@@ -1,0 +1,5 @@
+@startuml
+!$instant = 0
+!$stamp = %date("y-M-d H:m:s", $instant)
+class "$stamp" as Clockformatwidth
+@enduml

@@ -1,0 +1,40 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "sibling root $private" as Sibling
+      class "branch root leaf" as Branch
+      class "after root $private" as After
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Sibling
+  - !Entity Branch
+  - !Entity After
+  entities:
+  - id: Sibling
+    label: sibling root $private
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  - id: Branch
+    label: branch root leaf
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 9
+  - id: After
+    label: after root $private
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 12
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

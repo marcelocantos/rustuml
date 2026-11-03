@@ -1,0 +1,5 @@
+SVG structural differences:
+  [5] <ellipse> attr mismatch:
+    expected: [("cx", "32.2917"), ("cy", "35.0878"), ("fill", "#F4A1A4"), ("rx", "10.4167"), ("ry", "10.4167"), ("style", "stroke:#DB878B;stroke-width:1.0417;")]
+    actual:   [("cx", "32.2917"), ("cy", "35.0878"), ("fill", "#EDF0F2"), ("rx", "10.4167"), ("ry", "10.4167"), ("style", "stroke:#BABDBF;stroke-width:1.0417;")]
+

@@ -1,0 +1,31 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "now global" as Now
+      class "again automatic" as Again
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Now
+  - !Entity Again
+  entities:
+  - id: Now
+    label: now global
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  - id: Again
+    label: again automatic
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 9
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

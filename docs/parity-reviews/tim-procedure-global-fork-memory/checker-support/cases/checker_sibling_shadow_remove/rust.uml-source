@@ -1,0 +1,5 @@
+@startuml
+class "sibling root $private" as Sibling
+class "branch root leaf" as Branch
+class "after root $private" as After
+@enduml

@@ -1,0 +1,31 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "argument kept" as Local
+      class "published $local" as Global
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Local
+  - !Entity Global
+  entities:
+  - id: Local
+    label: argument kept
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  - id: Global
+    label: published $local
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 10
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
