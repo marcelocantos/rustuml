@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="66px" preserveAspectRatio="none" style="width:145px;height:66px;background:#FFFFFF;" version="1.1" viewBox="0 0 145 66" width="145px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Polar Harbor-->
+<g class="entity" data-qualified-name="Polar Harbor" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125.1621" x="7" y="7"/>
+<path d="M48.7207,7 L48.7207,12 L41.7207,19 L7,19" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.1621" x="22" y="40.5352">Polar Harbor</text>
+</g>
+</g></svg>

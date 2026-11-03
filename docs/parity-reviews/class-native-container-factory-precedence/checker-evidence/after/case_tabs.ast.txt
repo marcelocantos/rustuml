@@ -1,0 +1,56 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nNoDe\t\"Polar Harbor\" {\nClAsS\tCache\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Polar Harbor",
+            ),
+        ],
+        entities: [],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                name: "Polar Harbor",
+                kind: Node,
+                color: None,
+                entities: [],
+                parent: None,
+                source_line: 1,
+                stereotypes: [],
+                display_name: None,
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

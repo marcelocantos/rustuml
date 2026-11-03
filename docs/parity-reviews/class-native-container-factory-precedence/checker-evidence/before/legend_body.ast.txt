@@ -1,0 +1,52 @@
+Component(
+    ComponentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: Some(
+                "[Harbor display]\ncomponent journal",
+            ),
+            legend_line: Some(
+                1,
+            ),
+            legend_horizontal_alignment: Right,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nlegend right\n[Harbor display]\ncomponent journal\nendlegend\nnode \"Polar Harbor\" {\nclass Cache\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        components: [],
+        hidden_components: [],
+        removed_components: [],
+        interfaces: [],
+        connections: [],
+        removed_connections: [],
+        packages: [
+            ComponentPackage {
+                name: "Polar Harbor",
+                label: "Polar Harbor",
+                stereotype: None,
+                kind: Node,
+                color: None,
+                source_line: 5,
+                components: [],
+                packages: [],
+            },
+        ],
+        together: [],
+        notes: [],
+        removed_notes: [],
+    },
+)

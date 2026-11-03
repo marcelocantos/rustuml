@@ -1,0 +1,8 @@
+@startuml
+left header
+Journal from polar waters
+endheader
+node "Polar Harbor" {
+class Cache
+}
+@enduml

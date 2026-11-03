@@ -1,0 +1,436 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-native-container-factory-precedence",
+  "reviewer": {
+    "task_id": "independent Codex checker, orchestrator-prepared t3-de790caf checkout, branch t3/class-container-factory-review",
+    "model": "gpt-6-astra, high reasoning, Codex harness in T3 Code (inherited model, no child agents)"
+  },
+  "account_commit": "c80c06c50e777520472f978e366ab39d5ad3039b",
+  "implementation_commit": "451d641ed26dc104f661d266c4e5b0732e8c2a1b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show c80c06c50e777520472f978e366ab39d5ad3039b; git show 451d641ed26dc104f661d266c4e5b0732e8c2a1b; git show b3eb1bcbd138314ece69a0b23ea2191b19008b79 -- crates/rustuml-parser/src/parse/mod.rs",
+    "git -c protocol.file.allow=always submodule update --init test-diagrams/golden",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --no-fail-fast -- --nocapture",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml",
+    "git cherry-pick c80c06c50e777520472f978e366ab39d5ad3039b; git cherry-pick 451d641ed26dc104f661d266c4e5b0732e8c2a1b",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-parser --lib",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --no-fail-fast -- --nocapture",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -cp /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /tmp/rustuml-class-fresh/FactoryProbe.java /tmp/rustuml-checker-de790caf/fresh/*.puml",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -cp /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/CheckerReference.java /tmp/rustuml-checker-de790caf/reference-reproduction/*.puml",
+    "rustc --edition=2024 /tmp/rustuml-checker-de790caf/check_svg.rs -L dependency=/tmp/rustuml-checker-de790caf-target/release/deps --extern rustuml_oracle=/tmp/rustuml-checker-de790caf-target/release/deps/librustuml_oracle-9463d30e464f1e2a.rlib -o /tmp/rustuml-checker-de790caf/check_svg",
+    "uv run --python 3 /tmp/rustuml-checker-de790caf/run_cli.py before; uv run --python 3 /tmp/rustuml-checker-de790caf/run_cli.py after",
+    "PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 uv run --python 3 docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/check_cli.py /tmp/rustuml-checker-de790caf-target/release/rustuml /tmp/rustuml-checker-de790caf/check_svg test-diagrams/perturbations/class-native-container-factory-precedence /tmp/rustuml-checker-de790caf/reproduction",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture",
+    "/tmp/rustuml-checker-de790caf/before-rustuml --ast /tmp/rustuml-class-fresh/mixing_late.puml; /tmp/rustuml-checker-de790caf-target/release/rustuml --ast docs/parity-reviews/class-native-container-factory-precedence/checker-evidence/maker-negative/mixing_late.puml",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=/tmp/rustuml-checker-de790caf-target PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test harness_guards -- --nocapture"
+  ],
+  "findings": [
+    "The historical diagnosis is real: exact b3eb1bcbd138314ece69a0b23ea2191b19008b79 removes factory viability. PSystemBuilder constructor tries Sequence before Class before Description; createPSystem accepts the first successful complete factory. ClassDiagramFactory registers shared containers, native declarations, body-owning commands, and both NORMAL_KEYWORD and WITH_MIX_PREFIX description commands. Candidate provenance identifies these classes correctly, but a keyword blacklist is not equivalent to their executable grammar.",
+    "Direct mechanism counterexample: label_plain passes the strict CLI comparator; label_bracket changes only the quoted class display to \"North as [Cache]\" and Rust selects Deployment, omitting Cache, while Java still selects ClassDiagram. native_class_container_candidate uses rest.contains(\" as [\") inside quoted text, contrary to NameAndCodeParser.nameAndCodeForClassWithGeneric. This disproves label independence without relying on geometry tolerances.",
+    "Direct ownership counterexample: header_left is valid Java ClassDiagram, but Rust chooses Component and materializes the header text \"component journal\" as a component while losing the class. The helper recognizes keyword header only; Java CommandMultilinesHeader accepts left/right/center header and owns the body. header_plain and header_left_text select Class, isolating the alignment/text interaction. Their remaining coordinate mismatches are separate rendering residue.",
+    "Native grammar remains incomplete: declaration_static, declaration_visible and their multiline variants all produce Java ClassDiagram but Rust Deployment. CommandCreateClass and CommandCreateClassMultilines allow static class and an optional visibility character. The scan sees static or +class rather than a native command and does not own their bodies. These were also failing before this candidate; they are unresolved relevant mechanism counterexamples, not claimed newly introduced regressions.",
+    "Source-to-product audit: CLI main -> parse_block/parse_auto_with_base -> preprocessing -> detect_uml_subtype -> one selected parser -> render_svg_with_theme. There is no retry of real parser command viability. ClassParser.parse_line silently ignores unknown lines. case_tabs selects Class after the change but drops ClAsS Cache; tabs_lower passes. native_record selects Class but drops the record. mix_prefix selects Class but drops Endpoint. The scan advertises case-insensitive/native grammar that the downstream parser does not consume.",
+    "Both forward and reverse non-package container aliases are valid under Java CommandPackageWithUSymbol. Rust selects Class for alias_forward and alias_reverse but ClassParser.try_package rejects non-package aliases or fails reverse grammar; the resulting AST has no packages, and the entire container disappears. This is a known pre-existing parser/model defect, not a cloud geometry discrepancy. The account scope limit does not authorize acceptance while these relevant held-out cases fail.",
+    "Execution-order rejection is not durable: the helper returns false on an early description leaf, but the unchanged score dispatcher sees a later allowmixing and forces Class. ClassParser.try_meta merely consumes allowmixing and try_entity_decl accepts component without an ordered mixing state. The preserved maker mixing_late negative still exits 0 as Class before and after, while its Java reference is an error page. This is existing end-to-end residue; the helper-only execution-order test does not prove the claimed invariant. No new malformed negative was devised, and this existing negative is preserved outside the valid-reference perturbation suite with its error reference clearly identified.",
+    "Geometry/model residue remains separate from factory falsification: maker_cloud_class_top and maker_cloud_interface_top now correctly select Class but retain a roughly 0.0799 horizontal child offset, so their strict comparisons fail. maker_mixing_first already selected Class before this candidate and still differs in component depiction/layout afterward. header_plain, header_left_text, legend_body and title_body have retained text with coordinate/alignment differences. note_body selects Class and retains the note in its AST but has downstream attachment/layout differences. None of these is relabeled as a factory failure or a pass.",
+    "No new numeric layout constants, metrics entries, fixture-name branches, golden reads, or SVG post-processing were introduced in the production diff. Generic Java citations exist next to the new branches, but they do not derive the incomplete keyword/ownership decisions. The comparator, baselines, historical reviews, old fixtures, and production candidate were not edited by this checker.",
+    "Freshly built CLI evidence: 20 independent valid cases yield 3 strict passes and 17 mismatches; 3 retained maker positive failures yield 0 passes. Java generation and the published CLI reproducer agree with the preserved outputs. The same 23 sources all mismatched the freshly built baseline CLI. Original 810-case perturbations improve 349 -> 351 passes with exactly two repairs and no new failures. Main corpus counts remain 11181/11251 product and 10497/11251 assisted. These gains do not satisfy acceptance of the disproved mechanism.",
+    "Rejected under AGENTS.md rules 9-11: multiple valid held-out inputs directly disprove the mechanism; the no-oracle perturbation test is red. A scope-limited factory-label metric cannot waive these failures or the downstream valid-input mismatches. The whole project is not green."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/alias_forward.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/alias_forward.svg",
+      "axes": [
+        "container alias grammar direction",
+        "quoted display versus identifier"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/alias_reverse.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/alias_reverse.svg",
+      "axes": [
+        "container alias grammar direction",
+        "quoted display versus identifier"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.svg",
+      "axes": [
+        "keyword case",
+        "tab separators"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_static.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_static.svg",
+      "axes": [
+        "declaration modifiers",
+        "inline versus multiline member ownership"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_static_body.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_static_body.svg",
+      "axes": [
+        "declaration modifiers",
+        "inline versus multiline member ownership"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_visible.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_visible.svg",
+      "axes": [
+        "declaration modifiers",
+        "inline versus multiline member ownership"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_visible_body.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_visible_body.svg",
+      "axes": [
+        "declaration modifiers",
+        "inline versus multiline member ownership"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left.svg",
+      "axes": [
+        "header alignment",
+        "command-looking header text"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left_text.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left_text.svg",
+      "axes": [
+        "header alignment",
+        "command-looking header text"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_plain.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/header_plain.svg",
+      "axes": [
+        "header alignment",
+        "command-looking header text"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/label_bracket.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/label_bracket.svg",
+      "axes": [
+        "quoted class display text",
+        "node container with class alias"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/label_plain.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/label_plain.svg",
+      "axes": [
+        "quoted class display text",
+        "node container with class alias"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/legend_body.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/legend_body.svg",
+      "axes": [
+        "legend alignment and ownership",
+        "bracket and command-looking legend text"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_cloud_class_top.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_cloud_class_top.svg",
+      "axes": [
+        "maker known failure retained",
+        "container symbol and leaf declaration/mixing"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_cloud_interface_top.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_cloud_interface_top.svg",
+      "axes": [
+        "maker known failure retained",
+        "container symbol and leaf declaration/mixing"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_mixing_first.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/maker_mixing_first.svg",
+      "axes": [
+        "maker known failure retained",
+        "container symbol and leaf declaration/mixing"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/member_body.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/member_body.svg",
+      "axes": [
+        "class body ownership",
+        "command-looking and bracket member text"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/mix_early_tabs.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/mix_early_tabs.svg",
+      "axes": [
+        "early mixing and command case",
+        "tab-separated description leaf"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/mix_prefix.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/mix_prefix.svg",
+      "axes": [
+        "per-command mix prefix",
+        "native and description leaf mixture"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/native_record.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/native_record.svg",
+      "axes": [
+        "native declaration type",
+        "quoted folder container"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/note_body.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/note_body.svg",
+      "axes": [
+        "attached multiline note ownership",
+        "command-looking and bracket note text"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/tabs_lower.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/tabs_lower.svg",
+      "axes": [
+        "keyword case control",
+        "tab separators"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/title_body.puml",
+      "golden": "test-diagrams/perturbations/class-native-container-factory-precedence/title_body.svg",
+      "axes": [
+        "multiline title ownership",
+        "bracket and command-looking title text"
+      ],
+      "result": "fail"
+    }
+  ],
+  "verdict": "rejected",
+  "revisions": {
+    "prepared_integration_base": "7e62f83f560e4b21b8c98862dff44505bc39c427",
+    "original_account": "c80c06c50e777520472f978e366ab39d5ad3039b",
+    "original_implementation": "451d641ed26dc104f661d266c4e5b0732e8c2a1b",
+    "cherry_picked_account": "ca7c4647ec8d3e280e1c598fdc2fb1f320ec1b6d",
+    "cherry_picked_implementation_and_tested_head": "891c0463303f0d8a159a2d3a517ddbf41c2e8099",
+    "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "stdlib": "747d1eae809cde20675976d67e3eb84dc0021a0c",
+    "production_blob_unchanged_from_original_candidate": "cfabb745938f0ddd657ab08b326c5e743994f750"
+  },
+  "reference": {
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java_executable": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "java_version": "Temurin 21.0.13+9-LTS",
+    "graphviz_version": "16.1.0 (20260904.0139)",
+    "source_checkout_status": "clean; read-only throughout this review",
+    "generation": "20 independently authored inputs first generated with the existing generic FactoryProbe helper; all 23 references independently reproduced using the committed CheckerReference adapter and verified byte-identical. Maker positive references retained unchanged."
+  },
+  "build_environment": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_TARGET_DIR": "/tmp/rustuml-checker-de790caf-target",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG_for_CLI": "date=1774210426000,tz=AEDT+1100",
+    "baseline_cli_sha256": "bec1daf8e87bf08c4d76efc79b586199d733372ceed5982c6e95e9e3deac77de",
+    "candidate_cli_sha256": "08baa63ce5131d02b4131231dff5b5afe97b487d440b1ebcc904db3c8c52a021"
+  },
+  "results": {
+    "parser_after": {
+      "command_exit": 0,
+      "passed": 566,
+      "failed": 0,
+      "before_not_run": true
+    },
+    "product_before": {
+      "pass": 11181,
+      "eligible": 11251,
+      "command_exit": 101,
+      "gate_reason": "previously unlocked improvements; no baseline rewrite"
+    },
+    "product_after": {
+      "pass": 11181,
+      "eligible": 11251,
+      "command_exit": 101,
+      "gate_reason": "previously unlocked improvements; no baseline rewrite"
+    },
+    "assisted_before": {
+      "pass": 10497,
+      "eligible": 11251,
+      "mismatch": 754,
+      "skipped": 1299,
+      "total": 12550,
+      "command_exit": 101
+    },
+    "assisted_after": {
+      "pass": 10497,
+      "eligible": 11251,
+      "mismatch": 754,
+      "skipped": 1299,
+      "total": 12550,
+      "command_exit": 101
+    },
+    "original_perturbations_before": {
+      "pass": 349,
+      "total": 810,
+      "mismatch": 454,
+      "invalid_java_references": 7,
+      "command_exit": 101
+    },
+    "original_perturbations_after": {
+      "pass": 351,
+      "total": 810,
+      "mismatch": 452,
+      "invalid_java_references": 7,
+      "command_exit": 101,
+      "new_failures": 0,
+      "repairs": [
+        "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml",
+        "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml"
+      ]
+    },
+    "checker_cli_fresh_valid": {
+      "before_pass": 0,
+      "after_pass": 3,
+      "total": 20,
+      "after_mismatch": 17,
+      "invalid_java_references": 0
+    },
+    "maker_known_positive_cli": {
+      "before_pass": 0,
+      "after_pass": 0,
+      "total": 3,
+      "after_mismatch": 3,
+      "invalid_java_references": 0
+    },
+    "expanded_perturbations_after": {
+      "pass": 354,
+      "total": 833,
+      "mismatch": 472,
+      "invalid_java_references": 7,
+      "command_exit": 101,
+      "denominator": "810 paths from git tree at prepared integration base + 20 fresh checker cases + 3 retained maker positives"
+    },
+    "guards_before_checker_record": {
+      "passed": 4,
+      "failed": 2,
+      "command_exit": 101,
+      "failed_tests": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "caveat": "Existing historical review/decimal residue; candidate had no checker record yet. Post-record guard run recorded separately."
+    },
+    "CLI_reproduction": {
+      "command_exit": 1,
+      "same_23_comparisons": true
+    },
+    "maker_existing_negative": {
+      "source": "checker-evidence/maker-negative/mixing_late.puml",
+      "java_svg": "checker-evidence/maker-negative/mixing_late.svg",
+      "java_valid": false,
+      "before_rust_factory": "Class",
+      "after_rust_factory": "Class",
+      "before_cli_exit": 0,
+      "after_cli_exit": 0,
+      "excluded_from_positive_denominator_reason": "Existing intentionally invalid maker command-order control; retained outside valid-reference suite, never counted as a pass."
+    },
+    "guards_after_checker_record": {
+      "passed": 4,
+      "failed": 2,
+      "command_exit": 101,
+      "failed_tests": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "candidate_record_diagnostics": {
+        "rejected_latest_verdict": 1,
+        "retained_failed_cases": 20,
+        "schema_or_path_errors": 0
+      },
+      "interpretation": "Schema/paths satisfy the current harness. Acceptance guard correctly remains red for this rejected review; unrelated historical review and decimal failures remain unchanged."
+    }
+  },
+  "minimal_reproducers": [
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/label_bracket.puml",
+      "control": "test-diagrams/perturbations/class-native-container-factory-precedence/label_plain.puml",
+      "objection": "Display text changes factory; Cache disappears."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/header_left.puml",
+      "controls": [
+        "test-diagrams/perturbations/class-native-container-factory-precedence/header_plain.puml",
+        "test-diagrams/perturbations/class-native-container-factory-precedence/header_left_text.puml"
+      ],
+      "objection": "Aligned header body escapes command ownership and creates a component."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-native-container-factory-precedence/declaration_visible.puml",
+      "objection": "Valid native visibility-prefixed class is not recognized as class evidence."
+    }
+  ],
+  "bounded_repair_guidance": [
+    "Use command grammar with quote-aware name/code extraction and complete multiline command ownership; avoid another raw substring rule or count-dependent keyword ladder. Include static/visibility forms and aligned page blocks in the same recognized command model.",
+    "Make any failed class command trial authoritative through dispatch and parser execution. Preserve ordered allowmixing state and do not let the score fallback resurrect a rejected candidate. Test public parse/CLI outcomes, not only the eligibility helper.",
+    "Ensure every positively recognized native/mixed command is actually consumed by ClassParser with the same case and whitespace rules; unknown-command success cannot prove factory viability. Treat non-package alias/model restoration and geometry work as separately accounted dependencies if needed, preserving all present failures.",
+    "Rerun a fresh independent review after repairs. All relevant preserved valid inputs must pass under unchanged comparator semantics, or obtain an explicit owner-approved rule change; narrowing the metric to factory labels is insufficient."
+  ],
+  "caveats": [
+    "The JAR is source-pinned but not byte-identical to the historical JAR. Host fonts and Graphviz equivalence to historical references remain unproven. Fresh primary counterexamples are factory/model omissions, not merely font-sensitive geometry.",
+    "This bounded review did not run every workspace unit suite, formatting or Clippy; only evidence files were authored. Parser tests, both requested corpus tiers, guards, original/expanded perturbations, fresh CLI before/after and reference generation were run.",
+    "No baseline, comparator, skip rule, old reference, historical review, account, production code or bullseye mutation was made by the checker. Two maker commits were cherry-picked solely into the prepared isolated checkout as requested.",
+    "No acceptance or whole-project-green claim. Build-plane evidence commit only; no push, PR, release, local integration into parent/master, or additional agents."
+  ],
+  "evidence": {
+    "cli_results": "checker-evidence/cli-results.json",
+    "original_810_results": "checker-evidence/original-perturbations.json",
+    "java_factories": "checker-evidence/java-factories.txt",
+    "before_after_CLI_outputs_and_AST": "checker-evidence/{before,after}/",
+    "strict_comparator_adapter": "checker-evidence/check_svg.rs",
+    "portable_CLI_reproducer": "checker-evidence/check_cli.py",
+    "Java_reference_adapter": "checker-evidence/CheckerReference.java",
+    "command_summaries_and_full_log_hashes": "checker-evidence/command-results.json"
+  }
+}

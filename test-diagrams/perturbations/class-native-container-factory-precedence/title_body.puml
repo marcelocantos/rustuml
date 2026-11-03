@@ -1,0 +1,9 @@
+@startuml
+title
+[Harbor display]
+component journal
+end title
+node "Polar Harbor" {
+class Cache
+}
+@enduml
