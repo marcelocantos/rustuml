@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-date-pattern-tokens",
+  "rust_revision": "5f1035ace5c1fa38df91b2cf44c20e1e7edc79f0",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/DateFunction.java:executeReturnFunction",
+    "java.text.SimpleDateFormat:compile/subFormat (JDK 21 src.zip)"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Valid date patterns use token-run widths and quoted literal semantics of SimpleDateFormat at the supplied instant; invalid patterns/seconds produce a typed error, never a successful empty substitution.",
+  "causal_divergence": "Partial formatter treats Z/z/X as literal, pads all fields and drops doubled quotes; overflow returns empty String.",
+  "planned_change": "Parse pattern runs and quoted literals; implement numeric widths, zones and required calendar/text fields using existing signed instant conversion. Add typed preprocessing error output and stop failed execution; unowned parse_with_base must map it to ParseError for CLI rejection. No invented syntax marker or panic.",
+  "perturbation_axes": [
+    "Zone offsets including non-whole hours/UTC and token widths",
+    "Quoted/doubled apostrophes, date boundaries and invalid pattern/overflow controls"
+  ],
+  "oracle_plan": [
+    "Exact raw Java Diagram.getSource() and shipped CLI SVG, preserved checker cases and >=2 fresh axes",
+    "Parser/CLI tests, main tiers, original907 and expanded949 isolated CLI; built-in with accepted registry cleanup"
+  ],
+  "scope": "preprocess modules and new maker evidence only; no checker attestation",
+  "pending": [
+    "T14.6.3 reader contract owner decision; current behavior unchanged",
+    "Independent checker required",
+    "Date error to ParseError handoff requires parse owner; CLI errors remain blocked until that interface is consumed"
+  ]
+}

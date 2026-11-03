@@ -34,5 +34,7 @@
     "Positive versus negative/zero timestamps",
     "Variable/arithmetic timestamp expressions and multiple date patterns",
     "Explicit timestamp independence from pinned render date"
-  ]
+  ],
+  "invariant": "A two-argument date uses the supplied seconds-since-epoch instant; zero/one arguments use the render clock. Formatting uses the relevant timezone for that instant.",
+  "planned_change": "Honor the explicit signed seconds argument and format its instant, including dates before epoch; preserve deterministic timezone overrides and resolve host timezone at the explicit instant when no override exists."
 }
