@@ -1,0 +1,16 @@
+dfecfccdde547c328c5ae8ded2f90805b094d643 test: record adversarial class/container recovery review
+731ad57caffc940db2ee938332a7660c5662037b docs: account for render registry unwind ownership
+da7586a9b795e72809c76dbe228a77e29223df75 fix: release render registry during unwinding
+34c51916fb59d5af7e5d02fa4b493463280caf94 test: import parent heldouts byte-for-byte for 1192-source replay
+8a7bfb71cb202caecfdb9c33a099f0c32c726571 docs: account for native command note ownership and final cluster origin
+3e6ccb6cd4cdb9c015d5e5a83c997a0d05a1fecf docs: account for static shield cell grid and native HTML ports
+92f3bdc9e90fc24b14d6af8563c6a7bd78016194 docs: account for description body alignment and selected component symbol
+de192dc216b6795b6d820c240e82234988d1f39d docs: account for painted frontier union and package visibility title
+1051c34cc9ac39115368720fa8e5ed44ebdbadc5 docs: account for current document ribbon font and alignment
+a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8 docs: account for note leaf emission and correct boundary paint order
+3518e81fcfa3c88340f84cfdf6f25a13068ff3d7 docs: account for member glyph sizing and mixed symbol images
+372a84d6abb20df41a3690ba5ee5774b1ed03998 docs: account for simple actor, empty symbol frontiers and ribbon stripes
+2c778f1d341684d1912be60f533404af394f4a49 fix: consume native class commands and retain symbol image ownership
+f805738ac5af84ef8c8ef3e3803f6d52d6d16081 refactor: remove lint issues in the class image packet
+4fd5d7039d9b8f27bda1712aaa0d1b8d5399311d docs: account for sequence ownership of shared entity commands
+69bbdee5b57dc9fdc348995116240f9edda93a20 fix: retain earlier factory ownership for shared entity declarations

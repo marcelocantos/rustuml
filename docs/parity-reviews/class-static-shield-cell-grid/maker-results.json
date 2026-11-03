@@ -1,0 +1,9 @@
+{
+  "status": "maker evidence; not accepted",
+  "mechanism": "class-static-shield-cell-grid",
+  "account_commit": "3e6ccb6cd4cdb9c015d5e5a83c997a0d05a1fecf",
+  "tested_revision": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+  "central_evidence": "docs/parity-reviews/class-command-quark-note-ownership/maker-results.json",
+  "report": "docs/parity-reviews/class-command-quark-note-ownership/maker-evidence/README.md",
+  "new_independent_checker_required": true
+}

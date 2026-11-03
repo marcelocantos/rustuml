@@ -1,0 +1,338 @@
+[
+  {
+    "source": "native_record_False.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "4ad4cdb844cb8bd674b4d2e760ccca6d5c9b09abca68cb78823aa03df8766e97",
+    "svg_sha256": "f1d02f5d5130d7b0a3b2e56549739af71eca7f67166af0e7afed7fd1ba9a9296",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "native_record_True.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "92f73ddc152f5991ad4ac89b6a1d102e38183baf0e3fab6570fe64d7bb36da11",
+    "svg_sha256": "b9ec83c776006107b7a216e4d212caa4fa0fba5faf1b4a79bded8e027b1959ad",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "native_struct_False.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "715febb4c80e7b161d19546b49243de7978000841ad9abe9e7dda67094e3e498",
+    "svg_sha256": "2655f204a1b46c02b3a923d0a28bc382aa7f96ca0d7aec150aec19dd7e105653",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "native_struct_True.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "7563fd5a968b0886da4aa29eb670391616537822d4d17e34e264ec9d3adaa2ad",
+    "svg_sha256": "0feebbb8073d97e2cce6ded588600f0a8600b8f70675b19998657f7d4a5d7d00",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "native_protocol_False.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "9ee3c448b65a50f04fe897ae4f07d3c881e09d45d5a57e1abf9a51b5d0d53890",
+    "svg_sha256": "e36e7899c6192833039c20fad61e5befd8b0321cf2dde3fa6e56a95021a735e8",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "native_protocol_True.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "403d4b927336b1cfd46d379c7ab78606ac61ff8c2e46d5c050115a8432bd4adc",
+    "svg_sha256": "9ca8d2c8b8fd47ce2c04e1d66bf4c46846fe7eb36f921489ced10bff3d8b1d12",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "visibility_public.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "dc9d7a31d1afc779b7fcda0f0cc83767315e0b1b616f6e7a76a8a50a35413e05",
+    "svg_sha256": "7c67048f85f90e67eb70f81b5344040eced1050b555db229d010bb9b8dc67ab9",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "visibility_private.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "521bb09f13c4b7c74d50785f33f10735fdd93a63cfe51a64e53390018bcc678d",
+    "svg_sha256": "7afce0102a0ba1d413ad4e3dbfbc9bbc6cb86a092b455a8c104c8b2779af933d",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "visibility_protected.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "de5b55650215bfa4fccddf3e8c9fff68c2276492f9618b483d81de1b752afc15",
+    "svg_sha256": "512a25ff0a6299e490e7a1f4bf81b75f2bb29bf5d490e2c6b75fe3c11b9ea7e1",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "visibility_package.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "30564b91314d05de2879c67fc8e14c6df9b5b49e70fe347ada86d09a8fa7538b",
+    "svg_sha256": "3d4484bdce8669e3055164b09b0af85de1926ac63d0e29ef20d3b1d1138e7988",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "shield_top_False.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "3b534b2d005b4e327163a4b3047c5643c5c9a6fa0fdab723527606863fe7e6d3",
+    "svg_sha256": "c59f9b8f424cd569276211bbce1ecc3486613f3effa27cfc92c626a4a75e39ae",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "shield_top_True.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "5cea7ef1193fccaffa1dd700bfc2602e9206c6a77ffe86310ef4c7c06318a37a",
+    "svg_sha256": "4fada3842550297d266976201b11d75903d076f144e2a898b67f43b3512e13ef",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "shield_lef_False.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "c277a8f21d656ebe6cfb7c5875574e5a2fe2fa1b8d50b7221c5a5b67a93facdb",
+    "svg_sha256": "cbb2b9ed09ad6f7b606554f98ee7f370e9e1aaffc1aaf1661ca95d767d543dbe",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "shield_lef_True.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "9ad8db821d3a0bd920bac7d5747bacdbcb69755022388280620d0961ca646abf",
+    "svg_sha256": "7ab1d20443f4b034f48a4176ead22fcd15fdb678cae95ec42771fda7da9be797",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "component_uml1.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "09cd2d99095a4173db46fe4f6572cf0913ccde72ea057044bd70636f4ea7559a",
+    "svg_sha256": "9fc0873133e43f09a3d51dc7acfd75a23beb0ca30d46e1d0f9cb7800b6d1058b",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "component_uml2.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "6c541dc338179f4b099c95a752808d6ee42cf37185e7e2b9b18e9cf3dd3266aa",
+    "svg_sha256": "4732519ab4a8bf6121a45c7b178cca07b04ce4e68713070ed4896fff6bdba655",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "component_rectangle.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "8be77e8876c13b415acbe7d1fab5b37a086717e7be64e505f04971e4cbee5b12",
+    "svg_sha256": "9aa34168d032649980f41f90c365e429817056d9f80217ec21cb84aad2eac274",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "boundary_body.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "340dbcc4ab26fffa654f52c3f07c1746825f306784442975ce261f980f3be556",
+    "svg_sha256": "326024c485e092917df8cc80ccb8d641834523ed4f812e9d9ff318a79e824327",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "chrome_left.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "48112057ac74f43ba9059f1b839ad25230437db4a882b6d12e1223e72ebd8e2f",
+    "svg_sha256": "ee7ff25f9bb795943cdfbd1863e1af303d2e061d6eda569215a10f271f1e3c10",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "chrome_center.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "61410bb8ccb0560d764181868c464f7e4d8e246cdbdf75abde3654d69beb9fba",
+    "svg_sha256": "54fc6ab7384efd7a3fd6dfb1372386b0332bee735f11742b4c0eda40a96dce7e",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "chrome_right.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "c69bf4f20a81c784a60349810ded6f3e8b03c41fff28e7ae7d23349ec92d0074",
+    "svg_sha256": "2f6cadf4296140e7dcf1e2efddb43f66f7d3d0800d156315d08e00d212341b48",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "note_frontier_cloud.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "60ceaccf28c6d3a280310f6aac495cb43e27c9c9422bc9ceb8ce788ffb7bd45f",
+    "svg_sha256": "a29b773b02b42d643c1b1a189024e8c7d50e6e64dfc1a5af02b5e6d4f977677a",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "note_frontier_rectangle.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "41adc5c3e9acef7b7263441b33a1136b1ac34898c15d48095ae03b4ef0b2e0d4",
+    "svg_sha256": "887dcbca19d7e428532addb1e91953056d9696c1def0565520c6ba8897a45d5e",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  },
+  {
+    "source": "note_frontier_node.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "stdin_sha256": "0f944237b69a4d2055c497d85c0ae0aaaf555e709d963fb0f0413e26941ca7be",
+    "svg_sha256": "b7ac3baaf24ff24358b21b678ec2346b9e773608680f7448fb5efeb10570a2b8",
+    "exit": 0,
+    "reference_policy": "raw CLI pipe; historical GET references unchanged"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "status": "maker evidence; not accepted",
+  "mechanism": "class-boundary-primitive-paint-order",
+  "account_commit": "a9a42c3a6b7f4e685b6e8ad6198b91612f571bf8",
+  "tested_revision": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+  "central_evidence": "docs/parity-reviews/class-command-quark-note-ownership/maker-results.json",
+  "report": "docs/parity-reviews/class-command-quark-note-ownership/maker-evidence/README.md",
+  "new_independent_checker_required": true
+}

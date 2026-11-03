@@ -1,0 +1,751 @@
+{
+  "status": "maker evidence; not an acceptance",
+  "tested_revision": "69bbdee5b57dc9fdc348995116240f9edda93a20",
+  "cohorts": {
+    "current955": {
+      "denominator": 955,
+      "before": {
+        "mismatch": 357,
+        "pass": 582,
+        "invalid_reference": 9,
+        "process_error": 7
+      },
+      "after": {
+        "mismatch": 337,
+        "pass": 602,
+        "invalid_reference": 9,
+        "process_error": 7
+      }
+    },
+    "retained237": {
+      "denominator": 237,
+      "before": {
+        "pass": 143,
+        "mismatch": 73,
+        "process_error": 17,
+        "invalid_reference": 4
+      },
+      "after": {
+        "pass": 211,
+        "process_error": 10,
+        "mismatch": 12,
+        "invalid_reference": 4
+      }
+    },
+    "class23": {
+      "denominator": 23,
+      "before": {
+        "pass": 23
+      },
+      "after": {
+        "pass": 23
+      }
+    },
+    "sequence41": {
+      "denominator": 41,
+      "before": {
+        "pass": 17,
+        "mismatch": 22,
+        "process_error": 2
+      },
+      "after": {
+        "pass": 17,
+        "mismatch": 22,
+        "process_error": 2
+      }
+    },
+    "theme33": {
+      "denominator": 33,
+      "before": {
+        "mismatch": 23,
+        "process_error": 2,
+        "pass": 7,
+        "invalid_reference": 1
+      },
+      "after": {
+        "mismatch": 23,
+        "process_error": 2,
+        "pass": 7,
+        "invalid_reference": 1
+      }
+    },
+    "registry6": {
+      "denominator": 6,
+      "before": {
+        "pass": 6
+      },
+      "after": {
+        "pass": 6
+      }
+    },
+    "TIM42": {
+      "denominator": 42,
+      "before": {
+        "mismatch": 35,
+        "pass": 3,
+        "invalid_reference": 1,
+        "process_error": 3
+      },
+      "after": {
+        "mismatch": 35,
+        "pass": 3,
+        "invalid_reference": 1,
+        "process_error": 3
+      }
+    },
+    "original810": {
+      "denominator": 810,
+      "before": {
+        "pass": 526,
+        "mismatch": 277,
+        "invalid_reference": 7
+      },
+      "after": {
+        "pass": 546,
+        "mismatch": 257,
+        "invalid_reference": 7
+      }
+    },
+    "maker62": {
+      "denominator": 62,
+      "before": {
+        "pass": 61,
+        "mismatch": 1
+      },
+      "after": {
+        "pass": 62
+      }
+    },
+    "checker139": {
+      "denominator": 139,
+      "before": {
+        "pass": 82,
+        "mismatch": 48,
+        "process_error": 5,
+        "invalid_reference": 4
+      },
+      "after": {
+        "pass": 124,
+        "mismatch": 11,
+        "invalid_reference": 4
+      }
+    },
+    "all1192": {
+      "denominator": 1192,
+      "before": {
+        "pass": 725,
+        "process_error": 24,
+        "mismatch": 430,
+        "invalid_reference": 13
+      },
+      "after": {
+        "pass": 813,
+        "mismatch": 349,
+        "process_error": 17,
+        "invalid_reference": 13
+      }
+    }
+  },
+  "changed_cases": [
+    {
+      "source": "class-chrome-bordered-block-geometry/checker/style_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-chrome-bordered-block-geometry/checker/style_right.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-cloud-child-coordinate-dependency/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-execution-ownership/checker/bare_native_record.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-execution-ownership/checker/bare_native_struct.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-execution-ownership/checker/body_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-execution-ownership/checker/body_right.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-execution-ownership/checker/braced_note_class.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-execution-ownership/checker/braced_note_interface.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/checker/mixed_actor.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/checker/mixed_database.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/checker/mixed_queue.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/checker/mixed_rectangle.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/dependencies/command-execution-ownership__bare_native_record.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/dependencies/command-execution-ownership__braced_note_interface.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/dependencies/note-target-quark__group_target_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-command-grammar-closure/retained-maker/fresh/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-container-only-factory-closure/checker/empty_cloud.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-container-only-factory-closure/checker/empty_node.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-cuca-uid-event-order/checker_notes_interleaved_links.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-leaf-image-dependency/checker/dependency_component_uml1.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-leaf-image-dependency/checker/dependency_component_uml2.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-symbol-images/checker/boundary_uml1.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-symbol-images/checker/boundary_uml2.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-symbol-images/checker/component_uml1.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-symbol-images/checker/component_uml2.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-symbol-images/checker/plain_multiline_boundary.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-description-symbol-images/checker/plain_multiline_component.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_top_level_linked.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_explicit_cloud_short_label.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-endpoint-routing/checker/groups_3.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-endpoint-routing/checker/shield_LR.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-endpoint-routing/checker/shield_TB.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-endpoint-routing/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-endpoint-routing/retained-current/description-element-command-case__followup3__followup3_upper_interface_bare_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-endpoint-routing/retained-maker/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-magnetic-extremities/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-magnetic-extremities/retained-maker/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-paint-ownership/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-paint-ownership/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-group-paint-ownership/retained-maker/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review3_database_leaf_container_boundary.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review3_implicit_and_explicit_endpoints.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review3_rectangle_leaf_container_boundary.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review4_namespace_container_reordered.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review4_nested_package_alias_after_links.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review6_mixed_actor_ambiguous_context.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review6_package_quark_counts_for_mixed_lookup.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review7_group_quark_after_entity_participates.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-mixed-state-group-metadata/review7_phantom_group_quark_participates.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-named-note-scoped-identity-closure/checker/qualified_0.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-named-note-scoped-identity-closure/checker/qualified_1.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-native-leaf-presentation/checker/native_dataclass.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-native-leaf-presentation/checker/native_exception.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-native-leaf-presentation/checker/native_metaclass.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-native-leaf-presentation/checker/native_protocol.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-native-leaf-presentation/checker/native_record.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-native-leaf-presentation/checker/native_struct.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-note-cluster-ownership-dependency/checker/dependency_scope_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-note-cluster-ownership-dependency/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-note-declaration-scope/checker/scope_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-note-declaration-scope/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-note-target-quark/checker/group_target_bottom.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-note-target-quark/checker/group_target_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-package-command-precedence-closure/checker/visibility_private.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-package-command-precedence-closure/checker/visibility_public.puml",
+      "before": "process_error",
+      "after": "pass"
+    },
+    {
+      "source": "class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-page-chrome-composition-dependency/dependencies/chrome-bordered-block-geometry__style_right.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-parenthesis-endpoint-decoration/plain_package_target_one_dash_lr_control.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-parenthesis-link-identity/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-parenthesis-link-identity/retained-maker/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_after_entity_before_database_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_before_database_leaf_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_database_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-single-svek-envelope-origin/checker/root_note_cloud.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-single-svek-envelope-origin/checker/single_root_note_left.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-single-svek-envelope-origin/checker/single_root_note_top.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-single-svek-envelope-origin/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-single-svek-envelope-origin/retained-maker/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-svek-node-paint-order/checker_tb_mixed_floating_attached_both_orders.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-svek-painted-origin/dependencies/single-svek-envelope-origin__root_note_cloud.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-svek-painted-origin/retained-current/class-parenthesis-endpoint-decoration__package_target_parenthesis_one_dash_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "class-svek-painted-origin/retained-maker/group_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    },
+    {
+      "source": "description-element-command-case/followup3/followup3_upper_interface_bare_lr.puml",
+      "before": "mismatch",
+      "after": "pass"
+    }
+  ],
+  "lost_passes": [],
+  "new_process_errors": [],
+  "remaining_process_errors": [
+    {
+      "source": "class-command-execution-ownership/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+      "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+    },
+    {
+      "source": "class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+      "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+    },
+    {
+      "source": "class-command-execution-ownership/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+      "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+    },
+    {
+      "source": "class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+      "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+    },
+    {
+      "source": "class-command-execution-ownership/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+      "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+    },
+    {
+      "source": "class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+      "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+    },
+    {
+      "source": "class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+      "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+    },
+    {
+      "source": "class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+      "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+    },
+    {
+      "source": "class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+      "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+    },
+    {
+      "source": "class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+      "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+    },
+    {
+      "source": "sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "stderr": "\nthread 'main' (588413953) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "sequence-grouped-note-origin/checker_live_stack_3.puml",
+      "stderr": "\nthread 'main' (588413959) panicked at crates/rustuml-render/src/sequence.rs:8022:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    {
+      "source": "tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "stderr": "parse error: line 5: unrecognized class command: class Larch /' trailing\n"
+    },
+    {
+      "source": "tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "stderr": "parse error: line 2: unrecognized class command: !global argument = \"published\"\n"
+    },
+    {
+      "source": "tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "stderr": "parse error: line 2: unrecognized class command: !global automatic = \"global\"\n"
+    },
+    {
+      "source": "tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "stderr": "parse error: line 3: unrecognized class command: ' [dump] BGCOLOR=transparent, BLUE=#033C73, CYAN=#2FA4E7, DANGER=#C71C22, DANGER_DARK=#9F161B, DANGER_LIGHT=#D2494E, DANGER_TEXT=#FFF, DARK=#343A40, FGCOLOR=#343A40, GRAY=#868E96, GRAY_DARK=#343A40, GREEN=#73A839, INDIGO=#6610F2, INFO=#033C73, INFO_DARK=#02305C, INFO_LIGHT=#35638F, INFO_TEXT=#FFF, LIGHT=#F8F9FA, ORANGE=#FD7E14, PINK=#E83E8C, PRIMARY=#2FA4E7, PRIMARY_DARK=#2683B9, PRIMARY_LIGHT=#59B6EC, PRIMARY_TEXT=#FFF, PURPLE=#6F42C1, RED=#C71C22, SECONDARY=#E9ECEF, SECONDARY_DARK=#BABDBF, SECONDARY_LIGHT=#EDF0F2, SECONDARY_TEXT=#343A40, SUCCESS=#73A839, SUCCESS_DARK=#5C862E, SUCCESS_LIGHT=#8FB961, SUCCESS_TEXT=#FFF, TEAL=#20C997, THEME=cerulean, WARNING=#DD5600, WARNING_DARK=#B14500, WARNING_LIGHT=#E47833, WARNING_TEXT=#FFF, WHITE=#FFF, YELLOW=#DD5600, tag=maple\n"
+    },
+    {
+      "source": "tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "stderr": "parse error: line 2: unrecognized class command: class BirchLedger /' harmless\n"
+    }
+  ],
+  "retained_checker_residuals": [
+    "class-current-spot-cascade/checker/custom_class.puml",
+    "class-current-spot-cascade/checker/custom_grouped_class.puml",
+    "class-current-spot-cascade/checker/custom_grouped_record.puml",
+    "class-current-spot-cascade/checker/custom_record.puml",
+    "class-current-spot-cascade/checker/grouped_record.puml",
+    "class-current-spot-cascade/checker/grouped_struct.puml",
+    "class-current-spot-cascade/checker/theme_record.puml",
+    "class-current-spot-cascade/checker/theme_struct.puml",
+    "class-group-paint-ownership/dependencies/current-spot-cascade__grouped_record.puml",
+    "class-quoted-code-identity/checker/quoted_dotted.puml",
+    "class-quoted-code-identity/checker/quoted_lr_order.puml",
+    "class-single-svek-envelope-origin/checker/root_note_rectangle.puml"
+  ],
+  "same_class_model_losses": [],
+  "cwd_differences": [
+    {
+      "source": "tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "checker": "pass",
+      "own_before": "mismatch"
+    }
+  ],
+  "parent_inventory": {
+    "latest_reported": 1449,
+    "own_frozen": 1192,
+    "not_replayed": 257,
+    "original_frozen": 955,
+    "duplicates_explicit": true
+  },
+  "main_tier_before": {
+    "source_only": [
+      11188,
+      11251
+    ],
+    "assisted": [
+      10497,
+      11251
+    ],
+    "provenance": "Independent checker REPORT at 502960ac; not represented as another full maker baseline run. Own before CLI replays all 1192 and the union of 77 main failure candidates."
+  },
+  "implementation_commits": [
+    "2c778f1d341684d1912be60f533404af394f4a49",
+    "f805738ac5af84ef8c8ef3e3803f6d52d6d16081",
+    "69bbdee5b57dc9fdc348995116240f9edda93a20"
+  ],
+  "units": {
+    "before": 1428,
+    "after": 1431,
+    "parser_before": 571,
+    "parser_after": 573
+  },
+  "main_tier_after": {
+    "source_only": [
+      11188,
+      11251
+    ],
+    "assisted": [
+      10523,
+      11251
+    ],
+    "skipped": 1299
+  },
+  "fresh": {
+    "local24_before": {
+      "mismatch": 20,
+      "process_error": 4
+    },
+    "local24_after": {
+      "pass": 21,
+      "mismatch": 3
+    },
+    "remote20_before": {
+      "mismatch": 20
+    },
+    "remote20_after": {
+      "pass": 20
+    },
+    "priority4_before": {
+      "pass": 3,
+      "mismatch": 1
+    },
+    "priority4_after": {
+      "pass": 4
+    },
+    "model_assertions_passed": 48
+  },
+  "evidence": "maker-evidence/README.md",
+  "new_checker_required": true
+}

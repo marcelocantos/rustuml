@@ -1,0 +1,6 @@
+@startuml
+allowmixing
+class Linden
+boundary "Boundary dispatch\nshort" as Edge <<gate>>
+Linden --> Edge
+@enduml
