@@ -1,0 +1,319 @@
+{
+  "role": "maker measurement; not an independent checker attestation",
+  "account_commit": "c80c06c50e777520472f978e366ab39d5ad3039b",
+  "base_revision": "716813f43f1453fe9e96bea4a10d1e07b42be08f",
+  "historical_parent": "b02add363b1d9908bbe355ceba082d14c7306e6b",
+  "production_files": [
+    "crates/rustuml-parser/src/parse/mod.rs"
+  ],
+  "baseline_change": "None. All main-corpus family counts were unchanged; existing baseline drift is not attributable to this packet.",
+  "reference": {
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java_executable": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "stdlib_revision": "747d1eae809cde20675976d67e3eb84dc0021a0c",
+    "caveats": [
+      "Use the absolute Java executable or supplied JAVA_HOME/PATH; the default jenv 21 shim currently fails.",
+      "macOS host fonts and Graphviz 16.1.0 are not proven identical to the historical font/Graphviz environment.",
+      "Do not regenerate or overwrite preserved reference SVGs.",
+      "Other workers must treat both reference checkouts as read-only."
+    ]
+  },
+  "environment": {
+    "CARGO_BUILD_JOBS": 4,
+    "CARGO_TARGET_DIR": "/tmp/rustuml-class-target",
+    "RAYON_NUM_THREADS": 4
+  },
+  "commands": [
+    {
+      "command": "cargo check --workspace",
+      "result": "pass before implementation; original bracket-helper dead-code warning",
+      "log": "/tmp/rustuml-class-check.log"
+    },
+    {
+      "command": "cargo test -p rustuml-parser --lib",
+      "result": "566 passed, 0 failed after implementation (561 before adding the five regression tests)",
+      "log": "/tmp/rustuml-class-parser.log"
+    },
+    {
+      "command": "cargo test -p rustuml-parser --lib native_class_containers_follow_factory_order",
+      "setup": "Temporarily disable only the added early dispatch branch, retaining the unchanged recovered scoring dispatcher and regression test. Restore the exact file afterward and rerun all parser tests.",
+      "result": "Expected failure on quoted node containing a native class; confirms the new assertion detects the regression",
+      "log": "/tmp/rustuml-class-regression-negative.log"
+    },
+    {
+      "command": "cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --no-fail-fast -- --nocapture",
+      "result": "All four suite targets remain red for known parity/ratchet/evidence residue; per-suite measurements below",
+      "logs": [
+        "/tmp/rustuml-class-before.log",
+        "/tmp/rustuml-class-after.log"
+      ]
+    },
+    {
+      "command": "cargo clippy -p rustuml-parser --all-targets -- -D warnings",
+      "result": "fails only on existing clippy::question_mark at crates/rustuml-parser/src/parse/salt.rs:138; no diagnostic from the changed module or stranded bracket helper",
+      "log": "/tmp/rustuml-class-clippy.log"
+    },
+    {
+      "command": "rustfmt --check --edition 2024 --config skip_children=true crates/rustuml-parser/src/parse/mod.rs",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "cargo build --release -p rustuml; cargo build --release -p rustuml -p rustuml-oracle --example diff_one",
+      "result": "both pass; separate Cargo invocations",
+      "logs": [
+        "/tmp/rustuml-class-cli-build.log",
+        "/tmp/rustuml-class-tools.log"
+      ]
+    }
+  ],
+  "parity": {
+    "product": {
+      "before_pass": 11181,
+      "after_pass": 11181,
+      "eligible": 11251,
+      "class_pass": 1963,
+      "class_eligible": 1971
+    },
+    "assisted": {
+      "before_pass": 10497,
+      "after_pass": 10497,
+      "failed": 754,
+      "skipped": 1299,
+      "class_failures": 437
+    },
+    "perturbations": {
+      "before_pass": 349,
+      "after_pass": 351,
+      "total": 810,
+      "after_mismatches": 452,
+      "invalid_java_references": 7,
+      "before_failures": 461,
+      "after_failures": 459,
+      "gains": [
+        "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml",
+        "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml"
+      ],
+      "regressions": []
+    },
+    "guards": {
+      "before_pass": 4,
+      "after_pass": 4,
+      "total": 6,
+      "remaining_failures": [
+        "decimal literal provenance ratchet",
+        "review evidence"
+      ]
+    },
+    "environment_delta": "The original campaign numbers 11180 product / 10496 assisted gained one deployment match after pinned stdlib restoration, before this change. That gain is not credited to this implementation."
+  },
+  "fresh_java_comparisons": {
+    "directory": "/tmp/rustuml-class-fresh",
+    "method": "FactoryProbe.java invokes SourceStringReader with the absolute pinned Java executable and JAR, then writes SVG using FileFormat.SVG. The release CLI independently renders each same source; root data-diagram-type is compared. Existing diff_one --no-oracle applies the unchanged strict comparator.",
+    "java_valid": 28,
+    "factory_matches": 28,
+    "full_svg_matches": 25,
+    "valid_remaining_failures": [
+      "cloud_class_top.puml",
+      "cloud_interface_top.puml",
+      "mixing_first.puml"
+    ],
+    "invalid_negative_control": "mixing_late.puml: Java PSystemErrorV2, but Rust legacy allowmixing dispatch still accepts it. The new candidate rejects it; complete fallback error validation is outside this bounded repair.",
+    "remaining_failure_mechanisms": "Two top-to-bottom cloud examples retain a child-x geometry divergence after correct class dispatch. The allowmixing component is still painted as a class in the recovered renderer. No geometry or error marker was changed.",
+    "cases": [
+      {
+        "source": "bracket_leaf.puml",
+        "diff_exit": 0,
+        "source_sha256": "3bd0fea522ebcdca8508e1a02577a89ec08e9d4913a272faa27bf7c08feca815",
+        "java_svg_sha256": "3f7839f627b6a005099f47d153e5bcce1689bd90b97370e3c5b919e5f1d727d3"
+      },
+      {
+        "source": "cloud_class_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "150a4df9992d8fb58d6d8a9ad2095dfe820b61d756f87292d91ab6986dac91ce",
+        "java_svg_sha256": "c44f16c5c5969814e0fd9abfebe15cffd0d3c86e478f676e5db265419d92e3e5"
+      },
+      {
+        "source": "cloud_class_top.puml",
+        "diff_exit": 1,
+        "source_sha256": "6189359cfc320cc1fcd0e18f31ae220062b4f867b76cba3361c18c7ce10f4f12",
+        "java_svg_sha256": "65e191030794ba7a1822ebb189ec019f43c51c3845c028e8027df925c3e5368a"
+      },
+      {
+        "source": "cloud_interface_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "bfcee54b7533eee6b8484d8793331a2181f6882134e5eb6ca8b97a88f3b58bb8",
+        "java_svg_sha256": "b10284aa188219d09c13531ea50c8a063310381fa4b45eb516217b32980d9d7d"
+      },
+      {
+        "source": "cloud_interface_top.puml",
+        "diff_exit": 1,
+        "source_sha256": "d114c6975eb95d04992c5482c428eed9f3a571805b3328f84fe32973ff71437f",
+        "java_svg_sha256": "00595fd133c7d84a8ef19b8dbdf7424a672f19b04c48993bac1af3c0fbca7719"
+      },
+      {
+        "source": "database_class_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "a94db53cc06aa131ca467684f62223049e7e142bcc04a813955f0f8a085c445a",
+        "java_svg_sha256": "0e6fff299b481aca9c1e3914112cb47ae3bd757f4ac7ba5830c6d0a81d5f4612"
+      },
+      {
+        "source": "database_class_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "7564363bd4c7befe224b2d48dbdde08ec0eee62399ca0a1979573b0eb4370b5e",
+        "java_svg_sha256": "fc16eaf4ea955c5657aa01fa4394d98339b4978332927ed64ea51c8e158b8557"
+      },
+      {
+        "source": "database_interface_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "685fa4486e0c922cdc79f40a05446425f1387efe7236b974108487ec7c15a1cc",
+        "java_svg_sha256": "7d244d4b82ad04d07c6620c05c405bc1215bcd0bbda637c672188d05df9a2c16"
+      },
+      {
+        "source": "database_interface_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "709229452d927871b1b78fceb84c91e7203f0af00a92fd7a88530b2c7460969e",
+        "java_svg_sha256": "39f06b67fcb28a4f78769288c7ecebb0466ac885ea4224e7cc3b40f0305a5143"
+      },
+      {
+        "source": "description_leaf.puml",
+        "diff_exit": 0,
+        "source_sha256": "f56c7105f11b6e1968b309798644bb9cde07abe8ea4f2a6d4c01f96a2d47a36d",
+        "java_svg_sha256": "45e5855ee5d69ab0050ace8345adae4aac8fc6b4a82fb9f8b446123753559ca2"
+      },
+      {
+        "source": "folder_class_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "99edbc8bdd8618418ecccf73ea2795487496383ecf61f7e81b85610b3522e45a",
+        "java_svg_sha256": "447087b703940853c81d72836d0b4eb4abaf1355024f143e82e064ef46bb0528"
+      },
+      {
+        "source": "folder_class_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "1b61beaea8e40f5b9362aed676501e1facca4f9ed68402b17629fa4bc9cbc47a",
+        "java_svg_sha256": "e7d9a4affecc58f2e2c5f1441d47538f6ef5207c296decf30f35f3af371e4d40"
+      },
+      {
+        "source": "folder_interface_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "849b1536be86aa9972e62cf5a4efdbeb5a988c92a4e0db50796f2c3bdc7888bd",
+        "java_svg_sha256": "e84e4817ad92b62d3ea49d034de31e261169ef0c6ac462da53be231a5a125699"
+      },
+      {
+        "source": "folder_interface_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "fca989d28ae1d694712ef9f95b945067e2c9896a09df1322a6d27dfe73b3e9b3",
+        "java_svg_sha256": "232d052cdb7a898dae7d985cbd2866cb8beea168f33ef09e4e9766a791daf216"
+      },
+      {
+        "source": "frame_class_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "bf59760cbf9d7695c12413c5189c9b531713067a00c2250c12fd22b1304fe942",
+        "java_svg_sha256": "6bd94c5cd6aebeedcc21116fe65d61b898404feb17d2e03d950e4ddedd6f1890"
+      },
+      {
+        "source": "frame_class_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "bc82f44ae185f6601509fd1a7516875751db07e89f814863c847200934b513af",
+        "java_svg_sha256": "4ec9a082fd8e3640fc352633bf155e4907fedeeabe89c4e80cd0edb640e8cdf5"
+      },
+      {
+        "source": "frame_interface_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "13c0ffef017218fda7aec46f92a74a6a6045dbbbb2fdb9c68791247f471e3762",
+        "java_svg_sha256": "f4842a6137ec638bf5a241fe2c0f543910871b71dc286149539f035e35492b04"
+      },
+      {
+        "source": "frame_interface_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "b90ed0de8726a0ecc783c20ed1a7d1e9164bed295cff784da10acf24d5849d8a",
+        "java_svg_sha256": "86320e86023f26cc11b41066eaa149e24ec1eeaacd5878521e527bfdcf0716b7"
+      },
+      {
+        "source": "member_brackets.puml",
+        "diff_exit": 0,
+        "source_sha256": "5b238a830393f39f9b87387e56f03b051fc2b4d71e05233d890c9f40a54752cf",
+        "java_svg_sha256": "b1ff87b07af21bd5c0819a5e634e81eaed77abe83c660ab6ac42457a0559a126"
+      },
+      {
+        "source": "mixing_first.puml",
+        "diff_exit": 1,
+        "source_sha256": "ed00ac4f88d21961197d14908bcf881e3c20fe4ddcfaa5c83f0a663046e05dfb",
+        "java_svg_sha256": "b1e30254e4c4e21989cecdce2d8b0890aae1fde9bda2f074b719f09f80d0acca"
+      },
+      {
+        "source": "mixing_late.puml",
+        "diff_exit": 2,
+        "source_sha256": "a55708d61e1aa4686fa36721811a717ccad34dba7e0ff0195483588e76cc6343",
+        "java_svg_sha256": "c5a85da0a9cff51f9637802997730db274d212935940fd577491a3062d9efa93"
+      },
+      {
+        "source": "node_class_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "1750e43ed34f955435816fa371276058a1cf76e44990abfba582517ef22d8716",
+        "java_svg_sha256": "882efedf06a1197926fd3856abcb17335e07ecf720d4387b9baec63f7dd47a90"
+      },
+      {
+        "source": "node_class_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "b5b735d58f02c8f07f77e6fa704e1a3df5b6eebbcc059c00e61f6019b701777a",
+        "java_svg_sha256": "9552888bb80f93bb698f981e40278834e84838cc7ba55b520555437c2af5b171"
+      },
+      {
+        "source": "node_interface_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "939152206424accfa55feb0d19f9249a232c0a0b710f4b8a5b09d1456b4bfd15",
+        "java_svg_sha256": "e6af9eeee1e20cf700ce087b3ac1ae18273d1c78d07f04103b324c84349604ad"
+      },
+      {
+        "source": "node_interface_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "77d7fa3bfc999829a1f85898767ba48d8ff176188f616bb3755666013c28c13d",
+        "java_svg_sha256": "fac8ee4e055e2ad85c7ed4987c33284e09b6fc82a870a7122980ed503375fdfe"
+      },
+      {
+        "source": "rectangle_class_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "810f9c79e3c896235cc770316377a5435a1d7994cd49a10745ff056a9ca00ca7",
+        "java_svg_sha256": "2ba008ac02597cf0420a2b15394fdbd37ea8751a9457678dbe30bbccf11370e8"
+      },
+      {
+        "source": "rectangle_class_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "1408b11734814a9059748c913b48e14ecb1a259d423f885f1fe25f12df2484c9",
+        "java_svg_sha256": "d8470f2816acbda9ce9013c64e584e9c3e373ca2255b52091358fa494f644d09"
+      },
+      {
+        "source": "rectangle_interface_left.puml",
+        "diff_exit": 0,
+        "source_sha256": "17889220797924f5385a5f581c1df9ee9ee85baecd7c0027337c18aebbbce76a",
+        "java_svg_sha256": "66f9bf7caae839a390c9766f64c3feb1f376fe122dd2bb75ad034069e72dac0b"
+      },
+      {
+        "source": "rectangle_interface_top.puml",
+        "diff_exit": 0,
+        "source_sha256": "fc18ce590224000829ed9a19cfc6fce075f090fe4540eb99337715296a4aa370",
+        "java_svg_sha256": "3fd1eb2d12e73a0cb43439b642c9a4eb8a4a3ebd2cef86fc08957e00b5c3bf9f"
+      }
+    ]
+  },
+  "regression_conclusion": "Confirmed source-level regression in b3eb1bcb relative to b02add36: it deleted the class_factory_viable guard and bracket-command caller, permitting unconditional quoted-container promotion. Pinned Java factory probes and the disabled-branch negative test confirm the expected behavior. No complete parent-revision parity benchmark was run; other removed mechanisms are diagnosed from the exact diff, not claimed as measured parent-to-child deltas.",
+  "next_packet": {
+    "mechanism": "shared container name/code grammar",
+    "java": "CommandPackageWithUSymbol#getRegexConcat and executeArg: quoted DISPLAY as CODE, CODE as quoted DISPLAY, and bare name/code forms all feed the quark identity separately from display",
+    "rust": "ClassParser::try_package at the campaign base rejects every non-package alias, cannot consume code-as-quoted-display, and therefore silently drops the group before its descendants. This explains why correct factory selection alone leaves many alias-bearing held-out examples failing.",
+    "constraints": "Separate causal account and independent checker needed; do not bundle package shape expansion, quark endpoint ownership, or painted-bounds recovery into the same patch."
+  },
+  "integration_caveats": [
+    "Candidate requires the parent independent checker; this record supplies no acceptance verdict.",
+    "Production diff touches only parse/mod.rs. No harness, baseline, checker, source reference, or golden file changed.",
+    "Account commit must precede implementation when cherry-picking.",
+    "Fresh generated references and all failing comparisons remain in /tmp/rustuml-class-fresh; preserve them.",
+    "JAR is source-pinned but not historical-byte-identical; host font/Graphviz equivalence is unproven."
+  ]
+}
