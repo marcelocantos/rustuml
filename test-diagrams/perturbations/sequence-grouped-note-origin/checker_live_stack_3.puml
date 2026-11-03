@@ -1,0 +1,20 @@
+@startuml
+participant "Iris" as I
+participant "Wren.f" as W
+participant "Kiln" as K
+K -> I ++ : enter
+I -> I ++ : nested0
+I -> I ++ : nested1
+critical window
+note left of I
+Fractional Wi.f envelope
+line
+end note
+I -> W ++ : delegate
+return answer
+end
+return unwind
+return unwind
+return unwind
+
+@enduml

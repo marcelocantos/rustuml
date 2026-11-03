@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName "Serif"
+caption Independent font width check
+participant Iris
+participant Wren
+Iris -> Wren : Fractional iii.W
+@enduml

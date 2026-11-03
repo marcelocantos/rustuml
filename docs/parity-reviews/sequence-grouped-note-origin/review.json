@@ -1,0 +1,1629 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-grouped-note-origin",
+  "reviewer": {
+    "task_id": "t3-5f88df69/review-sequence-grouped-note-origin",
+    "model": "gpt-6-astra, high reasoning effort, OpenAI Codex harness in T3 Code",
+    "role": "Fresh independent adversarial checker; no children; no production edits"
+  },
+  "account_commit": "4532f693c4e94f01db72fe6655d51851ec94132a",
+  "implementation_commit": "d2b894e829484899e875644c0e25a22f3da1b7b2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git -c protocol.file.allow=always submodule update --init test-diagrams/golden",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --no-run > /tmp/rustuml-seq-checker/baseline-build.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --example diff_one --bin rustuml > /tmp/rustuml-seq-checker/baseline-cli-build.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards --no-fail-fast -- --nocapture > /tmp/rustuml-seq-checker/baseline-suites.log 2>&1",
+    "git cherry-pick 4532f693c4e94f01db72fe6655d51851ec94132a",
+    "git cherry-pick d2b894e829484899e875644c0e25a22f3da1b7b2",
+    "uv run --no-project docs/parity-reviews/sequence-grouped-note-origin/checker.py generate /tmp/rustuml-seq-checker/generated > /tmp/rustuml-seq-checker/generate.log 2>&1",
+    "uv run --no-project docs/parity-reviews/sequence-grouped-note-origin/checker.py generate-focused /tmp/rustuml-seq-checker/generated-focused > /tmp/rustuml-seq-checker/generate-focused.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --example diff_one --bin rustuml > /tmp/rustuml-seq-checker/candidate-build.log 2>&1",
+    "uv run --no-project docs/parity-reviews/sequence-grouped-note-origin/checker.py measure /tmp/rustuml-seq-checker/baseline-final /tmp/rustuml-seq-checker/baseline-bin > /tmp/rustuml-seq-checker/baseline-final-measure.log 2>&1",
+    "uv run --no-project docs/parity-reviews/sequence-grouped-note-origin/checker.py measure /tmp/rustuml-seq-checker/candidate-final /tmp/rustuml-seq-checker/candidate-bin > /tmp/rustuml-seq-checker/candidate-final-measure.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --no-fail-fast -- --nocapture > /tmp/rustuml-seq-checker/candidate-suites.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-render -p rustuml-parser --lib sequence -- --nocapture > /tmp/rustuml-seq-checker/candidate-unit.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture > /tmp/rustuml-seq-checker/candidate-final-perturbations.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 cargo fmt --check > /tmp/rustuml-seq-checker/fmt.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings > /tmp/rustuml-seq-checker/clippy.log 2>&1",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-checker/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test harness_guards -- --nocapture > /tmp/rustuml-seq-checker/final-guards.log 2>&1"
+  ],
+  "findings": [
+    "REJECTING REGRESSION: checker_winner_d2_i3 passes unchanged strict comparison on the freshly built parent CLI path and fails on the candidate. Java and parent have canvas width 213, outer frame x=9, inner frame x=16, outer note painted x=19, inner note x=26. Candidate has width 216, frames x=12/19, notes x=22/29: a uniform three-pixel excess right translation with identical labels, text widths, vertical geometry, and frame widths.",
+    "CAUSAL DISPROOF: InGroupableList.getMinSlow (Java lines 101-111) selects the member with the smallest raw getMinX first. getMinX (173-187) then applies only that winning member kind's margin: ordinary -5, nested list -10, left exo +3. Rust sequence.rs:8637-8640 instead maximizes MARGIN5 + depth*MARGIN10 minus each note origin. These operations are not equivalent when a direct outer note competes with a nested list. The original committed invariant itself overstates the depth formula; it is valid only along an actual winning nested-minimum chain.",
+    "COUNTEREXAMPLE DERIVATION: With Iris center 25.47265625 before missing-space translation, outer MMMMiii component width 87.0625 gives trunc(-61.58984375)=-61; inner MMMMi width 79.546875 gives trunc(-54.07421875)=-54. Inner list minimum is -59. Outer direct note -61 beats nested list -59, so the outer header starts at -61-5-10=-76 and Java translates by 76. Candidate reserves group_shift=25 and then takes max(15-(-61)-25,25-(-54)-25)=54; total translation 79. The extra three pixels exactly explain the product diff. No font substitution is involved: both engines emit outer textLength 56.0625 and inner textLength 48.5469.",
+    "OTHER RELEVANT FAILURES: checker_boundary_incoming and checker_boundary_outgoing preserve matching participant/note geometry but candidate outer frame x=3,width=294.9438 versus Java x=9,width=288.9438. They already fail on the parent, so they are not claimed as new regressions, but the candidate does not satisfy its stated boundary-competition perturbation axis. The reverse-boundary variant also has a pre-existing arrow-direction mismatch.",
+    "TRANSLATION AUDIT: subtracting group_shift is justified only when that shift was additively applied. Phase 3 assigns first.center_x=max(default_center,min_first_center_x), with group_shift inside default_center; other early reservations can win this maximum, and across/title/box shifts precede the note scan. Subtracting group_shift alone is therefore not a general reconstruction of Java's untranslated constraint state. All eight fresh grouped/ungrouped note competition probes pass the candidate; this source concern is not reported as a separately demonstrated regression. The demonstrated rejection above holds even where subtracting group_shift is valid.",
+    "LIVE ANCHOR AUDIT: the scan computes shared endpoint-merged live shifts via sequence_lifelines.segment_shifts, consistent in principle with NoteBox.getSegment merging live thickness at the top and bottom. Ordinary nonshadowed notes reuse that map in the deficit, group bounds, and paint. Under shadowing, however, the deficit uses participant.center_x+live_shift while group bounds/paint use box_x+box_width/2+live_shift for an active left note; participant_layout_halves includes SHADOW_LIVING_WIDTH_EXTRA=3, so these centers differ by 1.5. checker_shadow_active_0/1 both fail before and after; multiple shadow dimension/filter differences prevent assigning their whole diff to that anchor inconsistency.",
+    "SCOPE AUDIT: the new early return in note_group_extent is inside NotePosition::Left and gated by !teoz, !on_message, and folded Note shape. Free-note consumers are guarded by a nonempty group stack; other call sites inspect message-owned notes, which cannot enter the new branch. I found no new behavior for ungrouped, RIGHT, OVER, hexagonal, rectangular, message-attached, or Teoz notes through that branch. Three ungrouped position controls pass both builds. The Teoz control fails identically before and after, with byte-identical CLI output, and is not attributed to this patch.",
+    "LIFECYCLE RESIDUE: checker_alternatives_1_1 has a pre-existing five-pixel return-arrow endpoint discrepancy. Valid checker_live_stack_2 and checker_live_stack_3 both panic in parent and candidate at the multi-span constraint last=right-1 index (parent sequence.rs:8022, candidate:8033), and both actual CLI processes exit 101. Their Java SVGs are valid and retained; no malformed-negative inputs were generated. Padding 3 and 7 probes retain pre-existing vertical geometry failures; their horizontal frame x/width agrees in the candidate.",
+    "FONT CONTROL: the preserved review4_chrome_visible_physical_font still fails before/after. Fresh independent no-note Serif input also fails identically before/after. Java emits Iris textLength 18.6621, Wren 31.0898, Fractional iii.W 82.3101; Rust emits 20.9453,34.1934,92.3584, exactly the fresh Java SansSerif widths. text_render.rs:774-787 maps unrecognized Serif to MetricFamily::Sans. The explicit SansSerif control has matching geometry/text widths but an existing quoted versus unquoted font-family attribute mismatch. This evidence separates shared font behavior from the three-pixel margin regression.",
+    "PROVENANCE AND SCOPE HISTORY: original account 4532f693 predates implementation d2b894e8 and is its Git ancestor. The implementation commit explicitly cites that account. claimed_invariant was moved to invariant byte-for-byte; planned_change equals the original planned_model_change entries joined with spaces. The appended renderer-reversal diagnostic is clearly labeled post-implementation and corrects the original historical narrative without changing the claimed scope. This checker has not tested any whole historical tree or independently reproduced that reversal, and does not certify the maker's b3eb1bcb/93aa179c chronology.",
+    "HONESTY AUDIT: the production patch uses generic note kind/position/group predicates, existing constants with named Java provenance, and no golden reads, label-conditioned logic, coordinate-keyed SVG surgery, or unexplained new numeric literals. Its defect is the semantic use of those genuine margins. Source-to-product comparator, diff_one, harness guards, baselines, skips, and references remain unchanged. Corpus gains and the passing single-note unit test do not override the held-out regression."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_0_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_0_0.svg",
+      "axes": [
+        "participant declaration order",
+        "nested return ownership",
+        "alt branch note competition"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "3ae004ee03d86413c58f0aef1eead59fdac0079d95e0a04cc9ef7528f0300e07",
+      "golden_sha256": "a35a18e00e16c29065faafcdf83aeac482dbd323d5f124e244e192a965e72607",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "8897b3cd5d43f501c7bb63eded5a9d55c5fe6a1bac41d95bf26e0a3d75ae5bc9"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_0_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_0_1.svg",
+      "axes": [
+        "participant declaration order",
+        "nested return ownership",
+        "alt branch note competition"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "7ed8957adc1e656721e3de5b89b4968c28f58b7a946e2f350da624b8683b2cb4",
+      "golden_sha256": "e5d32f7b76a73b32a9cbb649f02685b1e119e6e08bd43408f7c21cd2ddbddce9",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "22fb4b11dad57270191646f18e3d759cafb8d8fe8b506257779265cdbea485c5"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_0.svg",
+      "axes": [
+        "participant declaration order",
+        "nested return ownership",
+        "alt branch note competition"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "49c68b73c029038529b3efa550b9083aec80f4e4a3b204c080cd83284827bde4",
+      "golden_sha256": "a2ca3cc416d028aa7842846546ed4b29cfc34c3b849589186241529c8e477f5c",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "74df9e51430ac76cc14c0859b1333b967c9ef4f239fa1cd3e8367f9860bfcfa6"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_alternatives_1_1.svg",
+      "axes": [
+        "participant declaration order",
+        "nested return ownership",
+        "alt branch note competition"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "68bbada62f23550f17635f80033f42869b132b655749480cee8940586b7e309a",
+      "golden_sha256": "e9b64ef35a8c78cd04f1868fc7406ca2093801f05c70af77d1d1e8890aa4bfaa",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "f22cb65f191860ceaac6d46074141cdf2bff8ca16bed46b9e05ed8e60b81fd99"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_incoming.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_incoming.svg",
+      "axes": [
+        "virtual border direction",
+        "nested competing left notes",
+        "fractional labels"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "88a02d84a4fcfbda482184b1c8577e92c5edcdcaf5ffd4e5dfbbe3584d487c19",
+      "golden_sha256": "c9fab35a746470ec922d0413f4e8da318802ba7097f3f53914c30983c7e4d5a1",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "b83aa242ce1e33c5f80b807fbfd851d2bdaf1b56181560b47f439ce8b993dfdf"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_outgoing.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_outgoing.svg",
+      "axes": [
+        "virtual border direction",
+        "nested competing left notes",
+        "fractional labels"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "6de11e391ba545efa8b1a19097ced6c078e7b9f86bf1198595f9f12da3ed6d88",
+      "golden_sha256": "eb970a887008d58ab78b3f00f25ce9921c4e63fc216026d3b1b1b9d24291f4de",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "d7ed9f69fa67727aaf1c8559b27c0ef9a707602d3d5693f4aee45b7519b61a36"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_reverse.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_reverse.svg",
+      "axes": [
+        "virtual border direction",
+        "nested competing left notes",
+        "fractional labels"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "459217198ddd13999b8fdf5427cd7caf9b6231931b8dd1571eb4d3d49b65f9de",
+      "golden_sha256": "b95ee534ab55b0285685b0232da3d1275f7ace1638c1cf4e6a3e4e505b84a0b0",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "b83aa242ce1e33c5f80b807fbfd851d2bdaf1b56181560b47f439ce8b993dfdf"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_right.svg",
+      "axes": [
+        "virtual border direction",
+        "nested competing left notes",
+        "fractional labels"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "34365eb7631384f2d3f392fae4369bd08f7896dd6fcab1d1249e49cd7db4fda2",
+      "golden_sha256": "74566f350ff1e7f6c6f483fe88453ce9ebf9d84bd0f35f1461ea794771250833",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "833b2d29952cd1a723b3a4c2d33b59b956eaf4bf114bf40c870803ea5e9baa69"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_inside_narrow.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_inside_narrow.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "0d2b99486bf844fb90b6206c8c9fd7ccbedee68fa92a0da57843879219874f2e",
+      "golden_sha256": "b14ebeab4bbe5553eeba9940893da23ffedf65a0e53ca7d2c5bcfc7eaca27c02",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "3469634506986068ec22eb755ebb7d8315c886ed5cfdfd768bdd6086d85784f0"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_inside_wide.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_inside_wide.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "feff527823d8b77d927abf53a79164a505381c5eff9bf84fd102a005d585180c",
+      "golden_sha256": "e61e63fe38117fc372ae18aaca87d7dc98f1f197b05901972c2c869823aaf6b7",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "662fe507ae4704b3b894fc7f239c25bad7237a592321bc86db4ba3dc2cba5d17"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_narrow.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_narrow.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "c069d2e34e4c2d085b08c7689ee8f2d471d8ee7af2cf885ccf537d6047235036",
+      "golden_sha256": "d8f29426c39820bc1110d82ab1432ac1970878285980dda551a6e72eef791f7c",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "de68ca1c02131ea5849c7a31882f439557d10cb8e432f354518dcd27e65bdb76"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_wide.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d1_outside_wide.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "58e82ca823715265dccbe3ffc75d373db8fb0c0e347540526f5c7f122987a98a",
+      "golden_sha256": "daffb738858e04d6dec4fdfb1018b2daa12c65842e708c6c0fd58298339b22c3",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "14ac0396af9dd7561a9a6f46c37b2c08eb0a279cb0e3812e8ee86af9e8f4e7bb"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_narrow.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_narrow.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "8997dd723a2e4f832118769f86a7579d06e8ea1c510c2873a13a833ba63734ef",
+      "golden_sha256": "b0c564fb955739dbdee0f1dcea145b573d76f41a261c91bc9755e561cf39e5c0",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "8bba7ae94cf3a2b5091ccd5bd11ecfd7df1abd63ed7d34e96b1b91f054250c5a"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_wide.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_inside_wide.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "cf21e0c4a35776fc304e26848b664b1298764ebee9219ea4cd306f09bd1b6d0f",
+      "golden_sha256": "0b1b033cb56c0cd90bab1c742e4fa62a1a865bb27752616ccaa1456947fb2508",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "9e38de1d1e921a3bf08c272de26321473bb733185d06ec2cf644994495cceda0"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_narrow.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_narrow.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "59d4f41adca86197edc290977a3a546beded1e2efcac6bfd73323bee094ce6e1",
+      "golden_sha256": "12e7db2b336f61c0192b08b2c407e9f7d5a7eaf7837c38db70d52278576bb1ec",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "aaa5e3ea30a5fa872be112af4047b072e897c2dcd50b682391ca7bdcc5b4c853"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_wide.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_compete_d3_outside_wide.svg",
+      "axes": [
+        "competing grouped versus ungrouped note",
+        "nesting depth",
+        "fractional label widths"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "78750db284dbb67c0756cb7e05272e607644780aa3c5016c6eca4d44a83d1cd3",
+      "golden_sha256": "7654973359425a54d17466e488b6729c688df815a5d1bfde71e979193bcbca4f",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "37b0365873918b46dcd4ccff236e19abf6f27d43a5f5dd442a76bead956e0752"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.svg",
+      "axes": [
+        "physical versus logical font metrics control",
+        "fresh labels and chrome",
+        "no grouped note control"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "6288b71f2dae71a7257513426bc68ed564b9f1c8a5e19eb80ad152dce09d3ed7",
+      "golden_sha256": "d85dcbd20ab58dcfcdb588dd332f87e12f5aa45d07d8acb5448124778572be15",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "4b241b47746bae334a4a0bfaa72e00d6190a08e34f80b58a9a499c4f3ddc4f2c"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.svg",
+      "axes": [
+        "physical versus logical font metrics control",
+        "fresh labels and chrome",
+        "no grouped note control"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "103a9edb30fc9f9f58c61b0ae38ee7b959b19cffed92e828c5f2fcae7c4e5700",
+      "golden_sha256": "87c2ae3c040d3751b8cb34414b8771ce05805f102162a932f3ffff2fd05fe331",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "c6628ac2c50158973e6a84ad4c7af344b3f517083eb1f8419d254b6bf934da11"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_1.svg",
+      "axes": [
+        "multiple live segment offsets",
+        "nested self activation and return",
+        "critical group"
+      ],
+      "result": "pass",
+      "baseline_result": "fail",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "10a8a72ef935b2cea3bd2197dba5adfaad43ba0ad16a95bd23da0bcfa8279167",
+      "golden_sha256": "3d6eda533bce82c0de8c0641ce64550690cbde2d08e5428a9438b09f67a85e62",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "572604a498094940a904bad33d8725bf124f20e33b3e56b09b23f4cb506a1bee"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_2.svg",
+      "axes": [
+        "multiple live segment offsets",
+        "nested self activation and return",
+        "critical group"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 101,
+      "assisted_exit": 101,
+      "baseline_product_exit": 101,
+      "baseline_assisted_exit": 101,
+      "java_exit": 0,
+      "source_sha256": "aeff6e48900776f40418573bec35843265f3929b77dfe3ddd428af47faf2b152",
+      "golden_sha256": "1276e1768a355b42fe708d3d3da198891ab4e863bfc4b7189b264bc29b1abcb2",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 101,
+        "stderr": "\nthread 'main' (584742584) panicked at crates/rustuml-render/src/sequence.rs:8033:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+        "product_render_exit": 101,
+        "same_svg_as_compared_product": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_live_stack_3.svg",
+      "axes": [
+        "multiple live segment offsets",
+        "nested self activation and return",
+        "critical group"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 101,
+      "assisted_exit": 101,
+      "baseline_product_exit": 101,
+      "baseline_assisted_exit": 101,
+      "java_exit": 0,
+      "source_sha256": "2a432be9f6284b3f320c9cb8a74e58cd4378c4f1e7f4fe223c055548a797e0d5",
+      "golden_sha256": "7f57261209c995089b749c843bff52a0efc8801dd5069af92c0b6e96724901df",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 101,
+        "stderr": "\nthread 'main' (584742689) panicked at crates/rustuml-render/src/sequence.rs:8033:37:\nindex out of bounds: the len is 2 but the index is 18446744073709551615\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+        "product_render_exit": 101,
+        "same_svg_as_compared_product": false,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_0_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_0_left.svg",
+      "axes": [
+        "global note padding",
+        "side-note direction",
+        "active segment with nested note"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "48e323325dd8e3be2978da2ada0a296a85ccfafc3ea94584955e88d3ff828d3a",
+      "golden_sha256": "2be74eb7235c4dffe329c603253da686a27fb91c840dbec988489b491fd8a467",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "2363385720c92b62be0d2d8b89f9e632e3fe421f8f3c128fa0a27dc417fc2a00"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_0_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_0_right.svg",
+      "axes": [
+        "global note padding",
+        "side-note direction",
+        "active segment with nested note"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "bed2076f53aa8f5704678ef452bdc457445ee60eff5e5ace30547383609825eb",
+      "golden_sha256": "de87560ebb6f6905b33a836743f6a650ac20d80a7fb5af98f0c986ae82a0bd47",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "ae29080a125a965a13ba81c667648a948137dbcb60ce87e1a56bf7a5679f1851"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_left.svg",
+      "axes": [
+        "global note padding",
+        "side-note direction",
+        "active segment with nested note"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "9294358d4ad48f0b71691f8b9c5ded73a6677006fe26a9f431f8615805d97600",
+      "golden_sha256": "c34ec432b45fc24ec6dc7dfd8b21effd852566ed3d4ed7c0dc5d660c124029d1",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "63683bb515ef9164ff9a5337605b399848a47f3680d07091c6d79bf66dc24dff"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_right.svg",
+      "axes": [
+        "global note padding",
+        "side-note direction",
+        "active segment with nested note"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "0cc3d2ad27ee571e0c2cd8da4ebed27227173d927e12e53d5407476f195e645c",
+      "golden_sha256": "7709897b6ad8e9f5e374d384f8bc1bf2a707c12dc0f77b79a6109450c9b4b719",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "9260df5943f24993150998d910a04a97b7ad806701b33b30e451a8ea5658aedd"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_left.svg",
+      "axes": [
+        "global note padding",
+        "side-note direction",
+        "active segment with nested note"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "ce9cb9eb348d8f3b12ae53d3afc35be1d040848935d0fbd7a19e898e01a192c6",
+      "golden_sha256": "1314ff477158c6b7f0303f3f87fe06489405b266d2d1aa28b1347e912fac5f55",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "d7209affea206131b60454ff02b91f4ebb556effd94c15e63d0c40e3cd55b4ec"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_right.svg",
+      "axes": [
+        "global note padding",
+        "side-note direction",
+        "active segment with nested note"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "63e59ee8a61da8b84b2aef8eeaf08834a055579af168826240f443fc43d991e7",
+      "golden_sha256": "cc94123324c26f6f8e85333629529f6abc777bbd970b9fb17d898a1352bc2da7",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "039024e1d0bca78707d5c0238f12ae49d1ad22abfaefe1cf7da77219c78652be"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_0.svg",
+      "axes": [
+        "shadow component dimensions",
+        "live versus inactive left note",
+        "fractional label width"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "46552e28130e66245e01e9df63bb429e38891c0e5c1728e21a6627472dd59cbb",
+      "golden_sha256": "f299bca78834940041abad72a547e771266ba71d762d5fbb40e81133eeb4e163",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "499a89a342c05f202e0684737ceeb99e98e93cca7396dc33c684b259018ca6f7"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_1.svg",
+      "axes": [
+        "shadow component dimensions",
+        "live versus inactive left note",
+        "fractional label width"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "aae4d3cc5d426be17199b0a1d76083501c73e4f2fb724c7875d0eeed6fb43204",
+      "golden_sha256": "2d832ff830fa02ac28363564b8ffab4048b440ac978c46a73f232a09aab40c86",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "cdaada248742725eb3d82c8dd5c285ad364dbe61af902382d86fdd0adfdfb9d7"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_teoz_control.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_teoz_control.svg",
+      "axes": [
+        "Teoz boundary control",
+        "nested group",
+        "competing active notes"
+      ],
+      "result": "fail",
+      "baseline_result": "fail",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 1,
+      "baseline_assisted_exit": 1,
+      "java_exit": 0,
+      "source_sha256": "f1dc7997a5e5e5412b6566bd48b1e5cba803f21ba89f446421ffc1d64167464e",
+      "golden_sha256": "c95eff7f7a5c6bad54a4197a738570bd68a6acb0e39e401871b72506229072a3",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "3e302e95a3a73ea7e987aa4a9e056228f8bed121937b7b0964282351e0b5ab4c"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_ungrouped_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_ungrouped_left.svg",
+      "axes": [
+        "ungrouped scope control",
+        "note position",
+        "multiline fractional label"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "e38397a80c5a73213f4d7638c1fb3370124f5c331ca678986d85fc9c2b895ea3",
+      "golden_sha256": "b734ec8612b76135f4ecf7e262f7474903bddf5a12646e77e74437ba6556a131",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "926b3031f3319d6f2f78b8c345ed9e868acb9ed80f64b295c640c2159d6b3bb4"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_ungrouped_over.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_ungrouped_over.svg",
+      "axes": [
+        "ungrouped scope control",
+        "note position",
+        "multiline fractional label"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "801e0a3528dd6b0549e731e5fa6bec7c7185915f9b62e3e59fdaab475bec46d6",
+      "golden_sha256": "9160df7ad90fd6f1a1114058a956e48a9400e916d5bcbf13c95c1c398ac10316",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "b958a4617224213c6ee4c1a011f078014fb87cd5576a0760c1b1ef5dac776e58"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_ungrouped_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_ungrouped_right.svg",
+      "axes": [
+        "ungrouped scope control",
+        "note position",
+        "multiline fractional label"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "433e559b0e8a24fd4213f031677e8295434d961c63d8e3e992cfd8b8d56ed2e1",
+      "golden_sha256": "aedb82e775bf94f9e7001ab80e5394a5a9b58668cd5e3d0d5d6d605567c2357c",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "fc59af8f9cbe51611bc0337404d4b40b3b8775675370d958683e1f12016bcf8e"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i1.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i1.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "21ec4e8afa6f6fd9988de0fc3daaef91a7c8c7ef14773813b5a4720b48407f07",
+      "golden_sha256": "3583a6cf2f2cf66141ad74b3e36fa3fabb356e9acb326b8ad12afd891232bfe6",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "86ff9652f4d5d7938b13933352278b510f8207a8929630af5de4841f9d68a295"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i2.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i2.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "dbbd6456eca71a241f70bd5d5ba93efa9dfa1f9ef1f1692de2c9c2ee405e7747",
+      "golden_sha256": "3e8d606e1008d706e79bdccaa0fe5c25a00de228ab27d7855b249b072672c05f",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "7b92a4338a5515ae487697f178e2549e40e7e84817a98f1210ae75849d2297eb"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i3.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i3.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "fail",
+      "baseline_result": "pass",
+      "product_exit": 1,
+      "assisted_exit": 1,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "273ea94740945a25e41b00bfd3ee5c0cf86bd3b87e88cb37356235110e64ae6b",
+      "golden_sha256": "80f8fca0dc0fb20f49d31531e170218535beb179932793c68eadc36aa6dcc931",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "4d80f9f391d44d999d6965cfd9e54520a3ade9688f374bc3289d191a04e571a1"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i4.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d2_i4.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "c621114c1629c3220158c71c58243c54f50f7156c942dbbe8ac07254c9d30152",
+      "golden_sha256": "8f23f61a5d088be88389f68722082ab7d7beff73b8a453d11dd8778ee004a9e5",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "71cf596db558a711379322ab05525ab0983fb3644e92fddab2531e13ddf80012"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i1.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i1.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "f40a6f501a73b0a9cc058800eab97e9bf4402d40279e14845abca62c6456fa78",
+      "golden_sha256": "664f521c36081b1605797bba076d8f8abd3964d834fd1adbe6b1e3bc592747c2",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "309b40b54cd034d66b8db026423404e5284bb312e5c6c0f6c114ce7d4dcb37a1"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i2.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i2.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "ce51278ae62a9371f82b5c1ec1e8303b6dbb01080b4ca0fdff6fcd5a97066dd9",
+      "golden_sha256": "ca7be482c479638b46d118f034f158c48cdc1ea0551e55f0961f97ee2cf2f947",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "c3acc51c4733c8411bb60c9f95b9268e91138200bf5ad21a69327918e6b86b82"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i3.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i3.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "8f851071f233b53448bd609fb2e4ef91f716d4b45ce4ca2ac15940d288277455",
+      "golden_sha256": "ed00c586639503545010f1359bb3ea2ebba6f5e4c2b7aa11c90d343c0c342e39",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "542d8d94874cafd229c95b5f6dc9792709d140f3d5a3d738f8d4a22cf568b93e"
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i4.puml",
+      "golden": "test-diagrams/perturbations/sequence-grouped-note-origin/checker_winner_d3_i4.svg",
+      "axes": [
+        "ordinary versus nested-list minimum ownership",
+        "nearby fractional note widths",
+        "group depth"
+      ],
+      "result": "pass",
+      "baseline_result": "pass",
+      "product_exit": 0,
+      "assisted_exit": 0,
+      "baseline_product_exit": 0,
+      "baseline_assisted_exit": 0,
+      "java_exit": 0,
+      "source_sha256": "a4a20f23552fe55592a34862cc1f4c1271cbbbc8c8c7652facc4fbaa64edeeb9",
+      "golden_sha256": "90e841b75a5ac0e93ec7d659923b134b67eae6c08651d158d621d82611c2bbf0",
+      "cli": {
+        "command": [
+          "/private/tmp/rustuml-seq-checker/candidate-bin/rustuml",
+          "-tsvg",
+          "-pipe"
+        ],
+        "exit": 0,
+        "stderr": "",
+        "product_render_exit": 0,
+        "same_svg_as_compared_product": true,
+        "sha256": "5080a58f31f85a26a7374240db417fc72b35f3ff022c30cfa7b5d274a517b266"
+      }
+    }
+  ],
+  "verdict": "rejected",
+  "actual_tested_revisions": {
+    "parent_tested": "7e62f83f560e4b21b8c98862dff44505bc39c427",
+    "actual_account_cherry_pick": "6304f6cb895a5f8cd2a12c91d49bcfde1290b154",
+    "actual_implementation_tested": "c51f9eeedd43879eef762569486906288c91cc7a",
+    "original_account": "4532f693c4e94f01db72fe6655d51851ec94132a",
+    "original_implementation": "d2b894e829484899e875644c0e25a22f3da1b7b2",
+    "original_maker_base": "716813f43f1453fe9e96bea4a10d1e07b42be08f",
+    "golden_gitlink": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+    "stdlib": "747d1eae809cde20675976d67e3eb84dc0021a0c"
+  },
+  "scope": "Independent review only; cherry-picks are setup. New review, support script and 41 new Java source/SVG pairs. No production fixes, target edits, baseline writes, comparator changes, guard changes, exclusions, or historical evidence edits.",
+  "checks": {
+    "main_product": {
+      "before": {
+        "passed": 11181,
+        "eligible": 11251
+      },
+      "after": {
+        "passed": 11181,
+        "eligible": 11251
+      },
+      "delta": 0,
+      "suite_exit": 101,
+      "reason": "Unchanged existing unlocked gains: class +1, preprocessing +1, rendering +4 versus frozen baselines."
+    },
+    "main_assisted": {
+      "before": {
+        "passed": 10497,
+        "failed": 754,
+        "skipped": 1299,
+        "total": 12550
+      },
+      "after": {
+        "passed": 10497,
+        "failed": 754,
+        "skipped": 1299,
+        "total": 12550
+      },
+      "delta": 0,
+      "suite_exit": 101,
+      "skip_breakdown": {
+        "java_error": 1199,
+        "ditaa": 100
+      },
+      "parked": 0
+    },
+    "main_sequence": {
+      "product_before": [
+        1411,
+        1411
+      ],
+      "product_after": [
+        1411,
+        1411
+      ],
+      "assisted_before": [
+        1411,
+        1411
+      ],
+      "assisted_after": [
+        1411,
+        1411
+      ],
+      "basis": "Full product family result; full assisted tier has no sequence failures. Same input/error eligibility and zero parse skips."
+    },
+    "original_810_perturbations": {
+      "product_before": {
+        "passed": 349,
+        "mismatch": 454,
+        "invalid_java": 7
+      },
+      "product_after": {
+        "passed": 351,
+        "mismatch": 452,
+        "invalid_java": 7
+      },
+      "product_pass_delta": 2,
+      "assisted_before": {
+        "passed": 309,
+        "mismatch": 494,
+        "invalid_java": 7
+      },
+      "assisted_after": {
+        "passed": 311,
+        "mismatch": 492,
+        "invalid_java": 7
+      },
+      "assisted_pass_delta": 2
+    },
+    "original_sequence_81": {
+      "product_before": [
+        78,
+        81
+      ],
+      "product_after": [
+        80,
+        81
+      ],
+      "assisted_before": [
+        78,
+        81
+      ],
+      "assisted_after": [
+        80,
+        81
+      ]
+    },
+    "added_41": {
+      "java_valid": 41,
+      "java_invalid": 0,
+      "product_before": {
+        "passed": 17,
+        "mismatch": 22,
+        "panic": 2
+      },
+      "product_after": {
+        "passed": 25,
+        "mismatch": 14,
+        "panic": 2
+      },
+      "assisted_before": {
+        "passed": 17,
+        "mismatch": 22,
+        "panic": 2
+      },
+      "assisted_after": {
+        "passed": 25,
+        "mismatch": 14,
+        "panic": 2
+      },
+      "improvements": 9,
+      "regressions": 1,
+      "pass_delta": 8,
+      "cli_before": {
+        "success": 39,
+        "panic": 2,
+        "identical_to_compared_svg": 39
+      },
+      "cli_after": {
+        "success": 39,
+        "panic": 2,
+        "identical_to_compared_svg": 39
+      }
+    },
+    "all_851_product_perturbations": {
+      "before": {
+        "passed": 366,
+        "mismatch": 476,
+        "panic": 2,
+        "invalid_java": 7
+      },
+      "after": {
+        "passed": 376,
+        "mismatch": 466,
+        "panic": 2,
+        "invalid_java": 7
+      },
+      "builtin_suite": {
+        "passed_tests": 1,
+        "failed_tests": 1,
+        "exit": 101
+      },
+      "note": "Built-in required-corpus negative test passes; held-out parity test fails. Added failures remain executable."
+    },
+    "sequence_units": {
+      "parser_passed": 56,
+      "renderer_passed": 43,
+      "total_passed": 99,
+      "failed": 0,
+      "exit": 0
+    },
+    "guards_before_attestation": {
+      "passed": 4,
+      "failed": 2,
+      "exit": 101,
+      "failed_tests": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "note": "Guard test binaries built at each revision; live source/evidence tree includes checker-generated fixtures and causal account by the time of the parent suite. This is not a clean historical evidence-tree claim."
+    },
+    "format": {
+      "exit": 1,
+      "reason": "Pre-existing class parser/renderer formatting differences; no formatter write applied."
+    },
+    "clippy": {
+      "exit": 101,
+      "reason": "Pre-existing unused looks_like_description_bracket_command in crates/rustuml-parser/src/parse/component.rs:72; no Salt lint error in this parent revision."
+    },
+    "diff_check": {
+      "exit": 0
+    },
+    "guards_after_attestation": {
+      "passed": 4,
+      "failed": 2,
+      "exit": 101,
+      "failed_tests": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "own_record_schema_errors": 0,
+      "own_record_semantic_failures": {
+        "rejected_latest_review": 1,
+        "failed_perturbations": 16
+      },
+      "note": "Unchanged guard reports exactly the intentional rejection and 16 failed new cases for this mechanism; no schema, path, missing-reference, or unreferenced-source errors."
+    }
+  },
+  "reference": {
+    "manifest": "/tmp/rustuml-campaign-reference.json",
+    "java_executable": "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "java_generation_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "historical_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "caveats": [
+      "Fresh source-pinned rebuilt JAR is not historical-byte-identical.",
+      "Historical host font and Graphviz equivalence remains unproven.",
+      "New sequence fixtures use no Graphviz graph layout; font controls are explicitly separated.",
+      "Existing references were not overwritten; reference and stdlib checkouts were read-only."
+    ]
+  },
+  "oracle": {
+    "classification": "Reference-comparable, verification judgment converted into existing strict machine comparison",
+    "path": "Fresh shipped rustuml -tsvg -pipe output compared byte-for-byte after outer whitespace trim with diff_one --no-oracle --print-rust; the unchanged diff_one compare_svg_strict decides the exact same SVG. Nonzero CLI/render exits are failures, never equality successes.",
+    "journey_exception": "Deterministic CLI transformation has no provider/backend wire. Every added case runs the actual freshly built CLI and a pinned live Java process; no mocked provider claim.",
+    "coverage": "29 initial independent cases plus 12 source-motivated focused cases. No maker input was copied. Fresh references generated without changing preserved fixtures.",
+    "residue": "This bounded matrix does not prove all activation, style, newpage, box/title/across, or group compositions. A demonstrated in-scope parent-pass/candidate-fail counterexample is sufficient to reject."
+  },
+  "schema_note": "The record follows the existing schema. A rejected latest review and failing perturbations necessarily keep the existing parity-review acceptance guard red; that semantic failure is not a schema waiver.",
+  "preserved_status_changes": [
+    {
+      "source": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+      "before": 1,
+      "after": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml",
+      "before": 1,
+      "after": 0
+    }
+  ],
+  "existing_invalid_java_references": [
+    "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+    "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+    "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml"
+  ],
+  "source_and_binary_sha256": {
+    "crates/rustuml-render/src/sequence.rs": "31a632dbce0cb53d8e4d5a6500c87d2a2d2746745c22f8467ab25bc839bfbddd",
+    "crates/rustuml-oracle/src/compare.rs": "907e99bad2e807068d4d007183c0501dd3a6f563f97e5bd9012628e673dc42a5",
+    "crates/rustuml-oracle/examples/diff_one.rs": "91570e802578eb50a0c5064c73e644f5cbb28f782aab08299316f5f9afce9196",
+    "crates/rustuml-oracle/tests/harness_guards.rs": "83a17e7b7e412b7e0c544a1558da7ee24e4a7dc8e14537ca4fd4b418f8fe7a1e",
+    "/tmp/rustuml-seq-checker/baseline-bin/rustuml": "8aaa1188e41b459509f49be3b2445a06371eb77f46a7710319c86241b16dfc63",
+    "/tmp/rustuml-seq-checker/baseline-bin/diff_one": "c1ee75d993fa7c747ff6817f2e0277000d6a1f339390b286a1185b01e397f697",
+    "/tmp/rustuml-seq-checker/candidate-bin/rustuml": "5fc9257255f4bb6b6bf77f0193a215b5a169d9e45c83f16e58a4a922739b0311",
+    "/tmp/rustuml-seq-checker/candidate-bin/diff_one": "c282837848038591deb22442fb218dcbd2fa98c207e2ddd9c13bd9d31f17cda7"
+  },
+  "logs": [
+    {
+      "path": "/tmp/rustuml-seq-checker/baseline-build.log",
+      "sha256": "467ad3fc2e3ea4f9a2b3473a811457539aa26e85c2495097e5c92980f69e4a37"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/baseline-cli-build.log",
+      "sha256": "2dc7d6657419514549da6b0ad250c0b12415c2730f2fa7ef981877b0ececfba5"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/baseline-final-measure.log",
+      "sha256": "1ece7beb76612f4046d6f80718140a383fcf0f925eefdddb0e9107eb5dacf21a"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/baseline-measure.log",
+      "sha256": "63eb71a3e0aab56be37cee245f8ae29762e3bf5237d452291a1209253db4a10c"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/baseline-suites.log",
+      "sha256": "be71ba446714a853f4912cb6e1ef8f8cf0ee2073d879717e90d0d4af3eb5c400"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-build.log",
+      "sha256": "04f070a5c025245bbf7bd4ca9cbbb367b348a575244fbbe152557370fb08f32f"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-final-measure.log",
+      "sha256": "8b5e736a8e85533fbd05287ff6a7d3b2bb089021ce0ef0ad993498c80e3890a5"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-final-perturbations.log",
+      "sha256": "6b6ca074625ba5998b23b4c502549575a27d85451405637aeb39812392dce5b8"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-measure.log",
+      "sha256": "2b595186fbe478e2845af74677324a73d71d80554ea79ad43f2c0ffdf1aa7a4d"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-suites.log",
+      "sha256": "6d910570e9df8e051b1838c07292283f42990e5b8eacf5bc7f7f37091c581866"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-unit.log",
+      "sha256": "0d91240e1fec57fa113c2ab8d76eef7de1bbe3ff23f8f20eeff52203ba192a09"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/clippy.log",
+      "sha256": "fd165af876d6944912ad6fd593a0fc2fe0d94f53bcbd47536f65b4cfc4abbdb0"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/fmt.log",
+      "sha256": "288de5aeb32b3d5186a496a8260c01d3e99990f7e692a370cd4333fab97f2c57"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/generate-focused.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/generate.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/final-guards.log",
+      "sha256": "decb9bb06abf03031b02fceea37931caa4a8e298280398d07f6078f83d68c81d"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/candidate-final/measurements.json",
+      "sha256": "21721c56bbf77f32e43021365447cd94b3e508b141dfc54740885c5aff661e0b"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/baseline-final/measurements.json",
+      "sha256": "f5771e4782c435c3c2952ff3fe3f3a4d572d80205fd4bf5513744a5e4bac0487"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/generated/generated.json",
+      "sha256": "8917a2e09889c2eb76d0307408f49c2d40ebdf3fd6ef0551b57789d269376ea8"
+    },
+    {
+      "path": "/tmp/rustuml-seq-checker/generated-focused/generated.json",
+      "sha256": "10d3bec78ac9a1790282cf466d0a321151a019537cf608b7ccb6ff05e897a46f"
+    }
+  ],
+  "evidence_storage": "All 41 generated source/Java-SVG pairs and review/generator are committed. Raw CLI SVGs, full per-case comparator output, and build/test logs remain under /tmp/rustuml-seq-checker, outside the repository."
+}
