@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-native-leaf-presentation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "maker proposal, not accepted",
+  "java_locations": [
+    "svek/image/EntityImageClassHeader.java#spotStyleSignature,getCircledChar,constructor",
+    "skin/VisibilityModifier.java#getUBlock",
+    "src/main/resources/skin/plantuml.skin#spot"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#calc_entity_dims,render_entity",
+    "crates/rustuml-parser/src/diagram/class.rs#ClassEntity,EntityKind"
+  ],
+  "invariant": "A native class declaration retains its native type and visibility; the header derives its spot character/background from that type and inserts the declaration visibility text block before the label. Static is retained as entity state; Java EntityImageClassHeader does not branch on static.",
+  "causal_divergence": "The parser drops record and other native kinds and declaration visibility/static. The class renderer has neither a spot mapping for these types nor a declaration visibility block. Routing alone therefore cannot render them.",
+  "planned_model_change": "Add ordinary native EntityKind variants and modifier state. Extend renderer kind handling with Java-derived spot character and background mappings. Derive visibility icon dimensions and placement from VisibilityModifier and EntityImageClassHeader before changing those paths; do not tune constants against SVGs. If that derivation or implementation cannot be completed in this packet, report visible-class SVG cases as unresolved dependencies. Update class-renderer test constructors mechanically for the added fields.",
+  "perturbation_axes": [
+    "native type and renamed/multiline labels",
+    "declaration visibility and body/member presence",
+    "quoted forward/reverse names and container nesting"
+  ],
+  "verification": "Both tiers, original/expanded perturbations, parser tests and fresh source-only CLI comparisons with unchanged comparator. Parent supplies independent checker; no maker acceptance."
+}
