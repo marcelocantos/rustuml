@@ -1,0 +1,13 @@
+    Blocking waiting for file lock on build directory
+    Checking rustuml-parser v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-parser)
+    Checking rustuml-layout v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-layout)
+error: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:72:15
+   |
+72 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `-D dead-code` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[expect(dead_code)]` or `#[allow(dead_code)]`
+
+error: could not compile `rustuml-parser` (lib) due to 1 previous error

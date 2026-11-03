@@ -1,0 +1,74 @@
+{
+  "status": "Unresolved dependencies; not waived and no acceptance claim",
+  "owned_packet_closures": {
+    "previous_ten_checker_failures": "Eight recover; Serif and SansSerif remain independent shared-font dependencies. Full 41 status inventory is in isolated-874/measurements.json.",
+    "previous_twelve_maker_failures": "All twelve recover; all original 78 cases pass. Each case remains in fresh/groups, fresh/self or fresh/returns with its source/reference index.",
+    "temporary_regressions": "The combined-row heldout regression and two main half-head regressions were detected and repaired. Intermediate logs and measurements remain preserved. Final main and isolated inventories have no regressions against b1bb1cf."
+  },
+  "items": [
+    {
+      "mechanism": "logical font family metrics and SVG serialization",
+      "sources": [
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.puml"
+      ],
+      "causal_evidence": "These controls have no groups or notes. Serif widths and ascents differ; SansSerif geometry agrees but family attribute quoting differs. Shared font/style/text serialization is outside this worker's ownership. Source-pinned rebuilt JAR does not prove historical font equivalence.",
+      "disposition": "Unrepaired, unwaived shared-family dependency; requires owner-assigned work and independent validation."
+    },
+    {
+      "mechanism": "Teoz activation-stair scheduling and future life-event history",
+      "sources": [
+        "life_0.puml",
+        "life_1.puml",
+        "life_10.puml",
+        "life_11.puml",
+        "life_12.puml",
+        "life_13.puml",
+        "life_14.puml",
+        "life_15.puml",
+        "life_16.puml",
+        "life_18.puml",
+        "life_19.puml",
+        "life_2.puml",
+        "life_20.puml",
+        "life_21.puml",
+        "life_22.puml",
+        "life_23.puml",
+        "life_3.puml",
+        "life_4.puml",
+        "life_6.puml",
+        "life_7.puml",
+        "life_8.puml",
+        "life_9.puml"
+      ],
+      "source_directory": "docs/parity-reviews/sequence-teoz-life-event-bounds/maker-results/inputs",
+      "final_evidence": "fresh/teoz-life",
+      "java_locations": [
+        "sequencediagram/teoz/LiveBoxes.java#addStep,getLevelAtInternal,getStairs,drawOneLevel",
+        "sequencediagram/teoz/Stairs.java#addStep",
+        "sequencediagram/teoz/LifeEventTile.java#callbackY_internal",
+        "sequencediagram/teoz/CommunicationTileSelf.java#callbackY_internal"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::sequence_lifecycle_layout",
+        "crates/rustuml-render/src/sequence.rs::add_sequence_life_variation",
+        "crates/rustuml-render/src/sequence.rs::phase-1 lifecycle row scheduling and activation bar construction"
+      ],
+      "causal_evidence": [
+        "Rust still applies legacy SAME_MESSAGE_LIFECYCLE_ROW=30 when activate and deactivate attach across a note. Java Teoz gives LifeEventTile zero preferred height and constructs paint stairs separately; life_1 has Java height241 versus Rust271.",
+        "Teoz LiveBoxes.getStairs resets message ownership across standalone notes, samples per-event IGNORE_FUTURE_ACTIVATE / CONSIDERE_FUTURE_DEACTIVATE levels, and adds message callbacks as well as life events. Rust only pairs accepted open/close variations. Preexisting nested levels with repeated deactivation can therefore produce missing staircase segments even with correct horizontal bounds.",
+        "LiveBoxes.addStep adds five to a deactivation callback that collides with an already registered event ordinate. Stairs.addStep discards decreasing ordinates and drawOneLevel reopens a level when indent equals that level. Rust's legacy pairing cannot represent the same event history or repeated close timing.",
+        "The 24-case matrix was 0/24 before this packet and is 2/24 after. All 24 valid inputs, Java SVGs, final Rust SVGs and both-tier diagnostics are retained. No parse/runtime errors; no passing input regressed. The original 36-case Teoz matrix and original checker control pass."
+      ],
+      "disposition": "Unrepaired distinct tile lifecycle model; requires a new precommitted account and coherent event/stair implementation before Teoz lifecycle parity can be accepted. The present packet does not certify this model."
+    },
+    {
+      "mechanism": "parent-only corpus and cwd include semantics",
+      "sources": [
+        "parent 33 theme heldouts and 6 accepted registry heldouts"
+      ],
+      "causal_evidence": "This isolated worktree deliberately measures the prepared 874 subset. Parent has 913. Root reported T14.6.2: one theme include differs between repo-root CLI and Cargo package cwd. This worker did not import unrelated production or mutate include handling.",
+      "disposition": "Parent must replay 913 at its documented cwd after integration. The 874 isolated runs use repo root; Cargo runs tests in crates/rustuml-oracle. New sequence inputs have no includes."
+    }
+  ]
+}
