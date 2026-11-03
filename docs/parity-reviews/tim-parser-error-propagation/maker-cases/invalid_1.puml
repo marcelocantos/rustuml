@@ -1,0 +1,4 @@
+@startuml
+class Before
+!$bad = %date("yyyy",2147483648)
+@enduml
