@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-description-body-symbol-choice",
+  "status": "maker plan; not accepted",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/image/EntityImageDescription#getUSymbol,constructor",
+    "cucadiagram/BodyFactory#create3",
+    "cucadiagram/BodyEnhanced2#getTextBlock",
+    "decoration/symbol/USymbolComponent1#getMargin,drawComponent1",
+    "decoration/symbol/USymbolComponent2#getMargin,drawComponent2",
+    "decoration/symbol/USymbolBoundary#asSmall",
+    "svek/Boundary#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#DescriptionLeafStyle,calc_entity_dims,render_description_leaf,ClassFontOverrides::from_diagram_for_entity"
+  ],
+  "invariant": "Description leaves retain the selected USymbol, its margin and paint order; merged text blocks center as blocks but inner lines follow BodyFactory alignment from the title style.",
+  "causal_divergence": "Rust treats every mixed component as component2 and centers each line independently. This differs from componentStyle selection and BodyEnhanced2 text-block alignment. Boundary draws its geometry before stereotype despite the vertical merged-block paint order.",
+  "planned_change": "Model component1/component2/rectangle symbol selection independently of entity kind and centralize symbol margins for dimensions and painting. Resolve description horizontal alignment through its title style; keep merged block placement separate from inner line alignment. Emit boundary stereotype, shape and name in merged-block order. Preserve other unsupported mixed image kinds as explicit residuals, without claiming class-box fallback correct.",
+  "perturbation_axes": [
+    "componentStyle uml1/uml2/rectangle and explicit style alignment",
+    "multiline unequal widths with stereotypes, alias direction and mixed declaration order"
+  ],
+  "rust_revision": "3e6ccb6cd4cdb9c015d5e5a83c997a0d05a1fecf"
+}
