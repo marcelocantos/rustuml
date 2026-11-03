@@ -1,0 +1,18 @@
+SVG structural differences:
+  element count: expected 14, got 7
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "120px"), ("preserveAspectRatio", "none"), ("style", "width:128px;height:120px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 128 120"), ("width", "128px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "74px"), ("preserveAspectRatio", "none"), ("style", "width:135px;height:74px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 135 74"), ("width", "135px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "Polar Harbor"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Polar Harbor"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M8.5,6 L100.8896,6 A3.75,3.75 0 0 1 103.3896,8.5 L110.3896,28.4883 L110.5,28.4883 A2.5,2.5 0 0 1 113,30.9883 L113,102.5 A2.5,2.5 0 0 1 110.5,105 L8.5,105 A2.5,2.5 0 0 1 6,102.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M9.5,7 L50.5,7 A3.75,3.75 0 0 1 53,9.5 L60,28 L119.6621,28 A2.5,2.5 0 0 1 122.1621,30.5 L122.1621,58.9883 A2.5,2.5 0 0 1 119.6621,61.4883 L9.5,61.4883 A2.5,2.5 0 0 1 7,58.9883 L7,9.5 A2.5,2.5 0 0 1 9.5,7"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "6"), ("x2", "110.3896"), ("y1", "28.4883"), ("y2", "28.4883")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "60"), ("y1", "28"), ("y2", "28")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "91.3896"), ("x", "10"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "85.1621"), ("x", "17"), ("y", "48.5352")]
+

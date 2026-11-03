@@ -1,0 +1,22 @@
+SVG structural differences:
+  element count: expected 19, got 15
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "188px"), ("preserveAspectRatio", "none"), ("style", "width:244px;height:188px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 244 188"), ("width", "244px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "78px"), ("preserveAspectRatio", "none"), ("style", "width:330px;height:78px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 330 78"), ("width", "330px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "title"), ("data-source-line", "1")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Measurement Bay"), ("data-source-line", "5"), ("id", "ent0003")]
+  [4] tag mismatch: expected <text>, got <polygon>
+  [5] tag mismatch: expected <text>, got <line>
+  [6] tag mismatch: expected <g>, got <line>
+  [7] tag mismatch: expected <polygon>, got <line>
+  [8] tag mismatch: expected <line>, got <text>
+  [9] tag mismatch: expected <line>, got <g>
+  [10] tag mismatch: expected <line>, got <rect>
+  [11] tag mismatch: expected <text>, got <rect>
+  [12] tag mismatch: expected <g>, got <rect>
+  [13] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "48"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "70.6777"), ("x", "81.66"), ("y", "99.9766")]
+    actual:   [("fill", "#F1F1F1"), ("height", "2"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "4"), ("x", "89.3604"), ("y", "18")]
+  [14] tag mismatch: expected <ellipse>, got <text>
+

@@ -1,0 +1,27 @@
+SVG structural differences:
+  element count: expected 25, got 13
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "192px"), ("preserveAspectRatio", "none"), ("style", "width:400px;height:192px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 400 192"), ("width", "400px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "118px"), ("preserveAspectRatio", "none"), ("style", "width:161px;height:118px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 161 118"), ("width", "161px"), ("zoomAndPan", "magnify")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "171"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:1;"), ("width", "379"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "none"), ("height", "97.49"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:1;"), ("width", "140"), ("x", "7"), ("y", "7")]
+  [7] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "Outer.Inner"), ("data-source-line", "2"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Outer.Inner"), ("data-source-line", "2"), ("id", "ent0003")]
+  [8] <polygon> attr mismatch:
+    expected: [("fill", "none"), ("points", "31,60,41,50,362,50,362,144,352,154,31,154,31,60"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#F1F1F1"), ("points", "22.84,52,32.84,42,131.1515,42,131.1515,78.4883,121.1515,88.4883,22.84,88.4883,22.84,52"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "352"), ("x2", "362"), ("y1", "60"), ("y2", "50")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "121.1515"), ("x2", "131.1515"), ("y1", "52"), ("y2", "42")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "31"), ("x2", "352"), ("y1", "60"), ("y2", "60")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "22.84"), ("x2", "121.1515"), ("y1", "52"), ("y2", "52")]
+  [11] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "352"), ("x2", "352"), ("y1", "60"), ("y2", "154")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "121.1515"), ("x2", "121.1515"), ("y1", "52"), ("y2", "88.4883")]
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "73.5889"), ("x", "155.7056"), ("y", "76.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "68.3115"), ("x", "37.84"), ("y", "75.5352")]
+

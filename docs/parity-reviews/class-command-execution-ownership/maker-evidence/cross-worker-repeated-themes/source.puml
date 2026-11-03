@@ -1,0 +1,8 @@
+@startuml
+!theme cerulean
+' switch palette
+!theme minty
+class JuniperIndex {
+  +code: String
+}
+@enduml

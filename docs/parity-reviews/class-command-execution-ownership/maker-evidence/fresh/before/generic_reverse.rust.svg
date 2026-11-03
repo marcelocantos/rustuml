@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="191px" preserveAspectRatio="none" style="width:254px;height:191px;background:#FFFFFF;" version="1.1" viewBox="0 0 254 191" width="254px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Data Types-->
+<g class="entity" data-qualified-name="Data Types" data-source-line="1" id="ent0002">
+<path d="M8.5,6 L49.5,6 A3.75,3.75 0 0 1 52,8.5 L59,27 L109.0303,27 A2.5,2.5 0 0 1 111.5303,29.5 L111.5303,57.9883 A2.5,2.5 0 0 1 109.0303,60.4883 L8.5,60.4883 A2.5,2.5 0 0 1 6,57.9883 L6,8.5 A2.5,2.5 0 0 1 8.5,6" fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="6" x2="59" y1="27" y2="27"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75.5303" x="16" y="47.5352">Data Types</text>
+</g>
+<!--entity Gauge-->
+<g class="entity" data-qualified-name="Gauge" data-source-line="4" id="ent0003">
+<polygon fill="#F1F1F1" points="146.23,20,156.23,10,229.2964,10,229.2964,46.4883,219.2964,56.4883,146.23,56.4883,146.23,20" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="219.2964" x2="229.2964" y1="20" y2="10"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="146.23" x2="219.2964" y1="20" y2="20"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="219.2964" x2="219.2964" y1="20" y2="56.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43.0664" x="161.23" y="43.5352">Gauge</text>
+</g>
+<!--entity Result-->
+<g class="entity" data-qualified-name="Result" data-source-line="4" id="ent0004">
+<polygon fill="#F1F1F1" points="146.88,130.49,156.88,120.49,228.6407,120.49,228.6407,156.9783,218.6407,166.9783,146.88,166.9783,146.88,130.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="218.6407" x2="228.6407" y1="130.49" y2="120.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="146.88" x2="218.6407" y1="130.49" y2="130.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="218.6407" x2="218.6407" y1="130.49" y2="166.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41.7607" x="161.88" y="154.0252">Result</text>
+</g>
+<!--link Gauge to Result-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="4" id="lnk5">
+<path d="M187.77,56.99 C187.77,75.5 187.77,95.51 187.77,114.02" fill="none" id="Gauge-to-Result" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="187.77,120.02,191.77,111.02,187.77,115.02,183.77,111.02,187.77,120.02" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

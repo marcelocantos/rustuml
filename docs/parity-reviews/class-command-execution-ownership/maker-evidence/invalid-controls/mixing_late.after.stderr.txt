@@ -1,0 +1,1 @@
+parse error: line 3: Use 'allowmixing' before mixing classes and other UML elements
